@@ -1,41 +1,10 @@
+@import "./utils/variables";
+@import "./utils/helper-classes";
 @import "./styleguide/typography";
 
-// PRIMARY COLORS:
-$sidebar-color: #171A2A; // sidebar panel
-$header-color: #EAEAEA; // header
-$content-bg-color: #FFF; // content
-
-// ACCENT COLORS:
-$nav-icon-color: rgba(255, 255, 255, 1); //nav icon color
-$icon-color: rgba(0, 0, 0, 0.3); //icon color
-$accent-color: #FFC107; // links, icons, buttons
-
-// SEMANTIC COLORS:
-$true-color: #4CAF50;
-$false-color: #FF4444;
-$info-color: $accent-color;
-
-// NEUTRAL COLORS:
-//$label-color: rgba(0, 0, 0, 0.45);
-$label-color: #000;
-$input: #EAE9E9;
-$input-disabled: rgba(0, 0, 0, 0.05);
-$divider-color: rgba(0, 0, 0, 0.1);
-$tag-background: rgba(255, 230, 156, 0.5);
-$table-hover: #F9F9F9;
-
-// OTHER
-$input-padding: 11px 16px 7px;
-$border-radius: 4px;
-$transition: 0.2s;
-
 * {
-  font-family: 'Montserrat Medium', monospace;
-}
-
-//disables scrollbar on 100vh auth on small laptops
-body {
-  display: flex;
+  font-family: 'Montserrat Regular', monospace;
+  font-size: 100%;
 }
 
 //reset ul styles
@@ -53,51 +22,4 @@ iframe {
 i {
   color: $icon-color;
   transition: $transition;
-}
-
-.mb-0 {
-  margin-bottom: 0;
-}
-
-// helper class
-.no-padding {
-  padding: 0;
-}
-
-.tt-capitalize {
-  text-transform: capitalize;
-}
-
-.box-shadow {
-  //box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.2), 0px 3px 16px rgba(0, 0, 0, 0.12), 0px 9px 12px rgba(0, 0, 0, 0.14);
-  box-shadow: rgba(0, 0, 0, 0.08) 0 8px 18px;
-}
-
-.invalid {
-  color: $false-color;
-  border-color: $false-color;
-}
-
-$srollbar-color: rgba(0, 0, 0, 0.1);
-$srollbar-thumb-color: rgba(0, 0, 0, 0.3);
-
-.scrollbar {
-  // scrollbar itself
-  &::-webkit-scrollbar {
-    width: 10px;
-    //background-color: $srollbar-color;
-    cursor: pointer;
-  }
-
-  // scrollable element
-  &::-webkit-scrollbar-thumb {
-    width: 10px;
-    background-color: $srollbar-thumb-color;
-    border-radius: $border-radius;
-  }
-}
-
-.hidden {
-  opacity: 0;
-  pointer-events: none;
 }

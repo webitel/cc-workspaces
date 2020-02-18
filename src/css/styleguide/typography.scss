@@ -1,83 +1,43 @@
+@import '../utils/mixins';
 
 .typo-heading-lg {
-  font-family: 'Montserrat Bold', monospace;
-  font-size: 22px;
-  line-height: 26px;
+  font-family: 'Montserrat Semi', monospace;
+  @include fontSize(24px);
+  @include lineHeight(26px);
 }
 
 .typo-heading-md {
-  font-family: 'Montserrat Bold', monospace;
-  font-size: 20px;
-  line-height: 22px;
+  font-family: 'Montserrat Semi', monospace;
+  @include fontSize(20px);
+  @include lineHeight(22px);
 }
 
 .typo-heading-sm {
-  font-family: 'Montserrat Bold', monospace;
-  font-size: 12px;
-  line-height: 14px;
+  font-family: 'Montserrat Semi', monospace;
+  @include fontSize(14px);
+  @include lineHeight(22px);
+}
+
+.typo-heading-xs {
+  font-family: 'Montserrat Semi', monospace;
+  @include fontSize(12px);
+  @include lineHeight(22px);
 }
 
 .typo-body-lg {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 18px;
-  line-height: 20px;
+  font-family: 'Montserrat Regular', monospace;
+  @include fontSize(14px);
+  @include lineHeight(30px);
 }
 
 .typo-body-md {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 12px;
-  line-height: 14px;
+  font-family: 'Montserrat Regular', monospace;
+  @include fontSize(14px);
+  @include lineHeight(18px);
 }
 
 .typo-body-sm {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 11px;
-  line-height: 13px;
-}
-
-.typo-btn {
-  font-family: 'Montserrat Bold', monospace;
-  font-size: 14px;
-  line-height: 16px;
-}
-
-.typo-input-label {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 12px;
-  line-height: 16px;
-}
-
-.typo-input-text {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.typo-notification-text {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 16px;
-  line-height: 18px;
-}
-
-.typo-nav-item {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 14px;
-  line-height: 16px;
-}
-
-.typo-tab {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 16px;
-  line-height: 22px;
-}
-
-.typo-404-title {
-  font-family: 'Montserrat ExtraBold', monospace;
-  font-size: 37px;
-  line-height: 44px;
-}
-.typo-404-text {
-  font-family: 'Montserrat Medium', monospace;
-  font-size: 26px;
-  line-height: 32px;
+  font-family: 'Montserrat Regular', monospace;
+  @include fontSize(12px);
+  @include lineHeight(18px);
 }
