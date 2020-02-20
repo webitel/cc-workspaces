@@ -1,0 +1,51 @@
+<template>
+  <div class="call-preview-wrap">
+    <div class="call-preview">
+      <div class="call-profile">
+        <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
+             alt="client photo">
+        <div class="call-profile__name">
+          Oleg Marchenko
+        </div>
+        <div class="call-profile__number">
+          +38 (063) 915-15-12
+        </div>
+      </div>
+      <div class="call-preview__actions">
+        <button class="call-preview__action">Accept</button>
+        <button class="call-preview__action">Decline</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'call-preview',
+  };
+</script>
+
+<style lang="scss" scoped>
+  .call-preview-wrap {
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    width: 100%;
+    background: rgba(121, 113, 2, 0.1);
+  }
+
+  .call-preview {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .call-preview__actions {
+    display: flex;
+
+    .call-preview__action {
+      margin: 0 20px;
+    }
+  }
+</style>
