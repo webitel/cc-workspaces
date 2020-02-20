@@ -2,9 +2,30 @@
 @import "./utils/helper-classes";
 @import "./styleguide/typography";
 
-* {
+@import "./operator-workspace/operator-workspace";
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
   font-family: 'Montserrat Regular', monospace;
   font-size: 100%;
+  background: $body-bg-color;
+}
+
+main {
+  min-height: 100%;
+  height: 100%;
+  padding: 20px 30px; // FIXME: replace with relative values
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
 }
 
 //reset ul styles
