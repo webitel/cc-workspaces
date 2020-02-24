@@ -1,0 +1,112 @@
+<template>
+  <div class="numpad-numbers">
+    <div class="numpad-numbers__row">
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('+')"
+      >+
+      </rounded-action>
+    </div>
+    <div class="numpad-numbers__row">
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('1')"
+      >1
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('2')">2
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('3')">3
+      </rounded-action>
+    </div>
+    <div class="numpad-numbers__row">
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('4')"
+      >4
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('5')"
+      >5
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('6')"
+      >6
+      </rounded-action>
+    </div>
+    <div class="numpad-numbers__row">
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('7')"
+      >7
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('8')"
+      >8
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('9')"
+      >9
+      </rounded-action>
+    </div>
+    <div class="numpad-numbers__row">
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('*')"
+      >*
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('0')"
+      >0
+      </rounded-action>
+      <rounded-action
+        class="numpad-numbers__num"
+        @click.native="input('#')"
+      >#
+      </rounded-action>
+    </div>
+  </div>
+</template>
+
+<script>
+  import RoundedAction from '../../../../utils/rounded-action.vue';
+
+  export default {
+    name: 'numpad-numbers',
+    components: {
+      RoundedAction,
+    },
+
+    methods: {
+      input(value) {
+        this.$emit('input', value);
+      },
+    },
+  };
+</script>
+
+<style lang="scss" scoped>
+  .numpad-numbers {
+    width: 210px;
+    margin: auto;
+
+    &__row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+
+      &:first-child {
+        justify-content: center;
+        margin-top: 0;
+      }
+    }
+  }
+</style>
