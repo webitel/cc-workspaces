@@ -5,23 +5,54 @@
         <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
              alt="client photo">
         <div class="call-profile__name">
-          Oleg Marchenko
+          {{computeDisplayName}}
         </div>
         <div class="call-profile__number">
-          +38 (063) 915-15-12
+          {{computeDisplayNumber}}
         </div>
       </div>
       <div class="call-preview__actions">
-        <button class="call-preview__action">Accept</button>
-        <button class="call-preview__action">Decline</button>
+        <rounded-action
+          class="call-preview__action"
+          @click.native="answer(itemIndex)"
+        >Accept
+        </rounded-action>
+        <rounded-action
+          class="call-preview__action"
+          @click.native="hangup(itemIndex)"
+        >Reject
+        </rounded-action>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+  import callInfo from '../../../../mixins/callInfoMixin';
+  import RoundedAction from '../../../utils/rounded-action.vue';
+
   export default {
     name: 'call-preview',
+    mixins: [callInfo],
+    components: {
+      RoundedAction,
+    },
+
+    computed: {
+      ...mapState('operator', {
+        itemInstance: (state) => state.openedItem.item,
+        itemIndex: (state) => state.openedItem.index,
+      }),
+    },
+
+    methods: {
+      ...mapActions('operator', {
+        answer: 'ANSWER',
+        hangup: 'HANGUP',
+        openCall: 'OPEN_CALL',
+      }),
+    },
   };
 </script>
 

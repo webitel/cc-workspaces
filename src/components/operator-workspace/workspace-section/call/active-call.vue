@@ -17,32 +17,45 @@
         <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
              alt="client photo">
         <div class="call-profile__name">
-          Oleg Marchenko
+          {{computeDisplayName}}
         </div>
         <div class="call-profile__number">
-          +38 (063) 915-15-12
+          {{computeDisplayNumber}}
         </div>
       </div>
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
           class="call-action"
-          @click.native="currentTab = 'redirect'"
-        >redirect
+          @click.native="currentTab = 'transfer'"
+        >Transfer
         </rounded-action>
-        <rounded-action class="call-action">close</rounded-action>
+        <rounded-action
+          class="call-action"
+          @click.native="hangup(itemIndex)"
+        >Hangup
+        </rounded-action>
       </div>
     </header>
     <divider></divider>
     <section class="active-call__info">
       <client-history v-show="currentTab === 'history'"></client-history>
       <contacts v-show="currentTab === 'contacts'"></contacts>
-      <redirect v-show="currentTab === 'redirect'"></redirect>
+      <transfer
+        v-show="currentTab === 'transfer'"
+        @select="transfer({user: $event, index: itemIndex})"
+      ></transfer>
     </section>
     <divider></divider>
     <div class="actions-wrap call-bottom-actions">
       <rounded-action class="call-action">numpad</rounded-action>
-      <rounded-action class="call-action">mute</rounded-action>
-      <rounded-action class="call-action">pause</rounded-action>
+      <rounded-action
+        class="call-action"
+        @click.native="toggleMute(itemIndex)"
+      >mute</rounded-action>
+      <rounded-action
+        class="call-action"
+        @click.native="toggleHold(itemIndex)"
+      >hold</rounded-action>
       <rounded-action class="call-action">record</rounded-action>
       <rounded-action class="call-action">edit</rounded-action>
     </div>
@@ -50,25 +63,46 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+  import callInfo from '../../../../mixins/callInfoMixin';
   import ClientHistory from '../workspace-client-history/client-history-container.vue';
   import Contacts from '../workspace-contacts/workspace-contacts-container.vue';
-  import Redirect from '../workspace-redirect/workspace-redirect-container.vue';
+  import Transfer from '../workspace-transfer/workspace-transfer-container.vue';
   import Divider from '../../../utils/divider.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
     name: 'active-call',
+    mixins: [callInfo],
     components: {
       RoundedAction,
       ClientHistory,
       Contacts,
-      Redirect,
+      Transfer,
       Divider,
     },
 
     data: () => ({
       currentTab: 'history',
     }),
+
+    computed: {
+      ...mapState('operator', {
+        itemInstance: (state) => state.openedItem.item,
+        itemIndex: (state) => state.openedItem.index,
+      }),
+    },
+
+    methods: {
+      ...mapActions('operator', {
+        answer: 'ANSWER',
+        transfer: 'TRANSFER',
+        hangup: 'HANGUP',
+        openCall: 'OPEN_CALL',
+        toggleMute: 'TOGGLE_MUTE',
+        toggleHold: 'TOGGLE_HOLD',
+      }),
+    },
   };
 </script>
 

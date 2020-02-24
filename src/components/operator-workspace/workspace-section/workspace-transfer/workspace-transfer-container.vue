@@ -6,7 +6,10 @@
     <div class="ws-contacts-wrap">
       <div class="ws-contacts-letter-wrap">
         <div class="ws-contact-letter">A</div>
-        <contact :class="{'selected': true}"></contact>
+        <contact
+          :class="{'selected': true}"
+          @click.native="select"
+        ></contact>
         <contact></contact>
       </div>
       <div class="ws-contacts-letter-wrap">
@@ -22,9 +25,15 @@
   import Contact from '../workspace-contacts/workspace-contact.vue';
 
   export default {
-    name: 'workspace-contacts-container',
+    name: 'workspace-transfer-container',
     components: {
       Contact,
+    },
+
+    methods: {
+      select() {
+        this.$emit('select', { extension: '778' });
+      },
     },
   };
 </script>
