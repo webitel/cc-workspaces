@@ -1,16 +1,7 @@
 <template>
   <div class="call-preview-wrap">
     <div class="call-preview">
-      <div class="call-profile">
-        <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
-             alt="client photo">
-        <div class="call-profile__name">
-          Oleg Marchenko
-        </div>
-        <div class="call-profile__number">
-          +38 (063) 915-15-12
-        </div>
-      </div>
+      <call-profile></call-profile>
       <div class="call-preview__actions">
         <button class="call-preview__action">Accept</button>
         <button class="call-preview__action">Decline</button>
@@ -20,8 +11,13 @@
 </template>
 
 <script>
+  import CallProfile from './call-profile.vue';
+
   export default {
     name: 'call-preview',
+    components: {
+      CallProfile,
+    },
   };
 </script>
 

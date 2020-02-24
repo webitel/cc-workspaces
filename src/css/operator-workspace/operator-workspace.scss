@@ -4,24 +4,6 @@
   border-radius: $border-radius;
 }
 
-.call-profile {
-  text-align: center;
-  margin-bottom: 40px;
-
-  &__pic {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    border: 1px solid red;
-  }
-
-  &__name {
-    @extend .typo-heading-sm;
-    margin-bottom: 10px;
-  }
-}
-
 .ws-history-container, .ws-contacts-container {
   .search {
     width: 100%;
