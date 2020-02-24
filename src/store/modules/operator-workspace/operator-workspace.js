@@ -9,7 +9,23 @@ const state = {
   },
 };
 
-const getters = {};
+const getters = {
+  // eslint-disable-next-line no-shadow
+  GET_CURRENT_ITEM_NAME: (state) => {
+    if (state.openedItem.item) {
+      return state.openedItem.item.getDisplayName();
+    }
+    return 'undefined';
+  },
+
+  // eslint-disable-next-line no-shadow
+  GET_CURRENT_ITEM_NUMBER: (state) => {
+    if (state.openedItem.item) {
+      return state.openedItem.item.getDisplayNumber();
+    }
+    return 'undefined';
+  },
+};
 
 const actions = {
   ANSWER: async (context, index) => {

@@ -1,16 +1,7 @@
 <template>
   <div class="call-preview-wrap">
     <div class="call-preview">
-      <div class="call-profile">
-        <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
-             alt="client photo">
-        <div class="call-profile__name">
-          {{computeDisplayName}}
-        </div>
-        <div class="call-profile__number">
-          {{computeDisplayNumber}}
-        </div>
-      </div>
+      <call-profile></call-profile>
       <div class="call-preview__actions">
         <rounded-action
           class="call-preview__action"
@@ -29,6 +20,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
+  import CallProfile from './call-profile.vue';
   import callInfo from '../../../../mixins/callInfoMixin';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
@@ -36,6 +28,7 @@
     name: 'call-preview',
     mixins: [callInfo],
     components: {
+      CallProfile,
       RoundedAction,
     },
 
