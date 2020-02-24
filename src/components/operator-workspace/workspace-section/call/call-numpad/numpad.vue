@@ -1,8 +1,6 @@
 <template>
   <div class="numpad">
-    <div class="numpad-state">
-      <div class="numpad-state__state">Ringing..</div>
-    </div>
+    <numpad-state/>
     <numpad-numbers
       @input="input"
     ></numpad-numbers>
@@ -10,11 +8,13 @@
 </template>
 
 <script>
+  import NumpadState from './numpad-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
 
   export default {
     name: 'numpad',
     components: {
+      NumpadState,
       NumpadNumbers,
     },
     methods: {
