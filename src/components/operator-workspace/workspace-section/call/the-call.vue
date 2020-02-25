@@ -1,7 +1,8 @@
 <template>
   <section class="call">
-    <call-preview v-if="!itemInstance"></call-preview>
-    <active-call v-else></active-call>
+    <call-preview v-if="state === 'PREVIEW'"></call-preview>
+    <active-call v-else-if="state === 'ACTIVE' || state === 'NEW'"></active-call>
+    <section v-else>hello there</section>
   </section>
 </template>
 
@@ -19,7 +20,7 @@
 
     computed: {
       ...mapState('operator', {
-        itemInstance: (state) => state.openedItem.item,
+        state: (state) => state.callState,
       }),
     },
   };

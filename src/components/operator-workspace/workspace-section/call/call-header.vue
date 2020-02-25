@@ -13,23 +13,40 @@
       </rounded-action>
     </div>
 
-    <call-profile></call-profile>
-    <form v-if="false" class="call-header__form-number">
-      <input type="text">
+    <call-profile v-if="callState !== 'NEW'"></call-profile>
+    <form
+      v-else
+      class="call-header__form-number"
+    >
+      <input v-model="number" type="text" autofocus>
     </form>
 
     <div class="actions-wrap actions-wrap__right">
       <rounded-action
+        v-if="callState !== 'NEW'"
         class="call-action"
-        @click.native="currentTab = 'redirect'"
-      >redirect
+        @click.native="currentTab = 'transfer'"
+      >transfer
       </rounded-action>
-      <rounded-action class="call-action">close</rounded-action>
+      <rounded-action
+        v-if="callState !== 'NEW'"
+        class="call-action"
+        @click.native="hangup()"
+      >close
+      </rounded-action>
+
+      <rounded-action
+        v-if="callState === 'NEW'"
+        class="call-action"
+        @click.native="call"
+      >call
+      </rounded-action>
     </div>
   </header>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
   import CallProfile from './call-profile.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
@@ -39,12 +56,35 @@
       CallProfile,
       RoundedAction,
     },
+
+    computed: {
+      ...mapState('operator', {
+        callState: (state) => state.callState,
+      }),
+
+      number: {
+        get() {
+          return this.$store.state.operator.newCallNumber;
+        },
+        set(value) {
+          this.setNumber(value);
+        },
+      },
+    },
+
+    methods: {
+      ...mapActions('operator', {
+        call: 'CALL_TO_NEW_NUMBER',
+        hangup: 'HANGUP',
+        setNumber: 'SET_NEW_CALL_NUMBER',
+      }),
+    },
   };
 </script>
 
 <style lang="scss" scoped>
   .call-header {
-    min-height: 160px;
+    height: 130px;
   }
 
   .actions-wrap__left {

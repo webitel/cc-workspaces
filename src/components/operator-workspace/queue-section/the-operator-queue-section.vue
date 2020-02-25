@@ -3,14 +3,15 @@
     <call-preview
       v-for="(call, key) of callList"
       :item-instance="call"
+      :index="key"
       :key="key"
-      @answer="answer(key)"
-      @reject="hangup(key)"
-      @click.native="openCall(key)"
+      @click.native.prevent="openCall(key)"
     ></call-preview>
     <!--    <message-preview></message-preview>-->
     <!--    <message-preview></message-preview>-->
-    <rounded-action>new call</rounded-action>
+    <rounded-action
+      @click.native="openCall()"
+    >new call</rounded-action>
   </section>
 </template>
 

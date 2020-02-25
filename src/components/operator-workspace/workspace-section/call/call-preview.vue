@@ -5,12 +5,17 @@
       <div class="call-preview__actions">
         <rounded-action
           class="call-preview__action"
-          @click.native="answer(itemIndex)"
+          @click.native="answer()"
         >Accept
         </rounded-action>
         <rounded-action
           class="call-preview__action"
-          @click.native="hangup(itemIndex)"
+          @click.native="transfer()"
+        >Transfer
+        </rounded-action>
+        <rounded-action
+          class="call-preview__action"
+          @click.native="hangup()"
         >Reject
         </rounded-action>
       </div>
@@ -19,7 +24,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   import CallProfile from './call-profile.vue';
   import callInfo from '../../../../mixins/callInfoMixin';
   import RoundedAction from '../../../utils/rounded-action.vue';
@@ -32,18 +37,11 @@
       RoundedAction,
     },
 
-    computed: {
-      ...mapState('operator', {
-        itemInstance: (state) => state.openedItem.item,
-        itemIndex: (state) => state.openedItem.index,
-      }),
-    },
-
     methods: {
       ...mapActions('operator', {
         answer: 'ANSWER',
+        transfer: 'TRANSFER',
         hangup: 'HANGUP',
-        openCall: 'OPEN_CALL',
       }),
     },
   };

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import NumpadState from './numpad-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
 
@@ -18,9 +19,9 @@
       NumpadNumbers,
     },
     methods: {
-      input(value) {
-        console.log(value);
-      },
+      ...mapActions('operator', {
+        input: 'ADD_DIGIT',
+      }),
     },
   };
 </script>
@@ -30,7 +31,6 @@
     display: flex;
     flex-direction: column;
     flex-basis: 100%; // make child height 100& of container
-    padding: 30px 60px 60px;
 
     .numpad-state {
       flex-grow: 1;
