@@ -56,6 +56,6 @@
     align-items: stretch;
     grid-template-columns: 340px 550px 1fr;
     grid-gap: 20px;
-    min-height: 100%;
+    height: 100%;
   }
 </style>

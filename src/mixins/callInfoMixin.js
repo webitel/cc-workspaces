@@ -1,12 +1,12 @@
 export default {
   computed: {
-    // computeDisplayName() {
-    //   return this.itemInstance.displayName || 'undefined name';
-    // },
-    //
-    // computeDisplayNumber() {
-    //   return this.itemInstance.displayNumber || 'undefined number';
-    // },
+    computeDisplayName() {
+      return this.itemInstance.displayName || 'undefined name';
+    },
+
+    computeDisplayNumber() {
+      return this.itemInstance.displayNumber || 'undefined number';
+    },
 
     computeCreatedTime() {
       const sec = Math.round((this.now - this.itemInstance.createdAt) / 10 ** 3);

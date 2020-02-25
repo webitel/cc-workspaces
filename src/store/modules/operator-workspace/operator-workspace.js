@@ -1,61 +1,121 @@
-import { CallActions } from 'webitel-sdk';
+import { CallActions, CallDirection } from 'webitel-sdk';
 import CallConnector from '../../../api/operator-workspace/call-ws-connection';
+
+const callStates = {
+  preview: 'PREVIEW',
+  active: 'ACTIVE',
+  new: 'NEW',
+};
+
+const answerParams = { useAudio: true };
 
 const state = {
   client: null,
   callList: [],
-  openedItem: {
-    type: 'call',
-  },
+  callState: '', // PREVIEW, ACTIVE, NEW
+  workspaceItem: {},
+  newCallNumber: '8888',
 };
 
 const getters = {
-  // eslint-disable-next-line no-shadow
-  GET_CURRENT_ITEM_NAME: (state) => {
-    if (state.openedItem.item) {
-      return state.openedItem.item.getDisplayName();
-    }
-    return 'undefined';
-  },
+  GET_CURRENT_ITEM_NAME: (state) => state.workspaceItem.displayName,
 
-  // eslint-disable-next-line no-shadow
-  GET_CURRENT_ITEM_NUMBER: (state) => {
-    if (state.openedItem.item) {
-      return state.openedItem.item.getDisplayNumber();
-    }
-    return 'undefined';
-  },
+  GET_CURRENT_ITEM_NUMBER: (state) => state.workspaceItem.displayNumber,
+
+  GET_CURRENT_CALL_DIGITS: (state) => state.workspaceItem.digits,
 };
 
 const actions = {
   ANSWER: async (context, index) => {
-    await context.state.callList[index].answer({});
+    const call = Number.isInteger(index)
+      ? context.state.callList[index] : context.state.workspaceItem;
+    try {
+      await call.answer(answerParams);
+      context.commit('SET_CALL_STATE', callStates.active);
+      context.commit('SET_WORKSPACE', call);
+    } catch (err) {
+      throw err;
+    }
   },
 
   TRANSFER: async (context, { user, index }) => {
-    console.log(user, index);
-    await context.state.callList[index].blindTransfer(user.extension);
+    const call = context.state.callList[index];
+    try {
+      await call.blindTransfer(user.extension);
+      context.commit('SET_CALL_STATE', null);
+      context.commit('RESET_WORKSPACE');
+    } catch (err) {
+      throw err;
+    }
   },
 
-  TOGGLE_MUTE: async (context, index) => {
-    const isMuted = context.state.callList[index].muted;
-    await context.state.callList[index].mute(!isMuted);
+  TOGGLE_MUTE: async (context) => {
+    const call = context.state.workspaceItem;
+    const isMuted = call.muted;
+    await call.mute(!isMuted);
   },
 
-  TOGGLE_HOLD: async (context, index) => {
-    await context.state.callList[index].toggleHold();
+  TOGGLE_HOLD: async (context) => {
+    const call = context.state.workspaceItem;
+    try {
+      await call.toggleHold();
+    } catch (err) {
+      throw err;
+    }
   },
 
   HANGUP: async (context, index) => {
-    await context.state.callList[index].hangup();
-    context.commit('RESET_OPENED_ITEM');
+    const call = Number.isInteger(index)
+      ? context.state.callList[index] : context.state.workspaceItem;
+
+    try {
+      await call.hangup();
+      context.commit('RESET_WORKSPACE');
+    } catch (err) {
+      throw err;
+    }
   },
 
   OPEN_CALL: async (context, index) => {
-    context.commit('SET_CURRENT_WORKSPACE', {
-      index,
-      type: 'call',
-    });
+    if (Number.isInteger(index)) { // if there's index, we have gotten
+      const call = context.state.callList[index]; // this item from queue => call already exists
+      // FIXME: HANDLE ACTIVE CALL OPEN BY CALL STATE
+      context.commit('SET_CALL_STATE', callStates.preview);
+      context.commit('SET_WORKSPACE', call);
+    } else { // else we are trying to create a new call
+      context.commit('SET_CALL_STATE', callStates.new);
+    }
+  },
+
+  CALL_TO_NEW_NUMBER: async (context) => {
+    const toNumber = context.state.newCallNumber;
+    try {
+      await context.state.client.invite({ toNumber });
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  ADD_DIGIT: async (context, value) => {
+    if (context.state.callState === 'NEW') {
+      const newCallNumber = context.state.newCallNumber + value;
+      context.dispatch('SET_NEW_CALL_NUMBER', newCallNumber);
+    } else {
+      context.dispatch('SEND_DTMF', value);
+    }
+  },
+
+  SEND_DTMF: async (context, value) => {
+    const call = context.state.workspaceItem;
+    try {
+      await call.sendDTMF(value);
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  SET_NEW_CALL_NUMBER: (context, value) => {
+    context.commit('SET_NEW_CALL_NUMBER', value);
   },
 
   INIT_CONNECTION: async (context) => {
@@ -64,9 +124,14 @@ const actions = {
       switch (action) {
         case CallActions.Ringing:
           context.commit('ADD_CALL', call);
+          if (call.direction === CallDirection.Outbound) {
+            context.commit('SET_CALL_STATE', callStates.active);
+            context.commit('SET_WORKSPACE', call);
+          }
           break;
         case CallActions.Hangup:
           context.commit('REMOVE_CALL', call);
+          context.commit('RESET_WORKSPACE');
           break;
         case CallActions.PeerStream:
           audio.srcObject = call.peerStreams.pop();
@@ -82,28 +147,38 @@ const actions = {
 };
 
 const mutations = {
-  // eslint-disable-next-line no-shadow
-  SET_CURRENT_WORKSPACE: (state, { index, type }) => {
-    state.openedItem = {
-      item: state.callList[index],
-      index,
-      type,
-    };
+  SET_CLI: (state, client) => {
+    state.client = client;
   },
 
-  // eslint-disable-next-line no-shadow
+  SET_WORKSPACE: (state, call) => {
+    state.workspaceItem = call;
+  },
+
+  SET_CALL_STATE: (state, callState) => {
+    state.callState = callState;
+  },
+
+  SET_NEW_CALL_NUMBER: (state, value) => {
+    state.newCallNumber = value;
+  },
+
+  // SET_NEW_CALL_ID: (state, id) => {
+  //   state.newCallId = id;
+  //   console.warn('new call id set');
+  // },
+
   ADD_CALL: (state, call) => {
     state.callList.push(call);
   },
 
-  // eslint-disable-next-line no-shadow
   REMOVE_CALL: (state, removedCall) => {
     state.callList = state.callList.filter((call) => call !== removedCall);
   },
 
-  // eslint-disable-next-line no-shadow
-  RESET_OPENED_ITEM: (state) => {
-    state.openedItem = {};
+  RESET_WORKSPACE: (state) => {
+    state.callState = null;
+    state.workspaceItem = {};
   },
 };
 
