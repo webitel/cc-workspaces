@@ -1,7 +1,8 @@
 import { Client } from 'webitel-sdk';
 
-const BASE_URL = 'wss://dev.webitel.com/ws';
-const token = 'azrhabwxcjygpefgo8zqa5nwgy';
+// const BASE_URL = 'wss://dev.webitel.com/ws';
+const BASE_URL = 'ws://10.10.10.25:10025';
+const token = localStorage.getItem('access-token');
 
 export default async (callHandler) => {
   const config = {
@@ -9,6 +10,7 @@ export default async (callHandler) => {
     registerWebDevice: true,
     token,
   };
+
   const cli = new Client(config);
   await cli.connect();
   await cli.auth();
