@@ -1,6 +1,10 @@
 <template>
   <footer class="call-footer">
-    <rounded-action class="call-action">numpad</rounded-action>
+    <rounded-action
+      class="call-action"
+      @click.native="$emit('openTab', 'numpad')"
+    >numpad
+    </rounded-action>
     <rounded-action
       class="call-action"
       @click.native="toggleMute"

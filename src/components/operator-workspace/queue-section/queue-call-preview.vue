@@ -1,11 +1,14 @@
 <template>
-  <article class="queue-preview" :class="{'hold': false}">
+  <article class="queue-preview" :class="{'hold': computeHoldState}">
     <header class="preview-header">
       <span class="preview-header__name">{{computeDisplayName}}</span>
       <span class="preview-header__time">{{computeCreatedTime}}</span>
     </header>
     <span class="call-preview__number">{{computeDisplayNumber}}</span>
-    <div class="preview-actions">
+    <div
+      v-if="computePreviewActions"
+      class="preview-actions"
+    >
       <button
         class="preview-action preview-action__answer"
         @click.stop="answer(index)"
@@ -24,6 +27,7 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import { CallActions, CallDirection } from 'webitel-sdk';
   import callInfo from '../../../mixins/callInfoMixin';
 
   export default {
@@ -44,18 +48,16 @@
       },
     },
 
-    data: () => ({
-      now: Date.now(),
-    }),
+    computed: {
+      computeHoldState() {
+        return this.itemInstance.state === CallActions.Hold;
+      },
 
-    mounted() {
-      console.warn('ITEM FROM QUEUE PREVIEW', this.itemInstance);
-      setInterval(() => {
-        this.now = Date.now();
-      }, 1000);
+      computePreviewActions() {
+        return this.itemInstance.state === CallActions.Ringing
+          && this.itemInstance.direction === CallDirection.Inbound;
+      },
     },
-
-    computed: {},
 
     methods: {
       ...mapActions('operator', {
@@ -72,7 +74,7 @@
     border-bottom: 1px solid blue;
 
     &.hold {
-      background: yellow;
+      border: 2px solid yellowgreen;
     }
   }
 

@@ -4,24 +4,34 @@
       <input class="search" type="text">
     </form>
     <div class="ws-contacts-wrap">
-      <div class="ws-contacts-letter-wrap">
-        <div class="ws-contact-letter">A</div>
-        <contact
-          :class="{'selected': true}"
-          @click.native="select"
-        ></contact>
-        <contact></contact>
-      </div>
-      <div class="ws-contacts-letter-wrap">
-        <div class="ws-contact-letter">A</div>
-        <contact></contact>
-        <contact></contact>
-      </div>
+      <contact
+        v-for="(item, key) of dataList"
+        :class="{'selected': item === selected}"
+        :key="key"
+        :item="item"
+        @click.native="select(item)"
+      ></contact>
+      <button @click="transfer(selected)">Transfer!</button>
+      <!--      <div class="ws-contacts-letter-wrap">-->
+      <!--        <div class="ws-contact-letter">A</div>-->
+      <!--        <contact-->
+      <!--          :class="{'selected': true}"-->
+      <!--          @click.native="select"-->
+      <!--        ></contact>-->
+      <!--        <contact></contact>-->
+      <!--      </div>-->
+      <!--      <div class="ws-contacts-letter-wrap">-->
+      <!--        <div class="ws-contact-letter">A</div>-->
+      <!--        <contact></contact>-->
+      <!--        <contact></contact>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+  import { getUsersList } from '../../../../api/operator-workspace/users';
   import Contact from '../workspace-contacts/workspace-contact.vue';
 
   export default {
@@ -30,10 +40,27 @@
       Contact,
     },
 
+    data: () => ({
+      dataList: [],
+      selected: null,
+    }),
+
+    mounted() {
+      this.loadDataList();
+    },
+
     methods: {
-      select() {
-        this.$emit('select', { extension: '778' });
+      select(item) {
+        this.selected = item;
       },
+
+      async loadDataList(value) {
+        this.dataList = await getUsersList(value);
+      },
+
+      ...mapActions('operator', {
+        transfer: 'TRANSFER',
+      }),
     },
   };
 </script>

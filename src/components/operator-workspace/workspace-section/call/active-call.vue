@@ -8,12 +8,14 @@
     <section class="active-call__info">
       <client-history v-show="currentTab === 'history'"></client-history>
       <contacts v-show="currentTab === 'contacts'"></contacts>
-      <transfer v-show="currentTab === 'redirect'"></transfer>
+      <transfer v-show="currentTab === 'transfer'"></transfer>
       <numpad v-show="currentTab === 'numpad'"></numpad>
     </section>
 
     <divider></divider>
-    <call-footer></call-footer>
+    <call-footer
+      @openTab="currentTab = $event"
+    ></call-footer>
   </div>
 </template>
 
@@ -65,11 +67,6 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-  }
-
-  .call-header {
-    display: flex;
-    justify-content: space-between;
   }
 
   .active-call__info {

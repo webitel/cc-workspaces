@@ -1,7 +1,7 @@
 import { Client } from 'webitel-sdk';
 
-// const BASE_URL = 'wss://dev.webitel.com/ws';
-const BASE_URL = 'ws://10.10.10.25:10025';
+const BASE_URL = 'wss://dev.webitel.com/ws';
+// const BASE_URL = 'ws://10.10.10.25:10025';
 const token = localStorage.getItem('access-token');
 
 export default async (callHandler) => {

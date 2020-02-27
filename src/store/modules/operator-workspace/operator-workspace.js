@@ -38,9 +38,10 @@ const actions = {
     }
   },
 
-  TRANSFER: async (context, { user, index }) => {
-    const call = context.state.callList[index];
+  TRANSFER: async (context, user) => {
+    const call = context.state.workspaceItem;
     try {
+      console.log(user.extension);
       await call.blindTransfer(user.extension);
       context.commit('SET_CALL_STATE', null);
       context.commit('RESET_WORKSPACE');
@@ -90,7 +91,7 @@ const actions = {
   CALL_TO_NEW_NUMBER: async (context) => {
     const toNumber = context.state.newCallNumber;
     try {
-      await context.state.client.invite({ toNumber });
+      await context.state.client.call({ toNumber });
     } catch (err) {
       throw err;
     }

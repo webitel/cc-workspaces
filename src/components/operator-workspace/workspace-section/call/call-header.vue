@@ -3,13 +3,13 @@
     <div class="actions-wrap actions-wrap__left">
       <rounded-action
         class="call-action"
-        @click.native="currentTab = 'history'"
-      >history
+        @click.native="$emit('openTab', 'contacts')"
+      >contacts
       </rounded-action>
       <rounded-action
         class="call-action"
-        @click.native="currentTab = 'contacts'"
-      >contacts
+        @click.native="$emit('openTab', 'history')"
+      >history
       </rounded-action>
     </div>
 
@@ -22,10 +22,10 @@
     </form>
 
     <div class="actions-wrap actions-wrap__right">
+<!--      v-if="callState !== 'NEW'"-->
       <rounded-action
-        v-if="callState !== 'NEW'"
         class="call-action"
-        @click.native="currentTab = 'transfer'"
+        @click.native="$emit('openTab', 'transfer')"
       >transfer
       </rounded-action>
       <rounded-action
@@ -84,22 +84,32 @@
 
 <style lang="scss" scoped>
   .call-header {
+    display: flex;
     height: 130px;
   }
 
   .actions-wrap__left {
+    flex: 1 1 auto;
+
     .call-action:first-child {
       margin-right: 20px;
     }
   }
 
   .actions-wrap__right {
+    flex: 1 1 auto;
+
     .call-action:last-child {
       margin-left: 20px;
     }
   }
 
+  .call-profile {
+    flex: 0 0  auto;
+  }
+
   .call-header__form-number {
+    flex: 0 0  auto;
     align-self: flex-end;
   }
 </style>

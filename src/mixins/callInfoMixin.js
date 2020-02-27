@@ -1,4 +1,14 @@
 export default {
+  data: () => ({
+    now: Date.now(),
+  }),
+
+  mounted() {
+    setInterval(() => {
+      this.now = Date.now();
+    }, 1000);
+  },
+
   computed: {
     computeDisplayName() {
       return this.itemInstance.displayName || 'undefined name';
@@ -9,7 +19,9 @@ export default {
     },
 
     computeCreatedTime() {
-      const sec = Math.round((this.now - this.itemInstance.createdAt) / 10 ** 3);
+      const start = this.itemInstance.answeredAt
+        ? this.itemInstance.answeredAt : this.itemInstance.createdAt;
+      const sec = Math.round((this.now - start) / 10 ** 3);
       return this.computeMinSecTime(sec);
     },
   },

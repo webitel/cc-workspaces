@@ -4,20 +4,43 @@
       <img style="width: 50px; height: 50px; border-radius: 50%;"
            src="https://static10.tgstat.ru/channels/_0/3b/3bc2c1c682ca9f9517380ce37ad01c75.jpg" alt="">
     </div>
-    <div class="numpad-state__primary-text">Ringing</div>
-    <div class="numpad-state__secondary-text">Digits: {{getDigits}}</div>
+    <div class="numpad-state__primary-text">{{computeCallState}}</div>
+    <div class="numpad-state__secondary-text">{{computeDTMFDigits}}</div>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapState } from 'vuex';
+  import { CallActions } from 'webitel-sdk';
+  import callInfo from '../../../../../mixins/callInfoMixin';
 
   export default {
     name: 'numpad-state',
+    mixins: [callInfo],
 
     computed: {
-      ...mapGetters('operator', {
-        getDigits: 'GET_DIGITS',
+      computeCallState() {
+        switch (this.itemInstance.state) {
+          case CallActions.Ringing:
+            return 'Ringing';
+          case CallActions.Hold:
+            return 'Hold';
+          case CallActions.Active:
+            return this.computeCreatedTime;
+          default:
+            return this.itemInstance.state || '';
+        }
+      },
+
+      computeDTMFDigits() {
+        if (this.itemInstance.digits && this.itemInstance.digits.length) {
+          return this.itemInstance.digits.join('');
+        }
+        return '';
+      },
+
+      ...mapState('operator', {
+        itemInstance: (state) => state.workspaceItem,
       }),
     },
   };
