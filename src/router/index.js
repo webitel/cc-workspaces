@@ -1,10 +1,17 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+import Auth from '../components/auth/the-auth.vue';
 import OperatorWorkspace from '../components/operator-workspace/the-operator-workspace.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: '/auth',
+    name: 'auth',
+    component: Auth,
+  },
   {
     path: '/workspace',
     name: 'operator-ws',
@@ -25,6 +32,16 @@ const router = new VueRouter({
     return { x: 0, y: 0 };
   },
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('access-token');
+  if (!(to.fullPath === '/auth')) {
+    if (!token) {
+      next('/auth');
+    }
+  }
+  next();
 });
 
 export default router;

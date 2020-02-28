@@ -3,17 +3,26 @@
     <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
          alt="client photo">
     <div class="call-profile__name">
-      Oleg Marchenko
+      {{getDisplayName}}
     </div>
     <div class="call-profile__number">
-      +38 (063) 915-15-12
+      {{getDisplayNumber}}
     </div>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'call-profile',
+
+    computed: {
+      ...mapGetters('operator', {
+        getDisplayName: 'GET_CURRENT_ITEM_NAME',
+        getDisplayNumber: 'GET_CURRENT_ITEM_NUMBER',
+      }),
+    },
   };
 </script>
 

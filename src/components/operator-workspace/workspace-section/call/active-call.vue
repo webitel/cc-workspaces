@@ -1,44 +1,75 @@
 <template>
   <div class="active-call">
-    <call-header></call-header>
+    <call-header
+      @openTab="currentTab = $event"
+    ></call-header>
     <divider></divider>
 
     <section class="active-call__info">
-      <client-history v-show="currentTab === 'history'"></client-history>
-      <contacts v-show="currentTab === 'contacts'"></contacts>
-      <redirect v-show="currentTab === 'redirect'"></redirect>
-      <numpad v-show="currentTab === 'numpad'"></numpad>
+      <component :is="computeCurrentTab"></component>
     </section>
 
     <divider></divider>
-    <call-footer></call-footer>
+    <call-footer
+      @openTab="currentTab = $event"
+    ></call-footer>
   </div>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+  import callInfo from '../../../../mixins/callInfoMixin';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
+  import Divider from '../../../utils/divider.vue';
   import ClientHistory from '../workspace-client-history/client-history-container.vue';
   import Contacts from '../workspace-contacts/workspace-contacts-container.vue';
-  import Redirect from '../workspace-redirect/workspace-redirect-container.vue';
+  import Transfer from '../workspace-transfer/workspace-transfer-container.vue';
   import Numpad from './call-numpad/numpad.vue';
-  import Divider from '../../../utils/divider.vue';
 
   export default {
     name: 'active-call',
+    mixins: [callInfo],
     components: {
       CallHeader,
       CallFooter,
       ClientHistory,
       Contacts,
-      Redirect,
       Numpad,
+      Transfer,
       Divider,
     },
 
     data: () => ({
       currentTab: 'numpad',
     }),
+
+    computed: {
+      computeCurrentTab() {
+        switch (this.currentTab) {
+          case 'history':
+            return 'client-history';
+          case 'contacts':
+            return 'contacts';
+          case 'transfer':
+            return 'transfer';
+          case 'numpad':
+            return 'numpad';
+          default:
+            return '';
+        }
+      },
+
+      ...mapState('operator', {}),
+    },
+
+    methods: {
+      ...mapActions('operator', {
+        answer: 'ANSWER',
+        hangup: 'HANGUP',
+        openCall: 'OPEN_CALL',
+      }),
+    },
   };
 </script>
 
@@ -47,11 +78,6 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-  }
-
-  .call-header {
-    display: flex;
-    justify-content: space-between;
   }
 
   .active-call__info {

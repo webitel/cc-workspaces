@@ -10,6 +10,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-operator-queue-section.vue';
   import WorkspaceSection from './workspace-section/the-operator-workspace-section.vue';
@@ -22,6 +23,16 @@
       QueueSection,
       WorkspaceSection,
       InfoSection,
+    },
+
+    created() {
+      this.initClient();
+    },
+
+    methods: {
+      ...mapActions('operator', {
+        initClient: 'INIT_CONNECTION',
+      }),
     },
   };
 </script>

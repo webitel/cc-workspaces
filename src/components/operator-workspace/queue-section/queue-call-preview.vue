@@ -1,31 +1,81 @@
 <template>
-  <article class="queue-preview">
+  <article class="queue-preview" :class="{'hold': isHold}">
     <header class="preview-header">
-      <span class="preview-header__name">Oleg Marchenko</span>
-      <span class="preview-header__time">00:00</span>
+      <span class="preview-header__name">{{computeDisplayName}}</span>
+      <span class="preview-header__time">{{computeCreatedTime}}</span>
     </header>
-    <span class="call-preview__number">+38 (063) 915-15-12</span>
-    <div class="preview-actions">
-      <rounded-action class="preview-action preview-action__answer">Answer</rounded-action>
-      <rounded-action class="preview-action preview-action__decline">Decline</rounded-action></div>
+    <span class="call-preview__number">{{computeDisplayNumber}}</span>
+    <div
+      v-if="computePreviewActions"
+      class="preview-actions"
+    >
+      <button
+        class="preview-action preview-action__answer"
+        @click.stop="answer(index)"
+      >
+        Answer
+      </button>
+      <button
+        class="preview-action preview-action__reject"
+        @click.stop="hangup(index)"
+      >
+        Reject
+      </button>
+    </div>
   </article>
 </template>
 
 <script>
-  import RoundedAction from '../../utils/rounded-action.vue';
+  import { mapActions } from 'vuex';
+  import { CallActions, CallDirection } from 'webitel-sdk';
+  import callInfo from '../../../mixins/callInfoMixin';
 
   export default {
     name: 'queue-call-preview',
-    components: {
-      RoundedAction,
+    mixins: [callInfo],
+
+    props: {
+      // index is for action calls
+      index: {
+        type: Number,
+        required: true,
+      },
+
+      // item is for UI computing
+      itemInstance: {
+        type: Object,
+        required: true,
+      },
+    },
+
+    computed: {
+      isHold() {
+        return this.itemInstance.isHold;
+      },
+
+      computePreviewActions() {
+        return this.itemInstance.state === CallActions.Ringing
+          && this.itemInstance.direction === CallDirection.Inbound;
+      },
+    },
+
+    methods: {
+      ...mapActions('operator', {
+        answer: 'ANSWER',
+        hangup: 'HANGUP',
+      }),
     },
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .queue-preview {
     padding: 20px 30px;
     border-bottom: 1px solid blue;
+
+    &.hold {
+      border: 2px solid yellowgreen;
+    }
   }
 
   .preview-header {
@@ -59,7 +109,7 @@
         background: $true-color;
       }
 
-      &__decline {
+      &__reject {
         background: $false-color;
       }
     }

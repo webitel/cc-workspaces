@@ -4,8 +4,8 @@
          alt="user photo">
     <div class="ws-contact-item__body">
       <div class="flex-wrap">
-        <div class="ws-contact-item__name">Oleg Marchenko</div>
-        <div class="ws-contact-item__number">+38 (063) 915-15-12</div>
+        <div class="ws-contact-item__name">{{item.name}}</div>
+        <div class="ws-contact-item__number">{{item.extension}}</div>
       </div>
     </div>
     <div class="ws-contact-item__status"></div>
@@ -15,6 +15,16 @@
 <script>
   export default {
     name: 'workspace-contact',
+
+    props: {
+      item: {
+        type: Object,
+        default: () => ({
+          name: 'Oleg Marchenko',
+          extension: '+38 (063) 915-15-12',
+        }),
+      },
+    },
   };
 </script>
 
