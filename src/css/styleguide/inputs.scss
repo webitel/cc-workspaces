@@ -1,0 +1,82 @@
+// COLORS
+$input-text-color: #A3A2A2;
+$input-icon-color: #A3A2A2;
+$input-border-color: #EAEAEA;
+
+$input-text-color__active: #000000;
+$input-icon-color__active: #000000;
+$input-border-color__active: #EAEAEA;
+
+.cc-label {
+  @extend .typo-input;
+  color: #000;
+}
+
+.cc-err-message {
+  @extend .typo-body-md;
+  color: #000;
+}
+
+.invalid .cc-label,
+.invalid .cc-err-message {
+  color: $error-color;
+}
+
+.cc-textarea {
+  @extend .typo-input;
+  position: relative;
+  width: calcRem(510px);
+  height: calcRem(200px);
+  padding: calcRem(10px) calcRem(40px) calcRem(40px) calcRem(20px);
+  border: calcRem(1px) solid $input-border-color;
+  border-radius: $border-radius;
+
+  &:focus .cc-textarea__close {
+    color: $input-icon-color__active;
+  }
+}
+
+.cc-textarea__textarea {
+}
+
+.cc-textarea__close {
+  position: absolute;
+  top: calcRem(8px);
+  right: calcRem(8px);
+  color: $input-icon-color;
+}
+
+.cc-textarea__send {
+  position: absolute;
+  bottom: calcRem(8px);
+  right: calcRem(8px);
+  color: $input-icon-color;
+}
+
+.cc-input {
+  @extend .typo-input;
+  display: flex;
+  align-items: center;
+  width: calcRem(429px);
+  padding: calcRem(8px);
+  border: calcRem(1px) solid $input-border-color;
+  border-radius: $border-radius;
+
+  &:focus, &:hover {
+    &:not(.cc-search) {
+      border-color: $input-border-color__active;
+    }
+
+    .cc-input__icon {
+      color: $input-icon-color__active;
+    }
+  }
+}
+
+.cc-input__input {
+  margin: 0 calcRem(8px);
+}
+
+.cc-input__icon {
+  color: $input-icon-color;
+}

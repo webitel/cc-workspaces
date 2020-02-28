@@ -1,6 +1,6 @@
 @import "./utils/variables";
 @import "./utils/helper-classes";
-@import "./styleguide/typography";
+@import "./styleguide/styleguide";
 
 @import "./operator-workspace/operator-workspace";
 
@@ -14,7 +14,7 @@ body {
   margin: 0;
   font-family: 'Montserrat Regular', monospace;
   font-size: 100%;
-  background: $body-bg-color;
+  background: $page-bg-color;
 }
 
 main {
@@ -41,6 +41,6 @@ iframe {
 }
 
 i {
-  color: $icon-color;
+  //color: $icon-color;
   transition: $transition;
 }
