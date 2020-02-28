@@ -15,11 +15,13 @@
       </rounded-action>
       <rounded-action
         class="numpad-numbers__num"
-        @click.native="input('2')">2
+        @click.native="input('2')"
+      >2
       </rounded-action>
       <rounded-action
         class="numpad-numbers__num"
-        @click.native="input('3')">3
+        @click.native="input('3')"
+      >3
       </rounded-action>
     </div>
     <div class="numpad-numbers__row">
