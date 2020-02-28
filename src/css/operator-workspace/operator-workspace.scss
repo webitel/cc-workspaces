@@ -1,0 +1,52 @@
+
+.workspace-section {
+  background: #fff;
+  border-radius: $border-radius;
+}
+
+.ws-history-container, .ws-contacts-container {
+  .search {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .ws-history-date, .ws-contact-letter {
+    text-align: center;
+  }
+
+  .ws-history-item, .ws-contact-item {
+    margin: 10px 0;
+  }
+}
+
+.ws-history-item, .ws-contact-item {
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+
+  &__pic {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid deepskyblue;
+  }
+
+  &__body {
+    flex: 1 0 auto;
+    margin: 0 15px;
+
+    .flex-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__status {
+    flex: 0 0 24px;
+    height: 24px;
+    width: 24px;
+    background: blue;
+  }
+}
