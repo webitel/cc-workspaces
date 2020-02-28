@@ -49,10 +49,6 @@
 
 <style lang="scss" scoped>
   .call-preview-wrap {
-    position: relative;
-    min-height: 100%;
-    height: 100%;
-    width: 100%;
     background: rgba(121, 113, 2, 0.1);
   }
 

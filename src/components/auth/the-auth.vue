@@ -40,7 +40,6 @@
 
         methods: {
             async authMessageHandler(event) {
-              console.warn(event);
                 if (event.data.accessToken) await handleToken(event.data.accessToken);
             },
         },

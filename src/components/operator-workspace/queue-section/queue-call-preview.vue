@@ -1,5 +1,5 @@
 <template>
-  <article class="queue-preview" :class="{'hold': computeHoldState}">
+  <article class="queue-preview" :class="{'hold': isHold}">
     <header class="preview-header">
       <span class="preview-header__name">{{computeDisplayName}}</span>
       <span class="preview-header__time">{{computeCreatedTime}}</span>
@@ -49,8 +49,8 @@
     },
 
     computed: {
-      computeHoldState() {
-        return this.itemInstance.state === CallActions.Hold;
+      isHold() {
+        return this.itemInstance.isHold;
       },
 
       computePreviewActions() {

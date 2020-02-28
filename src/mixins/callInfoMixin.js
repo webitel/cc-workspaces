@@ -1,12 +1,15 @@
 export default {
   data: () => ({
     now: Date.now(),
+    interval: null,
   }),
 
   mounted() {
-    setInterval(() => {
-      this.now = Date.now();
-    }, 1000);
+    this.setTimeNowTimer();
+  },
+
+  destroy() {
+    clearInterval(this.interval);
   },
 
   computed: {
@@ -27,6 +30,12 @@ export default {
   },
 
   methods: {
+    setTimeNowTimer() {
+      this.interval = setInterval(() => {
+        this.now = Date.now();
+      }, 1000);
+    },
+
     computeMinSecTime(time) {
       let min = Math.floor(time / 60);
       let sec = Math.floor(time % 60);
@@ -35,4 +44,5 @@ export default {
       return `${min}:${sec}`;
     },
   },
+
 };

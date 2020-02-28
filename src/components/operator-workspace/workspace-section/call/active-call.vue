@@ -6,10 +6,7 @@
     <divider></divider>
 
     <section class="active-call__info">
-      <client-history v-show="currentTab === 'history'"></client-history>
-      <contacts v-show="currentTab === 'contacts'"></contacts>
-      <transfer v-show="currentTab === 'transfer'"></transfer>
-      <numpad v-show="currentTab === 'numpad'"></numpad>
+      <component :is="computeCurrentTab"></component>
     </section>
 
     <divider></divider>
@@ -48,8 +45,22 @@
     }),
 
     computed: {
-      ...mapState('operator', {
-      }),
+      computeCurrentTab() {
+        switch (this.currentTab) {
+          case 'history':
+            return 'client-history';
+          case 'contacts':
+            return 'contacts';
+          case 'transfer':
+            return 'transfer';
+          case 'numpad':
+            return 'numpad';
+          default:
+            return '';
+        }
+      },
+
+      ...mapState('operator', {}),
     },
 
     methods: {

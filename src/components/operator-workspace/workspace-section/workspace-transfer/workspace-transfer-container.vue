@@ -4,6 +4,8 @@
       <input class="search" type="text">
     </form>
     <div class="ws-contacts-wrap">
+      <!-- div class="ws-contacts-letter-wrap">-->
+      <!--        <div class="ws-contact-letter">A</div>-->
       <contact
         v-for="(item, key) of dataList"
         :class="{'selected': item === selected}"
@@ -11,20 +13,8 @@
         :item="item"
         @click.native="select(item)"
       ></contact>
+      <!--      </div>-->
       <button @click="transfer(selected)">Transfer!</button>
-      <!--      <div class="ws-contacts-letter-wrap">-->
-      <!--        <div class="ws-contact-letter">A</div>-->
-      <!--        <contact-->
-      <!--          :class="{'selected': true}"-->
-      <!--          @click.native="select"-->
-      <!--        ></contact>-->
-      <!--        <contact></contact>-->
-      <!--      </div>-->
-      <!--      <div class="ws-contacts-letter-wrap">-->
-      <!--        <div class="ws-contact-letter">A</div>-->
-      <!--        <contact></contact>-->
-      <!--        <contact></contact>-->
-      <!--      </div>-->
     </div>
   </div>
 </template>

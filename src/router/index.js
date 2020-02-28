@@ -35,8 +35,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('access-token');
   if (!(to.fullPath === '/auth')) {
-    if (!localStorage.getItem('access-token')) {
+    if (!token) {
       next('/auth');
     }
   }

@@ -41,7 +41,6 @@ const actions = {
   TRANSFER: async (context, user) => {
     const call = context.state.workspaceItem;
     try {
-      console.log(user.extension);
       await call.blindTransfer(user.extension);
       context.commit('SET_CALL_STATE', null);
       context.commit('RESET_WORKSPACE');
@@ -80,8 +79,11 @@ const actions = {
   OPEN_CALL: async (context, index) => {
     if (Number.isInteger(index)) { // if there's index, we have gotten
       const call = context.state.callList[index]; // this item from queue => call already exists
-      // FIXME: HANDLE ACTIVE CALL OPEN BY CALL STATE
-      context.commit('SET_CALL_STATE', callStates.preview);
+      if (call.state === CallActions.Ringing) {
+        context.commit('SET_CALL_STATE', callStates.preview);
+      } else {
+        context.commit('SET_CALL_STATE', callStates.active);
+      }
       context.commit('SET_WORKSPACE', call);
     } else { // else we are trying to create a new call
       context.commit('SET_CALL_STATE', callStates.new);
@@ -98,11 +100,11 @@ const actions = {
   },
 
   ADD_DIGIT: async (context, value) => {
-    if (context.state.callState === 'NEW') {
+    if (context.state.callState !== 'NEW') {
+      context.dispatch('SEND_DTMF', value);
+    } else {
       const newCallNumber = context.state.newCallNumber + value;
       context.dispatch('SET_NEW_CALL_NUMBER', newCallNumber);
-    } else {
-      context.dispatch('SEND_DTMF', value);
     }
   },
 
@@ -120,23 +122,16 @@ const actions = {
   },
 
   INIT_CONNECTION: async (context) => {
-    const audio = new Audio();
     const callHandler = (action, call) => {
       switch (action) {
         case CallActions.Ringing:
-          context.commit('ADD_CALL', call);
-          if (call.direction === CallDirection.Outbound) {
-            context.commit('SET_CALL_STATE', callStates.active);
-            context.commit('SET_WORKSPACE', call);
-          }
+          context.dispatch('HANDLE_RINGING_ACTION', call);
           break;
         case CallActions.Hangup:
-          context.commit('REMOVE_CALL', call);
-          context.commit('RESET_WORKSPACE');
+          context.dispatch('HANDLE_HANGUP_ACTION', call);
           break;
         case CallActions.PeerStream:
-          audio.srcObject = call.peerStreams.pop();
-          audio.play();
+          context.dispatch('HANDLE_HANGUP_ACTION', call);
           break;
         default:
           console.log('default', action);
@@ -144,6 +139,25 @@ const actions = {
     };
     const client = await CallConnector(callHandler);
     context.commit('SET_CLI', client);
+  },
+
+  HANDLE_RINGING_ACTION: (context, call) => {
+    context.commit('ADD_CALL', call);
+    if (call.direction === CallDirection.Outbound) {
+      context.commit('SET_CALL_STATE', callStates.active);
+      context.commit('SET_WORKSPACE', call);
+    }
+  },
+
+  HANDLE_HANGUP_ACTION: (context, call) => {
+    context.commit('REMOVE_CALL', call);
+    context.commit('RESET_WORKSPACE');
+  },
+
+  HANDLE_STREAM_ACTION: (context, call) => {
+    const audio = new Audio();
+    audio.srcObject = call.peerStreams.pop();
+    audio.play();
   },
 };
 
@@ -163,11 +177,6 @@ const mutations = {
   SET_NEW_CALL_NUMBER: (state, value) => {
     state.newCallNumber = value;
   },
-
-  // SET_NEW_CALL_ID: (state, id) => {
-  //   state.newCallId = id;
-  //   console.warn('new call id set');
-  // },
 
   ADD_CALL: (state, call) => {
     state.callList.push(call);

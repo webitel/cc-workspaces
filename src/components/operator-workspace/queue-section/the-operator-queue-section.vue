@@ -47,12 +47,10 @@
 
 <style lang="scss" scoped>
   .workspace-section {
-    position: relative;
-
     .rounded-action {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
     }
   }
 </style>
