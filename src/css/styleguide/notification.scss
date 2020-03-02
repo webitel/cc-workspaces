@@ -20,25 +20,9 @@
   background: #fff;
   border-radius: $border-radius;
   cursor: pointer;
-
-  .notification-info:before {
-    color: $true-color;
-  }
-
-  .notification-error:before {
-    color: $false-color;
-  }
-
-  .icon-icon_close {
-    position: absolute;
-    top: 50%;
-    right: calcRem(24px);
-    transform: translateY(-50%);
-    transition: $transition;
-    cursor: pointer;
-  }
 }
 
 .notification__text {
+  flex-grow: 1;
   margin: 0 calcRem(24px) 0 calcRem(40px);
 }

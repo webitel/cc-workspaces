@@ -13,10 +13,15 @@
       @focusout="isFocused = false"
     ></textarea>
     <button
-      v-show="value"
       class="icon-btn cc-textarea__close"
-      @click="$emit('input', '')"
-    >X
+      :class="{'hidden': !value}"
+      @click="value = ''"
+    >
+      <icon>
+        <svg class="icon icon-close-md md">
+          <use xlink:href="#icon-close-md"></use>
+        </svg>
+      </icon>
     </button>
     <button
       class="icon-btn cc-textarea__send"
@@ -31,7 +36,7 @@
     props: {
       // value -- v-model from outer component
       value: {
-        default: '',
+        required: true,
       },
       // input placeholder
       placeholder: {

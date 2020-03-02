@@ -1,9 +1,19 @@
 <!-- eslint-disable -->
 <template>
-  <i>
+  <i class="icon-wrap">
     <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1"
          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
+        <symbol id="icon-close-md" viewBox="0 0 32 32">
+          <title>close</title>
+          <path
+            d="M11.374 9.96c-0.391-0.391-1.024-0.391-1.414 0s-0.391 1.024 0 1.414l4.626 4.626-4.626 4.626c-0.391 0.391-0.391 1.024 0 1.414s1.024 0.391 1.414 0l4.626-4.626 4.626 4.626c0.391 0.391 1.024 0.391 1.414 0s0.391-1.024 0-1.414l-4.626-4.626 4.626-4.626c0.391-0.391 0.391-1.024 0-1.414s-1.024-0.391-1.414 0l-4.626 4.626-4.626-4.626z"></path>
+        </symbol>
+        <symbol id="icon-search-md" viewBox="0 0 32 32">
+          <title>search</title>
+          <path
+            d="M13.333 4.067c-4.971 0-9 4.029-9 9s4.029 9 9 9c2.060 0 3.958-0.692 5.475-1.856 0.026 0.033 0.054 0.066 0.085 0.096l7.067 7.067c0.391 0.391 1.024 0.391 1.414 0s0.391-1.024 0-1.414l-7.067-7.067c-0.021-0.021-0.042-0.040-0.064-0.059 1.305-1.562 2.090-3.573 2.090-5.767 0-4.971-4.029-9-9-9zM6.333 13.067c0-3.866 3.134-7 7-7s7 3.134 7 7c0 3.866-3.134 7-7 7s-7-3.134-7-7z"></path>
+        </symbol>
         <symbol id="icon-call-transfer-lg" viewBox="0 0 32 32">
           <title>call-transfer-lg</title>
           <path
@@ -201,10 +211,14 @@
 </script>
 
 <style lang="scss" scoped>
-  .icon {
+  .icon-wrap {
     display: inline-block;
-    width: 1em;
-    height: 1em;
+  }
+
+  svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
     stroke-width: 0;
     stroke: currentColor;
     fill: currentColor;
@@ -217,4 +231,19 @@
     color: red;
   }
   ========================================== */
+
+  .lg {
+    width: calcRem(30px);
+    height: calcRem(30px);
+  }
+
+  .md {
+    width: calcRem(24px);
+    height: calcRem(24px);
+  }
+
+  .sm {
+    width: calcRem(16px);
+    height: calcRem(16px);
+  }
 </style>

@@ -17,10 +17,15 @@
         @focusout="isFocused = false"
       />
       <button
-        v-show="value"
-        class="cc-input__icon icon-btn"
+        class="icon-btn cc-input__icon"
+        :class="{'hidden': !value}"
         @click="validation = ''"
-      >X
+      >
+        <icon>
+          <svg class="icon icon-close-md md">
+            <use xlink:href="#icon-close-md"></use>
+          </svg>
+        </icon>
       </button>
     </div>
 
@@ -43,7 +48,7 @@
     props: {
       // value -- v-model from outer component
       value: {
-        default: '',
+        required: true,
       },
       // label above input itself
       label: {

@@ -5,12 +5,24 @@
          :key="key"
          @click="close(message.info || message.error)"
     >
-      <i v-if="message.info"></i>
-      <i v-if="message.error"></i>
+      <icon v-if="message.info">
+        <svg class="icon icon-tick-md md">
+          <use xlink:href="#icon-tick-md"></use>
+        </svg>
+      </icon>
+      <icon v-if="message.error">
+        <svg class="icon icon-attention-md md">
+          <use xlink:href="#icon-attention-md"></use>
+        </svg>
+      </icon>
       <div class="notification__text">
         {{message.info || message.error}}
       </div>
-      <i @click="close(message.info || message.error)"></i>
+      <icon @click="close(message.info || message.error)">
+        <svg class="icon icon-close-md md">
+          <use xlink:href="#icon-close-md"></use>
+        </svg>
+      </icon>
     </div>
   </aside>
 </template>
@@ -22,16 +34,16 @@
     name: 'notification',
     data() {
       return {
-        messages: [{
-          info: 'Info text',
-        }, {
-          error: 'Err text',
-        }],
+        messages: [],
       };
     },
     mounted() {
-      eventBus.$on('notificationInfo', (info) => { this.showInfo(info); });
-      eventBus.$on('notificationError', (error) => { this.showError(error); });
+      eventBus.$on('notificationInfo', (info) => {
+        this.showInfo(info);
+      });
+      eventBus.$on('notificationError', (error) => {
+        this.showError(error);
+      });
     },
     methods: {
       showInfo(message) {
@@ -60,5 +72,15 @@
 </script>
 
 <style lang="scss" scoped>
- @import '../../css/styleguide/notification';
+  @import '../../css/styleguide/notification';
+
+  .icon-tick-md {
+    stroke: $true-color;
+    fill: $true-color;
+  }
+
+  .icon-attention-md {
+    stroke: $false-color;
+    fill: $false-color;
+  }
 </style>
