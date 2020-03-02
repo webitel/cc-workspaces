@@ -1,0 +1,44 @@
+.notifications-wrap {
+  position: fixed;
+  top: calcRem(5px);
+  right: calcRem(5px);
+  z-index: 1000;
+}
+
+.notification {
+  @extend .typo-body-md;
+  @extend .box-shadow;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: calcRem(430px);
+  max-width: calcRem(850px);
+  padding: calcRem(24px) calcRem(30px);
+  margin-top: calcRem(7px);
+  color: #000;
+  background: #fff;
+  border-radius: $border-radius;
+  cursor: pointer;
+
+  .notification-info:before {
+    color: $true-color;
+  }
+
+  .notification-error:before {
+    color: $false-color;
+  }
+
+  .icon-icon_close {
+    position: absolute;
+    top: 50%;
+    right: calcRem(24px);
+    transform: translateY(-50%);
+    transition: $transition;
+    cursor: pointer;
+  }
+}
+
+.notification__text {
+  margin: 0 calcRem(24px) 0 calcRem(40px);
+}

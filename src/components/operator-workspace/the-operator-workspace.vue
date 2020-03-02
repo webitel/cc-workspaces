@@ -1,16 +1,18 @@
 <template>
   <main class="main-operator-workspace">
-    <widget-bar></widget-bar>
+    <notification/>
+    <widget-bar/>
     <section class="workspace">
-      <queue-section></queue-section>
-      <workspace-section></workspace-section>
-      <info-section></info-section>
+      <queue-section/>
+      <workspace-section/>
+      <info-section/>
     </section>
   </main>
 </template>
 
 <script>
   import { mapActions } from 'vuex';
+  import Notification from '../utils/notification.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-operator-queue-section.vue';
   import WorkspaceSection from './workspace-section/the-operator-workspace-section.vue';
@@ -19,6 +21,7 @@
   export default {
     name: 'the-operator-workspace',
     components: {
+      Notification,
       WidgetBar,
       QueueSection,
       WorkspaceSection,
