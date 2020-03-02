@@ -1,22 +1,29 @@
 <template>
   <footer class="call-footer">
     <rounded-action
-      class="call-action"
+      class="call-action secondary"
+      :class="{'active': true}"
       @click.native="$emit('openTab', 'numpad')"
     >numpad
     </rounded-action>
     <rounded-action
-      class="call-action"
+      class="call-action secondary"
       @click.native="toggleMute"
     >mute
     </rounded-action>
     <rounded-action
-      class="call-action"
+      class="call-action secondary"
       @click.native="toggleHold"
     >hold
     </rounded-action>
-    <rounded-action class="call-action">record</rounded-action>
-    <rounded-action class="call-action">edit</rounded-action>
+    <rounded-action
+      class="call-action secondary"
+    >record
+    </rounded-action>
+    <rounded-action
+      class="call-action secondary"
+    >edit
+    </rounded-action>
   </footer>
 </template>
 

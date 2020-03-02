@@ -2,12 +2,12 @@
   <header class="call-header">
     <div class="actions-wrap actions-wrap__left">
       <rounded-action
-        class="call-action"
+        class="call-action secondary"
         @click.native="$emit('openTab', 'contacts')"
       >contacts
       </rounded-action>
       <rounded-action
-        class="call-action"
+        class="call-action secondary"
         @click.native="$emit('openTab', 'history')"
       >history
       </rounded-action>
@@ -24,20 +24,20 @@
     <div class="actions-wrap actions-wrap__right">
 <!--      v-if="callState !== 'NEW'"-->
       <rounded-action
-        class="call-action"
+        class="call-action transfer"
         @click.native="$emit('openTab', 'transfer')"
       >transfer
       </rounded-action>
       <rounded-action
         v-if="callState !== 'NEW'"
-        class="call-action"
+        class="call-action end"
         @click.native="hangup()"
       >close
       </rounded-action>
 
       <rounded-action
         v-if="callState === 'NEW'"
-        class="call-action"
+        class="call-action call"
         @click.native="call"
       >call
       </rounded-action>

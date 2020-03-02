@@ -1,23 +1,32 @@
 <template>
-  <button class="rounded-action" type="button">
+  <button class="cc-btn" type="button">
     <slot></slot>
   </button>
 </template>
 
 <script>
   export default {
-    name: 'rounded-action',
+    name: 'btn',
   };
 </script>
 
 <style lang="scss" scoped>
-  .rounded-action {
-    width: calcRem(50px);
-    height: calcRem(50px);
+  .cc-btn {
+    padding: calcRem(11px) calcRem(17px) calcRem(7px);
+    color: #000;
+    background: $default-btn-color;
     border: none;
-    border-radius: 50%;
+    border-radius: $border-radius;
     transition: $transition;
     cursor: pointer;
+
+    &:hover {
+      background: $default-btn-color__hover;
+    }
+
+    &.capitalize {
+      text-transform: capitalize;
+    }
 
     &.call {
       color: #fff;
@@ -47,21 +56,18 @@
     }
 
     &.secondary {
-      color: #808080;
-      background: $secondary-action-color;
+      color: $secondary-btn-color;
+      background: $secondary-btn-color;
 
       &:hover {
-        color: #000;
+        color: $secondary-btn-color__hover;
+        background: $secondary-btn-color__hover;
       }
+    }
 
-      &.active {
-        color: #fff;
-        background: $secondary-action-color__active;
-
-        &:hover {
-          background: $secondary-action-color__active-hover;
-        }
-      }
+    &.disabled {
+      color: $btn-disabled;
+      background: $btn-disabled;
     }
   }
 </style>
