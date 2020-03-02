@@ -5,7 +5,7 @@ $input-border-color: #EAEAEA;
 
 $input-text-color__active: #000000;
 $input-icon-color__active: #000000;
-$input-border-color__active: #EAEAEA;
+$input-border-color__active: #000000;
 
 .cc-label {
   @extend .typo-input;
@@ -53,8 +53,7 @@ $input-border-color__active: #EAEAEA;
   color: $input-icon-color;
 }
 
-.cc-input {
-  @extend .typo-input;
+.cc-input__body {
   display: flex;
   align-items: center;
   width: calcRem(429px);
@@ -62,10 +61,8 @@ $input-border-color__active: #EAEAEA;
   border: calcRem(1px) solid $input-border-color;
   border-radius: $border-radius;
 
-  &:focus, &:hover {
-    &:not(.cc-search) {
-      border-color: $input-border-color__active;
-    }
+  &.focused, &:hover {
+    border-color: $input-border-color__active;
 
     .cc-input__icon {
       color: $input-icon-color__active;
@@ -74,9 +71,22 @@ $input-border-color__active: #EAEAEA;
 }
 
 .cc-input__input {
+  @extend .typo-input;
+  width: 100%;
   margin: 0 calcRem(8px);
+  border: none;
 }
 
 .cc-input__icon {
   color: $input-icon-color;
+}
+
+.cc-search-input .cc-input__body {
+  &.focused, &:hover {
+    border-color: $input-border-color;
+
+    .cc-input__icon {
+      color: $input-icon-color__active;
+    }
+  }
 }
