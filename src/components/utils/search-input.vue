@@ -15,6 +15,7 @@
         @focusout="isFocused = false"
       />
       <button
+        v-show="value"
         class="cc-input__icon icon-btn"
         @click="$emit('input', '')"
       >X
