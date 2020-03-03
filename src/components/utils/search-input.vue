@@ -1,10 +1,11 @@
 <template>
   <label class="cc-input cc-search-input">
     <div class="cc-input__body" :class="{'focused': isFocused}">
-      <button
-        class="cc-input__icon icon-btn"
-      >X
-      </button>
+      <icon>
+        <svg class="icon icon-search-md md">
+          <use xlink:href="#icon-search-md"></use>
+        </svg>
+      </icon>
       <input
         class="cc-input__input"
         :value="value"

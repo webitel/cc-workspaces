@@ -3,7 +3,7 @@
     <div class="notification"
          v-for="(message, key) in messages"
          :key="key"
-         @click="close(message.info || message.error)"
+         @click="close(message)"
     >
       <icon v-if="message.info">
         <svg class="icon icon-tick-md md">
@@ -16,9 +16,9 @@
         </svg>
       </icon>
       <div class="notification__text">
-        {{message.info || message.error}}
+        {{message.text}}
       </div>
-      <icon @click="close(message.info || message.error)">
+      <icon @click="close(message)">
         <svg class="icon icon-close-md md">
           <use xlink:href="#icon-close-md"></use>
         </svg>

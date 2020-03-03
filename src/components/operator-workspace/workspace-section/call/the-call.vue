@@ -2,17 +2,12 @@
   <section class="call">
     <call-preview v-if="state === 'PREVIEW'"></call-preview>
     <active-call v-else-if="state === 'ACTIVE' || state === 'NEW'"></active-call>
-    <section v-else>hello there
-      <comp
-        v-model="varia"
-      ></comp>
-    </section>
+    <section v-else>hello there</section>
   </section>
 </template>
 
 <script>
   import { mapState } from 'vuex';
-  import Comp from '../../../utils/input.vue';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
 
@@ -21,7 +16,6 @@
     components: {
       CallPreview,
       ActiveCall,
-      Comp,
     },
 
     data: () => ({

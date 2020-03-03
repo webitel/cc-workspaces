@@ -47,15 +47,15 @@
     }
 
     &.secondary {
-      color: #808080;
+      color: $secondary-action-icon-color;
       background: $secondary-action-color;
 
       &:hover {
-        color: #000;
+        color: $secondary-action-icon-color__hover;
       }
 
       &.active {
-        color: #fff;
+        color: $secondary-action-icon-color__active;
         background: $secondary-action-color__active;
 
         &:hover {
