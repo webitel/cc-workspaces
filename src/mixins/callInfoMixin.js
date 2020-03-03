@@ -25,7 +25,7 @@ export default {
       const start = this.itemInstance.answeredAt
         ? this.itemInstance.answeredAt : this.itemInstance.createdAt;
       const sec = Math.round((this.now - start) / 10 ** 3);
-      return this.computeMinSecTime(sec);
+      return this.computeHourMinSecTime(sec);
     },
   },
 
@@ -36,12 +36,14 @@ export default {
       }, 1000);
     },
 
-    computeMinSecTime(time) {
+    computeHourMinSecTime(time) {
+      let hour = Math.floor(time / 60 ** 2);
       let min = Math.floor(time / 60);
       let sec = Math.floor(time % 60);
+      hour = hour < 10 ? `0${hour}` : hour;
       min = min < 10 ? `0${min}` : min;
       sec = sec < 10 ? `0${sec}` : sec;
-      return `${min}:${sec}`;
+      return `${hour}:${min}:${sec}`;
     },
   },
 

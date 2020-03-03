@@ -115,31 +115,43 @@
 <style lang="scss" scoped>
   .call-header {
     display: flex;
-    height: 130px;
+    height: calcRem(140px);
+    justify-content: space-between;
   }
 
   .actions-wrap__left {
-    flex: 1 1 auto;
+    display: flex;
+    flex: 0 0 calcRem(120px);
 
     .call-action:first-child {
-      margin-right: 20px;
+      margin-right: calcRem(20px);
     }
   }
 
   .actions-wrap__right {
-    flex: 1 1 auto;
+    display: flex;
+    flex: 0 0 calcRem(120px);
+    justify-content: flex-end;
 
     .call-action:last-child {
-      margin-left: 20px;
+      margin-left: calcRem(20px);
     }
   }
 
   .call-profile {
-    flex: 0 0  auto;
+    flex: 0 0 auto;
   }
 
   .call-header__form-number {
-    flex: 0 0  auto;
+    flex: 0 0 auto;
     align-self: flex-end;
+
+    &__input {
+      @extend .typo-input;
+      text-align: center;
+      padding: calcRem(2px) 0;
+      border: none;
+      border-bottom: calcRem(1px) solid #000;
+    }
   }
 </style>
