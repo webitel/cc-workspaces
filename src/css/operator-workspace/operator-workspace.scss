@@ -5,17 +5,25 @@
 }
 
 .ws-history-container, .ws-contacts-container {
-  .search {
-    width: 100%;
-    margin-bottom: 10px;
+  $separator-color: #94979B;
+
+  .cc-search-input {
+    margin-bottom: calcRem(10px);
   }
 
   .ws-history-date, .ws-contact-letter {
+    @extend .typo-body-md;
     text-align: center;
+    color: $separator-color;
+    margin: calcRem(10px) 0;
   }
 
   .ws-history-item, .ws-contact-item {
-    margin: 10px 0;
+    margin-bottom: calcRem(10px);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -25,28 +33,40 @@
   align-items: center;
 
   &__pic {
-    flex: 0 0 50px;
-    width: 50px;
-    height: 50px;
+    flex: 0 0 calcRem(50px);
+    width: calcRem(50px);
+    height: calcRem(50px);
     border-radius: 50%;
-    border: 1px solid deepskyblue;
   }
 
   &__body {
     flex: 1 0 auto;
-    margin: 0 15px;
+    margin: 0 calcRem(15px);
 
     .flex-wrap {
       display: flex;
-      align-items: center;
       justify-content: space-between;
     }
   }
 
   &__status {
-    flex: 0 0 24px;
-    height: 24px;
-    width: 24px;
-    background: blue;
+    flex: 0 0 calcRem(24px);
+    height: calcRem(24px);
+    width: calcRem(24px);
+
+    .icon-call-transfer-md {
+      stroke: $call-color;
+      fill: $call-color;
+    }
+
+    .icon-missed-call-md {
+      stroke: $disconnect-color;
+      fill: $disconnect-color;
+    }
+
+    .icon-incoming-call-md {
+      stroke: $icons-color;
+      fill: $icons-color;
+    }
   }
 }

@@ -29,4 +29,23 @@
 </script>
 
 <style lang="scss" scoped>
+  .flex-wrap {
+    align-items: center;
+  }
+
+  .ws-history-item__number {
+    @extend .typo-heading-sm;
+  }
+
+  .ws-history-item__time {
+    @extend .typo-body-md;
+  }
+
+  .ws-history-item__date {
+    @extend .typo-body-sm;
+  }
+
+  .ws-history-item__location {
+    @extend .typo-body-sm;
+  }
 </style>

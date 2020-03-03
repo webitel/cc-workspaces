@@ -1,8 +1,6 @@
 <template>
   <div class="ws-contacts-container">
-    <form class="search-wrap">
-      <input class="search" type="text">
-    </form>
+    <search v-model="search"></search>
     <div class="ws-contacts-wrap">
       <div class="ws-contacts-letter-wrap">
         <div class="ws-contact-letter">A</div>
@@ -10,7 +8,7 @@
         <contact></contact>
       </div>
       <div class="ws-contacts-letter-wrap">
-        <div class="ws-contact-letter">A</div>
+        <div class="ws-contact-letter">B</div>
         <contact></contact>
         <contact></contact>
       </div>
@@ -19,16 +17,21 @@
 </template>
 
 <script>
+  import Search from '../../../utils/search-input.vue';
   import Contact from './workspace-contact.vue';
 
   export default {
     name: 'workspace-contacts-container',
     components: {
+      Search,
       Contact,
     },
+
+    data: () => ({
+      search: '',
+    }),
   };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

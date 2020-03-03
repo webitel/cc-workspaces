@@ -18,7 +18,7 @@
       <button
         class="icon-btn cc-input__icon"
         :class="{'hidden': !value}"
-        @click="validation = ''"
+        @click="value = ''"
       >
         <icon>
           <svg class="icon icon-close-md md">
