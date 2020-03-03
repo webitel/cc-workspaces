@@ -7,12 +7,12 @@
     <div class="cc-input__body" :class="{'focused': isFocused}">
       <input
         class="cc-input__input"
-        v-model="validation"
-        @input="$emit('input, $event.target.value')"
+        :value="validation"
         :type="type"
         :placeholder="placeholder || label"
         :autofocus="autofocus"
         :disabled="disabled"
+        @input="$emit('input', $event.target.value)"
         @focusin="isFocused = true"
         @focusout="isFocused = false"
       />

@@ -213,6 +213,8 @@
 <style lang="scss" scoped>
   .icon-wrap {
     display: inline-block;
+    width: calcRem(24px);
+    height: calcRem(24px);
   }
 
   svg {
@@ -220,8 +222,10 @@
     width: 1rem;
     height: 1rem;
     stroke-width: 0;
-    stroke: currentColor;
-    fill: currentColor;
+    stroke: $icon-color;
+    fill: $icon-color;
+    /*stroke: currentColor;*/
+    /*fill: currentColor;*/
   }
 
   /* ==========================================

@@ -12,7 +12,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import Comp from '../../../utils/input.vue';
+  import Comp from '../../../utils/search-input.vue';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
 
