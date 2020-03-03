@@ -10,8 +10,12 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<!--not scoped to change .icon colors-->
+<style lang="scss">
   .rounded-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: calcRem(50px);
     height: calcRem(50px);
     border: none;
@@ -20,7 +24,10 @@
     cursor: pointer;
 
     &.call {
-      color: #fff;
+      .icon {
+        stroke: #fff;
+        fill: #fff;
+      }
       background: $call-btn-color;
 
       &:hover {
@@ -29,7 +36,10 @@
     }
 
     &.end {
-      color: #fff;
+      .icon {
+        stroke: #fff;
+        fill: #fff;
+      }
       background: $end-btn-color;
 
       &:hover {
@@ -38,7 +48,10 @@
     }
 
     &.transfer {
-      color: #fff;
+      .icon {
+        stroke: #fff;
+        fill: #fff;
+      }
       background: $transfer-btn-color;
 
       &:hover {
@@ -47,15 +60,22 @@
     }
 
     &.secondary {
-      color: $secondary-action-icon-color;
+      .icon {
+        stroke: $secondary-action-icon-color;
+        fill: $secondary-action-icon-color;
+      }
       background: $secondary-action-color;
 
-      &:hover {
-        color: $secondary-action-icon-color__hover;
+      &:hover .icon {
+        stroke: $secondary-action-icon-color__hover;
+        fill: $secondary-action-icon-color__hover;
       }
 
       &.active {
-        color: $secondary-action-icon-color__active;
+        .icon {
+          stroke: $secondary-action-icon-color__active;
+          fill: $secondary-action-icon-color__active;
+        }
         background: $secondary-action-color__active;
 
         &:hover {

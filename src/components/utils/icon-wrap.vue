@@ -216,7 +216,7 @@
     width: calcRem(24px);
     height: calcRem(24px);
   }
-
+  /*svg instead of .icon to override styles by .icon-icon-name-size without any other seelectors*/
   svg {
     display: inline-block;
     width: 1rem;
@@ -224,6 +224,7 @@
     stroke-width: 0;
     stroke: $icon-color;
     fill: $icon-color;
+    transition: $transition;
     /*stroke: currentColor;*/
     /*fill: currentColor;*/
   }

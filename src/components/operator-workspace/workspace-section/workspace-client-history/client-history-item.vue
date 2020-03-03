@@ -12,7 +12,13 @@
         <div class="ws-history-item__location">Ukraine</div>
       </div>
     </div>
-    <div class="ws-history-item__status"></div>
+    <div class="ws-history-item__status">
+      <icon>
+        <svg class="icon icon-missed-call-md md">
+          <use xlink:href="#icon-missed-call-md"></use>
+        </svg>
+      </icon>
+    </div>
   </div>
 </template>
 
