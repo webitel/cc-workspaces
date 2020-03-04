@@ -47,3 +47,9 @@
   @include fontSize(14px);
   @include lineHeight(20px);
 }
+
+.typo-btn {
+  font-family: 'Montserrat Semi', monospace;
+  @include fontSize(12px);
+  @include lineHeight(18px);
+}

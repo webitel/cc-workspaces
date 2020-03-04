@@ -1,5 +1,9 @@
 <template>
   <section class="workspace-section">
+    <tabs
+      :current-tab="currentTab"
+      :tabs="queueTabs"
+    ></tabs>
     <call-preview
       v-for="(call, key) of callList"
       :item-instance="call"
@@ -7,11 +11,17 @@
       :key="key"
       @click.native.prevent="openCall(key)"
     ></call-preview>
-    <!--    <message-preview></message-preview>-->
-    <!--    <message-preview></message-preview>-->
+
     <rounded-action
+      class="call"
       @click.native="openCall()"
-    >new call</rounded-action>
+    >
+      <icon>
+        <svg class="icon icon-call-ringing-md md">
+          <use xlink:href="#icon-call-ringing-md"></use>
+        </svg>
+      </icon>
+    </rounded-action>
   </section>
 </template>
 
@@ -19,20 +29,36 @@
   import { mapActions, mapState } from 'vuex';
   import CallPreview from './queue-call-preview.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
-  // import MessagePreview from './queue-message-preview.vue';
+  import Tabs from '../../utils/tabs.vue';
 
   export default {
     name: 'the-operator-queue-section',
     components: {
       CallPreview,
-      // MessagePreview,
       RoundedAction,
+      Tabs,
     },
-    data: () => ({}),
+    data: () => ({
+      currentTab: { value: 'active' },
+    }),
+
     computed: {
       ...mapState('operator', {
         callList: (state) => state.callList,
       }),
+
+      queueTabs() {
+        return [
+          {
+            text: `Active(${this.callList.length})`,
+            value: 'active',
+          },
+          {
+            text: 'Offline(0)',
+            value: 'offline',
+          },
+        ];
+      },
     },
 
     methods: {
@@ -47,10 +73,14 @@
 
 <style lang="scss" scoped>
   .workspace-section {
+    .tabs {
+      text-align: center;
+    }
+
     .rounded-action {
       position: fixed;
-      bottom: 30px;
-      left: 30px;
+      bottom: 70px;
+      left: 40px;
     }
   }
 </style>

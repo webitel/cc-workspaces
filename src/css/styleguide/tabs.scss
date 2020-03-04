@@ -22,7 +22,7 @@ $tabs-color: #94979B;
   position: relative;
   display: inline-block;
   margin-right: calcRem(20px);
-  padding-bottom: calcRem(20px);
+  padding: calcRem(20px);
   color: $tabs-color;
   background: transparent;
   border: none;

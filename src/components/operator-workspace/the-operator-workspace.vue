@@ -30,11 +30,18 @@
 
     created() {
       this.initClient();
+      this.startDateCounter();
+    },
+
+    destroy() {
+      this.clearDateCounter();
     },
 
     methods: {
       ...mapActions('operator', {
         initClient: 'INIT_CONNECTION',
+        startDateCounter: 'START_DATE_COUNTER',
+        clearDateCounter: 'CLEAR_DATE_COUNTER',
       }),
     },
   };
