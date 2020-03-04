@@ -3,6 +3,7 @@
     <div class="actions-wrap actions-wrap__left">
       <rounded-action
         class="call-action secondary"
+        :class="{'active': currentTab === 'contacts'}"
         @click.native="$emit('openTab', 'contacts')"
       >
         <icon>
@@ -13,6 +14,7 @@
       </rounded-action>
       <rounded-action
         class="call-action secondary"
+        :class="{'active': currentTab === 'history'}"
         @click.native="$emit('openTab', 'history')"
       >
         <icon>
@@ -85,6 +87,12 @@
     components: {
       CallProfile,
       RoundedAction,
+    },
+
+    props: {
+      currentTab: {
+        type: String,
+      },
     },
 
     computed: {

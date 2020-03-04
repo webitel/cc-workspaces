@@ -2,7 +2,7 @@
   <footer class="call-footer">
     <rounded-action
       class="call-action secondary"
-      :class="{'active': false}"
+      :class="{'active': currentTab === 'numpad'}"
       @click.native="$emit('openTab', 'numpad')"
     >
       <icon>
@@ -60,6 +60,12 @@
     name: 'call-footer',
     components: {
       RoundedAction,
+    },
+
+    props: {
+      currentTab: {
+        type: String,
+      },
     },
 
     methods: {
