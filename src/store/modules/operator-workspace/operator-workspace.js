@@ -131,7 +131,7 @@ const actions = {
           context.dispatch('HANDLE_HANGUP_ACTION', call);
           break;
         case CallActions.PeerStream:
-          context.dispatch('HANDLE_HANGUP_ACTION', call);
+          context.dispatch('HANDLE_STREAM_ACTION', call);
           break;
         default:
           console.log('default', action);
