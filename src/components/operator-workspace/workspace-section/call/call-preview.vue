@@ -4,19 +4,34 @@
       <call-profile></call-profile>
       <div class="call-preview__actions">
         <rounded-action
-          class="call-preview__action"
+          class="rounded-action__lg call"
           @click.native="answer()"
-        >Accept
+        >
+          <icon class="lg">
+            <svg class="icon icon-call-lg lg">
+              <use xlink:href="#icon-call-lg"></use>
+            </svg>
+          </icon>
         </rounded-action>
         <rounded-action
-          class="call-preview__action"
+          class="rounded-action__lg transfer"
           @click.native="transfer()"
-        >Transfer
+        >
+          <icon class="lg">
+            <svg class="icon icon-call-transfer-lg lg">
+              <use xlink:href="#icon-call-transfer-lg"></use>
+            </svg>
+          </icon>
         </rounded-action>
         <rounded-action
-          class="call-preview__action"
+          class="rounded-action__lg end"
           @click.native="hangup()"
-        >Reject
+        >
+          <icon class="lg">
+            <svg class="icon icon-call-end-lg lg">
+              <use xlink:href="#icon-call-end-lg"></use>
+            </svg>
+          </icon>
         </rounded-action>
       </div>
     </div>
@@ -49,21 +64,17 @@
 
 <style lang="scss" scoped>
   .call-preview-wrap {
-    background: rgba(121, 113, 2, 0.1);
-  }
-
-  .call-preview {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 
   .call-preview__actions {
     display: flex;
 
-    .call-preview__action {
-      margin: 0 20px;
+    .rounded-action {
+      margin: 0 calcRem(15px);
     }
   }
 </style>

@@ -23,6 +23,11 @@
     transition: $transition;
     cursor: pointer;
 
+    &__lg {
+      width: calcRem(60px);
+      height: calcRem(60px);
+    }
+
     &.call {
       .icon {
         stroke: #fff;

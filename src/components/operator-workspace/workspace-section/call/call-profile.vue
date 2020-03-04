@@ -38,7 +38,6 @@
       height: calcRem(90px);
       margin: 0 auto calcRem(20px);
       border-radius: 50%;
-      border: calcRem(1px) solid red;
     }
 
     &__name {
