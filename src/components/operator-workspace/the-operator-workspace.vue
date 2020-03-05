@@ -48,9 +48,9 @@
 
   .workspace {
     display: grid;
-    grid-template-columns: 340px 550px 1fr;
-    grid-gap: 20px;
+    grid-template-columns: calcRem(340px) calcRem(550px) 1fr;
+    grid-gap: calcRem(20px);
     height: 100%;
-    margin-top: 28px;
+    margin-top: calcRem(28px);
   }
 </style>

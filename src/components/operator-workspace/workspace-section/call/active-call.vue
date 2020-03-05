@@ -83,7 +83,7 @@
   }
 
   .active-call__info {
-    margin: 20px 0;
+    margin: calcRem(20px) 0;
     flex: 1; // fill all available container height
 
     display: flex; // make child height 100& of container
