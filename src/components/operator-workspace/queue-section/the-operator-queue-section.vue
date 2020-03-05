@@ -79,7 +79,7 @@
 
     .rounded-action {
       position: fixed;
-      bottom: calcRem(70px);
+      bottom: calcRem(40px);
       left: calcRem(40px);
     }
   }

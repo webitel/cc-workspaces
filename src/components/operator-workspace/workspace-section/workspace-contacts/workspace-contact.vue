@@ -31,6 +31,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .ws-contact-item {
+    padding: calcRem(10px);
+  }
+
   .flex-wrap {
     align-items: flex-start;
     flex-direction: column;
@@ -48,8 +52,8 @@
     align-self: end;
 
     &__indicator {
-      width: 14px;
-      height: 14px;
+      width: calcRem(14px);
+      height: calcRem(14px);
       background: $true-color;
       border-radius: 50%;
     }

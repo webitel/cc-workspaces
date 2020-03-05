@@ -11,7 +11,6 @@
 <!--      <li><b>Client assistant: </b>Name Surname</li>-->
 <!--      <li><b>Number\LDaP: </b>666</li>-->
 <!--    </ul>-->
-    <img src="../../../assets/operator-workspace/client-info-template.png" alt="">
   </article>
 </template>
 
