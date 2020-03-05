@@ -101,12 +101,12 @@
     box-sizing: border-box;
     position: relative;
     padding: calcRem(20px) calcRem(30px);
-    border: 2px solid transparent;
+    border: calcRem(2px) solid transparent;
     border-bottom-color: $page-bg-color;
     border-radius: $border-radius;
 
     &.hold {
-      border: 2px solid $hold-color;
+      border-color: $hold-color;
     }
   }
 

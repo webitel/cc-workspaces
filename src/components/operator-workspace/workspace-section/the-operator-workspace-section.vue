@@ -27,7 +27,7 @@
 
 <style lang="scss" scoped>
   .workspace-section {
-    padding: 20px;
+    padding: calcRem(20px);
   }
 
   .chat {

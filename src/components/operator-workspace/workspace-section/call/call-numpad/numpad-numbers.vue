@@ -99,13 +99,13 @@
   $numpad-color: #808080;
 
   .numpad-numbers {
-    width: 210px;
+    width: calcRem(210px);
     margin: auto;
 
     &__row {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      margin-top: calcRem(30px);
 
       &:first-child {
         justify-content: center;
