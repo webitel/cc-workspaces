@@ -96,6 +96,8 @@
 </script>
 
 <style lang="scss" scoped>
+  $numpad-color: #808080;
+
   .numpad-numbers {
     width: 210px;
     margin: auto;
@@ -109,6 +111,11 @@
         justify-content: center;
         margin-top: 0;
       }
+    }
+
+    &__num {
+      @extend .typo-heading-sm;
+      color: $numpad-color;
     }
   }
 </style>

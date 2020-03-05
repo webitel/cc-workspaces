@@ -3,43 +3,75 @@
     <div class="actions-wrap actions-wrap__left">
       <rounded-action
         class="call-action secondary"
+        :class="{'active': currentTab === 'contacts'}"
         @click.native="$emit('openTab', 'contacts')"
-      >contacts
+      >
+        <icon>
+          <svg class="icon icon-call-contacts-md md">
+            <use xlink:href="#icon-call-contacts-md"></use>
+          </svg>
+        </icon>
       </rounded-action>
       <rounded-action
         class="call-action secondary"
+        :class="{'active': currentTab === 'history'}"
         @click.native="$emit('openTab', 'history')"
-      >history
+      >
+        <icon>
+          <svg class="icon icon-call-history-md md">
+            <use xlink:href="#icon-call-history-md"></use>
+          </svg>
+        </icon>
       </rounded-action>
     </div>
 
-    <call-profile v-if="callState !== 'NEW'"></call-profile>
+    <call-profile v-if="callState !== 'NEW'" class="call-profile__sm"></call-profile>
     <form
       v-else
       class="call-header__form-number"
     >
-      <input v-model="number" type="text" autofocus>
+      <input
+        class="call-header__form-number__input"
+        v-model="number"
+        type="text"
+        autofocus
+      >
     </form>
 
     <div class="actions-wrap actions-wrap__right">
-<!--      v-if="callState !== 'NEW'"-->
       <rounded-action
+        v-if="callState !== 'NEW'"
         class="call-action transfer"
         @click.native="$emit('openTab', 'transfer')"
-      >transfer
+      >
+        <icon>
+          <svg class="icon icon-call-transfer-md md">
+            <use xlink:href="#icon-call-transfer-md"></use>
+          </svg>
+        </icon>
       </rounded-action>
       <rounded-action
         v-if="callState !== 'NEW'"
         class="call-action end"
         @click.native="hangup()"
-      >close
+      >
+        <icon>
+          <svg class="icon icon-call-end-md md">
+            <use xlink:href="#icon-call-end-md"></use>
+          </svg>
+        </icon>
       </rounded-action>
 
       <rounded-action
-        v-if="callState === 'NEW'"
+        v-if="callState === 'NEW' && number"
         class="call-action call"
         @click.native="call"
-      >call
+      >
+        <icon>
+          <svg class="icon icon-call-ringing-md md">
+            <use xlink:href="#icon-call-ringing-md"></use>
+          </svg>
+        </icon>
       </rounded-action>
     </div>
   </header>
@@ -55,6 +87,12 @@
     components: {
       CallProfile,
       RoundedAction,
+    },
+
+    props: {
+      currentTab: {
+        type: String,
+      },
     },
 
     computed: {
@@ -85,31 +123,43 @@
 <style lang="scss" scoped>
   .call-header {
     display: flex;
-    height: 130px;
+    height: calcRem(140px);
+    justify-content: space-between;
   }
 
   .actions-wrap__left {
-    flex: 1 1 auto;
+    display: flex;
+    flex: 0 0 calcRem(120px);
 
     .call-action:first-child {
-      margin-right: 20px;
+      margin-right: calcRem(20px);
     }
   }
 
   .actions-wrap__right {
-    flex: 1 1 auto;
+    display: flex;
+    flex: 0 0 calcRem(120px);
+    justify-content: flex-end;
 
     .call-action:last-child {
-      margin-left: 20px;
+      margin-left: calcRem(20px);
     }
   }
 
   .call-profile {
-    flex: 0 0  auto;
+    flex: 0 0 auto;
   }
 
   .call-header__form-number {
-    flex: 0 0  auto;
+    flex: 0 0 auto;
     align-self: flex-end;
+
+    &__input {
+      @extend .typo-input;
+      text-align: center;
+      padding: calcRem(2px) 0;
+      border: none;
+      border-bottom: calcRem(1px) solid #000;
+    }
   }
 </style>

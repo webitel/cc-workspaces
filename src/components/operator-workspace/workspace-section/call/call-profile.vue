@@ -28,20 +28,40 @@
 
 <style lang="scss" scoped>
   .call-profile {
-    text-align: center;
-    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: calcRem(40px);
 
     &__pic {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 20px;
+      width: calcRem(90px);
+      height: calcRem(90px);
+      margin: 0 auto calcRem(20px);
       border-radius: 50%;
-      border: 1px solid red;
     }
 
     &__name {
       @extend .typo-heading-sm;
-      margin-bottom: 10px;
+      margin-bottom: calcRem(10px);
+    }
+
+    &__number {
+      @extend .typo-body-md;
+    }
+
+    &__sm {
+      margin: 0;
+
+      .call-profile__pic {
+        width: calcRem(80px);
+        height: calcRem(80px);
+        margin: 0 auto calcRem(10px);
+        border: none;
+      }
+
+      .call-profile__name {
+        margin-bottom: calcRem(5px);
+      }
     }
   }
 </style>

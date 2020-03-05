@@ -12,7 +12,13 @@
         <div class="ws-history-item__location">Ukraine</div>
       </div>
     </div>
-    <div class="ws-history-item__status"></div>
+    <div class="ws-history-item__status">
+      <icon>
+        <svg class="icon icon-missed-call-md md">
+          <use xlink:href="#icon-missed-call-md"></use>
+        </svg>
+      </icon>
+    </div>
   </div>
 </template>
 
@@ -23,4 +29,23 @@
 </script>
 
 <style lang="scss" scoped>
+  .flex-wrap {
+    align-items: center;
+  }
+
+  .ws-history-item__number {
+    @extend .typo-heading-sm;
+  }
+
+  .ws-history-item__time {
+    @extend .typo-body-md;
+  }
+
+  .ws-history-item__date {
+    @extend .typo-body-sm;
+  }
+
+  .ws-history-item__location {
+    @extend .typo-body-sm;
+  }
 </style>

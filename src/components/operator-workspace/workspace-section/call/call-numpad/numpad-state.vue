@@ -1,8 +1,10 @@
 <template>
   <div class="numpad-state">
     <div class="numpad-state__animation">
-      <img style="width: 50px; height: 50px; border-radius: 50%;"
-           src="https://static10.tgstat.ru/channels/_0/3b/3bc2c1c682ca9f9517380ce37ad01c75.jpg" alt="">
+      <img
+        v-show="false"
+        style="width: 50px; height: 50px; border-radius: 50%;"
+        src="https://static10.tgstat.ru/channels/_0/3b/3bc2c1c682ca9f9517380ce37ad01c75.jpg" alt="">
     </div>
     <div class="numpad-state__primary-text">{{computeCallState}}</div>
     <div class="numpad-state__secondary-text">{{computeDTMFDigits}}</div>
@@ -47,26 +49,33 @@
 </script>
 
 <style lang="scss" scoped>
+  .typo-call-state {
+    font-family: 'Montserrat Semi', monospace;
+    @include fontSize(40px);
+    @include lineHeight(40px);
+  }
+
   .numpad-state {
     display: flex;
     align-items: center;
     flex-direction: column;
 
     &__animation {
-      flex: 0 0 50px;
-      margin-bottom: 10px;
+      width: calcRem(50px);
+      height: calcRem(50px);
+      margin-bottom: calcRem(10px);
     }
 
     &__primary-text {
-      flex: 0 0 auto;
-      min-height: 28px;
-      margin-bottom: 25px;
+      @extend .typo-call-state;
+      text-align: center;
+      margin-bottom: calcRem(25px);
     }
 
     &__secondary-text {
-      flex: 0 0 auto;
-      min-height: 16px;
-      margin-bottom: 55px;
+      @extend .typo-heading-sm;
+      min-height: calcRem(16px);
+      margin-bottom: calcRem(55px);
     }
   }
 </style>

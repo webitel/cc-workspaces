@@ -1,6 +1,7 @@
 <template>
   <div class="active-call">
     <call-header
+      :current-tab="currentTab"
       @openTab="currentTab = $event"
     ></call-header>
     <divider></divider>
@@ -11,6 +12,7 @@
 
     <divider></divider>
     <call-footer
+      :current-tab="currentTab"
       @openTab="currentTab = $event"
     ></call-footer>
   </div>
