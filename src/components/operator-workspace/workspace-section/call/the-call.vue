@@ -24,9 +24,7 @@
       ActiveCall,
     },
 
-    data: () => ({
-      varia: 'variabl',
-    }),
+    data: () => ({}),
 
     computed: {
       ...mapState('operator', {

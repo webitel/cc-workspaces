@@ -31,13 +31,13 @@
     >
       <btn
         class="uppercase call"
-        @click.native="answer(index)"
+        @click.native.stop="answer(index)"
       >
         Answer
       </btn>
       <btn
         class="uppercase end"
-        @click.native="hangup(index)"
+        @click.native.stop="hangup(index)"
       >
         Reject
       </btn>
