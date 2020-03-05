@@ -106,7 +106,7 @@
     border-radius: $border-radius;
 
     &.hold {
-      border-color: $hold-color;
+      border: calcRem(2px) solid $hold-color;
     }
   }
 
