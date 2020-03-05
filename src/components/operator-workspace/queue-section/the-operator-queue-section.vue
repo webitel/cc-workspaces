@@ -2,7 +2,7 @@
   <section class="workspace-section">
     <tabs
       :current-tab="currentTab"
-      :tabs="queueTabs"
+      :tabs="tabs"
     ></tabs>
     <call-preview
       v-for="(call, key) of callList"
@@ -47,7 +47,7 @@
         callList: (state) => state.callList,
       }),
 
-      queueTabs() {
+      tabs() {
         return [
           {
             text: `Active(${this.callList.length})`,
@@ -79,8 +79,8 @@
 
     .rounded-action {
       position: fixed;
-      bottom: 70px;
-      left: 40px;
+      bottom: calcRem(70px);
+      left: calcRem(40px);
     }
   }
 </style>
