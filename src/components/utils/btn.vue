@@ -12,6 +12,7 @@
 
 <style lang="scss" scoped>
   .cc-btn {
+    @extend .typo-btn;
     padding: calcRem(11px) calcRem(17px) calcRem(7px);
     color: #000;
     background: $default-btn-color;
@@ -22,10 +23,6 @@
 
     &:hover {
       background: $default-btn-color__hover;
-    }
-
-    &.capitalize {
-      text-transform: capitalize;
     }
 
     &.call {
