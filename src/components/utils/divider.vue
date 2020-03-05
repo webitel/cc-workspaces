@@ -16,7 +16,7 @@
     max-height: 0;
     padding: 0;
     margin: 0;
-    border: 0 solid darkred;
+    border: calcRem(1px) solid $page-bg-color;
     border-top-width: thin;
   }
 </style>

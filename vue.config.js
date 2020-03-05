@@ -1,5 +1,5 @@
 process.env.VUE_APP_API_URL = process.env.NODE_ENV === 'production' ? '/api' : 'https://dev.webitel.com/api';
-process.env.VUE_APP_AUTH_MODULE_URL = process.env.NODE_ENV === 'production' ? '/app/auth' : 'http://10.10.10.117:8081/auth';
+process.env.VUE_APP_AUTH_MODULE_URL = process.env.NODE_ENV === 'production' ? '/app/auth' : 'https://dev.webitel.com/app/auth';
 
 module.exports = {
   // publicPath: '',

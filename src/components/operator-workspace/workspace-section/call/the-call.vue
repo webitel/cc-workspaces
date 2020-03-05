@@ -18,6 +18,10 @@
       ActiveCall,
     },
 
+    data: () => ({
+      varia: 'variabl',
+    }),
+
     computed: {
       ...mapState('operator', {
         state: (state) => state.callState,

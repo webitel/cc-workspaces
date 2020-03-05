@@ -18,28 +18,13 @@
   box-shadow: $box-shadow;
 }
 
-.invalid {
-  color: $false-color;
-  border-color: $false-color;
-}
-
-.scrollbar {
-  // scrollbar itself
-  &::-webkit-scrollbar {
-    width: 10px;
-    //background-color: $srollbar-color;
-    cursor: pointer;
-  }
-
-  // scrollable element
-  &::-webkit-scrollbar-thumb {
-    width: 10px;
-    background-color: $srollbar-thumb-color;
-    border-radius: $border-radius;
-  }
-}
-
 .hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }

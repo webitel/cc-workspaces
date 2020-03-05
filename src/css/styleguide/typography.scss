@@ -33,11 +33,17 @@
 .typo-body-md {
   font-family: 'Montserrat Regular', monospace;
   @include fontSize(14px);
-  @include lineHeight(18px);
+  @include lineHeight(20px);
 }
 
 .typo-body-sm {
   font-family: 'Montserrat Regular', monospace;
   @include fontSize(12px);
   @include lineHeight(18px);
+}
+
+.typo-input {
+  font-family: 'Montserrat Regular', monospace;
+  @include fontSize(14px);
+  @include lineHeight(20px);
 }

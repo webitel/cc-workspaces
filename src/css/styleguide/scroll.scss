@@ -1,0 +1,20 @@
+
+$scrollbar-bg-color: #EAEAEA;
+$srollbar-thumb-color: $accent-color;
+$srollbar-border-radius: 4px;
+
+.cc-scrollbar {
+  // scrollbar itself
+  &::-webkit-scrollbar {
+    width: calcRem(4px);
+    background-color: $scrollbar-bg-color;
+    cursor: pointer;
+  }
+
+  // scrollable element
+  &::-webkit-scrollbar-thumb {
+    width: calcRem(4px);
+    background-color: $srollbar-thumb-color;
+    border-radius: $srollbar-border-radius;
+  }
+}

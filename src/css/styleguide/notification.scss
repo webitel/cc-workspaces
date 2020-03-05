@@ -1,0 +1,28 @@
+.notifications-wrap {
+  position: fixed;
+  top: calcRem(5px);
+  right: calcRem(5px);
+  z-index: 1000;
+}
+
+.notification {
+  @extend .typo-body-md;
+  @extend .box-shadow;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: calcRem(430px);
+  max-width: calcRem(850px);
+  padding: calcRem(24px) calcRem(30px);
+  margin-top: calcRem(7px);
+  color: #000;
+  background: #fff;
+  border-radius: $border-radius;
+  cursor: pointer;
+}
+
+.notification__text {
+  flex-grow: 1;
+  margin: 0 calcRem(24px) 0 calcRem(40px);
+}
