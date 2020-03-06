@@ -1,8 +1,6 @@
 <template>
   <div class="ws-contacts-container">
-    <form class="search-wrap">
-      <input class="search" type="text">
-    </form>
+    <search v-model="search"></search>
     <div class="ws-contacts-wrap">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
@@ -14,25 +12,35 @@
         @click.native="select(item)"
       ></contact>
       <!--      </div>-->
-      <button @click="transfer(selected)">Transfer!</button>
     </div>
+    <btn
+      class="transfer"
+      :disabled="!selected"
+      @click.native="transfer(selected)"
+    >Transfer
+    </btn>
   </div>
 </template>
 
 <script>
   import { mapActions } from 'vuex';
   import { getUsersList } from '../../../../api/operator-workspace/users';
+  import Btn from '../../../utils/btn.vue';
+  import Search from '../../../utils/search-input.vue';
   import Contact from '../workspace-contacts/workspace-contact.vue';
 
   export default {
     name: 'workspace-transfer-container',
     components: {
+      Btn,
+      Search,
       Contact,
     },
 
     data: () => ({
       dataList: [],
       selected: null,
+      search: '',
     }),
 
     mounted() {
@@ -56,7 +64,20 @@
 </script>
 
 <style lang="scss" scoped>
-  .selected {
-    border: 1px solid #ef6119;
+
+  .ws-contact-item {
+    border: calcRem(1px) solid transparent;
+    border-radius: $border-radius;
+    transition: $transition;
+    cursor: pointer;
+
+    &.selected {
+      border-color: $accent-color;
+    }
+  }
+
+  .cc-btn {
+    display: block;
+    margin: auto;
   }
 </style>

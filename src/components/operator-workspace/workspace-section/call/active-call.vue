@@ -79,6 +79,7 @@
   .active-call {
     display: flex;
     flex-direction: column;
+    max-height: 100%;
     height: 100%;
   }
 

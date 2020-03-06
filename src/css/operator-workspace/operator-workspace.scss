@@ -1,11 +1,23 @@
 
 .workspace-section {
+  max-height: 100%;
+  //height: 90%;
   background: #fff;
+  border: 1px solid red;
   border-radius: $border-radius;
 }
 
 .ws-history-container, .ws-contacts-container {
   $separator-color: #94979B;
+  max-height: 100%;
+  height: 100%;
+
+  .ws-contacts-wrap, .ws-history-wrap {
+    @extend .cc-scrollbar;
+    max-height: 100%;
+    overflow-y: scroll;
+    //display: none;
+  }
 
   .cc-search-input {
     margin-bottom: calcRem(10px);

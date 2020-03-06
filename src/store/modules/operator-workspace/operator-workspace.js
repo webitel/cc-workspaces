@@ -67,7 +67,7 @@ const actions = {
   HANGUP: async (context, index) => {
     const call = Number.isInteger(index)
       ? context.state.callList[index] : context.state.workspaceItem;
-
+      // console.log(index, call);
     try {
       await call.hangup();
       context.commit('RESET_WORKSPACE');

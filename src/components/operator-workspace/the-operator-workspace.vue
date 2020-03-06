@@ -44,13 +44,22 @@
   .main-operator-workspace {
     display: flex;
     flex-direction: column;
+    max-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .workspace {
+    $outerheight: calcRem(20px*2+58px+20px);
     display: grid;
     grid-template-columns: calcRem(340px) calcRem(550px) 1fr;
     grid-gap: calcRem(20px);
-    height: 100%;
+    height: calc(100vh - #{$outerheight});
     margin-top: calcRem(28px);
+
+    .workspace-section {
+      //max-height: calc(100vh - #{$outerheight});
+     // height: calc(100vh - #{$outerheight});
+    }
   }
 </style>
