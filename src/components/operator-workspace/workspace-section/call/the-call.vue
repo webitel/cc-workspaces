@@ -2,13 +2,7 @@
   <section class="call">
     <call-preview v-if="state === 'PREVIEW'"></call-preview>
     <active-call v-else-if="state === 'ACTIVE' || state === 'NEW'"></active-call>
-    <section v-else class="empty-workspace">
-      <img
-        class="workspace-pic"
-        src="../../../../assets/operator-workspace/ws-empty.png"
-        alt="workspace is empty"
-      >
-    </section>
+    <empty-workspace v-else/>
   </section>
 </template>
 
@@ -16,12 +10,14 @@
   import { mapState } from 'vuex';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
+  import EmptyWorkspace from '../empty-workspace.vue';
 
   export default {
     name: 'the-call',
     components: {
       CallPreview,
       ActiveCall,
+      EmptyWorkspace,
     },
 
     data: () => ({}),
@@ -37,17 +33,5 @@
 <style lang="scss" scoped>
   .call {
     height: 100%;
-  }
-
-  .empty-workspace {
-    height: 100%;
-  }
-
-  .workspace-pic {
-    position: relative;
-    top: 50%;
-    display: block;
-    margin: auto;
-    transform: translateY(-50%);
   }
 </style>
