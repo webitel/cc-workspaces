@@ -82,5 +82,6 @@
     display: flex;
     justify-content: space-evenly;
     padding: calcRem(10px) 0;
+    margin: 0 calcRem(20px) calcRem(20px);
   }
 </style>

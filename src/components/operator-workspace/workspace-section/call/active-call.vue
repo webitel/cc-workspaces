@@ -84,10 +84,8 @@
   }
 
   .active-call__info {
-    margin: calcRem(20px) 0;
-    flex: 1; // fill all available container height
-
-    display: flex; // make child height 100& of container
-    flex-direction: column;
+    margin: calcRem(20px);
+    flex-grow: 1; // fill all available container height
+    min-height: 0;
   }
 </style>

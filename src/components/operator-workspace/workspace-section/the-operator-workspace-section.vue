@@ -26,10 +26,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .workspace-section {
-    padding: calcRem(20px);
-  }
-
   .chat {
     height: 100%;
   }

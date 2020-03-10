@@ -44,22 +44,21 @@
   .main-operator-workspace {
     display: flex;
     flex-direction: column;
-    max-height: 100vh;
     height: 100vh;
-    overflow: hidden;
+    max-height: 100vh;
   }
 
   .workspace {
-    $outerheight: calcRem(20px*2+58px+20px);
+    flex-grow: 1;
     display: grid;
     grid-template-columns: calcRem(340px) calcRem(550px) 1fr;
     grid-gap: calcRem(20px);
-    height: calc(100vh - #{$outerheight});
+    min-height: 0;
     margin-top: calcRem(28px);
 
     .workspace-section {
-      //max-height: calc(100vh - #{$outerheight});
-     // height: calc(100vh - #{$outerheight});
+      max-height: 100%;
+      min-height: 0;
     }
   }
 </style>

@@ -125,6 +125,7 @@
     display: flex;
     height: calcRem(140px);
     justify-content: space-between;
+    margin: calcRem(20px) calcRem(20px) 0;
   }
 
   .actions-wrap__left {
