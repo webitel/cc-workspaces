@@ -33,6 +33,7 @@
         stroke: #fff;
         fill: #fff;
       }
+
       background: $call-btn-color;
 
       &:hover {
@@ -45,6 +46,7 @@
         stroke: #fff;
         fill: #fff;
       }
+
       background: $end-btn-color;
 
       &:hover {
@@ -57,6 +59,7 @@
         stroke: #fff;
         fill: #fff;
       }
+
       background: $transfer-btn-color;
 
       &:hover {
@@ -65,15 +68,22 @@
     }
 
     &.secondary {
+      color: $secondary-action-icon-color;
+
       .icon {
         stroke: $secondary-action-icon-color;
         fill: $secondary-action-icon-color;
       }
+
       background: $secondary-action-color;
 
-      &:hover .icon {
-        stroke: $secondary-action-icon-color__hover;
-        fill: $secondary-action-icon-color__hover;
+      &:hover {
+        color: $secondary-action-icon-color__hover;
+
+        .icon {
+          stroke: $secondary-action-icon-color__hover;
+          fill: $secondary-action-icon-color__hover;
+        }
       }
 
       &.active {
@@ -81,6 +91,7 @@
           stroke: $secondary-action-icon-color__active;
           fill: $secondary-action-icon-color__active;
         }
+
         background: $secondary-action-color__active;
 
         &:hover {
