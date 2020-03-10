@@ -158,7 +158,12 @@
     &__input {
       @extend .typo-input;
       text-align: center;
-      padding: calcRem(2px) 0;
+
+      // make bottom border overflowing divider
+      position: relative;
+      bottom: calcRem(-2px);
+      padding: calcRem(3px) 0;
+
       border: none;
       border-bottom: calcRem(1px) solid #000;
     }

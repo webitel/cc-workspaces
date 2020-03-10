@@ -13,6 +13,7 @@
     ></call-preview>
 
     <rounded-action
+      v-show="callState !== 'NEW'"
       class="call"
       @click.native="openCall()"
     >
@@ -45,6 +46,7 @@
     computed: {
       ...mapState('operator', {
         callList: (state) => state.callList,
+        callState: (state) => state.callState,
       }),
 
       tabs() {
@@ -73,14 +75,16 @@
 
 <style lang="scss" scoped>
   .workspace-section {
+    position: relative;
+
     .tabs {
       text-align: center;
     }
 
     .rounded-action {
-      position: fixed;
-      bottom: calcRem(40px);
-      left: calcRem(40px);
+      position: absolute;
+      bottom: calcRem(10px);
+      left: calcRem(10px);
     }
   }
 </style>
