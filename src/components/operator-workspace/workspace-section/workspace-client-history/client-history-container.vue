@@ -1,14 +1,14 @@
 <template>
-  <div class="ws-history-container">
+  <div class="ws-worksection">
     <search v-model="search"></search>
-    <div class="ws-history-wrap">
-      <div class="ws-history-date-wrap">
-        <div class="ws-history-date">Today</div>
+    <div class="ws-worksection__list">
+      <div class="">
+        <div class="ws-worksection__list-separator">Today</div>
         <history-item></history-item>
         <history-item></history-item>
       </div>
-      <div class="ws-history-date-wrap">
-        <div class="ws-history-date">Yesterday</div>
+      <div class="">
+        <div class="ws-worksection__list-separator">Yesterday</div>
         <history-item></history-item>
         <history-item></history-item>
       </div>

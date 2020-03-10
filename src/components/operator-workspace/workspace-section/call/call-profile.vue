@@ -1,6 +1,6 @@
 <template>
   <div class="call-profile">
-    <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
+    <img class="call-profile__pic" src="../../../../assets/operator-workspace/default-avatar.svg"
          alt="client photo">
     <div class="call-profile__name">
       {{getDisplayName}}

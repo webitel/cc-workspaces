@@ -6,7 +6,7 @@
     ></call-header>
     <divider></divider>
 
-    <section class="active-call__info">
+    <section class="ws-worksection-wrap">
       <component :is="computeCurrentTab"></component>
     </section>
 
@@ -43,7 +43,7 @@
     },
 
     data: () => ({
-      currentTab: 'numpad',
+      currentTab: 'transfer',
     }),
 
     computed: {
@@ -83,9 +83,10 @@
     height: 100%;
   }
 
-  .active-call__info {
+  .ws-worksection-wrap {
     margin: calcRem(20px);
     flex-grow: 1; // fill all available container height
     min-height: 0;
+    display: flex;
   }
 </style>
