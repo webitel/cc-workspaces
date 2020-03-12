@@ -164,6 +164,9 @@
   }
 
   .queue-preview__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: calcVH(10px);
     left: calcVH(10px);
