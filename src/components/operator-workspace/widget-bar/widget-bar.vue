@@ -4,7 +4,13 @@
     <widget></widget>
     <widget></widget>
     <widget></widget>
-    <div class="settings">Settings</div>
+    <button class="icon-btn settings">
+      <icon>
+        <svg class="icon icon-settings-md md">
+          <use xlink:href="#icon-settings-md"></use>
+        </svg>
+      </icon>
+    </button>
   </aside>
 </template>
 
@@ -34,8 +40,12 @@
   }
 
   .settings {
-    @extend .typo-body-md;
     position: absolute;
     right: calcVH(20px);
+
+    &:hover .icon {
+      fill: #000;
+      stroke: #000;
+    }
   }
 </style>

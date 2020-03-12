@@ -25,12 +25,25 @@
           </icon>
         </rounded-action>
       </div>
+
       <img class="call-header__profile-pic"
            src="../../../../assets/operator-workspace/default-avatar.svg"
            alt="client photo">
+
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
-          v-if="true || callState !== 'NEW'"
+          v-if="callState !== 'NEW'"
+          class="call-action secondary"
+          @click.native="$emit('openTab', 'merge')"
+        >
+          <icon>
+            <svg class="icon icon-call-merge-md md">
+              <use xlink:href="#icon-call-merge-md"></use>
+            </svg>
+          </icon>
+        </rounded-action>
+        <rounded-action
+          v-if="callState !== 'NEW'"
           class="call-action transfer"
           @click.native="$emit('openTab', 'transfer')"
         >
@@ -41,7 +54,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="true || callState !== 'NEW'"
+          v-if="callState !== 'NEW'"
           class="call-action end"
           @click.native="hangup()"
         >
@@ -53,7 +66,7 @@
         </rounded-action>
 
         <rounded-action
-          v-if="true || callState === 'NEW' && number"
+          v-if="callState === 'NEW' && number"
           class="call-action call"
           @click.native="call"
         >
@@ -69,10 +82,10 @@
     <div class="call-header__number">
       <div v-if="callState !== 'NEW'" class="">
         <div class="call-profile__name">
-          {{'aaaaaa' + getDisplayName}}
+          {{getDisplayName}}
         </div>
         <div class="call-profile__number">
-          {{'aaaaaa' + getDisplayNumber}}
+          {{getDisplayNumber}}
         </div>
       </div>
       <form
@@ -85,6 +98,17 @@
           type="text"
           autofocus
         >
+        <button
+          class="icon-btn"
+          :class="{'hidden': !number}"
+          @click.prevent="number = ''"
+        >
+          <icon>
+            <svg class="icon icon-close-md md">
+              <use xlink:href="#icon-close-md"></use>
+            </svg>
+          </icon>
+        </button>
       </form>
     </div>
   </header>
@@ -185,8 +209,6 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
-    //margin-top: calcVH(10px);
-    /*margin-top: auto;*/
 
     .call-profile__name {
       @extend .typo-heading-sm;
@@ -198,8 +220,11 @@
     }
 
     .call-header__form-number {
+      position: relative;
       flex: 0 0 auto;
       align-self: flex-end;
+      display: flex;
+      align-items: flex-end;
 
       &__input {
         @extend .typo-input;
@@ -211,6 +236,16 @@
 
         border: none;
         border-bottom: calcVH(1px) solid #000;
+      }
+
+      .icon-btn {
+        position: absolute;
+        right: calcVH(-24px);
+
+        &:hover .icon {
+          fill: #000;
+          stroke: #000;
+        }
       }
     }
   }
