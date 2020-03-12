@@ -48,20 +48,5 @@
     &__number {
       @extend .typo-body-md;
     }
-
-    &__sm {
-      margin: 0;
-
-      .call-profile__pic {
-        width: calcRem(80px);
-        height: calcRem(80px);
-        margin: 0 auto calcRem(10px);
-        border: none;
-      }
-
-      .call-profile__name {
-        margin-bottom: calcRem(5px);
-      }
-    }
   }
 </style>

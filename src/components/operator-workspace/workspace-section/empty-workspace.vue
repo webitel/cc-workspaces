@@ -37,8 +37,8 @@
     }
 
     &__text {
-      margin-top: calcRem(10px);
       @extend .typo-body-sm;
+      margin-top: calcRem(10px);
     }
   }
 
