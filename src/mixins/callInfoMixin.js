@@ -25,7 +25,7 @@ export default {
       const start = this.itemInstance.answeredAt
         ? this.itemInstance.answeredAt : this.itemInstance.createdAt;
       const sec = Math.round((this.now - start) / 10 ** 3);
-      return this.computeHourMinSecTime(sec);
+      return this.computeHourMinSecTime(sec) || '00:00:00'; // dummy string handles undefined time after answer
     },
   },
 

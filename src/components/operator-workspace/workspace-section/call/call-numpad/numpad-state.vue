@@ -6,7 +6,21 @@
         style="width: 50px; height: 50px; border-radius: 50%;"
         src="https://static10.tgstat.ru/channels/_0/3b/3bc2c1c682ca9f9517380ce37ad01c75.jpg" alt="">
     </div>
-    <div class="numpad-state__primary-text">{{computeCallState}}</div>
+    <div
+      v-if="!isCallActive"
+      class="numpad-state__primary-text"
+    >{{computeCallState}}
+    </div>
+    <div
+      v-else
+      class="numpad-state__primary-text"
+    >
+      <span
+        class="numpad-state__primary-text__time-digit"
+        v-for="(digit, key) of computeCreatedTime.split('')"
+        :key="key"
+      >{{digit}}</span>
+    </div>
     <div class="numpad-state__secondary-text">{{computeDTMFDigits}}</div>
   </div>
 </template>
@@ -32,6 +46,10 @@
           default:
             return this.itemInstance.state || '';
         }
+      },
+
+      isCallActive() {
+        return this.itemInstance.state === CallActions.Active;
       },
 
       computeDTMFDigits() {
@@ -70,6 +88,17 @@
       @extend .typo-call-state;
       text-align: center;
       margin-bottom: calcVH(25px);
+
+      .numpad-state__primary-text__time-digit {
+        display: inline-block;
+        text-align: center;
+        width: calcVH(26px);
+
+        /*semicolons*/
+        &:nth-child(3), &:nth-child(6) {
+          width: calcVH(12px);
+        }
+      }
     }
 
     &__secondary-text {

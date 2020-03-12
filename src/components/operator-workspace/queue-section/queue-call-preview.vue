@@ -18,10 +18,17 @@
 
     <header class="preview-header">
       <span class="preview-header__name">{{computeDisplayName}}</span>
-      <span
-        class="preview-header__time"
-        :class="{'preview-header__time__bold': !isRinging}"
-      >{{computeCreatedTime}}</span>
+      <!--v-for for timer not to resize on digit width change-->
+      <div class="preview-header__time"
+           :class="{'preview-header__time__bold': !isRinging}"
+      >
+          <span
+            class="preview-header__time-digit"
+            v-for="(digit, key) of computeCreatedTime.split('')"
+            :key="key"
+          >{{digit}}</span>
+      </div>
+
     </header>
     <span
       class="call-preview__number">{{computeDisplayNumber}}</span>
@@ -119,9 +126,19 @@
     }
 
     &__time {
-      @extend .typo-body-md;
+      .preview-header__time-digit {
+        @extend .typo-body-md;
+        text-align: center;
+        display: inline-block;
+        width: calcVH(9.5px);
 
-      &__bold {
+        /*semicolons*/
+        &:nth-child(3), &:nth-child(6) {
+          width: calcVH(5px);
+        }
+      }
+
+      &__bold .preview-header__time-digit {
         font-family: 'Montserrat Semi', monospace;
       }
     }
