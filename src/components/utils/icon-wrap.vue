@@ -212,15 +212,17 @@
 
 <style lang="scss" scoped>
   .icon-wrap {
-    display: inline-block;
-    width: calcRem(24px);
-    height: calcRem(24px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calcVH(24px);
+    height: calcVH(24px);
   }
   /*svg instead of .icon to override styles by .icon-icon-name-size without any other seelectors*/
   svg {
     display: inline-block;
-    width: 1rem;
-    height: 1rem;
+    width: calcVH(24px);
+    height: calcVH(24px);
     stroke-width: 0;
     stroke: $icon-color;
     fill: $icon-color;
@@ -238,17 +240,17 @@
   ========================================== */
 
   .lg {
-    width: calcRem(30px);
-    height: calcRem(30px);
+    width: calcVH(30px);
+    height: calcVH(30px);
   }
 
   .md {
-    width: calcRem(24px);
-    height: calcRem(24px);
+    width: calcVH(24px);
+    height: calcVH(24px);
   }
 
   .sm {
-    width: calcRem(16px);
-    height: calcRem(16px);
+    width: calcVH(16px);
+    height: calcVH(16px);
   }
 </style>

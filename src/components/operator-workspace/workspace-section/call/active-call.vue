@@ -84,7 +84,7 @@
   }
 
   .ws-worksection-wrap {
-    margin: calcRem(20px);
+    margin: calcVH(20px);
     flex-grow: 1; // fill all available container height
     min-height: 0;
     display: flex;

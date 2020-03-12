@@ -31,18 +31,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: calcRem(40px);
+    margin-bottom: calcVH(40px);
 
     &__pic {
-      width: calcRem(90px);
-      height: calcRem(90px);
-      margin: 0 auto calcRem(20px);
+      width: calcVH(90px);
+      height: calcVH(90px);
+      margin: 0 auto calcVH(20px);
       border-radius: 50%;
     }
 
     &__name {
       @extend .typo-heading-sm;
-      margin-bottom: calcRem(10px);
+      margin-bottom: calcVH(10px);
     }
 
     &__number {

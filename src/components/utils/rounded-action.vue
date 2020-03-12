@@ -16,16 +16,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calcRem(50px);
-    height: calcRem(50px);
+    width: calcVH(50px);
+    height: calcVH(50px);
     border: none;
     border-radius: 50%;
     transition: $transition;
     cursor: pointer;
 
     &__lg {
-      width: calcRem(60px);
-      height: calcRem(60px);
+      width: calcVH(60px);
+      height: calcVH(60px);
     }
 
     &.call {

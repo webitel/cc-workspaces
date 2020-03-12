@@ -51,10 +51,10 @@
   .workspace {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: calcRem(340px) calcRem(550px) 1fr;
-    grid-gap: calcRem(20px);
+    grid-template-columns: calcVH(340px) calcVH(550px) 1fr;
+    grid-gap: calcVH(20px);
     min-height: 0;
-    margin-top: calcRem(28px);
+    margin-top: calcVH(28px);
 
     .workspace-section {
       max-height: 100%;

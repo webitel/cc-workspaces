@@ -33,16 +33,18 @@
 
     &__heading {
       @extend .typo-heading-sm;
-      margin-top: calcRem(20px);
+      margin-top: calcVH(20px);
     }
 
     &__text {
       @extend .typo-body-sm;
-      margin-top: calcRem(10px);
+      margin-top: calcVH(10px);
     }
   }
 
   .workspace-pic {
+    width: calcVH(180px);
+    height: calcVH(133px);
     display: block;
     margin: auto;
   }

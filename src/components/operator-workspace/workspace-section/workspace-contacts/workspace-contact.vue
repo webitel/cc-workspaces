@@ -51,8 +51,8 @@
     align-self: end;
 
     &__indicator {
-      width: calcRem(14px);
-      height: calcRem(14px);
+      width: calcVH(14px);
+      height: calcVH(14px);
       background: $true-color;
       border-radius: 50%;
     }

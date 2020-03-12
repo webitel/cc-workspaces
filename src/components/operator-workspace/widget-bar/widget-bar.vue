@@ -24,18 +24,18 @@
     position: relative;
     display: flex;
     justify-content: center;
-    padding: calcRem(14px) calcRem(20px);
+    padding: calcVH(14px) calcVH(20px);
     background: #fff;
     border-radius: $border-radius;
   }
 
   .widget {
-    margin: 0 calcRem(31px); // 63px / 2
+    margin: 0 calcVH(31px); // 63px / 2
   }
 
   .settings {
     @extend .typo-body-md;
     position: absolute;
-    right: calcRem(20px);
+    right: calcVH(20px);
   }
 </style>

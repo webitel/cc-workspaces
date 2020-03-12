@@ -137,8 +137,8 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
-    height: calcRem(160px);
-    margin: calcRem(20px) calcRem(20px) 0;
+    height: calcVH(160px);
+    margin: calcVH(20px) calcVH(20px) 0;
   }
 
   .call-header__actions {
@@ -149,10 +149,10 @@
 
     .actions-wrap__left {
       display: flex;
-      flex: 0 0 calcRem(190px); // x3 icons 50px + x2 margins 20px
+      flex: 0 0 calcVH(190px); // x3 icons 50px + x2 margins 20px
 
       .call-action {
-        margin-right: calcRem(20px);
+        margin-right: calcVH(20px);
 
         &:last-child {
           margin-right: 0;
@@ -161,18 +161,18 @@
     }
 
     .call-header__profile-pic {
-      flex: 0 0 calcRem(80px);
-      width: calcRem(80px);
-      height: calcRem(80px);
+      flex: 0 0 calcVH(80px);
+      width: calcVH(80px);
+      height: calcVH(80px);
     }
 
     .actions-wrap__right {
       display: flex;
-      flex: 0 0 calcRem(190px); // x3 icons 50px + x2 margins 20px
+      flex: 0 0 calcVH(190px); // x3 icons 50px + x2 margins 20px
       justify-content: flex-end;
 
       .call-action {
-        margin-left: calcRem(20px);
+        margin-left: calcVH(20px);
 
         &:first-child {
           margin-left: 0;
@@ -185,12 +185,12 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
-    //margin-top: calcRem(10px);
-    margin-top: auto;
+    //margin-top: calcVH(10px);
+    /*margin-top: auto;*/
 
     .call-profile__name {
       @extend .typo-heading-sm;
-      margin-bottom: calcRem(5px);
+      margin-bottom: calcVH(5px);
     }
 
     .call-profile__number {
@@ -207,10 +207,10 @@
 
         // make bottom border overflowing divider
         position: relative;
-        bottom: calcRem(-1px);
+        bottom: calcVH(-1px);
 
         border: none;
-        border-bottom: calcRem(1px) solid #000;
+        border-bottom: calcVH(1px) solid #000;
       }
     }
   }

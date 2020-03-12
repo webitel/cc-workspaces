@@ -100,13 +100,13 @@
   .queue-preview {
     box-sizing: border-box;
     position: relative;
-    padding: calcRem(20px) calcRem(30px);
-    border: calcRem(2px) solid transparent;
+    padding: calcVH(20px) calcVH(30px);
+    border: calcVH(2px) solid transparent;
     border-bottom-color: $page-bg-color;
     border-radius: $border-radius;
 
     &.hold {
-      border: calcRem(2px) solid $hold-color;
+      border: calcVH(2px) solid $hold-color;
     }
   }
 
@@ -135,23 +135,23 @@
   .preview-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: calcRem(20px);
+    margin-top: calcVH(20px);
 
     .cc-btn {
       flex-grow: 1;
 
       &:first-child {
-        margin-right: calcRem(20px);
+        margin-right: calcVH(20px);
       }
     }
   }
 
   .queue-preview__status {
     position: absolute;
-    top: calcRem(10px);
-    left: calcRem(10px);
-    width: calcRem(17px);
-    height: calcRem(17px);
+    top: calcVH(10px);
+    left: calcVH(10px);
+    width: calcVH(17px);
+    height: calcVH(17px);
     border-radius: 50%;
 
     .icon {

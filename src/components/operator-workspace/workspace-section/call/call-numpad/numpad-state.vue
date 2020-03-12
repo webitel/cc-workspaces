@@ -61,21 +61,21 @@
     flex-direction: column;
 
     &__animation {
-      width: calcRem(50px);
-      height: calcRem(50px);
-      margin-bottom: calcRem(10px);
+      width: calcVH(50px);
+      height: calcVH(50px);
+      margin-bottom: calcVH(10px);
     }
 
     &__primary-text {
       @extend .typo-call-state;
       text-align: center;
-      margin-bottom: calcRem(25px);
+      margin-bottom: calcVH(25px);
     }
 
     &__secondary-text {
       @extend .typo-heading-sm;
-      min-height: calcRem(16px);
-      margin-bottom: calcRem(55px);
+      min-height: calcVH(16px);
+      margin-bottom: calcVH(55px);
     }
   }
 </style>

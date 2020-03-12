@@ -81,7 +81,7 @@
   .call-footer {
     display: flex;
     justify-content: space-evenly;
-    padding: calcRem(10px) 0;
-    margin: 0 calcRem(20px);
+    padding: calcVH(10px) 0;
+    margin: 0 calcVH(20px);
   }
 </style>

@@ -66,7 +66,7 @@
 <style lang="scss" scoped>
 
   .ws-contact-item {
-    border: calcRem(1px) solid transparent;
+    border: calcVH(1px) solid transparent;
     border-radius: $border-radius;
     transition: $transition;
     cursor: pointer;

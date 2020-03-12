@@ -31,7 +31,7 @@
     display: flex;
     flex-direction: column;
     flex-basis: 100%; // make child height 100& of container
-    margin-bottom: calcRem(60px);
+    margin-bottom: calcVH(60px);
 
     .numpad-state {
       flex-grow: 1;

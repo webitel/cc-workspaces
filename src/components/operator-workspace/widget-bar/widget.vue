@@ -22,13 +22,13 @@
     align-items: center;
 
     &__icon {
-      width: calcRem(20px) !important;
-      height: calcRem(20px) !important;
-      margin-right: calcRem(10px);
+      width: calcVH(20px) !important;
+      height: calcVH(20px) !important;
+      margin-right: calcVH(10px);
 
       .icon {
-        width: calcRem(20px);
-        height: calcRem(20px);
+        width: calcVH(20px);
+        height: calcVH(20px);
         fill: $call-color;
         stroke: $call-color;
       }
@@ -36,7 +36,7 @@
 
     &__title {
       @extend .typo-body-sm;
-      margin-right: calcRem(5px);
+      margin-right: calcVH(5px);
     }
 
     &__value {

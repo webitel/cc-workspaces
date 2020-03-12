@@ -2,7 +2,7 @@ $tabs-color: #94979B;
 
 .tabs {
   position: relative;
-  padding: 0 calcRem(35px);
+  padding: 0 calcVH(35px);
 
   // all tabs underline
   &__underline {
@@ -10,7 +10,7 @@ $tabs-color: #94979B;
     left: 0;
     right: 0;
     bottom: 0;
-    height: calcRem(1px);
+    height: calcVH(1px);
     background: #EAE9E9;
     z-index: 0;
   }
@@ -21,12 +21,12 @@ $tabs-color: #94979B;
 
   position: relative;
   display: inline-block;
-  margin-right: calcRem(20px);
-  padding: calcRem(20px);
+  margin-right: calcVH(20px);
+  padding: calcVH(20px);
   color: $tabs-color;
   background: transparent;
   border: none;
-  border-bottom: calcRem(2px) solid transparent;
+  border-bottom: calcVH(2px) solid transparent;
   transition: $transition;
   cursor: pointer;
   z-index: 1;

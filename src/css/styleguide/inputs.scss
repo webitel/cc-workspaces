@@ -27,10 +27,10 @@ $input-border-color__active: #000000;
   @extend .typo-input;
   display: inline-block;
   position: relative;
-  width: calcRem(510px);
-  height: calcRem(200px);
-  padding: calcRem(10px) calcRem(40px) calcRem(40px) calcRem(20px);
-  border: calcRem(1px) solid $input-border-color;
+  width: calcVH(510px);
+  height: calcVH(200px);
+  padding: calcVH(10px) calcVH(40px) calcVH(40px) calcVH(20px);
+  border: calcVH(1px) solid $input-border-color;
   border-radius: $border-radius;
 
   &.focused .cc-textarea__close .icon {
@@ -48,8 +48,8 @@ $input-border-color__active: #000000;
 
 .cc-textarea__close {
   position: absolute;
-  top: calcRem(8px);
-  right: calcRem(8px);
+  top: calcVH(8px);
+  right: calcVH(8px);
   .icon {
     fill: $input-icon-color;
     stroke: $input-icon-color;
@@ -58,8 +58,8 @@ $input-border-color__active: #000000;
 
 .cc-textarea__send {
   position: absolute;
-  bottom: calcRem(8px);
-  right: calcRem(8px);
+  bottom: calcVH(8px);
+  right: calcVH(8px);
   color: $input-icon-color;
   .icon {
     fill: $input-icon-color;
@@ -71,7 +71,7 @@ $input-border-color__active: #000000;
 
 .cc-input {
   display: inline-block;
-  min-width: calcRem(429px);
+  min-width: calcVH(429px);
 }
 
 .cc-input__body {
@@ -79,8 +79,8 @@ $input-border-color__active: #000000;
   display: flex;
   align-items: center;
   width: 100%;
-  padding: calcRem(7px);
-  border: calcRem(1px) solid $input-border-color;
+  padding: calcVH(7px);
+  border: calcVH(1px) solid $input-border-color;
   border-radius: $border-radius;
 
   &.focused, &:hover {
@@ -96,12 +96,12 @@ $input-border-color__active: #000000;
 .cc-input__input {
   @extend .typo-input;
   width: 100%;
-  margin: 0 calcRem(8px);
+  margin: 0 calcVH(8px);
   border: none;
 }
 
 .cc-input__icon {
-  height: 24px;
+  height: calcVH(24px);
   .icon {
     fill: $input-icon-color;
     stroke: $input-icon-color;

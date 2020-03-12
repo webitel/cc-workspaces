@@ -92,8 +92,8 @@
 
     .rounded-action {
       position: absolute;
-      bottom: calcRem(10px);
-      left: calcRem(10px);
+      bottom: calcVH(10px);
+      left: calcVH(10px);
     }
   }
 </style>
