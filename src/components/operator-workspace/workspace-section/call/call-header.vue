@@ -82,10 +82,10 @@
     <div class="call-header__number">
       <div v-if="callState !== 'NEW'" class="">
         <div class="call-profile__name">
-          {{getDisplayName}}
+          {{displayName}}
         </div>
         <div class="call-profile__number">
-          {{getDisplayNumber}}
+          {{displayNumber}}
         </div>
       </div>
       <form
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -133,6 +133,11 @@
     computed: {
       ...mapState('operator', {
         callState: (state) => state.callState,
+      }),
+
+      ...mapGetters('operator', {
+        displayName: 'GET_CURRENT_ITEM_NAME',
+        displayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),
 
       number: {
@@ -206,6 +211,7 @@
   }
 
   .call-header__number {
+    text-align: center;
     display: flex;
     justify-content: center;
     align-items: stretch;
