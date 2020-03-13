@@ -30,11 +30,18 @@
 
     created() {
       this.initClient();
+      this.setNowWatcher();
+    },
+
+    destroyed() {
+      this.clearNowWatcher();
     },
 
     methods: {
       ...mapActions('operator', {
         initClient: 'INIT_CONNECTION',
+        setNowWatcher: 'SET_NOW_WATCHER',
+        clearNowWatcher: 'CLEAR_NOW_WATCHER',
       }),
     },
   };

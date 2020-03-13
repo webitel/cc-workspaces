@@ -1,18 +1,12 @@
+import { mapState } from 'vuex';
+
 export default {
-  data: () => ({
-    now: Date.now(),
-    interval: null,
-  }),
-
-  mounted() {
-    this.setTimeNowTimer();
-  },
-
-  destroy() {
-    clearInterval(this.interval);
-  },
 
   computed: {
+    ...mapState('operator', {
+      now: (state) => state.now,
+    }),
+
     computeDisplayName() {
       return this.itemInstance.displayName || 'undefined name';
     },
@@ -30,12 +24,6 @@ export default {
   },
 
   methods: {
-    setTimeNowTimer() {
-      this.interval = setInterval(() => {
-        this.now = Date.now();
-      }, 1000);
-    },
-
     computeHourMinSecTime(time) {
       let hour = Math.floor(time / 60 ** 2);
       let min = Math.floor(time / 60);

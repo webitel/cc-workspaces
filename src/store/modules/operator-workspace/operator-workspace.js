@@ -8,6 +8,7 @@ export const CallStates = Object.freeze({
 });
 
 const answerParams = { useAudio: true };
+let interval = null;
 
 const state = {
   client: null,
@@ -15,6 +16,7 @@ const state = {
   callState: '', // PREVIEW, ACTIVE, NEW
   workspaceItem: {},
   newCallNumber: '8888',
+  now: Date.now(),
 };
 
 const getters = {
@@ -160,6 +162,16 @@ const actions = {
     audio.srcObject = call.peerStreams.pop();
     audio.play();
   },
+
+  SET_NOW_WATCHER: (context) => {
+    interval = setInterval(() => {
+      context.commit('UPDATE_NOW');
+    }, 1000);
+  },
+
+  CLEAR_NOW_WATCHER: () => {
+    clearInterval(interval);
+  },
 };
 
 const mutations = {
@@ -190,6 +202,10 @@ const mutations = {
   RESET_WORKSPACE: (state) => {
     state.callState = null;
     state.workspaceItem = {};
+  },
+
+  UPDATE_NOW: (state) => {
+    state.now = Date.now();
   },
 };
 
