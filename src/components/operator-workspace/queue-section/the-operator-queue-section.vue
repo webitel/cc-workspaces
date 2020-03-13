@@ -29,6 +29,7 @@
 
 <script>
   import { mapActions, mapState } from 'vuex';
+  import { CallStates } from '../../../store/modules/operator-workspace/operator-workspace';
   import CallPreview from './queue-call-preview.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
   import Tabs from '../../utils/tabs.vue';
@@ -49,6 +50,8 @@
         callList: (state) => state.callList,
         callState: (state) => state.callState,
       }),
+
+      CallStates: () => CallStates,
 
       tabs() {
         return [

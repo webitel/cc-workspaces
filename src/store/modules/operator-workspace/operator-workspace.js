@@ -1,11 +1,11 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
 import CallConnector from '../../../api/operator-workspace/call-ws-connection';
 
-const callStates = {
-  preview: 'PREVIEW',
-  active: 'ACTIVE',
-  new: 'NEW',
-};
+export const CallStates = Object.freeze({
+  PREVIEW: Symbol('preview'),
+  ACTIVE: Symbol('active'),
+  NEW: Symbol('new'),
+});
 
 const answerParams = { useAudio: true };
 
@@ -31,7 +31,7 @@ const actions = {
       ? context.state.callList[index] : context.state.workspaceItem;
     try {
       await call.answer(answerParams);
-      context.commit('SET_CALL_STATE', callStates.active);
+      context.commit('SET_CALL_STATE', CallStates.ACTIVE);
       context.commit('SET_WORKSPACE', call);
     } catch (err) {
       throw err;
@@ -81,13 +81,13 @@ const actions = {
     if (Number.isInteger(index)) { // if there's index, we have gotten
       const call = context.state.callList[index]; // this item from queue => call already exists
       if (call.state === CallActions.Ringing) {
-        context.commit('SET_CALL_STATE', callStates.preview);
+        context.commit('SET_CALL_STATE', CallStates.PREVIEW);
       } else {
-        context.commit('SET_CALL_STATE', callStates.active);
+        context.commit('SET_CALL_STATE', CallStates.ACTIVE);
       }
       context.commit('SET_WORKSPACE', call);
     } else { // else we are trying to create a new call
-      context.commit('SET_CALL_STATE', callStates.new);
+      context.commit('SET_CALL_STATE', CallStates.NEW);
     }
   },
 
@@ -101,7 +101,7 @@ const actions = {
   },
 
   ADD_DIGIT: async (context, value) => {
-    if (context.state.callState !== 'NEW') {
+    if (context.state.callState !== CallStates.NEW) {
       context.dispatch('SEND_DTMF', value);
     } else {
       const newCallNumber = context.state.newCallNumber + value;
@@ -145,7 +145,7 @@ const actions = {
   HANDLE_RINGING_ACTION: (context, call) => {
     context.commit('ADD_CALL', call);
     if (call.direction === CallDirection.Outbound) {
-      context.commit('SET_CALL_STATE', callStates.active);
+      context.commit('SET_CALL_STATE', CallStates.ACTIVE);
       context.commit('SET_WORKSPACE', call);
     }
   },

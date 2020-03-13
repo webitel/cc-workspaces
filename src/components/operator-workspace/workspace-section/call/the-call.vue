@@ -1,13 +1,14 @@
 <template>
   <section class="call">
-    <call-preview v-if="state === 'PREVIEW'"></call-preview>
-    <active-call v-else-if="state === 'ACTIVE' || state === 'NEW'"></active-call>
+    <call-preview v-if="state === CallStates.PREVIEW"></call-preview>
+    <active-call v-else-if="state === CallStates.ACTIVE || state === CallStates.NEW"></active-call>
     <empty-workspace v-else/>
   </section>
 </template>
 
 <script>
   import { mapState } from 'vuex';
+  import { CallStates } from '../../../../store/modules/operator-workspace/operator-workspace';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
   import EmptyWorkspace from '../empty-workspace.vue';
@@ -23,6 +24,7 @@
     data: () => ({}),
 
     computed: {
+      CallStates: () => CallStates,
       ...mapState('operator', {
         state: (state) => state.callState,
       }),
