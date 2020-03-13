@@ -2,12 +2,12 @@
   <div class="ws-worksection">
     <search v-model="search"></search>
     <div class="ws-worksection__list">
-      <div class="">
+      <div>
         <div class="ws-worksection__list-separator">Today</div>
         <history-item></history-item>
         <history-item></history-item>
       </div>
-      <div class="">
+      <div>
         <div class="ws-worksection__list-separator">Yesterday</div>
         <history-item></history-item>
         <history-item></history-item>
