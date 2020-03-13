@@ -43,6 +43,7 @@ const actions = {
     try {
       await call.blindTransfer(user.extension);
       context.commit('SET_CALL_STATE', null);
+      context.commit('REMOVE_CALL', call);
       context.commit('RESET_WORKSPACE');
     } catch (err) {
       throw err;
@@ -91,9 +92,9 @@ const actions = {
   },
 
   CALL_TO_NEW_NUMBER: async (context) => {
-    const toNumber = context.state.newCallNumber;
+    const destination = context.state.newCallNumber;
     try {
-      await context.state.client.call({ toNumber });
+      await context.state.client.call({ destination });
     } catch (err) {
       throw err;
     }
