@@ -2,12 +2,12 @@
   <div class="ws-worksection">
     <search v-model="search"></search>
     <div class="ws-worksection__list">
-      <div class="">
+      <div>
         <div class="ws-worksection__list-separator">A</div>
         <contact></contact>
         <contact></contact>
       </div>
-      <div class="">
+      <div>
         <div class="ws-worksection__list-separator">B</div>
         <contact></contact>
         <contact></contact>

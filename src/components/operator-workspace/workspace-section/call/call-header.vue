@@ -80,7 +80,7 @@
     </div>
 
     <div class="call-header__number">
-      <div v-if="callState !== 'NEW'" class="">
+      <div v-if="callState !== 'NEW'">
         <div class="call-profile__name">
           {{getDisplayName}}
         </div>
