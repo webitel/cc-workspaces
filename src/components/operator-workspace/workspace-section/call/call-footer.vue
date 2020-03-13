@@ -13,6 +13,7 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
+      :class="{'hidden': callState === 'NEW'}"
       @click.native="toggleMute"
     >
       <icon>
@@ -23,6 +24,7 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
+      :class="{'hidden': callState === 'NEW'}"
       @click.native="toggleHold"
     >
       <icon>
@@ -33,6 +35,7 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
+      :class="{'hidden': callState === 'NEW'}"
     >
       <icon>
         <svg class="icon icon-rec-md md">
@@ -42,6 +45,7 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
+      :class="{'hidden': callState === 'NEW'}"
     >
       <icon>
         <svg class="icon icon-note-md md">
@@ -53,7 +57,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -66,6 +70,12 @@
       currentTab: {
         type: String,
       },
+    },
+
+    computed: {
+      ...mapState('operator', {
+        callState: (state) => state.callState,
+      }),
     },
 
     methods: {
@@ -81,6 +91,7 @@
   .call-footer {
     display: flex;
     justify-content: space-evenly;
-    padding: calcRem(10px) 0;
+    padding: calcVH(10px) 0;
+    margin: 0 calcVH(20px);
   }
 </style>

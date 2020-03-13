@@ -18,10 +18,17 @@
 
     <header class="preview-header">
       <span class="preview-header__name">{{computeDisplayName}}</span>
-      <span
-        class="preview-header__time"
-        :class="{'preview-header__time__bold': !isRinging}"
-      >{{computeCreatedTime}}</span>
+      <!--v-for for timer not to resize on digit width change-->
+      <div class="preview-header__time"
+           :class="{'preview-header__time__bold': !isRinging}"
+      >
+          <span
+            class="preview-header__time-digit"
+            v-for="(digit, key) of computeCreatedTime.split('')"
+            :key="key"
+          >{{digit}}</span>
+      </div>
+
     </header>
     <span
       class="call-preview__number">{{computeDisplayNumber}}</span>
@@ -100,13 +107,13 @@
   .queue-preview {
     box-sizing: border-box;
     position: relative;
-    padding: calcRem(20px) calcRem(30px);
-    border: calcRem(2px) solid transparent;
+    padding: calcVH(20px) calcVH(30px);
+    border: calcVH(2px) solid transparent;
     border-bottom-color: $page-bg-color;
     border-radius: $border-radius;
 
     &.hold {
-      border: calcRem(2px) solid $hold-color;
+      border: calcVH(2px) solid $hold-color;
     }
   }
 
@@ -119,9 +126,19 @@
     }
 
     &__time {
-      @extend .typo-body-md;
+      .preview-header__time-digit {
+        @extend .typo-body-md;
+        text-align: center;
+        display: inline-block;
+        width: calcVH(9.5px);
 
-      &__bold {
+        /*semicolons*/
+        &:nth-child(3), &:nth-child(6) {
+          width: calcVH(5px);
+        }
+      }
+
+      &__bold .preview-header__time-digit {
         font-family: 'Montserrat Semi', monospace;
       }
     }
@@ -135,23 +152,26 @@
   .preview-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: calcRem(20px);
+    margin-top: calcVH(20px);
 
     .cc-btn {
       flex-grow: 1;
 
       &:first-child {
-        margin-right: calcRem(20px);
+        margin-right: calcVH(20px);
       }
     }
   }
 
   .queue-preview__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: calcRem(10px);
-    left: calcRem(10px);
-    width: calcRem(17px);
-    height: calcRem(17px);
+    top: calcVH(10px);
+    left: calcVH(10px);
+    width: calcVH(17px);
+    height: calcVH(17px);
     border-radius: 50%;
 
     .icon {

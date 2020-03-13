@@ -1,8 +1,9 @@
 <template>
-  <div class="ws-history-item">
-    <img class="ws-history-item__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
+  <div class="ws-worksection__item ws-history-item">
+    <img class="ws-worksection__item__pic"
+         src="../../../../assets/operator-workspace/default-avatar.svg"
          alt="client photo">
-    <div class="ws-history-item__body">
+    <div class="ws-worksection__item__text">
       <div class="flex-wrap">
         <div class="ws-history-item__number">+38 (063) 915-15-12</div>
         <div class="ws-history-item__time">16:16</div>
@@ -12,7 +13,7 @@
         <div class="ws-history-item__location">Ukraine</div>
       </div>
     </div>
-    <div class="ws-history-item__status">
+    <div class="ws-worksection__item__status">
       <icon>
         <svg class="icon icon-missed-call-md md">
           <use xlink:href="#icon-missed-call-md"></use>
@@ -30,7 +31,15 @@
 
 <style lang="scss" scoped>
   .flex-wrap {
-    align-items: center;
+    height: 50%; // 2 flex-wraps in text container
+
+    &:first-child {
+      align-items: flex-start;
+    }
+
+    &:last-child {
+      align-items: flex-end;
+    }
   }
 
   .ws-history-item__number {
@@ -47,5 +56,23 @@
 
   .ws-history-item__location {
     @extend .typo-body-sm;
+  }
+
+
+  .ws-worksection__item__status {
+    .icon-call-transfer-md {
+      stroke: $call-color;
+      fill: $call-color;
+    }
+
+    .icon-missed-call-md {
+      stroke: $disconnect-color;
+      fill: $disconnect-color;
+    }
+
+    .icon-incoming-call-md {
+      stroke: $icons-color;
+      fill: $icons-color;
+    }
   }
 </style>

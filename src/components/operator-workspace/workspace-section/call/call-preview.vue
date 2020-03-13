@@ -74,7 +74,7 @@
     display: flex;
 
     .rounded-action {
-      margin: 0 calcRem(15px);
+      margin: 0 calcVH(15px);
     }
   }
 </style>

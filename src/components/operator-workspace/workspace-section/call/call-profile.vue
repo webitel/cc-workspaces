@@ -1,6 +1,6 @@
 <template>
   <div class="call-profile">
-    <img class="call-profile__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
+    <img class="call-profile__pic" src="../../../../assets/operator-workspace/default-avatar.svg"
          alt="client photo">
     <div class="call-profile__name">
       {{getDisplayName}}
@@ -31,37 +31,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: calcRem(40px);
+    margin-bottom: calcVH(40px);
 
     &__pic {
-      width: calcRem(90px);
-      height: calcRem(90px);
-      margin: 0 auto calcRem(20px);
+      width: calcVH(90px);
+      height: calcVH(90px);
+      margin: 0 auto calcVH(20px);
       border-radius: 50%;
     }
 
     &__name {
       @extend .typo-heading-sm;
-      margin-bottom: calcRem(10px);
+      margin-bottom: calcVH(10px);
     }
 
     &__number {
       @extend .typo-body-md;
-    }
-
-    &__sm {
-      margin: 0;
-
-      .call-profile__pic {
-        width: calcRem(80px);
-        height: calcRem(80px);
-        margin: 0 auto calcRem(10px);
-        border: none;
-      }
-
-      .call-profile__name {
-        margin-bottom: calcRem(5px);
-      }
     }
   }
 </style>

@@ -1,14 +1,16 @@
 <template>
-  <div class="ws-contact-item">
-    <img class="ws-contact-item__pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg"
-         alt="user photo">
-    <div class="ws-contact-item__body">
+  <div class="ws-worksection__item ws-contact-item">
+    <img
+      class="ws-worksection__item__pic"
+      src="../../../../assets/operator-workspace/default-avatar.svg"
+      alt="user photo">
+    <div class="ws-worksection__item__text">
       <div class="flex-wrap">
         <div class="ws-contact-item__name">{{item.name}}</div>
         <div class="ws-contact-item__number">{{item.extension}}</div>
       </div>
     </div>
-    <div class="ws-contact-item__status">
+    <div class="ws-worksection__item__status">
       <div class="ws-contact-item__status__indicator"></div>
     </div>
   </div>
@@ -31,12 +33,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .ws-contact-item {
-    padding: calcRem(10px);
-  }
 
   .flex-wrap {
-    align-items: flex-start;
+    height: 100%;
     flex-direction: column;
   }
 
@@ -52,8 +51,8 @@
     align-self: end;
 
     &__indicator {
-      width: calcRem(14px);
-      height: calcRem(14px);
+      width: calcVH(14px);
+      height: calcVH(14px);
       background: $true-color;
       border-radius: 50%;
     }

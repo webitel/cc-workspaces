@@ -4,7 +4,13 @@
     <widget></widget>
     <widget></widget>
     <widget></widget>
-    <div class="settings">Settings</div>
+    <button class="icon-btn settings">
+      <icon>
+        <svg class="icon icon-settings-md md">
+          <use xlink:href="#icon-settings-md"></use>
+        </svg>
+      </icon>
+    </button>
   </aside>
 </template>
 
@@ -24,18 +30,22 @@
     position: relative;
     display: flex;
     justify-content: center;
-    padding: calcRem(14px) calcRem(20px);
+    padding: calcVH(14px) calcVH(20px);
     background: #fff;
     border-radius: $border-radius;
   }
 
   .widget {
-    margin: 0 calcRem(31px); // 63px / 2
+    margin: 0 calcVH(31px); // 63px / 2
   }
 
   .settings {
-    @extend .typo-body-md;
     position: absolute;
-    right: calcRem(20px);
+    right: calcVH(20px);
+
+    &:hover .icon {
+      fill: #000;
+      stroke: #000;
+    }
   }
 </style>

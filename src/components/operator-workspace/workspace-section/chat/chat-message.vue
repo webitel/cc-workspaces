@@ -1,6 +1,6 @@
 <template>
   <div class="message-wrap" :class="{'right': my}">
-    <img class="message-pic" src="https://cs4.pikabu.ru/post_img/2016/05/22/8/1463919617179069423.jpg" alt="client photo">
+    <img class="message-pic" src="../../../../assets/operator-workspace/default-avatar.svg" alt="client photo">
     <div class="message">
       <div class="message__sender" v-if="!my">Vova Lomachenko</div>
       <p class="message__text">Ok! Thank you!</p>

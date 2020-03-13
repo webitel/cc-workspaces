@@ -1,14 +1,14 @@
 <template>
-  <div class="ws-contacts-container">
+  <div class="ws-worksection">
     <search v-model="search"></search>
-    <div class="ws-contacts-wrap">
-      <div class="ws-contacts-letter-wrap">
-        <div class="ws-contact-letter">A</div>
+    <div class="ws-worksection__list">
+      <div>
+        <div class="ws-worksection__list-separator">A</div>
         <contact></contact>
         <contact></contact>
       </div>
-      <div class="ws-contacts-letter-wrap">
-        <div class="ws-contact-letter">B</div>
+      <div>
+        <div class="ws-worksection__list-separator">B</div>
         <contact></contact>
         <contact></contact>
       </div>
@@ -34,4 +34,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .ws-contact-item {
+    cursor: pointer;
+    &:hover {
+      background: $page-bg-color;
+    }
+  }
 </style>

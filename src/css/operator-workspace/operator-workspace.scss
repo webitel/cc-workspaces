@@ -1,59 +1,60 @@
 
 .workspace-section {
   max-height: 100%;
-  //height: 90%;
+  height: 100%;
   background: #fff;
-  border: 1px solid red;
   border-radius: $border-radius;
 }
 
-.ws-history-container, .ws-contacts-container {
+.ws-worksection {
   $separator-color: #94979B;
-  max-height: 100%;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-
-  .ws-contacts-wrap, .ws-history-wrap {
-    @extend .cc-scrollbar;
-    max-height: 100%;
-    overflow-y: scroll;
-    //display: none;
-  }
+  width: 100%;
 
   .cc-search-input {
-    margin-bottom: calcRem(10px);
+    margin-bottom: calcVH(10px);
   }
 
-  .ws-history-date, .ws-contact-letter {
+  .ws-worksection__list {
+    @extend .cc-scrollbar;
+    flex-grow: 1;
+    overflow-y: scroll;
+    padding-right: calcVH(20px);
+  }
+
+  .ws-worksection__list-separator {
     @extend .typo-body-md;
     text-align: center;
     color: $separator-color;
-    margin: calcRem(10px) 0;
-  }
-
-  .ws-history-item, .ws-contact-item {
-    margin-bottom: calcRem(10px);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    margin: calcVH(10px) 0;
   }
 }
 
-.ws-history-item, .ws-contact-item {
+.ws-worksection__item {
   display: flex;
   justify-content: stretch;
-  align-items: center;
+  align-items: stretch;
+  padding: calcVH(10px);
+  margin-bottom: calcVH(10px);
+  border-radius: $border-radius;
+  transition: $transition;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &__pic {
-    flex: 0 0 calcRem(50px);
-    width: calcRem(50px);
-    height: calcRem(50px);
+    flex: 0 0 calcVH(50px);
+    width: calcVH(50px);
+    height: calcVH(50px);
     border-radius: 50%;
   }
 
-  &__body {
+  &__text {
     flex: 1 0 auto;
-    margin: 0 calcRem(15px);
+    margin: 0 calcVH(15px);
 
     .flex-wrap {
       display: flex;
@@ -62,23 +63,9 @@
   }
 
   &__status {
-    flex: 0 0 calcRem(24px);
-    height: calcRem(24px);
-    width: calcRem(24px);
-
-    .icon-call-transfer-md {
-      stroke: $call-color;
-      fill: $call-color;
-    }
-
-    .icon-missed-call-md {
-      stroke: $disconnect-color;
-      fill: $disconnect-color;
-    }
-
-    .icon-incoming-call-md {
-      stroke: $icons-color;
-      fill: $icons-color;
-    }
+    flex: 0 0 calcVH(24px);
+    height: calcVH(24px);
+    width: calcVH(24px);
+    align-self: end;
   }
 }

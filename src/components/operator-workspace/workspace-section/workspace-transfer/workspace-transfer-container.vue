@@ -1,7 +1,7 @@
 <template>
-  <div class="ws-contacts-container">
+  <div class="ws-worksection">
     <search v-model="search"></search>
-    <div class="ws-contacts-wrap">
+    <div class="ws-worksection__list">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
       <contact
@@ -66,7 +66,7 @@
 <style lang="scss" scoped>
 
   .ws-contact-item {
-    border: calcRem(1px) solid transparent;
+    border: calcVH(1px) solid transparent;
     border-radius: $border-radius;
     transition: $transition;
     cursor: pointer;
