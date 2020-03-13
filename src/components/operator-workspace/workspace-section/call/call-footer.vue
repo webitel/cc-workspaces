@@ -12,8 +12,11 @@
       </icon>
     </rounded-action>
     <rounded-action
-      class="call-action secondary"
-      :class="{'hidden': callState === 'NEW'}"
+      class="call-action secondary call-action__mic"
+      :class="{
+      'hidden': callState === CallStates.NEW,
+      'active': isMuted,
+      }"
       @click.native="toggleMute"
     >
       <icon>
@@ -24,7 +27,10 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
-      :class="{'hidden': callState === 'NEW'}"
+      :class="{
+      'hidden': callState === CallStates.NEW,
+      'hold': isHold,
+      }"
       @click.native="toggleHold"
     >
       <icon>
@@ -35,7 +41,7 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
-      :class="{'hidden': callState === 'NEW'}"
+      :class="{'hidden': callState === CallStates.NEW}"
     >
       <icon>
         <svg class="icon icon-rec-md md">
@@ -45,7 +51,7 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
-      :class="{'hidden': callState === 'NEW'}"
+      :class="{'hidden': callState === CallStates.NEW}"
     >
       <icon>
         <svg class="icon icon-note-md md">
@@ -58,6 +64,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
+  import { CallStates } from '../../../../store/modules/operator-workspace/operator-workspace';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -75,7 +82,18 @@
     computed: {
       ...mapState('operator', {
         callState: (state) => state.callState,
+        call: (state) => state.workspaceItem,
       }),
+
+      CallStates: () => CallStates,
+
+      isMuted() {
+        return this.call.muted;
+      },
+
+      isHold() {
+        return this.call.isHold;
+      },
     },
 
     methods: {
@@ -93,5 +111,20 @@
     justify-content: space-evenly;
     padding: calcVH(10px) 0;
     margin: 0 calcVH(20px);
+
+    .call-action__mic {
+      position: relative;
+
+      &.active:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 1.5px;
+        background: $secondary-action-icon-color__active;
+        transform: rotate(-45deg);
+        transition: $transition;
+      }
+    }
   }
 </style>

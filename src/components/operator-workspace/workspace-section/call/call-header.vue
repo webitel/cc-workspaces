@@ -32,7 +32,7 @@
 
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
-          v-if="callState !== 'NEW'"
+          v-if="callState !== CallStates.NEW"
           class="call-action secondary"
           @click.native="$emit('openTab', 'merge')"
         >
@@ -43,7 +43,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== 'NEW'"
+          v-if="callState !== CallStates.NEW"
           class="call-action transfer"
           @click.native="$emit('openTab', 'transfer')"
         >
@@ -54,7 +54,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== 'NEW'"
+          v-if="callState !== CallStates.NEW"
           class="call-action end"
           @click.native="hangup()"
         >
@@ -66,7 +66,7 @@
         </rounded-action>
 
         <rounded-action
-          v-if="callState === 'NEW' && number"
+          v-if="callState === CallStates.NEW && number"
           class="call-action call"
           @click.native="call"
         >
@@ -80,7 +80,7 @@
     </div>
 
     <div class="call-header__number">
-      <div v-if="callState !== 'NEW'">
+      <div v-if="callState !== CallStates.NEW">
         <div class="call-profile__name">
           {{displayName}}
         </div>
@@ -116,6 +116,7 @@
 
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex';
+  import { CallStates } from '../../../../store/modules/operator-workspace/operator-workspace';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -139,6 +140,8 @@
         displayName: 'GET_CURRENT_ITEM_NAME',
         displayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),
+
+      CallStates: () => CallStates,
 
       number: {
         get() {

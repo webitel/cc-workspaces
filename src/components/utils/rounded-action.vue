@@ -28,6 +28,40 @@
       height: calcVH(60px);
     }
 
+    /* on top due to lower styles priority, than call, hold, transfer, end styling */
+    &.secondary {
+      color: $secondary-action-icon-color;
+
+      .icon {
+        stroke: $secondary-action-icon-color;
+        fill: $secondary-action-icon-color;
+      }
+
+      background: $secondary-action-color;
+
+      &:hover {
+        color: $secondary-action-icon-color__hover;
+
+        .icon {
+          stroke: $secondary-action-icon-color__hover;
+          fill: $secondary-action-icon-color__hover;
+        }
+      }
+
+      &.active {
+        .icon {
+          stroke: $secondary-action-icon-color__active;
+          fill: $secondary-action-icon-color__active;
+        }
+
+        background: $secondary-action-color__active;
+
+        &:hover {
+          background: $secondary-action-color__active-hover;
+        }
+      }
+    }
+
     &.call {
       .icon {
         stroke: #fff;
@@ -67,36 +101,16 @@
       }
     }
 
-    &.secondary {
-      color: $secondary-action-icon-color;
-
+    &.hold {
       .icon {
-        stroke: $secondary-action-icon-color;
-        fill: $secondary-action-icon-color;
+        stroke: #fff;
+        fill: #fff;
       }
 
-      background: $secondary-action-color;
+      background: $hold-btn-color;
 
       &:hover {
-        color: $secondary-action-icon-color__hover;
-
-        .icon {
-          stroke: $secondary-action-icon-color__hover;
-          fill: $secondary-action-icon-color__hover;
-        }
-      }
-
-      &.active {
-        .icon {
-          stroke: $secondary-action-icon-color__active;
-          fill: $secondary-action-icon-color__active;
-        }
-
-        background: $secondary-action-color__active;
-
-        &:hover {
-          background: $secondary-action-color__active-hover;
-        }
+        background: $hold-btn-color__hover;
       }
     }
   }
