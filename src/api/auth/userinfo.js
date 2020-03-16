@@ -1,5 +1,5 @@
 import instance from '../instance';
-import store from '../../store/index';
+import store from '../../store';
 
 // gets user by token from localstorage
 // stores response username in vuex

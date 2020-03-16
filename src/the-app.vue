@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import getSession from './api/userinfo/userinfo';
+  import getSession from './api/auth/userinfo';
 
   export default {
     name: 'the-app',

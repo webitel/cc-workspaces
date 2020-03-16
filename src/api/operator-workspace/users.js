@@ -14,11 +14,12 @@ export async function getUsersList(search) {
       return response.items.map((item) => ({
         name: item.name,
         extension: item.extension,
+        presence: !!item.presence,
         id: item.id,
       }));
     }
     return [];
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw err;
   }
 }

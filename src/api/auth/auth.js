@@ -1,6 +1,6 @@
 import instance from '../instance';
 import router from '../../router/index';
-import getSession from '../userinfo/userinfo';
+import getSession from './userinfo';
 
 export const handleToken = async (token) => {
     localStorage.setItem('access-token', token);
