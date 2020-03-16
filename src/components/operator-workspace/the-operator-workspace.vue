@@ -39,7 +39,10 @@
 
     methods: {
       ...mapActions('operator', {
-        initClient: 'INIT_CONNECTION',
+        initClient: 'INIT_CLIENT',
+      }),
+
+      ...mapActions('now', {
         setNowWatcher: 'SET_NOW_WATCHER',
         clearNowWatcher: 'CLEAR_NOW_WATCHER',
       }),

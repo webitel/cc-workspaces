@@ -3,7 +3,7 @@ import { mapState } from 'vuex';
 export default {
 
   computed: {
-    ...mapState('operator', {
+    ...mapState('now', {
       now: (state) => state.now,
     }),
 
