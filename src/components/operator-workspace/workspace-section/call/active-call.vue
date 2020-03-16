@@ -43,7 +43,7 @@
     },
 
     data: () => ({
-      currentTab: 'transfer',
+      currentTab: 'numpad',
     }),
 
     computed: {
@@ -69,7 +69,7 @@
       ...mapActions('operator', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
-        openCall: 'OPEN_CALL',
+        openCall: 'OPEN_CALL_ON_WORKSPACE',
       }),
     },
   };

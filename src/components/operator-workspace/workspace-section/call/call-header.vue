@@ -93,10 +93,10 @@
         class="call-header__form-number"
       >
         <input
+          ref="number-input"
           class="call-header__form-number__input"
           v-model="number"
           type="text"
-          autofocus
         >
         <button
           class="icon-btn"
@@ -116,7 +116,7 @@
 
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex';
-  import { CallStates } from '../../../../store/modules/operator-workspace/operator-workspace';
+  import CallStates from '../../../../store/callUtils/CallStates';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -129,6 +129,10 @@
       currentTab: {
         type: String,
       },
+    },
+
+    mounted() {
+      this.setNumberFocus();
     },
 
     computed: {
@@ -154,8 +158,15 @@
     },
 
     methods: {
+      setNumberFocus() {
+        const input = this.$refs['number-input'];
+        if (input) {
+          this.$nextTick(() => input.focus());
+        }
+      },
+
       ...mapActions('operator', {
-        call: 'CALL_TO_NEW_NUMBER',
+        call: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_CALL_NUMBER',
       }),

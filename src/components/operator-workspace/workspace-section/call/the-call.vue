@@ -8,7 +8,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { CallStates } from '../../../../store/modules/operator-workspace/operator-workspace';
+  import CallStates from '../../../../store/callUtils/CallStates';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
   import EmptyWorkspace from '../empty-workspace.vue';

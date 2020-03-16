@@ -60,7 +60,7 @@
       },
 
       ...mapState('operator', {
-        itemInstance: (state) => state.workspaceItem,
+        itemInstance: (state) => state.callOnWorkspace,
       }),
     },
   };

@@ -64,7 +64,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import { CallStates } from '../../../../store/modules/operator-workspace/operator-workspace';
+  import CallStates from '../../../../store/callUtils/CallStates';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -82,7 +82,7 @@
     computed: {
       ...mapState('operator', {
         callState: (state) => state.callState,
-        call: (state) => state.workspaceItem,
+        call: (state) => state.callOnWorkspace,
       }),
 
       CallStates: () => CallStates,
