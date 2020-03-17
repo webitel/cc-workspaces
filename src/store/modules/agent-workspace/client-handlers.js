@@ -1,6 +1,6 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
 import CallStates from '../../callUtils/CallStates';
-import CallConnector from '../../../api/operator-workspace/call-ws-connection';
+import CallConnector from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, call) => {
   switch (action) {

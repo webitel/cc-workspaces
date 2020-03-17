@@ -11,7 +11,7 @@
   // import Chat from './chat/the-chat.vue';
 
   export default {
-    name: 'the-operator-workspace-section',
+    name: 'the-agent-workspace-section',
     components: {
       // Chat,
       Call,

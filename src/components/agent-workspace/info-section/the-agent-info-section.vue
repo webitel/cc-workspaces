@@ -13,7 +13,7 @@
   import ClientInfo from './client-info-tab.vue';
 
   export default {
-    name: 'the-operator-info-section',
+    name: 'the-agent-info-section',
     components: {
       Tabs,
       ClientInfo,

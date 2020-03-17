@@ -62,11 +62,11 @@
         }
       },
 
-      ...mapState('operator', {}),
+      ...mapState('agent', {}),
     },
 
     methods: {
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
         openCall: 'OPEN_CALL_ON_WORKSPACE',

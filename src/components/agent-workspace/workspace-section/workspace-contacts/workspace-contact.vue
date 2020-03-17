@@ -2,7 +2,7 @@
   <div class="ws-worksection__item ws-contact-item">
     <img
       class="ws-worksection__item__pic"
-      src="../../../../assets/operator-workspace/default-avatar.svg"
+      src="../../../../assets/agent-workspace/default-avatar.svg"
       alt="user photo">
     <div class="ws-worksection__item__text">
       <div class="flex-wrap">

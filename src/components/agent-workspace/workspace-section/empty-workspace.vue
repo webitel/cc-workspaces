@@ -3,7 +3,7 @@
     <div class="empty-workspace__content-wrap">
       <img
         class="workspace-pic"
-        src="../../../assets/operator-workspace/ws-empty.svg"
+        src="../../../assets/agent-workspace/ws-empty.svg"
         alt="workspace is empty"
       >
       <h1 class="empty-workspace__heading">There are currently no calls or chats</h1>

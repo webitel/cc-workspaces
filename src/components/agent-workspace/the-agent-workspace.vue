@@ -1,5 +1,5 @@
 <template>
-  <main class="main-operator-workspace">
+  <main class="main-agent-workspace">
     <notification/>
     <widget-bar/>
     <section class="workspace">
@@ -14,12 +14,12 @@
   import { mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
-  import QueueSection from './queue-section/the-operator-queue-section.vue';
-  import WorkspaceSection from './workspace-section/the-operator-workspace-section.vue';
-  import InfoSection from './info-section/the-operator-info-section.vue';
+  import QueueSection from './queue-section/the-agent-queue-section.vue';
+  import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
+  import InfoSection from './info-section/the-agent-info-section.vue';
 
   export default {
-    name: 'the-operator-workspace',
+    name: 'the-agent-workspace',
     components: {
       Notification,
       WidgetBar,
@@ -38,7 +38,7 @@
     },
 
     methods: {
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         initClient: 'INIT_CLIENT',
       }),
 
@@ -51,7 +51,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .main-operator-workspace {
+  .main-agent-workspace {
     display: flex;
     flex-direction: column;
     height: 100vh;

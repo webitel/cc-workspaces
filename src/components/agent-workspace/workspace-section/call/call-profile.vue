@@ -1,6 +1,6 @@
 <template>
   <div class="call-profile">
-    <img class="call-profile__pic" src="../../../../assets/operator-workspace/default-avatar.svg"
+    <img class="call-profile__pic" src="../../../../assets/agent-workspace/default-avatar.svg"
          alt="client photo">
     <div class="call-profile__name">
       {{getDisplayName}}
@@ -18,7 +18,7 @@
     name: 'call-profile',
 
     computed: {
-      ...mapGetters('operator', {
+      ...mapGetters('agent', {
         getDisplayName: 'GET_CURRENT_ITEM_NAME',
         getDisplayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),

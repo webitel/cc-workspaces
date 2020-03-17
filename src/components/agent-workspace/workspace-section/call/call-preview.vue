@@ -53,7 +53,7 @@
     },
 
     methods: {
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         answer: 'ANSWER',
         transfer: 'TRANSFER',
         hangup: 'HANGUP',

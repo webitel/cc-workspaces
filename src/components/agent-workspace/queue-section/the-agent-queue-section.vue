@@ -35,7 +35,7 @@
   import Tabs from '../../utils/tabs.vue';
 
   export default {
-    name: 'the-operator-queue-section',
+    name: 'the-agent-queue-section',
     components: {
       CallPreview,
       RoundedAction,
@@ -46,7 +46,7 @@
     }),
 
     computed: {
-      ...mapState('operator', {
+      ...mapState('agent', {
         callList: (state) => state.callList,
         callState: (state) => state.callState,
       }),
@@ -68,7 +68,7 @@
     },
 
     methods: {
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
         openCall: 'OPEN_CALL_ON_WORKSPACE',

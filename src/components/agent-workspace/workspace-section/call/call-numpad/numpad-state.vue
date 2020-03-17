@@ -59,7 +59,7 @@
         return '';
       },
 
-      ...mapState('operator', {
+      ...mapState('agent', {
         itemInstance: (state) => state.callOnWorkspace,
       }),
     },

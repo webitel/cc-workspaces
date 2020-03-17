@@ -25,7 +25,7 @@
 
     computed: {
       CallStates: () => CallStates,
-      ...mapState('operator', {
+      ...mapState('agent', {
         state: (state) => state.callState,
       }),
     },

@@ -24,7 +24,7 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { getUsersList } from '../../../../api/operator-workspace/users';
+  import { getUsersList } from '../../../../api/agent-workspace/users';
   import Btn from '../../../utils/btn.vue';
   import Search from '../../../utils/search-input.vue';
   import Contact from '../workspace-contacts/workspace-contact.vue';
@@ -56,7 +56,7 @@
         this.dataList = await getUsersList(value);
       },
 
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         transfer: 'TRANSFER',
       }),
     },

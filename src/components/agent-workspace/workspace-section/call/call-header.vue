@@ -27,7 +27,7 @@
       </div>
 
       <img class="call-header__profile-pic"
-           src="../../../../assets/operator-workspace/default-avatar.svg"
+           src="../../../../assets/agent-workspace/default-avatar.svg"
            alt="client photo">
 
       <div class="actions-wrap actions-wrap__right">
@@ -136,11 +136,11 @@
     },
 
     computed: {
-      ...mapState('operator', {
+      ...mapState('agent', {
         callState: (state) => state.callState,
       }),
 
-      ...mapGetters('operator', {
+      ...mapGetters('agent', {
         displayName: 'GET_CURRENT_ITEM_NAME',
         displayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),
@@ -149,7 +149,7 @@
 
       number: {
         get() {
-          return this.$store.state.operator.newCallNumber;
+          return this.$store.state.agent.newCallNumber;
         },
         set(value) {
           this.setNumber(value);
@@ -165,7 +165,7 @@
         }
       },
 
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         call: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_CALL_NUMBER',

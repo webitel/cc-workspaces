@@ -95,7 +95,7 @@
     },
 
     methods: {
-      ...mapActions('operator', {
+      ...mapActions('agent', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
       }),
