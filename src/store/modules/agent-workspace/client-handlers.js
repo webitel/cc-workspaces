@@ -14,7 +14,7 @@ const callHandler = (context) => (action, call) => {
       context.dispatch('HANDLE_STREAM_ACTION', call);
       break;
     default:
-      console.log('default', action);
+      // console.log('default', action);
   }
 };
 

@@ -18,8 +18,9 @@ export default {
     computeCreatedTime() {
       const start = this.itemInstance.answeredAt
         ? this.itemInstance.answeredAt : this.itemInstance.createdAt;
-      const sec = Math.round((this.now - start) / 10 ** 3);
-      return this.computeHourMinSecTime(sec) || '00:00:00'; // dummy string handles undefined time after answer
+      let sec = Math.round((this.now - start) / 10 ** 3);
+      sec = sec <= 0 ? 0 : sec; // handles -1 time after answer
+      return this.computeHourMinSecTime(sec);
     },
   },
 

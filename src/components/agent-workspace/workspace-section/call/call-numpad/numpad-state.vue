@@ -19,14 +19,14 @@
         class="numpad-state__primary-text__time-digit"
         v-for="(digit, key) of computeCreatedTime.split('')"
         :key="key"
-      >{{digit}}</span>
+      >{{digit || '0'}}</span>
     </div>
     <div class="numpad-state__secondary-text">{{computeDTMFDigits}}</div>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
   import { CallActions } from 'webitel-sdk';
   import callInfo from '../../../../../mixins/callInfoMixin';
 
@@ -34,13 +34,20 @@
     name: 'numpad-state',
     mixins: [callInfo],
 
+    data: () => ({
+      baseUrl: process.env.BASE_URL, // to resolve iframe equalizer path after build
+      CallActions,
+    }),
+
     computed: {
       computeCallState() {
         switch (this.itemInstance.state) {
           case CallActions.Ringing:
-            return 'Ringing';
+            return 'Ringing..';
           case CallActions.Hold:
             return 'Hold';
+          case CallActions.Hangup:
+            return 'Hangup';
           case CallActions.Active:
             return this.computeCreatedTime;
           default:
@@ -52,15 +59,12 @@
         return this.itemInstance.state === CallActions.Active;
       },
 
-      computeDTMFDigits() {
-        if (this.itemInstance.digits && this.itemInstance.digits.length) {
-          return this.itemInstance.digits.join('');
-        }
-        return '';
-      },
-
       ...mapState('agent', {
         itemInstance: (state) => state.callOnWorkspace,
+      }),
+
+      ...mapGetters('agent', {
+        computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
       }),
     },
   };

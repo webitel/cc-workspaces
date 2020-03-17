@@ -15,7 +15,12 @@ const getters = {
 
   GET_CURRENT_ITEM_NUMBER: (state) => state.callOnWorkspace.displayNumber,
 
-  GET_CURRENT_CALL_DIGITS: (state) => state.callOnWorkspace.digits,
+  GET_CURRENT_CALL_DIGITS: (state) => {
+    if (state.callOnWorkspace.digits && state.callOnWorkspace.digits.lengh) {
+      return state.callOnWorkspace.digits;
+    }
+    return '';
+  },
 };
 
 const actions = {
@@ -78,7 +83,7 @@ const mutations = {
 
   RESET_WORKSPACE: (state) => {
     state.callState = null;
-    state.workspaceCall = {};
+    state.callOnWorkspace = {};
   },
 };
 
