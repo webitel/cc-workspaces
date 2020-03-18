@@ -1,4 +1,5 @@
 // eslint-disable
+
 const HANDLER = '_vue_clickaway_handler';
 
 function bind(el, binding, vnode) {
