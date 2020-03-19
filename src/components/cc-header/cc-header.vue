@@ -2,7 +2,7 @@
   <header class="cc-header">
     <div class="cc-header__container">
       <switcher></switcher>
-      <status-select></status-select>
+      <status-select/>
       <img
         class="cc-header__profile-pic"
         src="../../assets/agent-workspace/default-avatar.svg"
