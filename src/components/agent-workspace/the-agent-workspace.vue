@@ -34,17 +34,25 @@
     },
 
     created() {
-      this.initClient();
+      this.initWorkspace();
       this.setNowWatcher();
     },
 
     destroyed() {
       this.clearNowWatcher();
     },
-
     methods: {
-      ...mapActions('agent', {
-        initClient: 'INIT_CLIENT',
+      async initWorkspace() {
+        await this.subscribeCalls();
+        await this.subscribeStatus();
+      },
+
+      ...mapActions('workspace', {
+        subscribeCalls: 'SUBSCRIBE_CALLS',
+      }),
+
+      ...mapActions('status', {
+        subscribeStatus: 'SUBSCRIBE_AGENT_STATUS',
       }),
 
       ...mapActions('now', {
