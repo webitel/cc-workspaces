@@ -1,4 +1,4 @@
-import { AgentStatus } from 'webitel-sdk';
+// import { AgentStatus } from 'webitel-sdk';
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 import UserStatus from '../../statusUtils/UserStatus';
 import { getUserStatus } from '../../../api/agent-workspace/users';
@@ -28,8 +28,6 @@ const actions = {
       const agent = await client.agentSession();
       await agent.listenStatus();
       window.agent = agent;
-      const isAgent = agent.status !== AgentStatus.Offline;
-      context.commit('SET_CCENTER_MODE', isAgent);
       context.commit('SET_AGENT_INSTANCE', agent);
     } catch (err) {
       console.error(err);

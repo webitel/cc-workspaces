@@ -27,7 +27,7 @@
     computed: {
       isAgent: {
         get() {
-          return this.$store.state.status.isAgent;
+          return this.$store.getters['status/IS_AGENT'];
         },
         set() {
           this.toggleCCenterMode();

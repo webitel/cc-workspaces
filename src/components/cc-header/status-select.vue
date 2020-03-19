@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
   import { AgentStatus } from 'webitel-sdk';
   import UserStatus from '../../store/statusUtils/UserStatus';
   import clickaway from '../../directives/clickaway';
@@ -98,7 +98,10 @@
       ...mapState('status', {
         agent: (state) => state.agent,
         user: (state) => state.user,
-        isAgent: (state) => state.isAgent,
+      }),
+
+      ...mapGetters('status', {
+        isAgent: 'IS_AGENT',
       }),
 
       computeAvailableStatus() {
@@ -116,9 +119,9 @@
               .substr(11, 8);
           }
         } else {
-            return new Date((this.now - this.user.lastStateChange || Date.now())).toISOString()
-              .substr(11, 8);
-          }
+          return new Date((this.now - this.user.lastStateChange || Date.now())).toISOString()
+            .substr(11, 8);
+        }
         return '00:00:00';
       },
     },
