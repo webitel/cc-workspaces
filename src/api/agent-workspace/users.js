@@ -2,7 +2,6 @@ import instance from '../instance';
 
 const BASE_URL = '/users';
 
-// eslint-disable-next-line import/prefer-default-export
 export async function getUsersList(search) {
   const size = 20;
   let url = `${BASE_URL}?size=${size}`;
@@ -19,6 +18,27 @@ export async function getUsersList(search) {
       }));
     }
     return [];
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getUserStatus() {
+  const url = '/user';
+
+  try {
+    const response = await instance.get(url);
+    return response.presence;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function setUserStatus(status = '') {
+  const url = '/presence';
+
+  try {
+    await instance.patch(url, { status });
   } catch (err) {
     throw err;
   }

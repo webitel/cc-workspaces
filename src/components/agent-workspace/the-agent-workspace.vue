@@ -52,7 +52,7 @@
       }),
 
       ...mapActions('status', {
-        subscribeStatus: 'SUBSCRIBE_AGENT_STATUS',
+        subscribeStatus: 'SUBSCRIBE_STATUS',
       }),
 
       ...mapActions('now', {

@@ -1,7 +1,7 @@
 <template>
   <header class="cc-header">
     <div class="cc-header__container">
-      <switcher></switcher>
+      <switcher v-model="isAgent"></switcher>
       <status-select/>
       <img
         class="cc-header__profile-pic"
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import Switcher from './cc-header-switcher.vue';
   import StatusSelect from './status-select.vue';
 
@@ -21,6 +22,23 @@
     components: {
       Switcher,
       StatusSelect,
+    },
+
+    computed: {
+      isAgent: {
+        get() {
+          return this.$store.state.status.isAgent;
+        },
+        set() {
+          this.toggleCCenterMode();
+        },
+      },
+    },
+
+    methods: {
+      ...mapActions('status', {
+        toggleCCenterMode: 'TOGGLE_CCENTER_MODE',
+      }),
     },
   };
 </script>

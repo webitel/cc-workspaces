@@ -57,6 +57,7 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import { AgentStatus } from 'webitel-sdk';
+  import UserStatus from '../../store/statusUtils/UserStatus';
   import clickaway from '../../directives/clickaway';
 
   export default {
@@ -65,6 +66,7 @@
 
     data: () => ({
       AgentStatus,
+      UserStatus,
       isOpened: false,
       agentStatusList: [
         {
@@ -79,11 +81,11 @@
       userStatusList: [
         {
           text: 'Active',
-          value: 'active',
+          value: UserStatus.ACTIVE,
         },
         {
           text: 'DnD',
-          value: 'dnd',
+          value: UserStatus.DND,
         },
       ],
     }),
@@ -95,51 +97,89 @@
 
       ...mapState('status', {
         agent: (state) => state.agent,
+        user: (state) => state.user,
+        isAgent: (state) => state.isAgent,
       }),
 
       computeAvailableStatus() {
-        return this.agentStatusList.filter((status) => status.value !== this.agent.status);
+        if (this.isAgent) {
+          return this.agentStatusList.filter((status) => status.value !== this.agent.status);
+        }
+        return this.userStatusList.filter((status) => status.value !== this.user.status);
       },
 
       // FIXME to redo with lastStateChange getter from sdk, when it's ready
       duration() {
-        if (this.now) {
-          return new Date((this.agent.stateDuration || 0) * 1000).toISOString()
-            .substr(11, 8);
-        }
+        if (this.isAgent) {
+          if (this.now) {
+            return new Date((this.agent.stateDuration || 0) * 1000).toISOString()
+              .substr(11, 8);
+          }
+        } else {
+            return new Date((this.now - this.user.lastStateChange || Date.now())).toISOString()
+              .substr(11, 8);
+          }
         return '00:00:00';
       },
     },
 
     methods: {
       ...mapActions('status', {
-        setWaiting: 'SET_WAITING_STATUS',
-        setPause: 'SET_PAUSE_STATUS',
-        logout: 'LOGOUT',
+        setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
+        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
+        setUserActive: 'SET_USER_ACTIVE_STATUS',
+        setUserDnd: 'SET_USER_DND_STATUS',
+        agentLogout: 'AGENT_LOGOUT',
       }),
 
       changeStatus(status) {
-        switch (status) {
-          case AgentStatus.Waiting:
-            this.setWaiting();
-            break;
-          case AgentStatus.Pause:
-            this.setPause();
-            break;
-          default:
-            break;
+        if (this.isAgent) {
+          switch (status) {
+            case AgentStatus.Waiting:
+              this.setAgentWaiting();
+              break;
+            case AgentStatus.Pause:
+              this.setAgentPause();
+              break;
+            default:
+              break;
+          }
+        } else {
+          switch (status) {
+            case UserStatus.ACTIVE:
+              this.setUserActive();
+              break;
+            case UserStatus.DND:
+              this.setUserDnd();
+              break;
+            default:
+              break;
+          }
         }
         this.close();
       },
 
-      computeCurrentStatusIndicatorClass(status = this.agent.status) {
-        switch (status) {
-          case AgentStatus.Waiting:
-            return 'status-select__indicator__active';
-          case AgentStatus.Pause:
-            return 'status-select__indicator__break';
-          default:
-            return '';
+      computeCurrentStatusIndicatorClass(statusArg) {
+        if (this.isAgent) {
+          const status = statusArg || this.agent.status;
+          switch (status) {
+            case AgentStatus.Waiting:
+              return 'status-select__indicator__active';
+            case AgentStatus.Pause:
+              return 'status-select__indicator__break';
+            default:
+              return '';
+          }
+        } else {
+          const status = statusArg || this.user.status;
+          switch (status) {
+            case UserStatus.ACTIVE:
+              return 'status-select__indicator__active';
+            case UserStatus.DND:
+              return 'status-select__indicator__break';
+            default:
+              return '';
+          }
         }
       },
 

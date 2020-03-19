@@ -16,7 +16,7 @@
     props: {
       value: {
         type: Boolean,
-        required: true,
+        // required: true,
       },
       disabled: {
         type: Boolean,
