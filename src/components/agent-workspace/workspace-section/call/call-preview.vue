@@ -53,7 +53,7 @@
     },
 
     methods: {
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         answer: 'ANSWER',
         transfer: 'TRANSFER',
         hangup: 'HANGUP',
