@@ -13,7 +13,7 @@
     >
         <span
           class="status-select__indicator"
-          :class="computeCurrentStatusIndicatorClass()"
+          :class="computeCurrentStatusIndicatorClass"
         ></span>
       <div class="status-select__item__text">{{duration}}</div>
       <icon class="status-select__arrow">
@@ -30,7 +30,7 @@
       <li class="status-select__item" @click="close">
         <span
           class="status-select__indicator"
-          :class="computeCurrentStatusIndicatorClass()"
+          :class="computeCurrentStatusIndicatorClass"
         ></span>
         <div class="status-select__item__text">{{duration}}</div>
         <icon class="status-select__arrow">
@@ -46,7 +46,7 @@
       >
         <span
           class="status-select__indicator"
-          :class="computeCurrentStatusIndicatorClass(status.value)"
+          :class="`status-select__indicator__${status.text.toLowerCase()}`"
         ></span>
         <div class="status-select__item__text">{{status.text}}</div>
       </li>
@@ -124,17 +124,33 @@
         }
         return '00:00:00';
       },
+
+      computeCurrentStatusIndicatorClass() {
+        if (this.isAgent) {
+          const { status } = this.agent;
+          switch (status) {
+            case AgentStatus.Waiting:
+              return 'status-select__indicator__active';
+            case AgentStatus.Pause:
+              return 'status-select__indicator__break';
+            default:
+              return '';
+          }
+        } else {
+          const { status } = this.user;
+          switch (status) {
+            case UserStatus.ACTIVE:
+              return 'status-select__indicator__active';
+            case UserStatus.DND:
+              return 'status-select__indicator__break';
+            default:
+              return '';
+          }
+        }
+      },
     },
 
     methods: {
-      ...mapActions('status', {
-        setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
-        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
-        setUserActive: 'SET_USER_ACTIVE_STATUS',
-        setUserDnd: 'SET_USER_DND_STATUS',
-        agentLogout: 'AGENT_LOGOUT',
-      }),
-
       changeStatus(status) {
         if (this.isAgent) {
           switch (status) {
@@ -145,7 +161,7 @@
               this.setAgentPause();
               break;
             default:
-              break;
+              return;
           }
         } else {
           switch (status) {
@@ -156,39 +172,23 @@
               this.setUserDnd();
               break;
             default:
-              break;
+              return;
           }
         }
         this.close();
       },
 
-      computeCurrentStatusIndicatorClass(statusArg) {
-        if (this.isAgent) {
-          const status = statusArg || this.agent.status;
-          switch (status) {
-            case AgentStatus.Waiting:
-              return 'status-select__indicator__active';
-            case AgentStatus.Pause:
-              return 'status-select__indicator__break';
-            default:
-              return '';
-          }
-        } else {
-          const status = statusArg || this.user.status;
-          switch (status) {
-            case UserStatus.ACTIVE:
-              return 'status-select__indicator__active';
-            case UserStatus.DND:
-              return 'status-select__indicator__break';
-            default:
-              return '';
-          }
-        }
-      },
-
       close() {
         this.isOpened = false;
       },
+
+      ...mapActions('status', {
+        setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
+        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
+        setUserActive: 'SET_USER_ACTIVE_STATUS',
+        setUserDnd: 'SET_USER_DND_STATUS',
+        agentLogout: 'AGENT_LOGOUT',
+      }),
     },
   };
 </script>
@@ -233,7 +233,7 @@
         background: $active-color;
       }
 
-      &__break {
+      &__break, &__dnd {
         background: $break-color;
       }
 

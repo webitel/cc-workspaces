@@ -47,7 +47,7 @@ const actions = {
     try {
       const presence = await getUserStatus();
       const user = {
-        status: getUserStatus(presence),
+        status: parseUserStatus(presence),
         lastStateChange: Date.now(),
       };
       context.commit('SET_USER_INSTANCE', user);
