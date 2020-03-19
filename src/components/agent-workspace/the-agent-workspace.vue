@@ -1,0 +1,74 @@
+<template>
+  <main class="main-agent-workspace">
+    <notification/>
+    <widget-bar/>
+    <section class="workspace">
+      <queue-section/>
+      <workspace-section/>
+      <info-section/>
+    </section>
+  </main>
+</template>
+
+<script>
+  import { mapActions } from 'vuex';
+  import Notification from '../utils/notification.vue';
+  import WidgetBar from './widget-bar/widget-bar.vue';
+  import QueueSection from './queue-section/the-agent-queue-section.vue';
+  import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
+  import InfoSection from './info-section/the-agent-info-section.vue';
+
+  export default {
+    name: 'the-agent-workspace',
+    components: {
+      Notification,
+      WidgetBar,
+      QueueSection,
+      WorkspaceSection,
+      InfoSection,
+    },
+
+    created() {
+      this.initClient();
+      this.setNowWatcher();
+    },
+
+    destroyed() {
+      this.clearNowWatcher();
+    },
+
+    methods: {
+      ...mapActions('agent', {
+        initClient: 'INIT_CLIENT',
+      }),
+
+      ...mapActions('now', {
+        setNowWatcher: 'SET_NOW_WATCHER',
+        clearNowWatcher: 'CLEAR_NOW_WATCHER',
+      }),
+    },
+  };
+</script>
+
+<style lang="scss" scoped>
+  .main-agent-workspace {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .workspace {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: calcVH(340px) calcVH(550px) 1fr;
+    grid-gap: calcVH(20px);
+    min-height: 0;
+    margin-top: calcVH(28px);
+
+    .workspace-section {
+      max-height: 100%;
+      min-height: 0;
+    }
+  }
+</style>

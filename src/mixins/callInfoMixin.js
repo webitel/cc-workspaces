@@ -1,18 +1,12 @@
+import { mapState } from 'vuex';
+
 export default {
-  data: () => ({
-    now: Date.now(),
-    interval: null,
-  }),
-
-  mounted() {
-    this.setTimeNowTimer();
-  },
-
-  destroy() {
-    clearInterval(this.interval);
-  },
 
   computed: {
+    ...mapState('now', {
+      now: (state) => state.now,
+    }),
+
     computeDisplayName() {
       return this.itemInstance.displayName || 'undefined name';
     },
@@ -24,18 +18,13 @@ export default {
     computeCreatedTime() {
       const start = this.itemInstance.answeredAt
         ? this.itemInstance.answeredAt : this.itemInstance.createdAt;
-      const sec = Math.round((this.now - start) / 10 ** 3);
-      return this.computeHourMinSecTime(sec) || '00:00:00'; // dummy string handles undefined time after answer
+      let sec = Math.round((this.now - start) / 10 ** 3);
+      sec = sec <= 0 ? 0 : sec; // handles -1 time after answer
+      return this.computeHourMinSecTime(sec);
     },
   },
 
   methods: {
-    setTimeNowTimer() {
-      this.interval = setInterval(() => {
-        this.now = Date.now();
-      }, 1000);
-    },
-
     computeHourMinSecTime(time) {
       let hour = Math.floor(time / 60 ** 2);
       let min = Math.floor(time / 60);

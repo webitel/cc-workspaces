@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Auth from '../components/auth/the-auth.vue';
-import OperatorWorkspace from '../components/operator-workspace/the-operator-workspace.vue';
+import AgentWorkspace from '../components/agent-workspace/the-agent-workspace.vue';
 
 Vue.use(VueRouter);
 
@@ -14,8 +14,8 @@ const routes = [
   },
   {
     path: '/workspace',
-    name: 'operator-ws',
-    component: OperatorWorkspace,
+    name: 'agent-ws',
+    component: AgentWorkspace,
   },
   {
     path: '*',
