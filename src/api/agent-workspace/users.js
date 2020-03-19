@@ -1,8 +1,9 @@
 import instance from '../instance';
+import UserStatus from '../../store/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
 
-export async function getUsersList(search) {
+export const getUsersList = async (search) => {
   const size = 20;
   let url = `${BASE_URL}?size=${size}`;
   if (search) url += `&name=${search}*`;
@@ -21,9 +22,9 @@ export async function getUsersList(search) {
   } catch (err) {
     throw err;
   }
-}
+};
 
-export async function getUserStatus() {
+export const getUserStatus = async () => {
   const url = '/user';
 
   try {
@@ -32,9 +33,9 @@ export async function getUserStatus() {
   } catch (err) {
     throw err;
   }
-}
+};
 
-export async function setUserStatus(status = '') {
+export const setUserStatus = async (status = '') => {
   const url = '/presence';
 
   try {
@@ -42,4 +43,14 @@ export async function setUserStatus(status = '') {
   } catch (err) {
     throw err;
   }
-}
+};
+
+export const parseUserStatus = (presence) => {
+  if (presence.status.includes('dnd')) {
+    return UserStatus.DND;
+  }
+  if (presence.status.includes('wss')) {
+    return UserStatus.ACTIVE;
+  }
+  return '';
+};

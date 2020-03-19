@@ -1,65 +1,58 @@
-// import { AgentStatus } from 'webitel-sdk';
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
-import UserStatus from '../../statusUtils/UserStatus';
-import { getUserStatus } from '../../../api/agent-workspace/users';
+import { getUserStatus, parseUserStatus } from '../../../api/agent-workspace/users';
 
 const userStatusHandler = (context) => (userArg) => {
   const user = {
+    status: parseUserStatus(userArg),
     lastStateChange: userArg.timestamp,
   };
-  if (userArg.status.includes('dnd')) {
-    user.status = UserStatus.DND;
-  } else if (userArg.status.includes('wss')) {
-    user.status = UserStatus.ACTIVE;
-  }
+
   context.commit('SET_USER_INSTANCE', user);
-  console.warn('user status change', userArg);
 };
 
 const actions = {
+  // main action to start initialization
   SUBSCRIBE_STATUS: async (context) => {
     context.dispatch('SUBSCRIBE_AGENT_STATUS');
     context.dispatch('SUBSCRIBE_USER_STATUS');
   },
 
+  // main agent subscribe action
   SUBSCRIBE_AGENT_STATUS: async (context) => {
     const client = await getCliInstance();
     try {
       const agent = await client.agentSession();
       await agent.listenStatus();
-      window.agent = agent;
       context.commit('SET_AGENT_INSTANCE', agent);
+
+      window.agent = agent;
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   },
 
+  // main user subscribe action
   SUBSCRIBE_USER_STATUS: async (context) => {
     const client = await getCliInstance();
     try {
       await client.subscribeUsersStatus(userStatusHandler(context));
       await context.dispatch('GET_CURRENT_USER_STATUS');
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   },
 
+  // helper action to get initial user status from HTTP request
   GET_CURRENT_USER_STATUS: async (context) => {
     try {
       const presence = await getUserStatus();
-      let status;
-      if (presence.status.includes('dnd')) {
-        status = UserStatus.DND;
-      } else if (presence.status.includes('wss')) {
-        status = UserStatus.ACTIVE;
-      }
       const user = {
-        status,
+        status: getUserStatus(presence),
         lastStateChange: Date.now(),
       };
       context.commit('SET_USER_INSTANCE', user);
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   },
 };
