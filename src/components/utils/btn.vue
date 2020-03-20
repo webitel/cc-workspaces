@@ -25,7 +25,7 @@
       background: $default-btn-color__hover;
     }
 
-    &.call {
+    &.call, &.true {
       color: #fff;
       background: $call-btn-color;
 
@@ -34,7 +34,7 @@
       }
     }
 
-    &.end {
+    &.end, &.false {
       color: #fff;
       background: $end-btn-color;
 
