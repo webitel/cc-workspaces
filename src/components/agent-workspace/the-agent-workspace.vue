@@ -1,6 +1,7 @@
 <template>
   <main class="main-agent-workspace">
     <notification/>
+    <break-popup/>
     <cc-header/>
     <div class="workspace-wrap">
       <widget-bar/>
@@ -16,6 +17,7 @@
 <script>
   import { mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
+  import BreakPopup from './break-popup/break-popup.vue';
   import CcHeader from '../cc-header/cc-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-agent-queue-section.vue';
@@ -26,6 +28,7 @@
     name: 'the-agent-workspace',
     components: {
       Notification,
+      BreakPopup,
       CcHeader,
       WidgetBar,
       QueueSection,
