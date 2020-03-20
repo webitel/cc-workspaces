@@ -7,9 +7,9 @@ const actions = {
     }
   },
 
-  SET_AGENT_PAUSE_STATUS: (context) => {
+  SET_AGENT_PAUSE_STATUS: (context, note = '') => {
     try {
-      context.state.agent.pause({});
+      context.state.agent.pause(note);
     } catch {
     }
   },

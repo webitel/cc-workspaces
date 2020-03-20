@@ -26,17 +26,28 @@
     </template>
     <template slot="popup-footer">
       <div class="popup-actions">
-        <btn class="popup-action uppercase">Send</btn>
-        <btn class="popup-action uppercase secondary">Cancel</btn>
+        <btn
+          class="popup-action uppercase"
+          @click.native="setBreak"
+        >
+          Send
+        </btn>
+        <btn
+          class="popup-action uppercase secondary"
+          @click.native="$emit('close')"
+        >
+          Cancel
+        </btn>
       </div>
     </template>
   </popup>
 </template>
 
 <script>
-  import Btn from '../../utils/btn.vue';
-  import CcTextarea from '../../utils/textarea.vue';
-  import Popup from '../../utils/popup-container.vue';
+  import { mapActions } from 'vuex';
+  import Btn from '../utils/btn.vue';
+  import CcTextarea from '../utils/textarea.vue';
+  import Popup from '../utils/popup-container.vue';
 
   export default {
     name: 'break-popup',
@@ -48,13 +59,25 @@
 
     data: () => ({
       selected: '',
+      userOption: '',
       breakOptions: [
         'Coffee break', 'Smoke break', 'Restroom', 'Dinner', 'Meeting',
         'Coffee break', 'Smoke break', 'Restroom', 'Dinner', 'Meeting',
         'Coffee break', 'Smoke break', 'Restroom', 'Dinner', 'Meeting',
       ],
-      userOption: '',
     }),
+
+    methods: {
+      setBreak() {
+        const note = this.selected || this.userOption;
+        this.setAgentPause(note);
+        this.$emit('close');
+      },
+
+      ...mapActions('status', {
+        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
+      }),
+    },
   };
 </script>
 

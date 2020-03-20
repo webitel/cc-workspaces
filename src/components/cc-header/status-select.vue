@@ -160,7 +160,7 @@
               this.setAgentWaiting();
               break;
             case AgentStatus.Pause:
-              this.setAgentPause();
+              this.$emit('setBreak'); // opens break reason popup
               break;
             default:
               return;
@@ -186,10 +186,9 @@
 
       ...mapActions('status', {
         setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
-        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
+        agentLogout: 'AGENT_LOGOUT',
         setUserActive: 'SET_USER_ACTIVE_STATUS',
         setUserDnd: 'SET_USER_DND_STATUS',
-        agentLogout: 'AGENT_LOGOUT',
       }),
     },
   };

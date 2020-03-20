@@ -21,18 +21,25 @@
     </template>
     <template slot="popup-footer">
       <div class="popup-actions">
-        <btn class="popup-action true uppercase">Continue work</btn>
-        <btn class="popup-action false uppercase">Logout</btn>
+        <btn
+          class="popup-action true uppercase"
+          @click.native="setAgentWaiting"
+        >Continue work
+        </btn>
+        <btn
+          class="popup-action false uppercase"
+          @click.native="agentLogout"
+        >Logout
+        </btn>
       </div>
     </template>
   </popup>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import { AgentStatus } from 'webitel-sdk';
-  import Btn from '../../utils/btn.vue';
-  import Popup from '../../utils/popup-container.vue';
+  import { mapState, mapActions } from 'vuex';
+  import Btn from '../utils/btn.vue';
+  import Popup from '../utils/popup-container.vue';
 
   export default {
     name: 'break-timer-popup',
@@ -40,11 +47,6 @@
       Btn,
       Popup,
     },
-
-    data: () => ({
-      AgentStatus,
-    }),
-
     computed: {
       ...mapState('now', {
         now: (state) => state.now,
@@ -61,6 +63,13 @@
         }
         return '00:00:00';
       },
+    },
+
+    methods: {
+      ...mapActions('status', {
+        setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
+        agentLogout: 'AGENT_LOGOUT',
+      }),
     },
   };
 </script>
