@@ -197,7 +197,6 @@
 
 <style lang="scss" scoped>
   $active-color: $true-color;
-  $break-color: $hold-color;
   $stop-color: $false-color;
   $option-bg__hover: $page-bg-color;
 
