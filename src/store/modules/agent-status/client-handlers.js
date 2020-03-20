@@ -4,7 +4,7 @@ import { getUserStatus, parseUserStatus } from '../../../api/agent-workspace/use
 const userStatusHandler = (context) => (userArg) => {
   const user = {
     status: parseUserStatus(userArg),
-    lastStateChange: userArg.timestamp,
+    lastStateChange: Date.now(),
   };
 
   context.commit('SET_USER_INSTANCE', user);

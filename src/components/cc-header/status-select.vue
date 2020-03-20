@@ -119,7 +119,9 @@
               .substr(11, 8);
           }
         } else {
-          return new Date((this.now - this.user.lastStateChange || Date.now())).toISOString()
+          let time = (this.now - this.user.lastStateChange || Date.now());
+          time = time < 0 ? 0 : time;
+          return new Date(time).toISOString()
             .substr(11, 8);
         }
         return '00:00:00';
