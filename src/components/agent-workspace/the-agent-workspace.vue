@@ -72,9 +72,13 @@
   }
 
   .workspace-wrap {
+    $header-height: calcVH(54px);
+
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    height: calc(100vh - #{$header-height});
+    max-height: calc(100vh - #{$header-height});
     padding: calcVH(20px) calcVH(30px);
     box-sizing: border-box;
   }
