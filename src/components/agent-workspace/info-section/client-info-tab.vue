@@ -1,11 +1,12 @@
 <template>
   <section class="client-info">
-    <article id="md" class="md" v-html="mdHtml"></article>
+    <article id="md" class="md" v-html="computeHTML"></article>
   </section>
 </template>
 
 <script>
   import MarkdownIt from 'markdown-it';
+  import { mapState } from 'vuex';
 
   const md = new MarkdownIt();
 
@@ -13,8 +14,25 @@
     name: 'client-info-tab',
     data: () => ({
       md,
-      mdHtml: '',
     }),
+
+    computed: {
+      ...mapState('workspace', {
+        call: (state) => state.callOnWorkspace,
+      }),
+
+      computeHTML() {
+        let res = '';
+        if (this.call.payload) {
+          Object.keys(this.call.payload).forEach((key) => {
+            res += `<h3>${key}:</h3>`;
+            res += md.render(this.call.payload[key]);
+            res += '<br/>';
+          });
+        }
+        return res;
+      },
+    },
   };
 </script>
 
