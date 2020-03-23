@@ -56,7 +56,7 @@
         this.dataList = await getUsersList(value);
       },
 
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         transfer: 'TRANSFER',
       }),
     },

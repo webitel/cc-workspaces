@@ -62,11 +62,11 @@
         }
       },
 
-      ...mapState('agent', {}),
+      ...mapState('workspace', {}),
     },
 
     methods: {
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
         openCall: 'OPEN_CALL_ON_WORKSPACE',

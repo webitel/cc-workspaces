@@ -80,7 +80,7 @@
     },
 
     computed: {
-      ...mapState('agent', {
+      ...mapState('workspace', {
         callState: (state) => state.callState,
         call: (state) => state.callOnWorkspace,
       }),
@@ -97,7 +97,7 @@
     },
 
     methods: {
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         toggleMute: 'TOGGLE_MUTE',
         toggleHold: 'TOGGLE_HOLD',
       }),

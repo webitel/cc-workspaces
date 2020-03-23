@@ -18,7 +18,7 @@
     name: 'call-profile',
 
     computed: {
-      ...mapGetters('agent', {
+      ...mapGetters('workspace', {
         getDisplayName: 'GET_CURRENT_ITEM_NAME',
         getDisplayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),

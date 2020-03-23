@@ -6,14 +6,14 @@ $srollbar-border-radius: 4px;
 .cc-scrollbar {
   // scrollbar itself
   &::-webkit-scrollbar {
-    width: calcVH(4px);
+    width: 4px;
     background-color: $scrollbar-bg-color;
     cursor: pointer;
   }
 
   // scrollable element
   &::-webkit-scrollbar-thumb {
-    width: calcVH(4px);
+    width: 4px;
     background-color: $srollbar-thumb-color;
     border-radius: $srollbar-border-radius;
   }

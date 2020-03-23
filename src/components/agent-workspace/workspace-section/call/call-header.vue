@@ -136,11 +136,11 @@
     },
 
     computed: {
-      ...mapState('agent', {
+      ...mapState('workspace', {
         callState: (state) => state.callState,
       }),
 
-      ...mapGetters('agent', {
+      ...mapGetters('workspace', {
         displayName: 'GET_CURRENT_ITEM_NAME',
         displayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),
@@ -149,7 +149,7 @@
 
       number: {
         get() {
-          return this.$store.state.agent.newCallNumber;
+          return this.$store.state.workspace.newCallNumber;
         },
         set(value) {
           this.setNumber(value);
@@ -165,7 +165,7 @@
         }
       },
 
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         call: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_CALL_NUMBER',

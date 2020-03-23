@@ -1,3 +1,4 @@
+import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 import CallStates from '../../callUtils/CallStates';
 
 const answerParams = { useAudio: true };
@@ -5,8 +6,9 @@ const answerParams = { useAudio: true };
 const actions = {
   CALL: async (context) => {
     const destination = context.state.newCallNumber;
+    const client = getCliInstance();
     try {
-      await context.state.client.call({ destination });
+      await client.call({ destination });
     } catch {
     }
   },
