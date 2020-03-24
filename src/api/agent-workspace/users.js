@@ -3,9 +3,8 @@ import UserStatus from '../../store/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
 
-export const getUsersList = async (search) => {
-  const size = 20;
-  let url = `${BASE_URL}?size=${size}`;
+export const getUsersList = async (page = 1, size = 20, search = '') => {
+  let url = `${BASE_URL}?page=${page}&size=${size}&sort=name`;
   if (search) url += `&name=${search}*`;
 
   try {
@@ -53,7 +52,6 @@ export const parseUserStatus = (presence) => {
     if (presence.status.includes('wss')) {
       return UserStatus.ACTIVE;
     }
-    return '';
   }
-   throw new Error('Empty status!');
+  return '';
 };
