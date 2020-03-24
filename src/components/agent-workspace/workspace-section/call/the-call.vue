@@ -11,7 +11,7 @@
   import CallStates from '../../../../store/callUtils/CallStates';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
-  import EmptyWorkspace from '../empty-workspace.vue';
+  import EmptyWorkspace from '../empty-workspace/empty-workspace.vue';
 
   export default {
     name: 'the-call',
