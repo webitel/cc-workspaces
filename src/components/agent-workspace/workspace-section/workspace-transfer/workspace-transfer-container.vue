@@ -1,6 +1,9 @@
 <template>
   <div class="ws-worksection">
-    <search v-model="search"></search>
+    <search
+      v-model="search"
+      @search="loadDataList"
+    />
     <div class="ws-worksection__list">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
@@ -52,8 +55,8 @@
         this.selected = item;
       },
 
-      async loadDataList(value) {
-        this.dataList = await getUsersList(value);
+      async loadDataList(search = '') {
+        this.dataList = await getUsersList(search);
       },
 
       ...mapActions('workspace', {
@@ -78,6 +81,6 @@
 
   .cc-btn {
     display: block;
-    margin: auto;
+    margin: calcVH(17px) auto auto;
   }
 </style>

@@ -180,6 +180,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
+    min-height: calcVH(160px);
     height: calcVH(160px);
     margin: calcVH(20px) calcVH(20px) 0;
   }
