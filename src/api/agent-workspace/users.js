@@ -46,11 +46,14 @@ export const setUserStatus = async (status = '') => {
 };
 
 export const parseUserStatus = (presence) => {
-  if (presence.status.includes('dnd')) {
-    return UserStatus.DND;
+  if (presence.status) {
+    if (presence.status.includes('dnd')) {
+      return UserStatus.DND;
+    }
+    if (presence.status.includes('wss')) {
+      return UserStatus.ACTIVE;
+    }
+    return '';
   }
-  if (presence.status.includes('wss')) {
-    return UserStatus.ACTIVE;
-  }
-  return '';
+   throw new Error('Empty status!');
 };
