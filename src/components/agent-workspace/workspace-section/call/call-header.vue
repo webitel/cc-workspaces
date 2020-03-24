@@ -32,7 +32,7 @@
 
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isMerge"
           class="call-action secondary"
           @click.native="$emit('openTab', 'merge')"
         >
@@ -43,7 +43,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isTransfer"
           class="call-action transfer"
           @click.native="$emit('openTab', 'transfer')"
         >
@@ -54,7 +54,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isHangup"
           class="call-action end"
           @click.native="hangup()"
         >
@@ -66,7 +66,7 @@
         </rounded-action>
 
         <rounded-action
-          v-if="callState === CallStates.NEW && number"
+          v-if="isCall"
           class="call-action call"
           @click.native="call"
         >
@@ -131,6 +131,10 @@
       },
     },
 
+    data: () => ({
+      CallStates,
+    }),
+
     mounted() {
       this.setNumberFocus();
     },
@@ -145,8 +149,6 @@
         displayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),
 
-      CallStates: () => CallStates,
-
       number: {
         get() {
           return this.$store.state.workspace.newCallNumber;
@@ -154,6 +156,25 @@
         set(value) {
           this.setNumber(value);
         },
+      },
+
+      isMerge() {
+        return this.callState === CallStates.ACTIVE;
+      },
+
+      isTransfer() {
+        return this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER;
+      },
+
+      isHangup() {
+        return this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER;
+      },
+
+      isCall() {
+        return this.callState === CallStates.NEW
+          && this.number;
       },
     },
 

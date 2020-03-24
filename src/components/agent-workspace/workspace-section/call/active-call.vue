@@ -28,6 +28,7 @@
   import Contacts from '../workspace-contacts/workspace-contacts-container.vue';
   import Transfer from '../workspace-transfer/workspace-transfer-container.vue';
   import Numpad from './call-numpad/numpad.vue';
+  import CallStates from '../../../../store/callUtils/CallStates';
 
   export default {
     name: 'active-call',
@@ -46,6 +47,10 @@
       currentTab: 'numpad',
     }),
 
+    mounted() {
+      this.setInitinalCurrentTab();
+    },
+
     computed: {
       computeCurrentTab() {
         switch (this.currentTab) {
@@ -62,10 +67,22 @@
         }
       },
 
-      ...mapState('workspace', {}),
+      ...mapState('workspace', {
+        callState: (state) => state.callState,
+      }),
     },
 
     methods: {
+      setInitinalCurrentTab() {
+        switch (this.callState) {
+          case CallStates.TRANSFER:
+            this.currentTab = 'transfer';
+            break;
+          default:
+            this.currentTab = 'numpad';
+        }
+      },
+
       ...mapActions('workspace', {
         answer: 'ANSWER',
         hangup: 'HANGUP',

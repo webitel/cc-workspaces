@@ -1,7 +1,7 @@
 <template>
   <section class="call">
-    <call-preview v-if="state === CallStates.PREVIEW"></call-preview>
-    <active-call v-else-if="state === CallStates.ACTIVE || state === CallStates.NEW"></active-call>
+    <call-preview v-if="isPreviewCall"></call-preview>
+    <active-call v-else-if="isActiveCall"></active-call>
     <empty-workspace v-else/>
   </section>
 </template>
@@ -28,6 +28,16 @@
       ...mapState('workspace', {
         state: (state) => state.callState,
       }),
+
+      isPreviewCall() {
+        return this.state === CallStates.PREVIEW;
+      },
+
+      isActiveCall() {
+        return this.state === CallStates.ACTIVE
+          || this.state === CallStates.NEW
+          || this.state === CallStates.TRANSFER;
+      },
     },
   };
 </script>

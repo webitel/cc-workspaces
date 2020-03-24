@@ -15,7 +15,7 @@
         </rounded-action>
         <rounded-action
           class="rounded-action__lg transfer"
-          @click.native="transfer()"
+          @click.native="openTransfer()"
         >
           <icon class="lg">
             <svg class="icon icon-call-transfer-lg lg">
@@ -55,7 +55,7 @@
     methods: {
       ...mapActions('workspace', {
         answer: 'ANSWER',
-        transfer: 'TRANSFER',
+        openTransfer: 'OPEN_PREVIEW_TRANSFER',
         hangup: 'HANGUP',
       }),
     },
