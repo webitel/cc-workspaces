@@ -6,7 +6,7 @@ const answerParams = { useAudio: true };
 const actions = {
   CALL: async (context) => {
     const destination = context.state.newCallNumber;
-    const client = getCliInstance();
+    const client = await getCliInstance();
     try {
       await client.call({ destination });
     } catch {
