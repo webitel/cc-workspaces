@@ -1,7 +1,7 @@
 <template>
   <div class="call-preview-wrap">
     <div class="call-preview">
-      <call-profile></call-profile>
+      <preview-profile/>
       <div class="call-preview__actions">
         <rounded-action
           class="rounded-action__lg call"
@@ -40,15 +40,13 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import CallProfile from './call-profile.vue';
-  import callInfo from '../../../../mixins/callInfoMixin';
+  import PreviewProfile from './call-preview-profile.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
     name: 'call-preview',
-    mixins: [callInfo],
     components: {
-      CallProfile,
+      PreviewProfile,
       RoundedAction,
     },
 

@@ -21,10 +21,11 @@
       EmptyWorkspace,
     },
 
-    data: () => ({}),
+    data: () => ({
+      CallStates,
+    }),
 
     computed: {
-      CallStates: () => CallStates,
       ...mapState('workspace', {
         state: (state) => state.callState,
       }),

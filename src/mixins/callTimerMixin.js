@@ -7,17 +7,9 @@ export default {
       now: (state) => state.now,
     }),
 
-    computeDisplayName() {
-      return this.itemInstance.displayName || 'undefined name';
-    },
-
-    computeDisplayNumber() {
-      return this.itemInstance.displayNumber || 'undefined number';
-    },
-
     computeCreatedTime() {
-      const start = this.itemInstance.answeredAt
-        ? this.itemInstance.answeredAt : this.itemInstance.createdAt;
+      const start = this.call.answeredAt
+        ? this.call.answeredAt : this.call.createdAt;
       let sec = Math.round((this.now - start) / 10 ** 3);
       sec = sec <= 0 ? 0 : sec; // handles -1 time after answer
       return this.computeHourMinSecTime(sec);

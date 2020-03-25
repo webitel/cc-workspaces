@@ -17,7 +17,7 @@
     </aside>
 
     <header class="preview-header">
-      <span class="preview-header__name">{{computeDisplayName}}</span>
+      <span class="preview-header__name">{{displayName}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="preview-header__time"
            :class="{'preview-header__time__bold': !isRinging}"
@@ -31,7 +31,7 @@
 
     </header>
     <span
-      class="call-preview__number">{{computeDisplayNumber}}</span>
+      class="call-preview__number">{{displayNumber}}</span>
     <div
       v-if="isRinging"
       class="preview-actions"
@@ -56,11 +56,12 @@
   import { mapActions } from 'vuex';
   import { CallActions, CallDirection } from 'webitel-sdk';
   import Btn from '../../utils/btn.vue';
-  import callInfo from '../../../mixins/callInfoMixin';
+  import callTimer from '../../../mixins/callTimerMixin';
+  import displayInfo from '../../../mixins/displayInfoMixin';
 
   export default {
     name: 'queue-call-preview',
-    mixins: [callInfo],
+    mixins: [callTimer, displayInfo],
     components: {
       Btn,
     },
@@ -73,7 +74,7 @@
       },
 
       // item is for UI computing
-      itemInstance: {
+      call: {
         type: Object,
         required: true,
       },
@@ -81,16 +82,16 @@
 
     computed: {
       isHold() {
-        return this.itemInstance.isHold;
+        return this.call.isHold;
       },
 
       isRinging() {
-        return this.itemInstance.state === CallActions.Ringing
-          && this.itemInstance.direction === CallDirection.Inbound;
+        return this.call.state === CallActions.Ringing
+          && this.call.direction === CallDirection.Inbound;
       },
 
       computePreviewStatusClass() {
-        return this.itemInstance.isHold ? 'hold' : 'call';
+        return this.call.isHold ? 'hold' : 'call';
       },
     },
 

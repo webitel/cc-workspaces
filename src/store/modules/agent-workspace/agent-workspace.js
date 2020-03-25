@@ -11,10 +11,6 @@ const state = {
 };
 
 const getters = {
-  GET_CURRENT_ITEM_NAME: (state) => state.callOnWorkspace.displayName,
-
-  GET_CURRENT_ITEM_NUMBER: (state) => state.callOnWorkspace.displayNumber,
-
   GET_CURRENT_CALL_DIGITS: (state) => {
     if (state.callOnWorkspace.digits && state.callOnWorkspace.digits.lengh) {
       return state.callOnWorkspace.digits;
