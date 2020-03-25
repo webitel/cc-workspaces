@@ -25,7 +25,7 @@
       background: $default-btn-color__hover;
     }
 
-    &.call {
+    &.call, &.true {
       color: #fff;
       background: $call-btn-color;
 
@@ -34,7 +34,7 @@
       }
     }
 
-    &.end {
+    &.end, &.false {
       color: #fff;
       background: $end-btn-color;
 
@@ -54,11 +54,12 @@
 
     &.secondary {
       color: $secondary-btn-color;
-      background: $secondary-btn-color;
+      background: #fff;
+      border: 1px solid $secondary-btn-color;
 
       &:hover {
         color: $secondary-btn-color__hover;
-        background: $secondary-btn-color__hover;
+        border-color: $secondary-btn-color__hover;
       }
     }
 

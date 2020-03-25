@@ -41,6 +41,10 @@ const actions = {
     }
   },
 
+  OPEN_PREVIEW_TRANSFER: (context) => {
+    context.commit('SET_CALL_STATE', CallStates.TRANSFER);
+  },
+
   ADD_DIGIT: async (context, value) => {
     const call = context.state.callOnWorkspace;
     // if there's a call, send dtmf

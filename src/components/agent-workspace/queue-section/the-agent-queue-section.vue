@@ -46,7 +46,7 @@
     }),
 
     computed: {
-      ...mapState('agent', {
+      ...mapState('workspace', {
         callList: (state) => state.callList,
         callState: (state) => state.callState,
       }),
@@ -68,7 +68,7 @@
     },
 
     methods: {
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
         openCall: 'OPEN_CALL_ON_WORKSPACE',

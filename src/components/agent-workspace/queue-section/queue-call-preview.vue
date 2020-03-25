@@ -95,7 +95,7 @@
     },
 
     methods: {
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
       }),

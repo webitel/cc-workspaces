@@ -15,7 +15,7 @@
     <button
       class="icon-btn cc-textarea__close"
       :class="{'hidden': !value}"
-      @click="value = ''"
+      @click="$emit('input', '')"
     >
       <icon>
         <svg class="icon icon-close-md md">
@@ -23,10 +23,10 @@
         </svg>
       </icon>
     </button>
-    <button
-      class="icon-btn cc-textarea__send"
-    >>
-    </button>
+    <!--    <button-->
+    <!--      class="icon-btn cc-textarea__send"-->
+    <!--    >>-->
+    <!--    </button>-->
   </label>
 </template>
 
@@ -59,6 +59,12 @@
     data: () => ({
       isFocused: false,
     }),
+
+    watch: {
+      isFocused(value) {
+        if (value) this.$emit('focus');
+      },
+    },
   };
 </script>
 

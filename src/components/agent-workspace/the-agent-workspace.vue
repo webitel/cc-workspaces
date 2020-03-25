@@ -1,18 +1,22 @@
 <template>
   <main class="main-agent-workspace">
     <notification/>
-    <widget-bar/>
-    <section class="workspace">
-      <queue-section/>
-      <workspace-section/>
-      <info-section/>
-    </section>
+    <cc-header/>
+    <div class="workspace-wrap">
+      <widget-bar/>
+      <section class="workspace">
+        <queue-section/>
+        <workspace-section/>
+        <info-section/>
+      </section>
+    </div>
   </main>
 </template>
 
 <script>
   import { mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
+  import CcHeader from '../cc-header/cc-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-agent-queue-section.vue';
   import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
@@ -22,6 +26,7 @@
     name: 'the-agent-workspace',
     components: {
       Notification,
+      CcHeader,
       WidgetBar,
       QueueSection,
       WorkspaceSection,
@@ -29,17 +34,25 @@
     },
 
     created() {
-      this.initClient();
+      this.initWorkspace();
       this.setNowWatcher();
     },
 
     destroyed() {
       this.clearNowWatcher();
     },
-
     methods: {
-      ...mapActions('agent', {
-        initClient: 'INIT_CLIENT',
+      async initWorkspace() {
+        await this.subscribeCalls();
+        await this.subscribeStatus();
+      },
+
+      ...mapActions('workspace', {
+        subscribeCalls: 'SUBSCRIBE_CALLS',
+      }),
+
+      ...mapActions('status', {
+        subscribeStatus: 'SUBSCRIBE_STATUS',
       }),
 
       ...mapActions('now', {
@@ -56,6 +69,18 @@
     flex-direction: column;
     height: 100vh;
     max-height: 100vh;
+  }
+
+  .workspace-wrap {
+    $header-height: calcVH(54px);
+
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: calc(100vh - #{$header-height});
+    max-height: calc(100vh - #{$header-height});
+    padding: calcVH(20px) calcVH(30px);
+    box-sizing: border-box;
   }
 
   .workspace {

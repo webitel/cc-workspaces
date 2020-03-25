@@ -1,11 +1,10 @@
 import instance from '../instance';
+import UserStatus from '../../store/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
 
-// eslint-disable-next-line import/prefer-default-export
-export async function getUsersList(search) {
-  const size = 20;
-  let url = `${BASE_URL}?size=${size}`;
+export const getUsersList = async (page = 1, size = 20, search = '') => {
+  let url = `${BASE_URL}?page=${page}&size=${size}&sort=name`;
   if (search) url += `&name=${search}*`;
 
   try {
@@ -22,4 +21,37 @@ export async function getUsersList(search) {
   } catch (err) {
     throw err;
   }
-}
+};
+
+export const getUserStatus = async () => {
+  const url = '/user';
+
+  try {
+    const response = await instance.get(url);
+    return response.presence;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const setUserStatus = async (status = '') => {
+  const url = '/presence';
+
+  try {
+    await instance.patch(url, { status });
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const parseUserStatus = (presence) => {
+  if (presence.status) {
+    if (presence.status.includes('dnd')) {
+      return UserStatus.DND;
+    }
+    if (presence.status.includes('wss')) {
+      return UserStatus.ACTIVE;
+    }
+  }
+  return '';
+};

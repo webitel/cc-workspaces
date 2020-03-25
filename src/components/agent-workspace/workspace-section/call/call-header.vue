@@ -32,7 +32,7 @@
 
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isMerge"
           class="call-action secondary"
           @click.native="$emit('openTab', 'merge')"
         >
@@ -43,7 +43,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isTransfer"
           class="call-action transfer"
           @click.native="$emit('openTab', 'transfer')"
         >
@@ -54,7 +54,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isHangup"
           class="call-action end"
           @click.native="hangup()"
         >
@@ -66,7 +66,7 @@
         </rounded-action>
 
         <rounded-action
-          v-if="callState === CallStates.NEW && number"
+          v-if="isCall"
           class="call-action call"
           @click.native="call"
         >
@@ -131,29 +131,50 @@
       },
     },
 
+    data: () => ({
+      CallStates,
+    }),
+
     mounted() {
       this.setNumberFocus();
     },
 
     computed: {
-      ...mapState('agent', {
+      ...mapState('workspace', {
         callState: (state) => state.callState,
       }),
 
-      ...mapGetters('agent', {
+      ...mapGetters('workspace', {
         displayName: 'GET_CURRENT_ITEM_NAME',
         displayNumber: 'GET_CURRENT_ITEM_NUMBER',
       }),
 
-      CallStates: () => CallStates,
-
       number: {
         get() {
-          return this.$store.state.agent.newCallNumber;
+          return this.$store.state.workspace.newCallNumber;
         },
         set(value) {
           this.setNumber(value);
         },
+      },
+
+      isMerge() {
+        return this.callState === CallStates.ACTIVE;
+      },
+
+      isTransfer() {
+        return this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER;
+      },
+
+      isHangup() {
+        return this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER;
+      },
+
+      isCall() {
+        return this.callState === CallStates.NEW
+          && this.number;
       },
     },
 
@@ -165,7 +186,7 @@
         }
       },
 
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         call: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_CALL_NUMBER',
@@ -180,6 +201,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
+    min-height: calcVH(160px);
     height: calcVH(160px);
     margin: calcVH(20px) calcVH(20px) 0;
   }

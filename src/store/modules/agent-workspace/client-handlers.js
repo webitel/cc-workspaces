@@ -1,6 +1,6 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
 import CallStates from '../../callUtils/CallStates';
-import CallConnector from '../../../api/agent-workspace/call-ws-connection';
+import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, call) => {
   switch (action) {
@@ -19,9 +19,9 @@ const callHandler = (context) => (action, call) => {
 };
 
 const actions = {
-  INIT_CLIENT: async (context) => {
-    const client = await CallConnector(callHandler(context));
-    context.commit('SET_CLI', client);
+  SUBSCRIBE_CALLS: async (context) => {
+    const client = await getCliInstance();
+    await client.subscribeCall(callHandler(context), null);
   },
 
   HANDLE_RINGING_ACTION: (context, call) => {
@@ -44,13 +44,6 @@ const actions = {
   },
 };
 
-const mutations = {
-  SET_CLI: (state, client) => {
-    state.client = client;
-  },
-};
-
 export default {
   actions,
-  mutations,
 };

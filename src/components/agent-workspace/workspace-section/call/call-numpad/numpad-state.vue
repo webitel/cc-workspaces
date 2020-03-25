@@ -59,11 +59,11 @@
         return this.itemInstance.state === CallActions.Active;
       },
 
-      ...mapState('agent', {
+      ...mapState('workspace', {
         itemInstance: (state) => state.callOnWorkspace,
       }),
 
-      ...mapGetters('agent', {
+      ...mapGetters('workspace', {
         computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
       }),
     },

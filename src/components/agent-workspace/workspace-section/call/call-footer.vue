@@ -2,7 +2,10 @@
   <footer class="call-footer">
     <rounded-action
       class="call-action secondary"
-      :class="{'active': currentTab === 'numpad'}"
+      :class="{
+      'hidden': !isNumpad,
+      'active': isOnNumpad,
+      }"
       @click.native="$emit('openTab', 'numpad')"
     >
       <icon>
@@ -14,8 +17,8 @@
     <rounded-action
       class="call-action secondary call-action__mic"
       :class="{
-      'hidden': callState === CallStates.NEW,
-      'active': isMuted,
+      'hidden': !isMuted,
+      'active': isOnMuted,
       }"
       @click.native="toggleMute"
     >
@@ -28,8 +31,8 @@
     <rounded-action
       class="call-action secondary"
       :class="{
-      'hidden': callState === CallStates.NEW,
-      'hold': isHold,
+      'hidden': !isHold,
+      'hold': isOnHold,
       }"
       @click.native="toggleHold"
     >
@@ -41,7 +44,10 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
-      :class="{'hidden': callState === CallStates.NEW}"
+      :class="{
+      'hidden': !isRecord,
+      'active': isOnRecord,
+      }"
     >
       <icon>
         <svg class="icon icon-rec-md md">
@@ -51,7 +57,10 @@
     </rounded-action>
     <rounded-action
       class="call-action secondary"
-      :class="{'hidden': callState === CallStates.NEW}"
+      :class="{
+      'hidden': !isNote,
+      'active': isOnNote,
+      }"
     >
       <icon>
         <svg class="icon icon-note-md md">
@@ -79,25 +88,69 @@
       },
     },
 
+    data: () => ({
+      CallStates,
+    }),
+
     computed: {
-      ...mapState('agent', {
+      ...mapState('workspace', {
         callState: (state) => state.callState,
         call: (state) => state.callOnWorkspace,
       }),
 
-      CallStates: () => CallStates,
+      // controls Active state
+      isOnNumpad() {
+        return this.currentTab === 'numpad';
+      },
 
-      isMuted() {
+      // controls btn Appearance
+      isNumpad() {
+        return true;
+      },
+
+      // controls Active state
+      isOnMuted() {
         return this.call.muted;
       },
 
-      isHold() {
+      // controls btn visibility
+      isMuted() {
+        return this.callState !== CallStates.NEW;
+      },
+
+      // controls Active state
+      isOnHold() {
         return this.call.isHold;
+      },
+
+      // controls btn visibility
+      isHold() {
+        return this.callState !== CallStates.NEW;
+      },
+
+      // controls Active state
+      isOnRecord() {
+        return false;
+      },
+
+      // controls btn visibility
+      isRecord() {
+        return this.callState !== CallStates.NEW;
+      },
+
+      // controls Active state
+      isOnNote() {
+        return false;
+      },
+
+      // controls btn visibility
+      isNote() {
+        return this.callState !== CallStates.NEW;
       },
     },
 
     methods: {
-      ...mapActions('agent', {
+      ...mapActions('workspace', {
         toggleMute: 'TOGGLE_MUTE',
         toggleHold: 'TOGGLE_HOLD',
       }),
