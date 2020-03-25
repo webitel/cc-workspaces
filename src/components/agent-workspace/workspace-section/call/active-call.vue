@@ -4,13 +4,13 @@
       :current-tab="currentTab"
       @openTab="currentTab = $event"
     ></call-header>
-    <divider></divider>
+    <divider/>
 
     <section class="ws-worksection-wrap">
-      <component :is="computeCurrentTab"></component>
+      <component :is="computeCurrentTab"/>
     </section>
 
-    <divider></divider>
+    <divider/>
     <call-footer
       :current-tab="currentTab"
       @openTab="currentTab = $event"
@@ -20,7 +20,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import callInfo from '../../../../mixins/callInfoMixin';
+  import callTimer from '../../../../mixins/callTimerMixin';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
   import Divider from '../../../utils/divider.vue';
@@ -32,7 +32,7 @@
 
   export default {
     name: 'active-call',
-    mixins: [callInfo],
+    mixins: [callTimer],
     components: {
       CallHeader,
       CallFooter,
@@ -79,7 +79,7 @@
             this.currentTab = 'transfer';
             break;
           default:
-            this.currentTab = 'numpad';
+            break;
         }
       },
 
