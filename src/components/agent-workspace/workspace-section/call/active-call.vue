@@ -27,6 +27,7 @@
   import ClientHistory from '../workspace-client-history/client-history-container.vue';
   import Contacts from '../workspace-contacts/workspace-contacts-container.vue';
   import Transfer from '../workspace-transfer/workspace-transfer-container.vue';
+  import Bridge from '../workspace-bridge/workspace-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
   import CallStates from '../../../../store/callUtils/CallStates';
 
@@ -40,11 +41,12 @@
       Contacts,
       Numpad,
       Transfer,
+      Bridge,
       Divider,
     },
 
     data: () => ({
-      currentTab: 'numpad',
+      currentTab: 'bridge',
     }),
 
     mounted() {
@@ -60,6 +62,8 @@
             return 'contacts';
           case 'transfer':
             return 'transfer';
+          case 'bridge':
+            return 'bridge';
           case 'numpad':
             return 'numpad';
           default:

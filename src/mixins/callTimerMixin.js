@@ -1,7 +1,6 @@
 import { mapState } from 'vuex';
 
 export default {
-
   computed: {
     ...mapState('now', {
       now: (state) => state.now,
@@ -27,5 +26,4 @@ export default {
       return `${hour}:${min}:${sec}`;
     },
   },
-
 };

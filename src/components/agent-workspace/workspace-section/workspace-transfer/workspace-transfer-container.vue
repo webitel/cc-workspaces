@@ -4,7 +4,7 @@
       v-model="search"
       @search="loadDataList"
     />
-    <p class="ws-worksection__transfer__instruction">Please select an agent</p>
+    <p class="ws-worksection__list-instruction">Please select an agent</p>
     <div id="scroll-wrap" class="ws-worksection__list" ref="scroll-wrap">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
@@ -92,11 +92,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .ws-worksection__transfer__instruction {
-    @extend .typo-heading-sm;
-    text-align: center;
-    margin-bottom: calcVH(17px);
-  }
 
   .ws-contact-item {
     border: calcVH(1px) solid transparent;

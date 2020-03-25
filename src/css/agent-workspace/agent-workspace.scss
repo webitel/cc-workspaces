@@ -17,6 +17,12 @@
     margin-bottom: calcVH(10px);
   }
 
+  &__list-instruction {
+    @extend .typo-heading-sm;
+    text-align: center;
+    margin-bottom: calcVH(17px);
+  }
+
   .ws-worksection__list {
     @extend .cc-scrollbar;
     flex-grow: 1;
