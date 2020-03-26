@@ -4,8 +4,9 @@ import CallStates from '../../callUtils/CallStates';
 const answerParams = { useAudio: true };
 
 const actions = {
-  CALL: async (context) => {
-    const destination = context.state.newCallNumber;
+  // destucturing arg due not receive mouse events
+  CALL: async (context, { user }) => {
+    const destination = user ? user.extension : context.state.newCallNumber;
     const client = await getCliInstance();
     try {
       await client.call({ destination });

@@ -5,13 +5,12 @@
       @search="loadDataList"
     />
     <div class="ws-worksection__list" ref="scroll-wrap">
-     <contact
+      <contact
         v-for="(item, key) of dataList"
-        :class="{'selected': item === selected}"
         :id="`scroll-item-${key}`"
         :key="key"
         :item="item"
-        @click.native="select(item)"
+        callable
       ></contact>
       <observer
         :options="obsOptions"
@@ -51,10 +50,8 @@
 
 <style lang="scss" scoped>
   .ws-contact-item {
-    cursor: pointer;
-
-    &.selected, &:hover {
-      border-color: $accent-color;
+    &:hover {
+      background-color: $page-bg-color;
     }
   }
 </style>
