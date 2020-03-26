@@ -108,6 +108,9 @@ describe('Contacts functionality', () => {
     // and check if cli.call() fn is triggered with proper destination
     await wrapper.vm.$nextTick();
     expect(mockCliCall)
-      .toHaveBeenCalledWith({ destination: item.extension });
+      .toHaveBeenCalled();
+    // FIRST CALL FIRST PARAM
+    expect(mockCliCall.mock.calls[0][0].destination)
+      .toEqual(item.extension);
   });
 });
