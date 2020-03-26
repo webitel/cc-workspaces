@@ -167,7 +167,7 @@
       },
 
       isOnHistory() {
-        return this.currentTab === 'contacts';
+        return this.currentTab === 'history';
       },
 
       isMerge() {
