@@ -1,10 +1,9 @@
 <template>
   <div class="ws-worksection">
     <p class="ws-worksection__list-instruction">Active calls</p>
-    <div id="scroll-wrap" class="ws-worksection__list" ref="scroll-wrap">
+    <div class="ws-worksection__list">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
-      <active-call/>
       <active-call
         :class="{'selected': call === selected}"
         v-for="(call, key) of callList"
@@ -17,7 +16,7 @@
     <btn
       class="transfer"
       :disabled="!selected"
-      @click.native="transfer(selected)"
+      @click.native="bridge(selected)"
     >Bridge
     </btn>
   </div>
@@ -43,6 +42,12 @@
       ...mapState('workspace', {
         callList: (state) => state.callList,
       }),
+
+      callList() {
+        return this.$store.state.workspace.callList.filter(
+          (call) => call !== this.$store.state.workspace.callOnWorkspace,
+        );
+      },
     },
 
     methods: {
@@ -51,7 +56,7 @@
       },
 
       ...mapActions('workspace', {
-        // transfer: 'TRANSFER',
+        bridge: 'BRIDGE',
       }),
     },
   };
