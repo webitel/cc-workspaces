@@ -67,11 +67,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .ws-worksection__transfer__instruction {
-    @extend .typo-heading-sm;
-    text-align: center;
-    margin-bottom: calcVH(17px);
-  }
 
   .ws-contact-item {
     border: calcVH(1px) solid transparent;

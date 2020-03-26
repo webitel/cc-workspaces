@@ -31,8 +31,18 @@ const actions = {
     const call = context.state.callOnWorkspace;
     try {
       await call.blindTransfer(user.extension);
-      context.commit('REMOVE_CALL', call);
-      context.commit('RESET_WORKSPACE');
+      // context.commit('REMOVE_CALL', call);
+      // context.commit('RESET_WORKSPACE');
+    } catch {
+    }
+  },
+
+  BRIDGE: async (context, callToBridge) => {
+    const call = context.state.callOnWorkspace;
+    try {
+      await call.bridgeTo(callToBridge);
+      // context.commit('REMOVE_CALL', call);
+      // context.commit('RESET_WORKSPACE');
     } catch {
     }
   },

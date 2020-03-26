@@ -38,9 +38,12 @@
 
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
-          v-if="isMerge"
-          class="call-action secondary"
-          @click.native="$emit('openTab', 'merge')"
+          v-if="isBridge"
+          class="call-action secondary bridge"
+          :class="{
+            'active': isOnBridge
+          }"
+          @click.native="$emit('openTab', 'bridge')"
         >
           <icon>
             <svg class="icon icon-call-merge-md md">
@@ -122,6 +125,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
+  import { CallActions } from 'webitel-sdk';
   import CallStates from '../../../../store/callUtils/CallStates';
   import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
   import RoundedAction from '../../../utils/rounded-action.vue';
@@ -170,8 +174,17 @@
         return this.currentTab === 'history';
       },
 
-      isMerge() {
-        return this.callState === CallStates.ACTIVE;
+      isOnBridge() {
+        return this.currentTab === 'bridge';
+      },
+
+      isBridge() {
+        return (this.callState !== CallActions.Hangup
+          || this.callState !== CallActions.Ringing)
+          && this.$store.state.workspace.callList.filter((call) => (
+            call.state !== CallActions.Hangup
+            || call.state !== CallActions.Ringing
+          )).length > 1;
       },
 
       isTransfer() {

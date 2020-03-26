@@ -11,6 +11,7 @@ const createCliInstance = async () => {
     endpoint: BASE_URL,
     registerWebDevice: true,
     token,
+    // debug: true,
   };
 
   const cli = new Client(config);
