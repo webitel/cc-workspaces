@@ -75,3 +75,11 @@
     align-self: end;
   }
 }
+
+.ws-contact-item__name {
+  @extend .typo-heading-sm;
+}
+
+.ws-contact-item__number {
+  @extend .typo-body-sm;
+}

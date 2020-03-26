@@ -65,14 +65,6 @@
     flex-direction: column;
   }
 
-  .ws-contact-item__name {
-    @extend .typo-heading-sm;
-  }
-
-  .ws-contact-item__number {
-    @extend .typo-body-sm;
-  }
-
   .ws-worksection__item__status {
     align-self: end;
     flex-basis: auto;
