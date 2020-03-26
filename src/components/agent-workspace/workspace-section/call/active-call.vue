@@ -46,7 +46,7 @@
     },
 
     data: () => ({
-      currentTab: 'bridge',
+      currentTab: 'numpad',
     }),
 
     mounted() {

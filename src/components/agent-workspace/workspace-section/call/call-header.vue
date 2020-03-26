@@ -39,7 +39,7 @@
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
           v-if="isBridge"
-          class="call-action secondary"
+          class="call-action secondary bridge"
           :class="{
             'active': isOnBridge
           }"
@@ -179,9 +179,11 @@
       },
 
       isBridge() {
-        return this.callState === CallStates.ACTIVE
+        return (this.callState !== CallActions.Hangup
+          || this.callState !== CallActions.Ringing)
           && this.$store.state.workspace.callList.filter((call) => (
-            call.state === CallActions.Active
+            call.state !== CallActions.Hangup
+            || call.state !== CallActions.Ringing
           )).length > 1;
       },
 
