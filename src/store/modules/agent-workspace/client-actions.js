@@ -65,6 +65,12 @@ const actions = {
     }
   },
 
+  SET_HOLD: async (context, call) => {
+    if (!call.isHold && call.allowHold) {
+      call.hold();
+    }
+  },
+
   SEND_DTMF: async (context, value) => {
     const call = context.state.callOnWorkspace;
     if (call.allowDtmf) {

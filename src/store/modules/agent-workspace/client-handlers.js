@@ -7,6 +7,9 @@ const callHandler = (context) => (action, call) => {
     case CallActions.Ringing:
       context.dispatch('HANDLE_RINGING_ACTION', call);
       break;
+    case CallActions.Active:
+      context.dispatch('HOLD_OTHER_CALLS', call);
+      break;
     case CallActions.Hangup:
       context.dispatch('HANDLE_HANGUP_ACTION', call);
       break;
