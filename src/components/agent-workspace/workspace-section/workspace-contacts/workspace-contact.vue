@@ -11,12 +11,18 @@
       </div>
     </div>
     <div class="ws-worksection__item__status">
-      <div class="ws-contact-item__status__indicator"></div>
+      <div
+        class="ws-contact-item__status__indicator"
+        :class="computeUserStatus"
+      ></div>
     </div>
   </div>
 </template>
 
 <script>
+  import { parseUserStatus } from '../../../../api/agent-workspace/users';
+  import UserStatus from '../../../../store/statusUtils/UserStatus';
+
   export default {
     name: 'workspace-contact',
 
@@ -27,6 +33,20 @@
           name: 'Oleg Marchenko',
           extension: '+38 (063) 915-15-12',
         }),
+      },
+    },
+
+    computed: {
+      computeUserStatus() {
+        const status = parseUserStatus(this.item.presence);
+        switch (status) {
+          case UserStatus.ACTIVE:
+            return 'active';
+          case UserStatus.DND:
+            return 'dnd';
+          default:
+            return '';
+        }
       },
     },
   };
@@ -53,8 +73,16 @@
     &__indicator {
       width: calcVH(14px);
       height: calcVH(14px);
-      background: $true-color;
+      background: $false-color;
       border-radius: 50%;
+
+      &.active {
+        background: $true-color;
+      }
+
+      &.dnd {
+        background: $break-color;
+      }
     }
   }
 </style>

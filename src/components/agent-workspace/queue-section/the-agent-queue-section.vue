@@ -7,7 +7,7 @@
     <section class="call-preview-wrap">
       <call-preview
         v-for="(call, key) of callList"
-        :item-instance="call"
+        :call="call"
         :index="key"
         :key="key"
         @click.native.prevent="openCall(key)"

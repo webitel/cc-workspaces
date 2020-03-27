@@ -4,13 +4,13 @@
       :current-tab="currentTab"
       @openTab="currentTab = $event"
     ></call-header>
-    <divider></divider>
+    <divider/>
 
     <section class="ws-worksection-wrap">
-      <component :is="computeCurrentTab"></component>
+      <component :is="computeCurrentTab"/>
     </section>
 
-    <divider></divider>
+    <divider/>
     <call-footer
       :current-tab="currentTab"
       @openTab="currentTab = $event"
@@ -20,7 +20,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import callInfo from '../../../../mixins/callInfoMixin';
+  import callTimer from '../../../../mixins/callTimerMixin';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
   import Divider from '../../../utils/divider.vue';
@@ -28,10 +28,11 @@
   import Contacts from '../workspace-contacts/workspace-contacts-container.vue';
   import Transfer from '../workspace-transfer/workspace-transfer-container.vue';
   import Numpad from './call-numpad/numpad.vue';
+  import CallStates from '../../../../store/callUtils/CallStates';
 
   export default {
     name: 'active-call',
-    mixins: [callInfo],
+    mixins: [callTimer],
     components: {
       CallHeader,
       CallFooter,
@@ -45,6 +46,10 @@
     data: () => ({
       currentTab: 'numpad',
     }),
+
+    mounted() {
+      this.setInitinalCurrentTab();
+    },
 
     computed: {
       computeCurrentTab() {
@@ -62,10 +67,22 @@
         }
       },
 
-      ...mapState('workspace', {}),
+      ...mapState('workspace', {
+        callState: (state) => state.callState,
+      }),
     },
 
     methods: {
+      setInitinalCurrentTab() {
+        switch (this.callState) {
+          case CallStates.TRANSFER:
+            this.currentTab = 'transfer';
+            break;
+          default:
+            break;
+        }
+      },
+
       ...mapActions('workspace', {
         answer: 'ANSWER',
         hangup: 'HANGUP',

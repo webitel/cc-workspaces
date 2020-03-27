@@ -1,7 +1,7 @@
 <template>
   <div class="call-preview-wrap">
     <div class="call-preview">
-      <call-profile></call-profile>
+      <preview-profile/>
       <div class="call-preview__actions">
         <rounded-action
           class="rounded-action__lg call"
@@ -15,7 +15,7 @@
         </rounded-action>
         <rounded-action
           class="rounded-action__lg transfer"
-          @click.native="transfer()"
+          @click.native="openTransfer()"
         >
           <icon class="lg">
             <svg class="icon icon-call-transfer-lg lg">
@@ -40,22 +40,20 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import CallProfile from './call-profile.vue';
-  import callInfo from '../../../../mixins/callInfoMixin';
+  import PreviewProfile from './call-preview-profile.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
     name: 'call-preview',
-    mixins: [callInfo],
     components: {
-      CallProfile,
+      PreviewProfile,
       RoundedAction,
     },
 
     methods: {
       ...mapActions('workspace', {
         answer: 'ANSWER',
-        transfer: 'TRANSFER',
+        openTransfer: 'OPEN_PREVIEW_TRANSFER',
         hangup: 'HANGUP',
       }),
     },

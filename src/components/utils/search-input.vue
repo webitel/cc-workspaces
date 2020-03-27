@@ -31,6 +31,8 @@
 </template>
 
 <script>
+  import debounce from '../../utils/debounce';
+
   export default {
     name: 'search-input',
     props: {
@@ -60,6 +62,22 @@
     data: () => ({
       isFocused: false,
     }),
+
+    watch: {
+      value() {
+        this.search.call(this);
+      },
+    },
+
+    created() {
+      this.search = debounce(this.search);
+    },
+
+    methods: {
+      search() {
+        this.$emit('search', this.value);
+      },
+    },
   };
 </script>
 

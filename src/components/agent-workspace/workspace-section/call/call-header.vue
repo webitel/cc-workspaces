@@ -4,7 +4,9 @@
       <div class="actions-wrap actions-wrap__left">
         <rounded-action
           class="call-action secondary"
-          :class="{'active': currentTab === 'contacts'}"
+          :class="{
+            'active': isOnContacts
+          }"
           @click.native="$emit('openTab', 'contacts')"
         >
           <icon>
@@ -15,7 +17,9 @@
         </rounded-action>
         <rounded-action
           class="call-action secondary"
-          :class="{'active': currentTab === 'history'}"
+          :class="{
+            'active': isOnHistory
+            }"
           @click.native="$emit('openTab', 'history')"
         >
           <icon>
@@ -26,13 +30,15 @@
         </rounded-action>
       </div>
 
-      <img class="call-header__profile-pic"
-           src="../../../../assets/agent-workspace/default-avatar.svg"
-           alt="client photo">
+      <img
+        class="call-header__profile-pic"
+        src="../../../../assets/agent-workspace/default-avatar.svg"
+        alt="client photo"
+      >
 
       <div class="actions-wrap actions-wrap__right">
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isMerge"
           class="call-action secondary"
           @click.native="$emit('openTab', 'merge')"
         >
@@ -43,7 +49,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isTransfer"
           class="call-action transfer"
           @click.native="$emit('openTab', 'transfer')"
         >
@@ -54,7 +60,7 @@
           </icon>
         </rounded-action>
         <rounded-action
-          v-if="callState !== CallStates.NEW"
+          v-if="isHangup"
           class="call-action end"
           @click.native="hangup()"
         >
@@ -66,9 +72,9 @@
         </rounded-action>
 
         <rounded-action
-          v-if="callState === CallStates.NEW && number"
+          v-if="isCall"
           class="call-action call"
-          @click.native="call"
+          @click.native="makeCall"
         >
           <icon>
             <svg class="icon icon-call-ringing-md md">
@@ -80,7 +86,7 @@
     </div>
 
     <div class="call-header__number">
-      <div v-if="callState !== CallStates.NEW">
+      <div v-if="!isNumberInput">
         <div class="call-profile__name">
           {{displayName}}
         </div>
@@ -115,12 +121,14 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapActions } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import CallStates from '../../../../store/callUtils/CallStates';
+  import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
     name: 'call-header',
+    mixins: [dispayInfoMixin],
     components: {
       RoundedAction,
     },
@@ -131,21 +139,19 @@
       },
     },
 
+    data: () => ({
+      CallStates,
+    }),
+
     mounted() {
       this.setNumberFocus();
     },
 
     computed: {
       ...mapState('workspace', {
+        call: (state) => state.callOnWorkspace,
         callState: (state) => state.callState,
       }),
-
-      ...mapGetters('workspace', {
-        displayName: 'GET_CURRENT_ITEM_NAME',
-        displayNumber: 'GET_CURRENT_ITEM_NUMBER',
-      }),
-
-      CallStates: () => CallStates,
 
       number: {
         get() {
@@ -154,6 +160,37 @@
         set(value) {
           this.setNumber(value);
         },
+      },
+
+      isOnContacts() {
+        return this.currentTab === 'contacts';
+      },
+
+      isOnHistory() {
+        return this.currentTab === 'contacts';
+      },
+
+      isMerge() {
+        return this.callState === CallStates.ACTIVE;
+      },
+
+      isTransfer() {
+        return this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER;
+      },
+
+      isHangup() {
+        return this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER;
+      },
+
+      isCall() {
+        return this.callState === CallStates.NEW
+          && this.number;
+      },
+
+      isNumberInput() {
+        return this.callState === CallStates.NEW;
       },
     },
 
@@ -166,7 +203,7 @@
       },
 
       ...mapActions('workspace', {
-        call: 'CALL',
+        makeCall: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_CALL_NUMBER',
       }),
@@ -180,6 +217,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
+    min-height: calcVH(160px);
     height: calcVH(160px);
     margin: calcVH(20px) calcVH(20px) 0;
   }
