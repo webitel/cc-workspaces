@@ -80,7 +80,10 @@ describe('Make new call functionality', () => {
     // and check if cli.call() fn is triggered with proper destination
     await wrapper.vm.$nextTick();
     expect(mockCliCall)
-      .toHaveBeenCalledWith({ destination: inputValue });
+      .toHaveBeenCalled();
+    // FIRST CALL FIRST PARAM
+    expect(mockCliCall.mock.calls[0][0].destination)
+      .toEqual(inputValue);
   });
 });
 
