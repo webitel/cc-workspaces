@@ -1,14 +1,16 @@
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 import CallStates from '../../callUtils/CallStates';
 
+const callParams = { disableStun: true };
 const answerParams = { useAudio: true };
 
 const actions = {
-  CALL: async (context) => {
-    const destination = context.state.newCallNumber;
+  // destucturing arg due not receive mouse events
+  CALL: async (context, { user }) => {
+    const destination = user ? user.extension : context.state.newCallNumber;
     const client = await getCliInstance();
     try {
-      await client.call({ destination });
+      await client.call({ destination, params: callParams });
     } catch {
     }
   },
@@ -30,8 +32,18 @@ const actions = {
     const call = context.state.callOnWorkspace;
     try {
       await call.blindTransfer(user.extension);
-      context.commit('REMOVE_CALL', call);
-      context.commit('RESET_WORKSPACE');
+      // context.commit('REMOVE_CALL', call);
+      // context.commit('RESET_WORKSPACE');
+    } catch {
+    }
+  },
+
+  BRIDGE: async (context, callToBridge) => {
+    const call = context.state.callOnWorkspace;
+    try {
+      await call.bridgeTo(callToBridge);
+      // context.commit('REMOVE_CALL', call);
+      // context.commit('RESET_WORKSPACE');
     } catch {
     }
   },

@@ -49,7 +49,7 @@ export const parseUserStatus = (presence) => {
     if (presence.status.includes('dnd')) {
       return UserStatus.DND;
     }
-    if (presence.status.includes('wss')) {
+    if (presence.status.includes('web')) {
       return UserStatus.ACTIVE;
     }
   }
