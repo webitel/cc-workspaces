@@ -25,11 +25,14 @@ const actions = {
   },
 
   HANDLE_RINGING_ACTION: (context, call) => {
+    const isPreviewDialer = call.queue && call.queue.queue_type === 'preview';
     context.commit('ADD_CALL', call);
-    if (call.direction === CallDirection.Outbound) {
+    if (call.direction === CallDirection.Inbound || isPreviewDialer) {
+      context.commit('SET_CALL_STATE', CallStates.PREVIEW);
+    } else {
       context.commit('SET_CALL_STATE', CallStates.ACTIVE);
-      context.commit('SET_WORKSPACE', call);
     }
+    context.commit('SET_WORKSPACE', call);
   },
 
   HANDLE_HANGUP_ACTION: (context, call) => {
