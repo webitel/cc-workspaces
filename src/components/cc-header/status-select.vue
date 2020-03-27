@@ -46,7 +46,7 @@
       >
         <span
           class="status-select__indicator"
-          :class="`status-select__indicator__${status.text.toLowerCase()}`"
+          :class="`${status.text.toLowerCase()}`"
         ></span>
         <div class="status-select__item__text">{{status.text}}</div>
       </li>
@@ -130,24 +130,16 @@
       computeCurrentStatusIndicatorClass() {
         if (this.isAgent) {
           const { status } = this.agent;
-          switch (status) {
-            case AgentStatus.Waiting:
-              return 'status-select__indicator__active';
-            case AgentStatus.Pause:
-              return 'status-select__indicator__break';
-            default:
-              return '';
-          }
-        } else {
-          const { status } = this.user;
-          switch (status) {
-            case UserStatus.ACTIVE:
-              return 'status-select__indicator__active';
-            case UserStatus.DND:
-              return 'status-select__indicator__break';
-            default:
-              return '';
-          }
+          return `${status}`;
+        }
+        const { status } = this.user;
+        switch (status) {
+          case UserStatus.ACTIVE:
+            return 'active';
+          case UserStatus.DND:
+            return 'dnd';
+          default:
+            return '';
         }
       },
     },
@@ -197,6 +189,7 @@
 <style lang="scss" scoped>
   $active-color: $true-color;
   $stop-color: $false-color;
+  $default-indicator: $page-bg-color;
   $option-bg__hover: $page-bg-color;
 
   .status-select {
@@ -227,17 +220,24 @@
       width: calcVH(14px);
       height: calcVH(14px);
       margin-right: calcVH(9px);
+      background: $default-indicator;
       border-radius: 50%;
 
-      &__active {
+      &.waiting, // AGENT
+      &.active // USER
+      {
         background: $active-color;
       }
 
-      &__break, &__dnd {
+      &.break, // AGENT
+      &.dnd // USER
+      {
         background: $break-color;
       }
 
-      &__stop {
+      &.offering, &.ringing, &.talking, &.reporting, &.fine, // AGENT
+      &.stop // USER
+      {
         background: $stop-color;
       }
     }
