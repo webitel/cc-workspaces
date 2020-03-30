@@ -28,10 +28,10 @@
 <script>
   import { mapState, mapGetters } from 'vuex';
   import { CallActions } from 'webitel-sdk';
-  import callTimer from '../../../../../mixins/callTimerMixin';
+  import callTimer from '../../../../mixins/callTimerMixin';
 
   export default {
-    name: 'numpad-state',
+    name: 'call-state',
     mixins: [callTimer],
 
     data: () => ({

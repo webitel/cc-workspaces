@@ -1,6 +1,6 @@
 <template>
   <div class="numpad">
-    <numpad-state/>
+    <call-state/>
     <numpad-numbers
       @input="input"
     ></numpad-numbers>
@@ -9,13 +9,13 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import NumpadState from './numpad-state.vue';
+  import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
 
   export default {
     name: 'numpad',
     components: {
-      NumpadState,
+      CallState,
       NumpadNumbers,
     },
     methods: {
