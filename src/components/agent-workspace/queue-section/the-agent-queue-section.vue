@@ -3,18 +3,13 @@
     <tabs
       :current-tab="currentTab"
       :tabs="tabs"
+      @change="currentTab = $event"
     ></tabs>
-    <section class="call-preview-wrap">
-      <call-preview
-        v-for="(call, key) of callList"
-        :call="call"
-        :index="key"
-        :key="key"
-        @click.native.prevent="openCall(key)"
-      ></call-preview>
-    </section>
+
+    <component :is="computeCurrentTab"></component>
+
     <rounded-action
-      v-show="callState !== 'NEW'"
+      v-show="isNewCallButton"
       class="call"
       @click.native="openCall()"
     >
@@ -29,15 +24,16 @@
 
 <script>
   import { mapActions, mapState } from 'vuex';
-  import CallStates from '../../../store/callUtils/CallStates';
-  import CallPreview from './queue-call-preview.vue';
+  import ActiveQueue from './active-queue/active-queue-container.vue';
+  import OfflineQueue from './offline-queue/offline-queue-container.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
   import Tabs from '../../utils/tabs.vue';
 
   export default {
     name: 'the-agent-queue-section',
     components: {
-      CallPreview,
+      ActiveQueue,
+      OfflineQueue,
       RoundedAction,
       Tabs,
     },
@@ -51,8 +47,6 @@
         callState: (state) => state.callState,
       }),
 
-      CallStates: () => CallStates,
-
       tabs() {
         return [
           {
@@ -65,12 +59,18 @@
           },
         ];
       },
+
+      computeCurrentTab() {
+        return `${this.currentTab.value}-queue`;
+      },
+
+      isNewCallButton() {
+        return this.callState !== 'NEW';
+      },
     },
 
     methods: {
       ...mapActions('workspace', {
-        answer: 'ANSWER',
-        hangup: 'HANGUP',
         openCall: 'OPEN_CALL_ON_WORKSPACE',
       }),
     },
