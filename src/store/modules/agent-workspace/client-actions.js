@@ -2,7 +2,7 @@ import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 import CallStates from '../../callUtils/CallStates';
 
 const callParams = { disableStun: true };
-const answerParams = { useAudio: true };
+const answerParams = { useAudio: true, disableStun: true };
 
 const actions = {
   // destucturing arg due not receive mouse events
@@ -62,6 +62,12 @@ const actions = {
         await call.toggleHold();
       } catch {
       }
+    }
+  },
+
+  SET_HOLD: async (context, call) => {
+    if (!call.isHold && call.allowHold) {
+      call.hold();
     }
   },
 

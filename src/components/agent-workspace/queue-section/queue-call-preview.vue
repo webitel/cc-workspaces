@@ -86,8 +86,13 @@
       },
 
       isRinging() {
-        return this.call.state === CallActions.Ringing
-          && this.call.direction === CallDirection.Inbound;
+        const isPreviewDialer = this.call.queue && this.call.queue.queue_type === 'preview';
+        return this.call.state === CallActions.Ringing // Inbound ringing
+          && (
+            this.call.direction === CallDirection.Inbound
+            || (this.call.direction === CallDirection.Outbound // Outbound preview dialer
+              && isPreviewDialer)
+          );
       },
 
       computePreviewStatusClass() {

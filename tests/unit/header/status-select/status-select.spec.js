@@ -131,7 +131,7 @@ describe('User status select', () => {
     });
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
-      .toContain('status-select__indicator__active');
+      .toContain('active');
   });
 
   it('Correctly computes User status BREAK indicator class', async () => {
@@ -147,7 +147,7 @@ describe('User status select', () => {
 
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
-      .toContain('status-select__indicator__break');
+      .toContain('dnd');
   });
 
   it('Set User DND status', async () => {

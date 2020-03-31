@@ -100,6 +100,7 @@
       <form
         v-else
         class="call-header__form-number"
+        @submit.prevent="makeCall"
       >
         <input
           ref="number-input"
@@ -110,7 +111,7 @@
         <button
           class="icon-btn"
           :class="{'hidden': !number}"
-          @click.prevent="number = ''"
+          type="reset"
         >
           <icon>
             <svg class="icon icon-close-md md">

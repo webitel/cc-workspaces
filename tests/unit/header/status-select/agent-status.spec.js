@@ -63,7 +63,7 @@ describe('Agent status select', () => {
     });
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
-      .toContain('status-select__indicator__active');
+      .toContain('waiting');
   });
 
   it('Correctly computes Agent status BREAK indicator class', async () => {
@@ -79,7 +79,7 @@ describe('Agent status select', () => {
 
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
-      .toContain('status-select__indicator__break');
+      .toContain('pause');
   });
 
   it('Changes Agent status', async () => {

@@ -56,6 +56,14 @@ const actions = {
   SET_NEW_CALL_NUMBER: (context, value) => {
     context.commit('SET_NEW_CALL_NUMBER', value);
   },
+
+  HOLD_OTHER_CALLS: (context, activeCall) => {
+    if (context.state.callList.length > 1) {
+      context.state.callList.forEach((call) => {
+        if (call !== activeCall) context.dispatch('SET_HOLD', call);
+      });
+    }
+  },
 };
 
 const mutations = {

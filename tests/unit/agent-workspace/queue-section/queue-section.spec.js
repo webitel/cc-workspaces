@@ -4,9 +4,18 @@ import workspaceModule from '../../../../src/store/modules/agent-workspace/agent
 import CallStates from '../../../../src/store/callUtils/CallStates';
 import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
+import CallPreview
+  from '../../../../src/components/agent-workspace/queue-section/queue-call-preview.vue';
+import MockSocket from '../../mocks/MockSocket';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+
+const initialCall = {};
+
+const mockSocket = new MockSocket(initialCall);
+jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
+  () => () => mockSocket);
 
 describe('Make new call functionality', () => {
   let state;
@@ -40,5 +49,49 @@ describe('Make new call functionality', () => {
     newCallBtn.trigger('click');
     expect(state.callState)
       .toEqual(CallStates.NEW);
+  });
+});
+
+describe('Ringing and Hangup events call functionality', () => {
+  let state;
+  const { actions, mutations } = workspaceModule;
+  let store;
+
+  beforeEach(() => {
+    state = {
+      callList: [initialCall],
+    };
+    store = new Vuex.Store({
+      modules: {
+        workspace: {
+          namespaced: true,
+          state,
+          actions,
+          mutations,
+        },
+      },
+    });
+  });
+
+  it('Draws new call when ringing event fires', async () => {
+    const wrapper = shallowMount(QueueSection, {
+      store,
+      localVue,
+      stubs: { Icon: true },
+    });
+    await wrapper.vm.$store.dispatch('workspace/SUBSCRIBE_CALLS');
+    await mockSocket.ringing({});
+    expect(wrapper.findAll(CallPreview).length).toEqual(2);
+  });
+
+  it('Removes a call when ringing event fires', async () => {
+    const wrapper = shallowMount(QueueSection, {
+      store,
+      localVue,
+      stubs: { Icon: true },
+    });
+    await wrapper.vm.$store.dispatch('workspace/SUBSCRIBE_CALLS');
+    await mockSocket.hangup(initialCall);
+    expect(wrapper.findAll(CallPreview).length).toEqual(0);
   });
 });
