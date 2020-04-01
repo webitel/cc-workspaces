@@ -3,7 +3,7 @@
     <status-badge/>
 
     <header class="preview-header">
-      <span class="preview-header__name">{{displayName}}</span>
+      <span class="preview-header__name">{{member.name}}</span>
     </header>
   </article>
 </template>
@@ -15,6 +15,13 @@
     name: 'offline-queue-preview',
     components: {
       StatusBadge,
+    },
+
+    props: {
+      member: {
+        type: Object,
+        required: true,
+      },
     },
   };
 </script>

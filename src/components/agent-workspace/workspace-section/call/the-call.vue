@@ -2,6 +2,7 @@
   <section class="call">
     <call-preview v-if="isPreviewCall"></call-preview>
     <active-call v-else-if="isActiveCall"></active-call>
+      <workspace-member v-else-if="true"></workspace-member>
     <empty-workspace v-else/>
   </section>
 </template>
@@ -11,6 +12,7 @@
   import CallStates from '../../../../store/callUtils/CallStates';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
+  import WorkspaceMember from '../workspace-member/workspace-member.vue';
   import EmptyWorkspace from '../empty-workspace/empty-workspace.vue';
 
   export default {
@@ -18,6 +20,7 @@
     components: {
       CallPreview,
       ActiveCall,
+      WorkspaceMember,
       EmptyWorkspace,
     },
 
