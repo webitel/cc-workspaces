@@ -4,7 +4,7 @@
       v-model="search"
       @search="loadDataList"
     />
-    <p class="ws-worksection__transfer__instruction">Please select an agent</p>
+    <p class="ws-worksection__list-instruction">Please select an agent</p>
     <div class="ws-worksection__list" ref="scroll-wrap">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
