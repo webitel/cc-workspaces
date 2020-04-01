@@ -1,170 +1,52 @@
 <template>
   <section class="call-preview-wrap">
     <offline-preview
-      v-for="(member, key) of membersList"
+      :class="{'selected': member === openedMember}"
+      v-for="(member, key) of dataList"
       :member="member"
       :key="key"
-      @click.native.prevent="openCall(key)"
+      @click.native.prevent="openMember(key)"
     ></offline-preview>
+    <observer/>
   </section>
 </template>
 
 <script>
   import { mapState, mapActions } from 'vuex';
   import OfflinePreview from './offline-queue-preview.vue';
+  import infiniteScrollMixin from '../../../../mixins/infiniteScrollMixin';
 
   export default {
     name: 'offline-queue-container',
+    mixins: [infiniteScrollMixin],
     components: {
       OfflinePreview,
     },
-/* eslint-disable */ // FIXME
-    data: () => ({
-      membersList:[
-        {
-          "communications": [
-            {
-              "id": "0",
-              "destination": "Hello",
-              "type": {
-                "id": "1",
-                "name": "Домашний"
-              },
-              "priority": 10,
-              "description": "\"Hello\"",
-              "resource": null,
-              "display": "",
-              "state": 0,
-              "last_activity_at": "0",
-              "attempts": 0,
-              "last_cause": ""
-            }
-          ],
-          "skills": [],
-          "variables": {
-            "Hello": "Hello"
-          },
-          "id": "66",
-          "queue": {
-            "id": "14",
-            "name": "Igor test"
-          },
-          "priority": 10,
-          "expire_at": "20",
-          "created_at": "1584663892453",
-          "name": "Hello-66",
-          "timezone": {
-            "id": "365",
-            "name": "Europe/Kiev"
-          },
-          "bucket": null,
-          "min_offering_at": "0",
-          "stop_cause": "ABANDONED",
-          "last_activity_at": "0",
-          "attempts": 0,
-          "reserved": false
-        },
-        {
-          "communications": [
-            {
-              "id": "0",
-              "destination": "Hello",
-              "type": {
-                "id": "1",
-                "name": "Домашний"
-              },
-              "priority": 10,
-              "description": "\"Hello\"",
-              "resource": null,
-              "display": "",
-              "state": 0,
-              "last_activity_at": "0",
-              "attempts": 0,
-              "last_cause": ""
-            }
-          ],
-          "skills": [],
-          "variables": {
-            "Hello": "Hello"
-          },
-          "id": "63",
-          "queue": {
-            "id": "14",
-            "name": "Igor test"
-          },
-          "priority": 10,
-          "expire_at": "20",
-          "created_at": "1584663891308",
-          "name": "Hello-63",
-          "timezone": {
-            "id": "365",
-            "name": "Europe/Kiev"
-          },
-          "bucket": null,
-          "min_offering_at": "0",
-          "stop_cause": "ABANDONED",
-          "last_activity_at": "0",
-          "attempts": 0,
-          "reserved": false
-        },
-        {
-          "communications": [
-            {
-              "id": "0",
-              "destination": "Hello",
-              "type": {
-                "id": "1",
-                "name": "Домашний"
-              },
-              "priority": 10,
-              "description": "\"Hello\"",
-              "resource": null,
-              "display": "",
-              "state": 0,
-              "last_activity_at": "0",
-              "attempts": 0,
-              "last_cause": ""
-            }
-          ],
-          "skills": [],
-          "variables": {
-            "Hello": "Hello"
-          },
-          "id": "64",
-          "queue": {
-            "id": "14",
-            "name": "Igor test"
-          },
-          "priority": 10,
-          "expire_at": "20",
-          "created_at": "1584663891805",
-          "name": "Hello-64",
-          "timezone": {
-            "id": "365",
-            "name": "Europe/Kiev"
-          },
-          "bucket": null,
-          "min_offering_at": "0",
-          "stop_cause": "ABANDONED",
-          "last_activity_at": "0",
-          "attempts": 0,
-          "reserved": false
-        }
-      ],
-    }),
+
+    data: () => ({}),
 
     computed: {
-      ...mapState('workspace', {}),
+      ...mapState('workspace/offlineQueue', {
+        dataList: (state) => state.membersList,
+        openedMember: (state) => state.memberOnWorkspace,
+      }),
     },
 
     methods: {
-      ...mapActions('workspace', {
-        openCall: 'OPEN_CALL_ON_WORKSPACE',
+      loadDataList() {
+        this.loadList({ search: this.search, page: this.page, size: this.size });
+      },
+
+      ...mapActions('workspace/offlineQueue', {
+        loadList: 'LOAD_DATA_LIST',
+        openMember: 'OPEN_MEMBER_ON_WORKSPACE',
       }),
     },
   };
 </script>
 
 <style lang="scss" scoped>
-
+  .queue-preview.selected {
+    background: $page-bg-color;
+  }
 </style>

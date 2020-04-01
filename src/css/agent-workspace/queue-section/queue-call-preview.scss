@@ -6,6 +6,7 @@
   border: calcVH(2px) solid transparent;
   border-bottom-color: $page-bg-color;
   border-radius: $border-radius;
+  cursor: pointer;
 
   &.hold {
     border: calcVH(2px) solid $hold-color;

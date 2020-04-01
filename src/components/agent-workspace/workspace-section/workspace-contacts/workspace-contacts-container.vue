@@ -32,6 +32,7 @@
     },
 
     data: () => ({
+      dataList: [],
       selected: null,
     }),
 

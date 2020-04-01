@@ -2,13 +2,13 @@
   <section class="call">
     <call-preview v-if="isPreviewCall"></call-preview>
     <active-call v-else-if="isActiveCall"></active-call>
-      <workspace-member v-else-if="true"></workspace-member>
+    <workspace-member v-else-if="isMemberOnWorkspace"></workspace-member>
     <empty-workspace v-else/>
   </section>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
   import CallStates from '../../../../store/callUtils/CallStates';
   import CallPreview from './call-preview.vue';
   import ActiveCall from './active-call.vue';
@@ -31,6 +31,9 @@
     computed: {
       ...mapState('workspace', {
         state: (state) => state.callState,
+      }),
+      ...mapGetters('workspace/offlineQueue', {
+        isMemberOnWorkspace: 'IS_MEMBER_ON_WORKSPACE',
       }),
 
       isPreviewCall() {
