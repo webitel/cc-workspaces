@@ -17,17 +17,17 @@
   import { mapState, mapActions } from 'vuex';
 
   export default {
-    name: 'workspace-member-communications',
+    name: 'member-communications',
 
     computed: {
-      ...mapState('workspace/offlineQueue', {
+      ...mapState('member', {
         communications: (state) => state.memberOnWorkspace.communications,
         selectedCommId: (state) => state.selectedCommId,
       }),
     },
 
     methods: {
-      ...mapActions('workspace/offlineQueue', {
+      ...mapActions('member', {
         selectCommunication: 'SELECT_COMMUNICATION',
       }),
     },

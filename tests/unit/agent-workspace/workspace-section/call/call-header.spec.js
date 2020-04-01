@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import CallStates from '../../../../../src/store/callUtils/CallStates';
+import CallStates from '../../../../../src/store/modules/agent-workspace/call/callUtils/CallStates';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
 

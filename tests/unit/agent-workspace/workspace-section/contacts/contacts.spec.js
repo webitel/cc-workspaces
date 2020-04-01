@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 import axiosInstance from '../../../../../src/api/instance';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import ContactsContainer
-  from '../../../../../src/components/agent-workspace/workspace-section/workspace-contacts/workspace-contacts-container.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contacts-container.vue';
 import Contact
-  from '../../../../../src/components/agent-workspace/workspace-section/workspace-contacts/workspace-contact.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

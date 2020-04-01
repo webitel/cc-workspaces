@@ -32,9 +32,9 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { getUsersList } from '../../../../api/agent-workspace/users';
-  import infiniteScrollMixin from '../../../../mixins/infiniteScrollMixin';
-  import Btn from '../../../utils/btn.vue';
+  import { getUsersList } from '../../../../../api/agent-workspace/users';
+  import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
+  import Btn from '../../../../utils/btn.vue';
   import Contact from '../workspace-contacts/workspace-contact.vue';
 
   export default {
@@ -60,7 +60,7 @@
         this.dataList = [...this.dataList, ...response];
       },
 
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         transfer: 'TRANSFER',
       }),
     },

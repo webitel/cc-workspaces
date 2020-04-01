@@ -89,7 +89,7 @@
     },
 
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
       }),

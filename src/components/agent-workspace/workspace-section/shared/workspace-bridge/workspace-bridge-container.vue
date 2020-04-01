@@ -24,7 +24,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import Btn from '../../../utils/btn.vue';
+  import Btn from '../../../../utils/btn.vue';
   import ActiveCall from './active-call-item.vue';
 
   export default {
@@ -39,13 +39,13 @@
     }),
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         callList: (state) => state.callList,
       }),
 
       callList() {
-        return this.$store.state.workspace.callList.filter(
-          (call) => call !== this.$store.state.workspace.callOnWorkspace,
+        return this.$store.state.call.callList.filter(
+          (call) => call !== this.$store.state.call.callOnWorkspace,
         );
       },
     },
@@ -55,7 +55,7 @@
         this.selected = item;
       },
 
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         bridge: 'BRIDGE',
       }),
     },

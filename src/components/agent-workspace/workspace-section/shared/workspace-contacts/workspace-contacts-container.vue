@@ -20,8 +20,8 @@
 </template>
 
 <script>
-  import { getUsersList } from '../../../../api/agent-workspace/users';
-  import infiniteScrollMixin from '../../../../mixins/infiniteScrollMixin';
+  import { getUsersList } from '../../../../../api/agent-workspace/users';
+  import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import Contact from './workspace-contact.vue';
 
   export default {

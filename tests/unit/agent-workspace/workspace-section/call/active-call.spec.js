@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 // import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import CallStates from '../../../../../src/store/callUtils/CallStates';
+import CallStates from '../../../../../src/store/modules/agent-workspace/call/callUtils/CallStates';
 import ActiveCall
   from '../../../../../src/components/agent-workspace/workspace-section/call/active-call.vue';
 import CallHeader
@@ -9,9 +9,9 @@ import CallHeader
 import Numpad
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-numpad/numpad.vue';
 import Transfer
-  from '../../../../../src/components/agent-workspace/workspace-section/workspace-transfer/workspace-transfer-container.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
 import Bridge
-  from '../../../../../src/components/agent-workspace/workspace-section/workspace-bridge/workspace-bridge-container.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/workspace-bridge-container.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

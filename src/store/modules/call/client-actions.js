@@ -1,5 +1,5 @@
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
-import CallStates from '../../callUtils/CallStates';
+import CallStates from './callUtils/CallStates';
 
 const callParams = { disableStun: true };
 const answerParams = { useAudio: true, disableStun: true };
@@ -22,7 +22,7 @@ const actions = {
       try {
         await call.answer(answerParams);
         context.commit('SET_CALL_STATE', CallStates.ACTIVE);
-        context.commit('SET_WORKSPACE', call);
+        context.dispatch('SET_WORKSPACE', call);
       } catch {
       }
     }
@@ -33,7 +33,7 @@ const actions = {
     try {
       await call.blindTransfer(user.extension);
       // context.commit('REMOVE_CALL', call);
-      // context.commit('RESET_WORKSPACE');
+      // context.dispatch('RESET_WORKSPACE');
     } catch {
     }
   },
@@ -43,7 +43,7 @@ const actions = {
     try {
       await call.bridgeTo(callToBridge);
       // context.commit('REMOVE_CALL', call);
-      // context.commit('RESET_WORKSPACE');
+      // context.dispatch('RESET_WORKSPACE');
     } catch {
     }
   },
@@ -87,7 +87,7 @@ const actions = {
     if (call.allowHangup) {
       try {
         await call.hangup();
-        context.commit('RESET_WORKSPACE');
+        context.dispatch('RESET_WORKSPACE');
       } catch {
       }
     }

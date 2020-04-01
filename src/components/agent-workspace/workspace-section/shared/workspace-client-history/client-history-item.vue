@@ -1,7 +1,7 @@
 <template>
   <div class="ws-worksection__item ws-history-item">
     <img class="ws-worksection__item__pic"
-         src="../../../../assets/agent-workspace/default-avatar.svg"
+         src="../../../../../assets/agent-workspace/default-avatar.svg"
          alt="client photo">
     <div class="ws-worksection__item__text">
       <div class="flex-wrap">

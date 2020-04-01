@@ -15,7 +15,7 @@
       </rounded-action>
       <img
         class="ws-worksection__item__pic"
-        src="../../../../assets/agent-workspace/default-avatar.svg"
+        src="../../../../../assets/agent-workspace/default-avatar.svg"
         alt="user photo"
       >
     </div>
@@ -37,9 +37,9 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { parseUserStatus } from '../../../../api/agent-workspace/users';
-  import UserStatus from '../../../../store/statusUtils/UserStatus';
-  import RoundedAction from '../../../utils/rounded-action.vue';
+  import { parseUserStatus } from '../../../../../api/agent-workspace/users';
+  import UserStatus from '../../../../../store/modules/agent-status/statusUtils/UserStatus';
+  import RoundedAction from '../../../../utils/rounded-action.vue';
 
   export default {
     name: 'workspace-contact',
@@ -74,7 +74,7 @@
     },
 
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         makeCall: 'CALL',
       }),
     },

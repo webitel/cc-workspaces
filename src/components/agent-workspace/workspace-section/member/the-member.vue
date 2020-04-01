@@ -10,12 +10,12 @@
 </template>
 
 <script>
-  import MemberHeader from './workspace-member-header.vue';
-  import MemberCommunications from './workspace-member-communications.vue';
-  import ClientHistory from '../workspace-client-history/client-history-container.vue';
+  import MemberHeader from './member-header.vue';
+  import MemberCommunications from './member-communications.vue';
+  import ClientHistory from '../shared/workspace-client-history/client-history-container.vue';
 
   export default {
-    name: 'workspace-member',
+    name: 'the-member',
     components: {
       MemberHeader,
       MemberCommunications,

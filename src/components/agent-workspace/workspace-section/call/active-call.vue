@@ -24,12 +24,12 @@
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
   import Divider from '../../../utils/divider.vue';
-  import ClientHistory from '../workspace-client-history/client-history-container.vue';
-  import Contacts from '../workspace-contacts/workspace-contacts-container.vue';
-  import Transfer from '../workspace-transfer/workspace-transfer-container.vue';
-  import Bridge from '../workspace-bridge/workspace-bridge-container.vue';
+  import ClientHistory from '../shared/workspace-client-history/client-history-container.vue';
+  import Contacts from '../shared/workspace-contacts/workspace-contacts-container.vue';
+  import Transfer from '../shared/workspace-transfer/workspace-transfer-container.vue';
+  import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
-  import CallStates from '../../../../store/callUtils/CallStates';
+  import CallStates from '../../../../store/modules/call/callUtils/CallStates';
 
   export default {
     name: 'active-call',
@@ -71,7 +71,7 @@
         }
       },
 
-      ...mapState('workspace', {
+      ...mapState('call', {
         callState: (state) => state.callState,
       }),
     },
@@ -87,7 +87,7 @@
         }
       },
 
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
         openCall: 'OPEN_CALL_ON_WORKSPACE',

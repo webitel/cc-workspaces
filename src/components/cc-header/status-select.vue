@@ -57,7 +57,7 @@
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex';
   import { AgentStatus } from 'webitel-sdk';
-  import UserStatus from '../../store/statusUtils/UserStatus';
+  import UserStatus from '../../store/modules/agent-status/statusUtils/UserStatus';
   import clickaway from '../../directives/clickaway';
 
   export default {

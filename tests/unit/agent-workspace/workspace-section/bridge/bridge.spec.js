@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import Bridge
-  from '../../../../../src/components/agent-workspace/workspace-section/workspace-bridge/workspace-bridge-container.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/workspace-bridge-container.vue';
 import ActiveCallItem
-  from '../../../../../src/components/agent-workspace/workspace-section/workspace-bridge/active-call-item.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/active-call-item.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

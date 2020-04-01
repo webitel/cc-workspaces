@@ -1,4 +1,5 @@
-import getCliInstance from '../../../../api/agent-workspace/call-ws-connection';
+import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
+import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 
 const state = {
   agent: null,
@@ -29,7 +30,7 @@ const actions = {
 
   OPEN_MEMBER_ON_WORKSPACE: (context, index) => {
     const memberOnWs = context.state.membersList[index];
-    context.commit('SET_WORKSPACE', memberOnWs);
+    context.dispatch('SET_WORKSPACE', memberOnWs);
   },
 
   SELECT_COMMUNICATION: (context, communication) => {
@@ -42,6 +43,11 @@ const actions = {
     const { agent } = context.state;
     await agent.directMember(memberId, commId);
   },
+
+  SET_WORKSPACE: (context, memberOnWs) => {
+    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.MEMBER, { root: true });
+    context.commit('SET_WORKSPACE', memberOnWs);
+  },
 };
 
 const mutations = {
@@ -53,12 +59,12 @@ const mutations = {
     state.membersList = list;
   },
 
-  SET_WORKSPACE: (state, member) => {
-    state.memberOnWorkspace = member;
-  },
-
   SET_SELECTED_COMMUNICATION: (state, commId) => {
     state.selectedCommId = commId;
+  },
+
+  SET_WORKSPACE: (state, member) => {
+    state.memberOnWorkspace = member;
   },
 };
 

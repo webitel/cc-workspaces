@@ -2,7 +2,7 @@
   <article class="ws-worksection__item ws-contact-item">
     <img
       class="ws-worksection__item__pic"
-      src="../../../../assets/agent-workspace/default-avatar.svg"
+      src="../../../../../assets/agent-workspace/default-avatar.svg"
       alt="user photo">
     <div class="ws-worksection__item__text">
       <div class="flex-wrap">
@@ -25,8 +25,8 @@
 
 <script>
   import { CallActions, CallDirection } from 'webitel-sdk';
-  import callTimer from '../../../../mixins/callTimerMixin';
-  import displayInfo from '../../../../mixins/displayInfoMixin';
+  import callTimer from '../../../../../mixins/callTimerMixin';
+  import displayInfo from '../../../../../mixins/displayInfoMixin';
 
   export default {
     name: 'active-call-item',

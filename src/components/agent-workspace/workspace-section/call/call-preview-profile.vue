@@ -23,7 +23,7 @@
     mixins: [dispayInfoMixin],
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         call: (state) => state.callOnWorkspace,
       }),
     },

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import Search from '../../../utils/search-input.vue';
+  import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './client-history-item.vue';
 
   export default {

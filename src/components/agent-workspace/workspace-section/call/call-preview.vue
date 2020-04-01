@@ -51,7 +51,7 @@
     },
 
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         answer: 'ANSWER',
         openTransfer: 'OPEN_PREVIEW_TRANSFER',
         hangup: 'HANGUP',

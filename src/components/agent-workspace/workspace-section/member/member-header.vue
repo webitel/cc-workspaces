@@ -59,10 +59,10 @@
     data: () => ({}),
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         // call: (state) => state.callOnWorkspace,
       }),
-      ...mapGetters('workspace/offlineQueue', {
+      ...mapGetters('member', {
         isCommSelected: 'IS_COMMUNICATION_SELECTED',
       }),
 
@@ -77,7 +77,7 @@
 
     methods: {
 
-      ...mapActions('workspace/offlineQueue', {
+      ...mapActions('member', {
         makeCall: 'CALL',
       }),
     },

@@ -42,7 +42,7 @@
     }),
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         callList: (state) => state.callList,
         callState: (state) => state.callState,
       }),
@@ -70,7 +70,7 @@
     },
 
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         openCall: 'OPEN_CALL_ON_WORKSPACE',
       }),
     },

@@ -1,5 +1,5 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
-import CallStates from '../../callUtils/CallStates';
+import CallStates from './callUtils/CallStates';
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, call) => {
@@ -35,12 +35,12 @@ const actions = {
     } else {
       context.commit('SET_CALL_STATE', CallStates.ACTIVE);
     }
-    context.commit('SET_WORKSPACE', call);
+    context.dispatch('SET_WORKSPACE', call);
   },
 
   HANDLE_HANGUP_ACTION: (context, call) => {
     context.commit('REMOVE_CALL', call);
-    context.commit('RESET_WORKSPACE');
+    context.dispatch('RESET_WORKSPACE');
   },
 
   HANDLE_STREAM_ACTION: (context, call) => {
