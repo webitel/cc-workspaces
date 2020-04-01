@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+import callModule from '../../../../../src/store/modules/call/call';
 import CallPreview
   from '../../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-preview.vue';
 import Btn from '../../../../../src/components/utils/btn.vue';
@@ -26,7 +27,7 @@ describe('Other UIs', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
         },
@@ -84,7 +85,7 @@ describe('Other UIs', () => {
 
 describe('Preview Actions', () => {
   let state;
-  const { actions } = workspaceModule;
+  const { actions } = callModule;
   let store;
   let call;
 
@@ -98,7 +99,7 @@ describe('Preview Actions', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,
@@ -169,7 +170,7 @@ describe('Preview Actions', () => {
 
 describe('Answer and Hangup', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
   let call;
 
@@ -185,7 +186,8 @@ describe('Answer and Hangup', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        workspace: workspaceModule,
+        call: {
           namespaced: true,
           state,
           actions,

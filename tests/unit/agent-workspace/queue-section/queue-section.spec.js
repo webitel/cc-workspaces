@@ -1,7 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../src/store/modules/agent-workspace/agent-workspace';
-import CallStates from '../../../../src/store/modules/agent-workspace/call/callUtils/CallStates';
+import callModule from '../../../../src/store/modules/call/call';
+import CallStates from '../../../../src/store/modules/call/callUtils/CallStates';
 import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
 import ActiveQueue
@@ -21,7 +22,7 @@ jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
 
 describe('Make new call functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -31,7 +32,8 @@ describe('Make new call functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        workspace: workspaceModule,
+        call: {
           namespaced: true,
           state,
           actions,
@@ -56,7 +58,7 @@ describe('Make new call functionality', () => {
 
 describe('Ringing and Hangup events call functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -65,7 +67,8 @@ describe('Ringing and Hangup events call functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        workspace: workspaceModule,
+        call: {
           namespaced: true,
           state,
           actions,
@@ -81,7 +84,7 @@ describe('Ringing and Hangup events call functionality', () => {
       localVue,
       stubs: { Icon: true },
     });
-    await wrapper.vm.$store.dispatch('workspace/SUBSCRIBE_CALLS');
+    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     await mockSocket.ringing({});
     expect(wrapper.findAll(ActivePreview).length).toEqual(2);
   });
@@ -92,7 +95,7 @@ describe('Ringing and Hangup events call functionality', () => {
       localVue,
       stubs: { Icon: true },
     });
-    await wrapper.vm.$store.dispatch('workspace/SUBSCRIBE_CALLS');
+    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     await mockSocket.hangup(initialCall);
     expect(wrapper.findAll(ActivePreview).length).toEqual(0);
   });

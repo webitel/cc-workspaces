@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+import callModule from '../../../../../src/store/modules/call/call';
 import Bridge
   from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/workspace-bridge-container.vue';
 import ActiveCallItem
@@ -12,7 +12,7 @@ localVue.use(Vuex);
 
 describe('Bridge functionality', () => {
   let state;
-  const { actions } = workspaceModule;
+  const { actions } = callModule;
   let store;
 
   const call1 = {
@@ -32,7 +32,7 @@ describe('Bridge functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,

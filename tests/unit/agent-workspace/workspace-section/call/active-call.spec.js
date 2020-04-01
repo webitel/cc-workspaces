@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 // import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import CallStates from '../../../../../src/store/modules/agent-workspace/call/callUtils/CallStates';
+import CallStates from '../../../../../src/store/modules/call/callUtils/CallStates';
 import ActiveCall
   from '../../../../../src/components/agent-workspace/workspace-section/call/active-call.vue';
 import CallHeader
@@ -25,7 +25,7 @@ describe('Make new call functionality', () => {
     state = {};
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
         },
@@ -53,7 +53,7 @@ describe('Transfer functionality', () => {
     state = {};
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
         },

@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import CallStates from '../../../../../src/store/modules/agent-workspace/call/callUtils/CallStates';
+import callModule from '../../../../../src/store/modules/call/call';
+import CallStates from '../../../../../src/store/modules/call/callUtils/CallStates';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
 
@@ -16,7 +16,7 @@ jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
 
 describe('Make new call functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Make new call functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,
@@ -89,7 +89,7 @@ describe('Make new call functionality', () => {
 
 describe('Transfer functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -102,7 +102,7 @@ describe('Transfer functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,
@@ -127,7 +127,7 @@ describe('Transfer functionality', () => {
 
 describe('Bridge functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   const call1 = {
@@ -148,7 +148,7 @@ describe('Bridge functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,

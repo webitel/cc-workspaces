@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import axiosInstance from '../../../../../src/api/instance';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+import callModule from '../../../../../src/store/modules/call/call';
 import Transfer
   from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
 import Contact
@@ -14,7 +14,7 @@ jest.mock('../../../../../src/api/instance');
 
 describe('Transfer functionality', () => {
   let state;
-  const { actions } = workspaceModule;
+  const { actions } = callModule;
   let store;
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('Transfer functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,
