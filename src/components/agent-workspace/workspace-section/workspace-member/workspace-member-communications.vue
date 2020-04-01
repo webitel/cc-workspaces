@@ -1,19 +1,36 @@
 <template>
   <ul class="ws-worksection__list workspace-member-communications__list">
-    <li class="workspace-member-communication">
-      <div class="workspace-member-communication__type">Mobile</div>
-      <div class="workspace-member-communication__destination">+38 (097) 342-22-12</div>
-    </li>
-    <li class="workspace-member-communication">
-      <div class="workspace-member-communication__type">Mobile</div>
-      <div class="workspace-member-communication__destination">+38 (097) 342-22-12</div>
+    <li
+      class="workspace-member-communication"
+      :class="{'selected': communication.id === selectedCommId}"
+      v-for="(communication, key) of communications"
+      :key="key"
+      @click="selectCommunication(communication)"
+    >
+      <div class="workspace-member-communication__type">{{communication.type.name}}</div>
+      <div class="workspace-member-communication__destination">{{communication.destination}}</div>
     </li>
   </ul>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+
   export default {
     name: 'workspace-member-communications',
+
+    computed: {
+      ...mapState('workspace/offlineQueue', {
+        communications: (state) => state.memberOnWorkspace.communications,
+        selectedCommId: (state) => state.selectedCommId,
+      }),
+    },
+
+    methods: {
+      ...mapActions('workspace/offlineQueue', {
+        selectCommunication: 'SELECT_COMMUNICATION',
+      }),
+    },
   };
 </script>
 
@@ -31,7 +48,7 @@
       margin-bottom: 0;
     }
 
-    &:hover {
+    &:hover, &.selected {
       border-color: $accent-color;
     }
 

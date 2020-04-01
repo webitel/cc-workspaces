@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapActions, mapGetters } from 'vuex';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -62,19 +62,22 @@
       ...mapState('workspace', {
         // call: (state) => state.callOnWorkspace,
       }),
+      ...mapGetters('workspace/offlineQueue', {
+        isCommSelected: 'IS_COMMUNICATION_SELECTED',
+      }),
 
       isOnHistory() {
         return this.currentTab === 'history';
       },
 
       isCall() {
-        return true;
+        return this.isCommSelected;
       },
     },
 
     methods: {
 
-      ...mapActions('workspace', {
+      ...mapActions('workspace/offlineQueue', {
         makeCall: 'CALL',
       }),
     },

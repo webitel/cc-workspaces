@@ -4,10 +4,12 @@ const state = {
   agent: null,
   membersList: [],
   memberOnWorkspace: {},
+  selectedCommId: null,
 };
 
 const getters = {
   IS_MEMBER_ON_WORKSPACE: (state) => (Object.keys(state.memberOnWorkspace).length),
+  IS_COMMUNICATION_SELECTED: (state) => (Number.isInteger(state.selectedCommId)),
 };
 
 const actions = {
@@ -29,6 +31,17 @@ const actions = {
     const memberOnWs = context.state.membersList[index];
     context.commit('SET_WORKSPACE', memberOnWs);
   },
+
+  SELECT_COMMUNICATION: (context, communication) => {
+    context.commit('SET_SELECTED_COMMUNICATION', communication.id);
+  },
+
+  CALL: async (context) => {
+    const memberId = state.memberOnWorkspace.id;
+    const commId = state.selectedCommId;
+    const { agent } = context.state;
+    await agent.directMember(memberId, commId);
+  },
 };
 
 const mutations = {
@@ -42,6 +55,10 @@ const mutations = {
 
   SET_WORKSPACE: (state, member) => {
     state.memberOnWorkspace = member;
+  },
+
+  SET_SELECTED_COMMUNICATION: (state, commId) => {
+    state.selectedCommId = commId;
   },
 };
 
