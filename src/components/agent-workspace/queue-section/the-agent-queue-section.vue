@@ -41,10 +41,19 @@
       currentTab: { value: 'active' },
     }),
 
+    watch: {
+      callList() {
+        this.currentTab = { value: 'active' };
+      },
+    },
+
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         callList: (state) => state.callList,
         callState: (state) => state.callState,
+      }),
+      ...mapState('member', {
+        membersList: (state) => state.membersList,
       }),
 
       tabs() {
@@ -54,7 +63,7 @@
             value: 'active',
           },
           {
-            text: 'Offline(0)',
+            text: `Offline(${this.membersList.length})`,
             value: 'offline',
           },
         ];
@@ -70,7 +79,7 @@
     },
 
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         openCall: 'OPEN_CALL_ON_WORKSPACE',
       }),
     },

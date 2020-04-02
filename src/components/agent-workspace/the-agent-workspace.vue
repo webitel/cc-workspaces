@@ -47,7 +47,7 @@
         await this.subscribeStatus();
       },
 
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         subscribeCalls: 'SUBSCRIBE_CALLS',
       }),
 

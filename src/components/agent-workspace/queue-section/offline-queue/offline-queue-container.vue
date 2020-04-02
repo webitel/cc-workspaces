@@ -26,7 +26,7 @@
     data: () => ({}),
 
     computed: {
-      ...mapState('workspace/offlineQueue', {
+      ...mapState('member', {
         dataList: (state) => state.membersList,
         openedMember: (state) => state.memberOnWorkspace,
       }),
@@ -37,7 +37,7 @@
         this.loadList({ search: this.search, page: this.page, size: this.size });
       },
 
-      ...mapActions('workspace/offlineQueue', {
+      ...mapActions('member', {
         loadList: 'LOAD_DATA_LIST',
         openMember: 'OPEN_MEMBER_ON_WORKSPACE',
       }),

@@ -127,7 +127,7 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import { CallActions } from 'webitel-sdk';
-  import CallStates from '../../../../store/callUtils/CallStates';
+  import CallStates from '../../../../store/modules/call/callUtils/CallStates';
   import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
@@ -153,14 +153,14 @@
     },
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         call: (state) => state.callOnWorkspace,
         callState: (state) => state.callState,
       }),
 
       number: {
         get() {
-          return this.$store.state.workspace.newCallNumber;
+          return this.$store.state.call.newCallNumber;
         },
         set(value) {
           this.setNumber(value);
@@ -182,7 +182,7 @@
       isBridge() {
         return (this.callState !== CallActions.Hangup
           || this.callState !== CallActions.Ringing)
-          && this.$store.state.workspace.callList.filter((call) => (
+          && this.$store.state.call.callList.filter((call) => (
             call.state !== CallActions.Hangup
             || call.state !== CallActions.Ringing
           )).length > 1;
@@ -216,7 +216,7 @@
         }
       },
 
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         makeCall: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_CALL_NUMBER',

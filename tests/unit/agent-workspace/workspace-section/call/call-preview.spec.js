@@ -1,7 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import CallStates from '../../../../../src/store/callUtils/CallStates';
+import callModule from '../../../../../src/store/modules/call/call';
+import CallStates from '../../../../../src/store/modules/call/callUtils/CallStates';
 import CallPreview
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
 import PreviewProfile from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview-profile.vue';
@@ -11,14 +12,14 @@ localVue.use(Vuex);
 
 describe('Transfer functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
     state = {};
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,
@@ -43,7 +44,7 @@ describe('Transfer functionality', () => {
 
 describe('Answer and Hangup functionality', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -57,7 +58,8 @@ describe('Answer and Hangup functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        workspace: workspaceModule,
+        call: {
           namespaced: true,
           state,
           actions,
@@ -106,7 +108,7 @@ describe('preview-profile displays', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
         },

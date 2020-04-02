@@ -40,11 +40,11 @@
     }),
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         call: (state) => state.callOnWorkspace,
       }),
 
-      ...mapGetters('workspace', {
+      ...mapGetters('call', {
         computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
       }),
 

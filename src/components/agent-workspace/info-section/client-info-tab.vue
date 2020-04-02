@@ -7,6 +7,8 @@
 <script>
   import MarkdownIt from 'markdown-it';
   import { mapState } from 'vuex';
+  import WorkspaceStates
+    from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
   const md = new MarkdownIt();
 
@@ -18,15 +20,24 @@
 
     computed: {
       ...mapState('workspace', {
+        state: (state) => state.workspaceState,
+      }),
+      ...mapState('call', {
         call: (state) => state.callOnWorkspace,
+      }),
+      ...mapState('member', {
+        member: (state) => state.memberOnWorkspace,
       }),
 
       computeHTML() {
+        let payload;
+        if (this.state === WorkspaceStates.CALL) payload = this.call.payload;
+        else if (this.state === WorkspaceStates.MEMBER) payload = this.member.variables;
         let res = '';
-        if (this.call.payload) {
-          Object.keys(this.call.payload).forEach((key) => {
+        if (payload) {
+          Object.keys(payload).forEach((key) => {
             res += `<h3>${key}:</h3>`;
-            res += md.render(this.call.payload[key]);
+            res += md.render(payload[key]);
             res += '<br/>';
           });
         }

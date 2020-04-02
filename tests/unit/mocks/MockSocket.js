@@ -5,6 +5,12 @@ export default class MockSocket {
     this.call = call;
   }
 
+  agent = {
+    offlineMembers: () => ({ items: [{ name: 'member1' }, { name: 'member2' }] }),
+  };
+
+  agentSession = () => this.agent;
+
   ringing = (call = this.call) => {
     const action = CallActions.Ringing;
     this.callback(action, call);

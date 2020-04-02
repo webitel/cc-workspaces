@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+import callModule from '../../../../../src/store/modules/call/call';
 import CallFooter
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-footer.vue';
 import RoundedAction from '../../../../../src/components/utils/rounded-action.vue';
@@ -10,7 +10,7 @@ localVue.use(Vuex);
 
 describe('Footer buttons', () => {
   let state;
-  const { actions, mutations } = workspaceModule;
+  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('Footer buttons', () => {
     };
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
           actions,

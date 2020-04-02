@@ -19,7 +19,7 @@
       NumpadNumbers,
     },
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         input: 'ADD_DIGIT',
       }),
     },

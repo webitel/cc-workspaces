@@ -73,7 +73,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import CallStates from '../../../../store/callUtils/CallStates';
+  import CallStates from '../../../../store/modules/call/callUtils/CallStates';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -93,7 +93,7 @@
     }),
 
     computed: {
-      ...mapState('workspace', {
+      ...mapState('call', {
         callState: (state) => state.callState,
         call: (state) => state.callOnWorkspace,
       }),
@@ -150,7 +150,7 @@
     },
 
     methods: {
-      ...mapActions('workspace', {
+      ...mapActions('call', {
         toggleMute: 'TOGGLE_MUTE',
         toggleHold: 'TOGGLE_HOLD',
       }),
