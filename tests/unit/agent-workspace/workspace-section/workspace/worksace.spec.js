@@ -3,12 +3,11 @@ import Vuex from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../../src/store/modules/call/call';
+import nowModule from '../../../../../src/store/modules/reactive-now/reactive-now';
+import statusModule from '../../../../../src/store/modules/agent-status/agent-status';
+import Workspace from '../../../../../src/components/agent-workspace/the-agent-workspace.vue';
 import Call
   from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
-import CallPreview
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
-import ActiveCall
-  from '../../../../../src/components/agent-workspace/workspace-section/call/active-call.vue';
 import MockSocket from '../../../mocks/MockSocket';
 
 const localVue = createLocalVue();
@@ -19,7 +18,7 @@ const mockSocket = new MockSocket();
 jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
   () => () => mockSocket);
 
-describe('Ringing event on call component', () => {
+describe('Hangup event on call component', () => {
   const { state, actions, mutations } = callModule;
   let store;
 
@@ -33,52 +32,39 @@ describe('Ringing event on call component', () => {
           actions,
           mutations,
         },
+        now: nowModule,
+        status: statusModule,
       },
     });
   });
 
-  it('Draws Active component when ringing event fires', async () => {
-    const wrapper = shallowMount(Call, {
+  it('Removes Call component when hangup event fires', async () => {
+    const wrapper = shallowMount(Workspace, {
       store,
       localVue,
       stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
-    await mockSocket.ringing({});
-    expect(wrapper.find(ActiveCall)
-      .exists())
-      .toBeTruthy();
-  });
-
-  it('Draws Preview component when Outbound Call '
-    + 'from preview dialer ringing event fires', async () => {
-    call = {
-      direction: CallDirection.Outbound,
-      queue: { queue_type: 'preview' },
-    };
-    const wrapper = shallowMount(Call, {
-      store,
-      localVue,
-      stubs: { Icon: true },
-    });
-    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
+    const call = {};
     await mockSocket.ringing(call);
-    expect(wrapper.find(CallPreview)
+    await mockSocket.hangup(call);
+    expect(wrapper.find(Call)
       .exists())
-      .toBeTruthy();
+      .toBeFalsy();
   });
 
-  it('Draws Preview component when Inbound Call ringing event fires', async () => {
+  it('Removes Call component when Inbound Call hangup event fires', async () => {
     call = { direction: CallDirection.Inbound };
-    const wrapper = shallowMount(Call, {
+    const wrapper = shallowMount(Workspace, {
       store,
       localVue,
       stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     await mockSocket.ringing(call);
-    expect(wrapper.find(CallPreview)
+    await mockSocket.hangup(call);
+    expect(wrapper.find(Call)
       .exists())
-      .toBeTruthy();
+      .toBeFalsy();
   });
 });
