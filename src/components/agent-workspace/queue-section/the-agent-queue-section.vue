@@ -46,6 +46,9 @@
         callList: (state) => state.callList,
         callState: (state) => state.callState,
       }),
+      ...mapState('member', {
+        membersList: (state) => state.membersList,
+      }),
 
       tabs() {
         return [
@@ -54,7 +57,7 @@
             value: 'active',
           },
           {
-            text: 'Offline(0)',
+            text: `Offline(${this.membersList.length})`,
             value: 'offline',
           },
         ];
