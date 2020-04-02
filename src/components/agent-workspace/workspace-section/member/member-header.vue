@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions, mapGetters } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -56,12 +56,7 @@
       },
     },
 
-    data: () => ({}),
-
     computed: {
-      ...mapState('call', {
-        // call: (state) => state.callOnWorkspace,
-      }),
       ...mapGetters('member', {
         isCommSelected: 'IS_COMMUNICATION_SELECTED',
       }),

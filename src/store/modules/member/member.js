@@ -9,7 +9,6 @@ const state = {
 };
 
 const getters = {
-  IS_MEMBER_ON_WORKSPACE: (state) => (Object.keys(state.memberOnWorkspace).length),
   IS_COMMUNICATION_SELECTED: (state) => (Number.isInteger(state.selectedCommId)),
 };
 
