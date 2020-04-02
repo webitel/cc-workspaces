@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../../src/store/modules/call/call';
-import CallPreview
+import ActivePreview
   from '../../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-preview.vue';
 import Btn from '../../../../../src/components/utils/btn.vue';
 
@@ -42,7 +42,7 @@ describe('Other UIs', () => {
   });
 
   it('Correctly displays call displayName', () => {
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -55,7 +55,7 @@ describe('Other UIs', () => {
   });
 
   it('Correctly displays call displayNumber', () => {
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -68,7 +68,7 @@ describe('Other UIs', () => {
   });
 
   it('Draws border on call on hold', () => {
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -115,7 +115,7 @@ describe('Preview Actions', () => {
   });
 
   it('Shows preview actions on Inbound Ringing', () => {
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -135,7 +135,7 @@ describe('Preview Actions', () => {
       direction: CallDirection.Outbound,
       queue: { queue_type: 'preview' },
     };
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -153,7 +153,7 @@ describe('Preview Actions', () => {
     call = {
       direction: CallDirection.Outbound,
     };
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -205,7 +205,7 @@ describe('Answer and Hangup', () => {
 
   it('Answers to call', () => {
     call.allowAnswer = true;
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
@@ -227,7 +227,7 @@ describe('Answer and Hangup', () => {
 
   it('Hangups to call', () => {
     call.allowHangup = true;
-    const wrapper = shallowMount(CallPreview, {
+    const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       stubs: { Icon: true },
