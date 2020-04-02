@@ -7,6 +7,8 @@ import OfflineQueue
 import OfflinePreview
   from '../../../../../src/components/agent-workspace/queue-section/offline-queue/offline-queue-preview.vue';
 import MockSocket from '../../../mocks/MockSocket';
+import WorkspaceStates
+  from "../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -63,11 +65,8 @@ describe('Members list functionality', () => {
     });
     expect(wrapper.findAll(OfflinePreview).length).toEqual(1);
     wrapper.find(OfflinePreview).trigger('click');
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(workspaceModule.actions.SET_WORKSPACE_STATE).toHaveBeenCalled();
+    expect(workspaceModule.actions.SET_WORKSPACE_STATE.mock.calls[0][1])
+      .toEqual(WorkspaceStates.MEMBER);
     expect(memberModule.mutations.SET_WORKSPACE).toHaveBeenCalled();
   });
 });
