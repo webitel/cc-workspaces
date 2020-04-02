@@ -4,8 +4,10 @@ import workspaceModule from '../../../../src/store/modules/agent-workspace/agent
 import CallStates from '../../../../src/store/callUtils/CallStates';
 import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
-import CallPreview
-  from '../../../../src/components/agent-workspace/queue-section/queue-call-preview.vue';
+import ActiveQueue
+  from '../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-container.vue';
+import ActivePreview
+  from '../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-preview.vue';
 import MockSocket from '../../mocks/MockSocket';
 
 const localVue = createLocalVue();
@@ -74,24 +76,24 @@ describe('Ringing and Hangup events call functionality', () => {
   });
 
   it('Draws new call when ringing event fires', async () => {
-    const wrapper = shallowMount(QueueSection, {
+    const wrapper = shallowMount(ActiveQueue, {
       store,
       localVue,
       stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('workspace/SUBSCRIBE_CALLS');
     await mockSocket.ringing({});
-    expect(wrapper.findAll(CallPreview).length).toEqual(2);
+    expect(wrapper.findAll(ActivePreview).length).toEqual(2);
   });
 
   it('Removes a call when ringing event fires', async () => {
-    const wrapper = shallowMount(QueueSection, {
+    const wrapper = shallowMount(ActiveQueue, {
       store,
       localVue,
       stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('workspace/SUBSCRIBE_CALLS');
     await mockSocket.hangup(initialCall);
-    expect(wrapper.findAll(CallPreview).length).toEqual(0);
+    expect(wrapper.findAll(ActivePreview).length).toEqual(0);
   });
 });

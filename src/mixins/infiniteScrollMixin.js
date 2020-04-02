@@ -8,7 +8,6 @@ export default {
   },
 
   data: () => ({
-    dataList: [],
     page: 1,
     size: 20,
     search: '',

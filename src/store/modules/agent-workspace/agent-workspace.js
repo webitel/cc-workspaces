@@ -1,4 +1,5 @@
 import { CallActions } from 'webitel-sdk';
+import offlineQueue from './offline-queue/offline-queue';
 import clientHandlers from './client-handlers';
 import clientActions from './client-actions';
 import CallStates from '../../callUtils/CallStates';
@@ -101,4 +102,5 @@ export default {
   getters,
   actions,
   mutations,
+  modules: { offlineQueue },
 };

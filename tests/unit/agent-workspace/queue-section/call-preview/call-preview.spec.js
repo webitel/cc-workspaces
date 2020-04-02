@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import CallPreview
-  from '../../../../../src/components/agent-workspace/queue-section/queue-call-preview.vue';
+  from '../../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-preview.vue';
 import Btn from '../../../../../src/components/utils/btn.vue';
 
 const localVue = createLocalVue();
