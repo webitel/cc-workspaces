@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../src/store/modules/call/call';
+import memberModule from '../../../../src/store/modules/member/member';
 import CallStates from '../../../../src/store/modules/call/callUtils/CallStates';
 import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
@@ -39,6 +40,7 @@ describe('Make new call functionality', () => {
           actions,
           mutations,
         },
+        member: memberModule,
       },
     });
   });

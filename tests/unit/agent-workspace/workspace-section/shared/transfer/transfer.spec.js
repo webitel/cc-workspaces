@@ -1,16 +1,16 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import axiosInstance from '../../../../../src/api/instance';
-import callModule from '../../../../../src/store/modules/call/call';
+import axiosInstance from '../../../../../../src/api/instance';
+import callModule from '../../../../../../src/store/modules/call/call';
 import Transfer
-  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
+  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
 import Contact
-  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
+  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-jest.mock('../../../../../src/api/instance');
+jest.mock('../../../../../../src/api/instance');
 
 describe('Transfer functionality', () => {
   let state;

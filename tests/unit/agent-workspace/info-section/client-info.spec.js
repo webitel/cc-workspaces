@@ -2,6 +2,8 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ClientInfo
   from '../../../../src/components/agent-workspace/info-section/client-info-tab.vue';
+import WorkspaceStates
+  from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -19,6 +21,12 @@ describe('Client Info MD', () => {
     store = new Vuex.Store({
       state,
       modules: {
+        workspace: {
+          namespaced: true,
+          state: {
+            workspaceState: WorkspaceStates.CALL,
+          },
+        },
         call: {
           namespaced: true,
           state,

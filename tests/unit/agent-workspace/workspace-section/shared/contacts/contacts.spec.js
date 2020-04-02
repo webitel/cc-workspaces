@@ -1,11 +1,11 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import axiosInstance from '../../../../../src/api/instance';
-import callModule from '../../../../../src/store/modules/call/call';
+import axiosInstance from '../../../../../../src/api/instance';
+import callModule from '../../../../../../src/store/modules/call/call';
 import ContactsContainer
-  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contacts-container.vue';
+  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contacts-container.vue';
 import Contact
-  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
+  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -13,10 +13,10 @@ localVue.use(Vuex);
 
 // Make new call on contact test
 const mockCliCall = jest.fn();
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
+jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',
   () => () => ({ call: mockCliCall }));
 
-jest.mock('../../../../../src/api/instance');
+jest.mock('../../../../../../src/api/instance');
 
 describe('Contacts functionality', () => {
   let state;

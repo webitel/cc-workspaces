@@ -100,7 +100,7 @@ describe('Bridge functionality', () => {
     state = {};
     store = new Vuex.Store({
       modules: {
-        workspace: {
+        call: {
           namespaced: true,
           state,
         },
