@@ -41,6 +41,12 @@
       currentTab: { value: 'active' },
     }),
 
+    watch: {
+      callList() {
+        this.currentTab = { value: 'active' };
+      },
+    },
+
     computed: {
       ...mapState('call', {
         callList: (state) => state.callList,
