@@ -12,19 +12,24 @@ export default {
     size: 20,
     search: '',
     rootMargin: '200px',
+    isMounted: false, // isMounted recomputes observerOptions with $ref, when component renders
   }),
 
   mounted() {
+    this.isMounted = true;
     this.loadDataList();
   },
 
   computed: {
     obsOptions() {
-      const root = this.$refs['scroll-wrap'];
-      return {
-        root,
-        rootMargin: this.rootMargin,
-      };
+      if (this.isMounted) {
+        const root = this.$refs['scroll-wrap'];
+        return {
+          root,
+          rootMargin: this.rootMargin,
+        };
+      }
+      return null;
     },
   },
 
