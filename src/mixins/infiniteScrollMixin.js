@@ -30,6 +30,7 @@ export default {
 
   methods: {
     handleIntersect() {
+      console.log('intersect');
       this.page += 1;
       this.loadDataList();
     },

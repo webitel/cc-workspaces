@@ -1,4 +1,4 @@
-import { setUserStatus } from '../../../api/agent-workspace/users';
+import { setUserStatus } from '../../../api/agent-workspace/users/users';
 
 const actions = {
   SET_USER_ACTIVE_STATUS: async () => {

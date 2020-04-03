@@ -7,7 +7,6 @@
     <div class="ws-worksection__list" ref="scroll-wrap">
       <contact
         v-for="(item, key) of dataList"
-        :id="`scroll-item-${key}`"
         :key="key"
         :item="item"
         callable
@@ -20,7 +19,7 @@
 </template>
 
 <script>
-  import { getUsersList } from '../../../../../api/agent-workspace/users';
+  import { getUsersList } from '../../../../../api/agent-workspace/users/users';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import Contact from './workspace-contact.vue';
 

@@ -24,7 +24,7 @@
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
   import Divider from '../../../utils/divider.vue';
-  import ClientHistory from '../shared/workspace-client-history/client-history-container.vue';
+  import History from '../shared/workspace-history/history-container.vue';
   import Contacts from '../shared/workspace-contacts/workspace-contacts-container.vue';
   import Transfer from '../shared/workspace-transfer/workspace-transfer-container.vue';
   import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
@@ -37,7 +37,7 @@
     components: {
       CallHeader,
       CallFooter,
-      ClientHistory,
+      History,
       Contacts,
       Numpad,
       Transfer,
@@ -55,20 +55,7 @@
 
     computed: {
       computeCurrentTab() {
-        switch (this.currentTab) {
-          case 'history':
-            return 'client-history';
-          case 'contacts':
-            return 'contacts';
-          case 'transfer':
-            return 'transfer';
-          case 'bridge':
-            return 'bridge';
-          case 'numpad':
-            return 'numpad';
-          default:
-            return '';
-        }
+        return this.currentTab;
       },
 
       ...mapState('call', {

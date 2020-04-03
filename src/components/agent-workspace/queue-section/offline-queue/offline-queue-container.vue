@@ -1,5 +1,5 @@
 <template>
-  <section class="call-preview-wrap">
+  <section class="call-preview-wrap"  ref="scroll-wrap">
     <offline-preview
       :class="{'selected': member === openedMember}"
       v-for="(member, key) of dataList"
