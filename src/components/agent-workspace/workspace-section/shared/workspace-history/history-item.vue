@@ -65,7 +65,7 @@
       computeStatusIcon() {
         if (this.item.direction === CallDirection.Inbound) {
           if (!this.item.answeredAt) return 'missed-call';
-          return 'call-ringing';
+          return 'incoming-call';
         }
         return 'call-transfer';
       },
