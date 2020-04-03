@@ -3,7 +3,7 @@
     <template slot="popup-header">
       <h1 class="popup__title">
         <span class="popup-indicator__break"></span>
-        Reason for break
+        {{$t('agentStatus.breakPopup.breakReason')}}
       </h1>
     </template>
     <template slot="popup-main">
@@ -30,13 +30,13 @@
           class="popup-action uppercase"
           @click.native="setBreak"
         >
-          Send
+          {{$t('reusable.send')}}
         </btn>
         <btn
           class="popup-action uppercase secondary"
           @click.native="$emit('close')"
         >
-          Cancel
+          {{$t('reusable.cancel')}}
         </btn>
       </div>
     </template>
@@ -60,12 +60,19 @@
     data: () => ({
       selected: '',
       userOption: '',
-      breakOptions: [
-        'Coffee break', 'Smoke break', 'Restroom', 'Dinner', 'Meeting',
-        'Coffee break', 'Smoke break', 'Restroom', 'Dinner', 'Meeting',
-        'Coffee break', 'Smoke break', 'Restroom', 'Dinner', 'Meeting',
-      ],
     }),
+
+    computed: {
+      breakOptions() {
+        return [
+          this.$t('agentStatus.breakPopup.commons.coffeeBreak'),
+          this.$t('agentStatus.breakPopup.commons.smokeBreak'),
+          this.$t('agentStatus.breakPopup.commons.restroom'),
+          this.$t('agentStatus.breakPopup.commons.dinner'),
+          this.$t('agentStatus.breakPopup.commons.meeting'),
+        ];
+      },
+    },
 
     methods: {
       setBreak() {

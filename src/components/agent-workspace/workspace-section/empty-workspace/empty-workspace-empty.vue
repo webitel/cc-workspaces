@@ -5,8 +5,8 @@
       src="../../../../assets/agent-workspace/empty-ws/empty-ws-empty.svg"
       alt="workspace is empty"
     >
-    <h1 class="empty-workspace__heading">There are currently no calls or chats</h1>
-    <p class="empty-workspace__text">Please wait! Have a nice work!</p>
+    <h1 class="empty-workspace__heading">{{$t('emptyWorkspace.empty.heading')}}</h1>
+    <p class="empty-workspace__text">{{$t('emptyWorkspace.empty.text')}}</p>
   </div>
 </template>
 

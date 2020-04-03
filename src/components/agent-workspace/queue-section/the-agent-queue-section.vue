@@ -59,11 +59,11 @@
       tabs() {
         return [
           {
-            text: `Active(${this.callList.length})`,
+            text: `${this.$t('queueSec.active')}(${this.callList.length})`,
             value: 'active',
           },
           {
-            text: `Offline(${this.membersList.length})`,
+            text: `${this.$t('queueSec.offline')}(${this.membersList.length})`,
             value: 'offline',
           },
         ];

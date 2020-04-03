@@ -4,7 +4,7 @@
       v-model="search"
       @search="loadDataList"
     />
-    <p class="ws-worksection__list-instruction">Please select an agent</p>
+    <p class="ws-worksection__list-instruction">{{$t('transfer.selectAgent')}}</p>
     <div class="ws-worksection__list" ref="scroll-wrap">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
@@ -25,7 +25,7 @@
       class="transfer"
       :disabled="!selected"
       @click.native="transfer(selected)"
-    >Transfer
+    >{{$t('transfer.transfer')}}
     </btn>
   </div>
 </template>

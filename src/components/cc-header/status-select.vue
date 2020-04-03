@@ -68,26 +68,6 @@
       AgentStatus,
       UserStatus,
       isOpened: false,
-      agentStatusList: [
-        {
-          text: 'Active',
-          value: AgentStatus.Waiting,
-        },
-        {
-          text: 'Break',
-          value: AgentStatus.Pause,
-        },
-      ],
-      userStatusList: [
-        {
-          text: 'Active',
-          value: UserStatus.ACTIVE,
-        },
-        {
-          text: 'DnD',
-          value: UserStatus.DND,
-        },
-      ],
     }),
 
     computed: {
@@ -103,6 +83,32 @@
       ...mapGetters('status', {
         isAgent: 'IS_AGENT',
       }),
+
+      agentStatusList() {
+        return [
+          {
+            text: this.$t('agentStatus.status.active'),
+            value: AgentStatus.Waiting,
+          },
+          {
+            text: this.$t('agentStatus.status.break'),
+            value: AgentStatus.Pause,
+          },
+        ];
+      },
+
+      userStatusList() {
+        return [
+          {
+            text: this.$t('agentStatus.status.active'),
+            value: UserStatus.ACTIVE,
+          },
+          {
+            text: this.$t('agentStatus.status.dnd'),
+            value: UserStatus.DND,
+          },
+        ];
+      },
 
       computeAvailableStatus() {
         if (this.isAgent) {

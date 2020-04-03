@@ -1,6 +1,6 @@
 <template>
   <div class="ws-worksection">
-    <p class="ws-worksection__list-instruction">Active calls</p>
+    <p class="ws-worksection__list-instruction">{{$t('bridge.activeCalls')}}</p>
     <div class="ws-worksection__list">
       <!-- div class="ws-contacts-letter-wrap">-->
       <!--        <div class="ws-contact-letter">A</div>-->
@@ -17,7 +17,7 @@
       class="transfer"
       :disabled="!selected"
       @click.native="bridge(selected)"
-    >Bridge
+    >{{$t('bridge.bridge')}}
     </btn>
   </div>
 </template>
