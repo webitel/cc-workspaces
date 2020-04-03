@@ -47,13 +47,23 @@
         this.setNumber(destination);
       },
 
+      async loadInitialList() {
+        this.dataList = await this.loadDataList();
+      },
+
+      async loadNext() {
+        const response = await this.loadDataList();
+        this.dataList = [...this.dataList, ...response];
+      },
+
       async loadDataList() {
         const response = await getAgentHistory({
           page: this.page,
           size: this.size,
           search: this.search,
         });
-        this.dataList = [...this.dataList, ...response];
+
+        return response;
       },
 
       ...mapActions('call', {

@@ -17,7 +17,7 @@ export default {
 
   mounted() {
     this.isMounted = true;
-    this.loadDataList();
+    this.loadInitialList();
   },
 
   computed: {
@@ -36,7 +36,7 @@ export default {
   methods: {
     handleIntersect() {
       this.page += 1;
-      this.loadDataList();
+      this.loadNext();
     },
   },
 };

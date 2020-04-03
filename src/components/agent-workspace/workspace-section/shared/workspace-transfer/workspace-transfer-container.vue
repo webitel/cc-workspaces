@@ -55,9 +55,18 @@
         this.selected = item;
       },
 
+      async loadInitialList() {
+        this.dataList = await this.loadDataList();
+      },
+
+      async loadNext() {
+        const response = await this.loadDataList();
+        this.dataList = [...this.dataList, ...response];
+      },
+
       async loadDataList() {
         const response = await getUsersList(this.page, this.size, this.search);
-        this.dataList = [...this.dataList, ...response];
+        return response;
       },
 
       ...mapActions('call', {
