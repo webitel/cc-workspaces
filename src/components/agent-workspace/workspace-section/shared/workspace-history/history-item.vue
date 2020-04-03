@@ -64,7 +64,7 @@
 
       computeStatusIcon() {
         if (this.item.direction === CallDirection.Inbound) {
-          if (this.item.answeredAt === 0) return 'missed-call';
+          if (!this.item.answeredAt) return 'missed-call';
           return 'call-ringing';
         }
         return 'call-transfer';
@@ -72,7 +72,7 @@
 
       computeStatusColor() {
         if (this.item.direction === CallDirection.Inbound) {
-          if (this.item.answeredAt === 0) return 'missed';
+          if (!this.item.answeredAt) return 'missed';
           return 'inbound';
         }
         return 'outbound';

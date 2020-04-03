@@ -29,7 +29,6 @@
       setObserver() {
         if (this.options) { // if parent rendered and we can set root within options
           this.observer = new IntersectionObserver(([entry]) => {
-            console.log(entry.isIntersecting, entry);
             if (entry && entry.isIntersecting) {
               this.$emit('intersect');
             }
