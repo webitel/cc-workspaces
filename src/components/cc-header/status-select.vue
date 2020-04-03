@@ -46,7 +46,7 @@
       >
         <span
           class="status-select__indicator"
-          :class="`${status.text.toLowerCase()}`"
+          :class="`${status.class}`"
         ></span>
         <div class="status-select__item__text">{{status.text}}</div>
       </li>
@@ -88,10 +88,12 @@
         return [
           {
             text: this.$t('agentStatus.status.active'),
+            class: 'active',
             value: AgentStatus.Waiting,
           },
           {
             text: this.$t('agentStatus.status.break'),
+            class: 'break',
             value: AgentStatus.Pause,
           },
         ];
@@ -101,10 +103,12 @@
         return [
           {
             text: this.$t('agentStatus.status.active'),
+            class: 'active',
             value: UserStatus.ACTIVE,
           },
           {
             text: this.$t('agentStatus.status.dnd'),
+            class: 'dnd',
             value: UserStatus.DND,
           },
         ];

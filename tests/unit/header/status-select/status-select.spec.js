@@ -40,9 +40,8 @@ describe('Status Select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
 
     wrapper.find('.status-select__item__selected')
@@ -58,9 +57,8 @@ describe('Status Select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
 
     const optionsList = wrapper.findAll('.status-select__options .status-select__item');
@@ -111,9 +109,8 @@ describe('User status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
 
     const durationUI = wrapper.find('.status-select__item__text');
@@ -125,9 +122,8 @@ describe('User status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
@@ -138,9 +134,8 @@ describe('User status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
     wrapper.setData({ user: { status: UserStatus.DND } });
     await wrapper.vm.$nextTick();
@@ -154,16 +149,15 @@ describe('User status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
 
     const optionsList = wrapper.findAll('.status-select__options .status-select__item');
     const dndOption = optionsList.wrappers.find((wrapper) => wrapper
-      .find('.status-select__item__text')
-      .text()
-      .toLowerCase() === 'dnd');
+      .find('.status-select__indicator')
+      .classes()
+      .indexOf('dnd') !== -1);
     dndOption.trigger('click');
     expect(actions.SET_USER_DND_STATUS)
       .toHaveBeenCalled();
@@ -173,18 +167,17 @@ describe('User status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
     wrapper.setData({ user: { status: UserStatus.DND } });
     await wrapper.vm.$nextTick();
 
     const optionsList = wrapper.findAll('.status-select__options .status-select__item');
     const dndOption = optionsList.wrappers.find((wrapper) => wrapper
-      .find('.status-select__item__text')
-      .text()
-      .toLowerCase() === 'active');
+      .find('.status-select__indicator')
+      .classes()
+      .indexOf('active') !== -1);
     dndOption.trigger('click');
     expect(actions.SET_USER_ACTIVE_STATUS)
       .toHaveBeenCalled();

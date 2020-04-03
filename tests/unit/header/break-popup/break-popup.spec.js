@@ -27,6 +27,7 @@ describe('Break popup', () => {
     const wrapper = shallowMount(BreakPopup, {
       store,
       localVue,
+      mocks: { $t: () => {} },
     });
 
     const reasonsList = wrapper.findAll('.break-popup__options__item');
@@ -38,6 +39,7 @@ describe('Break popup', () => {
     const wrapper = shallowMount(BreakPopup, {
       store,
       localVue,
+      mocks: { $t: () => {} },
     });
 
     const reason = 'JEST';

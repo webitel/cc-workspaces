@@ -47,6 +47,7 @@ describe('Transfer functionality', () => {
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
     });
     await wrapper.vm.$nextTick();
@@ -70,6 +71,7 @@ describe('Transfer functionality', () => {
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
     });
     await wrapper.vm.$nextTick();

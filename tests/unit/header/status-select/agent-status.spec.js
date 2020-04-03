@@ -43,9 +43,8 @@ describe('Agent status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
 
     const durationUI = wrapper.find('.status-select__item__text');
@@ -57,9 +56,8 @@ describe('Agent status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
@@ -70,9 +68,8 @@ describe('Agent status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
     wrapper.setData({ agent: { status: AgentStatus.Pause } });
     await wrapper.vm.$nextTick();
@@ -86,16 +83,15 @@ describe('Agent status select', () => {
     const wrapper = shallowMount(StatusSelect, {
       store,
       localVue,
-      stubs: {
-        Icon: true,
-      },
+      mocks: { $t: () => {} },
+      stubs: { Icon: true },
     });
 
     const optionsList = wrapper.findAll('.status-select__options .status-select__item');
     const breakOption = optionsList.wrappers.find((wrapper) => wrapper
-      .find('.status-select__item__text')
-      .text()
-      .toLowerCase() === 'break');
+      .find('.status-select__indicator')
+      .classes()
+      .indexOf('break') !== -1);
     breakOption.trigger('click');
     expect(wrapper.emitted().setBreak)
       .toBeTruthy();
