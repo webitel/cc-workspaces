@@ -10,17 +10,11 @@
       </div>
       <div class="flex-wrap">
         <div class="ws-history-item__date">{{computeDate}}</div>
-        <div class="ws-history-item__location">Ukraine</div>
+        <div class="ws-history-item__location"></div>
       </div>
     </div>
     <div class="ws-worksection__item__status">
       <icon>
-<!--        <svg-->
-<!--          class="icon md"-->
-<!--          :class="[`icon-${computeStatusIcon}-call-md`, computeStatusColor]"-->
-<!--        >-->
-<!--          <use :xlink:href="`#icon-${computeStatusIcon}-call-md`"></use>-->
-<!--        </svg>-->
         <svg
           class="icon md"
           :class="[`icon-${computeStatusIcon}-md`, computeStatusColor]"
@@ -47,10 +41,13 @@
 
     computed: {
       computeDestination() {
-        if (this.item.direction === CallDirection.Inbound) {
-          return `${this.item.from.name} (${this.item.from.number})`;
+        if (this.item.direction === CallDirection.Outbound) {
+          if (this.item.to.number) {
+            return `${this.item.to.name} (${this.item.to.number})`;
+          }
+          return this.item.destination;
         }
-        return `${this.item.to.name} (${this.item.to.number})`;
+        return `${this.item.from.name} (${this.item.from.number})`;
       },
 
       computeDate() {
