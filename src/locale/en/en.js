@@ -7,6 +7,9 @@ export default {
     logout: 'Logout',
     search: 'Search',
   },
+  header: {
+    docs: 'Docs',
+  },
   queueSec: {
     active: 'Active',
     offline: 'Offline',

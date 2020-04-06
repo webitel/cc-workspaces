@@ -13,11 +13,7 @@
       <status-select
         @setBreak="isBreakPopup = true"
       />
-      <img
-        class="cc-header__profile-pic"
-        src="../../assets/agent-workspace/default-avatar.svg"
-        alt="profile pic"
-      >
+      <user-preferences/>
     </div>
   </header>
 </template>
@@ -27,6 +23,7 @@
   import { AgentStatus } from 'webitel-sdk';
   import Switcher from './cc-header-switcher.vue';
   import StatusSelect from './status-select.vue';
+  import UserPreferences from './user-preferences.vue';
   import BreakPopup from '../break-popup/break-popup.vue';
   import TimerPopup from '../break-popup/break-timer-popup.vue';
 
@@ -35,6 +32,7 @@
     components: {
       Switcher,
       StatusSelect,
+      UserPreferences,
       BreakPopup,
       TimerPopup,
     },
@@ -85,13 +83,6 @@
 
     .status-select {
       margin-left: calcVH(30px);
-    }
-
-    .cc-header__profile-pic {
-      width: calcVH(24px);
-      height: calcVH(24px);
-      margin-left: calcVH(30px);
-      cursor: pointer;
     }
   }
 </style>
