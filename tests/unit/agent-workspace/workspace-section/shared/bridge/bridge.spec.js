@@ -45,6 +45,7 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(Bridge, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
     });
     expect(wrapper.findAll(ActiveCallItem).length)
@@ -55,6 +56,7 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(Bridge, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
     });
     wrapper.find(ActiveCallItem)

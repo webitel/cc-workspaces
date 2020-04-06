@@ -52,8 +52,8 @@
 
       computeDate() {
         const day = 24 * 60 * 60 * 10 ** 3;
-        if ((Date.now() - this.item.createdAt) < day) return 'Today';
-        if ((Date.now() - this.item.createdAt) < day * 2) return 'Yesterday';
+        if ((Date.now() - this.item.createdAt) < day) return this.$t('history.today');
+        if ((Date.now() - this.item.createdAt) < day * 2) return this.$t('history.yesterday');
         return new Date(+this.item.createdAt).toLocaleDateString();
       },
 
@@ -65,7 +65,7 @@
       computeStatusIcon() {
         if (this.item.direction === CallDirection.Inbound) {
           if (!this.item.answeredAt) return 'missed-call';
-          return 'call-ringing';
+          return 'incoming-call';
         }
         return 'call-transfer';
       },

@@ -46,7 +46,7 @@
       >
         <span
           class="status-select__indicator"
-          :class="`${status.text.toLowerCase()}`"
+          :class="`${status.class}`"
         ></span>
         <div class="status-select__item__text">{{status.text}}</div>
       </li>
@@ -68,26 +68,6 @@
       AgentStatus,
       UserStatus,
       isOpened: false,
-      agentStatusList: [
-        {
-          text: 'Active',
-          value: AgentStatus.Waiting,
-        },
-        {
-          text: 'Break',
-          value: AgentStatus.Pause,
-        },
-      ],
-      userStatusList: [
-        {
-          text: 'Active',
-          value: UserStatus.ACTIVE,
-        },
-        {
-          text: 'DnD',
-          value: UserStatus.DND,
-        },
-      ],
     }),
 
     computed: {
@@ -103,6 +83,36 @@
       ...mapGetters('status', {
         isAgent: 'IS_AGENT',
       }),
+
+      agentStatusList() {
+        return [
+          {
+            text: this.$t('agentStatus.status.active'),
+            class: 'active',
+            value: AgentStatus.Waiting,
+          },
+          {
+            text: this.$t('agentStatus.status.break'),
+            class: 'break',
+            value: AgentStatus.Pause,
+          },
+        ];
+      },
+
+      userStatusList() {
+        return [
+          {
+            text: this.$t('agentStatus.status.active'),
+            class: 'active',
+            value: UserStatus.ACTIVE,
+          },
+          {
+            text: this.$t('agentStatus.status.dnd'),
+            class: 'dnd',
+            value: UserStatus.DND,
+          },
+        ];
+      },
 
       computeAvailableStatus() {
         if (this.isAgent) {

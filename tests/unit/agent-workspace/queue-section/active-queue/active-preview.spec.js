@@ -118,6 +118,7 @@ describe('Preview Actions', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
       propsData: {
         call,
@@ -138,6 +139,7 @@ describe('Preview Actions', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
       propsData: {
         call,
@@ -208,6 +210,7 @@ describe('Answer and Hangup', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
       propsData: {
         call,
@@ -230,6 +233,7 @@ describe('Answer and Hangup', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
       propsData: {
         call,

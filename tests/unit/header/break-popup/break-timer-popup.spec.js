@@ -43,6 +43,7 @@ describe('Break timer popup', () => {
     const wrapper = shallowMount(TimerPopup, {
       store,
       localVue,
+      mocks: { $t: () => {} },
     });
     expect(wrapper.vm.duration)
       .toEqual('12:00:00');
@@ -52,6 +53,7 @@ describe('Break timer popup', () => {
     const wrapper = shallowMount(TimerPopup, {
       store,
       localVue,
+      mocks: { $t: () => {} },
     });
 
     const trueBtn = wrapper.find('.popup-action.true');
@@ -64,6 +66,7 @@ describe('Break timer popup', () => {
     const wrapper = shallowMount(TimerPopup, {
       store,
       localVue,
+      mocks: { $t: () => {} },
     });
 
     const trueBtn = wrapper.find('.popup-action.false');

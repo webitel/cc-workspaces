@@ -36,12 +36,12 @@
         </rounded-action>
       </div>
     </div>
-    <h1 class="call-header__name">Client name</h1>
+    <h1 class="call-header__name">{{member.name}}</h1>
   </header>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
@@ -57,6 +57,9 @@
     },
 
     computed: {
+      ...mapState('member', {
+        member: (state) => state.memberOnWorkspace,
+      }),
       ...mapGetters('member', {
         isCommSelected: 'IS_COMMUNICATION_SELECTED',
       }),

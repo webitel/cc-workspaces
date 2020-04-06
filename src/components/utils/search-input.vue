@@ -9,7 +9,7 @@
       <input
         class="cc-input__input"
         :value="value"
-        :placeholder="placeholder"
+        :placeholder="placeholder || $t('reusable.search')"
         :autofocus="autofocus"
         @input="$emit('input', $event.target.value)"
         @focusin="isFocused = true"
@@ -43,7 +43,6 @@
       // input placeholder
       placeholder: {
         type: String,
-        default: 'Search',
       },
       // autofocus on input when page is first loaded
       autofocus: {

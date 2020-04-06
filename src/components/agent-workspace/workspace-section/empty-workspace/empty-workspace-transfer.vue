@@ -5,8 +5,8 @@
       src="../../../../assets/agent-workspace/empty-ws/empty-ws-transfer.svg"
       alt="workspace is empty"
     >
-    <h1 class="empty-workspace__heading">Thanks You!</h1>
-    <p class="empty-workspace__text">Call has been transferred to another operator</p>
+    <h1 class="empty-workspace__heading">{{$t('emptyWorkspace.transfer.heading')}}</h1>
+    <p class="empty-workspace__text">{{$t('emptyWorkspace.transfer.text')}}</p>
   </div>
 </template>
 

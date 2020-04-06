@@ -45,6 +45,7 @@ describe('Make new call functionality', () => {
     const wrapper = shallowMount(QueueSection, {
       store,
       localVue,
+      mocks: { $t: () => {} },
       stubs: { Icon: true },
     });
     const newCallBtn = wrapper.find('.call');

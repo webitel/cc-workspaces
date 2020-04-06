@@ -3,7 +3,7 @@
     <template slot="popup-header">
       <h1 class="popup__title">
         <span class="popup-indicator__break"></span>
-        You are in break mode now
+        {{$t('agentStatus.breakTimer.heading')}}
       </h1>
     </template>
     <template slot="popup-main">
@@ -24,12 +24,12 @@
         <btn
           class="popup-action true uppercase"
           @click.native="setAgentWaiting"
-        >Continue work
+        >{{$t('agentStatus.breakTimer.continueWork')}}
         </btn>
         <btn
           class="popup-action false uppercase"
           @click.native="agentLogout"
-        >Logout
+        >{{$t('reusable.logout')}}
         </btn>
       </div>
     </template>

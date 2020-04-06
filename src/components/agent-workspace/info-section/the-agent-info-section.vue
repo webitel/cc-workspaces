@@ -20,21 +20,26 @@
     },
     data: () => ({
       currentTab: { value: 'info' },
-      tabs: [
-        {
-          text: 'Call info',
-          value: 'info',
-        },
-        {
-          text: 'Knowledge base',
-          value: 'knowledge-base',
-        },
-        {
-          text: 'Post processing',
-          value: 'post-processing',
-        },
-      ],
     }),
+
+    computed: {
+      tabs() {
+        return [
+          {
+            text: this.$t('infoSec.clientInfo'),
+            value: 'info',
+          },
+          {
+            text: this.$t('infoSec.knowledgeBase'),
+            value: 'knowledge-base',
+          },
+          {
+            text: this.$t('infoSec.postProcessing'),
+            value: 'post-processing',
+          },
+        ];
+      },
+    },
   };
 </script>
 
