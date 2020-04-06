@@ -27,6 +27,13 @@ const actions = {
     context.commit('SET_DATA_LIST', response.items);
   },
 
+  LOAD_NEXT_LIST_ITEMS: async (context, { page = 1, size = 20, search = '' }) => {
+    const agent = context.state.agent
+      ? context.state.agent : await context.dispatch('GET_AGENT_INSTANCE');
+    const response = await agent.offlineMembers(search, page, size);
+    context.commit('SET_DATA_LIST', [...state.membersList, ...response.items]);
+  },
+
   OPEN_MEMBER_ON_WORKSPACE: (context, index) => {
     const memberOnWs = context.state.membersList[index];
     context.dispatch('SET_WORKSPACE', memberOnWs);

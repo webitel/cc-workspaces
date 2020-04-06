@@ -5,12 +5,12 @@
       @search="loadDataList"
     />
     <div class="ws-worksection__list" ref="scroll-wrap">
-      <contact
+      <history-item
         v-for="(item, key) of dataList"
         :key="key"
         :item="item"
-        callable
-      ></contact>
+        @click.native="select(item)"
+      ></history-item>
       <observer
         :options="obsOptions"
         @intersect="handleIntersect"/>
@@ -19,25 +19,32 @@
 </template>
 
 <script>
-  import { getUsersList } from '../../../../../api/agent-workspace/users/users';
+  import { mapActions } from 'vuex';
+  import { CallDirection } from 'webitel-sdk';
+  import Search from '../../../../utils/search-input.vue';
+  import HistoryItem from './history-item.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import Contact from './workspace-contact.vue';
+  import { getAgentHistory } from '../../../../../api/agent-workspace/history/history';
 
   export default {
-    name: 'workspace-contacts-container',
+    name: 'history-container',
     mixins: [infiniteScrollMixin],
     components: {
-      Contact,
+      Search,
+      HistoryItem,
     },
 
     data: () => ({
-      dataList: [],
-      selected: null,
+      dataList: '',
+      size: 10,
     }),
 
     methods: {
       select(item) {
-        this.selected = item;
+        let destination = '';
+        if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
+        if (item.direction === CallDirection.Outbound) destination = item.destination;
+        this.setNumber(destination);
       },
 
       async loadInitialList() {
@@ -50,17 +57,21 @@
       },
 
       async loadDataList() {
-        const response = await getUsersList(this.page, this.size, this.search);
+        const response = await getAgentHistory({
+          page: this.page,
+          size: this.size,
+          search: this.search,
+        });
+
         return response;
       },
+
+      ...mapActions('call', {
+        setNumber: 'SET_NEW_CALL_NUMBER',
+      }),
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  .ws-contact-item {
-    &:hover {
-      background-color: $page-bg-color;
-    }
-  }
 </style>

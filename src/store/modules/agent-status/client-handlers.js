@@ -1,5 +1,5 @@
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
-import { getUserStatus, parseUserStatus } from '../../../api/agent-workspace/users';
+import { getUserStatus, parseUserStatus } from '../../../api/agent-workspace/users/users';
 
 const userStatusHandler = (context) => (userArg) => {
   const user = {

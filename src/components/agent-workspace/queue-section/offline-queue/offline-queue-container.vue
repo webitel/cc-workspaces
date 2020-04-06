@@ -1,5 +1,5 @@
 <template>
-  <section class="call-preview-wrap">
+  <section class="call-preview-wrap" ref="scroll-wrap">
     <offline-preview
       :class="{'selected': member === openedMember}"
       v-for="(member, key) of dataList"
@@ -33,12 +33,17 @@
     },
 
     methods: {
-      loadDataList() {
+      loadInitialList() {
         this.loadList({ search: this.search, page: this.page, size: this.size });
+      },
+
+      loadNext() {
+        this.loadNextList({ search: this.search, page: this.page, size: this.size });
       },
 
       ...mapActions('member', {
         loadList: 'LOAD_DATA_LIST',
+        loadNextList: 'LOAD_NEXT_LIST_ITEMS',
         openMember: 'OPEN_MEMBER_ON_WORKSPACE',
       }),
     },

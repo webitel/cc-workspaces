@@ -1,5 +1,5 @@
-import instance from '../instance';
-import UserStatus from '../../store/modules/agent-status/statusUtils/UserStatus';
+import instance from '../../instance';
+import UserStatus from '../../../store/modules/agent-status/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
 

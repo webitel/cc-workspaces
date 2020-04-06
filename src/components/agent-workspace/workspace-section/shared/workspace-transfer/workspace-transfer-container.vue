@@ -32,7 +32,7 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { getUsersList } from '../../../../../api/agent-workspace/users';
+  import { getUsersList } from '../../../../../api/agent-workspace/users/users';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import Btn from '../../../../utils/btn.vue';
   import Contact from '../workspace-contacts/workspace-contact.vue';
@@ -55,9 +55,18 @@
         this.selected = item;
       },
 
+      async loadInitialList() {
+        this.dataList = await this.loadDataList();
+      },
+
+      async loadNext() {
+        const response = await this.loadDataList();
+        this.dataList = [...this.dataList, ...response];
+      },
+
       async loadDataList() {
         const response = await getUsersList(this.page, this.size, this.search);
-        this.dataList = [...this.dataList, ...response];
+        return response;
       },
 
       ...mapActions('call', {

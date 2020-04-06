@@ -4,7 +4,7 @@
       :current-tab="currentTab"
       @openTab="openHistory"
     ></member-header>
-    <client-history v-if="currentTab === 'history'"/>
+    <history v-if="currentTab === 'history'"/>
     <member-communications v-else/>
   </section>
 </template>
@@ -12,14 +12,14 @@
 <script>
   import MemberHeader from './member-header.vue';
   import MemberCommunications from './member-communications.vue';
-  import ClientHistory from '../shared/workspace-client-history/client-history-container.vue';
+  import History from '../shared/workspace-history/history-container.vue';
 
   export default {
     name: 'the-member',
     components: {
       MemberHeader,
       MemberCommunications,
-      ClientHistory,
+      History,
     },
 
     data: () => ({
