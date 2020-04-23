@@ -52,9 +52,12 @@
 
       computeDate() {
         const day = 24 * 60 * 60 * 10 ** 3;
-        if ((Date.now() - this.item.createdAt) < day) return this.$t('history.today');
-        if ((Date.now() - this.item.createdAt) < day * 2) return this.$t('history.yesterday');
-        return new Date(+this.item.createdAt).toLocaleDateString();
+        const createdAt = +this.item.createdAt;
+        const date = new Date(createdAt).toLocaleDateString();
+        const time = new Date(createdAt).toLocaleTimeString().slice(0, 5); // slice only hh:mm
+        if ((Date.now() - createdAt) < day) return `${this.$t('history.today')} ${time}`;
+        if ((Date.now() - createdAt) < day * 2) return `${this.$t('history.yesterday')} ${time}`;
+        return `${date} ${time}`;
       },
 
       computeDuration() {
