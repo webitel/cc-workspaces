@@ -97,8 +97,9 @@
   }
 
   .break-popup__options {
+    $four-items-height: calcVH((54px+10px)*4); // item height + 10px bottom margin x 4
     @extend .cc-scrollbar;
-    max-height: calcVH(315px);
+    max-height: #{$four-items-height};
     overflow-y: scroll;
 
     &__item {
@@ -124,6 +125,7 @@
   .break-popup__textarea {
     height: calcVH(109px);
     margin-top: calcVH(10px);
+    margin-right: calcVH(10px + 4px); // 10px like options + 4px scroll width
     border: 1px solid $option-border-color;
 
     &:hover, &.selected {
