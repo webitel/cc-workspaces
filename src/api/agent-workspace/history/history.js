@@ -39,7 +39,40 @@ export const getAgentHistory = async ({ page, size, search }) => {
   }
 };
 
-export const getHistoryByNumber = () => {
+// eslint-disable-next-line no-unused-vars
+export const getNumberHistory = async ({ page, size, search }) => {
+  const { domainId } = store.state.userinfo;
+  const number = store.state.call.callOnWorkspace.displayNumber;
+  const createdAtFrom = 0;
+  const createdAtTo = Date.now();
+  try {
+    const response = await callService
+      .searchHistoryCall(
+        page,
+        size,
+        createdAtFrom,
+        createdAtTo,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        `${number}`,
+        undefined,
+        undefined,
+        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        domainId,
+      );
+    return response.items || [];
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const getMemberHistory = async ({ page, size, search }) => {

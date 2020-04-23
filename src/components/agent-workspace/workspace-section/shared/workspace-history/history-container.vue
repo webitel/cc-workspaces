@@ -26,10 +26,12 @@
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import {
     getAgentHistory,
+    getNumberHistory,
     getMemberHistory,
   } from '../../../../../api/agent-workspace/history/history';
   import WorkspaceStates
     from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import CallStates from '../../../../../store/modules/call/callUtils/CallStates';
 
   export default {
     name: 'history-container',
@@ -80,6 +82,9 @@
 
         if (this.workspaceState === WorkspaceStates.MEMBER) {
           response = await getMemberHistory(params);
+        } else if (this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER) {
+          response = await getNumberHistory(params);
         } else {
           response = await getAgentHistory(params);
         }
