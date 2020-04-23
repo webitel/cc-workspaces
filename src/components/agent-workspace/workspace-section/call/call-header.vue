@@ -306,8 +306,13 @@
         position: relative;
         bottom: calcVH(-1px);
 
-        border: none;
+        border: 1px solid transparent;
         border-bottom: calcVH(1px) solid #000;
+        outline: none;
+
+        &:focus {
+          border: 1px solid #000;
+        }
       }
 
       .icon-btn {

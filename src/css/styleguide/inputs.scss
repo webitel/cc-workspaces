@@ -99,6 +99,7 @@ $input-border-color__active: #000000;
   width: 100%;
   margin: 0 calcVH(8px);
   border: none;
+  outline: none;
 }
 
 .cc-input__icon {
@@ -116,7 +117,7 @@ $input-border-color__active: #000000;
 
 .cc-input__body {
   &.focused, &:hover {
-    border-color: $input-border-color;
+    border-color: $input-border-color__active;
 
     .icon {
       fill: $input-icon-color__active;
