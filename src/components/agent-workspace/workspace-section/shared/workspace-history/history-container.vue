@@ -19,12 +19,17 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import { CallDirection } from 'webitel-sdk';
   import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import { getAgentHistory } from '../../../../../api/agent-workspace/history/history';
+  import {
+    getAgentHistory,
+    getMemberHistory,
+  } from '../../../../../api/agent-workspace/history/history';
+  import WorkspaceStates
+    from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
   export default {
     name: 'history-container',
@@ -38,6 +43,15 @@
       dataList: '',
       size: 10,
     }),
+
+    computed: {
+      ...mapState('workspace', {
+        workspaceState: (state) => state.workspaceState,
+      }),
+      ...mapState('call', {
+        callState: (state) => state.callState,
+      }),
+    },
 
     methods: {
       select(item) {
@@ -57,11 +71,18 @@
       },
 
       async loadDataList() {
-        const response = await getAgentHistory({
+        let response;
+        const params = {
           page: this.page,
           size: this.size,
           search: this.search,
-        });
+        };
+
+        if (this.workspaceState === WorkspaceStates.MEMBER) {
+          response = await getMemberHistory(params);
+        } else {
+          response = await getAgentHistory(params);
+        }
 
         return response;
       },
