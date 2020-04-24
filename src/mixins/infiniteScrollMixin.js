@@ -34,7 +34,6 @@ export default {
   },
 
   methods: {
-
     async loadInitialList() {
       this.page = 1;
       this.dataList = await this.loadDataList();
