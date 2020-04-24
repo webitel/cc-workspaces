@@ -2,7 +2,7 @@
   <div class="ws-worksection">
     <search
       v-model="search"
-      @search="loadDataList"
+      @search="loadInitialList"
     />
     <div class="ws-worksection__list" ref="scroll-wrap">
       <history-item
@@ -43,7 +43,6 @@
 
     data: () => ({
       dataList: '',
-      size: 10,
     }),
 
     computed: {
@@ -56,6 +55,10 @@
     },
 
     methods: {
+      ...mapActions('call', {
+        setNumber: 'SET_NEW_CALL_NUMBER',
+      }),
+
       select(item) {
         let destination = '';
         if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
@@ -63,23 +66,8 @@
         this.setNumber(destination);
       },
 
-      async loadInitialList() {
-        this.dataList = await this.loadDataList();
-      },
-
-      async loadNext() {
-        const response = await this.loadDataList();
-        this.dataList = [...this.dataList, ...response];
-      },
-
-      async loadDataList() {
+      async fetch(params) {
         let response;
-        const params = {
-          page: this.page,
-          size: this.size,
-          search: this.search,
-        };
-
         if (this.workspaceState === WorkspaceStates.MEMBER) {
           response = await getMemberHistory(params);
         } else if (this.callState === CallStates.ACTIVE
@@ -91,10 +79,6 @@
 
         return response;
       },
-
-      ...mapActions('call', {
-        setNumber: 'SET_NEW_CALL_NUMBER',
-      }),
     },
   };
 </script>

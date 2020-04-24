@@ -34,9 +34,32 @@ export default {
   },
 
   methods: {
+
+    async loadInitialList() {
+      this.page = 1;
+      this.dataList = await this.loadDataList();
+    },
+
+    async loadNext() {
+      const response = await this.loadDataList();
+      this.dataList = [...this.dataList, ...response];
+    },
+
+    loadDataList() {
+      const params = {
+        page: this.page,
+        size: this.size,
+        search: this.search,
+      };
+      return this.fetch(params);
+    },
+
     handleIntersect() {
       this.page += 1;
       this.loadNext();
+    },
+
+    fetch() {
     },
   },
 };

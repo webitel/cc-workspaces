@@ -18,7 +18,7 @@
       <button
         class="icon-btn cc-input__icon"
         :class="{'hidden': !value}"
-        @click="value = ''"
+        @click="$emit('input', '')"
       >
         <icon>
           <svg class="icon icon-close-md md">
