@@ -45,6 +45,12 @@
       dataList: '',
     }),
 
+    watch: {
+      callState() {
+        this.loadInitialList();
+      },
+    },
+
     computed: {
       ...mapState('workspace', {
         workspaceState: (state) => state.workspaceState,
