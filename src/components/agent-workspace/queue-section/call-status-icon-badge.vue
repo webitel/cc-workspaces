@@ -42,6 +42,11 @@
     height: calcVH(17px);
     border-radius: 50%;
 
+    .icon-wrap {
+      width: calcVH(17px);
+      height: calcVH(17px);
+    }
+
     .icon {
       fill: #fff;
       stroke: #fff;

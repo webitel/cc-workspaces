@@ -4,8 +4,10 @@
       :current-tab="currentTab"
       @openTab="openHistory"
     ></member-header>
-    <history v-if="currentTab === 'history'"/>
-    <member-communications v-else/>
+    <div class="ws-worksection-wrap">
+      <history v-if="currentTab === 'history'"/>
+      <member-communications v-else/>
+    </div>
   </section>
 </template>
 

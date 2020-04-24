@@ -59,14 +59,28 @@
       tabs() {
         return [
           {
-            text: `${this.$t('queueSec.active')}(${this.callList.length})`,
+            text: this.activeTabText,
             value: 'active',
           },
           {
-            text: `${this.$t('queueSec.offline')}(${this.membersList.length})`,
+            text: this.offlineTabText,
             value: 'offline',
           },
         ];
+      },
+
+      activeTabText() {
+        if (this.callList.length) {
+          return `${this.$t('queueSec.active')}(${this.callList.length})`;
+        }
+        return this.$t('queueSec.active');
+      },
+
+      offlineTabText() {
+        if (this.membersList.length) {
+          return `${this.$t('queueSec.offline')}(${this.membersList.length})`;
+        }
+        return this.$t('queueSec.offline');
       },
 
       computeCurrentTab() {

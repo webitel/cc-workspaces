@@ -6,6 +6,13 @@
   border-radius: $border-radius;
 }
 
+.ws-worksection-wrap {
+  margin: calcVH(20px);
+  flex-grow: 1; // fill all available container height
+  min-height: 0;
+  display: flex;
+}
+
 .ws-worksection {
   $separator-color: #94979B;
   display: flex;

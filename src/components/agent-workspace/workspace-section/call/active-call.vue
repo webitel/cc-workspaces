@@ -90,11 +90,4 @@
     max-height: 100%;
     height: 100%;
   }
-
-  .ws-worksection-wrap {
-    margin: calcVH(20px);
-    flex-grow: 1; // fill all available container height
-    min-height: 0;
-    display: flex;
-  }
 </style>

@@ -5,19 +5,6 @@
         <rounded-action
           class="call-action secondary"
           :class="{
-            'active': isOnContacts
-          }"
-          @click.native="$emit('openTab', 'contacts')"
-        >
-          <icon>
-            <svg class="icon icon-call-contacts-md md">
-              <use xlink:href="#icon-call-contacts-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
-        <rounded-action
-          class="call-action secondary"
-          :class="{
             'active': isOnHistory
             }"
           @click.native="$emit('openTab', 'history')"
@@ -25,6 +12,19 @@
           <icon>
             <svg class="icon icon-call-history-md md">
               <use xlink:href="#icon-call-history-md"></use>
+            </svg>
+          </icon>
+        </rounded-action>
+        <rounded-action
+          class="call-action secondary"
+          :class="{
+            'active': isOnContacts
+          }"
+          @click.native="$emit('openTab', 'contacts')"
+        >
+          <icon>
+            <svg class="icon icon-call-contacts-md md">
+              <use xlink:href="#icon-call-contacts-md"></use>
             </svg>
           </icon>
         </rounded-action>
@@ -306,8 +306,13 @@
         position: relative;
         bottom: calcVH(-1px);
 
-        border: none;
+        border: 1px solid transparent;
         border-bottom: calcVH(1px) solid #000;
+        outline: none;
+
+        &:focus {
+          border: 1px solid #000;
+        }
       }
 
       .icon-btn {
