@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --hot",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint --fix"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -21,7 +21,7 @@
     "vue-router": "^3.1.5",
     "vuelidate": "^0.7.5",
     "vuex": "^3.1.2",
-    "webitel-sdk": "0.0.54"
+    "webitel-sdk": "0.0.65"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",

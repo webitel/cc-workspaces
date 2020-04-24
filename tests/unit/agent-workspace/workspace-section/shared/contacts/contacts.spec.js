@@ -54,6 +54,7 @@ describe('Contacts functionality', () => {
     await wrapper.vm.$nextTick();
     // expect(axiosInstance.get).toHaveBeenCalled();
     await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     // expect(wrapper.vm.dataList).toHaveLength(1);
     expect(wrapper.findAll(Contact).length)
       .toEqual(userList.length);
@@ -74,6 +75,7 @@ describe('Contacts functionality', () => {
       localVue,
       stubs: { Icon: true },
     });
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     const contact = wrapper.find(Contact);

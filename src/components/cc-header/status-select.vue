@@ -89,11 +89,11 @@
           {
             text: this.$t('agentStatus.status.active'),
             class: 'active',
-            value: AgentStatus.Waiting,
+            value: AgentStatus.Offline,
           },
           {
             text: this.$t('agentStatus.status.break'),
-            class: 'break',
+            class: 'pause',
             value: AgentStatus.Pause,
           },
         ];
@@ -158,7 +158,7 @@
       changeStatus(status) {
         if (this.isAgent) {
           switch (status) {
-            case AgentStatus.Waiting:
+            case AgentStatus.Online:
               this.setAgentWaiting();
               break;
             case AgentStatus.Pause:
@@ -233,19 +233,18 @@
       background: $default-indicator;
       border-radius: 50%;
 
-      &.waiting, // AGENT
+      &.online, // AGENT
       &.active // USER
       {
         background: $active-color;
       }
 
-      &.break, // AGENT
+      &.pause, // AGENT
       &.dnd // USER
       {
         background: $break-color;
       }
 
-      &.offering, &.ringing, &.talking, &.reporting, &.fine, // AGENT
       &.stop // USER
       {
         background: $stop-color;
