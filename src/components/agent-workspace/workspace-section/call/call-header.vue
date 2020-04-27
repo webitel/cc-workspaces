@@ -155,6 +155,7 @@
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
+        callList: (state) => state.callList,
         callState: (state) => state.callState,
       }),
 
@@ -180,22 +181,20 @@
       },
 
       isBridge() {
-        return (this.callState !== CallActions.Hangup
-          || this.callState !== CallActions.Ringing)
-          && this.$store.state.call.callList.filter((call) => (
+        return (this.call.state !== CallActions.Hangup
+          || this.call.state !== CallActions.Ringing)
+          && this.callList.filter((call) => (
             call.state !== CallActions.Hangup
             || call.state !== CallActions.Ringing
           )).length > 1;
       },
 
       isTransfer() {
-        return this.callState === CallStates.ACTIVE
-          || this.callState === CallStates.TRANSFER;
+        return this.callState !== CallStates.NEW;
       },
 
       isHangup() {
-        return this.callState === CallStates.ACTIVE
-          || this.callState === CallStates.TRANSFER;
+        return this.callState !== CallStates.NEW;
       },
 
       isCall() {
