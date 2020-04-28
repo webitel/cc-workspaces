@@ -2,7 +2,7 @@
   <div class="ws-worksection">
     <search
       v-model="search"
-      @search="loadDataList"
+      @search="loadInitialList"
     />
     <div class="ws-worksection__list" ref="scroll-wrap">
       <contact
@@ -40,18 +40,8 @@
         this.selected = item;
       },
 
-      async loadInitialList() {
-        this.dataList = await this.loadDataList();
-      },
-
-      async loadNext() {
-        const response = await this.loadDataList();
-        this.dataList = [...this.dataList, ...response];
-      },
-
-      async loadDataList() {
-        const response = await getUsersList(this.page, this.size, this.search);
-        return response;
+      fetch(params) {
+        return getUsersList(params);
       },
     },
   };
