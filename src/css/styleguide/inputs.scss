@@ -9,6 +9,7 @@ $input-border-color__active: #000000;
 
 .cc-label {
   @extend .typo-input;
+  display: inline-block;
   color: #000;
 }
 

@@ -17,7 +17,12 @@ export default {
   infoSec: {
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',
-    postProcessing: 'Post processing',
+    postProcessing: {
+      tab: 'Post processing',
+      isSuccess: 'Was this call successful?',
+      yes: 'Yes',
+      no: 'No',
+    },
   },
   emptyWorkspace: {
     empty: {
