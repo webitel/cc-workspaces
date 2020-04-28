@@ -3,7 +3,7 @@ import UserStatus from '../../../store/modules/agent-status/statusUtils/UserStat
 
 const BASE_URL = '/users';
 
-export const getUsersList = async (page = 1, size = 20, search = '') => {
+export const getUsersList = async ({ page = 1, size = 20, search = '' }) => {
   let url = `${BASE_URL}?page=${page}&size=${size}&sort=name`;
   if (search) url += `&name=${search}*`;
 

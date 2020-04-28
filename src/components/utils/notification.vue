@@ -16,7 +16,7 @@
         </svg>
       </icon>
       <div class="notification__text">
-        {{message.text}}
+        {{message.message}}
       </div>
       <icon @click="close(message)">
         <svg class="icon icon-close-md md">
@@ -47,23 +47,20 @@
     },
     methods: {
       showInfo(message) {
-        this.messages.unshift({ message });
+        this.messages.unshift({ message, info: true });
         setTimeout(() => {
           this.close(message);
         }, 4000);
       },
-
       showError(message) {
-        this.messages.unshift({ message });
+        this.messages.unshift({ message, error: true });
         setTimeout(() => {
           this.close(message);
         }, 4000);
       },
-
       close(message) {
         this.messages.splice(this.findMessageInArray(message), 1);
       },
-
       findMessageInArray(message) {
         return this.messages.findIndex((item) => item.message === message);
       },
