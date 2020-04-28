@@ -2,7 +2,7 @@
   <div class="ws-worksection">
     <search
       v-model="search"
-      @search="loadDataList"
+      @search="loadInitialList"
     />
     <div class="ws-worksection__list" ref="scroll-wrap">
       <history-item
@@ -19,12 +19,19 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import { CallDirection } from 'webitel-sdk';
   import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import { getAgentHistory } from '../../../../../api/agent-workspace/history/history';
+  import {
+    getAgentHistory,
+    getNumberHistory,
+    getMemberHistory,
+  } from '../../../../../api/agent-workspace/history/history';
+  import WorkspaceStates
+    from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import CallStates from '../../../../../store/modules/call/callUtils/CallStates';
 
   export default {
     name: 'history-container',
@@ -36,10 +43,28 @@
 
     data: () => ({
       dataList: '',
-      size: 10,
     }),
 
+    watch: {
+      callState() {
+        this.loadInitialList();
+      },
+    },
+
+    computed: {
+      ...mapState('workspace', {
+        workspaceState: (state) => state.workspaceState,
+      }),
+      ...mapState('call', {
+        callState: (state) => state.callState,
+      }),
+    },
+
     methods: {
+      ...mapActions('call', {
+        setNumber: 'SET_NEW_CALL_NUMBER',
+      }),
+
       select(item) {
         let destination = '';
         if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
@@ -47,28 +72,19 @@
         this.setNumber(destination);
       },
 
-      async loadInitialList() {
-        this.dataList = await this.loadDataList();
-      },
-
-      async loadNext() {
-        const response = await this.loadDataList();
-        this.dataList = [...this.dataList, ...response];
-      },
-
-      async loadDataList() {
-        const response = await getAgentHistory({
-          page: this.page,
-          size: this.size,
-          search: this.search,
-        });
+      async fetch(params) {
+        let response;
+        if (this.workspaceState === WorkspaceStates.MEMBER) {
+          response = await getMemberHistory(params);
+        } else if (this.callState === CallStates.ACTIVE
+          || this.callState === CallStates.TRANSFER) {
+          response = await getNumberHistory(params);
+        } else {
+          response = await getAgentHistory(params);
+        }
 
         return response;
       },
-
-      ...mapActions('call', {
-        setNumber: 'SET_NEW_CALL_NUMBER',
-      }),
     },
   };
 </script>
