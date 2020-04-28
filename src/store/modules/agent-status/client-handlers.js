@@ -22,11 +22,12 @@ const actions = {
     const client = await getCliInstance();
     try {
       const agent = await client.agentSession();
-      await agent.listenStatus();
+      await client.subscribeAgentsStatus(() => {}, { agent_id: agent.agentId });
       context.commit('SET_AGENT_INSTANCE', agent);
 
       window.agent = agent;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },

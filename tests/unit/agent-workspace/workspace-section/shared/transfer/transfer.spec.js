@@ -53,6 +53,7 @@ describe('Transfer functionality', () => {
     await wrapper.vm.$nextTick();
     // expect(axiosInstance.get).toHaveBeenCalled();
     await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     // expect(wrapper.vm.dataList).toHaveLength(1);
     expect(wrapper.findAll(Contact).length)
       .toEqual(1);
@@ -74,6 +75,7 @@ describe('Transfer functionality', () => {
       mocks: { $t: () => {} },
       stubs: { Icon: true },
     });
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     wrapper.find(Contact)

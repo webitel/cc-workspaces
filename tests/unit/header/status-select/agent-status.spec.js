@@ -15,7 +15,7 @@ describe('Agent status select', () => {
   beforeEach(() => {
     state = {
       agent: {
-        status: AgentStatus.Waiting,
+        status: AgentStatus.Online,
         stateDuration: 12 * 60 * 60,
       },
     };
@@ -61,7 +61,7 @@ describe('Agent status select', () => {
     });
     const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
     expect(indicatorEl.classes())
-      .toContain('waiting');
+      .toContain('online');
   });
 
   it('Correctly computes Agent status BREAK indicator class', async () => {
@@ -91,7 +91,7 @@ describe('Agent status select', () => {
     const breakOption = optionsList.wrappers.find((wrapper) => wrapper
       .find('.status-select__indicator')
       .classes()
-      .indexOf('break') !== -1);
+      .indexOf('pause') !== -1);
     breakOption.trigger('click');
     expect(wrapper.emitted().setBreak)
       .toBeTruthy();

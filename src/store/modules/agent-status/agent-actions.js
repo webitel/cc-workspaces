@@ -2,7 +2,7 @@
 const actions = {
   SET_AGENT_WAITING_STATUS: (context) => {
     try {
-      context.state.agent.waiting();
+      context.state.agent.online();
     } catch {
     }
   },
@@ -16,7 +16,7 @@ const actions = {
 
   AGENT_LOGOUT: (context) => {
     try {
-      context.state.agent.logout();
+      context.state.agent.offline();
     } catch {
     }
   },
