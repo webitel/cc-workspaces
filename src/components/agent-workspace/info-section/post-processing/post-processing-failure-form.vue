@@ -2,40 +2,47 @@
   <form class="processing-form processing-form__failure">
     <multiselect
       class="processing-form__category"
-      :value="value"
+      :value="[]"
       :label="'Category'"
-      :options="options"
+      :options="[]"
       :api-mode="false"
     ></multiselect>
     <multiselect
       class="processing-form__subcategory"
-      :value="value"
+      :value="[]"
       :placeholder="'Subcategory'"
-      :options="options"
+      :options="[]"
       :api-mode="false"
     ></multiselect>
+
     <multiselect
       class="processing-form__category"
-      v-model="scheduleCall"
+      v-model="isScheduleCall"
       :label="$t('infoSec.postProcessing.scheduleCall')"
-      :options="scheduleCallOptions"
+      :options="isisScheduleCallOptions"
       :api-mode="false"
       :track-by="'value'"
     ></multiselect>
-    <div class="processing-form__datetime" v-show="scheduleCall.value">
+
+    <div class="processing-form__datetime" v-show="isScheduleCallValue">
       <datepicker
-        :value="Date.now()"
+        v-model="nextDistributeAt"
       ></datepicker>
       <timepicker
-        :value="60"
+        v-model="nextDistributeAt"
       />
     </div>
     <member-communications/>
-    <btn class="processing-form__submit">{{$t('reusable.send')}}</btn>
+    <btn
+      class="processing-form__submit"
+      @click.native="sendReporting"
+    >{{$t('reusable.send')}}
+    </btn>
   </form>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
   import Btn from '../../../utils/btn.vue';
   import Multiselect from '../../../utils/multiselect.vue';
   import Datepicker from '../../../utils/datepicker.vue';
@@ -52,30 +59,45 @@
       Timepicker,
       MemberCommunications,
     },
-    data: () => ({
-      value: [],
-      options: [],
-      scheduleCallValue: null,
-    }),
 
     computed: {
-      scheduleCallOptions() {
+      ...mapState('reporting', {
+        isScheduleCallValue: (state) => state.isScheduleCall,
+      }),
+
+      isScheduleCall: {
+        get() {
+          // complicated getter for value for $t() name property in object
+          return this.isisScheduleCallOptions
+              .find((opt) => opt.value === this.isScheduleCallValue);
+        },
+        set(option) {
+          this.setValue({ prop: 'isScheduleCall', value: option.value });
+        },
+      },
+
+      nextDistributeAt: {
+        get() {
+          return this.$store.state.reporting.nextDistributeAt;
+        },
+        set(value) {
+          this.setValue({ prop: 'nextDistributeAt', value });
+        },
+      },
+
+      isisScheduleCallOptions() {
         return [
           { name: this.$t('infoSec.postProcessing.yes'), value: true },
           { name: this.$t('infoSec.postProcessing.no'), value: false },
         ];
       },
+    },
 
-      scheduleCall: {
-        get() {
-          return this.scheduleCallValue
-            || this.scheduleCallOptions.find((opt) => opt.value === true);
-        },
-        set(value) {
-          console.log('setter', value);
-          this.scheduleCallValue = value;
-        },
-      },
+    methods: {
+      ...mapActions('reporting', {
+        sendReporting: 'SEND_REPORTING',
+        setValue: 'SET_PROPERTY',
+      }),
     },
   };
 </script>

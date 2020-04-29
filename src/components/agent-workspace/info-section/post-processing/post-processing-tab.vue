@@ -19,6 +19,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import RadioButton from '../../../utils/radio-button.vue';
   import SuccessForm from './post-processing-success-form.vue';
   import FailureForm from './post-processing-failure-form.vue';
@@ -30,9 +31,23 @@
       SuccessForm,
       FailureForm,
     },
-    data: () => ({
-      isSuccess: false,
-    }),
+
+    computed: {
+      isSuccess: {
+        get() {
+          return this.$store.state.reporting.isSuccess;
+        },
+        set(value) {
+          this.setValue({ prop: 'isSuccess', value });
+        },
+      },
+    },
+
+    methods: {
+      ...mapActions('reporting', {
+        setValue: 'SET_PROPERTY',
+      }),
+    },
   };
 </script>
 
