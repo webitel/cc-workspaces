@@ -22,6 +22,8 @@ export default {
       isSuccess: 'Was this call successful?',
       yes: 'Yes',
       no: 'No',
+      addNewCommunication: 'Add new communication',
+      scheduleCall: 'Schedule next call?',
     },
   },
   emptyWorkspace: {

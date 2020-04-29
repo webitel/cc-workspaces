@@ -52,7 +52,8 @@
     position: relative;
     height: calcVH(24px);
     min-width: calcVH(24px);
-    padding-left: calcVH(32px);
+    padding-left: calcVH(24px);
+    box-sizing: border-box;
     cursor: pointer;
     user-select: none;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="hs-multiselect">
+  <div class="hs-multiselect" :class="{'disabled': disabled}">
     <label class="cc-label" v-if="label">{{label}}</label>
     <div class="hs-multiselect-wrap">
       <vue-multiselect
@@ -15,6 +15,7 @@
         :limitText="limitText"
         :loading="false"
         :internal-search="!apiMode"
+        :disabled="disabled"
         @input="$emit('input', $event)"
         @search-change="fetch"
         @open="isOpened = true"
@@ -90,6 +91,11 @@
       fetchMethod: {
         type: Function,
       },
+
+      disabled: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     data: () => ({
@@ -133,10 +139,10 @@
 </script>
 
 <style lang="scss">
+  @import '../../css/utils/variables';
+
   $label-color: #000;
   $list-option__hover: transparent;
-
-  $select-paddings: calcVH(7px) calcVH(30px) calcVH(7px) calcVH(8px);
 
   .hs-multiselect .cc-label {
     margin-bottom: calcVH(10px);
@@ -169,6 +175,7 @@
     background: #fff;
     cursor: pointer;
     transition: $transition;
+    box-sizing: border-box;
 
     &.opened {
       z-index: 1;
@@ -193,18 +200,22 @@
       }
 
       .multiselect__placeholder {
-        @extend .typo-body-sm;
+        @extend .typo-input;
         color: $label-color;
       }
 
       .multiselect__input {
-        @extend .typo-body-sm;
+        @extend .typo-input;
         outline: none;
         border: none;
       }
 
+      .multiselect__single {
+        @extend .typo-input;
+      }
+
       .multiselect__tag {
-        @extend .typo-body-sm;
+        @extend .typo-input;
       }
     }
 
@@ -220,12 +231,12 @@
 
     // empty/not found texts
     li:not(.multiselect__element) {
-      @extend .typo-body-sm;
+      @extend .typo-input;
       padding: $select-paddings;
     }
 
     &__element {
-      @extend .typo-body-sm;
+      @extend .typo-input;
       width: 100%;
       transition: $transition;
       cursor: pointer;
@@ -276,6 +287,18 @@
       .multiselect__strong {
         display: none !important;
       }
+    }
+  }
+
+  .hs-multiselect.disabled {
+    .hs-multiselect__arrow-down {
+      display: none;
+    }
+
+    .multiselect {
+      border: none;
+      outline: none;
+      cursor: text;
     }
   }
 </style>

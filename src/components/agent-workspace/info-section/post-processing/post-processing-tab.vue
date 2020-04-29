@@ -14,48 +14,35 @@
       ></radio-button>
     </form>
     <success-form v-if="isSuccess"/>
+    <failure-form v-else/>
   </section>
 </template>
 
 <script>
   import RadioButton from '../../../utils/radio-button.vue';
   import SuccessForm from './post-processing-success-form.vue';
+  import FailureForm from './post-processing-failure-form.vue';
 
   export default {
     name: 'post-processing-tab',
     components: {
       RadioButton,
       SuccessForm,
+      FailureForm,
     },
     data: () => ({
-      isSuccess: true,
+      isSuccess: false,
     }),
   };
 </script>
 
 <style lang="scss" scoped>
+  @import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
+
   .post-processing {
-    &__title {
-      @extend .typo-heading-md;
-      text-align: center;
-      margin: calcVH(50px) 0 calcVH(60px);
-    }
-
-    &__success-form {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: calcVH(60px);
-
-      .radio-button {
-        margin: 0 calcVH(15px);
-      }
-    }
-  }
-
-  .processing-form {
-    max-width: calcVH(530px);
-    padding: 0 calcVH(20px);
-    margin: auto;
+    @extend .cc-scrollbar;
+    max-height: 100%;
+    min-height: 0;
+    overflow: auto;
   }
 </style>
