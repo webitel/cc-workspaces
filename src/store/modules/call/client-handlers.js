@@ -13,11 +13,14 @@ const callHandler = (context) => (action, call) => {
     case CallActions.Hangup:
       context.dispatch('HANDLE_HANGUP_ACTION', call);
       break;
+    case CallActions.Reporting:
+      context.dispatch('HANDLE_REPORTING_ACTION', call);
+      break;
     case CallActions.PeerStream:
       context.dispatch('HANDLE_STREAM_ACTION', call);
       break;
     default:
-      // console.log('default', action);
+    // console.log('default', action);
   }
 };
 
@@ -25,6 +28,9 @@ const actions = {
   SUBSCRIBE_CALLS: async (context) => {
     const client = await getCliInstance();
     await client.subscribeCall(callHandler(context), null);
+    // await client.subscribeTask((...args) => {
+    //   console.log('task', args);
+    // });
   },
 
   HANDLE_RINGING_ACTION: (context, call) => {
@@ -39,6 +45,14 @@ const actions = {
   },
 
   HANDLE_HANGUP_ACTION: (context, call) => {
+    if (!call.allowReporting || call.reportingAt) {
+      context.commit('REMOVE_CALL', call);
+      context.dispatch('RESET_WORKSPACE');
+    }
+  },
+
+  HANDLE_REPORTING_ACTION: (context, call) => {
+    console.log('reporting');
     context.commit('REMOVE_CALL', call);
     context.dispatch('RESET_WORKSPACE');
   },
