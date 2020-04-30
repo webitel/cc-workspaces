@@ -6,6 +6,7 @@ export default {
     cancel: 'Cancel',
     logout: 'Logout',
     search: 'Search',
+    description: 'Description',
   },
   header: {
     docs: 'Docs',
@@ -19,6 +20,7 @@ export default {
     knowledgeBase: 'Knowledge base',
     postProcessing: {
       tab: 'Post processing',
+      completed: 'Thank you for your report!',
       isSuccess: 'Was this call successful?',
       yes: 'Yes',
       no: 'No',

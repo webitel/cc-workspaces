@@ -1,11 +1,21 @@
 
 // main wrap
 .post-processing {
-  // h1 title
-  &__title {
+  height: 100%;
+
+  // h1 titles
+  &__title, &__completed__title {
     @extend .typo-heading-md;
     text-align: center;
     margin: calcVH(50px) 0 calcVH(60px);
+  }
+
+  // completed post processing wrap
+  &__completed {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   // radio-buttons form
