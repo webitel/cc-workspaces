@@ -33,6 +33,10 @@
     margin-bottom: calcVH(20px);
   }
 
+  .cc-textarea {
+    width: 100%;
+  }
+
   // submit .cc-btn component
   &__submit {
     display: block;

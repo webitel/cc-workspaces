@@ -33,6 +33,10 @@
       />
     </div>
     <member-communications/>
+    <cc-textarea
+      v-model="description"
+      :placeholder="$t('reusable.description')"
+    ></cc-textarea>
     <btn
       class="processing-form__submit"
       @click.native="sendReporting"
@@ -44,6 +48,7 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import Btn from '../../../utils/btn.vue';
+  import CcTextarea from '../../../utils/textarea.vue';
   import Multiselect from '../../../utils/multiselect.vue';
   import Datepicker from '../../../utils/datepicker.vue';
   import Timepicker from '../../../utils/timepicker.vue';
@@ -54,6 +59,7 @@
     name: 'post-processing-failure-form',
     components: {
       Btn,
+      CcTextarea,
       Multiselect,
       Datepicker,
       Timepicker,
@@ -69,7 +75,7 @@
         get() {
           // complicated getter for value for $t() name property in object
           return this.isisScheduleCallOptions
-              .find((opt) => opt.value === this.isScheduleCallValue);
+            .find((opt) => opt.value === this.isScheduleCallValue);
         },
         set(option) {
           this.setValue({ prop: 'isScheduleCall', value: option.value });
@@ -82,6 +88,15 @@
         },
         set(value) {
           this.setValue({ prop: 'nextDistributeAt', value });
+        },
+      },
+
+      description: {
+        get() {
+          return this.$store.state.reporting.description;
+        },
+        set(value) {
+          this.setValue({ prop: 'description', value });
         },
       },
 

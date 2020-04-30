@@ -4,6 +4,7 @@ const state = {
   nextDistributeAt: Date.now(),
   categories: [],
   communications: [],
+  description: '',
 };
 
 const getters = {};
@@ -19,6 +20,7 @@ const actions = {
       isSuccess: context.state.isSuccess,
       // categories: context.state.categories,
       // communications: context.state.communications,
+      description: context.state.description,
     };
     if (context.state.isScheduleCall) reporting.nextDistributeAt = context.state.nextDistributeAt;
     try {

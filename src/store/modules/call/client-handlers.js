@@ -13,8 +13,8 @@ const callHandler = (context) => (action, call) => {
     case CallActions.Hangup:
       context.dispatch('HANDLE_HANGUP_ACTION', call);
       break;
-    case CallActions.Reporting:
-      context.dispatch('HANDLE_REPORTING_ACTION', call);
+    case CallActions.Destroy:
+      context.dispatch('HANDLE_DESTROY_ACTION', call);
       break;
     case CallActions.PeerStream:
       context.dispatch('HANDLE_STREAM_ACTION', call);
@@ -51,8 +51,7 @@ const actions = {
     }
   },
 
-  HANDLE_REPORTING_ACTION: (context, call) => {
-    console.log('reporting');
+  HANDLE_DESTROY_ACTION: (context, call) => {
     context.commit('REMOVE_CALL', call);
     context.dispatch('RESET_WORKSPACE');
   },
