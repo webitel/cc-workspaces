@@ -77,7 +77,6 @@
       ...mapActions('call', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
-        openCall: 'OPEN_CALL_ON_WORKSPACE',
       }),
     },
   };
