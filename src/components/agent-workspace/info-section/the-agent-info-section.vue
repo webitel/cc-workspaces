@@ -26,12 +26,6 @@
       currentTabValue: null,
     }),
 
-    watch: {
-      call() {
-        this.currentTab = { value: 'client-info' };
-      },
-    },
-
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,

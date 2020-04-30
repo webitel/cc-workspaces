@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ClientInfo
-  from '../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
+  from '../../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
 import WorkspaceStates
-  from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  from '../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
