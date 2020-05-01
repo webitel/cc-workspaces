@@ -3,7 +3,8 @@ const state = {
   isScheduleCall: true,
   nextDistributeAt: Date.now(),
   categories: [],
-  communications: [],
+  communication: null,
+  newCommunications: [],
   description: '',
 };
 
@@ -18,16 +19,16 @@ const actions = {
     const call = context.rootState.call.callOnWorkspace;
     const reporting = {
       isSuccess: context.state.isSuccess,
-      // categories: context.state.categories,
-      // communications: context.state.communications,
       description: context.state.description,
     };
+    if (context.state.communication) reporting.communication = context.state.communication;
     if (context.state.isScheduleCall) reporting.nextDistributeAt = context.state.nextDistributeAt;
-    try {
-      await call.reporting(reporting);
-    } catch (e) {
-      console.log(e);
-    }
+    console.log(reporting);
+    await call.reporting(reporting);
+  },
+
+  CHANGE_COMMUNICATION: (context, communication) => {
+    context.commit('SET_PROPERTY', { prop: 'communication', value: communication });
   },
 };
 

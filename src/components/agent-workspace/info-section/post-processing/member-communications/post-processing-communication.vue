@@ -1,38 +1,56 @@
 <template>
   <div class="processing-communication">
-    <radio-button
-      :value="selected"
-      :option="'id'"
-      @input="select"
-    ></radio-button>
-    <input
+    <!--    <radio-button-->
+    <!--      :value="selected"-->
+    <!--      :option="'id'"-->
+    <!--      @input="select"-->
+    <!--    ></radio-button>-->
+    <cc-input
       class="processing-communication__input processing-communication__input__number"
-      :value="'8 800 555 3535'"
-      type="text"
+      v-model="valueDraft.destination"
       :disabled="disabled"
-    >
+      :resetable="false"
+    ></cc-input>
     <multiselect
       class="processing-communication__select"
-      :value="[]"
+      v-model="valueDraft.type"
       :placeholder="'Type'"
-      :options="[]"
-      :api-mode="false"
+      :fetch-method="fetchCommunications"
       :disabled="disabled"
     ></multiselect>
-    <input
+    <cc-input
       class="processing-communication__input processing-communication__input__priority"
-      :value="'1'"
-      type="number"
+      v-model="valueDraft.priority"
       :disabled="disabled"
+      :resetable="false"
+    ></cc-input>
+    <button
+      v-if="disabled"
+      class="icon-btn"
+      @click.prevent="isEditing = true"
     >
-    <button class="icon-btn">
       <icon>
         <svg class="icon icon-call-ringing-md md">
           <use xlink:href="#icon-call-ringing-md"></use>
         </svg>
       </icon>
     </button>
-    <button class="icon-btn">
+    <button
+      v-else
+      class="icon-btn"
+      @click.prevent="update"
+    >
+      <icon>
+        <svg class="icon icon-tick-md md">
+          <use xlink:href="#icon-tick-md"></use>
+        </svg>
+      </icon>
+    </button>
+    <button
+      v-if="!exists"
+      class="icon-btn"
+      @click.prevent="$emit('remove')"
+    >
       <icon>
         <svg class="icon icon-call-ringing-md md">
           <use xlink:href="#icon-call-ringing-md"></use>
@@ -43,33 +61,72 @@
 </template>
 
 <script>
+  import getCommunications from '../../../../../api/agent-workspace/communications/communications';
+  import CcInput from '../../../../utils/input.vue';
   import Multiselect from '../../../../utils/multiselect.vue';
-  import RadioButton from '../../../../utils/radio-button.vue';
+  // import RadioButton from '../../../../utils/radio-button.vue';
+
+  // represent existing member
+  // fetch types dropdown
+  // comm edit, reset, save event
+  // add new comm
+  // new comm CUD
+  // icons?
+  // tests?
 
   export default {
     name: 'post-processing-communication',
     components: {
-      RadioButton,
+      // RadioButton,
+      CcInput,
       Multiselect,
     },
     props: {
+      value: {
+        type: Object,
+        required: true,
+      },
+
       selected: {
         type: String,
         required: true,
       },
 
-      disabled: {
+      exists: {
         type: Boolean,
-        default: true,
+        default: false,
       },
     },
 
-    data: () => ({}),
+    data: () => ({
+      valueDraft: {},
+      isEditing: false,
+    }),
+
+    watch: {
+      value: {
+        handler() {
+          this.valueDraft = { ...this.value };
+        },
+        immediate: true,
+      },
+    },
+
+    computed: {
+      disabled() {
+        return !this.isEditing;
+      },
+    },
 
     methods: {
+      update() {
+        this.$emit('change', this.valueDraft);
+        this.isEditing = false;
+      },
       select() {
         this.$emit('select', 'id');
       },
+      fetchCommunications: getCommunications,
     },
   };
 </script>
@@ -80,7 +137,7 @@
   .processing-communication {
     display: flex;
     justify-content: stretch;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     margin-top: calcVH(30px);
 
@@ -90,7 +147,7 @@
     }
 
     &__select {
-      flex: 1 1 auto;
+      flex: 1 4 auto;
       width: 100%;
       margin-right: calcVH(10px);
 
@@ -101,18 +158,10 @@
     }
 
     &__input {
-      @extend .cc-input__body;
-      @extend .typo-input;
-      flex: 1 1 auto;
-      width: 100%;
+      flex: 4 1 auto;
+      min-width: auto;
       height: calcVH(40px);
       margin-right: calcVH(10px);
-
-      &:disabled {
-        border-color: transparent;
-        background: #fff;
-        cursor: text;
-      }
 
       &__priority {
         flex: 0 0 calcVH(50px);

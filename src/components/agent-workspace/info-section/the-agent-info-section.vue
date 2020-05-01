@@ -29,7 +29,6 @@
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
-        callState: (state) => state.callOnWorkspace.state,
       }),
 
       currentTab: {
@@ -38,7 +37,7 @@
           if (this.currentTabValue) {
             return this.currentTabValue;
           }
-          if (this.callState === CallActions.Hangup && isReportingTab) {
+          if (this.call.state === CallActions.Hangup && isReportingTab) {
             return { value: 'post-processing' };
           }
           return { value: 'client-info' };

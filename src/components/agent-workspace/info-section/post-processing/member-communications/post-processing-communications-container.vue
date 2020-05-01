@@ -1,13 +1,10 @@
 <template>
   <div class="processing-communications-container">
     <communication
+      :value="communication"
       :selected="selected"
       @select="selected = $event"
-    ></communication>
-    <communication
-      :selected="selected"
-      @select="selected = $event"
-      :disabled="false"
+      @change="change"
     ></communication>
     <div class="processing-communications-container__add-new">
       <button class="icon-btn">
@@ -24,6 +21,7 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
   import Communication from './post-processing-communication.vue';
 
   export default {
@@ -34,6 +32,24 @@
     data: () => ({
       selected: '',
     }),
+
+    computed: {
+      ...mapState('reporting', {
+        changedCommunication: (state) => state.communication,
+      }),
+      communication() {
+        if (this.changedCommunication) {
+          return this.changedCommunication;
+        }
+        return this.$store.state.call.callOnWorkspace.memberCommunication;
+      },
+    },
+
+    methods: {
+      ...mapActions('reporting', {
+        change: 'CHANGE_COMMUNICATION',
+      }),
+    },
   };
 </script>
 
