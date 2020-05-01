@@ -53,6 +53,7 @@ $input-border-color__active: #000000;
   position: absolute;
   top: calcVH(8px);
   right: calcVH(8px);
+
   .icon {
     fill: $input-icon-color;
     stroke: $input-icon-color;
@@ -64,6 +65,7 @@ $input-border-color__active: #000000;
   bottom: calcVH(8px);
   right: calcVH(8px);
   color: $input-icon-color;
+
   .icon {
     fill: $input-icon-color;
     stroke: $input-icon-color;
@@ -73,7 +75,8 @@ $input-border-color__active: #000000;
 // INPUT
 
 .cc-input {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   min-width: calcVH(429px);
 }
 
@@ -82,7 +85,8 @@ $input-border-color__active: #000000;
   display: flex;
   align-items: center;
   width: 100%;
-  padding: calcVH(7px);
+  height: calcVH(40px);
+  // padding: calcVH(8px) calcVH(7px);
   border: calcVH(1px) solid $input-border-color;
   border-radius: $border-radius;
 
@@ -96,16 +100,29 @@ $input-border-color__active: #000000;
   }
 }
 
+.disabled .cc-input__body,
+.disabled .cc-input__body.focused,
+.disabled .cc-input__body:hover {
+  border-color: transparent;
+}
+
 .cc-input__input {
   @extend .typo-input;
   width: 100%;
   margin: 0 calcVH(8px);
   border: none;
   outline: none;
+
+  &:disabled {
+    border-color: transparent;
+    background: #fff;
+    cursor: text;
+  }
 }
 
 .cc-input__icon {
   height: calcVH(24px);
+
   .icon {
     fill: $input-icon-color;
     stroke: $input-icon-color;
