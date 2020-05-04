@@ -1,22 +1,34 @@
 <template>
   <div class="processing-communications-container">
     <communication
+      v-if="communication"
       :value="communication"
       :selected="selected"
+      exists
       @select="selected = $event"
-      @change="change"
+      @change="changeCommunication"
     ></communication>
-    <div class="processing-communications-container__add-new">
-      <button class="icon-btn">
-        <icon>
-          <svg class="icon icon-call-ringing-md md">
-            <use xlink:href="#icon-call-ringing-md"></use>
-          </svg>
-        </icon>
-      </button>
+    <communication
+      v-for="(communication, key) of newCommunications"
+      :value="communication"
+      :selected="selected"
+      :key="key"
+      @select="selected = $event"
+      @change="changeNewCommunication({value: $event, index: key})"
+      @delete="deleteNewCommunication(key)"
+    ></communication>
+    <button
+      class="processing-communications-container__add-new"
+      @click.prevent="addNewCommunication"
+    >
+      <icon>
+        <svg class="icon icon-plus-md md">
+          <use xlink:href="#icon-plus-md"></use>
+        </svg>
+      </icon>
       <span class="processing-communications-container__add-new__text">
         {{$t('infoSec.postProcessing.addNewCommunication')}}</span>
-    </div>
+    </button>
   </div>
 </template>
 
@@ -36,6 +48,7 @@
     computed: {
       ...mapState('reporting', {
         changedCommunication: (state) => state.communication,
+        newCommunications: (state) => state.newCommunications,
       }),
       communication() {
         if (this.changedCommunication) {
@@ -47,7 +60,10 @@
 
     methods: {
       ...mapActions('reporting', {
-        change: 'CHANGE_COMMUNICATION',
+        changeCommunication: 'CHANGE_COMMUNICATION',
+        addNewCommunication: 'ADD_NEW_COMMUNICATION',
+        changeNewCommunication: 'CHANGE_NEW_COMMUNICATION',
+        deleteNewCommunication: 'DELETE_NEW_COMMUNICATION',
       }),
     },
   };
@@ -55,7 +71,7 @@
 
 <style lang="scss" scoped>
   .processing-communications-container {
-    margin-top: calcVH(40px);
+    margin: calcVH(40px) 0;
 
     &__add-new {
       display: flex;

@@ -24,39 +24,56 @@
       :disabled="disabled"
       :resetable="false"
     ></cc-input>
-    <button
-      v-if="disabled"
-      class="icon-btn"
-      @click.prevent="isEditing = true"
-    >
-      <icon>
-        <svg class="icon icon-call-ringing-md md">
-          <use xlink:href="#icon-call-ringing-md"></use>
-        </svg>
-      </icon>
-    </button>
-    <button
-      v-else
-      class="icon-btn"
-      @click.prevent="update"
-    >
-      <icon>
-        <svg class="icon icon-tick-md md">
-          <use xlink:href="#icon-tick-md"></use>
-        </svg>
-      </icon>
-    </button>
-    <button
-      v-if="!exists"
-      class="icon-btn"
-      @click.prevent="$emit('remove')"
-    >
-      <icon>
-        <svg class="icon icon-call-ringing-md md">
-          <use xlink:href="#icon-call-ringing-md"></use>
-        </svg>
-      </icon>
-    </button>
+    <div class="actions">
+      <div class="action-wrap">
+        <button
+          v-if="disabled"
+          class="icon-btn"
+          @click.prevent="isEditing = true"
+        >
+          <icon>
+            <svg class="icon icon-edit-md md">
+              <use xlink:href="#icon-edit-md"></use>
+            </svg>
+          </icon>
+        </button>
+        <button
+          v-else
+          class="icon-btn"
+          @click.prevent="update"
+        >
+          <icon>
+            <svg class="icon icon-tick-md md">
+              <use xlink:href="#icon-tick-md"></use>
+            </svg>
+          </icon>
+        </button>
+      </div>
+      <div class="action-wrap">
+        <button
+          v-if="!exists && disabled"
+          class="icon-btn"
+          @click.prevent="$emit('delete')"
+        >
+          <icon>
+            <svg class="icon icon-bucket-md md">
+              <use xlink:href="#icon-bucket-md"></use>
+            </svg>
+          </icon>
+        </button>
+        <button
+          v-if="!disabled"
+          class="icon-btn"
+          @click.prevent="reset"
+        >
+          <icon>
+            <svg class="icon icon-close-md md">
+              <use xlink:href="#icon-close-md"></use>
+            </svg>
+          </icon>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -66,12 +83,7 @@
   import Multiselect from '../../../../utils/multiselect.vue';
   // import RadioButton from '../../../../utils/radio-button.vue';
 
-  // represent existing member
-  // fetch types dropdown
-  // comm edit, reset, save event
-  // add new comm
   // new comm CUD
-  // icons?
   // tests?
 
   export default {
@@ -103,6 +115,10 @@
       isEditing: false,
     }),
 
+    mounted() {
+      this.isEditing = !this.exists;
+    },
+
     watch: {
       value: {
         handler() {
@@ -123,6 +139,10 @@
         this.$emit('change', this.valueDraft);
         this.isEditing = false;
       },
+      reset() {
+        console.log('reset');
+        this.valueDraft = this.value;
+      },
       select() {
         this.$emit('select', 'id');
       },
@@ -137,7 +157,7 @@
   .processing-communication {
     display: flex;
     justify-content: stretch;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
     margin-top: calcVH(30px);
 
@@ -169,6 +189,21 @@
 
       &:last-child {
         margin-right: calcVH(20px);
+      }
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex: 0 0 calcVH(24px*2 + 10px);
+
+      .action-wrap {
+        height: calcVH(24px);
+
+        &:last-child {
+          margin-left: calcVH(10px);
+        }
       }
     }
   }

@@ -25,7 +25,6 @@ $input-border-color__active: #000000;
 
 // TEXTAREA
 .cc-textarea {
-  @extend .typo-input;
   display: inline-block;
   position: relative;
   width: calcVH(510px);
@@ -42,6 +41,7 @@ $input-border-color__active: #000000;
 }
 
 .cc-textarea__textarea {
+  @extend .typo-input;
   width: 100%;
   height: 100%;
   border: none;

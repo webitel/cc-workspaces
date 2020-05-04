@@ -15,7 +15,7 @@
     <button
       class="icon-btn cc-textarea__close"
       :class="{'hidden': !value}"
-      @click="$emit('input', '')"
+      @click.prevent="$emit('input', '')"
     >
       <icon>
         <svg class="icon icon-close-md md">

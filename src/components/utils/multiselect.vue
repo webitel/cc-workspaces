@@ -52,7 +52,7 @@
     },
     props: {
       value: {
-        type: [Array, Object],
+        // type: [Array, Object],
         required: true,
       },
 
