@@ -6,8 +6,8 @@
          @click="close(message)"
     >
       <icon v-if="message.info">
-        <svg class="icon icon-tick-md md">
-          <use xlink:href="#icon-tick-md"></use>
+        <svg class="icon icon-rounded-tick-md md">
+          <use xlink:href="#icon-rounded-tick-md"></use>
         </svg>
       </icon>
       <icon v-if="message.error">
@@ -71,7 +71,7 @@
 <style lang="scss" scoped>
   @import '../../css/styleguide/notification';
 
-  .icon-tick-md {
+  .icon-rounded-tick-md {
     stroke: $true-color;
     fill: $true-color;
   }
