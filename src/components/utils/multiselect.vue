@@ -193,6 +193,7 @@
   .multiselect {
     position: absolute;
     width: 100%;
+    height: calcVH(40px);
     border: 1px solid $input-border-color;
     border-radius: $border-radius;
     background: #fff;
@@ -213,9 +214,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: calcVH(40px);
       padding: $select-paddings;
-      box-sizing: border-box;
 
       .multiselect__strong {
         // @extend .count-badge;
