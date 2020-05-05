@@ -93,10 +93,8 @@
         }
         this.$v.$touch();
         if (!this.communication) {
-          // console.log(this.$v.newCommunications.$pending, this.$v.newCommunications.$error);
           return !(this.$v.newCommunications.$pending || this.$v.newCommunications.$error);
         }
-        // console.log(this.$v.$pending, this.$v.$error, this.$v);
         return !(this.$v.$pending || this.$v.$error);
       },
     },

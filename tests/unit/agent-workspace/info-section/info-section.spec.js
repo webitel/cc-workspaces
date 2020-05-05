@@ -51,7 +51,6 @@ describe('Open Post Processing tab automatically after hangup', () => {
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     expect(wrapper.find(PostProcessingTab).exists()).toBeFalsy();
-    callOnWorkspace.state = CallActions.Hangup;
     await mockSocket.hangup(callOnWorkspace);
     expect(wrapper.find(PostProcessingTab).exists()).toBeTruthy();
   });

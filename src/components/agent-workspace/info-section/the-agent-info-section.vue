@@ -23,29 +23,24 @@
       PostProcessing,
     },
     data: () => ({
-      currentTabValue: null,
+      currentTab: { value: 'client-info' },
     }),
+
+    watch: {
+      state() {
+        if (this.call.state === CallActions.Hangup && this.call.allowReporting) {
+          this.currentTab = { value: 'post-processing' };
+        } else {
+          this.currentTab = { value: 'client-info' };
+        }
+      },
+    },
 
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
+        state: (state) => state.callOnWorkspace.state,
       }),
-
-      currentTab: {
-        get() {
-          const isReportingTab = this.tabs.some((tab) => tab.value === 'post-processing');
-          if (this.currentTabValue) {
-            return this.currentTabValue;
-          }
-          if (this.call.state === CallActions.Hangup && isReportingTab) {
-            return { value: 'post-processing' };
-          }
-          return { value: 'client-info' };
-        },
-        set(value) {
-          this.currentTabValue = value;
-        },
-      },
 
       tabs() {
         const clientInfo = {
@@ -64,10 +59,10 @@
           clientInfo,
           knowledgeBase,
         ];
-        // if (this.call.allowReporting) {
+        if (this.call.allowReporting) {
           // insert post-processing on 2nd place
           tabs.splice(1, 0, postProcessing);
-        // }
+        }
         return tabs;
       },
     },

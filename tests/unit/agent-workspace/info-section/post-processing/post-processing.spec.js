@@ -12,7 +12,10 @@ import postProcessingModule from '../../../../../src/store/modules/post-processi
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-const callOnWorkspace = {};
+const mockReporting = jest.fn();
+const callOnWorkspace = {
+  reporting: mockReporting,
+};
 
 describe('Post processing Success reporting', () => {
   let state;
@@ -59,6 +62,20 @@ describe('Post processing Success reporting', () => {
     });
     expect(wrapper.find(SuccessForm).exists()).toBeTruthy();
   });
+
+  it('Renders success form by default', () => {
+    const wrapper = shallowMount(PostProcessingTab, {
+      store,
+      localVue,
+      mocks: {
+        $t: () => {
+        },
+      },
+    });
+
+    wrapper.find('.post-processing__submit').trigger('click');
+    expect(mockReporting).toHaveBeenCalled();
+  });
 });
 
 describe('Post processing Failure reporting', () => {
@@ -95,39 +112,5 @@ describe('Post processing Failure reporting', () => {
     noRadio.vm.$emit('input', false);
     await wrapper.vm.$nextTick(); // re-render
     expect(wrapper.find(FailureForm).exists()).toBeTruthy();
-  });
-});
-
-describe("Can't send report twice", () => {
-  let state;
-  let store;
-
-  beforeEach(() => {
-    state = {
-      callOnWorkspace,
-    };
-    store = new Vuex.Store({
-      state,
-      modules: {
-        reporting: postProcessingModule,
-        call: {
-          namespaced: true,
-          state,
-        },
-      },
-    });
-  });
-
-  it('Shows info component instead of forms', () => {
-    callOnWorkspace.reportingAt = 1;
-    const wrapper = shallowMount(PostProcessingTab, {
-      store,
-      localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
-    });
-    expect(wrapper.find('.post-processing__success-form').exists()).toBeFalsy();
   });
 });
