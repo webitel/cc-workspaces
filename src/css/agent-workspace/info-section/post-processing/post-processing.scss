@@ -21,6 +21,13 @@
       margin: 0 calcVH(15px);
     }
   }
+
+  // submit .cc-btn component
+  &__submit {
+    display: block;
+    min-width: calcVH(110px);
+    margin: calcVH(60px) auto;
+  }
 }
 
 // form wrap itself
@@ -37,13 +44,6 @@
 
   .cc-textarea {
     width: 100%;
-  }
-
-  // submit .cc-btn component
-  &__submit {
-    display: block;
-    min-width: calcVH(110px);
-    margin: calcVH(60px) auto;
   }
 
   &__datetime {

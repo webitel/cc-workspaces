@@ -4,6 +4,7 @@
       v-if="communication"
       :value="communication"
       :selected="selected"
+      :v="v.communication"
       exists
       @select="selected = $event"
       @change="changeCommunication"
@@ -13,6 +14,7 @@
       :value="communication"
       :selected="selected"
       :key="key"
+      :v="v.newCommunications.$each[key]"
       @select="selected = $event"
       @change="changeNewCommunication({value: $event, index: key})"
       @delete="deleteNewCommunication(key)"
@@ -41,6 +43,12 @@
     components: {
       Communication,
     },
+    props: {
+      v: {
+        type: Object,
+      },
+    },
+
     data: () => ({
       selected: '',
     }),

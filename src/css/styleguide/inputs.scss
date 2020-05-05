@@ -77,7 +77,8 @@ $input-border-color__active: #000000;
 .cc-input {
   display: flex;
   flex-direction: column;
-  min-width: calcVH(429px);
+  //min-width: calcVH(429px);
+  min-width: 100%;
 }
 
 .cc-input__body {

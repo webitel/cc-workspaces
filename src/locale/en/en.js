@@ -102,4 +102,7 @@ export default {
     callEnd: 'End call',
     history: 'History',
   },
+  validation: {
+    required: 'Required',
+  },
 };

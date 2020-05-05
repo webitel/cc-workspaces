@@ -1,11 +1,11 @@
 const defaultState = () => ({
   isSuccess: true,
-    isScheduleCall: true,
-    nextDistributeAt: Date.now(),
-    categories: [],
-    communication: null,
-    newCommunications: [],
-    description: '',
+  isScheduleCall: true,
+  nextDistributeAt: Date.now(),
+  categories: [],
+  communication: null,
+  newCommunications: [],
+  description: '',
 });
 
 const state = {
@@ -65,7 +65,8 @@ const mutations = {
   },
 
   CHANGE_NEW_COMMUNICATION: (state, { value, index }) => {
-    state.newCommunications[index] = value;
+    // splice triggers reactive recomputing, when simple assigning [index] = value -- not
+    state.newCommunications.splice(index, 1, value);
   },
 
   DELETE_NEW_COMMUNICATION: (state, index) => {

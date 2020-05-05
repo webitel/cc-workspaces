@@ -65,7 +65,9 @@
 
     &.disabled {
       color: $btn-disabled;
-      background: $btn-disabled;
+      border: 1px solid $btn-disabled;
+      background: #fff;
+      pointer-events: none;
     }
   }
 </style>
