@@ -74,7 +74,9 @@
       }),
 
       ...mapState('reporting', {
+        // for validation purposes
         communication: (state) => state.communication,
+        // for validation purposes
         newCommunications: (state) => state.newCommunications,
       }),
 
@@ -88,13 +90,7 @@
       },
 
       isCommunicationsValid() {
-        if (!this.communication && !this.newCommunications.length) {
-          return true;
-        }
         this.$v.$touch();
-        if (!this.communication) {
-          return !(this.$v.newCommunications.$pending || this.$v.newCommunications.$error);
-        }
         return !(this.$v.$pending || this.$v.$error);
       },
     },

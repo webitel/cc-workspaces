@@ -1,9 +1,11 @@
+import deepEqual from 'deep-equal';
+
 const defaultState = () => ({
   isSuccess: true,
   isScheduleCall: true,
   nextDistributeAt: Date.now(),
   categories: [],
-  communication: null,
+  communication: {},
   newCommunications: [],
   description: '',
 });
@@ -19,22 +21,23 @@ const actions = {
     context.commit('SET_PROPERTY', payload);
   },
 
-  SEND_REPORTING: async (context) => {
+  SEND_REPORTING: (context) => {
     const call = context.rootState.call.callOnWorkspace;
     const reporting = {
       success: context.state.isSuccess,
       description: context.state.description,
     };
-    if (context.state.communication) reporting.communication = context.state.communication;
+    const { communication } = context.state;
+    const isCommunicationChanged = !deepEqual(call.memberCommunication, communication);
+    if (isCommunicationChanged) reporting.communication = communication;
     if (context.state.newCommunications.length) {
       reporting.new_communications = context.state.newCommunications;
     }
     if (context.state.isScheduleCall) reporting.next_distribute_at = context.state.nextDistributeAt;
-    console.log(reporting);
-    await call.reporting(reporting);
+    call.reporting(reporting);
   },
 
-  CHANGE_COMMUNICATION: (context, communication) => {
+  SET_COMMUNICATION: (context, communication) => {
     context.commit('SET_PROPERTY', { prop: 'communication', value: communication });
   },
 

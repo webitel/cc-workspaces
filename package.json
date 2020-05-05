@@ -13,6 +13,7 @@
     "core-js": "^3.6.4",
     "css-loader": "^3.4.2",
     "deep-copy": "^1.4.2",
+    "deep-equal": "^2.0.3",
     "file-loader": "^5.0.2",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",

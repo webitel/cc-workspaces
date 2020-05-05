@@ -44,6 +44,11 @@ describe('Post processing Success reporting', () => {
       mocks: {
         $t: () => {
         },
+        $v: {
+          $touch: jest.fn(),
+          $pending: false,
+          $error: false,
+        },
       },
     });
     const yesRadio = wrapper.findAll(RadioButton)
@@ -58,6 +63,11 @@ describe('Post processing Success reporting', () => {
       mocks: {
         $t: () => {
         },
+        $v: {
+          $touch: jest.fn(),
+          $pending: false,
+          $error: false,
+        },
       },
     });
     expect(wrapper.find(SuccessForm).exists()).toBeTruthy();
@@ -69,6 +79,11 @@ describe('Post processing Success reporting', () => {
       localVue,
       mocks: {
         $t: () => {
+        },
+        $v: {
+          $touch: jest.fn(),
+          $pending: false,
+          $error: false,
         },
       },
     });
@@ -104,6 +119,11 @@ describe('Post processing Failure reporting', () => {
       localVue,
       mocks: {
         $t: () => {
+        },
+        $v: {
+          $touch: jest.fn(),
+          $pending: false,
+          $error: false,
         },
       },
     });

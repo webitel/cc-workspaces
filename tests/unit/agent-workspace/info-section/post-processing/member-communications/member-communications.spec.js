@@ -62,9 +62,8 @@ describe('Existing member communication actions', () => {
     const updComm = {
       destination: '11',
     };
-    expect(wrapper.vm.changedCommunication).toBeNull();
     wrapper.find(Communication).vm.$emit('change', updComm);
-    expect(wrapper.vm.changedCommunication).toEqual(updComm);
+    expect(wrapper.vm.communication).toEqual(updComm);
   });
 });
 
