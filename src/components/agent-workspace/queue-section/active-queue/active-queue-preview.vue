@@ -3,7 +3,7 @@
     <status-badge :state="computePreviewStatusClass"/>
 
     <header class="preview-header">
-      <span class="preview-header__name">{{displayName}}</span>
+      <span class="preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="preview-header__time"
            :class="{'preview-header__time__bold': !isRinging}"
@@ -17,7 +17,7 @@
     </header>
 
     <span
-      class="call-preview__number">{{displayNumber}}</span>
+      class="call-preview__number">{{displayNumber | truncateFromEnd(18)}}</span>
     <div
       v-if="isRinging"
       class="preview-actions"
