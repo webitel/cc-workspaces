@@ -4,7 +4,7 @@
       v-if="communication"
       :value="communication"
       :selected="selected"
-      :v="v.communication"
+      :v="existingCommunicationValidation"
       exists
       @select="selected = $event"
       @change="changeCommunication"
@@ -63,6 +63,9 @@
           return this.changedCommunication;
         }
         return this.$store.state.call.callOnWorkspace.memberCommunication;
+      },
+      existingCommunicationValidation() {
+        return this.changedCommunication ? this.v : {};
       },
     },
 
