@@ -20,12 +20,14 @@
         type: [String, Boolean],
         required: true,
       },
+      // may be a string, or object with true/false values
       option: {
         type: [String, Boolean],
         required: true,
       },
-      // may be a string, or object with true/false values
-      label: {},
+      label: {
+        type: String,
+      },
     },
     methods: {
       changeValue() {
