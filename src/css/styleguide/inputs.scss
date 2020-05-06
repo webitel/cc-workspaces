@@ -33,6 +33,7 @@ $input-border-color__active: #000000;
   padding: calcVH(10px) calcVH(40px) calcVH(40px) calcVH(20px);
   border: calcVH(1px) solid $input-border-color;
   border-radius: $border-radius;
+  box-sizing: border-box;
 
   &.focused .cc-textarea__close .icon {
     fill: $input-icon-color__active;

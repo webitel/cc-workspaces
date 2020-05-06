@@ -1,4 +1,3 @@
-import { CallActions } from 'webitel-sdk';
 import clientHandlers from './client-handlers';
 import clientActions from './client-actions';
 import CallStates from './callUtils/CallStates';
@@ -24,19 +23,15 @@ const actions = {
   ...clientActions.actions,
   ...clientHandlers.actions,
 
-  OPEN_CALL_ON_WORKSPACE: async (context, index) => {
-    if (Number.isInteger(index)) { // if there's index, we have gotten
-      const call = context.state.callList[index]; // this item from queue => call already exists
-      if (call.state === CallActions.Ringing) {
-        context.commit('SET_CALL_STATE', CallStates.PREVIEW);
-      } else {
-        context.commit('SET_CALL_STATE', CallStates.ACTIVE);
-      }
-      context.dispatch('SET_WORKSPACE', call);
-    } else { // else we are trying to create a new call
-      context.dispatch('SET_WORKSPACE');
-      context.commit('SET_CALL_STATE', CallStates.NEW);
-    }
+  OPEN_ACTIVE_CALL: (context, index) => {
+    const call = context.state.callList[index];
+    context.commit('SET_CALL_STATE', CallStates.ACTIVE);
+    context.dispatch('SET_WORKSPACE', call);
+  },
+
+  OPEN_NEW_CALL: (context) => {
+    context.dispatch('SET_WORKSPACE', {});
+    context.commit('SET_CALL_STATE', CallStates.NEW);
   },
 
   OPEN_PREVIEW_TRANSFER: (context) => {

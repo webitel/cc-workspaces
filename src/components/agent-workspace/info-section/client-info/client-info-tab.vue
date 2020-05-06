@@ -8,7 +8,7 @@
   import MarkdownIt from 'markdown-it';
   import { mapState } from 'vuex';
   import WorkspaceStates
-    from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+    from '../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
   const md = new MarkdownIt();
 
@@ -30,14 +30,14 @@
       }),
 
       computeHTML() {
-        let payload;
-        if (this.state === WorkspaceStates.CALL) payload = this.call.payload;
-        else if (this.state === WorkspaceStates.MEMBER) payload = this.member.variables;
+        let variables;
+        if (this.state === WorkspaceStates.CALL) variables = this.call.variables;
+        else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
         let res = '';
-        if (payload) {
-          Object.keys(payload).forEach((key) => {
+        if (variables) {
+          Object.keys(variables).forEach((key) => {
             res += `<h3>${key}:</h3>`;
-            res += md.render(payload[key]);
+            res += md.render(variables[key]);
             res += '<br/>';
           });
         }
@@ -48,7 +48,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../../css/agent-workspace/info-section/client-info/md-styles";
+  @import "../../../../css/agent-workspace/info-section/client-info/md-styles";
 
   .md {
     @extend .cc-scrollbar;

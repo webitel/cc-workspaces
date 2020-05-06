@@ -1,16 +1,18 @@
 <template>
   <section class="workspace-section">
     <tabs
-      :current-tab="currentTab"
+      v-model="currentTab"
       :tabs="tabs"
     ></tabs>
-    <component :is="currentTab.value" />
+    <component :is="currentTab.value"/>
   </section>
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+  import { CallActions } from 'webitel-sdk';
   import Tabs from '../../utils/tabs.vue';
-  import ClientInfo from './client-info-tab.vue';
+  import ClientInfo from './client-info/client-info-tab.vue';
   import PostProcessing from './post-processing/post-processing-tab.vue';
 
   export default {
@@ -21,25 +23,53 @@
       PostProcessing,
     },
     data: () => ({
-      currentTab: { value: 'post-processing' },
+      currentTabValue: null,
     }),
 
     computed: {
+      ...mapState('call', {
+        call: (state) => state.callOnWorkspace,
+        callState: (state) => state.callOnWorkspace.state,
+      }),
+
+      currentTab: {
+        get() {
+          const isReportingTab = this.tabs.some((tab) => tab.value === 'post-processing');
+          if (this.currentTabValue) {
+            return this.currentTabValue;
+          }
+          if (this.callState === CallActions.Hangup && isReportingTab) {
+            return { value: 'post-processing' };
+          }
+          return { value: 'client-info' };
+        },
+        set(value) {
+          this.currentTabValue = value;
+        },
+      },
+
       tabs() {
-        return [
-          {
-            text: this.$t('infoSec.clientInfo'),
-            value: 'client-info',
-          },
-          {
-            text: this.$t('infoSec.postProcessing.tab'),
-            value: 'post-processing',
-          },
-          {
-            text: this.$t('infoSec.knowledgeBase'),
-            value: 'knowledge-base',
-          },
+        const clientInfo = {
+          text: this.$t('infoSec.clientInfo'),
+          value: 'client-info',
+        };
+        const postProcessing = {
+          text: this.$t('infoSec.postProcessing.tab'),
+          value: 'post-processing',
+        };
+        const knowledgeBase = {
+          text: this.$t('infoSec.knowledgeBase'),
+          value: 'knowledge-base',
+        };
+        const tabs = [
+          clientInfo,
+          knowledgeBase,
         ];
+        if (this.call.allowReporting) {
+          // insert post-processing on 2nd place
+          tabs.splice(1, 0, postProcessing);
+        }
+        return tabs;
       },
     },
   };

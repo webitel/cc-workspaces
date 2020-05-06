@@ -11,7 +11,7 @@
     <rounded-action
       v-show="isNewCallButton"
       class="call"
-      @click.native="openCall()"
+      @click.native="openNewCall"
     >
       <icon>
         <svg class="icon icon-call-ringing-md md">
@@ -94,7 +94,7 @@
 
     methods: {
       ...mapActions('call', {
-        openCall: 'OPEN_CALL_ON_WORKSPACE',
+        openNewCall: 'OPEN_NEW_CALL',
       }),
     },
   };

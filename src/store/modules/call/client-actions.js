@@ -87,7 +87,6 @@ const actions = {
     if (call.allowHangup) {
       try {
         await call.hangup();
-        context.dispatch('RESET_WORKSPACE');
       } catch {
       }
     }

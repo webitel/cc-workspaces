@@ -25,10 +25,12 @@
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
+        callState: (state) => state.callState,
       }),
 
       isPreviewCall() {
-        return !this.call.answeredAt;
+        return !this.call.answeredAt
+          && this.callState !== CallStates.NEW;
       },
     },
   };

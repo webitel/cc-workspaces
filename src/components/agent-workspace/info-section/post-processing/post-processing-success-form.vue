@@ -2,36 +2,61 @@
   <form class="processing-form processing-form__success">
     <multiselect
       class="processing-form__category"
-      :value="value"
+      :value="[]"
       :label="'Category'"
-      :options="options"
+      :options="[]"
       :api-mode="false"
     ></multiselect>
     <multiselect
       class="processing-form__subcategory"
-      :value="value"
+      :value="[]"
       :placeholder="'Subcategory'"
-      :options="options"
+      :options="[]"
       :api-mode="false"
     ></multiselect>
-    <btn class="processing-form__submit">{{$t('reusable.send')}}</btn>
+    <cc-textarea
+      v-model="description"
+      :placeholder="$t('reusable.description')"
+    ></cc-textarea>
+    <btn
+      class="processing-form__submit"
+      @click.native="sendReporting"
+    >{{$t('reusable.send')}}
+    </btn>
   </form>
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import Btn from '../../../utils/btn.vue';
+  import CcTextarea from '../../../utils/textarea.vue';
   import Multiselect from '../../../utils/multiselect.vue';
 
   export default {
     name: 'post-processing-success-form',
     components: {
       Btn,
+      CcTextarea,
       Multiselect,
     },
-    data: () => ({
-      value: [],
-      options: [],
-    }),
+
+    computed: {
+      description: {
+        get() {
+          return this.$store.state.reporting.description;
+        },
+        set(value) {
+          this.setValue({ prop: 'description', value });
+        },
+      },
+    },
+
+    methods: {
+      ...mapActions('reporting', {
+        sendReporting: 'SEND_REPORTING',
+        setValue: 'SET_PROPERTY',
+      }),
+    },
   };
 </script>
 
