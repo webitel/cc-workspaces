@@ -26,7 +26,7 @@
         required: true,
       },
       label: {
-        type: String, 
+        type: String,
       },
     },
     methods: {
