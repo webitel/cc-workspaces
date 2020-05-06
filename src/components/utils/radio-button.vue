@@ -50,7 +50,8 @@
   $radio-button-color__active: #000;
   /* Customize the label (the container) */
   .radio-button {
-    display: block;
+    display: flex;
+    align-items: center;
     position: relative;
     height: calcVH(24px);
     min-width: calcVH(24px);
@@ -113,5 +114,6 @@
 
   .radio-button__label {
     @extend .cc-label;
+    margin-left: calcVH(10px);
   }
 </style>

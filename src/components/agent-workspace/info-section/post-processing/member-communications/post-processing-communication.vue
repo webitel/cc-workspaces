@@ -1,75 +1,152 @@
 <template>
   <div class="processing-communication">
-    <radio-button
-      :value="selected"
-      :option="'id'"
-      @input="select"
-    ></radio-button>
-    <input
+    <!--    <radio-button-->
+    <!--      :value="selected"-->
+    <!--      :option="'id'"-->
+    <!--      @input="select"-->
+    <!--    ></radio-button>-->
+    <cc-input
       class="processing-communication__input processing-communication__input__number"
-      :value="'8 800 555 3535'"
-      type="text"
+      v-model="valueDraft.destination"
       :disabled="disabled"
-    >
+      :resetable="false"
+    ></cc-input>
     <multiselect
       class="processing-communication__select"
-      :value="[]"
+      v-model="valueDraft.type"
       :placeholder="'Type'"
-      :options="[]"
-      :api-mode="false"
+      :fetch-method="fetchCommunications"
       :disabled="disabled"
     ></multiselect>
-    <input
+    <cc-input
       class="processing-communication__input processing-communication__input__priority"
-      :value="'1'"
-      type="number"
+      v-model="valueDraft.priority"
       :disabled="disabled"
-    >
-    <button class="icon-btn">
-      <icon>
-        <svg class="icon icon-call-ringing-md md">
-          <use xlink:href="#icon-call-ringing-md"></use>
-        </svg>
-      </icon>
-    </button>
-    <button class="icon-btn">
-      <icon>
-        <svg class="icon icon-call-ringing-md md">
-          <use xlink:href="#icon-call-ringing-md"></use>
-        </svg>
-      </icon>
-    </button>
+      :resetable="false"
+    ></cc-input>
+    <div class="actions">
+      <div class="action-wrap">
+        <button
+          v-if="disabled"
+          class="icon-btn"
+          @click.prevent="isEditing = true"
+        >
+          <icon>
+            <svg class="icon icon-edit-md md">
+              <use xlink:href="#icon-edit-md"></use>
+            </svg>
+          </icon>
+        </button>
+        <button
+          v-else
+          class="icon-btn"
+          @click.prevent="update"
+        >
+          <icon>
+            <svg class="icon icon-tick-md md">
+              <use xlink:href="#icon-tick-md"></use>
+            </svg>
+          </icon>
+        </button>
+      </div>
+      <div class="action-wrap">
+        <button
+          v-if="!exists && disabled"
+          class="icon-btn"
+          @click.prevent="$emit('delete')"
+        >
+          <icon>
+            <svg class="icon icon-bucket-md md">
+              <use xlink:href="#icon-bucket-md"></use>
+            </svg>
+          </icon>
+        </button>
+        <button
+          v-if="!disabled"
+          class="icon-btn"
+          @click.prevent="reset"
+        >
+          <icon>
+            <svg class="icon icon-close-md md">
+              <use xlink:href="#icon-close-md"></use>
+            </svg>
+          </icon>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import getCommunications from '../../../../../api/agent-workspace/communications/communications';
+  import CcInput from '../../../../utils/input.vue';
   import Multiselect from '../../../../utils/multiselect.vue';
-  import RadioButton from '../../../../utils/radio-button.vue';
+  // import RadioButton from '../../../../utils/radio-button.vue';
+
+  // new comm CUD
+  // tests?
 
   export default {
     name: 'post-processing-communication',
     components: {
-      RadioButton,
+      // RadioButton,
+      CcInput,
       Multiselect,
     },
     props: {
+      value: {
+        type: Object,
+        required: true,
+      },
+
       selected: {
         type: String,
         required: true,
       },
 
-      disabled: {
+      exists: {
         type: Boolean,
-        default: true,
+        default: false,
       },
     },
 
-    data: () => ({}),
+    data: () => ({
+      valueDraft: {},
+      isEditing: false,
+    }),
+
+    mounted() {
+      this.isEditing = !this.exists;
+    },
+
+    watch: {
+      value: {
+        handler() {
+          this.valueDraft = { ...this.value };
+        },
+        immediate: true,
+      },
+    },
+
+    computed: {
+      disabled() {
+        return !this.isEditing;
+      },
+    },
 
     methods: {
+      update() {
+        this.$emit('change', this.valueDraft);
+        this.isEditing = false;
+      },
+      reset() {
+        console.log('reset');
+        this.valueDraft = this.value;
+      },
       select() {
         this.$emit('select', 'id');
       },
+      fetchCommunications: getCommunications,
     },
   };
 </script>
@@ -90,7 +167,7 @@
     }
 
     &__select {
-      flex: 1 1 auto;
+      flex: 1 4 auto;
       width: 100%;
       margin-right: calcVH(10px);
 
@@ -101,18 +178,10 @@
     }
 
     &__input {
-      @extend .cc-input__body;
-      @extend .typo-input;
-      flex: 1 1 auto;
-      width: 100%;
+      flex: 4 1 auto;
+      min-width: auto;
       height: calcVH(40px);
       margin-right: calcVH(10px);
-
-      &:disabled {
-        border-color: transparent;
-        background: #fff;
-        cursor: text;
-      }
 
       &__priority {
         flex: 0 0 calcVH(50px);
@@ -120,6 +189,21 @@
 
       &:last-child {
         margin-right: calcVH(20px);
+      }
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex: 0 0 calcVH(24px*2 + 10px);
+
+      .action-wrap {
+        height: calcVH(24px);
+
+        &:last-child {
+          margin-left: calcVH(10px);
+        }
       }
     }
   }

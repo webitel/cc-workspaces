@@ -3,19 +3,11 @@
 .post-processing {
   height: 100%;
 
-  // h1 titles
-  &__title, &__completed__title {
+  // h1 title
+  &__title {
     @extend .typo-heading-md;
     text-align: center;
     margin: calcVH(50px) 0 calcVH(60px);
-  }
-
-  // completed post processing wrap
-  &__completed {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   // radio-buttons form
@@ -51,7 +43,7 @@
   &__submit {
     display: block;
     min-width: calcVH(110px);
-    margin: calcVH(60px) auto auto;
+    margin: calcVH(60px) auto;
   }
 
   &__datetime {

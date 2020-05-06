@@ -73,6 +73,9 @@ export default {
     },
   },
   icon: {
+    delete: 'Delete',
+    edit: 'Edit',
+    add: 'Add',
     settings: 'Settings',
     bridge: 'Bridge',
     close: 'Close',

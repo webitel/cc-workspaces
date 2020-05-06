@@ -1,6 +1,5 @@
 <template>
   <section class="post-processing">
-    <div v-if="!isAlreadyReported" class="post-processing__wrap">
       <h1 class="post-processing__title">{{$t('infoSec.postProcessing.isSuccess')}}</h1>
       <form class="post-processing__success-form">
         <radio-button
@@ -16,11 +15,6 @@
       </form>
       <success-form v-if="isSuccess"/>
       <failure-form v-else/>
-    </div>
-    <div v-else class="post-processing__completed">
-      <h1 class="post-processing__completed__title">
-        {{$t('infoSec.postProcessing.completed')}}</h1>
-    </div>
   </section>
 </template>
 
@@ -38,14 +32,16 @@
       FailureForm,
     },
 
+    watch: {
+      call() {
+        this.resetForm();
+      },
+    },
+
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
       }),
-
-      isAlreadyReported() {
-        return this.call.reportingAt;
-      },
 
       isSuccess: {
         get() {
@@ -60,6 +56,7 @@
     methods: {
       ...mapActions('reporting', {
         setValue: 'SET_PROPERTY',
+        resetForm: 'RESET_STATE',
       }),
     },
   };

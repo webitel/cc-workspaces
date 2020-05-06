@@ -52,7 +52,7 @@
     },
     props: {
       value: {
-        type: [Array, Object],
+        // type: [Array, Object],
         required: true,
       },
 
@@ -112,10 +112,7 @@
     computed: {
       opts() {
         if (this.apiMode) {
-          const options = this.fetchedOptions;
-          const optionsDiff = options.filter((item) => !this.value
-            .some((valueItem) => valueItem[this.trackBy] === item[this.trackBy]));
-          return [...this.value, ...optionsDiff];
+          return this.fetchedOptions;
         }
         return this.options;
       },

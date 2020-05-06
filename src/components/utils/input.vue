@@ -1,6 +1,6 @@
 <template>
-  <label class="cc-input">
-    <div v-if="!hideLabel" class="cc-label">
+  <label class="cc-input" :class="{'disabled': disabled}">
+    <div v-if="!label" class="cc-label">
       {{label}}
     </div>
 
@@ -17,6 +17,7 @@
         @focusout="isFocused = false"
       />
       <button
+        v-if="resetable"
         class="icon-btn cc-input__icon"
         :class="{'hidden': !value}"
         @click="validation = ''"
@@ -79,6 +80,10 @@
       hideDetails: {
         type: Boolean,
         default: false,
+      },
+      resetable: {
+        type: Boolean,
+        default: true,
       },
       // validation rules
       v: {},
