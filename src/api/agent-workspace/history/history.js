@@ -7,20 +7,105 @@ const callService = new CallServiceApiFactory(configuration, '', instance);
 
 export const getAgentHistory = async ({ page, size, search }) => {
   const { userId, domainId } = store.state.userinfo;
-  // eslint-disable-next-line no-unused-vars
-  let formattedSearch = search;
-  if (search.length && search.slice(-1) !== '*') formattedSearch += '*';
   const createdAtFrom = 0;
   const createdAtTo = Date.now();
   try {
     const response = await callService
-      .searchHistoryCall(page, size, createdAtFrom, createdAtTo, userId, domainId);
+      .searchHistoryCall(
+        page,
+        size,
+        createdAtFrom,
+        createdAtTo,
+        userId,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        `${search}`,
+        undefined,
+        undefined,
+        true,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        domainId,
+      );
     return response.items || [];
   } catch (err) {
     throw err;
   }
 };
 
-export const getHistoryByNumber = () => {};
+// eslint-disable-next-line no-unused-vars
+export const getNumberHistory = async ({ page, size, search }) => {
+  const { domainId } = store.state.userinfo;
+  const number = store.state.call.callOnWorkspace.displayNumber;
+  const createdAtFrom = 0;
+  const createdAtTo = Date.now();
+  try {
+    const response = await callService
+      .searchHistoryCall(
+        page,
+        size,
+        createdAtFrom,
+        createdAtTo,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        `${number}`,
+        undefined,
+        undefined,
+        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        domainId,
+      );
+    return response.items || [];
+  } catch (err) {
+    throw err;
+  }
+};
 
-export const getHistoryByMember = () => {};
+export const getMemberHistory = async ({ page, size, search }) => {
+  const { domainId } = store.state.userinfo;
+  const { memberOnWorkspace } = store.state.member;
+  const createdAtFrom = 0;
+  const createdAtTo = Date.now();
+  try {
+    const response = await callService
+      .searchHistoryCall(
+        page,
+        size,
+        createdAtFrom,
+        createdAtTo,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        memberOnWorkspace.id,
+        undefined,
+        `${search}`,
+        undefined,
+        undefined,
+        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        domainId,
+      );
+    return response.items || [];
+  } catch (err) {
+    throw err;
+  }
+};

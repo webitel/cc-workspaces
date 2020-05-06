@@ -5,7 +5,7 @@
          alt="client photo">
     <div class="ws-worksection__item__text">
       <div class="flex-wrap">
-        <div class="ws-history-item__number">{{computeDestination}}</div>
+        <div class="ws-history-item__number">{{computeDestination | truncateFromEnd(24)}}</div>
         <div class="ws-history-item__time">{{computeDuration}}</div>
       </div>
       <div class="flex-wrap">
