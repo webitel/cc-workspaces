@@ -1,3 +1,4 @@
+
 import deepEqual from 'deep-equal';
 
 const defaultState = () => ({
