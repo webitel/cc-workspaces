@@ -48,7 +48,7 @@
 </script>
 
 <style lang="scss">
-  @import "../../../css/agent-workspace/info-section/md-styles";
+  @import "../../../css/agent-workspace/info-section/client-info/md-styles";
 
   .md {
     @extend .cc-scrollbar;

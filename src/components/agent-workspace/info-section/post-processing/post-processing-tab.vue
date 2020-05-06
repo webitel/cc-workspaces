@@ -1,0 +1,48 @@
+<template>
+  <section class="post-processing">
+    <h1 class="post-processing__title">{{$t('infoSec.postProcessing.isSuccess')}}</h1>
+    <form class="post-processing__success-form">
+      <radio-button
+        v-model="isSuccess"
+        :option="true"
+        :label="$t('infoSec.postProcessing.yes')"
+      ></radio-button>
+      <radio-button
+        v-model="isSuccess"
+        :option="false"
+        :label="$t('infoSec.postProcessing.no')"
+      ></radio-button>
+    </form>
+    <success-form v-if="isSuccess"/>
+    <failure-form v-else/>
+  </section>
+</template>
+
+<script>
+  import RadioButton from '../../../utils/radio-button.vue';
+  import SuccessForm from './post-processing-success-form.vue';
+  import FailureForm from './post-processing-failure-form.vue';
+
+  export default {
+    name: 'post-processing-tab',
+    components: {
+      RadioButton,
+      SuccessForm,
+      FailureForm,
+    },
+    data: () => ({
+      isSuccess: false,
+    }),
+  };
+</script>
+
+<style lang="scss" scoped>
+  @import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
+
+  .post-processing {
+    @extend .cc-scrollbar;
+    max-height: 100%;
+    min-height: 0;
+    overflow: auto;
+  }
+</style>

@@ -4,22 +4,24 @@
       :current-tab="currentTab"
       :tabs="tabs"
     ></tabs>
-    <client-info/>
+    <component :is="currentTab.value" />
   </section>
 </template>
 
 <script>
   import Tabs from '../../utils/tabs.vue';
   import ClientInfo from './client-info-tab.vue';
+  import PostProcessing from './post-processing/post-processing-tab.vue';
 
   export default {
     name: 'the-agent-info-section',
     components: {
       Tabs,
       ClientInfo,
+      PostProcessing,
     },
     data: () => ({
-      currentTab: { value: 'info' },
+      currentTab: { value: 'post-processing' },
     }),
 
     computed: {
@@ -27,15 +29,15 @@
         return [
           {
             text: this.$t('infoSec.clientInfo'),
-            value: 'info',
+            value: 'client-info',
+          },
+          {
+            text: this.$t('infoSec.postProcessing.tab'),
+            value: 'post-processing',
           },
           {
             text: this.$t('infoSec.knowledgeBase'),
             value: 'knowledge-base',
-          },
-          {
-            text: this.$t('infoSec.postProcessing'),
-            value: 'post-processing',
           },
         ];
       },

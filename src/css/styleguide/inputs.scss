@@ -9,6 +9,7 @@ $input-border-color__active: #000000;
 
 .cc-label {
   @extend .typo-input;
+  display: inline-block;
   color: #000;
 }
 
@@ -123,5 +124,20 @@ $input-border-color__active: #000000;
       fill: $input-icon-color__active;
       stroke: $input-icon-color__active;
     }
+  }
+}
+
+.input__short {
+  @extend .typo-input;
+  text-align: center;
+  width: calcVH(40px);
+  padding: calcVH(10px) calcVH(5px);
+  border: 1px solid $input-border-color;
+  border-radius: $border-radius;
+  box-sizing: content-box;
+  transition: $transition;
+
+  &:hover, &:focus {
+    border-color: #000;
   }
 }
