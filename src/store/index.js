@@ -6,6 +6,7 @@ import workspace from './modules/agent-workspace/agent-workspace';
 import now from './modules/reactive-now/reactive-now';
 import call from './modules/call/call';
 import member from './modules/member/member';
+import reporting from './modules/post-processing/post-processing';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     workspace,
     call,
     member,
+    reporting,
     userinfo,
     now,
   },

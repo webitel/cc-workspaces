@@ -6,6 +6,7 @@ export default {
     cancel: 'Cancel',
     logout: 'Logout',
     search: 'Search',
+    description: 'Description',
   },
   header: {
     docs: 'Docs',
@@ -17,7 +18,15 @@ export default {
   infoSec: {
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',
-    postProcessing: 'Post processing',
+    postProcessing: {
+      tab: 'Post processing',
+      completed: 'Thank you for your report!',
+      isSuccess: 'Was this call successful?',
+      yes: 'Yes',
+      no: 'No',
+      addNewCommunication: 'Add new communication',
+      scheduleCall: 'Schedule next call?',
+    },
   },
   emptyWorkspace: {
     empty: {
@@ -64,6 +73,9 @@ export default {
     },
   },
   icon: {
+    delete: 'Delete',
+    edit: 'Edit',
+    add: 'Add',
     settings: 'Settings',
     bridge: 'Bridge',
     close: 'Close',
@@ -89,5 +101,8 @@ export default {
     ringing: 'Ringing',
     callEnd: 'End call',
     history: 'History',
+  },
+  validation: {
+    required: 'Required',
   },
 };

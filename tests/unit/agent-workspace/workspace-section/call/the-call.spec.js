@@ -7,8 +7,6 @@ import Call
   from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
 import CallPreview
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
-import ActiveCall
-  from '../../../../../src/components/agent-workspace/workspace-section/call/active-call.vue';
 import MockSocket from '../../../mocks/MockSocket';
 
 const localVue = createLocalVue();
@@ -44,8 +42,8 @@ describe('Ringing event on call component', () => {
       stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
-    await mockSocket.ringing({});
-    expect(wrapper.find(ActiveCall)
+    await mockSocket.ringing({ answeredAt: 0 });
+    expect(wrapper.find(CallPreview)
       .exists())
       .toBeTruthy();
   });

@@ -28,7 +28,7 @@
 
     methods: {
       ...mapActions('call', {
-        openCall: 'OPEN_CALL_ON_WORKSPACE',
+        openCall: 'OPEN_ACTIVE_CALL',
       }),
     },
   };

@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ClientInfo
-  from '../../../../src/components/agent-workspace/info-section/client-info-tab.vue';
+  from '../../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
 import WorkspaceStates
-  from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  from '../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -15,7 +15,7 @@ describe('Client Info MD from Call', () => {
   beforeEach(() => {
     state = {
       callOnWorkspace: {
-        payload: {},
+        variables: {},
       },
     };
     store = new Vuex.Store({
@@ -35,7 +35,7 @@ describe('Client Info MD from Call', () => {
     });
   });
 
-  it('Correctly renders empty payload', () => {
+  it('Correctly renders empty variables', () => {
     const wrapper = shallowMount(ClientInfo, {
       store,
       localVue,
@@ -44,8 +44,8 @@ describe('Client Info MD from Call', () => {
     expect(md.isEmpty()).toBe(true);
   });
 
-  it('Correctly renders key-value in call payload', () => {
-    state.callOnWorkspace.payload = {
+  it('Correctly renders key-value in call variables', () => {
+    state.callOnWorkspace.variables = {
       key: 'value',
     };
     const wrapper = shallowMount(ClientInfo, {
@@ -57,8 +57,8 @@ describe('Client Info MD from Call', () => {
     expect(md.find('p').text()).toBe('value');
   });
 
-  it('Correctly renders key-value with MD in call payload', () => {
-    state.callOnWorkspace.payload = {
+  it('Correctly renders key-value with MD in call variables', () => {
+    state.callOnWorkspace.variables = {
       md: '# h1 Heading',
     };
     const wrapper = shallowMount(ClientInfo, {
