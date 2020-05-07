@@ -10,6 +10,7 @@
       v-model="valueDraft.destination"
       :disabled="disabled"
       :resetable="false"
+      :v="v.destination"
     ></cc-input>
     <multiselect
       class="processing-communication__select"
@@ -17,6 +18,7 @@
       :placeholder="'Type'"
       :fetch-method="fetchCommunications"
       :disabled="disabled"
+      :v="v.type"
     ></multiselect>
     <cc-input
       class="processing-communication__input processing-communication__input__priority"
@@ -108,6 +110,10 @@
         type: Boolean,
         default: false,
       },
+
+      v: {
+        type: Object,
+      },
     },
 
     data: () => ({
@@ -127,7 +133,7 @@
         immediate: true,
       },
     },
-
+    
     computed: {
       disabled() {
         return !this.isEditing;
@@ -157,7 +163,7 @@
   .processing-communication {
     display: flex;
     justify-content: stretch;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     margin-top: calcVH(30px);
 
@@ -180,7 +186,7 @@
     &__input {
       flex: 4 1 auto;
       min-width: auto;
-      height: calcVH(40px);
+      /*height: calcVH(40px);*/
       margin-right: calcVH(10px);
 
       &__priority {
@@ -196,6 +202,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      margin-top: calcVH(6px);
       flex: 0 0 calcVH(24px*2 + 10px);
 
       .action-wrap {

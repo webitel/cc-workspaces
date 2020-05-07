@@ -32,22 +32,16 @@
         v-model="nextDistributeAt"
       />
     </div>
-    <member-communications/>
+    <member-communications :v="v"/>
     <cc-textarea
       v-model="description"
       :placeholder="$t('reusable.description')"
     ></cc-textarea>
-    <btn
-      class="processing-form__submit"
-      @click.native="sendReporting"
-    >{{$t('reusable.send')}}
-    </btn>
   </form>
 </template>
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import Btn from '../../../utils/btn.vue';
   import CcTextarea from '../../../utils/textarea.vue';
   import Multiselect from '../../../utils/multiselect.vue';
   import Datepicker from '../../../utils/datepicker.vue';
@@ -58,12 +52,16 @@
   export default {
     name: 'post-processing-failure-form',
     components: {
-      Btn,
       CcTextarea,
       Multiselect,
       Datepicker,
       Timepicker,
       MemberCommunications,
+    },
+    props: {
+      v: {
+        type: Object,
+      },
     },
 
     computed: {
@@ -110,7 +108,6 @@
 
     methods: {
       ...mapActions('reporting', {
-        sendReporting: 'SEND_REPORTING',
         setValue: 'SET_PROPERTY',
       }),
     },

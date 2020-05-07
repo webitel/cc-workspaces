@@ -4,15 +4,17 @@
       v-if="communication"
       :value="communication"
       :selected="selected"
+      :v="v.communication"
       exists
       @select="selected = $event"
-      @change="changeCommunication"
+      @change="setCommunication"
     ></communication>
     <communication
       v-for="(communication, key) of newCommunications"
       :value="communication"
       :selected="selected"
       :key="key"
+      :v="v.newCommunications.$each[key]"
       @select="selected = $event"
       @change="changeNewCommunication({value: $event, index: key})"
       @delete="deleteNewCommunication(key)"
@@ -41,26 +43,38 @@
     components: {
       Communication,
     },
+    props: {
+      v: {
+        type: Object,
+      },
+    },
+
     data: () => ({
       selected: '',
     }),
 
+    watch: {
+      memberCommunication: {
+        handler() {
+          this.setCommunication(this.call.memberCommunication);
+        },
+        immediate: true,
+      },
+    },
+
     computed: {
+      ...mapState('call', {
+        call: (state) => state.callOnWorkspace,
+      }),
       ...mapState('reporting', {
-        changedCommunication: (state) => state.communication,
+        communication: (state) => state.communication,
         newCommunications: (state) => state.newCommunications,
       }),
-      communication() {
-        if (this.changedCommunication) {
-          return this.changedCommunication;
-        }
-        return this.$store.state.call.callOnWorkspace.memberCommunication;
-      },
     },
 
     methods: {
       ...mapActions('reporting', {
-        changeCommunication: 'CHANGE_COMMUNICATION',
+        setCommunication: 'SET_COMMUNICATION',
         addNewCommunication: 'ADD_NEW_COMMUNICATION',
         changeNewCommunication: 'CHANGE_NEW_COMMUNICATION',
         deleteNewCommunication: 'DELETE_NEW_COMMUNICATION',

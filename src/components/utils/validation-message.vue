@@ -15,9 +15,11 @@
         if (this.v && this.v.$dirty) {
           if (this.v.required === false) {
             return this.$t('validation.required');
-          } if (this.v.numeric === false) {
+          }
+          if (this.v.numeric === false) {
             return this.$t('validation.numeric');
-          } if (this.v.email === false) {
+          }
+          if (this.v.email === false) {
             return this.$t('validation.email');
           }
         }
@@ -28,12 +30,9 @@
 </script>
 
 <style lang="scss" scoped>
-  /*
-      .input__details {
-          @extend .typo-body-md;
-
-          height: 14px;
-          margin-top: 8px;
-      }
-  */
+  .input__details {
+    @extend .typo-body-sm;
+    margin-top: calcVH(3px);
+    color: $error-color;
+  }
 </style>

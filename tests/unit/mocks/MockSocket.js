@@ -23,6 +23,8 @@ export default class MockSocket {
 
   hangup = (call = this.call) => {
     const action = CallActions.Hangup;
+    // eslint-disable-next-line no-param-reassign
+    call.state = CallActions.Hangup;
     this.callback(action, call);
   };
 

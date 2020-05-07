@@ -4,7 +4,7 @@
     <div class="hs-multiselect-wrap">
       <vue-multiselect
         :class="{'opened': isOpened}"
-        :value="value"
+        :value="validation"
         :options="opts"
         :placeholder="placeholder || label"
         :multiple="multiple"
@@ -38,17 +38,24 @@
         </svg>
       </icon>
     </div>
+    <validation-message
+      class="cc-err-message"
+      v-if="!hideDetails"
+      :v="v"
+    />
   </div>
 </template>
 
 <script>
   import VueMultiselect from 'vue-multiselect';
+  import ValidationMessage from './validation-message.vue';
   import debounce from '../../utils/debounce';
 
   export default {
     name: 'multiselect',
     components: {
       VueMultiselect,
+      ValidationMessage,
     },
     props: {
       value: {
@@ -96,6 +103,15 @@
         type: Boolean,
         default: false,
       },
+
+      hideDetails: {
+        type: Boolean,
+        default: false,
+      },
+
+      v: {
+        type: Object,
+      },
     },
 
     data: () => ({
@@ -115,6 +131,16 @@
           return this.fetchedOptions;
         }
         return this.options;
+      },
+
+      validation: {
+        get() {
+          return this.value;
+        },
+        set(value) {
+          if (this.v) this.v.$touch();
+          this.$emit('input', value);
+        },
       },
     },
 
@@ -167,6 +193,7 @@
   .multiselect {
     position: absolute;
     width: 100%;
+    height: calcVH(40px);
     border: 1px solid $input-border-color;
     border-radius: $border-radius;
     background: #fff;
@@ -187,9 +214,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: calcVH(40px);
       padding: $select-paddings;
-      box-sizing: border-box;
 
       .multiselect__strong {
         // @extend .count-badge;

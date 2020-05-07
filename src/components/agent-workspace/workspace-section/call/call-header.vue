@@ -111,7 +111,7 @@
         <button
           class="icon-btn"
           :class="{'hidden': !number}"
-          type="reset"
+          @click.prevent="number = ''"
         >
           <icon>
             <svg class="icon icon-close-md md">
