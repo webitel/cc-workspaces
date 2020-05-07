@@ -51,6 +51,7 @@
   @import "../../../../css/agent-workspace/info-section/client-info/md-styles";
 
   .md {
+    @extend .typo-body-md;
     @extend .cc-scrollbar;
     max-height: 100%;
     min-height: 0;
