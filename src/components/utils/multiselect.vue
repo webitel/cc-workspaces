@@ -16,7 +16,7 @@
         :loading="false"
         :internal-search="!apiMode"
         :disabled="disabled"
-        @input="$emit('input', $event)"
+        @input="input"
         @search-change="fetch"
         @open="isOpened = true"
         @close="close"
@@ -153,6 +153,12 @@
         }
       },
 
+      input(value) {
+        if (value) {
+          this.$emit('input', value);
+        }
+      },
+
       close() {
         this.$emit('closed');
         this.isOpened = false;
@@ -193,10 +199,11 @@
   .multiselect {
     position: absolute;
     width: 100%;
-    height: calcVH(40px);
+
     border: 1px solid $input-border-color;
     border-radius: $border-radius;
     background: #fff;
+
     cursor: pointer;
     transition: $transition;
     box-sizing: border-box;
@@ -214,7 +221,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      height: calcVH(38px); // 40px - 2px outer borders
       padding: $select-paddings;
+      box-sizing: border-box;
 
       .multiselect__strong {
         // @extend .count-badge;
@@ -234,6 +243,7 @@
 
       .multiselect__single {
         @extend .typo-input;
+        display: inline-block;
       }
 
       .multiselect__tag {
@@ -321,6 +331,12 @@
       border: none;
       outline: none;
       cursor: text;
+    }
+  }
+
+  .text-center {
+    .multiselect__single {
+      margin: auto;
     }
   }
 </style>

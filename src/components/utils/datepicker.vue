@@ -9,6 +9,7 @@
       :calendar-button-icon="'icon-icon_calendar'"
       :maximum-view="maximumView"
       :disabled="disabled"
+      :disabled-dates="disabledDates"
       calendar-button
       monday-first
       @input="$emit('input', $event.getTime())"
@@ -40,6 +41,9 @@
       },
       disabled: {
         type: Boolean,
+      },
+      disabledDates: {
+        type: Object,
       },
     },
   };
@@ -136,6 +140,7 @@
           float: none;
           text-indent: 0;
           color: transparent;
+          cursor: pointer;
 
           &:hover {
             background-color: transparent !important;
@@ -149,7 +154,7 @@
             height: calcVH(24px);
             background: url("../../assets/icons/arrow-left.svg") center center;
             background-size: contain;
-            border: none; // hide default arrows
+            border: none !important; // hide default arrows
             transform: translateX(-50%);
           }
 
@@ -172,6 +177,7 @@
         transition: $transition;
 
         &.day-header {
+          @extend .typo-body-sm;
           letter-spacing: 0.4px;
           color: $icon-color !important;
         }
