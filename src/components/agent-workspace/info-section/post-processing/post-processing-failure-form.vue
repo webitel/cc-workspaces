@@ -76,6 +76,8 @@
     computed: {
       ...mapState('reporting', {
         isScheduleCallValue: (state) => state.isScheduleCall,
+        nextDistributeAtValue: (state) => state.nextDistributeAt,
+        descriptionValue: (state) => state.description,
       }),
 
       isScheduleCall: {
@@ -91,7 +93,7 @@
 
       nextDistributeAt: {
         get() {
-          const nextDistributeAt = new Date(this.$store.state.reporting.nextDistributeAt);
+          const nextDistributeAt = new Date(this.nextDistributeAtValue);
           const min = nextDistributeAt.getMinutes();
           if (min % 15) {
             nextDistributeAt.setHours(nextDistributeAt.getHours() + 1);
@@ -106,7 +108,7 @@
 
       description: {
         get() {
-          return this.$store.state.reporting.description;
+          return this.descriptionValue;
         },
         set(value) {
           this.setValue({ prop: 'description', value });
