@@ -151,10 +151,10 @@ $input-border-color__active: #000000;
   @extend .typo-input;
   text-align: center;
   width: calcVH(40px);
-  padding: calcVH(10px) calcVH(5px);
+  padding: calcVH(9px) calcVH(4px); // 10px 5px - borders
   border: 1px solid $input-border-color;
   border-radius: $border-radius;
-  box-sizing: content-box;
+  box-sizing: border-box;
   transition: $transition;
 
   &:hover, &:focus {

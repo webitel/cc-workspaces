@@ -27,9 +27,12 @@
     <div class="processing-form__datetime" v-show="isScheduleCallValue">
       <datepicker
         v-model="nextDistributeAt"
+        :disabled-dates="disabledDates"
       ></datepicker>
       <timepicker
         v-model="nextDistributeAt"
+        :type="'text'"
+        min-select
       />
     </div>
     <member-communications :v="v"/>
@@ -64,6 +67,12 @@
       },
     },
 
+    data: () => ({
+      disabledDates: {
+        to: new Date(),
+      },
+    }),
+
     computed: {
       ...mapState('reporting', {
         isScheduleCallValue: (state) => state.isScheduleCall,
@@ -82,7 +91,13 @@
 
       nextDistributeAt: {
         get() {
-          return this.$store.state.reporting.nextDistributeAt;
+          const nextDistributeAt = new Date(this.$store.state.reporting.nextDistributeAt);
+          const min = nextDistributeAt.getMinutes();
+          if (min % 15) {
+            nextDistributeAt.setHours(nextDistributeAt.getHours() + 1);
+            nextDistributeAt.setMinutes(0, 0, 0);
+          }
+          return nextDistributeAt.getTime();
         },
         set(value) {
           this.setValue({ prop: 'nextDistributeAt', value });

@@ -6,11 +6,22 @@
         :value="computeHour"
         @input="setHour($event.target.value)"
         type="number"
+        min="0"
       >
     </div>
     <span class="timepicker__delimiter">:</span>
     <div class="timepicker__input-wrap">
+      <multiselect
+        class="timepicker__select text-center"
+        v-if="minSelect"
+        :value="computeMin"
+        :options="minOptions"
+        :api-mode="false"
+        :track-by="'value'"
+        @input="setMin($event.value)"
+      ></multiselect>
       <input
+        v-else
         class="input__short timepicker__input"
         :value="computeMin"
         @input="setMin($event.target.value)"
@@ -21,21 +32,64 @@
 </template>
 
 <script>
+  import Multiselect from './multiselect.vue';
+
   export default {
     name: 'timepicker',
+    components: {
+      Multiselect,
+    },
+
     props: {
       value: {
         type: Number,
         required: true,
       },
+      // inputs type like text or number
+      type: {
+        type: String,
+        default: 'number',
+      },
+      minSelect: {
+        type: Boolean,
+        default: false,
+      },
     },
+
+    data: () => ({
+      minOptions: [
+        {
+          name: '00',
+          value: 0,
+        },
+        {
+          name: '15',
+          value: 15,
+        },
+        {
+          name: '30',
+          value: 30,
+        },
+        {
+          name: '45',
+          value: 45,
+        },
+      ],
+    }),
 
     computed: {
       computeHour() {
         return new Date(this.value).getHours();
       },
       computeMin() {
-        return new Date(this.value).getMinutes();
+        const min = new Date(this.value).getMinutes();
+        if (this.minSelect) {
+          return this.minOptions.find((opt) => opt.value === min) || {
+            value: min,
+            name: `${min}`,
+          };
+        }
+        return min;
       },
     },
 
@@ -68,8 +122,8 @@
     flex-direction: column;
   }
 
-  .timepicker__input {
-    min-width: calcVH(50px);
+  .timepicker__input, .timepicker__select {
+    min-width: calcVH(80px);
   }
 
   .timepicker__delimiter {

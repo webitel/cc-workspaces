@@ -16,7 +16,7 @@
         :loading="false"
         :internal-search="!apiMode"
         :disabled="disabled"
-        @input="$emit('input', $event)"
+        @input="input"
         @search-change="fetch"
         @open="isOpened = true"
         @close="close"
@@ -153,6 +153,12 @@
         }
       },
 
+      input(value) {
+        if (value) {
+          this.$emit('input', value);
+        }
+      },
+
       close() {
         this.$emit('closed');
         this.isOpened = false;
@@ -237,6 +243,7 @@
 
       .multiselect__single {
         @extend .typo-input;
+        display: inline-block;
       }
 
       .multiselect__tag {
@@ -324,6 +331,12 @@
       border: none;
       outline: none;
       cursor: text;
+    }
+  }
+
+  .text-center {
+    .multiselect__single {
+      margin: auto;
     }
   }
 </style>
