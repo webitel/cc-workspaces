@@ -79,6 +79,7 @@ $input-border-color__active: #000000;
   flex-direction: column;
   //min-width: calcVH(429px);
   min-width: 100%;
+}
 
 .cc-input__body {
   box-sizing: border-box;
@@ -128,6 +129,7 @@ $input-border-color__active: #000000;
     stroke: $input-icon-color;
   }
 }
+
 
 // SEARCH INPUT
 .cc-search-input {
