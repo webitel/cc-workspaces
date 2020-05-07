@@ -58,10 +58,10 @@
           clientInfo,
           knowledgeBase,
         ];
-        // if (this.call.allowReporting) {
+        if (this.call.allowReporting) {
           // insert post-processing on 2nd place
           tabs.splice(1, 0, postProcessing);
-        // }
+        }
         return tabs;
       },
     },
