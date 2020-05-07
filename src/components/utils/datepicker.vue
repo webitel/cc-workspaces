@@ -172,6 +172,7 @@
         transition: $transition;
 
         &.day-header {
+          @extend .typo-body-sm;
           letter-spacing: 0.4px;
           color: $icon-color !important;
         }
