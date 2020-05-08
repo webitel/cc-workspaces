@@ -142,6 +142,10 @@
           color: transparent;
           cursor: pointer;
 
+          &.disabled {
+            display: none;
+          }
+
           &:hover {
             background-color: transparent !important;
           }
