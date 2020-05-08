@@ -1,5 +1,5 @@
 <template>
-  <div class="ws-worksection__item ws-contact-item">
+  <div class="ws-worksection__item ws-contact-item" :class="{'callable': callable}">
 
     <div class="ws-worksection__item__pic-wrap">
       <rounded-action
@@ -87,6 +87,20 @@
     flex-direction: column;
   }
 
+  .callable .ws-worksection__item__pic-wrap {
+    &:hover {
+      .ws-contact-item__call-action {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .ws-worksection__item__pic {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  }
+
   .ws-worksection__item__pic-wrap {
     position: relative;
 
@@ -103,18 +117,6 @@
     .ws-worksection__item__pic {
       transition: $transition;
       cursor: pointer;
-    }
-
-    &:hover {
-      .ws-contact-item__call-action {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .ws-worksection__item__pic {
-        opacity: 0;
-        pointer-events: none;
-      }
     }
   }
 
