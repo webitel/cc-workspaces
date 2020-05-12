@@ -73,6 +73,8 @@ export default {
     },
   },
   icon: {
+    collapse: 'Collapse',
+    expand: 'Expand',
     delete: 'Delete',
     edit: 'Edit',
     add: 'Add',

@@ -63,8 +63,11 @@
     },
 
     watch: {
-      call() {
-        this.resetForm();
+      call: {
+        handler() {
+          this.resetForm();
+        },
+        immediate: true,
       },
     },
 
