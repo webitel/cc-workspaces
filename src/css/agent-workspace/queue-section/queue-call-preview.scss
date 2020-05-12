@@ -1,21 +1,32 @@
+$opened-item-shadow: inset 0px 0px 8px -5px rgba(0, 0, 0, 0.15),
+inset 0px 0px 8px -5px rgba(0, 0, 0, 0.15);
+
+$opened-item-shadow2: inset 0px 1px 4px -3px rgba(0, 0, 0, 0.15),
+inset 0px -1px 4px -3px rgba(0, 0, 0, 0.15);
+
+$opened-item-shadow1: inset 0px 0px 8px rgba(0, 0, 0, 0.15),
+inset 0px 0px 8px rgba(0, 0, 0, 0.15),
+inset 0 8px 0px 0px #fff,
+inset 0 -8px 0px 0px #fff;
 
 .queue-preview {
   box-sizing: border-box;
   position: relative;
   padding: calcVH(20px) calcVH(30px);
-  border: calcVH(2px) solid transparent;
+  border: 0 solid transparent;
   border-bottom-color: $page-bg-color;
   border-radius: $border-radius;
   cursor: pointer;
 
-  &.hold {
-    border: calcVH(2px) solid $hold-color;
+  &.opened {
+    box-shadow: $opened-item-shadow;
   }
 }
 
 .preview-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 
   &__name {
     @extend .typo-heading-sm;
