@@ -11,7 +11,7 @@
 
     <div
       class="video-wrap local"
-      v-if="localStreams.length"
+      v-if="this.isLocalVideo || !this.isPeerVideo"
     >
       <video
         class="local-video"
@@ -90,14 +90,20 @@
         return this.call.localStreams || [];
       },
 
+      isPeerVideo() {
+        return this.peerStreams.some((stream) => (
+          stream.getTracks().some((track) => track.kind === 'video')
+        ));
+      },
+
+      isLocalVideo() {
+        return this.localStreams.some((stream) => (
+          stream.getTracks().some((track) => track.kind === 'video')
+        ));
+      },
+
       isVideo() {
-        const isPeerVideo = this.peerStreams.some((stream) => (
-          stream.getTracks().some((track) => track.kind === 'video')
-        ));
-        const isLocalVideo = this.localStreams.some((stream) => (
-          stream.getTracks().some((track) => track.kind === 'video')
-        ));
-        return isPeerVideo || isLocalVideo;
+        return this.isPeerVideo || this.isLocalVideo;
       },
 
       // controls Active state
