@@ -113,5 +113,21 @@
         background: $hold-btn-color__hover;
       }
     }
+
+
+    &.call-action__mic {
+      position: relative;
+
+      &.active:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 1.5px;
+        background: $secondary-action-icon-color__active;
+        transform: rotate(-45deg);
+        transition: $transition;
+      }
+    }
   }
 </style>

@@ -10,6 +10,8 @@
         <info-section/>
       </section>
     </div>
+
+    <video-container/>
   </main>
 </template>
 
@@ -21,6 +23,7 @@
   import QueueSection from './queue-section/the-agent-queue-section.vue';
   import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
   import InfoSection from './info-section/the-agent-info-section.vue';
+  import VideoContainer from './video-container/video-container.vue';
 
   export default {
     name: 'the-agent-workspace',
@@ -31,6 +34,7 @@
       QueueSection,
       WorkspaceSection,
       InfoSection,
+      VideoContainer,
     },
 
     created() {

@@ -164,20 +164,5 @@
     justify-content: space-evenly;
     padding: calcVH(10px) 0;
     margin: 0 calcVH(20px);
-
-    .call-action__mic {
-      position: relative;
-
-      &.active:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        height: 1.5px;
-        background: $secondary-action-icon-color__active;
-        transform: rotate(-45deg);
-        transition: $transition;
-      }
-    }
   }
 </style>

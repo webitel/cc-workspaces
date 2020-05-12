@@ -19,6 +19,9 @@ const callHandler = (context) => (action, call) => {
     case CallActions.PeerStream:
       context.dispatch('HANDLE_STREAM_ACTION', call);
       break;
+    case CallActions.LocalStream:
+      // context.dispatch('HANDLE_LOCAL_STREAM_ACTION', call);
+      break;
     default:
     // console.log('default', action);
   }
@@ -58,9 +61,19 @@ const actions = {
 
   HANDLE_STREAM_ACTION: (context, call) => {
     const audio = new Audio();
-    audio.srcObject = call.peerStreams.pop();
-    audio.play();
+    const stream = call.peerStreams.slice(-1).pop();
+    if (stream) {
+      audio.srcObject = stream;
+      audio.play();
+    }
   },
+
+  // HANDLE_LOCAL_STREAM_ACTION: (context, call) => {
+  // const video = new Audio();
+  // console.log(call.localStreams);
+  // audio.srcObject = call.localStreams.pop();
+  // audio.play();
+  // },
 };
 
 export default {
