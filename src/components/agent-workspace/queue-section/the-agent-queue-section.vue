@@ -28,6 +28,7 @@
   import OfflineQueue from './offline-queue/offline-queue-container.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
   import Tabs from '../../utils/tabs.vue';
+  import CallStates from '../../../store/modules/call/callUtils/CallStates';
 
   export default {
     name: 'the-agent-queue-section',
@@ -88,7 +89,7 @@
       },
 
       isNewCallButton() {
-        return this.callState !== 'NEW';
+        return this.callState !== CallStates.NEW;
       },
     },
 
