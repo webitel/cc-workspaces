@@ -7,7 +7,7 @@ const state = {
   callList: [],
   callState: '', // PREVIEW, ACTIVE, NEW
   callOnWorkspace: {},
-  newCallNumber: '8888',
+  newCallNumber: '',
 };
 
 const getters = {
