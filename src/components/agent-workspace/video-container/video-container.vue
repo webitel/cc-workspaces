@@ -11,7 +11,7 @@
 
     <div
       class="video-wrap local"
-      v-if="this.isLocalVideo || !this.isPeerVideo"
+      v-if="this.isLocalVideo && this.isPeerVideo"
     >
       <video
         class="local-video"
