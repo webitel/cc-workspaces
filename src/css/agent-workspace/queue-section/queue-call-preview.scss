@@ -22,10 +22,11 @@
   }
 
   &__time {
+    display: flex;
+    align-items: flex-start;
     .preview-header__time-digit {
       @extend .typo-body-md;
       text-align: center;
-      display: inline-block;
       width: calcVH(9.5px);
 
       /*semicolons*/
