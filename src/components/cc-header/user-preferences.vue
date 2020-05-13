@@ -12,9 +12,14 @@
     >
       <li class="user-preferences__action user-preferences__action__docs">
         <!--        <i class="icon-icon_doc"></i>-->
-        <span class="user-preferences__action__text" @click="docs">
+        <a
+          class="user-preferences__action__text"
+          href="https://docs.webitel.com/display/WEP/Webitel+Elastic+Platform"
+          target="_blank"
+          @click="close"
+        >
           {{$t('header.docs')}}
-        </span>
+        </a>
       </li>
       <li class="user-preferences__action user-preferences__action__logout">
         <!--        <i class="icon-icon_logout"></i>-->
@@ -38,11 +43,6 @@
     }),
 
     methods: {
-      docs() {
-        this.close();
-        window.open('https://docs.webitel.com', '_blank');
-      },
-
       settings() {
       },
 
@@ -89,12 +89,14 @@
     .user-preferences__action {
       display: flex;
       align-items: center;
-      padding: calcVH(11px) calcVH(13px);
       transition: $transition;
       cursor: pointer;
 
       .user-preferences__action__text {
         @extend .typo-body-sm;
+        display: block;
+        width: 100%;
+        padding: calcVH(11px) calcVH(13px);
         margin-left: calcVH(8px);
       }
 
