@@ -32,7 +32,8 @@
   border: none;
   cursor: pointer;
 
-  &:hover .icon {
+  &:hover .icon,
+  &.opened .icon {
     fill: #000;
     stroke: #000;
   }
