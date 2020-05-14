@@ -13,6 +13,7 @@
       <status-select
         @setBreak="isBreakPopup = true"
       />
+      <app-navigator/>
       <user-preferences/>
     </div>
   </header>
@@ -22,6 +23,7 @@
   import { mapState, mapActions } from 'vuex';
   import { AgentStatus } from 'webitel-sdk';
   import Switcher from './cc-header-switcher.vue';
+  import AppNavigator from './the-app-navigator.vue';
   import StatusSelect from './status-select.vue';
   import UserPreferences from './user-preferences.vue';
   import BreakPopup from '../break-popup/break-popup.vue';
@@ -31,6 +33,7 @@
     name: 'cc-header',
     components: {
       Switcher,
+      AppNavigator,
       StatusSelect,
       UserPreferences,
       BreakPopup,
