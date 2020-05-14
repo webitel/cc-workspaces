@@ -8,6 +8,14 @@ export default {
     search: 'Search',
     description: 'Description',
   },
+  appNavigator: {
+    title: 'Webitel applications',
+    admin: 'Admin',
+    agent: 'Agent Workspace',
+    supervisor: 'Supervisor Workspace',
+    audit: 'Audit',
+    history: 'Call History',
+  },
   header: {
     docs: 'Docs',
   },
@@ -73,6 +81,8 @@ export default {
     },
   },
   icon: {
+    account: 'Account',
+    appNavigator: 'App navigator',
     collapse: 'Collapse',
     expand: 'Expand',
     delete: 'Delete',
