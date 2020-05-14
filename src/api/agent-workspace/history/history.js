@@ -30,7 +30,7 @@ export const getAgentHistory = async ({ page, size, search }) => {
         undefined,
         undefined,
         undefined,
-        undefined,
+        '+created_at',
         domainId,
       );
     return response.items || [];

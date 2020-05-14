@@ -1,5 +1,5 @@
 <template>
-  <article class="queue-preview" :class="{'hold': isHold}">
+  <article class="queue-preview" :class="{'opened': isOpened}">
     <status-badge :state="computePreviewStatusClass"/>
 
     <header class="preview-header">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import { CallActions, CallDirection } from 'webitel-sdk';
   import StatusBadge from '../call-status-icon-badge.vue';
   import Btn from '../../../utils/btn.vue';
@@ -69,6 +69,14 @@
     },
 
     computed: {
+      ...mapState('call', {
+        callOnWorkspace: (state) => state.callOnWorkspace,
+      }),
+
+      isOpened() {
+        return this.call === this.callOnWorkspace;
+      },
+
       isHold() {
         return this.call.isHold;
       },
