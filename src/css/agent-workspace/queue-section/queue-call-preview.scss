@@ -25,10 +25,11 @@ inset 0px 0px 8px -5px rgba(0, 0, 0, 0.25);
   }
 
   &__time {
+    display: flex;
+    align-items: flex-start;
     .preview-header__time-digit {
       @extend .typo-body-md;
       text-align: center;
-      display: inline-block;
       width: calcVH(9.5px);
 
       /*semicolons*/

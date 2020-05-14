@@ -87,7 +87,7 @@ $input-border-color__active: #000000;
   align-items: center;
   width: 100%;
   height: calcVH(40px);
-  // padding: calcVH(8px) calcVH(7px);
+  padding: calcVH(8px) calcVH(7px);
   border: calcVH(1px) solid $input-border-color;
   border-radius: $border-radius;
 
