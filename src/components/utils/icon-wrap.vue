@@ -5,6 +5,24 @@
          version="1.1"
          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
+        <symbol id="icon-account-md" viewBox="0 0 32 32">
+          <title>{{$t('icon.account')}}</title>
+          <path d="M3 16c0-7.18 5.82-13 13-13s13 5.82 13 13c0 7.18-5.82 13-13 13s-13-5.82-13-13zM16 5c-6.075 0-11 4.925-11 11s4.925 11 11 11c6.075 0 11-4.925 11-11s-4.925-11-11-11z"></path>
+          <path d="M11.476 22.301c-1.113 0.785-1.676 1.777-1.676 2.766 0 0.552-0.448 1-1 1s-1-0.448-1-1c0-1.811 1.037-3.352 2.524-4.401 1.489-1.050 3.496-1.666 5.676-1.666s4.187 0.616 5.676 1.666c1.487 1.049 2.524 2.59 2.524 4.401 0 0.552-0.448 1-1 1s-1-0.448-1-1c0-0.989-0.563-1.981-1.676-2.766-1.111-0.783-2.704-1.301-4.524-1.301s-3.413 0.517-4.524 1.301z"></path>
+          <path d="M11 12c0-2.761 2.239-5 5-5s5 2.239 5 5c0 2.761-2.239 5-5 5s-5-2.239-5-5zM16 9c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3c0-1.657-1.343-3-3-3z"></path>
+        </symbol>
+        <symbol id="icon-app-navigator-md" viewBox="0 0 32 32">
+          <title>{{$t('icon.appNavigator')}}</title>
+          <path d="M7.333 7.333h4v4h-4v-4z"></path>
+          <path d="M14 7.333h4v4h-4v-4z"></path>
+          <path d="M20.667 7.333h4v4h-4v-4z"></path>
+          <path d="M7.333 14h4v4h-4v-4z"></path>
+          <path d="M14 14h4v4h-4v-4z"></path>
+          <path d="M20.667 14h4v4h-4v-4z"></path>
+          <path d="M7.333 20.667h4v4h-4v-4z"></path>
+          <path d="M14 20.667h4v4h-4v-4z"></path>
+          <path d="M20.667 20.667h4v4h-4v-4z"></path>
+        </symbol>
         <symbol id="icon-mic-muted-xl__bold" viewBox="0 0 32 32">
           <title>{{$t('icon.mic')}}</title>
           <path

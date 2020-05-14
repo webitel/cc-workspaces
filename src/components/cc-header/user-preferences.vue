@@ -1,11 +1,16 @@
 <template>
   <div class="user-preferences" v-clickaway="close">
-    <img
-      class="user-preferences__user-pic"
-      src="../../assets/agent-workspace/default-avatar.svg"
-      alt="profile pic"
-      @click="showUserActions = !showUserActions"
+    <button
+      class="icon-btn user-preferences__account"
+      @click.prevent="showUserActions = !showUserActions"
+      v-clickaway="close"
     >
+      <icon>
+        <svg class="icon md">
+          <use xlink:href="#icon-account-md"></use>
+        </svg>
+      </icon>
+    </button>
     <ul
       class="user-preferences__actions-wrap"
       v-show="showUserActions"
@@ -65,9 +70,7 @@
     align-items: center;
   }
 
-  .user-preferences__user-pic {
-    width: calcVH(24px);
-    height: calcVH(24px);
+  .user-preferences__account {
     margin-left: calcVH(30px);
     cursor: pointer;
   }
