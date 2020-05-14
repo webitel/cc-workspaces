@@ -210,7 +210,6 @@
     .peer-video {
       height: auto;
       min-width: 60vw;
-      min-height: 60vh;
       max-width: 90vw;
       max-height: 90vh;
     }

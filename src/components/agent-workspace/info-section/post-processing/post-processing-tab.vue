@@ -94,7 +94,7 @@
 
       isCommunicationsValid() {
         this.$v.$touch();
-        return this.isSuccess || !(this.$v.$pending || this.$v.$error);
+        return !(this.$v.$pending || this.$v.$error);
       },
     },
 

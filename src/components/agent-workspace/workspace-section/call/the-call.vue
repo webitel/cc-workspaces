@@ -30,7 +30,7 @@
 
       isPreviewCall() {
         return !this.call.answeredAt
-          && !this.callState;
+          && this.callState !== CallStates.NEW;
       },
     },
   };
