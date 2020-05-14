@@ -64,12 +64,6 @@
       apps() {
         return [
           {
-            name: 'admin',
-            title: this.$t('appNavigator.admin'),
-            href: process.env.VUE_APP_ADMIN_URL,
-            img: imgAdmin,
-          },
-          {
             name: 'agent',
             title: this.$t('appNavigator.agent'),
             href: process.env.VUE_APP_AGENT_URL,
@@ -82,16 +76,22 @@
             img: imgSupervisor,
           },
           {
+            name: 'history',
+            title: this.$t('appNavigator.history'),
+            href: process.env.VUE_APP_HISTORY_URL,
+            img: imgHistory,
+          },
+          {
             name: 'audit',
             title: this.$t('appNavigator.audit'),
             href: process.env.VUE_APP_AUDIT_URL,
             img: imgAudit,
           },
           {
-            name: 'history',
-            title: this.$t('appNavigator.history'),
-            href: process.env.VUE_APP_HISTORY_URL,
-            img: imgHistory,
+            name: 'admin',
+            title: this.$t('appNavigator.admin'),
+            href: process.env.VUE_APP_ADMIN_URL,
+            img: imgAdmin,
           },
         ];
       },
