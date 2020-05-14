@@ -51,18 +51,16 @@
       },
 
       computeDate() {
-        const day = 24 * 60 * 60 * 10 ** 3;
         const createdAt = +this.item.createdAt;
         const date = new Date(createdAt).toLocaleDateString();
         const time = new Date(createdAt).toLocaleTimeString().slice(0, 5); // slice only hh:mm
-        if ((Date.now() - createdAt) < day) return `${this.$t('history.today')} ${time}`;
-        if ((Date.now() - createdAt) < day * 2) return `${this.$t('history.yesterday')} ${time}`;
+        if (this.isToday(createdAt)) return `${this.$t('history.today')} ${time}`;
+        if (this.isYesterday(createdAt)) return `${this.$t('history.yesterday')} ${time}`;
         return `${date} ${time}`;
       },
 
       computeDuration() {
-        const duration = this.item.hangupAt - this.item.answeredAt;
-        return new Date(duration || 0).toISOString().substr(11, 8);
+        return new Date(this.item.duration * 10 ** 3 || 0).toISOString().substr(11, 8);
       },
 
       computeStatusIcon() {
@@ -79,6 +77,27 @@
           return 'inbound';
         }
         return 'outbound';
+      },
+    },
+
+    methods: {
+      isToday(createdAt) {
+        const date = new Date(+createdAt);
+        const today = new Date();
+        return this.isTheSameDate(today, date);
+      },
+
+      isYesterday(createdAt) {
+        const date = new Date(+createdAt);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        return this.isTheSameDate(yesterday, date);
+      },
+
+      isTheSameDate(date1, date2) {
+        return date1.getDate() === date2.getDate()
+          && date1.getMonth() === date2.getMonth()
+          && date1.getFullYear() === date2.getFullYear();
       },
     },
   };
