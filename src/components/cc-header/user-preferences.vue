@@ -33,18 +33,18 @@
             <span>{{$t('header.docs')}}</span>
           </a>
         </li>
-        <li class="user-preferences__action user-preferences__action__settings">
-          <a class="user-preferences__action__link" @click.prevent="settings">
-            <icon>
-              <svg class="icon sm">
-                <use xlink:href="#icon-settings-sm"></use>
-              </svg>
-            </icon>
-            <span>
-          {{$t('reusable.settings')}}
-        </span>
-          </a>
-        </li>
+<!--        <li class="user-preferences__action user-preferences__action__settings">-->
+<!--          <a class="user-preferences__action__link" @click.prevent="settings">-->
+<!--            <icon>-->
+<!--              <svg class="icon sm">-->
+<!--                <use xlink:href="#icon-settings-sm"></use>-->
+<!--              </svg>-->
+<!--            </icon>-->
+<!--            <span>-->
+<!--          {{$t('reusable.settings')}}-->
+<!--        </span>-->
+<!--          </a>-->
+<!--        </li>-->
         <li class="user-preferences__action user-preferences__action__logout">
           <a class="user-preferences__action__link" @click.prevent="logoutUser">
             <icon>
