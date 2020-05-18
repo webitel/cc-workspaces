@@ -7,6 +7,7 @@ export default {
     logout: 'Logout',
     search: 'Search',
     description: 'Description',
+    settings: 'Settings',
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -81,6 +82,8 @@ export default {
     },
   },
   icon: {
+    docs: 'Docs',
+    logout: 'Logout',
     account: 'Account',
     appNavigator: 'App navigator',
     collapse: 'Collapse',
