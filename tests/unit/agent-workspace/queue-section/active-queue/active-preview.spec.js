@@ -66,21 +66,6 @@ describe('Other UIs', () => {
     });
     expect(wrapper.find('.call-preview__number').text()).toEqual(display);
   });
-
-  it('Draws border on call on hold', () => {
-    const wrapper = shallowMount(ActivePreview, {
-      store,
-      localVue,
-      stubs: { Icon: true },
-      propsData: {
-        call,
-        index: state.callList.indexOf(call),
-      },
-    });
-    expect(wrapper.find('.queue-preview')
-      .classes())
-      .toContain('hold');
-  });
 });
 
 describe('Preview Actions', () => {

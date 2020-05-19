@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../../src/store/modules/call/call';
-import CallStates from '../../../../../src/store/modules/call/callUtils/CallStates';
 import CallPreview
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
 import PreviewProfile from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview-profile.vue';
@@ -37,8 +36,8 @@ describe('Transfer functionality', () => {
     });
     const transferBtn = wrapper.find('.transfer');
     transferBtn.trigger('click');
-    expect(state.callState)
-      .toEqual(CallStates.TRANSFER);
+    expect(wrapper.emitted().transfer)
+      .toBeTruthy();
   });
 });
 

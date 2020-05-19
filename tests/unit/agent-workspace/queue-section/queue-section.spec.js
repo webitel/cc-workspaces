@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import workspaceModule from '../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../src/store/modules/call/call';
 import memberModule from '../../../../src/store/modules/member/member';
-import CallStates from '../../../../src/store/modules/call/callUtils/CallStates';
 import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
 import MockSocket from '../../mocks/MockSocket';
@@ -24,7 +23,7 @@ describe('Make new call functionality', () => {
 
   beforeEach(() => {
     state = {
-      callState: null,
+      callOnWorkspace: {},
       callList: [],
     };
     store = new Vuex.Store({
@@ -50,7 +49,7 @@ describe('Make new call functionality', () => {
     });
     const newCallBtn = wrapper.find('.call');
     newCallBtn.trigger('click');
-    expect(state.callState)
-      .toEqual(CallStates.NEW);
+    expect(state.callOnWorkspace._isNew)
+      .toBeTruthy();
   });
 });

@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
 import callModule from '../../../../../src/store/modules/call/call';
-import CallStates from '../../../../../src/store/modules/call/callUtils/CallStates';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
 
@@ -21,9 +20,10 @@ describe('Make new call functionality', () => {
 
   beforeEach(() => {
     state = {
-      callState: CallStates.NEW,
-      callOnWorkspace: {},
-      newCallNumber: '',
+      callOnWorkspace: {
+        _isNew: true,
+        newNumber: '',
+      },
       callList: [],
     };
     store = new Vuex.Store({
@@ -95,7 +95,6 @@ describe('Transfer functionality', () => {
   beforeEach(() => {
     state = {
       callList: [],
-      callState: CallStates.ACTIVE,
       callOnWorkspace: {
         blindTransfer: jest.fn(),
       },
@@ -113,6 +112,9 @@ describe('Transfer functionality', () => {
   });
 
   it('Opens transfer tab from call-header', () => {
+    state.callOnWorkspace = {
+      allowHangup: true,
+    };
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
@@ -143,7 +145,6 @@ describe('Bridge functionality', () => {
   beforeEach(() => {
     state = {
       callList: [call1, call2],
-      callState: CallStates.ACTIVE,
       callOnWorkspace: call1,
     };
     store = new Vuex.Store({
