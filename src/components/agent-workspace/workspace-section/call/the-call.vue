@@ -1,43 +1,100 @@
 <template>
-  <section class="call">
-    <call-preview v-if="isPreviewCall" />
-    <active-call v-else />
+  <call-preview
+    v-if="isPreviewCall"
+    @transfer="openTransfer"
+  ></call-preview>
+
+  <section class="active-call" v-else>
+    <call-header
+      :current-tab="currentTab"
+      @openTab="currentTab = $event"
+    ></call-header>
+
+    <section class="ws-worksection-wrap">
+      <component :is="currentTab"/>
+    </section>
+
+    <call-footer
+      :current-tab="currentTab"
+      @openTab="currentTab = $event"
+    ></call-footer>
   </section>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import CallStates from '../../../../store/modules/call/callUtils/CallStates';
+  import { mapState, mapActions } from 'vuex';
+  import { CallActions, CallDirection } from 'webitel-sdk';
   import CallPreview from './call-preview.vue';
-  import ActiveCall from './active-call.vue';
+  import CallHeader from './call-header.vue';
+  import CallFooter from './call-footer.vue';
+  import History from '../shared/workspace-history/history-container.vue';
+  import Contacts from '../shared/workspace-contacts/workspace-contacts-container.vue';
+  import Transfer from '../shared/workspace-transfer/workspace-transfer-container.vue';
+  import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
+  import Numpad from './call-numpad/numpad.vue';
+  import callTimer from '../../../../mixins/callTimerMixin';
 
   export default {
     name: 'the-call',
+    mixins: [callTimer],
     components: {
       CallPreview,
-      ActiveCall,
+      CallHeader,
+      CallFooter,
+      History,
+      Contacts,
+      Numpad,
+      Transfer,
+      Bridge,
     },
 
     data: () => ({
-      CallStates,
+      currentTab: 'numpad',
+      isPreviewTransfer: false,
     }),
+
+    watch: {
+      call() {
+        this.isPreviewTransfer = false;
+      },
+    },
 
     computed: {
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
-        callState: (state) => state.callState,
       }),
 
       isPreviewCall() {
-        return !this.call.answeredAt
-          && this.callState !== CallStates.NEW;
+        if (this.isPreviewTransfer) return false;
+        const isPreviewDialer = this.call.queue && this.call.queue.queue_type === 'preview';
+        return this.call.state === CallActions.Ringing // Inbound ringing
+          && (
+            this.call.direction === CallDirection.Inbound
+            || (this.call.direction === CallDirection.Outbound // Outbound preview dialer
+              && isPreviewDialer)
+          );
+      },
+    },
+
+    methods: {
+      ...mapActions('call', {
+        answer: 'ANSWER',
+        hangup: 'HANGUP',
+      }),
+
+      openTransfer() {
+        this.isPreviewTransfer = true;
+        this.currentTab = 'transfer';
       },
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  .call {
+  .active-call {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
     height: 100%;
   }
 </style>

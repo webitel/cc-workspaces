@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 // import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import CallStates from '../../../../../src/store/modules/call/callUtils/CallStates';
 import ActiveCall
-  from '../../../../../src/components/agent-workspace/workspace-section/call/active-call.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
 import Numpad

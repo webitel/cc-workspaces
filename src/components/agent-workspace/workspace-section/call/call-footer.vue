@@ -1,5 +1,6 @@
 <template>
   <footer class="call-footer">
+    <divider/>
     <rounded-action
       class="call-action secondary"
       :class="{
@@ -73,12 +74,13 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import CallStates from '../../../../store/modules/call/callUtils/CallStates';
+  import Divider from '../../../utils/divider.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
   export default {
     name: 'call-footer',
     components: {
+      Divider,
       RoundedAction,
     },
 
@@ -88,13 +90,8 @@
       },
     },
 
-    data: () => ({
-      CallStates,
-    }),
-
     computed: {
       ...mapState('call', {
-        callState: (state) => state.callState,
         call: (state) => state.callOnWorkspace,
       }),
 
@@ -115,7 +112,7 @@
 
       // controls btn visibility
       isMuted() {
-        return this.callState !== CallStates.NEW;
+        return !this.call._isNew;
       },
 
       // controls Active state
@@ -125,7 +122,7 @@
 
       // controls btn visibility
       isHold() {
-        return this.callState !== CallStates.NEW;
+        return !this.call._isNew;
       },
 
       // controls Active state
@@ -135,7 +132,7 @@
 
       // controls btn visibility
       isRecord() {
-        return this.callState !== CallStates.NEW;
+        return !this.call._isNew;
       },
 
       // controls Active state
@@ -145,7 +142,7 @@
 
       // controls btn visibility
       isNote() {
-        return this.callState !== CallStates.NEW;
+        return !this.call._isNew;
       },
     },
 

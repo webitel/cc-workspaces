@@ -9,7 +9,7 @@
     <div
       v-if="!isCallActive"
       class="numpad-state__primary-text"
-    >{{computeCallState}}
+    >{{callState}}
     </div>
     <div
       v-else
@@ -48,7 +48,7 @@
         computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
       }),
 
-      computeCallState() {
+      callState() {
         switch (this.call.state) {
           case CallActions.Ringing:
             return 'Ringing..';

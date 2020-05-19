@@ -28,7 +28,6 @@
   import OfflineQueue from './offline-queue/offline-queue-container.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
   import Tabs from '../../utils/tabs.vue';
-  import CallStates from '../../../store/modules/call/callUtils/CallStates';
 
   export default {
     name: 'the-agent-queue-section',
@@ -51,7 +50,7 @@
     computed: {
       ...mapState('call', {
         callList: (state) => state.callList,
-        callState: (state) => state.callState,
+        call: (state) => state.callOnWorkspace,
       }),
       ...mapState('member', {
         membersList: (state) => state.membersList,
@@ -89,7 +88,7 @@
       },
 
       isNewCallButton() {
-        return this.callState !== CallStates.NEW;
+        return !this.call._isNew;
       },
     },
 

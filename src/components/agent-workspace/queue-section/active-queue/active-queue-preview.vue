@@ -24,13 +24,13 @@
     >
       <btn
         class="uppercase call"
-        @click.native.stop="answer(index)"
+        @click.native.stop="answer({ index })"
       >
         {{$t('reusable.answer')}}
       </btn>
       <btn
         class="uppercase end"
-        @click.native.stop="hangup(index)"
+        @click.native.stop="hangup({ index })"
       >
         {{$t('reusable.reject')}}
       </btn>
