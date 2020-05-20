@@ -2,10 +2,12 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import callModule from '../../../../../../src/store/modules/call/call';
+import workspaceModule from '../../../../../../src/store/modules/agent-workspace/agent-workspace';
 import HistoryContainer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-container.vue';
 import History
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-item.vue';
+import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
 
 // import historyAPI through require to override functions with mock
 const historyAPI = require('../../../../../../src/api/agent-workspace/history/history');
@@ -28,8 +30,10 @@ describe('Agent History functionality', () => {
   let store;
 
   beforeEach(() => {
+    state.callOnWorkspace = { _isNew: true };
     store = new Vuex.Store({
       modules: {
+        workspace: workspaceModule,
         call: {
           namespaced: true,
           state,
@@ -47,6 +51,8 @@ describe('Agent History functionality', () => {
       stubs: { Icon: true },
     });
     await wrapper.vm.$nextTick(); // make async call
+    await wrapper.vm.$nextTick(); // rerender list
+    await wrapper.vm.$nextTick(); // rerender list
     await wrapper.vm.$nextTick(); // rerender list
     expect(wrapper.findAll(History).length)
       .toEqual(historyList.length);
@@ -75,7 +81,7 @@ describe('Agent History functionality', () => {
     await wrapper.vm.$nextTick(); // rerender list
 
     wrapper.find(History).trigger('click');
-    expect(state.newCallNumber).toEqual(historyList[0].destination);
+    expect(state.callOnWorkspace.newNumber).toEqual(historyList[0].destination);
   });
 
   it('Properly displays history item duration', async () => {
@@ -83,8 +89,7 @@ describe('Agent History functionality', () => {
       direction: CallDirection.Outbound,
       to: {},
       from: {},
-      hangupAt: Date.now(),
-      answeredAt: Date.now() - 60 * 10 ** 3,
+      duration: 60,
     };
     const wrapper = shallowMount(History, {
       store,
@@ -93,6 +98,7 @@ describe('Agent History functionality', () => {
       propsData: {
         item,
       },
+      filters: { truncateFromEnd },
     });
     expect(wrapper.find(History).text())
       .toContain('00:01:00');

@@ -1,18 +1,16 @@
 import clientHandlers from './client-handlers';
 import clientActions from './client-actions';
-import CallStates from './callUtils/CallStates';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 
 const state = {
   callList: [],
-  callState: '', // PREVIEW, ACTIVE, NEW
   callOnWorkspace: {},
-  newCallNumber: '',
 };
 
 const getters = {
   GET_CURRENT_CALL_DIGITS: (state) => {
-    if (state.callOnWorkspace.digits && state.callOnWorkspace.digits.lengh) {
+    if (state.callOnWorkspace.digits
+      && state.callOnWorkspace.digits.length) {
       return state.callOnWorkspace.digits;
     }
     return '';
@@ -25,33 +23,27 @@ const actions = {
 
   OPEN_ACTIVE_CALL: (context, index) => {
     const call = context.state.callList[index];
-    context.commit('SET_CALL_STATE', CallStates.ACTIVE);
     context.dispatch('SET_WORKSPACE', call);
   },
 
   OPEN_NEW_CALL: (context) => {
-    context.dispatch('SET_WORKSPACE', {});
-    context.commit('SET_CALL_STATE', CallStates.NEW);
-  },
-
-  OPEN_PREVIEW_TRANSFER: (context) => {
-    context.commit('SET_CALL_STATE', CallStates.TRANSFER);
+    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: '' });
   },
 
   ADD_DIGIT: async (context, value) => {
     const call = context.state.callOnWorkspace;
-    // if there's a call, send dtmf
     if (call.allowDtmf) {
+      // if there's a call, send dtmf
       context.dispatch('SEND_DTMF', value);
-      // else user types a number
     } else {
-      const newCallNumber = context.state.newCallNumber + value;
-      context.dispatch('SET_NEW_CALL_NUMBER', newCallNumber);
+      // else user types a number
+      const newNumber = call.newNumber + value;
+      context.dispatch('SET_NEW_NUMBER', newNumber);
     }
   },
 
-  SET_NEW_CALL_NUMBER: (context, value) => {
-    context.commit('SET_NEW_CALL_NUMBER', value);
+  SET_NEW_NUMBER: (context, value) => {
+    context.commit('SET_NEW_NUMBER', value);
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {
@@ -64,7 +56,7 @@ const actions = {
 
   SET_WORKSPACE: (context, call) => {
     context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CALL, { root: true });
-    if (call) context.commit('SET_WORKSPACE', call); // else it's new call
+    context.commit('SET_WORKSPACE', call);
   },
 
   RESET_WORKSPACE: (context) => {
@@ -80,12 +72,8 @@ const mutations = {
     state.callOnWorkspace = call;
   },
 
-  SET_CALL_STATE: (state, callState) => {
-    state.callState = callState;
-  },
-
-  SET_NEW_CALL_NUMBER: (state, value) => {
-    state.newCallNumber = value;
+  SET_NEW_NUMBER: (state, value) => {
+    state.callOnWorkspace.newNumber = value;
   },
 
   ADD_CALL: (state, call) => {

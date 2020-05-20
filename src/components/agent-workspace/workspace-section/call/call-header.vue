@@ -65,7 +65,7 @@
         <rounded-action
           v-if="isHangup"
           class="call-action end"
-          @click.native="hangup()"
+          @click.native="hangup"
         >
           <icon>
             <svg class="icon icon-call-end-md md">
@@ -122,20 +122,22 @@
         </button>
       </form>
     </div>
+    <divider/>
   </header>
 </template>
 
 <script>
   import { mapState, mapActions } from 'vuex';
   import { CallActions } from 'webitel-sdk';
-  import CallStates from '../../../../store/modules/call/callUtils/CallStates';
-  import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
+  import Divider from '../../../utils/divider.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
+  import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
 
   export default {
     name: 'call-header',
     mixins: [dispayInfoMixin],
     components: {
+      Divider,
       RoundedAction,
     },
 
@@ -145,10 +147,6 @@
       },
     },
 
-    data: () => ({
-      CallStates,
-    }),
-
     mounted() {
       this.setNumberFocus();
     },
@@ -157,12 +155,12 @@
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
         callList: (state) => state.callList,
-        callState: (state) => state.callState,
+        newNumber: (state) => state.callOnWorkspace.newNumber,
       }),
 
       number: {
         get() {
-          return this.$store.state.call.newCallNumber;
+          return this.newNumber;
         },
         set(value) {
           this.setNumber(value);
@@ -191,20 +189,19 @@
       },
 
       isTransfer() {
-        return this.callState !== CallStates.NEW;
+        return this.call.allowHangup;
       },
 
       isHangup() {
-        return this.callState !== CallStates.NEW;
+        return this.call.allowHangup;
       },
 
       isCall() {
-        return this.callState === CallStates.NEW
-          && this.number;
+        return this.call._isNew && this.number;
       },
 
       isNumberInput() {
-        return this.callState === CallStates.NEW;
+        return this.call._isNew;
       },
     },
 
@@ -219,7 +216,7 @@
       ...mapActions('call', {
         makeCall: 'CALL',
         hangup: 'HANGUP',
-        setNumber: 'SET_NEW_CALL_NUMBER',
+        setNumber: 'SET_NEW_NUMBER',
       }),
     },
   };

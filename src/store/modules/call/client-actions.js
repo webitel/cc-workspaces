@@ -1,5 +1,4 @@
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
-import CallStates from './callUtils/CallStates';
 
 const callParams = { disableStun: true };
 const answerParams = { useAudio: true, disableStun: true };
@@ -7,7 +6,9 @@ const answerParams = { useAudio: true, disableStun: true };
 const actions = {
   // destucturing arg due not receive mouse events
   CALL: async (context, { user }) => {
-    const destination = user ? user.extension : context.state.newCallNumber;
+    const destination = user
+      ? user.extension
+      : context.state.callOnWorkspace.newNumber;
     const client = await getCliInstance();
     try {
       await client.call({ destination, params: callParams });
@@ -15,13 +16,13 @@ const actions = {
     }
   },
 
-  ANSWER: async (context, index) => {
+  ANSWER: async (context, { index }) => {
     const call = Number.isInteger(index)
-      ? context.state.callList[index] : context.state.callOnWorkspace;
+      ? context.state.callList[index]
+      : context.state.callOnWorkspace;
     if (call.allowAnswer) {
       try {
         await call.answer(answerParams);
-        context.commit('SET_CALL_STATE', CallStates.ACTIVE);
         context.dispatch('SET_WORKSPACE', call);
       } catch {
       }
@@ -81,9 +82,10 @@ const actions = {
     }
   },
 
-  HANGUP: async (context, index) => {
+  HANGUP: async (context, { index }) => {
     const call = Number.isInteger(index)
-      ? context.state.callList[index] : context.state.callOnWorkspace;
+      ? context.state.callList[index]
+      : context.state.callOnWorkspace;
     if (call.allowHangup) {
       try {
         await call.hangup();

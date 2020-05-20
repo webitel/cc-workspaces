@@ -5,7 +5,7 @@
       <div class="call-preview__actions">
         <rounded-action
           class="rounded-action__lg call"
-          @click.native="answer()"
+          @click.native="answer"
         >
           <icon class="lg">
             <svg class="icon icon-call-lg lg">
@@ -15,7 +15,7 @@
         </rounded-action>
         <rounded-action
           class="rounded-action__lg transfer"
-          @click.native="openTransfer()"
+          @click.native="openTransfer"
         >
           <icon class="lg">
             <svg class="icon icon-call-transfer-lg lg">
@@ -25,7 +25,7 @@
         </rounded-action>
         <rounded-action
           class="rounded-action__lg end"
-          @click.native="hangup()"
+          @click.native="hangup"
         >
           <icon class="lg">
             <svg class="icon icon-call-end-lg lg">
@@ -53,9 +53,12 @@
     methods: {
       ...mapActions('call', {
         answer: 'ANSWER',
-        openTransfer: 'OPEN_PREVIEW_TRANSFER',
         hangup: 'HANGUP',
       }),
+
+      openTransfer() {
+        this.$emit('transfer');
+      },
     },
   };
 </script>

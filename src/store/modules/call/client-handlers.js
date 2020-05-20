@@ -1,5 +1,4 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
-import CallStates from './callUtils/CallStates';
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, call) => {
@@ -19,9 +18,6 @@ const callHandler = (context) => (action, call) => {
     case CallActions.PeerStream:
       context.dispatch('HANDLE_STREAM_ACTION', call);
       break;
-    case CallActions.LocalStream:
-      // context.dispatch('HANDLE_LOCAL_STREAM_ACTION', call);
-      break;
     default:
     // console.log('default', action);
   }
@@ -37,14 +33,11 @@ const actions = {
   },
 
   HANDLE_RINGING_ACTION: (context, call) => {
-    const isPreviewDialer = call.queue && call.queue.queue_type === 'preview';
     context.commit('ADD_CALL', call);
-    if (call.direction === CallDirection.Inbound || isPreviewDialer) {
-      context.commit('SET_CALL_STATE', CallStates.PREVIEW);
-    } else {
-      context.commit('SET_CALL_STATE', CallStates.ACTIVE);
+    if (call.direction === CallDirection.Outbound
+      || !context.state.callOnWorkspace) {
+      context.dispatch('SET_WORKSPACE', call);
     }
-    context.dispatch('SET_WORKSPACE', call);
   },
 
   HANDLE_HANGUP_ACTION: (context, call) => {
@@ -67,13 +60,6 @@ const actions = {
       audio.play();
     }
   },
-
-  // HANDLE_LOCAL_STREAM_ACTION: (context, call) => {
-  // const video = new Audio();
-  // console.log(call.localStreams);
-  // audio.srcObject = call.localStreams.pop();
-  // audio.play();
-  // },
 };
 
 export default {

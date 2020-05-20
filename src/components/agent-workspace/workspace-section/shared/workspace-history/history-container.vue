@@ -31,7 +31,6 @@
   } from '../../../../../api/agent-workspace/history/history';
   import WorkspaceStates
     from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-  import CallStates from '../../../../../store/modules/call/callUtils/CallStates';
 
   export default {
     name: 'history-container',
@@ -46,7 +45,7 @@
     }),
 
     watch: {
-      callState() {
+      call() {
         this.loadInitialList();
       },
     },
@@ -56,13 +55,13 @@
         workspaceState: (state) => state.workspaceState,
       }),
       ...mapState('call', {
-        callState: (state) => state.callState,
+        call: (state) => state.callOnWorkspace,
       }),
     },
 
     methods: {
       ...mapActions('call', {
-        setNumber: 'SET_NEW_CALL_NUMBER',
+        setNumber: 'SET_NEW_NUMBER',
       }),
 
       select(item) {
@@ -76,8 +75,7 @@
         let response;
         if (this.workspaceState === WorkspaceStates.MEMBER) {
           response = await getMemberHistory(params);
-        } else if (this.callState === CallStates.ACTIVE
-          || this.callState === CallStates.TRANSFER) {
+        } else if (!this.call._isNew) {
           response = await getNumberHistory(params);
         } else {
           response = await getAgentHistory(params);
