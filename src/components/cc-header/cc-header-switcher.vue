@@ -1,6 +1,6 @@
 <template>
   <label class="switcher" :class="{'disabled': disabled}">
-    <div class="switcher-label">{{$t('agentStatus.callCenter')}}</div>
+    <div class="switcher-label" v-if="label">{{label}}</div>
     <input
       type="checkbox"
       :checked="value"
@@ -17,6 +17,9 @@
       value: {
         type: Boolean,
         // required: true,
+      },
+      label: {
+        type: String,
       },
       disabled: {
         type: Boolean,
