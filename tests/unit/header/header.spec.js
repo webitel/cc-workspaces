@@ -7,14 +7,14 @@ import StatusSelect from '../../../src/components/cc-header/status-select.vue';
 import BreakPopup from '../../../src/components/break-popup/break-popup.vue';
 import TimerPopup from '../../../src/components/break-popup/break-timer-popup.vue';
 import statusModule from '../../../src/store/modules/agent-status/agent-status';
+import callModule from '../../../src/store/modules/call/call';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('Header on agent Waiting', () => {
   let state;
-  let actions;
-  let getters;
+  const { getters, actions } = statusModule;
   let store;
 
   beforeEach(() => {
@@ -23,15 +23,10 @@ describe('Header on agent Waiting', () => {
         status: AgentStatus.Waiting,
       },
     };
-    getters = {
-      IS_AGENT: statusModule.getters.IS_AGENT,
-    };
-    actions = {
-      TOGGLE_CCENTER_MODE: statusModule.actions.TOGGLE_CCENTER_MODE,
-      AGENT_LOGOUT: jest.fn(),
-    };
+    actions.AGENT_LOGOUT = jest.fn();
     store = new Vuex.Store({
       modules: {
+        call: callModule,
         status: {
           namespaced: true,
           state,
@@ -46,6 +41,10 @@ describe('Header on agent Waiting', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
+      mocks: {
+        $t: () => {
+        },
+      },
     });
     const breakPopup = wrapper.find(BreakPopup);
     const timerPopup = wrapper.find(TimerPopup);
@@ -60,6 +59,10 @@ describe('Header on agent Waiting', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
+      mocks: {
+        $t: () => {
+        },
+      },
       // sync: false,
       /*
          FIXME: REMOVE data: () => ({});
@@ -84,9 +87,18 @@ describe('Header on agent Waiting', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
+      mocks: {
+        $t: () => {
+        },
+      },
     });
-    const switcher = wrapper.find(Switcher);
-    switcher.vm.$emit('input');
+    /*
+      last switcher is ccenter mode,
+      unfortunately, have no other ways
+      (except $t label string to discover switcher programmatically)
+    */
+    const ccenterSwitcher = wrapper.findAll(Switcher).wrappers.pop();
+    ccenterSwitcher.vm.$emit('input');
     expect(actions.AGENT_LOGOUT)
       .toHaveBeenCalled();
   });
@@ -94,7 +106,7 @@ describe('Header on agent Waiting', () => {
 
 describe('Header on agent Pause', () => {
   let state;
-  let actions;
+  const { getters, actions } = statusModule;
   let store;
 
   beforeEach(() => {
@@ -105,9 +117,11 @@ describe('Header on agent Pause', () => {
     };
     store = new Vuex.Store({
       modules: {
+        call: callModule,
         status: {
           namespaced: true,
           state,
+          getters,
           actions,
         },
       },
@@ -118,6 +132,10 @@ describe('Header on agent Pause', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
+      mocks: {
+        $t: () => {
+        },
+      },
     });
     const breakPopup = wrapper.find(BreakPopup);
     const timerPopup = wrapper.find(TimerPopup);
@@ -130,7 +148,7 @@ describe('Header on agent Pause', () => {
 
 describe('Header on agent Offline', () => {
   let state;
-  let actions;
+  const { getters, actions } = statusModule;
   let store;
 
   beforeEach(() => {
@@ -139,15 +157,14 @@ describe('Header on agent Offline', () => {
         status: AgentStatus.Offline,
       },
     };
-    actions = {
-      TOGGLE_CCENTER_MODE: statusModule.actions.TOGGLE_CCENTER_MODE,
-      SET_AGENT_WAITING_STATUS: jest.fn(),
-    };
+    actions.SET_AGENT_WAITING_STATUS = jest.fn();
     store = new Vuex.Store({
       modules: {
+        call: callModule,
         status: {
           namespaced: true,
           state,
+          getters,
           actions,
         },
       },
@@ -158,9 +175,18 @@ describe('Header on agent Offline', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
+      mocks: {
+        $t: () => {
+        },
+      },
     });
-    const switcher = wrapper.find(Switcher);
-    switcher.vm.$emit('input');
+    /*
+      last switcher is ccenter mode,
+      unfortunately, have no other ways
+      (except $t label string to discover switcher programmatically)
+    */
+    const ccenterSwitcher = wrapper.findAll(Switcher).wrappers.pop();
+    ccenterSwitcher.vm.$emit('input');
     expect(actions.SET_AGENT_WAITING_STATUS)
       .toHaveBeenCalled();
   });

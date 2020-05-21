@@ -5,6 +5,7 @@ import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 const state = {
   callList: [],
   callOnWorkspace: {},
+  isVideo: false,
 };
 
 const getters = {
@@ -54,6 +55,11 @@ const actions = {
     }
   },
 
+  TOGGLE_VIDEO: (context) => {
+    const value = !context.state.isVideo;
+    context.commit('SET_VIDEO', value);
+  },
+
   SET_WORKSPACE: (context, call) => {
     context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CALL, { root: true });
     context.commit('SET_WORKSPACE', call);
@@ -74,6 +80,10 @@ const mutations = {
 
   SET_NEW_NUMBER: (state, value) => {
     state.callOnWorkspace.newNumber = value;
+  },
+
+  SET_VIDEO: (state, value) => {
+    state.isVideo = value;
   },
 
   ADD_CALL: (state, call) => {

@@ -10,8 +10,9 @@ const actions = {
       ? user.extension
       : context.state.callOnWorkspace.newNumber;
     const client = await getCliInstance();
+    const params = { ...callParams, video: context.state.isVideo };
     try {
-      await client.call({ destination, params: callParams });
+      await client.call({ destination, params });
     } catch {
     }
   },
@@ -21,8 +22,9 @@ const actions = {
       ? context.state.callList[index]
       : context.state.callOnWorkspace;
     if (call.allowAnswer) {
+      const params = { ...answerParams, video: context.state.isVideo };
       try {
-        await call.answer(answerParams);
+        await call.answer(params);
         context.dispatch('SET_WORKSPACE', call);
       } catch {
       }

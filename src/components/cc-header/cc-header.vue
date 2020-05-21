@@ -9,7 +9,16 @@
     />
 
     <div class="cc-header__container">
-      <switcher v-model="isAgent"></switcher>
+      <switcher
+        :value="isVideo"
+        :label="$t('header.enableVideo')"
+        @input="toggleVideo"
+      ></switcher>
+      <switcher
+        :value="isAgent"
+        :label="$t('agentStatus.callCenter')"
+        @input="toggleCCenterMode"
+      ></switcher>
       <status-select
         @setBreak="isBreakPopup = true"
       />
@@ -20,7 +29,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
   import { AgentStatus } from 'webitel-sdk';
   import Switcher from './cc-header-switcher.vue';
   import AppNavigator from './the-app-navigator.vue';
@@ -50,15 +59,12 @@
       ...mapState('status', {
         agent: (state) => state.agent,
       }),
-
-      isAgent: {
-        get() {
-          return this.$store.getters['status/IS_AGENT'];
-        },
-        set() {
-          this.toggleCCenterMode();
-        },
-      },
+      ...mapState('call', {
+        isVideo: (state) => state.isVideo,
+      }),
+      ...mapGetters('status', {
+        isAgent: 'IS_AGENT',
+      }),
 
       isBreak() {
         return this.agent.status === AgentStatus.Pause;
@@ -68,6 +74,9 @@
     methods: {
       ...mapActions('status', {
         toggleCCenterMode: 'TOGGLE_CCENTER_MODE',
+      }),
+      ...mapActions('call', {
+        toggleVideo: 'TOGGLE_VIDEO',
       }),
     },
   };
@@ -84,7 +93,7 @@
     align-items: center;
     justify-content: flex-end;
 
-    .status-select {
+    .status-select, .switcher {
       margin-left: calcVH(30px);
     }
   }

@@ -19,6 +19,7 @@ export default {
   },
   header: {
     docs: 'Docs',
+    enableVideo: 'Enable video',
   },
   queueSec: {
     active: 'Active',
