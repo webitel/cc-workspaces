@@ -23,7 +23,6 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import { CallActions, CallDirection } from 'webitel-sdk';
   import CallPreview from './call-preview.vue';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
@@ -33,6 +32,7 @@
   import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
   import callTimer from '../../../../mixins/callTimerMixin';
+  import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';
 
   export default {
     name: 'the-call',
@@ -66,13 +66,7 @@
 
       isPreviewCall() {
         if (this.isPreviewTransfer) return false;
-        const isPreviewDialer = this.call.queue && this.call.queue.queue_type === 'preview';
-        return this.call.state === CallActions.Ringing // Inbound ringing
-          && (
-            this.call.direction === CallDirection.Inbound
-            || (this.call.direction === CallDirection.Outbound // Outbound preview dialer
-              && isPreviewDialer)
-          );
+        return isIncomingRinging(this.call);
       },
     },
 

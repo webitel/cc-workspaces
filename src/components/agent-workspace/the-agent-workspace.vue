@@ -24,9 +24,11 @@
   import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
   import InfoSection from './info-section/the-agent-info-section.vue';
   import VideoContainer from './video-container/video-container.vue';
+  import ringingSoundMixin from '../../mixins/ringingSoundMixin';
 
   export default {
     name: 'the-agent-workspace',
+    mixins: [ringingSoundMixin],
     components: {
       Notification,
       CcHeader,
@@ -45,6 +47,7 @@
     destroyed() {
       this.clearNowWatcher();
     },
+
     methods: {
       async initWorkspace() {
         await this.subscribeCalls();

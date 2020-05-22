@@ -40,11 +40,11 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import { CallActions, CallDirection } from 'webitel-sdk';
   import StatusBadge from '../call-status-icon-badge.vue';
   import Btn from '../../../utils/btn.vue';
   import callTimer from '../../../../mixins/callTimerMixin';
   import displayInfo from '../../../../mixins/displayInfoMixin';
+  import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';
 
   export default {
     name: 'active-queue-preview',
@@ -82,13 +82,7 @@
       },
 
       isRinging() {
-        const isPreviewDialer = this.call.queue && this.call.queue.queue_type === 'preview';
-        return this.call.state === CallActions.Ringing // Inbound ringing
-          && (
-            this.call.direction === CallDirection.Inbound
-            || (this.call.direction === CallDirection.Outbound // Outbound preview dialer
-              && isPreviewDialer)
-          );
+        return isIncomingRinging(this.call);
       },
 
       computePreviewStatusClass() {
