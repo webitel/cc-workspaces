@@ -23,11 +23,19 @@ const actions = {
     const list = await getAgentHistory(requestParams);
     context.commit('SET_DATA_LIST', list);
   },
+
+  PUSH_MISSED_STUB: (context, { from = {} }) => {
+    context.commit('PUSH_SINGLE_MISSED', { from, createdAt: Date.now() });
+  },
 };
 
 const mutations = {
   SET_DATA_LIST: (state, list) => {
-    state.missedList = list;
+    state.missedList = list.filter((item) => item.direction === 'inbound' && !item.answeredAt);
+  },
+
+  PUSH_SINGLE_MISSED: (state, missed) => {
+    state.missedList.push(missed);
   },
 };
 

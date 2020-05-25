@@ -26,7 +26,7 @@
 
     computed: {
       ...mapState('call/missed', {
-        missedList: (state) => state.missedList.filter((item) => item.direction === 'inbound' && !item.answeredAt),
+        missedList: (state) => state.missedList,
       }),
     },
 

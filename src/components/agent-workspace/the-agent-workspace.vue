@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapState, mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
   import CcHeader from '../cc-header/cc-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
@@ -48,6 +48,20 @@
       this.clearNowWatcher();
     },
 
+    watch: {
+      // after user info is loaded, fetch offline and missed queues data
+      userId() {
+        this.loadMembersList({});
+        this.loadMissedList();
+      },
+    },
+
+    computed: {
+      ...mapState('userinfo', {
+        userId: (state) => state.userId,
+      }),
+    },
+
     methods: {
       async initWorkspace() {
         await this.subscribeCalls();
@@ -56,6 +70,14 @@
 
       ...mapActions('call', {
         subscribeCalls: 'SUBSCRIBE_CALLS',
+      }),
+
+      ...mapActions('member', {
+        loadMembersList: 'LOAD_DATA_LIST',
+      }),
+
+      ...mapActions('call/missed', {
+        loadMissedList: 'LOAD_DATA_LIST',
       }),
 
       ...mapActions('status', {
