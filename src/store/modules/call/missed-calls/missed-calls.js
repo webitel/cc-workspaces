@@ -5,7 +5,8 @@ import { getAgentHistory } from '../../../../api/agent-workspace/history/history
 const requestParams = {
   size: 100,
   direction: CallDirection.Inbound,
-  answeredAt: 0,
+  answeredAtFrom: 0,
+  answeredAtTo: 0,
   createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: Date.now(),
 };
@@ -31,7 +32,7 @@ const actions = {
 
 const mutations = {
   SET_DATA_LIST: (state, list) => {
-    state.missedList = list.filter((item) => item.direction === 'inbound' && !item.answeredAt);
+    state.missedList = list;
   },
 
   PUSH_SINGLE_MISSED: (state, missed) => {

@@ -12,8 +12,9 @@ export const getAgentHistory = async ({
                                         search = '',
                                         createdAtFrom = 0,
                                         createdAtTo = Date.now(),
-                                        // direction,
-                                        // answeredAt,
+                                        direction,
+                                        answeredAtFrom,
+                                        answeredAtTo,
                                       }) => {
   const { userId, domainId } = store.state.userinfo;
   try {
@@ -39,6 +40,10 @@ export const getAgentHistory = async ({
         undefined,
         '-created_at',
         domainId,
+        undefined,
+        direction,
+        answeredAtFrom,
+        answeredAtTo,
       );
     return response.items || [];
   } catch (err) {
