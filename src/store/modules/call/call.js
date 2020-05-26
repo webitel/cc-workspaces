@@ -57,7 +57,13 @@ const actions = {
 
   TOGGLE_VIDEO: (context) => {
     const value = !context.state.isVideo;
+    localStorage.setItem('isVideo', JSON.stringify(value));
     context.commit('SET_VIDEO', value);
+  },
+
+  RESTORE_VIDEO_PARAM: (context) => {
+    const value = localStorage.getItem('isVideo');
+    if (value) context.commit('SET_VIDEO', JSON.parse(value));
   },
 
   SET_WORKSPACE: (context, call) => {

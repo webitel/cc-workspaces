@@ -54,6 +54,10 @@
       isBreakPopup: false,
     }),
 
+    created() {
+      this.restoreVideoParam();
+    },
+
 
     computed: {
       ...mapState('status', {
@@ -77,6 +81,7 @@
       }),
       ...mapActions('call', {
         toggleVideo: 'TOGGLE_VIDEO',
+        restoreVideoParam: 'RESTORE_VIDEO_PARAM',
       }),
     },
   };
