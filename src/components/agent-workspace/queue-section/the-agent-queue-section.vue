@@ -4,7 +4,17 @@
       :current-tab="currentTab"
       :tabs="tabs"
       @change="currentTab = $event"
-    ></tabs>
+    >
+      <template
+        v-for="(tab, key) of tabs"
+        :slot="tab.value"
+      >
+        <div class="queue-tab__wrap" :key="key">
+          <div class="queue-tab__indicator" :class="tab.value"></div>
+          <span class="queue-tab__text">{{tab.text}}</span>
+        </div>
+      </template>
+    </tabs>
 
     <component :is="computeCurrentTab"></component>
 
@@ -124,6 +134,30 @@
 
     .tabs {
       text-align: center;
+
+      .queue-tab__wrap {
+        display: flex;
+        align-items: center;
+      }
+
+      .queue-tab__indicator {
+        width: calcVH(4px);
+        height: calcVH(4px);
+        margin: calcVH(10px);
+        border-radius: 50%;
+
+        &.active {
+          background: $call-color;
+        }
+
+        &.offline {
+          background: $accent-color;
+        }
+
+        &.missed {
+          background: $disconnect-color;
+        }
+      }
     }
 
     .call-preview-wrap {

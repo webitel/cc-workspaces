@@ -6,7 +6,7 @@ const requestParams = {
   size: 100,
   direction: CallDirection.Inbound,
   answeredAt: 0,
-  // createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
+  createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: Date.now(),
 };
 

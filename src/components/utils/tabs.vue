@@ -9,7 +9,9 @@
       type="button"
       @click="openTab(tab)"
     >
-      {{tab.text}}
+      <slot :name="tab.value">
+        {{tab.text}}
+      </slot>
     </button>
 
     <div class="tabs__underline">
