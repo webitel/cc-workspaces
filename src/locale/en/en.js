@@ -24,6 +24,7 @@ export default {
   queueSec: {
     active: 'Active',
     offline: 'Offline',
+    missed: 'Missed',
   },
   infoSec: {
     clientInfo: 'Client info',

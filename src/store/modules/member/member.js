@@ -10,6 +10,7 @@ const state = {
 
 const getters = {
   IS_COMMUNICATION_SELECTED: (state) => (Number.isInteger(state.selectedCommId)),
+  MEMBERS_LENGTH: (state) => (state.membersList.length),
 };
 
 const actions = {

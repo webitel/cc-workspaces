@@ -1,7 +1,7 @@
 <template>
-  <aside class="call-status-badge" :class="computeIconClass">
+  <aside class="call-status-badge" :class="computeBadgeClass">
     <icon>
-      <svg class="icon sm" :class="`icon-${computeIconClass}-sm`">
+      <svg class="icon sm">
         <use :xlink:href="`#icon-${computeIconClass}-sm`"></use>
       </svg>
     </icon>
@@ -19,10 +19,19 @@
     },
 
     computed: {
+      computeBadgeClass() {
+        switch (this.state) {
+          case 'call': return 'call';
+          case 'hold': return 'hold';
+          case 'missed': return 'missed'; // missed -> missed
+          default: return 'call';
+        }
+      },
       computeIconClass() {
         switch (this.state) {
           case 'call': return 'call';
           case 'hold': return 'hold';
+          case 'missed': return 'call'; // missed -> call icon
           default: return 'call';
         }
       },
@@ -58,6 +67,10 @@
 
     &.hold {
       background: $hold-btn-color;
+    }
+
+    &.missed {
+      background: $disconnect-color;
     }
   }
 </style>

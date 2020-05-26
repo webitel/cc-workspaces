@@ -1,6 +1,8 @@
 import clientHandlers from './client-handlers';
 import clientActions from './client-actions';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
+// eslint-disable-next-line import/no-cycle
+import missed from './missed-calls/missed-calls';
 
 const state = {
   callList: [],
@@ -27,8 +29,8 @@ const actions = {
     context.dispatch('SET_WORKSPACE', call);
   },
 
-  OPEN_NEW_CALL: (context) => {
-    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: '' });
+  OPEN_NEW_CALL: (context, { newNumber }) => {
+    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
   },
 
   ADD_DIGIT: async (context, value) => {
@@ -101,4 +103,5 @@ export default {
   getters,
   actions,
   mutations,
+  modules: { missed },
 };

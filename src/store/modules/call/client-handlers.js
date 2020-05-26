@@ -49,6 +49,9 @@ const actions = {
 
   HANDLE_DESTROY_ACTION: (context, call) => {
     context.commit('REMOVE_CALL', call);
+    if (call.direction === CallDirection.Inbound && !call.answeredAt) {
+      context.dispatch('missed/PUSH_MISSED_STUB', call);
+    }
     context.dispatch('RESET_WORKSPACE');
   },
 

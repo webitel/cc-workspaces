@@ -4,7 +4,17 @@
       :current-tab="currentTab"
       :tabs="tabs"
       @change="currentTab = $event"
-    ></tabs>
+    >
+      <template
+        v-for="(tab, key) of tabs"
+        :slot="tab.value"
+      >
+        <div class="queue-tab__wrap" :key="key">
+          <div class="queue-tab__indicator" :class="tab.value"></div>
+          <span class="queue-tab__text">{{tab.text}}</span>
+        </div>
+      </template>
+    </tabs>
 
     <component :is="computeCurrentTab"></component>
 
@@ -23,9 +33,10 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
   import ActiveQueue from './active-queue/active-queue-container.vue';
   import OfflineQueue from './offline-queue/offline-queue-container.vue';
+  import MissedQueue from './missed-queue/missed-queue-container.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
   import Tabs from '../../utils/tabs.vue';
 
@@ -34,6 +45,7 @@
     components: {
       ActiveQueue,
       OfflineQueue,
+      MissedQueue,
       RoundedAction,
       Tabs,
     },
@@ -52,8 +64,11 @@
         callList: (state) => state.callList,
         call: (state) => state.callOnWorkspace,
       }),
-      ...mapState('member', {
-        membersList: (state) => state.membersList,
+      ...mapGetters('member', {
+        membersCount: 'MEMBERS_LENGTH',
+      }),
+      ...mapGetters('call/missed', {
+        missedCount: 'MISSED_LENGTH',
       }),
 
       tabs() {
@@ -66,6 +81,10 @@
             text: this.offlineTabText,
             value: 'offline',
           },
+          {
+            text: this.missedTabText,
+            value: 'missed',
+          },
         ];
       },
 
@@ -77,10 +96,17 @@
       },
 
       offlineTabText() {
-        if (this.membersList.length) {
-          return `${this.$t('queueSec.offline')}(${this.membersList.length})`;
+        if (this.membersCount) {
+          return `${this.$t('queueSec.offline')}(${this.membersCount})`;
         }
         return this.$t('queueSec.offline');
+      },
+
+      missedTabText() {
+        if (this.missedCount) {
+          return `${this.$t('queueSec.missed')}(${this.missedCount})`;
+        }
+        return this.$t('queueSec.missed');
       },
 
       computeCurrentTab() {
@@ -108,6 +134,30 @@
 
     .tabs {
       text-align: center;
+
+      .queue-tab__wrap {
+        display: flex;
+        align-items: center;
+      }
+
+      .queue-tab__indicator {
+        width: calcVH(4px);
+        height: calcVH(4px);
+        margin: calcVH(10px);
+        border-radius: 50%;
+
+        &.active {
+          background: $call-color;
+        }
+
+        &.offline {
+          background: $accent-color;
+        }
+
+        &.missed {
+          background: $disconnect-color;
+        }
+      }
     }
 
     .call-preview-wrap {
