@@ -1,7 +1,7 @@
 import { mapState } from 'vuex';
 import isIncomingRinging from '../store/modules/call/scripts/isIncomingRinging';
 
-const AUDIO_URL = 'http://dl7.dwld.ru/download/start/219259510_456240245/pskv-syntpop.mp3';
+const AUDIO_URL = require('../../public/ringing.mp3');
 
 export default {
   data: () => ({
