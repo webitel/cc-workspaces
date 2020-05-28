@@ -13,7 +13,7 @@ export const getUsersList = async ({ page = 1, size = 20, search = '' }) => {
       return response.items.map((item) => ({
         name: item.name,
         extension: item.extension,
-        presence: !!item.presence,
+        presence: item.presence,
         id: item.id,
       }));
     }
@@ -45,7 +45,7 @@ export const setUserStatus = async (status = '') => {
 };
 
 export const parseUserStatus = (presence) => {
-  if (presence.status) {
+  if (presence && presence.status) {
     if (presence.status.includes('dnd')) {
       return UserStatus.DND;
     }
