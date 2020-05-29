@@ -56,6 +56,7 @@
     watch: {
       call() {
         this.isPreviewTransfer = false;
+        this.currentTab = 'numpad';
       },
     },
 
