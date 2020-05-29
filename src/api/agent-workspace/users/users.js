@@ -2,9 +2,10 @@ import instance from '../../instance';
 import UserStatus from '../../../store/modules/agent-status/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
+const presenceSort = '+web,+dnd';
 
 export const getUsersList = async ({ page = 1, size = 20, search = '' }) => {
-  let url = `${BASE_URL}?page=${page}&size=${size}&sort=name`;
+  let url = `${BASE_URL}?page=${page}&size=${size}&sort=${presenceSort},+name`;
   if (search) url += `&name=${search}*`;
 
   try {
