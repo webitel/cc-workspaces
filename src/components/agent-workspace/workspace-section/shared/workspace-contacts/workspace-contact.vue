@@ -22,7 +22,7 @@
 
     <div class="ws-worksection__item__text">
       <div class="flex-wrap">
-        <div class="ws-contact-item__name">{{item.name}}</div>
+        <div class="ws-contact-item__name">{{item.name || item.username}}</div>
         <div class="ws-contact-item__number">{{item.extension}}</div>
       </div>
     </div>

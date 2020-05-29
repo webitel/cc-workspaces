@@ -42,6 +42,7 @@
 
     data: () => ({
       dataList: '',
+      fields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
     }),
 
     watch: {

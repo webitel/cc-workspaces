@@ -33,6 +33,7 @@
     data: () => ({
       dataList: [],
       selected: null,
+      fields: ['name', 'id', 'extension', 'presence', 'username'],
     }),
 
     methods: {
