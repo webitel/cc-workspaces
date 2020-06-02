@@ -18,7 +18,6 @@ export default {
 
   mounted() {
     this.isMounted = true;
-    this.loadInitialList();
   },
 
   computed: {
@@ -35,14 +34,12 @@ export default {
   },
 
   methods: {
-    async loadInitialList() {
-      this.page = 1;
-      this.dataList = await this.loadDataList();
-    },
-
-    async loadNext() {
-      const response = await this.loadDataList();
-      this.dataList = [...this.dataList, ...response];
+    setData(items) {
+      if (this.page === 1) {
+        this.dataList = items; // if component is re-rendered, reset persistent storage data
+      } else {
+        this.dataList = [...this.dataList, ...items];
+      }
     },
 
     async loadDataList() {
@@ -53,15 +50,16 @@ export default {
       };
       if (this.fields) params.fields = this.fields;
       if (this.sort) params.sort = this.sort;
+
       const response = await this.fetch(params);
       this.isNext = response.next;
-      return response.items;
+      this.setData(response.items);
     },
 
-    handleIntersect() {
+    async handleIntersect() {
       if (this.isNext) {
+        await this.loadDataList();
         this.page += 1;
-        this.loadNext();
       }
     },
 
