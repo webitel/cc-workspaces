@@ -33,17 +33,12 @@
     },
 
     methods: {
-      loadInitialList() {
+      loadDataList() {
         this.loadList({ search: this.search, page: this.page, size: this.size });
-      },
-
-      loadNext() {
-        this.loadNextList({ search: this.search, page: this.page, size: this.size });
       },
 
       ...mapActions('member', {
         loadList: 'LOAD_DATA_LIST',
-        loadNextList: 'LOAD_NEXT_LIST_ITEMS',
         openMember: 'OPEN_MEMBER_ON_WORKSPACE',
       }),
     },

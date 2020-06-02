@@ -66,6 +66,7 @@ const historyAPIRepository = {
       ...defaultParams,
       ...argParams,
     };
+    params.q = params.search;
     return fetchHistory(params);
   },
 };

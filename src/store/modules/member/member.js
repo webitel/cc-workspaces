@@ -25,14 +25,7 @@ const actions = {
     const agent = context.state.agent
       ? context.state.agent : await context.dispatch('GET_AGENT_INSTANCE');
     const response = await agent.offlineMembers(search, page, size);
-    context.commit('SET_DATA_LIST', response.items);
-  },
-
-  LOAD_NEXT_LIST_ITEMS: async (context, { page = 1, size = 20, search = '' }) => {
-    const agent = context.state.agent
-      ? context.state.agent : await context.dispatch('GET_AGENT_INSTANCE');
-    const response = await agent.offlineMembers(search, page, size);
-    context.commit('SET_DATA_LIST', [...state.membersList, ...response.items]);
+    context.commit('SET_DATA_LIST', { page, items: response.items });
   },
 
   OPEN_MEMBER_ON_WORKSPACE: (context, index) => {
@@ -62,8 +55,12 @@ const mutations = {
     state.agent = agent;
   },
 
-  SET_DATA_LIST: (state, list) => {
-    state.membersList = list;
+  SET_DATA_LIST: (state, { page, items }) => {
+    if (page === 1) {
+      state.membersList = items; // if component is re-rendered, reset persistent storage data
+    } else {
+      state.membersList = [...state.membersList, ...items];
+    }
   },
 
   SET_SELECTED_COMMUNICATION: (state, commId) => {

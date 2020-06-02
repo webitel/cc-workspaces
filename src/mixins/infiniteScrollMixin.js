@@ -42,7 +42,26 @@ export default {
       }
     },
 
+    resetData() {
+      this.page = 1;
+      this.loadDataList();
+    },
+
     async loadDataList() {
+      const params = this.collectParams();
+      const response = await this.fetch(params);
+      this.isNext = response.next;
+      this.setData(response.items);
+      this.page += 1;
+    },
+
+    async handleIntersect() {
+      if (this.isNext) {
+        await this.loadDataList();
+      }
+    },
+
+    collectParams() {
       const params = {
         page: this.page,
         size: this.size,
@@ -50,17 +69,7 @@ export default {
       };
       if (this.fields) params.fields = this.fields;
       if (this.sort) params.sort = this.sort;
-
-      const response = await this.fetch(params);
-      this.isNext = response.next;
-      this.setData(response.items);
-    },
-
-    async handleIntersect() {
-      if (this.isNext) {
-        await this.loadDataList();
-        this.page += 1;
-      }
+      return params;
     },
 
     fetch() {
