@@ -54,7 +54,7 @@ const fetchHistory = async ({
       answeredAtFrom,
       answeredAtTo,
     );
-    return response.items || [];
+    return { next: !!response.next, items: response.items || [] };
   } catch (err) {
     throw err;
   }
@@ -66,7 +66,6 @@ const historyAPIRepository = {
       ...defaultParams,
       ...argParams,
     };
-    console.log(argParams, params);
     return fetchHistory(params);
   },
 };

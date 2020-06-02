@@ -149,7 +149,8 @@
 
       async fetch(search) {
         if (this.apiMode) {
-          this.fetchedOptions = await this.fetchMethod(search);
+          const response = await this.fetchMethod(search);
+          this.fetchedOptions = response.items;
         }
       },
 
