@@ -10,6 +10,7 @@ const requestParams = {
   answeredAtTo: 0,
   createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: Date.now(),
+  fields: ['from', 'created_at'],
 };
 
 const state = {

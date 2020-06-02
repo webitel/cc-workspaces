@@ -15,9 +15,15 @@ const fetchUsers = async (url) => {
 };
 
 const usersAPIRepository = {
-  async getUsers({ page = 1, size = 20, search = '' }) {
+  async getUsers({
+                   page = 1,
+                   size = 20,
+                   search = '',
+                   fields,
+                 }) {
     let url = `${BASE_URL}?page=${page}&size=${size}&sort=name`;
     if (search) url += `&name=${search}*`;
+    if (fields) url += `&fields=${fields}`;
     return fetchUsers(url);
   },
   async setUserStatus(status) {

@@ -11,6 +11,8 @@ const state = {
 };
 
 const getters = {
+  IS_NEW_CALL: (state) => state.callOnWorkspace._isNew,
+
   GET_CURRENT_CALL_DIGITS: (state) => {
     if (state.callOnWorkspace.digits
       && state.callOnWorkspace.digits.length) {

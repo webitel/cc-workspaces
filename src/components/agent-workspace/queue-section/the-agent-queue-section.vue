@@ -62,7 +62,9 @@
     computed: {
       ...mapState('call', {
         callList: (state) => state.callList,
-        call: (state) => state.callOnWorkspace,
+      }),
+      ...mapGetters('call', {
+        isNewCall: 'IS_NEW_CALL',
       }),
       ...mapGetters('member', {
         membersCount: 'MEMBERS_LENGTH',
@@ -114,7 +116,7 @@
       },
 
       isNewCallButton() {
-        return !this.call._isNew;
+        return !this.isNewCall;
       },
     },
 

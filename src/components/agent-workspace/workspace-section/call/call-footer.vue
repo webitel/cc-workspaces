@@ -73,7 +73,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapActions } from 'vuex';
   import Divider from '../../../utils/divider.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
 
@@ -94,6 +94,9 @@
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
       }),
+      ...mapGetters('call', {
+        isNewCall: 'IS_NEW_CALL',
+      }),
 
       // controls Active state
       isOnNumpad() {
@@ -112,7 +115,7 @@
 
       // controls btn visibility
       isMuted() {
-        return !this.call._isNew;
+        return !this.isNewCall;
       },
 
       // controls Active state
@@ -122,7 +125,7 @@
 
       // controls btn visibility
       isHold() {
-        return !this.call._isNew;
+        return !this.isNewCall;
       },
 
       // controls Active state
@@ -132,7 +135,7 @@
 
       // controls btn visibility
       isRecord() {
-        return !this.call._isNew;
+        return !this.isNewCall;
       },
 
       // controls Active state
@@ -142,7 +145,7 @@
 
       // controls btn visibility
       isNote() {
-        return !this.call._isNew;
+        return !this.isNewCall;
       },
     },
 

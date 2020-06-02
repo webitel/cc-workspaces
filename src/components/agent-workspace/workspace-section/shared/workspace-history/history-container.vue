@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+  import { mapActions, mapGetters, mapState } from 'vuex';
   import { CallDirection } from 'webitel-sdk';
   import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
@@ -40,6 +40,7 @@
 
     data: () => ({
       dataList: '',
+      fields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
     }),
 
     watch: {
@@ -61,6 +62,9 @@
       ...mapState('userinfo', {
         userId: (state) => state.userId,
       }),
+      ...mapGetters('call', {
+        isNewCall: 'IS_NEW_CALL',
+      }),
     },
 
     methods: {
@@ -80,7 +84,7 @@
         const params = { ...argParams };
         if (this.workspaceState === WorkspaceStates.MEMBER) {
           response = await this.getMemberHistory(params);
-        } else if (!this.call._isNew) {
+        } else if (!this.isNewCall) {
           response = await this.getNumberHistory(params);
         } else {
           response = await this.getAgentHistory(params);
