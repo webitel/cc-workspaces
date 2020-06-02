@@ -1,59 +1,61 @@
 const defaultState = () => ({
-    domainId: 0,
-    username: '',
-    userId: 0,
-    scope: [],
-    roles: [],
-    license: [],
-    language: localStorage.getItem('language'),
+  domainId: 0,
+  name: '',
+  username: '',
+  account: '',
+  userId: 0,
+  scope: [],
+  roles: [],
+  license: [],
+  language: localStorage.getItem('language'),
 });
 
 const state = {
-    ...defaultState(),
+  ...defaultState(),
 };
 
-const getters = {
-
-};
+const getters = {};
 
 const actions = {
-    SET_SESSION: (context, session) => {
-        context.dispatch('RESET_STATE');
-        context.commit('SET_SESSION', session);
-    },
+  SET_SESSION: (context, session) => {
+    context.dispatch('RESET_STATE');
+    context.commit('SET_SESSION', session);
+  },
 
-    SET_DOMAIN_ID: (context, domainId) => {
-        context.commit('SET_DOMAIN_ID', domainId);
-    },
+  SET_DOMAIN_ID: (context, domainId) => {
+    context.commit('SET_DOMAIN_ID', domainId);
+  },
 
-    RESET_STATE: (context) => {
-        context.commit('RESET_STATE');
-    },
+  RESET_STATE: (context) => {
+    context.commit('RESET_STATE');
+  },
 };
 
 const mutations = {
-    SET_SESSION: (state, session) => {
-        state.domainId = session.dc;
-        state.username = session.preferredUsername;
-        state.roles = session.roles;
-        state.scope = session.scope;
-        state.userId = session.userId;
-        state.license = session.license;
-    },
+  SET_SESSION: (state, session) => {
+    state.domainId = session.dc;
+    state.account = session.preferredUsername;
+    state.roles = session.roles;
+    state.scope = session.scope;
+    state.userId = session.userId;
+    state.license = session.license;
+    state.username = session.username;
+    state.name = session.name;
+  },
 
-    SET_DOMAIN_ID: (state, domainId) => {
-        state.domainId = domainId;
-    },
+  SET_DOMAIN_ID: (state, domainId) => {
+    state.domainId = domainId;
+  },
 
-    RESET_STATE: (state) => {
-        Object.assign(state, defaultState());
-    },
+  RESET_STATE: (state) => {
+    Object.assign(state, defaultState());
+  },
 };
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations,
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
 };

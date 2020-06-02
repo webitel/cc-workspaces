@@ -2,6 +2,7 @@ import instance from '../../instance';
 import UserStatus from '../../../store/modules/agent-status/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
+const presenceSort = '+web,+dnd';
 
 export const getUsersList = async ({
                                      page = 1,
@@ -46,7 +47,7 @@ export const setUserStatus = async (status = '') => {
 };
 
 export const parseUserStatus = (presence) => {
-  if (presence.status) {
+  if (presence && presence.status) {
     if (presence.status.includes('dnd')) {
       return UserStatus.DND;
     }

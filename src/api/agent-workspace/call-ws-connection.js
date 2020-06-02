@@ -25,6 +25,6 @@ const createCliInstance = async () => {
 };
 
 export default async () => {
-  if (!cliInstance) cliInstance = await createCliInstance();
+  if (!cliInstance) cliInstance = createCliInstance();
   return cliInstance;
 };
