@@ -12,6 +12,7 @@ export const getAgentHistory = async ({
                                         search = '',
                                         createdAtFrom = 0,
                                         createdAtTo = Date.now(),
+                                        fields,
                                         direction,
                                         answeredAtFrom,
                                         answeredAtTo,
@@ -37,7 +38,7 @@ export const getAgentHistory = async ({
         undefined,
         undefined,
         undefined,
-        undefined,
+        fields,
         '-created_at',
         domainId,
         undefined,
@@ -51,8 +52,12 @@ export const getAgentHistory = async ({
   }
 };
 
-// eslint-disable-next-line no-unused-vars
-export const getNumberHistory = async ({ page, size, search }) => {
+export const getNumberHistory = async ({
+                                         page,
+                                         size,
+                                         search,
+                                         fields,
+                                       }) => {
   const { domainId } = store.state.userinfo;
   const number = store.state.call.callOnWorkspace.displayNumber;
   const createdAtFrom = 0;
@@ -70,14 +75,14 @@ export const getNumberHistory = async ({ page, size, search }) => {
         undefined,
         undefined,
         undefined,
-        `${number}`,
+        `${number || search}`,
         undefined,
         undefined,
         undefined,
         undefined,
         undefined,
         undefined,
-        undefined,
+        fields,
         '-created_at',
         domainId,
       );
@@ -87,7 +92,12 @@ export const getNumberHistory = async ({ page, size, search }) => {
   }
 };
 
-export const getMemberHistory = async ({ page, size, search }) => {
+export const getMemberHistory = async ({
+                                         page,
+                                         size,
+                                         search,
+                                         fields,
+                                       }) => {
   const { domainId } = store.state.userinfo;
   const { memberOnWorkspace } = store.state.member;
   const createdAtFrom = 0;
@@ -112,7 +122,7 @@ export const getMemberHistory = async ({ page, size, search }) => {
         undefined,
         undefined,
         undefined,
-        undefined,
+        fields,
         '-created_at',
         domainId,
       );
