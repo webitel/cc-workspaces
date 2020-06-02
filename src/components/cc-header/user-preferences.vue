@@ -14,8 +14,8 @@
     </button>
     <section class="user-preferences__actions-wrapper" v-show="isOpened">
       <header class="user-preferences__actions-header">
-        <h3 class="user-preferences__username">{{name}}</h3>
-        <p class="user-preferences__account">{{username}}</p>
+        <h3 class="user-preferences__username">{{name || username}}</h3>
+        <p class="user-preferences__account">{{account}}</p>
       </header>
       <ul class="user-preferences__actions">
         <li class="user-preferences__action user-preferences__action__docs">
@@ -76,12 +76,10 @@
 
     computed: {
       ...mapState('userinfo', {
+        name: (state) => state.name,
         username: (state) => state.username,
+        account: (state) => state.account,
       }),
-
-      name() {
-        return this.username.split('@').shift();
-      },
     },
 
     methods: {
