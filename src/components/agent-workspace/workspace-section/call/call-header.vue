@@ -127,7 +127,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapActions, mapGetters } from 'vuex';
   import { CallActions } from 'webitel-sdk';
   import Divider from '../../../utils/divider.vue';
   import RoundedAction from '../../../utils/rounded-action.vue';
@@ -156,6 +156,9 @@
         call: (state) => state.callOnWorkspace,
         callList: (state) => state.callList,
         newNumber: (state) => state.callOnWorkspace.newNumber,
+      }),
+      ...mapGetters('call', {
+        isNewCall: 'IS_NEW_CALL',
       }),
 
       number: {
@@ -197,11 +200,11 @@
       },
 
       isCall() {
-        return this.call._isNew && this.number;
+        return this.isNewCall && this.number;
       },
 
       isNumberInput() {
-        return this.call._isNew;
+        return this.isNewCall;
       },
     },
 
