@@ -2,7 +2,6 @@ import instance from '../../instance';
 import UserStatus from '../../../store/modules/agent-status/statusUtils/UserStatus';
 
 const BASE_URL = '/users';
-const presenceSort = '+web,+dnd';
 
 export const getUsersList = async ({
                                      page = 1,
