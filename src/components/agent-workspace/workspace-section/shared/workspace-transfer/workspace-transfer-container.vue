@@ -32,10 +32,12 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { getUsersList } from '../../../../../api/agent-workspace/users/users';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import Btn from '../../../../utils/btn.vue';
   import Contact from '../workspace-contacts/workspace-contact.vue';
+  import APIRepository from '../../../../../api/APIRepository';
+
+  const usersAPI = APIRepository.users;
 
   export default {
     name: 'workspace-transfer-container',
@@ -56,7 +58,7 @@
       },
 
       fetch(params) {
-        return getUsersList(params);
+        return usersAPI.getUsers(params);
       },
 
       ...mapActions('call', {

@@ -1,12 +1,14 @@
-import { setUserStatus } from '../../../api/agent-workspace/users/users';
+import APIRepository from '../../../api/APIRepository';
+
+const usersAPI = APIRepository.users;
 
 const actions = {
   SET_USER_ACTIVE_STATUS: async () => {
-    await setUserStatus('');
+    await usersAPI.setUserStatus('');
   },
 
   SET_USER_DND_STATUS: async () => {
-    await setUserStatus('dnd');
+    await usersAPI.setUserStatus('dnd');
   },
 };
 

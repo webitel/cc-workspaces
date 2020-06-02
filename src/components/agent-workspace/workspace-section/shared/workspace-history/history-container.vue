@@ -24,13 +24,11 @@
   import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import {
-    getAgentHistory,
-    getNumberHistory,
-    getMemberHistory,
-  } from '../../../../../api/agent-workspace/history/history';
   import WorkspaceStates
     from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import APIRepository from '../../../../../api/APIRepository';
+
+  const historyAPI = APIRepository.history;
 
   export default {
     name: 'history-container',
@@ -57,6 +55,12 @@
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
       }),
+      ...mapState('member', {
+        member: (state) => state.memberOnWorkspace,
+      }),
+      ...mapState('userinfo', {
+        userId: (state) => state.userId,
+      }),
     },
 
     methods: {
@@ -71,17 +75,40 @@
         this.setNumber(destination);
       },
 
-      async fetch(params) {
+      async fetch(argParams) {
         let response;
+        const params = { ...argParams };
         if (this.workspaceState === WorkspaceStates.MEMBER) {
-          response = await getMemberHistory(params);
+          response = await this.getMemberHistory(params);
         } else if (!this.call._isNew) {
-          response = await getNumberHistory(params);
+          response = await this.getNumberHistory(params);
         } else {
-          response = await getAgentHistory(params);
+          response = await this.getAgentHistory(params);
         }
-
         return response;
+      },
+
+      getAgentHistory(argParams) {
+        const params = {
+          ...argParams,
+          userId: this.userId,
+        };
+        return historyAPI.getHistory(params);
+      },
+      getMemberHistory(argParams) {
+        const params = {
+          ...argParams,
+          memberId: this.member.id,
+        };
+        return historyAPI.getHistory(params);
+      },
+      getNumberHistory(argParams) {
+        const number = this.call.displayNumber;
+        const params = {
+          ...argParams,
+          search: number,
+        };
+        return historyAPI.getHistory(params);
       },
     },
   };

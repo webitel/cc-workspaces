@@ -1,5 +1,8 @@
 import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
-import { getUserStatus, parseUserStatus } from '../../../api/agent-workspace/users/users';
+import parseUserStatus from './statusUtils/parseUserStatus';
+import APIRepository from '../../../api/APIRepository';
+
+const usersAPI = APIRepository.users;
 
 const userStatusHandler = (context) => (userArg) => {
   const user = {
@@ -46,7 +49,7 @@ const actions = {
   // helper action to get initial user status from HTTP request
   GET_CURRENT_USER_STATUS: async (context) => {
     try {
-      const presence = await getUserStatus();
+      const presence = await usersAPI.getUserStatus();
       const user = {
         status: parseUserStatus(presence),
         lastStateChange: Date.now(),

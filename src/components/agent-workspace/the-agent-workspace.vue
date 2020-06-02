@@ -57,6 +57,7 @@
     },
 
     computed: {
+      // after user info is loaded, fetch offline and missed queues data
       ...mapState('userinfo', {
         userId: (state) => state.userId,
       }),

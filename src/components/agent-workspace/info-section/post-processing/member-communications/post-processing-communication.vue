@@ -80,13 +80,12 @@
 </template>
 
 <script>
-  import getCommunications from '../../../../../api/agent-workspace/communications/communications';
   import CcInput from '../../../../utils/input.vue';
   import Multiselect from '../../../../utils/multiselect.vue';
   // import RadioButton from '../../../../utils/radio-button.vue';
+  import APIRepository from '../../../../../api/APIRepository';
 
-  // new comm CUD
-  // tests?
+  const communicationsAPI = APIRepository.communications;
 
   export default {
     name: 'post-processing-communication',
@@ -152,7 +151,7 @@
       select() {
         this.$emit('select', 'id');
       },
-      fetchCommunications: getCommunications,
+      fetchCommunications: communicationsAPI.getCommunications,
     },
   };
 </script>
