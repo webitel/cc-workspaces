@@ -30,7 +30,6 @@ const actions = {
 
       window.agent = agent;
     } catch (err) {
-      console.log(err);
       throw err;
     }
   },

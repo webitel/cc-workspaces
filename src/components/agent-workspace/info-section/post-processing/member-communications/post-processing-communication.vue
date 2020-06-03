@@ -145,7 +145,6 @@
         this.isEditing = false;
       },
       reset() {
-        console.log('reset');
         this.valueDraft = this.value;
       },
       select() {

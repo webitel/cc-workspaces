@@ -20,7 +20,6 @@ const usersAPIRepository = {
                    sort,
                    filters,
                  }) {
-    console.log(filters);
     let url = `${BASE_URL}?page=${page}&size=${size}`;
     if (search) url += `&name=${search}*`;
     if (fields) url += `&fields=${fields}`;
