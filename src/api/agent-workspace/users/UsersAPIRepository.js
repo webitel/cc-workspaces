@@ -5,10 +5,7 @@ const BASE_URL = '/users';
 const fetchUsers = async (url) => {
   try {
     const response = await instance.get(url);
-    if (response.items) {
-      return response.items;
-    }
-    return [];
+    return { next: !!response.next, items: response.items || [] };
   } catch (err) {
     throw err;
   }

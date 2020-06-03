@@ -2,7 +2,7 @@
   <div class="ws-worksection">
     <search
       v-model="search"
-      @search="loadInitialList"
+      @search="resetData"
     />
     <p class="ws-worksection__list-instruction">{{$t('transfer.selectAgent')}}</p>
     <div class="ws-worksection__list" ref="scroll-wrap">

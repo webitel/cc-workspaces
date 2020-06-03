@@ -53,7 +53,7 @@ const fetchHistory = async ({
       undefined,
       isMissed,
     );
-    return response.items || [];
+    return { next: !!response.next, items: response.items || [] };
   } catch (err) {
     throw err;
   }
@@ -65,6 +65,7 @@ const historyAPIRepository = {
       ...defaultParams,
       ...argParams,
     };
+    params.q = params.search;
     return fetchHistory(params);
   },
 };

@@ -29,8 +29,8 @@ const actions = {
       ...requestParams,
       userId,
     };
-    const list = await historyAPI.getHistory(params);
-    context.commit('SET_DATA_LIST', list);
+    const response = await historyAPI.getHistory(params);
+    context.commit('SET_DATA_LIST', response.items);
   },
 
   PUSH_MISSED_STUB: (context, { from = {} }) => {

@@ -24,7 +24,7 @@ const fetchCommunications = async ({
         search,
         domainId,
       );
-    return response.items || [];
+    return { next: !!response.next, items: response.items || [] };
   } catch (err) {
     throw err;
   }
