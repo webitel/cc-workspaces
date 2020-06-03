@@ -66,7 +66,6 @@ const historyAPIRepository = {
       ...defaultParams,
       ...argParams,
     };
-    console.log(argParams, params);
     return fetchHistory(params);
   },
 };

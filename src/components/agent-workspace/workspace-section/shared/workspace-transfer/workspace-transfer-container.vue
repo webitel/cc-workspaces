@@ -50,6 +50,8 @@
     data: () => ({
       dataList: [],
       selected: null,
+      filters: 'presence.status=sip,!dnd',
+      sort: '!dlg,!web,sip',
       fields: ['name', 'id', 'extension', 'presence'],
     }),
 
