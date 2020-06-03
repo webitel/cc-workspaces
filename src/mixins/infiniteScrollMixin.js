@@ -69,6 +69,7 @@ export default {
       };
       if (this.fields) params.fields = this.fields;
       if (this.sort) params.sort = this.sort;
+      if (this.filters) params.filters = this.filters;
       return params;
     },
 

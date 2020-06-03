@@ -143,21 +143,23 @@
       }
 
       .queue-tab__indicator {
-        width: calcVH(4px);
-        height: calcVH(4px);
-        margin: calcVH(10px);
-        border-radius: 50%;
+        display: block;
+        width: calcVH(24px);
+        height: calcVH(24px);
 
         &.active {
-          background: $call-color;
+          background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-active.svg");
+          background-size: contain;
         }
 
         &.offline {
-          background: $accent-color;
+          background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-offline.svg");
+          background-size: contain;
         }
 
         &.missed {
-          background: $disconnect-color;
+          background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-missed.svg");
+          background-size: contain;
         }
       }
     }

@@ -35,6 +35,7 @@
     data: () => ({
       dataList: [],
       selected: null,
+      sort: '!dlg,!dnd,web,sip',
       fields: ['name', 'id', 'extension', 'presence', 'username'],
     }),
 

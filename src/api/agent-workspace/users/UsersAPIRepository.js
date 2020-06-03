@@ -17,10 +17,15 @@ const usersAPIRepository = {
                    size = 20,
                    search = '',
                    fields,
+                   sort,
+                   filters,
                  }) {
-    let url = `${BASE_URL}?page=${page}&size=${size}&sort=name`;
+    console.log(filters);
+    let url = `${BASE_URL}?page=${page}&size=${size}`;
     if (search) url += `&name=${search}*`;
     if (fields) url += `&fields=${fields}`;
+    if (filters) url += `&${filters}`;
+    url += sort ? `&sort=${sort}` : '&sort=name';
     return fetchUsers(url);
   },
   async setUserStatus(status) {

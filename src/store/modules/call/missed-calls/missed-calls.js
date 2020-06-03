@@ -11,6 +11,7 @@ const requestParams = {
   createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: Date.now(),
   fields: ['from', 'created_at'],
+  isMissed: true,
 };
 
 const state = {

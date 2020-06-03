@@ -23,9 +23,7 @@ const fetchHistory = async ({
                               fields,
                               sort,
                               direction,
-                              answeredAtFrom,
-                              answeredAtTo,
-                              domainId,
+                              isMissed,
                             }) => {
   try {
     const response = await callService.searchHistoryCall(
@@ -48,11 +46,12 @@ const fetchHistory = async ({
       undefined,
       fields,
       sort,
-      domainId,
+      undefined,
       undefined,
       direction,
-      answeredAtFrom,
-      answeredAtTo,
+      undefined,
+      undefined,
+      isMissed,
     );
     return { next: !!response.next, items: response.items || [] };
   } catch (err) {

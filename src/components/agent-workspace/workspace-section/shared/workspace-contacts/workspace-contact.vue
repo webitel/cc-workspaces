@@ -68,6 +68,10 @@
             return 'active';
           case UserStatus.DND:
             return 'dnd';
+          case UserStatus.OFFLINE:
+            return 'offline';
+          case UserStatus.BUSY:
+            return 'busy';
           default:
             return '';
         }
@@ -83,6 +87,8 @@
 </script>
 
 <style lang="scss" scoped>
+  $offline-color: #808080;
+
   .flex-wrap {
     height: 100%;
     flex-direction: column;
@@ -133,7 +139,6 @@
     &__indicator {
       width: calcVH(14px);
       height: calcVH(14px);
-      background: $false-color;
       border-radius: 50%;
 
       &.active {
@@ -142,6 +147,14 @@
 
       &.dnd {
         background: $break-color;
+      }
+
+      &.offline {
+        background: $offline-color;
+      }
+
+      &.busy {
+        background: $false-color;
       }
     }
   }
