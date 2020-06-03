@@ -33,18 +33,18 @@
             <span>{{$t('header.docs')}}</span>
           </a>
         </li>
-<!--        <li class="user-preferences__action user-preferences__action__settings">-->
-<!--          <a class="user-preferences__action__link" @click.prevent="settings">-->
-<!--            <icon>-->
-<!--              <svg class="icon sm">-->
-<!--                <use xlink:href="#icon-settings-sm"></use>-->
-<!--              </svg>-->
-<!--            </icon>-->
-<!--            <span>-->
-<!--          {{$t('reusable.settings')}}-->
-<!--        </span>-->
-<!--          </a>-->
-<!--        </li>-->
+        <!--        <li class="user-preferences__action user-preferences__action__settings">-->
+        <!--          <a class="user-preferences__action__link" @click.prevent="settings">-->
+        <!--            <icon>-->
+        <!--              <svg class="icon sm">-->
+        <!--                <use xlink:href="#icon-settings-sm"></use>-->
+        <!--              </svg>-->
+        <!--            </icon>-->
+        <!--            <span>-->
+        <!--          {{$t('reusable.settings')}}-->
+        <!--        </span>-->
+        <!--          </a>-->
+        <!--        </li>-->
         <li class="user-preferences__action user-preferences__action__logout">
           <a class="user-preferences__action__link" @click.prevent="logoutUser">
             <icon>
@@ -65,7 +65,9 @@
 <script>
   import { mapState } from 'vuex';
   import clickaway from '../../directives/clickaway';
-  import { logout } from '../../api/auth/auth';
+  import APIRepository from '../../api/APIRepository';
+
+  const authAPI = APIRepository.auth;
 
   export default {
     name: 'user-preferences',
@@ -86,9 +88,14 @@
       settings() {
       },
 
-      logoutUser() {
-        logout();
-        this.close();
+      async logoutUser() {
+        try {
+          await authAPI.logout();
+          await this.$router.replace('/auth');
+        } catch {
+        } finally {
+          this.close();
+        }
       },
 
       close() {
@@ -175,6 +182,7 @@
 
     &__logout .user-preferences__action__link {
       color: $false-color;
+
       .icon {
         fill: $false-color;
         stroke: $false-color;

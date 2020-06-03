@@ -37,7 +37,8 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import { parseUserStatus } from '../../../../../api/agent-workspace/users/users';
+  import parseUserStatus
+    from '../../../../../store/modules/agent-status/statusUtils/parseUserStatus';
   import UserStatus from '../../../../../store/modules/agent-status/statusUtils/UserStatus';
   import RoundedAction from '../../../../utils/rounded-action.vue';
 
