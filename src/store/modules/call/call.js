@@ -1,7 +1,7 @@
 import clientHandlers from './client-handlers';
 import clientActions from './client-actions';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
-// eslint-disable-next-line import/no-cycle
+
 import missed from './missed-calls/missed-calls';
 
 const state = {

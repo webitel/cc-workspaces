@@ -3,19 +3,26 @@
 </template>
 
 <script>
-  import getSession from './api/auth/userinfo';
+  import { mapActions } from 'vuex';
+  import APIRepository from './api/APIRepository';
+
+  const authAPI = APIRepository.auth;
 
   export default {
     name: 'the-app',
 
     created() {
-      getSession();
-      this.setDomain();
+      this.restoreSession();
     },
+
     methods: {
-      setDomain() {
-        const domain = localStorage.getItem('domain');
-        if (domain) this.$store.dispatch('userinfo/SET_DOMAIN_ID', domain);
+      ...mapActions('userinfo', {
+        setSession: 'SET_SESSION',
+      }),
+
+      async restoreSession() {
+        const userinfo = await authAPI.getSession();
+        this.setSession(userinfo);
       },
     },
   };
