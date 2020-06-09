@@ -1,0 +1,44 @@
+.d-none {
+  display: none;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.tt-capitalize {
+  text-transform: capitalize;
+}
+
+.box-shadow {
+  box-shadow: $box-shadow;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover .icon,
+  &.opened .icon {
+    fill: #000;
+    stroke: #000;
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
+}

@@ -1,0 +1,62 @@
+
+// main wrap
+.post-processing {
+  height: 100%;
+
+  // h1 title
+  &__title {
+    @extend .typo-heading-md;
+    text-align: center;
+    margin: calcVH(50px) 0 calcVH(60px);
+  }
+
+  // radio-buttons form
+  &__success-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: calcVH(60px);
+
+    .radio-button {
+      margin: 0 calcVH(15px);
+    }
+  }
+
+  // submit .cc-btn component
+  &__submit {
+    display: block;
+    min-width: calcVH(110px);
+    margin: calcVH(60px) auto;
+  }
+}
+
+// form wrap itself
+.processing-form {
+  max-width: calcVH(530px);
+  padding: 0 calcVH(20px);
+  margin: auto;
+
+  // selects
+  &__category,
+  &__subcategory {
+    margin-bottom: calcVH(20px);
+  }
+
+  .cc-textarea {
+    width: 100%;
+  }
+
+  &__datetime {
+    display: flex;
+    justify-content: stretch;
+
+    .datepicker {
+      flex: 4 1 auto;
+    }
+
+    .timepicker {
+      margin-left: calcVH(20px);
+      flex: 0 0 auto;
+    }
+  }
+}

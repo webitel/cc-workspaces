@@ -1,0 +1,51 @@
+$tabs-color: #94979B;
+
+.tabs {
+  position: relative;
+  padding: 0 calcVH(20px);
+
+  // all tabs underline
+  &__underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calcVH(1px);
+    background: #EAE9E9;
+    z-index: 0;
+  }
+}
+
+.tab {
+  @extend .typo-heading-sm;
+  position: relative;
+  display: inline-block;
+  margin: 0 calcVH(5px);
+  padding: calcVH(20px) 0;
+  color: $tabs-color;
+  background: transparent;
+  border: none;
+  border-bottom: calcVH(2px) solid transparent;
+  transition: $transition;
+  cursor: pointer;
+  z-index: 1;
+
+  &.active, &:hover {
+    font-family: 'Montserrat Semi', monospace;
+    color: #000;
+  }
+
+  &.active {
+    border-bottom-color: $accent-color;
+  }
+
+  // disables bold font resize on hover
+  &:after {
+    display: block;
+    content: attr(value);
+    font-family: 'Montserrat Semi', monospace;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}

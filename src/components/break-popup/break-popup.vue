@@ -1,0 +1,152 @@
+<template>
+  <popup class="break-popup">
+    <template slot="popup-header">
+      <h1 class="popup__title">
+        <span class="popup-indicator__break"></span>
+        {{$t('agentStatus.breakPopup.breakReason')}}
+      </h1>
+    </template>
+    <template slot="popup-main">
+      <ul class="break-popup__options">
+        <li
+          class="break-popup__options__item"
+          :class="{'selected': option === selected}"
+          v-for="(option, key) of breakOptions"
+          :key="key"
+          @click="selected = option"
+        >{{option}}
+        </li>
+      </ul>
+      <cc-textarea
+        class="break-popup__textarea"
+        :class="{'selected': selected === 'TEXTAREA'}"
+        v-model="userOption"
+        @focus="selected = 'TEXTAREA'"
+      ></cc-textarea>
+    </template>
+    <template slot="popup-footer">
+      <div class="popup-actions">
+        <btn
+          class="popup-action uppercase"
+          @click.native="setBreak"
+        >
+          {{$t('reusable.send')}}
+        </btn>
+        <btn
+          class="popup-action uppercase secondary"
+          @click.native="$emit('close')"
+        >
+          {{$t('reusable.cancel')}}
+        </btn>
+      </div>
+    </template>
+  </popup>
+</template>
+
+<script>
+  import { mapActions } from 'vuex';
+  import Btn from '../utils/btn.vue';
+  import CcTextarea from '../utils/textarea.vue';
+  import Popup from '../utils/popup-container.vue';
+
+  export default {
+    name: 'break-popup',
+    components: {
+      Btn,
+      CcTextarea,
+      Popup,
+    },
+
+    data: () => ({
+      selected: '',
+      userOption: '',
+    }),
+
+    computed: {
+      breakOptions() {
+        return [
+          this.$t('agentStatus.breakPopup.commons.coffeeBreak'),
+          this.$t('agentStatus.breakPopup.commons.smokeBreak'),
+          this.$t('agentStatus.breakPopup.commons.restroom'),
+          this.$t('agentStatus.breakPopup.commons.dinner'),
+          this.$t('agentStatus.breakPopup.commons.meeting'),
+        ];
+      },
+    },
+
+    methods: {
+      setBreak() {
+        const note = this.selected || this.userOption;
+        this.setAgentPause(note);
+        this.$emit('close');
+      },
+
+      ...mapActions('status', {
+        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
+      }),
+    },
+  };
+</script>
+
+<style lang="scss" scoped>
+  $option-border-color: #F2F2F2;
+
+  .popup__title {
+    @extend .typo-heading-lg;
+    text-align: center;
+  }
+
+  .break-popup__options {
+    $four-items-height: calcVH((54px+10px)*4); // item height + 10px bottom margin x 4
+    @extend .cc-scrollbar;
+    max-height: #{$four-items-height};
+    overflow-y: scroll;
+
+    &__item {
+      @extend .typo-body-md;
+      padding: calcVH(17px) calcVH(14px);
+      margin-bottom: calcVH(10px);
+      margin-right: calcVH(10px);
+      border: 1px solid $option-border-color;
+      border-radius: $border-radius;
+      transition: $transition;
+      cursor: pointer;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:hover, &.selected {
+        border-color: $accent-color;
+      }
+    }
+  }
+
+  .break-popup__textarea {
+    height: calcVH(109px);
+    margin-top: calcVH(10px);
+    margin-right: calcVH(10px + 4px); // 10px like options + 4px scroll width
+    border: 1px solid $option-border-color;
+
+    &:hover, &.selected {
+      border-color: $accent-color;
+    }
+  }
+
+  .popup-indicator__break {
+    display: inline-block;
+    width: calcVH(14px);
+    height: calcVH(14px);
+    margin-right: calcVH(11px);
+    border-radius: 50%;
+    background: $break-color;
+  }
+
+  .popup-action {
+    min-width: calcVH(114px);
+
+    &.secondary {
+      margin-left: calcVH(30px);
+    }
+  }
+</style>
