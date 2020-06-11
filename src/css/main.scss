@@ -16,7 +16,7 @@ body {
   font-size: 100%;
   background: $page-bg-color;
 
-  @media screen and (max-height: 611px) {
+  @media screen and (max-height: 610px) {
    min-height: 610px;
   }
 }
