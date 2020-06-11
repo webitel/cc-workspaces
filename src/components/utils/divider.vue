@@ -11,6 +11,7 @@
 <style lang="scss" scoped>
   .divider {
     display: block;
+    width: 100%;
     max-width: 100%;
     height: 0;
     max-height: 0;

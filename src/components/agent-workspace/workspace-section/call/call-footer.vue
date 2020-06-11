@@ -1,74 +1,76 @@
 <template>
   <footer class="call-footer">
     <divider/>
-    <rounded-action
-      class="call-action secondary"
-      :class="{
+    <div class="call-footer__actions">
+      <rounded-action
+        class="call-action secondary"
+        :class="{
       'hidden': !isNumpad,
       'active': isOnNumpad,
       }"
-      @click.native="$emit('openTab', 'numpad')"
-    >
-      <icon>
-        <svg class="icon icon-numpad-md md">
-          <use xlink:href="#icon-numpad-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
-    <rounded-action
-      class="call-action secondary call-action__mic"
-      :class="{
+        @click.native="$emit('openTab', 'numpad')"
+      >
+        <icon>
+          <svg class="icon icon-numpad-md md">
+            <use xlink:href="#icon-numpad-md"></use>
+          </svg>
+        </icon>
+      </rounded-action>
+      <rounded-action
+        class="call-action secondary call-action__mic"
+        :class="{
       'hidden': !isMuted,
       'active': isOnMuted,
       }"
-      @click.native="toggleMute"
-    >
-      <icon>
-        <svg class="icon icon-mic-md md">
-          <use xlink:href="#icon-mic-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
-    <rounded-action
-      class="call-action secondary"
-      :class="{
+        @click.native="toggleMute"
+      >
+        <icon>
+          <svg class="icon icon-mic-md md">
+            <use xlink:href="#icon-mic-md"></use>
+          </svg>
+        </icon>
+      </rounded-action>
+      <rounded-action
+        class="call-action secondary"
+        :class="{
       'hidden': !isHold,
       'hold': isOnHold,
       }"
-      @click.native="toggleHold"
-    >
-      <icon>
-        <svg class="icon icon-hold-md md">
-          <use xlink:href="#icon-hold-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
-    <rounded-action
-      class="call-action secondary"
-      :class="{
+        @click.native="toggleHold"
+      >
+        <icon>
+          <svg class="icon icon-hold-md md">
+            <use xlink:href="#icon-hold-md"></use>
+          </svg>
+        </icon>
+      </rounded-action>
+      <rounded-action
+        class="call-action secondary"
+        :class="{
       'hidden': !isRecord,
       'active': isOnRecord,
       }"
-    >
-      <icon>
-        <svg class="icon icon-rec-md md">
-          <use xlink:href="#icon-rec-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
-    <rounded-action
-      class="call-action secondary"
-      :class="{
+      >
+        <icon>
+          <svg class="icon icon-rec-md md">
+            <use xlink:href="#icon-rec-md"></use>
+          </svg>
+        </icon>
+      </rounded-action>
+      <rounded-action
+        class="call-action secondary"
+        :class="{
       'hidden': !isNote,
       'active': isOnNote,
       }"
-    >
-      <icon>
-        <svg class="icon icon-note-md md">
-          <use xlink:href="#icon-note-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
+      >
+        <icon>
+          <svg class="icon icon-note-md md">
+            <use xlink:href="#icon-note-md"></use>
+          </svg>
+        </icon>
+      </rounded-action>
+    </div>
   </footer>
 </template>
 
@@ -160,6 +162,11 @@
 
 <style lang="scss" scoped>
   .call-footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .call-footer__actions {
     display: flex;
     justify-content: space-evenly;
     padding: calcVH(10px) 0;

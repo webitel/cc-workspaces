@@ -122,7 +122,7 @@
         </button>
       </form>
     </div>
-    <divider/>
+    <divider />
   </header>
 </template>
 
@@ -229,7 +229,6 @@
   .call-header {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: stretch;
     min-height: calcVH(160px);
     height: calcVH(160px);
@@ -241,6 +240,7 @@
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
+    margin-bottom: auto;
 
     .actions-wrap__left {
       display: flex;
