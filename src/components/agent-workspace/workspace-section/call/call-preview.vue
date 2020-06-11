@@ -73,9 +73,10 @@
 
   .call-preview__actions {
     display: flex;
+    justify-content: space-evenly;
 
     .rounded-action {
-      margin: 0 (15px);
+      margin: 0 15px;
     }
   }
 </style>

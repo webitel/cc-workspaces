@@ -30,13 +30,17 @@
     position: relative;
     display: flex;
     justify-content: center;
-    padding: (14px) (20px);
+    padding: 14px 20px;
     background: #fff;
     border-radius: $border-radius;
+
+    @media screen and (max-height: 768px) {
+      padding: 9px 20px;
+    }
   }
 
   .widget {
-    margin: 0 (31px); // 63px / 2
+    margin: 0 31px; // 63px / 2
   }
 
   .settings {

@@ -32,6 +32,7 @@
     flex-direction: column;
     flex-basis: 100%; // make child height 100& of container
     /*margin-bottom: (60px);*/
+    overflow: auto;
 
     /*.numpad-state {*/
     /*  flex-grow: 1;*/
