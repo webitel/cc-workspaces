@@ -35,18 +35,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: calcVH(40px);
+    margin-bottom: (40px);
 
     &__pic {
-      width: calcVH(90px);
-      height: calcVH(90px);
-      margin: 0 auto calcVH(20px);
+      width: (90px);
+      height: (90px);
+      margin: 0 auto (20px);
       border-radius: 50%;
     }
 
     &__name {
       @extend .typo-heading-sm;
-      margin-bottom: calcVH(10px);
+      margin-bottom: (10px);
     }
 
     &__number {

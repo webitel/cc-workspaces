@@ -38,7 +38,7 @@
 
 <style lang="scss" scoped>
   .workspace-member {
-    padding: calcVH(20px);
+    padding: (20px);
     box-sizing: border-box;
 
     .ws-worksection__list {

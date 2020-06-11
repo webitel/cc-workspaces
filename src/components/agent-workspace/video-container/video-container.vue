@@ -130,8 +130,8 @@
 
   .video-container {
     position: fixed;
-    right: calcVH(30px);
-    bottom: calcVH(70px);
+    right: (30px);
+    bottom: (70px);
     border-radius: $border-radius;
     z-index: 900;
     overflow: hidden;
@@ -152,8 +152,8 @@
       }
 
       &__expand {
-        top: calcVH(30px);
-        left: calcVH(30px);
+        top: (30px);
+        left: (30px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -164,12 +164,12 @@
       }
 
       &__hangup {
-        top: calcVH(30px);
-        right: calcVH(30px);
+        top: (30px);
+        right: (30px);
       }
 
       &__mic {
-        bottom: calcVH(48px);
+        bottom: (48px);
         left: 50%;
         transform: translateX(-50%);
       }
@@ -181,8 +181,8 @@
 
     &.local {
       position: absolute;
-      right: calcVH(30px);
-      bottom: calcVH(30px);
+      right: (30px);
+      bottom: (30px);
       width: fit-content;
       width: -moz-fit-content;
       height: fit-content;
@@ -193,13 +193,13 @@
     .peer-video {
       width: 100%;
       height: auto;
-      max-width: calcVH(444px);
+      max-width: (444px);
       object-fit: cover;
     }
 
     .local-video {
-      width: calcVH(60px);
-      height: calcVH(60px);
+      width: (60px);
+      height: (60px);
       /*width: 13.5%; // 60px from 444px container width*/
       //height: 20.1%; // 60px from 298px container height
       object-fit: cover;

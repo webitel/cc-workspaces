@@ -53,9 +53,9 @@
     display: flex;
     align-items: center;
     position: relative;
-    height: calcVH(24px);
-    min-width: calcVH(24px);
-    padding-left: calcVH(24px);
+    height: (24px);
+    min-width: (24px);
+    padding-left: (24px);
     box-sizing: border-box;
     cursor: pointer;
     user-select: none;
@@ -75,9 +75,9 @@
     position: absolute;
     //bottom: -2px;
     left: 0;
-    height: calcVH(18px);
-    width: calcVH(18px);
-    border: calcVH(2px) solid $radio-button-color;
+    height: (18px);
+    width: (18px);
+    border: (2px) solid $radio-button-color;
     background-color: #fff;
     border-radius: 50%;
     transition: $transition;
@@ -94,8 +94,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: calcVH(8px);
-    height: calcVH(8px);
+    width: (8px);
+    height: (8px);
     transform: translate(-50%, -50%);
     border-radius: 50%;
     transition: $transition;
@@ -114,6 +114,6 @@
 
   .radio-button__label {
     @extend .cc-label;
-    margin-left: calcVH(10px);
+    margin-left: (10px);
   }
 </style>

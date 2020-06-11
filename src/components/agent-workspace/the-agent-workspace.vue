@@ -105,17 +105,17 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: calcVH(20px) calcVH(30px);
+    padding: (20px) (30px);
     box-sizing: border-box;
   }
 
   .workspace {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: calcVH(340px) calcVH(550px) 1fr;
-    grid-gap: calcVH(20px);
+    grid-template-columns: (340px) (550px) 1fr;
+    grid-gap: (20px);
     min-height: 0;
-    margin-top: calcVH(28px);
+    margin-top: (28px);
 
     .workspace-section {
       max-height: 100%;

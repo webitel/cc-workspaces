@@ -102,13 +102,13 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
-    /*width: calcVH(210px);*/
+    /*width: (210px);*/
     margin: auto;
 
     /*&__row {*/
     /*  display: flex;*/
     /*  justify-content: space-between;*/
-    /*  margin-top: calcVH(10px);*/
+    /*  margin-top: (10px);*/
 
     /*&:first-child {*/
     /*  justify-content: center;*/

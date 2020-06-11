@@ -123,11 +123,11 @@
   }
 
   .timepicker__input, .timepicker__select {
-    min-width: calcVH(80px);
+    min-width: (80px);
   }
 
   .timepicker__delimiter {
     display: inline-block;
-    margin: 0 calcVH(10px);
+    margin: 0 (10px);
   }
 </style>

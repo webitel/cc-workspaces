@@ -17,7 +17,7 @@
     max-height: 0;
     padding: 0;
     margin: 0;
-    border: calcVH(1px) solid $page-bg-color;
+    border: (1px) solid $page-bg-color;
     border-top-width: thin;
   }
 </style>

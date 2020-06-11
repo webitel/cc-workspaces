@@ -169,7 +169,7 @@
   .call-footer__actions {
     display: flex;
     justify-content: space-evenly;
-    padding: calcVH(10px) 0;
-    margin: 0 calcVH(20px);
+    padding: (10px) 0;
+    margin: 0 (20px);
   }
 </style>

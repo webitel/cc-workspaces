@@ -230,9 +230,9 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    min-height: calcVH(160px);
-    height: calcVH(160px);
-    margin: calcVH(20px) calcVH(20px) 0;
+    min-height: (160px);
+    height: (160px);
+    margin: (20px) (20px) 0;
   }
 
   .call-header__actions {
@@ -244,10 +244,10 @@
 
     .actions-wrap__left {
       display: flex;
-      flex: 0 0 calcVH(190px); // x3 icons 50px + x2 margins 20px
+      flex: 0 0 (190px); // x3 icons 50px + x2 margins 20px
 
       .call-action {
-        margin-right: calcVH(20px);
+        margin-right: (20px);
 
         &:last-child {
           margin-right: 0;
@@ -256,18 +256,18 @@
     }
 
     .call-header__profile-pic {
-      flex: 0 0 calcVH(80px);
-      width: calcVH(80px);
-      height: calcVH(80px);
+      flex: 0 0 (80px);
+      width: (80px);
+      height: (80px);
     }
 
     .actions-wrap__right {
       display: flex;
-      flex: 0 0 calcVH(190px); // x3 icons 50px + x2 margins 20px
+      flex: 0 0 (190px); // x3 icons 50px + x2 margins 20px
       justify-content: flex-end;
 
       .call-action {
-        margin-left: calcVH(20px);
+        margin-left: (20px);
 
         &:first-child {
           margin-left: 0;
@@ -284,7 +284,7 @@
 
     .call-profile__name {
       @extend .typo-heading-sm;
-      margin-bottom: calcVH(5px);
+      margin-bottom: (5px);
     }
 
     .call-profile__number {
@@ -304,10 +304,10 @@
 
         // make bottom border overflowing divider
         position: relative;
-        bottom: calcVH(-1px);
+        bottom: (-1px);
 
         border: 1px solid transparent;
-        border-bottom: calcVH(1px) solid #000;
+        border-bottom: (1px) solid #000;
         outline: none;
 
         &:focus {
@@ -317,7 +317,7 @@
 
       .icon-btn {
         position: absolute;
-        right: calcVH(-24px);
+        right: (-24px);
 
         &:hover .icon {
           fill: #000;
