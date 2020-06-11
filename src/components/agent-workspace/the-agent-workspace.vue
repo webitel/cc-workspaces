@@ -97,18 +97,14 @@
   .main-agent-workspace {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    max-height: 100vh;
+    max-height: 100%;
   }
 
   .workspace-wrap {
-    $header-height: calcVH(54px);
-
+    flex-grow: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    height: calc(100vh - #{$header-height});
-    max-height: calc(100vh - #{$header-height});
     padding: calcVH(20px) calcVH(30px);
     box-sizing: border-box;
   }

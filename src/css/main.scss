@@ -15,6 +15,10 @@ body {
   font-family: 'Montserrat Regular', monospace;
   font-size: 100%;
   background: $page-bg-color;
+
+  @media screen and (max-height: 651px) {
+   min-height: 650px;
+  }
 }
 
 main {
