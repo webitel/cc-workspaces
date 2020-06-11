@@ -163,17 +163,17 @@
     justify-content: stretch;
     align-items: flex-start;
     width: 100%;
-    margin-top: calcVH(30px);
+    margin-top: (30px);
 
     .radio-button {
-      flex: 0 0 calcVH(24px);
-      margin-right: calcVH(15px);
+      flex: 0 0 (24px);
+      margin-right: (15px);
     }
 
     &__select {
       flex: 1 4 auto;
       width: 100%;
-      margin-right: calcVH(10px);
+      margin-right: (10px);
 
       .disabled {
         border-color: transparent;
@@ -184,15 +184,15 @@
     &__input {
       flex: 4 1 auto;
       min-width: auto;
-      /*height: calcVH(40px);*/
-      margin-right: calcVH(10px);
+      /*height: (40px);*/
+      margin-right: (10px);
 
       &__priority {
-        flex: 0 0 calcVH(50px);
+        flex: 0 0 (50px);
       }
 
       &:last-child {
-        margin-right: calcVH(20px);
+        margin-right: (20px);
       }
     }
 
@@ -200,14 +200,14 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      margin-top: calcVH(6px);
-      flex: 0 0 calcVH(24px*2 + 10px);
+      margin-top: (6px);
+      flex: 0 0 (24px*2 + 10px);
 
       .action-wrap {
-        height: calcVH(24px);
+        height: (24px);
 
         &:last-child {
-          margin-left: calcVH(10px);
+          margin-left: (10px);
         }
       }
     }

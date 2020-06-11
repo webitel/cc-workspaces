@@ -1,6 +1,6 @@
 <template>
   <div class="numpad">
-    <call-state/>
+<!--    <call-state/>-->
     <numpad-numbers
       @input="input"
     ></numpad-numbers>
@@ -9,13 +9,13 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import CallState from '../call-state.vue';
+  // import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
 
   export default {
     name: 'numpad',
     components: {
-      CallState,
+      // CallState,
       NumpadNumbers,
     },
     methods: {
@@ -31,10 +31,10 @@
     display: flex;
     flex-direction: column;
     flex-basis: 100%; // make child height 100& of container
-    margin-bottom: calcVH(60px);
+    /*margin-bottom: (60px);*/
 
-    .numpad-state {
-      flex-grow: 1;
-    }
+    /*.numpad-state {*/
+    /*  flex-grow: 1;*/
+    /*}*/
   }
 </style>

@@ -27,10 +27,10 @@ $input-border-color__active: #000000;
 .cc-textarea {
   display: inline-block;
   position: relative;
-  width: calcVH(510px);
-  height: calcVH(200px);
-  padding: calcVH(10px) calcVH(40px) calcVH(40px) calcVH(20px);
-  border: calcVH(1px) solid $input-border-color;
+  width: (510px);
+  height: (200px);
+  padding: (10px) (40px) (40px) (20px);
+  border: (1px) solid $input-border-color;
   border-radius: $border-radius;
   box-sizing: border-box;
 
@@ -51,8 +51,8 @@ $input-border-color__active: #000000;
 
 .cc-textarea__close {
   position: absolute;
-  top: calcVH(8px);
-  right: calcVH(8px);
+  top: (8px);
+  right: (8px);
 
   .icon {
     fill: $input-icon-color;
@@ -62,8 +62,8 @@ $input-border-color__active: #000000;
 
 .cc-textarea__send {
   position: absolute;
-  bottom: calcVH(8px);
-  right: calcVH(8px);
+  bottom: (8px);
+  right: (8px);
   color: $input-icon-color;
 
   .icon {
@@ -77,7 +77,7 @@ $input-border-color__active: #000000;
 .cc-input {
   display: flex;
   flex-direction: column;
-  //min-width: calcVH(429px);
+  //min-width: (429px);
   min-width: 100%;
 }
 
@@ -86,9 +86,9 @@ $input-border-color__active: #000000;
   display: flex;
   align-items: center;
   width: 100%;
-  height: calcVH(40px);
-  padding: calcVH(8px) calcVH(7px);
-  border: calcVH(1px) solid $input-border-color;
+  height: (40px);
+  padding: (8px) (7px);
+  border: (1px) solid $input-border-color;
   border-radius: $border-radius;
 
   &.focused, &:hover {
@@ -110,7 +110,7 @@ $input-border-color__active: #000000;
 .cc-input__input {
   @extend .typo-input;
   width: 100%;
-  margin: 0 calcVH(8px);
+  margin: 0 (8px);
   border: none;
   outline: none;
 
@@ -122,7 +122,7 @@ $input-border-color__active: #000000;
 }
 
 .cc-input__icon {
-  height: calcVH(24px);
+  height: (24px);
 
   .icon {
     fill: $input-icon-color;
@@ -150,8 +150,8 @@ $input-border-color__active: #000000;
 .input__short {
   @extend .typo-input;
   text-align: center;
-  width: calcVH(40px);
-  padding: calcVH(9px) calcVH(4px); // 10px 5px - borders
+  width: (40px);
+  padding: (9px) (4px); // 10px 5px - borders
   border: 1px solid $input-border-color;
   border-radius: $border-radius;
   box-sizing: border-box;

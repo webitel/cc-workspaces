@@ -357,15 +357,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /*width: calcVH(24px);*/
-    /*height: calcVH(24px);*/
+    /*width: (24px);*/
+    /*height: (24px);*/
   }
 
   /*svg instead of .icon to override styles by .icon-icon-name-size without any other seelectors*/
   svg {
     display: flex;
-    width: calcVH(24px);
-    height: calcVH(24px);
+    width: (24px);
+    height: (24px);
     stroke-width: 0;
     stroke: $icon-color;
     fill: $icon-color;
@@ -383,22 +383,22 @@
   ========================================== */
 
   .xl {
-    width: calcVH(50px);
-    height: calcVH(50px);
+    width: (50px);
+    height: (50px);
   }
 
   .lg {
-    width: calcVH(30px);
-    height: calcVH(30px);
+    width: (30px);
+    height: (30px);
   }
 
   .md {
-    width: calcVH(24px);
-    height: calcVH(24px);
+    width: (24px);
+    height: (24px);
   }
 
   .sm {
-    width: calcVH(16px);
-    height: calcVH(16px);
+    width: (16px);
+    height: (16px);
   }
 </style>

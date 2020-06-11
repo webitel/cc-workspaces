@@ -106,32 +106,32 @@
 </script>
 
 <style lang="scss" scoped>
-  $user-preferences-gap: calcVH(30px);
-  $user-preferences-shadow: 0px calcVH(8px) calcVH(18px) rgba(0, 0, 0, 0.08);
+  $user-preferences-gap: (30px);
+  $user-preferences-shadow: 0px (8px) (18px) rgba(0, 0, 0, 0.08);
 
   .typo-user-preferences-title {
     font-family: 'Montserrat Regular', monospace;
-    font-size: calcVH(14px);
-    line-height: calcVH(17px);
+    font-size: (14px);
+    line-height: (17px);
   }
 
   .typo-user-preferences-subtitle {
     font-family: 'Montserrat Regular', monospace;
-    font-size: calcVH(14px);
-    line-height: calcVH(17px);
+    font-size: (14px);
+    line-height: (17px);
   }
 
   .typo-user-preferences-action {
     font-family: 'Montserrat Regular', monospace;
-    font-size: calcVH(13px);
-    line-height: calcVH(16px);
+    font-size: (13px);
+    line-height: (16px);
   }
 
   .user-preferences {
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: calcVH(30px);
+    margin-left: (30px);
     z-index: 90;
   }
 
@@ -141,7 +141,7 @@
     position: absolute;
     top: calc(100% + 5px); // icon + 5px
     right: 0;
-    min-width: calcVH(120px);
+    min-width: (120px);
     background: #fff;
     border-radius: $border-radius;
     box-shadow: $user-preferences-shadow;
@@ -149,7 +149,7 @@
   }
 
   .user-preferences__actions-header {
-    padding: $user-preferences-gap $user-preferences-gap calcVH(21px);
+    padding: $user-preferences-gap $user-preferences-gap (21px);
 
     .user-preferences__username {
       @extend .typo-user-preferences-title;
@@ -172,11 +172,11 @@
       display: flex;
       align-items: center;
       width: 100%;
-      padding: calcVH(11px) $user-preferences-gap;
+      padding: (11px) $user-preferences-gap;
       cursor: pointer;
 
       .icon-wrap {
-        margin-right: calcVH(8px);
+        margin-right: (8px);
       }
     }
 

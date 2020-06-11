@@ -97,16 +97,16 @@
   }
 
   .break-popup__options {
-    $four-items-height: calcVH((54px+10px)*4); // item height + 10px bottom margin x 4
+    $four-items-height: ((54px+10px)*4); // item height + 10px bottom margin x 4
     @extend .cc-scrollbar;
     max-height: #{$four-items-height};
     overflow-y: scroll;
 
     &__item {
       @extend .typo-body-md;
-      padding: calcVH(17px) calcVH(14px);
-      margin-bottom: calcVH(10px);
-      margin-right: calcVH(10px);
+      padding: (17px) (14px);
+      margin-bottom: (10px);
+      margin-right: (10px);
       border: 1px solid $option-border-color;
       border-radius: $border-radius;
       transition: $transition;
@@ -123,9 +123,9 @@
   }
 
   .break-popup__textarea {
-    height: calcVH(109px);
-    margin-top: calcVH(10px);
-    margin-right: calcVH(10px + 4px); // 10px like options + 4px scroll width
+    height: (109px);
+    margin-top: (10px);
+    margin-right: (10px + 4px); // 10px like options + 4px scroll width
     border: 1px solid $option-border-color;
 
     &:hover, &.selected {
@@ -135,18 +135,18 @@
 
   .popup-indicator__break {
     display: inline-block;
-    width: calcVH(14px);
-    height: calcVH(14px);
-    margin-right: calcVH(11px);
+    width: (14px);
+    height: (14px);
+    margin-right: (11px);
     border-radius: 50%;
     background: $break-color;
   }
 
   .popup-action {
-    min-width: calcVH(114px);
+    min-width: (114px);
 
     &.secondary {
-      margin-left: calcVH(30px);
+      margin-left: (30px);
     }
   }
 </style>

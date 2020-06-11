@@ -73,8 +73,8 @@
 <style lang="scss" scoped>
   .typo-call-state {
     font-family: 'Montserrat Semi', monospace;
-    @include fontSize(40px);
-    @include lineHeight(40px);
+    font-size: (40px);
+    line-height: (40px);
   }
 
   .numpad-state {
@@ -83,32 +83,32 @@
     flex-direction: column;
 
     &__animation {
-      width: calcVH(50px);
-      height: calcVH(50px);
-      margin-bottom: calcVH(10px);
+      width: (50px);
+      height: (50px);
+      margin-bottom: (10px);
     }
 
     &__primary-text {
       @extend .typo-call-state;
       text-align: center;
-      margin-bottom: calcVH(25px);
+      margin-bottom: (25px);
 
       .numpad-state__primary-text__time-digit {
         display: inline-block;
         text-align: center;
-        width: calcVH(26px);
+        width: (26px);
 
         /*semicolons*/
         &:nth-child(3), &:nth-child(6) {
-          width: calcVH(12px);
+          width: (12px);
         }
       }
     }
 
     &__secondary-text {
       @extend .typo-heading-sm;
-      min-height: calcVH(16px);
-      margin-bottom: calcVH(55px);
+      min-height: (16px);
+      margin-bottom: (55px);
     }
   }
 </style>

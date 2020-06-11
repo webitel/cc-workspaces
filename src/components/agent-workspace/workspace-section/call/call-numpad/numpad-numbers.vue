@@ -1,80 +1,80 @@
 <template>
   <div class="numpad-numbers">
-    <div class="numpad-numbers__row">
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('+')"
-      >+
-      </rounded-action>
-    </div>
-    <div class="numpad-numbers__row">
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('1')"
-      >1
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('2')"
-      >2
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('3')"
-      >3
-      </rounded-action>
-    </div>
-    <div class="numpad-numbers__row">
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('4')"
-      >4
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('5')"
-      >5
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('6')"
-      >6
-      </rounded-action>
-    </div>
-    <div class="numpad-numbers__row">
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('7')"
-      >7
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('8')"
-      >8
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('9')"
-      >9
-      </rounded-action>
-    </div>
-    <div class="numpad-numbers__row">
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('*')"
-      >*
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('0')"
-      >0
-      </rounded-action>
-      <rounded-action
-        class="numpad-numbers__num secondary"
-        @click.native="input('#')"
-      >#
-      </rounded-action>
-    </div>
+    <!--    <div class="numpad-numbers__row">-->
+    <!--      <rounded-action-->
+    <!--        class="numpad-numbers__num secondary"-->
+    <!--        @click.native="input('+')"-->
+    <!--      >+-->
+    <!--      </rounded-action>-->
+    <!--    </div>-->
+    <!--    <div class="numpad-numbers__row">-->
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('1')"
+    >1
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('2')"
+    >2
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('3')"
+    >3
+    </rounded-action>
+    <!--    </div>-->
+    <!--    <div class="numpad-numbers__row">-->
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('4')"
+    >4
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('5')"
+    >5
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('6')"
+    >6
+    </rounded-action>
+    <!--    </div>-->
+    <!--    <div class="numpad-numbers__row">-->
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('7')"
+    >7
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('8')"
+    >8
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('9')"
+    >9
+    </rounded-action>
+    <!--    </div>-->
+    <!--    <div class="numpad-numbers__row">-->
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('*')"
+    >*
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('0')"
+    >0
+    </rounded-action>
+    <rounded-action
+      class="numpad-numbers__num secondary"
+      @click.native="input('#')"
+    >#
+    </rounded-action>
+    <!--    </div>-->
   </div>
 </template>
 
@@ -99,23 +99,26 @@
   $numpad-color: #808080;
 
   .numpad-numbers {
-    width: calcVH(210px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    /*width: (210px);*/
     margin: auto;
 
-    &__row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: calcVH(30px);
+    /*&__row {*/
+    /*  display: flex;*/
+    /*  justify-content: space-between;*/
+    /*  margin-top: (10px);*/
 
-      &:first-child {
-        justify-content: center;
-        margin-top: 0;
-      }
-    }
+    /*&:first-child {*/
+    /*  justify-content: center;*/
+    /*  margin-top: 0;*/
+    /*}*/
+    /*}*/
+  }
 
-    &__num {
-      @extend .typo-heading-sm;
-      color: $numpad-color;
-    }
+  .numpad-numbers__num {
+    @extend .typo-heading-sm;
+    color: $numpad-color;
   }
 </style>

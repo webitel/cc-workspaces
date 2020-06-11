@@ -74,9 +74,9 @@
         content: '';
         position: absolute;
         top: 50%;
-        left: calcVH(10px);
-        width: calcVH(24px);
-        height: calcVH(24px);
+        left: (10px);
+        width: (24px);
+        height: (24px);
         background: url("../../assets/icons/calendar_md.svg") center center;
         background-size: contain;
         transform: translateY(-50%);
@@ -86,9 +86,9 @@
       input {
         @extend .typo-input;
         @extend .cc-input__body;
-        height: calcVH(40px);
+        height: (40px);
         padding: $select-paddings;
-        padding-left: calcVH(44px);
+        padding-left: (44px);
       }
     }
 
@@ -96,16 +96,16 @@
     .vdp-datepicker__calendar-button {
       position: absolute;
       top: 50%;
-      right: calcVH(5px);
-      width: calcVH(24px);
-      height: calcVH(24px);
+      right: (5px);
+      width: (24px);
+      height: (24px);
       transform: translateY(-50%);
 
       i:before {
         content: '';
         position: absolute;
-        width: calcVH(24px);
-        height: calcVH(24px);
+        width: (24px);
+        height: (24px);
         background: url("../../assets/icons/arrow-left.svg") center center;
         background-size: contain;
         border: none; // hide default arrows
@@ -116,11 +116,11 @@
     .vdp-datepicker__calendar {
       @extend .box-shadow;
       //display: block !important;
-      width: calcVH(287px);
+      width: (287px);
       right: 0;
-      padding: calcVH(16px);
-      margin-top: calcVH(8px);
-      line-height: calcVH(36px) !important;
+      padding: (16px);
+      margin-top: (8px);
+      line-height: (36px) !important;
       border: none;
       border-radius: $border-radius;
 
@@ -128,12 +128,12 @@
         display: flex;
         justify-content: space-between;
         align-content: flex-end;
-        margin-bottom: calcVH(24px);
+        margin-bottom: (24px);
         line-height: 0;
 
         .day__month_btn {
           @extend .typo-heading-sm;
-          padding-top: calcVH(5px);
+          padding-top: (5px);
         }
 
         .prev, .next {
@@ -149,9 +149,9 @@
           &:after {
             content: '';
             position: absolute;
-            top: calcVH(5px);
-            width: calcVH(24px);
-            height: calcVH(24px);
+            top: (5px);
+            width: (24px);
+            height: (24px);
             background: url("../../assets/icons/arrow-left.svg") center center;
             background-size: contain;
             border: none !important; // hide default arrows
@@ -169,11 +169,11 @@
       }
 
       .cell {
-        width: calcVH(36px);
-        height: calcVH(36px);
+        width: (36px);
+        height: (36px);
         padding: 0;
-        line-height: calcVH(36px);
-        font-size: calcVH(14px);
+        line-height: (36px);
+        font-size: (14px);
         transition: $transition;
 
         &.day-header {

@@ -16,16 +16,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calcVH(50px);
-    height: calcVH(50px);
+    width: (50px);
+    height: (50px);
     border: none;
     border-radius: 50%;
     transition: $transition;
     cursor: pointer;
 
     &__lg {
-      width: calcVH(60px);
-      height: calcVH(60px);
+      width: (60px);
+      height: (60px);
     }
 
     /* on top due to lower styles priority, than call, hold, transfer, end styling */

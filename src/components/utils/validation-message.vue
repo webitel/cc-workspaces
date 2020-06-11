@@ -32,7 +32,7 @@
 <style lang="scss" scoped>
   .input__details {
     @extend .typo-body-sm;
-    margin-top: calcVH(3px);
+    margin-top: (3px);
     color: $error-color;
   }
 </style>

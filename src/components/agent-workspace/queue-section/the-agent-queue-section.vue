@@ -144,8 +144,8 @@
 
       .queue-tab__indicator {
         display: block;
-        width: calcVH(24px);
-        height: calcVH(24px);
+        width: (24px);
+        height: (24px);
 
         &.active {
           background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-active.svg");
@@ -172,8 +172,8 @@
 
     .rounded-action {
       position: absolute;
-      bottom: calcVH(10px);
-      left: calcVH(10px);
+      bottom: (10px);
+      left: (10px);
     }
   }
 </style>
