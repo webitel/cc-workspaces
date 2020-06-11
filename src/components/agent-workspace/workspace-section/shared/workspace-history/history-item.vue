@@ -37,10 +37,23 @@
         type: Object,
         required: true,
       },
+      forNumber: {
+        type: String,
+        required: false,
+      },
     },
 
     computed: {
       computeDestination() {
+        return this.forNumber ? this.destinationForNumber : this.destination;
+      },
+
+      destinationForNumber() {
+        if (this.item.from.number !== this.forNumber) return this.item.from.number;
+        return this.item.to.number || this.item.destination;
+      },
+
+      destination() {
         if (this.item.direction === CallDirection.Outbound) {
           if (this.item.to.number) {
             return `${this.item.to.name} (${this.item.to.number})`;
