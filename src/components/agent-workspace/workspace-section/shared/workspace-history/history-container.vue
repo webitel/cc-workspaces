@@ -9,6 +9,7 @@
         v-for="(item, key) of dataList"
         :key="key"
         :item="item"
+        :for-number="historyNumber"
         @click.native="select(item)"
       ></history-item>
       <observer
@@ -40,12 +41,14 @@
 
     data: () => ({
       dataList: '',
+      historyNumber: '',
       fields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
     }),
 
     watch: {
       call() {
-        this.loadInitialList();
+        this.resetHistoryNumber();
+        this.loadDataList();
       },
     },
 
@@ -112,7 +115,12 @@
           ...argParams,
           search: number,
         };
+        this.historyNumber = number;
         return historyAPI.getHistory(params);
+      },
+
+      resetHistoryNumber() {
+        this.historyNumber = '';
       },
     },
   };
