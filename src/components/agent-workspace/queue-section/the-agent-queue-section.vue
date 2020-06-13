@@ -39,6 +39,8 @@
   import MissedQueue from './missed-queue/missed-queue-container.vue';
   import RoundedAction from '../../utils/rounded-action.vue';
   import Tabs from '../../utils/tabs.vue';
+  import WorkspaceStates
+    from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
   export default {
     name: 'the-agent-queue-section',
@@ -62,6 +64,9 @@
     computed: {
       ...mapState('call', {
         callList: (state) => state.callList,
+      }),
+      ...mapState('workspace', {
+        workspaceState: (state) => state.workspaceState,
       }),
       ...mapGetters('call', {
         isNewCall: 'IS_NEW_CALL',
@@ -116,7 +121,12 @@
       },
 
       isNewCallButton() {
-        return !this.isNewCall;
+        return !this.isNewCall || !this.isCallWorkspace;
+      },
+
+      // used as isNewCallBtn check
+      isCallWorkspace() {
+        return this.workspaceState === WorkspaceStates.CALL;
       },
     },
 
