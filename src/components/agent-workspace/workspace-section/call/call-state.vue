@@ -21,7 +21,7 @@
         :key="key"
       >{{digit}}</span>
     </div>
-    <div class="numpad-state__secondary-text">{{computeDTMFDigits}}</div>
+    <div class="numpad-state__secondary-text">112{{computeDTMFDigits}}</div>
   </div>
 </template>
 
@@ -73,8 +73,8 @@
 <style lang="scss" scoped>
   .typo-call-state {
     font-family: 'Montserrat Semi', monospace;
-    font-size: (40px);
-    line-height: (40px);
+    font-size: 40px;
+    line-height: 40px;
   }
 
   .numpad-state {
@@ -83,32 +83,34 @@
     flex-direction: column;
 
     &__animation {
-      width: (50px);
-      height: (50px);
-      margin-bottom: (10px);
+      display: none; // FIXME
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
     }
 
     &__primary-text {
       @extend .typo-call-state;
       text-align: center;
-      margin-bottom: (25px);
+      height: 40px; // line height + 2 margins
+      margin-top: 25px; // FIXME ANIMATION
+      margin-bottom: 25px;
 
       .numpad-state__primary-text__time-digit {
         display: inline-block;
         text-align: center;
-        width: (26px);
+        width: 26px;
 
         /*semicolons*/
         &:nth-child(3), &:nth-child(6) {
-          width: (12px);
+          width: 12px;
         }
       }
     }
 
     &__secondary-text {
       @extend .typo-heading-sm;
-      min-height: (16px);
-      margin-bottom: (55px);
+      min-height: 16px;
     }
   }
 </style>
