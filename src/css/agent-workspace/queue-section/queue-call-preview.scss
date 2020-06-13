@@ -30,12 +30,24 @@ inset 0px 0px 8px -5px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  min-width: 0; // prevents preview-header content overflowing
 }
 
 .preview-header__name {
   @extend .typo-heading-sm;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
   @media screen and (max-width: 1336px) {
     display: none;
+  }
+}
+
+.offline-queue .preview-header__name {
+  @media screen and (max-width: 1336px) {
+    display: block;
   }
 }
 

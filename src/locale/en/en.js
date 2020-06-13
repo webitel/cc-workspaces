@@ -25,6 +25,7 @@ export default {
     active: 'Active',
     offline: 'Offline',
     missed: 'Missed',
+    at: 'at', // missed call "at 10:10"
   },
   infoSec: {
     clientInfo: 'Client info',
