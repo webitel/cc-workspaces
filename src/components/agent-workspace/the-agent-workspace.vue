@@ -112,7 +112,7 @@
   .workspace {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: (340px) (550px) 1fr;
+    grid-template-columns: 340px 550px 1fr;
     grid-gap: (20px);
     min-height: 0;
     margin-top: (28px);
@@ -120,6 +120,10 @@
     .workspace-section {
       max-height: 100%;
       min-height: 0;
+    }
+
+    @media screen and (max-width: 1336px) {
+      grid-template-columns: 120px 550px 1fr; // changed 1st col width
     }
   }
 </style>

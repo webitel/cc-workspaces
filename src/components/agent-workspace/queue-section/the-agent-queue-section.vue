@@ -1,5 +1,5 @@
 <template>
-  <section class="workspace-section">
+  <section class="workspace-section queue-section">
     <tabs
       :current-tab="currentTab"
       :tabs="tabs"
@@ -129,7 +129,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .workspace-section {
+  .queue-section {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -162,12 +162,17 @@
           background-size: contain;
         }
       }
-    }
 
-    .call-preview-wrap {
-      @extend .cc-scrollbar;
-      min-height: 0;
-      overflow: auto;
+      @media screen and (max-width: 1336px) {
+        ::v-deep .tab { // deeply styles tabs-component inner element, through scoped styles
+          width: 24px;
+          margin: 0 1px;
+        }
+
+        .queue-tab__text {
+          display: none;
+        }
+      }
     }
 
     .rounded-action {
@@ -175,5 +180,11 @@
       bottom: (10px);
       left: (10px);
     }
+  }
+
+  .call-preview-wrap {
+    @extend .cc-scrollbar;
+    min-height: 0;
+    overflow: auto;
   }
 </style>
