@@ -77,8 +77,13 @@
 <style lang="scss" scoped>
   .typo-timer-digits {
     font-family: 'Montserrat Semi', monospace;
-    font-size: (82px);
-    line-height: (82px);
+    font-size: 82px;
+    line-height: 82px;
+
+    @media screen and (max-width: 1336px) {
+      font-size: 60px;
+      line-height: 60px;
+    }
   }
 
   .popup__title {
@@ -102,12 +107,21 @@
     @extend .typo-timer-digits;
     text-align: center;
     display: inline-block;
-    width: (55px);
+    width: 55px;
     color: #000;
 
     /*semicolons*/
     &:nth-child(3), &:nth-child(6) {
-      width: (28px);
+      width: 28px;
+    }
+
+    @media screen and (max-width: 1336px) {
+      width: 40px;
+
+      /*semicolons*/
+      &:nth-child(3), &:nth-child(6) {
+        width: 20px;
+      }
     }
   }
 
@@ -121,11 +135,15 @@
   }
 
   .popup-action {
-    min-width: (180px);
-    height: (42px);
+    min-width: 180px;
+    height: 42px;
+
+    @media screen and (max-width: 1336px) {
+      min-width: 145px;
+    }
 
     &.false {
-      margin-left: (30px);
+     margin-left: 30px;
     }
   }
 </style>
