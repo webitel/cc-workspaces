@@ -1,5 +1,6 @@
 <template>
   <section class="call-preview-wrap">
+    <h3 class="call-preview-wrap__heading">{{$t('history.today')}}</h3>
     <missed-preview
       v-for="(missed, key) of missedList"
       :call="missed"
@@ -47,5 +48,12 @@
 </script>
 
 <style lang="scss" scoped>
+  $queue-header-color: #94979B;
 
+  .call-preview-wrap__heading {
+    @extend .typo-body-md;
+    text-align: center;
+    margin: 10px 0 5px;
+    color: $queue-header-color;
+  }
 </style>

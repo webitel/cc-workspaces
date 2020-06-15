@@ -58,7 +58,7 @@
   }
 
   .popup__main {
-    margin: (30px) 0;
+    margin: 30px 0;
   }
 
   .popup-actions {

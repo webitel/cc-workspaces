@@ -16,16 +16,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: (50px);
-    height: (50px);
+    width: 50px;
+    height: 50px;
     border: none;
     border-radius: 50%;
     transition: $transition;
     cursor: pointer;
 
+
+    @media screen and (max-width: 1336px) {
+      width: 40px;
+      height: 40px;
+
+      &__lg {
+        width: 48px;
+        height: 48px;
+      }
+    }
+
     &__lg {
-      width: (60px);
-      height: (60px);
+      width: 60px;
+      height: 60px;
     }
 
     /* on top due to lower styles priority, than call, hold, transfer, end styling */
