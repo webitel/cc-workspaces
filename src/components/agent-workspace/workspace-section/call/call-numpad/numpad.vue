@@ -6,17 +6,11 @@
       :class="{'numpad-numbers--opened': isNumpadOpened}"
       @input="input"
     ></numpad-numbers>
-    <rounded-action
-      class="secondary numpad-btn"
-      :class="{'active': isNumpadOpened}"
-      @click.native="isNumpadOpened = !isNumpadOpened"
-    >
-      <icon>
-        <svg class="icon icon-numpad-md md">
-          <use xlink:href="#icon-numpad-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
+    <numpad-expansion-btn
+      class="numpad-btn"
+      :is-opened="isNumpadOpened"
+      @toggle="isNumpadOpened = !isNumpadOpened"
+    ></numpad-expansion-btn>
   </div>
 </template>
 
@@ -24,14 +18,14 @@
   import { mapActions } from 'vuex';
   import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
-  import RoundedAction from '../../../../utils/rounded-action.vue';
+  import NumpadExpansionBtn from './numpad-expansion-btn.vue';
 
   export default {
     name: 'numpad',
     components: {
       CallState,
       NumpadNumbers,
-      RoundedAction,
+      NumpadExpansionBtn,
     },
 
     data: () => ({
@@ -51,16 +45,18 @@
     display: flex;
     flex-direction: column;
     flex-basis: 100%; // make child height 100& of container
-    overflow: auto;
 
     .numpad-btn {
       display: none;
       position: absolute;
-      bottom: 0;
+      bottom: -24px;
       left: 50%;
       transform: translateX(-50%);
       @media screen and (max-height: 810px) {
         display: block;
+      }
+      @media screen and (max-height: 768px) {
+        bottom: -18px;
       }
     }
 
@@ -73,14 +69,16 @@
     .numpad-numbers {
       @media screen and (max-height: 810px) {
         position: absolute;
-        padding: 20px;
-        margin-bottom: 10px;
+        bottom: 53px;
+        left: 50%;
+        padding: 10px;
         background: #fff;
         border-radius: $border-radius;
         box-shadow: $box-shadow;
         opacity: 0;
         pointer-events: none;
         z-index: 1;
+        transform: translateX(-50%);
 
         &--opened {
           opacity: 1;

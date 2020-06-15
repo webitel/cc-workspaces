@@ -21,7 +21,7 @@
         :key="key"
       >{{digit}}</span>
     </div>
-    <div class="numpad-state__secondary-text">112{{computeDTMFDigits}}</div>
+    <div class="numpad-state__secondary-text">{{computeDTMFDigits}}</div>
   </div>
 </template>
 
