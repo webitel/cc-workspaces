@@ -1,10 +1,10 @@
 <template>
   <div class="numpad-state">
     <div class="numpad-state__animation">
-      <img
-        v-show="false"
-        style="width: 50px; height: 50px; border-radius: 50%;"
-        src="https://static10.tgstat.ru/channels/_0/3b/3bc2c1c682ca9f9517380ce37ad01c75.jpg" alt="">
+      <iframe
+        v-if="isCallActive"
+        :src="`${baseUrl}animations/call-sonars/active/active.html`"
+      ></iframe>
     </div>
     <div
       v-if="!isCallActive"
@@ -83,7 +83,6 @@
     flex-direction: column;
 
     &__animation {
-      display: none; // FIXME
       width: 50px;
       height: 50px;
       margin-bottom: 10px;
