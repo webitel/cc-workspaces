@@ -2,8 +2,8 @@
   <div class="numpad-state">
     <div class="numpad-state__animation">
       <iframe
-        v-if="isCallActive"
-        :src="`${baseUrl}animations/call-sonars/active/active.html`"
+        v-if="animationUrl"
+        :src="animationUrl"
       ></iframe>
     </div>
     <div
@@ -35,7 +35,6 @@
     mixins: [callTimer],
 
     data: () => ({
-      baseUrl: process.env.BASE_URL, // to resolve iframe equalizer path after build
       CallActions,
     }),
 
@@ -63,6 +62,27 @@
         }
       },
 
+      animationUrl() {
+        const baseUrl = process.env.BASE_URL; // to resolve iframe equalizer path after build
+        let animation = '';
+        switch (this.call.state) {
+          case CallActions.Ringing:
+            animation = 'ringing';
+            break;
+          case CallActions.Hold:
+            animation = 'hold';
+            break;
+          case CallActions.Active:
+            animation = 'active';
+            break;
+          default:
+            break;
+        }
+        return animation
+          ? `${baseUrl}animations/call-sonars/${animation}/${animation}.html`
+          : false;
+      },
+
       isCallActive() {
         return this.call.state === CallActions.Active;
       },
@@ -83,9 +103,10 @@
     flex-direction: column;
 
     &__animation {
-      width: 50px;
-      height: 50px;
+      width: 52px;
+      height: 52px;
       margin-bottom: 10px;
+      overflow: hidden;
     }
 
     &__primary-text {
