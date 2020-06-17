@@ -101,20 +101,12 @@
   .numpad-numbers {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-    /*width: (210px);*/
+    grid-gap: 30px;
     margin: auto;
 
-    /*&__row {*/
-    /*  display: flex;*/
-    /*  justify-content: space-between;*/
-    /*  margin-top: (10px);*/
-
-    /*&:first-child {*/
-    /*  justify-content: center;*/
-    /*  margin-top: 0;*/
-    /*}*/
-    /*}*/
+    @media screen and (max-height: 900px) {
+      grid-gap: 10px;
+    }
   }
 
   .numpad-numbers__num {
