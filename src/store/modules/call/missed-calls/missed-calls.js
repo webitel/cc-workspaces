@@ -15,6 +15,7 @@ const requestParams = {
 };
 
 const state = {
+  isNewMissed: false, // UI flag
   missedList: [],
 };
 
@@ -35,6 +36,11 @@ const actions = {
 
   PUSH_MISSED_STUB: (context, { from = {} }) => {
     context.commit('PUSH_SINGLE_MISSED', { from, createdAt: Date.now() });
+    context.commit('SET_NEW_MISSED');
+  },
+
+  RESET_NEW_MISSED: (context) => {
+    context.commit('RESET_NEW_MISSED');
   },
 };
 
@@ -45,6 +51,14 @@ const mutations = {
 
   PUSH_SINGLE_MISSED: (state, missed) => {
     state.missedList.push(missed);
+  },
+
+  SET_NEW_MISSED: (state) => {
+    state.isNewMissed = true;
+  },
+
+  RESET_NEW_MISSED: (state) => {
+    state.isNewMissed = false;
   },
 };
 
