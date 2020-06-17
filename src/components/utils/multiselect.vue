@@ -175,19 +175,19 @@
   $list-option__hover: transparent;
 
   .hs-multiselect .cc-label {
-    margin-bottom: calcVH(10px);
+    margin-bottom: (10px);
   }
 
   .hs-multiselect-wrap {
     position: relative;
     width: 100%;
-    height: calcVH(40px);
+    height: (40px);
   }
 
   .hs-multiselect__arrow-down {
     position: absolute;
     top: 50%;
-    right: calcVH(3px);
+    right: (3px);
     transform: translateY(-50%);
     pointer-events: none;
 
@@ -222,7 +222,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: calcVH(38px); // 40px - 2px outer borders
+      height: (38px); // 40px - 2px outer borders
       padding: $select-paddings;
       box-sizing: border-box;
 
@@ -287,7 +287,7 @@
           justify-content: space-between;
           align-items: center;
           padding: $select-paddings;
-          padding-right: calcVH(8px);
+          padding-right: (8px);
           box-sizing: border-box;
         }
 

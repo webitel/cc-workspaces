@@ -77,8 +77,13 @@
 <style lang="scss" scoped>
   .typo-timer-digits {
     font-family: 'Montserrat Semi', monospace;
-    @include fontSize(82px);
-    @include lineHeight(82px);
+    font-size: 82px;
+    line-height: 82px;
+
+    @media screen and (max-width: 1336px) {
+      font-size: 60px;
+      line-height: 60px;
+    }
   }
 
   .popup__title {
@@ -87,7 +92,7 @@
   }
 
   .break-timer-wrap__timer-wrap {
-    padding: calcVH(27px) calcVH(51px);
+    padding: (27px) (51px);
     background: $accent-color;
     border-radius: $border-radius;
   }
@@ -102,30 +107,43 @@
     @extend .typo-timer-digits;
     text-align: center;
     display: inline-block;
-    width: calcVH(55px);
+    width: 55px;
     color: #000;
 
     /*semicolons*/
     &:nth-child(3), &:nth-child(6) {
-      width: calcVH(28px);
+      width: 28px;
+    }
+
+    @media screen and (max-width: 1336px) {
+      width: 40px;
+
+      /*semicolons*/
+      &:nth-child(3), &:nth-child(6) {
+        width: 20px;
+      }
     }
   }
 
   .popup-indicator__break {
     display: inline-block;
-    width: calcVH(14px);
-    height: calcVH(14px);
-    margin-right: calcVH(11px);
+    width: (14px);
+    height: (14px);
+    margin-right: (11px);
     border-radius: 50%;
     background: $break-color;
   }
 
   .popup-action {
-    min-width: calcVH(180px);
-    height: calcVH(42px);
+    min-width: 180px;
+    height: 42px;
+
+    @media screen and (max-width: 1336px) {
+      min-width: 145px;
+    }
 
     &.false {
-      margin-left: calcVH(30px);
+     margin-left: 30px;
     }
   }
 </style>

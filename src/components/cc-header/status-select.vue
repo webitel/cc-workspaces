@@ -209,9 +209,9 @@
     &__item {
       display: flex;
       align-items: center;
-      width: calcVH(130px);
+      width: (130px);
       word-break: break-all;
-      padding: calcVH(5px) calcVH(5px) calcVH(5px) calcVH(10px);
+      padding: (5px) (5px) (5px) (10px);
       background: #fff;
       transition: $transition;
       cursor: pointer;
@@ -227,9 +227,9 @@
 
     &__indicator {
       display: inline-block;
-      width: calcVH(14px);
-      height: calcVH(14px);
-      margin-right: calcVH(9px);
+      width: (14px);
+      height: (14px);
+      margin-right: (9px);
       background: $default-indicator;
       border-radius: 50%;
 

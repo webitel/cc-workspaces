@@ -137,8 +137,8 @@
     align-self: end;
 
     &__indicator {
-      width: calcVH(14px);
-      height: calcVH(14px);
+      width: (14px);
+      height: (14px);
       border-radius: 50%;
 
       &.active {

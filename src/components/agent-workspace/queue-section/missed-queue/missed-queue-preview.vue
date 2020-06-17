@@ -6,7 +6,7 @@
       <span class="preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="preview-header__time">
-        {{displayTime}}
+        {{$t('queueSec.at')}}: {{displayTime}}
       </div>
     </header>
 
@@ -47,7 +47,7 @@
         return this.call.from.number;
       },
       displayTime() {
-        return new Date(+this.call.createdAt).toISOString().substr(11, 8);
+        return new Date(+this.call.createdAt).toISOString().substr(11, 5);
       },
 
       computePreviewStatusClass() {

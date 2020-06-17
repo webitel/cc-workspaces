@@ -76,11 +76,11 @@
         @extend .typo-body-md;
         text-align: center;
         display: inline-block;
-        width: calcVH(9.5px);
+        width: (9.5px);
 
         /*semicolons*/
         &:nth-child(3), &:nth-child(6) {
-          width: calcVH(5px);
+          width: (5px);
         }
       }
 

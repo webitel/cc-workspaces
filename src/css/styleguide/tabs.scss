@@ -2,7 +2,7 @@ $tabs-color: #94979B;
 
 .tabs {
   position: relative;
-  padding: 0 calcVH(20px);
+  padding: 0 20px;
 
   // all tabs underline
   &__underline {
@@ -10,7 +10,7 @@ $tabs-color: #94979B;
     left: 0;
     right: 0;
     bottom: 0;
-    height: calcVH(1px);
+    height: (1px);
     background: #EAE9E9;
     z-index: 0;
   }
@@ -20,12 +20,12 @@ $tabs-color: #94979B;
   @extend .typo-heading-sm;
   position: relative;
   display: inline-block;
-  margin: 0 calcVH(5px);
-  padding: calcVH(20px) 0;
+  margin: 0 5px;
+  padding: 20px 0;
   color: $tabs-color;
   background: transparent;
   border: none;
-  border-bottom: calcVH(2px) solid transparent;
+  border-bottom: 2px solid transparent;
   transition: $transition;
   cursor: pointer;
   z-index: 1;

@@ -1,5 +1,5 @@
 <template>
-  <section class="workspace-section">
+  <section class="workspace-section queue-section">
     <tabs
       :current-tab="currentTab"
       :tabs="tabs"
@@ -10,7 +10,13 @@
         :slot="tab.value"
       >
         <div class="queue-tab__wrap" :key="key">
-          <div class="queue-tab__indicator" :class="tab.value"></div>
+          <div
+            class="queue-tab__indicator"
+            :class="[
+              tab.value,
+              { 'queue-tab__indicator--attention': tab.attention },
+              ]"
+          ></div>
           <span class="queue-tab__text">{{tab.text}}</span>
         </div>
       </template>
@@ -68,6 +74,9 @@
       ...mapState('workspace', {
         workspaceState: (state) => state.workspaceState,
       }),
+      ...mapState('call/missed', {
+        isNewMissed: (state) => state.isNewMissed,
+      }),
       ...mapGetters('call', {
         isNewCall: 'IS_NEW_CALL',
       }),
@@ -91,6 +100,7 @@
           {
             text: this.missedTabText,
             value: 'missed',
+            attention: this.isNewMissed,
           },
         ];
       },
@@ -139,7 +149,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .workspace-section {
+  .queue-section {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -154,8 +164,8 @@
 
       .queue-tab__indicator {
         display: block;
-        width: calcVH(24px);
-        height: calcVH(24px);
+        width: 24px;
+        height: 24px;
 
         &.active {
           background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-active.svg");
@@ -170,20 +180,36 @@
         &.missed {
           background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-missed.svg");
           background-size: contain;
+
+          &.queue-tab__indicator--attention {
+            background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-missed--attention.svg");
+            background-size: contain;
+          }
+        }
+      }
+
+      @media screen and (max-width: 1336px) {
+        ::v-deep .tab { // deeply styles tabs-component inner element, through scoped styles
+          width: 24px;
+          margin: 0 1px;
+        }
+
+        .queue-tab__text {
+          display: none;
         }
       }
     }
 
-    .call-preview-wrap {
-      @extend .cc-scrollbar;
-      min-height: 0;
-      overflow: auto;
-    }
-
     .rounded-action {
       position: absolute;
-      bottom: calcVH(10px);
-      left: calcVH(10px);
+      bottom: (10px);
+      left: (10px);
     }
+  }
+
+  .call-preview-wrap {
+    @extend .cc-scrollbar;
+    min-height: 0;
+    overflow: auto;
   }
 </style>

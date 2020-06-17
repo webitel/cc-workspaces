@@ -5,6 +5,20 @@
          version="1.1"
          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
+        <symbol id="icon-numpad-sm" viewBox="0 0 32 32">
+          <path d="M9 9h2v2h-2v-2z"></path>
+          <path d="M9 15h2v2h-2v-2z"></path>
+          <path d="M9 21h2v2h-2v-2z"></path>
+          <path d="M15 9h2v2h-2v-2z"></path>
+          <path d="M15 15h2v2h-2v-2z"></path>
+          <path d="M15 21h2v2h-2v-2z"></path>
+          <path d="M21 9h2v2h-2v-2z"></path>
+          <path d="M21 15h2v2h-2v-2z"></path>
+          <path d="M21 21h2v2h-2v-2z"></path>
+        </symbol>
+        <symbol id="icon-arrow-up-sm" viewBox="0 0 32 32">
+          <path d="M16.594 12.249l5.16 5.205c0.328 0.331 0.328 0.868 0 1.199s-0.86 0.331-1.188 0l-4.565-4.605-4.565 4.605c-0.328 0.331-0.86 0.331-1.188 0s-0.328-0.868 0-1.199l5.16-5.205c0.164-0.165 0.379-0.248 0.594-0.248s0.43 0.083 0.594 0.248z"></path>
+        </symbol>
         <symbol id="icon-settings-sm" viewBox="0 0 32 32">
           <title>{{$t('icon.settings')}}</title>
           <path d="M16.018 13.051c-1.528 0-2.673 1.145-2.673 2.673 0 0.513-0.416 0.929-0.929 0.929s-0.929-0.416-0.929-0.929c0-2.555 1.977-4.532 4.532-4.532s4.532 1.977 4.532 4.532c0 0.513-0.416 0.929-0.929 0.929s-0.929-0.416-0.929-0.929c0-1.528-1.145-2.673-2.673-2.673z"></path>
@@ -357,15 +371,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /*width: calcVH(24px);*/
-    /*height: calcVH(24px);*/
+    /*width: (24px);*/
+    /*height: (24px);*/
   }
 
   /*svg instead of .icon to override styles by .icon-icon-name-size without any other seelectors*/
   svg {
     display: flex;
-    width: calcVH(24px);
-    height: calcVH(24px);
+    width: (24px);
+    height: (24px);
     stroke-width: 0;
     stroke: $icon-color;
     fill: $icon-color;
@@ -383,22 +397,22 @@
   ========================================== */
 
   .xl {
-    width: calcVH(50px);
-    height: calcVH(50px);
+    width: (50px);
+    height: (50px);
   }
 
   .lg {
-    width: calcVH(30px);
-    height: calcVH(30px);
+    width: (30px);
+    height: (30px);
   }
 
   .md {
-    width: calcVH(24px);
-    height: calcVH(24px);
+    width: (24px);
+    height: (24px);
   }
 
   .sm {
-    width: calcVH(16px);
-    height: calcVH(16px);
+    width: (16px);
+    height: (16px);
   }
 </style>

@@ -26,8 +26,8 @@
 
         &:before {
             content: '';
-            width: calcVH(6px);
-            height: calcVH(6px);
+            width: (6px);
+            height: (6px);
             border-radius: 50%;
             position: absolute;
             display: block;

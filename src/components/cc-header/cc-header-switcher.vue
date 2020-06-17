@@ -46,14 +46,14 @@
 
     .slider {
       position: relative;
-      width: calcVH(40px);
-      height: calcVH(22px);
+      width: (40px);
+      height: (22px);
     }
   }
 
   .switcher-label {
     @extend .typo-body-sm;
-    margin-right: calcVH(10px);
+    margin-right: (10px);
     user-select: none;
   }
 </style>

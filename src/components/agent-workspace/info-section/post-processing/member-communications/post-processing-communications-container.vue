@@ -85,16 +85,16 @@
 
 <style lang="scss" scoped>
   .processing-communications-container {
-    margin: calcVH(40px) 0;
+    margin: (40px) 0;
 
     &__add-new {
       display: flex;
       align-items: center;
-      margin-top: calcVH(30px);
+      margin-top: (30px);
 
       &__text {
         @extend .typo-body-sm;
-        margin-left: calcVH(30px);
+        margin-left: (30px);
       }
     }
   }
