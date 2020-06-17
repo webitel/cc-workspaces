@@ -230,9 +230,14 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    min-height: (160px);
-    height: (160px);
-    margin: (20px) (20px) 0;
+    min-height: 160px;
+    height: 160px;
+    margin: 20px 20px 0;
+
+    @media screen and (max-height: 768px) {
+      min-height: 120px;
+      height: 120px;
+    }
   }
 
   .call-header__actions {
@@ -244,10 +249,10 @@
 
     .actions-wrap__left {
       display: flex;
-      flex: 0 0 (190px); // x3 icons 50px + x2 margins 20px
+      flex: 0 0 190px; // x3 icons 50px + x2 margins 20px
 
       .call-action {
-        margin-right: (20px);
+        margin-right: 20px;
 
         &:last-child {
           margin-right: 0;
@@ -256,14 +261,20 @@
     }
 
     .call-header__profile-pic {
-      flex: 0 0 (80px);
-      width: (80px);
-      height: (80px);
+      flex: 0 0 80px;
+      width: 80px;
+      height: 80px;
+
+      @media screen and (max-height: 768px) {
+        flex: 0 0 50px;
+        width: 50px;
+        height: 50px;
+      }
     }
 
     .actions-wrap__right {
       display: flex;
-      flex: 0 0 (190px); // x3 icons 50px + x2 margins 20px
+      flex: 0 0 190px; // x3 icons 50px + x2 margins 20px
       justify-content: flex-end;
 
       .call-action {
@@ -284,11 +295,12 @@
 
     .call-profile__name {
       @extend .typo-heading-sm;
-      margin-bottom: (5px);
+      margin-bottom: 5px;
     }
 
     .call-profile__number {
       @extend .typo-body-md;
+      margin-bottom: 10px;
     }
 
     .call-header__form-number {
@@ -307,7 +319,7 @@
         bottom: (-1px);
 
         border: 1px solid transparent;
-        border-bottom: (1px) solid #000;
+        border-bottom: 1px solid #000;
         outline: none;
 
         &:focus {

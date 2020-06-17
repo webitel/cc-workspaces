@@ -23,8 +23,10 @@
 }
 
 .workspace-pic {
-  width: (180px);
-  height: (133px);
+  width: 180px;
+  height: 150px;
   display: block;
   margin: auto;
+  overflow: hidden;
+  pointer-events: none;
 }

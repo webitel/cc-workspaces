@@ -1,5 +1,5 @@
 <template>
-  <article class="queue-preview" :class="{'opened': isOpened}">
+  <article class="queue-preview offline-queue" :class="{'opened': isOpened}">
     <status-badge/>
 
     <header class="preview-header">

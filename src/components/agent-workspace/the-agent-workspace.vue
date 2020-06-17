@@ -105,17 +105,21 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: (20px) (30px);
+    padding: 20px 30px;
     box-sizing: border-box;
+
+    @media screen and (max-height: 768px) {
+      padding: 15px;
+    }
   }
 
   .workspace {
     flex-grow: 1;
     display: grid;
     grid-template-columns: 340px 550px 1fr;
-    grid-gap: (20px);
+    grid-gap: 20px;
     min-height: 0;
-    margin-top: (28px);
+    margin-top: 28px;
 
     .workspace-section {
       max-height: 100%;
@@ -124,6 +128,11 @@
 
     @media screen and (max-width: 1336px) {
       grid-template-columns: 120px 550px 1fr; // changed 1st col width
+    }
+
+    @media screen and (max-height: 768px) {
+      grid-gap: 15px;
+      margin-top: 15px;
     }
   }
 </style>
