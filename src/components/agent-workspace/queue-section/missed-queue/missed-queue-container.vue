@@ -23,6 +23,7 @@
 
     created() {
       this.loadMissedList();
+      this.resetNewMissed(); // reset UI flag
     },
 
     computed: {
@@ -37,6 +38,7 @@
       }),
       ...mapActions('call/missed', {
         loadMissedList: 'LOAD_DATA_LIST',
+        resetNewMissed: 'RESET_NEW_MISSED',
       }),
 
       openCall(index) {

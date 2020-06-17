@@ -23,10 +23,24 @@
     transition: $transition;
     cursor: pointer;
 
-
     @media screen and (max-width: 1336px) {
       width: 40px;
       height: 40px;
+
+      .icon.sm {
+        width: 14px;
+        height: 14px;
+      }
+
+      .icon.md {
+        width: 20px;
+        height: 20px;
+      }
+
+      .icon.lg {
+        width: 25px;
+        height: 25px;
+      }
 
       &__lg {
         width: 48px;

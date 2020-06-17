@@ -10,7 +10,13 @@
         :slot="tab.value"
       >
         <div class="queue-tab__wrap" :key="key">
-          <div class="queue-tab__indicator" :class="tab.value"></div>
+          <div
+            class="queue-tab__indicator"
+            :class="[
+              tab.value,
+              { 'queue-tab__indicator--attention': tab.attention },
+              ]"
+          ></div>
           <span class="queue-tab__text">{{tab.text}}</span>
         </div>
       </template>
@@ -63,6 +69,9 @@
       ...mapState('call', {
         callList: (state) => state.callList,
       }),
+      ...mapState('call/missed', {
+        isNewMissed: (state) => state.isNewMissed,
+      }),
       ...mapGetters('call', {
         isNewCall: 'IS_NEW_CALL',
       }),
@@ -86,6 +95,7 @@
           {
             text: this.missedTabText,
             value: 'missed',
+            attention: this.isNewMissed,
           },
         ];
       },
@@ -144,8 +154,8 @@
 
       .queue-tab__indicator {
         display: block;
-        width: (24px);
-        height: (24px);
+        width: 24px;
+        height: 24px;
 
         &.active {
           background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-active.svg");
@@ -160,6 +170,11 @@
         &.missed {
           background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-missed.svg");
           background-size: contain;
+
+          &.queue-tab__indicator--attention {
+            background: url("../../../assets/agent-workspace/queue-section/tab-indicators/indicator-missed--attention.svg");
+            background-size: contain;
+          }
         }
       }
 
