@@ -4,7 +4,10 @@
       v-model="search"
       @search="resetData"
     />
-    <div class="ws-worksection__list" ref="scroll-wrap">
+    <section class="ws-worksection__list" ref="scroll-wrap">
+      <loader v-if="isLoading"/>
+      <empty-search v-else-if="!dataList.length" :type="'history'"></empty-search>
+      <div v-else class="ws-worksection__list-wrap">
       <history-item
         v-for="(item, key) of dataList"
         :key="key"
@@ -12,10 +15,12 @@
         :for-number="historyNumber"
         @click.native="select(item)"
       ></history-item>
-      <observer
-        :options="obsOptions"
-        @intersect="handleIntersect"/>
     </div>
+
+    <observer
+      :options="obsOptions"
+      @intersect="handleIntersect"/>
+    </section>
   </div>
 </template>
 
@@ -24,6 +29,8 @@
   import { CallDirection } from 'webitel-sdk';
   import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
+  import EmptySearch from '../workspace-empty-search/empty-search.vue';
+  import Loader from '../../../../utils/loader.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import WorkspaceStates
     from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
@@ -37,6 +44,8 @@
     components: {
       Search,
       HistoryItem,
+      EmptySearch,
+      Loader,
     },
 
     data: () => ({

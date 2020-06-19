@@ -50,6 +50,10 @@ export default {
       text: 'Call has been transferred to another operator',
     },
   },
+  emptySearch: {
+    heading: 'Oops!',
+    text: 'Search has not given any results',
+  },
   bridge: {
     activeCalls: 'Active calls',
     bridge: 'Bridge',

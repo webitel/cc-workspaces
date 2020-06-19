@@ -14,6 +14,7 @@ export default {
     rootMargin: '200px',
     isMounted: false, // isMounted recomputes observerOptions with $ref, when component renders
     isNext: true,
+    isLoading: true,
   }),
 
   mounted() {
@@ -48,11 +49,13 @@ export default {
     },
 
     async loadDataList() {
+      if (!this.dataList.length) this.isLoading = true;
       const params = this.collectParams();
-      const response = await this.fetch(params);
-      this.isNext = response.next;
-      this.setData(response.items);
+      const { items, next } = await this.fetch(params);
+      this.isNext = next;
+      this.setData(items);
       this.page += 1;
+      this.isLoading = false;
     },
 
     async handleIntersect() {
