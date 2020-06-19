@@ -37,8 +37,15 @@
   .ws-worksection__list {
     @extend .cc-scrollbar;
     flex-grow: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     overflow-y: scroll;
     padding-right: 20px;
+  }
+
+  .ws-worksection__list-wrap {
+    width: 100%;
   }
 
   .ws-worksection__list-separator {
@@ -46,6 +53,11 @@
     text-align: center;
     color: $separator-color;
     margin: 10px 0;
+  }
+
+  .loader,
+  .empty-search {
+    margin: auto;
   }
 }
 
