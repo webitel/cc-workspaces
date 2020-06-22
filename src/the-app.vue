@@ -21,8 +21,13 @@
       }),
 
       async restoreSession() {
-        const userinfo = await authAPI.getSession();
-        this.setSession(userinfo);
+        // ROUTER REDIRECTS EMPTY TOKEN PATHS TO /AUTH, SO THERE'S NO NEED TO CATCH IT
+        try {
+          const userinfo = await authAPI.getSession();
+          this.setSession(userinfo);
+        } catch {
+          await this.$router.replace('/auth');
+        }
       },
     },
   };

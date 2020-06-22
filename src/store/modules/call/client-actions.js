@@ -1,4 +1,4 @@
-import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
+import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const callParams = { disableStun: true };
 const answerParams = { useAudio: true, disableStun: true };

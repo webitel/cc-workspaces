@@ -25,6 +25,7 @@
   import InfoSection from './info-section/the-agent-info-section.vue';
   import VideoContainer from './video-container/video-container.vue';
   import ringingSoundMixin from '../../mixins/ringingSoundMixin';
+  import { destroyCliInstance } from '../../api/agent-workspace/call-ws-connection';
 
   export default {
     name: 'the-agent-workspace',
@@ -45,6 +46,7 @@
     },
 
     destroyed() {
+      this.destroyCliInstance();
       this.clearNowWatcher();
     },
 
@@ -68,6 +70,8 @@
         await this.subscribeCalls();
         await this.subscribeStatus();
       },
+
+      destroyCliInstance,
 
       ...mapActions('call', {
         subscribeCalls: 'SUBSCRIBE_CALLS',
