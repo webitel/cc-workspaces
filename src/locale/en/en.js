@@ -21,6 +21,13 @@ export default {
     docs: 'Docs',
     enableVideo: 'Enable video',
   },
+  widgets: {
+    inbound: 'Inbound',
+    handles: 'Handles Calls',
+    abandoned: 'Abandoned Calls',
+    avgTalk: 'Avg Talk Time',
+    avgHold: 'Avg Hold Time',
+  },
   queueSec: {
     active: 'Active',
     offline: 'Offline',
