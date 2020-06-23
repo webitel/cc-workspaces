@@ -123,7 +123,7 @@
     grid-template-columns: 340px 550px 1fr;
     grid-gap: 20px;
     min-height: 0;
-    margin-top: 28px;
+    margin-top: 20px;
 
     .workspace-section {
       max-height: 100%;
