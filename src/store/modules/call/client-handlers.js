@@ -1,5 +1,5 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
-import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
+import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, call) => {
   switch (action) {

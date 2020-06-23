@@ -5,11 +5,11 @@ const origin = (`${protocol}//${hostname}`).replace(/^http/, 'ws');
 const BASE_URL = process.env.NODE_ENV === 'production'
   ? `${origin}/ws` : 'wss://dev.webitel.com/ws';
 // const BASE_URL = 'ws://10.10.10.25:10025';
-const token = localStorage.getItem('access-token');
 
 let cliInstance = null;
 
 const createCliInstance = async () => {
+  const token = localStorage.getItem('access-token');
   const config = {
     endpoint: BASE_URL,
     registerWebDevice: true,
@@ -24,7 +24,14 @@ const createCliInstance = async () => {
   return cli;
 };
 
-export default async () => {
+export const destroyCliInstance = async () => {
+  if (cliInstance) {
+    cliInstance.then((cli) => cli.destroy());
+  }
+  cliInstance = null;
+};
+
+export const getCliInstance = () => {
   if (!cliInstance) cliInstance = createCliInstance();
   return cliInstance;
 };
