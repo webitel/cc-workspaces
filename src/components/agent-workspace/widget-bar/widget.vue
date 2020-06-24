@@ -5,7 +5,7 @@
         <use :xlink:href="`#icon-${widget.icon}-sm`"></use>
       </svg>
     </icon>
-    <div class="widget__title">{{widget.text}}:</div>
+    <div class="widget__title">{{widget.text()}}:</div>
     <div class="widget__value">{{value}}</div>
   </div>
 </template>
