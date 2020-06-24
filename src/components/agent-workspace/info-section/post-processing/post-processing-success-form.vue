@@ -3,14 +3,14 @@
     <multiselect
       class="processing-form__category"
       :value="[]"
-      :label="'Category'"
+      :label="$t('infoSec.postProcessing.category')"
       :options="[]"
       :api-mode="false"
     ></multiselect>
     <multiselect
       class="processing-form__subcategory"
       :value="[]"
-      :placeholder="'Subcategory'"
+      :label="$t('infoSec.postProcessing.subcategory')"
       :options="[]"
       :api-mode="false"
     ></multiselect>

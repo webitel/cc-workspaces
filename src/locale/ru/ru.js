@@ -23,8 +23,8 @@ export default {
   },
   widgets: {
     inbound: 'Входящих',
-    handles: 'Обработано звонков',
-    missed: 'Пропущено звонков',
+    handles: 'Обработано',
+    missed: 'Пропущено',
     avgTalk: 'Среднее время разговора',
     avgHold: 'Среднее время удержания',
   },
@@ -32,7 +32,7 @@ export default {
     active: 'Активные',
     offline: 'Оффлайн',
     missed: 'Пропущенные',
-    at: 'В', // missed call "at 10:10"
+    at: 'в', // missed call "at 10:10"
   },
   infoSec: {
     clientInfo: 'Информация',
@@ -45,12 +45,14 @@ export default {
       no: 'Нет',
       addNewCommunication: 'Добавить новыую коммуникацию',
       scheduleCall: 'Запланировать следующий звонок?',
+      category: 'Категория',
+      subcategory: 'Подкатегория',
     },
   },
   emptyWorkspace: {
     empty: {
       heading: 'Сейчас нет новых звонков или чатов',
-      text: 'Пожалуйста подождите! Хорошего дня!',
+      text: 'Пожалуйста, подождите! Хорошего дня!',
     },
     transfer: {
       heading: 'Спасибо!',
@@ -80,7 +82,7 @@ export default {
       commons: {
         coffeeBreak: 'Кофе',
         smokeBreak: 'Перекур',
-        restroom: 'Уборная',
+        restroom: 'WC',
         dinner: 'Обед',
         meeting: 'Совещание',
       },
@@ -112,7 +114,7 @@ export default {
     transfer: 'Перевод',
     missed: 'Пропущенный',
     call: 'Звонок',
-    tick: 'Галочка',
+    tick: 'Ок',
     rec: 'Запись',
     recStop: 'Остановить запись',
     note: 'Заметка',

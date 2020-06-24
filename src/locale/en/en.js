@@ -45,6 +45,8 @@ export default {
       no: 'No',
       addNewCommunication: 'Add new communication',
       scheduleCall: 'Schedule next call?',
+      category: 'Category',
+      subcategory: 'Subcategory',
     },
   },
   emptyWorkspace: {
