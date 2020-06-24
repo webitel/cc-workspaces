@@ -13,6 +13,7 @@
 
     created() {
       this.restoreSession();
+      this.setLanguage();
     },
 
     methods: {
@@ -28,6 +29,11 @@
         } catch {
           await this.$router.replace('/auth');
         }
+      },
+
+      setLanguage() {
+        const lang = localStorage.getItem('lang');
+        if (lang) this.$i18n.locale = lang;
       },
     },
   };

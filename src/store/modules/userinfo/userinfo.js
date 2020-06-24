@@ -7,7 +7,7 @@ const defaultState = () => ({
   scope: [],
   roles: [],
   license: [],
-  language: localStorage.getItem('language'),
+  language: localStorage.getItem('lang'),
 });
 
 const state = {
