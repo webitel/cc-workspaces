@@ -50,11 +50,11 @@
       callState() {
         switch (this.call.state) {
           case CallActions.Ringing:
-            return 'Ringing..';
+            return this.$t('workspaceSec.callState.ringing');
           case CallActions.Hold:
-            return 'Hold';
+            return this.$t('workspaceSec.callState.hold');
           case CallActions.Hangup:
-            return 'Hangup';
+            return this.$t('workspaceSec.callState.hangup');
           case CallActions.Active:
             return this.computeCreatedTime;
           default:

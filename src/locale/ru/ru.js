@@ -49,6 +49,13 @@ export default {
       subcategory: 'Подкатегория',
     },
   },
+  workspaceSec: {
+    callState: {
+      ringing: 'Звоним..',
+      hold: 'Удержание',
+      hangup: 'Конец',
+    },
+  },
   emptyWorkspace: {
     empty: {
       heading: 'Сейчас нет новых звонков или чатов',

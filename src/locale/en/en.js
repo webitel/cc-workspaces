@@ -49,6 +49,13 @@ export default {
       subcategory: 'Subcategory',
     },
   },
+  workspaceSec: {
+    callState: {
+      ringing: 'Ringing..',
+      hold: 'Hold',
+      hangup: 'Hangup',
+    },
+  },
   emptyWorkspace: {
     empty: {
       heading: 'There are currently no calls or chats',
