@@ -13,11 +13,11 @@ export default Object.freeze({
     icon: 'widget-handles',
     text: () => i18n.t('widgets.handles'),
   },
-  ABANDONED: {
-    type: 'abandoned',
+  MISSED: {
+    type: 'missed',
     field: 'abandoned',
-    icon: 'widget-abandoned',
-    text: () => i18n.t('widgets.abandoned'),
+    icon: 'widget-missed',
+    text: () => i18n.t('widgets.missed'),
   },
   AVG_TALK: {
     type: 'avgTalk',

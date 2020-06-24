@@ -34,7 +34,7 @@
 <style lang="scss" scoped>
   $widget-inbound-color: $accent-color;
   $widget-handles-color: $true-color;
-  $widget-abandoned-color: $false-color;
+  $widget-missed-color: $false-color;
   $widget-avg-talk-color: #239AC0;
   $widget-avg-hold-color: $accent-color;
 
@@ -78,9 +78,9 @@
       stroke: $widget-handles-color;
     }
 
-    &--abandoned .icon {
-      fill: $widget-abandoned-color;
-      stroke: $widget-abandoned-color;
+    &--missed .icon {
+      fill: $widget-missed-color;
+      stroke: $widget-missed-color;
     }
 
     &--avg-talk .icon {

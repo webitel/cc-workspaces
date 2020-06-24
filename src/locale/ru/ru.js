@@ -24,7 +24,7 @@ export default {
   widgets: {
     inbound: 'Входящих',
     handles: 'Обработано звонков',
-    abandoned: 'Пропущено звонков',
+    missed: 'Пропущено звонков',
     avgTalk: 'Среднее время разговора',
     avgHold: 'Среднее время удержания',
   },

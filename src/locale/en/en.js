@@ -24,7 +24,7 @@ export default {
   widgets: {
     inbound: 'Inbound',
     handles: 'Handles Calls',
-    abandoned: 'Abandoned Calls',
+    missed: 'Missed Calls',
     avgTalk: 'Avg Talk Time',
     avgHold: 'Avg Hold Time',
   },

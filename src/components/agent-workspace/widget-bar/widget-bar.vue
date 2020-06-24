@@ -9,8 +9,8 @@
       :value="data[Widgets.HANDLES.field]"
     ></widget>
     <widget
-      :widget="Widgets.ABANDONED"
-      :value="data[Widgets.ABANDONED.field]"
+      :widget="Widgets.MISSED"
+      :value="data[Widgets.MISSED.field]"
     ></widget>
     <widget
       :widget="Widgets.AVG_TALK"
