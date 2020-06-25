@@ -27,13 +27,13 @@ export default {
     field: 'avgTalkSec',
     icon: 'widget-avg-talk',
     text: () => i18n.t('widgets.avgTalk'),
-    show: false,
+    show: true,
   },
   AVG_HOLD: {
     type: 'avgHold',
     field: 'avgHoldSec',
     icon: 'widget-avg-hold',
     text: () => i18n.t('widgets.avgHold'),
-    show: false,
+    show: true,
   },
 };

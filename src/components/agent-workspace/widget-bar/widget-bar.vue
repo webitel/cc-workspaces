@@ -2,17 +2,20 @@
   <section class="widget-bar">
     <div class="widgets-wrap" :class="{'widgets-wrap--wide': selectionMode}">
       <widget
-        v-for="(widget, key) of Object.keys(Widgets)"
-        v-show="Widgets[widget].show || selectionMode"
+        v-for="(widget, key) of Object.keys(widgets)"
+        v-show="widgets[widget].show || selectionMode"
         :key="key"
-        :widget="Widgets[widget]"
-        :value="data[Widgets[widget].field]"
-        :show="Widgets[widget].show"
+        :widget="widgets[widget]"
+        :value="data[widgets[widget].field]"
+        :show="widgets[widget].show"
         :selection-mode="selectionMode"
         @select="toggleSelect(widget)"
       ></widget>
     </div>
-    <div class="widgets-controls" :class="{'widgets-controls--expanded': selectionMode}">
+    <div
+      class="widgets-controls"
+      :class="{'widgets-controls--expanded': selectionMode}"
+    >
       <button
         class="icon-btn"
         @click.prevent="selectionMode = !selectionMode"
@@ -43,13 +46,13 @@
     },
 
     data: () => ({
-      Widgets,
+      widgets: Widgets,
       data: {
+        count: 0,
+        handles: 0,
         abandoned: 0,
         avgHoldSec: 0,
         avgTalkSec: 0,
-        count: 0,
-        handles: 0,
         maxHoldSec: 0,
         maxTalkSec: 0,
         minHoldSec: 0,
@@ -68,6 +71,10 @@
       },
     },
 
+    created() {
+      this.getWidgetsFromLocalStorage();
+    },
+
     destroyed() {
       this.resetRefreshInterval();
     },
@@ -81,13 +88,35 @@
 
     methods: {
       toggleSelect(key) {
-        this.Widgets[key].show = !this.Widgets[key].show;
+        this.widgets[key].show = !this.widgets[key].show;
+        this.setWidgetsToLocalStorage();
+      },
+
+      setWidgetsToLocalStorage() {
+        const widgets = Object.values(this.widgets)
+          .filter((widget) => widget.show)
+          .map((widget) => widget.type)
+          .join(',');
+        localStorage.setItem('widgets', widgets);
+      },
+
+      getWidgetsFromLocalStorage() {
+        let widgets = localStorage.getItem('widgets');
+        if (widgets) {
+          widgets = widgets.split(',');
+          Object.values(this.widgets)
+            .forEach((widget) => {
+              // eslint-disable-next-line no-param-reassign
+              widget.show = widgets.indexOf(widget.type) !== -1;
+            });
+        }
       },
 
       setRefreshInterval() {
         this.loadWidgetsData();
         this.refreshIntervalInstance = setInterval(this.loadWidgetsData, REFRESH_INTERVAL_DURATION);
       },
+
       resetRefreshInterval() {
         clearInterval(this.refreshIntervalInstance);
       },
@@ -97,11 +126,6 @@
           const { agentId } = this.agent;
           this.data = await WidgetsAPI.getWidgets({ agentId });
         }
-      },
-
-      prettifySec(value) {
-        // sec number to 'mm:ss' format
-        return new Date(value * 1000).toISOString().substr(14, 5);
       },
     },
   };

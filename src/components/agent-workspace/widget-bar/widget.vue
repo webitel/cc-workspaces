@@ -89,7 +89,7 @@
     width: fit-content;
     height: 24px; // checkbox height
     padding: 5px;
-    //word-break: ;
+    white-space: nowrap;
 
     .widget__title {
       @extend .typo-widget-title;

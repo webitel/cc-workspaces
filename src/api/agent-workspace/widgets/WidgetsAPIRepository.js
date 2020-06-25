@@ -10,6 +10,22 @@ const defaultParams = {
   fields: ['count', 'handles', 'abandoned', 'avg_talk_time', 'avg_hold_time'],
 };
 
+const prettifySec = (value) => new Date(value * 1000).toISOString().substr(11, 8);
+
+const formatResponse = (stats) => ({
+  count: stats.count,
+  handles: stats.handles,
+  abandoned: stats.abandoned,
+  avgHoldSec: prettifySec(stats.avgHoldSec),
+  avgTalkSec: prettifySec(stats.avgTalkSec),
+  maxHoldSec: prettifySec(stats.maxHoldSec),
+  maxTalkSec: prettifySec(stats.maxTalkSec),
+  minHoldSec: prettifySec(stats.minHoldSec),
+  minTalkSec: prettifySec(stats.minTalkSec),
+  sumHoldSec: prettifySec(stats.sumHoldSec),
+  sumTalkSec: prettifySec(stats.sumTalkSec),
+});
+
 const fetchWidgets = async ({
                               from,
                               to,
@@ -18,11 +34,11 @@ const fetchWidgets = async ({
                             }) => {
   try {
     const defaultObject = {
+      count: 0,
+      handles: 0,
       abandoned: 0,
       avgHoldSec: 0,
       avgTalkSec: 0,
-      count: 0,
-      handles: 0,
       maxHoldSec: 0,
       maxTalkSec: 0,
       minHoldSec: 0,
@@ -41,11 +57,12 @@ const fetchWidgets = async ({
         undefined,
         fields,
       );
+
+    let data = {};
     if (Array.isArray(response.items)) {
-      const data = response.items.pop();
-      return { ...defaultObject, ...data };
+      data = response.items.pop();
     }
-    return defaultObject;
+    return formatResponse({ ...defaultObject, ...data });
   } catch (err) {
     throw err;
   }
