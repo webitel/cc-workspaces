@@ -63,51 +63,51 @@
     }),
 
     computed: {
-      apps() {
-        const agentApp = {
-          name: 'agent',
-          title: this.$t('appNavigator.agent'),
-          href: process.env.VUE_APP_AGENT_URL,
-          img: imgAgent,
-        };
-        const supervisorApp = {
-          name: 'supervisor',
-          title: this.$t('appNavigator.supervisor'),
-          href: process.env.VUE_APP_SUPERVISOR_URL,
-          img: imgSupervisor,
-        };
-        const historyApp = {
-          name: 'history',
-          title: this.$t('appNavigator.history'),
-          href: process.env.VUE_APP_HISTORY_URL,
-          img: imgHistory,
-        };
+        apps() {
+          const agentApp = {
+            name: 'agent',
+            title: this.$t('appNavigator.agent'),
+            href: process.env.VUE_APP_AGENT_URL,
+            img: imgAgent,
+          };
+          const supervisorApp = {
+            name: 'supervisor',
+            title: this.$t('appNavigator.supervisor'),
+            href: process.env.VUE_APP_SUPERVISOR_URL,
+            img: imgSupervisor,
+          };
+          const historyApp = {
+            name: 'history',
+            title: this.$t('appNavigator.history'),
+            href: process.env.VUE_APP_HISTORY_URL,
+            img: imgHistory,
+          };
 
-        const auditApp = {
-          name: 'audit',
-          title: this.$t('appNavigator.audit'),
-          href: process.env.VUE_APP_AUDIT_URL,
-          img: imgAudit,
-        };
+          const auditApp = {
+            name: 'audit',
+            title: this.$t('appNavigator.audit'),
+            href: process.env.VUE_APP_AUDIT_URL,
+            img: imgAudit,
+          };
 
-        const adminApp = {
-          name: 'admin',
-          title: this.$t('appNavigator.admin'),
-          href: process.env.VUE_APP_ADMIN_URL,
-          img: imgAdmin,
-        };
+          const adminApp = {
+            name: 'admin',
+            title: this.$t('appNavigator.admin'),
+            href: process.env.VUE_APP_ADMIN_URL,
+            img: imgAdmin,
+          };
 
-        const grafanaApp = {
-          name: 'grafana',
-          title: this.$t('appNavigator.grafana'),
-          href: process.env.VUE_APP_GRAFANA_URL,
-          img: imgGrafana,
-        };
+          const grafanaApp = {
+            name: 'grafana',
+            title: this.$t('appNavigator.grafana'),
+            href: process.env.VUE_APP_GRAFANA_URL,
+            img: imgGrafana,
+          };
 
-        const apps = [agentApp, supervisorApp, historyApp, auditApp, adminApp];
-        if (this.$config.ON_SITE) apps.push(grafanaApp);
-        return apps;
-      },
+          const apps = [agentApp, supervisorApp, historyApp, auditApp, adminApp];
+          if (this.$config.ON_SITE) apps.push(grafanaApp);
+          return apps;
+        },
     },
 
     methods: {

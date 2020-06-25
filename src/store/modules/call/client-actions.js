@@ -6,9 +6,11 @@ const answerParams = { useAudio: true, disableStun: true };
 const actions = {
   // destucturing arg due not receive mouse events
   CALL: async (context, { user }) => {
-    const destination = user
+    let destination = user
       ? user.extension
       : context.state.callOnWorkspace.newNumber;
+    // eslint-disable-next-line no-useless-escape
+    destination = destination.replace(/[^0-9a-zA-z\+\*#]/g, '');
     const client = await getCliInstance();
     const params = { ...callParams, video: context.state.isVideo };
     try {
