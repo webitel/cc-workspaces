@@ -1,6 +1,18 @@
 <template>
-  <div class="widget">
-    <icon class="widget-icon" :class="`widget-icon--${iconClass}`">
+  <div
+    class="widget"
+    :class="{'widget--selectable': selectionMode}"
+    @click.prevent="select"
+  >
+    <checkbox
+      class="widget-checkbox"
+      v-show="selectionMode"
+      :value="show"
+    ></checkbox>
+    <icon
+      class="widget-icon"
+      :class="`widget-icon--${iconClass}`"
+    >
       <svg class="icon sm">
         <use :xlink:href="`#icon-${widget.icon}-sm`"></use>
       </svg>
@@ -11,6 +23,8 @@
 </template>
 
 <script>
+  import Checkbox from '../../utils/checkbox.vue';
+
   export default {
     name: 'widget',
     props: {
@@ -21,11 +35,30 @@
       value: {
         type: [String, Number],
       },
+      // checkbox value
+      show: {
+        type: Boolean,
+      },
+      selectionMode: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    components: {
+      Checkbox,
     },
 
     computed: {
       iconClass() {
         return this.widget.icon.split('-').slice(1).join('-');
+      },
+    },
+
+    methods: {
+      select() {
+        if (this.selectionMode) {
+          this.$emit('select');
+        }
       },
     },
   };
@@ -53,16 +86,40 @@
   .widget {
     display: flex;
     align-items: center;
+    width: fit-content;
+    height: 24px; // checkbox height
     padding: 5px;
+    white-space: nowrap;
 
-    &__title {
+    .widget__title {
       @extend .typo-widget-title;
       margin-right: 5px;
     }
 
-    &__value {
+    .widget__value {
       @extend .typo-widget-value;
     }
+
+    @media screen and (max-width: 1336px) {
+      .widget__title {
+        display: none;
+      }
+    }
+
+    &--selectable {
+      cursor: pointer;
+
+      @media screen and (max-width: 1336px) {
+        .widget__title {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .widget-checkbox {
+    margin-right: 10px;
+    pointer-events: none; // prevent checkbox own click event
   }
 
   .widget-icon {
