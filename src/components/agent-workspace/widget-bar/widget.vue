@@ -91,17 +91,29 @@
     padding: 5px;
     //word-break: ;
 
-    &--selectable {
-      cursor: pointer;
-    }
-
-    &__title {
+    .widget__title {
       @extend .typo-widget-title;
       margin-right: 5px;
     }
 
-    &__value {
+    .widget__value {
       @extend .typo-widget-value;
+    }
+
+    @media screen and (max-width: 1336px) {
+      .widget__title {
+        display: none;
+      }
+    }
+
+    &--selectable {
+      cursor: pointer;
+
+      @media screen and (max-width: 1336px) {
+        .widget__title {
+          display: block;
+        }
+      }
     }
   }
 
