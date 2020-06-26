@@ -7,10 +7,12 @@ const agentService = new AgentServiceApiFactory(configuration, '', instance);
 const defaultParams = {
   from: new Date().setHours(0, 0, 0, 0),
   to: Date.now(),
-  fields: ['count', 'handles', 'abandoned', 'avg_talk_time', 'avg_hold_time'],
+  fields: ['count', 'handles', 'abandoned', 'avg_talk_sec', 'avg_hold_sec'],
 };
 
-const prettifySec = (value) => new Date(value * 1000).toISOString().substr(11, 8);
+const prettifySec = (value) => (
+  new Date(Math.round(value) * 1000).toISOString().substr(11, 8)
+);
 
 const formatResponse = (stats) => ({
   count: stats.count,
