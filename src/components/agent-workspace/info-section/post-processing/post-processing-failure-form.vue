@@ -1,19 +1,19 @@
 <template>
   <form class="processing-form processing-form__failure">
-    <multiselect
-      class="processing-form__category"
-      :value="[]"
-      :label="$t('infoSec.postProcessing.category')"
-      :options="[]"
-      :api-mode="false"
-    ></multiselect>
-    <multiselect
-      class="processing-form__subcategory"
-      :value="[]"
-      :label="$t('infoSec.postProcessing.subcategory')"
-      :options="[]"
-      :api-mode="false"
-    ></multiselect>
+<!--    <multiselect-->
+<!--      class="processing-form__category"-->
+<!--      :value="[]"-->
+<!--      :label="$t('infoSec.postProcessing.category')"-->
+<!--      :options="[]"-->
+<!--      :api-mode="false"-->
+<!--    ></multiselect>-->
+<!--    <multiselect-->
+<!--      class="processing-form__subcategory"-->
+<!--      :value="[]"-->
+<!--      :label="$t('infoSec.postProcessing.subcategory')"-->
+<!--      :options="[]"-->
+<!--      :api-mode="false"-->
+<!--    ></multiselect>-->
 
     <multiselect
       class="processing-form__category"
