@@ -1,9 +1,18 @@
 <template>
   <div class="ws-worksection">
-    <search
-      v-model="search"
-      @search="resetData"
-    />
+    <div class="ws-worksection__search-wrap">
+      <search
+        class="ws-worksection__search"
+        v-model="search"
+        @search="resetData"
+      />
+      <btn
+        class="transfer"
+        :class="{'disabled': isTransferDisabled}"
+        @click.native="transfer"
+      >{{$t('transfer.transfer')}}
+      </btn>
+    </div>
     <p class="ws-worksection__list-instruction">{{$t('transfer.selectAgent')}}</p>
 
     <section class="ws-worksection__list" ref="scroll-wrap">
@@ -24,12 +33,6 @@
         :options="obsOptions"
         @intersect="handleIntersect"/>
     </section>
-    <btn
-      class="transfer"
-      :disabled="!selected"
-      @click.native="transfer(selected)"
-    >{{$t('transfer.transfer')}}
-    </btn>
   </div>
 </template>
 
@@ -62,6 +65,12 @@
       fields: ['name', 'id', 'extension', 'presence'],
     }),
 
+    computed: {
+      isTransferDisabled() {
+        return !this.selected && !this.search;
+      },
+    },
+
     methods: {
       select(item) {
         this.selected = item;
@@ -71,14 +80,39 @@
         return usersAPI.getUsers(params);
       },
 
+      transfer() {
+        const number = this.selected
+          ? this.selected.extension : this.search;
+        this.blindTransfer(number);
+      },
+
       ...mapActions('call', {
-        transfer: 'TRANSFER',
+        blindTransfer: 'BLIND_TRANSFER',
       }),
     },
   };
 </script>
 
 <style lang="scss" scoped>
+  .ws-worksection__search-wrap {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+
+    .ws-worksection__search {
+      flex: 1 1 auto;
+      min-width: auto;
+      width: auto;
+      margin: 0;
+    }
+
+    .cc-btn {
+      flex: 0 0 auto;
+      display: block;
+      margin-left: 10px;
+    }
+  }
 
   .ws-contact-item {
     border: 1px solid transparent;
@@ -89,10 +123,5 @@
     &.selected, &:hover {
       border-color: $accent-color;
     }
-  }
-
-  .cc-btn {
-    display: block;
-    margin: 17px auto auto;
   }
 </style>
