@@ -33,10 +33,10 @@ const actions = {
     }
   },
 
-  TRANSFER: async (context, user) => {
+  BLIND_TRANSFER: async (context, number) => {
     const call = context.state.callOnWorkspace;
     try {
-      await call.blindTransfer(user.extension);
+      await call.blindTransfer(number);
       // context.commit('REMOVE_CALL', call);
       // context.dispatch('RESET_WORKSPACE');
     } catch {

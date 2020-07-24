@@ -24,13 +24,11 @@
 <script>
   import { mapActions } from 'vuex';
   import CcTextarea from '../../../utils/textarea.vue';
-  import Multiselect from '../../../utils/multiselect.vue';
 
   export default {
     name: 'post-processing-success-form',
     components: {
       CcTextarea,
-      Multiselect,
     },
 
     computed: {
