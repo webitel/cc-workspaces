@@ -44,7 +44,7 @@ export default {
       isSuccess: 'Был ли звонок успешным?',
       yes: 'Да',
       no: 'Нет',
-      addNewCommunication: 'Добавить новыую коммуникацию',
+      addNewCommunication: 'Добавить новую коммуникацию',
       scheduleCall: 'Запланировать следующий звонок?',
       category: 'Категория',
       subcategory: 'Подкатегория',

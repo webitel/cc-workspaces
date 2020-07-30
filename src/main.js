@@ -5,7 +5,8 @@ import router from './router';
 import store from './store';
 import i18n from './locale/i18n';
 import Icon from './components/utils/icon-wrap.vue';
-import './filters/globalFilters';
+
+import './plugins/webitel-ui';
 
 import './css/fonts.scss';
 import './css/main.scss';
