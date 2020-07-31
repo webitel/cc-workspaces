@@ -6,7 +6,7 @@ const agentService = new AgentServiceApiFactory(configuration, '', instance);
 
 const defaultParams = {
   from: new Date().setHours(0, 0, 0, 0),
-  to: Date.now(),
+  to: new Date().setHours(23, 59, 59, 999),
   fields: ['count', 'handles', 'abandoned', 'avg_talk_sec', 'avg_hold_sec'],
 };
 
@@ -48,6 +48,7 @@ const fetchWidgets = async ({
       sumHoldSec: 0,
       sumTalkSec: 0,
     };
+    console.log(to);
     const response = await agentService
       .searchAgentCallStatistics(
         undefined,
