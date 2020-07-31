@@ -13,13 +13,17 @@
   import { CallActions } from 'webitel-sdk';
   import Tabs from '../../utils/tabs.vue';
   import ClientInfo from './client-info/client-info-tab.vue';
+  import KnowledgeBase from './knowledge-base/knowledge-base-tab.vue';
   import PostProcessing from './post-processing/post-processing-tab.vue';
+  import WorkspaceStates
+    from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
   export default {
     name: 'the-agent-info-section',
     components: {
       Tabs,
       ClientInfo,
+      KnowledgeBase,
       PostProcessing,
     },
     data: () => ({
@@ -37,10 +41,24 @@
     },
 
     computed: {
+      ...mapState('workspace', {
+        workspaceState: (state) => state.workspaceState,
+      }),
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
         state: (state) => state.callOnWorkspace.state,
       }),
+      ...mapState('member', {
+        member: (state) => state.memberOnWorkspace,
+      }),
+
+      hasKnowledgeBase() {
+        let variables = {};
+        if (this.workspaceState === WorkspaceStates.CALL) variables = this.call.variables;
+        else if (this.workspaceState === WorkspaceStates.MEMBER) variables = this.member.variables;
+        return !!variables.knowledge_base;
+      },
+
       tabs() {
         const clientInfo = {
           text: this.$t('infoSec.clientInfo'),
@@ -54,14 +72,9 @@
           text: this.$t('infoSec.knowledgeBase'),
           value: 'knowledge-base',
         };
-        const tabs = [
-          clientInfo,
-          knowledgeBase,
-        ];
-        if (this.call.allowReporting) {
-          // insert post-processing on 2nd place
-          tabs.splice(1, 0, postProcessing);
-        }
+        const tabs = [clientInfo];
+        if (true || this.hasKnowledgeBase) tabs.push(knowledgeBase);
+        if (this.call.allowReporting) tabs.push(postProcessing);
         return tabs;
       },
     },
