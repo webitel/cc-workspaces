@@ -1,4 +1,5 @@
 import { AgentServiceApiFactory } from 'webitel-sdk';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import configuration from '../../utils/openAPIConfig';
 import instance from '../../instance';
 
@@ -10,22 +11,18 @@ const defaultParams = {
   fields: ['count', 'handles', 'abandoned', 'avg_talk_sec', 'avg_hold_sec'],
 };
 
-const prettifySec = (value) => (
-  new Date(Math.round(value) * 1000).toISOString().substr(11, 8)
-);
-
 const formatResponse = (stats) => ({
   count: stats.count,
   handles: stats.handles,
   abandoned: stats.abandoned,
-  avgHoldSec: prettifySec(stats.avgHoldSec),
-  avgTalkSec: prettifySec(stats.avgTalkSec),
-  maxHoldSec: prettifySec(stats.maxHoldSec),
-  maxTalkSec: prettifySec(stats.maxTalkSec),
-  minHoldSec: prettifySec(stats.minHoldSec),
-  minTalkSec: prettifySec(stats.minTalkSec),
-  sumHoldSec: prettifySec(stats.sumHoldSec),
-  sumTalkSec: prettifySec(stats.sumTalkSec),
+  avgHoldSec: convertDuration(stats.avgHoldSec),
+  avgTalkSec: convertDuration(stats.avgTalkSec),
+  maxHoldSec: convertDuration(stats.maxHoldSec),
+  maxTalkSec: convertDuration(stats.maxTalkSec),
+  minHoldSec: convertDuration(stats.minHoldSec),
+  minTalkSec: convertDuration(stats.minTalkSec),
+  sumHoldSec: convertDuration(stats.sumHoldSec),
+  sumTalkSec: convertDuration(stats.sumTalkSec),
 });
 
 const fetchWidgets = async ({

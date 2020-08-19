@@ -1,4 +1,3 @@
-
 let interval = null;
 
 const state = {

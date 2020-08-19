@@ -15,7 +15,7 @@
           class="status-select__indicator"
           :class="computeCurrentStatusIndicatorClass"
         ></span>
-      <div class="status-select__item__text">{{duration}}</div>
+      <div class="status-select__item__text">{{ duration }}</div>
       <icon class="status-select__arrow">
         <svg class="icon icon-arrow-down-md md">
           <use xlink:href="#icon-arrow-down-md"></use>
@@ -32,7 +32,7 @@
           class="status-select__indicator"
           :class="computeCurrentStatusIndicatorClass"
         ></span>
-        <div class="status-select__item__text">{{duration}}</div>
+        <div class="status-select__item__text">{{ duration }}</div>
         <icon class="status-select__arrow">
           <svg class="icon icon-arrow-down-md md">
             <use xlink:href="#icon-arrow-down-md"></use>
@@ -48,241 +48,238 @@
           class="status-select__indicator"
           :class="`${status.class}`"
         ></span>
-        <div class="status-select__item__text">{{status.text}}</div>
+        <div class="status-select__item__text">{{ status.text }}</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  import { mapState, mapGetters, mapActions } from 'vuex';
-  import { AgentStatus } from 'webitel-sdk';
-  import UserStatus from '../../store/modules/agent-status/statusUtils/UserStatus';
-  import clickaway from '../../directives/clickaway';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import { AgentStatus } from 'webitel-sdk';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import UserStatus from '../../store/modules/agent-status/statusUtils/UserStatus';
+import clickaway from '../../directives/clickaway';
 
-  export default {
-    name: 'status-select',
-    directives: { clickaway },
+export default {
+  name: 'status-select',
+  directives: { clickaway },
 
-    data: () => ({
-      AgentStatus,
-      UserStatus,
-      isOpened: false,
+  data: () => ({
+    AgentStatus,
+    UserStatus,
+    isOpened: false,
+  }),
+
+  computed: {
+    ...mapState('now', {
+      now: (state) => state.now,
     }),
 
-    computed: {
-      ...mapState('now', {
-        now: (state) => state.now,
-      }),
+    ...mapState('status', {
+      agent: (state) => state.agent,
+      user: (state) => state.user,
+    }),
 
-      ...mapState('status', {
-        agent: (state) => state.agent,
-        user: (state) => state.user,
-      }),
+    ...mapGetters('status', {
+      isAgent: 'IS_AGENT',
+    }),
 
-      ...mapGetters('status', {
-        isAgent: 'IS_AGENT',
-      }),
+    agentStatusList() {
+      return [
+        {
+          text: this.$t('agentStatus.status.active'),
+          class: 'active',
+          value: AgentStatus.Offline,
+        },
+        {
+          text: this.$t('agentStatus.status.break'),
+          class: 'pause',
+          value: AgentStatus.Pause,
+        },
+      ];
+    },
 
-      agentStatusList() {
-        return [
-          {
-            text: this.$t('agentStatus.status.active'),
-            class: 'active',
-            value: AgentStatus.Offline,
-          },
-          {
-            text: this.$t('agentStatus.status.break'),
-            class: 'pause',
-            value: AgentStatus.Pause,
-          },
-        ];
-      },
+    userStatusList() {
+      return [
+        {
+          text: this.$t('agentStatus.status.active'),
+          class: 'active',
+          value: UserStatus.ACTIVE,
+        },
+        {
+          text: this.$t('agentStatus.status.dnd'),
+          class: 'dnd',
+          value: UserStatus.DND,
+        },
+      ];
+    },
 
-      userStatusList() {
-        return [
-          {
-            text: this.$t('agentStatus.status.active'),
-            class: 'active',
-            value: UserStatus.ACTIVE,
-          },
-          {
-            text: this.$t('agentStatus.status.dnd'),
-            class: 'dnd',
-            value: UserStatus.DND,
-          },
-        ];
-      },
+    computeAvailableStatus() {
+      if (this.isAgent) {
+        return this.agentStatusList.filter((status) => status.value !== this.agent.status);
+      }
+      return this.userStatusList.filter((status) => status.value !== this.user.status);
+    },
 
-      computeAvailableStatus() {
-        if (this.isAgent) {
-          return this.agentStatusList.filter((status) => status.value !== this.agent.status);
+    // FIXME to redo with lastStateChange getter from sdk, when it's ready
+    duration() {
+      if (this.isAgent) {
+        if (this.now) {
+          return convertDuration(this.agent.stateDuration);
         }
-        return this.userStatusList.filter((status) => status.value !== this.user.status);
-      },
+      }
+      let time = (this.now - this.user.lastStateChange || Date.now());
+      time = time < 0 ? 0 : time;
+      return convertDuration(time / 1000);
+    },
 
-      // FIXME to redo with lastStateChange getter from sdk, when it's ready
-      duration() {
-        if (this.isAgent) {
-          if (this.now) {
-            return new Date((this.agent.stateDuration || 0) * 1000).toISOString()
-              .substr(11, 8);
-          }
-        } else {
-          let time = (this.now - this.user.lastStateChange || Date.now());
-          time = time < 0 ? 0 : time;
-          return new Date(time).toISOString()
-            .substr(11, 8);
-        }
-        return '00:00:00';
-      },
+    computeCurrentStatusIndicatorClass() {
+      if (this.isAgent) {
+        const { status } = this.agent;
+        return `${status}`;
+      }
+      const { status } = this.user;
+      switch (status) {
+        case UserStatus.ACTIVE:
+          return 'active';
+        case UserStatus.DND:
+          return 'dnd';
+        default:
+          return '';
+      }
+    },
+  },
 
-      computeCurrentStatusIndicatorClass() {
-        if (this.isAgent) {
-          const { status } = this.agent;
-          return `${status}`;
+  methods: {
+    changeStatus(status) {
+      if (this.isAgent) {
+        switch (status) {
+          case AgentStatus.Online:
+            this.setAgentWaiting();
+            break;
+          case AgentStatus.Pause:
+            this.$emit('setBreak'); // opens break reason popup
+            break;
+          default:
+            return;
         }
-        const { status } = this.user;
+      } else {
         switch (status) {
           case UserStatus.ACTIVE:
-            return 'active';
+            this.setUserActive();
+            break;
           case UserStatus.DND:
-            return 'dnd';
+            this.setUserDnd();
+            break;
           default:
-            return '';
+            return;
         }
-      },
+      }
+      this.close();
     },
 
-    methods: {
-      changeStatus(status) {
-        if (this.isAgent) {
-          switch (status) {
-            case AgentStatus.Online:
-              this.setAgentWaiting();
-              break;
-            case AgentStatus.Pause:
-              this.$emit('setBreak'); // opens break reason popup
-              break;
-            default:
-              return;
-          }
-        } else {
-          switch (status) {
-            case UserStatus.ACTIVE:
-              this.setUserActive();
-              break;
-            case UserStatus.DND:
-              this.setUserDnd();
-              break;
-            default:
-              return;
-          }
-        }
-        this.close();
-      },
-
-      close() {
-        this.isOpened = false;
-      },
-
-      ...mapActions('status', {
-        setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
-        agentLogout: 'AGENT_LOGOUT',
-        setUserActive: 'SET_USER_ACTIVE_STATUS',
-        setUserDnd: 'SET_USER_DND_STATUS',
-      }),
+    close() {
+      this.isOpened = false;
     },
-  };
+
+    ...mapActions('status', {
+      setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
+      agentLogout: 'AGENT_LOGOUT',
+      setUserActive: 'SET_USER_ACTIVE_STATUS',
+      setUserDnd: 'SET_USER_DND_STATUS',
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  $active-color: $true-color;
-  $stop-color: $false-color;
-  $default-indicator: $page-bg-color;
-  $option-bg__hover: $page-bg-color;
+$active-color: $true-color;
+$stop-color: $false-color;
+$default-indicator: $page-bg-color;
+$option-bg__hover: $page-bg-color;
 
-  .status-select {
-    position: relative;
-    z-index: 100;
+.status-select {
+  position: relative;
+  z-index: 100;
 
-    &__item {
-      display: flex;
-      align-items: center;
-      width: (130px);
-      word-break: break-all;
-      padding: (5px) (5px) (5px) (10px);
-      background: #fff;
-      transition: $transition;
-      cursor: pointer;
+  &__item {
+    display: flex;
+    align-items: center;
+    width: (130px);
+    word-break: break-all;
+    padding: (5px) (5px) (5px) (10px);
+    background: #fff;
+    transition: $transition;
+    cursor: pointer;
 
-      &__selected {
-        border-radius: $border-radius;
-      }
-
-      &__text {
-        @extend .typo-heading-sm;
-      }
+    &__selected {
+      border-radius: $border-radius;
     }
 
-    &__indicator {
-      display: inline-block;
-      width: (14px);
-      height: (14px);
-      margin-right: (9px);
-      background: $default-indicator;
-      border-radius: 50%;
+    &__text {
+      @extend .typo-heading-sm;
+    }
+  }
 
-      &.online, // AGENT
-      &.active // USER
-      {
-        background: $active-color;
-      }
+  &__indicator {
+    display: inline-block;
+    width: (14px);
+    height: (14px);
+    margin-right: (9px);
+    background: $default-indicator;
+    border-radius: 50%;
 
-      &.pause, // AGENT
-      &.dnd // USER
-      {
-        background: $break-color;
-      }
-
-      &.stop // USER
-      {
-        background: $stop-color;
-      }
+    &.online, // AGENT
+    &.active // USER
+    {
+      background: $active-color;
     }
 
-    &__arrow {
-      margin-left: auto;
-
-      .icon {
-        fill: #000;
-        stroke: #000;
-      }
+    &.pause, // AGENT
+    &.dnd // USER
+    {
+      background: $break-color;
     }
 
+    &.stop // USER
+    {
+      background: $stop-color;
+    }
+  }
+
+  &__arrow {
+    margin-left: auto;
+
+    .icon {
+      fill: #000;
+      stroke: #000;
+    }
+  }
+
+  .status-select__options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &.opened {
     .status-select__options {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
+      background: #fff;
+      box-shadow: $box-shadow;
+      border-radius: $border-radius;
 
-    &.opened {
-      .status-select__options {
-        background: #fff;
-        box-shadow: $box-shadow;
-        border-radius: $border-radius;
+      .status-select__item {
+        &:first-child, &:last-child {
+          border-radius: $border-radius;
+        }
 
-        .status-select__item {
-          &:first-child, &:last-child {
-            border-radius: $border-radius;
-          }
-
-          &:hover {
-            background: $option-bg__hover;
-          }
+        &:hover {
+          background: $option-bg__hover;
         }
       }
     }
   }
+}
 </style>

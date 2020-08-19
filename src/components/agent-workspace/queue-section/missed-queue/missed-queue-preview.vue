@@ -47,7 +47,7 @@
         return this.call.from.number;
       },
       displayTime() {
-        return new Date(+this.call.createdAt).toISOString().substr(11, 5);
+        return new Date(+this.call.createdAt).toLocaleTimeString().slice(0, 5); // hh:mm
       },
 
       computePreviewStatusClass() {
