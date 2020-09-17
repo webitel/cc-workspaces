@@ -32,6 +32,7 @@
 
 <script>
   import { mapState } from 'vuex';
+  import preventHiddenPageCallsDecorator from '@webitel/ui-sdk/src/scripts/preventHiddenPageCallsDecorator';
   import Widget from './widget.vue';
   import APIRepository from '../../../api/APIRepository';
   import Widgets from '../../../store/modules/widgets/utils/Widgets';
@@ -114,6 +115,7 @@
 
       setRefreshInterval() {
         this.loadWidgetsData();
+        this.loadWidgetsData = preventHiddenPageCallsDecorator(this.loadWidgetsData);
         this.refreshIntervalInstance = setInterval(this.loadWidgetsData, REFRESH_INTERVAL_DURATION);
       },
 

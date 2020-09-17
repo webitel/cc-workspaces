@@ -89,7 +89,6 @@
       position: absolute;
       display: none;
 
-
       /* Style the checkmark/indicator */
       box-sizing: border-box;
       top: 50%;

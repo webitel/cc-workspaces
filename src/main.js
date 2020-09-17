@@ -16,7 +16,6 @@ Vue.config.productionTip = false;
 Vue.component('icon', Icon);
 Vue.use(Vuelidate);
 
-
 const fetchConfig = async () => {
   const response = await fetch(`${process.env.BASE_URL}config.json`);
   return response.json();

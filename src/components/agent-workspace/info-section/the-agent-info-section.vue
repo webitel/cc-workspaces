@@ -56,7 +56,7 @@
         let variables = {};
         if (this.workspaceState === WorkspaceStates.CALL) variables = this.call.variables;
         else if (this.workspaceState === WorkspaceStates.MEMBER) variables = this.member.variables;
-        return !!variables.knowledge_base;
+        return !!variables?.knowledge_base;
       },
 
       tabs() {
@@ -73,7 +73,7 @@
           value: 'knowledge-base',
         };
         const tabs = [clientInfo];
-        if (true || this.hasKnowledgeBase) tabs.push(knowledgeBase);
+        if (this.hasKnowledgeBase) tabs.push(knowledgeBase);
         if (this.call.allowReporting) tabs.push(postProcessing);
         return tabs;
       },

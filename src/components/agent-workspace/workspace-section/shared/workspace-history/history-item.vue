@@ -5,11 +5,11 @@
          alt="client photo">
     <div class="ws-worksection__item__text">
       <div class="flex-wrap">
-        <div class="ws-history-item__number">{{computeDestination | truncateFromEnd(24)}}</div>
-        <div class="ws-history-item__time">{{computeDuration}}</div>
+        <div class="ws-history-item__number">{{ computeDestination | truncateFromEnd(24) }}</div>
+        <div class="ws-history-item__time">{{ duration }}</div>
       </div>
       <div class="flex-wrap">
-        <div class="ws-history-item__date">{{computeDate}}</div>
+        <div class="ws-history-item__date">{{ computeDate }}</div>
         <div class="ws-history-item__location"></div>
       </div>
     </div>
@@ -27,147 +27,147 @@
 </template>
 
 <script>
-  import { CallDirection } from 'webitel-sdk';
+import { CallDirection } from 'webitel-sdk';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
-  export default {
-    name: 'history-item',
+export default {
+  name: 'history-item',
 
-    props: {
-      item: {
-        type: Object,
-        required: true,
-      },
-      forNumber: {
-        type: String,
-        required: false,
-      },
+  props: {
+    item: {
+      type: Object,
+      required: true,
+    },
+    forNumber: {
+      type: String,
+      required: false,
+    },
+  },
+
+  computed: {
+    computeDestination() {
+      return this.forNumber ? this.destinationForNumber : this.destination;
     },
 
-    computed: {
-      computeDestination() {
-        return this.forNumber ? this.destinationForNumber : this.destination;
-      },
-
-      destinationForNumber() {
-        if (this.item.from.number !== this.forNumber) return this.item.from.number;
-        return this.item.to.number || this.item.destination;
-      },
-
-      destination() {
-        if (this.item.direction === CallDirection.Outbound) {
-          if (this.item.to.number) {
-            return `${this.item.to.name} (${this.item.to.number})`;
-          }
-          return this.item.destination;
-        }
-        return `${this.item.from.name} (${this.item.from.number})`;
-      },
-
-      computeDate() {
-        const createdAt = +this.item.createdAt;
-        const date = new Date(createdAt).toLocaleDateString();
-        const time = new Date(createdAt).toLocaleTimeString().slice(0, 5); // slice only hh:mm
-        if (this.isToday(createdAt)) return `${this.$t('history.today')} ${time}`;
-        if (this.isYesterday(createdAt)) return `${this.$t('history.yesterday')} ${time}`;
-        return `${date} ${time}`;
-      },
-
-      computeDuration() {
-        return new Date(this.item.duration * 10 ** 3 || 0).toISOString().substr(11, 8);
-      },
-
-      computeStatusIcon() {
-        if (this.item.direction === CallDirection.Inbound) {
-          if (!this.item.answeredAt) return 'missed-call';
-          return 'incoming-call';
-        }
-        return 'call-transfer';
-      },
-
-      computeStatusColor() {
-        if (this.item.direction === CallDirection.Inbound) {
-          if (!this.item.answeredAt) return 'missed';
-          return 'inbound';
-        }
-        return 'outbound';
-      },
+    destinationForNumber() {
+      if (this.item.from.number !== this.forNumber) return this.item.from.number;
+      return this.item.to.number || this.item.destination;
     },
 
-    methods: {
-      isToday(createdAt) {
-        const date = new Date(+createdAt);
-        const today = new Date();
-        return this.isTheSameDate(today, date);
-      },
-
-      isYesterday(createdAt) {
-        const date = new Date(+createdAt);
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        return this.isTheSameDate(yesterday, date);
-      },
-
-      isTheSameDate(date1, date2) {
-        return date1.getDate() === date2.getDate()
-          && date1.getMonth() === date2.getMonth()
-          && date1.getFullYear() === date2.getFullYear();
-      },
+    destination() {
+      if (this.item.direction === CallDirection.Outbound) {
+        if (this.item.to.number) {
+          return `${this.item.to.name} (${this.item.to.number})`;
+        }
+        return this.item.destination;
+      }
+      return `${this.item.from.name} (${this.item.from.number})`;
     },
-  };
+
+    computeDate() {
+      const createdAt = +this.item.createdAt;
+      const date = new Date(createdAt).toLocaleDateString();
+      const time = new Date(createdAt).toLocaleTimeString().slice(0, 5); // slice only hh:mm
+      if (this.isToday(createdAt)) return `${this.$t('history.today')} ${time}`;
+      if (this.isYesterday(createdAt)) return `${this.$t('history.yesterday')} ${time}`;
+      return `${date} ${time}`;
+    },
+
+    duration() {
+      return convertDuration(this.item.duration);
+    },
+
+    computeStatusIcon() {
+      if (this.item.direction === CallDirection.Inbound) {
+        if (!this.item.answeredAt) return 'missed-call';
+        return 'incoming-call';
+      }
+      return 'call-transfer';
+    },
+
+    computeStatusColor() {
+      if (this.item.direction === CallDirection.Inbound) {
+        if (!this.item.answeredAt) return 'missed';
+        return 'inbound';
+      }
+      return 'outbound';
+    },
+  },
+
+  methods: {
+    isToday(createdAt) {
+      const date = new Date(+createdAt);
+      const today = new Date();
+      return this.isTheSameDate(today, date);
+    },
+
+    isYesterday(createdAt) {
+      const date = new Date(+createdAt);
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      return this.isTheSameDate(yesterday, date);
+    },
+
+    isTheSameDate(date1, date2) {
+      return date1.getDate() === date2.getDate()
+        && date1.getMonth() === date2.getMonth()
+        && date1.getFullYear() === date2.getFullYear();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .ws-history-item {
-    cursor: pointer;
+.ws-history-item {
+  cursor: pointer;
 
-    &:hover {
-      background: $page-bg-color;
-    }
+  &:hover {
+    background: $page-bg-color;
+  }
+}
+
+.flex-wrap {
+  height: 50%; // 2 flex-wraps in text container
+
+  &:first-child {
+    align-items: flex-start;
   }
 
-  .flex-wrap {
-    height: 50%; // 2 flex-wraps in text container
+  &:last-child {
+    align-items: flex-end;
+  }
+}
 
-    &:first-child {
-      align-items: flex-start;
-    }
+.ws-history-item__number {
+  @extend .typo-heading-sm;
+}
 
-    &:last-child {
-      align-items: flex-end;
-    }
+.ws-history-item__time {
+  @extend .typo-body-md;
+}
+
+.ws-history-item__date {
+  @extend .typo-body-sm;
+}
+
+.ws-history-item__location {
+  @extend .typo-body-sm;
+}
+
+.ws-worksection__item__status {
+  .outbound {
+    stroke: $call-color;
+    fill: $call-color;
   }
 
-  .ws-history-item__number {
-    @extend .typo-heading-sm;
+  .missed {
+    stroke: $disconnect-color;
+    fill: $disconnect-color;
   }
 
-  .ws-history-item__time {
-    @extend .typo-body-md;
+  .inbound {
+    stroke: $icons-color;
+    fill: $icons-color;
   }
-
-  .ws-history-item__date {
-    @extend .typo-body-sm;
-  }
-
-  .ws-history-item__location {
-    @extend .typo-body-sm;
-  }
-
-
-  .ws-worksection__item__status {
-    .outbound {
-      stroke: $call-color;
-      fill: $call-color;
-    }
-
-    .missed {
-      stroke: $disconnect-color;
-      fill: $disconnect-color;
-    }
-
-    .inbound {
-      stroke: $icons-color;
-      fill: $icons-color;
-    }
-  }
+}
 </style>

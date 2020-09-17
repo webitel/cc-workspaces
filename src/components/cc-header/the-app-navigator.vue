@@ -124,7 +124,6 @@
   $app-navigator-border-color: #eaeaea;
   $app-navigator-border-color--hover: $accent-color;
 
-
   // helper class
   .typo-app-navigator {
     font-family: 'Montserrat Regular', monospace;

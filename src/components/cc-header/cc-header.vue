@@ -58,7 +58,6 @@
       this.restoreVideoParam();
     },
 
-
     computed: {
       ...mapState('status', {
         agent: (state) => state.agent,

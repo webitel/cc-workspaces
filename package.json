@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@webitel/ui-sdk": "^0.2.0",
+    "@webitel/ui-sdk": "^0.4.4",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "css-loader": "^3.4.2",

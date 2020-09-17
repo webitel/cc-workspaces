@@ -139,7 +139,6 @@
       }
     }
 
-
     &.call-action__mic {
       position: relative;
 
