@@ -9,8 +9,10 @@
   import { mapState } from 'vuex';
   import WorkspaceStates
     from '../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import patchMDRender from './_internals/patchMDRender';
 
   const md = new MarkdownIt();
+  patchMDRender(md);
 
   export default {
     name: 'client-info-tab',
