@@ -35,6 +35,7 @@
         let variables;
         if (this.state === WorkspaceStates.CALL) variables = this.call.variables;
         else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
+        if (variables.knowledge_base) variables = { ...variables, knowledge_base: undefined };
         let res = '';
         if (variables) {
           Object.keys(variables).forEach((key) => {
