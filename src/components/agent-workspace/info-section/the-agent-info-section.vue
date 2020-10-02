@@ -34,7 +34,7 @@
       state() {
         if (this.call.state === CallActions.Hangup && this.call.allowReporting) {
           this.currentTab = { value: 'post-processing' };
-        } else {
+        } else if (this.currentTab.value === 'post-processing') {
           this.currentTab = { value: 'client-info' };
         }
       },

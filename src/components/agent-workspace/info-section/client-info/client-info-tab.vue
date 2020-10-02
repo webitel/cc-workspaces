@@ -9,8 +9,10 @@
   import { mapState } from 'vuex';
   import WorkspaceStates
     from '../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import patchMDRender from './_internals/patchMDRender';
 
   const md = new MarkdownIt();
+  patchMDRender(md);
 
   export default {
     name: 'client-info-tab',
@@ -33,6 +35,7 @@
         let variables;
         if (this.state === WorkspaceStates.CALL) variables = this.call.variables;
         else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
+        if (variables.knowledge_base) variables = { ...variables, knowledge_base: undefined };
         let res = '';
         if (variables) {
           Object.keys(variables).forEach((key) => {
