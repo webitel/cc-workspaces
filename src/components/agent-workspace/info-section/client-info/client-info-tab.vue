@@ -35,9 +35,9 @@
         let variables;
         if (this.state === WorkspaceStates.CALL) variables = this.call.variables;
         else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
-        if (variables.knowledge_base) variables = { ...variables, knowledge_base: undefined };
         let res = '';
         if (variables) {
+          delete variables.knowledge_base;
           Object.keys(variables).forEach((key) => {
             res += `<h3>${key}:</h3>`;
             res += md.render(variables[key]);
