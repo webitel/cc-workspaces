@@ -13,7 +13,7 @@ const routes = [
     component: Auth,
   },
   {
-    path: '/workspace',
+    path: '/',
     name: 'agent-ws',
     component: AgentWorkspace,
   },
