@@ -9,7 +9,7 @@ process.env.VUE_APP_HISTORY_URL = process.env.NODE_ENV === 'production' ? '/hist
 process.env.VUE_APP_GRAFANA_URL = process.env.NODE_ENV === 'production' ? '/grafana' : 'https://dev.webitel.com/grafana';
 
 module.exports = {
-  publicPath: '',
+  publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
   // lintOnSave: false,
   css: {
     loaderOptions: {
