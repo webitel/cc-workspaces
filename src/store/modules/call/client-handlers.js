@@ -27,6 +27,8 @@ const actions = {
   SUBSCRIBE_CALLS: async (context) => {
     const client = await getCliInstance();
     await client.subscribeCall(callHandler(context), null);
+    const callList = client.allCall();
+    if (callList.length) context.commit('SET_CALL_LIST', callList);
     // await client.subscribeTask((...args) => {
     //   console.log('task', args);
     // });

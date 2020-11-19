@@ -96,6 +96,10 @@ const mutations = {
     state.isVideo = value;
   },
 
+  SET_CALL_LIST: (state, callList) => {
+    state.callList = callList;
+  },
+
   ADD_CALL: (state, call) => {
     state.callList.push(call);
   },
