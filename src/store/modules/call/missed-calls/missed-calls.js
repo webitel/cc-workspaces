@@ -3,6 +3,8 @@ import APIRepository from '../../../../api/APIRepository';
 
 const historyAPI = APIRepository.history;
 
+// NO_ANSWER cause - це коли до тебе має іти дзвінок 20 сєк, і якщо ти не піднімеш то буде помилка
+// ORIGINATOR_CANCEL cause - це коли до тебе має іти дзвінок 20 сєк, але клієнт на 10 секунді сам відхиляє дзвінок
 const requestParams = {
   size: 100,
   direction: CallDirection.Inbound,
@@ -11,6 +13,7 @@ const requestParams = {
   createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: new Date().setHours(23, 59, 59, 999), // today end
   fields: ['from', 'created_at'],
+  cause: ['NO_ANSWER', 'ORIGINATOR_CANCEL'],
   isMissed: true,
 };
 
