@@ -31,9 +31,9 @@
 </template>
 
 <script>
-  import debounce from '../../utils/debounce';
+import debounce from '@webitel/ui-sdk/src/scripts/debounce';
 
-  export default {
+export default {
     name: 'search-input',
     props: {
       // value -- v-model from outer component

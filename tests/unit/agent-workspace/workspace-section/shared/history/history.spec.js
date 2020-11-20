@@ -7,7 +7,7 @@ import HistoryContainer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-container.vue';
 import History
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-item.vue';
-import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
+// import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
 
 // import historyAPI through require to override functions with mock
 const historyAPI = require('../../../../../../src/api/agent-workspace/history/history');
