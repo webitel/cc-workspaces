@@ -25,7 +25,6 @@
   import InfoSection from './info-section/the-agent-info-section.vue';
   import VideoContainer from './video-container/video-container.vue';
   import ringingSoundMixin from '../../mixins/ringingSoundMixin';
-  import { destroyCliInstance } from '../../api/agent-workspace/call-ws-connection';
 
   export default {
     name: 'the-agent-workspace',
@@ -41,13 +40,11 @@
     },
 
     created() {
-      this.initWorkspace();
-      this.setNowWatcher();
+      this.openSession();
     },
 
     destroyed() {
-      this.destroyCliInstance();
-      this.clearNowWatcher();
+      this.closeSession();
     },
 
     watch: {
@@ -66,32 +63,15 @@
     },
 
     methods: {
-      async initWorkspace() {
-        await this.subscribeCalls();
-        await this.subscribeStatus();
-      },
-
-      destroyCliInstance,
-
-      ...mapActions('call', {
-        subscribeCalls: 'SUBSCRIBE_CALLS',
+      ...mapActions('workspace', {
+        openSession: 'OPEN_SESSION',
+        closeSession: 'CLOSE_SESSION',
       }),
-
       ...mapActions('member', {
         loadMembersList: 'LOAD_DATA_LIST',
       }),
-
       ...mapActions('call/missed', {
         loadMissedList: 'LOAD_DATA_LIST',
-      }),
-
-      ...mapActions('status', {
-        subscribeStatus: 'SUBSCRIBE_STATUS',
-      }),
-
-      ...mapActions('now', {
-        setNowWatcher: 'SET_NOW_WATCHER',
-        clearNowWatcher: 'CLEAR_NOW_WATCHER',
       }),
     },
   };
