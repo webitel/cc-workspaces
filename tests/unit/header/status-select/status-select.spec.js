@@ -11,7 +11,6 @@ localVue.use(Vuex);
 describe('Status Select', () => {
   let state;
   let getters;
-  let store;
 
   beforeEach(() => {
     state = {
@@ -34,36 +33,6 @@ describe('Status Select', () => {
         },
       },
     });
-  });
-
-  it('Opens status-select options', async () => {
-    const wrapper = shallowMount(StatusSelect, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-    });
-
-    wrapper.find('.status-select__item__selected')
-      .trigger('click');
-    await wrapper.vm.$nextTick();
-    const options = wrapper.find('.status-select__options');
-    expect(options.classes())
-      .not
-      .toContain('hidden');
-  });
-
-  it('Fills status-select options UI with options', async () => {
-    const wrapper = shallowMount(StatusSelect, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-    });
-
-    const optionsList = wrapper.findAll('.status-select__options .status-select__item');
-    expect(optionsList.length)
-      .toBeGreaterThan(0);
   });
 });
 

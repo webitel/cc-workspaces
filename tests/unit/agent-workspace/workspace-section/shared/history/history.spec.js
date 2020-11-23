@@ -7,10 +7,12 @@ import HistoryContainer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-container.vue';
 import History
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-item.vue';
+import APIRepository from '../../../../../../src/api/APIRepository';
 // import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
 
 // import historyAPI through require to override functions with mock
-const historyAPI = require('../../../../../../src/api/agent-workspace/history/history');
+// const historyAPI = require('../../../../../../src/api/agent-workspace/history/HistoryAPIRepository');
+const historyAPI = APIRepository.history;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -44,31 +46,23 @@ describe('Agent History functionality', () => {
     });
   });
 
-  it('Fills history list from API', async () => {
+  it('renders a component', async () => {
     const wrapper = shallowMount(HistoryContainer, {
       store,
       localVue,
       stubs: { Icon: true },
     });
-    await wrapper.vm.$nextTick(); // make async call
-    await wrapper.vm.$nextTick(); // rerender list
-    await wrapper.vm.$nextTick(); // rerender list
-    await wrapper.vm.$nextTick(); // rerender list
-    expect(wrapper.findAll(History).length)
-      .toEqual(historyList.length);
+    expect(wrapper.exists()).toBe(true);
   });
 
-  it('Properly fills history with items from list', async () => {
+  it('Creates history components from data list', () => {
     const wrapper = shallowMount(HistoryContainer, {
       store,
       localVue,
       stubs: { Icon: true },
+      data: () => ({ dataList: historyList, isLoading: false }),
     });
-    await wrapper.vm.$nextTick(); // make async call
-    await wrapper.vm.$nextTick(); // rerender list
-    const contact = wrapper.find(History);
-    expect(contact.vm.item.id)
-      .toEqual(historyList[0].id);
+    expect(wrapper.findAllComponents(History).length).toEqual(historyList.length);
   });
 
   it('Selects history item and sets its number to new number input', async () => {
@@ -76,11 +70,9 @@ describe('Agent History functionality', () => {
       store,
       localVue,
       stubs: { Icon: true },
+      data: () => ({ dataList: historyList, isLoading: false }),
     });
-    await wrapper.vm.$nextTick(); // make async call
-    await wrapper.vm.$nextTick(); // rerender list
-
-    wrapper.find(History).trigger('click');
+    wrapper.findComponent(History).trigger('click');
     expect(state.callOnWorkspace.newNumber).toEqual(historyList[0].destination);
   });
 
@@ -95,12 +87,9 @@ describe('Agent History functionality', () => {
       store,
       localVue,
       stubs: { Icon: true },
-      propsData: {
-        item,
-      },
-      filters: { truncateFromEnd },
+      propsData: { item },
     });
-    expect(wrapper.find(History).text())
+    expect(wrapper.findComponent(History).text())
       .toContain('00:01:00');
   });
 });

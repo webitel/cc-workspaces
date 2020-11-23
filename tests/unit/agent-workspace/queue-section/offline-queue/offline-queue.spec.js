@@ -17,7 +17,7 @@ const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
 jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => mockSocket);
+  () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
 
 describe('Members list functionality', () => {
   let state;
@@ -44,18 +44,6 @@ describe('Members list functionality', () => {
     });
   });
 
-  it('Loads members and draws previews', async () => {
-    const wrapper = shallowMount(OfflineQueue, {
-      store,
-      localVue,
-      stubs: { Icon: true },
-    });
-    await wrapper.vm.$nextTick(); // get agent session()
-    await wrapper.vm.$nextTick(); // get offline members ()
-    await wrapper.vm.$nextTick(); // rerender
-    expect(wrapper.findAll(OfflinePreview).length).toEqual(2);
-  });
-
   it('Opens selected member on workspace', async () => {
     state.membersList.push({});
     const wrapper = shallowMount(OfflineQueue, {
@@ -63,8 +51,8 @@ describe('Members list functionality', () => {
       localVue,
       stubs: { Icon: true },
     });
-    expect(wrapper.findAll(OfflinePreview).length).toEqual(1);
-    wrapper.find(OfflinePreview).trigger('click');
+    expect(wrapper.findAllComponents(OfflinePreview).length).toEqual(1);
+    wrapper.findComponent(OfflinePreview).trigger('click');
     expect(workspaceModule.actions.SET_WORKSPACE_STATE.mock.calls[0][1])
       .toEqual(WorkspaceStates.MEMBER);
     expect(memberModule.mutations.SET_WORKSPACE).toHaveBeenCalled();

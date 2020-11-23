@@ -5,6 +5,7 @@ import workspaceModule from '../../../../../src/store/modules/agent-workspace/ag
 import callModule from '../../../../../src/store/modules/call/call';
 import nowModule from '../../../../../src/store/modules/reactive-now/reactive-now';
 import statusModule from '../../../../../src/store/modules/agent-status/agent-status';
+import userinfoModule from '../../../../../src/store/modules/userinfo/userinfo';
 import Workspace from '../../../../../src/components/agent-workspace/the-agent-workspace.vue';
 import Call
   from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
@@ -16,7 +17,7 @@ localVue.use(Vuex);
 let call = {};
 const mockSocket = new MockSocket();
 jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => mockSocket);
+  () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
 
 describe('Hangup event on call component', () => {
   const { state, actions, mutations } = callModule;
@@ -34,6 +35,7 @@ describe('Hangup event on call component', () => {
         },
         now: nowModule,
         status: statusModule,
+        userinfo: userinfoModule,
       },
     });
   });

@@ -11,11 +11,11 @@ localVue.use(Vuex);
 // Make new call on number test
 const mockCliCall = jest.fn();
 jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => ({ call: mockCliCall }));
+  () => ({ getCliInstance: () => ({ call: mockCliCall }), destroyCliInstance: jest.fn() }));
 
 describe('Make new call functionality', () => {
   let state;
-  const { actions, mutations } = callModule;
+  const { actions, getters, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -31,6 +31,7 @@ describe('Make new call functionality', () => {
         call: {
           namespaced: true,
           state,
+          getters,
           actions,
           mutations,
         },
@@ -89,7 +90,7 @@ describe('Make new call functionality', () => {
 
 describe('Transfer functionality', () => {
   let state;
-  const { actions, mutations } = callModule;
+  const { getters, actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -104,6 +105,7 @@ describe('Transfer functionality', () => {
         call: {
           namespaced: true,
           state,
+          getters,
           actions,
           mutations,
         },
@@ -129,7 +131,7 @@ describe('Transfer functionality', () => {
 
 describe('Bridge functionality', () => {
   let state;
-  const { actions, mutations } = callModule;
+  const { getters, actions, mutations } = callModule;
   let store;
 
   const call1 = {
@@ -152,6 +154,7 @@ describe('Bridge functionality', () => {
         call: {
           namespaced: true,
           state,
+          getters,
           actions,
           mutations,
         },

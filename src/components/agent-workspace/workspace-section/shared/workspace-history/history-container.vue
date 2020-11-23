@@ -9,8 +9,8 @@
       <empty-search v-else-if="!dataList.length" :type="'history'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
       <history-item
-        v-for="(item, key) of dataList"
-        :key="key"
+        v-for="item of dataList"
+        :key="item.id"
         :item="item"
         :for-number="historyNumber"
         @click.native="select(item)"

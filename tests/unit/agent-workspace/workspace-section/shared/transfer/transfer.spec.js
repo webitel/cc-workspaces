@@ -43,19 +43,13 @@ describe('Transfer functionality', () => {
         extension: '180',
       },
     ];
-    axiosInstance.get.mockImplementationOnce(() => Promise.resolve({ items: userList }));
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
-      mocks: { $t: () => {} },
       stubs: { Icon: true },
+      data: () => ({ dataList: userList, isLoading: false }),
     });
-    await wrapper.vm.$nextTick();
-    // expect(axiosInstance.get).toHaveBeenCalled();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    // expect(wrapper.vm.dataList).toHaveLength(1);
-    expect(wrapper.findAll(Contact).length)
+    expect(wrapper.findAllComponents(Contact).length)
       .toEqual(1);
   });
 
@@ -68,20 +62,14 @@ describe('Transfer functionality', () => {
         extension: '180',
       },
     ];
-    axiosInstance.get.mockImplementationOnce(() => Promise.resolve({ items: userList }));
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
-      mocks: { $t: () => {} },
       stubs: { Icon: true },
+      data: () => ({ dataList: userList, isLoading: false }),
     });
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    wrapper.find(Contact)
-      .trigger('click');
-    wrapper.find('.transfer')
-      .trigger('click');
+    wrapper.findComponent(Contact).trigger('click');
+    wrapper.find('.transfer').trigger('click');
     const userExtension = userList[0].extension;
     expect(state.callOnWorkspace.blindTransfer)
       .toHaveBeenCalledWith(userExtension);

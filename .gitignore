@@ -2,7 +2,9 @@
 node_modules
 package-lock.json
 /dist
+/coverage
 demo.html
+jest.json
 
 # local env files
 .env.local
