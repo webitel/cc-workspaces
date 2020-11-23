@@ -46,10 +46,6 @@ describe('Open Post Processing tab automatically after hangup', () => {
     const wrapper = shallowMount(InfoSection, {
       store,
       localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     expect(wrapper.findComponent(PostProcessingTab).exists()).toBeFalsy();

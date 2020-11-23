@@ -41,10 +41,10 @@
 
     computed: {
       displayName() {
-        return this.call.from.name;
+        return this.call.from?.name || '';
       },
       displayNumber() {
-        return this.call.from.number;
+        return this.call.from?.number || '';
       },
       displayTime() {
         return new Date(+this.call.createdAt).toLocaleTimeString().slice(0, 5); // hh:mm
