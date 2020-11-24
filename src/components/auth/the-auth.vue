@@ -1,7 +1,7 @@
 <template>
   <div class="auth-wrap">
     <div v-show="!isLoaded" class="auth-loader">
-      <loader/>
+      <wt-loader/>
     </div>
     <iframe
       class="auth"
@@ -15,7 +15,6 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import loader from '../utils/loader.vue';
   import APIRepository from '../../api/APIRepository';
 
   const authURL = process.env.VUE_APP_AUTH_MODULE_URL;
@@ -23,10 +22,6 @@
 
   export default {
     name: 'auth',
-    components: {
-      loader,
-    },
-
     data: () => ({
       authURL,
       isLoaded: false,
@@ -73,7 +68,7 @@
       left: 0;
       background: #fff;
 
-      .loader {
+      .wt-loader {
         position: absolute;
         top: 50%;
         right: 50%;

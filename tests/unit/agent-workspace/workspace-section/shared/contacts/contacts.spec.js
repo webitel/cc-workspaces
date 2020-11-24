@@ -1,6 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import axiosInstance from '../../../../../../src/api/instance';
 import callModule from '../../../../../../src/store/modules/call/call';
 import ContactsContainer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contacts-container.vue';
@@ -47,7 +46,6 @@ describe('Contacts functionality', () => {
     const wrapper = shallowMount(ContactsContainer, {
       store,
       localVue,
-      stubs: { Icon: true },
       data: () => ({ dataList: userList, isLoading: false }),
     });
     expect(wrapper.findAllComponents(Contact).length)
@@ -65,14 +63,13 @@ describe('Contacts functionality', () => {
     const wrapper = shallowMount(Contact, {
       store,
       localVue,
-      stubs: { Icon: true },
       propsData: {
         item,
         callable: true,
       },
     });
-    const btn = wrapper.find('.call');
-    btn.trigger('click');
+    const callBtn = wrapper.findComponent({ name: 'wt-rounded-action' });
+    callBtn.vm.$emit('click');
 
     // then mock a getCliInstance fn
     // and check if cli.call() fn is triggered with proper destination

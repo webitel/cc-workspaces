@@ -38,8 +38,6 @@
   import ActiveQueue from './active-queue/active-queue-container.vue';
   import OfflineQueue from './offline-queue/offline-queue-container.vue';
   import MissedQueue from './missed-queue/missed-queue-container.vue';
-  import RoundedAction from '../../utils/rounded-action.vue';
-  import Tabs from '../../utils/tabs.vue';
   import WorkspaceStates
     from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
@@ -49,8 +47,6 @@
       ActiveQueue,
       OfflineQueue,
       MissedQueue,
-      RoundedAction,
-      Tabs,
     },
     data: () => ({
       currentTab: { value: 'active' },

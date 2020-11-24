@@ -2,17 +2,14 @@
   <div class="ws-worksection__item ws-contact-item">
 
     <div class="ws-worksection__item__pic-wrap">
-      <rounded-action
-        class="ws-contact-item__call-action call"
+      <wt-rounded-action
+        class="ws-contact-item__call-action"
         :class="{'d-none': !callable}"
-        @click.native="makeCall({user: item})"
-      >
-        <icon>
-          <svg class="icon icon-call-ringing-md md">
-            <use xlink:href="#icon-call-ringing-md"></use>
-          </svg>
-        </icon>
-      </rounded-action>
+        icon="call-ringing"
+        color="success"
+        size="lg"
+        @click="makeCall({user: item})"
+      ></wt-rounded-action>
       <img
         class="ws-worksection__item__pic"
         src="../../../../../assets/agent-workspace/default-avatar.svg"
@@ -29,7 +26,7 @@
     <div class="ws-worksection__item__status">
       <div
         class="ws-contact-item__status__indicator"
-        :class="computeUserStatus"
+        :class="userStatus"
       ></div>
     </div>
   </div>
@@ -40,14 +37,9 @@
   import parseUserStatus
     from '../../../../../store/modules/agent-status/statusUtils/parseUserStatus';
   import UserStatus from '../../../../../store/modules/agent-status/statusUtils/UserStatus';
-  import RoundedAction from '../../../../utils/rounded-action.vue';
 
   export default {
     name: 'workspace-contact',
-    components: {
-      RoundedAction,
-    },
-
     props: {
       item: {
         type: Object,
@@ -61,7 +53,7 @@
     },
 
     computed: {
-      computeUserStatus() {
+      userStatus() {
         const status = parseUserStatus(this.item.presence);
         switch (status) {
           case UserStatus.ACTIVE:
@@ -108,7 +100,7 @@
     }
 
     .ws-worksection__item__pic {
-      transition: $transition;
+      transition: var(--transition);
       cursor: pointer;
     }
 
@@ -137,8 +129,8 @@
     align-self: end;
 
     &__indicator {
-      width: (14px);
-      height: (14px);
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
 
       &.active {

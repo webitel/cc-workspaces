@@ -37,11 +37,6 @@
       call: {
         type: Object,
         required: true,
-        default: () => ({
-          answeredAt: Date.now(),
-          displayName: 'Administrator Lisa',
-          displayNumber: '3434',
-        }),
       },
     },
 
@@ -59,7 +54,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   .flex-wrap {
     height: 100%;
     flex-direction: column;
@@ -76,11 +70,11 @@
         @extend .typo-body-md;
         text-align: center;
         display: inline-block;
-        width: (9.5px);
+        width: 9.5px;
 
         /*semicolons*/
         &:nth-child(3), &:nth-child(6) {
-          width: (5px);
+          width: 5px;
         }
       }
 

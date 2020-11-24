@@ -1,6 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import axiosInstance from '../../../../../../src/api/instance';
 import callModule from '../../../../../../src/store/modules/call/call';
 import Transfer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
@@ -46,14 +45,13 @@ describe('Transfer functionality', () => {
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
-      stubs: { Icon: true },
       data: () => ({ dataList: userList, isLoading: false }),
     });
     expect(wrapper.findAllComponents(Contact).length)
       .toEqual(1);
   });
 
-  it('Selects user and transfers call', async () => {
+  it('Selects user and transfers call', () => {
     const userList = [
       {
         id: '36',
@@ -65,11 +63,11 @@ describe('Transfer functionality', () => {
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
-      stubs: { Icon: true },
       data: () => ({ dataList: userList, isLoading: false }),
     });
     wrapper.findComponent(Contact).trigger('click');
-    wrapper.find('.transfer').trigger('click');
+    const transferBtn = wrapper.findComponent({ name: 'wt-button' });
+    transferBtn.vm.$emit('click');
     const userExtension = userList[0].extension;
     expect(state.callOnWorkspace.blindTransfer)
       .toHaveBeenCalledWith(userExtension);

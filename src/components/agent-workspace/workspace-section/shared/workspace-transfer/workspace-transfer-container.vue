@@ -6,17 +6,17 @@
         v-model="search"
         @search="resetData"
       />
-      <btn
-        class="transfer"
-        :class="{'disabled': isTransferDisabled}"
-        @click.native="transfer"
+      <wt-button
+        color="transfer"
+        :disabled="isTransferDisabled"
+        @click="transfer"
       >{{$t('transfer.transfer')}}
-      </btn>
+      </wt-button>
     </div>
     <p class="ws-worksection__list-instruction">{{$t('transfer.selectAgent')}}</p>
 
     <section class="ws-worksection__list" ref="scroll-wrap">
-      <loader v-if="isLoading"/>
+      <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
         <contact
@@ -39,10 +39,8 @@
 <script>
   import { mapActions } from 'vuex';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import Btn from '../../../../utils/btn.vue';
   import Contact from '../workspace-contacts/workspace-contact.vue';
   import EmptySearch from '../workspace-empty-search/empty-search.vue';
-  import Loader from '../../../../utils/loader.vue';
   import APIRepository from '../../../../../api/APIRepository';
 
   const usersAPI = APIRepository.users;
@@ -51,10 +49,8 @@
     name: 'workspace-transfer-container',
     mixins: [infiniteScrollMixin],
     components: {
-      Btn,
       Contact,
       EmptySearch,
-      Loader,
     },
 
     data: () => ({
@@ -107,17 +103,16 @@
       margin: 0;
     }
 
-    .cc-btn {
+    .wt-button {
       flex: 0 0 auto;
-      display: block;
       margin-left: 10px;
     }
   }
 
   .ws-contact-item {
     border: 1px solid transparent;
-    border-radius: $border-radius;
-    transition: $transition;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
     cursor: pointer;
 
     &.selected, &:hover {
