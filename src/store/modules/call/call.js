@@ -40,10 +40,10 @@ const actions = {
     }
   },
 
-  ANSWER: async (context, { index }) => {
+  ANSWER: async (context, { callId }) => {
     const ANSWER_PARAMS = { useAudio: true, disableStun: true };
-    const call = Number.isInteger(index)
-      ? context.state.callList[index]
+    const call = callId
+      ? context.state.callList.find((call) => call.id === callId)
       : context.state.callOnWorkspace;
     if (call.allowAnswer) {
       const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
@@ -108,9 +108,9 @@ const actions = {
     }
   },
 
-  HANGUP: async (context, { index }) => {
-    const call = Number.isInteger(index)
-      ? context.state.callList[index]
+  HANGUP: async (context, { callId }) => {
+    const call = callId
+      ? context.state.callList.find((call) => call.id === callId)
       : context.state.callOnWorkspace;
     if (call.allowHangup) {
       try {
@@ -125,7 +125,8 @@ const actions = {
     context.dispatch('SET_WORKSPACE', call);
   },
 
-  OPEN_NEW_CALL: (context, newNumber) => {
+  // new number destructuring to prevent mouse event
+  OPEN_NEW_CALL: (context, { newNumber }) => {
     context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
   },
 

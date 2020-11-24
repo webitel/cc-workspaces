@@ -22,18 +22,18 @@
       v-if="isRinging"
       class="preview-actions"
     >
-      <btn
-        class="uppercase call"
-        @click.native.stop="answer({ index })"
+      <wt-button
+        color="success"
+        @click="answer({ callId: call.id })"
       >
         {{$t('reusable.answer')}}
-      </btn>
-      <btn
-        class="uppercase end"
-        @click.native.stop="hangup({ index })"
+      </wt-button>
+      <wt-button
+        color="danger"
+        @click="hangup({ callId: call.id })"
       >
         {{$t('reusable.reject')}}
-      </btn>
+      </wt-button>
     </div>
   </article>
 </template>
@@ -41,7 +41,6 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import StatusBadge from '../call-status-icon-badge.vue';
-  import Btn from '../../../utils/btn.vue';
   import callTimer from '../../../../mixins/callTimerMixin';
   import displayInfo from '../../../../mixins/displayInfoMixin';
   import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';
@@ -49,18 +48,8 @@
   export default {
     name: 'active-queue-preview',
     mixins: [callTimer, displayInfo],
-    components: {
-      StatusBadge,
-      Btn,
-    },
-
+    components: { StatusBadge },
     props: {
-      // index is for action calls
-      index: {
-        type: Number,
-        required: true,
-      },
-
       // item is for UI computing
       call: {
         type: Object,

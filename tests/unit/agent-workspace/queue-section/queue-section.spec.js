@@ -48,7 +48,7 @@ describe('Make new call functionality', () => {
       localVue,
       stubs: { Icon: true },
     });
-    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
+    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click', {});
     expect(state.callOnWorkspace._isNew).toBeTruthy();
   });
 });
