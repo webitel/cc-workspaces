@@ -41,7 +41,7 @@
     align-items: center;
 
     .numpad-expansion-btn__arrow {
-      transition: $transition;
+      transition: var(--transition);
       opacity: 0;
       pointer-events: none;
       transform: translateY(2px) rotate(0);
