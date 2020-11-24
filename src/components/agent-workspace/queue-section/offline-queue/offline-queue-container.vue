@@ -4,7 +4,7 @@
       :class="{'selected': member === openedMember}"
       v-for="(member, key) of dataList"
       :member="member"
-      :key="key"
+      :key="member.id"
       @click.native.prevent="openMember(key)"
     ></offline-preview>
     <observer/>
@@ -22,8 +22,6 @@
     components: {
       OfflinePreview,
     },
-
-    data: () => ({}),
 
     computed: {
       ...mapState('member', {

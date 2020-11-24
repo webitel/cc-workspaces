@@ -15,7 +15,6 @@ jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
 
 describe('Make new call functionality', () => {
   let state;
-  const { actions, getters, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -29,11 +28,8 @@ describe('Make new call functionality', () => {
     store = new Vuex.Store({
       modules: {
         call: {
-          namespaced: true,
+          ...callModule,
           state,
-          getters,
-          actions,
-          mutations,
         },
       },
     });
@@ -43,7 +39,6 @@ describe('Make new call functionality', () => {
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     const numberInput = wrapper.find('.call-header__form-number__input');
     expect(numberInput.exists())
@@ -62,7 +57,6 @@ describe('Make new call functionality', () => {
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     const inputValue = '123';
     // find input and emit some value from it
@@ -75,7 +69,7 @@ describe('Make new call functionality', () => {
     // then find "call" button and trigger click
     await wrapper.vm.$nextTick();
     wrapper.find('.call-action.call')
-      .trigger('click');
+      .vm.$emit('click', {});
 
     // then mock a getCliInstance fn
     // and check if cli.call() fn is triggered with proper destination
@@ -90,7 +84,6 @@ describe('Make new call functionality', () => {
 
 describe('Transfer functionality', () => {
   let state;
-  const { getters, actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -103,11 +96,8 @@ describe('Transfer functionality', () => {
     store = new Vuex.Store({
       modules: {
         call: {
-          namespaced: true,
+          ...callModule,
           state,
-          getters,
-          actions,
-          mutations,
         },
       },
     });
@@ -120,10 +110,9 @@ describe('Transfer functionality', () => {
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     const transferBtn = wrapper.find('.call-action.transfer');
-    transferBtn.trigger('click');
+    transferBtn.vm.$emit('click');
     expect(wrapper.emitted().openTab[0])
       .toEqual(['transfer']);
   });
@@ -167,7 +156,6 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     expect(wrapper.find('.call-action.bridge')
       .exists())
@@ -178,7 +166,6 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     expect(wrapper.find('.call-action.bridge')
       .exists())
@@ -189,10 +176,9 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(CallHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     const transferBtn = wrapper.find('.call-action.bridge');
-    transferBtn.trigger('click');
+    transferBtn.vm.$emit('click');
     expect(wrapper.emitted().openTab[0])
       .toEqual(['bridge']);
   });

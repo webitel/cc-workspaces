@@ -5,7 +5,7 @@
       v-for="(missed, key) of missedList"
       :call="missed"
       :index="key"
-      :key="key"
+      :key="missed.id"
       @click.native.prevent="openCall(key)"
     ></missed-preview>
   </section>
