@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
   import CcHeader from '../cc-header/cc-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
@@ -47,31 +47,10 @@
       this.closeSession();
     },
 
-    watch: {
-      // after user info is loaded, fetch offline and missed queues data
-      userId() {
-        this.loadMembersList({});
-        this.loadMissedList();
-      },
-    },
-
-    computed: {
-      // after user info is loaded, fetch offline and missed queues data
-      ...mapState('userinfo', {
-        userId: (state) => state.userId,
-      }),
-    },
-
     methods: {
       ...mapActions('workspace', {
         openSession: 'OPEN_SESSION',
         closeSession: 'CLOSE_SESSION',
-      }),
-      ...mapActions('member', {
-        loadMembersList: 'LOAD_DATA_LIST',
-      }),
-      ...mapActions('call/missed', {
-        loadMissedList: 'LOAD_DATA_LIST',
       }),
     },
   };

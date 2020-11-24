@@ -24,6 +24,7 @@
     <component :is="currentTabComponent"></component>
 
     <wt-rounded-action
+      class="call"
       v-show="isNewCallButton"
       color="success"
       icon="call-ringing"

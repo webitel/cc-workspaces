@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import VueRouter from 'vue-router';
 import JSDOM from 'jsdom';
 import API from '../../../src/api/auth/authAPIRepository';
 import Auth from '../../../src/components/auth/the-auth.vue';
@@ -7,6 +8,7 @@ import userinfo from '../../../src/store/modules/userinfo/userinfo';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+localVue.use(VueRouter);
 
 API.setToken = jest.fn();
 API.getSession = jest.fn(() => ({}));
@@ -15,7 +17,8 @@ describe('Auth', () => {
   let store;
   let wrapper;
   global.window = new JSDOM.JSDOM().window;
-  const $router = { replace: jest.fn() };
+  const router = new VueRouter();
+  router.replace = jest.fn();
 
   beforeEach(() => {
     store = new Vuex.Store({
@@ -25,7 +28,7 @@ describe('Auth', () => {
     wrapper = shallowMount(Auth, {
       localVue,
       store,
-      mocks: { $router },
+      router,
     });
   });
 
@@ -39,7 +42,7 @@ describe('Auth', () => {
     await setTimeout(() => {
       expect(API.setToken).toHaveBeenCalledWith(accessToken);
       expect(API.getSession).toHaveBeenCalled();
-      expect($router.replace).toHaveBeenCalled();
+      expect(router.replace).toHaveBeenCalled();
       done();
     }, 100);
   });

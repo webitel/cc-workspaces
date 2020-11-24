@@ -125,7 +125,7 @@ const actions = {
     context.dispatch('SET_WORKSPACE', call);
   },
 
-  OPEN_NEW_CALL: (context, { newNumber }) => {
+  OPEN_NEW_CALL: (context, newNumber) => {
     context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
   },
 
