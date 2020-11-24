@@ -1,9 +1,8 @@
 <template>
   <section class="workspace-section queue-section">
-    <tabs
-      :current-tab="currentTab"
+    <wt-tabs
+      v-model="currentTab"
       :tabs="tabs"
-      @change="currentTab = $event"
     >
       <template
         v-for="(tab, key) of tabs"
@@ -20,21 +19,17 @@
           <span class="queue-tab__text">{{tab.text}}</span>
         </div>
       </template>
-    </tabs>
+    </wt-tabs>
 
-    <component :is="computeCurrentTab"></component>
+    <component :is="currentTabComponent"></component>
 
-    <rounded-action
+    <wt-rounded-action
       v-show="isNewCallButton"
-      class="call"
-      @click.native="openNewCall"
-    >
-      <icon>
-        <svg class="icon icon-call-ringing-md md">
-          <use xlink:href="#icon-call-ringing-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
+      color="success"
+      icon="call-ringing"
+      size="lg"
+      @click="openNewCall"
+    ></wt-rounded-action>
   </section>
 </template>
 
@@ -106,27 +101,21 @@
       },
 
       activeTabText() {
-        if (this.callList.length) {
-          return `${this.$t('queueSec.active')}(${this.callList.length})`;
-        }
-        return this.$t('queueSec.active');
+        const t = this.$t('queueSec.active');
+        return this.callList.length ? `${t}(${this.callList.length})` : t;
       },
 
       offlineTabText() {
-        if (this.membersCount) {
-          return `${this.$t('queueSec.offline')}(${this.membersCount})`;
-        }
-        return this.$t('queueSec.offline');
+        const t = this.$t('queueSec.offline');
+        return this.membersCount ? `${t}(${this.membersCount})` : t;
       },
 
       missedTabText() {
-        if (this.missedCount) {
-          return `${this.$t('queueSec.missed')}(${this.missedCount})`;
-        }
-        return this.$t('queueSec.missed');
+        const t = this.$t('queueSec.missed');
+        return this.missedCount ? `${t}(${this.missedCount})` : t;
       },
 
-      computeCurrentTab() {
+      currentTabComponent() {
         return `${this.currentTab.value}-queue`;
       },
 
@@ -154,7 +143,7 @@
     display: flex;
     flex-direction: column;
 
-    .tabs {
+    .wt-tabs {
       text-align: center;
 
       .queue-tab__wrap {
@@ -189,7 +178,7 @@
       }
 
       @media screen and (max-width: 1336px) {
-        ::v-deep .tab { // deeply styles tabs-component inner element, through scoped styles
+        ::v-deep .wt-tab { // deeply styles tabs-component inner element, through scoped styles
           width: 24px;
           margin: 0 1px;
         }
@@ -200,15 +189,15 @@
       }
     }
 
-    .rounded-action {
+    .wt-rounded-action {
       position: absolute;
-      bottom: (10px);
-      left: (10px);
+      bottom: 10px;
+      left: 10px;
     }
   }
 
   .call-preview-wrap {
-    @extend .cc-scrollbar;
+    @extend %wt-scrollbar;
     min-height: 0;
     overflow: auto;
   }

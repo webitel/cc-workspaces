@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/ui-sdk": "^0.6.5",
+    "@webitel/ui-sdk": "^0.6.7",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
@@ -22,6 +22,7 @@
     "jsdom": "^16.4.0",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
+    "svg-sprite-loader": "^5.0.0",
     "vue": "^2.6.11",
     "vue-i18n": "^8.15.3",
     "vue-multiselect": "^2.1.6",
