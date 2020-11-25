@@ -21,7 +21,7 @@ const mutations = {
     state.chatList.push(chat);
   },
   REMOVE_CHAT: (state, removedChat) => {
-    state.callList = state.callList.filter((call) => call !== removedChat);
+    state.chatList = state.chatList.filter((chat) => chat !== removedChat);
   },
 };
 
