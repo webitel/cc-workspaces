@@ -1,5 +1,5 @@
 <template>
-  <section class="call-preview-wrap">
+  <section>
     <active-preview
       v-for="(call, key) of callList"
       :call="call"

@@ -14,7 +14,7 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import OfflinePreview from './offline-queue-preview.vue';
-  import infiniteScrollMixin from '../../../../mixins/infiniteScrollMixin';
+  import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
 
   export default {
     name: 'offline-queue-container',

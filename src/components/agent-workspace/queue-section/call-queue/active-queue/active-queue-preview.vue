@@ -16,8 +16,10 @@
       </div>
     </header>
 
-    <span
-      class="call-preview__number">{{displayNumber | truncateFromEnd(18)}}</span>
+    <span class="call-preview__number">
+      {{displayNumber | truncateFromEnd(18)}}
+    </span>
+
     <div
       v-if="isRinging"
       class="preview-actions"
@@ -41,9 +43,9 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import StatusBadge from '../call-status-icon-badge.vue';
-  import callTimer from '../../../../mixins/callTimerMixin';
-  import displayInfo from '../../../../mixins/displayInfoMixin';
-  import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';
+  import callTimer from '../../../../../mixins/callTimerMixin';
+  import displayInfo from '../../../../../mixins/displayInfoMixin';
+  import isIncomingRinging from '../../../../../store/modules/call/scripts/isIncomingRinging';
 
   export default {
     name: 'active-queue-preview',
@@ -89,5 +91,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/agent-workspace/queue-section/queue-call-preview';
+  @import '../../../../../css/agent-workspace/queue-section/queue-task-preview';
 </style>

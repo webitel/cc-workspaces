@@ -6,7 +6,7 @@
       <span class="preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="preview-header__time">
-        {{$t('queueSec.at')}}: {{displayTime}}
+        {{$t('queueSec.call.at')}}: {{displayTime}}
       </div>
     </header>
 
@@ -55,5 +55,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/agent-workspace/queue-section/queue-call-preview';
+  @import '../../../../../css/agent-workspace/queue-section/queue-task-preview';
 </style>

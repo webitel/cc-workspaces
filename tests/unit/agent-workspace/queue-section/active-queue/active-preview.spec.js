@@ -4,7 +4,7 @@ import { CallActions, CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../../src/store/modules/call/call';
 import ActivePreview
-  from '../../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-preview.vue';
+  from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
 import Btn from '../../../../../src/components/utils/btn.vue';
 
 const localVue = createLocalVue();

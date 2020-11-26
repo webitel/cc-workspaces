@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import CallStatusIconBadge from '../../../../src/components/agent-workspace/queue-section/call-status-icon-badge.vue';
+import CallStatusIconBadge from '@/components/agent-workspace/queue-section/call-queue/call-status-icon-badge.vue';
 
 describe('CallStatusIconBadge', () => {
   it('renders a component', () => {

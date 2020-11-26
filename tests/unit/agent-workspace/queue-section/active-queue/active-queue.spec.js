@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 import callModule from '../../../../../src/store/modules/call/call';
 import ActiveQueue
-  from '../../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-container.vue';
+  from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-container.vue';
 import ActivePreview
-  from '../../../../../src/components/agent-workspace/queue-section/active-queue/active-queue-preview.vue';
+  from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
 import MockSocket from '../../../mocks/MockSocket';
 
 const localVue = createLocalVue();
