@@ -61,6 +61,9 @@ export default {
       hold: 'Удержание',
       hangup: 'Конец',
     },
+    chat: {
+      draftPlaceholder: 'Напишите сообщение...',
+    },
   },
   emptyWorkspace: {
     empty: {

@@ -61,6 +61,9 @@ export default {
       hold: 'Hold',
       hangup: 'Hangup',
     },
+    chat: {
+      draftPlaceholder: 'Write a message...',
+    },
   },
   emptyWorkspace: {
     empty: {
