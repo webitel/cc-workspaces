@@ -1,7 +1,6 @@
 <template>
-  <section class="queue-task-container call-preview-wrap" ref="scroll-wrap">
+  <section class="queue-task-container" ref="scroll-wrap">
     <offline-preview
-      :class="{'selected': member === openedMember}"
       v-for="(member, key) of dataList"
       :member="member"
       :key="member.id"
@@ -26,7 +25,6 @@ export default {
   computed: {
     ...mapState('member', {
       dataList: (state) => state.membersList,
-      openedMember: (state) => state.memberOnWorkspace,
     }),
   },
 
@@ -45,8 +43,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../../../../css/agent-workspace/queue-section/queue-task-container';
-
-.queue-preview.selected {
-  background: $page-bg-color;
-}
 </style>

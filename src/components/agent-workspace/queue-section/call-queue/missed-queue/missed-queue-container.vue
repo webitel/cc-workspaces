@@ -1,6 +1,6 @@
 <template>
-  <section class="queue-task-container call-preview-wrap">
-    <h3 class="call-preview-wrap__heading">{{$t('history.today')}}</h3>
+  <section class="queue-task-container">
+    <h3 class="queue-task-container__heading">{{$t('history.today')}}</h3>
     <missed-preview
       v-for="(missed, key) of missedList"
       :call="missed"
@@ -51,12 +51,12 @@
 
 <style lang="scss" scoped>
 @import '../../../../../css/agent-workspace/queue-section/queue-task-container';
-$queue-header-color: #94979B;
 
-  .call-preview-wrap__heading {
+  .queue-task-container__heading {
     @extend .typo-body-md;
     text-align: center;
     margin: 10px 0 5px;
-    color: $queue-header-color;
+    color: var(--text-outline-color);
+    background: var(--main-primary-color);
   }
 </style>

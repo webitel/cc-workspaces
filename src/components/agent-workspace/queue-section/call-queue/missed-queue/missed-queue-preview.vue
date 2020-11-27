@@ -1,17 +1,21 @@
 <template>
   <article class="queue-preview">
-    <status-badge :state="computePreviewStatusClass"/>
+    <status-badge :state="previewStatusClass"/>
 
     <header class="queue-preview-header">
       <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
-      <div class="queue-preview-header__time">
+      <div class="missed-preview__call-time">
         {{$t('queueSec.call.at')}}: {{displayTime}}
       </div>
     </header>
 
-    <span
-      class="call-preview__number">{{displayNumber | truncateFromEnd(18)}}</span>
+    <section class="queue-preview-body">
+      <div class="missed-preview__number">
+        {{ displayNumber | truncateFromEnd(18) }}
+      </div>
+    </section>
+    <footer class="queue-preview-footer"></footer>
   </article>
 </template>
 
@@ -45,7 +49,7 @@
         return `${time.getHours()}:${time.getMinutes()}`;
       },
 
-      computePreviewStatusClass() {
+      previewStatusClass() {
         return 'missed';
       },
     },
@@ -56,4 +60,7 @@
 
 <style lang="scss" scoped>
   @import '../../../../../css/agent-workspace/queue-section/queue-task-preview';
+  .missed-preview__call-time {
+    @extend %typo-body-md;
+  }
 </style>

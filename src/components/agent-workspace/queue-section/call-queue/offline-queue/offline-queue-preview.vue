@@ -1,10 +1,13 @@
 <template>
-  <article class="queue-preview offline-queue" :class="{'opened': isOpened}">
+  <article class="queue-preview offline-queue" :class="{'queue-preview--opened': isOpened}">
     <status-badge/>
 
     <header class="queue-preview-header">
-      <span class="queue-preview-header__name">{{member.name}}</span>
+      <span class="queue-preview-header__name">{{displayName}}</span>
     </header>
+
+    <section class="queue-preview-body"></section>
+    <footer class="queue-preview-footer"></footer>
   </article>
 </template>
 
@@ -33,10 +36,19 @@
       isOpened() {
         return this.member === this.memberOnWorkspace;
       },
+
+      displayName() {
+        return this.member.name;
+      },
     },
   };
 </script>
 
 <style lang="scss" scoped>
   @import '../../../../../css/agent-workspace/queue-section/queue-task-preview';
+  .queue-preview-header__name {
+    @media screen and (max-width: 1336px) {
+      display: block;
+    }
+  }
 </style>
