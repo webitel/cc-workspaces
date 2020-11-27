@@ -5,7 +5,6 @@ import workspaceModule from '../../../../../src/store/modules/agent-workspace/ag
 import callModule from '../../../../../src/store/modules/call/call';
 import ActivePreview
   from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
-import Btn from '../../../../../src/components/utils/btn.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -45,11 +44,7 @@ describe('Other UIs', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      stubs: { Icon: true },
-      propsData: {
-        call,
-        index: state.callList.indexOf(call),
-      },
+      propsData: { call },
     });
     expect(wrapper.find('.queue-preview-header__name').text()).toEqual(display);
   });
@@ -58,13 +53,9 @@ describe('Other UIs', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      stubs: { Icon: true },
-      propsData: {
-        call,
-        index: state.callList.indexOf(call),
-      },
+      propsData: { call },
     });
-    expect(wrapper.find('.call-preview__number').text()).toEqual(display);
+    expect(wrapper.find('.active-preview__number').text()).toEqual(display);
   });
 });
 
@@ -103,14 +94,9 @@ describe('Preview Actions', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-      propsData: {
-        call,
-        index: state.callList.indexOf(call),
-      },
+      propsData: { call },
     });
-    expect(wrapper.find('.preview-actions')
+    expect(wrapper.find('.queue-preview-actions')
       .exists())
       .toBeTruthy();
   });
@@ -124,14 +110,9 @@ describe('Preview Actions', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-      propsData: {
-        call,
-        index: state.callList.indexOf(call),
-      },
+      propsData: { call },
     });
-    expect(wrapper.find('.preview-actions')
+    expect(wrapper.find('.queue-preview-actions')
       .exists())
       .toBeTruthy();
   });
@@ -143,9 +124,7 @@ describe('Preview Actions', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      propsData: {
-        call,
-      },
+      propsData: { call },
     });
     expect(wrapper.find('.preview-actions')
       .exists())
@@ -194,10 +173,7 @@ describe('Answer and Hangup', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      propsData: {
-        call,
-        index: state.callList.indexOf(call),
-      },
+      propsData: { call },
     });
     wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
     expect(call.answer).toHaveBeenCalled();
@@ -208,9 +184,7 @@ describe('Answer and Hangup', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      propsData: {
-        call,
-      },
+      propsData: { call },
     });
     wrapper.findAllComponents({ name: 'wt-button' }).at(1).vm.$emit('click');
     expect(call.hangup).toHaveBeenCalled();
