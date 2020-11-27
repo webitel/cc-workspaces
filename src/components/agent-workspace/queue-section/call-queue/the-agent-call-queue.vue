@@ -99,6 +99,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 @import '../../../../css/agent-workspace/queue-section/task-queue';

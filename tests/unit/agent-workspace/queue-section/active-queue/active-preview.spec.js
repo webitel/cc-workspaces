@@ -51,7 +51,7 @@ describe('Other UIs', () => {
         index: state.callList.indexOf(call),
       },
     });
-    expect(wrapper.find('.preview-header__name').text()).toEqual(display);
+    expect(wrapper.find('.queue-preview-header__name').text()).toEqual(display);
   });
 
   it('Correctly displays call displayNumber', () => {

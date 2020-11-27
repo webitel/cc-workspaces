@@ -38,6 +38,6 @@ describe('Other UIs', () => {
         member,
       },
     });
-    expect(wrapper.find('.preview-header__name').text()).toEqual(name);
+    expect(wrapper.find('.queue-preview-header__name').text()).toEqual(name);
   });
 });

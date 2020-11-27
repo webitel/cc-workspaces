@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="queue-task-container">
     <active-preview
       v-for="(call, key) of callList"
       :call="call"
@@ -35,5 +35,5 @@
 </script>
 
 <style lang="scss" scoped>
-
+@import '../../../../../css/agent-workspace/queue-section/queue-task-container';
 </style>

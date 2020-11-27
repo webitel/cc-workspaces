@@ -1,8 +1,5 @@
 <template>
-  <section>
-<!--    <chat-preview-->
-<!--      :task="{}"-->
-<!--    ></chat-preview>-->
+  <section class="queue-task-container">
     <chat-preview
       v-for="task of taskList"
       :key="task.id"
@@ -30,5 +27,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '../../../../../css/agent-workspace/queue-section/queue-task-container';
 </style>

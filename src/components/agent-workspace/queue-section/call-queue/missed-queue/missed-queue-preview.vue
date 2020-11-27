@@ -2,10 +2,10 @@
   <article class="queue-preview">
     <status-badge :state="computePreviewStatusClass"/>
 
-    <header class="preview-header">
-      <span class="preview-header__name">{{displayName | truncate(18)}}</span>
+    <header class="queue-preview-header">
+      <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
-      <div class="preview-header__time">
+      <div class="queue-preview-header__time">
         {{$t('queueSec.call.at')}}: {{displayTime}}
       </div>
     </header>

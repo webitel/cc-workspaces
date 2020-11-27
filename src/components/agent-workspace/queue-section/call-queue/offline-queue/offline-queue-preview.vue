@@ -2,8 +2,8 @@
   <article class="queue-preview offline-queue" :class="{'opened': isOpened}">
     <status-badge/>
 
-    <header class="preview-header">
-      <span class="preview-header__name">{{member.name}}</span>
+    <header class="queue-preview-header">
+      <span class="queue-preview-header__name">{{member.name}}</span>
     </header>
   </article>
 </template>

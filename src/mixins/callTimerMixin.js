@@ -7,7 +7,7 @@ export default {
       now: (state) => state.now,
     }),
 
-    computeCreatedTime() {
+    startTime() {
       const task = this.call || this.task;
       const start = task.answeredAt
         ? task.answeredAt : task.createdAt;

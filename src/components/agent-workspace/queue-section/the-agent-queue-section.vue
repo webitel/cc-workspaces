@@ -72,14 +72,15 @@ export default {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  min-height: 0;
 }
 
 .call-queue {
-  flex: 1 1 auto;
+  flex: 0 2 auto;
   margin-bottom: 10px;
 }
 
 .chat-queue {
-  flex: 2 1 100%;
+  flex: 2 1 auto;
 }
 </style>

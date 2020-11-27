@@ -1,0 +1,5 @@
+.queue-task-container {
+  @extend %wt-scrollbar;
+  min-height: 0;
+  overflow: auto;
+}

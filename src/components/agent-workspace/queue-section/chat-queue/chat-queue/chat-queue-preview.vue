@@ -1,31 +1,28 @@
 <template>
-  <article class="queue-preview">
-
-    <header class="preview-header">
-      <span class="preview-header__name">{{displayName | truncate(18)}}</span>
-      <!--v-for for timer not to resize on digit width change-->
-      <div class="preview-header__time preview-header__time__bold">
-          <span
-            class="preview-header__time-digit"
-            v-for="(digit, key) of computeCreatedTime.split('')"
-            :key="key"
-          >{{digit}}</span>
-      </div>
+  <article class="queue-preview" :class="{ 'queue-preview--opened': isOpened }">
+    <header class="queue-preview-header">
+      <span class="queue-preview-header__name">{{displayName | truncate(18) }}</span>
+      <queue-preview-timer :task="task" bold/>
     </header>
 
-    <div class="chat-preview__message">
-      {{message | truncate(30)}}
-    </div>
+    <section class="queue-preview-body">
+      <div class="chat-preview__message">
+        {{ lastMessage | truncate(30) }}
+      </div>
+    </section>
+
+    <footer class="queue-preview-footer"></footer>
   </article>
 </template>
 
 <script>
-import callTimer from '../../../../../mixins/callTimerMixin';
+import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
 
 export default {
   name: 'chat-queue-preview',
-  mixins: [callTimer, displayInfo],
+  components: { QueuePreviewTimer },
+  mixins: [displayInfo],
   props: {
     task: {
       type: Object,
@@ -33,10 +30,13 @@ export default {
     },
   },
   computed: {
+    isOpened() {
+      return false;
+    },
     displayName() {
       return this.task.otherChannels.map((channel) => channel.name).join(', ');
     },
-    message() {
+    lastMessage() {
       // assume message type == 'text'
       return this.task.messages[this.task.messages.length - 1].text;
     },

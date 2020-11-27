@@ -1,17 +1,15 @@
-$opened-item-shadow: inset 0px 0px 8px -5px rgba(0, 0, 0, 0.25),
-inset 0px 0px 8px -5px rgba(0, 0, 0, 0.25);
-
 .queue-preview {
   box-sizing: border-box;
   position: relative;
-  padding: 10px;
+  padding: 10px 10px 10px 30px;
   margin-bottom: 1px;
+  border: 1px solid transparent;
   background: var(--main-primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
 
-  &.opened {
-    box-shadow: $opened-item-shadow;
+  &--opened {
+    border-color: var(--main-accent-color);
   }
 
   @media screen and (max-width: 1336px) {
@@ -26,73 +24,52 @@ inset 0px 0px 8px -5px rgba(0, 0, 0, 0.25);
   }
 }
 
-.preview-header {
+.queue-preview-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  min-width: 0; // prevents preview-header content overflowing
-}
+  min-width: 0; // prevents queue-preview-header content overflowing
 
-.preview-header__name {
-  @extend .typo-heading-sm;
-  max-width: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  &__name {
+    @extend %typo-strong-lg;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
-  @media screen and (max-width: 1336px) {
-    display: none;
-  }
-}
-
-.offline-queue .preview-header__name {
-  @media screen and (max-width: 1336px) {
-    display: block;
-  }
-}
-
-.preview-header__time {
-  @extend .typo-body-md;
-  display: flex;
-  align-items: flex-start;
-
-  .preview-header__time-digit {
-    @extend .typo-body-md;
-    text-align: center;
-    width: (9.5px);
-
-    /*semicolons*/
-    &:nth-child(3), &:nth-child(6) {
-      width: (5px);
+    @media screen and (max-width: 1336px) {
+      display: none;
     }
   }
-
-  &__bold .preview-header__time-digit {
-    font-family: 'Montserrat Semi', monospace;
-  }
 }
 
-// .message-preview__text, --- FOR CHATS
-.call-preview__number {
-  @extend .typo-body-md;
+//.offline-queue .queue-preview-header__name {
+//  @media screen and (max-width: 1336px) {
+//    display: block;
+//  }
+//}
+
+.queue-preview-body {
+  @extend %typo-body-md;
   @media screen and (max-width: 1336px) {
     display: none;
   }
 }
 
-.preview-actions {
-  display: flex;
-  margin-top: 20px;
+.queue-preview-footer {
+  @media screen and (max-width: 1336px) {
+    display: none;
+  }
 
-  .wt-button {
-    flex-grow: 1;
+  .queue-preview-actions {
+    display: flex;
+    margin-top: 20px;
 
-    &:first-child {
-      margin-right: 20px;
+    .wt-button {
+      flex-grow: 1;
+
+      &:first-child {
+        margin-right: 20px;
+      }
     }
-  }
-
-  @media screen and (max-width: 1336px) {
-    display: none;
   }
 }
