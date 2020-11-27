@@ -1,5 +1,5 @@
 <template>
-    <section class="messages-container">
+    <section class="chat-messages-container">
       <chat-message></chat-message>
       <chat-message my></chat-message>
       <chat-message></chat-message>
