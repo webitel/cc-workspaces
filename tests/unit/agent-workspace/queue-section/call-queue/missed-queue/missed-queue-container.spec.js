@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import call from '../../../../../src/store/modules/call/call';
+import call from '@/store/modules/call/call';
 import MissedQueueContainer
-  from '../../../../../src/components/agent-workspace/queue-section/call-queue/missed-queue/missed-queue-container.vue';
+  from '@/components/agent-workspace/queue-section/call-queue/missed-queue/missed-queue-container.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

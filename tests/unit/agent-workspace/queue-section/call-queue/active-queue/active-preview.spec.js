@@ -1,10 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions, CallDirection } from 'webitel-sdk';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../../src/store/modules/call/call';
+import workspaceModule from '@/store/modules/agent-workspace/agent-workspace';
+import callModule from '@/store/modules/call/call';
 import ActivePreview
-  from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
+  from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

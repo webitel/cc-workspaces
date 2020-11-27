@@ -1,14 +1,14 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import memberModule from '../../../../../src/store/modules/member/member';
+import workspaceModule from '@/store/modules/agent-workspace/agent-workspace';
+import memberModule from '@/store/modules/member/member';
 import OfflineQueue
-  from '../../../../../src/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-container.vue';
+  from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-container.vue';
 import OfflinePreview
-  from '../../../../../src/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-preview.vue';
-import MockSocket from '../../../mocks/MockSocket';
+  from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-preview.vue';
+import MockSocket from '../../../../mocks/MockSocket';
 import WorkspaceStates
-  from '../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -16,7 +16,7 @@ localVue.use(Vuex);
 const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
+jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',
   () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
 
 describe('Members list functionality', () => {

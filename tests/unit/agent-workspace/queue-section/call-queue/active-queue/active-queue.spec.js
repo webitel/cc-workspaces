@@ -1,12 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../../src/store/modules/call/call';
+import workspaceModule from '@/store/modules/agent-workspace/agent-workspace';
+import callModule from '@/store/modules/call/call';
 import ActiveQueue
-  from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-container.vue';
+  from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-container.vue';
 import ActivePreview
-  from '../../../../../src/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
-import MockSocket from '../../../mocks/MockSocket';
+  from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
+import MockSocket from '../../../../mocks/MockSocket';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -14,7 +14,7 @@ localVue.use(Vuex);
 const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
+jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',
   () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
 
 describe('Ringing and Hangup events call functionality', () => {
