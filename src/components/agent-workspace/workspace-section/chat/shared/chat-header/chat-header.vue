@@ -29,6 +29,8 @@ export default {
 
 <style lang="scss" scoped>
 .chat-header {
+  box-sizing: border-box;
+  height: 100px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 10px;

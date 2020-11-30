@@ -25,12 +25,10 @@ export default {
 .chat-preview {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   height: 100%;
-  min-height: 0;
 
   .chat-messages-container {
-    flex: 1 1 100%;
+    flex: 1 1 0;
   }
 }
 </style>
