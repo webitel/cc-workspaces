@@ -62,6 +62,7 @@ export default {
       hangup: 'Hangup',
     },
     chat: {
+      acceptPreviewText: 'If you are ready to answer, click "Accept" button first',
       draftPlaceholder: 'Write a message...',
     },
   },

@@ -62,6 +62,7 @@ export default {
       hangup: 'Конец',
     },
     chat: {
+      acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
       draftPlaceholder: 'Напишите сообщение...',
     },
   },
