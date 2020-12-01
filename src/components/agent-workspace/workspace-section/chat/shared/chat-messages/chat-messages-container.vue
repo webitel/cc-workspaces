@@ -38,9 +38,11 @@ export default {
 
 .chat-messages-items {
   @extend %wt-scrollbar;
+  box-sizing: border-box;
   flex: 1 1;
   overflow-x: hidden;
   overflow-y: scroll;
   height: 100%;
+  padding: 20px 10px;
 }
 </style>
