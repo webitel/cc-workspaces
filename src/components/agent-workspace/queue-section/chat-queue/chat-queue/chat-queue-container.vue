@@ -4,12 +4,13 @@
       v-for="task of taskList"
       :key="task.id"
       :task="task"
+      @click.native.prevent="openTask(task)"
     ></chat-preview>
   </section>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import ChatPreview from './chat-queue-preview.vue';
 
 export default {
@@ -21,6 +22,11 @@ export default {
   computed: {
     ...mapState('chat', {
       taskList: (state) => state.chatList,
+    }),
+  },
+  methods: {
+    ...mapActions('chat', {
+      openTask: 'OPEN_CHAT',
     }),
   },
 };

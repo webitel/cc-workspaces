@@ -34,11 +34,11 @@ export default {
       return false;
     },
     displayName() {
-      return this.task.otherChannels.map((channel) => channel.name).join(', ');
+      return this.task.members.map((member) => member.name).join(', ');
     },
     lastMessage() {
       // assume message type == 'text'
-      return this.task.messages[this.task.messages.length - 1].text;
+      return this.task.messages[this.task.messages.length - 1].value;
     },
   },
 };

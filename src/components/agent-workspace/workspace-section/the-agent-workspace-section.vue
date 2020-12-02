@@ -28,7 +28,6 @@
       }),
 
       workspaceComponent() {
-        return 'chat';
         switch (this.state) {
           case WorkspaceStates.CALL: return 'call';
           case WorkspaceStates.CHAT: return 'chat';
@@ -41,7 +40,4 @@
 </script>
 
 <style lang="scss" scoped>
-  .chat {
-    height: 100%;
-  }
 </style>

@@ -1,3 +1,4 @@
+import { ConversationState } from 'webitel-sdk';
 import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 
@@ -6,14 +7,25 @@ const state = {
   chatOnWorkspace: {},
 };
 
-const getters = {};
+const getters = {
+  IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
+};
 
 const actions = {
   ...clientHandlers.actions,
 
   ACCEPT: async (context) => {
     try {
-      await context.state.chatOnWorkspace.accept();
+      await context.state.chatOnWorkspace.join();
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  SEND: async (context, message) => {
+    try {
+      console.info(message);
+      await context.state.chatOnWorkspace.sendText(message);
     } catch (err) {
       throw err;
     }
@@ -22,7 +34,7 @@ const actions = {
   CLOSE: async (context) => {
     const { chatOnWorkspace } = context.state;
     try {
-      if (chatOnWorkspace.state === 'active') { // FIXME CHAT STATE ENUM
+      if (chatOnWorkspace.allowLeave) {
         await chatOnWorkspace.leave();
       } else {
         await chatOnWorkspace.decline();
