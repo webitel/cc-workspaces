@@ -1,6 +1,6 @@
 <template>
   <footer class="chat-footer">
-    <div v-if="isChatPreview" class="chat-footer__chat-preview">
+    <div v-if="!isChatActive" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
         <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
@@ -11,6 +11,8 @@
         v-model="draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         name="draft"
+        chat-mode
+        @enter="sendMessage"
       ></wt-textarea>
       <div class="chat-footer__actions">
         <div class="chat-footer__cell-wrapper"></div>
@@ -21,7 +23,7 @@
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper">
-          <wt-rounded-action icon="chat-send" color="secondary" @click="send"></wt-rounded-action>
+          <wt-rounded-action icon="chat-send" color="secondary" @click="sendMessage"></wt-rounded-action>
         </div>
       </div>
     </div>
@@ -29,7 +31,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'chat-footer',
@@ -37,16 +39,26 @@ export default {
     draft: '',
   }),
   computed: {
-    isChatPreview() {
-      return true;
-    },
+    ...mapGetters('chat', {
+      isChatActive: 'IS_CHAT_ACTIVE',
+    }),
   },
   methods: {
     ...mapActions('chat', {
       accept: 'ACCEPT',
       decline: 'CLOSE',
-      send: '',
+      send: 'SEND',
     }),
+
+    async sendMessage() {
+      const { draft } = this;
+      try {
+        this.draft = '';
+        await this.send(draft);
+      } catch {
+        this.draft = draft;
+      }
+    },
   },
 };
 </script>

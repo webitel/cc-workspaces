@@ -4,14 +4,14 @@
       <img class="chat-message__pic" src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
     </div>
     <div class="chat-message__main-wrapper">
-      <p class="chat-message__text" v-if="message.text">{{ message.text }}</p>
+      <p class="chat-message__text" v-if="message.text">{{ text }}</p>
     </div>
     <aside class="chat-message__message-info-wrapper">
       <div class="chat-message__sent-at">{{ sentAt }}</div>
       <wt-icon
         v-if="my"
         class="chat-message__status-icon"
-        icon="chat-message-status-read"
+        icon="chat-message-status-sent"
         size="sm"
       ></wt-icon>
     </aside>
@@ -27,20 +27,17 @@ import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
       message: {
         type: Object,
         required: true,
-        default: () => ({
-          text: 'Hello there!',
-          createdAt: Date.now(),
-        }),
-      },
-      // defines, if this is a current user's message
-      my: {
-        type: Boolean,
-        default: false,
       },
     },
     computed: {
       sentAt() {
         return prettifyTime(this.message.createdAt);
+      },
+      text() {
+        return this.message.value;
+      },
+      my() {
+        return !!this.message.member?.self;
       },
     },
   };

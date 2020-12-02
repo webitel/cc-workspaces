@@ -1,16 +1,17 @@
 <template>
   <section class="chat-messages-container">
     <div class="chat-messages-items" ref="items-container">
-        <chat-message
-          v-for="(i, key) of 20"
-          :key="key"
-          :my="!(i % 2)"
-        ></chat-message>
-      </div>
+      <chat-message
+        v-for="message of messages"
+        :message="message"
+        :key="message.id"
+      ></chat-message>
+    </div>
   </section>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import ChatMessage from './chat-message.vue';
 
 export default {
@@ -21,10 +22,18 @@ export default {
   mounted() {
     this.scrollToBottom();
   },
+  computed: {
+    ...mapState('chat', {
+      chat: (state) => state.chatOnWorkspace,
+    }),
+    messages() {
+      return this.chat.messages;
+    },
+  },
   methods: {
     scrollToBottom() {
-      const chatEnd = this.$refs['items-container'];
-      chatEnd.scrollTop = chatEnd.scrollHeight - chatEnd.offsetHeight;
+      const chatsContainer = this.$refs['items-container'];
+      chatsContainer.scrollTop = chatsContainer.scrollHeight - chatsContainer.offsetHeight;
     },
   },
 };
