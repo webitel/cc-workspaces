@@ -24,7 +24,6 @@ const actions = {
 
   SEND: async (context, message) => {
     try {
-      console.info(message);
       await context.state.chatOnWorkspace.sendText(message);
     } catch (err) {
       throw err;

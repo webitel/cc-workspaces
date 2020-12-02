@@ -10,8 +10,8 @@ const displayName = 'jest';
 const lastMessage = 'jest2';
 const task = {
   id: '1',
-  otherChannels: [{ name: 'jest' }],
-  messages: [{ text: 'jest1' }, { text: 'jest2' }],
+  members: [{ name: 'jest' }],
+  messages: [{ value: 'jest1' }, { value: 'jest2' }],
 };
 
 describe('ChatQueuePreview', () => {
