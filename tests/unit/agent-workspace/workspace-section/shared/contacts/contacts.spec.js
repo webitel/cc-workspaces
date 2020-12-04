@@ -10,7 +10,6 @@ import Contact
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-
 // Make new call on contact test
 const mockCliCall = jest.fn();
 jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',

@@ -1,46 +1,160 @@
 <template>
-  <div class="widget">
-    <icon class="widget__icon">
-      <svg class="icon icon-call-ringing-md md">
-        <use xlink:href="#icon-call-ringing-md"></use>
+  <div
+    class="widget"
+    :class="{'widget--selectable': selectionMode}"
+    @click.prevent="select"
+  >
+    <checkbox
+      class="widget-checkbox"
+      v-show="selectionMode"
+      :value="show"
+    ></checkbox>
+    <icon
+      class="widget-icon"
+      :class="`widget-icon--${iconClass}`"
+    >
+      <svg class="icon sm">
+        <use :xlink:href="`#icon-${widget.icon}-sm`"></use>
       </svg>
     </icon>
-    <div class="widget__title">Processed Calls:</div>
-    <div class="widget__value">12</div>
+    <div class="widget__title">{{widget.text()}}:</div>
+    <div class="widget__value">{{value}}</div>
   </div>
 </template>
 
 <script>
+  import Checkbox from '../../utils/checkbox.vue';
+
   export default {
     name: 'widget',
+    props: {
+      widget: {
+        type: Object,
+        required: true,
+      },
+      value: {
+        type: [String, Number],
+      },
+      // checkbox value
+      show: {
+        type: Boolean,
+      },
+      selectionMode: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    components: {
+      Checkbox,
+    },
+
+    computed: {
+      iconClass() {
+        return this.widget.icon.split('-').slice(1).join('-');
+      },
+    },
+
+    methods: {
+      select() {
+        if (this.selectionMode) {
+          this.$emit('select');
+        }
+      },
+    },
   };
 </script>
 
 <style lang="scss" scoped>
+  $widget-inbound-color: $accent-color;
+  $widget-handles-color: $true-color;
+  $widget-missed-color: $false-color;
+  $widget-avg-talk-color: #239AC0;
+  $widget-avg-hold-color: $accent-color;
+
+  .typo-widget-title {
+    font-family: 'Montserrat Regular', monospace;
+    font-size: 10px;
+    line-height: 10px;
+  }
+
+  .typo-widget-value {
+    font-family: 'Montserrat Semi', monospace;
+    font-size: 10px;
+    line-height: 10px;
+  }
+
   .widget {
     display: flex;
     align-items: center;
+    width: fit-content;
+    height: 24px; // checkbox height
+    padding: 5px;
+    white-space: nowrap;
 
-    &__icon {
-      width: calcVH(20px) !important;
-      height: calcVH(20px) !important;
-      margin-right: calcVH(10px);
+    .widget__title {
+      @extend .typo-widget-title;
+      margin-right: 5px;
+    }
 
-      .icon {
-        width: calcVH(20px);
-        height: calcVH(20px);
-        fill: $call-color;
-        stroke: $call-color;
+    .widget__value {
+      @extend .typo-widget-value;
+    }
+
+    @media screen and (max-width: 1336px) {
+      .widget__title {
+        display: none;
       }
     }
 
-    &__title {
-      @extend .typo-body-sm;
-      margin-right: calcVH(5px);
+    &--selectable {
+      cursor: pointer;
+
+      @media screen and (max-width: 1336px) {
+        .widget__title {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .widget-checkbox {
+    margin-right: 10px;
+    pointer-events: none; // prevent checkbox own click event
+  }
+
+  .widget-icon {
+    margin-right: 10px;
+
+    &--inbound .icon {
+      fill: $widget-inbound-color;
+      stroke: $widget-inbound-color;
     }
 
-    &__value {
-      @extend .typo-heading-sm;
+    &--handles .icon {
+      fill: $widget-handles-color;
+      stroke: $widget-handles-color;
+    }
+
+    &--missed .icon {
+      fill: $widget-missed-color;
+      stroke: $widget-missed-color;
+    }
+
+    &--avg-talk .icon {
+      fill: $widget-avg-talk-color;
+      stroke: $widget-avg-talk-color;
+    }
+
+    &--avg-hold .icon {
+      fill: $widget-avg-hold-color;
+      stroke: $widget-avg-hold-color;
+    }
+
+    .icon {
+      //  width: 20px;
+      //  height: 20px;
+      // fill: $call-color;
+      // stroke: $call-color;
     }
   }
 </style>

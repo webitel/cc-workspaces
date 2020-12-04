@@ -16,16 +16,41 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calcVH(50px);
-    height: calcVH(50px);
+    width: 50px;
+    height: 50px;
     border: none;
     border-radius: 50%;
     transition: $transition;
     cursor: pointer;
 
+    @media screen and (max-width: 1336px) {
+      width: 40px;
+      height: 40px;
+
+      .icon.sm {
+        width: 14px;
+        height: 14px;
+      }
+
+      .icon.md {
+        width: 20px;
+        height: 20px;
+      }
+
+      .icon.lg {
+        width: 25px;
+        height: 25px;
+      }
+
+      &__lg {
+        width: 48px;
+        height: 48px;
+      }
+    }
+
     &__lg {
-      width: calcVH(60px);
-      height: calcVH(60px);
+      width: 60px;
+      height: 60px;
     }
 
     /* on top due to lower styles priority, than call, hold, transfer, end styling */
@@ -113,7 +138,6 @@
         background: $hold-btn-color__hover;
       }
     }
-
 
     &.call-action__mic {
       position: relative;

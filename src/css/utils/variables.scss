@@ -5,5 +5,5 @@ $transition: 0.2s;
 $box-shadow: rgba(0, 0, 0, 0.08) 0 8px 18px;
 $divider-color: rgba(0, 0, 0, 0.1);
 
-$input-paddings: calcVH(7px);
-$select-paddings: calcVH(7px) calcVH(30px) calcVH(7px) calcVH(8px);
+$input-paddings: (7px);
+$select-paddings: (7px) (30px) (7px) (8px);

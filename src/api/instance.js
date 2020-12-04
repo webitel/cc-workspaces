@@ -13,7 +13,6 @@ const instance = axios.create({
   },
 });
 
-
 instance.interceptors.request.use(
   (request) => {
     if (request.method === 'post'

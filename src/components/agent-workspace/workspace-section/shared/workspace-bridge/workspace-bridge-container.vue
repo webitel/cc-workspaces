@@ -69,7 +69,7 @@
   }
 
   .ws-contact-item {
-    border: calcVH(1px) solid transparent;
+    border: (1px) solid transparent;
     border-radius: $border-radius;
     transition: $transition;
     cursor: pointer;
@@ -81,6 +81,6 @@
 
   .cc-btn {
     display: block;
-    margin: calcVH(17px) auto auto;
+    margin: (17px) auto auto;
   }
 </style>

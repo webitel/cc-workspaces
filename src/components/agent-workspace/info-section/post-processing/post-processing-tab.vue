@@ -93,6 +93,7 @@
       },
 
       isCommunicationsValid() {
+        if (this.isSuccess) return true;
         this.$v.$touch();
         return !(this.$v.$pending || this.$v.$error);
       },

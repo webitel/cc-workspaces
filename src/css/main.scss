@@ -4,6 +4,8 @@
 
 @import "./agent-workspace/agent-workspace";
 
+@import "~@webitel/ui-sdk/src/css/main.scss";
+
 html {
   height: 100%;
 }
@@ -15,6 +17,10 @@ body {
   font-family: 'Montserrat Regular', monospace;
   font-size: 100%;
   background: $page-bg-color;
+
+  @media screen and (max-height: 610px) {
+   min-height: 610px;
+  }
 }
 
 main {
@@ -24,6 +30,7 @@ main {
 
 h1, h2, h3, h4, h5, h6, p {
   margin: 0;
+  font-weight: normal;
 }
 
 //reset ul styles

@@ -48,6 +48,7 @@
   const imgAudit = require('../../assets/app-navigator/app-audit.svg');
   const imgHistory = require('../../assets/app-navigator/app-history.svg');
   const imgSupervisor = require('../../assets/app-navigator/app-supervisor.svg');
+  const imgGrafana = require('../../assets/app-navigator/app-grafana.svg');
 
   const CURRENT_APP = 'agent';
 
@@ -62,40 +63,51 @@
     }),
 
     computed: {
-      apps() {
-        return [
-          {
+        apps() {
+          const agentApp = {
             name: 'agent',
             title: this.$t('appNavigator.agent'),
             href: process.env.VUE_APP_AGENT_URL,
             img: imgAgent,
-          },
-          {
+          };
+          const supervisorApp = {
             name: 'supervisor',
             title: this.$t('appNavigator.supervisor'),
             href: process.env.VUE_APP_SUPERVISOR_URL,
             img: imgSupervisor,
-          },
-          {
+          };
+          const historyApp = {
             name: 'history',
             title: this.$t('appNavigator.history'),
             href: process.env.VUE_APP_HISTORY_URL,
             img: imgHistory,
-          },
-          {
+          };
+
+          const auditApp = {
             name: 'audit',
             title: this.$t('appNavigator.audit'),
             href: process.env.VUE_APP_AUDIT_URL,
             img: imgAudit,
-          },
-          {
+          };
+
+          const adminApp = {
             name: 'admin',
             title: this.$t('appNavigator.admin'),
             href: process.env.VUE_APP_ADMIN_URL,
             img: imgAdmin,
-          },
-        ];
-      },
+          };
+
+          const grafanaApp = {
+            name: 'grafana',
+            title: this.$t('appNavigator.grafana'),
+            href: process.env.VUE_APP_GRAFANA_URL,
+            img: imgGrafana,
+          };
+
+          const apps = [agentApp, supervisorApp, historyApp, auditApp, adminApp];
+          if (this.$config.ON_SITE) apps.push(grafanaApp);
+          return apps;
+        },
     },
 
     methods: {
@@ -107,24 +119,23 @@
 </script>
 
 <style lang="scss" scoped>
-  $app-navigator-gap: calcVH(30px);
-  $app-navigator-shadow: 0px calcVH(8px) calcVH(18px) rgba(0, 0, 0, 0.08);
+  $app-navigator-gap: (30px);
+  $app-navigator-shadow: 0px (8px) (18px) rgba(0, 0, 0, 0.08);
   $app-navigator-border-color: #eaeaea;
   $app-navigator-border-color--hover: $accent-color;
-
 
   // helper class
   .typo-app-navigator {
     font-family: 'Montserrat Regular', monospace;
-    font-size: calcVH(14px);
-    line-height: calcVH(20px);
+    font-size: (14px);
+    line-height: (20px);
   }
 
   .app-navigator {
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: calcVH(30px);
+    margin-left: (30px);
     z-index: 90;
   }
 
@@ -158,8 +169,8 @@
   }
 
   .app-navigator__card {
-    width: calcVH(120px);
-    height: calcVH(120px);
+    width: (120px);
+    height: (120px);
     box-sizing: border-box;
     border: 1px solid $app-navigator-border-color;
     border-radius: $border-radius;

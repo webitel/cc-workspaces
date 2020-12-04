@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
@@ -13,6 +13,7 @@
 
     created() {
       this.restoreSession();
+      this.setLanguage();
     },
 
     methods: {
@@ -21,8 +22,18 @@
       }),
 
       async restoreSession() {
-        const userinfo = await authAPI.getSession();
-        this.setSession(userinfo);
+        // ROUTER REDIRECTS EMPTY TOKEN PATHS TO /AUTH, SO THERE'S NO NEED TO CATCH IT
+        try {
+          const userinfo = await authAPI.getSession();
+          this.setSession(userinfo);
+        } catch {
+          await this.$router.replace('/auth');
+        }
+      },
+
+      setLanguage() {
+        const lang = localStorage.getItem('lang');
+        if (lang) this.$i18n.locale = lang;
       },
     },
   };

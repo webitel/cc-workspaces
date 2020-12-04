@@ -1,19 +1,19 @@
 <template>
   <form class="processing-form processing-form__success">
-    <multiselect
-      class="processing-form__category"
-      :value="[]"
-      :label="'Category'"
-      :options="[]"
-      :api-mode="false"
-    ></multiselect>
-    <multiselect
-      class="processing-form__subcategory"
-      :value="[]"
-      :placeholder="'Subcategory'"
-      :options="[]"
-      :api-mode="false"
-    ></multiselect>
+<!--    <multiselect-->
+<!--      class="processing-form__category"-->
+<!--      :value="[]"-->
+<!--      :label="$t('infoSec.postProcessing.category')"-->
+<!--      :options="[]"-->
+<!--      :api-mode="false"-->
+<!--    ></multiselect>-->
+<!--    <multiselect-->
+<!--      class="processing-form__subcategory"-->
+<!--      :value="[]"-->
+<!--      :label="$t('infoSec.postProcessing.subcategory')"-->
+<!--      :options="[]"-->
+<!--      :api-mode="false"-->
+<!--    ></multiselect>-->
     <cc-textarea
       v-model="description"
       :placeholder="$t('reusable.description')"
@@ -24,13 +24,11 @@
 <script>
   import { mapActions } from 'vuex';
   import CcTextarea from '../../../utils/textarea.vue';
-  import Multiselect from '../../../utils/multiselect.vue';
 
   export default {
     name: 'post-processing-success-form',
     components: {
       CcTextarea,
-      Multiselect,
     },
 
     computed: {

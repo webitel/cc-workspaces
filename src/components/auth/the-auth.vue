@@ -48,7 +48,7 @@
         if (event.data.accessToken) {
           authAPI.setToken(event.data.accessToken);
           await this.restoreSession();
-          await this.$router.replace('/workspace');
+          await this.$router.replace('/');
         }
       },
 

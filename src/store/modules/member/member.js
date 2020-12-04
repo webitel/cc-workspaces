@@ -1,4 +1,4 @@
-import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
+import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 
 const state = {

@@ -16,15 +16,24 @@ export default {
     supervisor: 'Supervisor Workspace',
     audit: 'Audit',
     history: 'Call History',
+    grafana: 'Grafana',
   },
   header: {
     docs: 'Docs',
     enableVideo: 'Enable video',
   },
+  widgets: {
+    inbound: 'Inbound',
+    handles: 'Handles Calls',
+    missed: 'Missed Calls',
+    avgTalk: 'Avg Talk Time',
+    avgHold: 'Avg Hold Time',
+  },
   queueSec: {
     active: 'Active',
     offline: 'Offline',
     missed: 'Missed',
+    at: 'at', // missed call "at 10:10"
   },
   infoSec: {
     clientInfo: 'Client info',
@@ -37,6 +46,15 @@ export default {
       no: 'No',
       addNewCommunication: 'Add new communication',
       scheduleCall: 'Schedule next call?',
+      category: 'Category',
+      subcategory: 'Subcategory',
+    },
+  },
+  workspaceSec: {
+    callState: {
+      ringing: 'Ringing..',
+      hold: 'Hold',
+      hangup: 'Hangup',
     },
   },
   emptyWorkspace: {
@@ -48,6 +66,10 @@ export default {
       heading: 'Thank You!',
       text: 'Call has been transferred to another operator',
     },
+  },
+  emptySearch: {
+    heading: 'Oops!',
+    text: 'Search has not given any results',
   },
   bridge: {
     activeCalls: 'Active calls',

@@ -1,4 +1,3 @@
-
 const actions = {
   SET_AGENT_WAITING_STATUS: (context) => {
     try {

@@ -37,8 +37,8 @@
 <style lang="scss" scoped>
 
   .workspace-member-communication {
-    padding: calcVH(10px) calcVH(20px);
-    margin-bottom: calcVH(10px);
+    padding: (10px) (20px);
+    margin-bottom: (10px);
     border: 1px solid transparent;
     border-radius: $border-radius;
     transition: $transition;
@@ -54,7 +54,7 @@
 
     &__type {
       @extend .typo-heading-sm;
-      margin-bottom: calcVH(6px);
+      margin-bottom: (6px);
     }
 
     &__destination {

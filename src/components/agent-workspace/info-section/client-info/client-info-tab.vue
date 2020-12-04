@@ -1,6 +1,6 @@
 <template>
   <section class="client-info">
-    <article id="md" class="md" v-html="computeHTML"></article>
+    <article class="md markdown-body" v-html="computeHTML"></article>
   </section>
 </template>
 
@@ -9,8 +9,10 @@
   import { mapState } from 'vuex';
   import WorkspaceStates
     from '../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import patchMDRender from './_internals/patchMDRender';
 
-  const md = new MarkdownIt();
+  const md = new MarkdownIt({ linkify: true });
+  patchMDRender(md);
 
   export default {
     name: 'client-info-tab',
@@ -35,10 +37,9 @@
         else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
         let res = '';
         if (variables) {
-          Object.keys(variables).forEach((key) => {
-            res += `<h3>${key}:</h3>`;
-            res += md.render(variables[key]);
-            res += '<br/>';
+          delete variables.knowledge_base;
+          Object.keys(variables).forEach((name) => {
+            res += md.render(`**${name}:** ${variables[name]}`);
           });
         }
         return res;
@@ -47,8 +48,8 @@
   };
 </script>
 
-<style lang="scss">
-  @import "../../../../css/agent-workspace/info-section/client-info/md-styles";
+<style lang="scss" scoped>
+@import '~github-markdown-css/github-markdown.css';
 
   .md {
     @extend .typo-body-md;

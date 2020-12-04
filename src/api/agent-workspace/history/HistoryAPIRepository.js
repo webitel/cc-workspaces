@@ -7,7 +7,7 @@ const defaultParams = {
   size: 10,
   search: '',
   createdAtFrom: 0,
-  createdAtTo: Date.now(),
+  createdAtTo: new Date().setHours(23, 59, 59, 999), // today end
   sort: '-created_at',
 };
 const callService = new CallServiceApiFactory(configuration, '', instance);
@@ -20,6 +20,7 @@ const fetchHistory = async ({
                               userId,
                               memberId,
                               q,
+                              cause,
                               fields,
                               sort,
                               direction,
@@ -42,7 +43,7 @@ const fetchHistory = async ({
       undefined,
       undefined,
       undefined,
-      undefined,
+      cause,
       undefined,
       fields,
       sort,

@@ -6,9 +6,12 @@ process.env.VUE_APP_AGENT_URL = process.env.NODE_ENV === 'production' ? '/worksp
 process.env.VUE_APP_SUPERVISOR_URL = process.env.NODE_ENV === 'production' ? '/supervisor' : 'https://dev.webitel.com/supervisor';
 process.env.VUE_APP_AUDIT_URL = process.env.NODE_ENV === 'production' ? '/audit' : 'https://dev.webitel.com/audit';
 process.env.VUE_APP_HISTORY_URL = process.env.NODE_ENV === 'production' ? '/history' : 'https://dev.webitel.com/history';
+process.env.VUE_APP_GRAFANA_URL = process.env.NODE_ENV === 'production' ? '/grafana' : 'https://dev.webitel.com/grafana';
+process.env.VUE_APP_SETTINGS_URL = process.env.NODE_ENV === 'production' ? '/settings' : 'https://dev.webitel.com/settings';
 
 module.exports = {
-  // publicPath: '',
+  // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+  publicPath: '/workspace',
   // lintOnSave: false,
   css: {
     loaderOptions: {

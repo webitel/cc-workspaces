@@ -7,10 +7,14 @@
 }
 
 .ws-worksection-wrap {
-  margin: calcVH(20px);
+  margin: 20px;
   flex-grow: 1; // fill all available container height
   min-height: 0;
   display: flex;
+
+  @media screen and (max-height: 768px) {
+    margin: 14px;
+  }
 }
 
 .ws-worksection {
@@ -21,27 +25,39 @@
   width: 100%;
 
   .cc-search-input {
-    margin-bottom: calcVH(10px);
+    margin-bottom: 10px;
   }
 
   &__list-instruction {
     @extend .typo-heading-sm;
     text-align: center;
-    margin-bottom: calcVH(17px);
+    margin-bottom: 17px;
   }
 
   .ws-worksection__list {
     @extend .cc-scrollbar;
     flex-grow: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     overflow-y: scroll;
-    padding-right: calcVH(20px);
+    padding-right: 20px;
+  }
+
+  .ws-worksection__list-wrap {
+    width: 100%;
   }
 
   .ws-worksection__list-separator {
     @extend .typo-body-md;
     text-align: center;
     color: $separator-color;
-    margin: calcVH(10px) 0;
+    margin: 10px 0;
+  }
+
+  .loader,
+  .empty-search {
+    margin: auto;
   }
 }
 
@@ -49,8 +65,8 @@
   display: flex;
   justify-content: stretch;
   align-items: stretch;
-  padding: calcVH(10px);
-  margin-bottom: calcVH(10px);
+  padding: 10px;
+  margin-bottom: 10px;
   border-radius: $border-radius;
   transition: $transition;
 
@@ -59,15 +75,15 @@
   }
 
   &__pic {
-    flex: 0 0 calcVH(50px);
-    width: calcVH(50px);
-    height: calcVH(50px);
+    flex: 0 0 50px;
+    width: (50px);
+    height: (50px);
     border-radius: 50%;
   }
 
   &__text {
     flex: 1 0 auto;
-    margin: 0 calcVH(15px);
+    margin: 0 15px;
 
     .flex-wrap {
       display: flex;
@@ -76,9 +92,9 @@
   }
 
   &__status {
-    flex: 0 0 calcVH(24px);
-    height: calcVH(24px);
-    width: calcVH(24px);
+    flex: 0 0 24px;
+    height: (24px);
+    width: (24px);
     align-self: end;
   }
 }

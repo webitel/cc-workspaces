@@ -1,4 +1,4 @@
-import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
+import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const callParams = { disableStun: true };
 const answerParams = { useAudio: true, disableStun: true };
@@ -6,9 +6,11 @@ const answerParams = { useAudio: true, disableStun: true };
 const actions = {
   // destucturing arg due not receive mouse events
   CALL: async (context, { user }) => {
-    const destination = user
+    let destination = user
       ? user.extension
       : context.state.callOnWorkspace.newNumber;
+    // eslint-disable-next-line no-useless-escape
+    destination = destination.replace(/[^0-9a-zA-z\+\*#]/g, '');
     const client = await getCliInstance();
     const params = { ...callParams, video: context.state.isVideo };
     try {
@@ -31,10 +33,10 @@ const actions = {
     }
   },
 
-  TRANSFER: async (context, user) => {
+  BLIND_TRANSFER: async (context, number) => {
     const call = context.state.callOnWorkspace;
     try {
-      await call.blindTransfer(user.extension);
+      await call.blindTransfer(number);
       // context.commit('REMOVE_CALL', call);
       // context.dispatch('RESET_WORKSPACE');
     } catch {

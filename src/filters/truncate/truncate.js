@@ -1,4 +1,3 @@
-
 export const truncate = (value, length) => {
   if (value) {
     if (value.length < length) return value;

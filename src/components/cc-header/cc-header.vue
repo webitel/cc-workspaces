@@ -58,7 +58,6 @@
       this.restoreVideoParam();
     },
 
-
     computed: {
       ...mapState('status', {
         agent: (state) => state.agent,
@@ -89,7 +88,7 @@
 
 <style lang="scss" scoped>
   .cc-header {
-    padding: calcVH(10px) calcVH(77px);
+    padding: (10px) (77px);
     background: $header-bg-color;
   }
 
@@ -99,7 +98,7 @@
     justify-content: flex-end;
 
     .status-select, .switcher {
-      margin-left: calcVH(30px);
+      margin-left: (30px);
     }
   }
 </style>

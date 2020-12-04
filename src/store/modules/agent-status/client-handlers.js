@@ -1,4 +1,4 @@
-import getCliInstance from '../../../api/agent-workspace/call-ws-connection';
+import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 import parseUserStatus from './statusUtils/parseUserStatus';
 import APIRepository from '../../../api/APIRepository';
 
