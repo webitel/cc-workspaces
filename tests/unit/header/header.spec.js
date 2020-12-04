@@ -1,13 +1,13 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import Header from '@/components/shared/app-header/app-header.vue';
-import Switcher from '../../../src/components/shared/app-header/cc-header-switcher.vue';
+import Header from '../../../src/components/shared/app-header/app-header.vue';
 import StatusSelect from '../../../src/components/shared/app-header/status-select.vue';
 import BreakPopup from '../../../src/components/break-popup/break-popup.vue';
 import TimerPopup from '../../../src/components/break-popup/break-timer-popup.vue';
 import statusModule from '../../../src/store/modules/agent-status/agent-status';
-import callModule from '../../../src/store/modules/call/call';
+import call from '../../../src/store/modules/call/call';
+import userinfo from '../../../src/store/modules/userinfo/userinfo';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -26,7 +26,8 @@ describe('Header on agent Waiting', () => {
     actions.AGENT_LOGOUT = jest.fn();
     store = new Vuex.Store({
       modules: {
-        call: callModule,
+        call,
+        userinfo,
         status: {
           namespaced: true,
           state,
@@ -38,55 +39,40 @@ describe('Header on agent Waiting', () => {
   });
 
   it('Doesnt show any popups on default Waiting', () => {
-    const wrapper = shallowMount(Header, {
-      store,
-      localVue,
-    });
-    const breakPopup = wrapper.find(BreakPopup);
-    const timerPopup = wrapper.find(TimerPopup);
-    expect(breakPopup.exists())
+    const wrapper = shallowMount(Header, { store, localVue });
+    const breakPopup = wrapper.findComponent(BreakPopup);
+    const timerPopup = wrapper.findComponent(TimerPopup);
+    expect(breakPopup.isVisible())
       .toBeFalsy();
-    expect(timerPopup.exists())
+    expect(timerPopup.isVisible())
       .toBeFalsy();
   });
 
   // TODO: Fix this test
-  it('Shows break popup on setBreak event', async () => {
+  it('Shows break popup on setBreak event', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
-      // sync: false,
-      /*
-         FIXME: REMOVE data: () => ({});
-          all properties have changed, and popup v-if should be rerendered,
-          but it's not, and I don't know why :(
-      */
-      data: () => ({
-        isBreakPopup: true,
-      }),
+      data: () => ({ isBreakPopup: true }),
     });
-    const breakPopup = wrapper.find(BreakPopup);
-    const statusSelect = wrapper.find(StatusSelect);
+    const breakPopup = wrapper.findComponent(BreakPopup);
+    const statusSelect = wrapper.findComponent(StatusSelect);
 
     statusSelect.vm.$emit('setBreak');
 
-    await wrapper.vm.$nextTick();
-    expect(breakPopup.exists())
+    expect(breakPopup.isVisible())
       .toBeTruthy();
   });
 
   it('Logs agent out', () => {
-    const wrapper = shallowMount(Header, {
-      store,
-      localVue,
-    });
+    const wrapper = shallowMount(Header, { store, localVue });
     /*
       last switcher is ccenter mode,
       unfortunately, have no other ways
       (except $t label string to discover switcher programmatically)
     */
-    const ccenterSwitcher = wrapper.findAll(Switcher).wrappers.pop();
-    ccenterSwitcher.vm.$emit('input');
+    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' }).wrappers.pop();
+    ccenterSwitcher.vm.$emit('change');
     expect(actions.AGENT_LOGOUT)
       .toHaveBeenCalled();
   });
@@ -94,7 +80,6 @@ describe('Header on agent Waiting', () => {
 
 describe('Header on agent Pause', () => {
   let state;
-  const { getters, actions } = statusModule;
   let store;
 
   beforeEach(() => {
@@ -105,27 +90,23 @@ describe('Header on agent Pause', () => {
     };
     store = new Vuex.Store({
       modules: {
-        call: callModule,
+        call,
+        userinfo,
         status: {
-          namespaced: true,
+          ...statusModule,
           state,
-          getters,
-          actions,
         },
       },
     });
   });
 
   it('Shows timer popup on Pause state', () => {
-    const wrapper = shallowMount(Header, {
-      store,
-      localVue,
-    });
-    const breakPopup = wrapper.find(BreakPopup);
-    const timerPopup = wrapper.find(TimerPopup);
-    expect(breakPopup.exists())
+    const wrapper = shallowMount(Header, { store, localVue });
+    const breakPopup = wrapper.findComponent(BreakPopup);
+    const timerPopup = wrapper.findComponent(TimerPopup);
+    expect(breakPopup.isVisible())
       .toBeFalsy();
-    expect(timerPopup.exists())
+    expect(timerPopup.isVisible())
       .toBeTruthy();
   });
 });
@@ -144,7 +125,8 @@ describe('Header on agent Offline', () => {
     actions.SET_AGENT_WAITING_STATUS = jest.fn();
     store = new Vuex.Store({
       modules: {
-        call: callModule,
+        call,
+        userinfo,
         status: {
           namespaced: true,
           state,
@@ -165,8 +147,8 @@ describe('Header on agent Offline', () => {
       unfortunately, have no other ways
       (except $t label string to discover switcher programmatically)
     */
-    const ccenterSwitcher = wrapper.findAll(Switcher).wrappers.pop();
-    ccenterSwitcher.vm.$emit('input');
+    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' }).wrappers.pop();
+    ccenterSwitcher.vm.$emit('change');
     expect(actions.SET_AGENT_WAITING_STATUS)
       .toHaveBeenCalled();
   });

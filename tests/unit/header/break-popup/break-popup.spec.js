@@ -24,11 +24,7 @@ describe('Break popup', () => {
   });
 
   it('Renders break reasons list', () => {
-    const wrapper = shallowMount(BreakPopup, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-    });
+    const wrapper = shallowMount(BreakPopup, { store, localVue });
 
     const reasonsList = wrapper.findAll('.break-popup__options__item');
     expect(reasonsList.length)
@@ -36,18 +32,16 @@ describe('Break popup', () => {
   });
 
   it('Sets agent break status from textarea', () => {
+    const reason = 'JEST';
     const wrapper = shallowMount(BreakPopup, {
       store,
       localVue,
-      mocks: { $t: () => {} },
+      data: () => ({ selected: 'TEXTAREA' }),
     });
 
-    const reason = 'JEST';
-    const textarea = wrapper.find('.break-popup__textarea');
+    const textarea = wrapper.getComponent({ name: 'wt-textarea' });
     textarea.vm.$emit('input', reason);
-    const sendBtn = wrapper.findAll('.popup-action')
-      .at(0); // FIXME
-    sendBtn.trigger('click');
+    wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
     // check if function called
     expect(actions.SET_AGENT_PAUSE_STATUS).toHaveBeenCalled();
     // check if function accepted reason param
