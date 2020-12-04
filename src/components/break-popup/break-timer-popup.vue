@@ -1,12 +1,12 @@
 <template>
-  <popup class="break-timer-popup">
-    <template slot="popup-header">
-      <h1 class="popup__title">
+  <wt-popup class="break-timer-popup" @close="close">
+    <template slot="title">
+      <div class="break-timer-popup__title-wrapper">
         <span class="popup-indicator__break"></span>
         {{ $t('agentStatus.breakTimer.heading') }}
-      </h1>
+      </div>
     </template>
-    <template slot="popup-main">
+    <template slot="main">
       <div class="break-timer-wrap__timer-wrap">
         <div class="break-timer-wrap__timer">
             <span
@@ -19,35 +19,27 @@
         </div>
       </div>
     </template>
-    <template slot="popup-footer">
-      <div class="popup-actions">
-        <btn
-          class="popup-action true uppercase"
-          @click.native="setAgentWaiting"
-        >{{ $t('agentStatus.breakTimer.continueWork') }}
-        </btn>
-        <btn
-          class="popup-action false uppercase"
-          @click.native="agentLogout"
-        >{{ $t('reusable.logout') }}
-        </btn>
-      </div>
+    <template slot="actions">
+      <wt-button
+        color="success"
+        @click="setAgentWaiting"
+      >{{ $t('agentStatus.breakTimer.continueWork') }}
+      </wt-button>
+      <wt-button
+        color="danger"
+        @click="agentLogout"
+      >{{ $t('reusable.logout') }}
+      </wt-button>
     </template>
-  </popup>
+  </wt-popup>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import Btn from '../utils/btn.vue';
-import Popup from '../utils/popup-container.vue';
 
 export default {
   name: 'break-timer-popup',
-  components: {
-    Btn,
-    Popup,
-  },
   computed: {
     ...mapState('now', {
       now: (state) => state.now,
@@ -86,15 +78,25 @@ export default {
   }
 }
 
-.popup__title {
-  @extend .typo-heading-lg;
-  text-align: center;
+.break-timer-popup__title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .popup-indicator__break {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 11px;
+    border-radius: 50%;
+    background: var(--main-accent-color);
+  }
 }
 
 .break-timer-wrap__timer-wrap {
-  padding: (27px) (51px);
-  background: $accent-color;
-  border-radius: $border-radius;
+  padding: 27px 51px;
+  background: var(--main-accent-color);
+  border-radius: var(--border-radius);
 }
 
 .break-timer-wrap__timer {
@@ -108,7 +110,7 @@ export default {
   text-align: center;
   display: inline-block;
   width: 55px;
-  color: #000;
+  color: var(--text-primary-color);
 
   /*semicolons*/
   &:nth-child(3), &:nth-child(6) {
@@ -122,28 +124,6 @@ export default {
     &:nth-child(3), &:nth-child(6) {
       width: 20px;
     }
-  }
-}
-
-.popup-indicator__break {
-  display: inline-block;
-  width: (14px);
-  height: (14px);
-  margin-right: (11px);
-  border-radius: 50%;
-  background: $break-color;
-}
-
-.popup-action {
-  min-width: 180px;
-  height: 42px;
-
-  @media screen and (max-width: 1336px) {
-    min-width: 145px;
-  }
-
-  &.false {
-    margin-left: 30px;
   }
 }
 </style>

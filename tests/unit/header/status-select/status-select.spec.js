@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
 import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
-import StatusSelect from '../../../../src/components/cc-header/status-select.vue';
+import StatusSelect from '../../../../src/components/shared/app-header/status-select.vue';
 import statusModule from '../../../../src/store/modules/agent-status/agent-status';
 
 const localVue = createLocalVue();

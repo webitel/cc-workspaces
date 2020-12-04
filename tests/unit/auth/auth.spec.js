@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import JSDOM from 'jsdom';
 import API from '../../../src/api/auth/authAPIRepository';
-import Auth from '../../../src/components/auth/the-auth.vue';
+import Auth from '../../../src/components/shared/auth/the-auth.vue';
 import userinfo from '../../../src/store/modules/userinfo/userinfo';
 
 const localVue = createLocalVue();

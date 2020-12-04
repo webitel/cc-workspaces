@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import Header from '../../../src/components/cc-header/cc-header.vue';
-import Switcher from '../../../src/components/cc-header/cc-header-switcher.vue';
-import StatusSelect from '../../../src/components/cc-header/status-select.vue';
+import Header from '@/components/shared/app-header/app-header.vue';
+import Switcher from '../../../src/components/shared/app-header/cc-header-switcher.vue';
+import StatusSelect from '../../../src/components/shared/app-header/status-select.vue';
 import BreakPopup from '../../../src/components/break-popup/break-popup.vue';
 import TimerPopup from '../../../src/components/break-popup/break-timer-popup.vue';
 import statusModule from '../../../src/store/modules/agent-status/agent-status';

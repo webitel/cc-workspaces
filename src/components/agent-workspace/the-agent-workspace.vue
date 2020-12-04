@@ -18,7 +18,7 @@
 <script>
   import { mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
-  import CcHeader from '../cc-header/cc-header.vue';
+  import CcHeader from '../shared/app-header/app-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-agent-queue-section.vue';
   import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';

@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
-import StatusSelect from '../../../../src/components/cc-header/status-select.vue';
+import StatusSelect from '../../../../src/components/shared/app-header/status-select.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
