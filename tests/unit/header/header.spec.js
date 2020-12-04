@@ -41,10 +41,6 @@ describe('Header on agent Waiting', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
     });
     const breakPopup = wrapper.find(BreakPopup);
     const timerPopup = wrapper.find(TimerPopup);
@@ -59,10 +55,6 @@ describe('Header on agent Waiting', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
       // sync: false,
       /*
          FIXME: REMOVE data: () => ({});
@@ -87,10 +79,6 @@ describe('Header on agent Waiting', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
     });
     /*
       last switcher is ccenter mode,
@@ -132,10 +120,6 @@ describe('Header on agent Pause', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
     });
     const breakPopup = wrapper.find(BreakPopup);
     const timerPopup = wrapper.find(TimerPopup);
@@ -175,10 +159,6 @@ describe('Header on agent Offline', () => {
     const wrapper = shallowMount(Header, {
       store,
       localVue,
-      mocks: {
-        $t: () => {
-        },
-      },
     });
     /*
       last switcher is ccenter mode,

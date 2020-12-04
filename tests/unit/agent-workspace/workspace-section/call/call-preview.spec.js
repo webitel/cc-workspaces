@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../../src/store/modules/call/call';
+import call from '../../../../../src/store/modules/call/call';
 import CallPreview
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
 import PreviewProfile from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview-profile.vue';
@@ -10,21 +10,11 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('Transfer functionality', () => {
-  let state;
-  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
-    state = {};
     store = new Vuex.Store({
-      modules: {
-        call: {
-          namespaced: true,
-          state,
-          actions,
-          mutations,
-        },
-      },
+      modules: { call },
     });
   });
 
@@ -32,10 +22,9 @@ describe('Transfer functionality', () => {
     const wrapper = shallowMount(CallPreview, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    const transferBtn = wrapper.find('.transfer');
-    transferBtn.trigger('click');
+    const transferBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(1);
+    transferBtn.vm.$emit('click', {});
     expect(wrapper.emitted().transfer)
       .toBeTruthy();
   });
@@ -43,7 +32,6 @@ describe('Transfer functionality', () => {
 
 describe('Answer and Hangup functionality', () => {
   let state;
-  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -59,10 +47,8 @@ describe('Answer and Hangup functionality', () => {
       modules: {
         workspace: workspaceModule,
         call: {
-          namespaced: true,
+          ...call,
           state,
-          actions,
-          mutations,
         },
       },
     });
@@ -72,10 +58,9 @@ describe('Answer and Hangup functionality', () => {
     const wrapper = shallowMount(CallPreview, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    const answerBtn = wrapper.find('.call');
-    answerBtn.trigger('click');
+    const answerBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(0);
+    answerBtn.vm.$emit('click', {});
     expect(state.callOnWorkspace.answer)
       .toHaveBeenCalled();
   });
@@ -84,10 +69,9 @@ describe('Answer and Hangup functionality', () => {
     const wrapper = shallowMount(CallPreview, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    const hangupBtn = wrapper.find('.end');
-    hangupBtn.trigger('click');
+    const hangupBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(2);
+    hangupBtn.vm.$emit('click', {});
     expect(state.callOnWorkspace.hangup)
       .toHaveBeenCalled();
   });
@@ -108,7 +92,7 @@ describe('preview-profile displays', () => {
     store = new Vuex.Store({
       modules: {
         call: {
-          namespaced: true,
+          ...call,
           state,
         },
       },
@@ -119,7 +103,6 @@ describe('preview-profile displays', () => {
     const wrapper = shallowMount(PreviewProfile, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     expect(wrapper.find('.preview-profile__name').text()).toEqual(display);
   });
@@ -128,7 +111,6 @@ describe('preview-profile displays', () => {
     const wrapper = shallowMount(PreviewProfile, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     expect(wrapper.find('.preview-profile__number').text()).toEqual(display);
   });

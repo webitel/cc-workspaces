@@ -30,10 +30,15 @@ export default {
     avgHold: 'Среднее время удержания',
   },
   queueSec: {
-    active: 'Активные',
-    offline: 'Оффлайн',
-    missed: 'Пропущенные',
-    at: 'в', // missed call "at 10:10"
+    queueSec: {
+      call: {
+        calls: 'Звонки',
+        at: 'в', // missed call "at 10:10"
+      },
+      chat: {
+        chats: 'Чаты',
+      },
+    },
   },
   infoSec: {
     clientInfo: 'Информация',
@@ -55,6 +60,10 @@ export default {
       ringing: 'Звоним..',
       hold: 'Удержание',
       hangup: 'Конец',
+    },
+    chat: {
+      acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
+      draftPlaceholder: 'Напишите сообщение...',
     },
   },
   emptyWorkspace: {

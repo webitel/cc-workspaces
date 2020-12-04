@@ -5,8 +5,8 @@
       @openTab="openHistory"
     ></member-header>
     <div class="ws-worksection-wrap">
-      <history v-if="currentTab === 'history'"/>
-      <member-communications v-else/>
+      <history v-show="isHistoryOpened"/>
+      <member-communications v-show="!isHistoryOpened"/>
     </div>
   </section>
 </template>
@@ -28,6 +28,12 @@
       currentTab: '',
     }),
 
+    computed: {
+      isHistoryOpened() {
+        return this.currentTab === 'history';
+      },
+    },
+
     methods: {
       openHistory(tab) {
         this.currentTab = this.currentTab ? '' : tab;
@@ -38,7 +44,7 @@
 
 <style lang="scss" scoped>
   .workspace-member {
-    padding: (20px);
+    padding: 20px;
     box-sizing: border-box;
 
     .ws-worksection__list {

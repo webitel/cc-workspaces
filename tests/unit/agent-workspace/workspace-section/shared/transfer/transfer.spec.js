@@ -1,6 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import axiosInstance from '../../../../../../src/api/instance';
 import callModule from '../../../../../../src/store/modules/call/call';
 import Transfer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
@@ -43,23 +42,16 @@ describe('Transfer functionality', () => {
         extension: '180',
       },
     ];
-    axiosInstance.get.mockImplementationOnce(() => Promise.resolve({ items: userList }));
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
+      data: () => ({ dataList: userList, isLoading: false }),
     });
-    await wrapper.vm.$nextTick();
-    // expect(axiosInstance.get).toHaveBeenCalled();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    // expect(wrapper.vm.dataList).toHaveLength(1);
-    expect(wrapper.findAll(Contact).length)
+    expect(wrapper.findAllComponents(Contact).length)
       .toEqual(1);
   });
 
-  it('Selects user and transfers call', async () => {
+  it('Selects user and transfers call', () => {
     const userList = [
       {
         id: '36',
@@ -68,20 +60,14 @@ describe('Transfer functionality', () => {
         extension: '180',
       },
     ];
-    axiosInstance.get.mockImplementationOnce(() => Promise.resolve({ items: userList }));
     const wrapper = shallowMount(Transfer, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
+      data: () => ({ dataList: userList, isLoading: false }),
     });
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    wrapper.find(Contact)
-      .trigger('click');
-    wrapper.find('.transfer')
-      .trigger('click');
+    wrapper.findComponent(Contact).trigger('click');
+    const transferBtn = wrapper.findComponent({ name: 'wt-button' });
+    transferBtn.vm.$emit('click');
     const userExtension = userList[0].extension;
     expect(state.callOnWorkspace.blindTransfer)
       .toHaveBeenCalledWith(userExtension);

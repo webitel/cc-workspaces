@@ -1,7 +1,8 @@
 import { AgentStatus } from 'webitel-sdk';
 import clientHandlers from './client-handlers';
-import agentActions from './agent-actions';
-import userActions from './user-actions';
+import APIRepository from '../../../api/APIRepository';
+
+const usersAPI = APIRepository.users;
 
 const state = {
   agent: {},
@@ -14,10 +15,37 @@ const getters = {
 
 const actions = {
   ...clientHandlers.actions,
-  ...agentActions.actions,
-  ...userActions.actions,
 
-  TOGGLE_CCENTER_MODE: async (context) => {
+  SET_AGENT_WAITING_STATUS: (context) => {
+    try {
+      context.state.agent.online();
+    } catch {
+    }
+  },
+
+  SET_AGENT_PAUSE_STATUS: (context, note = '') => {
+    try {
+      context.state.agent.pause(note);
+    } catch {
+    }
+  },
+
+  AGENT_LOGOUT: (context) => {
+    try {
+      context.state.agent.offline();
+    } catch {
+    }
+  },
+
+  SET_USER_ACTIVE_STATUS: async () => {
+    await usersAPI.setUserStatus('');
+  },
+
+  SET_USER_DND_STATUS: async () => {
+    await usersAPI.setUserStatus('dnd');
+  },
+
+  TOGGLE_CONTACT_CENTER_MODE: async (context) => {
     try {
       if (context.getters.IS_AGENT) {
         await context.dispatch('AGENT_LOGOUT');

@@ -49,7 +49,6 @@ describe('Member header', () => {
     const wrapper = shallowMount(MemberHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     expect(wrapper.find('.call')
       .exists())
@@ -61,11 +60,9 @@ describe('Member header', () => {
     const wrapper = shallowMount(MemberHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    expect(wrapper.find('.call')
-      .exists())
-      .toBeTruthy();
+    const callBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(1);
+    expect(callBtn.classes()).not.toContain('hidden');
   });
 
   it('Calls to member', () => {
@@ -73,9 +70,9 @@ describe('Member header', () => {
     const wrapper = shallowMount(MemberHeader, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    wrapper.find('.call').trigger('click');
+    const callBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(1);
+    callBtn.vm.$emit('click');
     expect(agent.directMember).toHaveBeenCalled();
     expect(agent.directMember.mock.calls[0]).toEqual([member.id, state.selectedCommId]);
   });

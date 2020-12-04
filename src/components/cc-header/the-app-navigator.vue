@@ -41,8 +41,6 @@
 </template>
 
 <script>
-  import clickaway from '../../directives/clickaway';
-
   const imgAdmin = require('../../assets/app-navigator/app-admin.svg');
   const imgAgent = require('../../assets/app-navigator/app-agent.svg');
   const imgAudit = require('../../assets/app-navigator/app-audit.svg');
@@ -54,9 +52,6 @@
 
   export default {
     name: 'the-app-navigator',
-    directives: {
-      clickaway,
-    },
     data: () => ({
       isOpened: false,
       activeApp: CURRENT_APP,

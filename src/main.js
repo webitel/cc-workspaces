@@ -8,7 +8,7 @@ import Icon from './components/utils/icon-wrap.vue';
 
 import './plugins/webitel-ui';
 
-import './css/fonts.scss';
+// import './css/fonts.scss';
 import './css/main.scss';
 
 Vue.config.productionTip = false;

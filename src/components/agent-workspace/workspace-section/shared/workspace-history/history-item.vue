@@ -14,14 +14,10 @@
       </div>
     </div>
     <div class="ws-worksection__item__status">
-      <icon>
-        <svg
-          class="icon md"
-          :class="[`icon-${computeStatusIcon}-md`, computeStatusColor]"
-        >
-          <use :xlink:href="`#icon-${computeStatusIcon}-md`"></use>
-        </svg>
-      </icon>
+      <wt-icon
+        :icon="statusIcon"
+        :color="statusIconColor"
+      ></wt-icon>
     </div>
   </div>
 </template>
@@ -29,6 +25,26 @@
 <script>
 import { CallDirection } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+
+const isTheSameDate = (date1, date2) => (
+  date1.getDate() === date2.getDate()
+  && date1.getMonth() === date2.getMonth()
+  && date1.getFullYear() === date2.getFullYear()
+);
+
+const isToday = (createdAt) => {
+  const date = new Date(+createdAt);
+  const today = new Date();
+  return isTheSameDate(today, date);
+};
+
+const isYesterday = (createdAt) => {
+  const date = new Date(+createdAt);
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return isTheSameDate(yesterday, date);
+};
 
 export default {
   name: 'history-item',
@@ -67,9 +83,9 @@ export default {
     computeDate() {
       const createdAt = +this.item.createdAt;
       const date = new Date(createdAt).toLocaleDateString();
-      const time = new Date(createdAt).toLocaleTimeString().slice(0, 5); // slice only hh:mm
-      if (this.isToday(createdAt)) return `${this.$t('history.today')} ${time}`;
-      if (this.isYesterday(createdAt)) return `${this.$t('history.yesterday')} ${time}`;
+      const time = prettifyTime(createdAt);
+      if (isToday(createdAt)) return `${this.$t('history.today')} ${time}`;
+      if (isYesterday(createdAt)) return `${this.$t('history.yesterday')} ${time}`;
       return `${date} ${time}`;
     },
 
@@ -77,42 +93,24 @@ export default {
       return convertDuration(this.item.duration);
     },
 
-    computeStatusIcon() {
+    statusIcon() {
       if (this.item.direction === CallDirection.Inbound) {
-        if (!this.item.answeredAt) return 'missed-call';
-        return 'incoming-call';
+        if (!this.item.answeredAt) return 'call-disconnect';
+        return 'call-inbound';
       }
-      return 'call-transfer';
+      return 'call-outbound';
     },
 
-    computeStatusColor() {
+    statusIconColor() {
       if (this.item.direction === CallDirection.Inbound) {
-        if (!this.item.answeredAt) return 'missed';
-        return 'inbound';
+        if (!this.item.answeredAt) return 'false';
+        return 'accent';
       }
-      return 'outbound';
+      return 'true';
     },
   },
 
   methods: {
-    isToday(createdAt) {
-      const date = new Date(+createdAt);
-      const today = new Date();
-      return this.isTheSameDate(today, date);
-    },
-
-    isYesterday(createdAt) {
-      const date = new Date(+createdAt);
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      return this.isTheSameDate(yesterday, date);
-    },
-
-    isTheSameDate(date1, date2) {
-      return date1.getDate() === date2.getDate()
-        && date1.getMonth() === date2.getMonth()
-        && date1.getFullYear() === date2.getFullYear();
-    },
   },
 };
 </script>

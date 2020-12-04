@@ -14,8 +14,8 @@
       <div class="ws-worksection__item__time ws-worksection__item__time__bold"
       >
           <span
-            class="preview-header__time-digit"
-            v-for="(digit, key) of computeCreatedTime.split('')"
+            class="queue-preview-header__time-digit"
+            v-for="(digit, key) of startTime.split('')"
             :key="key"
           >{{digit}}</span>
       </div>
@@ -37,11 +37,6 @@
       call: {
         type: Object,
         required: true,
-        default: () => ({
-          answeredAt: Date.now(),
-          displayName: 'Administrator Lisa',
-          displayNumber: '3434',
-        }),
       },
     },
 
@@ -59,7 +54,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   .flex-wrap {
     height: 100%;
     flex-direction: column;
@@ -72,19 +66,19 @@
     height: auto;
 
     .ws-worksection__item__time {
-      .preview-header__time-digit {
+      .queue-preview-header__time-digit {
         @extend .typo-body-md;
         text-align: center;
         display: inline-block;
-        width: (9.5px);
+        width: 9.5px;
 
         /*semicolons*/
         &:nth-child(3), &:nth-child(6) {
-          width: (5px);
+          width: 5px;
         }
       }
 
-      &__bold .preview-header__time-digit {
+      &__bold .queue-preview-header__time-digit {
         font-family: 'Montserrat Semi', monospace;
       }
     }

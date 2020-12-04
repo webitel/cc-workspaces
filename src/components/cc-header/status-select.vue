@@ -59,11 +59,9 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import UserStatus from '../../store/modules/agent-status/statusUtils/UserStatus';
-import clickaway from '../../directives/clickaway';
 
 export default {
   name: 'status-select',
-  directives: { clickaway },
 
   data: () => ({
     AgentStatus,

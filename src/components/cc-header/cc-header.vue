@@ -76,7 +76,7 @@
 
     methods: {
       ...mapActions('status', {
-        toggleCCenterMode: 'TOGGLE_CCENTER_MODE',
+        toggleCCenterMode: 'TOGGLE_CONTACT_CENTER_MODE',
       }),
       ...mapActions('call', {
         toggleVideo: 'TOGGLE_VIDEO',

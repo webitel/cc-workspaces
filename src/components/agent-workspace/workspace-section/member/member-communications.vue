@@ -3,8 +3,8 @@
     <li
       class="workspace-member-communication"
       :class="{'selected': communication.id === selectedCommId}"
-      v-for="(communication, key) of communications"
-      :key="key"
+      v-for="(communication) of communications"
+      :key="communication.id"
       @click="selectCommunication(communication)"
     >
       <div class="workspace-member-communication__type">{{communication.type.name}}</div>
@@ -37,24 +37,25 @@
 <style lang="scss" scoped>
 
   .workspace-member-communication {
-    padding: (10px) (20px);
-    margin-bottom: (10px);
+    padding: 10px 20px;
+    margin-bottom: 10px;
     border: 1px solid transparent;
-    border-radius: $border-radius;
-    transition: $transition;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
     cursor: pointer;
 
     &:last-child {
       margin-bottom: 0;
     }
 
-    &:hover, &.selected {
+    &:hover,
+    &.selected {
       border-color: $accent-color;
     }
 
     &__type {
       @extend .typo-heading-sm;
-      margin-bottom: (6px);
+      margin-bottom: 6px;
     }
 
     &__destination {

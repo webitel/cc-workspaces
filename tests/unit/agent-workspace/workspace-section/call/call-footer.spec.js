@@ -3,14 +3,12 @@ import Vuex from 'vuex';
 import callModule from '../../../../../src/store/modules/call/call';
 import CallFooter
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-footer.vue';
-import RoundedAction from '../../../../../src/components/utils/rounded-action.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('Footer buttons', () => {
   let state;
-  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -27,10 +25,8 @@ describe('Footer buttons', () => {
     store = new Vuex.Store({
       modules: {
         call: {
-          namespaced: true,
+          ...callModule,
           state,
-          actions,
-          mutations,
         },
       },
     });
@@ -40,10 +36,9 @@ describe('Footer buttons', () => {
     const wrapper = shallowMount(CallFooter, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    const numpad = wrapper.findAll(RoundedAction).wrappers[0];
-    numpad.trigger('click');
+    const numpad = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(0);
+    numpad.vm.$emit('click');
     expect(wrapper.emitted().openTab[0]).toEqual(['numpad']);
   });
 
@@ -51,13 +46,12 @@ describe('Footer buttons', () => {
     const wrapper = shallowMount(CallFooter, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     const mute = wrapper.find('.call-action__mic');
     expect(mute.classes())
       .not
       .toContain('hidden');
-    mute.trigger('click');
+    mute.vm.$emit('click');
     expect(state.callOnWorkspace.mute)
       .toHaveBeenCalledWith(!state.callOnWorkspace.muted);
   });
@@ -66,13 +60,12 @@ describe('Footer buttons', () => {
     const wrapper = shallowMount(CallFooter, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
-    const hold = wrapper.findAll(RoundedAction).wrappers[2];
+    const hold = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(2);
     expect(hold.classes())
       .not
       .toContain('hidden');
-    hold.trigger('click');
+    hold.vm.$emit('click');
     expect(state.callOnWorkspace.toggleHold)
       .toHaveBeenCalled();
   });
