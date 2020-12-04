@@ -2,6 +2,8 @@ export default {
   reusable: {
     answer: 'Answer',
     reject: 'Reject',
+    accept: 'Accept',
+    decline: 'Decline',
     send: 'Send',
     cancel: 'Cancel',
     logout: 'Logout',
@@ -30,10 +32,13 @@ export default {
     avgHold: 'Avg Hold Time',
   },
   queueSec: {
-    active: 'Active',
-    offline: 'Offline',
-    missed: 'Missed',
-    at: 'at', // missed call "at 10:10"
+    call: {
+      calls: 'Calls',
+      at: 'at', // missed call "at 10:10"
+    },
+    chat: {
+      chats: 'Chats',
+    },
   },
   infoSec: {
     clientInfo: 'Client info',

@@ -17,7 +17,7 @@
     >
       <span
         class="numpad-state__primary-text__time-digit"
-        v-for="(digit, key) of computeCreatedTime.split('')"
+        v-for="(digit, key) of startTime.split('')"
         :key="key"
       >{{digit}}</span>
     </div>
@@ -56,7 +56,7 @@
           case CallActions.Hangup:
             return this.$t('workspaceSec.callState.hangup');
           case CallActions.Active:
-            return this.computeCreatedTime;
+            return this.startTime;
           default:
             return this.call.state || '';
         }

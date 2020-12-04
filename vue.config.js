@@ -11,7 +11,7 @@ process.env.VUE_APP_GRAFANA_URL = process.env.NODE_ENV === 'production' ? '/graf
 module.exports = {
   // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
   publicPath: '/workspace',
-  // lintOnSave: false,
+  lintOnSave: false,
   css: {
     loaderOptions: {
       sass: {

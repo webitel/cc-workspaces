@@ -1,8 +1,9 @@
-import { CallActions } from 'webitel-sdk';
+import { CallActions, ChatActions } from 'webitel-sdk';
 
 export default class MockSocket {
-  constructor(call) {
-    this.call = call;
+  constructor(payload = {}) {
+    this.call = payload.call || {};
+    this.chat = payload.chat || {};
   }
 
   agent = {
@@ -13,24 +14,45 @@ export default class MockSocket {
 
   allCall = () => [];
 
+  allConversations = () => [];
+
   ringing = (call = this.call) => {
     const action = CallActions.Ringing;
-    this.callback(action, call);
+    this.callCallback(action, call);
   };
 
   active = (call = this.call) => {
     const action = CallActions.Active;
-    this.callback(action, call);
+    this.callCallback(action, call);
   };
 
   hangup = (call = this.call) => {
     const action = CallActions.Hangup;
     // eslint-disable-next-line no-param-reassign
     call.state = CallActions.Hangup;
-    this.callback(action, call);
+    this.callCallback(action, call);
+  };
+
+  invite = (chat = this.chat) => {
+    const action = ChatActions.UserInvite;
+    this.chatCallback(action, chat);
+  };
+
+  message = (chat = this.chat) => {
+    const action = ChatActions.Message;
+    this.chatCallback(action, chat);
+  };
+
+  close = (chat = this.chat) => {
+    const action = ChatActions.Close;
+    this.chatCallback(action, chat);
   };
 
   subscribeCall = (callback) => {
-    this.callback = callback;
+    this.callCallback = callback;
+  };
+
+  subscribeChat = (callback) => {
+    this.chatCallback = callback;
   };
 }

@@ -31,12 +31,10 @@
   import Transfer from '../shared/workspace-transfer/workspace-transfer-container.vue';
   import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
-  import callTimer from '../../../../mixins/callTimerMixin';
   import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';
 
   export default {
     name: 'the-call',
-    mixins: [callTimer],
     components: {
       CallPreview,
       CallHeader,

@@ -14,8 +14,8 @@
       <div class="ws-worksection__item__time ws-worksection__item__time__bold"
       >
           <span
-            class="preview-header__time-digit"
-            v-for="(digit, key) of computeCreatedTime.split('')"
+            class="queue-preview-header__time-digit"
+            v-for="(digit, key) of startTime.split('')"
             :key="key"
           >{{digit}}</span>
       </div>
@@ -66,7 +66,7 @@
     height: auto;
 
     .ws-worksection__item__time {
-      .preview-header__time-digit {
+      .queue-preview-header__time-digit {
         @extend .typo-body-md;
         text-align: center;
         display: inline-block;
@@ -78,7 +78,7 @@
         }
       }
 
-      &__bold .preview-header__time-digit {
+      &__bold .queue-preview-header__time-digit {
         font-family: 'Montserrat Semi', monospace;
       }
     }

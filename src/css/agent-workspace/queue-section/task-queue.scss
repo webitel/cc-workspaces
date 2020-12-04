@@ -1,0 +1,12 @@
+
+.task-queue__header {
+  padding: 13px 20px;
+  margin-bottom: 1px;
+  background: var(--main-primary-color);
+  border-radius: var(--border-radius);
+}
+
+.task-queue__header__title {
+  @extend %typo-strong-sm;
+  color: var(--text-outline-color);
+}
