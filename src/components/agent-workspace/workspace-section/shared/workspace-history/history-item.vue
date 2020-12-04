@@ -25,6 +25,7 @@
 <script>
 import { CallDirection } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 
 const isTheSameDate = (date1, date2) => (
   date1.getDate() === date2.getDate()
@@ -82,8 +83,7 @@ export default {
     computeDate() {
       const createdAt = +this.item.createdAt;
       const date = new Date(createdAt).toLocaleDateString();
-      let time = new Date(createdAt);
-      time = `${time.getHours()}:${time.getMinutes()}`;
+      const time = prettifyTime(createdAt);
       if (isToday(createdAt)) return `${this.$t('history.today')} ${time}`;
       if (isYesterday(createdAt)) return `${this.$t('history.yesterday')} ${time}`;
       return `${date} ${time}`;

@@ -21,6 +21,7 @@
 
 <script>
   // import { mapState, mapActions } from 'vuex';
+  import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
   import StatusBadge from '../call-status-icon-badge.vue';
 
   export default {
@@ -45,8 +46,7 @@
         return this.call.from?.number || '';
       },
       displayTime() {
-        const time = new Date(+this.call.createdAt);
-        return `${time.getHours()}:${time.getMinutes()}`;
+        return prettifyTime(this.call.createdAt);
       },
 
       previewStatusClass() {

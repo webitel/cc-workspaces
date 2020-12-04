@@ -61,6 +61,10 @@ export default {
       hold: 'Удержание',
       hangup: 'Конец',
     },
+    chat: {
+      acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
+      draftPlaceholder: 'Напишите сообщение...',
+    },
   },
   emptyWorkspace: {
     empty: {

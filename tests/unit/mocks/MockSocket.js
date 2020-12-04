@@ -43,6 +43,16 @@ export default class MockSocket {
     this.chatCallback(action, chat);
   };
 
+  leave = (chat = this.chat) => {
+    const action = ChatActions.Leave;
+    this.chatCallback(action, chat);
+  };
+
+  decline = (chat = this.chat) => {
+    const action = ChatActions.Decline;
+    this.chatCallback(action, chat);
+  };
+
   close = (chat = this.chat) => {
     const action = ChatActions.Close;
     this.chatCallback(action, chat);

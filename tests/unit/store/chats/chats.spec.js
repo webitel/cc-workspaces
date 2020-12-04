@@ -1,61 +1,79 @@
 import chatModule from '../../../../src/store/modules/chat/chat';
-import MockSocket from '../../mocks/MockSocket';
+import WorkspaceStates from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
-let mockSocket = new MockSocket();
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket }));
+const chat = {
+  id: '1',
+  join: jest.fn(),
+  decline: jest.fn(),
+  leave: jest.fn(),
+  sendText: jest.fn(),
+};
 
-const chat = { id: '1' };
-
-describe('chat store module: actions', () => {
+describe('chat store: actions', () => {
   const context = {
+    state: { chatOnWorkspace: chat },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };
 
   beforeEach(() => {
-    mockSocket = new MockSocket();
+    chat.join.mockClear();
+    chat.leave.mockClear();
+    chat.decline.mockClear();
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
 
-  it('SUBSCRIBE_CHATS subscribes to chats', async () => {
-    const subscribeChatMock = jest.fn();
-    mockSocket.subscribeChat = subscribeChatMock;
-    await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    expect(subscribeChatMock).toHaveBeenCalled();
+  it('ACCEPT action calls chat join() method', () => {
+    chatModule.actions.ACCEPT(context);
+    expect(chat.join).toHaveBeenCalled();
   });
 
-  it('HANDLE_INVITE_ACTION is called after Invite event', async () => {
-    await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    mockSocket.invite(chat);
-    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_INVITE_ACTION', chat);
+  it('SEND action calls chat sendText() method', () => {
+    const message = 'jest';
+    chatModule.actions.SEND(context, message);
+    expect(chat.sendText).toHaveBeenCalledWith(message);
   });
 
-  it('HANDLE_MESSAGE_ACTION is called after Message event', async () => {
-    await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    mockSocket.message(chat);
-    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_MESSAGE_ACTION', chat);
+  it('CLOSE action calls chat leave() method, if allowLeave is true', () => {
+    chat.allowLeave = true;
+    chatModule.actions.CLOSE(context);
+    expect(chat.leave).toHaveBeenCalled();
   });
 
-  it('HANDLE_CLOSE_ACTION is called after Close event', async () => {
-    await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    mockSocket.close(chat);
-    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_CLOSE_ACTION', chat);
+  it('CLOSE action calls chat decline() method', () => {
+    chat.allowLeave = false;
+    chatModule.actions.CLOSE(context);
+    expect(chat.decline).toHaveBeenCalled();
   });
 
-  it('HANDLE_INVITE_ACTION commits ADD_CHAT mutation with invited chat', () => {
-    chatModule.actions.HANDLE_INVITE_ACTION(context, chat);
-    expect(context.commit).toHaveBeenCalledWith('ADD_CHAT', chat);
+  it('OPEN_CHAT dispatches SET_WORKSPACE action with passed chat as param', () => {
+    chatModule.actions.OPEN_CHAT(context, chat);
+    expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', chat);
   });
 
-  it('HANDLE_CLOSE_ACTION commits REMOVE_CHAT mutation with removed chat', () => {
-    chatModule.actions.HANDLE_CLOSE_ACTION(context, chat);
-    expect(context.commit).toHaveBeenCalledWith('REMOVE_CHAT', chat);
+  it('SET_WORKSPACE dispatches global SET_WORKSPACE_STATE action', () => {
+    chatModule.actions.SET_WORKSPACE(context, chat);
+    expect(context.dispatch).toHaveBeenCalledWith('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CHAT, { root: true });
+  });
+
+  it('SET_WORKSPACE commits local SET_WORKSPACE with passed chat', () => {
+    chatModule.actions.SET_WORKSPACE(context, chat);
+    expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE', chat);
+  });
+
+  it('RESET_WORKSPACE dispatches global SET_WORKSPACE_STATE action', () => {
+    chatModule.actions.RESET_WORKSPACE(context);
+    expect(context.dispatch).toHaveBeenCalledWith('workspace/RESET_WORKSPACE_STATE', null, { root: true });
+  });
+
+  it('RESET_WORKSPACE commits local SET_WORKSPACE with empty object', () => {
+    chatModule.actions.RESET_WORKSPACE(context);
+    expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE', {});
   });
 });
 
-describe('chat store module: mutations', () => {
+describe('chat store: mutations', () => {
   it('SET_CHAT_LIST sets chatList to state', () => {
     const chatList = [chat];
     const state = { chatList: [] };
@@ -75,5 +93,12 @@ describe('chat store module: mutations', () => {
     const state = { chatList: [chat] };
     chatModule.mutations.REMOVE_CHAT(state, chat);
     expect(state.chatList).toEqual(chatList);
+  });
+
+  it('SET_WORKSPACE sets passed chat to chatOnWorkspace state prop', () => {
+    const chatOnWorkspace = chat;
+    const state = { chatOnWorkspace: {} };
+    chatModule.mutations.SET_WORKSPACE(state, chat);
+    expect(state.chatOnWorkspace).toEqual(chatOnWorkspace);
   });
 });

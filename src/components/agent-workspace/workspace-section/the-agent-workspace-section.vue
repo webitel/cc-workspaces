@@ -9,6 +9,7 @@
   import WorkspaceStates
     from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
   import Call from './call/the-call.vue';
+  import Chat from './chat/the-chat.vue';
   import Member from './member/the-member.vue';
   import EmptyWorkspace from './empty-workspace/empty-workspace-empty.vue';
 
@@ -16,6 +17,7 @@
     name: 'the-agent-workspace-section',
     components: {
       Call,
+      Chat,
       Member,
       EmptyWorkspace,
     },
@@ -28,6 +30,7 @@
       workspaceComponent() {
         switch (this.state) {
           case WorkspaceStates.CALL: return 'call';
+          case WorkspaceStates.CHAT: return 'chat';
           case WorkspaceStates.MEMBER: return 'member';
           default: return 'empty-workspace';
         }
@@ -37,7 +40,4 @@
 </script>
 
 <style lang="scss" scoped>
-  .chat {
-    height: 100%;
-  }
 </style>
