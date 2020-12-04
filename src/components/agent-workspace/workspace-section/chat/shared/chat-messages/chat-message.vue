@@ -4,7 +4,7 @@
       <img class="chat-message__pic" src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
     </div>
     <div class="chat-message__main-wrapper">
-      <p class="chat-message__text" v-if="message.text">{{ text }}</p>
+      <p class="chat-message__text">{{ text }}</p>
     </div>
     <aside class="chat-message__message-info-wrapper">
       <div class="chat-message__sent-at">{{ sentAt }}</div>
