@@ -7,12 +7,12 @@
 
     <section class="ws-worksection__list" ref="scroll-wrap">
 
-      <loader v-if="isLoading"/>
+      <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
         <contact
-          v-for="(item, key) of dataList"
-          :key="key"
+          v-for="(item) of dataList"
+          :key="item.id"
           :item="item"
           callable
         ></contact>
@@ -29,7 +29,6 @@
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import Contact from './workspace-contact.vue';
   import EmptySearch from '../workspace-empty-search/empty-search.vue';
-  import Loader from '../../../../utils/loader.vue';
   import APIRepository from '../../../../../api/APIRepository';
 
   const usersAPI = APIRepository.users;
@@ -40,7 +39,6 @@
     components: {
       Contact,
       EmptySearch,
-      Loader,
     },
 
     data: () => ({

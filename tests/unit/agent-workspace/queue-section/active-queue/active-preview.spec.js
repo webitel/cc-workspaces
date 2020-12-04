@@ -143,10 +143,8 @@ describe('Preview Actions', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      stubs: { Icon: true },
       propsData: {
         call,
-        index: state.callList.indexOf(call),
       },
     });
     expect(wrapper.find('.preview-actions')
@@ -163,6 +161,7 @@ describe('Answer and Hangup', () => {
 
   beforeEach(() => {
     call = {
+      id: '1',
       state: CallActions.Ringing,
       direction: CallDirection.Inbound,
       answer: jest.fn(),
@@ -195,22 +194,13 @@ describe('Answer and Hangup', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
       propsData: {
         call,
         index: state.callList.indexOf(call),
       },
     });
-    // because Vue Test Utils can't find element by class and trigger .native event :(
-    wrapper.findAll(Btn)
-      .wrappers
-      .find((wrapper) => wrapper.classes()
-        .includes('call'))
-      .trigger('click');
-
-    expect(call.answer)
-      .toHaveBeenCalled();
+    wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
+    expect(call.answer).toHaveBeenCalled();
   });
 
   it('Hangups to call', () => {
@@ -218,21 +208,11 @@ describe('Answer and Hangup', () => {
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
       propsData: {
         call,
-        index: state.callList.indexOf(call),
       },
     });
-    // because Vue Test Utils can't find element by class and trigger .native event :(
-    wrapper.findAll(Btn)
-      .wrappers
-      .find((wrapper) => wrapper.classes()
-        .includes('end'))
-      .trigger('click');
-
-    expect(call.hangup)
-      .toHaveBeenCalled();
+    wrapper.findAllComponents({ name: 'wt-button' }).at(1).vm.$emit('click');
+    expect(call.hangup).toHaveBeenCalled();
   });
 });

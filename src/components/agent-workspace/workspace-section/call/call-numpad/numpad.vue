@@ -73,8 +73,8 @@
         left: 50%;
         padding: 10px;
         background: #fff;
-        border-radius: $border-radius;
-        box-shadow: $box-shadow;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
         opacity: 0;
         pointer-events: none;
         z-index: 1;

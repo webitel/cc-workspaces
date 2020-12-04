@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState } from 'vuex';
   import CallPreview from './call-preview.vue';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
@@ -72,11 +72,6 @@
     },
 
     methods: {
-      ...mapActions('call', {
-        answer: 'ANSWER',
-        hangup: 'HANGUP',
-      }),
-
       openTransfer() {
         this.isPreviewTransfer = true;
         this.currentTab = 'transfer';

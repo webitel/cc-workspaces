@@ -11,6 +11,8 @@ export default class MockSocket {
 
   agentSession = () => this.agent;
 
+  allCall = () => [];
+
   ringing = (call = this.call) => {
     const action = CallActions.Ringing;
     this.callback(action, call);

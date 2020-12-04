@@ -15,7 +15,7 @@ const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
 jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => mockSocket);
+  () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
 
 describe('Ringing and Hangup events call functionality', () => {
   let state;

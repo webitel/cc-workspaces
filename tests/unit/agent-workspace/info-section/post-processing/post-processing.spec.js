@@ -37,13 +37,19 @@ describe('Post processing Success reporting', () => {
     });
   });
 
+  it('renders a success form', async () => {
+    const wrapper = shallowMount(SuccessForm, {
+      store,
+      localVue,
+    });
+    expect(wrapper.exists()).toBe(true);
+  });
+
   it('Starts with success radio button', () => {
     const wrapper = shallowMount(PostProcessingTab, {
       store,
       localVue,
       mocks: {
-        $t: () => {
-        },
         $v: {
           $touch: jest.fn(),
           $pending: false,
@@ -51,7 +57,7 @@ describe('Post processing Success reporting', () => {
         },
       },
     });
-    const yesRadio = wrapper.findAll(RadioButton)
+    const yesRadio = wrapper.findAllComponents(RadioButton)
       .wrappers.find((radioBtn) => radioBtn.props().option === true);
     expect(yesRadio.props().value === true).toBeTruthy();
   });
@@ -61,8 +67,6 @@ describe('Post processing Success reporting', () => {
       store,
       localVue,
       mocks: {
-        $t: () => {
-        },
         $v: {
           $touch: jest.fn(),
           $pending: false,
@@ -70,7 +74,7 @@ describe('Post processing Success reporting', () => {
         },
       },
     });
-    expect(wrapper.find(SuccessForm).exists()).toBeTruthy();
+    expect(wrapper.findComponent(SuccessForm).exists()).toBeTruthy();
   });
 
   it('Renders success form by default', () => {
@@ -78,8 +82,6 @@ describe('Post processing Success reporting', () => {
       store,
       localVue,
       mocks: {
-        $t: () => {
-        },
         $v: {
           $touch: jest.fn(),
           $pending: false,
@@ -113,13 +115,19 @@ describe('Post processing Failure reporting', () => {
     });
   });
 
+  it('renders a failure form', async () => {
+    const wrapper = shallowMount(FailureForm, {
+      store,
+      localVue,
+    });
+    expect(wrapper.exists()).toBe(true);
+  });
+
   it('Opens failure form on radio click', async () => {
     const wrapper = shallowMount(PostProcessingTab, {
       store,
       localVue,
       mocks: {
-        $t: () => {
-        },
         $v: {
           $touch: jest.fn(),
           $pending: false,
@@ -127,10 +135,10 @@ describe('Post processing Failure reporting', () => {
         },
       },
     });
-    const noRadio = wrapper.findAll(RadioButton)
+    const noRadio = wrapper.findAllComponents(RadioButton)
       .wrappers.find((radioBtn) => radioBtn.props().option === false);
     noRadio.vm.$emit('input', false);
     await wrapper.vm.$nextTick(); // re-render
-    expect(wrapper.find(FailureForm).exists()).toBeTruthy();
+    expect(wrapper.findComponent(FailureForm).exists()).toBeTruthy();
   });
 });

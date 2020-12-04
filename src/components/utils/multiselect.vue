@@ -48,8 +48,8 @@
 
 <script>
   import VueMultiselect from 'vue-multiselect';
+  import debounce from '@webitel/ui-sdk/src/scripts/debounce';
   import ValidationMessage from './validation-message.vue';
-  import debounce from '../../utils/debounce';
 
   export default {
     name: 'multiselect',

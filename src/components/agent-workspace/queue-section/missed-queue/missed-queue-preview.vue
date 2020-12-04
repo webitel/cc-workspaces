@@ -26,12 +26,6 @@
     },
 
     props: {
-      // index is for action calls
-      index: {
-        type: Number,
-        required: true,
-      },
-
       // item is for UI computing
       call: {
         type: Object,
@@ -41,13 +35,14 @@
 
     computed: {
       displayName() {
-        return this.call.from.name;
+        return this.call.from?.name || '';
       },
       displayNumber() {
-        return this.call.from.number;
+        return this.call.from?.number || '';
       },
       displayTime() {
-        return new Date(+this.call.createdAt).toLocaleTimeString().slice(0, 5); // hh:mm
+        const time = new Date(+this.call.createdAt);
+        return `${time.getHours()}:${time.getMinutes()}`;
       },
 
       computePreviewStatusClass() {

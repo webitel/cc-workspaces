@@ -1,8 +1,6 @@
 <template>
   <section class="workspace-section">
-    <call v-if="isCall"/>
-    <member v-else-if="isMember"/>
-    <empty-workspace v-else/>
+    <component :is="workspaceComponent"/>
   </section>
 </template>
 
@@ -27,12 +25,12 @@
         state: (state) => state.workspaceState,
       }),
 
-      isCall() {
-        return this.state === WorkspaceStates.CALL;
-      },
-
-      isMember() {
-        return this.state === WorkspaceStates.MEMBER;
+      workspaceComponent() {
+        switch (this.state) {
+          case WorkspaceStates.CALL: return 'call';
+          case WorkspaceStates.MEMBER: return 'member';
+          default: return 'empty-workspace';
+        }
       },
     },
   };

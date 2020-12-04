@@ -1,92 +1,71 @@
 <template>
   <div class="numpad-numbers">
-    <!--    <div class="numpad-numbers__row">-->
-    <!--      <rounded-action-->
-    <!--        class="numpad-numbers__num secondary"-->
-    <!--        @click.native="input('+')"-->
-    <!--      >+-->
-    <!--      </rounded-action>-->
-    <!--    </div>-->
-    <!--    <div class="numpad-numbers__row">-->
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('1')"
-    >1
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('2')"
-    >2
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('3')"
-    >3
-    </rounded-action>
-    <!--    </div>-->
-    <!--    <div class="numpad-numbers__row">-->
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('4')"
-    >4
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('5')"
-    >5
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('6')"
-    >6
-    </rounded-action>
-    <!--    </div>-->
-    <!--    <div class="numpad-numbers__row">-->
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('7')"
-    >7
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('8')"
-    >8
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('9')"
-    >9
-    </rounded-action>
-    <!--    </div>-->
-    <!--    <div class="numpad-numbers__row">-->
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('*')"
-    >*
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('0')"
-    >0
-    </rounded-action>
-    <rounded-action
-      class="numpad-numbers__num secondary"
-      @click.native="input('#')"
-    >#
-    </rounded-action>
-    <!--    </div>-->
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('1')"
+    >1</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('2')"
+    >2</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('3')"
+    >3</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('4')"
+    >4</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('5')"
+    >5</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('6')"
+    >6</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('7')"
+    >7</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('8')"
+    >8</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('9')"
+    >9</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('*')"
+    >*</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('0')"
+    >0</wt-rounded-action>
+    <wt-rounded-action
+      class="numpad-numbers__num"
+      color="secondary"
+      @click="input('#')"
+    >#</wt-rounded-action>
   </div>
 </template>
 
 <script>
-  import RoundedAction from '../../../../utils/rounded-action.vue';
-
   export default {
     name: 'numpad-numbers',
-    components: {
-      RoundedAction,
-    },
-
     methods: {
       input(value) {
         this.$emit('input', value);

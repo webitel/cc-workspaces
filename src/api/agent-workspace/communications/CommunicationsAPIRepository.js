@@ -1,5 +1,5 @@
 import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
-import configuration from '../../utils/openAPIConfig';
+import configuration from '../../openAPIConfig';
 import instance from '../../instance';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);

@@ -64,14 +64,12 @@
 
 <script>
   import { mapState } from 'vuex';
-  import clickaway from '../../directives/clickaway';
   import APIRepository from '../../api/APIRepository';
 
   const authAPI = APIRepository.auth;
 
   export default {
     name: 'user-preferences',
-    directives: { clickaway },
     data: () => ({
       isOpened: false,
     }),

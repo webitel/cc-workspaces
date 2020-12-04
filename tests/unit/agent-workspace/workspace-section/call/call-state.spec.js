@@ -43,7 +43,7 @@ describe('Call state', () => {
       localVue,
       stubs: { Icon: true },
     });
-    await wrapper.vm.$store.dispatch('call/OPEN_NEW_CALL');
+    await wrapper.vm.$store.dispatch('call/OPEN_NEW_CALL', {});
     expect(wrapper.find('.numpad-state__primary-text').text()).toEqual('');
   });
 });

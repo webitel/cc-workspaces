@@ -34,18 +34,28 @@ describe('Existing member communication actions', () => {
     });
   });
 
+  it('renders a communication', async () => {
+    const wrapper = shallowMount(Communication, {
+      store,
+      localVue,
+      stubs: { Icon: true },
+      propsData: {
+        value: {},
+        selected: '',
+        v: {},
+      },
+    });
+    expect(wrapper.exists()).toBe(true);
+  });
+
   it('Initially draws existing communication', () => {
     const wrapper = shallowMount(CommunicationsContainer, {
       store,
       localVue,
       propsData: { v: { newCommunications: { $each: [] } } },
-      mocks: {
-        $t: () => {
-        },
-      },
       stubs: { Icon: true },
     });
-    expect(wrapper.find(Communication)).toBeTruthy();
+    expect(wrapper.findComponent(Communication)).toBeTruthy();
   });
 
   it('Updates communication on change event', async () => {
@@ -53,16 +63,12 @@ describe('Existing member communication actions', () => {
       store,
       localVue,
       propsData: { v: { newCommunications: { $each: [] } } },
-      mocks: {
-        $t: () => {
-        },
-      },
       stubs: { Icon: true },
     });
     const updComm = {
       destination: '11',
     };
-    wrapper.find(Communication).vm.$emit('change', updComm);
+    wrapper.findComponent(Communication).vm.$emit('change', updComm);
     expect(wrapper.vm.communication).toEqual(updComm);
   });
 });
@@ -92,16 +98,12 @@ describe('New member communications actions', () => {
       store,
       localVue,
       propsData: { v: { newCommunications: { $each: [] } } },
-      mocks: {
-        $t: () => {
-        },
-      },
       stubs: { Icon: true },
     });
     const commLength = wrapper.findAll(Communication).length;
     wrapper.find('.processing-communications-container__add-new').trigger('click');
     await wrapper.vm.$nextTick();
-    expect(wrapper.findAll(Communication).length).toEqual(commLength + 1);
+    expect(wrapper.findAllComponents(Communication).length).toEqual(commLength + 1);
   });
 
   it('Updates new communication on change event', () => {
@@ -111,16 +113,12 @@ describe('New member communications actions', () => {
       store,
       localVue,
       propsData: { v: { newCommunications: { $each: [] } } },
-      mocks: {
-        $t: () => {
-        },
-      },
       stubs: { Icon: true },
     });
     const updComm = {
       destination: '11',
     };
-    wrapper.findAll(Communication).wrappers.pop()
+    wrapper.findAllComponents(Communication).wrappers.pop()
       .vm.$emit('change', updComm);
     expect(wrapper.vm.newCommunications.pop()).toEqual(updComm);
   });
@@ -132,14 +130,10 @@ describe('New member communications actions', () => {
       store,
       localVue,
       propsData: { v: { newCommunications: { $each: [] } } },
-      mocks: {
-        $t: () => {
-        },
-      },
       stubs: { Icon: true },
     });
     const newCommLength = wrapper.vm.newCommunications.length;
-    wrapper.findAll(Communication).wrappers.pop()
+    wrapper.findAllComponents(Communication).wrappers.pop()
       .vm.$emit('delete', newCommLength - 1);
     expect(wrapper.vm.newCommunications.length).toEqual(newCommLength - 1);
   });

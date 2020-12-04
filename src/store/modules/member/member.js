@@ -21,7 +21,10 @@ const actions = {
     return agent;
   },
 
-  LOAD_DATA_LIST: async (context, { page = 1, size = 20, search = '' }) => {
+  LOAD_DATA_LIST: async (context, payload) => {
+    const page = payload?.page || 1;
+    const size = payload?.size || 20;
+    const search = payload?.search || '';
     const agent = context.state.agent
       ? context.state.agent : await context.dispatch('GET_AGENT_INSTANCE');
     const response = await agent.offlineMembers(search, page, size);
