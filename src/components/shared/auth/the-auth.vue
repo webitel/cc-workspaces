@@ -15,7 +15,7 @@
 
 <script>
   import { mapActions } from 'vuex';
-  import APIRepository from '../../api/APIRepository';
+  import APIRepository from '../../../api/APIRepository';
 
   const authURL = process.env.VUE_APP_AUTH_MODULE_URL;
   const authAPI = APIRepository.auth;
