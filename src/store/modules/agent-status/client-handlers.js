@@ -62,17 +62,6 @@ const actions = {
   },
 };
 
-const mutations = {
-  SET_AGENT_INSTANCE: (state, agent) => {
-    state.agent = agent;
-  },
-
-  SET_USER_INSTANCE: (state, user) => {
-    state.user = user;
-  },
-};
-
 export default {
   actions,
-  mutations,
 };

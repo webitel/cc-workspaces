@@ -40,6 +40,17 @@ import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 export default {
   name: 'break-timer-popup',
+  data: () => ({
+    duration: '00:00:00',
+  }),
+  watch: {
+    now: {
+      handler() {
+        this.duration = convertDuration(this.agent.stateDuration);
+      },
+      immediate: true,
+    },
+  },
   computed: {
     ...mapState('now', {
       now: (state) => state.now,
@@ -48,13 +59,6 @@ export default {
     ...mapState('status', {
       agent: (state) => state.agent,
     }),
-
-    duration() {
-      if (this.now) {
-        return convertDuration(this.agent.stateDuration);
-      }
-      return '';
-    },
   },
 
   methods: {
