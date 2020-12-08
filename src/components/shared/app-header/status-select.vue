@@ -2,6 +2,7 @@
   <wt-status-select
     :status="status"
     :status-duration="duration"
+    :options="options"
     @change="changeStatus"
   ></wt-status-select>
 </template>
@@ -9,14 +10,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import UIStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import UserStatus from '../../../store/modules/agent-status/statusUtils/UserStatus';
 
 export default {
   name: 'status-select',
-
-  data: () => ({}),
 
   computed: {
     ...mapState('now', {
@@ -42,19 +40,39 @@ export default {
 
     status() {
       const { status } = this.isAgent ? this.agent : this.user;
-      switch (status) {
-        case AgentStatus.Online:
-        case UserStatus.ACTIVE:
-          return UIStatus.ONLINE;
-        case AgentStatus.Pause:
-        case UserStatus.DND:
-          return UIStatus.PAUSE;
-        case AgentStatus.Offline:
-        case UserStatus.OFFLINE:
-          return UIStatus.OFFLINE;
-        default:
-          return '';
-      }
+      return status;
+    },
+
+    agentOptions() {
+      return [
+        {
+          color: 'success',
+          text: this.$t('agentStatus.status.active'),
+          value: AgentStatus.Online,
+        },
+        {
+          color: 'primary',
+          text: this.$t('agentStatus.status.break'),
+          value: AgentStatus.Pause,
+        },
+      ];
+    },
+    userOptions() {
+      return [
+        {
+          color: 'success',
+          text: this.$t('agentStatus.status.active'),
+          value: UserStatus.ACTIVE,
+        },
+        {
+          color: 'primary',
+          text: this.$t('agentStatus.status.dnd'),
+          value: UserStatus.DND,
+        },
+      ];
+    },
+    options() {
+      return this.isAgent ? this.agentOptions : this.userOptions;
     },
   },
 
@@ -62,20 +80,20 @@ export default {
     changeStatus(status) {
       if (this.isAgent) {
         switch (status) {
-          case UIStatus.ONLINE:
+          case AgentStatus.Online:
             this.setAgentWaiting();
             break;
-          case UIStatus.PAUSE:
+          case AgentStatus.Pause:
             this.$emit('setBreak'); // opens break reason popup
             break;
           default:
         }
       } else {
         switch (status) {
-          case UIStatus.ONLINE:
+          case UserStatus.ACTIVE:
             this.setUserActive();
             break;
-          case UIStatus.PAUSE:
+          case UserStatus.DND:
             this.setUserDnd();
             break;
           default:

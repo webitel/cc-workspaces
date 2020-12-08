@@ -1,7 +1,6 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
-import UIStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import StatusSelect from '../../../../src/components/shared/app-header/status-select.vue';
 import statusModule from '../../../../src/store/modules/agent-status/agent-status';
 
@@ -55,13 +54,13 @@ describe('Agent Status Select', () => {
 
   it('Set Agent Pause status', async () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
-    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', UIStatus.PAUSE);
+    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', AgentStatus.Pause);
     expect(wrapper.emitted().setBreak).toBeTruthy();
   });
 
   it('Set Agent Active status', async () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
-    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', UIStatus.ONLINE);
+    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', AgentStatus.Online);
     expect(actions.SET_AGENT_WAITING_STATUS)
       .toHaveBeenCalled();
   });
