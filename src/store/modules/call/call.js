@@ -49,7 +49,7 @@ const actions = {
       const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
       try {
         await call.answer(params);
-        context.dispatch('SET_WORKSPACE', call);
+        await context.dispatch('SET_WORKSPACE', call);
       } catch {
       }
     }

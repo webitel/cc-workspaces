@@ -66,6 +66,9 @@ export default {
       setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
       agentLogout: 'AGENT_LOGOUT',
     }),
+    close() {
+      this.$emit('close');
+    },
   },
 };
 </script>

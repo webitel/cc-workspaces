@@ -173,8 +173,8 @@
 
   $label-color: #000;
   $list-option__hover: transparent;
-
-  .hs-multiselect .cc-label {
+.hs-multiselect {
+  .cc-label {
     margin-bottom: (10px);
   }
 
@@ -323,7 +323,7 @@
     }
   }
 
-  .hs-multiselect.disabled {
+  &.disabled {
     .hs-multiselect__arrow-down {
       display: none;
     }
@@ -340,4 +340,5 @@
       margin: auto;
     }
   }
+}
 </style>
