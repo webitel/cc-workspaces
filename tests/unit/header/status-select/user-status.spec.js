@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import UIStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
 import StatusSelect from '../../../../src/components/shared/app-header/status-select.vue';
 
@@ -54,14 +53,14 @@ describe('User status select', () => {
 
   it('Set User DND status', async () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
-    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', UIStatus.PAUSE);
+    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', UserStatus.DND);
     expect(actions.SET_USER_DND_STATUS)
       .toHaveBeenCalled();
   });
 
   it('Set User Active status', async () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
-    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', UIStatus.ONLINE);
+    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', UserStatus.ACTIVE);
     expect(actions.SET_USER_ACTIVE_STATUS)
       .toHaveBeenCalled();
   });
