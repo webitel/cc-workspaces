@@ -40,37 +40,23 @@ describe('Break timer popup', () => {
   });
 
   it('Correctly displays break duration', () => {
-    const wrapper = shallowMount(TimerPopup, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-    });
+    const wrapper = shallowMount(TimerPopup, { store, localVue });
     expect(wrapper.vm.duration)
       .toEqual('12:00:00');
   });
 
   it('Correctly goes Waiting', () => {
-    const wrapper = shallowMount(TimerPopup, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-    });
+    const wrapper = shallowMount(TimerPopup, { store, localVue });
 
-    const trueBtn = wrapper.find('.popup-action.true');
-    trueBtn.trigger('click');
+    wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
     expect(actions.SET_AGENT_WAITING_STATUS)
       .toHaveBeenCalled();
   });
 
   it('Correctly goes Offline', () => {
-    const wrapper = shallowMount(TimerPopup, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-    });
+    const wrapper = shallowMount(TimerPopup, { store, localVue });
 
-    const trueBtn = wrapper.find('.popup-action.false');
-    trueBtn.trigger('click');
+    wrapper.findAllComponents({ name: 'wt-button' }).at(1).vm.$emit('click');
     expect(actions.AGENT_LOGOUT)
       .toHaveBeenCalled();
   });

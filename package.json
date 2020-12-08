@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/ui-sdk": "^0.6.16",
+    "@webitel/ui-sdk": "^0.6.20",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
@@ -31,13 +31,13 @@
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
     "vuex": "^3.1.2",
-    "webitel-sdk": "^0.1.12"
+    "webitel-sdk": "^0.1.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",
     "@vue/cli-plugin-eslint": "~4.2.0",
     "@vue/cli-plugin-router": "~4.2.0",
-    "@vue/cli-plugin-unit-jest": "~4.2.0",
+    "@vue/cli-plugin-unit-jest": "~4.4.0",
     "@vue/cli-plugin-vuex": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
     "@vue/eslint-config-airbnb": "^5.0.2",

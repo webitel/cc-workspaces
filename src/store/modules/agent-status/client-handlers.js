@@ -25,7 +25,9 @@ const actions = {
     const client = await getCliInstance();
     try {
       const agent = await client.agentSession();
-      await client.subscribeAgentsStatus(() => {}, { agent_id: agent.agentId });
+      await client.subscribeAgentsStatus(async (state, agent) => {
+        context.commit('SET_AGENT_INSTANCE', agent);
+      }, { agent_id: agent.agentId });
       context.commit('SET_AGENT_INSTANCE', agent);
 
       window.agent = agent;
@@ -60,17 +62,6 @@ const actions = {
   },
 };
 
-const mutations = {
-  SET_AGENT_INSTANCE: (state, agent) => {
-    state.agent = agent;
-  },
-
-  SET_USER_INSTANCE: (state, user) => {
-    state.user = user;
-  },
-};
-
 export default {
   actions,
-  mutations,
 };

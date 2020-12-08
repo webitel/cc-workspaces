@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Auth from '../components/auth/the-auth.vue';
+import Auth from '../components/shared/auth/the-auth.vue';
 import AgentWorkspace from '../components/agent-workspace/the-agent-workspace.vue';
 
 Vue.use(VueRouter);

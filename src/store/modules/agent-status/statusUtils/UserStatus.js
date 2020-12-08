@@ -1,6 +1,6 @@
 export default Object.freeze({
-  ACTIVE: Symbol('active'),
-  DND: Symbol('dnd'),
-  BUSY: Symbol('busy'),
-  OFFLINE: Symbol('offline'),
+  ACTIVE: 'active',
+  DND: 'dnd',
+  BUSY: 'busy',
+  OFFLINE: 'offline',
 });

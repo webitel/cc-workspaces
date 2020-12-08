@@ -1,12 +1,12 @@
 <template>
-  <popup class="break-popup">
-    <template slot="popup-header">
-      <h1 class="popup__title">
+  <wt-popup class="break-popup" @close="close">
+    <template slot="title">
+      <div class="break-popup__title-wrapper">
         <span class="popup-indicator__break"></span>
-        {{$t('agentStatus.breakPopup.breakReason')}}
-      </h1>
+        {{ $t('agentStatus.breakPopup.breakReason') }}
+      </div>
     </template>
-    <template slot="popup-main">
+    <template slot="main">
       <ul class="break-popup__options">
         <li
           class="break-popup__options__item"
@@ -14,139 +14,127 @@
           v-for="(option, key) of breakOptions"
           :key="key"
           @click="selected = option"
-        >{{option}}
+        >{{ option }}
         </li>
       </ul>
-      <cc-textarea
+      <wt-textarea
         class="break-popup__textarea"
         :class="{'selected': selected === 'TEXTAREA'}"
-        v-model="userOption"
+        v-model="userBreakNote"
+        :placeholder="$t('agentStatus.breakPopup.breakReason')"
         @focus="selected = 'TEXTAREA'"
-      ></cc-textarea>
+      ></wt-textarea>
     </template>
-    <template slot="popup-footer">
-      <div class="popup-actions">
-        <btn
-          class="popup-action uppercase"
-          @click.native="setBreak"
-        >
-          {{$t('reusable.send')}}
-        </btn>
-        <btn
-          class="popup-action uppercase secondary"
-          @click.native="$emit('close')"
-        >
-          {{$t('reusable.cancel')}}
-        </btn>
-      </div>
+    <template slot="actions">
+      <wt-button
+        @click="setBreak"
+      >{{ $t('reusable.send') }}
+      </wt-button>
+      <wt-button
+        color="secondary"
+        @click="close"
+      >{{ $t('reusable.cancel') }}
+      </wt-button>
     </template>
-  </popup>
+  </wt-popup>
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
-  import Btn from '../utils/btn.vue';
-  import CcTextarea from '../utils/textarea.vue';
-  import Popup from '../utils/popup-container.vue';
+import { mapActions } from 'vuex';
 
-  export default {
-    name: 'break-popup',
-    components: {
-      Btn,
-      CcTextarea,
-      Popup,
+export default {
+  name: 'break-popup',
+
+  data: () => ({
+    selected: '',
+    userBreakNote: '',
+  }),
+
+  computed: {
+    breakOptions() {
+      return [
+        this.$t('agentStatus.breakPopup.commons.coffeeBreak'),
+        this.$t('agentStatus.breakPopup.commons.smokeBreak'),
+        this.$t('agentStatus.breakPopup.commons.restroom'),
+        this.$t('agentStatus.breakPopup.commons.dinner'),
+        this.$t('agentStatus.breakPopup.commons.meeting'),
+      ];
     },
+  },
 
-    data: () => ({
-      selected: '',
-      userOption: '',
+  methods: {
+    ...mapActions('status', {
+      setAgentPause: 'SET_AGENT_PAUSE_STATUS',
     }),
 
-    computed: {
-      breakOptions() {
-        return [
-          this.$t('agentStatus.breakPopup.commons.coffeeBreak'),
-          this.$t('agentStatus.breakPopup.commons.smokeBreak'),
-          this.$t('agentStatus.breakPopup.commons.restroom'),
-          this.$t('agentStatus.breakPopup.commons.dinner'),
-          this.$t('agentStatus.breakPopup.commons.meeting'),
-        ];
-      },
+    setBreak() {
+      const note = this.selected === 'TEXTAREA' ? this.userBreakNote : this.selected;
+      this.setAgentPause(note);
+      this.close();
     },
-
-    methods: {
-      setBreak() {
-        const note = this.selected || this.userOption;
-        this.setAgentPause(note);
-        this.$emit('close');
-      },
-
-      ...mapActions('status', {
-        setAgentPause: 'SET_AGENT_PAUSE_STATUS',
-      }),
+    close() {
+      this.$emit('close');
     },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  $option-border-color: #F2F2F2;
 
-  .popup__title {
-    @extend .typo-heading-lg;
-    text-align: center;
-  }
+.wt-popup ::v-deep .wt-popup__popup {
+  min-width: 500px;
+}
 
-  .break-popup__options {
-    $four-items-height: ((54px+10px)*4); // item height + 10px bottom margin x 4
-    @extend .cc-scrollbar;
-    max-height: #{$four-items-height};
-    overflow-y: scroll;
-
-    &__item {
-      @extend .typo-body-md;
-      padding: (17px) (14px);
-      margin-bottom: (10px);
-      margin-right: (10px);
-      border: 1px solid $option-border-color;
-      border-radius: $border-radius;
-      transition: $transition;
-      cursor: pointer;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      &:hover, &.selected {
-        border-color: $accent-color;
-      }
-    }
-  }
-
-  .break-popup__textarea {
-    height: (109px);
-    margin-top: (10px);
-    margin-right: (10px + 4px); // 10px like options + 4px scroll width
-    border: 1px solid $option-border-color;
-
-    &:hover, &.selected {
-      border-color: $accent-color;
-    }
-  }
+.break-popup__title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .popup-indicator__break {
     display: inline-block;
-    width: (14px);
-    height: (14px);
-    margin-right: (11px);
+    width: 14px;
+    height: 14px;
+    margin-right: 11px;
     border-radius: 50%;
-    background: $break-color;
+    background: var(--main-accent-color);
   }
+}
 
-  .popup-action {
-    min-width: (114px);
+.break-popup__options {
+  $four-items-height: ((54px+10px)*4); // item height + 10px bottom margin x 4
+  @extend %wt-scrollbar;
+  max-height: #{$four-items-height};
+  overflow-y: scroll;
 
-    &.secondary {
-      margin-left: (30px);
+  &__item {
+    @extend .typo-body-md;
+    padding: 17px 14px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border: 1px solid var(--form-border-color);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    cursor: pointer;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover, &.selected {
+      border-color: var(--main-accent-color);
     }
   }
+}
+
+.break-popup__textarea {
+  height: 109px;
+  margin-top: 10px;
+  margin-right: 10px + 4px; // 10px like options + 4px scroll width
+
+  &:hover, &.selected  {
+    &::v-deep .wt-textarea__wrapper .wt-textarea__textarea {
+      border-color: var(--main-accent-color);
+    }
+  }
+}
 </style>

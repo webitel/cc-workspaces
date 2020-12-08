@@ -58,11 +58,23 @@ export default class MockSocket {
     this.chatCallback(action, chat);
   };
 
+  changeAgentStatus = (status = 'online', agent = this.agent) => {
+    this.agentStatusCallback(status, agent);
+  };
+
   subscribeCall = (callback) => {
     this.callCallback = callback;
   };
 
   subscribeChat = (callback) => {
     this.chatCallback = callback;
+  };
+
+  subscribeAgentsStatus = (callback) => {
+    this.agentStatusCallback = callback;
+  };
+
+  subscribeUsersStatus = (callback) => {
+    this.userStatusCallback = callback;
   };
 }
