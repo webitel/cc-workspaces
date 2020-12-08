@@ -1,6 +1,10 @@
 <template>
   <section class="chat-messages-container">
-    <div class="chat-messages-items" v-chat-scroll>
+    <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
+      <scroll-observer
+        :options="intersectionObserverOptions"
+        @intersect="loadMessages"
+      ></scroll-observer>
       <chat-message
         v-for="message of messages"
         :message="message"
@@ -13,6 +17,7 @@
 <script>
 import { mapState } from 'vuex';
 import ChatMessage from './chat-message.vue';
+import ScrollObserver from '../../../../../utils/scroll-observer.vue';
 import chatScroll from '../../../../../../directives/chatScroll';
 
 export default {
@@ -20,6 +25,13 @@ export default {
   directives: { chatScroll },
   components: {
     ChatMessage,
+    ScrollObserver,
+  },
+  data: () => ({
+    isMounted: false,
+  }),
+  mounted() {
+    this.isMounted = true;
   },
   computed: {
     ...mapState('chat', {
@@ -27,6 +39,20 @@ export default {
     }),
     messages() {
       return this.chat.messages;
+    },
+    intersectionObserverOptions() {
+      if (this.isMounted) {
+        return {
+          root: this.$refs['chat-messages-items'],
+          rootMargin: '100px',
+        };
+      }
+      return null;
+    },
+  },
+  methods: {
+    loadMessages() {
+      console.info('intersection');
     },
   },
 };
