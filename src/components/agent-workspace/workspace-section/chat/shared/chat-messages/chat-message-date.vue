@@ -8,6 +8,7 @@ export default {
   props: {
     time: {
       type: Number,
+      required: true,
     },
   },
   computed: {
