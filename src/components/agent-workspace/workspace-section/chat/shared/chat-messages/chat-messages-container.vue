@@ -5,18 +5,24 @@
         :options="intersectionObserverOptions"
         @intersect="loadMessages"
       ></scroll-observer>
-      <chat-message
-        v-for="message of messages"
-        :message="message"
-        :key="message.id"
-      ></chat-message>
+      <div v-for="(message, key) of messages" :key="message.id">
+        <message-date
+          v-if="showDate(key)"
+          :time="message.createdAt"
+        ></message-date>
+        <message
+          :message="message"
+          :show-user-pic="showUserPic(key)"
+        ></message>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import ChatMessage from './chat-message.vue';
+import Message from './chat-message.vue';
+import MessageDate from './chat-message-date.vue';
 import ScrollObserver from '../../../../../utils/scroll-observer.vue';
 import chatScroll from '../../../../../../directives/chatScroll';
 
@@ -24,7 +30,8 @@ export default {
   name: 'chat-messages-container',
   directives: { chatScroll },
   components: {
-    ChatMessage,
+    Message,
+    MessageDate,
     ScrollObserver,
   },
   data: () => ({
@@ -53,6 +60,20 @@ export default {
   methods: {
     loadMessages() {
       console.info('intersection');
+    },
+    showDate(messageIndex) {
+      if (messageIndex === 0) return true;
+      const messageDate = new Date(this.messages[messageIndex].createdAt);
+      const prevMessageDate = new Date(this.messages[messageIndex - 1].createdAt);
+      return messageDate.getFullYear() !== prevMessageDate.getFullYear()
+        || messageDate.getMonth() !== prevMessageDate.getMonth()
+        || messageDate.getDate() !== prevMessageDate.getDate();
+    },
+    showUserPic(messageIndex) {
+      if (messageIndex === 0) return true;
+      const message = this.messages[messageIndex];
+      const prevMessage = this.messages[messageIndex - 1];
+      return message.member !== prevMessage.member;
     },
   },
 };

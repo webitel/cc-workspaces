@@ -1,7 +1,7 @@
 <template>
   <div class="chat-message" :class="{'chat-message--right': my}">
     <div class="chat-message__pic-wrapper" v-if="!my">
-      <img class="chat-message__pic" src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
+      <img v-if="showUserPic" class="chat-message__pic" src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
     </div>
     <div class="chat-message__main-wrapper">
       <p class="chat-message__text">{{ text }}</p>
@@ -27,6 +27,10 @@ import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
       message: {
         type: Object,
         required: true,
+      },
+      showUserPic: {
+        type: Boolean,
+        default: true,
       },
     },
     computed: {
