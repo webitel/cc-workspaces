@@ -5,6 +5,7 @@ import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 const state = {
   chatList: [],
   chatOnWorkspace: {},
+  mediaView: null,
 };
 
 const getters = {
@@ -56,6 +57,14 @@ const actions = {
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
     context.commit('SET_WORKSPACE', {});
   },
+
+  OPEN_MEDIA: (context, message) => {
+    context.commit('SET_MEDIA_VIEW', message);
+  },
+
+  CLOSE_MEDIA: (context) => {
+    context.commit('SET_MEDIA_VIEW', null);
+  },
 };
 
 const mutations = {
@@ -70,6 +79,9 @@ const mutations = {
   },
   SET_WORKSPACE: (state, chat) => {
     state.chatOnWorkspace = chat;
+  },
+  SET_MEDIA_VIEW: (state, mediaView) => {
+    state.mediaView = mediaView;
   },
 };
 
