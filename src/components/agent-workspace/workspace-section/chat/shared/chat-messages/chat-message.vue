@@ -34,7 +34,7 @@ import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
         return prettifyTime(this.message.createdAt);
       },
       text() {
-        return this.message.value;
+        return this.message.text;
       },
       my() {
         return !!this.message.member?.self;
