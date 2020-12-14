@@ -21,7 +21,7 @@ describe('Chat Message component', () => {
 
   it('correctly computes message text', () => {
     const text = 'jest';
-    message.value = text;
+    message.text = text;
     const wrapper = shallowMount(ChatMessage, { propsData: { message } });
     expect(wrapper.vm.text).toBe(text);
   });
