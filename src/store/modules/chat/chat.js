@@ -25,7 +25,18 @@ const actions = {
 
   SEND: async (context, message) => {
     try {
-      await context.state.chatOnWorkspace.sendText(message);
+      await context.state.chatOnWorkspace.send(message);
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  SEND_FILE: async (context, files) => {
+    try {
+      // eslint-disable-next-line no-unused-expressions
+      Array.isArray(files)
+        ? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
+        : await context.dispatch('SEND', files);
     } catch (err) {
       throw err;
     }

@@ -12,12 +12,25 @@
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         name="draft"
         chat-mode
+        @paste="handleFilePaste"
         @enter="sendMessage"
       ></wt-textarea>
       <div class="chat-footer__actions">
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper">
-          <wt-rounded-action icon="attach" color="secondary" @click="() => {}"></wt-rounded-action>
+          <wt-rounded-action
+            class="rounded-action-file-input"
+            color="secondary"
+          >
+            <wt-icon icon="attach"></wt-icon>
+            <input
+              ref="attachment-input"
+              class="rounded-action-file-input__input"
+              type="file"
+              multiple
+              @change="handleAttachments"
+            >
+          </wt-rounded-action>
         </div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper"></div>
@@ -48,7 +61,24 @@ export default {
       accept: 'ACCEPT',
       decline: 'CLOSE',
       send: 'SEND',
+      sendFile: 'SEND_FILE',
     }),
+
+    async handleFilePaste(event) {
+      const files = Array
+        .from(event.clipboardData.items)
+        .map((item) => item.getAsFile())
+        .filter((item) => !!item);
+     if (files.length) {
+       this.sendFile(files);
+       event.preventDefault();
+     }
+    },
+
+    async handleAttachments(event) {
+      const files = Array.from(event.target.files);
+      await this.sendFile(files);
+    },
 
     async sendMessage() {
       const { draft } = this;
@@ -103,11 +133,25 @@ export default {
     grid-gap: 10px;
 
     .chat-footer__cell-wrapper {
+      position: relative;
       display: flex;
       align-items: flex-start;
       justify-content: center;
     }
   }
 }
-
+.rounded-action-file-input {
+  position: relative;
+  .rounded-action-file-input__input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
 </style>

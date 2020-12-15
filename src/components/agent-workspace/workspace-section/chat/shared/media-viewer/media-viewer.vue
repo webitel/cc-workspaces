@@ -1,6 +1,6 @@
 <template>
-  <aside class="media-viewer" v-show="isMediaView">
-    <div class="media-viewer__shadow" @click="close"></div>
+  <aside class="media-viewer" v-show="isMediaView" @click="close">
+    <div class="media-viewer__shadow"></div>
     <div class="media-viewer__content-wrapper">
       <img class="media-viewer__content__img" :src="photo.url" :alt="photo.name">
     </div>

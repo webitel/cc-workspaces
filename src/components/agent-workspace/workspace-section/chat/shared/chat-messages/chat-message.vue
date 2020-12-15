@@ -61,16 +61,14 @@ export default {
       return prettifyTime(this.message.createdAt);
     },
     text() {
-      return this.message.value || this.message.text;
+      return this.message.text;
     },
     image() {
-      // return { name: 'my-pdf.pdf', mime: 'image/jpeg', url: 'https://i.imgur.com/4Kuye6W.jpeg', size: '10mb' };
       const isImage = this.message.file && this.message.file.mime.includes('image');
       return isImage ? this.message.file : null;
     },
     document() {
       return this.message.file;
-        // || { name: 'my-pdf.pdf', mime: 'image/jpeg', url: 'https://i.imgur.com/4Kuye6W.jpeg', size: '10mb' };
     },
     my() {
       return !!this.message.member?.self;
@@ -84,6 +82,7 @@ export default {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = this.document.url;
+      a.target = '_blank';
       a.download = this.document.name;
       document.body.appendChild(a);
       a.click();
@@ -114,6 +113,7 @@ export default {
     }
 
     .chat-message__image {
+      cursor: pointer;
       &__img {
         width: 100%;
       }
