@@ -28,7 +28,7 @@
         </div>
         <div class="chat-message__document__info-wrapper">
           <a class="chat-message__document__name" :title="document.name">{{ document.name }}</a>
-          <div class="chat-message__document__size">{{ document.size }}</div>
+          <div class="chat-message__document__size">{{ documentSize }}</div>
         </div>
       </div>
     </div>
@@ -47,6 +47,7 @@
 <script>
 import { mapActions } from 'vuex';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 
 export default {
   name: 'chat-message',
@@ -73,6 +74,10 @@ export default {
     },
     document() {
       return this.message.file;
+    },
+    documentSize() {
+      if (!this.document) return '';
+      return prettifyFileSize(this.document.size);
     },
     my() {
       return !!this.message.member?.self;
@@ -118,6 +123,7 @@ export default {
 
     .chat-message__image {
       cursor: pointer;
+
       &__img {
         width: 100%;
       }
