@@ -8,6 +8,7 @@
     </div>
     <div v-else class="chat-footer__chat-active">
       <wt-textarea
+        ref="message-draft"
         v-model="draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         name="draft"
@@ -51,6 +52,20 @@ export default {
   data: () => ({
     draft: '',
   }),
+  mounted() {
+    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
+  },
+  destroyed() {
+    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
+  },
+  watch: {
+    isChatActive: {
+      handler(value) {
+        if (value) this.$nextTick(() => this.setDraftFocus());
+      },
+      immediate: true,
+    },
+  },
   computed: {
     ...mapGetters('chat', {
       isChatActive: 'IS_CHAT_ACTIVE',
@@ -63,6 +78,12 @@ export default {
       send: 'SEND',
       sendFile: 'SEND_FILE',
     }),
+
+    setDraftFocus() {
+      const messageDraft = this.$refs['message-draft'];
+      if (!messageDraft) return;
+      messageDraft.$el.querySelector('textarea').focus();
+    },
 
     async handleFilePaste(event) {
       const files = Array

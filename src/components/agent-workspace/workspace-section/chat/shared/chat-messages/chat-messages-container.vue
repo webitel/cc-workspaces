@@ -1,5 +1,5 @@
 <template>
-  <section class="chat-messages-container">
+  <section class="chat-messages-container" @click="chatInputFocus">
     <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
       <scroll-observer
         :options="intersectionObserverOptions"
@@ -58,6 +58,9 @@ export default {
     },
   },
   methods: {
+    chatInputFocus() {
+      this.$eventBus.$emit('chat-input-focus');
+    },
     loadMessages() {
       console.info('intersection');
     },
