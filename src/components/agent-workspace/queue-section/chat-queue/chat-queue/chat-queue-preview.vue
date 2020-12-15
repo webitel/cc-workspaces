@@ -37,7 +37,7 @@ export default {
       return this.task.members.map((member) => member.name).join(', ');
     },
     lastMessage() {
-      return this.task.messages[this.task.messages.length - 1].value;
+      return this.task.messages[this.task.messages.length - 1].text;
     },
   },
 };

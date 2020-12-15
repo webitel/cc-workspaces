@@ -20,7 +20,11 @@
         @click="downloadDocument"
       >
         <div class="chat-message__document__icon-wrapper">
-          <wt-icon class="chat-message__document__icon" icon="attach"></wt-icon>
+          <wt-icon
+            class="chat-message__document__icon"
+            icon="attach"
+            :color="my ? 'primary' : 'contrast'"
+          ></wt-icon>
         </div>
         <div class="chat-message__document__info-wrapper">
           <a class="chat-message__document__name" :title="document.name">{{ document.name }}</a>
@@ -121,6 +125,7 @@ export default {
 
     .chat-message__document {
       display: flex;
+      cursor: pointer;
 
       .chat-message__document__icon-wrapper {
         width: 32px;
@@ -130,7 +135,7 @@ export default {
         justify-content: center;
         margin-right: 10px;
         border-radius: var(--border-radius);
-        background: var(--main-primary-color);
+        background: var(--chat-client-attachment-bg-color);
       }
 
       .chat-message__document__info-wrapper {
@@ -180,6 +185,7 @@ export default {
         .chat-message__document__icon-wrapper {
           margin-right: 0;
           margin-left: 10px;
+          background: var(--chat-agent-attachment-bg-color);
         }
       }
     }
