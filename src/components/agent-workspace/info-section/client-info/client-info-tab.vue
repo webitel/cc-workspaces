@@ -6,9 +6,8 @@
 
 <script>
   import MarkdownIt from 'markdown-it';
-  import { mapState } from 'vuex';
-  import WorkspaceStates
-    from '../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  import { mapGetters } from 'vuex';
+  import deepCopy from 'deep-copy';
   import patchMDRender from './_internals/patchMDRender';
 
   const md = new MarkdownIt({ linkify: true });
@@ -21,25 +20,17 @@
     }),
 
     computed: {
-      ...mapState('workspace', {
-        state: (state) => state.workspaceState,
+      ...mapGetters('workspace', {
+        taskOnWorkspace: 'TASK_ON_WORKSPACE',
       }),
-      ...mapState('call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-      ...mapState('member', {
-        member: (state) => state.memberOnWorkspace,
-      }),
-
       computeHTML() {
-        let variables;
-        if (this.state === WorkspaceStates.CALL) variables = this.call.variables;
-        else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
+        const { variables } = this.taskOnWorkspace;
         let res = '';
         if (variables) {
-          delete variables.knowledge_base;
-          Object.keys(variables).forEach((name) => {
-            res += md.render(`**${name}:** ${variables[name]}`);
+          const variablesCopy = deepCopy(variables);
+          delete variablesCopy.knowledge_base;
+          Object.keys(variablesCopy).forEach((name) => {
+            res += md.render(`**${name}:** ${variablesCopy[name]}`);
           });
         }
         return res;

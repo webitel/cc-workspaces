@@ -8,7 +8,7 @@ const getters = {
   TASK_ON_WORKSPACE: (state, getters, rootState) => (
     state.workspaceState
       ? rootState[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
-      : null
+      : {}
   ),
 };
 

@@ -13,29 +13,19 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import WorkspaceStates
-    from '../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import { mapGetters } from 'vuex';
 
   export default {
     name: 'knowledge-base-tab',
 
     computed: {
-      ...mapState('workspace', {
-        state: (state) => state.workspaceState,
-      }),
-      ...mapState('call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-      ...mapState('member', {
-        member: (state) => state.memberOnWorkspace,
+      ...mapGetters('workspace', {
+        taskOnWorkspace: 'TASK_ON_WORKSPACE',
       }),
 
       knowledgeSource() {
-        let variables = {};
-        if (this.state === WorkspaceStates.CALL) variables = this.call.variables;
-        else if (this.state === WorkspaceStates.MEMBER) variables = this.member.variables;
-        return variables.knowledge_base;
+        const { variables } = this.taskOnWorkspace;
+        return variables?.knowledge_base;
       },
     },
   };

@@ -21,7 +21,7 @@ describe('knowledge base info section tab', () => {
     });
   });
 
-  it('renders a component', async () => {
+  it('renders a component', () => {
     const wrapper = shallowMount(KnowledgeBaseTab, {
       store,
       localVue,
