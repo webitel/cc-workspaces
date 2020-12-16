@@ -7,4 +7,13 @@ describe('Chat Preview', () => {
     const wrapper = shallowMount(ChatPreview);
     expect(wrapper.exists()).toBe(true);
   });
+
+  it('calls store sendFile method at handleDrop method', () => {
+    const sendFileMock = jest.spyOn(ChatPreview.methods, 'sendFile').mockImplementation(() => {});
+    const wrapper = shallowMount(ChatPreview);
+    const files = [{ name: 'jest' }];
+    const event = { dataTransfer: { files } };
+    wrapper.vm.handleDrop(event);
+    expect(sendFileMock).toHaveBeenCalledWith(files);
+  });
 });
