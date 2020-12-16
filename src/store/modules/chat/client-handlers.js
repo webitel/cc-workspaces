@@ -32,12 +32,11 @@ const actions = {
   },
 
   HANDLE_INVITE_ACTION: (context, chat) => {
-    // console.info(JSON.stringify({ ...chat, client: null }));
     context.commit('ADD_CHAT', chat);
   },
 
-  HANDLE_MESSAGE_ACTION: () => {
-    // context.commit('ADD_CALL', chat);
+  HANDLE_MESSAGE_ACTION: (context, chat) => {
+    context.dispatch('CHAT_INSERT_TO_START', chat);
   },
 
   HANDLE_CLOSE_ACTION: (context, chat) => {

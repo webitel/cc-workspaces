@@ -18,6 +18,7 @@ describe('chat store: actions', () => {
   };
 
   beforeEach(() => {
+    context.state = { chatOnWorkspace: chat };
     chat.join.mockClear();
     chat.leave.mockClear();
     chat.decline.mockClear();
@@ -65,6 +66,16 @@ describe('chat store: actions', () => {
   it('OPEN_CHAT dispatches SET_WORKSPACE action with passed chat as param', () => {
     chatModule.actions.OPEN_CHAT(context, chat);
     expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', chat);
+  });
+
+  it('CHAT_INSERT_TO_START changes passed chat position to start in chatList array', () => {
+    const oldChat = { id: '1' };
+    const updatedChat = { id: '2' };
+    const oldChatList = [oldChat, updatedChat];
+    const updatedChatList = [updatedChat, oldChat];
+    context.state.chatList = oldChatList;
+    chatModule.actions.CHAT_INSERT_TO_START(context, updatedChat);
+    expect(context.commit).toHaveBeenCalledWith('SET_CHAT_LIST', updatedChatList);
   });
 
   it('SET_WORKSPACE dispatches global SET_WORKSPACE_STATE action', () => {

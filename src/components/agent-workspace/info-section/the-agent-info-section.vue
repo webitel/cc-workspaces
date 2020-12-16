@@ -9,14 +9,12 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
   import { CallActions } from 'webitel-sdk';
   import Tabs from '../../utils/tabs.vue';
   import ClientInfo from './client-info/client-info-tab.vue';
   import KnowledgeBase from './knowledge-base/knowledge-base-tab.vue';
   import PostProcessing from './post-processing/post-processing-tab.vue';
-  import WorkspaceStates
-    from '../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
   export default {
     name: 'the-agent-info-section',
@@ -41,21 +39,16 @@
     },
 
     computed: {
-      ...mapState('workspace', {
-        workspaceState: (state) => state.workspaceState,
-      }),
       ...mapState('call', {
         call: (state) => state.callOnWorkspace,
-        state: (state) => state.callOnWorkspace.state,
+        state: (state) => state.callOnWorkspace.state, // is used for state change watcher
       }),
-      ...mapState('member', {
-        member: (state) => state.memberOnWorkspace,
+      ...mapGetters('workspace', {
+        taskOnWorkspace: 'TASK_ON_WORKSPACE',
       }),
 
       hasKnowledgeBase() {
-        let variables = {};
-        if (this.workspaceState === WorkspaceStates.CALL) variables = this.call.variables;
-        else if (this.workspaceState === WorkspaceStates.MEMBER) variables = this.member.variables;
+        const { variables } = this.taskOnWorkspace;
         return !!variables?.knowledge_base;
       },
 

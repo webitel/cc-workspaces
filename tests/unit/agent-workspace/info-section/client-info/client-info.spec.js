@@ -4,6 +4,7 @@ import ClientInfo
   from '../../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
 import WorkspaceStates
   from '../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -22,10 +23,10 @@ describe('Client Info MD from Call', () => {
       state,
       modules: {
         workspace: {
-          namespaced: true,
           state: {
             workspaceState: WorkspaceStates.CALL,
           },
+          ...workspaceModule,
         },
         call: {
           namespaced: true,
@@ -41,7 +42,7 @@ describe('Client Info MD from Call', () => {
       localVue,
     });
     const md = wrapper.find('.md');
-    expect(md.isEmpty()).toBe(true);
+    expect(md.element).toBeEmptyDOMElement();
   });
 
 //   it('Correctly renders key-value in call variables', () => {

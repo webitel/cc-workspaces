@@ -3,6 +3,7 @@
     <offline-preview
       v-for="(member, key) of dataList"
       :member="member"
+      :opened="member === taskOnWorkspace"
       :key="member.id"
       @click.native.prevent="openMember(key)"
     ></offline-preview>
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import OfflinePreview from './offline-queue-preview.vue';
 import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
 
@@ -25,6 +26,9 @@ export default {
   computed: {
     ...mapState('member', {
       dataList: (state) => state.membersList,
+    }),
+    ...mapGetters('workspace', {
+      taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
   },
 

@@ -38,6 +38,11 @@ describe('chat store client handlers: actions', () => {
     expect(context.dispatch).toHaveBeenCalledWith('HANDLE_MESSAGE_ACTION', chat);
   });
 
+  it('HANDLE_MESSAGE_ACTION dispatches CHAT_INSERT_TO_START with passed message', async () => {
+    await chatModule.actions.HANDLE_MESSAGE_ACTION(context, chat);
+    expect(context.dispatch).lastCalledWith('CHAT_INSERT_TO_START', chat);
+  });
+
   it('HANDLE_CLOSE_ACTION is called after Leave event', async () => {
     await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
     mockSocket.leave(chat);
