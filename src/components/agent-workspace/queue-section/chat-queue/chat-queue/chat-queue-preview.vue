@@ -37,7 +37,8 @@ export default {
       return this.task.members.map((member) => member.name).join(', ');
     },
     lastMessage() {
-      return this.task.messages[this.task.messages.length - 1].value;
+      const lastMessage = this.task.messages[this.task.messages.length - 1];
+      return lastMessage.file ? lastMessage.file.name : lastMessage.text;
     },
   },
 };

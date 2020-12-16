@@ -64,6 +64,10 @@ export default {
     chat: {
       acceptPreviewText: 'If you are ready to answer, click "Accept" button first',
       draftPlaceholder: 'Write a message...',
+      dropzone: {
+        title: 'Drop your files here',
+        description: 'To upload them',
+      },
     },
   },
   emptyWorkspace: {

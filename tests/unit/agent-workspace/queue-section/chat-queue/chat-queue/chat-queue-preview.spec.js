@@ -11,7 +11,7 @@ const lastMessage = 'jest2';
 const task = {
   id: '1',
   members: [{ name: 'jest' }],
-  messages: [{ value: 'jest1' }, { value: 'jest2' }],
+  messages: [{ text: 'jest1' }, { text: 'jest2' }],
 };
 
 describe('ChatQueuePreview', () => {
@@ -23,6 +23,13 @@ describe('ChatQueuePreview', () => {
   it('correctly computes last message text', () => {
     const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task } });
     expect(wrapper.vm.lastMessage).toBe(lastMessage);
+  });
+
+  it('correctly computes last message text, if last message is file', () => {
+    const filename = 'jest';
+    const testTask = { ...task, messages: [{ file: { name: filename } }] };
+    const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task: testTask } });
+    expect(wrapper.vm.lastMessage).toBe(filename);
   });
 
   it('correctly computes chat participants name to display', () => {

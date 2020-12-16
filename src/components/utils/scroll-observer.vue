@@ -7,17 +7,17 @@
   export default {
     props: {
       options: Object,
-      // default: () => ({
-      //   // rootMargin: '200px',
-      // }),
     },
     data: () => ({
       observer: null,
     }),
 
     watch: {
-      options() {
-        this.setObserver();
+      options: {
+        handler() {
+          this.setObserver();
+        },
+        immediate: true,
       },
     },
 
@@ -27,7 +27,7 @@
 
     methods: {
       setObserver() {
-        if (this.options) { // if parent rendered and we can set root within options
+        if (this.options && !this.observer) { // if parent rendered and we can set root within options
           this.observer = new IntersectionObserver(([entry]) => {
             if (entry && entry.isIntersecting) {
               this.$emit('intersect');

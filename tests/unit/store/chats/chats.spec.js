@@ -1,11 +1,12 @@
 import chatModule from '../../../../src/store/modules/chat/chat';
-import WorkspaceStates from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
 const chat = {
   id: '1',
   join: jest.fn(),
   decline: jest.fn(),
   leave: jest.fn(),
+  send: jest.fn(),
   sendText: jest.fn(),
 };
 
@@ -29,10 +30,24 @@ describe('chat store: actions', () => {
     expect(chat.join).toHaveBeenCalled();
   });
 
-  it('SEND action calls chat sendText() method', () => {
+  it('SEND action calls chat send() method', () => {
     const message = 'jest';
     chatModule.actions.SEND(context, message);
-    expect(chat.sendText).toHaveBeenCalledWith(message);
+    expect(chat.send).toHaveBeenCalledWith(message);
+  });
+
+  it('SEND_FILE action calls chat send() method, if 1 file is passed', () => {
+    const file = { name: 'jest1' };
+    chatModule.actions.SEND_FILE(context, file);
+    expect(context.dispatch).toHaveBeenCalledWith('SEND', file);
+  });
+
+  it('SEND_FILE action calls chat send() method, for each passed file in array', () => {
+    const files = [{ name: 'jest1' }, { name: 'jest2' }];
+    chatModule.actions.SEND_FILE(context, files);
+    expect(context.dispatch).toHaveBeenCalledTimes(files.length);
+    expect(context.dispatch.mock.calls[0]).toEqual(['SEND', files[0]]);
+    expect(context.dispatch.mock.calls[1]).toEqual(['SEND', files[1]]);
   });
 
   it('CLOSE action calls chat leave() method, if allowLeave is true', () => {
@@ -71,6 +86,17 @@ describe('chat store: actions', () => {
     chatModule.actions.RESET_WORKSPACE(context);
     expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE', {});
   });
+
+  it('OPEN_MEDIA commits SET_MEDIA_VIEW mutation with passed message to open', () => {
+    const message = { id: '1' };
+    chatModule.actions.OPEN_MEDIA(context, message);
+    expect(context.commit).toHaveBeenCalledWith('SET_MEDIA_VIEW', message);
+  });
+
+  it('CLOSE_MEDIA commits SET_MEDIA_VIEW mutation with null value', () => {
+    chatModule.actions.CLOSE_MEDIA(context);
+    expect(context.commit).toHaveBeenCalledWith('SET_MEDIA_VIEW', null);
+  });
 });
 
 describe('chat store: mutations', () => {
@@ -100,5 +126,13 @@ describe('chat store: mutations', () => {
     const state = { chatOnWorkspace: {} };
     chatModule.mutations.SET_WORKSPACE(state, chat);
     expect(state.chatOnWorkspace).toEqual(chatOnWorkspace);
+  });
+
+  it('SET_MEDIA_VIEW sets passed message to mediaView state prop', () => {
+    const message = { id: '1' };
+    const mediaView = message;
+    const state = { mediaView: {} };
+    chatModule.mutations.SET_MEDIA_VIEW(state, message);
+    expect(state.mediaView).toEqual(mediaView);
   });
 });

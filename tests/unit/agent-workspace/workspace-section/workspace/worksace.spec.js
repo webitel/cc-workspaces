@@ -44,7 +44,6 @@ describe('Hangup event on call component', () => {
     const wrapper = shallowMount(Workspace, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     const call = {};
@@ -60,7 +59,6 @@ describe('Hangup event on call component', () => {
     const wrapper = shallowMount(Workspace, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     await mockSocket.ringing(call);
@@ -68,5 +66,16 @@ describe('Hangup event on call component', () => {
     expect(wrapper.find(Call)
       .exists())
       .toBeFalsy();
+  });
+
+  it('ignores all drop events', () => {
+    const wrapper = shallowMount(Workspace, { store, localVue });
+    const event = {
+      preventDefault: jest.fn(),
+      stopPropagation: jest.fn(),
+    };
+    wrapper.vm.preventDrop(event);
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(event.stopPropagation).toHaveBeenCalled();
   });
 });
