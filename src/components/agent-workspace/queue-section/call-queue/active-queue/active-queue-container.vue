@@ -3,6 +3,7 @@
     <active-preview
       v-for="(call, key) of callList"
       :call="call"
+      :opened="call === taskOnWorkspace"
       :index="key"
       :key="key"
       @click.native.prevent="openCall(key)"
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
   import ActivePreview from './active-queue-preview.vue';
 
   export default {
@@ -23,6 +24,9 @@
     computed: {
       ...mapState('call', {
         callList: (state) => state.callList,
+      }),
+      ...mapGetters('workspace', {
+        taskOnWorkspace: 'TASK_ON_WORKSPACE',
       }),
     },
 
