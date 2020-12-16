@@ -59,6 +59,14 @@ const actions = {
     context.dispatch('SET_WORKSPACE', chat);
   },
 
+  CHAT_INSERT_TO_START: (context, chat) => {
+    const chatPosition = context.state.chatList.indexOf(chat);
+    const chatList = context.state.chatList.slice();
+    chatList.splice(chatPosition, 1);
+    chatList.unshift(chat);
+    context.commit('SET_CHAT_LIST', chatList);
+  },
+
   SET_WORKSPACE: (context, chat) => {
     context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CHAT, { root: true });
     context.commit('SET_WORKSPACE', chat);

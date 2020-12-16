@@ -122,6 +122,7 @@ export default {
       cursor: pointer;
 
       &__img {
+        @extend %typo-body-md;
         width: 100%;
       }
     }
