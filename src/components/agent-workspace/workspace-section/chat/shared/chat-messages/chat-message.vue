@@ -89,13 +89,10 @@ export default {
     }),
     downloadDocument() {
       const a = document.createElement('a');
-      a.style.display = 'none';
       a.href = this.document.url;
       a.target = '_blank';
       a.download = this.document.name;
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
     },
     openImage() {
       this.openMedia(this.message);

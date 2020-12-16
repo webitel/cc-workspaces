@@ -77,4 +77,18 @@ describe('Chat Messages Container', () => {
     });
     expect(wrapper.vm.showUserPic(messages.length - 1)).toBe(false);
   });
+
+  it('event bus emits input focus event at message container click', () => {
+    const $eventBus = { $emit: jest.fn() };
+    const wrapper = shallowMount(ChatMessagesContainer, {
+      mocks: { $eventBus },
+      computed: {
+        chat() {
+          return chat;
+        },
+      },
+    });
+   wrapper.find('.chat-messages-container').trigger('click');
+    expect($eventBus.$emit).toHaveBeenCalledWith('chat-input-focus');
+  });
 });

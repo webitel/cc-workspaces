@@ -82,7 +82,9 @@ export default {
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
       if (!messageDraft) return;
-      messageDraft.$el.querySelector('textarea').focus();
+      const textarea = messageDraft.$el.querySelector('textarea');
+      if (!textarea) return;
+      textarea.focus();
     },
 
     async handleFilePaste(event) {
