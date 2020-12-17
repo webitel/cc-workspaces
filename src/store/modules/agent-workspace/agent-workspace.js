@@ -4,7 +4,13 @@ const state = {
   workspaceState: null,
 };
 
-const getters = {};
+const getters = {
+  TASK_ON_WORKSPACE: (state, getters, rootState) => (
+    state.workspaceState
+      ? rootState[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
+      : {}
+  ),
+};
 
 const actions = {
   OPEN_SESSION: async (context) => {

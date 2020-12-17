@@ -58,4 +58,34 @@ import ChatFooter
     draftTextarea.$emit('enter', message);
     expect(sendMock).toHaveBeenCalledWith(message);
   });
+
+  it('calls store sendFile method at textarea pasted attachment', () => {
+    const sendFileMock = jest.spyOn(ChatFooter.methods, 'sendFile').mockImplementation(() => {});
+    const file = { name: 'jest' };
+    const event = {
+      clipboardData: {
+        items: [{ getAsFile: () => file }],
+      },
+      preventDefault() {},
+    };
+    const wrapper = shallowMount(ChatFooter, {
+      computed: {
+        isChatActive() { return true; },
+      },
+    });
+    wrapper.vm.handleFilePaste(event);
+    expect(sendFileMock).toHaveBeenCalledWith([ file ]);
+  });
+
+  it('calls store sendFile method at input attachment', () => {
+    const sendFileMock = jest.spyOn(ChatFooter.methods, 'sendFile').mockImplementation(() => {});
+    const files = [{ name: 'jest' }];
+    const wrapper = shallowMount(ChatFooter, {
+      computed: {
+        isChatActive() { return true; },
+      },
+    });
+    wrapper.vm.handleAttachments({ target: { files } });
+    expect(sendFileMock).toHaveBeenCalledWith(files);
+  });
 });

@@ -1,5 +1,5 @@
 <template>
-  <article class="queue-preview" :class="{'queue-preview--opened': isOpened}">
+  <article class="queue-preview" :class="{'queue-preview--opened': opened}">
     <status-badge :state="computePreviewStatusClass"/>
 
     <header class="queue-preview-header">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import StatusBadge from '../call-status-icon-badge.vue';
 import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
@@ -52,17 +52,13 @@ export default {
       type: Object,
       required: true,
     },
+    opened: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
-    ...mapState('call', {
-      callOnWorkspace: (state) => state.callOnWorkspace,
-    }),
-
-    isOpened() {
-      return this.call === this.callOnWorkspace;
-    },
-
     isHold() {
       return this.call.isHold;
     },

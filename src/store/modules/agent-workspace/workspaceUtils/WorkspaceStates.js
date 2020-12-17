@@ -1,5 +1,5 @@
 export default Object.freeze({
-  CALL: Symbol('call'),
-  MEMBER: Symbol('member'),
-  CHAT: Symbol('chat'),
+  CALL: 'call',
+  MEMBER: 'member',
+  CHAT: 'chat',
 });

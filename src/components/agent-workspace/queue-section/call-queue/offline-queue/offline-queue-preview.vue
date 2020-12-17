@@ -1,5 +1,5 @@
 <template>
-  <article class="queue-preview offline-queue" :class="{'queue-preview--opened': isOpened}">
+  <article class="queue-preview offline-queue" :class="{'queue-preview--opened': opened}">
     <status-badge/>
 
     <header class="queue-preview-header">
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
   import StatusBadge from '../call-status-icon-badge.vue';
 
   export default {
@@ -20,23 +19,18 @@
     components: {
       StatusBadge,
     },
-
     props: {
       member: {
         type: Object,
         required: true,
       },
+      opened: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
-      ...mapState('member', {
-        memberOnWorkspace: (state) => state.memberOnWorkspace,
-      }),
-
-      isOpened() {
-        return this.member === this.memberOnWorkspace;
-      },
-
       displayName() {
         return this.member.name;
       },

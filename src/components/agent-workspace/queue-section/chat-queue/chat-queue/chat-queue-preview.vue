@@ -1,5 +1,5 @@
 <template>
-  <article class="queue-preview" :class="{ 'queue-preview--opened': isOpened }">
+  <article class="queue-preview" :class="{ 'queue-preview--opened': opened }">
     <header class="queue-preview-header">
       <span class="queue-preview-header__name">{{displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
@@ -28,16 +28,18 @@ export default {
       type: Object,
       required: true,
     },
+    opened: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
-    isOpened() {
-      return false;
-    },
     displayName() {
       return this.task.members.map((member) => member.name).join(', ');
     },
     lastMessage() {
-      return this.task.messages[this.task.messages.length - 1].value;
+      const lastMessage = this.task.messages[this.task.messages.length - 1];
+      return lastMessage.file ? lastMessage.file.name : lastMessage.text;
     },
   },
 };

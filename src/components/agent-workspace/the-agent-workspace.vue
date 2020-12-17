@@ -1,5 +1,5 @@
 <template>
-  <main class="main-agent-workspace">
+  <main class="main-agent-workspace" @dragenter.prevent @dragover.prevent @drop="preventDrop">
     <notification/>
     <cc-header/>
     <div class="workspace-wrap">
@@ -52,6 +52,11 @@
         openSession: 'OPEN_SESSION',
         closeSession: 'CLOSE_SESSION',
       }),
+
+      preventDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
+      },
     },
   };
 </script>

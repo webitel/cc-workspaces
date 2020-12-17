@@ -64,6 +64,10 @@ export default {
     chat: {
       acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
       draftPlaceholder: 'Напишите сообщение...',
+      dropzone: {
+        title: 'Перетяните файлы сюда',
+        description: 'Чтобы отправить их',
+      },
     },
   },
   emptyWorkspace: {
