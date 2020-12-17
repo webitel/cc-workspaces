@@ -3,18 +3,11 @@
 
 // form wrap itself
 .processing-form {
-  max-width: (530px);
-  padding: 0 (20px);
-  margin: auto;
 
   // selects
   &__category,
   &__subcategory {
     margin-bottom: (20px);
-  }
-
-  .cc-textarea {
-    width: 100%;
   }
 
   &__datetime {

@@ -1,45 +1,23 @@
 <template>
   <form class="processing-form processing-form__success">
-<!--    <multiselect-->
-<!--      class="processing-form__category"-->
-<!--      :value="[]"-->
-<!--      :label="$t('infoSec.postProcessing.category')"-->
-<!--      :options="[]"-->
-<!--      :api-mode="false"-->
-<!--    ></multiselect>-->
-<!--    <multiselect-->
-<!--      class="processing-form__subcategory"-->
-<!--      :value="[]"-->
-<!--      :label="$t('infoSec.postProcessing.subcategory')"-->
-<!--      :options="[]"-->
-<!--      :api-mode="false"-->
-<!--    ></multiselect>-->
-    <cc-textarea
-      v-model="description"
+    <wt-textarea
+      :value="description"
+      :label="$t('reusable.description')"
       :placeholder="$t('reusable.description')"
-    ></cc-textarea>
+      @input="setValue({ prop: 'description', value: $event })"
+    ></wt-textarea>
   </form>
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
-  import CcTextarea from '../../../utils/textarea.vue';
+  import { mapState, mapActions } from 'vuex';
 
   export default {
     name: 'post-processing-success-form',
-    components: {
-      CcTextarea,
-    },
-
     computed: {
-      description: {
-        get() {
-          return this.$store.state.reporting.description;
-        },
-        set(value) {
-          this.setValue({ prop: 'description', value });
-        },
-      },
+      ...mapState('reporting', {
+        description: (state) => state.description,
+      }),
     },
 
     methods: {
