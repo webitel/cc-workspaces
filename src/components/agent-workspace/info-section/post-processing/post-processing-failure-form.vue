@@ -28,7 +28,7 @@
         @change="setValue({ prop: 'nextDistributeAt', value: $event })"
       ></wt-datetimepicker>
     </div>
-    <member-communications :v="v"/>
+    <member-communications/>
     <wt-textarea
       :value="description"
       :label="$t('reusable.description')"
@@ -46,11 +46,6 @@ export default {
   name: 'post-processing-failure-form',
   components: {
     MemberCommunications,
-  },
-  props: {
-    v: {
-      type: Object,
-    },
   },
 
   data: () => ({

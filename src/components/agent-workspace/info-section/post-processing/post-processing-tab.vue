@@ -23,12 +23,11 @@
         >{{ $t('infoSec.postProcessing.no') }}
         </wt-button>
       </div>
-      <success-form v-show="isSuccess"/>
-      <failure-form v-show="!isSuccess" :v="$v"/>
+      <success-form v-show="!isSuccess"/>
+      <failure-form v-show="!!isSuccess"/>
     </article>
     <wt-button
       class="post-processing__submit-btn"
-      :disabled="!isCommunicationsValid"
       @click="sendReporting"
     >{{ $t('reusable.send') }}
     </wt-button>
@@ -37,7 +36,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
 import SuccessForm from './post-processing-success-form.vue';
 import FailureForm from './post-processing-failure-form.vue';
 
@@ -46,27 +44,6 @@ export default {
   components: {
     SuccessForm,
     FailureForm,
-  },
-
-  validations: {
-    communication: {
-      destination: {
-        required,
-      },
-      type: {
-        required,
-      },
-    },
-    newCommunications: {
-      $each: {
-        destination: {
-          required,
-        },
-        type: {
-          required,
-        },
-      },
-    },
   },
 
   watch: {
@@ -81,21 +58,11 @@ export default {
   computed: {
     ...mapState('reporting', {
       isSuccess: (state) => state.isSuccess,
-      // for validation purposes
-      communication: (state) => state.communication,
-      // for validation purposes
-      newCommunications: (state) => state.newCommunications,
     }),
 
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
-
-    isCommunicationsValid() {
-      if (this.isSuccess) return true;
-      this.$v.$touch();
-      return !(this.$v.$pending || this.$v.$error);
-    },
   },
 
   methods: {

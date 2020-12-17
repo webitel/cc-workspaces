@@ -16,12 +16,6 @@ const callOnWorkspace = {
   reporting: mockReporting,
 };
 
-const vMock = {
-  $touch: jest.fn(),
-  $pending: false,
-  $error: false,
-};
-
 describe('Post processing Success reporting', () => {
   let state;
   let store;
@@ -79,25 +73,13 @@ describe('Post processing Failure reporting', () => {
   });
 
   it('post processing failure form is initially invisible', async () => {
-    const wrapper = shallowMount(PostProcessingTab, {
-      store,
-      localVue,
-      mocks: {
-        $v: vMock,
-      },
-    });
+    const wrapper = shallowMount(PostProcessingTab, { store, localVue });
     const failureForm = wrapper.findComponent(FailureForm);
     expect(failureForm.isVisible()).toBe(false);
   });
 
   it('Opens failure form on radio click', async () => {
-    const wrapper = shallowMount(PostProcessingTab, {
-      store,
-      localVue,
-      mocks: {
-        $v: vMock,
-      },
-    });
+    const wrapper = shallowMount(PostProcessingTab, { store, localVue });
     wrapper.findAllComponents({ name: 'wt-button' })
       .wrappers.find((button) => button.attributes().color === 'danger')
       .vm.$emit('click');
