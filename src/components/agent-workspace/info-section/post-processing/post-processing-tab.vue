@@ -1,7 +1,7 @@
 <template>
   <section class="post-processing">
     <h1 class="post-processing__title">{{ $t('infoSec.postProcessing.isSuccess') }}</h1>
-    <form
+    <article
       class="post-processing__form-wrapper"
       :class="isSuccess
          ? 'post-processing__form-wrapper--success'
@@ -25,7 +25,7 @@
       </div>
       <success-form v-show="isSuccess"/>
       <failure-form v-show="!isSuccess" :v="$v"/>
-    </form>
+    </article>
     <wt-button
       class="post-processing__submit-btn"
       :disabled="!isCommunicationsValid"

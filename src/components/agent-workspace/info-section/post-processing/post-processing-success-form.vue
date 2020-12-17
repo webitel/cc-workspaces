@@ -29,5 +29,4 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
 </style>

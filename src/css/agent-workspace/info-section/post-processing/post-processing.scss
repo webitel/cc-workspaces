@@ -1,26 +1,5 @@
-
-
-
-// form wrap itself
 .processing-form {
-
-  // selects
-  &__category,
-  &__subcategory {
-    margin-bottom: (20px);
-  }
-
-  &__datetime {
-    display: flex;
-    justify-content: stretch;
-
-    .datepicker {
-      flex: 4 1 auto;
-    }
-
-    .timepicker {
-      margin-left: (20px);
-      flex: 0 0 auto;
-    }
+  .processing-form__input {
+    margin-bottom: 10px;
   }
 }

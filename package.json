@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/ui-sdk": "^0.6.24",
+    "@webitel/ui-sdk": "^0.6.27",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
