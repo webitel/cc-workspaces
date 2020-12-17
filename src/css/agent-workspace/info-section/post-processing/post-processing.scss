@@ -1,34 +1,5 @@
 
-// main wrap
-.post-processing {
-  height: 100%;
 
-  // h1 title
-  &__title {
-    @extend .typo-heading-md;
-    text-align: center;
-    margin: (50px) 0 (60px);
-  }
-
-  // radio-buttons form
-  &__success-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: (60px);
-
-    .radio-button {
-      margin: 0 (15px);
-    }
-  }
-
-  // submit .cc-btn component
-  &__submit {
-    display: block;
-    min-width: (110px);
-    margin: (60px) auto;
-  }
-}
 
 // form wrap itself
 .processing-form {

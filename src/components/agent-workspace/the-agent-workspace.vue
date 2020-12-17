@@ -66,6 +66,7 @@
     display: flex;
     flex-direction: column;
     max-height: 100%;
+    min-width: 1280px;
   }
 
   .workspace-wrap {
