@@ -3,12 +3,13 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
 import reporting from '../../../../src/store/modules/post-processing/post-processing';
 import workspace from '../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../src/store/modules/call/call';
+import call from '../../../../src/store/modules/call/call';
 import InfoSection
   from '../../../../src/components/agent-workspace/info-section/the-agent-info-section.vue';
 import PostProcessingTab
   from '../../../../src/components/agent-workspace/info-section/post-processing/post-processing-tab.vue';
 import MockSocket from '../../mocks/MockSocket';
+import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -20,7 +21,6 @@ jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
 
 describe('Open Post Processing tab automatically after hangup', () => {
   let state;
-  const { actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -30,23 +30,21 @@ describe('Open Post Processing tab automatically after hangup', () => {
     store = new Vuex.Store({
       state,
       modules: {
-        workspace,
+        workspace: {
+          ...workspace,
+          state: { workspaceState: WorkspaceStates.CALL },
+        },
         reporting,
         call: {
-          namespaced: true,
+          ...call,
           state,
-          actions,
-          mutations,
         },
       },
     });
   });
 
   it('Open Post Processing tab automatically after hangup', async () => {
-    const wrapper = shallowMount(InfoSection, {
-      store,
-      localVue,
-    });
+    const wrapper = shallowMount(InfoSection, { store, localVue });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     expect(wrapper.findComponent(PostProcessingTab).exists()).toBeFalsy();
     await mockSocket.hangup(callOnWorkspace);
