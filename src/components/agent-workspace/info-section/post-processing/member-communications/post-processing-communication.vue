@@ -1,10 +1,13 @@
 <template>
-  <article class="processing-communication" :class="{'processing-communication--selected': selected}">
+  <article class="processing-communication" :class="{'processing-communication--selected': isSelected}">
     <div class="processing-communication__radio-wrapper">
-      <wt-radio :selected="selected" :value="selected"></wt-radio>
+      <wt-radio
+        :selected="isSelected"
+        :value="true"
+      ></wt-radio>
     </div>
     <div class="processing-communication__info-wrapper">
-      <div class="processing-communication__info-phone">{{ communication.number }}</div>
+      <div class="processing-communication__info-phone">{{ communication.destination }}</div>
       <div class="processing-communication__info-name">{{ communication.type.name }}</div>
     </div>
     <div class="processing-communication__priority-wrapper">
@@ -13,12 +16,12 @@
     <div class="processing-communication__actions-wrapper">
       <wt-icon-btn
         icon="edit"
-        @click="$emit('edit')"
+        @click.stop="$emit('edit')"
       ></wt-icon-btn>
       <wt-icon-btn
         v-if="deletable"
         icon="bucket"
-        @click="$emit('delete')"
+        @click.stop="$emit('delete')"
       ></wt-icon-btn>
     </div>
   </article>
@@ -30,22 +33,20 @@ export default {
   props: {
     communication: {
       type: Object,
-      // required: true,
-      default: () => ({
-        number: '8 800 555 3535',
-        type: { name: 'mobile' },
-        priority: 22,
-      }),
+      required: true,
     },
 
     selected: {
-      type: String,
-      required: true,
     },
 
     deletable: {
       type: Boolean,
       default: true,
+    },
+  },
+  computed: {
+    isSelected() {
+      return this.selected === this.communication;
     },
   },
 };

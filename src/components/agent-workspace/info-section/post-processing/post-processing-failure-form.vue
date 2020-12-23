@@ -1,6 +1,6 @@
 <template>
   <form class="processing-form processing-form__failure">
-    <div class="processing-form__input">
+    <div class="processing-form__input" v-if="isMember">
       <h2 class="processing-form__schedule-call-select__title">
         {{ $t('infoSec.postProcessing.nextDistributeAtTitle') }}
       </h2>
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="processing-form__input" v-show="isScheduleCall">
+    <div class="processing-form__input" v-if="isMember" v-show="isScheduleCall">
       <wt-datetimepicker
         :value="nextDistributeAt"
         :disabled-dates="disabledDates"
@@ -28,7 +28,7 @@
         @change="setValue({ prop: 'nextDistributeAt', value: $event })"
       ></wt-datetimepicker>
     </div>
-    <member-communications/>
+    <member-communications v-if="isMember" />
     <wt-textarea
       :value="description"
       :label="$t('reusable.description')"
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import MemberCommunications from './member-communications/post-processing-communications-container.vue';
 
 export default {
@@ -59,6 +59,10 @@ export default {
       isScheduleCall: (state) => state.isScheduleCall,
       nextDistributeAt: (state) => state.nextDistributeAt,
       description: (state) => state.description,
+    }),
+
+    ...mapGetters('reporting', {
+      isMember: 'IS_MEMBER',
     }),
   },
 

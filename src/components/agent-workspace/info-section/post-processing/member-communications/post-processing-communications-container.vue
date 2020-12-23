@@ -1,10 +1,19 @@
 <template>
   <div class="processing-communications-container">
-    <communication selected="'true'"/>
+    <communication
+      v-for="(communication, key) of communicationsList"
+      :communication="communication"
+      :selected="nextCommunication"
+      :key="key"
+      :deletable="communicationsList.length > 1"
+      @edit="editCommunication(communication)"
+      @delete="deleteCommunication(communication)"
+      @click.native="selectCommunication(communication)"
+    ></communication>
     <wt-button
       color="secondary"
       wide
-      @click="addNewCommunication"
+      @click="addCommunication"
     >
       {{ $t('infoSec.postProcessing.addNewCommunication') }}
     </wt-button>
@@ -12,44 +21,44 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import Communication from './post-processing-communication.vue';
 
 export default {
   name: 'post-processing-communications-container',
-  components: {
-    Communication,
-  },
+  components: { Communication },
 
   data: () => ({
     selected: '',
   }),
 
   watch: {
-    memberCommunication: {
+    task: {
       handler() {
-        this.setCommunication(this.call.memberCommunication);
+        this.loadCommunicationsList();
       },
       immediate: true,
     },
   },
 
   computed: {
-    ...mapState('call', {
-      call: (state) => state.callOnWorkspace,
-    }),
     ...mapState('reporting', {
-      communication: (state) => state.communication,
-      newCommunications: (state) => state.newCommunications,
+      communicationsList: (state) => state.communicationsList,
+      nextCommunication: (state) => state.nextCommunication,
+    }),
+
+    ...mapGetters('workspace', {
+      task: 'TASK_ON_WORKSPACE',
     }),
   },
 
   methods: {
     ...mapActions('reporting', {
-      setCommunication: 'SET_COMMUNICATION',
-      addNewCommunication: 'ADD_NEW_COMMUNICATION',
-      changeNewCommunication: 'CHANGE_NEW_COMMUNICATION',
-      deleteNewCommunication: 'DELETE_NEW_COMMUNICATION',
+      selectCommunication: 'SET_NEXT_COMMUNICATION',
+      loadCommunicationsList: 'LOAD_COMMUNICATIONS_LIST',
+      addCommunication: 'BEGIN_COMMUNICATION_ADDING',
+      editCommunication: 'BEGIN_COMMUNICATION_EDIT',
+      deleteCommunication: 'DELETE_COMMUNICATION',
     }),
   },
 };
@@ -59,8 +68,8 @@ export default {
 .processing-communications-container {
   margin: 20px 0;
 
-  .wt-button {
-    margin-top: 10px;
+  .processing-communication {
+    margin-bottom: 10px;
   }
 }
 </style>
