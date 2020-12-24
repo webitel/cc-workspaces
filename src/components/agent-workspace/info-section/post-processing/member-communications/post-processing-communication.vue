@@ -1,215 +1,99 @@
 <template>
-  <div class="processing-communication">
-    <!--    <radio-button-->
-    <!--      :value="selected"-->
-    <!--      :option="'id'"-->
-    <!--      @input="select"-->
-    <!--    ></radio-button>-->
-    <cc-input
-      class="processing-communication__input processing-communication__input__number"
-      v-model="valueDraft.destination"
-      :disabled="disabled"
-      :resetable="false"
-      :v="v.destination"
-    ></cc-input>
-    <multiselect
-      class="processing-communication__select"
-      v-model="valueDraft.type"
-      :placeholder="'Type'"
-      :fetch-method="fetchCommunications"
-      :disabled="disabled"
-      :v="v.type"
-    ></multiselect>
-    <cc-input
-      class="processing-communication__input processing-communication__input__priority"
-      v-model="valueDraft.priority"
-      :disabled="disabled"
-      :resetable="false"
-    ></cc-input>
-    <div class="actions">
-      <div class="action-wrap">
-        <button
-          v-if="disabled"
-          class="icon-btn"
-          @click.prevent="isEditing = true"
-        >
-          <icon>
-            <svg class="icon icon-edit-md md">
-              <use xlink:href="#icon-edit-md"></use>
-            </svg>
-          </icon>
-        </button>
-        <button
-          v-else
-          class="icon-btn"
-          @click.prevent="update"
-        >
-          <icon>
-            <svg class="icon icon-tick-md md">
-              <use xlink:href="#icon-tick-md"></use>
-            </svg>
-          </icon>
-        </button>
-      </div>
-      <div class="action-wrap">
-        <button
-          v-if="!exists && disabled"
-          class="icon-btn"
-          @click.prevent="$emit('delete')"
-        >
-          <icon>
-            <svg class="icon icon-bucket-md md">
-              <use xlink:href="#icon-bucket-md"></use>
-            </svg>
-          </icon>
-        </button>
-        <button
-          v-if="!disabled"
-          class="icon-btn"
-          @click.prevent="reset"
-        >
-          <icon>
-            <svg class="icon icon-close-md md">
-              <use xlink:href="#icon-close-md"></use>
-            </svg>
-          </icon>
-        </button>
-      </div>
+  <article class="processing-communication" :class="{'processing-communication--selected': isSelected}">
+    <div class="processing-communication__radio-wrapper">
+      <wt-radio
+        :selected="isSelected"
+        :value="true"
+      ></wt-radio>
     </div>
-  </div>
+    <div class="processing-communication__info-wrapper">
+      <div class="processing-communication__info-destination">{{ communication.destination }}</div>
+      <div class="processing-communication__info-type">{{ communication.type.name }}</div>
+    </div>
+    <div class="processing-communication__priority-wrapper">
+      <span class="processing-communication__priority">{{ communication.priority }}</span>
+    </div>
+    <div class="processing-communication__actions-wrapper">
+      <wt-icon-btn
+        icon="edit"
+        @click.stop="$emit('edit')"
+      ></wt-icon-btn>
+      <wt-icon-btn
+        v-if="deletable"
+        icon="bucket"
+        @click.stop="$emit('delete')"
+      ></wt-icon-btn>
+    </div>
+  </article>
 </template>
 
 <script>
-  import CcInput from '../../../../utils/input.vue';
-  import Multiselect from '../../../../utils/multiselect.vue';
-  // import RadioButton from '../../../../utils/radio-button.vue';
-  import APIRepository from '../../../../../api/APIRepository';
-
-  const communicationsAPI = APIRepository.communications;
-
-  export default {
-    name: 'post-processing-communication',
-    components: {
-      // RadioButton,
-      CcInput,
-      Multiselect,
-    },
-    props: {
-      value: {
-        type: Object,
-        required: true,
-      },
-
-      selected: {
-        type: String,
-        required: true,
-      },
-
-      exists: {
-        type: Boolean,
-        default: false,
-      },
-
-      v: {
-        type: Object,
-      },
+export default {
+  name: 'post-processing-communication',
+  props: {
+    communication: {
+      type: Object,
+      required: true,
     },
 
-    data: () => ({
-      valueDraft: {},
-      isEditing: false,
-    }),
-
-    mounted() {
-      this.isEditing = !this.exists;
+    selected: {
     },
 
-    watch: {
-      value: {
-        handler() {
-          this.valueDraft = { ...this.value };
-        },
-        immediate: true,
-      },
+    deletable: {
+      type: Boolean,
+      default: true,
     },
-
-    computed: {
-      disabled() {
-        return !this.isEditing;
-      },
+  },
+  computed: {
+    isSelected() {
+      return this.selected === this.communication;
     },
-
-    methods: {
-      update() {
-        this.$emit('change', this.valueDraft);
-        this.isEditing = false;
-      },
-      reset() {
-        this.valueDraft = this.value;
-      },
-      select() {
-        this.$emit('select', 'id');
-      },
-      fetchCommunications: communicationsAPI.getCommunications,
-    },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../../css/styleguide/inputs';
+.processing-communication {
+  --border--hover-color: var(--main-accent-color);
+  --bg--active-color: var(--main-option-hover-color);
 
-  .processing-communication {
-    display: flex;
-    justify-content: stretch;
-    align-items: flex-start;
-    width: 100%;
-    margin-top: (30px);
+  display: grid;
+  grid-template-columns: 24px 3fr 1fr 58px;
+  align-items: center;
+  grid-gap: 10px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  cursor: pointer;
 
-    .radio-button {
-      flex: 0 0 (24px);
-      margin-right: (15px);
-    }
-
-    &__select {
-      flex: 1 4 auto;
-      width: 100%;
-      margin-right: (10px);
-
-      .disabled {
-        border-color: transparent;
-        cursor: text;
-      }
-    }
-
-    &__input {
-      flex: 4 1 auto;
-      min-width: auto;
-      /*height: (40px);*/
-      margin-right: (10px);
-
-      &__priority {
-        flex: 0 0 (50px);
-      }
-
-      &:last-child {
-        margin-right: (20px);
-      }
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-top: (6px);
-      flex: 0 0 (24px*2 + 10px);
-
-      .action-wrap {
-        height: (24px);
-
-        &:last-child {
-          margin-left: (10px);
-        }
-      }
-    }
+  &:hover {
+    border-color: var(--border--hover-color);
   }
+
+  &--selected {
+    background: var(--bg--active-color);
+  }
+}
+
+.processing-communication__info-destination {
+  @extend %typo-strong-md;
+}
+
+.processing-communication__info-type {
+  @extend %typo-body-sm;
+}
+
+.processing-communication__priority {
+  @extend %typo-body-md;
+}
+
+.processing-communication__actions-wrapper {
+  display: flex;
+  justify-content: flex-end;
+
+  .wt-icon-btn:last-child {
+    margin-left: 10px;
+  }
+}
 </style>

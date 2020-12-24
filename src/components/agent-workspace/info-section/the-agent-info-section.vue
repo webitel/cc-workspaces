@@ -26,6 +26,7 @@ export default {
   },
   data: () => ({
     currentTab: { value: 'client-info' },
+    // currentTab: { value: 'post-processing' },
   }),
 
   watch: {

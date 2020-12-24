@@ -1,136 +1,99 @@
 <template>
   <form class="processing-form processing-form__failure">
-<!--    <multiselect-->
-<!--      class="processing-form__category"-->
-<!--      :value="[]"-->
-<!--      :label="$t('infoSec.postProcessing.category')"-->
-<!--      :options="[]"-->
-<!--      :api-mode="false"-->
-<!--    ></multiselect>-->
-<!--    <multiselect-->
-<!--      class="processing-form__subcategory"-->
-<!--      :value="[]"-->
-<!--      :label="$t('infoSec.postProcessing.subcategory')"-->
-<!--      :options="[]"-->
-<!--      :api-mode="false"-->
-<!--    ></multiselect>-->
-
-    <multiselect
-      class="processing-form__category"
-      v-model="isScheduleCall"
-      :label="$t('infoSec.postProcessing.scheduleCall')"
-      :options="isisScheduleCallOptions"
-      :api-mode="false"
-      :track-by="'value'"
-    ></multiselect>
-
-    <div class="processing-form__datetime" v-show="isScheduleCallValue">
-      <datepicker
-        v-model="nextDistributeAt"
-        :disabled-dates="disabledDates"
-      ></datepicker>
-      <timepicker
-        v-model="nextDistributeAt"
-        :type="'text'"
-        min-select
-      />
+    <div class="processing-form__input" v-if="isMember">
+      <h2 class="processing-form__schedule-call-select__title">
+        {{ $t('infoSec.postProcessing.nextDistributeAtTitle') }}
+      </h2>
+      <div class="processing-form__schedule-call-select-wrapper">
+        <wt-radio
+          :selected="isScheduleCall"
+          :label="$t('infoSec.postProcessing.yes')"
+          :value="true"
+          @input="setValue({ prop: 'isScheduleCall', value: $event })"
+        ></wt-radio>
+        <wt-radio
+          :selected="isScheduleCall"
+          :label="$t('infoSec.postProcessing.no')"
+          :value="false"
+          @input="setValue({ prop: 'isScheduleCall', value: $event })"
+        ></wt-radio>
+      </div>
     </div>
-    <member-communications :v="v"/>
-    <cc-textarea
-      v-model="description"
+
+    <div class="processing-form__input" v-if="isMember" v-show="isScheduleCall">
+      <wt-datetimepicker
+        :value="nextDistributeAt"
+        :disabled-dates="disabledDates"
+        :label="$t('infoSec.postProcessing.nextDistributeAt')"
+        @change="setValue({ prop: 'nextDistributeAt', value: $event })"
+      ></wt-datetimepicker>
+    </div>
+    <member-communications v-if="isMember" />
+    <wt-textarea
+      :value="description"
+      :label="$t('reusable.description')"
       :placeholder="$t('reusable.description')"
-    ></cc-textarea>
+      @input="setValue({ prop: 'description', value: $event })"
+    ></wt-textarea>
   </form>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
-  import CcTextarea from '../../../utils/textarea.vue';
-  import Multiselect from '../../../utils/multiselect.vue';
-  import Datepicker from '../../../utils/datepicker.vue';
-  import Timepicker from '../../../utils/timepicker.vue';
-  import MemberCommunications
-    from './member-communications/post-processing-communications-container.vue';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import MemberCommunications from './member-communications/post-processing-communications-container.vue';
 
-  export default {
-    name: 'post-processing-failure-form',
-    components: {
-      CcTextarea,
-      Multiselect,
-      Datepicker,
-      Timepicker,
-      MemberCommunications,
-    },
-    props: {
-      v: {
-        type: Object,
-      },
-    },
+export default {
+  name: 'post-processing-failure-form',
+  components: {
+    MemberCommunications,
+  },
 
-    data: () => ({
-      disabledDates: {
-        to: new Date(),
-      },
+  data: () => ({
+    disabledDates: {
+      to: new Date(),
+    },
+  }),
+
+  computed: {
+    ...mapState('reporting', {
+      isScheduleCall: (state) => state.isScheduleCall,
+      nextDistributeAt: (state) => state.nextDistributeAt,
+      description: (state) => state.description,
     }),
 
-    computed: {
-      ...mapState('reporting', {
-        isScheduleCallValue: (state) => state.isScheduleCall,
-        nextDistributeAtValue: (state) => state.nextDistributeAt,
-        descriptionValue: (state) => state.description,
-      }),
+    ...mapGetters('reporting', {
+      isMember: 'IS_MEMBER',
+    }),
+  },
 
-      isScheduleCall: {
-        get() {
-          // complicated getter for value for $t() name property in object
-          return this.isisScheduleCallOptions
-            .find((opt) => opt.value === this.isScheduleCallValue);
-        },
-        set(option) {
-          this.setValue({ prop: 'isScheduleCall', value: option.value });
-        },
-      },
-
-      nextDistributeAt: {
-        get() {
-          const nextDistributeAt = new Date(this.nextDistributeAtValue);
-          const min = nextDistributeAt.getMinutes();
-          if (min % 15) {
-            nextDistributeAt.setHours(nextDistributeAt.getHours() + 1);
-            nextDistributeAt.setMinutes(0, 0, 0);
-          }
-          return nextDistributeAt.getTime();
-        },
-        set(value) {
-          this.setValue({ prop: 'nextDistributeAt', value });
-        },
-      },
-
-      description: {
-        get() {
-          return this.descriptionValue;
-        },
-        set(value) {
-          this.setValue({ prop: 'description', value });
-        },
-      },
-
-      isisScheduleCallOptions() {
-        return [
-          { name: this.$t('infoSec.postProcessing.yes'), value: true },
-          { name: this.$t('infoSec.postProcessing.no'), value: false },
-        ];
-      },
-    },
-
-    methods: {
-      ...mapActions('reporting', {
-        setValue: 'SET_PROPERTY',
-      }),
-    },
-  };
+  methods: {
+    ...mapActions('reporting', {
+      setValue: 'SET_PROPERTY',
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
+@import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
+
+.processing-form__schedule-call-select__title {
+  @extend %typo-body-lg;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.processing-form__schedule-call-select-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .wt-radio:first-child {
+    margin-right: 10px;
+  }
+}
+
+.processing-form__input.wt-datetimepicker {
+  width: 100%;
+}
 </style>

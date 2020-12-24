@@ -10,7 +10,7 @@ const defaultParams = {
   search: '',
 };
 
-const fetchCommunications = async ({
+const getCommunicationTypes = async ({
                                      page,
                                      size,
                                      search,
@@ -31,12 +31,12 @@ const fetchCommunications = async ({
 };
 
 const communicationsAPIRepository = {
-  async getCommunications(argParams) {
+  getCommunicationTypes(argParams) {
     const params = {
       ...defaultParams,
       ...argParams,
     };
-    return fetchCommunications(params);
+    return getCommunicationTypes(params);
   },
 };
 
