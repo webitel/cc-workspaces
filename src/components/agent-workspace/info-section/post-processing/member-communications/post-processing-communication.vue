@@ -7,8 +7,8 @@
       ></wt-radio>
     </div>
     <div class="processing-communication__info-wrapper">
-      <div class="processing-communication__info-phone">{{ communication.destination }}</div>
-      <div class="processing-communication__info-name">{{ communication.type.name }}</div>
+      <div class="processing-communication__info-destination">{{ communication.destination }}</div>
+      <div class="processing-communication__info-type">{{ communication.type.name }}</div>
     </div>
     <div class="processing-communication__priority-wrapper">
       <span class="processing-communication__priority">{{ communication.priority }}</span>
@@ -76,11 +76,11 @@ export default {
   }
 }
 
-.processing-communication__info-phone {
+.processing-communication__info-destination {
   @extend %typo-strong-md;
 }
 
-.processing-communication__info-name {
+.processing-communication__info-type {
   @extend %typo-body-sm;
 }
 

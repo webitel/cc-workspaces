@@ -47,11 +47,11 @@ const actions = {
   },
 
   BEGIN_COMMUNICATION_ADDING: (context) => {
-    context.commit('SET_IS_NEW_COMMUNICATION', true);
+    context.commit('SET_PROPERTY', { prop: 'isNewCommunication', value: true });
   },
 
   BEGIN_COMMUNICATION_EDIT: (context, communication) => {
-    context.commit('SET_EDITED_COMMUNICATION', communication);
+    context.commit('SET_PROPERTY', { prop: 'editedCommunication', value: communication });
   },
 
   ADD_COMMUNICATION: (context, communication) => {
@@ -69,17 +69,13 @@ const actions = {
 
   DELETE_COMMUNICATION: (context, communication) => {
     context.commit('DELETE_COMMUNICATION', communication);
-    if (context.state.nextCommunication === communication) {
-      const commList = context.state.communicationsList;
-      if (commList.length) context.dispatch('SET_NEXT_COMMUNICATION', commList[0]);
-    }
   },
 
   CLOSE_COMMUNICATION_ACTIONS: (context) => {
     if (context.state.isNewCommunication) {
-      context.commit('SET_IS_NEW_COMMUNICATION', false);
+      context.commit('SET_PROPERTY', { prop: 'isNewCommunication', value: false });
     } else {
-      context.commit('SET_EDITED_COMMUNICATION', null);
+      context.commit('SET_PROPERTY', { prop: 'editedCommunication', value: null });
     }
   },
 
@@ -109,14 +105,6 @@ const mutations = {
   DELETE_COMMUNICATION: (state, communication) => {
     const deletedCommunicationIndex = state.communicationsList.indexOf(communication);
     state.communicationsList.splice(deletedCommunicationIndex, 1);
-  },
-
-  SET_IS_NEW_COMMUNICATION: (state, isNewCommunication) => {
-    state.isNewCommunication = isNewCommunication;
-  },
-
-  SET_EDITED_COMMUNICATION: (state, editedCommunication) => {
-    state.editedCommunication = editedCommunication;
   },
 
   SET_PROPERTY: (state, { prop, value }) => {

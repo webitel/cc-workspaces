@@ -115,7 +115,7 @@ export default {
       ? defaultCommunication() : deepCopy(this.editedCommunication);
     },
     async getCommunications(params) {
-      const response = await communicationsAPI.getCommunications(params);
+      const response = await communicationsAPI.getCommunicationTypes(params);
       return response.items || [];
     },
   },
