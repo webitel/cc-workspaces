@@ -5,7 +5,7 @@
         <wt-rounded-action
           class="call-action"
           :class="{ 'active': isOnHistory }"
-          icon="call-history"
+          icon="history"
           color="secondary"
           @click="$emit('openTab', 'history')"
         ></wt-rounded-action>
