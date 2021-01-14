@@ -13,24 +13,22 @@
       ></active-call>
       <!--      </div>-->
     </div>
-    <btn
-      class="transfer"
+    <wt-button
       :disabled="!selected"
-      @click.native="bridge(selected)"
+      color="transfer"
+      @click="bridge(selected)"
     >{{$t('bridge.bridge')}}
-    </btn>
+    </wt-button>
   </div>
 </template>
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import Btn from '../../../../utils/btn.vue';
   import ActiveCall from './active-call-item.vue';
 
   export default {
     name: 'workspace-transfer-container',
     components: {
-      Btn,
       ActiveCall,
     },
 
@@ -69,9 +67,9 @@
   }
 
   .ws-contact-item {
-    border: (1px) solid transparent;
-    border-radius: $border-radius;
-    transition: $transition;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
     cursor: pointer;
 
     &.selected, &:hover {
@@ -79,8 +77,7 @@
     }
   }
 
-  .cc-btn {
-    display: block;
-    margin: (17px) auto auto;
+  .wt-button {
+    margin: 17px auto auto;
   }
 </style>

@@ -2,7 +2,10 @@ export default {
   reusable: {
     answer: 'Answer',
     reject: 'Reject',
+    accept: 'Accept',
+    decline: 'Decline',
     send: 'Send',
+    save: 'Save',
     cancel: 'Cancel',
     logout: 'Logout',
     search: 'Search',
@@ -30,10 +33,13 @@ export default {
     avgHold: 'Avg Hold Time',
   },
   queueSec: {
-    active: 'Active',
-    offline: 'Offline',
-    missed: 'Missed',
-    at: 'at', // missed call "at 10:10"
+    call: {
+      calls: 'Calls',
+      at: 'at', // missed call "at 10:10"
+    },
+    chat: {
+      chats: 'Chats',
+    },
   },
   infoSec: {
     clientInfo: 'Client info',
@@ -45,7 +51,13 @@ export default {
       yes: 'Yes',
       no: 'No',
       addNewCommunication: 'Add new communication',
-      scheduleCall: 'Schedule next call?',
+      communicationDestination: 'Number',
+      communicationType: 'Type',
+      communicationPriority: 'Priority',
+      nextDistributeAtTitle: 'Schedule next call?',
+      nextDistributeAt: 'Next call time',
+      createCommunicationTitle: 'Create new communication',
+      editCommunicationTitle: 'Edit existing communication',
       category: 'Category',
       subcategory: 'Subcategory',
     },
@@ -55,6 +67,14 @@ export default {
       ringing: 'Ringing..',
       hold: 'Hold',
       hangup: 'Hangup',
+    },
+    chat: {
+      acceptPreviewText: 'If you are ready to answer, click "Accept" button first',
+      draftPlaceholder: 'Write a message...',
+      dropzone: {
+        title: 'Drop your files here',
+        description: 'To upload them',
+      },
     },
   },
   emptyWorkspace: {

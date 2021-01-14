@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapState } from 'vuex';
   import CallPreview from './call-preview.vue';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
@@ -31,12 +31,10 @@
   import Transfer from '../shared/workspace-transfer/workspace-transfer-container.vue';
   import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
-  import callTimer from '../../../../mixins/callTimerMixin';
   import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';
 
   export default {
     name: 'the-call',
-    mixins: [callTimer],
     components: {
       CallPreview,
       CallHeader,
@@ -72,11 +70,6 @@
     },
 
     methods: {
-      ...mapActions('call', {
-        answer: 'ANSWER',
-        hangup: 'HANGUP',
-      }),
-
       openTransfer() {
         this.isPreviewTransfer = true;
         this.currentTab = 'transfer';

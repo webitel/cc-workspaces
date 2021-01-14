@@ -1,6 +1,6 @@
 import axios from 'axios';
-import eventBus from '../utils/eventBus';
-import { objCamelToSnake, objSnakeToCamel } from './utils/caseConverters';
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
+import { objCamelToSnake, objSnakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 
 // global API configuration
 // 'X-Webitel-Access' ~ 'X-Access-Token'

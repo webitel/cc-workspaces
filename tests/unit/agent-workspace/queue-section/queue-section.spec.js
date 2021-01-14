@@ -18,7 +18,7 @@ jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
 
 describe('Make new call functionality', () => {
   let state;
-  const { actions, mutations } = callModule;
+  const { getters, actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
@@ -32,8 +32,10 @@ describe('Make new call functionality', () => {
         call: {
           namespaced: true,
           state,
+          getters,
           actions,
           mutations,
+          modules: callModule.modules,
         },
         member: memberModule,
       },
@@ -44,12 +46,8 @@ describe('Make new call functionality', () => {
     const wrapper = shallowMount(QueueSection, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
     });
-    const newCallBtn = wrapper.find('.call');
-    newCallBtn.trigger('click');
-    expect(state.callOnWorkspace._isNew)
-      .toBeTruthy();
+    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click', {});
+    expect(state.callOnWorkspace._isNew).toBeTruthy();
   });
 });

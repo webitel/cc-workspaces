@@ -1,121 +1,114 @@
 <template>
-  <section class="post-processing">
-    <h1 class="post-processing__title">{{$t('infoSec.postProcessing.isSuccess')}}</h1>
-    <form class="post-processing__success-form">
-      <radio-button
-        v-model="isSuccess"
-        :option="true"
-        :label="$t('infoSec.postProcessing.yes')"
-      ></radio-button>
-      <radio-button
-        v-model="isSuccess"
-        :option="false"
-        :label="$t('infoSec.postProcessing.no')"
-      ></radio-button>
-    </form>
-    <success-form v-if="isSuccess"/>
-    <failure-form :v="$v" v-else/>
-    <btn
-      class="post-processing__submit"
-      :class="{disabled: !isCommunicationsValid}"
-      @click.native="sendReporting"
-    >{{$t('reusable.send')}}
-    </btn>
-  </section>
+  <div class="post-processing">
+    <post-processing-wrapper v-show="!isCommunicationPopup" :color="isSuccess ? 'success' : 'failure'">
+      <template slot="title">
+        {{ $t('infoSec.postProcessing.isSuccess') }}
+      </template>
+      <template slot="main">
+        <div class="post-processing__status-wrapper">
+          <wt-button
+            class="post-processing__status-control"
+            :outline="!isSuccess"
+            color="success"
+            @click="setSuccess(true)"
+          >{{ $t('infoSec.postProcessing.yes') }}
+          </wt-button>
+          <wt-button
+            class="post-processing__status-control"
+            :outline="isSuccess"
+            color="danger"
+            @click="setSuccess(false)"
+          >{{ $t('infoSec.postProcessing.no') }}
+          </wt-button>
+        </div>
+        <success-form v-show="isSuccess"/>
+        <failure-form v-show="!isSuccess"/>
+      </template>
+      <template slot="actions">
+        <wt-button
+          class="post-processing__submit-btn"
+          @click="sendReporting"
+        >{{ $t('reusable.send') }}
+        </wt-button>
+      </template>
+    </post-processing-wrapper>
+    <member-communication-popup v-show="isCommunicationPopup"/>
+  </div>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
-  import { required } from 'vuelidate/lib/validators';
-  import Btn from '../../../utils/btn.vue';
-  import RadioButton from '../../../utils/radio-button.vue';
-  import SuccessForm from './post-processing-success-form.vue';
-  import FailureForm from './post-processing-failure-form.vue';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import PostProcessingWrapper from './_internals/post-processing-wrapper.vue';
+import SuccessForm from './post-processing-success-form.vue';
+import FailureForm from './post-processing-failure-form.vue';
+import MemberCommunicationPopup from './member-communications/post-processing-communication-popup.vue';
 
-  export default {
-    name: 'post-processing-tab',
-    components: {
-      Btn,
-      RadioButton,
-      SuccessForm,
-      FailureForm,
-    },
+export default {
+  name: 'post-processing-tab',
+  components: {
+    PostProcessingWrapper,
+    SuccessForm,
+    FailureForm,
+    MemberCommunicationPopup,
+  },
 
-    validations: {
-      communication: {
-        destination: {
-          required,
-        },
-        type: {
-          required,
-        },
+  watch: {
+    taskOnWorkspace: {
+      handler() {
+        this.resetForm();
       },
-      newCommunications: {
-        $each: {
-          destination: {
-            required,
-          },
-          type: {
-            required,
-          },
-        },
-      },
+      immediate: true,
     },
+  },
 
-    watch: {
-      call: {
-        handler() {
-          this.resetForm();
-        },
-        immediate: true,
-      },
+  computed: {
+    ...mapState('reporting', {
+      isSuccess: (state) => state.isSuccess,
+    }),
+
+    ...mapGetters('workspace', {
+      taskOnWorkspace: 'TASK_ON_WORKSPACE',
+    }),
+
+    ...mapGetters('reporting', {
+      isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
+    }),
+  },
+
+  methods: {
+    ...mapActions('reporting', {
+      setValue: 'SET_PROPERTY',
+      sendReporting: 'SEND_REPORTING',
+      resetForm: 'RESET_STATE',
+    }),
+    setSuccess(value) {
+      this.setValue({ prop: 'isSuccess', value });
     },
-
-    computed: {
-      ...mapState('call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-
-      ...mapState('reporting', {
-        // for validation purposes
-        communication: (state) => state.communication,
-        // for validation purposes
-        newCommunications: (state) => state.newCommunications,
-      }),
-
-      isSuccess: {
-        get() {
-          return this.$store.state.reporting.isSuccess;
-        },
-        set(value) {
-          this.setValue({ prop: 'isSuccess', value });
-        },
-      },
-
-      isCommunicationsValid() {
-        if (this.isSuccess) return true;
-        this.$v.$touch();
-        return !(this.$v.$pending || this.$v.$error);
-      },
-    },
-
-    methods: {
-      ...mapActions('reporting', {
-        setValue: 'SET_PROPERTY',
-        sendReporting: 'SEND_REPORTING',
-        resetForm: 'RESET_STATE',
-      }),
-    },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
+.post-processing {
+  @extend %wt-scrollbar;
+  max-height: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: scroll;
+}
 
-  .post-processing {
-    @extend .cc-scrollbar;
-    max-height: 100%;
-    min-height: 0;
-    overflow: auto;
+.post-processing__status-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  margin-bottom: 20px;
+
+  .post-processing__status-control {
+    width: 100%;
+
+    &:first-child {
+      margin-right: 10px;
+    }
   }
+}
 </style>

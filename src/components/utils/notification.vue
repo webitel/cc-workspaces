@@ -28,9 +28,9 @@
 </template>
 
 <script>
-  import eventBus from '../../utils/eventBus';
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 
-  export default {
+export default {
     name: 'notification',
     data() {
       return {

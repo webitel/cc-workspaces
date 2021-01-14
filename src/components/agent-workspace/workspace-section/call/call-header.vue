@@ -2,32 +2,20 @@
   <header class="call-header">
     <div class="call-header__actions">
       <div class="actions-wrap actions-wrap__left">
-        <rounded-action
-          class="call-action secondary"
-          :class="{
-            'active': isOnHistory
-            }"
-          @click.native="$emit('openTab', 'history')"
-        >
-          <icon>
-            <svg class="icon icon-call-history-md md">
-              <use xlink:href="#icon-call-history-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
-        <rounded-action
-          class="call-action secondary"
-          :class="{
-            'active': isOnContacts
-          }"
-          @click.native="$emit('openTab', 'contacts')"
-        >
-          <icon>
-            <svg class="icon icon-call-contacts-md md">
-              <use xlink:href="#icon-call-contacts-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
+        <wt-rounded-action
+          class="call-action"
+          :class="{ 'active': isOnHistory }"
+          icon="history"
+          color="secondary"
+          @click="$emit('openTab', 'history')"
+        ></wt-rounded-action>
+        <wt-rounded-action
+          class="call-action"
+          :class="{ 'active': isOnContacts }"
+          icon="contacts"
+          color="secondary"
+          @click="$emit('openTab', 'contacts')"
+        ></wt-rounded-action>
       </div>
 
       <img
@@ -37,65 +25,42 @@
       >
 
       <div class="actions-wrap actions-wrap__right">
-        <rounded-action
+        <wt-rounded-action
           v-if="isBridge"
-          class="call-action secondary bridge"
-          :class="{
-            'active': isOnBridge
-          }"
-          @click.native="$emit('openTab', 'bridge')"
-        >
-          <icon>
-            <svg class="icon icon-call-merge-md md">
-              <use xlink:href="#icon-call-merge-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
-        <rounded-action
+          class="call-action bridge"
+          :class="{ 'active': isOnBridge }"
+          icon="call-merge"
+          color="secondary"
+          @click="$emit('openTab', 'bridge')"
+        ></wt-rounded-action>
+        <wt-rounded-action
           v-if="isTransfer"
           class="call-action transfer"
-          @click.native="$emit('openTab', 'transfer')"
-        >
-          <icon>
-            <svg class="icon icon-call-transfer-md md">
-              <use xlink:href="#icon-call-transfer-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
-        <rounded-action
+          icon="call-transfer"
+          color="transfer"
+          @click="$emit('openTab', 'transfer')"
+        ></wt-rounded-action>
+        <wt-rounded-action
           v-if="isHangup"
           class="call-action end"
-          @click.native="hangup"
-        >
-          <icon>
-            <svg class="icon icon-call-end-md md">
-              <use xlink:href="#icon-call-end-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
-
-        <rounded-action
+          icon="call-end"
+          color="danger"
+          @click="hangup"
+        ></wt-rounded-action>
+        <wt-rounded-action
           v-if="isCall"
           class="call-action call"
-          @click.native="makeCall"
-        >
-          <icon>
-            <svg class="icon icon-call-ringing-md md">
-              <use xlink:href="#icon-call-ringing-md"></use>
-            </svg>
-          </icon>
-        </rounded-action>
+          icon="call-ringing"
+          color="success"
+          @click="makeCall"
+        ></wt-rounded-action>
       </div>
     </div>
 
     <div class="call-header__number">
       <div v-if="!isNumberInput">
-        <div class="call-profile__name">
-          {{displayName}}
-        </div>
-        <div class="call-profile__number">
-          {{displayNumber}}
-        </div>
+        <div class="call-profile__name">{{displayName}}</div>
+        <div class="call-profile__number">{{displayNumber}}</div>
       </div>
       <form
         v-else
@@ -114,33 +79,22 @@
           type="reset"
           @click.prevent="number = ''"
         >
-          <icon>
-            <svg class="icon icon-close-md md">
-              <use xlink:href="#icon-close-md"></use>
-            </svg>
-          </icon>
+          <wt-icon icon="close" color="active"></wt-icon>
         </button>
       </form>
     </div>
-    <divider />
+    <wt-divider />
   </header>
 </template>
 
 <script>
   import { mapState, mapActions, mapGetters } from 'vuex';
   import { CallActions } from 'webitel-sdk';
-  import Divider from '../../../utils/divider.vue';
-  import RoundedAction from '../../../utils/rounded-action.vue';
-  import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
+  import displayInfoMixin from '../../../../mixins/displayInfoMixin';
 
   export default {
     name: 'call-header',
-    mixins: [dispayInfoMixin],
-    components: {
-      Divider,
-      RoundedAction,
-    },
-
+    mixins: [displayInfoMixin],
     props: {
       currentTab: {
         type: String,
@@ -278,7 +232,7 @@
       justify-content: flex-end;
 
       .call-action {
-        margin-left: (20px);
+        margin-left: 20px;
 
         &:first-child {
           margin-left: 0;
@@ -316,7 +270,7 @@
 
         // make bottom border overflowing divider
         position: relative;
-        bottom: (-1px);
+        bottom: -1px;
 
         border: 1px solid transparent;
         border-bottom: 1px solid #000;
@@ -329,12 +283,7 @@
 
       .icon-btn {
         position: absolute;
-        right: (-24px);
-
-        &:hover .icon {
-          fill: #000;
-          stroke: #000;
-        }
+        right: -24px;
       }
     }
   }

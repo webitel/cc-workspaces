@@ -45,8 +45,6 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(Bridge, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
     });
     expect(wrapper.findAll(ActiveCallItem).length)
       .toEqual(state.callList.length - 1); // all except callOnWorkspace
@@ -56,13 +54,10 @@ describe('Bridge functionality', () => {
     const wrapper = shallowMount(Bridge, {
       store,
       localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
     });
-    wrapper.find(ActiveCallItem)
-      .trigger('click');
-    wrapper.find('.transfer')
-      .trigger('click');
+    wrapper.find(ActiveCallItem).trigger('click');
+    const bridgeBtn = wrapper.findComponent({ name: 'wt-button' });
+    bridgeBtn.vm.$emit('click');
     expect(state.callOnWorkspace.bridgeTo)
       .toHaveBeenCalledWith(call2);
   });

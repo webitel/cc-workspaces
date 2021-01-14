@@ -3,6 +3,7 @@ export default {
     answer: 'Ответить',
     reject: 'Сбросить',
     send: 'Отправить',
+    save: 'Сохранить',
     cancel: 'Отменить',
     logout: 'Выйти',
     search: 'Поиск',
@@ -30,10 +31,15 @@ export default {
     avgHold: 'Среднее время удержания',
   },
   queueSec: {
-    active: 'Активные',
-    offline: 'Оффлайн',
-    missed: 'Пропущенные',
-    at: 'в', // missed call "at 10:10"
+    queueSec: {
+      call: {
+        calls: 'Звонки',
+        at: 'в', // missed call "at 10:10"
+      },
+      chat: {
+        chats: 'Чаты',
+      },
+    },
   },
   infoSec: {
     clientInfo: 'Информация',
@@ -45,7 +51,13 @@ export default {
       yes: 'Да',
       no: 'Нет',
       addNewCommunication: 'Добавить новую коммуникацию',
-      scheduleCall: 'Запланировать следующий звонок?',
+      communicationDestination: 'Номер',
+      communicationType: 'Тип',
+      communicationPriority: 'Приоритет',
+      nextDistributeAtTitle: 'Запланировать следующий звонок?',
+      nextDistributeAt: 'Время следующего звонка',
+      createCommunicationTitle: 'Создать новую коммуникацию',
+      editCommunicationTitle: 'Редактировать существующую коммуникацию',
       category: 'Категория',
       subcategory: 'Подкатегория',
     },
@@ -55,6 +67,14 @@ export default {
       ringing: 'Звоним..',
       hold: 'Удержание',
       hangup: 'Конец',
+    },
+    chat: {
+      acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
+      draftPlaceholder: 'Напишите сообщение...',
+      dropzone: {
+        title: 'Перетяните файлы сюда',
+        description: 'Чтобы отправить их',
+      },
     },
   },
   emptyWorkspace: {

@@ -1,5 +1,5 @@
 import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
-import configuration from '../../utils/openAPIConfig';
+import configuration from '../../openAPIConfig';
 import instance from '../../instance';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
@@ -10,7 +10,7 @@ const defaultParams = {
   search: '',
 };
 
-const fetchCommunications = async ({
+const getCommunicationTypes = async ({
                                      page,
                                      size,
                                      search,
@@ -31,12 +31,12 @@ const fetchCommunications = async ({
 };
 
 const communicationsAPIRepository = {
-  async getCommunications(argParams) {
+  getCommunicationTypes(argParams) {
     const params = {
       ...defaultParams,
       ...argParams,
     };
-    return fetchCommunications(params);
+    return getCommunicationTypes(params);
   },
 };
 

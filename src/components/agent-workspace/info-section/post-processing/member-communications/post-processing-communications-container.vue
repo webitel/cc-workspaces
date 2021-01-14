@@ -1,101 +1,75 @@
 <template>
   <div class="processing-communications-container">
     <communication
-      v-if="communication"
-      :value="communication"
-      :selected="selected"
-      :v="v.communication"
-      exists
-      @select="selected = $event"
-      @change="setCommunication"
-    ></communication>
-    <communication
-      v-for="(communication, key) of newCommunications"
-      :value="communication"
-      :selected="selected"
+      v-for="(communication, key) of communicationsList"
+      :communication="communication"
+      :selected="nextCommunication"
       :key="key"
-      :v="v.newCommunications.$each[key]"
-      @select="selected = $event"
-      @change="changeNewCommunication({value: $event, index: key})"
-      @delete="deleteNewCommunication(key)"
+      :deletable="communicationsList.length > 1"
+      @edit="editCommunication(communication)"
+      @delete="deleteCommunication(communication)"
+      @click.native="selectCommunication(communication)"
     ></communication>
-    <button
-      class="processing-communications-container__add-new"
-      @click.prevent="addNewCommunication"
+    <wt-button
+      color="secondary"
+      wide
+      @click="addCommunication"
     >
-      <icon>
-        <svg class="icon icon-plus-md md">
-          <use xlink:href="#icon-plus-md"></use>
-        </svg>
-      </icon>
-      <span class="processing-communications-container__add-new__text">
-        {{$t('infoSec.postProcessing.addNewCommunication')}}</span>
-    </button>
+      {{ $t('infoSec.postProcessing.addNewCommunication') }}
+    </wt-button>
   </div>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
-  import Communication from './post-processing-communication.vue';
+import { mapState, mapActions, mapGetters } from 'vuex';
+import Communication from './post-processing-communication.vue';
 
-  export default {
-    name: 'post-processing-communications-container',
-    components: {
-      Communication,
-    },
-    props: {
-      v: {
-        type: Object,
+export default {
+  name: 'post-processing-communications-container',
+  components: { Communication },
+
+  data: () => ({
+    selected: '',
+  }),
+
+  watch: {
+    task: {
+      handler() {
+        this.loadCommunicationsList();
       },
+      immediate: true,
     },
+  },
 
-    data: () => ({
-      selected: '',
+  computed: {
+    ...mapState('reporting', {
+      communicationsList: (state) => state.communicationsList,
+      nextCommunication: (state) => state.nextCommunication,
     }),
 
-    watch: {
-      memberCommunication: {
-        handler() {
-          this.setCommunication(this.call.memberCommunication);
-        },
-        immediate: true,
-      },
-    },
+    ...mapGetters('workspace', {
+      task: 'TASK_ON_WORKSPACE',
+    }),
+  },
 
-    computed: {
-      ...mapState('call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-      ...mapState('reporting', {
-        communication: (state) => state.communication,
-        newCommunications: (state) => state.newCommunications,
-      }),
-    },
-
-    methods: {
-      ...mapActions('reporting', {
-        setCommunication: 'SET_COMMUNICATION',
-        addNewCommunication: 'ADD_NEW_COMMUNICATION',
-        changeNewCommunication: 'CHANGE_NEW_COMMUNICATION',
-        deleteNewCommunication: 'DELETE_NEW_COMMUNICATION',
-      }),
-    },
-  };
+  methods: {
+    ...mapActions('reporting', {
+      selectCommunication: 'SET_NEXT_COMMUNICATION',
+      loadCommunicationsList: 'LOAD_COMMUNICATIONS_LIST',
+      addCommunication: 'BEGIN_COMMUNICATION_ADDING',
+      editCommunication: 'BEGIN_COMMUNICATION_EDIT',
+      deleteCommunication: 'DELETE_COMMUNICATION',
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .processing-communications-container {
-    margin: (40px) 0;
+.processing-communications-container {
+  margin: 20px 0;
 
-    &__add-new {
-      display: flex;
-      align-items: center;
-      margin-top: (30px);
-
-      &__text {
-        @extend .typo-body-sm;
-        margin-left: (30px);
-      }
-    }
+  .processing-communication {
+    margin-bottom: 10px;
   }
+}
 </style>

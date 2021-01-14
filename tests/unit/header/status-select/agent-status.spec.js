@@ -1,23 +1,30 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
-import StatusSelect from '../../../../src/components/cc-header/status-select.vue';
+import StatusSelect from '../../../../src/components/shared/app-header/status-select.vue';
 import statusModule from '../../../../src/store/modules/agent-status/agent-status';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe('Agent status select', () => {
+const lastStatusChange = Date.now() - 12 * 60 * 60 * 10 ** 3; // '12:00:00'
+
+describe('Agent Status Select', () => {
+  let store;
   let state;
   let getters;
-  let store;
+  let actions;
 
   beforeEach(() => {
     state = {
       agent: {
-        status: AgentStatus.Online,
-        stateDuration: 12 * 60 * 60,
+        status: AgentStatus.Waiting,
+        lastStatusChange,
       },
+    };
+    actions = {
+      SET_AGENT_WAITING_STATUS: jest.fn(),
+      AGENT_LOGOUT: jest.fn(),
     };
     getters = {
       IS_AGENT: statusModule.getters.IS_AGENT,
@@ -28,6 +35,7 @@ describe('Agent status select', () => {
           namespaced: true,
           state,
           getters,
+          actions,
         },
         now: {
           namespaced: true,
@@ -40,60 +48,20 @@ describe('Agent status select', () => {
   });
 
   it('Correctly computes Agent status duration', () => {
-    const wrapper = shallowMount(StatusSelect, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-    });
-
-    const durationUI = wrapper.find('.status-select__item__text');
-    expect(durationUI.text())
-      .toEqual('12:00:00');
+    const wrapper = shallowMount(StatusSelect, { store, localVue });
+    expect(wrapper.vm.duration).toEqual('12:00:00');
   });
 
-  it('Correctly computes Agent status ACTIVE indicator class', async () => {
-    const wrapper = shallowMount(StatusSelect, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-    });
-    const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
-    expect(indicatorEl.classes())
-      .toContain('online');
+  it('Set Agent Pause status', async () => {
+    const wrapper = shallowMount(StatusSelect, { store, localVue });
+    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', AgentStatus.Pause);
+    expect(wrapper.emitted().setBreak).toBeTruthy();
   });
 
-  it('Correctly computes Agent status BREAK indicator class', async () => {
-    const wrapper = shallowMount(StatusSelect, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-    });
-    wrapper.setData({ agent: { status: AgentStatus.Pause } });
-    await wrapper.vm.$nextTick();
-
-    const indicatorEl = wrapper.find('.status-select__item__selected .status-select__indicator');
-    expect(indicatorEl.classes())
-      .toContain('pause');
-  });
-
-  it('Changes Agent status', async () => {
-    const wrapper = shallowMount(StatusSelect, {
-      store,
-      localVue,
-      mocks: { $t: () => {} },
-      stubs: { Icon: true },
-    });
-
-    const optionsList = wrapper.findAll('.status-select__options .status-select__item');
-    const breakOption = optionsList.wrappers.find((wrapper) => wrapper
-      .find('.status-select__indicator')
-      .classes()
-      .indexOf('pause') !== -1);
-    breakOption.trigger('click');
-    expect(wrapper.emitted().setBreak)
-      .toBeTruthy();
+  it('Set Agent Active status', async () => {
+    const wrapper = shallowMount(StatusSelect, { store, localVue });
+    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', AgentStatus.Online);
+    expect(actions.SET_AGENT_WAITING_STATUS)
+      .toHaveBeenCalled();
   });
 });

@@ -1,5 +1,5 @@
 <template>
-  <main class="main-agent-workspace">
+  <main class="main-agent-workspace" @dragenter.prevent @dragover.prevent @drop="preventDrop">
     <notification/>
     <cc-header/>
     <div class="workspace-wrap">
@@ -16,16 +16,15 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   import Notification from '../utils/notification.vue';
-  import CcHeader from '../cc-header/cc-header.vue';
+  import CcHeader from '../shared/app-header/app-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-agent-queue-section.vue';
   import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
   import InfoSection from './info-section/the-agent-info-section.vue';
   import VideoContainer from './video-container/video-container.vue';
   import ringingSoundMixin from '../../mixins/ringingSoundMixin';
-  import { destroyCliInstance } from '../../api/agent-workspace/call-ws-connection';
 
   export default {
     name: 'the-agent-workspace',
@@ -41,58 +40,23 @@
     },
 
     created() {
-      this.initWorkspace();
-      this.setNowWatcher();
+      this.openSession();
     },
 
     destroyed() {
-      this.destroyCliInstance();
-      this.clearNowWatcher();
-    },
-
-    watch: {
-      // after user info is loaded, fetch offline and missed queues data
-      userId() {
-        this.loadMembersList({});
-        this.loadMissedList();
-      },
-    },
-
-    computed: {
-      // after user info is loaded, fetch offline and missed queues data
-      ...mapState('userinfo', {
-        userId: (state) => state.userId,
-      }),
+      this.closeSession();
     },
 
     methods: {
-      async initWorkspace() {
-        await this.subscribeCalls();
-        await this.subscribeStatus();
+      ...mapActions('workspace', {
+        openSession: 'OPEN_SESSION',
+        closeSession: 'CLOSE_SESSION',
+      }),
+
+      preventDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
       },
-
-      destroyCliInstance,
-
-      ...mapActions('call', {
-        subscribeCalls: 'SUBSCRIBE_CALLS',
-      }),
-
-      ...mapActions('member', {
-        loadMembersList: 'LOAD_DATA_LIST',
-      }),
-
-      ...mapActions('call/missed', {
-        loadMissedList: 'LOAD_DATA_LIST',
-      }),
-
-      ...mapActions('status', {
-        subscribeStatus: 'SUBSCRIBE_STATUS',
-      }),
-
-      ...mapActions('now', {
-        setNowWatcher: 'SET_NOW_WATCHER',
-        clearNowWatcher: 'CLEAR_NOW_WATCHER',
-      }),
     },
   };
 </script>
@@ -102,6 +66,7 @@
     display: flex;
     flex-direction: column;
     max-height: 100%;
+    min-width: 1280px;
   }
 
   .workspace-wrap {

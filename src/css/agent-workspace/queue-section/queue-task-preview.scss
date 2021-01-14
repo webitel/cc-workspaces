@@ -1,0 +1,75 @@
+.queue-preview {
+  box-sizing: border-box;
+  position: relative;
+  padding: 10px 10px 10px 30px;
+  margin-bottom: 1px;
+  border: 1px solid transparent;
+  background: var(--main-primary-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  &--opened {
+    border-color: var(--main-accent-color);
+  }
+
+  @media screen and (max-width: 1336px) {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+
+    .call-status-badge {
+      position: static;
+      margin-right: 10px;
+    }
+  }
+}
+
+.queue-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-width: 0; // prevents queue-preview-header content overflowing
+
+  &__name {
+    @extend %typo-strong-lg;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    @media screen and (max-width: 1336px) {
+      display: none;
+    }
+  }
+}
+
+//.offline-queue .queue-preview-header__name {
+//  @media screen and (max-width: 1336px) {
+//    display: block;
+//  }
+//}
+
+.queue-preview-body {
+  @extend %typo-body-md;
+  @media screen and (max-width: 1336px) {
+    display: none;
+  }
+}
+
+.queue-preview-footer {
+  @media screen and (max-width: 1336px) {
+    display: none;
+  }
+
+  .queue-preview-actions {
+    display: flex;
+    margin-top: 20px;
+
+    .wt-button {
+      flex-grow: 1;
+
+      &:first-child {
+        margin-right: 20px;
+      }
+    }
+  }
+}

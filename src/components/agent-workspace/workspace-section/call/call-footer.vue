@@ -1,175 +1,148 @@
 <template>
   <footer class="call-footer">
-    <divider/>
+    <wt-divider/>
     <div class="call-footer__actions">
-      <rounded-action
-        class="call-action secondary"
+      <wt-rounded-action
+        class="call-action"
         :class="{
-      'hidden': !isNumpad,
-      'active': isOnNumpad,
-      }"
-        @click.native="$emit('openTab', 'numpad')"
-      >
-        <icon>
-          <svg class="icon icon-numpad-md md">
-            <use xlink:href="#icon-numpad-md"></use>
-          </svg>
-        </icon>
-      </rounded-action>
-      <rounded-action
-        class="call-action secondary call-action__mic"
+          'hidden': !isNumpad,
+          'active': isOnNumpad,
+         }"
+        icon="numpad"
+        color="secondary"
+        @click="$emit('openTab', 'numpad')"
+      ></wt-rounded-action>
+      <wt-rounded-action
+        class="call-action call-action__mic"
         :class="{
-      'hidden': !isMuted,
-      'active': isOnMuted,
-      }"
-        @click.native="toggleMute"
-      >
-        <icon>
-          <svg class="icon icon-mic-md md">
-            <use xlink:href="#icon-mic-md"></use>
-          </svg>
-        </icon>
-      </rounded-action>
-      <rounded-action
-        class="call-action secondary"
+          'hidden': !isMuted,
+          'active': isOnMuted,
+        }"
+        :icon="isOnMuted ? 'mic-muted' : 'mic'"
+        color="secondary"
+        @click="toggleMute"
+      ></wt-rounded-action>
+      <wt-rounded-action
+        class="call-action"
         :class="{
-      'hidden': !isHold,
-      'hold': isOnHold,
-      }"
-        @click.native="toggleHold"
-      >
-        <icon>
-          <svg class="icon icon-hold-md md">
-            <use xlink:href="#icon-hold-md"></use>
-          </svg>
-        </icon>
-      </rounded-action>
-      <rounded-action
-        class="call-action secondary"
+          'hidden': !isHold,
+          'hold': isOnHold,
+        }"
+        icon="hold"
+        :color="isOnHold ? 'primary' : 'secondary'"
+        @click="toggleHold"
+      ></wt-rounded-action>
+      <wt-rounded-action
+        class="call-action"
         :class="{
-      'hidden': !isRecord,
-      'active': isOnRecord,
-      }"
-      >
-        <icon>
-          <svg class="icon icon-rec-md md">
-            <use xlink:href="#icon-rec-md"></use>
-          </svg>
-        </icon>
-      </rounded-action>
-      <rounded-action
-        class="call-action secondary"
+          'hidden': !isRecord,
+          'active': isOnRecord,
+        }"
+        :icon="isOnRecord ? 'rec-stop' : 'rec'"
+        color="secondary"
+      ></wt-rounded-action>
+      <wt-rounded-action
+        class="call-action"
         :class="{
-      'hidden': !isNote,
-      'active': isOnNote,
-      }"
-      >
-        <icon>
-          <svg class="icon icon-note-md md">
-            <use xlink:href="#icon-note-md"></use>
-          </svg>
-        </icon>
-      </rounded-action>
+          'hidden': !isNote,
+          'active': isOnNote,
+        }"
+        icon="note"
+        color="secondary"
+      ></wt-rounded-action>
     </div>
   </footer>
 </template>
 
 <script>
-  import { mapState, mapGetters, mapActions } from 'vuex';
-  import Divider from '../../../utils/divider.vue';
-  import RoundedAction from '../../../utils/rounded-action.vue';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
-  export default {
-    name: 'call-footer',
-    components: {
-      Divider,
-      RoundedAction,
+export default {
+  name: 'call-footer',
+  props: {
+    currentTab: {
+      type: String,
+    },
+  },
+
+  computed: {
+    ...mapState('call', {
+      call: (state) => state.callOnWorkspace,
+    }),
+    ...mapGetters('call', {
+      isNewCall: 'IS_NEW_CALL',
+    }),
+
+    // controls Active state
+    isOnNumpad() {
+      return this.currentTab === 'numpad';
     },
 
-    props: {
-      currentTab: {
-        type: String,
-      },
+    // controls btn Appearance
+    isNumpad() {
+      return true;
     },
 
-    computed: {
-      ...mapState('call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-      ...mapGetters('call', {
-        isNewCall: 'IS_NEW_CALL',
-      }),
-
-      // controls Active state
-      isOnNumpad() {
-        return this.currentTab === 'numpad';
-      },
-
-      // controls btn Appearance
-      isNumpad() {
-        return true;
-      },
-
-      // controls Active state
-      isOnMuted() {
-        return this.call.muted;
-      },
-
-      // controls btn visibility
-      isMuted() {
-        return !this.isNewCall;
-      },
-
-      // controls Active state
-      isOnHold() {
-        return this.call.isHold;
-      },
-
-      // controls btn visibility
-      isHold() {
-        return !this.isNewCall;
-      },
-
-      // controls Active state
-      isOnRecord() {
-        return false;
-      },
-
-      // controls btn visibility
-      isRecord() {
-        return !this.isNewCall;
-      },
-
-      // controls Active state
-      isOnNote() {
-        return false;
-      },
-
-      // controls btn visibility
-      isNote() {
-        return !this.isNewCall;
-      },
+    // controls Active state
+    isOnMuted() {
+      return this.call.muted;
     },
 
-    methods: {
-      ...mapActions('call', {
-        toggleMute: 'TOGGLE_MUTE',
-        toggleHold: 'TOGGLE_HOLD',
-      }),
+    // controls btn visibility
+    isMuted() {
+      return !this.isNewCall;
     },
-  };
+
+    // controls Active state
+    isOnHold() {
+      return this.call.isHold;
+    },
+
+    // controls btn visibility
+    isHold() {
+      return !this.isNewCall;
+    },
+
+    // controls Active state
+    isOnRecord() {
+      return false;
+    },
+
+    // controls btn visibility
+    isRecord() {
+      return !this.isNewCall;
+    },
+
+    // controls Active state
+    isOnNote() {
+      return false;
+    },
+
+    // controls btn visibility
+    isNote() {
+      return !this.isNewCall;
+    },
+  },
+
+  methods: {
+    ...mapActions('call', {
+      toggleMute: 'TOGGLE_MUTE',
+      toggleHold: 'TOGGLE_HOLD',
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .call-footer {
-    display: flex;
-    flex-direction: column;
-  }
+.call-footer {
+  display: flex;
+  flex-direction: column;
+}
 
-  .call-footer__actions {
-    display: flex;
-    justify-content: space-evenly;
-    padding: (10px) 0;
-    margin: 0 (20px);
-  }
+.call-footer__actions {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px 0;
+  margin: 0 20px;
+}
 </style>

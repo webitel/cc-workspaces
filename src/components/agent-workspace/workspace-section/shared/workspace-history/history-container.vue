@@ -5,12 +5,12 @@
       @search="resetData"
     />
     <section class="ws-worksection__list" ref="scroll-wrap">
-      <loader v-if="isLoading"/>
+      <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'history'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
       <history-item
-        v-for="(item, key) of dataList"
-        :key="key"
+        v-for="item of dataList"
+        :key="item.id"
         :item="item"
         :for-number="historyNumber"
         @click.native="select(item)"
@@ -30,7 +30,6 @@
   import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
   import EmptySearch from '../workspace-empty-search/empty-search.vue';
-  import Loader from '../../../../utils/loader.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import WorkspaceStates
     from '../../../../../store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
@@ -45,7 +44,6 @@
       Search,
       HistoryItem,
       EmptySearch,
-      Loader,
     },
 
     data: () => ({

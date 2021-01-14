@@ -1,45 +1,25 @@
 <template>
-  <section class="chat">
-    <aside class="floating-actions">
-      <rounded-action class="floating-action">Redirect</rounded-action>
-      <rounded-action class="floating-action">Close</rounded-action>
-    </aside>
-    <message-container></message-container>
-    <textarea></textarea>
-  </section>
+  <div class="the-chat">
+    <chat-preview/>
+    <media-viewer/>
+  </div>
 </template>
 
 <script>
-  import RoundedAction from '../../../utils/rounded-action.vue';
-  import MessageContainer from './chat-messages-container.vue';
+import ChatPreview from './chat-preview/chat-preview.vue';
+import MediaViewer from './shared/media-viewer/media-viewer.vue';
 
-  export default {
-    name: 'the-chat',
-    components: {
-      MessageContainer,
-      RoundedAction,
-    },
-  };
+export default {
+  name: 'the-chat',
+  components: {
+    ChatPreview,
+    MediaViewer,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .chat {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .floating-actions {
-    position: absolute;
-    right: 30px;
-    top: 20px;
-
-    .floating-action {
-      margin-left: 20px;
-    }
-  }
-
-  .messages-container {
-    flex-grow: 1;
-  }
+.the-chat {
+  height: 100%;
+}
 </style>
