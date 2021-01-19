@@ -7,7 +7,6 @@
         :class="{'d-none': !callable}"
         icon="call-ringing"
         color="success"
-        size="lg"
         @click="makeCall({user: item})"
       ></wt-rounded-action>
       <img
