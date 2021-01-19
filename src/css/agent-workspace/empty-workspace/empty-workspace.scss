@@ -13,20 +13,17 @@
 
   &__heading {
     @extend .typo-heading-sm;
-    margin-top: (20px);
+    margin-top: 20px;
   }
 
   &__text {
     @extend .typo-body-sm;
-    margin-top: (10px);
+    margin-top: 10px;
   }
 }
 
 .workspace-pic {
   width: 180px;
-  height: 150px;
-  display: block;
+  height: 180px;
   margin: auto;
-  overflow: hidden;
-  pointer-events: none;
 }
