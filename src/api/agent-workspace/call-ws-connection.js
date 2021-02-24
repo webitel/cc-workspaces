@@ -25,10 +25,17 @@ const createCliInstance = async () => {
 };
 
 export const destroyCliInstance = async () => {
-  if (cliInstance) {
-    cliInstance.then((cli) => cli.destroy());
-  }
-  cliInstance = null;
+  if (!window.cli) return;
+  // if (cliInstance) {
+  // cliInstance.then((cli) => cli.destroy());
+  // }
+    if (window.cli.phone && window.cli.phone.ua) {
+      await window.cli.phone.ua.stop();
+    }
+    await window.cli.disconnect();
+    window.cli.eventHandler.off('*');
+  // }
+  // cliInstance = null;
 };
 
 export const getCliInstance = () => {
