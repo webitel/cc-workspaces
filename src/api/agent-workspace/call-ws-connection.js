@@ -34,6 +34,7 @@ export const destroyCliInstance = async () => {
     }
     await window.cli.disconnect();
     window.cli.eventHandler.off('*');
+    cliInstance = null;
   // }
   // cliInstance = null;
 };

@@ -8,6 +8,7 @@ Vue.use(VueI18n);
 const messages = {
   en,
   ru,
+  ua: en,
 };
 
 export default new VueI18n({

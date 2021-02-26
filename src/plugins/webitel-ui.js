@@ -14,3 +14,4 @@ const globals = {
 Vue.use(WebitelUI, { eventBus, globals });
 i18n.mergeLocaleMessage('en', WebitelUIEn);
 i18n.mergeLocaleMessage('ru', WebitelUIRu);
+i18n.mergeLocaleMessage('ua', WebitelUIEn);
