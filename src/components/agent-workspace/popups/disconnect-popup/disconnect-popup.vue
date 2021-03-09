@@ -8,7 +8,7 @@
       </article>
     </template>
     <template slot="actions">
-      <wt-button color="success" @click="reloadPage">
+      <wt-button ref="jest" color="success" @click="reloadPage">
         {{ $t('disconnectPopup.reloadBtn') }}
       </wt-button>
       <wt-button color="secondary" @click="closePopup">
