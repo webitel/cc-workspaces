@@ -7,6 +7,7 @@ export default {
     send: 'Send',
     save: 'Save',
     cancel: 'Cancel',
+    close: 'Close',
     logout: 'Logout',
     search: 'Search',
     description: 'Description',
@@ -124,6 +125,11 @@ export default {
       break: 'Break',
       dnd: 'DnD',
     },
+  },
+  disconnectPopup: {
+    title: 'Ohh.. Something went wrong!',
+    mainText: 'Connection was accidentally interrupted.',
+    reloadBtn: 'Reload page',
   },
   icon: {
     docs: 'Docs',

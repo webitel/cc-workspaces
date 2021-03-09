@@ -1,5 +1,7 @@
 <template>
   <main class="main-agent-workspace" @dragenter.prevent @dragover.prevent @drop="preventDrop">
+    <disconnect-popup/>
+
     <notification/>
     <cc-header/>
     <div class="workspace-wrap">
@@ -24,6 +26,7 @@
   import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
   import InfoSection from './info-section/the-agent-info-section.vue';
   import VideoContainer from './video-container/video-container.vue';
+  import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
   import ringingSoundMixin from '../../mixins/ringingSoundMixin';
 
   export default {
@@ -37,6 +40,7 @@
       WorkspaceSection,
       InfoSection,
       VideoContainer,
+      DisconnectPopup,
     },
 
     created() {

@@ -30,8 +30,8 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import StatusSelect from './status-select.vue';
-import BreakPopup from '../../break-popup/break-popup.vue';
-import TimerPopup from '../../break-popup/break-timer-popup.vue';
+import BreakPopup from '../../agent-workspace/popups/break-popup/break-popup.vue';
+import TimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 import APIRepository from '../../../api/APIRepository';
 
 const authAPI = APIRepository.auth;

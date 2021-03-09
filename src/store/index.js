@@ -8,6 +8,7 @@ import call from './modules/call/call';
 import chat from './modules/chat/chat';
 import member from './modules/member/member';
 import reporting from './modules/post-processing/post-processing';
+import globals from './modules/global-handlers/global-handlers';
 
 Vue.use(Vuex);
 
@@ -21,5 +22,6 @@ export default new Vuex.Store({
     reporting,
     userinfo,
     now,
+    globals,
   },
 });
