@@ -19,6 +19,7 @@ const actions = {
       await context.dispatch('userinfo/RESTORE_SESSION', null, { root: true });
       // then, async open workspace session
       context.dispatch('now/SET_NOW_WATCHER', null, { root: true });
+      context.dispatch('globals/INIT_GLOBAL_HANDLERS', null, { root: true });
       context.dispatch('call/SUBSCRIBE_CALLS', null, { root: true });
       context.dispatch('chat/SUBSCRIBE_CHATS', null, { root: true });
       context.dispatch('status/SUBSCRIBE_STATUS', null, { root: true });

@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import BreakPopup from '../../../../src/components/break-popup/break-popup.vue';
+import BreakPopup from '../../../../src/components/agent-workspace/popups/break-popup/break-popup.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

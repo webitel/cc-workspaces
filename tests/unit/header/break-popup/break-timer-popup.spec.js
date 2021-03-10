@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import TimerPopup from '../../../../src/components/break-popup/break-timer-popup.vue';
+import TimerPopup from '../../../../src/components/agent-workspace/popups/break-popup/break-timer-popup.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

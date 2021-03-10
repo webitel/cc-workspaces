@@ -77,4 +77,14 @@ export default class MockSocket {
   subscribeUsersStatus = (callback) => {
     this.userStatusCallback = callback;
   };
+
+  on = (eventName, callback) => {
+    callback(eventName);
+    return {
+      trigger() {
+        callback(eventName);
+        return this;
+      },
+    };
+  };
 }

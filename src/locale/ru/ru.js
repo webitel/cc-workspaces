@@ -5,6 +5,7 @@ export default {
     send: 'Отправить',
     save: 'Сохранить',
     cancel: 'Отменить',
+    close: 'Закрыть',
     logout: 'Выйти',
     search: 'Поиск',
     description: 'Описание',
@@ -124,6 +125,11 @@ export default {
       break: 'Пауза',
       dnd: 'Не отвлекать',
     },
+  },
+  disconnectPopup: {
+    title: 'Охх... Что-то пошло не так!',
+    mainText: 'Связь была утеряна.',
+    reloadBtn: 'Обновить страницу',
   },
   icon: {
     docs: 'Документация',
