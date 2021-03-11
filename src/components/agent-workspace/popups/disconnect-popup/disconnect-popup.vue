@@ -3,8 +3,13 @@
     <template slot="title">{{ $t('disconnectPopup.title') }}</template>
     <template slot="main">
       <article class="disconnect-popup__main">
-        {{ $t('disconnectPopup.mainText') }}
-
+        <img
+          class="disconnect-popup__img"
+          src="../../../../assets/agent-workspace/popups/disconnect-popup-animation.svg"
+          alt="disconnect pic"
+          loading="lazy"
+        >
+        <p class="disconnect-popup__main__text">{{ $t('disconnectPopup.mainText') }}</p>
       </article>
     </template>
     <template slot="actions">
@@ -42,5 +47,15 @@ export default {
 <style lang="scss" scoped>
 .disconnect-popup__main {
   text-align: center;
+}
+.disconnect-popup__main__text {
+  @extend %typo-body-lg;
+  text-align: center;
+}
+
+.disconnect-popup__img {
+  width: 180px;
+  height: 180px;
+  margin: 15px;
 }
 </style>
