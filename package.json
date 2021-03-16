@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "0.1.0",
+  "version": "20.12.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --hot",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/ui-sdk": "^0.6.52",
+    "@webitel/ui-sdk": "^0.7.41",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
