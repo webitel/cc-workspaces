@@ -8,9 +8,17 @@ const BASE_URL = process.env.NODE_ENV === 'production'
 
 let cliInstance = null;
 
+const getCLIDebug = () => {
+  let debug = false;
+  try {
+    const CONFIG = JSON.parse(localStorage.getItem('CONFIG'));
+    debug = CONFIG.CLI?.debug;
+  } catch {}
+  return debug;
+};
+
 const createCliInstance = async () => {
-  const CONFIG = localStorage.getItem('CONFIG');
-  const debug = CONFIG ? CONFIG.CLI?.debug : false;
+  const debug = getCLIDebug();
   const token = localStorage.getItem('access-token');
   const config = {
     endpoint: BASE_URL,
