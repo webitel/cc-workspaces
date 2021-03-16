@@ -9,12 +9,14 @@ const BASE_URL = process.env.NODE_ENV === 'production'
 let cliInstance = null;
 
 const createCliInstance = async () => {
+  const CONFIG = localStorage.getItem('CONFIG');
+  const debug = CONFIG ? CONFIG.CLI?.debug : false;
   const token = localStorage.getItem('access-token');
   const config = {
     endpoint: BASE_URL,
     registerWebDevice: true,
     token,
-    // debug: true,
+    debug,
   };
 
   const cli = new Client(config);

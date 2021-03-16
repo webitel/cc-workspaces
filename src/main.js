@@ -34,5 +34,6 @@ const createVueInstance = () => {
 (async () => {
   const config = await fetchConfig();
   Vue.prototype.$config = config;
+  localStorage.setItem('CONFIG', JSON.stringify(config));
   createVueInstance();
 })();
