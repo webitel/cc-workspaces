@@ -1,3 +1,6 @@
 {
-  "ON_SITE": true
+  "ON_SITE": true,
+  "CLI": {
+    "debug": false
+  }
 }
