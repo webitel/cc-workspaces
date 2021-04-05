@@ -24,8 +24,14 @@ const getters = {};
 const actions = {
 
   RESTORE_SESSION: async (context) => {
+    const DAY_LENGTH = 24 * 60 * 60 * 1000;
     try {
       const userinfo = await authAPI.getSession();
+      if ((userinfo.expiresAt - Date.now() < DAY_LENGTH)) {
+        await APIRepository.auth.logout();
+        await router.replace('/auth');
+        return;
+      }
       await context.dispatch('SET_SESSION', userinfo);
     } catch (err) {
       await router.replace('/auth');
