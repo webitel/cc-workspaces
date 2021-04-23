@@ -12,6 +12,7 @@
 import { mapGetters } from 'vuex';
 import { CallActions, ConversationState } from 'webitel-sdk';
 import Tabs from '../../utils/tabs.vue';
+import GeneralInfo from './general-info/general-info-tab.vue';
 import ClientInfo from './client-info/client-info-tab.vue';
 import KnowledgeBase from './knowledge-base/knowledge-base-tab.vue';
 import PostProcessing from './post-processing/post-processing-tab.vue';
@@ -20,13 +21,13 @@ export default {
   name: 'the-agent-info-section',
   components: {
     Tabs,
+    GeneralInfo,
     ClientInfo,
     KnowledgeBase,
     PostProcessing,
   },
   data: () => ({
-    currentTab: { value: 'client-info' },
-    // currentTab: { value: 'post-processing' },
+    currentTab: { value: 'general-info' },
   }),
 
   watch: {
@@ -58,6 +59,10 @@ export default {
     },
 
     tabs() {
+      const generalInfo = {
+        text: this.$t('infoSec.generalInfo'),
+        value: 'general-info',
+      };
       const clientInfo = {
         text: this.$t('infoSec.clientInfo'),
         value: 'client-info',
@@ -70,7 +75,8 @@ export default {
         text: this.$t('infoSec.knowledgeBase'),
         value: 'knowledge-base',
       };
-      const tabs = [clientInfo];
+      const tabs = [generalInfo];
+      if (this.taskOnWorkspace) tabs.push(clientInfo);
       if (this.hasKnowledgeBase) tabs.push(knowledgeBase);
       if (this.taskOnWorkspace.allowReporting) tabs.push(postProcessing);
       return tabs;
