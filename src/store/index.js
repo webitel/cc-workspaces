@@ -12,7 +12,7 @@ import globals from './modules/global-handlers/global-handlers';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     status,
     workspace,
@@ -25,3 +25,7 @@ export default new Vuex.Store({
     globals,
   },
 });
+
+window.$store = store;
+
+export default store;

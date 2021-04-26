@@ -53,7 +53,7 @@ import ChatFooter
         isChatActive() { return true; },
       },
     });
-    const draftTextarea = wrapper.getComponent({ name: 'wt-textarea' }).vm;
+    const draftTextarea = wrapper.findComponent({ name: 'wt-textarea' }).vm;
     draftTextarea.$emit('input', message);
     draftTextarea.$emit('enter', message);
     expect(sendMock).toHaveBeenCalledWith(message);
