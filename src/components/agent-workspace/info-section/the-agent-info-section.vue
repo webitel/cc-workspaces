@@ -4,7 +4,7 @@
       v-model="currentTab"
       :tabs="tabs"
     ></tabs>
-    <component :is="currentTab.value"/>
+    <component class="info-tab" :is="currentTab.value"/>
   </section>
 </template>
 
@@ -93,12 +93,12 @@ export default {
   max-width: 100%;
 }
 
-.client-info {
+.info-tab {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   max-height: 100%;
   min-height: 0;
-  padding: 20px;
+  padding: var(--component-padding);
 }
 </style>

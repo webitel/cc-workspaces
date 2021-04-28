@@ -14,9 +14,11 @@ const getters = {
 
 const actions = {
   LOAD_AGENT_INFO: (context) => {
-    context.dispatch('LOAD_STATUS');
-    context.dispatch('LOAD_PAUSE_CAUSES');
-    context.dispatch('LOAD_QUEUES');
+    return Promise.allSettled([
+    context.dispatch('LOAD_STATUS'),
+    context.dispatch('LOAD_PAUSE_CAUSES'),
+    context.dispatch('LOAD_QUEUES'),
+  ]);
   },
   LOAD_STATUS: async (context) => {
     const status = await AgentStatusAPI.get({ itemId: context.getters.AGENT_ID });

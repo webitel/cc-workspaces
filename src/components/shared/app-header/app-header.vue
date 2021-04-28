@@ -7,7 +7,6 @@
     <timer-popup
       v-show="isBreak"
     />
-
     <wt-switcher
       :value="isVideo"
       :label="$t('header.enableVideo')"

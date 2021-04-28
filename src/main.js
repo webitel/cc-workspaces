@@ -6,7 +6,7 @@ import store from './store';
 import i18n from './locale/i18n';
 import Icon from './components/utils/icon-wrap.vue';
 
-import './plugins/webitel-ui';
+import './plugins';
 
 // import './css/fonts.scss';
 import './css/main.scss';

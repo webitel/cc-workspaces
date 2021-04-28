@@ -1,35 +1,45 @@
 <template>
   <section class="general-info">
-    <agent-status-timers :status="state.status"></agent-status-timers>
-    <agent-org-structure :agent="agent"></agent-org-structure>
-    <section class="agent-queues">
-      <ul>
-        <li
-          v-for="(queue) of state.queues"
-          :key="queue.queue.id"
-        >
-          {{ queue.queue.name }} <strong>waiting</strong><wt-badge>{{ queue.waitingMembers }}</wt-badge>
-        </li>
-      </ul>
-    </section>
+    <wt-loader v-show="!isLoaded"></wt-loader>
+    <div class="general-info__content-wrapper" v-show="isLoaded">
+      <wt-cc-agent-status-timers
+        class="general-info__article"
+        :status="agentInfo.status"
+      ></wt-cc-agent-status-timers>
+      <agent-queues
+        class="general-info__article general-info__article--padded general-info__article--outlined"
+        :queues="agentInfo.queues"
+      ></agent-queues>
+      <agent-org-structure
+        class="general-info__article"
+        :agent="agent"
+      ></agent-org-structure>
+      <agent-pause-causes
+        class="general-info__article general-info__article--padded general-info__article--outlined"
+        :pause-causes="agentInfo.pauseCauses"
+      ></agent-pause-causes>
+    </div>
   </section>
 </template>
 
 <script>
   import { mapState, mapActions } from 'vuex';
   import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-  import AgentStatusTimers from './agent-status-timers.vue';
   import AgentOrgStructure from './agent-org-structure.vue';
+  import AgentQueues from './agent-queues.vue';
+  import AgentPauseCauses from './agent-pause-causes.vue';
 
   export default {
     name: 'general-info-tab',
-    components: { AgentStatusTimers, AgentOrgStructure },
+    components: { AgentOrgStructure, AgentQueues, AgentPauseCauses },
     data: () => ({
       namespace: 'agentInfo',
+      isLoaded: false,
     }),
     watch: {
-      agent() { // wait for agent to load to get agentId
-        this.loadAgentInfo();
+      async agent() { // wait for agent to load to get agentId
+        await this.loadAgentInfo();
+        this.isLoaded = true;
       },
     },
     computed: {
@@ -37,7 +47,7 @@
         agent: (state) => state.agent,
       }),
       ...mapState({
-        state(state) {
+        agentInfo(state) {
           return getNamespacedState(state, this.namespace);
         },
       }),
@@ -53,4 +63,32 @@
 </script>
 
 <style lang="scss" scoped>
+.general-info {
+  @extend %wt-scrollbar;
+  position: relative;
+  overflow: scroll;
+
+  .wt-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.general-info__article {
+  margin-top: var(--component-spacing);
+
+  &--padded {
+    padding: var(--component-spacing);
+  }
+
+  &--outlined {
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+  }
+}
+.wt-cc-agent-status-timers {
+  justify-content: center;
+}
 </style>
