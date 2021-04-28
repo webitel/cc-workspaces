@@ -13,7 +13,7 @@ import agentInfo from './modules/agent-info/agent-info';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     status,
     workspace,
@@ -27,3 +27,7 @@ export default new Vuex.Store({
     agentInfo,
   },
 });
+
+window.$store = store;
+
+export default store;

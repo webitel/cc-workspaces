@@ -12,7 +12,11 @@ process.env.VUE_APP_SETTINGS_URL = process.env.NODE_ENV === 'production' ? '/set
 process.env.VUE_APP_PACKAGE_VERSION = require('./package.json').version;
 
 module.exports = {
-  // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+  transpileDependencies: [
+    '@webitel/ui-sdk/src',
+    '@webitel/cc-ui-sdk/src',
+  ],
+// publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
   publicPath: '/workspace',
   lintOnSave: false,
   css: {
