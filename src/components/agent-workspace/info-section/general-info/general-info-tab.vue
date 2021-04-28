@@ -25,12 +25,14 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+  import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
   import AgentOrgStructure from './agent-org-structure.vue';
   import AgentQueues from './agent-queues.vue';
   import AgentPauseCauses from './agent-pause-causes.vue';
 
   export default {
     name: 'general-info-tab',
+    mixins: [autoRefreshMixin],
     components: { AgentOrgStructure, AgentQueues, AgentPauseCauses },
     data: () => ({
       namespace: 'agentInfo',
@@ -58,6 +60,9 @@
           return dispatch(`${this.namespace}/LOAD_AGENT_INFO`, payload);
         },
       }),
+      makeAutoRefresh() {
+        return this.loadAgentInfo();
+      },
     },
   };
 </script>

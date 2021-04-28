@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import agentPauseCauseRepresentationMixin from '@webitel/cc-ui-sdk/src/mixins/agentPauseCauseRepresentationMixin/agentPauseCauseRepresentationMixin';
+import agentPauseCauseRepresentationMixin from '@webitel/cc-ui-sdk/src/mixins/agentPauseCauseRepresentation/agentPauseCauseRepresentationMixin';
 
 export default {
   name: 'agent-pause-causes',
