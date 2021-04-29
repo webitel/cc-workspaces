@@ -8,7 +8,8 @@
       >
         <span class="agent-queue__name">{{ queue.queue.name }}</span>
         <span class="agent-queue__waiting">
-          <strong>{{ $t('aa Waiting') }}</strong><wt-badge>{{ queue.waitingMembers }}</wt-badge>
+          <strong>{{ $t('infoSec.generalInfo.queueWaiting') }}</strong>
+          <wt-badge>{{ queue.waitingMembers }}</wt-badge>
         </span>
       </li>
     </ul>
