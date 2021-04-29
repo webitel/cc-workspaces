@@ -43,6 +43,10 @@ export default {
     },
   },
   infoSec: {
+    generalInfo: {
+      generalInfo: 'Основная информация',
+      queueWaiting: 'Ожидают',
+    },
     clientInfo: 'Информация',
     knowledgeBase: 'База знаний',
     postProcessing: {

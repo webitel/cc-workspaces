@@ -60,7 +60,7 @@ export default {
 
     tabs() {
       const generalInfo = {
-        text: this.$t('infoSec.generalInfo'),
+        text: this.$t('infoSec.generalInfo.generalInfo'),
         value: 'general-info',
       };
       const clientInfo = {
