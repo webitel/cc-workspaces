@@ -10,13 +10,13 @@ const callHandler = (context) => (action, chat) => {
       context.dispatch('HANDLE_MESSAGE_ACTION', chat);
       break;
     case ChatActions.Decline:
-      context.dispatch('HANDLE_CLOSE_ACTION', chat);
       break;
     case ChatActions.Leave:
-      context.dispatch('HANDLE_CLOSE_ACTION', chat);
       break;
     case ChatActions.Close:
-      context.dispatch('HANDLE_CLOSE_ACTION', chat);
+      break;
+    case ChatActions.Destroy:
+      context.dispatch('HANDLE_DESTROY_ACTION', chat);
       break;
     default:
     // console.log('default', action);
@@ -39,7 +39,7 @@ const actions = {
     context.dispatch('CHAT_INSERT_TO_START', chat);
   },
 
-  HANDLE_CLOSE_ACTION: (context, chat) => {
+  HANDLE_DESTROY_ACTION: (context, chat) => {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
   },
