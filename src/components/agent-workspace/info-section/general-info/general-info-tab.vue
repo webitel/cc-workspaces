@@ -41,7 +41,6 @@
     watch: {
       async agent() { // wait for agent to load to get agentId
         await this.loadAgentInfo();
-        this.isLoaded = true;
       },
     },
     computed: {
@@ -56,11 +55,15 @@
     },
     methods: {
       ...mapActions({
-        loadAgentInfo(dispatch, payload) {
+        dispatchLoadAgentInfo(dispatch, payload) {
           return dispatch(`${this.namespace}/LOAD_AGENT_INFO`, payload);
         },
       }),
-      makeAutoRefresh() {
+      async loadAgentInfo(payload) {
+        await this.dispatchLoadAgentInfo(payload);
+        this.isLoaded = true;
+      },
+      async makeAutoRefresh() {
         return this.loadAgentInfo();
       },
     },
