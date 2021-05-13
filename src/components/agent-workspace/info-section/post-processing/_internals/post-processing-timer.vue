@@ -8,7 +8,7 @@
       <wt-icon-btn
         v-show="showRenewalButton"
         icon="plus"
-        :tooltip="$t('+30 sec')"
+        :tooltip="renewalTooltip"
         @click="handleClick"
       ></wt-icon-btn>
       <span
@@ -40,6 +40,11 @@ export default {
       required: true,
       description: 'Timestamp. Processing end and destroy() task event',
     },
+    processingSec: {
+      type: Number,
+      required: true,
+      description: 'Base processing time. Default renewal time.',
+    },
     renewalSec: {
       type: Number,
       default: 5,
@@ -64,6 +69,9 @@ export default {
     showRenewalButton() {
       return this.processingSecLeft <= this.renewalSec;
     },
+    renewalTooltip() {
+      return `+${this.processingSec} ${this.$t('date.sec')}`;
+    },
     progressColor() {
       if (this.processingProgressSec / this.processingEndSec < 0.5) return 'success';
       if (this.processingProgressSec / this.processingEndSec < 0.75) return 'primary';
@@ -81,5 +89,9 @@ export default {
 <style lang="scss" scoped>
 .post-processing-timer {
   display: inline-block;
+
+  .wt-icon-btn ::v-deep .wt-tooltip {
+    white-space: nowrap;
+  }
 }
 </style>

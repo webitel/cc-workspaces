@@ -27,6 +27,7 @@
           v-if="showTimer"
           :start-processing-at="taskOnWorkspace.task.startProcessingAt"
           :processing-timeout-at="taskOnWorkspace.task.processingTimeoutAt"
+          :processing-sec="taskOnWorkspace.task.processingSec"
           :renewal-sec="taskOnWorkspace.task.renewalSec"
           @click="renewProcessingTime"
         ></post-processing-timer>
