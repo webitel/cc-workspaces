@@ -58,6 +58,11 @@ export default class MockSocket {
     this.chatCallback(action, chat);
   };
 
+  destroy = (chat = this.chat) => {
+    const action = ChatActions.Destroy;
+    this.chatCallback(action, chat);
+  };
+
   changeAgentStatus = (status = 'online', agent = this.agent) => {
     this.agentStatusCallback(status, agent);
   };
