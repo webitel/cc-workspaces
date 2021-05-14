@@ -20,18 +20,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'chat-header',
   computed: {
-    ...mapState('chat', {
-      chatOnWorkspace: (state) => state.chatOnWorkspace,
+    ...mapGetters('chat', {
+      isCloseAction: 'ALLOW_CHAT_CLOSE',
     }),
-    isCloseAction() {
-      window.taskOnWorkspace = this.chatOnWorkspace;
-      return this.chatOnWorkspace.allowLeave || this.chatOnWorkspace.allowDecline;
-    },
   },
   methods: {
     ...mapActions('chat', {

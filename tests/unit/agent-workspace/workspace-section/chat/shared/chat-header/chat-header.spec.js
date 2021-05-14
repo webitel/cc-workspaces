@@ -3,14 +3,16 @@ import Vuex from 'vuex';
 import ChatHeader
   from '../../../../../../../src/components/agent-workspace/workspace-section/chat/shared/chat-header/chat-header.vue';
 
-const chatOnWorkspace = {
-  allowDecline: true,
-};
 const localVue = createLocalVue();
 localVue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
-    chat: { namespaced: true, state: { chatOnWorkspace } },
+    chat: {
+      namespaced: true,
+      getters: {
+        ALLOW_CHAT_CLOSE: () => true,
+      },
+    },
   },
 });
 

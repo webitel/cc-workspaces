@@ -1,12 +1,12 @@
 <template>
   <footer class="chat-footer">
-    <div v-if="!isChatActive" class="chat-footer__chat-preview">
+    <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
         <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
-    <div v-else class="chat-footer__chat-active">
+    <div v-else-if="isChatActive" class="chat-footer__chat-active">
       <wt-textarea
         ref="message-draft"
         v-model="draft"
@@ -68,6 +68,7 @@ export default {
   },
   computed: {
     ...mapGetters('chat', {
+      isChatPreview: 'ALLOW_CHAT_JOIN',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
   },
