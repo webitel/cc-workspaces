@@ -9,6 +9,8 @@ const state = {
 };
 
 const getters = {
+  ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
+  ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
   IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
 };
 
