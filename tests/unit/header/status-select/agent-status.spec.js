@@ -14,14 +14,14 @@ describe('Agent Status Select', () => {
   let state;
   let getters;
   let actions;
+  let agent = {};
 
   beforeEach(() => {
-    state = {
-      agent: {
-        status: AgentStatus.Waiting,
-        lastStatusChange,
-      },
+    agent = {
+      status: AgentStatus.Waiting,
+      lastStatusChange,
     };
+    state = { agent };
     actions = {
       SET_AGENT_WAITING_STATUS: jest.fn(),
       AGENT_LOGOUT: jest.fn(),
@@ -50,5 +50,11 @@ describe('Agent Status Select', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
     expect(wrapper.exists()).toBe(true);
+  });
+
+  it('correctly computes statusDuration', () => {
+    agent.lastStatusChange = Date.now() - 24 * 1000;
+    const wrapper = shallowMount(StatusSelect, { store, localVue });
+    expect(wrapper.vm.statusDuration).toBe('00:00:23'); // 24 - 1
   });
 });
