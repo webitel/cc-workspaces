@@ -134,7 +134,7 @@ describe('Preview Actions', () => {
 
 describe('Answer and Hangup', () => {
   let state;
-  const { actions, mutations } = callModule;
+  const { actions, mutations, getters } = callModule;
   let store;
   let call;
 
@@ -155,6 +155,7 @@ describe('Answer and Hangup', () => {
         call: {
           namespaced: true,
           state,
+          getters,
           actions,
           mutations,
         },
