@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
-import StatusSelect from '../../../../src/components/shared/app-header/user-status-select.vue';
+import StatusSelect from '../../../../src/components/shared/app-header/agent-status-select.vue';
 import statusModule from '../../../../src/store/modules/agent-status/agent-status';
 
 const localVue = createLocalVue();
@@ -47,21 +47,8 @@ describe('Agent Status Select', () => {
     });
   });
 
-  it('Correctly computes Agent status duration', () => {
+  it('renders a component', () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
-    expect(wrapper.vm.duration).toEqual('12:00:00');
-  });
-
-  it('Set Agent Pause status', async () => {
-    const wrapper = shallowMount(StatusSelect, { store, localVue });
-    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', AgentStatus.Pause);
-    expect(wrapper.emitted().setBreak).toBeTruthy();
-  });
-
-  it('Set Agent Active status', async () => {
-    const wrapper = shallowMount(StatusSelect, { store, localVue });
-    wrapper.getComponent({ name: 'wt-status-select' }).vm.$emit('change', AgentStatus.Online);
-    expect(actions.SET_AGENT_WAITING_STATUS)
-      .toHaveBeenCalled();
+    expect(wrapper.exists()).toBe(true);
   });
 });

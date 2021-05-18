@@ -1,12 +1,6 @@
 <template>
   <wt-app-header>
-    <break-popup
-      v-show="isBreakPopup && !isBreak"
-      @close="isBreakPopup = false"
-    />
-    <timer-popup
-      v-show="isBreak"
-    />
+    <timer-popup v-show="isBreak"></timer-popup>
     <wt-switcher
       :value="isVideo"
       :label="$t('header.enableVideo')"
@@ -36,7 +30,6 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserStatusSelect from './user-status-select.vue';
-import BreakPopup from '../../agent-workspace/popups/break-popup/break-popup.vue';
 import TimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 import APIRepository from '../../../api/APIRepository';
 
@@ -47,7 +40,6 @@ export default {
   components: {
     AgentStatusSelect,
     UserStatusSelect,
-    BreakPopup,
     TimerPopup,
   },
 
