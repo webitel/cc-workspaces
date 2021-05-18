@@ -39,8 +39,11 @@
       isLoaded: false,
     }),
     watch: {
-      async agent() { // wait for agent to load to get agentId
-        await this.loadAgentInfo();
+      agent: { // wait for agent to load to get agentId
+        async handler() {
+          if (this.agent) await this.loadAgentInfo();
+        },
+        immediate: true,
       },
     },
     computed: {
