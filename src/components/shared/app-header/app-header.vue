@@ -17,9 +17,10 @@
       :label="$t('agentStatus.callCenter')"
       @change="toggleCCenterMode"
     ></wt-switcher>
-    <status-select
-      @setBreak="isBreakPopup = true"
-    />
+
+    <agent-status-select v-if="isAgent"></agent-status-select>
+    <user-status-select v-else></user-status-select>
+
     <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
     <wt-header-actions
       :user="user"
@@ -33,7 +34,8 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import StatusSelect from './status-select.vue';
+import AgentStatusSelect from './agent-status-select.vue';
+import UserStatusSelect from './user-status-select.vue';
 import BreakPopup from '../../agent-workspace/popups/break-popup/break-popup.vue';
 import TimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 import APIRepository from '../../../api/APIRepository';
@@ -43,7 +45,8 @@ const authAPI = APIRepository.auth;
 export default {
   name: 'app-header',
   components: {
-    StatusSelect,
+    AgentStatusSelect,
+    UserStatusSelect,
     BreakPopup,
     TimerPopup,
   },
@@ -115,13 +118,14 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
-  .wt-status-select {
-    width: 150px;
-    margin-left: 30px;
+  .wt-switcher {
+    margin-left: var(--component-spacing);
   }
 
-  .wt-switcher {
-    margin-left: 30px;
+  .agent-status-select, .user-status-select {
+    max-width: 200px;
+    width: 150px;
+    margin-left: var(--component-spacing);
   }
 }
 </style>
