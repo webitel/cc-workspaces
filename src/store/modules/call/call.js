@@ -10,6 +10,8 @@ const state = {
 };
 
 const getters = {
+  GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id === callId),
+
   IS_NEW_CALL: (state) => state.callOnWorkspace._isNew,
 
   GET_CURRENT_CALL_DIGITS: (state) => {
@@ -40,10 +42,10 @@ const actions = {
     }
   },
 
-  ANSWER: async (context, { callId }) => {
+  ANSWER: async (context, { callId } = {}) => {
     const ANSWER_PARAMS = { useAudio: true, disableStun: true };
     const call = callId
-      ? context.state.callList.find((call) => call.id === callId)
+      ? context.getters.GET_CALL_BY_ID(callId)
       : context.state.callOnWorkspace;
     if (call.allowAnswer) {
       const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
@@ -75,14 +77,14 @@ const actions = {
     }
   },
 
-  TOGGLE_MUTE: async (context) => {
-    const call = context.state.callOnWorkspace;
+  TOGGLE_MUTE: async (context, { callId } = {}) => {
+    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.state.callOnWorkspace;
     const isMuted = call.muted;
     await call.mute(!isMuted);
   },
 
-  TOGGLE_HOLD: async (context) => {
-    const call = context.state.callOnWorkspace;
+  TOGGLE_HOLD: async (context, { callId } = {}) => {
+    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.state.callOnWorkspace;
     if ((!call.isHold && call.allowHold)
       || (call.isHold && call.allowUnHold)) {
       try {
@@ -108,9 +110,9 @@ const actions = {
     }
   },
 
-  HANGUP: async (context, { callId }) => {
+  HANGUP: async (context, { callId } = {}) => {
     const call = callId
-      ? context.state.callList.find((call) => call.id === callId)
+      ? context.getters.GET_CALL_BY_ID(callId)
       : context.state.callOnWorkspace;
     if (call.allowHangup) {
       try {

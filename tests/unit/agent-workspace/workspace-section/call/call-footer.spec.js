@@ -12,15 +12,18 @@ describe('Footer buttons', () => {
   let store;
 
   beforeEach(() => {
-    state = {
-      callOnWorkspace: {
+    const callOnWorkspace = {
+        // id: 1,
         mute: jest.fn(),
         muted: false,
 
         toggleHold: jest.fn(),
         isHold: false,
         allowHold: true,
-      },
+    };
+    state = {
+      callOnWorkspace,
+      // callList: [callOnWorkspace],
     };
     store = new Vuex.Store({
       modules: {
