@@ -75,14 +75,12 @@ const actions = {
     }
   },
 
-  TOGGLE_MUTE: async (context) => {
-    const call = context.state.callOnWorkspace;
+  TOGGLE_MUTE: async (context, call = context.state.callOnWorkspace) => {
     const isMuted = call.muted;
     await call.mute(!isMuted);
   },
 
-  TOGGLE_HOLD: async (context) => {
-    const call = context.state.callOnWorkspace;
+  TOGGLE_HOLD: async (context, call = context.state.callOnWorkspace) => {
     if ((!call.isHold && call.allowHold)
       || (call.isHold && call.allowUnHold)) {
       try {
