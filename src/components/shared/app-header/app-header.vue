@@ -1,6 +1,6 @@
 <template>
   <wt-app-header>
-    <timer-popup v-show="isBreak"></timer-popup>
+    <break-timer-popup/>
     <wt-switcher
       :value="isVideo"
       :label="$t('header.enableVideo')"
@@ -27,10 +27,9 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { AgentStatus } from 'webitel-sdk';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserStatusSelect from './user-status-select.vue';
-import TimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
+import BreakTimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 import APIRepository from '../../../api/APIRepository';
 
 const authAPI = APIRepository.auth;
@@ -40,12 +39,10 @@ export default {
   components: {
     AgentStatusSelect,
     UserStatusSelect,
-    TimerPopup,
+    BreakTimerPopup,
   },
 
   data: () => ({
-    AgentStatus,
-    isBreakPopup: false,
     currentApp: 'agent',
     buildInfo: {
       release: process.env.VUE_APP_PACKAGE_VERSION,
@@ -60,15 +57,11 @@ export default {
       grafana: { href: process.env.VUE_APP_GRAFANA_URL },
     },
   }),
-
   created() {
     this.restoreVideoParam();
   },
 
   computed: {
-    ...mapState('status', {
-      agent: (state) => state.agent,
-    }),
     ...mapState('call', {
       isVideo: (state) => state.isVideo,
     }),
@@ -78,10 +71,6 @@ export default {
     ...mapGetters('status', {
       isAgent: 'IS_AGENT',
     }),
-
-    isBreak() {
-      return this.agent.status === AgentStatus.Pause;
-    },
   },
 
   methods: {

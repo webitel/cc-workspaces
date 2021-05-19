@@ -1,5 +1,9 @@
 <template>
-  <wt-popup class="break-timer-popup" @close="close">
+  <wt-popup
+    class="break-timer-popup"
+    v-show="isBreakPopup"
+    @close="close"
+  >
     <template slot="title">
       <div class="break-timer-popup__title-wrapper">
         <span class="popup-indicator__break"></span>
@@ -37,11 +41,13 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import { AgentStatus } from 'webitel-sdk';
 
 export default {
   name: 'break-timer-popup',
   data: () => ({
     duration: '00:00:00',
+    isBreakPopupValue: false,
   }),
   watch: {
     now: {
@@ -50,15 +56,25 @@ export default {
       },
       immediate: true,
     },
+    agentStatus: {
+      handler() {
+        if (this.agentStatus === AgentStatus.Pause) this.isBreakPopupValue = true;
+      },
+      immediate: true,
+    },
   },
+
   computed: {
     ...mapState('now', {
       now: (state) => state.now,
     }),
-
     ...mapState('status', {
       agent: (state) => state.agent,
+      agentStatus: (state) => state.agent.status,
     }),
+    isBreakPopup() {
+      return this.isBreakPopupValue && this.agentStatus === AgentStatus.Pause;
+    },
   },
 
   methods: {
@@ -67,7 +83,7 @@ export default {
       agentLogout: 'AGENT_LOGOUT',
     }),
     close() {
-      this.$emit('close');
+      this.isBreakPopupValue = false;
     },
   },
 };

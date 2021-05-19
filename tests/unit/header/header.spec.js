@@ -2,8 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import Header from '../../../src/components/shared/app-header/app-header.vue';
-import StatusSelect from '../../../src/components/shared/app-header/user-status-select.vue';
-import TimerPopup from '../../../src/components/agent-workspace/popups/break-popup/break-timer-popup.vue';
 import statusModule from '../../../src/store/modules/agent-status/agent-status';
 import call from '../../../src/store/modules/call/call';
 import userinfo from '../../../src/store/modules/userinfo/userinfo';
@@ -37,13 +35,6 @@ describe('Header on agent Waiting', () => {
     });
   });
 
-  it('Doesnt show any popups on default Waiting', () => {
-    const wrapper = shallowMount(Header, { store, localVue });
-    const timerPopup = wrapper.findComponent(TimerPopup);
-    expect(timerPopup.isVisible())
-      .toBeFalsy();
-  });
-
   it('Logs agent out', () => {
     const wrapper = shallowMount(Header, { store, localVue });
     /*
@@ -58,35 +49,28 @@ describe('Header on agent Waiting', () => {
   });
 });
 
-describe('Header on agent Pause', () => {
-  let state;
-  let store;
-
-  beforeEach(() => {
-    state = {
-      agent: {
-        status: AgentStatus.Pause,
-      },
-    };
-    store = new Vuex.Store({
-      modules: {
-        call,
-        userinfo,
-        status: {
-          ...statusModule,
-          state,
-        },
-      },
-    });
-  });
-
-  it('Shows timer popup on Pause state', () => {
-    const wrapper = shallowMount(Header, { store, localVue });
-    const timerPopup = wrapper.findComponent(TimerPopup);
-    expect(timerPopup.isVisible())
-      .toBeTruthy();
-  });
-});
+// describe('Header on agent Pause', () => {
+//   let state;
+//   let store;
+//
+//   beforeEach(() => {
+//     state = {
+//       agent: {
+//         status: AgentStatus.Pause,
+//       },
+//     };
+//     store = new Vuex.Store({
+//       modules: {
+//         call,
+//         userinfo,
+//         status: {
+//           ...statusModule,
+//           state,
+//         },
+//       },
+//     });
+//   });
+// });
 
 describe('Header on agent Offline', () => {
   let state;
