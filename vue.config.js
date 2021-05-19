@@ -38,6 +38,7 @@ module.exports = {
 
     // use svg-sprite-loader to process icons sprite
     config.module.rule('svg-sprite').test(/^(.*sprites).*\.svg/)
-      .use('svg-sprite-loader').loader('svg-sprite-loader').options({ symbolId: () => '' });
+      .use('svg-sprite-loader').loader('svg-sprite-loader')
+.options({ symbolId: () => '' });
   },
 };

@@ -2,7 +2,7 @@ import statusModule from '../../../../src/store/modules/agent-status/agent-statu
 import MockSocket from '../../mocks/MockSocket';
 import usersAPIRepository from '../../../../src/api/agent-workspace/users/UsersAPIRepository';
 
-const setUserStatus = usersAPIRepository.setUserStatus;
+const { setUserStatus } = usersAPIRepository;
 
 let mockSocket = new MockSocket();
 jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
