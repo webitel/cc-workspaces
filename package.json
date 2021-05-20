@@ -7,12 +7,13 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "build-and-run-locally": "npm run build && sudo docker run -p 80:80 -v ${PWD}/dist:/usr/share/nginx/html:rw -v ${HOME}/default.conf:/etc/nginx/conf.d/default.conf:ro -v ${PWD}/dist:/www/workspace:rw -v ${HOME}/Projects/web-client-auth/dist:/www/auth:ro --rm nginx",
+    "link-local-webitel-cc-ui": "rm -rf node_modules/@webitel/cc-ui-sdk && ln -s /home/user/Projects/webitel-cc-ui-sdk node_modules/@webitel/cc-ui-sdk",
     "lint": "vue-cli-service lint --fix"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/cc-ui-sdk": "^0.1.10",
-    "@webitel/ui-sdk": "^0.7.77",
+    "@webitel/cc-ui-sdk": "^0.1.15",
+    "@webitel/ui-sdk": "^0.7.78",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",

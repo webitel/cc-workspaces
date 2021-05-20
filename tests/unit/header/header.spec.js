@@ -2,8 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import Header from '../../../src/components/shared/app-header/app-header.vue';
-import StatusSelect from '../../../src/components/shared/app-header/status-select.vue';
-import BreakPopup from '../../../src/components/agent-workspace/popups/break-popup/break-popup.vue';
+import StatusSelect from '../../../src/components/shared/app-header/user-status-select.vue';
 import TimerPopup from '../../../src/components/agent-workspace/popups/break-popup/break-timer-popup.vue';
 import statusModule from '../../../src/store/modules/agent-status/agent-status';
 import call from '../../../src/store/modules/call/call';
@@ -40,28 +39,9 @@ describe('Header on agent Waiting', () => {
 
   it('Doesnt show any popups on default Waiting', () => {
     const wrapper = shallowMount(Header, { store, localVue });
-    const breakPopup = wrapper.findComponent(BreakPopup);
     const timerPopup = wrapper.findComponent(TimerPopup);
-    expect(breakPopup.isVisible())
-      .toBeFalsy();
     expect(timerPopup.isVisible())
       .toBeFalsy();
-  });
-
-  // TODO: Fix this test
-  it('Shows break popup on setBreak event', () => {
-    const wrapper = shallowMount(Header, {
-      store,
-      localVue,
-      data: () => ({ isBreakPopup: true }),
-    });
-    const breakPopup = wrapper.findComponent(BreakPopup);
-    const statusSelect = wrapper.findComponent(StatusSelect);
-
-    statusSelect.vm.$emit('setBreak');
-
-    expect(breakPopup.isVisible())
-      .toBeTruthy();
   });
 
   it('Logs agent out', () => {
@@ -102,10 +82,7 @@ describe('Header on agent Pause', () => {
 
   it('Shows timer popup on Pause state', () => {
     const wrapper = shallowMount(Header, { store, localVue });
-    const breakPopup = wrapper.findComponent(BreakPopup);
     const timerPopup = wrapper.findComponent(TimerPopup);
-    expect(breakPopup.isVisible())
-      .toBeFalsy();
     expect(timerPopup.isVisible())
       .toBeTruthy();
   });
