@@ -1,15 +1,15 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import ClientInfo
-  from '../../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
+import ClientInfoMarkdown
+  from '../../../../../../src/components/agent-workspace/info-section/client-info/client-info-markdown/client-info-markdown.vue';
 import WorkspaceStates
-  from '../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+  from '../../../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import workspaceModule from '../../../../../../src/store/modules/agent-workspace/agent-workspace';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe('Client Info Tab', () => {
+describe('Client Info MD from Call', () => {
   let state;
   let store;
 
@@ -36,12 +36,13 @@ describe('Client Info Tab', () => {
     });
   });
 
-  it('renders a component', () => {
-    const wrapper = shallowMount(ClientInfo, {
+  it('Correctly renders empty variables', () => {
+    const wrapper = shallowMount(ClientInfoMarkdown, {
       store,
       localVue,
     });
-    expect(wrapper.exists()).toBe(true);
+    const md = wrapper.find('.md');
+    expect(md.element).toBeEmptyDOMElement();
   });
 
 //   it('Correctly renders key-value in call variables', () => {
