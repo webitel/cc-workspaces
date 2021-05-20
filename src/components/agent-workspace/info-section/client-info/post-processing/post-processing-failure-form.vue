@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../css/agent-workspace/info-section/post-processing/post-processing';
+@import '../../../../../css/agent-workspace/info-section/post-processing/post-processing';
 
 .processing-form__schedule-call-select__title {
   @extend %typo-body-lg;

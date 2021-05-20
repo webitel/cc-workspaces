@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import FailureForm from '../../../../../../src/components/agent-workspace/info-section/post-processing/post-processing-failure-form.vue';
-import postProcessingModule from '../../../../../../src/store/modules/post-processing/post-processing';
+import FailureForm from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-failure-form.vue';
+import postProcessingModule from '../../../../../../../src/store/modules/post-processing/post-processing';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

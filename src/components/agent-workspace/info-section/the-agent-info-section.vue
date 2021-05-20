@@ -15,7 +15,6 @@ import Tabs from '../../utils/tabs.vue';
 import GeneralInfo from './general-info/general-info-tab.vue';
 import ClientInfo from './client-info/client-info-tab.vue';
 import KnowledgeBase from './knowledge-base/knowledge-base-tab.vue';
-import PostProcessing from './post-processing/post-processing-tab.vue';
 
 export default {
   name: 'the-agent-info-section',
@@ -24,7 +23,6 @@ export default {
     GeneralInfo,
     ClientInfo,
     KnowledgeBase,
-    PostProcessing,
   },
   data: () => ({
     currentTab: { value: 'general-info' },
@@ -38,8 +36,6 @@ export default {
       if ((this.taskState === CallActions.Hangup
         || this.taskState === ConversationState.Closed)
         && this.taskOnWorkspace.allowReporting) {
-        this.currentTab = { value: 'post-processing' };
-      } else if (this.currentTab.value === 'post-processing') {
         this.currentTab = { value: 'client-info' };
       }
     },
@@ -51,6 +47,10 @@ export default {
     }),
     taskState() {
       return this.taskOnWorkspace.state;
+    },
+
+    showClientInfo() {
+      return this.taskOnWorkspace?.id;
     },
 
     hasKnowledgeBase() {
@@ -67,18 +67,13 @@ export default {
         text: this.$t('infoSec.clientInfo'),
         value: 'client-info',
       };
-      const postProcessing = {
-        text: this.$t('infoSec.postProcessing.tab'),
-        value: 'post-processing',
-      };
       const knowledgeBase = {
         text: this.$t('infoSec.knowledgeBase'),
         value: 'knowledge-base',
       };
       const tabs = [generalInfo];
-      if (this.taskOnWorkspace) tabs.push(clientInfo);
+      if (this.showClientInfo) tabs.push(clientInfo);
       if (this.hasKnowledgeBase) tabs.push(knowledgeBase);
-      if (this.taskOnWorkspace.allowReporting) tabs.push(postProcessing);
       return tabs;
     },
   },

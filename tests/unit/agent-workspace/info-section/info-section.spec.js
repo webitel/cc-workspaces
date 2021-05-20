@@ -6,8 +6,8 @@ import workspace from '../../../../src/store/modules/agent-workspace/agent-works
 import call from '../../../../src/store/modules/call/call';
 import InfoSection
   from '../../../../src/components/agent-workspace/info-section/the-agent-info-section.vue';
-import PostProcessingTab
-  from '../../../../src/components/agent-workspace/info-section/post-processing/post-processing-tab.vue';
+import ClientInfoTab
+  from '../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
 import MockSocket from '../../mocks/MockSocket';
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 
@@ -19,7 +19,7 @@ const mockSocket = new MockSocket(callOnWorkspace);
 jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
   () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
 
-describe('Open Post Processing tab automatically after hangup', () => {
+describe('Open Post Processing automatically after hangup', () => {
   let state;
   let store;
 
@@ -43,11 +43,11 @@ describe('Open Post Processing tab automatically after hangup', () => {
     });
   });
 
-  it('Open Post Processing tab automatically after hangup', async () => {
+  it('Open Client Info tab automatically after hangup', async () => {
     const wrapper = shallowMount(InfoSection, { store, localVue });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
-    expect(wrapper.findComponent(PostProcessingTab).exists()).toBeFalsy();
+    expect(wrapper.findComponent(ClientInfoTab).exists()).toBeFalsy();
     await mockSocket.hangup(callOnWorkspace);
-    expect(wrapper.findComponent(PostProcessingTab).exists()).toBeTruthy();
+    expect(wrapper.findComponent(ClientInfoTab).exists()).toBeTruthy();
   });
 });

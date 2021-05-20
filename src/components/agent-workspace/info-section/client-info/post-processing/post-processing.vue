@@ -53,7 +53,7 @@ import FailureForm from './post-processing-failure-form.vue';
 import MemberCommunicationPopup from './member-communications/post-processing-communication-popup.vue';
 
 export default {
-  name: 'post-processing-tab',
+  name: 'post-processing',
   components: {
     PostProcessingWrapper,
     PostProcessingTimer,
@@ -107,11 +107,6 @@ export default {
 
 <style lang="scss" scoped>
 .post-processing {
-  @extend %wt-scrollbar;
-  max-height: 100%;
-  height: 100%;
-  min-height: 0;
-  overflow: scroll;
 }
 
 .post-processing__status-wrapper {

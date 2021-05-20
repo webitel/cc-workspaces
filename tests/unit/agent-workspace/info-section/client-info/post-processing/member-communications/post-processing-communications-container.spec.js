@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import CommunicationsContainer
-  from '../../../../../../src/components/agent-workspace/info-section/post-processing/member-communications/post-processing-communications-container.vue';
+  from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/member-communications/post-processing-communications-container.vue';
 import reporting
-  from '../../../../../../src/store/modules/post-processing/post-processing';
+  from '../../../../../../../src/store/modules/post-processing/post-processing';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
