@@ -20,6 +20,17 @@ const getters = {
 };
 
 const actions = {
+  SAVE_FORM: (context) => {
+    const form = { ...context.state };
+    const taskOnWorkspace = context.getters['workspace/TASK_ON_WORKSPACE'];
+    if (taskOnWorkspace) taskOnWorkspace.postProcessData = form;
+    console.info(taskOnWorkspace);
+  },
+  RESTORE_FORM: (context) => {
+    const form = context.getters['workspace/TASK_ON_WORKSPACE']?.postProcessData || {};
+    const state = { ...defaultState(), ...form };
+    context.commit('SET_STATE', state);
+  },
   SEND_REPORTING: (context) => {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
     const reporting = {
@@ -113,6 +124,10 @@ const mutations = {
 
   RESET_STATE: (state) => {
     Object.assign(state, defaultState());
+  },
+
+  SET_STATE: (state, _state) => {
+    Object.assign(state, _state);
   },
 };
 

@@ -65,7 +65,7 @@ export default {
   watch: {
     taskOnWorkspace: {
       handler() {
-        this.resetForm();
+        this.initForm();
       },
       immediate: true,
     },
@@ -93,13 +93,18 @@ export default {
     ...mapActions('reporting', {
       setValue: 'SET_PROPERTY',
       sendReporting: 'SEND_REPORTING',
-      resetForm: 'RESET_STATE',
+      saveForm: 'SAVE_FORM',
+      restoreForm: 'RESTORE_FORM',
     }),
     setSuccess(value) {
       this.setValue({ prop: 'isSuccess', value });
     },
     renewProcessingTime() {
       this.taskOnWorkspace.task.renew();
+    },
+    async initForm() {
+      await this.saveForm();
+      await this.restoreForm();
     },
   },
 };
