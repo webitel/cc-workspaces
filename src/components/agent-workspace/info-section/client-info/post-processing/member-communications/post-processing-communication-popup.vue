@@ -44,7 +44,7 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import deepCopy from 'deep-copy';
 import PostProcessingWrapper from '../_internals/post-processing-wrapper.vue';
-import APIRepository from '../../../../../api/APIRepository';
+import APIRepository from '../../../../../../api/APIRepository';
 
 const communicationsAPI = APIRepository.communications;
 

@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import Communication
-  from '../../../../../../src/components/agent-workspace/info-section/post-processing/member-communications/post-processing-communication.vue';
+  from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/member-communications/post-processing-communication.vue';
 
 const communication = {
   destination: 'destination',
