@@ -1,6 +1,7 @@
 <template>
   <wt-app-header>
     <break-timer-popup/>
+    <user-dnd-switcher></user-dnd-switcher>
     <wt-switcher
       :value="isVideo"
       :label="$t('header.enableVideo')"
@@ -12,8 +13,7 @@
       @change="toggleCCenterMode"
     ></wt-switcher>
 
-    <agent-status-select v-if="isAgent"></agent-status-select>
-    <user-status-select v-else></user-status-select>
+    <agent-status-select/>
 
     <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
     <wt-header-actions
@@ -28,7 +28,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import AgentStatusSelect from './agent-status-select.vue';
-import UserStatusSelect from './user-status-select.vue';
+import UserDndSwitcher from './user-dnd-switcher.vue';
 import BreakTimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 import APIRepository from '../../../api/APIRepository';
 
@@ -38,7 +38,7 @@ export default {
   name: 'app-header',
   components: {
     AgentStatusSelect,
-    UserStatusSelect,
+    UserDndSwitcher,
     BreakTimerPopup,
   },
 
@@ -99,11 +99,11 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
-  .wt-switcher {
+  .wt-switcher, .user-dnd-switcher{
     margin-left: var(--component-spacing);
   }
 
-  .agent-status-select, .user-status-select {
+  .agent-status-select {
     max-width: 200px;
     width: 150px;
     margin-left: var(--component-spacing);

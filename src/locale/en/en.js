@@ -25,6 +25,10 @@ export default {
   header: {
     docs: 'Docs',
     enableVideo: 'Enable video',
+    dnd: {
+      label: 'DnD',
+      tooltip: 'You will receive calls from queues only',
+    },
   },
   widgets: {
     inbound: 'Inbound',

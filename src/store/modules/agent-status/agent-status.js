@@ -1,6 +1,7 @@
 import { AgentStatus } from 'webitel-sdk';
 import clientHandlers from './client-handlers';
 import APIRepository from '../../../api/APIRepository';
+import UserStatus from './statusUtils/UserStatus';
 
 const usersAPI = APIRepository.users;
 
@@ -43,6 +44,11 @@ const actions = {
 
   SET_USER_DND_STATUS: async () => {
     await usersAPI.setUserStatus('dnd');
+  },
+
+  TOGGLE_USER_DND: async (context) => {
+    const status = context.state.user.status === UserStatus.DND ? '' : UserStatus.DND;
+    await usersAPI.setUserStatus(status);
   },
 
   TOGGLE_CONTACT_CENTER_MODE: async (context) => {

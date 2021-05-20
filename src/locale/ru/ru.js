@@ -23,6 +23,10 @@ export default {
   header: {
     docs: 'Документация',
     enableVideo: 'Использовать видео',
+    dnd: {
+      label: 'Не беспокоить',
+      tooltip: 'Вы будете получать звонки только из очередей',
+    },
   },
   widgets: {
     inbound: 'Входящих',
