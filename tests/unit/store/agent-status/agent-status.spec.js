@@ -1,8 +1,7 @@
 import statusModule from '../../../../src/store/modules/agent-status/agent-status';
+import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
 import MockSocket from '../../mocks/MockSocket';
 import usersAPIRepository from '../../../../src/api/agent-workspace/users/UsersAPIRepository';
-
-const { setUserStatus } = usersAPIRepository;
 
 let mockSocket = new MockSocket();
 jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
@@ -45,18 +44,20 @@ describe('status store client handlers: actions', () => {
     expect(agent.offline).toHaveBeenCalled();
   });
 
-  it('SET_USER_ACTIVE_STATUS calls setUserStatus API method with "" (empty string)', () => {
+  it('TOGGLE_USER_DND calls setUserStatus API method with \'\', if current status is dnd', () => {
     const setUserStatusMock = jest.fn();
     usersAPIRepository.setUserStatus = setUserStatusMock;
-    statusModule.actions.SET_USER_ACTIVE_STATUS(context);
+    context.state.user = { status: UserStatus.DND };
+    statusModule.actions.TOGGLE_USER_DND(context);
     expect(setUserStatusMock).toHaveBeenCalledWith('');
   });
 
-  it('SET_USER_DND_STATUS calls setUserStatus API method with "dnd"', () => {
+  it('TOGGLE_USER_DND calls setUserStatus API method with \'dnd\', if current status is dnd', () => {
     const setUserStatusMock = jest.fn();
     usersAPIRepository.setUserStatus = setUserStatusMock;
-    statusModule.actions.SET_USER_DND_STATUS(context);
-    expect(setUserStatusMock).toHaveBeenCalledWith('dnd');
+    context.state.user = { status: UserStatus.ACTIVE };
+    statusModule.actions.TOGGLE_USER_DND(context);
+    expect(setUserStatusMock).toHaveBeenCalledWith(UserStatus.DND);
   });
 
   it('TOGGLE_CONTACT_CENTER_MODE dispatches AGENT_LOGOUT if IS_AGENT getter == true', async () => {

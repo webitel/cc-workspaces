@@ -128,11 +128,6 @@ export default {
       heading: 'You are in break mode now',
       continueWork: 'Continue work',
     },
-    status: {
-      active: 'Active',
-      break: 'Break',
-      dnd: 'DnD',
-    },
   },
   disconnectPopup: {
     title: 'Ohh.. Something went wrong!',

@@ -128,11 +128,6 @@ export default {
       heading: 'Вы находитесь в режиме паузы',
       continueWork: 'Продолжить работу',
     },
-    status: {
-      active: 'Активный',
-      break: 'Пауза',
-      dnd: 'Не отвлекать',
-    },
   },
   disconnectPopup: {
     title: 'Охх... Что-то пошло не так!',

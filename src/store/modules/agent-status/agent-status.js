@@ -38,14 +38,6 @@ const actions = {
     }
   },
 
-  SET_USER_ACTIVE_STATUS: async () => {
-    await usersAPI.setUserStatus('');
-  },
-
-  SET_USER_DND_STATUS: async () => {
-    await usersAPI.setUserStatus('dnd');
-  },
-
   TOGGLE_USER_DND: async (context) => {
     const status = context.state.user.status === UserStatus.DND ? '' : UserStatus.DND;
     await usersAPI.setUserStatus(status);
