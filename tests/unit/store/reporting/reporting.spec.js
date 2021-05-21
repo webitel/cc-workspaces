@@ -82,6 +82,33 @@ describe('reporting store: actions', () => {
     expect(call.reporting).toHaveBeenCalledWith(finalReporting);
   });
 
+  it('RESTORE_FORM commits SET_STATE with passed task.postProcessData', async () => {
+    const task = {
+      postProcessData: {
+        isSuccess: false,
+        communicationsList: ['aa'],
+        description: 'jest',
+        editedCommunication: { name: 'jest' },
+        isNewCommunication: true,
+        isScheduleCall: false,
+        nextCommunication: { jest: 'jest' },
+        nextDistributeAt: 123,
+      },
+    };
+    const result = {
+      isSuccess: false,
+      communicationsList: ['aa'],
+      description: 'jest',
+      editedCommunication: { name: 'jest' },
+      isNewCommunication: true,
+      isScheduleCall: false,
+      nextCommunication: { jest: 'jest' },
+      nextDistributeAt: 123,
+    };
+    await reportingModule.actions.RESTORE_FORM(context, task);
+    expect(context.commit).toHaveBeenCalledWith('SET_STATE', result);
+  });
+
   it('LOAD_COMMUNICATIONS_LIST calls task\'s getMember() method', async () => {
     await reportingModule.actions.LOAD_COMMUNICATIONS_LIST(context);
     expect(call.getMember).toHaveBeenCalled();
