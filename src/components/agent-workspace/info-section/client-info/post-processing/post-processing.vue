@@ -64,8 +64,8 @@ export default {
 
   watch: {
     taskOnWorkspace: {
-      handler() {
-        this.initForm();
+      handler(newTask, oldTask) {
+        this.initForm({ newTask, oldTask });
       },
       immediate: true,
     },
@@ -102,9 +102,9 @@ export default {
     renewProcessingTime() {
       this.taskOnWorkspace.task.renew();
     },
-    async initForm() {
-      await this.saveForm();
-      await this.restoreForm();
+    async initForm({ newTask, oldTask }) {
+      if (oldTask) this.saveForm(oldTask);
+      if (newTask) this.restoreForm(newTask);
     },
   },
 };

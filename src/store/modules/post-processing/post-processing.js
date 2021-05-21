@@ -20,14 +20,13 @@ const getters = {
 };
 
 const actions = {
-  SAVE_FORM: (context) => {
+  SAVE_FORM: (context, task) => {
     const form = { ...context.state };
-    const taskOnWorkspace = context.getters['workspace/TASK_ON_WORKSPACE'];
-    if (taskOnWorkspace) taskOnWorkspace.postProcessData = form;
-    console.info(taskOnWorkspace);
+    // eslint-disable-next-line no-param-reassign
+    task.postProcessData = form;
   },
-  RESTORE_FORM: (context) => {
-    const form = context.getters['workspace/TASK_ON_WORKSPACE']?.postProcessData || {};
+  RESTORE_FORM: (context, task) => {
+    const form = task.postProcessData || {};
     const state = { ...defaultState(), ...form };
     context.commit('SET_STATE', state);
   },
