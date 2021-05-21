@@ -7,6 +7,7 @@
         :status="agentInfo.status"
       ></wt-cc-agent-status-timers>
       <agent-queues
+        v-if="agentInfo.queues.length"
         class="general-info__article general-info__article--padded general-info__article--outlined"
         :queues="agentInfo.queues"
       ></agent-queues>
@@ -15,6 +16,7 @@
         :agent="agent"
       ></agent-org-structure>
       <agent-pause-causes
+        v-if="agentInfo.pauseCauses.length"
         class="general-info__article general-info__article--padded general-info__article--outlined"
         :pause-causes="agentInfo.pauseCauses"
       ></agent-pause-causes>
