@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapState } from 'vuex';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
   import Contact from '../workspace-contacts/workspace-contact.vue';
   import EmptySearch from '../workspace-empty-search/empty-search.vue';
@@ -62,6 +62,9 @@
     }),
 
     computed: {
+      ...mapState('userinfo', {
+        userId: (state) => state.userId,
+      }),
       isTransferDisabled() {
         return !this.selected && !this.search;
       },
@@ -73,7 +76,7 @@
       },
 
       fetch(params) {
-        return usersAPI.getUsers(params);
+        return usersAPI.getUsers({ ...params, notId: [this.userId] });
       },
 
       transfer() {
