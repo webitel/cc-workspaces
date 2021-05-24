@@ -25,6 +25,10 @@ export default {
   header: {
     docs: 'Docs',
     enableVideo: 'Enable video',
+    dnd: {
+      label: 'DnD',
+      tooltip: 'You will receive calls from queues only',
+    },
   },
   widgets: {
     inbound: 'Inbound',
@@ -123,11 +127,6 @@ export default {
     breakTimer: {
       heading: 'You are in break mode now',
       continueWork: 'Continue work',
-    },
-    status: {
-      active: 'Active',
-      break: 'Break',
-      dnd: 'DnD',
     },
   },
   disconnectPopup: {

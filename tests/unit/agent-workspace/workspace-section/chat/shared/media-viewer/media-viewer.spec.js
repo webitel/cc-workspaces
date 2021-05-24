@@ -6,7 +6,7 @@ import chat from '../../../../../../../src/store/modules/chat/chat';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
-const store = new Vuex.Store({ modules: { chat }});
+const store = new Vuex.Store({ modules: { chat } });
 
 describe('Media Viewer', () => {
   it('renders a component', () => {

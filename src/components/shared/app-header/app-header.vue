@@ -1,6 +1,7 @@
 <template>
   <wt-app-header>
-    <timer-popup v-show="isBreak"></timer-popup>
+    <break-timer-popup/>
+    <user-dnd-switcher></user-dnd-switcher>
     <wt-switcher
       :value="isVideo"
       :label="$t('header.enableVideo')"
@@ -12,8 +13,7 @@
       @change="toggleCCenterMode"
     ></wt-switcher>
 
-    <agent-status-select v-if="isAgent"></agent-status-select>
-    <user-status-select v-else></user-status-select>
+    <agent-status-select/>
 
     <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
     <wt-header-actions
@@ -27,10 +27,9 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { AgentStatus } from 'webitel-sdk';
 import AgentStatusSelect from './agent-status-select.vue';
-import UserStatusSelect from './user-status-select.vue';
-import TimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
+import UserDndSwitcher from './user-dnd-switcher.vue';
+import BreakTimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 import APIRepository from '../../../api/APIRepository';
 
 const authAPI = APIRepository.auth;
@@ -39,13 +38,11 @@ export default {
   name: 'app-header',
   components: {
     AgentStatusSelect,
-    UserStatusSelect,
-    TimerPopup,
+    UserDndSwitcher,
+    BreakTimerPopup,
   },
 
   data: () => ({
-    AgentStatus,
-    isBreakPopup: false,
     currentApp: 'agent',
     buildInfo: {
       release: process.env.VUE_APP_PACKAGE_VERSION,
@@ -60,15 +57,11 @@ export default {
       grafana: { href: process.env.VUE_APP_GRAFANA_URL },
     },
   }),
-
   created() {
     this.restoreVideoParam();
   },
 
   computed: {
-    ...mapState('status', {
-      agent: (state) => state.agent,
-    }),
     ...mapState('call', {
       isVideo: (state) => state.isVideo,
     }),
@@ -78,10 +71,6 @@ export default {
     ...mapGetters('status', {
       isAgent: 'IS_AGENT',
     }),
-
-    isBreak() {
-      return this.agent.status === AgentStatus.Pause;
-    },
   },
 
   methods: {
@@ -110,11 +99,11 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
-  .wt-switcher {
+  .wt-switcher, .user-dnd-switcher{
     margin-left: var(--component-spacing);
   }
 
-  .agent-status-select, .user-status-select {
+  .agent-status-select {
     max-width: 200px;
     width: 150px;
     margin-left: var(--component-spacing);

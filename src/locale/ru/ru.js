@@ -23,6 +23,10 @@ export default {
   header: {
     docs: 'Документация',
     enableVideo: 'Использовать видео',
+    dnd: {
+      label: 'Не беспокоить',
+      tooltip: 'Вы будете получать звонки только из очередей',
+    },
   },
   widgets: {
     inbound: 'Входящих',
@@ -123,11 +127,6 @@ export default {
     breakTimer: {
       heading: 'Вы находитесь в режиме паузы',
       continueWork: 'Продолжить работу',
-    },
-    status: {
-      active: 'Активный',
-      break: 'Пауза',
-      dnd: 'Не отвлекать',
     },
   },
   disconnectPopup: {

@@ -4,14 +4,9 @@ import APIRepository from '../../../api/APIRepository';
 
 const usersAPI = APIRepository.users;
 
-const userStatusHandler = (context) => (userArg) => {
-  const user = {
-    status: parseUserStatus(userArg),
-    lastStateChange: Date.now(),
-  };
-
-  context.commit('SET_USER_INSTANCE', user);
-};
+const userStatusHandler = (user) => ({
+  status: parseUserStatus(user),
+});
 
 const actions = {
   // main action to start initialization
@@ -25,9 +20,11 @@ const actions = {
     const client = await getCliInstance();
     try {
       const agent = await client.agentSession();
+
       await client.subscribeAgentsStatus(async (state, agent) => {
         context.commit('SET_AGENT_INSTANCE', agent);
       }, { agent_id: agent.agentId });
+
       context.commit('SET_AGENT_INSTANCE', agent);
 
       window.agent = agent;
@@ -40,7 +37,11 @@ const actions = {
   SUBSCRIBE_USER_STATUS: async (context) => {
     const client = await getCliInstance();
     try {
-      await client.subscribeUsersStatus(userStatusHandler(context));
+      await client.subscribeUsersStatus((presence) => {
+        const user = userStatusHandler(presence);
+        context.commit('SET_USER_INSTANCE', user);
+      });
+
       await context.dispatch('GET_CURRENT_USER_STATUS');
     } catch (err) {
       throw err;
@@ -51,10 +52,7 @@ const actions = {
   GET_CURRENT_USER_STATUS: async (context) => {
     try {
       const presence = await usersAPI.getUserStatus();
-      const user = {
-        status: parseUserStatus(presence),
-        lastStateChange: Date.now(),
-      };
+      const user = userStatusHandler(presence);
       context.commit('SET_USER_INSTANCE', user);
     } catch (err) {
       throw err;

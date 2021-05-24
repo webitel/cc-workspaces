@@ -6,9 +6,9 @@ import OfflineQueue
   from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-container.vue';
 import OfflinePreview
   from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-preview.vue';
-import MockSocket from '../../../../mocks/MockSocket';
 import WorkspaceStates
   from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import MockSocket from '../../../../mocks/MockSocket';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
