@@ -3,13 +3,13 @@ import AgentStatusAPI from '../../../api/agent-workspace/agent-info/agent-status
 import AgentQueuesAPI from '../../../api/agent-workspace/agent-info/agent-queues';
 
 const state = {
-  status: {},
+  agent: {},
   pauseCauses: [],
   queues: [],
 };
 
 const getters = {
-  AGENT_ID: (state, getters, rootState) => rootState.status.agent.agentId,
+  AGENT_ID: (state, getters, rootState) => rootState.status.agent.agentId, // used for initial agent data loading
 };
 
 const actions = {
@@ -19,8 +19,8 @@ const actions = {
     context.dispatch('LOAD_QUEUES'),
   ]),
   LOAD_STATUS: async (context) => {
-    const status = await AgentStatusAPI.get({ itemId: context.getters.AGENT_ID });
-    context.commit('SET_AGENT_STATUS', status);
+    const agent = await AgentStatusAPI.get({ itemId: context.getters.AGENT_ID });
+    context.commit('SET_AGENT', agent);
   },
   LOAD_PAUSE_CAUSES: async (context) => {
     const { items } = await AgentPauseCausesAPI.getList({ agentId: context.getters.AGENT_ID });
@@ -38,8 +38,8 @@ const actions = {
 };
 
 const mutations = {
-  SET_AGENT_STATUS: (state, status) => {
-    state.status = status;
+  SET_AGENT: (state, agent) => {
+    state.agent = agent;
   },
   SET_PAUSE_CAUSES: (state, pauseCauses) => {
     state.pauseCauses = pauseCauses;
