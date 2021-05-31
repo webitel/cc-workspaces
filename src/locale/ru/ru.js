@@ -2,6 +2,8 @@ export default {
   reusable: {
     answer: 'Ответить',
     reject: 'Сбросить',
+    accept: 'Принять',
+    decline: 'Отклонить',
     send: 'Отправить',
     save: 'Сохранить',
     cancel: 'Отменить',
@@ -36,14 +38,12 @@ export default {
     avgHold: 'Среднее время удержания',
   },
   queueSec: {
-    queueSec: {
-      call: {
-        calls: 'Звонки',
-        at: 'в', // missed call "at 10:10"
-      },
-      chat: {
-        chats: 'Чаты',
-      },
+    call: {
+      calls: 'Звонки',
+      at: 'в', // missed call "at 10:10"
+    },
+    chat: {
+      chats: 'Чаты',
     },
   },
   infoSec: {
