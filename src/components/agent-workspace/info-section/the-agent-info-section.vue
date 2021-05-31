@@ -30,7 +30,11 @@ export default {
 
   watch: {
     taskOnWorkspace() {
-      this.currentTab = { value: 'client-info' };
+      if (this.showClientInfo) {
+        this.currentTab = { value: 'client-info' };
+      } else {
+        this.currentTab = { value: 'general-info' };
+      }
     },
     taskState() {
       if ((this.taskState === CallActions.Hangup
