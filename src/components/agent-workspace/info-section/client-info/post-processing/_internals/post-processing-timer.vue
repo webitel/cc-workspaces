@@ -56,14 +56,18 @@ export default {
       now: (state) => state.now,
     }),
     processingSecLeft() {
+      console.info('SEC LEFT', Math.ceil((this.processingTimeoutAt - this.now) / ms));
       return Math.ceil((this.processingTimeoutAt - this.now) / ms);
     },
     processingEndSec() {
       if (!this.now) return 0; // reactive ticking
+      console.info('DIFFFF', this.now - this.startProcessingAt);
+      console.info('END SEC', Math.ceil((this.processingTimeoutAt - this.startProcessingAt) / ms));
       return Math.ceil((this.processingTimeoutAt - this.startProcessingAt) / ms);
     },
     processingProgressSec() {
       if (!this.now) return 0; // reactive ticking
+      console.info('PROGRESS SEC', this.processingEndSec - this.processingSecLeft);
       return this.processingEndSec - this.processingSecLeft;
     },
     showRenewalButton() {

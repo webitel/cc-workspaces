@@ -21,6 +21,7 @@
         v-model="communication.priority"
         :label="$t('infoSec.postProcessing.communicationPriority')"
       ></wt-input>
+      <post-processing-timer-wrapper/>
     </template>
     <template slot="actions">
       <wt-button
@@ -43,6 +44,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import deepCopy from 'deep-copy';
+import PostProcessingTimerWrapper from '../_internals/post-processing-timer-wrapper.vue';
 import PostProcessingWrapper from '../_internals/post-processing-wrapper.vue';
 import APIRepository from '../../../../../../api/APIRepository';
 
@@ -56,7 +58,7 @@ const defaultCommunication = () => ({
 
 export default {
   name: 'post-processing-communication-popup',
-  components: { PostProcessingWrapper },
+  components: { PostProcessingWrapper, PostProcessingTimerWrapper },
   data: () => ({
     communication: {},
   }),
@@ -127,5 +129,9 @@ export default {
   &:first-child {
     margin-right: 10px;
   }
+}
+
+.post-processing-timer {
+  margin: var(--component-spacing) auto;
 }
 </style>
