@@ -56,7 +56,7 @@ export default {
       now: (state) => state.now,
     }),
     processingSecLeft() {
-      return Math.ceil((this.processingTimeoutAt - this.now) / ms);
+      return Math.floor((this.processingTimeoutAt - this.now) / ms);
     },
     processingEndSec() {
       if (!this.now) return 0; // reactive ticking
