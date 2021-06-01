@@ -21,13 +21,13 @@ describe('Agent Info Module: Actions', () => {
     agentInfo.actions.LOAD_AGENT_INFO(context);
     expect(context.dispatch).toHaveBeenCalledWith('LOAD_QUEUES');
   });
-  it('LOAD_STATUS calls AgentStatus API and commits response to SET_AGENT_STATUS', async () => {
+  it('LOAD_STATUS calls AgentStatus API and commits response to SET_AGENT', async () => {
     const response = { jest: 'jest' };
     const getMock = jest.fn(() => response);
     AgentStatusAPI.get = getMock;
     await agentInfo.actions.LOAD_STATUS(context);
     expect(getMock).toHaveBeenCalled();
-    expect(context.commit).toHaveBeenCalledWith('SET_AGENT_STATUS', response);
+    expect(context.commit).toHaveBeenCalledWith('SET_AGENT', response);
   });
   it('LOAD_PAUSE_CAUSES calls AgentPauseCause API and commits response to SET_PAUSE_CAUSES', async () => {
     const response = { items: [] };
@@ -52,10 +52,10 @@ describe('Agent Info Module: Mutation', () => {
   beforeEach(() => {
     state = {};
   });
-  it('SET_AGENT_STATUS sets passed status to state', () => {
-    const status = { status: 'jest' };
-    agentInfo.mutations.SET_AGENT_STATUS(state, status);
-    expect(state.status).toEqual(status);
+  it('SET_AGENT sets passed status to state', () => {
+    const agent = { status: 'jest' };
+    agentInfo.mutations.SET_AGENT(state, agent);
+    expect(state.agent).toEqual(agent);
   });
   it('SET_PAUSE_CAUSES sets passed pauseCauses to state', () => {
     const pauseCauses = [{ name: 'jest' }];

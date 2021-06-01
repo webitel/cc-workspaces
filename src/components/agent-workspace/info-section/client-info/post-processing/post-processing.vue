@@ -23,14 +23,7 @@
         </div>
         <success-form v-show="isSuccess"/>
         <failure-form v-show="!isSuccess"/>
-        <post-processing-timer
-          v-if="showTimer"
-          :start-processing-at="taskOnWorkspace.task.startProcessingAt"
-          :processing-timeout-at="taskOnWorkspace.task.processingTimeoutAt"
-          :processing-sec="taskOnWorkspace.task.processingSec"
-          :renewal-sec="taskOnWorkspace.task.renewalSec"
-          @click="renewProcessingTime"
-        ></post-processing-timer>
+        <post-processing-timer-wrapper/>
       </template>
       <template slot="actions">
         <wt-button
@@ -47,18 +40,18 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import PostProcessingWrapper from './_internals/post-processing-wrapper.vue';
-import PostProcessingTimer from './_internals/post-processing-timer.vue';
 import SuccessForm from './post-processing-success-form.vue';
 import FailureForm from './post-processing-failure-form.vue';
+import PostProcessingTimerWrapper from './_internals/post-processing-timer-wrapper.vue';
 import MemberCommunicationPopup from './member-communications/post-processing-communication-popup.vue';
 
 export default {
   name: 'post-processing',
   components: {
     PostProcessingWrapper,
-    PostProcessingTimer,
     SuccessForm,
     FailureForm,
+    PostProcessingTimerWrapper,
     MemberCommunicationPopup,
   },
 
@@ -83,10 +76,6 @@ export default {
     ...mapGetters('reporting', {
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
     }),
-
-    showTimer() {
-      return this.taskOnWorkspace.task?.processingSec;
-    },
   },
 
   methods: {
@@ -98,9 +87,6 @@ export default {
     }),
     setSuccess(value) {
       this.setValue({ prop: 'isSuccess', value });
-    },
-    renewProcessingTime() {
-      this.taskOnWorkspace.task.renew();
     },
     async initForm({ newTask, oldTask }) {
       if (oldTask) this.saveForm(oldTask);

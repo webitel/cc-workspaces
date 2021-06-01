@@ -4,7 +4,7 @@
     <div class="general-info__content-wrapper" v-show="isLoaded">
       <wt-cc-agent-status-timers
         class="general-info__article"
-        :status="agentInfo.status"
+        :status="agentInfo.agent"
       ></wt-cc-agent-status-timers>
       <agent-queues
         v-if="agentInfo.queues.length"
@@ -13,7 +13,7 @@
       ></agent-queues>
       <agent-org-structure
         class="general-info__article"
-        :agent="agent"
+        :agent="agentInfo.agent"
       ></agent-org-structure>
       <agent-pause-causes
         v-if="agentInfo.pauseCauses.length"
