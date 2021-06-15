@@ -1,7 +1,7 @@
 .queue-preview {
   box-sizing: border-box;
   position: relative;
-  padding: 10px 10px 10px 30px;
+  padding: 10px 10px 10px 10px;
   margin-bottom: 1px;
   border: 1px solid transparent;
   background: var(--main-primary-color);
@@ -24,10 +24,18 @@
   }
 }
 
+.queue-header-wrapper{
+  display: flex;
+}
+
 .queue-preview-header {
   display: flex;
+  flex: 1 0 auto;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: flex-start;
+  padding: 0 0 15px 10px;
+  width: 290px;
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
@@ -35,6 +43,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    width: 200px;
 
     @media screen and (max-width: 1336px) {
       display: none;
@@ -50,12 +59,15 @@
 
 .queue-preview-body {
   @extend %typo-body-md;
+  flex: 1 0 100%;
+  width: 200px;
   @media screen and (max-width: 1336px) {
     display: none;
   }
 }
 
 .queue-preview-footer {
+  flex:1 0 100%;
   @media screen and (max-width: 1336px) {
     display: none;
   }

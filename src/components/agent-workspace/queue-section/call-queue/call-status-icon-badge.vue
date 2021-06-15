@@ -44,12 +44,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 10px;
-    left: 10px;
     width: 17px;
     height: 17px;
     border-radius: 50%;
+
 
     .icon-wrap {
       width: (17px);
