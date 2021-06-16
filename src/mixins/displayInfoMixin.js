@@ -9,7 +9,7 @@ export default {
     },
 
     displayQueueName() {
-      return this.call.task?.queue?.name;
+      return this.call?.task?.queue?.name || this.task.task?.queue?.name;
     },
   },
 };

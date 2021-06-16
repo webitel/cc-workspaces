@@ -5,6 +5,8 @@
       <queue-preview-timer :task="task" bold/>
     </header>
 
+    <wt-badge>{{displayQueueName }}</wt-badge>
+
     <section class="queue-preview-body">
       <div class="chat-preview__message">
         {{ lastMessage | truncate(30) }}
