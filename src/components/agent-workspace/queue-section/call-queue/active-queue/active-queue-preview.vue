@@ -17,8 +17,8 @@
         </header>
       </div>
       <!--Badge with queue name-->
-      <wt-badge v-if="queueName">
-        {{ queueName }}
+      <wt-badge v-if="displayQueueName">
+        {{ displayQueueName }}
       </wt-badge>
 
       <footer class="queue-preview-footer">
@@ -41,8 +41,6 @@
         </div>
       </footer>
     </div>
-
-
   </div>
 </template>
 
@@ -81,9 +79,9 @@ export default {
     computePreviewStatusClass() {
       return this.call.isHold ? 'hold' : 'call';
     },
-    queueName() {
-      return this.call.task?.queue?.name;
-    },
+    // queueName() {
+    //   return this.call.task?.queue?.name;
+    // },
   },
 
   methods: {

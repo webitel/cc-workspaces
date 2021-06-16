@@ -7,5 +7,9 @@ export default {
     displayNumber() {
       return this.call?.displayNumber || this.task?.displayName;
     },
+
+    displayQueueName() {
+      return this.call.task?.queue?.name;
+    },
   },
 };

@@ -11,6 +11,9 @@
     <div class="preview-profile__number">
       {{displayNumber}}
     </div>
+    <wt-badge v-if="displayQueueName">
+      {{displayQueueName}}
+    </wt-badge>
   </div>
 </template>
 
@@ -35,7 +38,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 
     &__pic {
       width: 90px;
@@ -46,11 +49,12 @@
 
     &__name {
       @extend .typo-heading-sm;
-      margin-bottom: 10px;
     }
 
     &__number {
       @extend .typo-body-md;
+      margin-bottom: 30px;
+
     }
   }
 </style>
