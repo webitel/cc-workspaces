@@ -3,14 +3,14 @@
     <template slot="title">{{ title }}</template>
     <template slot="main">
       <wt-input
-        v-model="communication.destination"
-        :v="$v.communication.destination"
+        v-model="draft.destination"
+        :v="$v.draft.destination"
         :label="$t('infoSec.postProcessing.communicationDestination')"
         required
       ></wt-input>
       <wt-select
-        v-model="communication.type"
-        :v="$v.communication.type"
+        v-model="draft.type"
+        :v="$v.draft.type"
         :label="$t('infoSec.postProcessing.communicationType')"
         :internal-search="false"
         :search="getCommunications"
@@ -18,7 +18,8 @@
         required
       ></wt-select>
       <wt-input
-        v-model="communication.priority"
+        v-model="draft.priority"
+        type="number"
         :label="$t('infoSec.postProcessing.communicationPriority')"
       ></wt-input>
       <post-processing-timer-wrapper/>
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import deepCopy from 'deep-copy';
 import PostProcessingTimerWrapper from '../_internals/post-processing-timer-wrapper.vue';
@@ -60,16 +61,22 @@ export default {
   name: 'post-processing-communication-popup',
   components: { PostProcessingWrapper, PostProcessingTimerWrapper },
   data: () => ({
-    communication: {},
+    draft: {},
   }),
-  validations: {
+  props: {
     communication: {
+      type: Object,
+      description: 'Edited communication',
+    },
+  },
+  validations: {
+    draft: {
       destination: { required },
       type: { required },
     },
   },
   watch: {
-    communication: {
+    draft: {
       handler() {
         this.$v.$touch();
       },
@@ -78,20 +85,18 @@ export default {
     },
     isCommunicationPopup: {
       handler() {
-        this.refreshData();
+        this.setDraft();
       },
       immediate: true,
     },
   },
   computed: {
-    ...mapState('reporting', {
-      isNewCommunication: (state) => state.isNewCommunication,
-      editedCommunication: (state) => state.editedCommunication,
-    }),
-
     ...mapGetters('reporting', {
-      isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
+      isCommunicationPopup: 'IS_COMMUNICATION_POPUP', // used for setDraft() watcher
     }),
+    isNewCommunication() {
+      return !this.communication;
+    },
     title() {
       return this.isNewCommunication
         ? this.$t('infoSec.postProcessing.createCommunicationTitle')
@@ -99,22 +104,23 @@ export default {
     },
   },
   methods: {
-    ...mapActions('reporting', {
-      addCommunication: 'ADD_COMMUNICATION',
-      editCommunication: 'EDIT_COMMUNICATION',
-      cancel: 'CLOSE_COMMUNICATION_ACTIONS',
-    }),
     save() {
-      const { communication } = this;
       if (this.isNewCommunication) {
-        this.addCommunication(communication);
+        this.$emit('submit:add', this.draft);
       } else {
-        this.editCommunication(communication);
+        this.$emit('submit:edit', this.draft);
       }
+      this.close();
     },
-    refreshData() {
-      this.communication = this.isNewCommunication
-      ? defaultCommunication() : deepCopy(this.editedCommunication);
+    setDraft() {
+      this.draft = this.isNewCommunication
+        ? defaultCommunication() : deepCopy(this.communication);
+    },
+    cancel() {
+      this.close();
+    },
+    close() {
+      this.$emit('close');
     },
     async getCommunications(params) {
       const response = await communicationsAPI.getCommunicationTypes(params);

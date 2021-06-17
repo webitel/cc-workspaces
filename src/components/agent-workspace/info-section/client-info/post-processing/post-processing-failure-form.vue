@@ -6,69 +6,45 @@
       </h2>
       <div class="processing-form__schedule-call-select-wrapper">
         <wt-radio
-          :selected="isScheduleCall"
+          v-model="taskPostProcessing.isScheduleCall"
           :label="$t('infoSec.postProcessing.yes')"
           :value="true"
-          @input="setValue({ prop: 'isScheduleCall', value: $event })"
         ></wt-radio>
         <wt-radio
-          :selected="isScheduleCall"
+          v-model="taskPostProcessing.isScheduleCall"
           :label="$t('infoSec.postProcessing.no')"
           :value="false"
-          @input="setValue({ prop: 'isScheduleCall', value: $event })"
         ></wt-radio>
       </div>
     </div>
 
-    <div class="processing-form__input" v-if="isMember" v-show="isScheduleCall">
+    <div class="processing-form__input" v-if="isMember" v-show="taskPostProcessing.isScheduleCall">
       <wt-datetimepicker
-        :value="nextDistributeAt"
-        :disabled-dates="disabledDates"
+        v-model="taskPostProcessing.nextDistributeAt"
+        :disabled-dates="{ to: new Date() }"
         :label="$t('infoSec.postProcessing.nextDistributeAt')"
-        @change="setValue({ prop: 'nextDistributeAt', value: $event })"
       ></wt-datetimepicker>
     </div>
     <member-communications v-if="isMember" />
     <wt-textarea
-      :value="description"
+      v-model="taskPostProcessing.description"
       :label="$t('reusable.description')"
       :placeholder="$t('reusable.description')"
-      @input="setValue({ prop: 'description', value: $event })"
     ></wt-textarea>
   </form>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import MemberCommunications from './member-communications/post-processing-communications-container.vue';
 
 export default {
   name: 'post-processing-failure-form',
-  components: {
-    MemberCommunications,
-  },
-
-  data: () => ({
-    disabledDates: {
-      to: new Date(),
-    },
-  }),
-
+  components: { MemberCommunications },
   computed: {
-    ...mapState('reporting', {
-      isScheduleCall: (state) => state.isScheduleCall,
-      nextDistributeAt: (state) => state.nextDistributeAt,
-      description: (state) => state.description,
-    }),
-
     ...mapGetters('reporting', {
+      taskPostProcessing: 'TASK_POST_PROCESSING',
       isMember: 'IS_MEMBER',
-    }),
-  },
-
-  methods: {
-    ...mapActions('reporting', {
-      setValue: 'SET_PROPERTY',
     }),
   },
 };
