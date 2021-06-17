@@ -28,14 +28,14 @@ const actions = {
     const client = await getCliInstance();
     await client.subscribeCall(callHandler(context), null);
     const callList = client.allCall();
-    if (callList.length) context.commit('SET_CALL_LIST', callList);
+    if (callList.length) context.dispatch('SET_CALL_LIST', callList);
     // await client.subscribeTask((...args) => {
     //   console.log('task', args);
     // });
   },
 
   HANDLE_RINGING_ACTION: (context, call) => {
-    context.commit('ADD_CALL', call);
+    context.dispatch('ADD_CALL', call);
     if (call.direction === CallDirection.Outbound
       || !context.state.callOnWorkspace) {
       context.dispatch('SET_WORKSPACE', call);
