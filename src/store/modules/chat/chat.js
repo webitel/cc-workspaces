@@ -1,4 +1,5 @@
 import { ConversationState } from 'webitel-sdk';
+import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 
@@ -16,6 +17,20 @@ const getters = {
 
 const actions = {
   ...clientHandlers.actions,
+
+  SET_CHAT_LIST: (context, chatList) => {
+    chatList.forEach((chat) => {
+      // eslint-disable-next-line no-param-reassign
+      chat.postProcessData = new Reporting(chat, chat.postProcessData);
+    });
+    context.commit('SET_CHAT_LIST', chatList);
+  },
+
+  ADD_CHAT: (context, chat) => {
+    // eslint-disable-next-line no-param-reassign
+    chat.postProcessData = new Reporting(chat, chat.postProcessData);
+    context.commit('ADD_CHAT', chat);
+  },
 
   ACCEPT: async (context) => {
     try {

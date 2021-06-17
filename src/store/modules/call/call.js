@@ -1,4 +1,5 @@
 import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
+import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import missed from './missed-calls/missed-calls';
@@ -25,6 +26,20 @@ const getters = {
 
 const actions = {
   ...clientHandlers.actions,
+
+  SET_CALL_LIST: (context, callList) => {
+    callList.forEach((call) => {
+      // eslint-disable-next-line no-param-reassign
+      call.postProcessData = new Reporting(call, call.postProcessData);
+    });
+    context.commit('SET_CALL_LIST', callList);
+  },
+
+  ADD_CALL: (context, call) => {
+    // eslint-disable-next-line no-param-reassign
+    call.postProcessData = new Reporting(call, call.postProcessData);
+    context.commit('ADD_CALL', call);
+  },
 
   // destructuring arg in order to skip mouse events
   CALL: async (context, { user }) => {
