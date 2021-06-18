@@ -28,14 +28,14 @@ describe('chat store: actions', () => {
   });
 
   it('SET_CHAT_LIST action sets Reporting class object to passed chats, if allowReporting is true', () => {
-    const chat = { allowReporting: true };
+    const chat = { hasReporting: true };
     const chatList = [chat];
     chatModule.actions.SET_CHAT_LIST(context, chatList);
     expect(chat.postProcessData instanceof Reporting).toBe(true);
   });
 
   it('ADD_CHAT action sets Reporting class object to passed chat, if allowReporting is true', () => {
-    const chat = { allowReporting: true };
+    const chat = { hasReporting: true };
     chatModule.actions.ADD_CHAT(context, chat);
     expect(chat.postProcessData instanceof Reporting).toBe(true);
   });

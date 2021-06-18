@@ -19,14 +19,14 @@ describe('call store: actions', () => {
   });
 
   it('SET_CALL_LIST action sets Reporting class object to passed call, if allowReporting is true', () => {
-    const call = { allowReporting: true };
+    const call = { hasReporting: true };
     const callList = [call];
     callModule.actions.SET_CALL_LIST(context, callList);
     expect(call.postProcessData instanceof Reporting).toBe(true);
   });
 
   it('ADD_CALL action sets Reporting class object to passed call, if allowReporting is true', () => {
-    const call = { allowReporting: true };
+    const call = { hasReporting: true };
     callModule.actions.ADD_CALL(context, call);
     expect(call.postProcessData instanceof Reporting).toBe(true);
   });

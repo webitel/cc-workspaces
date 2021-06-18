@@ -29,19 +29,19 @@ const actions = {
 
   SET_CALL_LIST: (context, callList) => {
     callList.forEach((call) => {
-      // if (call.allowReporting) {
+      if (call.hasReporting) {
         // eslint-disable-next-line no-param-reassign
         call.postProcessData = new Reporting(call);
-      // }
+      }
     });
     context.commit('SET_CALL_LIST', callList);
   },
 
   ADD_CALL: (context, call) => {
-    // if (call.allowReporting) {
+    if (call.hasReporting) {
       // eslint-disable-next-line no-param-reassign
       call.postProcessData = new Reporting(call);
-    // }
+    }
     context.commit('ADD_CALL', call);
   },
 
