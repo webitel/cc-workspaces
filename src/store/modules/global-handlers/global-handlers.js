@@ -10,6 +10,9 @@ const actions = {
   INIT_GLOBAL_HANDLERS: (context) => {
     context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
   },
+  RESET_GLOBAL_HANDLERS: (context) => {
+    context.dispatch('CLOSE_DISCONNECT_POPUP');
+  },
   SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
     const client = await getCliInstance();
     client.on('disconnected', () => context.dispatch('OPEN_DISCONNECT_POPUP'));
