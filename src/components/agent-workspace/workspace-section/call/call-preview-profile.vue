@@ -11,7 +11,7 @@
     <div class="preview-profile__number">
       {{displayNumber}}
     </div>
-    <wt-badge v-if="displayQueueName">
+    <wt-badge color="secondary" v-if="displayQueueName">
       {{displayQueueName}}
     </wt-badge>
   </div>
@@ -19,11 +19,11 @@
 
 <script>
   import { mapState } from 'vuex';
-  import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
+  import displayInfoMixin from '../../../../mixins/displayInfoMixin';
 
   export default {
     name: 'call-preview-profile',
-    mixins: [dispayInfoMixin],
+    mixins: [displayInfoMixin],
 
     computed: {
       ...mapState('call', {

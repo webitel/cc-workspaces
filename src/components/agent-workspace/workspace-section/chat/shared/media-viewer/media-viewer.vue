@@ -6,7 +6,7 @@
     </div>
   </aside>
 </template>
-
+<!--v-show="isMediaView" @click="close-->
 <script>
 import { mapState, mapActions } from 'vuex';
 

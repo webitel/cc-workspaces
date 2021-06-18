@@ -27,6 +27,7 @@
         state: (state) => state.workspaceState,
       }),
 
+
       workspaceComponent() {
         switch (this.state) {
           case WorkspaceStates.CALL: return 'call';

@@ -1,11 +1,13 @@
 <template>
   <article class="queue-preview" :class="{ 'queue-preview--opened': opened }">
     <header class="queue-preview-header">
-      <span class="queue-preview-header__name">{{displayName | truncate(18) }}</span>
+      <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
     </header>
 
-    <wt-badge>{{displayQueueName }}</wt-badge>
+    <wt-badge color="secondary" v-if="displayQueueName">
+      {{ displayQueueName }}
+    </wt-badge>
 
     <section class="queue-preview-body">
       <div class="chat-preview__message">
@@ -23,7 +25,7 @@ import displayInfo from '../../../../../mixins/displayInfoMixin';
 
 export default {
   name: 'chat-queue-preview',
-  components: { QueuePreviewTimer },
+  components: {QueuePreviewTimer},
   mixins: [displayInfo],
   props: {
     task: {

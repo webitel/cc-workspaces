@@ -17,7 +17,7 @@
         </header>
       </div>
       <!--Badge with queue name-->
-      <wt-badge v-if="displayQueueName">
+      <wt-badge color="secondary" v-if="displayQueueName">
         {{ displayQueueName }}
       </wt-badge>
 
