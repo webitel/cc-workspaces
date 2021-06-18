@@ -30,9 +30,10 @@ const actions = {
     }
   },
 
-  CLOSE_SESSION: (context) => {
+  CLOSE_SESSION: async (context) => {
     context.dispatch('now/CLEAR_NOW_WATCHER', null, { root: true });
-    destroyCliInstance();
+    await destroyCliInstance();
+    context.dispatch('globals/RESET_GLOBAL_HANDLERS', null, { root: true });
   },
 
   SET_WORKSPACE_STATE: (context, wsState) => {
