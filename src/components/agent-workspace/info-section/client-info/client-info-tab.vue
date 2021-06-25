@@ -1,5 +1,6 @@
 <template>
   <section class="client-info">
+    <queue-name></queue-name>
     <client-info-markdown></client-info-markdown>
     <post-processing
       v-if="taskOnWorkspace.allowReporting"
@@ -11,12 +12,15 @@
   import { mapGetters } from 'vuex';
   import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
   import PostProcessing from './post-processing/post-processing.vue';
+  import QueueName from './queue-name/queue-name.vue';
+
 
   export default {
     name: 'client-info-tab',
     components: {
       ClientInfoMarkdown,
       PostProcessing,
+      QueueName,
     },
     data: () => ({
     }),

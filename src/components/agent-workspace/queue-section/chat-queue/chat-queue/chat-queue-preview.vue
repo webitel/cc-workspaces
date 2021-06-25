@@ -4,11 +4,13 @@
       <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
     </header>
-
-    <wt-badge color="secondary" v-if="displayQueueName">
-      {{ displayQueueName }}
-    </wt-badge>
-
+    <section class="queue-preview-badges">
+      <div class="queue-name-wrapper">
+        <wt-badge color="secondary" v-if="displayQueueName">
+          {{ displayQueueName }}
+        </wt-badge>
+      </div>
+    </section>
     <section class="queue-preview-body">
       <div class="chat-preview__message">
         {{ lastMessage | truncate(30) }}

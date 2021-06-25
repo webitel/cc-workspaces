@@ -7,19 +7,17 @@
       @drop="handleDrop"
     ></dropzone>
     <chat-header/>
-    <chat-queue-name :task="task"></chat-queue-name>
     <chat-messages-container/>
     <chat-footer/>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import {mapActions,} from 'vuex';
 import Dropzone from '../../../../utils/dropzone.vue';
 import ChatHeader from '../shared/chat-header/chat-header.vue';
 import ChatMessagesContainer from '../shared/chat-messages/chat-messages-container.vue';
 import ChatFooter from '../shared/chat-footer/chat-footer.vue';
-import ChatQueueName from '../shared/chat-queue-name/chat-queue-name.vue';
 
 export default {
   name: 'chat-preview',
@@ -28,16 +26,10 @@ export default {
     ChatHeader,
     ChatMessagesContainer,
     ChatFooter,
-    ChatQueueName,
   },
   data: () => ({
     isDropzoneVisible: false,
   }),
-  computed: {
-    ...mapState('chat', {
-      task: (state) => state.chatOnWorkspace,
-    }),
-  },
   methods: {
     ...mapActions('chat', {
       sendFile: 'SEND_FILE',

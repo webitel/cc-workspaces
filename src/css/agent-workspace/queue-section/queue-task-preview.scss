@@ -13,7 +13,7 @@
   }
 
   @media screen and (max-width: 1336px) {
-    display: flex;
+    display: inline-block;
     align-items: center;
     padding: 10px;
 
@@ -26,6 +26,8 @@
 
 .queue-header-wrapper{
   display: flex;
+  @media screen and (max-width: 1336px){
+  }
 }
 
 .queue-preview-header {
@@ -49,7 +51,15 @@
       display: none;
     }
   }
+  @media screen and (max-width: 1336px) {
+    width: 70px;
+    align-items: center;
+    padding: 0;
+  }
 }
+
+
+
 
 //.offline-queue .queue-preview-header__name {
 //  @media screen and (max-width: 1336px) {

@@ -11,9 +11,6 @@
     <div class="preview-profile__number">
       {{displayNumber}}
     </div>
-    <wt-badge color="secondary" v-if="displayQueueName">
-      {{displayQueueName}}
-    </wt-badge>
   </div>
 </template>
 
@@ -55,6 +52,11 @@
       @extend .typo-body-md;
       margin-bottom: 30px;
 
+    }
+  }
+  .queue-name-wrapper{
+    @media screen and (max-width: 1366px){
+      display: block;
     }
   }
 </style>

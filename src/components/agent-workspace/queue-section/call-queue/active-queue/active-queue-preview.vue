@@ -16,11 +16,14 @@
           </section>
         </header>
       </div>
-      <!--Badge with queue name-->
-      <wt-badge color="secondary" v-if="displayQueueName">
-        {{ displayQueueName }}
-      </wt-badge>
-
+            <!--badge-->
+      <section class="queue-preview-badges">
+        <div class="queue-name-wrapper">
+          <wt-badge color="secondary" v-if="displayQueueName">
+            {{ displayQueueName }}
+          </wt-badge>
+        </div>
+      </section>
       <footer class="queue-preview-footer">
         <div
           v-if="isRinging"
@@ -79,9 +82,6 @@ export default {
     computePreviewStatusClass() {
       return this.call.isHold ? 'hold' : 'call';
     },
-    // queueName() {
-    //   return this.call.task?.queue?.name;
-    // },
   },
 
   methods: {
