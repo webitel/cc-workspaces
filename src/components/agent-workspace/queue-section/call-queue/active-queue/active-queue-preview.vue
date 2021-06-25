@@ -1,54 +1,46 @@
 <template>
-  <div class="queue-preview" :class="{'queue-preview--opened': opened}">
-    <div class="queue-preview-wrapper">
-
-      <div class="queue-header-wrapper">
-        <status-badge :state="computePreviewStatusClass"/>
-        <header class="queue-preview-header">
-
-          <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
-          <queue-preview-timer :task="call" :bold="!isRinging"/>
-
-          <section class="queue-preview-body">
-            <div class="active-preview__number">
-              {{ displayNumber | truncateFromEnd(18) }}
-            </div>
-          </section>
-        </header>
-      </div>
-            <!--badge-->
-      <section class="queue-preview-badges">
-        <div class="queue-name-wrapper">
-          <wt-badge color="secondary" v-if="displayQueueName">
-            {{ displayQueueName }}
-          </wt-badge>
-        </div>
-      </section>
-      <footer class="queue-preview-footer">
-        <div
-          v-if="isRinging"
-          class="queue-preview-actions"
-        >
-          <wt-button
-            color="success"
-            @click="answer({ callId: call.id })"
-          >
-            {{ $t('reusable.answer') }}
-          </wt-button>
-          <wt-button
-            color="danger"
-            @click="hangup({ callId: call.id })"
-          >
-            {{ $t('reusable.reject') }}
-          </wt-button>
-        </div>
-      </footer>
+  <article class="queue-preview" :class="{'queue-preview--opened': opened}">
+    <div class="queue-header-wrapper">
+      <status-badge :state="computePreviewStatusClass"/>
+      <header class="queue-preview-header">
+        <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
+        <queue-preview-timer :task="call" :bold="!isRinging"/>
+      </header>
     </div>
-  </div>
+    <section class="queue-preview-body">
+      <div class="active-preview__number">
+        {{ displayNumber | truncateFromEnd(18) }}
+      </div>
+    </section>
+    <section class="queue-preview-badges" v-if="displayQueueName">
+      <wt-badge color="secondary">
+        {{ displayQueueName }}
+      </wt-badge>
+    </section>
+    <footer class="queue-preview-footer">
+      <div
+        v-if="isRinging"
+        class="queue-preview-actions"
+      >
+        <wt-button
+          color="success"
+          @click="answer({ callId: call.id })"
+        >
+          {{ $t('reusable.answer') }}
+        </wt-button>
+        <wt-button
+          color="danger"
+          @click="hangup({ callId: call.id })"
+        >
+          {{ $t('reusable.reject') }}
+        </wt-button>
+      </div>
+    </footer>
+  </article>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import { mapActions } from 'vuex';
 import StatusBadge from '../call-status-icon-badge.vue';
 import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
@@ -57,7 +49,7 @@ import isIncomingRinging from '../../../../../store/modules/call/scripts/isIncom
 export default {
   name: 'active-queue-preview',
   mixins: [displayInfo],
-  components: {StatusBadge, QueuePreviewTimer},
+  components: { StatusBadge, QueuePreviewTimer },
   props: {
     // item is for UI computing
     call: {

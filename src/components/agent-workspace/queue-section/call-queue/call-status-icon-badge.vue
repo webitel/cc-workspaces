@@ -48,7 +48,6 @@
     height: 17px;
     border-radius: 50%;
 
-
     .icon-wrap {
       width: (17px);
       height: (17px);

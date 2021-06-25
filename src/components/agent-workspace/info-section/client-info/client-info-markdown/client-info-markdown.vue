@@ -22,7 +22,7 @@ export default {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
     computeHTML() {
-      const {variables} = this.taskOnWorkspace;
+      const { variables } = this.taskOnWorkspace;
       let res = '';
       if (variables) {
         const variablesCopy = deepCopy(variables);

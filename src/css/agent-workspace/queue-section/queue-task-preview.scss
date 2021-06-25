@@ -1,7 +1,7 @@
 .queue-preview {
   box-sizing: border-box;
   position: relative;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   margin-bottom: 1px;
   border: 1px solid transparent;
   background: var(--main-primary-color);
@@ -13,7 +13,7 @@
   }
 
   @media screen and (max-width: 1336px) {
-    display: inline-block;
+    display: flex;
     align-items: center;
     padding: 10px;
 
@@ -24,10 +24,8 @@
   }
 }
 
-.queue-header-wrapper{
+.queue-header-wrapper {
   display: flex;
-  @media screen and (max-width: 1336px){
-  }
 }
 
 .queue-preview-header {
@@ -36,8 +34,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: flex-start;
-  padding: 0 0 15px 10px;
-  width: 290px;
+  padding: 0 0 5px 10px;
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
@@ -45,21 +42,23 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 200px;
 
     @media screen and (max-width: 1336px) {
       display: none;
     }
   }
+
   @media screen and (max-width: 1336px) {
-    width: 70px;
     align-items: center;
     padding: 0;
   }
 }
 
-
-
+.queue-preview-badges {
+  @media screen and (max-width: 1336px) {
+    display: none;
+  }
+}
 
 //.offline-queue .queue-preview-header__name {
 //  @media screen and (max-width: 1336px) {
@@ -71,13 +70,15 @@
   @extend %typo-body-md;
   flex: 1 0 100%;
   width: 200px;
+  //padding: 0 0 15px 0px;
+  padding: 0 0 15px 20px;
   @media screen and (max-width: 1336px) {
     display: none;
   }
 }
 
 .queue-preview-footer {
-  flex:1 0 100%;
+  flex: 1 0 100%;
   @media screen and (max-width: 1336px) {
     display: none;
   }

@@ -27,7 +27,7 @@ import ScrollObserver from '../../../../../utils/scroll-observer.vue';
 import chatScroll from '../../../../../../directives/chatScroll';
 
 export default {
-   name: 'chat-messages-container',
+  name: 'chat-messages-container',
   directives: { chatScroll },
   components: {
     Message,

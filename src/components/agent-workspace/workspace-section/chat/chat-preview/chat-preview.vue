@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {mapActions,} from 'vuex';
+import { mapActions } from 'vuex';
 import Dropzone from '../../../../utils/dropzone.vue';
 import ChatHeader from '../shared/chat-header/chat-header.vue';
 import ChatMessagesContainer from '../shared/chat-messages/chat-messages-container.vue';
