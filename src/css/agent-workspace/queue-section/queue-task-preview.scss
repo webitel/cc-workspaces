@@ -28,13 +28,11 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  //Забрав падінг зліва щоб іконка статус кол вирінялась по лівій границі блоку queue-preview
-  padding-bottom: 5px;
+  margin-bottom: 5px;
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
     @extend %typo-strong-lg;
-    //Прибив блок до іконки кол статусу
     flex: 1 0 auto;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -47,6 +45,7 @@
 }
 
 .queue-preview-badges {
+  margin-top: 15px;
   @media screen and (max-width: 1336px) {
     display: none;
   }
@@ -60,9 +59,7 @@
 
 .queue-preview-body {
   @extend %typo-body-md;
-  flex: 1 0 100%;
-  width: 200px;
-  padding: 0 0 15px 20px;
+  padding-left: 20px;
   @media screen and (max-width: 1336px) {
     display: none;
   }

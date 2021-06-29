@@ -1,14 +1,13 @@
 <template>
   <article class="queue-preview" :class="{'queue-preview--opened': opened}">
-<!--  Видалив блоки так як вирішив питання з переіменуванням шляхом зміни деяких стилів  -->
       <header class="queue-preview-header">
         <status-badge :state="computePreviewStatusClass"/>
-        <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
+        <span class="queue-preview-header__name">{{ displayName | truncate(27) }}</span>
         <queue-preview-timer :task="call" :bold="!isRinging"/>
       </header>
     <section class="queue-preview-body">
       <div class="active-preview__number">
-        {{ displayNumber | truncateFromEnd(18) }}
+        {{ displayNumber | truncateFromEnd(33) }}
       </div>
     </section>
     <section class="queue-preview-badges" v-if="displayQueueName">
