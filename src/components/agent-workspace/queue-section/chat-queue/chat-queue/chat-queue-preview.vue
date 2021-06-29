@@ -9,13 +9,12 @@
         {{ lastMessage | truncate(30) }}
       </div>
     </section>
-    <footer class="queue-preview-footer">
-      <section class="queue-preview-badges" v-if="displayQueueName">
-        <wt-badge color="secondary">
-          {{ displayQueueName }}
-        </wt-badge>
-      </section>
-    </footer>
+    <section class="queue-preview-badges" v-if="displayQueueName">
+      <wt-badge color="secondary">
+        {{ displayQueueName }}
+      </wt-badge>
+    </section>
+    <footer class="queue-preview-footer"></footer>
   </article>
 </template>
 

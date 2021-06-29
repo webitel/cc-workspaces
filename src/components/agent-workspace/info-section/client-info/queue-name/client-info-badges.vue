@@ -27,9 +27,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--component-padding);
-  background-color: var(--secondary-color-50);
-  border-radius: var(--border-radius);
   margin-bottom: var(--component-padding);
 }
 </style>

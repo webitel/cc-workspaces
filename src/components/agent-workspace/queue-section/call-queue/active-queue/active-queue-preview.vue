@@ -1,12 +1,11 @@
 <template>
   <article class="queue-preview" :class="{'queue-preview--opened': opened}">
-    <div class="queue-header-wrapper">
-      <status-badge :state="computePreviewStatusClass"/>
+<!--  Видалив блоки так як вирішив питання з переіменуванням шляхом зміни деяких стилів  -->
       <header class="queue-preview-header">
+        <status-badge :state="computePreviewStatusClass"/>
         <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
         <queue-preview-timer :task="call" :bold="!isRinging"/>
       </header>
-    </div>
     <section class="queue-preview-body">
       <div class="active-preview__number">
         {{ displayNumber | truncateFromEnd(18) }}

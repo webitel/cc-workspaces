@@ -24,21 +24,18 @@
   }
 }
 
-.queue-header-wrapper {
-  display: flex;
-}
-
 .queue-preview-header {
   display: flex;
-  flex: 1 0 auto;
   justify-content: space-between;
-  flex-wrap: wrap;
   align-items: flex-start;
-  padding: 0 0 5px 10px;
+  //Забрав падінг зліва щоб іконка статус кол вирінялась по лівій границі блоку queue-preview
+  padding-bottom: 5px;
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
     @extend %typo-strong-lg;
+    //Прибив блок до іконки кол статусу
+    flex: 1 0 auto;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -46,11 +43,6 @@
     @media screen and (max-width: 1336px) {
       display: none;
     }
-  }
-
-  @media screen and (max-width: 1336px) {
-    align-items: center;
-    padding: 0;
   }
 }
 
@@ -70,7 +62,6 @@
   @extend %typo-body-md;
   flex: 1 0 100%;
   width: 200px;
-  //padding: 0 0 15px 0px;
   padding: 0 0 15px 20px;
   @media screen and (max-width: 1336px) {
     display: none;
@@ -78,7 +69,6 @@
 }
 
 .queue-preview-footer {
-  flex: 1 0 100%;
   @media screen and (max-width: 1336px) {
     display: none;
   }

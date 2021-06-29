@@ -76,9 +76,9 @@
 
   &__pic {
     flex: 0 0 50px;
-    border-radius: 50%;
     width: 50px;
     height: 50px;
+    border-radius: 50%;
   }
 
   &__text {
@@ -92,8 +92,8 @@
   }
 
   &__status {
-    flex: 0 0 24px;
     align-self: end;
+    flex: 0 0 24px;
     width: 24px;
     height: 24px;
   }
@@ -105,10 +105,4 @@
 
 .ws-contact-item__number {
   @extend .typo-body-sm;
-}
-
-.queue-name-wrapper {
-  @media screen and (max-width: 1366px){
-    display: none;
-  }
 }

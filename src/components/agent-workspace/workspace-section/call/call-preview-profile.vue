@@ -21,7 +21,6 @@ import displayInfoMixin from '../../../../mixins/displayInfoMixin';
 export default {
   name: 'call-preview-profile',
   mixins: [displayInfoMixin],
-
   computed: {
     ...mapState('call', {
       call: (state) => state.callOnWorkspace,
@@ -35,7 +34,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 
   &__pic {
     width: 90px;
@@ -50,8 +49,6 @@ export default {
 
   &__number {
     @extend .typo-body-md;
-    margin-bottom: 30px;
-
   }
 }
 </style>

@@ -46,11 +46,13 @@
     justify-content: center;
     width: 17px;
     height: 17px;
+    //Відступив від іконки вправо на 10пх що було як в макеті.
+    margin-right: var(--icon-spacing);
     border-radius: 50%;
 
     .icon-wrap {
-      width: (17px);
-      height: (17px);
+      width: 17px;
+      height: 17px;
     }
 
     .icon {
