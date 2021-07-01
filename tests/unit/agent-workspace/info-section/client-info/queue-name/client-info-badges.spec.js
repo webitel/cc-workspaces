@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ClientInfoBadges
   from '../../../../../../src/components/agent-workspace/info-section/client-info/queue-name/client-info-badges.vue';
@@ -6,7 +6,7 @@ import ClientInfoBadges
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-let task;
+const task = { task: {} };
 
 const store = new Vuex.Store({
   modules: {
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
 
 describe('client-info-badges.vue', () => {
   beforeEach(() => {
-   task = {};
+    task.task = {};
   });
   it('Should render component', () => {
     const wrapper = shallowMount(ClientInfoBadges, {
