@@ -51,7 +51,7 @@ describe('chat store client handlers: actions', () => {
 
   it('HANDLE_INVITE_ACTION commits ADD_CHAT mutation with invited chat', () => {
     chatModule.actions.HANDLE_INVITE_ACTION(context, chat);
-    expect(context.commit).toHaveBeenCalledWith('ADD_CHAT', chat);
+    expect(context.dispatch).toHaveBeenCalledWith('ADD_CHAT', chat);
   });
 
   it('HANDLE_DESTROY_ACTION commits REMOVE_CHAT mutation with removed chat', () => {

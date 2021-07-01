@@ -28,11 +28,11 @@ const actions = {
     const client = await getCliInstance();
     await client.subscribeChat(callHandler(context), null);
     const chatList = client.allConversations();
-    if (chatList.length) context.commit('SET_CHAT_LIST', chatList);
+    if (chatList.length) context.dispatch('SET_CHAT_LIST', chatList);
   },
 
   HANDLE_INVITE_ACTION: (context, chat) => {
-    context.commit('ADD_CHAT', chat);
+    context.dispatch('ADD_CHAT', chat);
   },
 
   HANDLE_MESSAGE_ACTION: (context, chat) => {

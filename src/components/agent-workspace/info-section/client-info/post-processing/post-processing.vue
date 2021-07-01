@@ -1,6 +1,16 @@
 <template>
   <div class="post-processing">
-    <post-processing-wrapper v-show="!isCommunicationPopup" :color="isSuccess ? 'success' : 'failure'">
+    <communication-popup
+      v-show="isCommunicationPopup"
+      :communication="taskPostProcessing.editedCommunication"
+      @submit:add="taskPostProcessing.addCommunication($event)"
+      @submit:edit="taskPostProcessing.editCommunication($event)"
+      @close="closeCommunicationPopup"
+    ></communication-popup>
+    <post-processing-wrapper
+      v-show="!isCommunicationPopup"
+      :color="taskPostProcessing.success ? 'success' : 'failure'"
+    >
       <template slot="title">
         {{ $t('infoSec.postProcessing.isSuccess') }}
       </template>
@@ -8,21 +18,21 @@
         <div class="post-processing__status-wrapper">
           <wt-button
             class="post-processing__status-control"
-            :outline="!isSuccess"
+            :outline="!taskPostProcessing.success"
             color="success"
             @click="setSuccess(true)"
           >{{ $t('infoSec.postProcessing.yes') }}
           </wt-button>
           <wt-button
             class="post-processing__status-control"
-            :outline="isSuccess"
+            :outline="taskPostProcessing.success"
             color="danger"
             @click="setSuccess(false)"
           >{{ $t('infoSec.postProcessing.no') }}
           </wt-button>
         </div>
-        <success-form v-show="isSuccess"/>
-        <failure-form v-show="!isSuccess"/>
+        <success-form v-show="taskPostProcessing.success"/>
+        <failure-form v-show="!taskPostProcessing.success"/>
         <post-processing-timer-wrapper/>
       </template>
       <template slot="actions">
@@ -33,17 +43,16 @@
         </wt-button>
       </template>
     </post-processing-wrapper>
-    <member-communication-popup v-show="isCommunicationPopup"/>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
-import PostProcessingWrapper from './_internals/post-processing-wrapper.vue';
-import SuccessForm from './post-processing-success-form.vue';
-import FailureForm from './post-processing-failure-form.vue';
+import { mapGetters } from 'vuex';
 import PostProcessingTimerWrapper from './_internals/post-processing-timer-wrapper.vue';
-import MemberCommunicationPopup from './member-communications/post-processing-communication-popup.vue';
+import PostProcessingWrapper from './_internals/post-processing-wrapper.vue';
+import CommunicationPopup from './member-communications/post-processing-communication-popup.vue';
+import FailureForm from './post-processing-failure-form.vue';
+import SuccessForm from './post-processing-success-form.vue';
 
 export default {
   name: 'post-processing',
@@ -52,54 +61,33 @@ export default {
     SuccessForm,
     FailureForm,
     PostProcessingTimerWrapper,
-    MemberCommunicationPopup,
-  },
-
-  watch: {
-    taskOnWorkspace: {
-      handler(newTask, oldTask) {
-        this.initForm({ newTask, oldTask });
-      },
-      immediate: true,
-    },
+    CommunicationPopup,
   },
 
   computed: {
-    ...mapState('reporting', {
-      isSuccess: (state) => state.isSuccess,
-    }),
-
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
-
     ...mapGetters('reporting', {
+      taskPostProcessing: 'TASK_POST_PROCESSING',
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
     }),
   },
 
   methods: {
-    ...mapActions('reporting', {
-      setValue: 'SET_PROPERTY',
-      sendReporting: 'SEND_REPORTING',
-      saveForm: 'SAVE_FORM',
-      restoreForm: 'RESTORE_FORM',
-    }),
-    setSuccess(value) {
-      this.setValue({ prop: 'isSuccess', value });
+    sendReporting() {
+      this.taskPostProcessing.send();
     },
-    async initForm({ newTask, oldTask }) {
-      if (oldTask) this.saveForm(oldTask);
-      if (newTask) this.restoreForm(newTask);
+    setSuccess(value) {
+      this.taskPostProcessing.success = value;
+    },
+    closeCommunicationPopup() {
+      if (this.taskPostProcessing.editedCommunication) {
+        this.taskPostProcessing.editedCommunication = null;
+      } else this.taskPostProcessing.isNewCommunication = false;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.post-processing {
-}
-
 .post-processing__status-wrapper {
   display: flex;
   align-items: center;

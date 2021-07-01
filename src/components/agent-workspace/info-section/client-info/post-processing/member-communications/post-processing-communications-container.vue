@@ -1,19 +1,19 @@
 <template>
   <div class="processing-communications-container">
     <communication
-      v-for="(communication, key) of communicationsList"
+      v-for="(communication, key) of taskPostProcessing.communications"
       :communication="communication"
-      :selected="nextCommunication"
+      :selected="taskPostProcessing.nextCommunication"
       :key="key"
-      :deletable="communicationsList.length > 1"
-      @edit="editCommunication(communication)"
-      @delete="deleteCommunication(communication)"
-      @click.native="selectCommunication(communication)"
+      :deletable="taskPostProcessing.communications.length > 1"
+      @edit="taskPostProcessing.startCommunicationEditing(communication)"
+      @delete="taskPostProcessing.deleteCommunication(communication)"
+      @click.native="taskPostProcessing.selectNextCommunication(communication)"
     ></communication>
     <wt-button
       color="secondary"
       wide
-      @click="addCommunication"
+      @click="taskPostProcessing.startCommunicationAdding()"
     >
       {{ $t('infoSec.postProcessing.addNewCommunication') }}
     </wt-button>
@@ -21,44 +21,17 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import Communication from './post-processing-communication.vue';
 
 export default {
   name: 'post-processing-communications-container',
   components: { Communication },
 
-  data: () => ({
-    selected: '',
-  }),
-
-  watch: {
-    task: {
-      handler() {
-        this.loadCommunicationsList();
-      },
-      immediate: true,
-    },
-  },
-
   computed: {
-    ...mapState('reporting', {
-      communicationsList: (state) => state.communicationsList,
-      nextCommunication: (state) => state.nextCommunication,
-    }),
-
-    ...mapGetters('workspace', {
-      task: 'TASK_ON_WORKSPACE',
-    }),
-  },
-
-  methods: {
-    ...mapActions('reporting', {
-      selectCommunication: 'SET_NEXT_COMMUNICATION',
-      loadCommunicationsList: 'LOAD_COMMUNICATIONS_LIST',
-      addCommunication: 'BEGIN_COMMUNICATION_ADDING',
-      editCommunication: 'BEGIN_COMMUNICATION_EDIT',
-      deleteCommunication: 'DELETE_COMMUNICATION',
+    ...mapGetters('reporting', {
+      taskPostProcessing: 'TASK_POST_PROCESSING',
+      isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
     }),
   },
 };

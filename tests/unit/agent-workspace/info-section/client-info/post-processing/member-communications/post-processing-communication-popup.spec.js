@@ -4,6 +4,7 @@ import CommunicationPopup
   from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/member-communications/post-processing-communication-popup.vue';
 import reporting
   from '../../../../../../../src/store/modules/post-processing/post-processing';
+import Reporting from '../../../../../../../src/store/modules/post-processing/Reporting';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -19,13 +20,17 @@ const tMock = jest.fn();
 const vMock = {
   $touch: jest.fn(),
   $error: false,
-  communication: {},
+  draft: {},
 };
+
+const taskOnWorkspace = {};
+taskOnWorkspace.postProcessData = new Reporting(taskOnWorkspace);
 
 describe('Post Processing Communication Popup', () => {
   let store;
 
   beforeEach(() => {
+    reporting.getters.TASK_POST_PROCESSING = () => taskOnWorkspace.postProcessData;
     store = new Vuex.Store({
       modules: { reporting },
     });
@@ -68,9 +73,6 @@ describe('Post Processing Communication Popup', () => {
   });
 
   it('at new communication save button calls addCommunication with this communication', () => {
-    const addCommunicationMock = jest.fn();
-    jest.spyOn(CommunicationPopup.methods, 'addCommunication')
-      .mockImplementation(addCommunicationMock);
     const wrapper = shallowMount(CommunicationPopup, {
       localVue,
       store,
@@ -82,17 +84,15 @@ describe('Post Processing Communication Popup', () => {
       },
     });
     wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
-    expect(addCommunicationMock).toHaveBeenCalledWith(wrapper.vm.communication);
+    expect(wrapper.emitted()['submit:add']).toBeTruthy();
   });
 
   it('at edited communication save button calls editCommunication with this communication', () => {
-    const editCommunicationMock = jest.fn();
-    jest.spyOn(CommunicationPopup.methods, 'editCommunication')
-      .mockImplementation(editCommunicationMock);
     const wrapper = shallowMount(CommunicationPopup, {
       localVue,
       store,
       mocks: { $v: vMock },
+      propsData: { communication },
       computed: {
         isNewCommunication() {
           return false;
@@ -100,6 +100,6 @@ describe('Post Processing Communication Popup', () => {
       },
     });
     wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
-    expect(editCommunicationMock).toHaveBeenCalledWith(wrapper.vm.communication);
+    expect(wrapper.emitted()['submit:edit'][0]).toEqual([communication]);
   });
 });
