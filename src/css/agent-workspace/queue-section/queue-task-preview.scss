@@ -1,7 +1,7 @@
 .queue-preview {
   box-sizing: border-box;
   position: relative;
-  padding: 10px 10px 10px 30px;
+  padding: 10px;
   margin-bottom: 1px;
   border: 1px solid transparent;
   background: var(--main-primary-color);
@@ -28,10 +28,12 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin-bottom: 5px;
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
     @extend %typo-strong-lg;
+    flex: 1 0 auto;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -39,6 +41,13 @@
     @media screen and (max-width: 1336px) {
       display: none;
     }
+  }
+}
+
+.queue-preview-badges {
+  margin-top: 15px;
+  @media screen and (max-width: 1336px) {
+    display: none;
   }
 }
 
@@ -50,6 +59,7 @@
 
 .queue-preview-body {
   @extend %typo-body-md;
+  padding-left: 20px;
   @media screen and (max-width: 1336px) {
     display: none;
   }

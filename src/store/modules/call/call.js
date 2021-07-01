@@ -9,7 +9,6 @@ const state = {
   callOnWorkspace: {},
   isVideo: false,
 };
-
 const getters = {
   GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id === callId),
 

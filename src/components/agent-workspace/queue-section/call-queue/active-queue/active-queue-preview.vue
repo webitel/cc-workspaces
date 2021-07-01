@@ -1,18 +1,20 @@
 <template>
   <article class="queue-preview" :class="{'queue-preview--opened': opened}">
-    <status-badge :state="computePreviewStatusClass"/>
-
-    <header class="queue-preview-header">
-      <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
-      <queue-preview-timer :task="call" :bold="!isRinging"/>
-    </header>
-
+      <header class="queue-preview-header">
+        <status-badge :state="computePreviewStatusClass"/>
+        <span class="queue-preview-header__name">{{ displayName | truncate(27) }}</span>
+        <queue-preview-timer :task="call" :bold="!isRinging"/>
+      </header>
     <section class="queue-preview-body">
       <div class="active-preview__number">
-        {{ displayNumber | truncateFromEnd(18) }}
+        {{ displayNumber | truncateFromEnd(33) }}
       </div>
     </section>
-
+    <section class="queue-preview-badges" v-if="displayQueueName">
+      <wt-badge color="secondary">
+        {{ displayQueueName }}
+      </wt-badge>
+    </section>
     <footer class="queue-preview-footer">
       <div
         v-if="isRinging"

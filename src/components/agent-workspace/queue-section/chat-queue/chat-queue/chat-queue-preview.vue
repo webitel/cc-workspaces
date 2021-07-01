@@ -1,16 +1,19 @@
 <template>
   <article class="queue-preview" :class="{ 'queue-preview--opened': opened }">
     <header class="queue-preview-header">
-      <span class="queue-preview-header__name">{{displayName | truncate(18) }}</span>
+      <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
     </header>
-
     <section class="queue-preview-body">
       <div class="chat-preview__message">
         {{ lastMessage | truncate(30) }}
       </div>
     </section>
-
+    <section class="queue-preview-badges" v-if="displayQueueName">
+      <wt-badge color="secondary">
+        {{ displayQueueName }}
+      </wt-badge>
+    </section>
     <footer class="queue-preview-footer"></footer>
   </article>
 </template>
