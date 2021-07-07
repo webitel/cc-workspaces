@@ -116,6 +116,7 @@ export default {
 
     .chat-message__text {
       @extend %typo-body-md;
+      overflow-wrap: break-word;
     }
 
     .chat-message__image {
