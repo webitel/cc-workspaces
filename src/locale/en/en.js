@@ -32,7 +32,7 @@ export default {
   },
   widgets: {
     inbound: 'Inbound',
-    handles: 'Handles Calls',
+    handles: 'Processed Calls',
     missed: 'Missed Calls',
     avgTalk: 'Avg Talk Time',
     avgHold: 'Avg Hold Time',
