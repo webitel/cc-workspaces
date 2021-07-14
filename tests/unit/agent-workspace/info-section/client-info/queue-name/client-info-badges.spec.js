@@ -6,7 +6,7 @@ import ClientInfoBadges
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-let task;
+const task = { task: {} };
 
 const store = new Vuex.Store({
   modules: {
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
 
 describe('client-info-badges.vue', () => {
   beforeEach(() => {
-   task = {};
+    task.task = {};
   });
   it('Should render component', () => {
     const wrapper = shallowMount(ClientInfoBadges, {
