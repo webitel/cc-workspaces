@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/cc-ui-sdk": "^0.1.15",
-    "@webitel/ui-sdk": "^0.8.7",
+    "@webitel/cc-ui-sdk": "^0.1.16",
+    "@webitel/ui-sdk": "^0.8.16",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
