@@ -42,7 +42,6 @@ export default {
   },
 
   data: () => ({
-    currentApp: WebitelApplications.AGENT,
     buildInfo: {
       release: process.env.VUE_APP_PACKAGE_VERSION,
       build: process.env.VUE_APP_BUILD_NUMBER,
@@ -58,6 +57,7 @@ export default {
     }),
     ...mapState('userinfo', {
       user: (state) => state,
+      currentApp: (state) => state.thisApp,
     }),
     ...mapGetters('status', {
       isAgent: 'IS_AGENT',
