@@ -1,5 +1,5 @@
 <!-- eslint-disable -->
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <i class="icon-wrap">
     <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;"
          version="1.1"

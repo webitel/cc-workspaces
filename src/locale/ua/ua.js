@@ -36,6 +36,8 @@ export default {
     missed: 'Пропущено',
     avgTalk: 'Средній час розмови',
     avgHold: 'Средній час утримання',
+    utilization: 'Утилізація',
+    occupancy: 'Зайнятість',
   },
   queueSec: {
     call: {
