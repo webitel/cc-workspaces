@@ -1,83 +1,50 @@
+import ApplicationsAccess from '@webitel/ui-sdk/src/modules/Userinfo/classes/ApplicationsAccess';
+import UserinfoStoreModule from '@webitel/ui-sdk/src/modules/Userinfo/store/UserinfoStoreModule';
+import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+
+// register api's
+import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
+import userinfoAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/userinfo';
+import instance from '../../../api/instance';
+
 import router from '../../../router';
-import APIRepository from '../../../api/APIRepository';
 
-const authAPI = APIRepository.auth;
-
-const defaultState = () => ({
-  domainId: 0,
-  name: '',
-  username: '',
-  account: '',
-  userId: 0,
-  scope: [],
-  roles: [],
-  license: [],
-  language: localStorage.getItem('lang'),
-});
+authAPI.setInstance(instance);
+userinfoAPI.setInstance(instance);
 
 const state = {
-  ...defaultState(),
+  thisApp: WebitelApplications.HISTORY,
 };
-
-const getters = {};
 
 const actions = {
-
-  RESTORE_SESSION: async (context) => {
+  /*
+  * copy-pasted OPEN_SESSION action from UserinfoStoreModule + added day-length token check
+  * suppose it would be better to add BEFORE/AFTER SET_SESSION HOOKS in UserinfoStoreModule
+  * and make this check in these hook instead of copy-paste overriding base action
+  * */
+  OPEN_SESSION: async (context) => {
     const DAY_LENGTH = 24 * 60 * 60 * 1000;
-    try {
-      const userinfo = await authAPI.getSession();
-      if ((userinfo.expiresAt - Date.now() < DAY_LENGTH)) {
-        await APIRepository.auth.logout();
-        await router.replace('/auth');
-        return;
-      }
-      await context.dispatch('SET_SESSION', userinfo);
-    } catch (err) {
-      await router.replace('/auth');
-      throw err;
+
+    await context.dispatch('BEFORE_OPEN_SESSION_HOOK');
+    if (!localStorage.getItem('access-token')) {
+      context.dispatch('REDIRECT_TO_AUTH');
+      throw new Error('No access-token in localStorage');
     }
-  },
+    const session = await userinfoAPI.getSession();
 
-  SET_SESSION: (context, session) => {
-    context.dispatch('RESET_STATE');
-    context.commit('SET_SESSION', session);
-  },
+    if ((session.expiresAt - Date.now() < DAY_LENGTH)) {
+      await authAPI.logout();
+      await router.replace('/auth');
+      return;
+    }
 
-  SET_DOMAIN_ID: (context, domainId) => {
-    context.commit('SET_DOMAIN_ID', domainId);
-  },
-
-  RESET_STATE: (context) => {
-    context.commit('RESET_STATE');
-  },
-};
-
-const mutations = {
-  SET_SESSION: (state, session) => {
-    state.domainId = session.dc;
-    state.account = session.preferredUsername;
-    state.roles = session.roles;
-    state.scope = session.scope;
-    state.userId = session.userId;
-    state.license = session.license;
-    state.username = session.username;
-    state.name = session.name;
-  },
-
-  SET_DOMAIN_ID: (state, domainId) => {
-    state.domainId = domainId;
-  },
-
-  RESET_STATE: (state) => {
-    Object.assign(state, defaultState());
+    await context.dispatch('SET_SESSION', session);
+    const access = await userinfoAPI.getApplicationsAccess();
+    await context.dispatch('SET_APPLICATIONS_ACCESS', new ApplicationsAccess({ access }).getAccess());
+    await context.dispatch('AFTER_OPEN_SESSION_HOOK');
   },
 };
 
-export default {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations,
-};
+const userinfo = new UserinfoStoreModule().getModule({ state, actions });
+
+export default userinfo;
