@@ -17,7 +17,6 @@ const state = {
 };
 
 const actions = {
-  REDIRECT_TO_AUTH: () => router.replace('/auth'),
   /*
   * copy-pasted OPEN_SESSION action from UserinfoStoreModule + added day-length token check
   * suppose it would be better to add BEFORE/AFTER SET_SESSION HOOKS in UserinfoStoreModule
