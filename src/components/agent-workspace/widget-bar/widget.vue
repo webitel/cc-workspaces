@@ -7,7 +7,7 @@
     <wt-checkbox
       class="widget-checkbox"
       v-show="selectionMode"
-      v-model="show">
+      :selected="show">
     </wt-checkbox>
 
     <wt-icon

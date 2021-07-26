@@ -19,7 +19,7 @@
       <wt-icon-btn
         class="icon"
         icon="arrow-down"
-        @click.prevent="selectionMode = !selectionMode"
+        @click="selectionMode = !selectionMode"
       ></wt-icon-btn>
     </div>
   </section>
