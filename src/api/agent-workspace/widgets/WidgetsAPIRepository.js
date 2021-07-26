@@ -8,7 +8,7 @@ const agentService = new AgentServiceApiFactory(configuration, '', instance);
 const defaultParams = {
   from: new Date().setHours(0, 0, 0, 0),
   to: new Date().setHours(23, 59, 59, 999),
-  fields: ['count', 'handles', 'abandoned', 'avg_talk_sec', 'avg_hold_sec'],
+  fields: ['count', 'handles', 'abandoned', 'avg_talk_sec', 'avg_hold_sec', 'occupancy', 'utilization'],
 };
 
 const formatResponse = (stats) => ({
@@ -23,6 +23,8 @@ const formatResponse = (stats) => ({
   minTalkSec: convertDuration(stats.minTalkSec),
   sumHoldSec: convertDuration(stats.sumHoldSec),
   sumTalkSec: convertDuration(stats.sumTalkSec),
+  occupancy: `${stats.occupancy.toFixed(2)}%`,
+  utilization: `${stats.utilization.toFixed(2)}%`,
 });
 
 const fetchWidgets = async ({
@@ -44,6 +46,8 @@ const fetchWidgets = async ({
       minTalkSec: 0,
       sumHoldSec: 0,
       sumTalkSec: 0,
+      occupancy: 0,
+      utilization: 0,
     };
     const response = await agentService
       .searchAgentCallStatistics(

@@ -36,6 +36,8 @@ export default {
     missed: 'Missed Calls',
     avgTalk: 'Avg Talk Time',
     avgHold: 'Avg Hold Time',
+    utilization: 'Utilization',
+    occupancy: 'Occupancy',
   },
   queueSec: {
     call: {
