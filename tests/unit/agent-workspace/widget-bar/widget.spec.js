@@ -4,7 +4,6 @@ import Widget from '../../../../src/components/agent-workspace/widget-bar/widget
 describe('Widget', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(Widget, {
-      stubs: { Icon: true },
       propsData: {
         widget: {
           icon: '',
@@ -16,7 +15,6 @@ describe('Widget', () => {
   });
   it('widget emits "select" event at click, if selectionMode is true', () => {
     const wrapper = shallowMount(Widget, {
-      stubs: { Icon: true },
       propsData: {
         widget: {
           icon: '',
@@ -30,7 +28,6 @@ describe('Widget', () => {
   });
   it('widget does not emit "select" event at click, if selectionMode is true', () => {
     const wrapper = shallowMount(Widget, {
-      stubs: { Icon: true },
       propsData: {
         widget: {
           icon: '',
