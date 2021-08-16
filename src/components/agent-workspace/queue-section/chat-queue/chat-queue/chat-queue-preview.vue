@@ -1,6 +1,7 @@
 <template>
   <article class="queue-preview" :class="{ 'queue-preview--opened': opened }">
     <header class="queue-preview-header">
+      <wt-icon icon-prefix="messenger" :icon="displayIcon" size="sm"></wt-icon>
       <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
     </header>
@@ -14,13 +15,15 @@
         {{ displayQueueName }}
       </wt-badge>
     </section>
-    <footer class="queue-preview-footer"></footer>
+<!--    <footer class="queue-preview-footer"></footer>-->
   </article>
 </template>
 
 <script>
+import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
+
 
 export default {
   name: 'chat-queue-preview',
@@ -43,6 +46,23 @@ export default {
     lastMessage() {
       const lastMessage = this.task.messages[this.task.messages.length - 1];
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+    },
+    displayIcon() {
+      // If there are conferences in the future,
+      // then facebook can be replaced by some other icon.
+      if (this.task.members.length > 1) {
+        return 'facebook';
+      }
+      const iconName = this.task.members.map((member) => {
+        switch (member.type) {
+          case MessengerType.WHATSAPP:
+            return 'whatsapp';
+          case MessengerType.WEB_CHAT:
+            return 'web-chat';
+            default: return member.type;
+        }
+      });
+      return iconName.join(', ');
     },
   },
 };

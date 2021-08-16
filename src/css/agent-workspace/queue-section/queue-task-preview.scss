@@ -1,8 +1,13 @@
 .queue-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  //gap: 15px;
   box-sizing: border-box;
   position: relative;
   padding: 10px;
   margin-bottom: 1px;
+  height: 106px;
   border: 1px solid transparent;
   background: var(--main-primary-color);
   border-radius: var(--border-radius);
@@ -16,6 +21,7 @@
     display: flex;
     align-items: center;
     padding: 10px;
+    height: 36px;
 
     .call-status-badge {
       position: static;
@@ -28,7 +34,6 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 5px;
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
@@ -42,10 +47,12 @@
       display: none;
     }
   }
+  .wt-icon {
+    margin-right: var(--icon-spacing);
+  }
 }
 
 .queue-preview-badges {
-  margin-top: 15px;
   @media screen and (max-width: 1336px) {
     display: none;
   }
@@ -59,7 +66,7 @@
 
 .queue-preview-body {
   @extend %typo-body-md;
-  padding-left: 20px;
+  color:var(--text-outline-color);
   @media screen and (max-width: 1336px) {
     display: none;
   }
