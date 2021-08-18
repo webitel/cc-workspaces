@@ -1,10 +1,11 @@
 <template>
-  <div class="chat-message" :class="{'chat-message--right': my}">
+  <div class="chat-message" :class="{'chat-message--right' : my || !message.channelId }">
     <div class="chat-message__user-pic-wrapper" v-if="!my">
       <img v-if="showUserPic" class="chat-message__user-pic"
-           src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
+           :src="changeIcon"
+           alt="client photo">
     </div>
-    <div class="chat-message__main-wrapper">
+    <div class="chat-message__main-wrapper" :style="botBackgroundColor">
       <p v-if="text" class="chat-message__text">
         {{ text }}
       </p>
@@ -62,6 +63,18 @@ export default {
     },
   },
   computed: {
+    changeIcon() {
+      return !this.message.channelId
+        // eslint-disable-next-line global-require
+        ? require('../../../../../../assets/agent-workspace/droid.svg')
+        // eslint-disable-next-line global-require
+        : require('../../../../../../assets/agent-workspace/default-avatar.svg');
+    },
+    botBackgroundColor() {
+      return !this.message.channelId || this.my
+        ? { backgroundColor: 'var(--chat-agent-message-bg-color)' }
+        : { backgroundColor: 'var(--chat-client-message-bg-color)' };
+    },
     sentAt() {
       return prettifyTime(this.message.createdAt);
     },
@@ -194,6 +207,9 @@ export default {
         }
       }
     }
+    .chat-message__user-pic-wrapper{
+      margin-right: 0;
+    }
 
     .chat-message__message-info-wrapper {
       margin-left: 0;
@@ -209,7 +225,6 @@ export default {
   margin-right: 10px;
 
   .chat-message__user-pic {
-    width: 100%;
     height: 100%;
   }
 }

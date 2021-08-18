@@ -1,13 +1,11 @@
 .queue-preview {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  //gap: 15px;
+  gap: var(--component-spacing);
   box-sizing: border-box;
   position: relative;
   padding: 10px;
   margin-bottom: 1px;
-  height: 106px;
   border: 1px solid transparent;
   background: var(--main-primary-color);
   border-radius: var(--border-radius);

@@ -48,21 +48,20 @@ export default {
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
     },
     displayIcon() {
-      // If there are conferences in the future,
-      // then facebook can be replaced by some other icon.
-      if (this.task.members.length > 1) {
-        return 'facebook';
+      const member = this.task.members[0];
+      switch (member.type) {
+        case MessengerType.TELEGRAM:
+          return 'telegram';
+        case MessengerType.VIBER:
+            return 'viber';
+        case MessengerType.FACEBOOK:
+          return 'facebook';
+        case MessengerType.WHATSAPP:
+          return 'whatsapp';
+        case MessengerType.WEB_CHAT:
+          return 'web-chat';
+        default: return member.type;
       }
-      const iconName = this.task.members.map((member) => {
-        switch (member.type) {
-          case MessengerType.WHATSAPP:
-            return 'whatsapp';
-          case MessengerType.WEB_CHAT:
-            return 'web-chat';
-            default: return member.type;
-        }
-      });
-      return iconName.join(', ');
     },
   },
 };
