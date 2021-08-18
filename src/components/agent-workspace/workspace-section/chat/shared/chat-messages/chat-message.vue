@@ -1,11 +1,11 @@
 <template>
-  <div class="chat-message" :class="{'chat-message--right' : my || !message.channelId }">
+  <div class="chat-message" :class="{'chat-message--right' : my || bot }">
     <div class="chat-message__user-pic-wrapper" v-if="!my">
       <img v-if="showUserPic" class="chat-message__user-pic"
-           :src="changeIcon"
+           :src="avatarPic"
            alt="client photo">
     </div>
-    <div class="chat-message__main-wrapper" :style="botBackgroundColor">
+    <div class="chat-message__main-wrapper">
       <p v-if="text" class="chat-message__text">
         {{ text }}
       </p>
@@ -49,6 +49,8 @@
 import { mapActions } from 'vuex';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
+import botAvatar from '../../../../../../assets/agent-workspace/bot-avatar.svg';
+import defaultAvatar from '../../../../../../assets/agent-workspace/default-avatar.svg';
 
 export default {
   name: 'chat-message',
@@ -63,17 +65,11 @@ export default {
     },
   },
   computed: {
-    changeIcon() {
-      return !this.message.channelId
-        // eslint-disable-next-line global-require
-        ? require('../../../../../../assets/agent-workspace/droid.svg')
-        // eslint-disable-next-line global-require
-        : require('../../../../../../assets/agent-workspace/default-avatar.svg');
+    avatarPic() {
+      return !this.message.channelId ? botAvatar : defaultAvatar;
     },
-    botBackgroundColor() {
-      return !this.message.channelId || this.my
-        ? { backgroundColor: 'var(--chat-agent-message-bg-color)' }
-        : { backgroundColor: 'var(--chat-client-message-bg-color)' };
+    bot() {
+      return !this.message.channelId;
     },
     sentAt() {
       return prettifyTime(this.message.createdAt);
@@ -207,7 +203,8 @@ export default {
         }
       }
     }
-    .chat-message__user-pic-wrapper{
+
+    .chat-message__user-pic-wrapper {
       margin-right: 0;
     }
 
