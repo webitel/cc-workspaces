@@ -15,7 +15,7 @@
         {{ displayQueueName }}
       </wt-badge>
     </section>
-<!--    <footer class="queue-preview-footer"></footer>-->
+    <!--    <footer class="queue-preview-footer"></footer>-->
   </article>
 </template>
 
@@ -23,7 +23,6 @@
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
-
 
 export default {
   name: 'chat-queue-preview',
@@ -53,14 +52,15 @@ export default {
         case MessengerType.TELEGRAM:
           return 'telegram';
         case MessengerType.VIBER:
-            return 'viber';
+          return 'viber';
         case MessengerType.FACEBOOK:
           return 'facebook';
         case MessengerType.WHATSAPP:
           return 'whatsapp';
         case MessengerType.WEB_CHAT:
           return 'web-chat';
-        default: return member.type;
+        default:
+          return member.type;
       }
     },
   },
