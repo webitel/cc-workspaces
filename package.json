@@ -14,7 +14,7 @@
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@webitel/cc-ui-sdk": "^0.1.16",
-    "@webitel/ui-sdk": "^0.8.34",
+    "@webitel/ui-sdk": "^0.8.42",
     "axios": "^0.19.2",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
@@ -34,7 +34,7 @@
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
     "vuex": "^3.1.2",
-    "webitel-sdk": "^0.1.70"
+    "webitel-sdk": "^0.1.73"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",

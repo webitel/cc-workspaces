@@ -1,8 +1,9 @@
 <template>
-  <div class="chat-message" :class="{'chat-message--right': my}">
+  <div class="chat-message" :class="{'chat-message--right' : isAgentSideMessage }">
     <div class="chat-message__user-pic-wrapper" v-if="!my">
       <img v-if="showUserPic" class="chat-message__user-pic"
-           src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
+           :src="avatarPic"
+           alt="client photo">
     </div>
     <div class="chat-message__main-wrapper">
       <p v-if="text" class="chat-message__text">
@@ -48,6 +49,8 @@
 import { mapActions } from 'vuex';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
+import botAvatar from '../../../../../../assets/agent-workspace/bot-avatar.svg';
+import defaultAvatar from '../../../../../../assets/agent-workspace/default-avatar.svg';
 
 export default {
   name: 'chat-message',
@@ -62,6 +65,18 @@ export default {
     },
   },
   computed: {
+    my() {
+      return !!this.message.member?.self;
+    },
+    bot() {
+      return !this.message.channelId;
+    },
+    isAgentSideMessage() {
+      return this.my || this.bot;
+    },
+    avatarPic() {
+      return this.bot ? botAvatar : defaultAvatar;
+    },
     sentAt() {
       return prettifyTime(this.message.createdAt);
     },
@@ -78,9 +93,6 @@ export default {
     documentSize() {
       if (!this.document) return '';
       return prettifyFileSize(this.document.size);
-    },
-    my() {
-      return !!this.message.member?.self;
     },
   },
   methods: {
@@ -195,6 +207,10 @@ export default {
       }
     }
 
+    .chat-message__user-pic-wrapper {
+      margin-right: 0;
+    }
+
     .chat-message__message-info-wrapper {
       margin-left: 0;
       margin-right: 10px;
@@ -209,7 +225,6 @@ export default {
   margin-right: 10px;
 
   .chat-message__user-pic {
-    width: 100%;
     height: 100%;
   }
 }
