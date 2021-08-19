@@ -8,6 +8,7 @@ process.env.VUE_APP_AUDIT_URL = process.env.NODE_ENV === 'production' ? '/audit'
 process.env.VUE_APP_HISTORY_URL = process.env.NODE_ENV === 'production' ? '/history' : 'https://dev.webitel.com/history';
 process.env.VUE_APP_GRAFANA_URL = process.env.NODE_ENV === 'production' ? '/grafana' : 'https://dev.webitel.com/grafana';
 process.env.VUE_APP_SETTINGS_URL = process.env.NODE_ENV === 'production' ? '/settings' : 'https://dev.webitel.com/settings';
+process.env.VUE_APP_APPLICATION_HUB_URL = process.env.NODE_ENV === 'production' ? '/' : 'https://dev.webitel.com/';
 
 process.env.VUE_APP_PACKAGE_VERSION = require('./package.json').version;
 

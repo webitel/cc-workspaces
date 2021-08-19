@@ -16,7 +16,7 @@ const actions = {
   OPEN_SESSION: async (context) => {
     try {
       // firstly, try to restore user session
-      await context.dispatch('userinfo/RESTORE_SESSION', null, { root: true });
+      await context.dispatch('userinfo/OPEN_SESSION', null, { root: true });
       // then, async open workspace session
       context.dispatch('now/SET_NOW_WATCHER', null, { root: true });
       context.dispatch('globals/INIT_GLOBAL_HANDLERS', null, { root: true });

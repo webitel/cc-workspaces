@@ -1,5 +1,5 @@
 <template>
-  <main class="main-agent-workspace" @dragenter.prevent @dragover.prevent @drop="preventDrop">
+  <main v-if="hasAccess" class="main-agent-workspace" @dragenter.prevent @dragover.prevent @drop="preventDrop">
     <disconnect-popup/>
 
     <notification/>
@@ -15,10 +15,12 @@
 
     <video-container/>
   </main>
+  <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+  import { mapActions, mapGetters } from 'vuex';
   import Notification from '../utils/notification.vue';
   import CcHeader from '../shared/app-header/app-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
@@ -51,6 +53,15 @@
       this.closeSession();
     },
 
+    computed: {
+      ...mapGetters('userinfo', {
+        checkAppAccess: 'CHECK_APP_ACCESS',
+      }),
+      hasAccess() {
+        return this.checkAppAccess(WebitelApplications.AGENT);
+      },
+    },
+
     methods: {
       ...mapActions('workspace', {
         openSession: 'OPEN_SESSION',
@@ -60,6 +71,11 @@
       preventDrop(event) {
         event.preventDefault();
         event.stopPropagation();
+      },
+
+      goToApplicationHub() {
+        const adminUrl = process.env.VUE_APP_APPLICATION_HUB_URL;
+        window.location.href = adminUrl;
       },
     },
   };

@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import TimerPopup from '../../../../src/components/agent-workspace/popups/break-popup/break-timer-popup.vue';
-import Header from '../../../../src/components/shared/app-header/app-header';
+import Header from '../../../../src/components/shared/app-header/app-header.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -34,6 +34,12 @@ describe('Break timer popup', () => {
           namespaced: true,
           state: {
             now: Date.now(),
+          },
+        },
+        userinfo: {
+          namespaced: true,
+          getters: {
+            CHECK_APP_ACCESS: () => () => true,
           },
         },
       },

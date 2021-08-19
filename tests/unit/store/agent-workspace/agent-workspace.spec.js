@@ -16,9 +16,9 @@ describe('workspace store: actions', () => {
     context.commit.mockClear();
   });
 
-  it('OPEN_SESSION dispatches userinfo/RESTORE_SESSION (restores user data)', async () => {
+  it('OPEN_SESSION dispatches userinfo/OPEN_SESSION (restores user data)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('userinfo/RESTORE_SESSION', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('userinfo/OPEN_SESSION', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches now/SET_NOW_WATCHER (inits reactive time)', async () => {
