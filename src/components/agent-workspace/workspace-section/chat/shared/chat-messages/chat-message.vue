@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-message" :class="{'chat-message--right' : my || bot }">
+  <div class="chat-message" :class="{'chat-message--right' : isAgentSideMessage }">
     <div class="chat-message__user-pic-wrapper" v-if="!my">
       <img v-if="showUserPic" class="chat-message__user-pic"
            :src="avatarPic"
@@ -65,11 +65,17 @@ export default {
     },
   },
   computed: {
-    avatarPic() {
-      return !this.message.channelId ? botAvatar : defaultAvatar;
+    my() {
+      return !!this.message.member?.self;
     },
     bot() {
       return !this.message.channelId;
+    },
+    isAgentSideMessage() {
+      return this.my || this.bot;
+    },
+    avatarPic() {
+      return this.bot ? botAvatar : defaultAvatar;
     },
     sentAt() {
       return prettifyTime(this.message.createdAt);
@@ -87,9 +93,6 @@ export default {
     documentSize() {
       if (!this.document) return '';
       return prettifyFileSize(this.document.size);
-    },
-    my() {
-      return !!this.message.member?.self;
     },
   },
   methods: {
