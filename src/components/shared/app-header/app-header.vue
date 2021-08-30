@@ -2,11 +2,11 @@
   <wt-app-header>
     <break-timer-popup/>
     <user-dnd-switcher></user-dnd-switcher>
-    <wt-switcher
-      :value="isVideo"
-      :label="$t('header.enableVideo')"
-      @change="toggleVideo"
-    ></wt-switcher>
+<!--    <wt-switcher-->
+<!--      :value="isVideo"-->
+<!--      :label="$t('header.enableVideo')"-->
+<!--      @change="toggleVideo"-->
+<!--    ></wt-switcher>-->
     <wt-switcher
       :value="isAgent"
       :label="$t('agentStatus.callCenter')"
