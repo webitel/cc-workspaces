@@ -6,9 +6,11 @@
            alt="client photo">
     </div>
     <div class="chat-message__main-wrapper">
-      <p v-if="text" class="chat-message__text">
-        {{ text }}
-      </p>
+      <p
+        v-if="text"
+        class="chat-message__text"
+        v-html="text"
+      ></p>
       <div v-if="image" class="chat-message__image" @click="openImage">
         <img
           class="chat-message__image__img"
@@ -47,6 +49,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import linkifyHtml from 'linkifyjs/html';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import botAvatar from '../../../../../../assets/agent-workspace/bot-avatar.svg';
@@ -81,7 +84,9 @@ export default {
       return prettifyTime(this.message.createdAt);
     },
     text() {
-      return this.message.text;
+      return linkifyHtml(this.message.text, {
+        target: '_blank',
+      });
     },
     image() {
       const isImage = this.message.file && this.message.file.mime.includes('image');
@@ -129,6 +134,13 @@ export default {
     .chat-message__text {
       @extend %typo-body-md;
       overflow-wrap: break-word;
+      white-space: pre-line; // read \n as "new line"
+
+      // reset links inside text
+      ::v-deep a {
+        color: revert;
+        text-decoration: revert;
+      }
     }
 
     .chat-message__image {
@@ -190,7 +202,6 @@ export default {
 
   &--right {
     flex-direction: row-reverse;
-    text-align: right;
     margin-left: auto;
 
     .chat-message__main-wrapper {

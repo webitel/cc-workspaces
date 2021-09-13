@@ -24,6 +24,7 @@
     "file-loader": "^5.0.2",
     "github-markdown-css": "^4.0.0",
     "jsdom": "^16.4.0",
+    "linkifyjs": "^3.0.0-beta.3",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
     "svg-sprite-loader": "^5.0.0",
