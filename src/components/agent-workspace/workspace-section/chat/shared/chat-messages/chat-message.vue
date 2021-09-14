@@ -84,6 +84,7 @@ export default {
       return prettifyTime(this.message.createdAt);
     },
     text() {
+      if (!this.message.text) return '';
       return linkifyHtml(this.message.text, {
         target: '_blank',
       });
