@@ -50,12 +50,6 @@
   }
 }
 
-.queue-preview-badges {
-  @media screen and (max-width: 1336px) {
-    display: none;
-  }
-}
-
 //.offline-queue .queue-preview-header__name {
 //  @media screen and (max-width: 1336px) {
 //    display: block;
@@ -65,6 +59,12 @@
 .queue-preview-body {
   @extend %typo-body-md;
   color:var(--text-outline-color);
+  @media screen and (max-width: 1336px) {
+    display: none;
+  }
+}
+
+.queue-preview-badges {
   @media screen and (max-width: 1336px) {
     display: none;
   }

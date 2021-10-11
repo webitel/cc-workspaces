@@ -15,9 +15,8 @@
         {{ displayQueueName }}
       </wt-badge>
     </section>
-    <footer class="queue-preview-footer">
+    <footer class="queue-preview-footer" v-if="isRinging">
       <div
-        v-if="isRinging"
         class="queue-preview-actions"
       >
         <wt-button
