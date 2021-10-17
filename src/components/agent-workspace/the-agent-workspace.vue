@@ -105,7 +105,7 @@
   .workspace {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: 340px 550px 1fr;
+    grid-template-columns: 1fr 2fr 2fr;
     grid-gap: 20px;
     min-height: 0;
     margin-top: 20px;

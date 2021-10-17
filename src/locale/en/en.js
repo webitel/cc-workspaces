@@ -52,6 +52,11 @@ export default {
     generalInfo: {
       generalInfo: 'General info',
       queueWaiting: 'Waiting',
+      queue: 'Queue',
+      agents: 'Agents',
+      total: 'Total',
+      paused: 'Paused',
+      free: 'Free',
     },
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',
