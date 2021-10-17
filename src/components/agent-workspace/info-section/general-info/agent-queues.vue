@@ -63,9 +63,6 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    console.log('queue', this.queues);
-  },
 };
 </script>
 
