@@ -22,7 +22,7 @@ const onImageLoaded = (src, callback) => {
 
 const scrollAfterImageLoad = (root, node = root) => {
   if (!node.querySelectorAll) return;
-  const imgs = node.querySelectorAll('img');
+  const imgs = node.querySelectorAll('img.chat-message__image__img');
   imgs.forEach((img) => {
     onImageLoaded(img.getAttribute('src'), () => scrollToBottom(root));
   });
