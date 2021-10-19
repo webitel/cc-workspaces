@@ -4,7 +4,6 @@ const { hostname, protocol } = window.location;
 const origin = (`${protocol}//${hostname}`).replace(/^http/, 'ws');
 const BASE_URL = process.env.NODE_ENV === 'production'
   ? `${origin}/ws` : 'wss://dev.webitel.com/ws';
-// const BASE_URL = 'ws://10.10.10.25:10025';
 
 let cliInstance = null;
 
@@ -36,17 +35,10 @@ const createCliInstance = async () => {
 
 export const destroyCliInstance = async () => {
   if (!window.cli) return;
-  // if (cliInstance) {
-  // cliInstance.then((cli) => cli.destroy());
-  // }
-    if (window.cli.phone && window.cli.phone.ua) {
-      await window.cli.phone.ua.stop();
-    }
-    await window.cli.disconnect();
-    window.cli.eventHandler.off('*');
-    cliInstance = null;
-  // }
-  // cliInstance = null;
+
+  await window.cli.destroy();
+  cliInstance = null;
+  window.cli = null;
 };
 
 export const getCliInstance = () => {
