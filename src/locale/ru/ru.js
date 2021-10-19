@@ -52,6 +52,11 @@ export default {
     generalInfo: {
       generalInfo: 'Основная информация',
       queueWaiting: 'Ожидают',
+      queue: 'Очередь',
+      agents: 'Операторы',
+      total: 'Все',
+      paused: 'Пауза',
+      free: 'Свободно',
     },
     clientInfo: 'Информация',
     knowledgeBase: 'База знаний',

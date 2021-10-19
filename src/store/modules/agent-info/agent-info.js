@@ -30,7 +30,7 @@ const actions = {
     const params = {
       parentId: context.getters.AGENT_ID,
       size: 100,
-      fields: ['queue', 'waiting_members'],
+      fields: ['queue', 'waiting_members', 'agents'],
     };
     const { items } = await AgentQueuesAPI.getList(params);
     context.commit('SET_QUEUES', items);

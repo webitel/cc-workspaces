@@ -1,24 +1,46 @@
 <template>
   <article class="agent-queues">
-    <ul class="agent-queues__list-wrapper">
-      <li
-        class="agent-queue"
-        v-for="(queue) of queues"
-        :key="queue.queue.id"
+
+    <div class="agent-queues__headers">
+      <div
+        class="agent-queues__headers-item"
+        v-for="(header, index) in headers"
+        :key="index"
       >
-        <span class="agent-queue__name">{{ queue.queue.name }}</span>
-        <span class="agent-queue__waiting">
-          <strong>{{ $t('infoSec.generalInfo.queueWaiting') }}</strong>
-          <wt-badge>{{ queue.waitingMembers }}</wt-badge>
-        </span>
-      </li>
-    </ul>
+        {{ $t(header.locale) }}
+      </div>
+    </div>
+
+    <div
+      class="agent-queues__queue"
+      v-for="queue in queues"
+      :key="queue.queue.id"
+    >
+      <div class="agent-queues__queue-item">{{ queue.queue.name }}</div>
+
+      <table-agents
+        :agents="queue.agents"
+      ></table-agents>
+
+      <div class="agent-queues__queue-item">
+        <wt-badge>{{ queue.waitingMembers }}</wt-badge>
+      </div>
+    </div>
   </article>
 </template>
 
 <script>
+import tableAgents from './table-agents.vue';
+import headers from '../../../../store/modules/agent-info/_internals/agentQueuesHeaders';
+
 export default {
   name: 'agent-queues',
+  components: {
+    tableAgents,
+  },
+  data: () => ({
+    headers,
+  }),
   props: {
     queues: {
       type: Array,
@@ -29,25 +51,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.agent-queue {
+.agent-queues {
   @extend %typo-body-lg;
+}
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  &:not(:last-child) {
-    margin-bottom: var(--component-spacing);
+.agent-queues__headers {
+  @extend %typo-strong-lg;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  justify-items: center;
+}
+
+.agent-queues__queue {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  align-items: start;
+  margin-top: var(--component-spacing);
+
+  .agent-queues__queue-item {
+
+    &:last-of-type {
+      justify-self: center;
+    }
   }
 
-  .agent-queue__waiting {
+  .wt-badge {
     @extend %typo-strong-sm;
-    display: flex;
-    align-items: center;
-
-    .wt-badge {
-      @extend %typo-strong-sm;
-      margin-left: 5px;
-    }
   }
 }
 </style>
