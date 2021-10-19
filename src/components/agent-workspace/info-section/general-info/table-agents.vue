@@ -41,6 +41,7 @@ export default {
 .table-agents {
   display: flex;
   justify-content: space-evenly;
+  gap: 4px;
 
   &__total {
     @extend %typo-strong-lg;
