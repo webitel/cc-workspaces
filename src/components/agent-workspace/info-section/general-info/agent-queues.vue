@@ -65,10 +65,13 @@ export default {
 .agent-queues__queue {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
-  align-items: start;
+  align-items: center;
+  gap: 4px;
   margin-top: var(--component-spacing);
 
   .agent-queues__queue-item {
+    overflow-wrap: break-word;
+    word-break: break-all;
 
     &:last-of-type {
       justify-self: center;
