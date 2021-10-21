@@ -15,7 +15,6 @@ const listResponseHandler = (response) => {
   const items = response.items.map((item) => ({
     ...item,
     agents: {
-      total: item.agents.total || 0,
       pause: item.agents.pause || 0,
       free: item.agents.free || 0,
     },
