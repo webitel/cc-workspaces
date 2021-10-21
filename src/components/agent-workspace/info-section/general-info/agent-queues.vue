@@ -58,13 +58,17 @@ export default {
 .agent-queues__headers {
   @extend %typo-strong-lg;
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-columns: 2fr 2fr 1fr;
   justify-items: center;
+
+  .agent-queues__headers-item:first-child {
+    justify-self: start;
+  }
 }
 
 .agent-queues__queue {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-columns: 2fr 2fr 1fr;
   align-items: center;
   gap: 4px;
   margin-top: var(--component-spacing);
