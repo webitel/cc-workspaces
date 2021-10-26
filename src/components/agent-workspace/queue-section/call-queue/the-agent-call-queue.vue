@@ -64,12 +64,12 @@ export default {
         {
           value: 'active',
           icon: 'call',
-          iconColor: 'true',
+          iconColor: 'success',
         },
         {
           value: 'missed',
           icon: 'call-disconnect',
-          iconColor: 'false',
+          iconColor: 'danger',
           attention: this.isNewMissed,
         },
         {

@@ -122,27 +122,27 @@ $widget-avg-hold-color: $accent-color;
 .widget-icon {
   margin-right: 10px;
 
-  &--inbound ::v-deep .wt-icon__icon {
+  &--inbound.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-inbound-color;
     stroke: $widget-inbound-color;
   }
 
-  &--handles ::v-deep .wt-icon__icon {
+  &--handles.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-handles-color;
     stroke: $widget-handles-color;
   }
 
-  &--missed ::v-deep .wt-icon__icon {
+  &--missed.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-missed-color;
     stroke: $widget-missed-color;
   }
 
-  &--avg-talk ::v-deep .wt-icon__icon {
+  &--avg-talk.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-talk-color;
     stroke: $widget-avg-talk-color;
   }
 
-  &--avg-hold ::v-deep .wt-icon__icon {
+  &--avg-hold.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-hold-color;
     stroke: $widget-avg-hold-color;
   }
