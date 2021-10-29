@@ -29,17 +29,15 @@ module.exports = {
       },
     },
   },
-  configureWebpack: (config) => {
-    // eslint-disable-next-line no-param-reassign
-    config.devtool = 'source-map';
-  },
   chainWebpack: (config) => {
-    // exclude sprites default building
-    config.module.rule('svg').exclude.add(/^(.*sprites).*\.svg/);
+    config.module
+      .rule('svg')
+      .exclude.add(/^(.*sprite).*\.svg/); // same as in svg-sprite-loader
 
-    // use svg-sprite-loader to process icons sprite
-    config.module.rule('svg-sprite').test(/^(.*sprites).*\.svg/)
-      .use('svg-sprite-loader').loader('svg-sprite-loader')
-.options({ symbolId: () => '' });
+    config.module
+      .rule('svg-sprite')
+      .test(/^(.*sprite).*\.svg/) // same as in svg-url-loader
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader');
   },
 };
