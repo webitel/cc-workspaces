@@ -38,7 +38,7 @@
           'hidden': !isRecord,
           'active': isOnRecord,
         }"
-        :icon="isOnRecord ? 'rec-stop' : 'rec'"
+        :icon="isOnRecord ? 'rec-off' : 'rec'"
         color="secondary"
       ></wt-rounded-action>
       <wt-rounded-action
