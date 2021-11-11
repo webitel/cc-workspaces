@@ -12,8 +12,7 @@
         v-model="draft.type"
         :v="$v.draft.type"
         :label="$t('infoSec.postProcessing.communicationType')"
-        :internal-search="false"
-        :search="getCommunications"
+        :search-method="getCommunications"
         :clearable="false"
         required
       ></wt-select>
@@ -122,9 +121,8 @@ export default {
     close() {
       this.$emit('close');
     },
-    async getCommunications(params) {
-      const response = await communicationsAPI.getCommunicationTypes(params);
-      return response.items || [];
+    getCommunications(params) {
+      return communicationsAPI.getList(params);
     },
   },
 };
