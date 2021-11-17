@@ -1,6 +1,7 @@
 {
   "ON_SITE": true,
   "CLI": {
-    "debug": false
+    "debug": false,
+    "registerWebDevice": true
   }
 }

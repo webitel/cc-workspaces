@@ -7,6 +7,8 @@ import ActiveQueue
 import ActivePreview
   from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
 import MockSocket from '../../../../mocks/MockSocket';
+import webSocketClientController
+  from '../../../../../../src/api/agent-workspace/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -14,8 +16,8 @@ localVue.use(Vuex);
 const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
-jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 describe('Ringing and Hangup events call functionality', () => {
   let state;
@@ -27,6 +29,9 @@ describe('Ringing and Hangup events call functionality', () => {
       callList: [initialCall],
     };
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         workspace: workspaceModule,
         call: {
@@ -43,7 +48,6 @@ describe('Ringing and Hangup events call functionality', () => {
     const wrapper = shallowMount(ActiveQueue, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     await mockSocket.ringing({});
@@ -54,7 +58,6 @@ describe('Ringing and Hangup events call functionality', () => {
     const wrapper = shallowMount(ActiveQueue, {
       store,
       localVue,
-      stubs: { Icon: true },
     });
     await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
     await mockSocket.hangup(initialCall);

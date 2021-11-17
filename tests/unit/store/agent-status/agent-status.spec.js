@@ -2,10 +2,12 @@ import statusModule from '../../../../src/store/modules/agent-status/agent-statu
 import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
 import MockSocket from '../../mocks/MockSocket';
 import usersAPIRepository from '../../../../src/api/agent-workspace/users/UsersAPIRepository';
+import webSocketClientController
+  from '../../../../src/api/agent-workspace/WebSocketClientController';
 
 let mockSocket = new MockSocket();
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket }));
+jest.spyOn(webSocketClientController, 'getCliInstance')
+  .mockImplementation(() => mockSocket);
 jest.mock('../../../../src/api/agent-workspace/users/UsersAPIRepository');
 
 describe('status store client handlers: actions', () => {
@@ -18,6 +20,7 @@ describe('status store client handlers: actions', () => {
 
   const context = {
     state: { agent },
+    rootState: { client: webSocketClientController },
     getters: {},
     dispatch: jest.fn(),
     commit: jest.fn(),

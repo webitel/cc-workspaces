@@ -6,6 +6,8 @@ import memberModule from '../../../../src/store/modules/member/member';
 import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
 import MockSocket from '../../mocks/MockSocket';
+import webSocketClientController
+  from "../../../../src/api/agent-workspace/WebSocketClientController";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -13,8 +15,8 @@ localVue.use(Vuex);
 const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => mockSocket);
+jest.spyOn(webSocketClientController, 'getCliInstance')
+  .mockImplementation(() => mockSocket);
 
 describe('Make new call functionality', () => {
   let state;
@@ -27,6 +29,9 @@ describe('Make new call functionality', () => {
       callList: [],
     };
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         workspace: workspaceModule,
         call: {

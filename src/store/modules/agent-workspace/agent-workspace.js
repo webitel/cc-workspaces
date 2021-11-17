@@ -1,4 +1,3 @@
-import { destroyCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const state = {
   workspaceState: null,
@@ -32,7 +31,7 @@ const actions = {
 
   CLOSE_SESSION: async (context) => {
     context.dispatch('now/CLEAR_NOW_WATCHER', null, { root: true });
-    await destroyCliInstance();
+    await context.rootState.client.destroyCliInstance();
     context.dispatch('globals/RESET_GLOBAL_HANDLERS', null, { root: true });
   },
 

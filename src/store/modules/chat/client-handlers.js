@@ -1,5 +1,4 @@
 import { ChatActions } from 'webitel-sdk';
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, chat) => {
   switch (action) {
@@ -25,7 +24,7 @@ const callHandler = (context) => (action, chat) => {
 
 const actions = {
   SUBSCRIBE_CHATS: async (context) => {
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     await client.subscribeChat(callHandler(context), null);
     const chatList = client.allConversations();
     if (chatList.length) context.dispatch('SET_CHAT_LIST', chatList);

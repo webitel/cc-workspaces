@@ -1,5 +1,4 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const callHandler = (context) => (action, call) => {
   switch (action) {
@@ -25,7 +24,7 @@ const callHandler = (context) => (action, call) => {
 
 const actions = {
   SUBSCRIBE_CALLS: async (context) => {
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     await client.subscribeCall(callHandler(context), null);
     const callList = client.allCall();
     if (callList.length) context.dispatch('SET_CALL_LIST', callList);

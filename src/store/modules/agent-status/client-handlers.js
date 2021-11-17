@@ -1,4 +1,3 @@
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 import parseUserStatus from './statusUtils/parseUserStatus';
 import APIRepository from '../../../api/APIRepository';
 
@@ -17,7 +16,7 @@ const actions = {
 
   // main agent subscribe action
   SUBSCRIBE_AGENT_STATUS: async (context) => {
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     try {
       const agent = await client.agentSession();
 
@@ -35,7 +34,7 @@ const actions = {
 
   // main user subscribe action
   SUBSCRIBE_USER_STATUS: async (context) => {
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     try {
       await client.subscribeUsersStatus((presence) => {
         const user = userStatusHandler(presence);

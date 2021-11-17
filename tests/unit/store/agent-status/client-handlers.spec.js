@@ -1,15 +1,18 @@
 import clientHandlers from '../../../../src/store/modules/agent-status/client-handlers';
 import MockSocket from '../../mocks/MockSocket';
 import usersAPIRepository from '../../../../src/api/agent-workspace/users/UsersAPIRepository';
+import webSocketClientController
+  from '../../../../src/api/agent-workspace/WebSocketClientController';
 
 let mockSocket = new MockSocket();
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 const agent = { agentId: '1' };
 
 describe('status store client handlers: actions', () => {
   const context = {
+    rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };

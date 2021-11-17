@@ -1,4 +1,3 @@
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
@@ -52,7 +51,7 @@ const actions = {
       : context.state.callOnWorkspace.newNumber;
     // eslint-disable-next-line no-useless-escape
     destination = destination.replace(/[^0-9a-zA-z\+\*#]/g, '');
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     const params = { ...CALL_PARAMS, video: context.state.isVideo };
     try {
       await client.call({ destination, params });

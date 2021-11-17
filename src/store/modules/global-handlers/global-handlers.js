@@ -1,4 +1,3 @@
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const state = {
   isDisconnectPopup: false,
@@ -14,7 +13,7 @@ const actions = {
     context.dispatch('CLOSE_DISCONNECT_POPUP');
   },
   SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     client.on('disconnected', () => context.dispatch('OPEN_DISCONNECT_POPUP'));
   },
   OPEN_DISCONNECT_POPUP: (context) => context.commit('SET_DISCONNECT_POPUP', true),
