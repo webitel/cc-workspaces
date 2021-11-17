@@ -17,6 +17,7 @@ Vue.component('icon', Icon);
 Vue.use(Vuelidate);
 
 const fetchConfig = async () => {
+  if (window._config) return window._config; // Electron sets config to window
   const response = await fetch(`${process.env.BASE_URL}config.json`);
   return response.json();
 };

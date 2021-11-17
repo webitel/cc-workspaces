@@ -1,4 +1,3 @@
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 
 const state = {
@@ -15,7 +14,7 @@ const getters = {
 
 const actions = {
   GET_AGENT_INSTANCE: async (context) => {
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     const agent = await client.agentSession();
     context.commit('SET_AGENT_INSTANCE', agent);
     return agent;

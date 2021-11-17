@@ -1,12 +1,15 @@
 import workspaceModule from '../../../../src/store/modules/agent-workspace/agent-workspace';
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import * as WSClient from '../../../../src/api/agent-workspace/call-ws-connection';
+import webSocketClientController from '../../../../src/api/agent-workspace/WebSocketClientController';
 
 const destroyCliInstanceMock = jest.fn();
-WSClient.destroyCliInstance = destroyCliInstanceMock;
+
+jest.spyOn(webSocketClientController, 'destroyCliInstance')
+  .mockImplementation(destroyCliInstanceMock);
 
 describe('workspace store: actions', () => {
   const context = {
+    rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };

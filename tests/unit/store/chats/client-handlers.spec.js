@@ -1,14 +1,17 @@
 import chatModule from '../../../../src/store/modules/chat/chat';
 import MockSocket from '../../mocks/MockSocket';
+import webSocketClientController
+  from '../../../../src/api/agent-workspace/WebSocketClientController';
 
 let mockSocket = new MockSocket();
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 const chat = { id: '1' };
 
 describe('chat store client handlers: actions', () => {
   const context = {
+    rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };

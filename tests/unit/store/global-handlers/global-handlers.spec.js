@@ -1,13 +1,16 @@
 import globalsModule from '../../../../src/store/modules/global-handlers/global-handlers';
 import MockSocket from '../../mocks/MockSocket';
+import webSocketClientController
+  from '../../../../src/api/agent-workspace/WebSocketClientController';
 
 const mockSocket = new MockSocket();
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 describe('global handlers store: actions', () => {
   const context = {
     state: {},
+    rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };
