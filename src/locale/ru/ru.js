@@ -37,7 +37,7 @@ export default {
     avgTalk: 'Среднее время разговора',
     avgHold: 'Среднее время удержания',
     utilization: 'Утилизация',
-    occupancy: 'Зайнятость',
+    occupancy: 'Занятость',
   },
   queueSec: {
     call: {
