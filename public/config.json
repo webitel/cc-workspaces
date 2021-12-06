@@ -3,5 +3,14 @@
   "CLI": {
     "debug": false,
     "registerWebDevice": true
+  },
+  "POST_PROCESSING": {
+    "//260": [
+      "Не відповів",
+      "Нема нікого вдома"
+    ],
+    "//23": [
+      "Всі молодці"
+    ]
   }
 }

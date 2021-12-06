@@ -26,7 +26,15 @@
       ></wt-datetimepicker>
     </div>
     <member-communications v-if="isMember" />
+    <wt-select
+      v-if="descriptionOptions"
+      v-model="taskPostProcessing.description"
+      :options="descriptionOptions"
+      :label="$t('reusable.description')"
+      :track-by="null"
+    ></wt-select>
     <wt-textarea
+      v-else
       v-model="taskPostProcessing.description"
       :label="$t('reusable.description')"
       :placeholder="$t('reusable.description')"
@@ -46,6 +54,13 @@ export default {
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isMember: 'IS_MEMBER',
     }),
+    ...mapGetters('workspace', {
+      taskOnWorkspace: 'TASK_ON_WORKSPACE',
+    }),
+    descriptionOptions() {
+      const queueId = this.taskOnWorkspace.task?.queue?.id;
+      return this.$config?.POST_PROCESSING?.[queueId]; // option strings
+    },
   },
 };
 </script>
