@@ -36,7 +36,7 @@
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
     "vuex": "^3.1.2",
-    "webitel-sdk": "^0.1.89"
+    "webitel-sdk": "^0.1.88"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",

@@ -103,7 +103,6 @@
 
     mounted() {
       this.setNumberFocus();
-      window.onbeforeunload = () => this.hangup(); // in order to force hangup on page refresh
     },
 
     computed: {
