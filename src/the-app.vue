@@ -8,6 +8,9 @@
 
     created() {
       this.setLanguage();
+      window.onbeforeunload = async () => {
+        await this.$store.state.client.destroyCliInstance();
+      };
     },
 
     methods: {
