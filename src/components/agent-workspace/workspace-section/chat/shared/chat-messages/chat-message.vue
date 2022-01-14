@@ -5,7 +5,7 @@
            :src="avatarPic"
            alt="client photo">
     </div>
-    <div class="chat-message__main-wrapper">
+    <div class="chat-message__main-wrapper" @click.stop>
       <p
         v-if="text"
         class="chat-message__text"
