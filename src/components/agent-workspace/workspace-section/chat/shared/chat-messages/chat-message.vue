@@ -5,7 +5,8 @@
            :src="avatarPic"
            alt="client photo">
     </div>
-    <div class="chat-message__main-wrapper">
+    <!--    click.stop prevents focus on textarea and allows to select the message text -->
+    <div class="chat-message__main-wrapper" @click.stop>
       <p
         v-if="text"
         class="chat-message__text"
@@ -48,10 +49,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import linkifyHtml from 'linkifyjs/html';
-import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
+import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import linkifyHtml from 'linkifyjs/html';
+import { mapActions } from 'vuex';
 import botAvatar from '../../../../../../assets/agent-workspace/bot-avatar.svg';
 import defaultAvatar from '../../../../../../assets/agent-workspace/default-avatar.svg';
 
