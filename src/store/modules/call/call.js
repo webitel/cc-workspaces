@@ -1,4 +1,4 @@
-import { getCliInstance } from '../../../api/agent-workspace/call-ws-connection';
+import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import missed from './missed-calls/missed-calls';
@@ -8,8 +8,9 @@ const state = {
   callOnWorkspace: {},
   isVideo: false,
 };
-
 const getters = {
+  GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id === callId),
+
   IS_NEW_CALL: (state) => state.callOnWorkspace._isNew,
 
   GET_CURRENT_CALL_DIGITS: (state) => {
@@ -24,6 +25,24 @@ const getters = {
 const actions = {
   ...clientHandlers.actions,
 
+  SET_CALL_LIST: (context, callList) => {
+    callList.forEach((call) => {
+      if (call.hasReporting) {
+        // eslint-disable-next-line no-param-reassign
+        call.postProcessData = new Reporting(call);
+      }
+    });
+    context.commit('SET_CALL_LIST', callList);
+  },
+
+  ADD_CALL: (context, call) => {
+    if (call.hasReporting) {
+      // eslint-disable-next-line no-param-reassign
+      call.postProcessData = new Reporting(call);
+    }
+    context.commit('ADD_CALL', call);
+  },
+
   // destructuring arg in order to skip mouse events
   CALL: async (context, { user }) => {
     const CALL_PARAMS = { disableStun: true };
@@ -32,7 +51,7 @@ const actions = {
       : context.state.callOnWorkspace.newNumber;
     // eslint-disable-next-line no-useless-escape
     destination = destination.replace(/[^0-9a-zA-z\+\*#]/g, '');
-    const client = await getCliInstance();
+    const client = await context.rootState.client.getCliInstance();
     const params = { ...CALL_PARAMS, video: context.state.isVideo };
     try {
       await client.call({ destination, params });
@@ -40,10 +59,10 @@ const actions = {
     }
   },
 
-  ANSWER: async (context, { callId }) => {
+  ANSWER: async (context, { callId } = {}) => {
     const ANSWER_PARAMS = { useAudio: true, disableStun: true };
     const call = callId
-      ? context.state.callList.find((call) => call.id === callId)
+      ? context.getters.GET_CALL_BY_ID(callId)
       : context.state.callOnWorkspace;
     if (call.allowAnswer) {
       const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
@@ -75,14 +94,14 @@ const actions = {
     }
   },
 
-  TOGGLE_MUTE: async (context) => {
-    const call = context.state.callOnWorkspace;
+  TOGGLE_MUTE: async (context, { callId } = {}) => {
+    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.state.callOnWorkspace;
     const isMuted = call.muted;
     await call.mute(!isMuted);
   },
 
-  TOGGLE_HOLD: async (context) => {
-    const call = context.state.callOnWorkspace;
+  TOGGLE_HOLD: async (context, { callId } = {}) => {
+    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.state.callOnWorkspace;
     if ((!call.isHold && call.allowHold)
       || (call.isHold && call.allowUnHold)) {
       try {
@@ -108,9 +127,9 @@ const actions = {
     }
   },
 
-  HANGUP: async (context, { callId }) => {
+  HANGUP: async (context, { callId } = {}) => {
     const call = callId
-      ? context.state.callList.find((call) => call.id === callId)
+      ? context.getters.GET_CALL_BY_ID(callId)
       : context.state.callOnWorkspace;
     if (call.allowHangup) {
       try {

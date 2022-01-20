@@ -1,7 +1,10 @@
 .queue-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-spacing);
   box-sizing: border-box;
   position: relative;
-  padding: 10px 10px 10px 30px;
+  padding: 10px;
   margin-bottom: 1px;
   border: 1px solid transparent;
   background: var(--main-primary-color);
@@ -16,6 +19,7 @@
     display: flex;
     align-items: center;
     padding: 10px;
+    height: 36px;
 
     .call-status-badge {
       position: static;
@@ -32,6 +36,7 @@
 
   &__name {
     @extend %typo-strong-lg;
+    flex: 1 0 auto;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -39,6 +44,9 @@
     @media screen and (max-width: 1336px) {
       display: none;
     }
+  }
+  .wt-icon {
+    margin-right: var(--icon-spacing);
   }
 }
 
@@ -50,6 +58,13 @@
 
 .queue-preview-body {
   @extend %typo-body-md;
+  color:var(--text-outline-color);
+  @media screen and (max-width: 1336px) {
+    display: none;
+  }
+}
+
+.queue-preview-badges {
   @media screen and (max-width: 1336px) {
     display: none;
   }

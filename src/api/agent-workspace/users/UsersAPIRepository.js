@@ -1,31 +1,14 @@
+import { EndpointListGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
+import { objCamelToSnake } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import instance from '../../instance';
 
-const BASE_URL = '/users';
+const baseUrl = '/users';
 
-const fetchUsers = async (url) => {
-  try {
-    const response = await instance.get(url);
-    return { next: !!response.next, items: response.items || [] };
-  } catch (err) {
-    throw err;
-  }
-};
+const listGetter = new EndpointListGetterApiConsumer({ baseUrl, instance });
 
 const usersAPIRepository = {
-  async getUsers({
-                   page = 1,
-                   size = 20,
-                   search = '',
-                   fields,
-                   sort,
-                   filters,
-                 }) {
-    let url = `${BASE_URL}?page=${page}&size=${size}`;
-    if (search) url += `&name=${search}*`;
-    if (fields) url += `&fields=${fields}`;
-    if (filters) url += `&${filters}`;
-    url += sort ? `&sort=${sort}` : '&sort=name';
-    return fetchUsers(url);
+  async getUsers(params) {
+    return listGetter.getList(objCamelToSnake(params));
   },
   async setUserStatus(status) {
     const url = '/presence';

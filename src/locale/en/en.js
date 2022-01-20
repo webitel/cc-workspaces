@@ -7,6 +7,7 @@ export default {
     send: 'Send',
     save: 'Save',
     cancel: 'Cancel',
+    close: 'Close',
     logout: 'Logout',
     search: 'Search',
     description: 'Description',
@@ -24,13 +25,19 @@ export default {
   header: {
     docs: 'Docs',
     enableVideo: 'Enable video',
+    dnd: {
+      label: 'DnD',
+      tooltip: 'You will receive calls from queues only',
+    },
   },
   widgets: {
     inbound: 'Inbound',
-    handles: 'Handles Calls',
+    handles: 'Processed Calls',
     missed: 'Missed Calls',
     avgTalk: 'Avg Talk Time',
     avgHold: 'Avg Hold Time',
+    utilization: 'Utilization',
+    occupancy: 'Occupancy',
   },
   queueSec: {
     call: {
@@ -42,6 +49,15 @@ export default {
     },
   },
   infoSec: {
+    generalInfo: {
+      generalInfo: 'General info',
+      queueWaiting: 'Waiting',
+      queue: 'Queue',
+      agents: 'Agents',
+      total: 'Total',
+      paused: 'Paused',
+      free: 'Free',
+    },
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',
     postProcessing: {
@@ -119,11 +135,11 @@ export default {
       heading: 'You are in break mode now',
       continueWork: 'Continue work',
     },
-    status: {
-      active: 'Active',
-      break: 'Break',
-      dnd: 'DnD',
-    },
+  },
+  disconnectPopup: {
+    title: 'Ohh.. Something went wrong!',
+    mainText: 'Connection was accidentally interrupted.',
+    reloadBtn: 'Reload page',
   },
   icon: {
     docs: 'Docs',

@@ -18,6 +18,7 @@ module.exports = {
     'no-empty': 'off',
     'no-underscore-dangle': 'off',
     'max-len': 'off',
+    'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     indent: 'off',
   },
   overrides: [

@@ -1,14 +1,17 @@
 import chatModule from '../../../../src/store/modules/chat/chat';
 import MockSocket from '../../mocks/MockSocket';
+import webSocketClientController
+  from '../../../../src/api/agent-workspace/WebSocketClientController';
 
 let mockSocket = new MockSocket();
-jest.mock('../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 const chat = { id: '1' };
 
 describe('chat store client handlers: actions', () => {
   const context = {
+    rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };
@@ -43,31 +46,19 @@ describe('chat store client handlers: actions', () => {
     expect(context.dispatch).lastCalledWith('CHAT_INSERT_TO_START', chat);
   });
 
-  it('HANDLE_CLOSE_ACTION is called after Leave event', async () => {
+  it('HANDLE_DESTROY_ACTION is called after Destroy event', async () => {
     await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    mockSocket.leave(chat);
-    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_CLOSE_ACTION', chat);
-  });
-
-  it('HANDLE_CLOSE_ACTION is called after Decline event', async () => {
-    await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    mockSocket.decline(chat);
-    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_CLOSE_ACTION', chat);
-  });
-
-  it('HANDLE_CLOSE_ACTION is called after Close event', async () => {
-    await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
-    mockSocket.close(chat);
-    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_CLOSE_ACTION', chat);
+    mockSocket.destroy(chat);
+    expect(context.dispatch).toHaveBeenCalledWith('HANDLE_DESTROY_ACTION', chat);
   });
 
   it('HANDLE_INVITE_ACTION commits ADD_CHAT mutation with invited chat', () => {
     chatModule.actions.HANDLE_INVITE_ACTION(context, chat);
-    expect(context.commit).toHaveBeenCalledWith('ADD_CHAT', chat);
+    expect(context.dispatch).toHaveBeenCalledWith('ADD_CHAT', chat);
   });
 
-  it('HANDLE_CLOSE_ACTION commits REMOVE_CHAT mutation with removed chat', () => {
-    chatModule.actions.HANDLE_CLOSE_ACTION(context, chat);
+  it('HANDLE_DESTROY_ACTION commits REMOVE_CHAT mutation with removed chat', () => {
+    chatModule.actions.HANDLE_DESTROY_ACTION(context, chat);
     expect(context.commit).toHaveBeenCalledWith('REMOVE_CHAT', chat);
   });
 });

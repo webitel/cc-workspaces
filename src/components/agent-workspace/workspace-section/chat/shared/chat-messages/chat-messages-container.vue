@@ -62,7 +62,7 @@ export default {
       this.$eventBus.$emit('chat-input-focus');
     },
     loadMessages() {
-      console.info('intersection');
+      // console.info('intersection');
     },
     showDate(messageIndex) {
       if (messageIndex === 0) return true;

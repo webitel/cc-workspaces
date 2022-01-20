@@ -1,4 +1,3 @@
-import { destroyCliInstance } from '../../../api/agent-workspace/call-ws-connection';
 
 const state = {
   workspaceState: null,
@@ -16,9 +15,10 @@ const actions = {
   OPEN_SESSION: async (context) => {
     try {
       // firstly, try to restore user session
-      await context.dispatch('userinfo/RESTORE_SESSION', null, { root: true });
+      await context.dispatch('userinfo/OPEN_SESSION', null, { root: true });
       // then, async open workspace session
       context.dispatch('now/SET_NOW_WATCHER', null, { root: true });
+      context.dispatch('globals/INIT_GLOBAL_HANDLERS', null, { root: true });
       context.dispatch('call/SUBSCRIBE_CALLS', null, { root: true });
       context.dispatch('chat/SUBSCRIBE_CHATS', null, { root: true });
       context.dispatch('status/SUBSCRIBE_STATUS', null, { root: true });
@@ -29,9 +29,10 @@ const actions = {
     }
   },
 
-  CLOSE_SESSION: (context) => {
+  CLOSE_SESSION: async (context) => {
     context.dispatch('now/CLEAR_NOW_WATCHER', null, { root: true });
-    destroyCliInstance();
+    await context.rootState.client.destroyCliInstance();
+    context.dispatch('globals/RESET_GLOBAL_HANDLERS', null, { root: true });
   },
 
   SET_WORKSPACE_STATE: (context, wsState) => {

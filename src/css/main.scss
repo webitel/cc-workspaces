@@ -11,10 +11,10 @@ html {
 }
 
 body {
+  @extend %typo-body-lg;
   min-height: 100%;
   height: 100%;
   margin: 0;
-  font-family: 'Montserrat Regular', monospace;
   font-size: 100%;
   background: $page-bg-color;
 
@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6, p {
 ul {
   padding: 0;
   margin: 0;
-  list-style-type: none;
+  list-style: none;
 }
 
 iframe {

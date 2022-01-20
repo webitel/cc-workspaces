@@ -2,9 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 import Header from '../../../src/components/shared/app-header/app-header.vue';
-import StatusSelect from '../../../src/components/shared/app-header/status-select.vue';
-import BreakPopup from '../../../src/components/break-popup/break-popup.vue';
-import TimerPopup from '../../../src/components/break-popup/break-timer-popup.vue';
 import statusModule from '../../../src/store/modules/agent-status/agent-status';
 import call from '../../../src/store/modules/call/call';
 import userinfo from '../../../src/store/modules/userinfo/userinfo';
@@ -38,32 +35,6 @@ describe('Header on agent Waiting', () => {
     });
   });
 
-  it('Doesnt show any popups on default Waiting', () => {
-    const wrapper = shallowMount(Header, { store, localVue });
-    const breakPopup = wrapper.findComponent(BreakPopup);
-    const timerPopup = wrapper.findComponent(TimerPopup);
-    expect(breakPopup.isVisible())
-      .toBeFalsy();
-    expect(timerPopup.isVisible())
-      .toBeFalsy();
-  });
-
-  // TODO: Fix this test
-  it('Shows break popup on setBreak event', () => {
-    const wrapper = shallowMount(Header, {
-      store,
-      localVue,
-      data: () => ({ isBreakPopup: true }),
-    });
-    const breakPopup = wrapper.findComponent(BreakPopup);
-    const statusSelect = wrapper.findComponent(StatusSelect);
-
-    statusSelect.vm.$emit('setBreak');
-
-    expect(breakPopup.isVisible())
-      .toBeTruthy();
-  });
-
   it('Logs agent out', () => {
     const wrapper = shallowMount(Header, { store, localVue });
     /*
@@ -78,38 +49,28 @@ describe('Header on agent Waiting', () => {
   });
 });
 
-describe('Header on agent Pause', () => {
-  let state;
-  let store;
-
-  beforeEach(() => {
-    state = {
-      agent: {
-        status: AgentStatus.Pause,
-      },
-    };
-    store = new Vuex.Store({
-      modules: {
-        call,
-        userinfo,
-        status: {
-          ...statusModule,
-          state,
-        },
-      },
-    });
-  });
-
-  it('Shows timer popup on Pause state', () => {
-    const wrapper = shallowMount(Header, { store, localVue });
-    const breakPopup = wrapper.findComponent(BreakPopup);
-    const timerPopup = wrapper.findComponent(TimerPopup);
-    expect(breakPopup.isVisible())
-      .toBeFalsy();
-    expect(timerPopup.isVisible())
-      .toBeTruthy();
-  });
-});
+// describe('Header on agent Pause', () => {
+//   let state;
+//   let store;
+//
+//   beforeEach(() => {
+//     state = {
+//       agent: {
+//         status: AgentStatus.Pause,
+//       },
+//     };
+//     store = new Vuex.Store({
+//       modules: {
+//         call,
+//         userinfo,
+//         status: {
+//           ...statusModule,
+//           state,
+//         },
+//       },
+//     });
+//   });
+// });
 
 describe('Header on agent Offline', () => {
   let state;

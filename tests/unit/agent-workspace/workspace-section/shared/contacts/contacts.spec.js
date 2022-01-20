@@ -5,14 +5,16 @@ import ContactsContainer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contacts-container.vue';
 import Contact
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
+import webSocketClientController
+  from '../../../../../../src/api/agent-workspace/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 // Make new call on contact test
 const mockCliCall = jest.fn();
-jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => ({ call: mockCliCall }), destroyCliInstance: jest.fn() }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => ({ call: mockCliCall }));
 
 jest.mock('../../../../../../src/api/instance');
 
@@ -24,6 +26,9 @@ describe('Contacts functionality', () => {
   beforeEach(() => {
     state = {};
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         call: {
           namespaced: true,

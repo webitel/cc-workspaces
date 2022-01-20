@@ -1,83 +1,98 @@
 <template>
   <wt-app-header>
-    <break-popup
-      v-show="isBreakPopup && !isBreak"
-      @close="isBreakPopup = false"
-    />
-    <timer-popup
-      v-show="isBreak"
-    />
-
-    <wt-switcher
-      :value="isVideo"
-      :label="$t('header.enableVideo')"
-      @change="toggleVideo"
-    ></wt-switcher>
+    <break-timer-popup/>
+    <user-dnd-switcher></user-dnd-switcher>
+<!--    <wt-switcher-->
+<!--      :value="isVideo"-->
+<!--      :label="$t('header.enableVideo')"-->
+<!--      @change="toggleVideo"-->
+<!--    ></wt-switcher>-->
     <wt-switcher
       :value="isAgent"
       :label="$t('agentStatus.callCenter')"
       @change="toggleCCenterMode"
     ></wt-switcher>
-    <status-select
-      @setBreak="isBreakPopup = true"
-    />
+
+    <agent-status-select/>
+
     <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
-    <wt-header-actions :user="user" @settings="settings" @logout="logoutUser"/>
+    <wt-header-actions
+      :user="user"
+      :build-info="buildInfo"
+      @settings="settings"
+      @logout="logoutUser"
+    />
   </wt-app-header>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { AgentStatus } from 'webitel-sdk';
-import StatusSelect from './status-select.vue';
-import BreakPopup from '../../break-popup/break-popup.vue';
-import TimerPopup from '../../break-popup/break-timer-popup.vue';
-import APIRepository from '../../../api/APIRepository';
-
-const authAPI = APIRepository.auth;
+import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
+import AgentStatusSelect from './agent-status-select.vue';
+import UserDndSwitcher from './user-dnd-switcher.vue';
+import BreakTimerPopup from '../../agent-workspace/popups/break-popup/break-timer-popup.vue';
 
 export default {
   name: 'app-header',
   components: {
-    StatusSelect,
-    BreakPopup,
-    TimerPopup,
+    AgentStatusSelect,
+    UserDndSwitcher,
+    BreakTimerPopup,
   },
 
   data: () => ({
-    AgentStatus,
-    isBreakPopup: false,
-    currentApp: 'agent',
-    apps: {
-      agent: { href: process.env.VUE_APP_AGENT_URL },
-      supervisor: { href: process.env.VUE_APP_SUPERVISOR_URL },
-      history: { href: process.env.VUE_APP_HISTORY_URL },
-      audit: { href: process.env.VUE_APP_AUDIT_URL },
-      admin: { href: process.env.VUE_APP_ADMIN_URL },
-      grafana: { href: process.env.VUE_APP_GRAFANA_URL },
+    buildInfo: {
+      release: process.env.VUE_APP_PACKAGE_VERSION,
+      build: process.env.VUE_APP_BUILD_NUMBER,
     },
   }),
-
   created() {
     this.restoreVideoParam();
   },
 
   computed: {
-    ...mapState('status', {
-      agent: (state) => state.agent,
-    }),
     ...mapState('call', {
       isVideo: (state) => state.isVideo,
     }),
     ...mapState('userinfo', {
       user: (state) => state,
+      currentApp: (state) => state.thisApp,
     }),
     ...mapGetters('status', {
       isAgent: 'IS_AGENT',
     }),
-
-    isBreak() {
-      return this.agent.status === AgentStatus.Pause;
+    ...mapGetters('userinfo', {
+      checkAccess: 'CHECK_APP_ACCESS',
+    }),
+    apps() {
+      const agent = {
+        name: WebitelApplications.AGENT,
+        href: process.env.VUE_APP_AGENT_URL,
+      };
+      const supervisor = {
+        name: WebitelApplications.SUPERVISOR,
+        href: process.env.VUE_APP_SUPERVISOR_URL,
+      };
+      const history = {
+        name: WebitelApplications.HISTORY,
+        href: process.env.VUE_APP_HISTORY_URL,
+      };
+      const audit = {
+        name: WebitelApplications.AUDIT,
+        href: process.env.VUE_APP_AUDIT_URL,
+      };
+      const admin = {
+        name: WebitelApplications.ADMIN,
+        href: process.env.VUE_APP_ADMIN_URL,
+      };
+      const grafana = {
+        name: WebitelApplications.ANALYTICS,
+        href: process.env.VUE_APP_GRAFANA_URL,
+      };
+      const apps = [admin, supervisor, agent, history, audit];
+      if (this.$config?.ON_SITE) apps.push(grafana);
+      return apps.filter(({ name }) => this.checkAccess(name));
     },
   },
 
@@ -107,13 +122,14 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
-  .wt-status-select {
-    width: 150px;
-    margin-left: 30px;
+  .wt-switcher, .user-dnd-switcher{
+    margin-left: var(--component-spacing);
   }
 
-  .wt-switcher {
-    margin-left: 30px;
+  .agent-status-select {
+    max-width: 200px;
+    width: 150px;
+    margin-left: var(--component-spacing);
   }
 }
 </style>

@@ -9,10 +9,9 @@ import workspaceModule from '../../../../../src/store/modules/agent-workspace/ag
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe('Client Info MD from Call', () => {
+describe('Client Info Tab', () => {
   let state;
   let store;
-
   beforeEach(() => {
     state = {
       callOnWorkspace: {
@@ -36,13 +35,19 @@ describe('Client Info MD from Call', () => {
     });
   });
 
-  it('Correctly renders empty variables', () => {
+  it('renders a component', () => {
     const wrapper = shallowMount(ClientInfo, {
       store,
       localVue,
     });
-    const md = wrapper.find('.md');
-    expect(md.element).toBeEmptyDOMElement();
+    expect(wrapper.exists()).toBe(true);
+  });
+  it('renders a component client-info-badges', () => {
+    const wrapper = shallowMount(ClientInfo, {
+      store,
+      localVue,
+    });
+    expect(wrapper.findComponent({ name: 'client-info-badges' }).exists()).toBe(true);
   });
 
 //   it('Correctly renders key-value in call variables', () => {

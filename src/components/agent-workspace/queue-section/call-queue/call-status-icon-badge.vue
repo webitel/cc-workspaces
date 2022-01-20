@@ -44,16 +44,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 10px;
-    left: 10px;
     width: 17px;
     height: 17px;
+    margin-right: var(--icon-spacing);
     border-radius: 50%;
 
     .icon-wrap {
-      width: (17px);
-      height: (17px);
+      width: 17px;
+      height: 17px;
     }
 
     .icon {

@@ -2,9 +2,12 @@ export default {
   reusable: {
     answer: 'Ответить',
     reject: 'Сбросить',
+    accept: 'Принять',
+    decline: 'Отклонить',
     send: 'Отправить',
     save: 'Сохранить',
     cancel: 'Отменить',
+    close: 'Закрыть',
     logout: 'Выйти',
     search: 'Поиск',
     description: 'Описание',
@@ -22,6 +25,10 @@ export default {
   header: {
     docs: 'Документация',
     enableVideo: 'Использовать видео',
+    dnd: {
+      label: 'Не беспокоить',
+      tooltip: 'Вы будете получать звонки только из очередей',
+    },
   },
   widgets: {
     inbound: 'Входящих',
@@ -29,19 +36,28 @@ export default {
     missed: 'Пропущено',
     avgTalk: 'Среднее время разговора',
     avgHold: 'Среднее время удержания',
+    utilization: 'Утилизация',
+    occupancy: 'Занятость',
   },
   queueSec: {
-    queueSec: {
-      call: {
-        calls: 'Звонки',
-        at: 'в', // missed call "at 10:10"
-      },
-      chat: {
-        chats: 'Чаты',
-      },
+    call: {
+      calls: 'Звонки',
+      at: 'в', // missed call "at 10:10"
+    },
+    chat: {
+      chats: 'Чаты',
     },
   },
   infoSec: {
+    generalInfo: {
+      generalInfo: 'Основная информация',
+      queueWaiting: 'Ожидают',
+      queue: 'Очередь',
+      agents: 'Операторы',
+      total: 'Все',
+      paused: 'Пауза',
+      free: 'Свободно',
+    },
     clientInfo: 'Информация',
     knowledgeBase: 'База знаний',
     postProcessing: {
@@ -119,11 +135,11 @@ export default {
       heading: 'Вы находитесь в режиме паузы',
       continueWork: 'Продолжить работу',
     },
-    status: {
-      active: 'Активный',
-      break: 'Пауза',
-      dnd: 'Не отвлекать',
-    },
+  },
+  disconnectPopup: {
+    title: 'Охх... Что-то пошло не так!',
+    mainText: 'Связь была утеряна.',
+    reloadBtn: 'Обновить страницу',
   },
   icon: {
     docs: 'Документация',

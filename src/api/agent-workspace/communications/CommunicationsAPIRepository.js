@@ -1,43 +1,16 @@
 import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
+import { SdkListGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
 import configuration from '../../openAPIConfig';
 import instance from '../../instance';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
 
-const defaultParams = {
-  page: 1,
-  size: 10,
-  search: '',
-};
+const listGetter = new SdkListGetterApiConsumer(communicationService.searchCommunicationType);
 
-const getCommunicationTypes = async ({
-                                     page,
-                                     size,
-                                     search,
-                                     domainId,
-                                   }) => {
-  try {
-    const response = await communicationService
-      .searchCommunicationType(
-        page,
-        size,
-        search,
-        domainId,
-      );
-    return { next: !!response.next, items: response.items || [] };
-  } catch (err) {
-    throw err;
-  }
-};
+const getCommunicationsList = (params) => listGetter.getList(params);
 
 const communicationsAPIRepository = {
-  getCommunicationTypes(argParams) {
-    const params = {
-      ...defaultParams,
-      ...argParams,
-    };
-    return getCommunicationTypes(params);
-  },
+  getList: getCommunicationsList,
 };
 
 export default communicationsAPIRepository;

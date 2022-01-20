@@ -4,14 +4,17 @@ import { CallActions } from 'webitel-sdk';
 import callModule from '../../../../../src/store/modules/call/call';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
+import webSocketClientController
+  from '../../../../../src/api/agent-workspace/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 // Make new call on number test
 const mockCliCall = jest.fn();
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => ({ call: mockCliCall }), destroyCliInstance: jest.fn() }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance')
+  .mockImplementation(() => ({ call: mockCliCall }));
 
 describe('Make new call functionality', () => {
   let state;
@@ -26,6 +29,9 @@ describe('Make new call functionality', () => {
       callList: [],
     };
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         call: {
           ...callModule,

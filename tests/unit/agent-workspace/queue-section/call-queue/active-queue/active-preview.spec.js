@@ -57,6 +57,29 @@ describe('Other UIs', () => {
     });
     expect(wrapper.find('.active-preview__number').text()).toEqual(display);
   });
+
+  it('Correctly displays call displayQueueName', () => {
+    call.task = {
+      queue: { name: display },
+    };
+    const wrapper = shallowMount(ActivePreview, {
+      store,
+      localVue,
+      propsData: { call },
+    });
+    expect(wrapper.findComponent({ name: 'wt-badge' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'wt-badge' }).text()).toBe(display);
+  });
+
+  it('if call has no queue, queue badge is absent', () => {
+    call.task = {};
+    const wrapper = shallowMount(ActivePreview, {
+      store,
+      localVue,
+      propsData: { call },
+    });
+    expect(wrapper.find('.queue-preview-badges').exists()).toBe(false);
+  });
 });
 
 describe('Preview Actions', () => {
@@ -134,7 +157,7 @@ describe('Preview Actions', () => {
 
 describe('Answer and Hangup', () => {
   let state;
-  const { actions, mutations } = callModule;
+  const { actions, mutations, getters } = callModule;
   let store;
   let call;
 
@@ -155,6 +178,7 @@ describe('Answer and Hangup', () => {
         call: {
           namespaced: true,
           state,
+          getters,
           actions,
           mutations,
         },

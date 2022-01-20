@@ -4,14 +4,16 @@ import callModule from '../../../../../src/store/modules/call/call';
 import CallState
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-state.vue';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+import webSocketClientController
+  from '../../../../../src/api/agent-workspace/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 // Make new call on number test
 const mockCliCall = jest.fn();
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => ({ call: mockCliCall }));
+jest.spyOn(webSocketClientController, 'getCliInstance')
+  .mockImplementation(() => ({ call: mockCliCall }));
 
 describe('Call state', () => {
   let state;
@@ -23,6 +25,9 @@ describe('Call state', () => {
       callOnWorkspace: {},
     };
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         workspace: workspaceModule,
         call: {

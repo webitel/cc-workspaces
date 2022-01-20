@@ -5,13 +5,15 @@ import memberModule from '../../../../../src/store/modules/member/member';
 import MemberHeader
   from '../../../../../src/components/agent-workspace/workspace-section/member/member-header.vue';
 import MockSocket from '../../../mocks/MockSocket';
+import webSocketClientController
+  from "../../../../../src/api/agent-workspace/WebSocketClientController";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 const mockSocket = new MockSocket();
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => () => mockSocket);
+jest.spyOn(webSocketClientController, 'getCliInstance')
+  .mockImplementation(() => mockSocket);
 
 describe('Member header', () => {
   const {
@@ -32,6 +34,9 @@ describe('Member header', () => {
 
   beforeEach(() => {
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         workspace: workspaceModule,
         member: {

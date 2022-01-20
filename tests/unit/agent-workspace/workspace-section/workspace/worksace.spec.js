@@ -10,14 +10,16 @@ import Workspace from '../../../../../src/components/agent-workspace/the-agent-w
 import Call
   from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
 import MockSocket from '../../../mocks/MockSocket';
+import webSocketClientController
+  from '../../../../../src/api/agent-workspace/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 let call = {};
 const mockSocket = new MockSocket();
-jest.mock('../../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
+
+jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 describe('Hangup event on call component', () => {
   const { state, actions, mutations } = callModule;
@@ -25,6 +27,9 @@ describe('Hangup event on call component', () => {
 
   beforeEach(() => {
     store = new Vuex.Store({
+      state: {
+        client: webSocketClientController,
+      },
       modules: {
         workspace: workspaceModule,
         call: {

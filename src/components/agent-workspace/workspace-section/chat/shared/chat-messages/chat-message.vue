@@ -1,13 +1,17 @@
 <template>
-  <div class="chat-message" :class="{'chat-message--right': my}">
+  <div class="chat-message" :class="{'chat-message--right' : isAgentSideMessage }">
     <div class="chat-message__user-pic-wrapper" v-if="!my">
       <img v-if="showUserPic" class="chat-message__user-pic"
-           src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client photo">
+           :src="avatarPic"
+           alt="client photo">
     </div>
-    <div class="chat-message__main-wrapper">
-      <p v-if="text" class="chat-message__text">
-        {{ text }}
-      </p>
+    <!--    click.stop prevents focus on textarea and allows to select the message text -->
+    <div class="chat-message__main-wrapper" @click.stop>
+      <p
+        v-if="text"
+        class="chat-message__text"
+        v-html="text"
+      ></p>
       <div v-if="image" class="chat-message__image" @click="openImage">
         <img
           class="chat-message__image__img"
@@ -45,9 +49,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
+import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import linkifyHtml from 'linkifyjs/html';
+import { mapActions } from 'vuex';
+import botAvatar from '../../../../../../assets/agent-workspace/bot-avatar.svg';
+import defaultAvatar from '../../../../../../assets/agent-workspace/default-avatar.svg';
 
 export default {
   name: 'chat-message',
@@ -62,11 +69,26 @@ export default {
     },
   },
   computed: {
+    my() {
+      return !!this.message.member?.self;
+    },
+    bot() {
+      return !this.message.channelId;
+    },
+    isAgentSideMessage() {
+      return this.my || this.bot;
+    },
+    avatarPic() {
+      return this.bot ? botAvatar : defaultAvatar;
+    },
     sentAt() {
       return prettifyTime(this.message.createdAt);
     },
     text() {
-      return this.message.text;
+      if (!this.message.text) return '';
+      return linkifyHtml(this.message.text, {
+        target: '_blank',
+      });
     },
     image() {
       const isImage = this.message.file && this.message.file.mime.includes('image');
@@ -78,9 +100,6 @@ export default {
     documentSize() {
       if (!this.document) return '';
       return prettifyFileSize(this.document.size);
-    },
-    my() {
-      return !!this.message.member?.self;
     },
   },
   methods: {
@@ -116,6 +135,14 @@ export default {
 
     .chat-message__text {
       @extend %typo-body-md;
+      overflow-wrap: break-word;
+      white-space: pre-line; // read \n as "new line"
+
+      // reset links inside text
+      ::v-deep a {
+        color: revert;
+        text-decoration: revert;
+      }
     }
 
     .chat-message__image {
@@ -177,7 +204,6 @@ export default {
 
   &--right {
     flex-direction: row-reverse;
-    text-align: right;
     margin-left: auto;
 
     .chat-message__main-wrapper {
@@ -194,6 +220,10 @@ export default {
       }
     }
 
+    .chat-message__user-pic-wrapper {
+      margin-right: 0;
+    }
+
     .chat-message__message-info-wrapper {
       margin-left: 0;
       margin-right: 10px;
@@ -208,7 +238,6 @@ export default {
   margin-right: 10px;
 
   .chat-message__user-pic {
-    width: 100%;
     height: 100%;
   }
 }

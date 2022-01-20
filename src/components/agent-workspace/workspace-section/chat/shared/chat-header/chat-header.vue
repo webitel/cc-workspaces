@@ -9,16 +9,26 @@
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper">
-      <wt-rounded-action icon="chat-end" color="danger" @click="close"></wt-rounded-action>
+      <wt-rounded-action
+        v-show="isCloseAction"
+        icon="chat-end"
+        color="danger"
+        @click="close"
+      ></wt-rounded-action>
     </div>
   </header>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'chat-header',
+  computed: {
+    ...mapGetters('chat', {
+      isCloseAction: 'ALLOW_CHAT_CLOSE',
+    }),
+  },
   methods: {
     ...mapActions('chat', {
       close: 'CLOSE',

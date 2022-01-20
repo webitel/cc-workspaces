@@ -8,9 +8,16 @@ process.env.VUE_APP_AUDIT_URL = process.env.NODE_ENV === 'production' ? '/audit'
 process.env.VUE_APP_HISTORY_URL = process.env.NODE_ENV === 'production' ? '/history' : 'https://dev.webitel.com/history';
 process.env.VUE_APP_GRAFANA_URL = process.env.NODE_ENV === 'production' ? '/grafana' : 'https://dev.webitel.com/grafana';
 process.env.VUE_APP_SETTINGS_URL = process.env.NODE_ENV === 'production' ? '/settings' : 'https://dev.webitel.com/settings';
+process.env.VUE_APP_APPLICATION_HUB_URL = process.env.NODE_ENV === 'production' ? '/' : 'https://dev.webitel.com/';
+
+process.env.VUE_APP_PACKAGE_VERSION = require('./package.json').version;
 
 module.exports = {
-  // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
+  transpileDependencies: [
+    '@webitel/ui-sdk/src',
+    '@webitel/cc-ui-sdk/src',
+  ],
+// publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
   publicPath: '/workspace',
   lintOnSave: false,
   css: {
@@ -22,16 +29,15 @@ module.exports = {
       },
     },
   },
-  configureWebpack: (config) => {
-    // eslint-disable-next-line no-param-reassign
-    config.devtool = 'source-map';
-  },
   chainWebpack: (config) => {
-    // exclude sprites default building
-    config.module.rule('svg').exclude.add(/^(.*sprites).*\.svg/);
+    config.module
+      .rule('svg')
+      .exclude.add(/^(.*sprite).*\.svg/); // same as in svg-sprite-loader
 
-    // use svg-sprite-loader to process icons sprite
-    config.module.rule('svg-sprite').test(/^(.*sprites).*\.svg/)
-      .use('svg-sprite-loader').loader('svg-sprite-loader').options({ symbolId: () => '' });
+    config.module
+      .rule('svg-sprite')
+      .test(/^(.*sprite).*\.svg/) // same as in svg-url-loader
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader');
   },
 };

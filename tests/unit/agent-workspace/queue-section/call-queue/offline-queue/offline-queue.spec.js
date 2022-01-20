@@ -6,9 +6,11 @@ import OfflineQueue
   from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-container.vue';
 import OfflinePreview
   from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-preview.vue';
-import MockSocket from '../../../../mocks/MockSocket';
 import WorkspaceStates
   from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import MockSocket from '../../../../mocks/MockSocket';
+import webSocketClientController
+  from '../../../../../../src/api/agent-workspace/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -16,8 +18,8 @@ localVue.use(Vuex);
 const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
-jest.mock('../../../../../../src/api/agent-workspace/call-ws-connection',
-  () => ({ getCliInstance: () => mockSocket, destroyCliInstance: jest.fn() }));
+jest.spyOn(webSocketClientController, 'getCliInstance')
+  .mockImplementation(() => mockSocket);
 
 describe('Members list functionality', () => {
   let state;
@@ -33,6 +35,9 @@ describe('Members list functionality', () => {
     };
     store = new Vuex.Store({
       modules: {
+        state: {
+          client: webSocketClientController,
+        },
         workspace: workspaceModule,
         member: {
           namespaced: true,

@@ -6,51 +6,49 @@
       alt="client photo"
     >
     <div class="preview-profile__name">
-      {{displayName}}
+      {{ displayName }}
     </div>
     <div class="preview-profile__number">
-      {{displayNumber}}
+      {{ displayNumber }}
     </div>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import dispayInfoMixin from '../../../../mixins/displayInfoMixin';
+import { mapState } from 'vuex';
+import displayInfoMixin from '../../../../mixins/displayInfoMixin';
 
-  export default {
-    name: 'call-preview-profile',
-    mixins: [dispayInfoMixin],
-
-    computed: {
-      ...mapState('call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-    },
-  };
+export default {
+  name: 'call-preview-profile',
+  mixins: [displayInfoMixin],
+  computed: {
+    ...mapState('call', {
+      call: (state) => state.callOnWorkspace,
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .preview-profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px;
+.preview-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
 
-    &__pic {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 20px;
-      border-radius: 50%;
-    }
-
-    &__name {
-      @extend .typo-heading-sm;
-      margin-bottom: 10px;
-    }
-
-    &__number {
-      @extend .typo-body-md;
-    }
+  &__pic {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
   }
+
+  &__name {
+    @extend .typo-heading-sm;
+  }
+
+  &__number {
+    @extend .typo-body-md;
+  }
+}
 </style>

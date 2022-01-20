@@ -1,10 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import chat from '@/store/modules/chat/chat';
-import ChatQueuePreview from '../../../../../../src/components/agent-workspace/queue-section/chat-queue/chat-queue/chat-queue-preview.vue';
+import ChatQueuePreview
+  from '../../../../../../src/components/agent-workspace/queue-section/chat-queue/chat-queue/chat-queue-preview.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+
 const store = new Vuex.Store({ modules: { chat } });
 const displayName = 'jest';
 const lastMessage = 'jest2';
@@ -28,7 +30,11 @@ describe('ChatQueuePreview', () => {
   it('correctly computes last message text, if last message is file', () => {
     const filename = 'jest';
     const testTask = { ...task, messages: [{ file: { name: filename } }] };
-    const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task: testTask } });
+    const wrapper = shallowMount(ChatQueuePreview, {
+      localVue,
+      store,
+      propsData: { task: testTask },
+    });
     expect(wrapper.vm.lastMessage).toBe(filename);
   });
 
@@ -36,4 +42,27 @@ describe('ChatQueuePreview', () => {
     const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task } });
     expect(wrapper.vm.displayName).toBe(displayName);
   });
+
+  it('Correctly displays chat displayQueueName', () => {
+    const queueName = 'jest3';
+    const testTask = { ...task, task: { queue: { name: queueName } } };
+    const wrapper = shallowMount(ChatQueuePreview, {
+      store,
+      localVue,
+      propsData: { task: testTask },
+    });
+    expect(wrapper.findComponent({ name: 'wt-badge' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'wt-badge' }).text()).toBe(queueName);
+  });
+
+  it('if chat has no queue, queue badge is absent', () => {
+    const testTask = { ...task, task: {} };
+    const wrapper = shallowMount(ChatQueuePreview, {
+      store,
+      localVue,
+      propsData: { task: testTask },
+    });
+    expect(wrapper.find('.queue-preview-badges').exists()).toBe(false);
+  });
 });
+

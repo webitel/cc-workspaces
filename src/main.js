@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
+import deepmerge from 'deepmerge';
 import App from './the-app.vue';
 import router from './router';
 import store from './store';
 import i18n from './locale/i18n';
 import Icon from './components/utils/icon-wrap.vue';
 
-import './plugins/webitel-ui';
+import './plugins';
 
 // import './css/fonts.scss';
 import './css/main.scss';
@@ -17,8 +18,10 @@ Vue.component('icon', Icon);
 Vue.use(Vuelidate);
 
 const fetchConfig = async () => {
+  const windowConfig = window._config || {}; // Electron sets config to window
   const response = await fetch(`${process.env.BASE_URL}config.json`);
-  return response.json();
+  const fileConfig = (await response.json()) || {};
+  return deepmerge(fileConfig, windowConfig);
 };
 
 const createVueInstance = () => {
@@ -34,5 +37,6 @@ const createVueInstance = () => {
 (async () => {
   const config = await fetchConfig();
   Vue.prototype.$config = config;
+  localStorage.setItem('CONFIG', JSON.stringify(config));
   createVueInstance();
 })();

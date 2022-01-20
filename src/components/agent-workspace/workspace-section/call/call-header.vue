@@ -29,7 +29,7 @@
           v-if="isBridge"
           class="call-action bridge"
           :class="{ 'active': isOnBridge }"
-          icon="call-merge"
+          icon="call-add-to"
           color="secondary"
           @click="$emit('openTab', 'bridge')"
         ></wt-rounded-action>

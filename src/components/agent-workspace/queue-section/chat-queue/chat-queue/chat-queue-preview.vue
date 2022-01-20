@@ -1,21 +1,26 @@
 <template>
   <article class="queue-preview" :class="{ 'queue-preview--opened': opened }">
     <header class="queue-preview-header">
-      <span class="queue-preview-header__name">{{displayName | truncate(18) }}</span>
+      <wt-icon icon-prefix="messenger" :icon="displayIcon" size="sm"></wt-icon>
+      <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
     </header>
-
     <section class="queue-preview-body">
       <div class="chat-preview__message">
         {{ lastMessage | truncate(30) }}
       </div>
     </section>
-
-    <footer class="queue-preview-footer"></footer>
+    <section class="queue-preview-badges" v-if="displayQueueName">
+      <wt-badge color="secondary">
+        {{ displayQueueName }}
+      </wt-badge>
+    </section>
+    <!--    <footer class="queue-preview-footer"></footer>-->
   </article>
 </template>
 
 <script>
+import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
 
@@ -40,6 +45,23 @@ export default {
     lastMessage() {
       const lastMessage = this.task.messages[this.task.messages.length - 1];
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+    },
+    displayIcon() {
+      const member = this.task.members[0];
+      switch (member.type) {
+        case MessengerType.TELEGRAM:
+          return 'telegram';
+        case MessengerType.VIBER:
+          return 'viber';
+        case MessengerType.FACEBOOK:
+          return 'facebook';
+        case MessengerType.WHATSAPP:
+          return 'whatsapp';
+        case MessengerType.WEB_CHAT:
+          return 'web-chat';
+        default:
+          return member.type;
+      }
     },
   },
 };

@@ -1,7 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import TimerPopup from '../../../../src/components/break-popup/break-timer-popup.vue';
+import TimerPopup from '../../../../src/components/agent-workspace/popups/break-popup/break-timer-popup.vue';
+import Header from '../../../../src/components/shared/app-header/app-header.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -35,6 +36,12 @@ describe('Break timer popup', () => {
             now: Date.now(),
           },
         },
+        userinfo: {
+          namespaced: true,
+          getters: {
+            CHECK_APP_ACCESS: () => () => true,
+          },
+        },
       },
     });
   });
@@ -43,6 +50,19 @@ describe('Break timer popup', () => {
     const wrapper = shallowMount(TimerPopup, { store, localVue });
     expect(wrapper.vm.duration)
       .toEqual('12:00:00');
+  });
+
+  it('Doesn\'t show popup on Online status', () => {
+    state.agent.status = AgentStatus.Online;
+    const wrapper = shallowMount(TimerPopup, { store, localVue });
+    expect(wrapper.isVisible())
+      .toBeFalsy();
+  });
+
+  it('Show timer popup on Pause state', () => {
+    const wrapper = shallowMount(Header, { store, localVue });
+    expect(wrapper.isVisible())
+      .toBeTruthy();
   });
 
   it('Correctly goes Waiting', () => {
