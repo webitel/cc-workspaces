@@ -1,4 +1,3 @@
-
 const state = {
   workspaceState: null,
 };
@@ -21,6 +20,7 @@ const actions = {
       context.dispatch('globals/INIT_GLOBAL_HANDLERS', null, { root: true });
       context.dispatch('call/SUBSCRIBE_CALLS', null, { root: true });
       context.dispatch('chat/SUBSCRIBE_CHATS', null, { root: true });
+      context.dispatch('chat/INIT_TAB_TITLE', null, { root: true });
       context.dispatch('status/SUBSCRIBE_STATUS', null, { root: true });
       context.dispatch('call/missed/LOAD_DATA_LIST', null, { root: true });
       context.dispatch('member/LOAD_DATA_LIST', null, { root: true });

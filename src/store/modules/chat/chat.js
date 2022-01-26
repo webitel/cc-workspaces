@@ -7,6 +7,8 @@ const state = {
   chatList: [],
   chatOnWorkspace: {},
   mediaView: null,
+  documentTitle: null,
+  notificationsCount: 0,
 };
 
 const getters = {
@@ -105,6 +107,27 @@ const actions = {
   CLOSE_MEDIA: (context) => {
     context.commit('SET_MEDIA_VIEW', null);
   },
+  INIT_TAB_TITLE: (context) => {
+    context.commit('INIT_TAB_TITLE', document.title);
+    context.dispatch('RESET_NOTIFICATION_COUNT');
+  },
+
+  INCREASE_NOTIFICATIONS_COUNT: (context) => {
+    const count = context.state.notificationsCount + 1;
+    context.commit('SET_NOTIFICATIONS_COUNT', count);
+    context.dispatch('SET_TAB_TITLE');
+  },
+
+  RESET_NOTIFICATION_COUNT: (context) => {
+    context.commit('SET_NOTIFICATIONS_COUNT', 0);
+    context.dispatch('SET_TAB_TITLE');
+  },
+
+  SET_TAB_TITLE: (context) => {
+    const count = context.state.notificationsCount;
+    const docTitle = context.state.documentTitle;
+    document.title = count ? `(${count}) ${docTitle}` : docTitle;
+  },
 };
 
 const mutations = {
@@ -122,6 +145,12 @@ const mutations = {
   },
   SET_MEDIA_VIEW: (state, mediaView) => {
     state.mediaView = mediaView;
+  },
+  INIT_TAB_TITLE: (state, title) => {
+    state.documentTitle = title;
+  },
+  SET_NOTIFICATIONS_COUNT: (state, count) => {
+    state.notificationsCount = count;
   },
 };
 
