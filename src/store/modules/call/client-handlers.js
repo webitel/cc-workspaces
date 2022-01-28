@@ -6,7 +6,7 @@ const callHandler = (context) => (action, call) => {
       context.dispatch('HANDLE_RINGING_ACTION', call);
       break;
     case CallActions.Active:
-      context.dispatch('HOLD_OTHER_CALLS', call);
+      context.dispatch('HANDLE_ACTIVE_CALL_ACTION', call);
       break;
     case CallActions.Hangup:
       context.dispatch('HANDLE_HANGUP_ACTION', call);
@@ -39,6 +39,12 @@ const actions = {
       || !context.state.callOnWorkspace) {
       context.dispatch('SET_WORKSPACE', call);
     }
+  },
+
+  HANDLE_ACTIVE_CALL_ACTION: (context, call) => {
+    const activeCallIndex = context.state.callList.findIndex((eachCall) => eachCall === call);
+    context.dispatch('OPEN_ACTIVE_CALL', activeCallIndex);
+    context.dispatch('HOLD_OTHER_CALLS', call);
   },
 
   HANDLE_HANGUP_ACTION: (context, call) => {
