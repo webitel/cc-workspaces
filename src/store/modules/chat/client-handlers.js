@@ -8,21 +8,17 @@ import i18n from '../../../locale/i18n';
 
 const NOTIFICATION_VISIBLE_INTERVAL = 2000;
 
-const chooseNotificationSound = (action) => {
-  let sound;
+const getNotificationSound = (action) => {
   switch (action) {
     case ChatActions.UserInvite:
-      sound = newChatMedia;
-      break;
+      return newChatMedia;
     case ChatActions.Message:
-      sound = newMessageMedia;
-      break;
+      return newMessageMedia;
     case ChatActions.Close:
-      sound = endChatMedia;
-      break;
+      return endChatMedia;
     default:
+      return false;
   }
-  return sound;
 };
 
 const callHandler = (context) => (action, chat) => {
@@ -38,10 +34,10 @@ const callHandler = (context) => (action, chat) => {
     case ChatActions.Leave:
       break;
     case ChatActions.Close:
-      context.dispatch('HANDLE_CLOSE_ACTION', action);
+      context.dispatch('HANDLE_CLOSE_ACTION', { action });
       break;
     case ChatActions.Destroy:
-      context.dispatch('HANDLE_DESTROY_ACTION', chat);
+      context.dispatch('HANDLE_DESTROY_ACTION', { chat });
       break;
     default:
     // console.log('default', action);
@@ -66,7 +62,7 @@ const actions = {
 
   HANDLE_INVITE_ACTION: (context, { action, chat }) => {
     const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`);
-    const sound = chooseNotificationSound(action);
+    const sound = getNotificationSound(action);
     context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
     context.dispatch('SHOW_NOTIFICATION', notificationText);
     context.dispatch('ADD_CHAT', chat);
@@ -77,34 +73,34 @@ const actions = {
     const message = chat.messages[chat.messages.length - 1];
 
     if (!context.getters.IS_MY_MESSAGE(message)) {
-      const sound = chooseNotificationSound(action);
+      const sound = getNotificationSound(action);
       context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
       context.dispatch('SHOW_NOTIFICATION', notificationText);
     }
     context.dispatch('CHAT_INSERT_TO_START', chat);
   },
 
-  HANDLE_DESTROY_ACTION: (context, chat) => {
+  HANDLE_DESTROY_ACTION: (context, { chat }) => {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
-    context.dispatch('RESET_NOTIFICATIONS_COUNT');
+    context.dispatch('RESET_UNREAD_COUNT');
   },
 
-  HANDLE_CLOSE_ACTION: (context, action) => {
+  HANDLE_CLOSE_ACTION: (context, { action }) => {
     const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`);
-    const sound = chooseNotificationSound(action);
+    const sound = getNotificationSound(action);
     context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
     context.dispatch('SHOW_NOTIFICATION', notificationText);
   },
 
   SHOW_NOTIFICATION: async (context, notificationText) => {
-    context.dispatch('INCREMENT_NOTIFICATIONS_COUNT');
+    context.dispatch('INCREMENT_UNREAD_COUNT');
     const notification = new Notification(notificationText, {
       icon: notificationIcon,
     });
 
     document.documentElement.addEventListener('click', () => {
-      context.dispatch('RESET_NOTIFICATIONS_COUNT');
+      context.dispatch('RESET_UNREAD_COUNT');
       if (Notification.permission !== 'granted') Notification.requestPermission();
     });
 

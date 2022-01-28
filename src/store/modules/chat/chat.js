@@ -7,7 +7,6 @@ const state = {
   chatList: [],
   chatOnWorkspace: {},
   mediaView: null,
-  documentTitle: null,
   unreadCount: 0,
 };
 
@@ -23,7 +22,7 @@ const actions = {
 
   INITIALIZE: (context) => {
     context.dispatch('SUBSCRIBE_CHATS');
-    context.dispatch('INIT_TAB_TITLE');
+    context.dispatch('RESET_UNREAD_COUNT');
   },
 
   SET_CHAT_LIST: (context, chatList) => {
@@ -113,29 +112,25 @@ const actions = {
   CLOSE_MEDIA: (context) => {
     context.commit('SET_MEDIA_VIEW', null);
   },
-  INIT_TAB_TITLE: (context) => {
-    context.commit('INIT_TAB_TITLE', document.title);
-    context.dispatch('RESET_NOTIFICATIONS_COUNT');
-  },
 
-  INCREMENT_NOTIFICATIONS_COUNT: (context) => {
+  INCREMENT_UNREAD_COUNT: (context) => {
     const count = context.state.unreadCount + 1;
-    context.dispatch('SET_NOTIFICATIONS_COUNT', count);
+    context.dispatch('SET_UNREAD_COUNT', count);
   },
 
-  RESET_NOTIFICATIONS_COUNT: (context) => {
-    context.dispatch('SET_NOTIFICATIONS_COUNT', 0);
+  RESET_UNREAD_COUNT: (context) => {
+    context.dispatch('SET_UNREAD_COUNT', 0);
   },
 
-  SET_NOTIFICATIONS_COUNT: (context, count) => {
-    context.commit('SET_NOTIFICATIONS_COUNT', count);
+  SET_UNREAD_COUNT: (context, count) => {
+    context.commit('SET_UNREAD_COUNT', count);
     context.dispatch('SET_TAB_TITLE');
   },
 
   SET_TAB_TITLE: (context) => {
     const count = context.state.unreadCount;
-    const docTitle = context.state.documentTitle;
-    document.title = count ? `(${count}) ${docTitle}` : docTitle;
+    const titleText = document.title.replace(/\s*\(.*?\)\s*/g, '');
+    document.title = count ? `(${count}) ${titleText}` : titleText;
   },
 };
 
@@ -155,10 +150,7 @@ const mutations = {
   SET_MEDIA_VIEW: (state, mediaView) => {
     state.mediaView = mediaView;
   },
-  INIT_TAB_TITLE: (state, title) => {
-    state.documentTitle = title;
-  },
-  SET_NOTIFICATIONS_COUNT: (state, count) => {
+  SET_UNREAD_COUNT: (state, count) => {
     state.unreadCount = count;
   },
 };
