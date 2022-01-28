@@ -180,4 +180,9 @@ export default {
   validation: {
     required: 'Обов\'язково',
   },
+  notifications: {
+    message: 'Нове повідомлення',
+    userInvite: 'Новий чат',
+    closeConversation: 'Клієнт вийшов з чату',
+  },
 };

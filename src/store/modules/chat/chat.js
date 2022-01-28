@@ -8,17 +8,23 @@ const state = {
   chatOnWorkspace: {},
   mediaView: null,
   documentTitle: null,
-  notificationsCount: 0,
+  unreadCount: 0,
 };
 
 const getters = {
   ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
   ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
   IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
+  IS_MY_MESSAGE: (state) => (message) => message.member?.self,
 };
 
 const actions = {
   ...clientHandlers.actions,
+
+  INITIALIZE: (context) => {
+    context.dispatch('SUBSCRIBE_CHATS');
+    context.dispatch('INIT_TAB_TITLE');
+  },
 
   SET_CHAT_LIST: (context, chatList) => {
     chatList.forEach((chat) => {
@@ -109,22 +115,25 @@ const actions = {
   },
   INIT_TAB_TITLE: (context) => {
     context.commit('INIT_TAB_TITLE', document.title);
-    context.dispatch('RESET_NOTIFICATION_COUNT');
+    context.dispatch('RESET_NOTIFICATIONS_COUNT');
   },
 
-  INCREASE_NOTIFICATIONS_COUNT: (context) => {
-    const count = context.state.notificationsCount + 1;
+  INCREMENT_NOTIFICATIONS_COUNT: (context) => {
+    const count = context.state.unreadCount + 1;
+    context.dispatch('SET_NOTIFICATIONS_COUNT', count);
+  },
+
+  RESET_NOTIFICATIONS_COUNT: (context) => {
+    context.dispatch('SET_NOTIFICATIONS_COUNT', 0);
+  },
+
+  SET_NOTIFICATIONS_COUNT: (context, count) => {
     context.commit('SET_NOTIFICATIONS_COUNT', count);
     context.dispatch('SET_TAB_TITLE');
   },
 
-  RESET_NOTIFICATION_COUNT: (context) => {
-    context.commit('SET_NOTIFICATIONS_COUNT', 0);
-    context.dispatch('SET_TAB_TITLE');
-  },
-
   SET_TAB_TITLE: (context) => {
-    const count = context.state.notificationsCount;
+    const count = context.state.unreadCount;
     const docTitle = context.state.documentTitle;
     document.title = count ? `(${count}) ${docTitle}` : docTitle;
   },
@@ -150,7 +159,7 @@ const mutations = {
     state.documentTitle = title;
   },
   SET_NOTIFICATIONS_COUNT: (state, count) => {
-    state.notificationsCount = count;
+    state.unreadCount = count;
   },
 };
 

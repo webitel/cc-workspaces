@@ -1,23 +1,44 @@
+import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { ChatActions } from 'webitel-sdk';
 import endChatMedia from '../../../../public/media/end-chat.wav';
 import newChatMedia from '../../../../public/media/new-chat.wav';
 import newMessageMedia from '../../../../public/media/new-message.wav';
+import notificationIcon from '../../../../public/notification-icon.png';
+import i18n from '../../../locale/i18n';
+
+const NOTIFICATION_VISIBLE_INTERVAL = 2000;
+
+const chooseNotificationSound = (action) => {
+  let sound;
+  switch (action) {
+    case ChatActions.UserInvite:
+      sound = newChatMedia;
+      break;
+    case ChatActions.Message:
+      sound = newMessageMedia;
+      break;
+    case ChatActions.Close:
+      sound = endChatMedia;
+      break;
+    default:
+  }
+  return sound;
+};
 
 const callHandler = (context) => (action, chat) => {
   switch (action) {
     case ChatActions.UserInvite:
-      context.dispatch('HANDLE_INVITE_ACTION', chat);
+      context.dispatch('HANDLE_INVITE_ACTION', { action, chat });
       break;
     case ChatActions.Message:
-      context.dispatch('HANDLE_MESSAGE_ACTION', chat);
+      context.dispatch('HANDLE_MESSAGE_ACTION', { action, chat });
       break;
     case ChatActions.Decline:
       break;
     case ChatActions.Leave:
       break;
     case ChatActions.Close:
-      context.dispatch('PLAY_NOTIFICATION_SOUND', endChatMedia);
-      context.dispatch('SHOW_NOTIFICATION', 'Chat is closed');
+      context.dispatch('HANDLE_CLOSE_ACTION', action);
       break;
     case ChatActions.Destroy:
       context.dispatch('HANDLE_DESTROY_ACTION', chat);
@@ -28,8 +49,12 @@ const callHandler = (context) => (action, chat) => {
 };
 
 const actions = {
-  PLAY_NOTIFICATION_SOUND: (context, sound) => {
-    new Audio(sound).play().then();
+  PLAY_NOTIFICATION_SOUND: async (context, sound) => {
+    try {
+      await new Audio(sound).play();
+    } catch (err) {
+      throw err;
+    }
   },
 
   SUBSCRIBE_CHATS: async (context) => {
@@ -39,17 +64,22 @@ const actions = {
     if (chatList.length) context.dispatch('SET_CHAT_LIST', chatList);
   },
 
-  HANDLE_INVITE_ACTION: (context, chat) => {
-    context.dispatch('PLAY_NOTIFICATION_SOUND', newChatMedia);
-    context.dispatch('SHOW_NOTIFICATION', 'New chat');
+  HANDLE_INVITE_ACTION: (context, { action, chat }) => {
+    const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`);
+    const sound = chooseNotificationSound(action);
+    context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
+    context.dispatch('SHOW_NOTIFICATION', notificationText);
     context.dispatch('ADD_CHAT', chat);
   },
 
-  HANDLE_MESSAGE_ACTION: (context, chat) => {
+  HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
+    const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`);
     const message = chat.messages[chat.messages.length - 1];
-    if (!message.member?.self) {
-      context.dispatch('PLAY_NOTIFICATION_SOUND', newMessageMedia);
-      context.dispatch('SHOW_NOTIFICATION', `New ${message.type} from ${message.member?.name}`);
+
+    if (!context.getters.IS_MY_MESSAGE(message)) {
+      const sound = chooseNotificationSound(action);
+      context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
+      context.dispatch('SHOW_NOTIFICATION', notificationText);
     }
     context.dispatch('CHAT_INSERT_TO_START', chat);
   },
@@ -57,19 +87,30 @@ const actions = {
   HANDLE_DESTROY_ACTION: (context, chat) => {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
+    context.dispatch('RESET_NOTIFICATIONS_COUNT');
+  },
+
+  HANDLE_CLOSE_ACTION: (context, action) => {
+    const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`);
+    const sound = chooseNotificationSound(action);
+    context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
+    context.dispatch('SHOW_NOTIFICATION', notificationText);
   },
 
   SHOW_NOTIFICATION: async (context, notificationText) => {
-    context.dispatch('INCREASE_NOTIFICATIONS_COUNT');
-    const notification = new Notification(notificationText);
+    context.dispatch('INCREMENT_NOTIFICATIONS_COUNT');
+    const notification = new Notification(notificationText, {
+      icon: notificationIcon,
+    });
 
-    document.querySelector('.workspace').addEventListener('click', () => {
-      context.dispatch('RESET_NOTIFICATION_COUNT');
+    document.documentElement.addEventListener('click', () => {
+      context.dispatch('RESET_NOTIFICATIONS_COUNT');
+      if (Notification.permission !== 'granted') Notification.requestPermission();
     });
 
     setTimeout(() => {
       notification.close();
-    }, 2000);
+    }, NOTIFICATION_VISIBLE_INTERVAL);
   },
 };
 
