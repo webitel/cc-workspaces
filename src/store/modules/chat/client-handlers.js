@@ -66,6 +66,9 @@ const actions = {
     context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
     context.dispatch('SHOW_NOTIFICATION', notificationText);
     context.dispatch('ADD_CHAT', chat);
+    if (!context.getters['workspace/TASK_ON_WORKSPACE']) {
+      context.dispatch('SET_WORKSPACE', chat);
+    }
   },
 
   HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
