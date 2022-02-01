@@ -32,6 +32,9 @@ const actions = {
 
   HANDLE_INVITE_ACTION: (context, chat) => {
     context.dispatch('ADD_CHAT', chat);
+    if (!context.getters['workspace/TASK_ON_WORKSPACE']) {
+      context.dispatch('SET_WORKSPACE', chat);
+    }
   },
 
   HANDLE_MESSAGE_ACTION: (context, chat) => {
