@@ -14,6 +14,7 @@ describe('chat store client handlers: actions', () => {
     rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
+    getters: { 'workspace/TASK_ON_WORKSPACE': null },
   };
 
   beforeEach(() => {
@@ -55,6 +56,18 @@ describe('chat store client handlers: actions', () => {
   it('HANDLE_INVITE_ACTION commits ADD_CHAT mutation with invited chat', () => {
     chatModule.actions.HANDLE_INVITE_ACTION(context, chat);
     expect(context.dispatch).toHaveBeenCalledWith('ADD_CHAT', chat);
+  });
+
+  it('HANDLE_INVITE_ACTION calls SET_WORKSPACE with chat if no task on workspace', () => {
+    context.getters['workspace/TASK_ON_WORKSPACE'] = false;
+    chatModule.actions.HANDLE_INVITE_ACTION(context, chat);
+    expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', chat);
+  });
+
+  it('HANDLE_INVITE_ACTION action does not call SET_WORKSPACE if something present in workspace', () => {
+    context.getters['workspace/TASK_ON_WORKSPACE'] = true;
+    chatModule.actions.HANDLE_INVITE_ACTION(context, chat);
+    expect(context.dispatch).not.toHaveBeenCalledWith('SET_WORKSPACE');
   });
 
   it('HANDLE_DESTROY_ACTION commits REMOVE_CHAT mutation with removed chat', () => {
