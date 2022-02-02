@@ -62,9 +62,11 @@ export default {
 }
 
 .media-viewer__content__img {
+  // like on web telegram preview
   display: block;
-  max-width: 70%;
-  max-height: 70%;
+  max-width: 100vw;
+  max-height: 90vh;
+  object-fit: contain;
   margin: auto;
 }
 </style>
