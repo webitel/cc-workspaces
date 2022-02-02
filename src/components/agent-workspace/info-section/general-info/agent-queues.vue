@@ -23,7 +23,7 @@
       ></table-agents>
 
       <div class="agent-queues__queue-item">
-        <wt-badge>{{ queue.waitingMembers }}</wt-badge>
+        <wt-chip>{{ queue.waitingMembers }}</wt-chip>
       </div>
     </div>
   </article>
@@ -82,7 +82,7 @@ export default {
     }
   }
 
-  .wt-badge {
+  .wt-chip {
     @extend %typo-strong-sm;
   }
 }

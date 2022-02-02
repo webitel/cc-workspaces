@@ -1,8 +1,8 @@
 <template>
-  <article class="client-info-badges" v-if="queueName">
-    <wt-badge color="secondary">
+  <article class="client-info-chips" v-if="queueName">
+    <wt-chip color="secondary">
       {{ queueName }}
-    </wt-badge>
+    </wt-chip>
   </article>
 </template>
 
@@ -10,7 +10,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'client-info-badges',
+  name: 'client-info-chips',
   computed: {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.client-info-badges {
+.client-info-chips {
   display: flex;
   justify-content: space-between;
   align-items: center;

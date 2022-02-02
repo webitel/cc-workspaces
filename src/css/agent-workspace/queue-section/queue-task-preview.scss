@@ -21,7 +21,7 @@
     padding: 10px;
     height: 36px;
 
-    .call-status-badge {
+    .call-status-chip {
       position: static;
       margin-right: 10px;
     }
@@ -64,7 +64,7 @@
   }
 }
 
-.queue-preview-badges {
+.queue-preview-chips {
   @media screen and (max-width: 1336px) {
     display: none;
   }

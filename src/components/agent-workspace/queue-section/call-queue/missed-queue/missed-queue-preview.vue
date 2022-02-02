@@ -1,6 +1,6 @@
 <template>
   <article class="queue-preview">
-    <status-badge :state="previewStatusClass"/>
+    <status-chip :state="previewStatusClass"/>
 
     <header class="queue-preview-header">
       <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
@@ -22,12 +22,12 @@
 <script>
   // import { mapState, mapActions } from 'vuex';
   import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-  import StatusBadge from '../call-status-icon-badge.vue';
+  import StatusChip from '../call-status-icon-chip.vue';
 
   export default {
     name: 'missed-queue-preview',
     components: {
-      StatusBadge,
+      StatusChip,
     },
 
     props: {

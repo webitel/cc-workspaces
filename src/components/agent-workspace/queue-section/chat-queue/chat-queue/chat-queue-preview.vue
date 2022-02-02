@@ -10,10 +10,10 @@
         {{ lastMessage | truncate(30) }}
       </div>
     </section>
-    <section class="queue-preview-badges" v-if="displayQueueName">
-      <wt-badge color="secondary">
+    <section class="queue-preview-chips" v-if="displayQueueName">
+      <wt-chip color="secondary">
         {{ displayQueueName }}
-      </wt-badge>
+      </wt-chip>
     </section>
     <!--    <footer class="queue-preview-footer"></footer>-->
   </article>

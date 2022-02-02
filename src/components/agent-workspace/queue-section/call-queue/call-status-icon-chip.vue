@@ -1,5 +1,5 @@
 <template>
-  <aside class="call-status-badge" :class="computeBadgeClass">
+  <aside class="call-status-chip" :class="computeChipClass">
     <icon>
       <svg class="icon sm">
         <use :xlink:href="`#icon-${computeIconClass}-sm`"></use>
@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    name: 'call-status-icon-badge',
+    name: 'call-status-icon-chip',
     props: {
       state: {
         type: String,
@@ -19,7 +19,7 @@
     },
 
     computed: {
-      computeBadgeClass() {
+      computeChipClass() {
         switch (this.state) {
           case 'call': return 'call';
           case 'hold': return 'hold';
@@ -40,7 +40,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .call-status-badge {
+  .call-status-chip {
     display: flex;
     align-items: center;
     justify-content: center;
