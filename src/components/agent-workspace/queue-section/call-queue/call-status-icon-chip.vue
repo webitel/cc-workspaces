@@ -46,7 +46,7 @@
     justify-content: center;
     width: 17px;
     height: 17px;
-    margin-right: var(--icon-spacing);
+    margin-right: var(--spacing-xs);
     border-radius: 50%;
 
     .icon-wrap {

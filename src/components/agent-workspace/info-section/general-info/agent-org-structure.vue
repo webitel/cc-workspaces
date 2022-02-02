@@ -50,7 +50,7 @@ export default {
 .agent-org-structure {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: var(--component-spacing);
+  grid-column-gap: var(--spacing-sm);
 
   &__item {
     text-align: center;

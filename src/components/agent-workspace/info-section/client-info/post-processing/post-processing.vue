@@ -104,6 +104,6 @@ export default {
 }
 
 .post-processing-timer {
-  margin: var(--component-spacing) auto;
+  margin: var(--spacing-sm) auto;
 }
 </style>

@@ -1,7 +1,7 @@
 .queue-preview {
   display: flex;
   flex-direction: column;
-  gap: var(--component-spacing);
+  gap: var(--spacing-sm);
   box-sizing: border-box;
   position: relative;
   padding: 10px;
@@ -46,7 +46,7 @@
     }
   }
   .wt-icon {
-    margin-right: var(--icon-spacing);
+    margin-right: var(--spacing-xs);
   }
 }
 

@@ -98,6 +98,6 @@ export default {
   flex-direction: column;
   max-height: 100%;
   min-height: 0;
-  padding: var(--component-padding);
+  padding: var(--spacing-sm);
 }
 </style>

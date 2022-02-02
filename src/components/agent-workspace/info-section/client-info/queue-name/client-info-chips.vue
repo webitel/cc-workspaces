@@ -27,6 +27,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--component-padding);
+  margin-bottom: var(--spacing-sm);
 }
 </style>

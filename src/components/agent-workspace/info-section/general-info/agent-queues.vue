@@ -71,7 +71,7 @@ export default {
   grid-template-columns: 2fr 2fr 1fr;
   align-items: center;
   gap: 4px;
-  margin-top: var(--component-spacing);
+  margin-top: var(--spacing-sm);
 
   .agent-queues__queue-item {
     overflow-wrap: break-word;
