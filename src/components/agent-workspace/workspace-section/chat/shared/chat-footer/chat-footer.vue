@@ -139,7 +139,7 @@ export default {
   }
 
   .chat-footer__chat-preview__text {
-    @extend %typo-body-lg;
+    @extend %typo-body-1;
     text-align: center;
     color: var(--text-outline-color);
     margin-bottom: 20px;

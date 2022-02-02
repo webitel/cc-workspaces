@@ -60,12 +60,12 @@ export default {
 }
 
 .dropzone__title {
-  @extend %typo-heading-md;
+  @extend %typo-heading-2;
   text-align: center;
 }
 
 .dropzone__description {
-  @extend %typo-body-md;
+  @extend %typo-body-2;
   text-align: center;
 }
 </style>

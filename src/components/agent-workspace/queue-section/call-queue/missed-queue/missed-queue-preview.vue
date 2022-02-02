@@ -61,6 +61,6 @@
 <style lang="scss" scoped>
   @import '../../../../../css/agent-workspace/queue-section/queue-task-preview';
   .missed-preview__call-time {
-    @extend %typo-body-md;
+    @extend %typo-body-2;
   }
 </style>

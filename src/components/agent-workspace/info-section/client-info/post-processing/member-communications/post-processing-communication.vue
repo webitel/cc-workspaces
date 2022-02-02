@@ -77,15 +77,15 @@ export default {
 }
 
 .processing-communication__info-destination {
-  @extend %typo-strong-md;
+  @extend %typo-subtitle-2;
 }
 
 .processing-communication__info-type {
-  @extend %typo-body-sm;
+  @extend %typo-caption;
 }
 
 .processing-communication__priority {
-  @extend %typo-body-md;
+  @extend %typo-body-2;
 }
 
 .processing-communication__actions-wrapper {

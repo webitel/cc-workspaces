@@ -38,7 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 .agent-pause-cause {
-  @extend %typo-body-lg;
+  @extend %typo-body-1;
 
   display: grid;
   grid-template-columns: 1fr 50px minmax(100px, 1fr) 45px;

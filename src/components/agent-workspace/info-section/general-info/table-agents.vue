@@ -38,7 +38,7 @@ export default {
   gap: 4px;
 
   &__total {
-    @extend %typo-strong-lg;
+    @extend %typo-subtitle-1;
   }
 }
 </style>

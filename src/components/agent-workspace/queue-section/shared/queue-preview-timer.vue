@@ -34,7 +34,7 @@ export default {
   align-items: flex-start;
 
   &__digit {
-    @extend %typo-body-md;
+    @extend %typo-body-2;
     text-align: center;
     width: (9.5px);
 

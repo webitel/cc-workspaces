@@ -134,7 +134,7 @@ export default {
     border-radius: var(--border-radius);
 
     .chat-message__text {
-      @extend %typo-body-md;
+      @extend %typo-body-2;
       overflow-wrap: break-word;
       white-space: pre-line; // read \n as "new line"
 
@@ -149,7 +149,7 @@ export default {
       cursor: pointer;
 
       &__img {
-        @extend %typo-body-md;
+        @extend %typo-body-2;
         width: 100%;
       }
     }
@@ -177,12 +177,12 @@ export default {
       }
 
       .chat-message__document__name {
-        @extend %typo-strong-md;
+        @extend %typo-subtitle-2;
         cursor: pointer;
       }
 
       .chat-message__document__size {
-        @extend %typo-body-sm;
+        @extend %typo-caption;
         color: var(--text-outline-color);
       }
     }
@@ -197,7 +197,7 @@ export default {
   }
 
   .chat-message__sent-at {
-    @extend %typo-body-sm;
+    @extend %typo-caption;
     color: var(--text-outline-color);
     white-space: nowrap;
   }

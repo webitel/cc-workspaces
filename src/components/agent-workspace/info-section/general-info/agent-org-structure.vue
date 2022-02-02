@@ -56,11 +56,11 @@ export default {
     text-align: center;
 
     &__title {
-      @extend %typo-strong-lg;
+      @extend %typo-subtitle-1;
     }
 
     &__value {
-      @extend %typo-body-lg;
+      @extend %typo-body-1;
       overflow-wrap: break-word;
       word-break: break-all;
     }

@@ -277,7 +277,7 @@ export default {
 }
 
 .radial-progress-inner {
-  @extend %typo-strong-md;
+  @extend %typo-subtitle-2;
 
   position: absolute;
   top: 0;

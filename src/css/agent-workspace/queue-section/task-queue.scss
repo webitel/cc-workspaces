@@ -7,6 +7,6 @@
 }
 
 .task-queue__header__title {
-  @extend %typo-strong-sm;
+  @extend %typo-caption;
   color: var(--text-outline-color);
 }

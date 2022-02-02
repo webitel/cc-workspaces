@@ -35,7 +35,7 @@
   min-width: 0; // prevents queue-preview-header content overflowing
 
   &__name {
-    @extend %typo-strong-lg;
+    @extend %typo-subtitle-1;
     flex: 1 0 auto;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -57,7 +57,7 @@
 //}
 
 .queue-preview-body {
-  @extend %typo-body-md;
+  @extend %typo-body-2;
   color:var(--text-outline-color);
   @media screen and (max-width: 1336px) {
     display: none;

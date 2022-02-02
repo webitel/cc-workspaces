@@ -52,11 +52,11 @@ export default {
 
 <style lang="scss" scoped>
 .agent-queues {
-  @extend %typo-body-lg;
+  @extend %typo-body-1;
 }
 
 .agent-queues__headers {
-  @extend %typo-strong-lg;
+  @extend %typo-subtitle-1;
   display: grid;
   grid-template-columns: 2fr 2fr 1fr;
   justify-items: center;
@@ -83,7 +83,7 @@ export default {
   }
 
   .wt-chip {
-    @extend %typo-strong-sm;
+    @extend %typo-caption;
   }
 }
 </style>
