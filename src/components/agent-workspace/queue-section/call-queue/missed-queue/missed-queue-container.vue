@@ -57,6 +57,6 @@
     text-align: center;
     margin: 10px 0 5px;
     color: var(--text-outline-color);
-    background: var(--main-primary-color);
+    background: var(--main-color);
   }
 </style>

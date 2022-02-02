@@ -112,13 +112,13 @@ export default {
     height: 14px;
     margin-right: 11px;
     border-radius: 50%;
-    background: var(--main-accent-color);
+    background: var(--accent-color);
   }
 }
 
 .break-timer-wrap__timer-wrap {
   padding: 27px 51px;
-  background: var(--main-accent-color);
+  background: var(--accent-color);
   border-radius: var(--border-radius);
 }
 

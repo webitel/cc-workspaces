@@ -127,7 +127,7 @@ export default {
 
 .chat-footer__chat-preview {
   padding: 20px;
-  border: 1px solid var(--main-page-bg-color);
+  border: 1px solid var(--page-bg-color);
 
   .chat-footer__chat-preview-wrapper {
     width: 66%;

@@ -24,7 +24,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--main-primary-color);
+  background: var(--main-color);
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   z-index: 10;
@@ -36,10 +36,10 @@ export default {
     right: 0;
     bottom: 0;
     left: 0;
-    background: linear-gradient(90deg, var(--main-accent-color) 50%, transparent 50%),
-    linear-gradient(90deg, var(--main-accent-color) 50%, transparent 50%),
-    linear-gradient(0deg, var(--main-accent-color) 50%, transparent 50%),
-    linear-gradient(0deg, var(--main-accent-color) 50%, transparent 50%);
+    background: linear-gradient(90deg, var(--accent-color) 50%, transparent 50%),
+    linear-gradient(90deg, var(--accent-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--accent-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--accent-color) 50%, transparent 50%);
     background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
     background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
     background-position: 0 0, 100% 100%;
