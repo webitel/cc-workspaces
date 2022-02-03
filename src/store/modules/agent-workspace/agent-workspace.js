@@ -8,6 +8,8 @@ const getters = {
       ? rootState[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
       : {}
   ),
+
+  IS_EMPTY_WORKSPACE: (state) => !state.workspaceState,
 };
 
 const actions = {
