@@ -36,7 +36,7 @@ const actions = {
   HANDLE_RINGING_ACTION: (context, call) => {
     context.dispatch('ADD_CALL', call);
     if (call.direction === CallDirection.Outbound
-      || !Object.keys(context.rootGetters['workspace/TASK_ON_WORKSPACE']).length) {
+      || context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       context.dispatch('SET_WORKSPACE', call);
     }
   },
