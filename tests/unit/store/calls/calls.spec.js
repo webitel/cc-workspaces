@@ -10,7 +10,7 @@ describe('call store: actions', () => {
     state: { callOnWorkspace: call },
     dispatch: jest.fn(),
     commit: jest.fn(),
-    getters: { 'workspace/TASK_ON_WORKSPACE': null },
+    rootGetters: { 'workspace/IS_EMPTY_WORKSPACE': null },
   };
 
   beforeEach(() => {
@@ -33,13 +33,13 @@ describe('call store: actions', () => {
   });
 
   it('HANDLE_RINGING_ACTION action calls SET_WORKSPACE with call if no task on workspace', () => {
-    context.getters['workspace/TASK_ON_WORKSPACE'] = false;
+    context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = true;
     callModule.actions.HANDLE_RINGING_ACTION(context, call);
     expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', call);
   });
 
   it('HANDLE_RINGING_ACTION action does not call SET_WORKSPACE if something present in workspace', () => {
-    context.getters['workspace/TASK_ON_WORKSPACE'] = true;
+    context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = false;
     callModule.actions.HANDLE_RINGING_ACTION(context, call);
     expect(context.dispatch).not.toHaveBeenCalledWith('SET_WORKSPACE');
   });
