@@ -1,6 +1,6 @@
+import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
-import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import missed from './missed-calls/missed-calls';
 
 const state = {
@@ -166,6 +166,7 @@ const actions = {
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {
+    context.dispatch('notifications/PAUSE_SOUND', null, { root: true });
     if (context.state.callList.length > 1) {
       context.state.callList.forEach((call) => {
         if (call !== activeCall) context.dispatch('SET_HOLD', call);
