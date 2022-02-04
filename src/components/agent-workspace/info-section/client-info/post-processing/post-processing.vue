@@ -1,11 +1,11 @@
 <template>
-  <div class="post-processing">
+  <div v-if="showReportingForm" class="post-processing">
     <communication-popup
       v-show="isCommunicationPopup"
       :communication="taskPostProcessing.editedCommunication"
+      @close="closeCommunicationPopup"
       @submit:add="taskPostProcessing.addCommunication($event)"
       @submit:edit="taskPostProcessing.editCommunication($event)"
-      @close="closeCommunicationPopup"
     ></communication-popup>
     <post-processing-wrapper
       v-show="!isCommunicationPopup"
@@ -17,23 +17,23 @@
       <template slot="main">
         <div class="post-processing__status-wrapper">
           <wt-button
-            class="post-processing__status-control"
             :outline="!taskPostProcessing.success"
+            class="post-processing__status-control"
             color="success"
             @click="setSuccess(true)"
           >{{ $t('infoSec.postProcessing.yes') }}
           </wt-button>
           <wt-button
-            class="post-processing__status-control"
             :outline="taskPostProcessing.success"
+            class="post-processing__status-control"
             color="danger"
             @click="setSuccess(false)"
           >{{ $t('infoSec.postProcessing.no') }}
           </wt-button>
         </div>
-        <success-form v-show="taskPostProcessing.success"/>
-        <failure-form v-show="!taskPostProcessing.success"/>
-        <post-processing-timer-wrapper/>
+        <success-form v-show="taskPostProcessing.success" />
+        <failure-form v-show="!taskPostProcessing.success" />
+        <post-processing-timer-wrapper />
       </template>
       <template slot="actions">
         <wt-button
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import PostProcessingTimerWrapper from './_internals/post-processing-timer-wrapper.vue';
 import PostProcessingWrapper from './_internals/post-processing-wrapper.vue';
 import CommunicationPopup from './member-communications/post-processing-communication-popup.vue';
@@ -66,12 +66,19 @@ export default {
 
   computed: {
     ...mapGetters('reporting', {
+      isTaskReporting: 'IS_TASK_REPORTING',
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
     }),
+    showReportingForm() {
+      return this.isTaskReporting && this.taskPostProcessing;
+    },
   },
 
   methods: {
+    ...mapActions('reporting', {
+      initReportingForm: 'INIT_POST_PROCESSING_FORM',
+    }),
     sendReporting() {
       this.taskPostProcessing.send();
     },
@@ -82,6 +89,12 @@ export default {
       if (this.taskPostProcessing.editedCommunication) {
         this.taskPostProcessing.editedCommunication = null;
       } else this.taskPostProcessing.isNewCommunication = false;
+    },
+  },
+  watch: {
+    isTaskReporting: {
+      handler() { this.initReportingForm(); },
+      immediate: true,
     },
   },
 };
