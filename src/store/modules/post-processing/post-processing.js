@@ -8,6 +8,7 @@ const state = {
 const getters = {
   IS_TASK_REPORTING: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].hasReporting,
   TASK_POST_PROCESSING: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].postProcessData,
+  REPORTED_AT: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].task.reportedAt,
   IS_MEMBER: (state, getters, rootState, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].isMember,
   IS_COMMUNICATION_POPUP: (state, getters) => getters.TASK_POST_PROCESSING?.isNewCommunication
     || getters.TASK_POST_PROCESSING?.editedCommunication,
