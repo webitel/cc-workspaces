@@ -18,6 +18,7 @@ const mockReporting = jest.fn();
 const callOnWorkspace = {
   hasReporting: true,
   reporting: mockReporting,
+  task: { reportedAt: 0 },
 };
 callOnWorkspace.postProcessData = new Reporting(callOnWorkspace);
 
