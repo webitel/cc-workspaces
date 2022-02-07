@@ -70,16 +70,16 @@ export default {
       isTaskReporting: 'IS_TASK_REPORTING',
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
-      reportedAt: 'REPORTED_AT',
+      reportingSent: 'REPORTING_SENT',
     }),
     showReportingForm() {
       return this.isTaskReporting && this.taskPostProcessing;
     },
     reportButtonColor() {
-      return this.reportedAt ? 'secondary' : 'primary';
+      return this.reportingSent ? 'secondary' : 'primary';
     },
     reportButtonText() {
-      return this.reportedAt ? this.$t('reusable.edit') : this.$t('reusable.send');
+      return this.reportingSent ? this.$t('reusable.edit') : this.$t('reusable.send');
     },
   },
 
