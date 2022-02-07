@@ -37,9 +37,10 @@
       </template>
       <template slot="actions">
         <wt-button
+          :color="reportButtonColor"
           class="post-processing__submit-btn"
           @click="sendReporting"
-        >{{ $t('reusable.send') }}
+        >{{ reportButtonText }}
         </wt-button>
       </template>
     </post-processing-wrapper>
@@ -69,9 +70,16 @@ export default {
       isTaskReporting: 'IS_TASK_REPORTING',
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
+      reportingSent: 'REPORTING_SENT',
     }),
     showReportingForm() {
       return this.isTaskReporting && this.taskPostProcessing;
+    },
+    reportButtonColor() {
+      return this.reportingSent ? 'secondary' : 'primary';
+    },
+    reportButtonText() {
+      return this.reportingSent ? this.$t('reusable.edit') : this.$t('reusable.send');
     },
   },
 
