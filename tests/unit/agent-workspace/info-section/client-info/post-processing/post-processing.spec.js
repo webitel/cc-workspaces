@@ -1,22 +1,58 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import Reporting from '../../../../../../src/store/modules/post-processing/Reporting';
-import PostProcessingTab
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing.vue';
-import SuccessForm
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-success-form.vue';
 import FailureForm
   from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-failure-form.vue';
-import postProcessingModule from '../../../../../../src/store/modules/post-processing/post-processing';
+import SuccessForm
+  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-success-form.vue';
+import PostProcessingTab
+  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing.vue';
+import postProcessingModule
+  from '../../../../../../src/store/modules/post-processing/post-processing';
+import Reporting
+  from '../../../../../../src/store/modules/post-processing/Reporting';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 const mockReporting = jest.fn();
 const callOnWorkspace = {
+  hasReporting: true,
   reporting: mockReporting,
 };
 callOnWorkspace.postProcessData = new Reporting(callOnWorkspace);
+
+describe('Post processing appearance and form setting', () => {
+  let state;
+  let store;
+  const initReportingFormMock = jest.fn();
+
+  beforeEach(() => {
+    store = new Vuex.Store({
+                             state,
+                             modules: {
+                               reporting: postProcessingModule,
+                               workspace: {
+                                 namespaced: true,
+                                 getters: {
+                                   TASK_ON_WORKSPACE: () => callOnWorkspace,
+                                 },
+                               },
+                             },
+                           });
+
+    initReportingFormMock.mockClear();
+    jest.spyOn(PostProcessingTab.methods, 'initReportingForm')
+        .mockImplementationOnce(initReportingFormMock);
+  });
+
+  it('post processing immediately calls initReportingForm', () => {
+    shallowMount(PostProcessingTab, { store, localVue });
+    expect(initReportingFormMock).toHaveBeenCalled();
+  });
+
+  // https://github.com/vuejs/vue-test-utils/issues/331#issuecomment-382037200
+  // it('post processing calls initReportingForm after isTaskReporting getter change', async () => {});
+});
 
 describe('Post processing Success reporting', () => {
   let state;
@@ -24,17 +60,17 @@ describe('Post processing Success reporting', () => {
 
   beforeEach(() => {
     store = new Vuex.Store({
-      state,
-      modules: {
-        reporting: postProcessingModule,
-        workspace: {
-          namespaced: true,
-          getters: {
-            TASK_ON_WORKSPACE: () => callOnWorkspace,
-          },
-        },
-      },
-    });
+                             state,
+                             modules: {
+                               reporting: postProcessingModule,
+                               workspace: {
+                                 namespaced: true,
+                                 getters: {
+                                   TASK_ON_WORKSPACE: () => callOnWorkspace,
+                                 },
+                               },
+                             },
+                           });
   });
 
   it('post processing success form is initially visible', async () => {
@@ -44,8 +80,9 @@ describe('Post processing Success reporting', () => {
   });
 
   it('At success submit, calls taskOnWorkspace sendReport() method', () => {
-    const sendReportMock = jest.spyOn(PostProcessingTab.methods, 'sendReporting').mockImplementation(() => {
-    });
+    const sendReportMock = jest.spyOn(PostProcessingTab.methods, 'sendReporting')
+                               .mockImplementation(() => {
+                               });
     const wrapper = shallowMount(PostProcessingTab, { store, localVue });
     wrapper.findAllComponents({ name: 'wt-button' }).at(-1).vm.$emit('click');
     expect(sendReportMock).toHaveBeenCalled();
@@ -61,17 +98,17 @@ describe('Post processing Failure reporting', () => {
       callOnWorkspace,
     };
     store = new Vuex.Store({
-      state,
-      modules: {
-        reporting: postProcessingModule,
-        workspace: {
-          namespaced: true,
-          getters: {
-            TASK_ON_WORKSPACE: () => callOnWorkspace,
-          },
-        },
-      },
-    });
+                             state,
+                             modules: {
+                               reporting: postProcessingModule,
+                               workspace: {
+                                 namespaced: true,
+                                 getters: {
+                                   TASK_ON_WORKSPACE: () => callOnWorkspace,
+                                 },
+                               },
+                             },
+                           });
   });
 
   it('post processing failure form is initially invisible', async () => {
@@ -83,8 +120,8 @@ describe('Post processing Failure reporting', () => {
   it('Opens failure form on radio click', async () => {
     const wrapper = shallowMount(PostProcessingTab, { store, localVue });
     wrapper.findAllComponents({ name: 'wt-button' })
-      .wrappers.find((button) => button.attributes().color === 'danger')
-      .vm.$emit('click');
+           .wrappers.find((button) => button.attributes().color === 'danger')
+           .vm.$emit('click');
     await wrapper.vm.$nextTick(); // re-render
     const failureForm = wrapper.findComponent(FailureForm);
     expect(failureForm.isVisible()).toBe(true);

@@ -2,14 +2,11 @@
   <section class="client-info">
     <client-info-badges/>
     <client-info-markdown/>
-    <post-processing
-      v-if="taskOnWorkspace.allowReporting"
-    ></post-processing>
+    <post-processing/>
   </section>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
 import PostProcessing from './post-processing/post-processing.vue';
 import ClientInfoBadges from './queue-name/client-info-badges.vue';
@@ -20,13 +17,6 @@ export default {
     ClientInfoMarkdown,
     PostProcessing,
     ClientInfoBadges,
-  },
-  data: () => ({}),
-
-  computed: {
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
   },
 };
 </script>
