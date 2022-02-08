@@ -53,6 +53,46 @@ describe('Post processing appearance and form setting', () => {
 
   // https://github.com/vuejs/vue-test-utils/issues/331#issuecomment-382037200
   // it('post processing calls initReportingForm after isTaskReporting getter change', async () => {});
+
+  it('should render report button color "secondary"', () => {
+    const wrapper = shallowMount(PostProcessingTab, {
+      store,
+      localVue,
+      computed: {
+        reportingSent() {
+          return 1;
+        },
+      },
+    });
+    const { reportButtonColor } = wrapper.vm;
+    expect(reportButtonColor).toBe('secondary');
+  });
+
+  it('should render report button text "Edit"', () => {
+    const wrapper = shallowMount(PostProcessingTab, {
+      store,
+      localVue,
+      computed: {
+        reportingSent() {
+          return 1;
+        },
+      },
+    });
+    const { reportButtonText } = wrapper.vm;
+    expect(reportButtonText).toBe('reusable.edit');
+  });
+
+  it('should render report button color "primary"', () => {
+    const wrapper = shallowMount(PostProcessingTab, { store, localVue });
+    const { reportButtonColor } = wrapper.vm;
+    expect(reportButtonColor).toBe('primary');
+  });
+
+  it('should render report button text "Send"', () => {
+    const wrapper = shallowMount(PostProcessingTab, { store, localVue });
+    const { reportButtonText } = wrapper.vm;
+    expect(reportButtonText).toBe('reusable.send');
+  });
 });
 
 describe('Post processing Success reporting', () => {
