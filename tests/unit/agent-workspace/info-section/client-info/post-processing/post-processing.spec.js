@@ -16,7 +16,7 @@ localVue.use(Vuex);
 
 const mockReporting = jest.fn();
 const callOnWorkspace = {
-  hasReporting: true,
+  allowReporting: true,
   reporting: mockReporting,
 };
 callOnWorkspace.postProcessData = new Reporting(callOnWorkspace);
