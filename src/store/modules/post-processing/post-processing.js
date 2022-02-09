@@ -6,7 +6,7 @@ const state = {
 };
 
 const getters = {
-  IS_TASK_REPORTING: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].hasReporting,
+  IS_TASK_REPORTING: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].allowReporting,
   TASK_POST_PROCESSING: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].postProcessData,
   REPORTING_SENT: (s, g, rS, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].task.reportedAt,
   IS_MEMBER: (state, getters, rootState, rootGetters) => rootGetters['workspace/TASK_ON_WORKSPACE'].isMember,
