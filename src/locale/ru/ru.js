@@ -12,6 +12,7 @@ export default {
     search: 'Поиск',
     description: 'Описание',
     settings: 'Настройки',
+    edit: 'Редактировать',
   },
   appNavigator: {
     title: 'Приложения Webitel',

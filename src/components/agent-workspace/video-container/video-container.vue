@@ -65,12 +65,12 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import RoundedAction from '../../utils/rounded-action.vue';
+  // import RoundedAction from '../../utils/rounded-action.vue';
 
   export default {
     name: 'video-container',
     components: {
-      RoundedAction,
+      // RoundedAction,
     },
 
     data: () => ({

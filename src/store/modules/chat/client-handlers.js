@@ -32,7 +32,7 @@ const actions = {
 
   HANDLE_INVITE_ACTION: (context, chat) => {
     context.dispatch('ADD_CHAT', chat);
-    if (!context.getters['workspace/TASK_ON_WORKSPACE']) {
+    if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       context.dispatch('SET_WORKSPACE', chat);
     }
   },
