@@ -31,7 +31,7 @@
       <div class="actions-wrap actions-wrap__right">
         <wt-rounded-action
           v-if="isBridge"
-          class="call-action bridge"
+          class="call-action"
           :active="isOnBridge"
           icon="call-add-to"
           color="secondary"
@@ -50,7 +50,7 @@
         ></wt-rounded-action>
         <wt-rounded-action
           v-if="isHangup"
-          class="call-action end"
+          class="call-action"
           icon="call-end"
           color="danger"
           rounded
@@ -71,8 +71,8 @@
 
     <div class="call-header__number">
       <div v-if="!isNumberInput">
-        <div class="call-profile__name">{{displayName}}</div>
-        <div class="call-profile__number">{{displayNumber}}</div>
+        <div class="call-profile__name">{{ displayName }}</div>
+        <div class="call-profile__number">{{ displayNumber }}</div>
       </div>
       <form
         v-else

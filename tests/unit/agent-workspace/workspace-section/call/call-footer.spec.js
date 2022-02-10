@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import findRoundedActionByIcon from '../../../../utils/findRoundedActionByIcon';
 import callModule from '../../../../../src/store/modules/call/call';
 import CallFooter
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-footer.vue';
@@ -40,7 +41,7 @@ describe('Footer buttons', () => {
       store,
       localVue,
     });
-    const numpad = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(0);
+    const numpad = findRoundedActionByIcon('numpad')(wrapper);
     numpad.vm.$emit('click');
     expect(wrapper.emitted().openTab[0]).toEqual(['numpad']);
   });
@@ -50,7 +51,7 @@ describe('Footer buttons', () => {
       store,
       localVue,
     });
-    const mute = wrapper.find('.call-action__mic');
+    const mute = findRoundedActionByIcon('mic')(wrapper);
     expect(mute.classes())
       .not
       .toContain('hidden');
@@ -64,7 +65,7 @@ describe('Footer buttons', () => {
       store,
       localVue,
     });
-    const hold = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(2);
+    const hold = findRoundedActionByIcon('hold')(wrapper);
     expect(hold.classes())
       .not
       .toContain('hidden');
