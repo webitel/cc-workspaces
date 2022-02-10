@@ -117,11 +117,11 @@
   }
 
   .ws-contact-item__name {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
   }
 
   .ws-contact-item__number {
-    @extend .typo-body-sm;
+    @extend %typo-caption;
   }
 
   .ws-contact-item__status {

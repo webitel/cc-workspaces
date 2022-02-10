@@ -8,13 +8,13 @@ $input-icon-color__active: #000000;
 $input-border-color__active: #000000;
 
 .cc-label {
-  @extend .typo-input;
+  @extend %typo-body-1;
   display: inline-block;
   color: #000;
 }
 
 .cc-err-message {
-  @extend .typo-body-md;
+  @extend %typo-body-2;
   color: #000;
 }
 
@@ -41,7 +41,7 @@ $input-border-color__active: #000000;
 }
 
 .cc-textarea__textarea {
-  @extend .typo-input;
+  @extend %typo-body-1;
   width: 100%;
   height: 100%;
   border: none;
@@ -108,7 +108,7 @@ $input-border-color__active: #000000;
 }
 
 .cc-input__input {
-  @extend .typo-input;
+  @extend %typo-body-1;
   width: 100%;
   margin: 0 (8px);
   border: none;
@@ -148,7 +148,7 @@ $input-border-color__active: #000000;
 }
 
 .input__short {
-  @extend .typo-input;
+  @extend %typo-body-1;
   text-align: center;
   width: (40px);
   padding: (9px) (4px); // 10px 5px - borders

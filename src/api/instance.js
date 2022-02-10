@@ -38,7 +38,7 @@ instance.interceptors.response.use(
       localStorage.removeItem('access-token');
     }
     // if error isn't 401, returns it
-    eventBus.$emit('notificationError', error.response.data.detail);
+    eventBus.$emit('notification', { type: 'error', text: error.response.data.detail });
     return Promise.reject(error.response.data);
   },
 );

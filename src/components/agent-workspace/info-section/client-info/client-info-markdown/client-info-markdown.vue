@@ -41,6 +41,6 @@ export default {
 @import '../../../../../../node_modules/github-markdown-css/github-markdown.css';
 
 .md {
-  @extend .typo-body-md;
+  @extend %typo-body-2;
 }
 </style>

@@ -2,7 +2,7 @@
   <main v-if="hasAccess" class="main-agent-workspace" @dragenter.prevent @dragover.prevent @drop="preventDrop">
     <disconnect-popup/>
 
-    <notification/>
+    <wt-notifications-bar/>
     <cc-header/>
     <div class="workspace-wrap">
       <widget-bar/>
@@ -21,7 +21,6 @@
 <script>
   import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
   import { mapActions, mapGetters } from 'vuex';
-  import Notification from '../utils/notification.vue';
   import CcHeader from '../shared/app-header/app-header.vue';
   import WidgetBar from './widget-bar/widget-bar.vue';
   import QueueSection from './queue-section/the-agent-queue-section.vue';
@@ -35,7 +34,6 @@
     name: 'the-agent-workspace',
     mixins: [ringingSoundMixin],
     components: {
-      Notification,
       CcHeader,
       WidgetBar,
       QueueSection,
@@ -94,11 +92,11 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: 20px 30px;
+    padding: var(--spacing-sm);
     box-sizing: border-box;
 
     @media screen and (max-height: 768px) {
-      padding: 15px;
+      //padding: 15px;
     }
   }
 
@@ -106,9 +104,9 @@
     flex-grow: 1;
     display: grid;
     grid-template-columns: 340px 550px 1fr;
-    grid-gap: 20px;
+    grid-gap: var(--spacing-sm);
     min-height: 0;
-    margin-top: 20px;
+    margin-top: var(--spacing-sm);
 
     .workspace-section {
       max-height: 100%;
@@ -120,8 +118,8 @@
     }
 
     @media screen and (max-height: 768px) {
-      grid-gap: 15px;
-      margin-top: 15px;
+      //grid-gap: 15px;
+      //margin-top: 15px;
     }
   }
 </style>

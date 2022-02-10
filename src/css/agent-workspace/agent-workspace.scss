@@ -29,13 +29,13 @@
   }
 
   &__list-instruction {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     text-align: center;
     margin-bottom: 17px;
   }
 
   .ws-worksection__list {
-    @extend .cc-scrollbar;
+    @extend %wt-scrollbar;
     flex-grow: 1;
     position: relative;
     display: flex;
@@ -49,7 +49,7 @@
   }
 
   .ws-worksection__list-separator {
-    @extend .typo-body-md;
+    @extend %typo-body-2;
     text-align: center;
     color: $separator-color;
     margin: 10px 0;
@@ -100,9 +100,9 @@
 }
 
 .ws-contact-item__name {
-  @extend .typo-heading-sm;
+  @extend %typo-subtitle-1;
 }
 
 .ws-contact-item__number {
-  @extend .typo-body-sm;
+  @extend %typo-caption;
 }

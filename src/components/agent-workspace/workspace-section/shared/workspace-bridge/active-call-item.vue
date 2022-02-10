@@ -67,7 +67,7 @@
 
     .ws-worksection__item__time {
       .queue-preview-header__time-digit {
-        @extend .typo-body-md;
+        @extend %typo-body-2;
         text-align: center;
         display: inline-block;
         width: 9.5px;
@@ -79,7 +79,7 @@
       }
 
       &__bold .queue-preview-header__time-digit {
-        font-family: 'Montserrat Semi', monospace;
+        @extend %typo-subtitle-2;
       }
     }
   }

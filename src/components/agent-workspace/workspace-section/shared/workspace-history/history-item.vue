@@ -137,19 +137,19 @@ export default {
 }
 
 .ws-history-item__number {
-  @extend .typo-heading-sm;
+  @extend %typo-subtitle-1;
 }
 
 .ws-history-item__time {
-  @extend .typo-body-md;
+  @extend %typo-body-2;
 }
 
 .ws-history-item__date {
-  @extend .typo-body-sm;
+  @extend %typo-caption;
 }
 
 .ws-history-item__location {
-  @extend .typo-body-sm;
+  @extend %typo-caption;
 }
 
 .ws-worksection__item__status {

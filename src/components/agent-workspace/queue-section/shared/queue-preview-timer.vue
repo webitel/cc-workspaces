@@ -45,7 +45,7 @@ export default {
   }
 
   &--bold .call-preview-timer__digit {
-    font-family: 'Montserrat Semi', monospace;
+    @extend %typo-subtitle-2;
   }
 }
 </style>

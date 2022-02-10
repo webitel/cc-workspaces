@@ -248,12 +248,12 @@
     align-items: stretch;
 
     .call-profile__name {
-      @extend .typo-heading-sm;
+      @extend %typo-subtitle-1;
       margin-bottom: 5px;
     }
 
     .call-profile__number {
-      @extend .typo-body-md;
+      @extend %typo-body-2;
       margin-bottom: 10px;
     }
 
@@ -265,7 +265,7 @@
       align-items: flex-end;
 
       &__input {
-        @extend .typo-input;
+        @extend %typo-body-1;
         text-align: center;
 
         // make bottom border overflowing divider

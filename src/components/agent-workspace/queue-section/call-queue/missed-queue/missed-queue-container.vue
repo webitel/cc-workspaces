@@ -53,7 +53,7 @@
 @import '../../../../../css/agent-workspace/queue-section/queue-task-container';
 
   .queue-task-container__heading {
-    @extend .typo-body-md;
+    @extend %typo-body-2;
     text-align: center;
     margin: 10px 0 5px;
     color: var(--text-outline-color);

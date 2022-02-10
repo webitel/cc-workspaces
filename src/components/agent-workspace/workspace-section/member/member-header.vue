@@ -92,7 +92,7 @@
   }
 
   .call-header__name {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     text-align: center;
     margin-top: 10px;
   }

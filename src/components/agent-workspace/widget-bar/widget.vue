@@ -68,18 +68,6 @@ $widget-missed-color: $false-color;
 $widget-avg-talk-color: #239AC0;
 $widget-avg-hold-color: $accent-color;
 
-.typo-widget-title {
-  font-family: 'Montserrat Regular', monospace;
-  font-size: 10px;
-  line-height: 10px;
-}
-
-.typo-widget-value {
-  font-family: 'Montserrat Semi', monospace;
-  font-size: 10px;
-  line-height: 10px;
-}
-
 .widget {
   display: flex;
   align-items: center;
@@ -89,12 +77,12 @@ $widget-avg-hold-color: $accent-color;
   white-space: nowrap;
 
   .widget__title {
-    @extend .typo-widget-title;
+    @extend %typo-caption;
     margin-right: 5px;
   }
 
   .widget__value {
-    @extend .typo-widget-value;
+    @extend %typo-caption;
   }
 
   @media screen and (max-width: 1336px) {
