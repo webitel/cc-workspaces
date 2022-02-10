@@ -133,11 +133,11 @@
       border-radius: 50%;
 
       &.active {
-        background: $true-color;
+        background: var(--true-color);
       }
 
       &.dnd {
-        background: $break-color;
+        background: var(--accent-color);
       }
 
       &.offline {
@@ -145,7 +145,7 @@
       }
 
       &.busy {
-        background: $false-color;
+        background: var(--false-color);
       }
     }
   }

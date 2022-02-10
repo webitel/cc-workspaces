@@ -1,9 +1,9 @@
 <template>
   <div class="ws-worksection">
-    <search
+    <wt-search-bar
       v-model="search"
       @search="resetData"
-    />
+    ></wt-search-bar>
 
     <section class="ws-worksection__list" ref="scroll-wrap">
 
@@ -63,7 +63,7 @@
 <style lang="scss" scoped>
   .ws-contact-item {
     &:hover {
-      background-color: $page-bg-color;
+      background-color: var(--page-bg-color);
     }
   }
 </style>

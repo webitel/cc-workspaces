@@ -1,10 +1,8 @@
 import Observer from '../components/utils/scroll-observer.vue';
-import Search from '../components/utils/search-input.vue';
 
 export default {
   components: {
     Observer,
-    Search,
   },
 
   data: () => ({

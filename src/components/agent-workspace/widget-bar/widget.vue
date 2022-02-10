@@ -62,11 +62,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$widget-inbound-color: $accent-color;
-$widget-handles-color: $true-color;
-$widget-missed-color: $false-color;
+$widget-inbound-color: var(--accent-color);
+$widget-handles-color: var(--true-color);
+$widget-missed-color: var(--false-color);
 $widget-avg-talk-color: #239AC0;
-$widget-avg-hold-color: $accent-color;
+$widget-avg-hold-color: var(--accent-color);
 
 .widget {
   display: flex;

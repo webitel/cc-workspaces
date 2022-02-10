@@ -50,7 +50,7 @@
 
     &:hover,
     &.selected {
-      border-color: $accent-color;
+      border-color: var(--accent-color);
     }
 
     &__type {

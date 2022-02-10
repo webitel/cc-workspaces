@@ -1,7 +1,5 @@
 @import "~@webitel/ui-sdk/src/css/main.scss";
-@import "./utils/variables";
 @import "./utils/helper-classes";
-@import "./styleguide/styleguide";
 
 @import "./agent-workspace/agent-workspace";
 
@@ -16,7 +14,7 @@ body {
   height: 100%;
   margin: 0;
   font-size: 100%;
-  background: $page-bg-color;
+  background: var(--page-bg-color);
 
   @media screen and (max-height: 610px) {
    min-height: 610px;

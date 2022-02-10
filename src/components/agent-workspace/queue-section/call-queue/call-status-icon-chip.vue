@@ -1,74 +1,54 @@
 <template>
-  <aside class="call-status-chip" :class="computeChipClass">
-    <icon>
-      <svg class="icon sm">
-        <use :xlink:href="`#icon-${computeIconClass}-sm`"></use>
-      </svg>
-    </icon>
+  <aside class="call-status-chip">
+    <wt-icon
+      :icon="icon"
+      :color="iconColor"
+      size="sm"
+    ></wt-icon>
   </aside>
 </template>
 
 <script>
-  export default {
-    name: 'call-status-icon-chip',
-    props: {
-      state: {
-        type: String,
-        default: 'call',
-      },
+export default {
+  name: 'call-status-icon-chip',
+  props: {
+    state: {
+      type: String,
+      default: 'call',
     },
+  },
 
-    computed: {
-      computeChipClass() {
-        switch (this.state) {
-          case 'call': return 'call';
-          case 'hold': return 'hold';
-          case 'missed': return 'missed'; // missed -> missed
-          default: return 'call';
-        }
-      },
-      computeIconClass() {
-        switch (this.state) {
-          case 'call': return 'call';
-          case 'hold': return 'hold';
-          case 'missed': return 'call'; // missed -> call icon
-          default: return 'call';
-        }
-      },
+  computed: {
+    icon() {
+      switch (this.state) {
+        case 'call':
+          return 'call';
+        case 'hold':
+          return 'hold';
+        case 'missed':
+          return 'missed'; // missed -> missed
+        default:
+          return 'call';
+      }
     },
-  };
+    iconColor() {
+      switch (this.state) {
+        case 'call':
+          return 'success';
+        case 'hold':
+          return 'hold';
+        case 'missed':
+          return 'danger'; // missed -> missed
+        default:
+          return 'success';
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .call-status-chip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 17px;
-    height: 17px;
-    margin-right: var(--spacing-xs);
-    border-radius: 50%;
-
-    .icon-wrap {
-      width: 17px;
-      height: 17px;
-    }
-
-    .icon {
-      fill: #fff;
-      stroke: #fff;
-    }
-
-    &.call {
-      background: $call-btn-color;
-    }
-
-    &.hold {
-      background: $hold-btn-color;
-    }
-
-    &.missed {
-      background: $disconnect-color;
-    }
-  }
+.call-status-chip {
+  margin-right: var(--spacing-xs);
+}
 </style>

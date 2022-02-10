@@ -120,7 +120,7 @@ export default {
   cursor: pointer;
 
   &:hover {
-    background: $page-bg-color;
+    background: var(--page-bg-color);
   }
 }
 
@@ -150,22 +150,5 @@ export default {
 
 .ws-history-item__location {
   @extend %typo-caption;
-}
-
-.ws-worksection__item__status {
-  .outbound {
-    stroke: $call-color;
-    fill: $call-color;
-  }
-
-  .missed {
-    stroke: $disconnect-color;
-    fill: $disconnect-color;
-  }
-
-  .inbound {
-    stroke: $icons-color;
-    fill: $icons-color;
-  }
 }
 </style>

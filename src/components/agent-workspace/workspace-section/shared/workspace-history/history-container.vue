@@ -1,9 +1,9 @@
 <template>
   <div class="ws-worksection">
-    <search
+    <wt-search-bar
       v-model="search"
       @search="resetData"
-    />
+    ></wt-search-bar>
     <section class="ws-worksection__list" ref="scroll-wrap">
       <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'history'"></empty-search>
@@ -27,7 +27,6 @@
 <script>
   import { mapActions, mapGetters, mapState } from 'vuex';
   import { CallDirection } from 'webitel-sdk';
-  import Search from '../../../../utils/search-input.vue';
   import HistoryItem from './history-item.vue';
   import EmptySearch from '../workspace-empty-search/empty-search.vue';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
@@ -41,7 +40,6 @@
     name: 'history-container',
     mixins: [infiniteScrollMixin],
     components: {
-      Search,
       HistoryItem,
       EmptySearch,
     },

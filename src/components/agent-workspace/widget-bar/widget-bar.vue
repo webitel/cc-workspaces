@@ -135,7 +135,7 @@ export default {
 .widget-bar {
   display: flex;
   background: #fff;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
 }
 
 .widgets-wrap {
