@@ -22,22 +22,30 @@
           <wt-rounded-action
             class="rounded-action-file-input"
             color="secondary"
+            icon="attach"
+            rounded
+            wide
+            @click="triggerAttachmentInput"
+          ></wt-rounded-action>
+          <input
+            ref="attachment-input"
+            class="rounded-action-file-input__input"
+            type="file"
+            multiple
+            @change="handleAttachments"
           >
-            <wt-icon icon="attach"></wt-icon>
-            <input
-              ref="attachment-input"
-              class="rounded-action-file-input__input"
-              type="file"
-              multiple
-              @change="handleAttachments"
-            >
-          </wt-rounded-action>
         </div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper">
-          <wt-rounded-action icon="chat-send" color="secondary" @click="sendMessage"></wt-rounded-action>
+          <wt-rounded-action
+            icon="chat-send"
+            color="secondary"
+            rounded
+            wide
+            @click="sendMessage"
+          ></wt-rounded-action>
         </div>
       </div>
     </div>
@@ -79,6 +87,10 @@ export default {
       send: 'SEND',
       sendFile: 'SEND_FILE',
     }),
+
+    triggerAttachmentInput() {
+      this.$refs['attachment-input'].click();
+    },
 
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
@@ -164,18 +176,13 @@ export default {
     }
   }
 }
-.rounded-action-file-input {
+.chat-footer__cell-wrapper {
   position: relative;
   .rounded-action-file-input__input {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
+    width: 0;
+    height: 0;
+    visibility: hidden;
   }
 }
 </style>

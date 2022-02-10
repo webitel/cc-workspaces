@@ -13,6 +13,8 @@
         v-show="isCloseAction"
         icon="chat-end"
         color="danger"
+        rounded
+        wide
         @click="close"
       ></wt-rounded-action>
     </div>

@@ -3,10 +3,11 @@
 
     <div class="ws-worksection__item__pic-wrap">
       <wt-rounded-action
+        v-show="callable"
         class="ws-contact-item__call-action"
-        :class="{'d-none': !callable}"
         icon="call-ringing"
         color="success"
+        rounded
         @click="makeCall({user: item})"
       ></wt-rounded-action>
       <img

@@ -4,16 +4,20 @@
       <div class="actions-wrap actions-wrap__left">
         <wt-rounded-action
           class="call-action"
-          :class="{ 'active': isOnHistory }"
+          :active="isOnHistory"
           icon="history"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'history')"
         ></wt-rounded-action>
         <wt-rounded-action
           class="call-action"
-          :class="{ 'active': isOnContacts }"
+          :active="isOnContacts"
           icon="contacts"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'contacts')"
         ></wt-rounded-action>
       </div>
@@ -28,16 +32,20 @@
         <wt-rounded-action
           v-if="isBridge"
           class="call-action bridge"
-          :class="{ 'active': isOnBridge }"
+          :active="isOnBridge"
           icon="call-add-to"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'bridge')"
         ></wt-rounded-action>
         <wt-rounded-action
           v-if="isTransfer"
-          class="call-action transfer"
+          class="call-action"
           icon="call-transfer"
           color="transfer"
+          rounded
+          wide
           @click="$emit('openTab', 'transfer')"
         ></wt-rounded-action>
         <wt-rounded-action
@@ -45,13 +53,17 @@
           class="call-action end"
           icon="call-end"
           color="danger"
+          rounded
+          wide
           @click="hangup"
         ></wt-rounded-action>
         <wt-rounded-action
           v-if="isCall"
-          class="call-action call"
+          class="call-action"
           icon="call-ringing"
           color="success"
+          rounded
+          wide
           @click="makeCall"
         ></wt-rounded-action>
       </div>

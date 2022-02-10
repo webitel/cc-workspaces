@@ -6,19 +6,22 @@
         <wt-rounded-action
           icon="call"
           color="success"
-          size="lg"
+          rounded
+          wide
           @click="answer"
         ></wt-rounded-action>
         <wt-rounded-action
           icon="call-transfer"
           color="transfer"
-          size="lg"
+          rounded
+          wide
           @click="openTransfer"
         ></wt-rounded-action>
         <wt-rounded-action
           icon="call-end"
           color="danger"
-          size="lg"
+          rounded
+          wide
           @click="hangup"
         ></wt-rounded-action>
       </div>

@@ -9,6 +9,7 @@
       color="success"
       icon="call-ringing"
       size="lg"
+      rounded
       @click="openNewCall"
     ></wt-rounded-action>
   </section>
