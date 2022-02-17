@@ -1,5 +1,8 @@
 <template>
-  <footer class="chat-footer">
+  <footer
+    v-clickaway="closeEmojiPicker"
+    class="chat-footer"
+  >
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
@@ -11,10 +14,10 @@
         ref="message-draft"
         v-model="draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
-        name="draft"
         chat-mode
-        @paste="handleFilePaste"
+        name="draft"
         @enter="sendMessage"
+        @paste="handleFilePaste"
       ></wt-textarea>
       <div class="chat-footer__actions">
         <div class="chat-footer__cell-wrapper"></div>
@@ -27,17 +30,27 @@
             <input
               ref="attachment-input"
               class="rounded-action-file-input__input"
-              type="file"
               multiple
+              type="file"
               @change="handleAttachments"
             >
           </wt-rounded-action>
         </div>
-        <div class="chat-footer__cell-wrapper"></div>
+        <div class="chat-footer__cell-wrapper">
+          <wt-rounded-action
+            color="secondary"
+            icon="chat-emoji"
+            @click="isEmojiPickerOpened = !isEmojiPickerOpened"
+          ></wt-rounded-action>
+          <chat-emoji
+            v-if="isEmojiPickerOpened"
+            @emoji-click="addEmoji"
+          ></chat-emoji>
+        </div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper">
-          <wt-rounded-action icon="chat-send" color="secondary" @click="sendMessage"></wt-rounded-action>
+          <wt-rounded-action color="secondary" icon="chat-send" @click="sendMessage"></wt-rounded-action>
         </div>
       </div>
     </div>
@@ -45,12 +58,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import insertText from 'insert-text-at-cursor';
+import { mapActions, mapGetters } from 'vuex';
+import chatEmoji from '../chat-emoji/chat-emoji.vue';
 
 export default {
   name: 'chat-footer',
+  components: { chatEmoji },
   data: () => ({
     draft: '',
+    isEmojiPickerOpened: false,
   }),
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
@@ -80,6 +97,16 @@ export default {
       sendFile: 'SEND_FILE',
     }),
 
+    addEmoji(event) {
+      // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
+      const messageDraft = this.$refs['message-draft'];
+      const textarea = messageDraft.$el.querySelector('textarea');
+      insertText(textarea, event.detail.unicode);
+    },
+
+    closeEmojiPicker() {
+      this.isEmojiPickerOpened = false;
+    },
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
       if (!messageDraft) return;
@@ -93,10 +120,10 @@ export default {
         .from(event.clipboardData.items)
         .map((item) => item.getAsFile())
         .filter((item) => !!item);
-     if (files.length) {
-       this.sendFile(files);
-       event.preventDefault();
-     }
+      if (files.length) {
+        await this.sendFile(files);
+        event.preventDefault();
+      }
     },
 
     async handleAttachments(event) {
@@ -120,8 +147,8 @@ export default {
 <style lang="scss" scoped>
 .chat-footer {
   display: flex;
-  flex-direction: column;
   align-items: stretch;
+  flex-direction: column;
   padding: 10px;
 }
 
@@ -130,19 +157,19 @@ export default {
   border: 1px solid var(--main-page-bg-color);
 
   .chat-footer__chat-preview-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     width: 66%;
     min-width: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin: auto;
   }
 
   .chat-footer__chat-preview__text {
     @extend %typo-body-lg;
+    margin-bottom: 20px;
     text-align: center;
     color: var(--text-outline-color);
-    margin-bottom: 20px;
   }
 }
 
@@ -163,9 +190,16 @@ export default {
       justify-content: center;
     }
   }
+
+  .chat-emoji {
+    position: absolute;
+    bottom: 160px;
+  }
 }
+
 .rounded-action-file-input {
   position: relative;
+
   .rounded-action-file-input__input {
     position: absolute;
     top: 0;
@@ -174,8 +208,8 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0;
     cursor: pointer;
+    opacity: 0;
   }
 }
 </style>
