@@ -24,20 +24,10 @@ const actions = {
   },
 
   SET_CHAT_LIST: (context, chatList) => {
-    chatList.forEach((chat) => {
-      if (chat.hasReporting) {
-        // eslint-disable-next-line no-param-reassign
-        chat.postProcessData = new Reporting(chat);
-      }
-    });
     context.commit('SET_CHAT_LIST', chatList);
   },
 
   ADD_CHAT: (context, chat) => {
-    if (chat.hasReporting) {
-      // eslint-disable-next-line no-param-reassign
-      chat.postProcessData = new Reporting(chat);
-    }
     context.commit('ADD_CHAT', chat);
   },
 

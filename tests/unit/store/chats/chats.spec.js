@@ -1,6 +1,5 @@
 import chatModule from '../../../../src/store/modules/chat/chat';
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import Reporting from '../../../../src/store/modules/post-processing/Reporting';
 
 const chat = {
   id: '1',
@@ -25,19 +24,6 @@ describe('chat store: actions', () => {
     chat.decline.mockClear();
     context.dispatch.mockClear();
     context.commit.mockClear();
-  });
-
-  it('SET_CHAT_LIST action sets Reporting class object to passed chats, if allowReporting is true', () => {
-    const chat = { hasReporting: true };
-    const chatList = [chat];
-    chatModule.actions.SET_CHAT_LIST(context, chatList);
-    expect(chat.postProcessData instanceof Reporting).toBe(true);
-  });
-
-  it('ADD_CHAT action sets Reporting class object to passed chat, if allowReporting is true', () => {
-    const chat = { hasReporting: true };
-    chatModule.actions.ADD_CHAT(context, chat);
-    expect(chat.postProcessData instanceof Reporting).toBe(true);
   });
 
   it('ACCEPT action calls chat join() method', () => {
