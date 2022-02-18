@@ -1,7 +1,6 @@
+import Auth from '@webitel/ui-sdk/src/modules/Userinfo/components/the-auth.vue';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
-import Auth from '@webitel/ui-sdk/src/modules/Userinfo/components/the-auth.vue';
 import AgentWorkspace from '../components/agent-workspace/the-agent-workspace.vue';
 
 Vue.use(VueRouter);
@@ -42,6 +41,12 @@ router.beforeEach((to, from, next) => {
     }
   }
   next();
+});
+
+router.afterEach((to, from) => {
+  if (from.fullPath === '/auth') {
+    if (Notification.permission !== 'granted') Notification.requestPermission();
+  }
 });
 
 export default router;

@@ -1,24 +1,15 @@
 import { mapState } from 'vuex';
 import isIncomingRinging from '../store/modules/call/scripts/isIncomingRinging';
 
-const AUDIO_URL = require('../../public/media/ringing.mp3');
+// this mixin needed for watcher to watch ringing calls; it is not possible to watch inside store
 
 export default {
-  data: () => ({
-    ringingAudio: new Audio(AUDIO_URL),
-  }),
-
-  created() {
-    this.ringingAudio.loop = true;
-  },
-
   watch: {
     isEveryRinging(value) {
       if (value) {
-        this.ringingAudio.play().catch();
+        this.playRinging();
       } else {
-        this.ringingAudio.pause();
-        this.ringingAudio.currentTime = 0;
+        this.stopPlaying();
       }
     },
   },

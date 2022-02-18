@@ -1,39 +1,45 @@
 <template>
-  <main v-if="hasAccess" class="main-agent-workspace" @drop="preventDrop" @dragenter.prevent
-        @dragover.prevent>
-    <disconnect-popup/>
+  <main
+    v-if="hasAccess"
+    class="main-agent-workspace"
+    @dragenter.prevent
+    @dragover.prevent
+    @drop="preventDrop"
+  >
+    <disconnect-popup />
 
-    <notification/>
-    <cc-header/>
+    <notification />
+    <cc-header />
     <div class="workspace-wrap">
-      <widget-bar/>
+      <widget-bar />
       <section class="workspace">
-        <queue-section/>
-        <workspace-section/>
-        <info-section/>
+        <queue-section />
+        <workspace-section />
+        <info-section />
       </section>
     </div>
 
-    <video-container/>
+    <video-container />
   </main>
   <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
 </template>
 
 <script>
-import WebitelApplications
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { mapActions, mapGetters } from 'vuex';
-import CcHeader from '../shared/app-header/app-header.vue';
 import Notification from '../utils/notification.vue';
-import InfoSection from './info-section/the-agent-info-section.vue';
-import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
-import QueueSection from './queue-section/the-agent-queue-section.vue';
-import VideoContainer from './video-container/video-container.vue';
+import CcHeader from '../shared/app-header/app-header.vue';
 import WidgetBar from './widget-bar/widget-bar.vue';
+import QueueSection from './queue-section/the-agent-queue-section.vue';
 import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
+import InfoSection from './info-section/the-agent-info-section.vue';
+import VideoContainer from './video-container/video-container.vue';
+import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
+import ringingSoundMixin from '../../mixins/ringingSoundMixin';
 
 export default {
   name: 'the-agent-workspace',
+  mixins: [ringingSoundMixin],
   components: {
     Notification,
     CcHeader,
@@ -57,7 +63,6 @@ export default {
     ...mapGetters('userinfo', {
       checkAppAccess: 'CHECK_APP_ACCESS',
     }),
-
     hasAccess() {
       return this.checkAppAccess(WebitelApplications.AGENT);
     },
@@ -67,6 +72,10 @@ export default {
     ...mapActions('workspace', {
       openSession: 'OPEN_SESSION',
       closeSession: 'CLOSE_SESSION',
+    }),
+    ...mapActions('notifications', {
+      playRinging: 'RING_CALL',
+      stopPlaying: 'STOP_PLAYING',
     }),
 
     preventDrop(event) {
