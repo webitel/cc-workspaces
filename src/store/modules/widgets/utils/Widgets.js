@@ -48,4 +48,18 @@ export default {
     locale: 'widgets.utilization',
     show: true,
   },
+  CHAT_ACCEPTS: {
+    type: 'chatAccepts',
+    field: 'chatAccepts',
+    icon: 'widget-chatAccepts',
+    locale: 'widgets.chatAccepts',
+    show: true,
+  },
+  CHAT_AHT: {
+    type: 'chatAht',
+    field: 'chatAht',
+    icon: 'widget-chatAht',
+    locale: 'widgets.chatAht',
+    show: true,
+  },
 };

@@ -39,6 +39,8 @@ export default {
     avgHold: 'Средній час утримання',
     utilization: 'Утилізація',
     occupancy: 'Зайнятість',
+    chatAccepts: 'Кількість прийнятих чатів',
+    chatAht: 'Середній час обробки чату',
   },
   queueSec: {
     call: {
