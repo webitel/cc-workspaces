@@ -61,7 +61,7 @@ const actions = {
     const stream = call.peerStreams.slice(-1).pop();
     if (stream) {
       audio.srcObject = stream;
-      audio.play();
+      context.dispatch('notifications/PLAY_SOUND', audio, { root: true });
     }
   },
 };

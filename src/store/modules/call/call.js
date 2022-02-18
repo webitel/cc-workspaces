@@ -1,6 +1,5 @@
-import Reporting from '../post-processing/Reporting';
-import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
+import clientHandlers from './client-handlers';
 import missed from './missed-calls/missed-calls';
 
 const state = {
@@ -156,6 +155,7 @@ const actions = {
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {
+    context.dispatch('notifications/STOP_PLAYING', null, { root: true });
     if (context.state.callList.length > 1) {
       context.state.callList.forEach((call) => {
         if (call !== activeCall) context.dispatch('SET_HOLD', call);

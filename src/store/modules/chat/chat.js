@@ -1,6 +1,5 @@
 import { ConversationState } from 'webitel-sdk';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
-import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 
 const state = {
@@ -13,10 +12,15 @@ const getters = {
   ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
   ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
   IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
+  IS_MY_MESSAGE: (state) => (message) => message.member?.self,
 };
 
 const actions = {
   ...clientHandlers.actions,
+
+  INITIALIZE: (context) => {
+    context.dispatch('SUBSCRIBE_CHATS');
+  },
 
   SET_CHAT_LIST: (context, chatList) => {
     context.commit('SET_CHAT_LIST', chatList);

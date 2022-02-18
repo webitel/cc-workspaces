@@ -181,4 +181,9 @@ export default {
   validation: {
     required: 'Required',
   },
+  notifications: {
+    message: 'New message',
+    userInvite: 'New chat',
+    closeConversation: 'Client left chat',
+  },
 };
