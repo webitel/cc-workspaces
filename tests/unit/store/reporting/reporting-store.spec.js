@@ -1,6 +1,6 @@
 import reportingModule from '../../../../src/store/modules/post-processing/post-processing';
 
-describe('post processing: getters', () => {
+describe('reporting: getters', () => {
   let reporting;
   let taskOnWorkspace;
   let rootGetters;
