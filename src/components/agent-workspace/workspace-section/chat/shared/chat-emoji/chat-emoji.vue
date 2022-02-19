@@ -1,18 +1,32 @@
 <template>
-  <div
-    ref="chat-emoji"
-    class="chat-emoji"
-  ></div>
+  <div class="chat-emoji">
+    <wt-rounded-action
+      color="secondary"
+      icon="chat-emoji"
+      @click="$emit('click')"
+    ></wt-rounded-action>
+    <div
+      v-show="isOpened"
+      ref="emoji-picker"
+      class="chat-emoji__wrapper"
+    ></div>
+  </div>
 </template>
 
 <script>
 import { Picker } from 'emoji-picker-element';
 
 export default {
-  name: 'chat-emoji-picker',
+  name: 'chat-emoji',
   data: () => ({
     picker: {},
   }),
+  props: {
+    isOpened: {
+      type: Boolean,
+      default: false,
+    },
+  },
   mounted() {
     this.initPicker();
   },
@@ -23,15 +37,21 @@ export default {
                                  i18n: this.$i18n.t('emojiPicker'),
                                });
       this.appendPicker();
-      this.handleEmojiClick();
     },
     appendPicker() {
-      this.$refs['chat-emoji'].appendChild(this.picker);
+      this.$refs['emoji-picker'].appendChild(this.picker);
     },
-    handleEmojiClick() {
-      this.picker.addEventListener('emoji-click', (event) => {
-        this.$emit('emoji-click', event);
-      });
+    emitEmojiClickEvent(event) {
+      this.$emit('insert-emoji', event);
+    },
+  },
+  watch: {
+    isOpened(value) {
+      if (value === false) {
+        this.picker.removeEventListener('emoji-click', this.emitEmojiClickEvent);
+      } else {
+        this.picker.addEventListener('emoji-click', this.emitEmojiClickEvent);
+      }
     },
   },
 };
@@ -39,7 +59,12 @@ export default {
 
 <style lang="scss" scoped>
 .chat-emoji ::v-deep {
+  position: relative;
+
   emoji-picker {
+    position: absolute;
+    bottom: 160px;
+    left: -200px;
   }
 }
 </style>

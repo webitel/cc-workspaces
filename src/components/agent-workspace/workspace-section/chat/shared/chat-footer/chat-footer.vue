@@ -1,15 +1,15 @@
 <template>
   <footer
-    v-clickaway="closeEmojiPicker"
+    v-clickaway="closePicker"
     class="chat-footer"
   >
-    <div v-if="isChatPreview" class="chat-footer__chat-preview">
+    <div class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
         <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
-    <div v-else-if="isChatActive" class="chat-footer__chat-active">
+    <div class="chat-footer__chat-active">
       <wt-textarea
         ref="message-draft"
         v-model="draft"
@@ -37,14 +37,10 @@
           </wt-rounded-action>
         </div>
         <div class="chat-footer__cell-wrapper">
-          <wt-rounded-action
-            color="secondary"
-            icon="chat-emoji"
-            @click="isEmojiPickerOpened = !isEmojiPickerOpened"
-          ></wt-rounded-action>
           <chat-emoji
-            v-if="isEmojiPickerOpened"
-            @emoji-click="addEmoji"
+            :is-opened="isPickerOpened"
+            @click="isPickerOpened = !isPickerOpened"
+            @insert-emoji="insertEmoji"
           ></chat-emoji>
         </div>
         <div class="chat-footer__cell-wrapper"></div>
@@ -58,16 +54,16 @@
 </template>
 
 <script>
-import insertText from 'insert-text-at-cursor';
+import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
-import chatEmoji from '../chat-emoji/chat-emoji.vue';
+import ChatEmoji from '../chat-emoji/chat-emoji.vue';
 
 export default {
   name: 'chat-footer',
-  components: { chatEmoji },
+  components: { ChatEmoji },
   data: () => ({
     draft: '',
-    isEmojiPickerOpened: false,
+    isPickerOpened: false,
   }),
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
@@ -97,16 +93,17 @@ export default {
       sendFile: 'SEND_FILE',
     }),
 
-    addEmoji(event) {
+    insertEmoji(event) {
       // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
       const messageDraft = this.$refs['message-draft'];
       const textarea = messageDraft.$el.querySelector('textarea');
-      insertText(textarea, event.detail.unicode);
+      insertTextAtCursor(textarea, event.detail.unicode);
     },
 
-    closeEmojiPicker() {
-      this.isEmojiPickerOpened = false;
+    closePicker() {
+      this.isPickerOpened = false;
     },
+
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
       if (!messageDraft) return;
@@ -121,7 +118,7 @@ export default {
         .map((item) => item.getAsFile())
         .filter((item) => !!item);
       if (files.length) {
-        await this.sendFile(files);
+        this.sendFile(files);
         event.preventDefault();
       }
     },
@@ -189,11 +186,6 @@ export default {
       align-items: flex-start;
       justify-content: center;
     }
-  }
-
-  .chat-emoji {
-    position: absolute;
-    bottom: 160px;
   }
 }
 
