@@ -1,7 +1,6 @@
 <template>
   <section class="workspace-section">
     <component :is="workspaceComponent"/>
-    <chat></chat>
   </section>
 </template>
 
