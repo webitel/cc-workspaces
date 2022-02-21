@@ -59,7 +59,8 @@ export default {
 
   emoji-picker {
     position: absolute;
-    bottom: 100%;
+    bottom: 50px;
+    left: -170px;
     z-index: 1;
   }
 }
