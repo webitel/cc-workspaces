@@ -1,15 +1,14 @@
 <template>
   <footer
-    v-clickaway="closePicker"
     class="chat-footer"
   >
-    <div class="chat-footer__chat-preview">
+    <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
         <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
-    <div class="chat-footer__chat-active">
+    <div v-else-if="isChatActive" class="chat-footer__chat-active">
       <wt-textarea
         ref="message-draft"
         v-model="draft"
@@ -38,8 +37,6 @@
         </div>
         <div class="chat-footer__cell-wrapper">
           <chat-emoji
-            :is-opened="isPickerOpened"
-            @click="isPickerOpened = !isPickerOpened"
             @insert-emoji="insertEmoji"
           ></chat-emoji>
         </div>
@@ -63,7 +60,6 @@ export default {
   components: { ChatEmoji },
   data: () => ({
     draft: '',
-    isPickerOpened: false,
   }),
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
@@ -93,15 +89,11 @@ export default {
       sendFile: 'SEND_FILE',
     }),
 
-    insertEmoji(event) {
+    insertEmoji(unicode) {
       // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
       const messageDraft = this.$refs['message-draft'];
       const textarea = messageDraft.$el.querySelector('textarea');
-      insertTextAtCursor(textarea, event.detail.unicode);
-    },
-
-    closePicker() {
-      this.isPickerOpened = false;
+      insertTextAtCursor(textarea, unicode);
     },
 
     setDraftFocus() {
@@ -112,7 +104,7 @@ export default {
       textarea.focus();
     },
 
-    async handleFilePaste(event) {
+    handleFilePaste(event) {
       const files = Array
         .from(event.clipboardData.items)
         .map((item) => item.getAsFile())

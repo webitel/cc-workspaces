@@ -1,13 +1,16 @@
 <template>
-  <div class="chat-emoji">
+  <div
+    v-clickaway="closePicker"
+    class="chat-emoji"
+  >
     <wt-rounded-action
       color="secondary"
       icon="chat-emoji"
-      @click="$emit('click')"
+      @click="isOpened = !isOpened"
     ></wt-rounded-action>
     <div
       v-show="isOpened"
-      ref="emoji-picker"
+      ref="emoji-picker-wrapper"
       class="chat-emoji__wrapper"
     ></div>
   </div>
@@ -20,15 +23,14 @@ export default {
   name: 'chat-emoji',
   data: () => ({
     picker: {},
+    isOpened: false,
   }),
-  props: {
-    isOpened: {
-      type: Boolean,
-      default: false,
-    },
-  },
   mounted() {
     this.initPicker();
+    this.picker.addEventListener('emoji-click', this.emitEmojiClickEvent);
+  },
+  destroyed() {
+    this.picker.removeEventListener('emoji-click', this.emitEmojiClickEvent);
   },
   methods: {
     initPicker() {
@@ -39,19 +41,14 @@ export default {
       this.appendPicker();
     },
     appendPicker() {
-      this.$refs['emoji-picker'].appendChild(this.picker);
+      this.$refs['emoji-picker-wrapper'].appendChild(this.picker);
     },
     emitEmojiClickEvent(event) {
-      this.$emit('insert-emoji', event);
+      const { unicode } = event.detail;
+      this.$emit('insert-emoji', unicode);
     },
-  },
-  watch: {
-    isOpened(value) {
-      if (value === false) {
-        this.picker.removeEventListener('emoji-click', this.emitEmojiClickEvent);
-      } else {
-        this.picker.addEventListener('emoji-click', this.emitEmojiClickEvent);
-      }
+    closePicker() {
+      this.isOpened = false;
     },
   },
 };
