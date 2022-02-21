@@ -67,6 +67,8 @@ $widget-handles-color: $true-color;
 $widget-missed-color: $false-color;
 $widget-avg-talk-color: #239AC0;
 $widget-avg-hold-color: $accent-color;
+$widget-chat-accepts-color: $true-color;
+$widget-chat-aht-color: $true-color;
 
 .typo-widget-title {
   font-family: 'Montserrat Regular', monospace;
@@ -145,6 +147,16 @@ $widget-avg-hold-color: $accent-color;
   &--avg-hold.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-hold-color;
     stroke: $widget-avg-hold-color;
+  }
+
+  &--chat-accepts.wt-icon ::v-deep .wt-icon__icon {
+    fill: $widget-chat-accepts-color;
+    stroke: $widget-chat-accepts-color;
+  }
+
+  &--chat-aht.wt-icon ::v-deep .wt-icon__icon {
+    fill: $widget-chat-aht-color;
+    stroke: $widget-chat-aht-color;
   }
 }
 </style>

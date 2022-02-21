@@ -51,14 +51,14 @@ export default {
   CHAT_ACCEPTS: {
     type: 'chatAccepts',
     field: 'chatAccepts',
-    icon: 'widget-chatAccepts',
+    icon: 'widget-chat-accepts',
     locale: 'widgets.chatAccepts',
     show: true,
   },
   CHAT_AHT: {
     type: 'chatAht',
     field: 'chatAht',
-    icon: 'widget-chatAht',
+    icon: 'widget-chat-aht',
     locale: 'widgets.chatAht',
     show: true,
   },
