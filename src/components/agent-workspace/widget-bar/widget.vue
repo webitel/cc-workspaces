@@ -14,7 +14,7 @@
       class="widget-icon"
       :class="`widget-icon--${iconWidgetName}`"
       :icon="iconWidgetName"
-      icon-prefix="widget"
+      icon-prefix="ws"
       size="sm">
     </wt-icon>
 
@@ -124,37 +124,37 @@ $widget-chat-aht-color: $true-color;
 .widget-icon {
   margin-right: 10px;
 
-  &--inbound.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-inbound.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-inbound-color;
     stroke: $widget-inbound-color;
   }
 
-  &--handles.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-handles.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-handles-color;
     stroke: $widget-handles-color;
   }
 
-  &--missed.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-missed.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-missed-color;
     stroke: $widget-missed-color;
   }
 
-  &--avg-talk.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-avg-talk.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-talk-color;
     stroke: $widget-avg-talk-color;
   }
 
-  &--avg-hold.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-avg-hold.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-hold-color;
     stroke: $widget-avg-hold-color;
   }
 
-  &--chat-accepts.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-chat-accepts.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-chat-accepts-color;
     stroke: $widget-chat-accepts-color;
   }
 
-  &--chat-aht.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-chat-aht.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-chat-aht-color;
     stroke: $widget-chat-aht-color;
   }
