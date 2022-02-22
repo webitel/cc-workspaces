@@ -39,6 +39,8 @@ export default {
     avgHold: 'Avg Hold Time',
     utilization: 'Utilization',
     occupancy: 'Occupancy',
+    chatAccepts: 'Accepted chats',
+    chatAht: 'Chat Handling Time',
   },
   queueSec: {
     call: {
