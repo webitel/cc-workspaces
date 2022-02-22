@@ -18,10 +18,6 @@ const getters = {
 const actions = {
   ...clientHandlers.actions,
 
-  INITIALIZE: (context) => {
-    context.dispatch('SUBSCRIBE_CHATS');
-  },
-
   SET_CHAT_LIST: (context, chatList) => {
     context.commit('SET_CHAT_LIST', chatList);
   },
