@@ -184,6 +184,6 @@ export default {
   notifications: {
     message: 'Нове повідомлення',
     userInvite: 'Новий чат',
-    closeConversation: 'Клієнт вийшов з чату',
+    closeConversation: 'Абонент вийшов з чату',
   },
 };

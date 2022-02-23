@@ -32,7 +32,7 @@ const actions = {
   },
 
   HANDLE_INVITE_ACTION: (context, { action, chat }) => {
-    context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
+    context.dispatch('NOTIFY', { action, chat });
     context.dispatch('ADD_CHAT', chat);
     if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       context.dispatch('SET_WORKSPACE', chat);
@@ -42,7 +42,7 @@ const actions = {
   HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
     const message = chat.messages[chat.messages.length - 1];
     if (!context.getters.IS_MY_MESSAGE(message)) {
-      context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
+      context.dispatch('NOTIFY', { action, chat });
     }
     context.dispatch('CHAT_INSERT_TO_START', chat);
   },
@@ -50,11 +50,11 @@ const actions = {
   HANDLE_DESTROY_ACTION: (context, { chat }) => {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
-    context.dispatch('notifications/RESET_UNREAD_COUNT', null, { root: true });
+    context.dispatch('RESET_UNREAD_COUNT');
   },
 
   HANDLE_CLOSE_ACTION: (context, { action, chat }) => {
-    context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
+    context.dispatch('NOTIFY', { action, chat });
   },
 };
 

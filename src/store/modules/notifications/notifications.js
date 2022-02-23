@@ -9,8 +9,10 @@ import i18n from '../../../locale/i18n';
 
 const NOTIFICATION_VISIBLE_INTERVAL = 2000;
 
+const localStoragePlaying = () => localStorage.getItem('isPlaying');
+const localStorageConversation = () => localStorage.getItem('isConversation');
+
 const getNotificationSound = (action) => {
-  console.log(action);
   switch (action) {
     case ChatActions.UserInvite:
       return new Audio(newChatSound);
@@ -31,15 +33,17 @@ const setStorageId = (value) => {
 
 const state = {
   windowId: null,
-  broadcastChannel: null,
+  broadcastChannel: null, // in order to reset the tab title with unread number
   unreadCount: 0,
-  currentlyPlaying: null,
+  currentlyPlaying: false,
+  isConversation: false,
 };
 
 const getters = {
-  GET_WINDOW_ID: (state) => state.windowId,
   IS_MAIN_TAB: (state) => state.windowId === getStorageId(),
-  IS_PLAYING: (state) => localStorage.getItem('isPlaying') || state.currentlyPlaying,
+  IS_PLAYING: (state) => localStoragePlaying() && state.currentlyPlaying,
+  IS_CONVERSATION: (state) => localStorageConversation() && state.isConversation,
+  SOUND_IS_ALLOWED: (state, getters) => !getters.IS_CONVERSATION && !getters.IS_PLAYING,
 };
 
 const actions = {
@@ -53,22 +57,17 @@ const actions = {
       context.dispatch('SET_UNREAD_COUNT', data.count);
     });
     context.commit('SET_BROADCAST_CHANNEL', broadcastChannel);
-    context.dispatch('HANDLE_TAB_CLOSING');
+    context.dispatch('SUBSCRIBE_TAB_CLOSING');
   },
 
-  HANDLE_TAB_CLOSING: (context) => {
-    // when main tab closes, remove item from localStorage
-    window.addEventListener('beforeunload', () => {
-      context.dispatch('STOP_PLAYING');
-      localStorage.removeItem('windowId');
-    });
-
+  SUBSCRIBE_TAB_CLOSING: (context) => {
     // listen to localStorage change and set windowId if no one saved
     window.addEventListener('storage', () => {
       if (!getStorageId()) {
-        setStorageId(context.getters.GET_WINDOW_ID);
+        setStorageId(context.state.windowId);
       }
     });
+    context.state.broadcastChannel.close();
   },
 
   NOTIFY: (context, { action, chat }) => {
@@ -95,6 +94,9 @@ const actions = {
 
     setTimeout(() => {
       notification.close();
+      notification.removeEventListener('click', () => {
+        window.focus();
+      });
     }, NOTIFICATION_VISIBLE_INTERVAL);
   },
 
@@ -122,9 +124,11 @@ const actions = {
   },
 
   PLAY_NOTIFICATION: (context, sound) => {
-    if (!context.getters.IS_PLAYING && context.getters.IS_MAIN_TAB) {
+    if (context.getters.SOUND_IS_ALLOWED && context.getters.IS_MAIN_TAB) {
       try {
-        sound.addEventListener('ended', () => context.dispatch('STOP_PLAYING', sound));
+        sound.addEventListener('ended', () => {
+          context.dispatch('STOP_PLAYING', sound);
+        });
         context.dispatch('PLAY_SOUND', sound);
       } catch (err) {
         throw err;
@@ -146,9 +150,21 @@ const actions = {
 
   STOP_PLAYING: (context, sound) => {
     const currentSound = sound ?? context.state.currentlyPlaying;
-    currentSound.pause();
+    if (currentSound) {
+      currentSound.pause();
+    }
     localStorage.removeItem('isPlaying');
     context.commit('STOP_PLAYING');
+  },
+
+  START_CONVERSATION: (context) => {
+    localStorage.setItem('isConversation', 'true');
+    context.commit('START_CONVERSATION');
+  },
+
+  END_CONVERSATION: (context) => {
+    localStorage.removeItem('isConversation');
+    context.commit('END_CONVERSATION');
   },
 };
 
@@ -167,6 +183,12 @@ const mutations = {
   },
   SET_UNREAD_COUNT: (state, count) => {
     state.unreadCount = count;
+  },
+  START_CONVERSATION: (state) => {
+    state.isConversation = true;
+  },
+  END_CONVERSATION: (state) => {
+    state.isConversation = false;
   },
 };
 

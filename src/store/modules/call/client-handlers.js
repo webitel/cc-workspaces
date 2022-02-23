@@ -46,6 +46,7 @@ const actions = {
       context.commit('REMOVE_CALL', call);
       context.dispatch('RESET_WORKSPACE');
     }
+    context.dispatch('END_CONVERSATION');
   },
 
   HANDLE_DESTROY_ACTION: (context, call) => {
@@ -53,6 +54,7 @@ const actions = {
     if (call.direction === CallDirection.Inbound && !call.answeredAt) {
       context.dispatch('missed/PUSH_MISSED_STUB', call);
     }
+    context.dispatch('END_CONVERSATION');
     context.dispatch('RESET_WORKSPACE');
   },
 
@@ -61,8 +63,17 @@ const actions = {
     const stream = call.peerStreams.slice(-1).pop();
     if (stream) {
       audio.srcObject = stream;
-      context.dispatch('notifications/PLAY_SOUND', audio, { root: true });
+      audio.play();
+      context.dispatch('START_CONVERSATION');
     }
+  },
+
+  START_CONVERSATION: (context) => {
+    context.dispatch('notifications/START_CONVERSATION', null, { root: true });
+  },
+
+  END_CONVERSATION: (context) => {
+    context.dispatch('notifications/END_CONVERSATION', null, { root: true });
   },
 };
 

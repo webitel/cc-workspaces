@@ -95,6 +95,14 @@ const actions = {
   CLOSE_MEDIA: (context) => {
     context.commit('SET_MEDIA_VIEW', null);
   },
+
+  NOTIFY: (context, { action, chat }) => {
+    context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
+  },
+
+  RESET_UNREAD_COUNT: (context) => {
+    context.dispatch('notifications/RESET_UNREAD_COUNT', null, { root: true });
+  },
 };
 
 const mutations = {

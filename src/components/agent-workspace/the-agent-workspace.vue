@@ -35,11 +35,11 @@ import WorkspaceSection from './workspace-section/the-agent-workspace-section.vu
 import InfoSection from './info-section/the-agent-info-section.vue';
 import VideoContainer from './video-container/video-container.vue';
 import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
-import ringingSoundMixin from '../../mixins/ringingSoundMixin';
+import ringingNotificationMixin from '../../mixins/ringingNotificationMixin';
 
 export default {
   name: 'the-agent-workspace',
-  mixins: [ringingSoundMixin],
+  mixins: [ringingNotificationMixin],
   components: {
     Notification,
     CcHeader,
@@ -72,10 +72,6 @@ export default {
     ...mapActions('workspace', {
       openSession: 'OPEN_SESSION',
       closeSession: 'CLOSE_SESSION',
-    }),
-    ...mapActions('notifications', {
-      playRinging: 'RING_CALL',
-      stopPlaying: 'STOP_PLAYING',
     }),
 
     preventDrop(event) {
