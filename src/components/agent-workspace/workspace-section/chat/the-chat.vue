@@ -2,7 +2,8 @@
   <section class="the-chat">
     <media-viewer/>
     <chat-header></chat-header>
-    <chat-messaging-container/>
+<!--    <chat-messaging-container/>-->
+    <chat-transfer-container></chat-transfer-container>
   </section>
 </template>
 
@@ -10,6 +11,7 @@
 import MediaViewer from './media-viewer/media-viewer.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging-container/chat-messaging-container.vue';
+import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 
 export default {
   name: 'the-chat',
@@ -17,6 +19,7 @@ export default {
     MediaViewer,
     ChatHeader,
     ChatMessagingContainer,
+    ChatTransferContainer,
   },
 };
 </script>
@@ -27,8 +30,13 @@ export default {
   flex-direction: column;
   height: 100%;
 
-  .chat-messaging-container {
+  .chat-messaging-container,
+  .chat-transfer-container {
     flex-grow: 1;
+  }
+  .chat-transfer-container.ws-worksection {
+    height: auto;
+    min-height: 0;
   }
 }
 </style>

@@ -46,7 +46,7 @@
   const usersAPI = APIRepository.users;
 
   export default {
-    name: 'workspace-transfer-container',
+    name: 'call-transfer-container',
     mixins: [infiniteScrollMixin],
     components: {
       Contact,
