@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ChatFooter
-  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/shared/chat-footer/chat-footer.vue';
+  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/chat-messaging-container/chat-messaging-footer/chat-footer.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

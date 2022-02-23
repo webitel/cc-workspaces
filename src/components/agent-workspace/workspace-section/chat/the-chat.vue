@@ -1,25 +1,34 @@
 <template>
-  <div class="the-chat">
-    <chat-preview/>
+  <section class="the-chat">
     <media-viewer/>
-  </div>
+    <chat-header></chat-header>
+    <chat-messaging-container/>
+  </section>
 </template>
 
 <script>
-import ChatPreview from './chat-preview/chat-preview.vue';
-import MediaViewer from './shared/media-viewer/media-viewer.vue';
+import MediaViewer from './media-viewer/media-viewer.vue';
+import ChatHeader from './chat-header/chat-header.vue';
+import ChatMessagingContainer from './chat-messaging-container/chat-messaging-container.vue';
 
 export default {
   name: 'the-chat',
   components: {
-    ChatPreview,
     MediaViewer,
+    ChatHeader,
+    ChatMessagingContainer,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .the-chat {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+
+  .chat-messaging-container {
+    flex-grow: 1;
+  }
 }
 </style>

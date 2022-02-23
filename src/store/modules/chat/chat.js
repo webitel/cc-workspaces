@@ -1,6 +1,5 @@
 import { ConversationState } from 'webitel-sdk';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
-import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 
 const state = {
@@ -10,6 +9,7 @@ const state = {
 };
 
 const getters = {
+  ALLOW_CHAT_TRANSFER: (state) => state.chatOnWorkspace.allowLeave,
   ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
   ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
   IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,

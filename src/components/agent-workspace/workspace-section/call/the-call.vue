@@ -28,7 +28,7 @@
   import CallFooter from './call-footer.vue';
   import History from '../shared/workspace-history/history-container.vue';
   import Contacts from '../shared/workspace-contacts/workspace-contacts-container.vue';
-  import Transfer from '../shared/workspace-transfer/workspace-transfer-container.vue';
+  import Transfer from './call-transfer/call-transfer-container.vue';
   import Bridge from '../shared/workspace-bridge/workspace-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
   import isIncomingRinging from '../../../../store/modules/call/scripts/isIncomingRinging';

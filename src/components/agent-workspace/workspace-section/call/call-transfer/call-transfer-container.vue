@@ -39,8 +39,8 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import Contact from '../workspace-contacts/workspace-contact.vue';
-  import EmptySearch from '../workspace-empty-search/empty-search.vue';
+  import Contact from '../../shared/workspace-contacts/workspace-contact.vue';
+  import EmptySearch from '../../shared/workspace-empty-search/empty-search.vue';
   import APIRepository from '../../../../../api/APIRepository';
 
   const usersAPI = APIRepository.users;

@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import callModule from '../../../../../../src/store/modules/call/call';
 import Transfer
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-transfer/workspace-transfer-container.vue';
+  from '../../../../../../src/components/agent-workspace/workspace-section/call/call-transfer/workspace-transfer-container.vue';
 import Contact
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-contacts/workspace-contact.vue';
 

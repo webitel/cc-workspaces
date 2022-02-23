@@ -4,10 +4,18 @@
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper">
-      <img src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client pic">
+      <img src="../../../../../assets/agent-workspace/default-avatar.svg" alt="client pic">
     </div>
     <div class="chat-header__cell-wrapper"></div>
-    <div class="chat-header__cell-wrapper"></div>
+    <div class="chat-header__cell-wrapper">
+      <wt-rounded-action
+        v-if="isTransfer"
+        class="call-action transfer"
+        icon="chat-transfer"
+        color="transfer"
+        @click="$emit('openTab', 'transfer')"
+      ></wt-rounded-action>
+    </div>
     <div class="chat-header__cell-wrapper">
       <wt-rounded-action
         v-show="isCloseAction"
@@ -20,14 +28,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'chat-header',
   computed: {
+    ...mapState('chat', {
+      chat: (state) => state.chatOnWorkspace,
+    }),
     ...mapGetters('chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
     }),
+    isTransfer() {
+      return this.chat.allowClose;
+    },
   },
   methods: {
     ...mapActions('chat', {
