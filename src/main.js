@@ -12,6 +12,8 @@ import './plugins';
 // import './css/fonts.scss';
 import './css/main.scss';
 
+import './assets/icons/sprite';
+
 Vue.config.productionTip = false;
 
 Vue.component('icon', Icon);
