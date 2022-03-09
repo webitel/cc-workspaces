@@ -29,7 +29,6 @@ export default {
   }),
   methods: {
     openTab(tab) {
-      console.info(tab);
       switch (tab) {
         case 'transfer':
           this.currentTab = tab;

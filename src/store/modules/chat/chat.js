@@ -61,7 +61,6 @@ const actions = {
     context,
     { chat = context.state.chatOnWorkspace, destination, item },
   ) => {
-    console.info(item);
     if (destination === ChatTransferDestination.USER) {
       return chat.transferToUser(item.id);
     }

@@ -28,14 +28,11 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'chat-header',
   computed: {
-    ...mapState('chat', {
-      chat: (state) => state.chatOnWorkspace,
-    }),
     ...mapGetters('chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',
