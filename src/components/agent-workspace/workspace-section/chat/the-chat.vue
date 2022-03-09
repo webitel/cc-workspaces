@@ -1,9 +1,12 @@
 <template>
   <section class="the-chat">
     <media-viewer/>
-    <chat-header></chat-header>
-<!--    <chat-messaging-container/>-->
-    <chat-transfer-container></chat-transfer-container>
+    <chat-header
+      @openTab="openTab"
+    ></chat-header>
+    <component
+      :is="`chat-${currentTab}-container`"
+    ></component>
   </section>
 </template>
 
@@ -20,6 +23,22 @@ export default {
     ChatHeader,
     ChatMessagingContainer,
     ChatTransferContainer,
+  },
+  data: () => ({
+    currentTab: 'messaging',
+  }),
+  methods: {
+    openTab(tab) {
+      console.info(tab);
+      switch (tab) {
+        case 'transfer':
+          this.currentTab = tab;
+          break;
+        default: {
+          throw new Error(`Unknown chat tab: ${tab}`);
+        }
+      }
+    },
   },
 };
 </script>

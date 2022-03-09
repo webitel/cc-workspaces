@@ -9,7 +9,7 @@
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper">
       <wt-rounded-action
-        v-if="isTransfer"
+        v-show="isTransferAction"
         class="call-action transfer"
         icon="chat-transfer"
         color="transfer"
@@ -38,10 +38,8 @@ export default {
     }),
     ...mapGetters('chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
+      isTransferAction: 'ALLOW_CHAT_TRANSFER',
     }),
-    isTransfer() {
-      return this.chat.allowClose;
-    },
   },
   methods: {
     ...mapActions('chat', {
