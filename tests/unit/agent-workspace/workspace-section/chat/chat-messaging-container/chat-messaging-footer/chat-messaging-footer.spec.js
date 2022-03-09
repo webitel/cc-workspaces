@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import ChatFooter
-  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/chat-messaging-container/chat-messaging-footer/chat-footer.vue';
+import ChatMessagingFooter
+  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/chat-messaging-container/chat-messaging-footer/chat-messaging-footer.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -13,7 +13,7 @@ const chat = {
   },
 };
 
-describe('Chat Footer: Chat Preview', () => {
+describe('Chat Messaging Footer: Chat Preview', () => {
   const store = new Vuex.Store({
     modules: { chat },
   });
@@ -24,26 +24,26 @@ describe('Chat Footer: Chat Preview', () => {
   };
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatFooter, mountOptions);
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     expect(wrapper.exists()).toBe(true);
   });
 
   it('renders chat preview actions if isChatActive computed is falsy', () => {
-    const wrapper = shallowMount(ChatFooter, mountOptions);
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(true);
     expect(wrapper.find('.chat-footer__chat-active').exists()).toBe(false);
   });
 
   it('calls accept() chat method at accept chat button click', () => {
-    const acceptMock = jest.spyOn(ChatFooter.methods, 'accept').mockImplementation(() => {
+    const acceptMock = jest.spyOn(ChatMessagingFooter.methods, 'accept').mockImplementation(() => {
     });
-    const wrapper = shallowMount(ChatFooter, mountOptions);
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     wrapper.getComponent({ name: 'wt-button' }).vm.$emit('click');
     expect(acceptMock).toHaveBeenCalled();
   });
 });
 
-describe('Chat Footer: Active Chat', () => {
+describe('Chat Messaging Footer: Active Chat', () => {
   chat.getters.ALLOW_CHAT_JOIN = () => false;
   chat.getters.IS_CHAT_ACTIVE = () => true;
   const store = new Vuex.Store({
@@ -55,7 +55,7 @@ describe('Chat Footer: Active Chat', () => {
     store,
   };
   it('renders active chat actions if isChatActive computed is truthy', () => {
-    const wrapper = shallowMount(ChatFooter, mountOptions);
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     expect(wrapper.find('.chat-footer__chat-active').exists()).toBe(true);
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(false);
   });
@@ -63,8 +63,8 @@ describe('Chat Footer: Active Chat', () => {
   // TODO: FIX THIS TEST ON BAMBOO :/
   // it('calls send() store method at draft textarea input + enter', () => {
   //   const message = 'jest';
-  //   const sendMock = jest.spyOn(ChatFooter.methods, 'send').mockImplementation(() => {});
-  //   const wrapper = shallowMount(ChatFooter, {
+  //   const sendMock = jest.spyOn(ChatMessagingFooter.methods, 'send').mockImplementation(() => {});
+  //   const wrapper = shallowMount(ChatMessagingFooter, {
   //     computed: {
   //       isChatActive() { return true; },
   //     },
@@ -76,7 +76,7 @@ describe('Chat Footer: Active Chat', () => {
   // });
 
   it('calls store sendFile method at textarea pasted attachment', () => {
-    const sendFileMock = jest.spyOn(ChatFooter.methods, 'sendFile').mockImplementation(() => {
+    const sendFileMock = jest.spyOn(ChatMessagingFooter.methods, 'sendFile').mockImplementation(() => {
     });
     const file = { name: 'jest' };
     const event = {
@@ -86,16 +86,16 @@ describe('Chat Footer: Active Chat', () => {
       preventDefault() {
       },
     };
-    const wrapper = shallowMount(ChatFooter, mountOptions);
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     wrapper.vm.handleFilePaste(event);
     expect(sendFileMock).toHaveBeenCalledWith([file]);
   });
 
   it('calls store sendFile method at input attachment', () => {
-    const sendFileMock = jest.spyOn(ChatFooter.methods, 'sendFile').mockImplementation(() => {
+    const sendFileMock = jest.spyOn(ChatMessagingFooter.methods, 'sendFile').mockImplementation(() => {
     });
     const files = [{ name: 'jest' }];
-    const wrapper = shallowMount(ChatFooter, mountOptions);
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     wrapper.vm.handleAttachments({ target: { files } });
     expect(sendFileMock).toHaveBeenCalledWith(files);
   });
