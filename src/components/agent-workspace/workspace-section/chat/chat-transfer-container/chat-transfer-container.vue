@@ -5,17 +5,18 @@
         v-model="search"
         class="ws-worksection__search"
         @search="resetData"
-      />
+      ></wt-search-bar>
+
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.USER }"
         color="secondary"
-        icon="edit"
+        icon="ws-agent"
         @click="transferDestination = TransferDestination.USER"
       ></wt-rounded-action>
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
         color="secondary"
-        icon="edit"
+        icon="ws-bot"
         @click="transferDestination = TransferDestination.CHATPLAN"
       ></wt-rounded-action>
     </div>
@@ -24,14 +25,14 @@
       <wt-loader v-if="isLoading" />
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
-        <contact
+        <chat-transfer-item
           v-for="(item, key) of dataList"
           :id="`scroll-item-${key}`"
-          :key="key"
-          :class="{'selected': item === selected}"
+          :key="item.id"
           :item="item"
-          @click.native="select(item)"
-        ></contact>
+          :type="transferDestination"
+          @transfer="handleTransfer"
+        ></chat-transfer-item>
       </div>
 
       <observer
@@ -43,25 +44,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import APIRepository from '../../../../../api/APIRepository';
+import TransferDestination from '../../../../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-import Contact from '../../shared/workspace-contacts/workspace-contact.vue';
 import EmptySearch from '../../shared/workspace-empty-search/empty-search.vue';
+import ChatTransferItem from './chat-transfer-item.vue';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
-
-const TransferDestination = Object.freeze({
-                                            USER: 'user',
-                                            CHATPLAN: 'chatplan',
-                                          });
 
 export default {
   name: 'call-transfer-container',
   mixins: [infiniteScrollMixin],
   components: {
-    Contact,
+    ChatTransferItem,
     EmptySearch,
   },
 
@@ -78,6 +75,12 @@ export default {
   },
 
   methods: {
+    ...mapActions('chat', {
+      transfer: 'TRANSFER',
+    }),
+    handleTransfer(item) {
+      return this.transfer({ destination: this.transferDestination, item });
+    },
     fetch(params) {
       if (this.transferDestination === TransferDestination.CHATPLAN) {
         return this.fetchChatplans(params);
@@ -88,7 +91,7 @@ export default {
       const userParams = {
         filters: 'presence.status=sip,!dnd',
         sort: 'presence.status',
-        fields: ['name', 'id', 'presence'],
+        fields: ['name', 'id', 'extension', 'presence'],
       };
       return usersAPI.getUsers({ ...userParams, ...params, notId: [this.userId] });
     },
@@ -106,12 +109,12 @@ export default {
 
 <style lang="scss" scoped>
 .ws-worksection__search-wrap {
-  box-sizing: border-box;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   width: 100%;
-  padding: 0 10px;
   margin-bottom: 10px;
+  padding: 0 10px;
 
   .ws-worksection__search {
     flex: 1 1 auto;
