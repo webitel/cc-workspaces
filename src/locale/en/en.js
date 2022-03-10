@@ -39,6 +39,8 @@ export default {
     avgHold: 'Avg Hold Time',
     utilization: 'Utilization',
     occupancy: 'Occupancy',
+    chatAccepts: 'Accepted chats',
+    chatAht: 'Chat Handling Time',
   },
   queueSec: {
     call: {
@@ -101,7 +103,7 @@ export default {
     },
     transfer: {
       heading: 'Thank You!',
-      text: 'Call has been transferred to another operator',
+      text: 'Task has been transferred to another operator',
     },
   },
   emptySearch: {

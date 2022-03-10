@@ -1,0 +1,11 @@
+import './ws-agent.svg';
+import './ws-bot.svg';
+import './ws-widget-avg-hold.svg';
+import './ws-widget-avg-talk.svg';
+import './ws-widget-chat-accepts.svg';
+import './ws-widget-chat-aht.svg';
+import './ws-widget-handles.svg';
+import './ws-widget-inbound.svg';
+import './ws-widget-missed.svg';
+import './ws-widget-occupancy.svg';
+import './ws-widget-utilization.svg';

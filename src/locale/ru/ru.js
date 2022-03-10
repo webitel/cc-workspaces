@@ -39,6 +39,8 @@ export default {
     avgHold: 'Среднее время удержания',
     utilization: 'Утилизация',
     occupancy: 'Занятость',
+    chatAccepts: 'Количество принятых чатов',
+    chatAht: 'Среднее время обработки чата',
   },
   queueSec: {
     call: {
@@ -101,7 +103,7 @@ export default {
     },
     transfer: {
       heading: 'Спасибо!',
-      text: 'Звонок был переведён на другого оператора',
+      text: 'Задача была переведена на другого оператора',
     },
   },
   emptySearch: {
