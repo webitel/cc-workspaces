@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import MediaViewer
-  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/shared/media-viewer/media-viewer.vue';
-import chat from '../../../../../../../src/store/modules/chat/chat';
+  from '../../../../../../src/components/agent-workspace/workspace-section/chat/media-viewer/media-viewer.vue';
+import chat from '../../../../../../src/store/modules/chat/chat';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

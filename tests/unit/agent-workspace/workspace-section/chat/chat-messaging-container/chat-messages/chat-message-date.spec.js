@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import MessageDate
-  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/shared/chat-messages/chat-message-date.vue';
+  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/chat-messaging-container/chat-messages/chat-message-date.vue';
 
 const time = Date.now();
 describe('Chat Message Date component', () => {
