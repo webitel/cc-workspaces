@@ -103,7 +103,7 @@ export default {
     },
     transfer: {
       heading: 'Thank You!',
-      text: 'Call has been transferred to another operator',
+      text: 'Task has been transferred to another operator',
     },
   },
   emptySearch: {

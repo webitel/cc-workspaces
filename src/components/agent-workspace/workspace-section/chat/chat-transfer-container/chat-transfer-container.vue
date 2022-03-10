@@ -19,6 +19,10 @@
         icon="ws-bot"
         @click="transferDestination = TransferDestination.CHATPLAN"
       ></wt-rounded-action>
+      <wt-icon-btn
+        icon="close"
+        @click="closeTab"
+      ></wt-icon-btn>
     </div>
 
     <section ref="scroll-wrap" class="ws-worksection__list">
@@ -48,6 +52,7 @@ import { mapActions, mapState } from 'vuex';
 import APIRepository from '../../../../../api/APIRepository';
 import TransferDestination from '../../../../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
+import EmptyWorkspaceTransfer from '../../empty-workspace/empty-workspace-transfer.vue';
 import EmptySearch from '../../shared/workspace-empty-search/empty-search.vue';
 import ChatTransferItem from './chat-transfer-item.vue';
 
@@ -78,8 +83,9 @@ export default {
     ...mapActions('chat', {
       transfer: 'TRANSFER',
     }),
-    handleTransfer(item) {
-      return this.transfer({ destination: this.transferDestination, item });
+    async handleTransfer(item) {
+      await this.transfer({ destination: this.transferDestination, item });
+      this.$emit('openTab', 'successful-transfer');
     },
     fetch(params) {
       if (this.transferDestination === TransferDestination.CHATPLAN) {
@@ -97,6 +103,9 @@ export default {
     },
     fetchChatplans(params) {
       return chatplansAPI.getChatplans(params);
+    },
+    closeTab() {
+      this.$emit('closeTab');
     },
   },
   watch: {
@@ -123,7 +132,7 @@ export default {
     margin: 0;
   }
 
-  .wt-rounded-action {
+  .wt-rounded-action, .wt-icon-btn {
     flex: 0 0 auto;
     margin-left: 10px;
   }
