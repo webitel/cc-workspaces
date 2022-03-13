@@ -1,4 +1,6 @@
 import { ConversationState } from 'webitel-sdk';
+import ChatTransferDestination
+  from '../../../enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import clientHandlers from './client-handlers';
 
@@ -9,6 +11,7 @@ const state = {
 };
 
 const getters = {
+  ALLOW_CHAT_TRANSFER: (state) => state.chatOnWorkspace.allowLeave,
   ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
   ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
   IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
@@ -51,6 +54,19 @@ const actions = {
     } catch (err) {
       throw err;
     }
+  },
+
+  TRANSFER: async (
+    context,
+    { chat = context.state.chatOnWorkspace, destination, item },
+  ) => {
+    if (destination === ChatTransferDestination.USER) {
+      return chat.transferToUser(item.id);
+    }
+    if (destination === ChatTransferDestination.CHATPLAN) {
+      return chat.transferToPlan(item.id);
+    }
+    throw new TypeError('Unknown transfer destination: ', destination);
   },
 
   CLOSE: async (context) => {

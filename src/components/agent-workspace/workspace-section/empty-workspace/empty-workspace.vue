@@ -1,19 +1,24 @@
 <template>
   <section class="empty-workspace">
-<!--    <transfer-ws v-if="false"/>-->
-    <empty-ws/>
+    <component :is="`${type}-ws`"></component>
   </section>
 </template>
 
 <script>
   import EmptyWs from './empty-workspace-empty.vue';
-  // import TransferWs from './empty-workspace-transfer.vue';
+  import TransferWs from './empty-workspace-transfer.vue';
 
   export default {
     name: 'empty-workspace',
     components: {
       EmptyWs,
-      // TransferWs,
+      TransferWs,
+    },
+    props: {
+      type: {
+        type: String,
+        default: 'empty',
+      },
     },
   };
 </script>
