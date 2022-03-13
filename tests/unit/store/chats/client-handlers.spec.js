@@ -44,9 +44,19 @@ describe('chat store client handlers: actions', () => {
     expect(context.dispatch).toHaveBeenCalledWith('HANDLE_MESSAGE_ACTION', { action: ChatActions.Message, chat });
   });
 
+  it('HANDLE_INVITE_ACTION dispatches NOTIFY action with action and chat', async () => {
+    await chatModule.actions.HANDLE_INVITE_ACTION(context, { action: ChatActions.UserInvite, chat });
+    expect(context.dispatch).toHaveBeenCalledWith('NOTIFY', { action: ChatActions.UserInvite, chat });
+  });
+
   it('HANDLE_MESSAGE_ACTION dispatches CHAT_INSERT_TO_START with passed message', async () => {
     await chatModule.actions.HANDLE_MESSAGE_ACTION(context, { action: ChatActions.Message, chat });
     expect(context.dispatch).lastCalledWith('CHAT_INSERT_TO_START', chat);
+  });
+
+  it('HANDLE_MESSAGE_ACTION dispatches NOTIFY action with action and chat params', async () => {
+    await chatModule.actions.HANDLE_INVITE_ACTION(context, { action: ChatActions.Message, chat });
+    expect(context.dispatch).toHaveBeenCalledWith('NOTIFY', { action: ChatActions.Message, chat });
   });
 
   it('HANDLE_DESTROY_ACTION is called after Destroy event', async () => {
@@ -75,5 +85,15 @@ describe('chat store client handlers: actions', () => {
   it('HANDLE_DESTROY_ACTION commits REMOVE_CHAT mutation with removed chat', () => {
     chatModule.actions.HANDLE_DESTROY_ACTION(context, { chat });
     expect(context.commit).toHaveBeenCalledWith('REMOVE_CHAT', chat);
+  });
+
+  it('HANDLE_DESTROY_ACTION dispatches RESET_UNREAD_COUNT', async () => {
+    await chatModule.actions.HANDLE_DESTROY_ACTION(context, { chat });
+    expect(context.dispatch).toHaveBeenCalledWith('RESET_UNREAD_COUNT');
+  });
+
+  it('HANDLE_CLOSE_ACTION dispatches NOTIFY action with action and chat params', async () => {
+    await chatModule.actions.HANDLE_CLOSE_ACTION(context, { action: ChatActions.Close, chat });
+    expect(context.dispatch).toHaveBeenCalledWith('NOTIFY', { action: ChatActions.Close, chat });
   });
 });
