@@ -1,5 +1,7 @@
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 import chatModule from '../../../../src/store/modules/chat/chat';
+import ChatTransferDestination from '../../../../src/enums/ChatTransferDestination.enum';
+
 
 const chat = {
   id: '1',
@@ -8,6 +10,8 @@ const chat = {
   leave: jest.fn(),
   send: jest.fn(),
   sendText: jest.fn(),
+  transferToUser: jest.fn(),
+  transferToPlan: jest.fn(),
 };
 
 describe('chat store: actions', () => {
@@ -22,6 +26,8 @@ describe('chat store: actions', () => {
     chat.join.mockClear();
     chat.leave.mockClear();
     chat.decline.mockClear();
+    chat.transferToUser.mockClear();
+    chat.transferToPlan.mockClear();
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
@@ -54,6 +60,20 @@ describe('chat store: actions', () => {
     expect(context.dispatch).toHaveBeenCalledTimes(files.length);
     expect(context.dispatch.mock.calls[0]).toEqual(['SEND', files[0]]);
     expect(context.dispatch.mock.calls[1]).toEqual(['SEND', files[1]]);
+  });
+
+  it('TRANSFER action calls chat transferToUser() method is passed destination is USER', () => {
+    const id = 'jest';
+    const payload = { destination: ChatTransferDestination.USER, item: { id } };
+    chatModule.actions.TRANSFER(context, payload);
+    expect(chat.transferToUser).toHaveBeenCalledWith(id);
+  });
+
+  it('TRANSFER action calls chat transferToPlan() method is passed destination is CHATPLAN', () => {
+    const id = 'jest';
+    const payload = { destination: ChatTransferDestination.CHATPLAN, item: { id } };
+    chatModule.actions.TRANSFER(context, payload);
+    expect(chat.transferToPlan).toHaveBeenCalledWith(id);
   });
 
   it('CLOSE action calls chat leave() method, if allowLeave is true', () => {
