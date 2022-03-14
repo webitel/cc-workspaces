@@ -23,7 +23,7 @@ global.BroadcastChannel = class BroadcastChannel {
 
 const state = {
   windowId: null,
-  broadcastChannel: new BroadcastChannel('channel'), // in order to reset the tab title with unread number
+  broadcastChannel: new BroadcastChannel('channel'),
   unreadCount: 0,
   currentlyPlaying: false,
   isConversation: false,
@@ -112,13 +112,6 @@ describe('notifications store: actions', () => {
     notificationsModule.actions.RESET_UNREAD_COUNT(context);
     expect(context.dispatch).toHaveBeenCalledWith('SET_UNREAD_COUNT', 0);
   });
-
-  // it('SET_TAB_TITLE changes document title with unread count', async () => {
-  //   // context.state.unreadCount = 35;
-  //   const document = { title: 'docTitle' };
-  //   await notificationsModule.actions.SET_TAB_TITLE(context);
-  //   expect(document.title).toMatch(`(${context.state.unreadCount}) ${document.title}`);
-  // });
 
   it('PLAY_NOTIFICATION action dispatches PLAY_SOUND action with sound audio', () => {
     const sound = new Audio(audio);
