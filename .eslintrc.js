@@ -20,6 +20,7 @@ module.exports = {
     'max-len': 'off',
     'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     indent: 'off',
+    'no-useless-escape': 'off',
   },
   overrides: [
     {

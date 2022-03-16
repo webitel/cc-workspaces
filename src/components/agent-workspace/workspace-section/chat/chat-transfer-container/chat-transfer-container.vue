@@ -4,6 +4,7 @@
       <wt-search-bar
         v-model="search"
         class="ws-worksection__search"
+        debounce
         @search="resetData"
       ></wt-search-bar>
 
@@ -102,7 +103,7 @@ export default {
       return usersAPI.getUsers({ ...userParams, ...params, notId: [this.userId] });
     },
     fetchChatplans(params) {
-      return chatplansAPI.getChatplans(params);
+      return chatplansAPI.getChatplans({ ...params, enabled: true });
     },
     closeTab() {
       this.$emit('closeTab');
