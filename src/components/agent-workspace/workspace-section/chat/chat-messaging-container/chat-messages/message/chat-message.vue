@@ -82,14 +82,16 @@ export default {
 .chat-message {
   position: relative;
   display: flex;
+  gap: 10px;
   max-width: 80%;
 
   .chat-message-avatar {
-    margin: 0 10px 0 0;
+    flex: 0 0 32px;
   }
 
   .chat-message__main-wrapper {
-    max-width: 100%;
+    width: fit-content;
+    min-width: 0;
     padding: 8px 10px;
     background: var(--chat-client-message-bg-color);
     border-radius: var(--border-radius);
@@ -102,14 +104,6 @@ export default {
 
     .chat-message__main-wrapper {
       background: var(--chat-agent-message-bg-color);
-    }
-
-    .chat-message-avatar {
-      margin: 0 0 0 10px;
-    }
-
-    .chat-message-meta {
-      margin: 0 10px 0 0;
     }
   }
 }

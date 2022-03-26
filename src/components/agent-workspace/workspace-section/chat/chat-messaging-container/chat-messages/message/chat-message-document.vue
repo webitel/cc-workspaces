@@ -71,11 +71,13 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
   }
 
   &__name {
     @extend %typo-strong-md;
     cursor: pointer;
+    overflow-wrap: break-word;
   }
 
   &__size {
