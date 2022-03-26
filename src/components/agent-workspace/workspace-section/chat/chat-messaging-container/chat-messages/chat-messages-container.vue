@@ -12,7 +12,7 @@
         ></message-date>
         <message
           :message="message"
-          :show-user-pic="showUserPic(key)"
+          :show-avatar="showAvatar(key)"
         ></message>
       </div>
     </div>
@@ -21,8 +21,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Message from './chat-message.vue';
-import MessageDate from './chat-message-date.vue';
+import Message from './message/chat-message.vue';
+import MessageDate from './chat-date.vue';
 import ScrollObserver from '../../../../../utils/scroll-observer.vue';
 import chatScroll from '../../../../../../directives/chatScroll';
 
@@ -72,11 +72,12 @@ export default {
         || messageDate.getMonth() !== prevMessageDate.getMonth()
         || messageDate.getDate() !== prevMessageDate.getDate();
     },
-    showUserPic(messageIndex) {
+    showAvatar(messageIndex) {
       if (messageIndex === 0) return true;
       const message = this.messages[messageIndex];
       const prevMessage = this.messages[messageIndex - 1];
-      return message.member !== prevMessage.member;
+      return (message.member !== prevMessage.member)
+        && (message.member?.self && !prevMessage.member?.self);
     },
   },
 };
@@ -96,5 +97,9 @@ export default {
   overflow-y: scroll;
   height: 100%;
   padding: 20px 10px;
+}
+
+.chat-message {
+  margin-top: 10px;
 }
 </style>
