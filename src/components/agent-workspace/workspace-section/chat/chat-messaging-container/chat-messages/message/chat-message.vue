@@ -1,17 +1,17 @@
 <template>
-  <div class="chat-message" :class="{'chat-message--right' : isAgentSideMessage }">
+  <div :class="{'chat-message--right' : isAgentSideMessage }" class="chat-message">
     <message-avatar
-      :show-avatar="showAvatar"
+      :bot="isBot"
       :message="message"
       :my="my"
-      :bot="isBot"
+      :show-avatar="showAvatar"
     ></message-avatar>
     <!--    click.stop prevents focus on textarea and allows to select the message text -->
     <div class="chat-message__main-wrapper" @click.stop>
-      <message-text
+      <message-audio
         :message="message"
         :my="my"
-      ></message-text>
+      ></message-audio>
       <message-image
         :message="message"
         :my="my"
@@ -21,10 +21,14 @@
         :message="message"
         :my="my"
       ></message-document>
+      <message-text
+        :message="message"
+        :my="my"
+      ></message-text>
     </div>
     <message-meta
-      :my="my"
       :message="message"
+      :my="my"
     ></message-meta>
   </div>
 </template>
@@ -32,6 +36,7 @@
 <script>
 import { mapActions } from 'vuex';
 import MessageAvatar from './chat-message-avatar.vue';
+import MessageAudio from './chat-message-audio.vue';
 import MessageText from './chat-message-text.vue';
 import MessageImage from './chat-message-image.vue';
 import MessageDocument from './chat-message-document.vue';
@@ -41,6 +46,7 @@ export default {
   name: 'chat-message',
   components: {
     MessageAvatar,
+    MessageAudio,
     MessageText,
     MessageImage,
     MessageDocument,
@@ -82,20 +88,23 @@ export default {
 .chat-message {
   position: relative;
   display: flex;
-  gap: 10px;
   max-width: 80%;
+  gap: 10px;
 
   .chat-message-avatar {
     flex: 0 0 32px;
   }
 
   .chat-message__main-wrapper {
+    display: flex;
+    flex-direction: column;
     width: fit-content;
     min-width: 0;
     padding: 8px 10px;
-    background: var(--chat-client-message-bg-color);
-    border-radius: var(--border-radius);
     line-height: 0; // prevents height difference from its content
+    border-radius: var(--border-radius);
+    background: var(--chat-client-message-bg-color);
+    gap: 10px;
   }
 
   &--right {
