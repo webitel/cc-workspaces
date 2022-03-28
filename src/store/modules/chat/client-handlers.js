@@ -32,11 +32,11 @@ const actions = {
   },
 
   HANDLE_INVITE_ACTION: (context, { action, chat }) => {
-    context.dispatch('NOTIFY', { action, chat });
     context.dispatch('ADD_CHAT', chat);
     if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       context.dispatch('SET_WORKSPACE', chat);
     }
+    context.dispatch('NOTIFY', { action, chat });
   },
 
   HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {

@@ -9,9 +9,6 @@ import i18n from '../../../locale/i18n';
 
 const NOTIFICATION_VISIBLE_INTERVAL = 2000;
 
-const localStoragePlaying = () => localStorage.getItem('isPlaying');
-const localStorageConversation = () => localStorage.getItem('isConversation');
-
 const getNotificationSound = (action) => {
   switch (action) {
     case ChatActions.UserInvite:
@@ -36,44 +33,46 @@ const state = {
   broadcastChannel: null, // in order to reset the tab title with unread number
   unreadCount: 0,
   currentlyPlaying: false,
-  isConversation: false,
+  isCall: false,
 };
 
 const getters = {
   IS_MAIN_TAB: (state) => state.windowId === getStorageId(),
-  IS_PLAYING: (state) => localStoragePlaying() && state.currentlyPlaying,
-  IS_CONVERSATION: (state) => localStorageConversation() && state.isConversation,
-  SOUND_IS_ALLOWED: (state, getters) => !getters.IS_CONVERSATION && !getters.IS_PLAYING,
+  IS_SOUND_ALLOWED: (state) => !state.isCall && !state.currentlyPlaying,
 };
 
 const actions = {
   INIT_NOTIFICATIONS: (context) => {
-    const windowId = Math.random().toString();
-    context.commit('SET_WINDOW_ID', windowId);
-    setStorageId(windowId);
+    context.dispatch('SETUP_WINDOW_ID');
 
-    const broadcastChannel = new BroadcastChannel('broadcastChannel');
+    const broadcastChannel = new BroadcastChannel('appNotifications');
     broadcastChannel.addEventListener('message', ({ data }) => {
       context.dispatch('SET_UNREAD_COUNT', data.count);
     });
     context.commit('SET_BROADCAST_CHANNEL', broadcastChannel);
-    context.dispatch('SUBSCRIBE_TAB_CLOSING');
+    // context.dispatch('SUBSCRIBE_TAB_CLOSING');
   },
 
-  SUBSCRIBE_TAB_CLOSING: (context) => {
-    // listen to localStorage change and set windowId if no one saved
-    window.addEventListener('storage', () => {
-      if (!getStorageId()) {
-        setStorageId(context.state.windowId);
-      }
-    });
-    context.state.broadcastChannel.close();
+  SETUP_WINDOW_ID: (context) => {
+    const windowId = Math.random().toString();
+    context.commit('SET_WINDOW_ID', windowId);
+    setStorageId(windowId);
   },
+
+  // SUBSCRIBE_TAB_CLOSING: (context) => {
+  //   // listen to localStorage change and set windowId if no one saved
+  //   window.addEventListener('storage', () => {
+  //     if (!getStorageId()) {
+  //       setStorageId(context.state.windowId);
+  //     }
+  //   });
+  // },
 
   NOTIFY: (context, { action, chat }) => {
     const sound = getNotificationSound(action);
     context.dispatch('PLAY_NOTIFICATION', sound);
-    if (context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !== chat.channelId) {
+    if (context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !== chat.channelId
+    && context.getters.IS_MAIN_TAB) {
       context.dispatch('SHOW_NOTIFICATION', action);
     }
   },
@@ -88,22 +87,20 @@ const actions = {
     const notification = new Notification(notificationText, {
       icon: notificationIcon,
     });
+
     notification.addEventListener('click', () => {
       window.focus();
-    });
+    }, { once: true });
 
     setTimeout(() => {
       notification.close();
-      notification.removeEventListener('click', () => {
-        window.focus();
-      });
     }, NOTIFICATION_VISIBLE_INTERVAL);
   },
 
   INCREMENT_UNREAD_COUNT: (context) => {
     const count = context.state.unreadCount + 1;
-    context.state.broadcastChannel.postMessage({ count });
     context.dispatch('SET_UNREAD_COUNT', count);
+    context.state.broadcastChannel.postMessage({ count });
   },
 
   SET_UNREAD_COUNT: (context, count) => {
@@ -113,22 +110,27 @@ const actions = {
 
   RESET_UNREAD_COUNT: (context) => {
     const count = 0;
-    context.state.broadcastChannel.postMessage({ count });
     context.dispatch('SET_UNREAD_COUNT', count);
+    context.state.broadcastChannel.postMessage({ count });
   },
 
   SET_TAB_TITLE: (context) => {
+    console.log('SET TITLE');
     const count = context.state.unreadCount;
     const titleText = document.title.replace(/\s*\(.*?\)\s*/g, '');
     document.title = count ? `(${count}) ${titleText}` : titleText;
   },
 
   PLAY_NOTIFICATION: (context, sound) => {
-    if (context.getters.SOUND_IS_ALLOWED && context.getters.IS_MAIN_TAB) {
+    if (context.getters.IS_SOUND_ALLOWED
+      && context.getters.IS_MAIN_TAB
+      && !localStorage.getItem('isPlaying')
+      && !localStorage.getItem('isCall')
+      ) {
       try {
         sound.addEventListener('ended', () => {
           context.dispatch('STOP_PLAYING', sound);
-        });
+        }, { once: true });
         context.dispatch('PLAY_SOUND', sound);
       } catch (err) {
         throw err;
@@ -145,7 +147,7 @@ const actions = {
   PLAY_SOUND: (context, sound) => {
     sound.play();
     localStorage.setItem('isPlaying', 'true');
-    context.commit('PLAY_SOUND', sound);
+    context.commit('SET_CURRENTLY_PLAYING', sound);
   },
 
   STOP_PLAYING: (context, sound) => {
@@ -154,17 +156,17 @@ const actions = {
       currentSound.pause();
     }
     localStorage.removeItem('isPlaying');
-    context.commit('STOP_PLAYING');
+    context.commit('RESET_CURRENTLY_PLAYING');
   },
 
-  START_CONVERSATION: (context) => {
-    localStorage.setItem('isConversation', 'true');
-    context.commit('START_CONVERSATION');
+  HANDLE_START_CALL: (context) => {
+    localStorage.setItem('isCall', 'true');
+    context.commit('HANDLE_START_CALL');
   },
 
-  END_CONVERSATION: (context) => {
-    localStorage.removeItem('isConversation');
-    context.commit('END_CONVERSATION');
+  HANDLE_END_CALL: (context) => {
+    localStorage.removeItem('isCall');
+    context.commit('HANDLE_END_CALL');
   },
 };
 
@@ -175,20 +177,20 @@ const mutations = {
   SET_BROADCAST_CHANNEL: (state, channel) => {
     state.broadcastChannel = channel;
   },
-  PLAY_SOUND: (state, sound) => {
+  SET_CURRENTLY_PLAYING: (state, sound) => {
     state.currentlyPlaying = sound;
   },
-  STOP_PLAYING: (state) => {
+  RESET_CURRENTLY_PLAYING: (state) => {
     state.currentlyPlaying = false;
   },
   SET_UNREAD_COUNT: (state, count) => {
     state.unreadCount = count;
   },
-  START_CONVERSATION: (state) => {
-    state.isConversation = true;
+  HANDLE_START_CALL: (state) => {
+    state.isCall = true;
   },
-  END_CONVERSATION: (state) => {
-    state.isConversation = false;
+  HANDLE_END_CALL: (state) => {
+    state.isCall = false;
   },
 };
 
@@ -199,3 +201,20 @@ export default {
   actions,
   mutations,
 };
+
+const createPiramide = (num) => {
+  let visualPiramide = '';
+  for (let i = 1; i < num + 1; i++) {
+    for (let j = num; j > i; j--) {
+      visualPiramide += ' ';
+    }
+    for (let j = 0; j < i; j++) {
+      visualPiramide += '#';
+    }
+    visualPiramide += '\n';
+  }
+  console.log('PIRAMIDE WIH ' + num + ' ROWS');
+  console.log(visualPiramide);
+}
+
+createPiramide(4)

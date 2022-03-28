@@ -1,5 +1,4 @@
 import { mapActions, mapGetters, mapState } from 'vuex';
-import isIncomingRinging from '../store/modules/call/scripts/isIncomingRinging';
 
 // ATTENTION! Mixin must be imported into the-agent-workspace to correctly notify new call ringing!
 // This mixin is needed for watcher to watch ringing; it is not possible to watch inside store
@@ -19,14 +18,12 @@ export default {
     ...mapState('call', {
       callList: (state) => state.callList,
     }),
+    ...mapGetters('call', {
+      isAnyRinging: 'IS_ANY_RINGING',
+    }),
     ...mapGetters('notifications', {
       isSoundPlaying: 'IS_PLAYING',
     }),
-
-    isAnyRinging() {
-      // every on empty array is true
-      return this.callList.length && this.callList.every((call) => isIncomingRinging(call));
-    },
   },
 
   methods: {
@@ -36,20 +33,10 @@ export default {
       resetUnreadCount: 'RESET_UNREAD_COUNT',
     }),
 
-    handleClosing() {
+    handleDestroy() {
       if (this.isSoundPlaying) {
         this.stopPlaying();
       }
-
-      document.documentElement.removeEventListener('click', () => {
-        this.resetUnreadCount();
-      });
-
-      window.removeEventListener('storage', (value) => {
-        if (!localStorage.getItem('windowId')) {
-          localStorage.setItem('windowId', value);
-        }
-      });
 
       localStorage.removeItem('windowId');
     },
@@ -63,6 +50,6 @@ export default {
   },
 
   beforeDestroy() {
-    this.handleClosing();
+    this.handleDestroy();
   },
 };

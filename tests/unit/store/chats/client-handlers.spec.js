@@ -55,7 +55,7 @@ describe('chat store client handlers: actions', () => {
   });
 
   it('HANDLE_MESSAGE_ACTION dispatches NOTIFY action with action and chat params', async () => {
-    await chatModule.actions.HANDLE_INVITE_ACTION(context, { action: ChatActions.Message, chat });
+    await chatModule.actions.HANDLE_MESSAGE_ACTION(context, { action: ChatActions.Message, chat });
     expect(context.dispatch).toHaveBeenCalledWith('NOTIFY', { action: ChatActions.Message, chat });
   });
 
@@ -72,13 +72,13 @@ describe('chat store client handlers: actions', () => {
 
   it('HANDLE_INVITE_ACTION calls SET_WORKSPACE with chat if no task on workspace', () => {
     context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = true;
-    chatModule.actions.HANDLE_INVITE_ACTION(context, { chat });
-    expect(context.dispatch).toHaveBeenLastCalledWith('SET_WORKSPACE', chat);
+    chatModule.actions.HANDLE_INVITE_ACTION(context, { action: ChatActions.UserInvite, chat });
+    expect(context.dispatch.mock.calls[1][0]).toContain('SET_WORKSPACE', chat);
   });
 
   it('HANDLE_INVITE_ACTION action does not call SET_WORKSPACE if something present in workspace', () => {
     context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = false;
-    chatModule.actions.HANDLE_INVITE_ACTION(context, { chat });
+    chatModule.actions.HANDLE_INVITE_ACTION(context, { action: ChatActions.UserInvite, chat });
     expect(context.dispatch).not.toHaveBeenCalledWith('SET_WORKSPACE');
   });
 

@@ -187,6 +187,7 @@ export default {
     message: 'New message',
     userInvite: 'New chat',
     closeConversation: 'Subscriber left the chat',
+  },
   emojiPicker: {
     categoriesLabel: 'Categories',
     emojiUnsupportedMessage: 'Your browser does not support color emoji.',

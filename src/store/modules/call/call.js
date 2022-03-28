@@ -1,6 +1,7 @@
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import clientHandlers from './client-handlers';
 import missed from './missed-calls/missed-calls';
+import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
   callList: [],
@@ -19,6 +20,8 @@ const getters = {
     }
     return '';
   },
+
+  IS_ANY_RINGING: (state) => state.callList.length && state.callList.every((call) => isIncomingRinging(call)),
 };
 
 const actions = {

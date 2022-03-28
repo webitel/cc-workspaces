@@ -187,6 +187,7 @@ export default {
     message: 'Нове повідомлення',
     userInvite: 'Новий чат',
     closeConversation: 'Абонент вийшов з чату',
+  },
   emojiPicker: {
     categoriesLabel: 'Категорії',
     emojiUnsupportedMessage: 'Ваш браузер не підтримує кольорові емодзі.',

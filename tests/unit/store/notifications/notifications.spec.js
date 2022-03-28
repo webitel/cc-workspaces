@@ -23,22 +23,21 @@ global.BroadcastChannel = class BroadcastChannel {
 
 const state = {
   windowId: null,
-  broadcastChannel: new BroadcastChannel('channel'),
+  broadcastChannel: new BroadcastChannel('appNotifications'),
   unreadCount: 0,
   currentlyPlaying: false,
-  isConversation: false,
+  isCall: false,
 };
 
 const chat = { id: '1' };
 
 describe('notifications store: actions', () => {
   const context = {
-    state,
     dispatch: jest.fn(),
     commit: jest.fn(),
     getters: {
       IS_MAIN_TAB: () => true,
-      SOUND_IS_ALLOWED: () => true,
+      IS_SOUND_ALLOWED: () => true,
     },
     rootGetters: {
       'workspace/TASK_ON_WORKSPACE': { channelId: 'id' },
@@ -46,28 +45,24 @@ describe('notifications store: actions', () => {
   };
 
   beforeEach(() => {
+    context.state = { ...state };
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
 
-  it('INIT_NOTIFICATIONS action commits SET_WINDOW_ID mutation', () => {
+  it('INIT_NOTIFICATIONS action dispatches SETUP_WINDOW_ID action', () => {
     notificationsModule.actions.INIT_NOTIFICATIONS(context);
-    expect(context.commit.mock.calls[0][0]).toContain('SET_WINDOW_ID');
+    expect(context.dispatch.mock.calls[0][0]).toContain('SETUP_WINDOW_ID');
   });
 
   it('INIT_NOTIFICATIONS action commits SET_BROADCAST_CHANNEL mutation', () => {
     notificationsModule.actions.INIT_NOTIFICATIONS(context);
-    expect(context.commit.mock.calls[1][0]).toContain('SET_BROADCAST_CHANNEL');
+    expect(context.commit.mock.calls[0][0]).toContain('SET_BROADCAST_CHANNEL');
   });
 
-  it('INIT_NOTIFICATIONS action commits SUBSCRIBE_TAB_CLOSING action', () => {
+  it('INIT_NOTIFICATIONS action commits SETUP_WINDOW_ID action', () => {
     notificationsModule.actions.INIT_NOTIFICATIONS(context);
-    expect(context.dispatch).toHaveBeenCalledWith('SUBSCRIBE_TAB_CLOSING');
-  });
-
-  it('SUBSCRIBE_TAB_CLOSING action closes broadcastChannel', () => {
-    notificationsModule.actions.SUBSCRIBE_TAB_CLOSING(context);
-    expect(context.state.broadcastChannel.closed).toBe(true);
+    expect(context.dispatch).toHaveBeenCalledWith('SETUP_WINDOW_ID');
   });
 
   it('NOTIFY action dispatches PLAY_NOTIFICATION action', () => {
@@ -80,7 +75,7 @@ describe('notifications store: actions', () => {
     expect(context.dispatch.mock.calls[1][0]).toContain('SHOW_NOTIFICATION');
   });
 
-  it('NOTIFY action dispatches SHOW_NOTIFICATION action if chat is not open as TASK_ON_WORKSPACE', () => {
+  it('NOTIFY action does not dispatch SHOW_NOTIFICATION action if chat is open as TASK_ON_WORKSPACE', () => {
     context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId = '1';
     notificationsModule.actions.NOTIFY(context, { action: ChatActions.Message, chat });
     expect(context.dispatch.mock.calls[0][0]).not.toContain('SHOW_NOTIFICATION');
@@ -132,16 +127,16 @@ describe('notifications store: actions', () => {
     expect(localStorage.getItem('isPlaying')).toBeTruthy();
   });
 
-  it('PLAY_SOUND action commits PLAY_SOUND mutation with sound', () => {
+  it('PLAY_SOUND action commits SET_CURRENTLY_PLAIYNG mutation with sound', () => {
     const sound = new Audio(audio);
     notificationsModule.actions.PLAY_SOUND(context, sound);
-    expect(context.commit).toHaveBeenCalledWith('PLAY_SOUND', sound);
+    expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', sound);
   });
 
-  it('STOP_PLAYING action commits STOP_PLAYING mutation', () => {
+  it('STOP_PLAYING action commits RESET_CURRENTLY_PLAYING mutation', () => {
     const sound = new Audio(audio);
     notificationsModule.actions.STOP_PLAYING(context, sound);
-    expect(context.commit).toHaveBeenCalledWith('STOP_PLAYING');
+    expect(context.commit).toHaveBeenCalledWith('RESET_CURRENTLY_PLAYING');
   });
 
   it('STOP_PLAYING action removes localStorage isPlaying', () => {
@@ -151,25 +146,25 @@ describe('notifications store: actions', () => {
     expect(localStorage.getItem('isPlaying')).toBeFalsy();
   });
 
-  it('START_CONVERSATION action sets localStorage isConversation', () => {
-    notificationsModule.actions.START_CONVERSATION(context);
-    expect(localStorage.getItem('isConversation')).toBeTruthy();
+  it('HANDLE_START_CALL action sets localStorage isCall', () => {
+    notificationsModule.actions.HANDLE_START_CALL(context);
+    expect(localStorage.getItem('isCall')).toBeTruthy();
   });
 
-  it('START_CONVERSATION action commits START_CONVERSATION mutation', () => {
-    notificationsModule.actions.START_CONVERSATION(context);
-    expect(context.commit).toHaveBeenCalledWith('START_CONVERSATION');
+  it('HANDLE_START_CALL action commits HANDLE_START_CALL mutation', () => {
+    notificationsModule.actions.HANDLE_START_CALL(context);
+    expect(context.commit).toHaveBeenCalledWith('HANDLE_START_CALL');
   });
 
-  it('END_CONVERSATION action removes localStorage isConversation', () => {
-    localStorage.setItem('isConversation', true);
-    notificationsModule.actions.END_CONVERSATION(context);
-    expect(localStorage.getItem('isConversation')).toBeFalsy();
+  it('HANDLE_END_CALL action removes localStorage isCall', () => {
+    localStorage.setItem('isCall', true);
+    notificationsModule.actions.HANDLE_END_CALL(context);
+    expect(localStorage.getItem('isCall')).toBeFalsy();
   });
 
-  it('END_CONVERSATION action commits END_CONVERSATION mutation', () => {
-    notificationsModule.actions.END_CONVERSATION(context);
-    expect(context.commit).toHaveBeenCalledWith('END_CONVERSATION');
+  it('HANDLE_END_CALL action commits HANDLE_END_CALL mutation', () => {
+    notificationsModule.actions.HANDLE_END_CALL(context);
+    expect(context.commit).toHaveBeenCalledWith('HANDLE_END_CALL');
   });
 });
 
@@ -187,14 +182,14 @@ describe('notifications store: mutations', () => {
     expect(state.broadcastChannel).toEqual(channel);
   });
 
-  it('PLAY_SOUND mutation sets currentlyPlaying to state', () => {
+  it('SET_CURRENTLY_PLAIYNG mutation sets currentlyPlaying to state', () => {
     const isPlaying = true;
-    notificationsModule.mutations.PLAY_SOUND(state, isPlaying);
+    notificationsModule.mutations.SET_CURRENTLY_PLAYING(state, isPlaying);
     expect(state.currentlyPlaying).toBe(true);
   });
 
-  it('STOP_PLAYING mutation sets currentlyPlaying to false in state', () => {
-    notificationsModule.mutations.STOP_PLAYING(state);
+  it('RESET_CURRENTLY_PLAYING mutation sets currentlyPlaying to false in state', () => {
+    notificationsModule.mutations.RESET_CURRENTLY_PLAYING(state);
     expect(state.currentlyPlaying).toBe(false);
   });
 
@@ -204,13 +199,13 @@ describe('notifications store: mutations', () => {
     expect(state.unreadCount).toEqual(unreadCount);
   });
 
-  it('START_CONVERSATION mutation sets isCoversation to true', () => {
-    notificationsModule.mutations.START_CONVERSATION(state);
-    expect(state.isConversation).toBe(true);
+  it('HANDLE_START_CALL mutation sets isCoversation to true', () => {
+    notificationsModule.mutations.HANDLE_START_CALL(state);
+    expect(state.isCall).toBe(true);
   });
 
-  it('END_CONVERSATION mutation sets isConversation to false', () => {
-    notificationsModule.mutations.END_CONVERSATION(state);
-    expect(state.isConversation).toBe(false);
+  it('HANDLE_END_CALL mutation sets isCall to false', () => {
+    notificationsModule.mutations.HANDLE_END_CALL(state);
+    expect(state.isCall).toBe(false);
   });
 });

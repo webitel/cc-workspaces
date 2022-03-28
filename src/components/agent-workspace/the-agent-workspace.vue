@@ -35,11 +35,11 @@ import WorkspaceSection from './workspace-section/the-agent-workspace-section.vu
 import InfoSection from './info-section/the-agent-info-section.vue';
 import VideoContainer from './video-container/video-container.vue';
 import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
-import ringingNotificationMixin from '../../mixins/ringingNotificationMixin';
+import appNotificationMixin from '../../mixins/appNotificationMixin';
 
 export default {
   name: 'the-agent-workspace',
-  mixins: [ringingNotificationMixin],
+  mixins: [appNotificationMixin],
   components: {
     Notification,
     CcHeader,

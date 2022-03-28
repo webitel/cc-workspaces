@@ -43,10 +43,4 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-// router.afterEach((to, from) => {
-//   if (from.fullPath === '/auth') {
-//     if (Notification.permission !== 'granted') Notification.requestPermission();
-//   }
-// });
-
 export default router;

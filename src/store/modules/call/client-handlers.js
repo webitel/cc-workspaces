@@ -46,7 +46,7 @@ const actions = {
       context.commit('REMOVE_CALL', call);
       context.dispatch('RESET_WORKSPACE');
     }
-    context.dispatch('END_CONVERSATION');
+    context.dispatch('HANDLE_END_CALL');
   },
 
   HANDLE_DESTROY_ACTION: (context, call) => {
@@ -54,7 +54,7 @@ const actions = {
     if (call.direction === CallDirection.Inbound && !call.answeredAt) {
       context.dispatch('missed/PUSH_MISSED_STUB', call);
     }
-    context.dispatch('END_CONVERSATION');
+    context.dispatch('HANDLE_END_CALL');
     context.dispatch('RESET_WORKSPACE');
   },
 
@@ -64,16 +64,16 @@ const actions = {
     if (stream) {
       audio.srcObject = stream;
       audio.play();
-      context.dispatch('START_CONVERSATION');
+      context.dispatch('HANDLE_START_TALKING');
     }
   },
 
-  START_CONVERSATION: (context) => {
-    context.dispatch('notifications/START_CONVERSATION', null, { root: true });
+  HANDLE_START_TALKING: (context) => {
+    context.dispatch('notifications/HANDLE_START_CALL', null, { root: true });
   },
 
-  END_CONVERSATION: (context) => {
-    context.dispatch('notifications/END_CONVERSATION', null, { root: true });
+  HANDLE_END_CALL: (context) => {
+    context.dispatch('notifications/HANDLE_END_CALL', null, { root: true });
   },
 };
 
