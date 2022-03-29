@@ -27,12 +27,6 @@ export default {
   name: 'chat-message-document',
   mixins: [chatMessageDetailMixin],
   computed: {
-    document() {
-      return this.message.file;
-    },
-    showDocument() {
-      return this.document && !this.document.mime.includes('image') && !this.document.mime.includes('audio');
-    },
     documentSize() {
       if (!this.document) return '';
       return prettifyFileSize(this.document.size);

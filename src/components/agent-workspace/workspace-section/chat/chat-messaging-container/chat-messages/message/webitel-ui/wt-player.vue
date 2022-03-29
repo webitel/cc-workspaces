@@ -1,13 +1,14 @@
 <template>
   <aside class="wt-player">
-    <audio
-      id="wt-player__player"
-      ref="audio"
+    <component
+      :is="playerType"
+      class="wt-player__player"
+      ref="player"
       :src="src"
       :autoplay="autoplay"
       controls
       v-on="listeners"
-    ></audio>
+    ></component>
 
     <!-- The "wt-icon-btn" component is append in to "audio" element by "setCloseIcon" method-->
     <wt-icon-btn
@@ -38,6 +39,19 @@ export default {
       type: [String, Function, Boolean],
       default: () => (url) => url.replace('/stream', '/download'),
     },
+    mime: {
+      type: String,
+      default: 'audio',
+    },
+    // plyr-specific options
+    resetOnEnd: {
+      type: Boolean,
+      default: false,
+    },
+    invertTime: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: () => ({
     player: null,
@@ -62,19 +76,24 @@ export default {
         ...this.$listeners,
       };
     },
+    playerType() {
+      return this.mime.includes('video') ? 'video' : 'audio';
+    },
   },
 
   methods: {
     setupPlayer() {
       const baseURL = this.$baseURL || process.env.BASE_URL;
-      if (this.player) this.player.restart();
+      if (this.player) this.player.destroy();
       const controls = ['play-large', 'play', 'progress', 'current-time',
         'mute', 'volume', 'captions', 'settings', 'pip',
         'airplay', 'fullscreen'];
       if (this.download) controls.push('download');
-      this.player = new Plyr('#wt-player__player', {
+      this.player = Plyr.setup('.wt-player__player', {
         autoplay: this.autoplay,
         loadSprite: false,
+        resetOnEnd: this.resetOnEnd,
+        invertTime: this.invertTime,
         iconUrl: `${baseURL}img/plyr.svg`,
         controls,
         loop: {
@@ -92,7 +111,7 @@ export default {
       }
     },
     appendCloseIcon() {
-      const plyrControls = this.$refs.audio.plyr?.elements?.controls;
+      const plyrControls = this.$refs.player.plyr?.elements?.controls;
       const closeIcon = this.$refs['close-icon'].$el;
       if (plyrControls) {
         plyrControls.append(closeIcon);
@@ -111,6 +130,7 @@ export default {
   bottom: 60px;
 
   .plyr {
+    max-width: 100%; // prevents <video> container overflow
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
   }
@@ -123,6 +143,10 @@ export default {
   .plyr__control:hover, {
     background: var(--main-option-hover-color);
     color: var(--text-primary-color);
+  }
+
+  .plyr__control--overlaid svg {
+    left: 0; // reset plyr style for video "play" button icon
   }
 
   //.plyr__control[role='menuitemradio']::before,

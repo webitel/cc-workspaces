@@ -13,12 +13,6 @@ import chatMessageDetailMixin from '../../../../../../../mixins/chatMessageDetai
 export default {
   name: 'chat-message-image',
   mixins: [chatMessageDetailMixin],
-  computed: {
-    image() {
-      const isImage = this.message.file && this.message.file.mime.includes('image');
-      return isImage ? this.message.file : null;
-    },
-  },
 };
 </script>
 
