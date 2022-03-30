@@ -138,8 +138,19 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (context, { newNumber }) => {
-    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
+  OPEN_NEW_CALL: (context, { newNumber } = {}) => {
+    return context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
+  },
+
+  CLOSE_NEW_CALL: (context) => {
+    if (context.state.callList.length) {
+      return context.dispatch('OPEN_ACTIVE_CALL', 0);
+    }
+    if (context.rootState.chat.chatList.length) {
+      const chat = context.rootState.chat.chatList[0];
+      return context.dispatch('chat/OPEN_CHAT', chat, { root: true });
+    }
+    return context.dispatch('RESET_WORKSPACE');
   },
 
   ADD_DIGIT: async (context, value) => {

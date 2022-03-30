@@ -112,12 +112,41 @@ const actions = {
     context.commit('SET_MEDIA_VIEW', null);
   },
 
+
   NOTIFY: (context, { action, chat }) => {
     context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
   },
 
   RESET_UNREAD_COUNT: (context) => {
     context.dispatch('notifications/RESET_UNREAD_COUNT', null, { root: true });
+
+  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    // eslint-disable-next-line no-param-reassign
+    chat.players = player ? [player] : [];
+  },
+  CLEAN_CHAT_PLAYERS: (context, { chat = context.state.chatOnWorkspace } = {}) => {
+    /*
+    * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
+    * in memory when they are really destroyed
+    * */
+    // eslint-disable-next-line no-param-reassign
+    delete chat.players;
+  },
+  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    if (chat.players) {
+      chat.players.push(player);
+    } else {
+      context.dispatch('INITIALIZE_CHAT_PLAYERS', { player, chat });
+    }
+    player.on('play', () => {
+      context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
+    });
+  },
+  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    chat.players.forEach((chatPlayer) => {
+      if (chatPlayer !== player) chatPlayer.pause();
+    });
+
   },
 };
 

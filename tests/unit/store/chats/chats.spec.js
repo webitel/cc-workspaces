@@ -143,6 +143,45 @@ describe('chat store: actions', () => {
   it('RESET_UNREAD_COUNT action dispatches global RESET_UNREAD_COUNT action', () => {
     chatModule.actions.RESET_UNREAD_COUNT(context);
     expect(context.dispatch).toHaveBeenCalledWith('notifications/RESET_UNREAD_COUNT', null, { root: true });
+
+  it('INITIALIZE_CHAT_PLAYERS sets array with passed player to chatOnWorkspace in state', () => {
+    const player = { jest: 1 };
+    expect(context.state.chatOnWorkspace.players).toBeFalsy();
+    chatModule.actions.INITIALIZE_CHAT_PLAYERS(context, { player });
+    expect(context.state.chatOnWorkspace.players).toEqual([player]);
+  });
+
+  it('CLEAN_CHAT_PLAYERS removes chat.players property', () => {
+    context.state.chatOnWorkspace.players = ['jest'];
+    chatModule.actions.CLEAN_CHAT_PLAYERS(context);
+    expect(context.state.chatOnWorkspace.players).toBe(undefined);
+  });
+
+  it('ATTACH_PLAYER_TO_CHAT dispatches INITIALIZE_CHAT_PLAYERS if chatOnWorkspace has no players', () => {
+    const player = { on: jest.fn() };
+    chatModule.actions.ATTACH_PLAYER_TO_CHAT(context, { player });
+    expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_CHAT_PLAYERS', { player, chat: context.state.chatOnWorkspace });
+  });
+
+  it('ATTACH_PLAYER_TO_CHAT sets working watcher on player "play" event', () => {
+    let callback;
+    const player = {
+      on: (event, _callback) => {
+        callback = _callback;
+      },
+    };
+    chatModule.actions.ATTACH_PLAYER_TO_CHAT(context, { player });
+    callback();
+    expect(context.dispatch).toHaveBeenCalledWith('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
+  });
+
+  it('PAUSE_ALL_CHAT_PLAYERS_EXCEPT triggers player.pause() on all players in chatOnWorkspace (except the passed one)', () => {
+    const player = { pause: jest.fn() };
+    const player2 = { pause: jest.fn() };
+    context.state.chatOnWorkspace.players = [player, player2];
+    chatModule.actions.PAUSE_ALL_CHAT_PLAYERS_EXCEPT(context, { player });
+    expect(player.pause).not.toHaveBeenCalled();
+    expect(player2.pause).toHaveBeenCalled();
   });
 });
 

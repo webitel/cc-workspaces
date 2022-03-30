@@ -75,7 +75,7 @@ describe('Chat Messages Container', () => {
         },
       },
     });
-    expect(wrapper.vm.showUserPic(messages.length - 1)).toBe(false);
+    expect(wrapper.vm.showAvatar(messages.length - 1)).toBe(false);
   });
 
   it('event bus emits input focus event at message container click', () => {
