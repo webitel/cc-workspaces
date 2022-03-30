@@ -1,10 +1,10 @@
 <template>
-  <div class="chat-message-date">{{ messageDate }}</div>
+  <div class="chat-date">{{ date }}</div>
 </template>
 
 <script>
 export default {
-  name: 'chat-message-date',
+  name: 'chat-date',
   props: {
     time: {
       type: Number,
@@ -12,7 +12,7 @@ export default {
     },
   },
   computed: {
-    messageDate() {
+    date() {
       const options = { day: 'numeric', month: 'long' };
       return new Date(this.time).toLocaleDateString([], options);
     },
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-message-date {
+.chat-date {
   @extend %typo-strong-sm;
   text-align: center;
   margin: 30px 0;
