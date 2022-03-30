@@ -17,4 +17,4 @@ class BroadcastChannelMock {
   }
 }
 
-export default Object.getPrototypeOf(new BroadcastChannelMock('bc'));
+global.BroadcastChannel = BroadcastChannelMock;

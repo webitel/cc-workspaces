@@ -1,7 +1,7 @@
 import { ChatActions } from 'webitel-sdk';
 import audio from '../../../../public/media/new-message.wav';
 import notificationsModule from '../../../../src/store/modules/notifications/notifications';
-import BroadcastChannel from '../../mocks/broadcastChannelMock';
+import '../../mocks/broadcastChannelMock';
 
 const state = {
   windowId: null,
