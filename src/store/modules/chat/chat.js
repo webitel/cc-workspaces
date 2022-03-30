@@ -101,7 +101,6 @@ const actions = {
   },
 
   RESET_WORKSPACE: (context) => {
-    context.dispatch('CLEAN_CHAT_PLAYERS', { chat: context.state.chatOnWorkspace });
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
     context.commit('SET_WORKSPACE', {});
   },
@@ -124,7 +123,7 @@ const actions = {
     * in memory when they are really destroyed
     * */
     // eslint-disable-next-line no-param-reassign
-    chat.players = [];
+    delete chat.players;
   },
   ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.state.chatOnWorkspace }) => {
     if (chat.players) {
