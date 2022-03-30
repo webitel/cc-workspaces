@@ -13,6 +13,8 @@
         <message
           :message="message"
           :show-avatar="showAvatar(key)"
+          @open-image="openImage(message)"
+          @initialized-player="handlePlayerInitialize"
         ></message>
       </div>
     </div>
@@ -20,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Message from './message/chat-message.vue';
 import MessageDate from './chat-date.vue';
 import ScrollObserver from '../../../../../utils/scroll-observer.vue';
@@ -37,9 +39,6 @@ export default {
   data: () => ({
     isMounted: false,
   }),
-  mounted() {
-    this.isMounted = true;
-  },
   computed: {
     ...mapState('chat', {
       chat: (state) => state.chatOnWorkspace,
@@ -58,6 +57,11 @@ export default {
     },
   },
   methods: {
+    ...mapActions('chat', {
+      openMedia: 'OPEN_MEDIA',
+      attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
+      cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
+    }),
     chatInputFocus() {
       this.$eventBus.$emit('chat-input-focus');
     },
@@ -79,6 +83,18 @@ export default {
       return (message.member !== prevMessage.member)
         && (message.member?.self && !prevMessage.member?.self);
     },
+    openImage(message) {
+      this.openMedia(message);
+    },
+    handlePlayerInitialize(player) {
+      this.attachPlayer({ player });
+    },
+  },
+  mounted() {
+    this.isMounted = true;
+  },
+  destroyed() {
+    this.cleanChatPlayers();
   },
 };
 </script>

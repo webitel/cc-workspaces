@@ -101,6 +101,7 @@ const actions = {
   },
 
   RESET_WORKSPACE: (context) => {
+    context.dispatch('CLEAN_CHAT_PLAYERS', { chat: context.state.chatOnWorkspace });
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
     context.commit('SET_WORKSPACE', {});
   },
@@ -111,6 +112,34 @@ const actions = {
 
   CLOSE_MEDIA: (context) => {
     context.commit('SET_MEDIA_VIEW', null);
+  },
+
+  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    // eslint-disable-next-line no-param-reassign
+    chat.players = player ? [player] : [];
+  },
+  CLEAN_CHAT_PLAYERS: (context, { chat = context.state.chatOnWorkspace } = {}) => {
+    /*
+    * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
+    * in memory when they are really destroyed
+    * */
+    // eslint-disable-next-line no-param-reassign
+    chat.players = [];
+  },
+  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    if (chat.players) {
+      chat.players.push(player);
+    } else {
+      context.dispatch('INITIALIZE_CHAT_PLAYERS', { player, chat });
+    }
+    player.on('play', () => {
+      context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
+    });
+  },
+  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    chat.players.forEach((chatPlayer) => {
+      if (chatPlayer !== player) chatPlayer.pause();
+    });
   },
 };
 

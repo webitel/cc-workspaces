@@ -9,6 +9,7 @@
       :mime="audio.mime"
       :autoplay="false"
       reset-on-end
+      @initialized="handlePlayerInitialize"
     ></wt-move-me-to-lib-player>
   </div>
 </template>
@@ -26,6 +27,11 @@ export default {
   computed: {
     audioUrl() {
       return this.audio.streamUrl || this.audio.url;
+    },
+  },
+  methods: {
+    handlePlayerInitialize(player) {
+      this.$emit('initialized', player);
     },
   },
 };

@@ -11,6 +11,7 @@
       <message-audio
         :message="message"
         :my="my"
+        @initialized="handlePlayerInitialize"
       ></message-audio>
       <message-image
         :message="message"
@@ -34,7 +35,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import MessageAvatar from './chat-message-avatar.vue';
 import MessageAudio from './chat-message-audio.vue';
 import MessageText from './chat-message-text.vue';
@@ -74,11 +74,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions('chat', {
-      openMedia: 'OPEN_MEDIA',
-    }),
     openImage() {
-      this.openMedia(this.message);
+      this.$emit('open-image');
+    },
+    handlePlayerInitialize(player) {
+      this.$emit('initialized-player', player);
     },
   },
 };

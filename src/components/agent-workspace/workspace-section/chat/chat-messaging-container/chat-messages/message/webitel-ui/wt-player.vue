@@ -89,7 +89,7 @@ export default {
         'mute', 'volume', 'captions', 'settings', 'pip',
         'airplay', 'fullscreen'];
       if (this.download) controls.push('download');
-      this.player = Plyr.setup('.wt-player__player', {
+      this.player = new Plyr(this.$refs.player, {
         autoplay: this.autoplay,
         loadSprite: false,
         resetOnEnd: this.resetOnEnd,
@@ -101,6 +101,7 @@ export default {
         },
       });
       this.appendCloseIcon();
+      this.$emit('initialized', this.player);
     },
     setupDownload() {
       if (!this.download) this.setupPlayer();
