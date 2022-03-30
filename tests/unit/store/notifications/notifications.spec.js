@@ -1,25 +1,7 @@
 import { ChatActions } from 'webitel-sdk';
 import audio from '../../../../public/media/new-message.wav';
 import notificationsModule from '../../../../src/store/modules/notifications/notifications';
-
-global.BroadcastChannel = class BroadcastChannel {
-  constructor(name) {
-    this.name = name;
-    this.closed = false;
-  }
-
-  addEventListener(event, cb) {
-    this.event = event;
-  }
-
-  postMessage(message) {
-    this.message = message;
-  }
-
-  close() {
-    this.closed = true;
-  }
-};
+import BroadcastChannel from '../../mocks/broadcastChannelMock';
 
 const state = {
   windowId: null,
@@ -65,9 +47,9 @@ describe('notifications store: actions', () => {
     expect(context.dispatch).toHaveBeenCalledWith('SETUP_WINDOW_ID');
   });
 
-  it('NOTIFY action dispatches PLAY_NOTIFICATION action', () => {
+  it('NOTIFY action dispatches PLAY_NOTIFICATION_SOUND action', () => {
     notificationsModule.actions.NOTIFY(context, { action: ChatActions.Message, chat });
-    expect(context.dispatch.mock.calls[0][0]).toContain('PLAY_NOTIFICATION');
+    expect(context.dispatch.mock.calls[0][0]).toContain('PLAY_NOTIFICATION_SOUND');
   });
 
   it('NOTIFY action dispatches SHOW_NOTIFICATION action if chat is not open as TASK_ON_WORKSPACE', () => {
@@ -108,9 +90,9 @@ describe('notifications store: actions', () => {
     expect(context.dispatch).toHaveBeenCalledWith('SET_UNREAD_COUNT', 0);
   });
 
-  it('PLAY_NOTIFICATION action dispatches PLAY_SOUND action with sound audio', () => {
+  it('PLAY_NOTIFICATION_SOUND action dispatches PLAY_SOUND action with sound audio', () => {
     const sound = new Audio(audio);
-    notificationsModule.actions.PLAY_NOTIFICATION(context, sound);
+    notificationsModule.actions.PLAY_NOTIFICATION_SOUND(context, sound);
     expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', sound);
   });
 
@@ -146,25 +128,25 @@ describe('notifications store: actions', () => {
     expect(localStorage.getItem('isPlaying')).toBeFalsy();
   });
 
-  it('HANDLE_START_CALL action sets localStorage isCall', () => {
-    notificationsModule.actions.HANDLE_START_CALL(context);
+  it('HANDLE_CALL_START action sets localStorage isCall', () => {
+    notificationsModule.actions.HANDLE_CALL_START(context);
     expect(localStorage.getItem('isCall')).toBeTruthy();
   });
 
-  it('HANDLE_START_CALL action commits HANDLE_START_CALL mutation', () => {
-    notificationsModule.actions.HANDLE_START_CALL(context);
-    expect(context.commit).toHaveBeenCalledWith('HANDLE_START_CALL');
+  it('HANDLE_CALL_START action commits HANDLE_CALL_START mutation', () => {
+    notificationsModule.actions.HANDLE_CALL_START(context);
+    expect(context.commit).toHaveBeenCalledWith('HANDLE_CALL_START');
   });
 
-  it('HANDLE_END_CALL action removes localStorage isCall', () => {
+  it('HANDLE_CALL_END action removes localStorage isCall', () => {
     localStorage.setItem('isCall', true);
-    notificationsModule.actions.HANDLE_END_CALL(context);
+    notificationsModule.actions.HANDLE_CALL_END(context);
     expect(localStorage.getItem('isCall')).toBeFalsy();
   });
 
-  it('HANDLE_END_CALL action commits HANDLE_END_CALL mutation', () => {
-    notificationsModule.actions.HANDLE_END_CALL(context);
-    expect(context.commit).toHaveBeenCalledWith('HANDLE_END_CALL');
+  it('HANDLE_CALL_END action commits HANDLE_CALL_END mutation', () => {
+    notificationsModule.actions.HANDLE_CALL_END(context);
+    expect(context.commit).toHaveBeenCalledWith('HANDLE_CALL_END');
   });
 });
 
@@ -199,13 +181,13 @@ describe('notifications store: mutations', () => {
     expect(state.unreadCount).toEqual(unreadCount);
   });
 
-  it('HANDLE_START_CALL mutation sets isCoversation to true', () => {
-    notificationsModule.mutations.HANDLE_START_CALL(state);
+  it('HANDLE_CALL_START mutation sets isCoversation to true', () => {
+    notificationsModule.mutations.HANDLE_CALL_START(state);
     expect(state.isCall).toBe(true);
   });
 
-  it('HANDLE_END_CALL mutation sets isCall to false', () => {
-    notificationsModule.mutations.HANDLE_END_CALL(state);
+  it('HANDLE_CALL_END mutation sets isCall to false', () => {
+    notificationsModule.mutations.HANDLE_CALL_END(state);
     expect(state.isCall).toBe(false);
   });
 });

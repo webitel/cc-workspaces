@@ -31,14 +31,14 @@ export default {
       playRinging: 'RING_CALL',
       stopPlaying: 'STOP_PLAYING',
       resetUnreadCount: 'RESET_UNREAD_COUNT',
+      removeStorageId: 'REMOVE_STORAGE_ID',
     }),
 
     handleDestroy() {
       if (this.isSoundPlaying) {
         this.stopPlaying();
       }
-
-      localStorage.removeItem('windowId');
+      this.removeStorageId();
     },
   },
 

@@ -184,9 +184,9 @@ export default {
     required: 'Обязательно',
   },
   notifications: {
-    message: 'Новое сообщение',
-    userInvite: 'Новый чат',
-    closeConversation: 'Абонент покинул чат',
+    message: 'Новое сообщение от {name}',
+    userInvite: 'Новый чат от {name',
+    closeConversation: '{name} покинул чат',
   },
   emojiPicker: {
     categoriesLabel: 'Категории',

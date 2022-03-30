@@ -22,14 +22,18 @@ const getNotificationSound = (action) => {
   }
 };
 
+const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
+
 const getStorageId = () => localStorage.getItem('windowId');
 
-const setStorageId = (value) => {
+const setStorageId = (context, value) => {
   localStorage.setItem('windowId', value);
+  context.commit('SET_STORAGE_ID', context.state.windowId);
 };
 
 const state = {
   windowId: null,
+  storageId: null,
   broadcastChannel: null, // in order to reset the tab title with unread number
   unreadCount: 0,
   currentlyPlaying: false,
@@ -37,7 +41,7 @@ const state = {
 };
 
 const getters = {
-  IS_MAIN_TAB: (state) => state.windowId === getStorageId(),
+  IS_MAIN_TAB: (state) => state.windowId === state.storageId,
   IS_SOUND_ALLOWED: (state) => !state.isCall && !state.currentlyPlaying,
 };
 
@@ -49,40 +53,41 @@ const actions = {
     broadcastChannel.addEventListener('message', ({ data }) => {
       context.dispatch('SET_UNREAD_COUNT', data.count);
     });
+
+    document.documentElement.addEventListener('click', () => {
+      context.dispatch('RESET_UNREAD_COUNT');
+    });
+    context.dispatch('SUBSCRIBE_TAB_CLOSING');
     context.commit('SET_BROADCAST_CHANNEL', broadcastChannel);
-    // context.dispatch('SUBSCRIBE_TAB_CLOSING');
+  },
+
+  SUBSCRIBE_TAB_CLOSING: (context) => {
+    window.addEventListener('storage', () => {
+      if (!getStorageId()) {
+        setStorageId(context, context.state.windowId);
+      }
+    });
   },
 
   SETUP_WINDOW_ID: (context) => {
     const windowId = Math.random().toString();
     context.commit('SET_WINDOW_ID', windowId);
-    setStorageId(windowId);
+    setStorageId(context, windowId);
   },
-
-  // SUBSCRIBE_TAB_CLOSING: (context) => {
-  //   // listen to localStorage change and set windowId if no one saved
-  //   window.addEventListener('storage', () => {
-  //     if (!getStorageId()) {
-  //       setStorageId(context.state.windowId);
-  //     }
-  //   });
-  // },
 
   NOTIFY: (context, { action, chat }) => {
     const sound = getNotificationSound(action);
-    context.dispatch('PLAY_NOTIFICATION', sound);
+    context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
+    context.dispatch('INCREMENT_UNREAD_COUNT');
     if (context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !== chat.channelId
     && context.getters.IS_MAIN_TAB) {
-      context.dispatch('SHOW_NOTIFICATION', action);
+      const name = getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
+      context.dispatch('SHOW_NOTIFICATION', { action, name });
     }
   },
 
-  SHOW_NOTIFICATION: async (context, action) => {
-    const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`);
-    context.dispatch('INCREMENT_UNREAD_COUNT');
-    document.documentElement.addEventListener('click', () => {
-      context.dispatch('RESET_UNREAD_COUNT');
-    });
+  SHOW_NOTIFICATION: async (context, { action, name }) => {
+    const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`, { name });
 
     const notification = new Notification(notificationText, {
       icon: notificationIcon,
@@ -109,19 +114,19 @@ const actions = {
   },
 
   RESET_UNREAD_COUNT: (context) => {
+    if (context.state.unreadCount === 0) return;
     const count = 0;
     context.dispatch('SET_UNREAD_COUNT', count);
     context.state.broadcastChannel.postMessage({ count });
   },
 
   SET_TAB_TITLE: (context) => {
-    console.log('SET TITLE');
     const count = context.state.unreadCount;
     const titleText = document.title.replace(/\s*\(.*?\)\s*/g, '');
     document.title = count ? `(${count}) ${titleText}` : titleText;
   },
 
-  PLAY_NOTIFICATION: (context, sound) => {
+  PLAY_NOTIFICATION_SOUND: (context, sound) => {
     if (context.getters.IS_SOUND_ALLOWED
       && context.getters.IS_MAIN_TAB
       && !localStorage.getItem('isPlaying')
@@ -159,14 +164,18 @@ const actions = {
     context.commit('RESET_CURRENTLY_PLAYING');
   },
 
-  HANDLE_START_CALL: (context) => {
+  HANDLE_CALL_START: (context) => {
     localStorage.setItem('isCall', 'true');
-    context.commit('HANDLE_START_CALL');
+    context.commit('HANDLE_CALL_START');
   },
 
-  HANDLE_END_CALL: (context) => {
+  HANDLE_CALL_END: (context) => {
     localStorage.removeItem('isCall');
-    context.commit('HANDLE_END_CALL');
+    context.commit('HANDLE_CALL_END');
+  },
+
+  REMOVE_STORAGE_ID: () => {
+    localStorage.removeItem('windowId');
   },
 };
 
@@ -174,6 +183,11 @@ const mutations = {
   SET_WINDOW_ID: (state, windowId) => {
     state.windowId = windowId;
   },
+
+  SET_STORAGE_ID: (state, storageId) => {
+    state.storageId = storageId;
+  },
+
   SET_BROADCAST_CHANNEL: (state, channel) => {
     state.broadcastChannel = channel;
   },
@@ -186,10 +200,10 @@ const mutations = {
   SET_UNREAD_COUNT: (state, count) => {
     state.unreadCount = count;
   },
-  HANDLE_START_CALL: (state) => {
+  HANDLE_CALL_START: (state) => {
     state.isCall = true;
   },
-  HANDLE_END_CALL: (state) => {
+  HANDLE_CALL_END: (state) => {
     state.isCall = false;
   },
 };
@@ -201,20 +215,3 @@ export default {
   actions,
   mutations,
 };
-
-const createPiramide = (num) => {
-  let visualPiramide = '';
-  for (let i = 1; i < num + 1; i++) {
-    for (let j = num; j > i; j--) {
-      visualPiramide += ' ';
-    }
-    for (let j = 0; j < i; j++) {
-      visualPiramide += '#';
-    }
-    visualPiramide += '\n';
-  }
-  console.log('PIRAMIDE WIH ' + num + ' ROWS');
-  console.log(visualPiramide);
-}
-
-createPiramide(4)

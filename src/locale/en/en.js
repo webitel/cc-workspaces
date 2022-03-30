@@ -184,9 +184,9 @@ export default {
     required: 'Required',
   },
   notifications: {
-    message: 'New message',
-    userInvite: 'New chat',
-    closeConversation: 'Subscriber left the chat',
+    message: 'New message from {name}',
+    userInvite: 'New chat invite from {name}',
+    closeConversation: '{name} left the chat',
   },
   emojiPicker: {
     categoriesLabel: 'Categories',

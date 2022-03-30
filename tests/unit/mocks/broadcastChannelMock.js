@@ -1,4 +1,4 @@
-class BroadcastChannel {
+class BroadcastChannelMock {
   constructor(name) {
     this.name = name;
     this.closed = false;
@@ -17,4 +17,4 @@ class BroadcastChannel {
   }
 }
 
-export default BroadcastChannel;
+export default Object.getPrototypeOf(new BroadcastChannelMock('bc'));
