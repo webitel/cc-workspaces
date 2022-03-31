@@ -65,4 +65,3 @@ describe('ChatQueuePreview', () => {
     expect(wrapper.find('.queue-preview-badges').exists()).toBe(false);
   });
 });
-

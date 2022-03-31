@@ -183,6 +183,11 @@ export default {
   validation: {
     required: 'Required',
   },
+  notifications: {
+    message: 'New message from {name}',
+    userInvite: 'New chat invite from {name}',
+    closeConversation: '{name} left the chat',
+  },
   emojiPicker: {
     categoriesLabel: 'Categories',
     emojiUnsupportedMessage: 'Your browser does not support color emoji.',

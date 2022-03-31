@@ -1,6 +1,5 @@
 import { ConversationState } from 'webitel-sdk';
-import ChatTransferDestination
-  from '../../../enums/ChatTransferDestination.enum';
+import ChatTransferDestination from '../../../enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
 import clientHandlers from './client-handlers';
 
@@ -13,10 +12,9 @@ const state = {
 const getters = {
   ALLOW_CHAT_TRANSFER: (state) => state.chatOnWorkspace.allowLeave,
   ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
-  ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave ||
-    state.chatOnWorkspace.allowDecline,
-  IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state ===
-    ConversationState.Active,
+  ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
+  IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
+  IS_MY_MESSAGE: (state) => (message) => message.member?.self,
 };
 
 const actions = {
@@ -113,10 +111,19 @@ const actions = {
     context.commit('SET_MEDIA_VIEW', null);
   },
 
+  NOTIFY: (context, { action, chat }) => {
+    context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
+  },
+
+  RESET_UNREAD_COUNT: (context) => {
+    context.dispatch('notifications/RESET_UNREAD_COUNT', null, { root: true });
+  },
+
   INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.state.chatOnWorkspace }) => {
     // eslint-disable-next-line no-param-reassign
     chat.players = player ? [player] : [];
   },
+
   CLEAN_CHAT_PLAYERS: (context, { chat = context.state.chatOnWorkspace } = {}) => {
     /*
     * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
