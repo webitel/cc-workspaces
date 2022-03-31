@@ -100,4 +100,3 @@ describe('Reporting class', () => {
     expect(reporting.communications.length).toBe(0);
   });
 });
-

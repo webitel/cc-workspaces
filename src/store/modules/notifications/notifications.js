@@ -78,12 +78,12 @@ const actions = {
   NOTIFY: (context, { action, chat }) => {
     const sound = getNotificationSound(action);
     context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
-    context.dispatch('INCREMENT_UNREAD_COUNT');
     if (context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !== chat.channelId
     && context.getters.IS_MAIN_TAB) {
       const name = getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
       context.dispatch('SHOW_NOTIFICATION', { action, name });
     }
+    context.dispatch('INCREMENT_UNREAD_COUNT');
   },
 
   SHOW_NOTIFICATION: async (context, { action, name }) => {
