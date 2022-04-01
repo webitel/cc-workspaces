@@ -7,7 +7,10 @@
       :key="member.id"
       @click.native.prevent="openMember(key)"
     ></offline-preview>
-    <observer/>
+
+    <observer
+      :options="obsOptions"
+      @intersect="handleIntersect"/>
   </section>
 </template>
 
