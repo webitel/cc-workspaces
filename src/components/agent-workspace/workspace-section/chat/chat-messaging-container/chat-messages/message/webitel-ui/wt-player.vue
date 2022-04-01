@@ -52,6 +52,11 @@ export default {
       type: Boolean,
       default: true,
     },
+    // plyr is caching volume settings so we should reset them at init
+    resetVolume: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     player: null,
@@ -100,14 +105,23 @@ export default {
           active: this.loop,
         },
       });
+
+      if (this.resetVolume) this.makeVolumeReset();
+      if (this.download) this.setupDownload();
+
       this.appendCloseIcon();
       this.$emit('initialized', this.player);
+    },
+    makeVolumeReset() {
+      this.player.volume = 1;
+      this.player.muted = false;
     },
     setupDownload() {
       if (!this.download) this.setupPlayer();
       else if (typeof this.download === 'string') {
         this.player.download = this.download;
       } else if (typeof this.download === 'function') {
+        console.warn('here!', this.download(this.src));
         this.player.download = this.download(this.src);
       }
     },

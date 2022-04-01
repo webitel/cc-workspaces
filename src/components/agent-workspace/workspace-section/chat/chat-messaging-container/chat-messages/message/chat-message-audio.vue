@@ -9,6 +9,7 @@
       :mime="audio.mime"
       :autoplay="false"
       reset-on-end
+      reset-volume
       @initialized="handlePlayerInitialize"
     ></wt-move-me-to-lib-player>
   </div>
@@ -41,9 +42,10 @@ export default {
 .chat-message-audio {
   .wt-player ::v-deep {
     .wt-player__close-icon,
-    .plyr__menu,
+    //.plyr__menu,
     .plyr__volume,
-    .plyr__control[download] {
+    //.plyr__control[download]
+    {
       display: none;
     }
   }
