@@ -57,6 +57,8 @@ export default {
       sumTalkSec: 0,
       occupancy: '0.00%',
       utilization: '0.00%',
+      chatAccepts: 0,
+      chatAht: '00:00:00',
     },
     refreshIntervalInstance: null,
     selectionMode: false,
