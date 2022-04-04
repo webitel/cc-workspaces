@@ -183,6 +183,11 @@ export default {
   validation: {
     required: 'Обязательно',
   },
+  notifications: {
+    message: 'Новое сообщение от {name}',
+    userInvite: 'Новый чат от {name',
+    closeConversation: '{name} покинул чат',
+  },
   emojiPicker: {
     categoriesLabel: 'Категории',
     emojiUnsupportedMessage: 'Ваш браузер не поддерживает цветовые эмодзи.',
@@ -217,5 +222,4 @@ export default {
       flags: 'Флаги',
     },
   },
-
 };

@@ -183,6 +183,11 @@ export default {
   validation: {
     required: 'Обов\'язково',
   },
+  notifications: {
+    message: 'Нове повідомлення від {name}',
+    userInvite: 'Новий чат з {name}',
+    closeConversation: '{name} вийшов з чату',
+  },
   emojiPicker: {
     categoriesLabel: 'Категорії',
     emojiUnsupportedMessage: 'Ваш браузер не підтримує кольорові емодзі.',
