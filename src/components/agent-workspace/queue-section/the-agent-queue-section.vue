@@ -5,12 +5,11 @@
       <chat-queue/>
     </div>
     <wt-rounded-action
-      v-show="isNewCallButton"
       color="success"
-      icon="call-ringing"
+      :icon="isNewCallButton ? 'call-ringing' : 'close'"
       size="lg"
       rounded
-      @click="openNewCall"
+      @click="toggleNewCall"
     ></wt-rounded-action>
   </section>
 </template>
@@ -50,7 +49,11 @@ export default {
   methods: {
     ...mapActions('call', {
       openNewCall: 'OPEN_NEW_CALL',
+      closeNewCall: 'CLOSE_NEW_CALL',
     }),
+    toggleNewCall() {
+      return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
+    },
   },
 };
 </script>
