@@ -15,7 +15,7 @@
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@webitel/cc-ui-sdk": "^0.1.22",
-    "@webitel/ui-sdk": "^1.0.14",
+    "@webitel/ui-sdk": "^1.0.25",
     "axios": "^0.25.0",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
@@ -23,9 +23,10 @@
     "deep-copy": "^1.4.2",
     "deep-equal": "^2.0.3",
     "deepmerge": "^4.2.2",
+    "emoji-picker-element": "^1.10.1",
     "file-loader": "^5.0.2",
     "github-markdown-css": "^4.0.0",
-    "i": "^0.3.7",
+    "insert-text-at-cursor": "^0.3.0",
     "jsdom": "^16.4.0",
     "linkifyjs": "^3.0.0-beta.3",
     "markdown-it": "^10.0.0",
@@ -45,18 +46,19 @@
     "@vue/cli-plugin-babel": "^4.2.2",
     "@vue/cli-plugin-eslint": "~4.2.0",
     "@vue/cli-plugin-router": "~4.2.0",
-    "@vue/cli-plugin-unit-jest": "~4.4.0",
+    "@vue/cli-plugin-unit-jest": "~5.0.1",
     "@vue/cli-plugin-vuex": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/test-utils": "^1.1.1",
+    "@vue/vue2-jest": "^27.0.0-alpha.4",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.1.2",
+    "husky": "^7.0.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11",
-    "husky": "^7.0.0"
+    "vue-template-compiler": "^2.6.11"
   }
 }

@@ -1,3 +1,5 @@
+import './ws-agent.svg';
+import './ws-bot.svg';
 import './ws-widget-avg-hold.svg';
 import './ws-widget-avg-talk.svg';
 import './ws-widget-chat-accepts.svg';

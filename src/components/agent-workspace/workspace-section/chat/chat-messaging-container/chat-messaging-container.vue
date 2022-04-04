@@ -1,31 +1,31 @@
 <template>
-  <div class="chat-preview" @dragenter.prevent="handleDragEnter">
+  <div
+    class="chat-messaging-container"
+    @dragenter.prevent="handleDragEnter"
+  >
     <dropzone
       v-show="isDropzoneVisible"
       @dragenter.prevent
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     ></dropzone>
-    <chat-header/>
-    <chat-messages-container/>
-    <chat-footer/>
+    <messages-container/>
+    <messaging-footer/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import Dropzone from '../../../../utils/dropzone.vue';
-import ChatHeader from '../shared/chat-header/chat-header.vue';
-import ChatMessagesContainer from '../shared/chat-messages/chat-messages-container.vue';
-import ChatFooter from '../shared/chat-footer/chat-footer.vue';
+import MessagesContainer from './chat-messages/chat-messages-container.vue';
+import MessagingFooter from './chat-messaging-footer/chat-messaging-footer.vue';
 
 export default {
-  name: 'chat-preview',
+  name: 'chat-messaging-container',
   components: {
     Dropzone,
-    ChatHeader,
-    ChatMessagesContainer,
-    ChatFooter,
+    MessagesContainer,
+    MessagingFooter,
   },
   data: () => ({
     isDropzoneVisible: false,
@@ -50,11 +50,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-preview {
+.chat-messaging-container {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
 
   .chat-messages-container {
     flex: 1 1 0;

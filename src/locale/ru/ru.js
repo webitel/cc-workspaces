@@ -103,7 +103,7 @@ export default {
     },
     transfer: {
       heading: 'Спасибо!',
-      text: 'Звонок был переведён на другого оператора',
+      text: 'Задача была переведена на другого оператора',
     },
   },
   emptySearch: {
@@ -183,4 +183,39 @@ export default {
   validation: {
     required: 'Обязательно',
   },
+  emojiPicker: {
+    categoriesLabel: 'Категории',
+    emojiUnsupportedMessage: 'Ваш браузер не поддерживает цветовые эмодзи.',
+    favoritesLabel: 'Любимые',
+    loadingMessage: 'Загрузка…',
+    networkErrorMessage: 'Не удалось загрузить эмодзи.',
+    regionLabel: 'Emoji picker',
+    searchDescription: 'Если результат поиска доступен, нажимайте кнопки вверх или вниз для навигации, и enter для выбора.',
+    searchLabel: 'Поиск',
+    searchResultsLabel: 'Результаты поиска',
+    skinToneDescription: 'После открытия, нажимайте кнопки вверх или вниз для навигации, и enter для выбора.',
+    skinToneLabel: 'Выберите тон кожи',
+    skinTonesLabel: 'Тон кожи',
+    skinTones: [
+      'По умолчанию',
+      'Светлый',
+      'Средне-светлый',
+      'Средний',
+      'Средне-темный',
+      'Темный',
+    ],
+    categories: {
+      custom: 'Свой',
+      'smileys-emotion': 'Смайлы и смайлики',
+      'people-body': 'Люди и тело',
+      'animals-nature': 'Звери и природа',
+      'food-drink': 'Еда и напитки',
+      'travel-places': 'Путешествия и места',
+      activities: 'Активности',
+      objects: 'Объекты',
+      symbols: 'Символы',
+      flags: 'Флаги',
+    },
+  },
+
 };

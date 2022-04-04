@@ -103,7 +103,7 @@ export default {
     },
     transfer: {
       heading: 'Дякую!',
-      text: 'Дзвінок було переведено на іншого оператора',
+      text: 'Задачу було переведено на іншого оператора',
     },
   },
   emptySearch: {
@@ -182,5 +182,39 @@ export default {
   },
   validation: {
     required: 'Обов\'язково',
+  },
+  emojiPicker: {
+    categoriesLabel: 'Категорії',
+    emojiUnsupportedMessage: 'Ваш браузер не підтримує кольорові емодзі.',
+    favoritesLabel: 'Улюблені',
+    loadingMessage: 'Завантаження…',
+    networkErrorMessage: 'Не вдалось завантажити емодзі.',
+    regionLabel: 'Emoji picker',
+    searchDescription: 'Коли результат пошуку доступний, тисніть кнопки вверх або вниз для навігації, та enter для вибору.',
+    searchLabel: 'Пошук',
+    searchResultsLabel: 'Результати пошуку',
+    skinToneDescription: 'Після відкриття, тисніть кнопки вверх або вниз для навігації, та enter для вибору.',
+    skinToneLabel: 'Виберіть тон шкіри',
+    skinTonesLabel: 'Тони шкіри',
+    skinTones: [
+      'За замовчуванням',
+      'Світлий',
+      'Середньо-світлий',
+      'Середній',
+      'Середньо-темний',
+      'Темний',
+    ],
+    categories: {
+      custom: 'Свій',
+      'smileys-emotion': 'Смайли та смайлики',
+      'people-body': 'Люди і тіло',
+      'animals-nature': 'Тварини та природа',
+      'food-drink': 'Їжа та напої',
+      'travel-places': 'Подорожі та місця',
+      activities: 'Активності',
+      objects: 'Об\'єкти',
+      symbols: 'Символи',
+      flags: 'Прапори',
+    },
   },
 };

@@ -4,10 +4,19 @@
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper">
-      <img src="../../../../../../assets/agent-workspace/default-avatar.svg" alt="client pic">
+      <img src="../../../../../assets/agent-workspace/default-avatar.svg" alt="client pic">
     </div>
     <div class="chat-header__cell-wrapper"></div>
-    <div class="chat-header__cell-wrapper"></div>
+    <div class="chat-header__cell-wrapper">
+      <wt-rounded-action
+        v-show="isTransferAction"
+        icon="chat-transfer"
+        color="transfer"
+        rounded
+        wide
+        @click="$emit('openTab', 'transfer')"
+      ></wt-rounded-action>
+    </div>
     <div class="chat-header__cell-wrapper">
       <wt-rounded-action
         v-show="isCloseAction"
@@ -29,6 +38,7 @@ export default {
   computed: {
     ...mapGetters('chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
+      isTransferAction: 'ALLOW_CHAT_TRANSFER',
     }),
   },
   methods: {

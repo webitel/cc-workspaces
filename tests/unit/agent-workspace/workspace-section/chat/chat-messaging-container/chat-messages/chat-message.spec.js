@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ChatMessage
-  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/shared/chat-messages/chat-message.vue';
+  from '../../../../../../../src/components/agent-workspace/workspace-section/chat/chat-messaging-container/chat-messages/chat-message.vue';
 
 let message = {};
 describe('Chat Message component', () => {
