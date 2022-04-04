@@ -1,7 +1,6 @@
+import ChatTransferDestination from '../../../../src/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 import chatModule from '../../../../src/store/modules/chat/chat';
-import ChatTransferDestination from '../../../../src/enums/ChatTransferDestination.enum';
-
 
 const chat = {
   id: '1',
@@ -143,6 +142,7 @@ describe('chat store: actions', () => {
   it('RESET_UNREAD_COUNT action dispatches global RESET_UNREAD_COUNT action', () => {
     chatModule.actions.RESET_UNREAD_COUNT(context);
     expect(context.dispatch).toHaveBeenCalledWith('notifications/RESET_UNREAD_COUNT', null, { root: true });
+  });
 
   it('INITIALIZE_CHAT_PLAYERS sets array with passed player to chatOnWorkspace in state', () => {
     const player = { jest: 1 };

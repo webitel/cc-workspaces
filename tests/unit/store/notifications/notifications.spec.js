@@ -11,7 +11,7 @@ const state = {
   isCall: false,
 };
 
-const chat = { id: '1' };
+const chat = { id: '1', messages: [{ member: { name: 'name' } }] };
 
 describe('notifications store: actions', () => {
   const context = {
@@ -63,11 +63,6 @@ describe('notifications store: actions', () => {
     expect(context.dispatch.mock.calls[0][0]).not.toContain('SHOW_NOTIFICATION');
   });
 
-  it('SHOW_NOTIFICATION action dispatches INCREMENT_UNREAD_COUNT', () => {
-    notificationsModule.actions.SHOW_NOTIFICATION(context, ChatActions.Message);
-    expect(context.dispatch).toHaveBeenCalledWith('INCREMENT_UNREAD_COUNT');
-  });
-
   it('INCREMENT_UNREAD_COUNT action dispatches SET_UNREAD_COUNT and increases unreadCount', () => {
     notificationsModule.actions.INCREMENT_UNREAD_COUNT(context);
     expect(context.dispatch).toHaveBeenCalledWith('SET_UNREAD_COUNT', context.state.unreadCount + 1);
@@ -85,7 +80,13 @@ describe('notifications store: actions', () => {
     expect(context.commit).toHaveBeenCalledWith('SET_UNREAD_COUNT', unreadCount);
   });
 
-  it('RESET_UNREAD_COUNT action dispatches SET_UNREAD_COUNT action with unread count equal to 0', () => {
+  it('RESET_UNREAD_COUNT action does not dispatch if unread count is 0', () => {
+    notificationsModule.actions.RESET_UNREAD_COUNT(context);
+    expect(context.dispatch).not.toHaveBeenCalledWith('SET_UNREAD_COUNT');
+  });
+
+  it('RESET_UNREAD_COUNT action dispatches SET_UNREAD_COUNT passing unread count equal to 0', () => {
+    context.state.unreadCount = 1;
     notificationsModule.actions.RESET_UNREAD_COUNT(context);
     expect(context.dispatch).toHaveBeenCalledWith('SET_UNREAD_COUNT', 0);
   });

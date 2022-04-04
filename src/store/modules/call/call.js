@@ -138,9 +138,7 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (context, { newNumber } = {}) => {
-    return context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
-  },
+  OPEN_NEW_CALL: (context, { newNumber } = {}) => context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' }),
 
   CLOSE_NEW_CALL: (context) => {
     if (context.state.callList.length) {

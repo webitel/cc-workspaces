@@ -51,7 +51,7 @@ describe('Agent Status Select', () => {
     const wrapper = shallowMount(StatusSelect, { store, localVue });
     expect(wrapper.exists()).toBe(true);
   });
-  
+
   // it('correctly computes statusDuration', () => {
   //   agent.lastStatusChange = Date.now() - 24 * 1000;
   //   const wrapper = shallowMount(StatusSelect, { store, localVue });
