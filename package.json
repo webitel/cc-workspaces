@@ -15,7 +15,7 @@
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@webitel/cc-ui-sdk": "^0.1.22",
-    "@webitel/ui-sdk": "^1.0.25",
+    "@webitel/ui-sdk": "^1.0.26",
     "axios": "^0.25.0",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
@@ -28,7 +28,8 @@
     "github-markdown-css": "^4.0.0",
     "insert-text-at-cursor": "^0.3.0",
     "jsdom": "^16.4.0",
-    "linkifyjs": "^3.0.0-beta.3",
+    "linkify-html": "^3.0.5",
+    "linkifyjs": "^3.0.5",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
     "npm": "^8.4.1",
@@ -40,7 +41,7 @@
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
     "vuex": "^3.1.2",
-    "webitel-sdk": "^0.1.97"
+    "webitel-sdk": "^0.1.100"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",

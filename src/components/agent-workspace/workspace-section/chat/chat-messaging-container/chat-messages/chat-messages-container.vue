@@ -12,7 +12,9 @@
         ></message-date>
         <message
           :message="message"
-          :show-user-pic="showUserPic(key)"
+          :show-avatar="showAvatar(key)"
+          @open-image="openImage(message)"
+          @initialized-player="handlePlayerInitialize"
         ></message>
       </div>
     </div>
@@ -20,9 +22,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Message from './chat-message.vue';
-import MessageDate from './chat-message-date.vue';
+import { mapState, mapActions } from 'vuex';
+import Message from './message/chat-message.vue';
+import MessageDate from './chat-date.vue';
 import ScrollObserver from '../../../../../utils/scroll-observer.vue';
 import chatScroll from '../../../../../../directives/chatScroll';
 
@@ -37,9 +39,6 @@ export default {
   data: () => ({
     isMounted: false,
   }),
-  mounted() {
-    this.isMounted = true;
-  },
   computed: {
     ...mapState('chat', {
       chat: (state) => state.chatOnWorkspace,
@@ -58,6 +57,11 @@ export default {
     },
   },
   methods: {
+    ...mapActions('chat', {
+      openMedia: 'OPEN_MEDIA',
+      attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
+      cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
+    }),
     chatInputFocus() {
       this.$eventBus.$emit('chat-input-focus');
     },
@@ -72,12 +76,25 @@ export default {
         || messageDate.getMonth() !== prevMessageDate.getMonth()
         || messageDate.getDate() !== prevMessageDate.getDate();
     },
-    showUserPic(messageIndex) {
+    showAvatar(messageIndex) {
       if (messageIndex === 0) return true;
       const message = this.messages[messageIndex];
       const prevMessage = this.messages[messageIndex - 1];
-      return message.member !== prevMessage.member;
+      return (message.member !== prevMessage.member)
+        && (message.member?.self && !prevMessage.member?.self);
     },
+    openImage(message) {
+      this.openMedia(message);
+    },
+    handlePlayerInitialize(player) {
+      this.attachPlayer({ player });
+    },
+  },
+  mounted() {
+    this.isMounted = true;
+  },
+  destroyed() {
+    this.cleanChatPlayers();
   },
 };
 </script>
@@ -96,5 +113,9 @@ export default {
   overflow-y: scroll;
   height: 100%;
   padding: 20px 10px;
+}
+
+.chat-message {
+  margin-top: 10px;
 }
 </style>
