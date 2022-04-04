@@ -1,6 +1,7 @@
 import axios from 'axios';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import { objCamelToSnake, objSnakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
+import attachStarToRequestUrlSearchQuery from './interceptors/request/attachStarToRequestUrlSearchQuery.interceptor';
 
 // global API configuration
 // 'X-Webitel-Access' ~ 'X-Access-Token'
@@ -29,6 +30,8 @@ instance.interceptors.request.use(
     return request;
   },
 );
+
+instance.interceptors.request.use(...attachStarToRequestUrlSearchQuery.default);
 
 instance.interceptors.response.use(
   (response) => objSnakeToCamel(response.data),
