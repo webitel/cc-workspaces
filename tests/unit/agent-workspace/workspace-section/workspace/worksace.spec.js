@@ -54,7 +54,7 @@ describe('Hangup event on call component', () => {
     const call = {};
     await mockSocket.ringing(call);
     await mockSocket.hangup(call);
-    expect(wrapper.find(Call)
+    expect(wrapper.findComponent(Call)
       .exists())
       .toBeFalsy();
   });

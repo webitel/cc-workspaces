@@ -46,7 +46,7 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    expect(wrapper.findAll(ActiveCallItem).length)
+    expect(wrapper.findAllComponents(ActiveCallItem).length)
       .toEqual(state.callList.length - 1); // all except callOnWorkspace
   });
 
@@ -55,7 +55,7 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    wrapper.find(ActiveCallItem).trigger('click');
+    wrapper.findComponent(ActiveCallItem).trigger('click');
     const bridgeBtn = wrapper.findComponent({ name: 'wt-button' });
     bridgeBtn.vm.$emit('click');
     expect(state.callOnWorkspace.bridgeTo)
