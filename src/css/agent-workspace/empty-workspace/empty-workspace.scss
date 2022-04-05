@@ -12,12 +12,12 @@
   }
 
   &__heading {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     margin-top: 20px;
   }
 
   &__text {
-    @extend .typo-body-sm;
+    @extend %typo-caption;
     margin-top: 10px;
   }
 }

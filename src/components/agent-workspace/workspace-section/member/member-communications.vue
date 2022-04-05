@@ -50,16 +50,16 @@
 
     &:hover,
     &.selected {
-      border-color: $accent-color;
+      border-color: var(--accent-color);
     }
 
     &__type {
-      @extend .typo-heading-sm;
+      @extend %typo-subtitle-1;
       margin-bottom: 6px;
     }
 
     &__destination {
-      @extend .typo-body-sm;
+      @extend %typo-caption;
     }
   }
 </style>

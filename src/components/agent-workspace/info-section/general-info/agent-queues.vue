@@ -23,7 +23,7 @@
       ></table-agents>
 
       <div class="agent-queues__queue-item">
-        <wt-badge>{{ queue.waitingMembers }}</wt-badge>
+        <wt-chip>{{ queue.waitingMembers }}</wt-chip>
       </div>
     </div>
   </article>
@@ -52,11 +52,11 @@ export default {
 
 <style lang="scss" scoped>
 .agent-queues {
-  @extend %typo-body-lg;
+  @extend %typo-body-1;
 }
 
 .agent-queues__headers {
-  @extend %typo-strong-lg;
+  @extend %typo-subtitle-1;
   display: grid;
   grid-template-columns: 2fr 2fr 1fr;
   justify-items: center;
@@ -71,7 +71,7 @@ export default {
   grid-template-columns: 2fr 2fr 1fr;
   align-items: center;
   gap: 4px;
-  margin-top: var(--component-spacing);
+  margin-top: var(--spacing-sm);
 
   .agent-queues__queue-item {
     overflow-wrap: break-word;
@@ -82,8 +82,8 @@ export default {
     }
   }
 
-  .wt-badge {
-    @extend %typo-strong-sm;
+  .wt-chip {
+    @extend %typo-caption;
   }
 }
 </style>

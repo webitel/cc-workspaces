@@ -123,13 +123,13 @@ export default {
 <style lang="scss" scoped>
 .wt-app-header {
   .wt-switcher, .user-dnd-switcher{
-    margin-left: var(--component-spacing);
+    margin-left: var(--spacing-sm);
   }
 
   .agent-status-select {
     max-width: 200px;
     width: 150px;
-    margin-left: var(--component-spacing);
+    margin-left: var(--spacing-sm);
   }
 }
 </style>

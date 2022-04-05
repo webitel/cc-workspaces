@@ -4,9 +4,11 @@
       <div class="actions-wrap actions-wrap__left">
         <wt-rounded-action
           class="call-action"
-          :class="{ 'active': isOnHistory }"
+          :active="isOnHistory"
           icon="history"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'history')"
         ></wt-rounded-action>
       </div>
@@ -20,6 +22,8 @@
           :class="{ 'hidden': !isCall }"
           icon="call-ringing"
           color="success"
+          rounded
+          wide
           @click="makeCall"
         ></wt-rounded-action>
       </div>
@@ -92,7 +96,7 @@
   }
 
   .call-header__name {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     text-align: center;
     margin-top: 10px;
   }

@@ -3,10 +3,11 @@
 
     <div class="ws-worksection__item__pic-wrap">
       <wt-rounded-action
+        v-show="callable"
         class="ws-contact-item__call-action"
-        :class="{'d-none': !callable}"
         icon="call-ringing"
         color="success"
+        rounded
         @click="makeCall({user: item})"
       ></wt-rounded-action>
       <img
@@ -117,11 +118,11 @@
   }
 
   .ws-contact-item__name {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
   }
 
   .ws-contact-item__number {
-    @extend .typo-body-sm;
+    @extend %typo-caption;
   }
 
   .ws-contact-item__status {
@@ -133,11 +134,11 @@
       border-radius: 50%;
 
       &.active {
-        background: $true-color;
+        background: var(--true-color);
       }
 
       &.dnd {
-        background: $break-color;
+        background: var(--accent-color);
       }
 
       &.offline {
@@ -145,7 +146,7 @@
       }
 
       &.busy {
-        background: $false-color;
+        background: var(--false-color);
       }
     }
   }

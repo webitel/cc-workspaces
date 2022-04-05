@@ -24,16 +24,18 @@
           <wt-rounded-action
             class="rounded-action-file-input"
             color="secondary"
+            icon="attach"
+            rounded
+            wide
+            @click="triggerAttachmentInput"
+          ></wt-rounded-action>
+          <input
+            ref="attachment-input"
+            class="rounded-action-file-input__input"
+            type="file"
+            multiple
+            @change="handleAttachments"
           >
-            <wt-icon icon="attach"></wt-icon>
-            <input
-              ref="attachment-input"
-              class="rounded-action-file-input__input"
-              multiple
-              type="file"
-              @change="handleAttachments"
-            >
-          </wt-rounded-action>
         </div>
         <div class="chat-footer__cell-wrapper">
           <chat-emoji
@@ -43,7 +45,13 @@
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper"></div>
         <div class="chat-footer__cell-wrapper">
-          <wt-rounded-action color="secondary" icon="chat-send" @click="sendMessage"></wt-rounded-action>
+          <wt-rounded-action
+            icon="chat-send"
+            color="secondary"
+            rounded
+            wide
+            @click="sendMessage"
+          ></wt-rounded-action>
         </div>
       </div>
     </div>
@@ -103,6 +111,9 @@ export default {
       if (!textarea) return;
       textarea.focus();
     },
+    triggerAttachmentInput() {
+      this.$refs['attachment-input'].click();
+    },
 
     handleFilePaste(event) {
       const files = Array
@@ -155,7 +166,7 @@ export default {
   }
 
   .chat-footer__chat-preview__text {
-    @extend %typo-body-lg;
+    @extend %typo-body-1;
     margin-bottom: 20px;
     text-align: center;
     color: var(--text-outline-color);
@@ -181,19 +192,13 @@ export default {
   }
 }
 
-.rounded-action-file-input {
+.chat-footer__cell-wrapper {
   position: relative;
-
   .rounded-action-file-input__input {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    opacity: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
   }
 }
 </style>

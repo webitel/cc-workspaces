@@ -2,13 +2,13 @@
   <main
     v-if="hasAccess"
     class="main-agent-workspace"
+    @drop="preventDrop"
     @dragenter.prevent
     @dragover.prevent
-    @drop="preventDrop"
   >
     <disconnect-popup />
 
-    <notification />
+    <wt-notifications-bar />
     <cc-header />
     <div class="workspace-wrap">
       <widget-bar />
@@ -27,12 +27,11 @@
 <script>
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { mapActions, mapGetters } from 'vuex';
-import Notification from '../utils/notification.vue';
 import CcHeader from '../shared/app-header/app-header.vue';
 import WidgetBar from './widget-bar/widget-bar.vue';
 import QueueSection from './queue-section/the-agent-queue-section.vue';
-import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
 import InfoSection from './info-section/the-agent-info-section.vue';
+import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
 import VideoContainer from './video-container/video-container.vue';
 import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
 import appNotificationMixin from '../../mixins/appNotificationMixin';
@@ -41,7 +40,6 @@ export default {
   name: 'the-agent-workspace',
   mixins: [appNotificationMixin],
   components: {
-    Notification,
     CcHeader,
     WidgetBar,
     QueueSection,
@@ -91,34 +89,33 @@ export default {
 .main-agent-workspace {
   display: flex;
   flex-direction: column;
-  max-height: 100%;
   min-width: 1280px;
+  max-height: 100%;
 }
 
 .workspace-wrap {
-  flex-grow: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: 20px 30px;
+  flex-grow: 1;
   box-sizing: border-box;
+  min-height: 0;
+  padding: var(--spacing-sm);
 
   @media screen and (max-height: 768px) {
-    padding: 15px;
+    //padding: 15px;
   }
 }
 
 .workspace {
-  flex-grow: 1;
   display: grid;
-  grid-template-columns: 340px 550px 1fr;
-  grid-gap: 20px;
+  flex-grow: 1;
   min-height: 0;
-  margin-top: 20px;
+  margin-top: var(--spacing-sm);
+  grid-template-columns: 340px 550px 1fr;
+  grid-gap: var(--spacing-sm);
 
-  .workspace-section {
-    max-height: 100%;
-    min-height: 0;
+  @media screen and (max-width: 1336px) {
+    grid-template-columns: 120px 550px 1fr; // changed 1st col width
   }
 
   @media screen and (max-width: 1336px) {
@@ -126,8 +123,9 @@ export default {
   }
 
   @media screen and (max-height: 768px) {
-    grid-gap: 15px;
-    margin-top: 15px;
+    //grid-gap: 15px;
+    //margin-top: 15px;
   }
 }
+
 </style>

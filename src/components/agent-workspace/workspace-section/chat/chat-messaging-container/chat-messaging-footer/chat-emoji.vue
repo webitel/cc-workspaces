@@ -6,6 +6,8 @@
     <wt-rounded-action
       color="secondary"
       icon="chat-emoji"
+      rounded
+      wide
       @click="isOpened = !isOpened"
     ></wt-rounded-action>
     <div
@@ -55,13 +57,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-emoji ::v-deep {
+.chat-emoji {
+  width: 100%;
 
-  emoji-picker {
+  ::v-deep emoji-picker {
     position: absolute;
-    bottom: calc(100% + var(--spacing--sm));
-    left: 50%;
     z-index: 1;
+    bottom: calc(100% + var(--spacing-sm));
+    left: 50%;
     transform: translateX(-50%);
   }
 }

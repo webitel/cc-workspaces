@@ -21,7 +21,7 @@ export default {
   cursor: pointer;
 
   &__img {
-    @extend %typo-body-md;
+    @extend %typo-body-2;
     width: 100%;
   }
 }

@@ -67,18 +67,18 @@ describe('Other UIs', () => {
       localVue,
       propsData: { call },
     });
-    expect(wrapper.findComponent({ name: 'wt-badge' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'wt-badge' }).text()).toBe(display);
+    expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(display);
   });
 
-  it('if call has no queue, queue badge is absent', () => {
+  it('if call has no queue, queue chip is absent', () => {
     call.task = {};
     const wrapper = shallowMount(ActivePreview, {
       store,
       localVue,
       propsData: { call },
     });
-    expect(wrapper.find('.queue-preview-badges').exists()).toBe(false);
+    expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
   });
 });
 

@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
+import findRoundedActionByIcon from '../../../../utils/findRoundedActionByIcon';
 import callModule from '../../../../../src/store/modules/call/call';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
@@ -16,7 +17,11 @@ const mockCliCall = jest.fn();
 jest.spyOn(webSocketClientController, 'getCliInstance')
   .mockImplementation(() => ({ call: mockCliCall }));
 
+
+
 describe('Make new call functionality', () => {
+  const findCallBtn = findRoundedActionByIcon('call-ringing');
+
   let state;
   let store;
 
@@ -54,7 +59,7 @@ describe('Make new call functionality', () => {
     numberInput.trigger('input');
 
     await wrapper.vm.$nextTick();
-    const callBtn = wrapper.find('.call-action.call');
+    const callBtn = findCallBtn(wrapper);
     expect(callBtn.exists())
       .toBeTruthy();
   });
@@ -74,8 +79,8 @@ describe('Make new call functionality', () => {
 
     // then find "call" button and trigger click
     await wrapper.vm.$nextTick();
-    wrapper.find('.call-action.call')
-      .vm.$emit('click', {});
+    const callBtn = findCallBtn(wrapper);
+    callBtn.vm.$emit('click', {});
 
     // then mock a getCliInstance fn
     // and check if cli.call() fn is triggered with proper destination
@@ -89,6 +94,8 @@ describe('Make new call functionality', () => {
 });
 
 describe('Transfer functionality', () => {
+  const findTransferBtn = findRoundedActionByIcon('call-transfer');
+
   let state;
   let store;
 
@@ -117,7 +124,7 @@ describe('Transfer functionality', () => {
       store,
       localVue,
     });
-    const transferBtn = wrapper.find('.call-action.transfer');
+    const transferBtn = findTransferBtn(wrapper);
     transferBtn.vm.$emit('click');
     expect(wrapper.emitted().openTab[0])
       .toEqual(['transfer']);
@@ -125,6 +132,8 @@ describe('Transfer functionality', () => {
 });
 
 describe('Bridge functionality', () => {
+  const findBridgeBtn = findRoundedActionByIcon('call-add-to');
+
   let state;
   const { getters, actions, mutations } = callModule;
   let store;
@@ -163,9 +172,8 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    expect(wrapper.find('.call-action.bridge')
-      .exists())
-      .toBeFalsy();
+    const bridgeBtn = findBridgeBtn(wrapper);
+    expect(bridgeBtn).toBeFalsy();
   });
 
   it('Shows merge btn with only 2 active call', () => {
@@ -173,9 +181,8 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    expect(wrapper.find('.call-action.bridge')
-      .exists())
-      .toBeTruthy();
+    const bridgeBtn = findBridgeBtn(wrapper);
+    expect(bridgeBtn.exists()).toBe(true);
   });
 
   it('Opens bridge tab from call-header', () => {
@@ -183,8 +190,9 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    const transferBtn = wrapper.find('.call-action.bridge');
-    transferBtn.vm.$emit('click');
+    const bridgeBtn = findBridgeBtn(wrapper);
+    expect(bridgeBtn.exists()).toBe(true);
+    bridgeBtn.vm.$emit('click');
     expect(wrapper.emitted().openTab[0])
       .toEqual(['bridge']);
   });

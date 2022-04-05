@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import ClientInfoBadges
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/queue-name/client-info-badges.vue';
+import ClientInfoChips
+  from '../../../../../../src/components/agent-workspace/info-section/client-info/queue-name/client-info-chips.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -19,12 +19,12 @@ const store = new Vuex.Store({
   },
 });
 
-describe('client-info-badges.vue', () => {
+describe('client-info-chips.vue', () => {
   beforeEach(() => {
     task.task = {};
   });
   it('Should render component', () => {
-    const wrapper = shallowMount(ClientInfoBadges, {
+    const wrapper = shallowMount(ClientInfoChips, {
       localVue,
       store,
     });
@@ -37,18 +37,18 @@ describe('client-info-badges.vue', () => {
         name: display,
       },
     };
-    const wrapper = shallowMount(ClientInfoBadges, {
+    const wrapper = shallowMount(ClientInfoChips, {
       localVue,
       store,
     });
-    expect(wrapper.findComponent({ name: 'wt-badge' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'wt-badge' }).text()).toBe(display);
+    expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(display);
   });
-  it('if task has no queue, queue badge is absent', () => {
-    const wrapper = shallowMount(ClientInfoBadges, {
+  it('if task has no queue, queue chip is absent', () => {
+    const wrapper = shallowMount(ClientInfoChips, {
       localVue,
       store,
     });
-    expect(wrapper.find('.client-info-badges').exists()).toBe(false);
+    expect(wrapper.find('.client-info-chips').exists()).toBe(false);
   });
 });

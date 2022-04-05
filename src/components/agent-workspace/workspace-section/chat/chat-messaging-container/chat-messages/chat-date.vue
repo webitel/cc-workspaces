@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 .chat-date {
-  @extend %typo-strong-sm;
+  @extend %typo-caption;
   text-align: center;
   margin: 30px 0;
   color: var(--text-outline-color);

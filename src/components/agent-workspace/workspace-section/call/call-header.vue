@@ -4,16 +4,20 @@
       <div class="actions-wrap actions-wrap__left">
         <wt-rounded-action
           class="call-action"
-          :class="{ 'active': isOnHistory }"
+          :active="isOnHistory"
           icon="history"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'history')"
         ></wt-rounded-action>
         <wt-rounded-action
           class="call-action"
-          :class="{ 'active': isOnContacts }"
+          :active="isOnContacts"
           icon="contacts"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'contacts')"
         ></wt-rounded-action>
       </div>
@@ -27,31 +31,39 @@
       <div class="actions-wrap actions-wrap__right">
         <wt-rounded-action
           v-if="isBridge"
-          class="call-action bridge"
-          :class="{ 'active': isOnBridge }"
+          class="call-action"
+          :active="isOnBridge"
           icon="call-add-to"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'bridge')"
         ></wt-rounded-action>
         <wt-rounded-action
           v-if="isTransfer"
-          class="call-action transfer"
+          class="call-action"
           icon="call-transfer"
           color="transfer"
+          rounded
+          wide
           @click="$emit('openTab', 'transfer')"
         ></wt-rounded-action>
         <wt-rounded-action
           v-if="isHangup"
-          class="call-action end"
+          class="call-action"
           icon="call-end"
           color="danger"
+          rounded
+          wide
           @click="hangup"
         ></wt-rounded-action>
         <wt-rounded-action
           v-if="isCall"
-          class="call-action call"
+          class="call-action"
           icon="call-ringing"
           color="success"
+          rounded
+          wide
           @click="makeCall"
         ></wt-rounded-action>
       </div>
@@ -59,8 +71,8 @@
 
     <div class="call-header__number">
       <div v-if="!isNumberInput">
-        <div class="call-profile__name">{{displayName}}</div>
-        <div class="call-profile__number">{{displayNumber}}</div>
+        <div class="call-profile__name">{{ displayName }}</div>
+        <div class="call-profile__number">{{ displayNumber }}</div>
       </div>
       <form
         v-else
@@ -248,12 +260,12 @@
     align-items: stretch;
 
     .call-profile__name {
-      @extend .typo-heading-sm;
+      @extend %typo-subtitle-1;
       margin-bottom: 5px;
     }
 
     .call-profile__number {
-      @extend .typo-body-md;
+      @extend %typo-body-2;
       margin-bottom: 10px;
     }
 
@@ -265,7 +277,7 @@
       align-items: flex-end;
 
       &__input {
-        @extend .typo-input;
+        @extend %typo-body-1;
         text-align: center;
 
         // make bottom border overflowing divider

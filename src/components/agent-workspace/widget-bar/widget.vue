@@ -62,25 +62,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$widget-inbound-color: $accent-color;
-$widget-handles-color: $true-color;
-$widget-missed-color: $false-color;
+$widget-inbound-color: var(--accent-color);
+$widget-handles-color: var(--true-color);
+$widget-missed-color: var(--false-color);
 $widget-avg-talk-color: #239AC0;
-$widget-avg-hold-color: $accent-color;
-$widget-chat-accepts-color: $true-color;
-$widget-chat-aht-color: $true-color;
-
-.typo-widget-title {
-  font-family: 'Montserrat Regular', monospace;
-  font-size: 10px;
-  line-height: 10px;
-}
-
-.typo-widget-value {
-  font-family: 'Montserrat Semi', monospace;
-  font-size: 10px;
-  line-height: 10px;
-}
+$widget-avg-hold-color: var(--accent-color);
+$widget-chat-accepts-color:  var(--true-color);
+$widget-chat-aht-color:  var(--true-color);
 
 .widget {
   display: flex;
@@ -91,12 +79,12 @@ $widget-chat-aht-color: $true-color;
   white-space: nowrap;
 
   .widget__title {
-    @extend .typo-widget-title;
+    @extend %typo-caption;
     margin-right: 5px;
   }
 
   .widget__value {
-    @extend .typo-widget-value;
+    @extend %typo-caption;
   }
 
   @media screen and (max-width: 1336px) {

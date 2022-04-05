@@ -1,6 +1,6 @@
 <template>
   <section class="client-info">
-    <client-info-badges/>
+    <client-info-chips/>
     <client-info-markdown/>
     <post-processing/>
   </section>
@@ -9,14 +9,14 @@
 <script>
 import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
 import PostProcessing from './post-processing/post-processing.vue';
-import ClientInfoBadges from './queue-name/client-info-badges.vue';
+import ClientInfoChips from './queue-name/client-info-chips.vue';
 
 export default {
   name: 'client-info-tab',
   components: {
     ClientInfoMarkdown,
     PostProcessing,
-    ClientInfoBadges,
+    ClientInfoChips,
   },
 };
 </script>

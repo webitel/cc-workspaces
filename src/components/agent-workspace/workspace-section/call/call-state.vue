@@ -84,12 +84,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.typo-call-state {
-  font-family: 'Montserrat Semi', monospace;
-  font-size: 40px;
-  line-height: 40px;
-}
-
 .numpad-state {
   display: flex;
   align-items: center;
@@ -103,7 +97,7 @@ export default {
   }
 
   &__primary-text {
-    @extend .typo-call-state;
+    @extend %typo-heading-1;
     text-align: center;
     height: 40px; // line height + 2 margins
     margin-top: 25px; // FIXME ANIMATION
@@ -112,7 +106,7 @@ export default {
     .numpad-state__primary-text__time-digit {
       display: inline-block;
       text-align: center;
-      width: 26px;
+      width: 20px;
 
       /*semicolons*/
       &:nth-child(3), &:nth-child(6) {
@@ -122,7 +116,7 @@ export default {
   }
 
   &__secondary-text {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     min-height: 16px;
   }
 }

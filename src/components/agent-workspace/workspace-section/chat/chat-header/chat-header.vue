@@ -10,9 +10,10 @@
     <div class="chat-header__cell-wrapper">
       <wt-rounded-action
         v-show="isTransferAction"
-        class="call-action transfer"
         icon="chat-transfer"
         color="transfer"
+        rounded
+        wide
         @click="$emit('openTab', 'transfer')"
       ></wt-rounded-action>
     </div>
@@ -21,6 +22,8 @@
         v-show="isCloseAction"
         icon="chat-end"
         color="danger"
+        rounded
+        wide
         @click="close"
       ></wt-rounded-action>
     </div>

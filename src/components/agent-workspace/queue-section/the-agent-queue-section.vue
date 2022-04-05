@@ -8,6 +8,7 @@
       color="success"
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       size="lg"
+      rounded
       @click="toggleNewCall"
     ></wt-rounded-action>
   </section>

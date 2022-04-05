@@ -54,8 +54,8 @@ export default {
 
 <style lang="scss" scoped>
 .processing-communication {
-  --border--hover-color: var(--main-accent-color);
-  --bg--active-color: var(--main-option-hover-color);
+  --border--hover-color: var(--accent-color);
+  --bg--active-color: var(--accent-secondary-color);
 
   display: grid;
   grid-template-columns: 24px 3fr 1fr 58px;
@@ -77,15 +77,15 @@ export default {
 }
 
 .processing-communication__info-destination {
-  @extend %typo-strong-md;
+  @extend %typo-subtitle-2;
 }
 
 .processing-communication__info-type {
-  @extend %typo-body-sm;
+  @extend %typo-caption;
 }
 
 .processing-communication__priority {
-  @extend %typo-body-md;
+  @extend %typo-body-2;
 }
 
 .processing-communication__actions-wrapper {

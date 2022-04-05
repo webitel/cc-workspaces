@@ -69,13 +69,13 @@ export default {
   }
 
   &__name {
-    @extend %typo-strong-md;
+    @extend %typo-subtitle-2;
     cursor: pointer;
     overflow-wrap: break-word;
   }
 
   &__size {
-    @extend %typo-body-sm;
+    @extend %typo-caption;
     color: var(--text-outline-color);
   }
 

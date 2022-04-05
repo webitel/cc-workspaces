@@ -1,11 +1,11 @@
 <template>
   <div class="ws-worksection">
     <div class="ws-worksection__search-wrap">
-      <search
+      <wt-search-bar
         class="ws-worksection__search"
         v-model="search"
         @search="resetData"
-      />
+      ></wt-search-bar>
       <wt-button
         color="transfer"
         :disabled="isTransferDisabled"
@@ -119,7 +119,7 @@
     cursor: pointer;
 
     &.selected, &:hover {
-      border-color: $accent-color;
+      border-color: var(--accent-color);
     }
   }
 </style>

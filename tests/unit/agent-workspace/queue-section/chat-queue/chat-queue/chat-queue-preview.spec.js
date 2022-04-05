@@ -51,17 +51,17 @@ describe('ChatQueuePreview', () => {
       localVue,
       propsData: { task: testTask },
     });
-    expect(wrapper.findComponent({ name: 'wt-badge' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'wt-badge' }).text()).toBe(queueName);
+    expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(queueName);
   });
 
-  it('if chat has no queue, queue badge is absent', () => {
+  it('if chat has no queue, queue chip is absent', () => {
     const testTask = { ...task, task: {} };
     const wrapper = shallowMount(ChatQueuePreview, {
       store,
       localVue,
       propsData: { task: testTask },
     });
-    expect(wrapper.find('.queue-preview-badges').exists()).toBe(false);
+    expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
   });
 });

@@ -1,6 +1,6 @@
 <template>
   <article class="queue-preview offline-queue" :class="{'queue-preview--opened': opened}">
-    <status-badge/>
+    <status-chip/>
 
     <header class="queue-preview-header">
       <span class="queue-preview-header__name">{{displayName}}</span>
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-  import StatusBadge from '../call-status-icon-badge.vue';
+  import StatusChip from '../call-status-icon-chip.vue';
 
   export default {
     name: 'offline-queue-preview',
     components: {
-      StatusBadge,
+      StatusChip,
     },
     props: {
       member: {

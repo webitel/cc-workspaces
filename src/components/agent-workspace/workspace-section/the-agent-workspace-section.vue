@@ -43,4 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.workspace-section {
+  //padding: var(--spacing-sm);
+}
 </style>

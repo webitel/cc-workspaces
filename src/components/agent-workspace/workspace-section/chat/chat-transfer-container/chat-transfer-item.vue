@@ -24,13 +24,11 @@
 <script>
 import parseUserStatus from '../../../../../store/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../store/modules/agent-status/statusUtils/UserStatus';
-import WtAvatar from './webitel-ui/components/wt-avatar/wt-avatar.vue';
-import AbstractUserStatus from './webitel-ui/enums/AbstractUserStatus.enum';
+import AbstractUserStatus from '../../../../../../../webitel-ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import TransferDestination from '../../../../../enums/ChatTransferDestination.enum';
 
 export default {
   name: 'chat-transfer-item',
-  components: { WtAvatar },
   props: {
     item: {
       type: Object,
@@ -71,11 +69,11 @@ export default {
   display: flex;
   box-sizing: border-box;
   min-height: 52px;
-  padding: var(--spacing--sm);
+  padding: var(--spacing-xs);
   transition: var(--transition);
   border: 1px solid transparent;
   border-radius: var(--border-radius);
-  gap: var(--spacing--sm);
+  gap: var(--spacing-xs);
 
   &:hover {
     border-color: var(--accent-color);
@@ -96,11 +94,11 @@ export default {
 }
 
 .chat-transfer-item__title {
-  @extend %typo-strong-md;
+  @extend %typo-subtitle-2;
   overflow-wrap: break-word;
 }
 
 .chat-transfer-item__subtitle {
-  @extend %typo-body-md;
+  @extend %typo-body-2;
 }
 </style>

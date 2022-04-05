@@ -4,27 +4,23 @@
     class="chat-message-audio"
     @click="$emit('open', audio)"
   >
-    <wt-move-me-to-lib-player
+    <wt-player
       :src="audioUrl"
       :mime="audio.mime"
       :autoplay="false"
       reset-on-end
       reset-volume
       @initialized="handlePlayerInitialize"
-    ></wt-move-me-to-lib-player>
+    ></wt-player>
   </div>
 </template>
 
 <script>
-import WtMoveMeToLibPlayer from './webitel-ui/wt-player.vue';
 import chatMessageDetailMixin from '../../../../../../../mixins/chatMessageDetailMixin';
 
 export default {
   name: 'chat-message-audio',
   mixins: [chatMessageDetailMixin],
-  components: {
-    WtMoveMeToLibPlayer,
-  },
   computed: {
     audioUrl() {
       return this.audio.streamUrl || this.audio.url;

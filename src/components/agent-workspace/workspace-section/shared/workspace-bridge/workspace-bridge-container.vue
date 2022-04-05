@@ -73,7 +73,7 @@
     cursor: pointer;
 
     &.selected, &:hover {
-      border-color: $accent-color;
+      border-color: var(--accent-color);
     }
   }
 

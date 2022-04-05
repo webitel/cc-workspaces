@@ -1,7 +1,7 @@
 <template>
   <article class="queue-preview" :class="{'queue-preview--opened': opened}">
       <header class="queue-preview-header">
-        <status-badge :state="computePreviewStatusClass"/>
+        <status-chip :state="computePreviewStatusClass"/>
         <span class="queue-preview-header__name">{{ displayName | truncate(27) }}</span>
         <queue-preview-timer :task="call" :bold="!isRinging"/>
       </header>
@@ -10,10 +10,10 @@
         {{ displayNumber | truncateFromEnd(33) }}
       </div>
     </section>
-    <section class="queue-preview-badges" v-if="displayQueueName">
-      <wt-badge color="secondary">
+    <section class="queue-preview-chips" v-if="displayQueueName">
+      <wt-chip color="secondary">
         {{ displayQueueName }}
-      </wt-badge>
+      </wt-chip>
     </section>
     <footer class="queue-preview-footer" v-if="isRinging">
       <div
@@ -38,7 +38,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import StatusBadge from '../call-status-icon-badge.vue';
+import StatusChip from '../call-status-icon-chip.vue';
 import QueuePreviewTimer from '../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
 import isIncomingRinging from '../../../../../store/modules/call/scripts/isIncomingRinging';
@@ -46,7 +46,7 @@ import isIncomingRinging from '../../../../../store/modules/call/scripts/isIncom
 export default {
   name: 'active-queue-preview',
   mixins: [displayInfo],
-  components: { StatusBadge, QueuePreviewTimer },
+  components: { StatusChip, QueuePreviewTimer },
   props: {
     // item is for UI computing
     call: {

@@ -120,7 +120,7 @@ export default {
   cursor: pointer;
 
   &:hover {
-    background: $page-bg-color;
+    background: var(--page-bg-color);
   }
 }
 
@@ -137,35 +137,18 @@ export default {
 }
 
 .ws-history-item__number {
-  @extend .typo-heading-sm;
+  @extend %typo-subtitle-1;
 }
 
 .ws-history-item__time {
-  @extend .typo-body-md;
+  @extend %typo-body-2;
 }
 
 .ws-history-item__date {
-  @extend .typo-body-sm;
+  @extend %typo-caption;
 }
 
 .ws-history-item__location {
-  @extend .typo-body-sm;
-}
-
-.ws-worksection__item__status {
-  .outbound {
-    stroke: $call-color;
-    fill: $call-color;
-  }
-
-  .missed {
-    stroke: $disconnect-color;
-    fill: $disconnect-color;
-  }
-
-  .inbound {
-    stroke: $icons-color;
-    fill: $icons-color;
-  }
+  @extend %typo-caption;
 }
 </style>
