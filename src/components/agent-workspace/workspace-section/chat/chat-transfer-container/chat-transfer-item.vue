@@ -22,9 +22,9 @@
 </template>
 
 <script>
+import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import parseUserStatus from '../../../../../store/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../store/modules/agent-status/statusUtils/UserStatus';
-import AbstractUserStatus from '../../../../../../../webitel-ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import TransferDestination from '../../../../../enums/ChatTransferDestination.enum';
 
 export default {
