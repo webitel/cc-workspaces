@@ -26,7 +26,7 @@ export default {
         case 'hold':
           return 'hold';
         case 'missed':
-          return 'missed'; // missed -> missed
+          return 'call-missed'; // missed -> missed
         default:
           return 'call';
       }

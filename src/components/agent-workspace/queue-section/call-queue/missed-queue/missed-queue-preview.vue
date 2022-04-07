@@ -1,8 +1,8 @@
 <template>
   <article class="queue-preview">
-    <status-chip :state="previewStatusClass"/>
 
     <header class="queue-preview-header">
+      <status-chip state="missed"/>
       <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="missed-preview__call-time">
@@ -15,7 +15,7 @@
         {{ displayNumber | truncateFromEnd(18) }}
       </div>
     </section>
-    <footer class="queue-preview-footer"></footer>
+<!--    <footer class="queue-preview-footer"></footer>-->
   </article>
 </template>
 
@@ -47,10 +47,6 @@
       },
       displayTime() {
         return prettifyTime(this.call.createdAt);
-      },
-
-      previewStatusClass() {
-        return 'missed';
       },
     },
 
