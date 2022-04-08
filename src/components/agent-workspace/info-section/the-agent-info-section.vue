@@ -90,6 +90,7 @@ export default {
   min-width: 0;
   max-width: 100%;
   padding: var(--spacing-sm);
+  gap: var(--spacing-sm);
 }
 
 .info-tab {

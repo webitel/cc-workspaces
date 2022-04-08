@@ -26,14 +26,14 @@
   width: 100%;
 
   .wt-search-bar {
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
   }
 
 
   &__list-instruction {
     @extend %typo-subtitle-1;
     text-align: center;
-    margin-bottom: 17px;
+    margin-bottom: var(--spacing-xs);
   }
 
   .ws-worksection__list {
@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    padding-right: 20px;
+    padding-right: var(--spacing-2xs);
   }
 
   .ws-worksection__list-wrap {
@@ -54,7 +54,7 @@
     @extend %typo-body-2;
     text-align: center;
     color: $separator-color;
-    margin: 10px 0;
+    margin: var(--spacing-xs) 0;
   }
 
   .wt-loader,

@@ -35,7 +35,7 @@ const actions = {
     if ((session.expiresAt - Date.now() < DAY_LENGTH)) {
       await authAPI.logout();
       await router.replace('/auth');
-      return;
+      throw new Error(`Session expires soon ${session.expiresAt}`);
     }
 
     await context.dispatch('SET_SESSION', session);

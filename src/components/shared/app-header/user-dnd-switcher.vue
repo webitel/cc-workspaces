@@ -39,7 +39,7 @@ export default {
     position: absolute;
   }
 
-  &:hover, &:focus-within {
+  &:hover {
     .wt-tooltip {
       opacity: 1;
     }

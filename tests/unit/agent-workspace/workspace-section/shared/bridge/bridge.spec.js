@@ -3,9 +3,7 @@ import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
 import callModule from '../../../../../../src/store/modules/call/call';
 import Bridge
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/workspace-bridge-container.vue';
-import ActiveCallItem
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/active-call-item.vue';
+  from '../../../../../../src/components/agent-workspace/workspace-section/call/call-merge/call-bridge-container.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -46,7 +44,7 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    expect(wrapper.findAllComponents(ActiveCallItem).length)
+    expect(wrapper.findAllComponents({ name: 'merge-lookup-item' }).length)
       .toEqual(state.callList.length - 1); // all except callOnWorkspace
   });
 
@@ -55,9 +53,7 @@ describe('Bridge functionality', () => {
       store,
       localVue,
     });
-    wrapper.findComponent(ActiveCallItem).trigger('click');
-    const bridgeBtn = wrapper.findComponent({ name: 'wt-button' });
-    bridgeBtn.vm.$emit('click');
+    wrapper.findComponent({ name: 'merge-lookup-item' }).vm.$emit('input', call2);
     expect(state.callOnWorkspace.bridgeTo)
       .toHaveBeenCalledWith(call2);
   });

@@ -1,13 +1,13 @@
 <template>
   <article class="queue-preview offline-queue" :class="{'queue-preview--opened': opened}">
-    <status-chip/>
 
     <header class="queue-preview-header">
-      <span class="queue-preview-header__name">{{displayName}}</span>
+      <status-chip/>
+      <span class="queue-preview-header__name">{{ displayName }}</span>
     </header>
 
-    <section class="queue-preview-body"></section>
-    <footer class="queue-preview-footer"></footer>
+<!--    <section class="queue-preview-body"></section>-->
+<!--    <footer class="queue-preview-footer"></footer>-->
   </article>
 </template>
 

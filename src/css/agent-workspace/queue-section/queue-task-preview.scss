@@ -1,10 +1,10 @@
 .queue-preview {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   box-sizing: border-box;
   position: relative;
-  padding: 10px;
+  padding: var(--spacing-xs);
   margin-bottom: 1px;
   border: 1px solid transparent;
   background: var(--main-color);
@@ -18,12 +18,12 @@
   @media screen and (max-width: 1336px) {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: var(--spacing-xs);
     height: 36px;
 
     .call-status-chip {
       position: static;
-      margin-right: 10px;
+      margin-right: var(--spacing-xs);
     }
   }
 }
@@ -36,7 +36,7 @@
 
   &__name {
     @extend %typo-subtitle-1;
-    flex: 1 0 auto;
+    flex-grow: 1;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -77,13 +77,12 @@
 
   .queue-preview-actions {
     display: flex;
-    margin-top: 20px;
 
     .wt-button {
       flex-grow: 1;
 
       &:first-child {
-        margin-right: 20px;
+        margin-right: var(--spacing-xs);
       }
     }
   }

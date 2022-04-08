@@ -1,31 +1,31 @@
 <template>
-  <div class="ws-worksection__item ws-history-item">
-    <img class="ws-worksection__item__pic"
-         src="../../../../../assets/agent-workspace/default-avatar.svg"
-         alt="client photo">
-    <div class="ws-worksection__item__text">
-      <div class="flex-wrap">
-        <div class="ws-history-item__number">{{ computeDestination | truncateFromEnd(24) }}</div>
-        <div class="ws-history-item__time">{{ duration }}</div>
-      </div>
-      <div class="flex-wrap">
-        <div class="ws-history-item__date">{{ computeDate }}</div>
-        <div class="ws-history-item__location"></div>
-      </div>
-    </div>
-    <div class="ws-worksection__item__status">
+  <lookup-item @click.native="handleInput">
+    <template slot="title">
+      {{ shownDestination | truncateFromEnd(24) }}
+    </template>
+
+    <template slot="subtitle">
+      {{ duration }}
+    </template>
+
+    <template slot="info-title">
+      {{ date }}
+    </template>
+
+    <template slot="after">
       <wt-icon
         :icon="statusIcon"
         :color="statusIconColor"
       ></wt-icon>
-    </div>
-  </div>
+    </template>
+  </lookup-item>
 </template>
 
 <script>
 import { CallDirection } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import lookupItemMixin from './mixins/lookupItemMixin';
 
 const isTheSameDate = (date1, date2) => (
   date1.getDate() === date2.getDate()
@@ -45,15 +45,10 @@ const isYesterday = (createdAt) => {
   yesterday.setDate(yesterday.getDate() - 1);
   return isTheSameDate(yesterday, date);
 };
-
 export default {
-  name: 'history-item',
-
+  name: 'history-lookup-item',
+  mixins: [lookupItemMixin],
   props: {
-    item: {
-      type: Object,
-      required: true,
-    },
     forNumber: {
       type: String,
       required: false,
@@ -61,7 +56,7 @@ export default {
   },
 
   computed: {
-    computeDestination() {
+    shownDestination() {
       return this.forNumber ? this.destinationForNumber : this.destination;
     },
 
@@ -80,7 +75,7 @@ export default {
       return `${this.item.from.name} (${this.item.from.number})`;
     },
 
-    computeDate() {
+    date() {
       const createdAt = +this.item.createdAt;
       const date = new Date(createdAt).toLocaleDateString();
       const time = prettifyTime(createdAt);
@@ -109,46 +104,11 @@ export default {
       return 'success';
     },
   },
-
-  methods: {
-  },
 };
 </script>
 
 <style lang="scss" scoped>
-.ws-history-item {
-  cursor: pointer;
-
-  &:hover {
-    background: var(--page-bg-color);
+  .lookup-item {
+    cursor: pointer;
   }
-}
-
-.flex-wrap {
-  height: 50%; // 2 flex-wraps in text container
-
-  &:first-child {
-    align-items: flex-start;
-  }
-
-  &:last-child {
-    align-items: flex-end;
-  }
-}
-
-.ws-history-item__number {
-  @extend %typo-subtitle-1;
-}
-
-.ws-history-item__time {
-  @extend %typo-body-2;
-}
-
-.ws-history-item__date {
-  @extend %typo-caption;
-}
-
-.ws-history-item__location {
-  @extend %typo-caption;
-}
 </style>
