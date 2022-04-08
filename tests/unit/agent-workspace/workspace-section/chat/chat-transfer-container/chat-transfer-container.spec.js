@@ -8,7 +8,7 @@ describe('ChatTransferContainer', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('at ChatTransferItem "transfer" event, calls transfer() with passed item and destination', async () => {
+  it('at TransferLookupItem "input" event, calls transfer() with passed item and destination', async () => {
     const transferDestination = ChatTransferDestination.CHATPLAN;
     const item = { id: 'jest' };
     const mock = jest.spyOn(ChatTransferContainer.methods, 'transfer')
@@ -24,7 +24,7 @@ describe('ChatTransferContainer', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.findComponent({ name: 'wt-loader' }).exists()).toBe(false);
     expect(wrapper.findComponent({ name: 'empty-search' }).exists()).toBe(false);
-    wrapper.findComponent({ name: 'chat-transfer-item' }).vm.$emit('transfer', item);
+    wrapper.findComponent({ name: 'transfer-lookup-item' }).vm.$emit('input', item);
     expect(mock).toHaveBeenCalledWith({ destination: transferDestination, item });
   });
 });

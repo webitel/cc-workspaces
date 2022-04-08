@@ -30,14 +30,14 @@
       <wt-loader v-if="isLoading" />
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
-        <chat-transfer-item
+        <transfer-lookup-item
           v-for="(item, key) of dataList"
           :id="`scroll-item-${key}`"
-          :key="item.id"
+          :key="`${item.id}${key}`"
           :item="item"
           :type="transferDestination"
-          @transfer="handleTransfer"
-        ></chat-transfer-item>
+          @input="handleTransfer"
+        ></transfer-lookup-item>
       </div>
 
       <observer
@@ -53,9 +53,8 @@ import { mapActions, mapState } from 'vuex';
 import APIRepository from '../../../../../api/APIRepository';
 import TransferDestination from '../../../../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-import EmptyWorkspaceTransfer from '../../empty-workspace/empty-workspace-transfer.vue';
 import EmptySearch from '../../shared/workspace-empty-search/empty-search.vue';
-import ChatTransferItem from './chat-transfer-item.vue';
+import TransferLookupItem from '../../shared/lookup-item/transfer-lookup-item.vue';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
@@ -64,7 +63,7 @@ export default {
   name: 'call-transfer-container',
   mixins: [infiniteScrollMixin],
   components: {
-    ChatTransferItem,
+    TransferLookupItem,
     EmptySearch,
   },
 

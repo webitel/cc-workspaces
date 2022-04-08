@@ -14,7 +14,7 @@ import Numpad
 import Transfer
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-transfer/call-transfer-container.vue';
 import Bridge
-  from '../../../../../src/components/agent-workspace/workspace-section/shared/workspace-bridge/workspace-bridge-container.vue';
+  from '../../../../../src/components/agent-workspace/workspace-section/call/call-merge/call-bridge-container.vue';
 import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
 
 const localVue = createLocalVue();

@@ -8,7 +8,7 @@
       ></wt-search-bar>
       <wt-button
         color="transfer"
-        :disabled="isTransferDisabled"
+        :disabled="isTransferToNumberDisabled"
         @click="transfer"
       >{{$t('transfer.transfer')}}
       </wt-button>
@@ -19,14 +19,13 @@
       <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
-        <contact
+        <transfer-lookup-item
           v-for="(item, key) of dataList"
-          :class="{'selected': item === selected}"
           :id="`scroll-item-${key}`"
-          :key="key"
+          :key="`${item.id}${key}`"
           :item="item"
-          @click.native="select(item)"
-        ></contact>
+          @input="transfer"
+        ></transfer-lookup-item>
       </div>
 
       <observer
@@ -39,7 +38,7 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import infiniteScrollMixin from '../../../../../mixins/infiniteScrollMixin';
-  import Contact from '../../shared/workspace-contacts/workspace-contact.vue';
+  import TransferLookupItem from '../../shared/lookup-item/transfer-lookup-item.vue';
   import EmptySearch from '../../shared/workspace-empty-search/empty-search.vue';
   import APIRepository from '../../../../../api/APIRepository';
 
@@ -49,13 +48,12 @@
     name: 'call-transfer-container',
     mixins: [infiniteScrollMixin],
     components: {
-      Contact,
+      TransferLookupItem,
       EmptySearch,
     },
 
     data: () => ({
       dataList: [],
-      selected: null,
       filters: 'presence.status=sip,!dnd',
       sort: 'presence.status',
       fields: ['name', 'id', 'extension', 'presence'],
@@ -65,29 +63,22 @@
       ...mapState('userinfo', {
         userId: (state) => state.userId,
       }),
-      isTransferDisabled() {
-        return !this.selected && !this.search;
+      isTransferToNumberDisabled() {
+        return !this.search;
       },
     },
 
     methods: {
-      select(item) {
-        this.selected = item;
-      },
-
-      fetch(params) {
-        return usersAPI.getUsers({ ...params, notId: [this.userId] });
-      },
-
-      transfer() {
-        const number = this.selected
-          ? this.selected.extension : this.search;
-        this.blindTransfer(number);
-      },
-
       ...mapActions('call', {
         blindTransfer: 'BLIND_TRANSFER',
       }),
+      fetch(params) {
+        return usersAPI.getUsers({ ...params, notId: [this.userId] });
+      },
+      transfer(item = {}) {
+        const number = item.extension || this.search;
+        this.blindTransfer(number);
+      },
     },
   };
 </script>
@@ -109,17 +100,6 @@
     .wt-button {
       flex: 0 0 auto;
       margin-left: 10px;
-    }
-  }
-
-  .ws-contact-item {
-    border: 1px solid transparent;
-    border-radius: var(--border-radius);
-    transition: var(--transition);
-    cursor: pointer;
-
-    &.selected, &:hover {
-      border-color: var(--accent-color);
     }
   }
 </style>
