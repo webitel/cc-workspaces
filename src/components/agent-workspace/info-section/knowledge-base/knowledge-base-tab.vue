@@ -36,6 +36,6 @@ import { mapGetters } from 'vuex';
     @extend %wt-scrollbar;
     height: 100%;
     width: 100%;
-    overflow: auto;
+    overflow: scroll;
   }
 </style>

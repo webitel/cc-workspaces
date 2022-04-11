@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "22.01.0",
+  "version": "22.03.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --hot",
@@ -9,23 +9,27 @@
     "build-and-run-locally": "npm run build && sudo docker run -p 80:80 -v ${PWD}/dist:/usr/share/nginx/html:rw -v ${HOME}/default.conf:/etc/nginx/conf.d/default.conf:ro -v ${PWD}/dist:/www/workspace:rw -v ${HOME}/Projects/web-client-auth/dist:/www/auth:ro --rm nginx",
     "link-local-webitel-cc-ui": "rm -rf node_modules/@webitel/cc-ui-sdk && ln -s /home/user/Projects/webitel-cc-ui-sdk node_modules/@webitel/cc-ui-sdk",
     "link-local-webitel-sdk": "rm -rf node_modules/webitel-sdk && ln -s /home/user/Projects/webitel_sdk/dist node_modules/webitel-sdk",
-    "lint": "vue-cli-service lint --fix"
+    "lint": "vue-cli-service lint --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@webitel/cc-ui-sdk": "0.1.17",
-    "@webitel/ui-sdk": "^0.9.54",
-    "axios": "^0.19.2",
+    "@webitel/cc-ui-sdk": "^0.1.22",
+    "@webitel/ui-sdk": "^1.0.30",
+    "axios": "^0.25.0",
     "bamboo-jest-reporter": "^1.0.3",
     "core-js": "^3.6.4",
     "css-loader": "^3.4.2",
     "deep-copy": "^1.4.2",
     "deep-equal": "^2.0.3",
     "deepmerge": "^4.2.2",
+    "emoji-picker-element": "^1.10.1",
     "file-loader": "^5.0.2",
     "github-markdown-css": "^4.0.0",
+    "insert-text-at-cursor": "^0.3.0",
     "jsdom": "^16.4.0",
-    "linkifyjs": "^3.0.0-beta.3",
+    "linkify-html": "^3.0.5",
+    "linkifyjs": "^3.0.5",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
     "svg-sprite-loader": "^5.0.0",
@@ -36,22 +40,24 @@
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
     "vuex": "^3.1.2",
-    "webitel-sdk": "^0.1.90"
+    "webitel-sdk": "^0.1.100"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",
     "@vue/cli-plugin-eslint": "~4.2.0",
     "@vue/cli-plugin-router": "~4.2.0",
-    "@vue/cli-plugin-unit-jest": "~4.4.0",
+    "@vue/cli-plugin-unit-jest": "~5.0.1",
     "@vue/cli-plugin-vuex": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/test-utils": "^1.1.1",
+    "@vue/vue2-jest": "^27.0.0-alpha.4",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.1.2",
-    "node-sass": "^4.12.0",
+    "husky": "^7.0.0",
+    "sass": "^1.49.11",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   }

@@ -1,9 +1,10 @@
 
 .workspace-section {
   max-height: 100%;
+  min-height: 0;
   height: 100%;
-  background: #fff;
-  border-radius: $border-radius;
+  background: var(--main-color);
+  border-radius: var(--border-radius);
 }
 
 .ws-worksection-wrap {
@@ -24,24 +25,25 @@
   height: 100%;
   width: 100%;
 
-  .cc-search-input {
-    margin-bottom: 10px;
+  .wt-search-bar {
+    margin-bottom: var(--spacing-xs);
   }
 
+
   &__list-instruction {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     text-align: center;
-    margin-bottom: 17px;
+    margin-bottom: var(--spacing-xs);
   }
 
   .ws-worksection__list {
-    @extend .cc-scrollbar;
+    @extend %wt-scrollbar;
     flex-grow: 1;
     position: relative;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    padding-right: 20px;
+    padding-right: var(--spacing-2xs);
   }
 
   .ws-worksection__list-wrap {
@@ -49,10 +51,10 @@
   }
 
   .ws-worksection__list-separator {
-    @extend .typo-body-md;
+    @extend %typo-body-2;
     text-align: center;
     color: $separator-color;
-    margin: 10px 0;
+    margin: var(--spacing-xs) 0;
   }
 
   .wt-loader,
@@ -67,8 +69,8 @@
   align-items: stretch;
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: $border-radius;
-  transition: $transition;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
 
   &:last-child {
     margin-bottom: 0;
@@ -100,9 +102,9 @@
 }
 
 .ws-contact-item__name {
-  @extend .typo-heading-sm;
+  @extend %typo-subtitle-1;
 }
 
 .ws-contact-item__number {
-  @extend .typo-body-sm;
+  @extend %typo-caption;
 }

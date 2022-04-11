@@ -38,15 +38,15 @@ export default {
 
 <style lang="scss" scoped>
 .agent-pause-cause {
-  @extend %typo-body-lg;
+  @extend %typo-body-1;
 
   display: grid;
   grid-template-columns: 1fr 50px minmax(100px, 1fr) 45px;
-  grid-gap: var(--component-spacing);
+  grid-gap: var(--spacing-sm);
   align-items: center;
 
   &:not(:last-child) {
-    margin-bottom: var(--component-spacing);
+    margin-bottom: var(--spacing-sm);
   }
 
   &__name {

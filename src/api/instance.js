@@ -1,6 +1,7 @@
 import axios from 'axios';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import { objCamelToSnake, objSnakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
+import attachStarToRequestUrlSearchQuery from './interceptors/request/attachStarToRequestUrlSearchQuery.interceptor';
 
 // global API configuration
 // 'X-Webitel-Access' ~ 'X-Access-Token'
@@ -30,6 +31,8 @@ instance.interceptors.request.use(
   },
 );
 
+instance.interceptors.request.use(...attachStarToRequestUrlSearchQuery.default);
+
 instance.interceptors.response.use(
   (response) => objSnakeToCamel(response.data),
   (error) => { // catches 401 error across all api's
@@ -38,7 +41,7 @@ instance.interceptors.response.use(
       localStorage.removeItem('access-token');
     }
     // if error isn't 401, returns it
-    eventBus.$emit('notificationError', error.response.data.detail);
+    eventBus.$emit('notification', { type: 'error', text: error.response.data.detail });
     return Promise.reject(error.response.data);
   },
 );

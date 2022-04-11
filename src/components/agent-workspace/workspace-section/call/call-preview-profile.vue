@@ -44,11 +44,11 @@ export default {
   }
 
   &__name {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
   }
 
   &__number {
-    @extend .typo-body-md;
+    @extend %typo-body-2;
   }
 }
 </style>

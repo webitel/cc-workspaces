@@ -1,25 +1,23 @@
 <template>
   <section class="workspace-section">
-    <tabs
+    <wt-tabs
       v-model="currentTab"
       :tabs="tabs"
-    ></tabs>
-    <component class="info-tab" :is="currentTab.value"/>
+    ></wt-tabs>
+    <component :is="currentTab.value" class="info-tab" />
   </section>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { CallActions, ConversationState } from 'webitel-sdk';
-import Tabs from '../../utils/tabs.vue';
-import GeneralInfo from './general-info/general-info-tab.vue';
 import ClientInfo from './client-info/client-info-tab.vue';
+import GeneralInfo from './general-info/general-info-tab.vue';
 import KnowledgeBase from './knowledge-base/knowledge-base-tab.vue';
 
 export default {
   name: 'the-agent-info-section',
   components: {
-    Tabs,
     GeneralInfo,
     ClientInfo,
     KnowledgeBase,
@@ -88,16 +86,18 @@ export default {
 .workspace-section {
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
+  padding: var(--spacing-sm);
+  gap: var(--spacing-sm);
 }
 
 .info-tab {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: 100%;
+  flex-grow: 1;
   min-height: 0;
-  padding: var(--component-padding);
+  max-height: 100%;
 }
 </style>

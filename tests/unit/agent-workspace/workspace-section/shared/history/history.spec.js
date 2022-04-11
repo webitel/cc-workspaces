@@ -5,8 +5,8 @@ import callModule from '../../../../../../src/store/modules/call/call';
 import workspaceModule from '../../../../../../src/store/modules/agent-workspace/agent-workspace';
 import HistoryContainer
   from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-container.vue';
-import History
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-item.vue';
+import HistoryLookupItem
+  from '../../../../../../src/components/agent-workspace/workspace-section/shared/lookup-item/history-lookup-item.vue';
 import APIRepository from '../../../../../../src/api/APIRepository';
 // import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
 
@@ -62,7 +62,7 @@ describe('Agent History functionality', () => {
       stubs: { Icon: true },
       data: () => ({ dataList: historyList, isLoading: false }),
     });
-    expect(wrapper.findAllComponents(History).length).toEqual(historyList.length);
+    expect(wrapper.findAllComponents({ name: 'history-lookup-item' }).length).toEqual(historyList.length);
   });
 
   it('Selects history item and sets its number to new number input', async () => {
@@ -72,7 +72,7 @@ describe('Agent History functionality', () => {
       stubs: { Icon: true },
       data: () => ({ dataList: historyList, isLoading: false }),
     });
-    wrapper.findComponent(History).trigger('click');
+    wrapper.findComponent({ name: 'history-lookup-item' }).vm.$emit('input');
     expect(state.callOnWorkspace.newNumber).toEqual(historyList[0].destination);
   });
 
@@ -83,13 +83,13 @@ describe('Agent History functionality', () => {
       from: {},
       duration: 60,
     };
-    const wrapper = shallowMount(History, {
+    const wrapper = shallowMount(HistoryLookupItem, {
       store,
       localVue,
       stubs: { Icon: true },
       propsData: { item },
     });
-    expect(wrapper.findComponent(History).text())
+    expect(wrapper.text())
       .toContain('00:01:00');
   });
 });

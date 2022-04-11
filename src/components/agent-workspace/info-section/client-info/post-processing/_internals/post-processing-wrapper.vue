@@ -41,7 +41,7 @@ export default {
   margin: auto;
 
   .post-processing-wrapper__title {
-    @extend %typo-heading-md;
+    @extend %typo-heading-2;
     text-align: center;
     max-width: 80%;
     margin: 45px auto;

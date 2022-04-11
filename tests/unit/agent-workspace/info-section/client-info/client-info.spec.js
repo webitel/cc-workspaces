@@ -42,12 +42,12 @@ describe('Client Info Tab', () => {
     });
     expect(wrapper.exists()).toBe(true);
   });
-  it('renders a component client-info-badges', () => {
+  it('renders a component client-info-chips', () => {
     const wrapper = shallowMount(ClientInfo, {
       store,
       localVue,
     });
-    expect(wrapper.findComponent({ name: 'client-info-badges' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'client-info-chips' }).exists()).toBe(true);
   });
 
 //   it('Correctly renders key-value in call variables', () => {

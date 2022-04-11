@@ -108,10 +108,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  //padding: var;
 
   @media screen and (max-width: 1336px) {
-    padding: 0;
+    //padding: 0;
   }
 }
 

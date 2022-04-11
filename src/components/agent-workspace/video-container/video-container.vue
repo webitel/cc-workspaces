@@ -65,12 +65,12 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import RoundedAction from '../../utils/rounded-action.vue';
+  // import RoundedAction from '../../utils/rounded-action.vue';
 
   export default {
     name: 'video-container',
     components: {
-      RoundedAction,
+      // RoundedAction,
     },
 
     data: () => ({
@@ -132,7 +132,7 @@
     position: fixed;
     right: (30px);
     bottom: (70px);
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
     z-index: 900;
     overflow: hidden;
 
@@ -159,7 +159,7 @@
         justify-content: center;
         border: none;
         border-radius: 50%;
-        transition: $transition;
+        transition: var(--transition);
         cursor: pointer;
       }
 
@@ -186,7 +186,7 @@
       width: fit-content;
       width: -moz-fit-content;
       height: fit-content;
-      border: 2px solid $accent-color;
+      border: 2px solid var(--accent-color);
       z-index: 2;
     }
 

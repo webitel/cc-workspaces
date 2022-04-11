@@ -1,6 +1,6 @@
 import { ConversationState } from 'webitel-sdk';
+import ChatTransferDestination from '../../../enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
-import Reporting from '../post-processing/Reporting';
 import clientHandlers from './client-handlers';
 
 const state = {
@@ -10,9 +10,11 @@ const state = {
 };
 
 const getters = {
+  ALLOW_CHAT_TRANSFER: (state) => state.chatOnWorkspace.allowLeave,
   ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
   ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
   IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
+  IS_MY_MESSAGE: (state) => (message) => message.member?.self,
 };
 
 const actions = {
@@ -51,6 +53,19 @@ const actions = {
     } catch (err) {
       throw err;
     }
+  },
+
+  TRANSFER: async (
+    context,
+    { chat = context.state.chatOnWorkspace, destination, item },
+  ) => {
+    if (destination === ChatTransferDestination.USER) {
+      return chat.transferToUser(item.id);
+    }
+    if (destination === ChatTransferDestination.CHATPLAN) {
+      return chat.transferToPlan(item.id);
+    }
+    throw new TypeError('Unknown transfer destination: ', destination);
   },
 
   CLOSE: async (context) => {
@@ -94,6 +109,43 @@ const actions = {
 
   CLOSE_MEDIA: (context) => {
     context.commit('SET_MEDIA_VIEW', null);
+  },
+
+  NOTIFY: (context, { action, chat }) => {
+    context.dispatch('notifications/NOTIFY', { action, chat }, { root: true });
+  },
+
+  RESET_UNREAD_COUNT: (context) => {
+    context.dispatch('notifications/RESET_UNREAD_COUNT', null, { root: true });
+  },
+
+  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    // eslint-disable-next-line no-param-reassign
+    chat.players = player ? [player] : [];
+  },
+
+  CLEAN_CHAT_PLAYERS: (context, { chat = context.state.chatOnWorkspace } = {}) => {
+    /*
+    * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
+    * in memory when they are really destroyed
+    * */
+    // eslint-disable-next-line no-param-reassign
+    delete chat.players;
+  },
+  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    if (chat.players) {
+      chat.players.push(player);
+    } else {
+      context.dispatch('INITIALIZE_CHAT_PLAYERS', { player, chat });
+    }
+    player.on('play', () => {
+      context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
+    });
+  },
+  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+    chat.players.forEach((chatPlayer) => {
+      if (chatPlayer !== player) chatPlayer.pause();
+    });
   },
 };
 

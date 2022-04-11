@@ -12,6 +12,7 @@ export default {
     search: 'Search',
     description: 'Description',
     settings: 'Settings',
+    edit: 'Edit',
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -38,6 +39,8 @@ export default {
     avgHold: 'Avg Hold Time',
     utilization: 'Utilization',
     occupancy: 'Occupancy',
+    chatAccepts: 'Accepted chats',
+    chatAht: 'Chat Handling Time',
   },
   queueSec: {
     call: {
@@ -100,7 +103,7 @@ export default {
     },
     transfer: {
       heading: 'Thank You!',
-      text: 'Call has been transferred to another operator',
+      text: 'Task has been transferred to another operator',
     },
   },
   emptySearch: {
@@ -179,5 +182,44 @@ export default {
   },
   validation: {
     required: 'Required',
+  },
+  notifications: {
+    message: 'New message from {name}',
+    userInvite: 'New chat invite from {name}',
+    closeConversation: '{name} left the chat',
+  },
+  emojiPicker: {
+    categoriesLabel: 'Categories',
+    emojiUnsupportedMessage: 'Your browser does not support color emoji.',
+    favoritesLabel: 'Favorites',
+    loadingMessage: 'Loading…',
+    networkErrorMessage: 'Could not load emoji.',
+    regionLabel: 'Emoji picker',
+    searchDescription: 'When search results are available, press up or down to select and enter to choose.',
+    searchLabel: 'Search',
+    searchResultsLabel: 'Search results',
+    skinToneDescription: 'When expanded, press up or down to select and enter to choose.',
+    skinToneLabel: 'Choose a skin tone',
+    skinTonesLabel: 'Skin tones',
+    skinTones: [
+      'Default',
+      'Light',
+      'Medium-Light',
+      'Medium',
+      'Medium-Dark',
+      'Dark',
+    ],
+    categories: {
+      custom: 'Custom',
+      'smileys-emotion': 'Smileys and emoticons',
+      'people-body': 'People and body',
+      'animals-nature': 'Animals and nature',
+      'food-drink': 'Food and drink',
+      'travel-places': 'Travel and places',
+      activities: 'Activities',
+      objects: 'Objects',
+      symbols: 'Symbols',
+      flags: 'Flags',
+    },
   },
 };

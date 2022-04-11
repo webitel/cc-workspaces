@@ -34,7 +34,7 @@ export default {
   align-items: flex-start;
 
   &__digit {
-    @extend %typo-body-md;
+    @extend %typo-body-2;
     text-align: center;
     width: (9.5px);
 
@@ -45,7 +45,7 @@ export default {
   }
 
   &--bold .call-preview-timer__digit {
-    font-family: 'Montserrat Semi', monospace;
+    @extend %typo-subtitle-2;
   }
 }
 </style>

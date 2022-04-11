@@ -90,10 +90,10 @@
 }
 
 .general-info__article {
-  margin-top: var(--component-spacing);
+  margin-top: var(--spacing-sm);
 
   &--padded {
-    padding: var(--component-spacing);
+    padding: var(--spacing-sm);
   }
 
   &--outlined {

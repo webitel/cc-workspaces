@@ -1,5 +1,6 @@
-import chatModule from '../../../../src/store/modules/chat/chat';
+import ChatTransferDestination from '../../../../src/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+import chatModule from '../../../../src/store/modules/chat/chat';
 
 const chat = {
   id: '1',
@@ -8,6 +9,8 @@ const chat = {
   leave: jest.fn(),
   send: jest.fn(),
   sendText: jest.fn(),
+  transferToUser: jest.fn(),
+  transferToPlan: jest.fn(),
 };
 
 describe('chat store: actions', () => {
@@ -22,6 +25,8 @@ describe('chat store: actions', () => {
     chat.join.mockClear();
     chat.leave.mockClear();
     chat.decline.mockClear();
+    chat.transferToUser.mockClear();
+    chat.transferToPlan.mockClear();
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
@@ -54,6 +59,20 @@ describe('chat store: actions', () => {
     expect(context.dispatch).toHaveBeenCalledTimes(files.length);
     expect(context.dispatch.mock.calls[0]).toEqual(['SEND', files[0]]);
     expect(context.dispatch.mock.calls[1]).toEqual(['SEND', files[1]]);
+  });
+
+  it('TRANSFER action calls chat transferToUser() method is passed destination is USER', () => {
+    const id = 'jest';
+    const payload = { destination: ChatTransferDestination.USER, item: { id } };
+    chatModule.actions.TRANSFER(context, payload);
+    expect(chat.transferToUser).toHaveBeenCalledWith(id);
+  });
+
+  it('TRANSFER action calls chat transferToPlan() method is passed destination is CHATPLAN', () => {
+    const id = 'jest';
+    const payload = { destination: ChatTransferDestination.CHATPLAN, item: { id } };
+    chatModule.actions.TRANSFER(context, payload);
+    expect(chat.transferToPlan).toHaveBeenCalledWith(id);
   });
 
   it('CLOSE action calls chat leave() method, if allowLeave is true', () => {
@@ -112,6 +131,57 @@ describe('chat store: actions', () => {
   it('CLOSE_MEDIA commits SET_MEDIA_VIEW mutation with null value', () => {
     chatModule.actions.CLOSE_MEDIA(context);
     expect(context.commit).toHaveBeenCalledWith('SET_MEDIA_VIEW', null);
+  });
+
+  it('NOTIFY action dispatches global NOTIFY action with action and chat params', () => {
+    const action = 'message';
+    chatModule.actions.NOTIFY(context, { action, chat });
+    expect(context.dispatch).toHaveBeenCalledWith('notifications/NOTIFY', { action, chat }, { root: true });
+  });
+
+  it('RESET_UNREAD_COUNT action dispatches global RESET_UNREAD_COUNT action', () => {
+    chatModule.actions.RESET_UNREAD_COUNT(context);
+    expect(context.dispatch).toHaveBeenCalledWith('notifications/RESET_UNREAD_COUNT', null, { root: true });
+  });
+
+  it('INITIALIZE_CHAT_PLAYERS sets array with passed player to chatOnWorkspace in state', () => {
+    const player = { jest: 1 };
+    expect(context.state.chatOnWorkspace.players).toBeFalsy();
+    chatModule.actions.INITIALIZE_CHAT_PLAYERS(context, { player });
+    expect(context.state.chatOnWorkspace.players).toEqual([player]);
+  });
+
+  it('CLEAN_CHAT_PLAYERS removes chat.players property', () => {
+    context.state.chatOnWorkspace.players = ['jest'];
+    chatModule.actions.CLEAN_CHAT_PLAYERS(context);
+    expect(context.state.chatOnWorkspace.players).toBe(undefined);
+  });
+
+  it('ATTACH_PLAYER_TO_CHAT dispatches INITIALIZE_CHAT_PLAYERS if chatOnWorkspace has no players', () => {
+    const player = { on: jest.fn() };
+    chatModule.actions.ATTACH_PLAYER_TO_CHAT(context, { player });
+    expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_CHAT_PLAYERS', { player, chat: context.state.chatOnWorkspace });
+  });
+
+  it('ATTACH_PLAYER_TO_CHAT sets working watcher on player "play" event', () => {
+    let callback;
+    const player = {
+      on: (event, _callback) => {
+        callback = _callback;
+      },
+    };
+    chatModule.actions.ATTACH_PLAYER_TO_CHAT(context, { player });
+    callback();
+    expect(context.dispatch).toHaveBeenCalledWith('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
+  });
+
+  it('PAUSE_ALL_CHAT_PLAYERS_EXCEPT triggers player.pause() on all players in chatOnWorkspace (except the passed one)', () => {
+    const player = { pause: jest.fn() };
+    const player2 = { pause: jest.fn() };
+    context.state.chatOnWorkspace.players = [player, player2];
+    chatModule.actions.PAUSE_ALL_CHAT_PLAYERS_EXCEPT(context, { player });
+    expect(player.pause).not.toHaveBeenCalled();
+    expect(player2.pause).toHaveBeenCalled();
   });
 });
 

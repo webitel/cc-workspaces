@@ -50,17 +50,17 @@ export default {
 .agent-org-structure {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: var(--component-spacing);
+  grid-column-gap: var(--spacing-sm);
 
   &__item {
     text-align: center;
 
     &__title {
-      @extend %typo-strong-lg;
+      @extend %typo-subtitle-1;
     }
 
     &__value {
-      @extend %typo-body-lg;
+      @extend %typo-body-1;
       overflow-wrap: break-word;
       word-break: break-all;
     }

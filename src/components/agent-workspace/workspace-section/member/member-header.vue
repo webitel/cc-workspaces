@@ -4,9 +4,11 @@
       <div class="actions-wrap actions-wrap__left">
         <wt-rounded-action
           class="call-action"
-          :class="{ 'active': isOnHistory }"
+          :active="isOnHistory"
           icon="history"
           color="secondary"
+          rounded
+          wide
           @click="$emit('openTab', 'history')"
         ></wt-rounded-action>
       </div>
@@ -20,6 +22,8 @@
           :class="{ 'hidden': !isCall }"
           icon="call-ringing"
           color="success"
+          rounded
+          wide
           @click="makeCall"
         ></wt-rounded-action>
       </div>
@@ -66,34 +70,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .call-header {
-    display: flex;
-    flex-direction: column;
-    margin: 0 0 50px;
-  }
-
-  .call-header__actions {
-    display: flex;
-    justify-content: space-between;
-
-    .actions-wrap {
-      display: flex;
-      // flex: 0 0 190px; // x3 icons 50px + x2 margins 20px
-
-      &__right {
-        justify-content: flex-end;
-      }
-    }
-
-    .call-header__profile-pic {
-      width: 80px;
-      height: 80px;
-    }
-  }
-
-  .call-header__name {
-    @extend .typo-heading-sm;
-    text-align: center;
-    margin-top: 10px;
-  }
+@import '../../../../css/agent-workspace/workspace-section/call-header';
 </style>

@@ -1,7 +1,7 @@
-import Reporting from '../post-processing/Reporting';
-import clientHandlers from './client-handlers';
 import WorkspaceStates from '../agent-workspace/workspaceUtils/WorkspaceStates';
+import clientHandlers from './client-handlers';
 import missed from './missed-calls/missed-calls';
+import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
   callList: [],
@@ -20,6 +20,9 @@ const getters = {
     }
     return '';
   },
+
+  // every returns true on empty array, so we have to check for array length
+  IS_ANY_RINGING: (state) => state.callList.length && state.callList.every((call) => isIncomingRinging(call)),
 };
 
 const actions = {
@@ -135,8 +138,17 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (context, { newNumber }) => {
-    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' });
+  OPEN_NEW_CALL: (context, { newNumber } = {}) => context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' }),
+
+  CLOSE_NEW_CALL: (context) => {
+    if (context.state.callList.length) {
+      return context.dispatch('OPEN_ACTIVE_CALL', 0);
+    }
+    if (context.rootState.chat.chatList.length) {
+      const chat = context.rootState.chat.chatList[0];
+      return context.dispatch('chat/OPEN_CHAT', chat, { root: true });
+    }
+    return context.dispatch('RESET_WORKSPACE');
   },
 
   ADD_DIGIT: async (context, value) => {

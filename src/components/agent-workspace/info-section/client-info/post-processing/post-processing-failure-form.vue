@@ -69,7 +69,7 @@ export default {
 @import '../../../../../css/agent-workspace/info-section/post-processing/post-processing';
 
 .processing-form__schedule-call-select__title {
-  @extend %typo-body-lg;
+  @extend %typo-body-1;
   text-align: center;
   margin-bottom: 10px;
 }

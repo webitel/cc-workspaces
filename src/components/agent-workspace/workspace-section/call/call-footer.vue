@@ -6,21 +6,13 @@
         class="call-action"
         :class="{
           'hidden': !isNumpad,
-          'active': isOnNumpad,
          }"
+        :active="isOnNumpad"
         icon="numpad"
         color="secondary"
+        rounded
+        wide
         @click="$emit('openTab', 'numpad')"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        class="call-action call-action__mic"
-        :class="{
-          'hidden': !isMuted,
-          'active': isOnMuted,
-        }"
-        :icon="isOnMuted ? 'mic-muted' : 'mic'"
-        color="secondary"
-        @click="toggleMute"
       ></wt-rounded-action>
       <wt-rounded-action
         class="call-action"
@@ -29,27 +21,42 @@
           'hold': isOnHold,
         }"
         icon="hold"
-        :color="isOnHold ? 'primary' : 'secondary'"
+        :color="isOnHold ? 'hold' : 'secondary'"
+        :active="isOnHold"
+        rounded
+        wide
         @click="toggleHold"
       ></wt-rounded-action>
       <wt-rounded-action
-        class="call-action"
+        class="call-action call-action__mic"
         :class="{
-          'hidden': !isRecord,
-          'active': isOnRecord,
+          'hidden': !isMuted,
         }"
-        :icon="isOnRecord ? 'rec-off' : 'rec'"
+        :icon="isOnMuted ? 'mic-muted' : 'mic'"
+        :active="isOnMuted"
         color="secondary"
+        rounded
+        wide
+        @click="toggleMute"
       ></wt-rounded-action>
-      <wt-rounded-action
-        class="call-action"
-        :class="{
-          'hidden': !isNote,
-          'active': isOnNote,
-        }"
-        icon="note"
-        color="secondary"
-      ></wt-rounded-action>
+<!--      <wt-rounded-action-->
+<!--        class="call-action"-->
+<!--        :class="{-->
+<!--          'hidden': !isRecord,-->
+<!--          'active': isOnRecord,-->
+<!--        }"-->
+<!--        :icon="isOnRecord ? 'rec-off' : 'rec'"-->
+<!--        color="secondary"-->
+<!--      ></wt-rounded-action>-->
+<!--      <wt-rounded-action-->
+<!--        class="call-action"-->
+<!--        :class="{-->
+<!--          'hidden': !isNote,-->
+<!--          'active': isOnNote,-->
+<!--        }"-->
+<!--        icon="note"-->
+<!--        color="secondary"-->
+<!--      ></wt-rounded-action>-->
     </div>
   </footer>
 </template>
@@ -143,6 +150,7 @@ export default {
   display: flex;
   justify-content: space-evenly;
   padding: 10px 0;
+  gap: 10px;
   margin: 0 20px;
 }
 </style>

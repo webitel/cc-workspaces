@@ -1,4 +1,3 @@
-
 const state = {
   workspaceState: null,
 };
@@ -9,6 +8,8 @@ const getters = {
       ? rootState[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
       : {}
   ),
+
+  IS_EMPTY_WORKSPACE: (state) => !state.workspaceState,
 };
 
 const actions = {
@@ -19,6 +20,7 @@ const actions = {
       // then, async open workspace session
       context.dispatch('now/SET_NOW_WATCHER', null, { root: true });
       context.dispatch('globals/INIT_GLOBAL_HANDLERS', null, { root: true });
+      context.dispatch('notifications/INIT_NOTIFICATIONS', null, { root: true });
       context.dispatch('call/SUBSCRIBE_CALLS', null, { root: true });
       context.dispatch('chat/SUBSCRIBE_CHATS', null, { root: true });
       context.dispatch('status/SUBSCRIBE_STATUS', null, { root: true });

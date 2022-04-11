@@ -5,16 +5,16 @@ import App from './the-app.vue';
 import router from './router';
 import store from './store';
 import i18n from './locale/i18n';
-import Icon from './components/utils/icon-wrap.vue';
 
 import './plugins';
 
 // import './css/fonts.scss';
 import './css/main.scss';
 
+import './assets/icons/sprite';
+
 Vue.config.productionTip = false;
 
-Vue.component('icon', Icon);
 Vue.use(Vuelidate);
 
 const fetchConfig = async () => {

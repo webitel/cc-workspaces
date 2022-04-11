@@ -49,7 +49,7 @@ export default {
   text-align: center;
 }
 .disconnect-popup__main__text {
-  @extend %typo-body-lg;
+  @extend %typo-body-1;
   text-align: center;
 }
 

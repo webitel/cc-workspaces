@@ -1,8 +1,8 @@
 <template>
   <article class="queue-preview">
-    <status-badge :state="previewStatusClass"/>
 
     <header class="queue-preview-header">
+      <status-chip state="missed"/>
       <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="missed-preview__call-time">
@@ -15,19 +15,19 @@
         {{ displayNumber | truncateFromEnd(18) }}
       </div>
     </section>
-    <footer class="queue-preview-footer"></footer>
+<!--    <footer class="queue-preview-footer"></footer>-->
   </article>
 </template>
 
 <script>
   // import { mapState, mapActions } from 'vuex';
   import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-  import StatusBadge from '../call-status-icon-badge.vue';
+  import StatusChip from '../call-status-icon-chip.vue';
 
   export default {
     name: 'missed-queue-preview',
     components: {
-      StatusBadge,
+      StatusChip,
     },
 
     props: {
@@ -48,10 +48,6 @@
       displayTime() {
         return prettifyTime(this.call.createdAt);
       },
-
-      previewStatusClass() {
-        return 'missed';
-      },
     },
 
     methods: {},
@@ -61,6 +57,6 @@
 <style lang="scss" scoped>
   @import '../../../../../css/agent-workspace/queue-section/queue-task-preview';
   .missed-preview__call-time {
-    @extend %typo-body-md;
+    @extend %typo-body-2;
   }
 </style>

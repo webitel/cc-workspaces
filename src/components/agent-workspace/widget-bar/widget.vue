@@ -14,7 +14,7 @@
       class="widget-icon"
       :class="`widget-icon--${iconWidgetName}`"
       :icon="iconWidgetName"
-      icon-prefix="widget"
+      icon-prefix="ws"
       size="sm">
     </wt-icon>
 
@@ -62,23 +62,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$widget-inbound-color: $accent-color;
-$widget-handles-color: $true-color;
-$widget-missed-color: $false-color;
+$widget-inbound-color: var(--accent-color);
+$widget-handles-color: var(--true-color);
+$widget-missed-color: var(--false-color);
 $widget-avg-talk-color: #239AC0;
-$widget-avg-hold-color: $accent-color;
-
-.typo-widget-title {
-  font-family: 'Montserrat Regular', monospace;
-  font-size: 10px;
-  line-height: 10px;
-}
-
-.typo-widget-value {
-  font-family: 'Montserrat Semi', monospace;
-  font-size: 10px;
-  line-height: 10px;
-}
+$widget-avg-hold-color: var(--accent-color);
+$widget-chat-accepts-color:  var(--true-color);
+$widget-chat-aht-color:  var(--true-color);
 
 .widget {
   display: flex;
@@ -89,12 +79,12 @@ $widget-avg-hold-color: $accent-color;
   white-space: nowrap;
 
   .widget__title {
-    @extend .typo-widget-title;
+    @extend %typo-caption;
     margin-right: 5px;
   }
 
   .widget__value {
-    @extend .typo-widget-value;
+    @extend %typo-caption;
   }
 
   @media screen and (max-width: 1336px) {
@@ -122,29 +112,39 @@ $widget-avg-hold-color: $accent-color;
 .widget-icon {
   margin-right: 10px;
 
-  &--inbound.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-inbound.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-inbound-color;
     stroke: $widget-inbound-color;
   }
 
-  &--handles.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-handles.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-handles-color;
     stroke: $widget-handles-color;
   }
 
-  &--missed.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-missed.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-missed-color;
     stroke: $widget-missed-color;
   }
 
-  &--avg-talk.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-avg-talk.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-talk-color;
     stroke: $widget-avg-talk-color;
   }
 
-  &--avg-hold.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-avg-hold.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-avg-hold-color;
     stroke: $widget-avg-hold-color;
+  }
+
+  &--widget-chat-accepts.wt-icon ::v-deep .wt-icon__icon {
+    fill: $widget-chat-accepts-color;
+    stroke: $widget-chat-accepts-color;
+  }
+
+  &--widget-chat-aht.wt-icon ::v-deep .wt-icon__icon {
+    fill: $widget-chat-aht-color;
+    stroke: $widget-chat-aht-color;
   }
 }
 </style>

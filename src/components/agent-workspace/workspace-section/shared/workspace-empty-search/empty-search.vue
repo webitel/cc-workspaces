@@ -52,11 +52,11 @@
   }
 
   .empty-search__heading {
-    @extend .typo-heading-sm;
+    @extend %typo-subtitle-1;
     margin-bottom: 5px;
   }
 
   .empty-search__text {
-    @extend .typo-body-sm;
+    @extend %typo-caption;
   }
 </style>

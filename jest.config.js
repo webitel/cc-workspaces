@@ -31,7 +31,7 @@ module.exports = {
 
     'src/mixins/**/*.{js,vue}',
 
-    '!src/components/utils/*.{js,vue}',
+    // '!src/components/utils/*.{js,vue}',
     '!src/**/index.js', // No need to cover bootstrap file
     '!src/**/main.js', // No need to cover bootstrap file
   ],
