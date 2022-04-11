@@ -23,7 +23,7 @@ const actions = {
   * and make this check in these hook instead of copy-paste overriding base action
   * */
   OPEN_SESSION: async (context) => {
-    const DAY_LENGTH = 24 * 60 * 60 * 1000;
+    const HOUR_LENGTH = 60 * 60 * 1000;
 
     await context.dispatch('BEFORE_OPEN_SESSION_HOOK');
     if (!localStorage.getItem('access-token')) {
@@ -32,7 +32,7 @@ const actions = {
     }
     const session = await userinfoAPI.getSession();
 
-    if ((session.expiresAt - Date.now() < DAY_LENGTH)) {
+    if ((session.expiresAt - Date.now() < HOUR_LENGTH)) {
       await authAPI.logout();
       await router.replace('/auth');
       throw new Error(`Session expires soon ${session.expiresAt}`);
