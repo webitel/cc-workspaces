@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "22.01.0",
+  "version": "22.03.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --hot",
