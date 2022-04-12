@@ -8,7 +8,7 @@ import ActivePreview
   from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
 import MockSocket from '../../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

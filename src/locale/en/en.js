@@ -1,3 +1,5 @@
+import { DeviceNotFoundError } from 'webitel-sdk';
+
 export default {
   reusable: {
     answer: 'Answer',
@@ -144,44 +146,10 @@ export default {
     mainText: 'Connection was accidentally interrupted.',
     reloadBtn: 'Reload page',
   },
-  icon: {
-    docs: 'Docs',
-    logout: 'Logout',
-    account: 'Account',
-    appNavigator: 'App navigator',
-    collapse: 'Collapse',
-    expand: 'Expand',
-    delete: 'Delete',
-    edit: 'Edit',
-    add: 'Add',
-    settings: 'Settings',
-    bridge: 'Bridge',
-    close: 'Close',
-    search: 'Search',
-    transfer: 'Transfer',
-    missed: 'Missed call',
-    call: 'Call',
-    tick: 'Tick',
-    rec: 'Rec',
-    recStop: 'Stop rec',
-    note: 'Note',
-    mic: 'Mic',
-    numpad: 'Numpad',
-    inbound: 'Inbound',
-    hold: 'Hold',
-    contacts: 'Contacts',
-    arrDown: 'Down',
-    arrLeft: 'Left',
-    arrRight: 'Right',
-    arrUp: 'Up',
-    end: 'End',
-    attention: 'Attention',
-    ringing: 'Ringing',
-    callEnd: 'End call',
-    history: 'History',
-  },
-  validation: {
-    required: 'Required',
+  error: {
+    websocket: {
+      [DeviceNotFoundError.name]: 'Microphone is\'nt connected. Cannot perform action.',
+    },
   },
   notifications: {
     message: 'New message from {name}',

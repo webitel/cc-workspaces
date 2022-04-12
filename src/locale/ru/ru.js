@@ -1,3 +1,5 @@
+import { DeviceNotFoundError } from 'webitel-sdk';
+
 export default {
   reusable: {
     answer: 'Ответить',
@@ -144,44 +146,10 @@ export default {
     mainText: 'Связь была утеряна.',
     reloadBtn: 'Обновить страницу',
   },
-  icon: {
-    docs: 'Документация',
-    logout: 'Выйти',
-    account: 'Аккаунт',
-    appNavigator: 'Навигатор приложений',
-    collapse: 'Свернуть',
-    expand: 'Развернуть',
-    delete: 'Удалить',
-    edit: 'Изменить',
-    add: 'Добавить',
-    settings: 'Настройки',
-    bridge: 'Соединить',
-    close: 'Закрыть',
-    search: 'Поиск',
-    transfer: 'Перевод',
-    missed: 'Пропущенный',
-    call: 'Звонок',
-    tick: 'Ок',
-    rec: 'Запись',
-    recStop: 'Остановить запись',
-    note: 'Заметка',
-    mic: 'Микрофон',
-    numpad: 'Набор',
-    inbound: 'Входящий',
-    hold: 'Удержание',
-    contacts: 'Контакты',
-    arrDown: 'Вниз',
-    arrLeft: 'Влево',
-    arrRight: 'Вправо',
-    arrUp: 'Вверх',
-    end: 'Закончить',
-    attention: 'Внимание',
-    ringing: 'Гудки',
-    callEnd: 'Конец звонка',
-    history: 'История',
-  },
-  validation: {
-    required: 'Обязательно',
+  error: {
+    websocket: {
+      [DeviceNotFoundError.name]: 'Микрофон не подсоединён. Невозможно выполнить действие.',
+    },
   },
   notifications: {
     message: 'Новое сообщение от {name}',

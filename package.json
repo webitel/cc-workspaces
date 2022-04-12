@@ -3,7 +3,7 @@
   "version": "22.03.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --hot",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "build-and-run-locally": "npm run build && sudo docker run -p 80:80 -v ${PWD}/dist:/usr/share/nginx/html:rw -v ${HOME}/default.conf:/etc/nginx/conf.d/default.conf:ro -v ${PWD}/dist:/www/workspace:rw -v ${HOME}/Projects/web-client-auth/dist:/www/auth:ro --rm nginx",

@@ -6,7 +6,7 @@ import callModule from '../../../../../src/store/modules/call/call';
 import CallHeader
   from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
 import webSocketClientController
-  from '../../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
