@@ -8,6 +8,11 @@
   >
     <disconnect-popup />
 
+    <welcome-popup
+      v-if="isWelcomePopup"
+      @input="initSession"
+    ></welcome-popup>
+
     <wt-notifications-bar />
     <cc-header />
     <div class="workspace-wrap">
@@ -34,6 +39,7 @@ import InfoSection from './info-section/the-agent-info-section.vue';
 import WorkspaceSection from './workspace-section/the-agent-workspace-section.vue';
 import VideoContainer from './video-container/video-container.vue';
 import DisconnectPopup from './popups/disconnect-popup/disconnect-popup.vue';
+import WelcomePopup from './popups/welcome-popup/welcome-popup.vue';
 import appNotificationMixin from '../../mixins/appNotificationMixin';
 
 export default {
@@ -47,11 +53,11 @@ export default {
     InfoSection,
     VideoContainer,
     DisconnectPopup,
+    WelcomePopup,
   },
-
-  created() {
-    this.openSession();
-  },
+  data: () => ({
+    isWelcomePopup: true,
+  }),
 
   destroyed() {
     this.closeSession();
@@ -71,6 +77,11 @@ export default {
       openSession: 'OPEN_SESSION',
       closeSession: 'CLOSE_SESSION',
     }),
+
+    async initSession() {
+      await this.openSession();
+      this.isWelcomePopup = false;
+    },
 
     preventDrop(event) {
       event.preventDefault();

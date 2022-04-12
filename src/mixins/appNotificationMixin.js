@@ -42,13 +42,6 @@ export default {
     },
   },
 
-  beforeRouteEnter(from, to, next) {
-    if (to.fullPath === '/auth') {
-      if (window.Notification.permission !== 'granted') window.Notification.requestPermission();
-    }
-    next();
-  },
-
   beforeDestroy() {
     this.handleDestroy();
   },

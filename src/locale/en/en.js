@@ -144,6 +144,23 @@ export default {
     mainText: 'Connection was accidentally interrupted.',
     reloadBtn: 'Reload page',
   },
+  welcomePopup: {
+    title: 'Welcome to Webitel Agent Workspace!',
+    subtitle: 'Please, check your devices and browser permission before start',
+    mic: {
+      status: 'Microphone permission status',
+      message: {
+        notFound: 'Microphone not found',
+        denied: 'Permission denied',
+      },
+    },
+    notifications: {
+      status: 'Notifications permission status',
+      message: {
+        denied: 'Permission denied',
+      },
+    },
+  },
   icon: {
     docs: 'Docs',
     logout: 'Logout',
