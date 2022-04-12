@@ -96,7 +96,6 @@ export default {
       this.checkNotifications();
     },
     handleKeyPress(event) {
-      console.info(event, event.keyCode);
       if (event.keyCode === 13 // enter
       || event.key === 32) { // space
         this.close();
