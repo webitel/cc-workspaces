@@ -146,6 +146,17 @@ export default {
     mainText: 'Connection was accidentally interrupted.',
     reloadBtn: 'Reload page',
   },
+  welcomePopup: {
+    title: 'Welcome to Webitel Agent Workspace!',
+    subtitle: 'Please, check your devices and browser permission before start',
+    mic: {
+      status: 'Microphone permission status',
+      message: {
+        notFound: 'Microphone not found',
+        denied: 'Permission denied',
+      },
+    },
+  },
   error: {
     websocket: {
       [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',

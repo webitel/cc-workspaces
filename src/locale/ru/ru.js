@@ -146,6 +146,17 @@ export default {
     mainText: 'Связь была утеряна.',
     reloadBtn: 'Обновить страницу',
   },
+  welcomePopup: {
+    title: 'Добро пожаловать в Webitel Agent Workspace!',
+    subtitle: 'Пожалуйста, проверьте свои устройства и настройки браузера перед началом работы',
+    mic: {
+      status: 'Разрешение на использование Микрофона',
+      message: {
+        notFound: 'Микрофон не найден',
+        denied: 'Запрещено',
+      },
+    },
+  },
   error: {
     websocket: {
       [DeviceNotFoundError.id]: 'Микрофон не подсоединён. Невозможно выполнить действие.',
