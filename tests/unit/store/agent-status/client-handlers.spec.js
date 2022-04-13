@@ -1,8 +1,8 @@
 import clientHandlers from '../../../../src/store/modules/agent-status/client-handlers';
 import MockSocket from '../../mocks/MockSocket';
-import usersAPIRepository from '../../../../src/api/agent-workspace/users/UsersAPIRepository';
+import usersAPIRepository from '../../../../src/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import webSocketClientController
-  from '../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 let mockSocket = new MockSocket();
 

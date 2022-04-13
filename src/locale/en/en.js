@@ -1,3 +1,5 @@
+import { DeviceNotFoundError } from 'webitel-sdk';
+
 export default {
   reusable: {
     answer: 'Answer',
@@ -154,51 +156,11 @@ export default {
         denied: 'Permission denied',
       },
     },
-    notifications: {
-      status: 'Notifications permission status',
-      message: {
-        denied: 'Permission denied',
-      },
+  },
+  error: {
+    websocket: {
+      [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
     },
-  },
-  icon: {
-    docs: 'Docs',
-    logout: 'Logout',
-    account: 'Account',
-    appNavigator: 'App navigator',
-    collapse: 'Collapse',
-    expand: 'Expand',
-    delete: 'Delete',
-    edit: 'Edit',
-    add: 'Add',
-    settings: 'Settings',
-    bridge: 'Bridge',
-    close: 'Close',
-    search: 'Search',
-    transfer: 'Transfer',
-    missed: 'Missed call',
-    call: 'Call',
-    tick: 'Tick',
-    rec: 'Rec',
-    recStop: 'Stop rec',
-    note: 'Note',
-    mic: 'Mic',
-    numpad: 'Numpad',
-    inbound: 'Inbound',
-    hold: 'Hold',
-    contacts: 'Contacts',
-    arrDown: 'Down',
-    arrLeft: 'Left',
-    arrRight: 'Right',
-    arrUp: 'Up',
-    end: 'End',
-    attention: 'Attention',
-    ringing: 'Ringing',
-    callEnd: 'End call',
-    history: 'History',
-  },
-  validation: {
-    required: 'Required',
   },
   notifications: {
     message: 'New message from {name}',

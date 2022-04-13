@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import webSocketClientController from '../api/agent-workspace/WebSocketClientController';
+import webSocketClientController from '../api/agent-workspace/websocket/WebSocketClientController';
 import agentInfo from './modules/agent-info/agent-info';
 import status from './modules/agent-status/agent-status';
 import workspace from './modules/agent-workspace/agent-workspace';

@@ -10,7 +10,7 @@ import ClientInfoTab
   from '../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
 import MockSocket from '../../mocks/MockSocket';
 import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import webSocketClientController from '../../../../src/api/agent-workspace/WebSocketClientController';
+import webSocketClientController from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

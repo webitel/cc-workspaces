@@ -84,7 +84,7 @@ export default {
           this.notification.status = true;
         } else {
           this.notification.status = false;
-          this.notification.message = status;
+          this.notification.message = 'denied';
         }
       } catch (err) {
         this.notification.status = false;
