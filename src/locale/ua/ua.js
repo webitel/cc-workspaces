@@ -148,7 +148,7 @@ export default {
   },
   error: {
     websocket: {
-      [DeviceNotFoundError.name]: 'Мікрофон не під\'єднаний. Неможливо виконати дію.',
+      [DeviceNotFoundError.id]: 'Мікрофон не під\'єднаний. Неможливо виконати дію.',
     },
   },
   notifications: {

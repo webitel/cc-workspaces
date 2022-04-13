@@ -148,7 +148,7 @@ export default {
   },
   error: {
     websocket: {
-      [DeviceNotFoundError.name]: 'Microphone is\'nt connected. Cannot perform action.',
+      [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
     },
   },
   notifications: {
