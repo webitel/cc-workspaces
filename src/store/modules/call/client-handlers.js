@@ -28,9 +28,6 @@ const actions = {
     await client.subscribeCall(callHandler(context), null);
     const callList = client.allCall();
     if (callList.length) context.dispatch('SET_CALL_LIST', callList);
-    // await client.subscribeTask((...args) => {
-    //   console.log('task', args);
-    // });
   },
 
   HANDLE_RINGING_ACTION: (context, call) => {

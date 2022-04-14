@@ -1,7 +1,7 @@
 import { AgentServiceApiFactory } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import configuration from '../../openAPIConfig';
-import instance from '../../instance';
+import configuration from '../../../openAPIConfig';
+import instance from '../../../instance';
 
 const agentService = new AgentServiceApiFactory(configuration, '', instance);
 

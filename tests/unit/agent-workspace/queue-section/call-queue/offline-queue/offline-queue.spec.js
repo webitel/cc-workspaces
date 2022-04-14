@@ -10,7 +10,7 @@ import WorkspaceStates
   from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
 import MockSocket from '../../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

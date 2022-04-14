@@ -1,7 +1,7 @@
 import globalsModule from '../../../../src/store/modules/global-handlers/global-handlers';
 import MockSocket from '../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const mockSocket = new MockSocket();
 

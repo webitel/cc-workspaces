@@ -7,7 +7,7 @@ import QueueSection
   from '../../../../src/components/agent-workspace/queue-section/the-agent-queue-section.vue';
 import MockSocket from '../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

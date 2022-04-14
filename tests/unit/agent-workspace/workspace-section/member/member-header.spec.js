@@ -6,7 +6,7 @@ import MemberHeader
   from '../../../../../src/components/agent-workspace/workspace-section/member/member-header.vue';
 import MockSocket from '../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

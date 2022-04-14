@@ -1,6 +1,6 @@
-import AgentStatusAPI from '../../../../src/api/agent-workspace/agent-info/agent-status';
-import AgentPauseCauseAPI from '../../../../src/api/agent-workspace/agent-info/agent-pause-causes';
-import AgentQueuesAPI from '../../../../src/api/agent-workspace/agent-info/agent-queues';
+import AgentStatusAPI from '../../../../src/api/agent-workspace/endpoints/agent-info/agent-status';
+import AgentPauseCauseAPI from '../../../../src/api/agent-workspace/endpoints/agent-info/agent-pause-causes';
+import AgentQueuesAPI from '../../../../src/api/agent-workspace/endpoints/agent-info/agent-queues';
 import agentInfo from '../../../../src/store/modules/agent-info/agent-info';
 import getContextMock from '../../mocks/store/contextMock';
 

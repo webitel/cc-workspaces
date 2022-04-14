@@ -1,4 +1,6 @@
 import { Client } from 'webitel-sdk';
+import call from '../../../store/modules/call/call';
+import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 const { hostname, protocol } = window.location;
 const origin = (`${protocol}//${hostname}`).replace(/^http/, 'ws');
@@ -16,6 +18,7 @@ const getConfig = () => {
 
 const WebSocketClientEvent = Object.freeze({
   AFTER_AUTH: 'afterAuth',
+  ERROR: 'error',
 });
 
 class WebSocketClientController {
@@ -24,6 +27,7 @@ class WebSocketClientController {
 
   _config = getConfig(); // readonly, used on init
   _on = {
+    [WebSocketClientEvent.ERROR]: [websocketErrorEventHandler],
     [WebSocketClientEvent.AFTER_AUTH]: [],
   }
 
@@ -59,6 +63,7 @@ class WebSocketClientController {
 
     await cli.auth();
     this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
+    this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
 
     window.cli = cli;
     return cli;

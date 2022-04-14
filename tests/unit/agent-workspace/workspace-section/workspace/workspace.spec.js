@@ -11,7 +11,7 @@ import Call
   from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
 import MockSocket from '../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../src/api/agent-workspace/WebSocketClientController';
+  from '../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
