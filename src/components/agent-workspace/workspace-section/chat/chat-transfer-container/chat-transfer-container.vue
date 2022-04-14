@@ -8,12 +8,12 @@
         @search="resetData"
       ></wt-search-bar>
 
-      <wt-rounded-action
-        :class="{ 'active': transferDestination === TransferDestination.USER }"
-        color="secondary"
-        icon="ws-agent"
-        @click="transferDestination = TransferDestination.USER"
-      ></wt-rounded-action>
+<!--      <wt-rounded-action-->
+<!--        :class="{ 'active': transferDestination === TransferDestination.USER }"-->
+<!--        color="secondary"-->
+<!--        icon="ws-agent"-->
+<!--        @click="transferDestination = TransferDestination.USER"-->
+<!--      ></wt-rounded-action>-->
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
         color="secondary"
@@ -70,7 +70,7 @@ export default {
   data: () => ({
     dataList: [],
     TransferDestination,
-    transferDestination: TransferDestination.USER,
+    transferDestination: TransferDestination.CHATPLAN,
   }),
 
   computed: {
