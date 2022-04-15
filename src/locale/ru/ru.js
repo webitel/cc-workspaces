@@ -156,6 +156,12 @@ export default {
         denied: 'Запрещено',
       },
     },
+    notifications: {
+      status: 'Разрешение на получение Оповещений',
+      message: {
+        denied: 'Запрещено',
+      },
+    },
   },
   error: {
     websocket: {

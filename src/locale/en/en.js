@@ -156,6 +156,12 @@ export default {
         denied: 'Permission denied',
       },
     },
+    notifications: {
+      status: 'Notifications permission status',
+      message: {
+        denied: 'Permission denied',
+      },
+    },
   },
   error: {
     websocket: {

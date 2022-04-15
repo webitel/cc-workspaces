@@ -1,5 +1,5 @@
 <template>
-  <wt-popup>
+  <wt-popup @close="close">
     <template slot="title">
       {{ $t('welcomePopup.title') }}
     </template>
@@ -95,9 +95,11 @@ export default {
       this.checkMic();
       this.checkNotifications();
     },
-    handleKeyPress(event) {
-      if (event.keyCode === 13 // enter
-      || event.key === 32) { // space
+    handleKeyPress(e) {
+      if (e.keyCode === 13 // enter
+        || e.key === ' '
+        || e.code === 'Space'
+        || e.keyCode === 32) { // space
         this.close();
       }
     },
