@@ -1,4 +1,4 @@
-import Reporting from '../../../../src/store/modules/post-processing/Reporting';
+import Reporting from '../../../../src/features/post-processing/store/Reporting';
 
 const comm = { id: '123' };
 const member = { communications: [comm] };

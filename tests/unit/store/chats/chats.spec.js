@@ -1,6 +1,6 @@
-import ChatTransferDestination from '../../../../src/enums/ChatTransferDestination.enum';
-import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import chatModule from '../../../../src/store/modules/chat/chat';
+import ChatTransferDestination from '../../../../src/ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
+import WorkspaceStates from '../../../../src/ui/store/workspaceUtils/WorkspaceStates';
+import chatModule from '../../../../src/features/chat/chat';
 
 const chat = {
   id: '1',

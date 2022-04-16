@@ -1,15 +1,15 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import FailureForm
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-failure-form.vue';
+  from '../../../../../../src/ui/modules/info-section/modules/client-info/components/post-processing/post-processing-failure-form.vue';
 import SuccessForm
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-success-form.vue';
+  from '../../../../../../src/ui/modules/info-section/modules/client-info/components/post-processing/post-processing-success-form.vue';
 import PostProcessingTab
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing.vue';
+  from '../../../../../../src/ui/modules/info-section/modules/client-info/components/post-processing/post-processing.vue';
 import postProcessingModule
-  from '../../../../../../src/store/modules/post-processing/post-processing';
+  from '../../../../../../src/features/post-processing/store/post-processing';
 import Reporting
-  from '../../../../../../src/store/modules/post-processing/Reporting';
+  from '../../../../../../src/features/post-processing/store/Reporting';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

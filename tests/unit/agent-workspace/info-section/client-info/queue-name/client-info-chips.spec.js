@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ClientInfoChips
-  from '../../../../../../src/components/agent-workspace/info-section/client-info/queue-name/client-info-chips.vue';
+  from '../../../../../../src/ui/modules/info-section/modules/client-info/components/queue-name/client-info-chips.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

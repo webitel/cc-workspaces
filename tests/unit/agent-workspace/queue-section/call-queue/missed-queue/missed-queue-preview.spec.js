@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import MissedQueuePreview
-  from '@/components/agent-workspace/queue-section/call-queue/missed-queue/missed-queue-preview.vue';
+  from '@/ui/modules/queue-section/modules/call-queue/components/missed-queue/missed-queue-preview.vue';
 
 describe('MissedQueuePreview', () => {
   it('renders a component', () => {

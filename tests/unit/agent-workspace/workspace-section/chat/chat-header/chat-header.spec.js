@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ChatHeader
-  from '../../../../../../src/components/agent-workspace/workspace-section/chat/chat-header/chat-header.vue';
+  from '../../../../../../src/ui/modules/work-section/modules/chat/components/chat-header/chat-header.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

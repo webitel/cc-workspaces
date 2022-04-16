@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import GeneralInfoTab from '../../../../../src/components/agent-workspace/info-section/general-info/general-info-tab.vue';
+import GeneralInfoTab from '../../../../../src/ui/modules/info-section/modules/general-info/components/general-info-tab.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

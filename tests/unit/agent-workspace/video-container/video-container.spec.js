@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import call from '../../../../src/store/modules/call/call';
-import VideoContainer from '../../../../src/components/agent-workspace/video-container/video-container.vue';
+import call from '../../../../src/features/call/call';
+import VideoContainer from '../../../../src/ui/modules/video-container/components/video-container.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

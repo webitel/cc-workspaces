@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import TheChat
-  from '../../../../../src/components/agent-workspace/workspace-section/chat/the-chat.vue';
+  from '../../../../../src/ui/modules/work-section/modules/chat/components/the-chat.vue';
 
 describe('The Chat', () => {
   it('renders a component', () => {

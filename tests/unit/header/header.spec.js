@@ -1,10 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
-import Header from '../../../src/components/shared/app-header/app-header.vue';
-import statusModule from '../../../src/store/modules/agent-status/agent-status';
-import call from '../../../src/store/modules/call/call';
-import userinfo from '../../../src/store/modules/userinfo/userinfo';
+import Header from '../../../src/ui/modules/app-header/components/app-header.vue';
+import statusModule from '../../../src/features/agent-status/agent-status';
+import call from '../../../src/features/call/call';
+import userinfo from '../../../src/ui/modules/userinfo/userinfo';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

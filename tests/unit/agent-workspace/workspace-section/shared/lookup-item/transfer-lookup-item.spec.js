@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
-import TransferLookupItem from '../../../../../../src/components/agent-workspace/workspace-section/shared/lookup-item/transfer-lookup-item.vue';
-import ChatTransferDestination from '../../../../../../src/enums/ChatTransferDestination.enum';
+import TransferLookupItem from '../../../../../../src/ui/modules/work-section/modules/shared/components/lookup-item/transfer-lookup-item.vue';
+import ChatTransferDestination from '../../../../../../src/ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 
 describe('TransferLookupItem', () => {
   const item = {};

@@ -1,12 +1,12 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import memberModule from '../../../../../src/store/modules/member/member';
+import workspaceModule from '../../../../../src/ui/store/agent-workspace';
+import memberModule from '../../../../../src/features/member/member';
 import MemberHeader
-  from '../../../../../src/components/agent-workspace/workspace-section/member/member-header.vue';
+  from '../../../../../src/ui/modules/work-section/modules/member/member-header.vue';
 import MockSocket from '../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+  from '../../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

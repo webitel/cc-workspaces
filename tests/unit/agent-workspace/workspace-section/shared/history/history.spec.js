@@ -1,13 +1,13 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-import callModule from '../../../../../../src/store/modules/call/call';
-import workspaceModule from '../../../../../../src/store/modules/agent-workspace/agent-workspace';
+import callModule from '../../../../../../src/features/call/call';
+import workspaceModule from '../../../../../../src/ui/store/agent-workspace';
 import HistoryContainer
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/workspace-history/history-container.vue';
+  from '../../../../../../src/ui/modules/work-section/modules/shared/components/workspace-history/history-container.vue';
 import HistoryLookupItem
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/lookup-item/history-lookup-item.vue';
-import APIRepository from '../../../../../../src/api/APIRepository';
+  from '../../../../../../src/ui/modules/work-section/modules/shared/components/lookup-item/history-lookup-item.vue';
+import APIRepository from '../../../../../../src/app/api/APIRepository';
 // import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
 
 // import historyAPI through require to override functions with mock

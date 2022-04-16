@@ -1,14 +1,14 @@
-import statusModule from '../../../../src/store/modules/agent-status/agent-status';
-import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
+import statusModule from '../../../../src/features/agent-status/agent-status';
+import UserStatus from '../../../../src/features/agent-status/statusUtils/UserStatus';
 import MockSocket from '../../mocks/MockSocket';
-import usersAPIRepository from '../../../../src/api/agent-workspace/endpoints/users/UsersAPIRepository';
+import usersAPIRepository from '../../../../src/app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import webSocketClientController
-  from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+  from '../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 let mockSocket = new MockSocket();
 jest.spyOn(webSocketClientController, 'getCliInstance')
   .mockImplementation(() => mockSocket);
-jest.mock('../../../../src/api/agent-workspace/endpoints/users/UsersAPIRepository');
+jest.mock('../../../../src/app/api/agent-workspace/endpoints/users/UsersAPIRepository');
 
 describe('status store client handlers: actions', () => {
   const agent = {

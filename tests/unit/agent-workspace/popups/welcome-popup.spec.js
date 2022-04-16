@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import WelcomePopup
-  from '../../../../src/components/agent-workspace/popups/welcome-popup/welcome-popup.vue';
+  from '../../../../src/ui/modules/popups/welcome-popup/welcome-popup.vue';
 
 describe('WelcomePopup', () => {
   it('renders a component', () => {

@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
-import callModule from '../../../../../../src/store/modules/call/call';
+import callModule from '../../../../../../src/features/call/call';
 import Bridge
-  from '../../../../../../src/components/agent-workspace/workspace-section/call/call-merge/call-bridge-container.vue';
+  from '../../../../../../src/ui/modules/work-section/modules/call/components/call-merge/call-bridge-container.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

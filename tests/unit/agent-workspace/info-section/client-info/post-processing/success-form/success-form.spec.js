@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import SuccessForm from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/post-processing-success-form.vue';
-import postProcessingModule from '../../../../../../../src/store/modules/post-processing/post-processing';
-import Reporting from '../../../../../../../src/store/modules/post-processing/Reporting';
+import SuccessForm from '../../../../../../../src/ui/modules/info-section/modules/client-info/components/post-processing/post-processing-success-form.vue';
+import postProcessingModule from '../../../../../../../src/features/post-processing/store/post-processing';
+import Reporting from '../../../../../../../src/features/post-processing/store/Reporting';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

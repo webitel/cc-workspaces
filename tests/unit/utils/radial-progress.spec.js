@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import RadialProgress from '../../../src/components/utils/radial-progress.vue';
+import RadialProgress from '../../../src/app/components/utils/radial-progress.vue';
 
 describe('Radial Progress', () => {
   it('renders a component', () => {

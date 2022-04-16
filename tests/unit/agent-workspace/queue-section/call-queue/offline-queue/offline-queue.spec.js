@@ -1,16 +1,16 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '@/store/modules/agent-workspace/agent-workspace';
-import memberModule from '@/store/modules/member/member';
+import workspaceModule from '../../../../../../src/ui/store/agent-workspace';
+import memberModule from '@/features/member/member';
 import OfflineQueue
-  from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-container.vue';
+  from '@/ui/modules/queue-section/modules/call-queue/components/offline-queue/offline-queue-container.vue';
 import OfflinePreview
-  from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-preview.vue';
+  from '@/ui/modules/queue-section/modules/call-queue/components/offline-queue/offline-queue-preview.vue';
 import WorkspaceStates
-  from '@/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
+  from '@/ui/store/workspaceUtils/WorkspaceStates';
 import MockSocket from '../../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+  from '../../../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

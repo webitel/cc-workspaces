@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import UserStatus from '../../../../src/store/modules/agent-status/statusUtils/UserStatus';
-import UserDndSwitcher from '../../../../src/components/shared/app-header/user-dnd-switcher.vue';
+import UserStatus from '../../../../src/features/agent-status/statusUtils/UserStatus';
+import UserDndSwitcher from '../../../../src/ui/modules/app-header/components/user-dnd-switcher.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

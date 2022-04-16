@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import globals from '../../../../src/store/modules/global-handlers/global-handlers';
-import DisconnectPopup from '../../../../src/components/agent-workspace/popups/disconnect-popup/disconnect-popup.vue';
+import globals from '../../../../src/features/global-handlers/store/global-handlers';
+import DisconnectPopup from '../../../../src/ui/modules/popups/disconnect-popup/components/disconnect-popup.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

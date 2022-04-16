@@ -1,14 +1,14 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '@/store/modules/agent-workspace/agent-workspace';
-import callModule from '@/store/modules/call/call';
+import workspaceModule from '../../../../../../src/ui/store/agent-workspace';
+import callModule from '@/features/call/call';
 import ActiveQueue
-  from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-container.vue';
+  from '@/ui/modules/queue-section/modules/call-queue/components/active-queue/active-queue-container.vue';
 import ActivePreview
-  from '@/components/agent-workspace/queue-section/call-queue/active-queue/active-queue-preview.vue';
+  from '@/ui/modules/queue-section/modules/call-queue/components/active-queue/active-queue-preview.vue';
 import MockSocket from '../../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+  from '../../../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import status from '../../../../src/store/modules/agent-status/agent-status';
-import WidgetBar from '../../../../src/components/agent-workspace/widget-bar/widget-bar.vue';
+import status from '../../../../src/features/agent-status/agent-status';
+import WidgetBar from '../../../../src/ui/modules/widget-bar/components/widget-bar.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

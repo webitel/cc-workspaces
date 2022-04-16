@@ -1,10 +1,10 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
-import workspace from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import call from '../../../../../src/store/modules/call/call';
+import workspace from '../../../../../src/ui/store/agent-workspace';
+import call from '../../../../../src/features/call/call';
 import KnowledgeBaseTab
-  from '../../../../../src/components/agent-workspace/info-section/knowledge-base/knowledge-base-tab.vue';
+  from '../../../../../src/ui/modules/info-section/modules/knowledge-base/knowledge-base-tab.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

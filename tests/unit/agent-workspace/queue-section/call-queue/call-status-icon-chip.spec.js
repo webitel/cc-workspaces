@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import CallStatusIconChip from '@/components/agent-workspace/queue-section/call-queue/call-status-icon-chip.vue';
+import CallStatusIconChip from '../../../../../src/ui/modules/queue-section/modules/call-queue/components/call-status-icon-chip.vue';
 
 describe('CallStatusIconChip', () => {
   it('renders a component', () => {

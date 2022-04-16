@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
-import HistoryLookupItem from '../../../../../../src/components/agent-workspace/workspace-section/shared/lookup-item/history-lookup-item.vue';
+import HistoryLookupItem from '../../../../../../src/ui/modules/work-section/modules/shared/components/lookup-item/history-lookup-item.vue';
 
 describe('HistoryLookupItem', () => {
   const item = {

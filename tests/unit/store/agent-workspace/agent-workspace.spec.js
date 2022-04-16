@@ -1,6 +1,6 @@
-import workspaceModule from '../../../../src/store/modules/agent-workspace/agent-workspace';
-import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import webSocketClientController from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+import workspaceModule from '../../../../src/ui/store/agent-workspace';
+import WorkspaceStates from '../../../../src/ui/store/workspaceUtils/WorkspaceStates';
+import webSocketClientController from '../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const destroyCliInstanceMock = jest.fn();
 

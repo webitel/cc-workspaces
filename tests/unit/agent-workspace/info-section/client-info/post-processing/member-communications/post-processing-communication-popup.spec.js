@@ -1,10 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import CommunicationPopup
-  from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/member-communications/post-processing-communication-popup.vue';
+  from '../../../../../../../src/ui/modules/info-section/modules/client-info/components/post-processing/member-communications/post-processing-communication-popup.vue';
 import reporting
-  from '../../../../../../../src/store/modules/post-processing/post-processing';
-import Reporting from '../../../../../../../src/store/modules/post-processing/Reporting';
+  from '../../../../../../../src/features/post-processing/store/post-processing';
+import Reporting from '../../../../../../../src/features/post-processing/store/Reporting';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

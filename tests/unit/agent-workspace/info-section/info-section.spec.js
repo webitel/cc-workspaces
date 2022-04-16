@@ -1,16 +1,16 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
-import reporting from '../../../../src/store/modules/post-processing/post-processing';
-import workspace from '../../../../src/store/modules/agent-workspace/agent-workspace';
-import call from '../../../../src/store/modules/call/call';
+import reporting from '../../../../src/features/post-processing/store/post-processing';
+import workspace from '../../../../src/ui/store/agent-workspace';
+import call from '../../../../src/features/call/call';
 import InfoSection
-  from '../../../../src/components/agent-workspace/info-section/the-agent-info-section.vue';
+  from '../../../../src/ui/modules/info-section/components/the-agent-info-section.vue';
 import ClientInfoTab
-  from '../../../../src/components/agent-workspace/info-section/client-info/client-info-tab.vue';
+  from '../../../../src/ui/modules/info-section/modules/client-info/components/client-info-tab.vue';
 import MockSocket from '../../mocks/MockSocket';
-import WorkspaceStates from '../../../../src/store/modules/agent-workspace/workspaceUtils/WorkspaceStates';
-import webSocketClientController from '../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+import WorkspaceStates from '../../../../src/ui/store/workspaceUtils/WorkspaceStates';
+import webSocketClientController from '../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

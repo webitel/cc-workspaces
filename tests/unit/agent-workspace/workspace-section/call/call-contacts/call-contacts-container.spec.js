@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import CallContactsContainer
-  from '../../../../../../src/components/agent-workspace/workspace-section/call/call-contacts/call-contacts-container.vue';
+  from '../../../../../../src/ui/modules/work-section/modules/call/components/call-contacts/call-contacts-container.vue';
 
 describe('CallContactsContainer', () => {
   it('renders a component', () => {

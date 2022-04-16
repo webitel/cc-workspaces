@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import chatMessageDetailMixin from '../../../src/mixins/chatMessageDetailMixin';
+import chatMessageDetailMixin from '../../../src/ui/modules/work-section/modules/chat/mixins/chatMessageDetailMixin';
 
 const Component = {
   render() {},

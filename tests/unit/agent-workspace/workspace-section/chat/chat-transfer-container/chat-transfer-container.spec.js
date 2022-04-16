@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
-import ChatTransferContainer from '../../../../../../src/components/agent-workspace/workspace-section/chat/chat-transfer-container/chat-transfer-container.vue';
-import ChatTransferDestination from '../../../../../../src/enums/ChatTransferDestination.enum';
+import ChatTransferContainer from '../../../../../../src/ui/modules/work-section/modules/chat/components/chat-transfer-container/chat-transfer-container.vue';
+import ChatTransferDestination from '../../../../../../src/ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 
 describe('ChatTransferContainer', () => {
   it('renders a component', () => {

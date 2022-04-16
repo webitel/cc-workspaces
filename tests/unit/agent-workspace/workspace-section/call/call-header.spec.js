@@ -2,11 +2,11 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallActions } from 'webitel-sdk';
 import findRoundedActionByIcon from '../../../../utils/findRoundedActionByIcon';
-import callModule from '../../../../../src/store/modules/call/call';
+import callModule from '../../../../../src/features/call/call';
 import CallHeader
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-header.vue';
 import webSocketClientController
-  from '../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+  from '../../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

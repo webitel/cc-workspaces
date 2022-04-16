@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import EmptyWorkspace from '../../../../../src/components/agent-workspace/workspace-section/empty-workspace/empty-workspace.vue';
+import EmptyWorkspace from '../../../../../src/ui/modules/work-section/modules/empty-workspace/components/empty-workspace.vue';
 
 describe('EmptyWorkspace', () => {
   it('renders a component', () => {

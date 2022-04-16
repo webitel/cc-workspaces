@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Widget from '../../../../src/components/agent-workspace/widget-bar/widget.vue';
+import Widget from '../../../../src/ui/modules/widget-bar/components/widget.vue';
 
 describe('Widget', () => {
   it('renders a component', () => {

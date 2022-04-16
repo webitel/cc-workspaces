@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import MergeLookupItem
-  from '../../../../../../src/components/agent-workspace/workspace-section/shared/lookup-item/merge-lookup-item.vue';
+  from '../../../../../../src/ui/modules/work-section/modules/shared/components/lookup-item/merge-lookup-item.vue';
 
 describe('MergeLookupItem', () => {
   const item = {};

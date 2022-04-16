@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import Dropzone
-  from '../../../src/components/utils/dropzone.vue';
+  from '../../../src/app/components/utils/dropzone.vue';
 
 describe('Dropzone', () => {
   it('renders a component', () => {

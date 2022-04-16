@@ -2,20 +2,20 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import Vuex from 'vuex';
 // import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../../src/store/modules/call/call';
+import callModule from '../../../../../src/features/call/call';
 import TheCall
-  from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/the-call.vue';
 import CallPreview
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-preview.vue';
 import CallHeader
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-header.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-header.vue';
 import Numpad
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-numpad/numpad.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-numpad/numpad.vue';
 import Transfer
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-transfer/call-transfer-container.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-transfer/call-transfer-container.vue';
 import Bridge
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-merge/call-bridge-container.vue';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-merge/call-bridge-container.vue';
+import workspaceModule from '../../../../../src/ui/store/agent-workspace';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

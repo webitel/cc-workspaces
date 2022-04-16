@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import AgentWorkspace from '../../../../src/components/agent-workspace/the-agent-workspace.vue';
+import AgentWorkspace from '../../../../src/ui/components/the-agent-workspace.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

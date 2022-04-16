@@ -1,10 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import call from '../../../../../src/store/modules/call/call';
+import workspaceModule from '../../../../../src/ui/store/agent-workspace';
+import call from '../../../../../src/features/call/call';
 import CallPreview
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview.vue';
-import PreviewProfile from '../../../../../src/components/agent-workspace/workspace-section/call/call-preview-profile.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-preview.vue';
+import PreviewProfile from '../../../../../src/ui/modules/work-section/modules/call/components/call-preview-profile.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

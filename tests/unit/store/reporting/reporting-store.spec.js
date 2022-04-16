@@ -1,4 +1,4 @@
-import reportingModule from '../../../../src/store/modules/post-processing/post-processing';
+import reportingModule from '../../../../src/features/post-processing/store/post-processing';
 
 describe('reporting: getters', () => {
   let reporting;

@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import PostProcessingTimer from '../../../../../../../src/components/agent-workspace/info-section/client-info/post-processing/_internals/post-processing-timer.vue';
-import nowModule from '../../../../../../../src/store/modules/reactive-now/reactive-now';
+import PostProcessingTimer from '../../../../../../../src/ui/modules/info-section/modules/client-info/components/post-processing/_internals/post-processing-timer.vue';
+import nowModule from '../../../../../../../src/ui/modules/reactive-now/reactive-now';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

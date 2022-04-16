@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ContactLookupItem from '../../../../../../src/components/agent-workspace/workspace-section/shared/lookup-item/contact-lookup-item.vue';
+import ContactLookupItem from '../../../../../../src/ui/modules/work-section/modules/shared/components/lookup-item/contact-lookup-item.vue';
 
 describe('ContactLookupItem', () => {
   const item = {};

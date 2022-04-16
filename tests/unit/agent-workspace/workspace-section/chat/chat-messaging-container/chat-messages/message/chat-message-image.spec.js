@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ChatMessageImage
-  from '../../../../../../../../src/components/agent-workspace/workspace-section/chat/chat-messaging-container/chat-messages/message/chat-message-image.vue';
+  from '../../../../../../../../src/ui/modules/work-section/modules/chat/components/chat-messaging-container/chat-messages/message/chat-message-image.vue';
 
 let message = {};
 

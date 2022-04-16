@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import CallTransferContainer
-  from '../../../../../../src/components/agent-workspace/workspace-section/call/call-transfer/call-transfer-container.vue';
+  from '../../../../../../src/ui/modules/work-section/modules/call/components/call-transfer/call-transfer-container.vue';
 
 describe('CallTransferContainer', () => {
   it('renders a component', () => {

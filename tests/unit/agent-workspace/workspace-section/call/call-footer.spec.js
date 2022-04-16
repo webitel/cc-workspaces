@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import findRoundedActionByIcon from '../../../../utils/findRoundedActionByIcon';
-import callModule from '../../../../../src/store/modules/call/call';
+import callModule from '../../../../../src/features/call/call';
 import CallFooter
-  from '../../../../../src/components/agent-workspace/workspace-section/call/call-footer.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/call-footer.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

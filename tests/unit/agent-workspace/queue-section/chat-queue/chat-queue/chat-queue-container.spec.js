@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import chat from '@/store/modules/chat/chat';
-import ChatQueueContainer from '../../../../../../src/components/agent-workspace/queue-section/chat-queue/chat-queue/chat-queue-container.vue';
+import chat from '@/features/chat/chat';
+import ChatQueueContainer from '../../../../../../src/ui/modules/queue-section/modules/chat-queue/components/chat-queue/chat-queue-container.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

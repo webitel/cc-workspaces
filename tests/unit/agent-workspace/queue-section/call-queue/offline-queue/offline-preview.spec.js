@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import OfflinePreview
-  from '@/components/agent-workspace/queue-section/call-queue/offline-queue/offline-queue-preview.vue';
+  from '@/ui/modules/queue-section/modules/call-queue/components/offline-queue/offline-queue-preview.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

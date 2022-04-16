@@ -1,17 +1,17 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../../src/store/modules/call/call';
-import nowModule from '../../../../../src/store/modules/reactive-now/reactive-now';
-import statusModule from '../../../../../src/store/modules/agent-status/agent-status';
-import userinfoModule from '../../../../../src/store/modules/userinfo/userinfo';
-import Workspace from '../../../../../src/components/agent-workspace/the-agent-workspace.vue';
+import workspaceModule from '../../../../../src/ui/store/agent-workspace';
+import callModule from '../../../../../src/features/call/call';
+import nowModule from '../../../../../src/ui/modules/reactive-now/reactive-now';
+import statusModule from '../../../../../src/features/agent-status/agent-status';
+import userinfoModule from '../../../../../src/ui/modules/userinfo/userinfo';
+import Workspace from '../../../../../src/ui/components/the-agent-workspace.vue';
 import Call
-  from '../../../../../src/components/agent-workspace/workspace-section/call/the-call.vue';
+  from '../../../../../src/ui/modules/work-section/modules/call/components/the-call.vue';
 import MockSocket from '../../../mocks/MockSocket';
 import webSocketClientController
-  from '../../../../../src/api/agent-workspace/websocket/WebSocketClientController';
+  from '../../../../../src/app/api/agent-workspace/websocket/WebSocketClientController';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
