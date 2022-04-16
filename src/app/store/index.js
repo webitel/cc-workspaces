@@ -5,11 +5,11 @@ import agentInfo from '../../ui/modules/info-section/modules/general-info/store/
 import status from '../../features/agent-status/agent-status';
 import workspace from '../../ui/store/agent-workspace';
 import call from '../../features/call/call';
-import chat from '../../features/chat/chat';
+import chat from '../../features/chat/store/chat';
 import globals from '../../features/global-handlers/store/global-handlers';
 import member from '../../features/member/member';
 import notifications from '../../features/notifications/store/notifications';
-import reporting from '../../features/post-processing/store/post-processing';
+import reporting from '../../features/reporting/store/post-processing';
 import now from '../../ui/modules/reactive-now/reactive-now';
 import userinfo from '../../ui/modules/userinfo/userinfo';
 

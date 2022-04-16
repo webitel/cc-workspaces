@@ -29,7 +29,7 @@
   import { mapActions } from 'vuex';
   import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
   import ContactLookupItem from '../../../shared/components/lookup-item/contact-lookup-item.vue';
-  import EmptySearch from '../../../shared/components/workspace-empty-search/empty-search.vue';
+  import EmptySearch from '../../../shared/components/workspace-empty-search/components/empty-search.vue';
   import APIRepository from '../../../../../../../app/api/APIRepository';
 
   const usersAPI = APIRepository.users;

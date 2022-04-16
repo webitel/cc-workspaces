@@ -53,7 +53,7 @@ import { mapActions, mapState } from 'vuex';
 import APIRepository from '../../../../../../../app/api/APIRepository';
 import TransferDestination from '../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
-import EmptySearch from '../../../shared/components/workspace-empty-search/empty-search.vue';
+import EmptySearch from '../../../shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferLookupItem from '../../../shared/components/lookup-item/transfer-lookup-item.vue';
 
 const usersAPI = APIRepository.users;

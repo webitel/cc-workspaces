@@ -10,7 +10,7 @@ import WorkspaceStates
   from '../../../store/workspaceUtils/WorkspaceStates';
 import Call from '../modules/call/components/the-call.vue';
 import Chat from '../modules/chat/components/the-chat.vue';
-import Member from '../modules/member/the-member.vue';
+import Member from '../modules/member/components/the-member.vue';
 import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspace-empty.vue';
 
 export default {

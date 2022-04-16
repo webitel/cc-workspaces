@@ -26,7 +26,7 @@
   import CallPreview from './call-preview.vue';
   import CallHeader from './call-header.vue';
   import CallFooter from './call-footer.vue';
-  import History from '../../shared/components/workspace-history/history-container.vue';
+  import History from '../../shared/components/workspace-history/components/history-container.vue';
   import Contacts from './call-contacts/call-contacts-container.vue';
   import Transfer from './call-transfer/call-transfer-container.vue';
   import Bridge from './call-merge/call-bridge-container.vue';
