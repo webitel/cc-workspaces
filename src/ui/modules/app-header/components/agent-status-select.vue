@@ -24,7 +24,7 @@ export default {
       now: (state) => state.now,
     }),
 
-    ...mapState('status', {
+    ...mapState('features/status', {
       agent: (state) => state.agent,
     }),
 

@@ -5,7 +5,7 @@ const state = {
 const getters = {
   TASK_ON_WORKSPACE: (state, getters, rootState) => (
     state.workspaceState
-      ? rootState[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
+      ? rootState.features[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
       : {}
   ),
 
@@ -19,13 +19,13 @@ const actions = {
       await context.dispatch('userinfo/OPEN_SESSION', null, { root: true });
       // then, async open workspace session
       context.dispatch('now/SET_NOW_WATCHER', null, { root: true });
-      context.dispatch('globals/INIT_GLOBAL_HANDLERS', null, { root: true });
-      context.dispatch('notifications/INIT_NOTIFICATIONS', null, { root: true });
-      context.dispatch('call/SUBSCRIBE_CALLS', null, { root: true });
-      context.dispatch('chat/SUBSCRIBE_CHATS', null, { root: true });
-      context.dispatch('status/SUBSCRIBE_STATUS', null, { root: true });
-      context.dispatch('call/missed/LOAD_DATA_LIST', null, { root: true });
-      context.dispatch('member/LOAD_DATA_LIST', null, { root: true });
+      context.dispatch('features/globals/INIT_GLOBAL_HANDLERS', null, { root: true });
+      context.dispatch('features/notifications/INIT_NOTIFICATIONS', null, { root: true });
+      context.dispatch('features/call/SUBSCRIBE_CALLS', null, { root: true });
+      context.dispatch('features/chat/SUBSCRIBE_CHATS', null, { root: true });
+      context.dispatch('features/status/SUBSCRIBE_STATUS', null, { root: true });
+      context.dispatch('features/call/missed/LOAD_DATA_LIST', null, { root: true });
+      context.dispatch('features/member/LOAD_DATA_LIST', null, { root: true });
     } catch (err) {
       throw err;
     }
@@ -34,7 +34,7 @@ const actions = {
   CLOSE_SESSION: async (context) => {
     context.dispatch('now/CLEAR_NOW_WATCHER', null, { root: true });
     await context.rootState.client.destroyCliInstance();
-    context.dispatch('globals/RESET_GLOBAL_HANDLERS', null, { root: true });
+    context.dispatch('features/globals/RESET_GLOBAL_HANDLERS', null, { root: true });
   },
 
   SET_WORKSPACE_STATE: (context, wsState) => {

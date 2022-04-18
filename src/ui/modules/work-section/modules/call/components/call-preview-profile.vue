@@ -22,7 +22,7 @@ export default {
   name: 'call-preview-profile',
   mixins: [displayInfoMixin],
   computed: {
-    ...mapState('call', {
+    ...mapState('features/call', {
       call: (state) => state.callOnWorkspace,
     }),
   },

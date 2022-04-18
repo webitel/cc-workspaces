@@ -3,7 +3,7 @@
     <p class="ws-worksection__list-instruction">{{$t('bridge.activeCalls')}}</p>
     <div class="ws-worksection__list">
       <merge-lookup-item
-        v-for="(item) of callList"
+        v-for="(item) of bridgeList"
         :item="item"
         :key="item.id"
         @input="bridge"
@@ -21,19 +21,20 @@
     components: { MergeLookupItem },
 
     computed: {
-      ...mapState('call', {
+      ...mapState('features/call', {
+        callOnWorkspace: (state) => state.callOnWorkspace,
         callList: (state) => state.callList,
       }),
 
-      callList() {
-        return this.$store.state.call.callList.filter(
-          (call) => call !== this.$store.state.call.callOnWorkspace,
+      bridgeList() {
+        return this.callList.filter(
+          (call) => call !== this.callOnWorkspace,
         );
       },
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         bridge: 'BRIDGE',
       }),
     },

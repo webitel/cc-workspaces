@@ -1,5 +1,5 @@
 import { Client } from 'webitel-sdk';
-import call from '../../../../features/call/call';
+import call from '../../../../features/modules/call/call';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 const { hostname, protocol } = window.location;

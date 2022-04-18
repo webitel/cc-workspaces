@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import findRoundedActionByIcon from '../../../../../../../../tests/utils/findRoundedActionByIcon';
-import callModule from '../../../../../../../features/call/call';
+import callModule from '../../../../../../../features/modules/call/call';
 import CallFooter
   from '../call-footer.vue';
 
@@ -28,9 +28,14 @@ describe('Footer buttons', () => {
     };
     store = new Vuex.Store({
       modules: {
-        call: {
-          ...callModule,
-          state,
+        features: {
+          namespaced: true,
+          modules: {
+            call: {
+              ...callModule,
+              state,
+            },
+          },
         },
       },
     });

@@ -49,7 +49,7 @@
       },
     },
     computed: {
-      ...mapState('status', {
+      ...mapState('features/status', {
         agent: (state) => state.agent,
       }),
       ...mapState({

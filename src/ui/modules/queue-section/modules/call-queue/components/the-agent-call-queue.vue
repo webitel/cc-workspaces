@@ -49,13 +49,13 @@ export default {
   },
 
   computed: {
-    ...mapState('call', {
+    ...mapState('features/call', {
       callList: (state) => state.callList,
     }),
-    ...mapState('call/missed', {
+    ...mapState('features/call/missed', {
       isNewMissed: (state) => state.isNewMissed,
     }),
-    ...mapGetters('member', {
+    ...mapGetters('features/member', {
       membersCount: 'MEMBERS_LENGTH',
     }),
 
@@ -87,7 +87,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('call', {
+    ...mapActions('features/call', {
       openNewCall: 'OPEN_NEW_CALL',
     }),
   },

@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
 import workspace from '../../../../../store/agent-workspace';
-import call from '../../../../../../features/call/call';
+import call from '../../../../../../features/modules/call/call';
 import KnowledgeBaseTab
   from '../knowledge-base-tab.vue';
 

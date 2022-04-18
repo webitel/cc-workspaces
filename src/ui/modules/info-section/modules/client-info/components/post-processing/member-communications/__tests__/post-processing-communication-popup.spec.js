@@ -3,8 +3,8 @@ import Vuex from 'vuex';
 import CommunicationPopup
   from '../post-processing-communication-popup.vue';
 import reporting
-  from '../../../../../../../../../features/reporting/store/post-processing';
-import Reporting from '../../../../../../../../../features/reporting/store/Reporting';
+  from '../../../../../../../../../features/modules/reporting/store/post-processing';
+import Reporting from '../../../../../../../../../features/modules/reporting/store/Reporting';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

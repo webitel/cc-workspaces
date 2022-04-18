@@ -11,12 +11,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import UserStatus from '../../../../features/agent-status/statusUtils/UserStatus';
+import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 
 export default {
   name: 'user-dnd-switcher',
   computed: {
-    ...mapState('status', {
+    ...mapState('features/status', {
       user: (state) => state.user,
     }),
     isDnd() {
@@ -24,7 +24,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('status', {
+    ...mapActions('features/status', {
       toggleDnd: 'TOGGLE_USER_DND',
     }),
   },

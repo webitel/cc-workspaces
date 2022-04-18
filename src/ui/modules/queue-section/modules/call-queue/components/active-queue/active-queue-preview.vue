@@ -41,7 +41,7 @@ import { mapActions } from 'vuex';
 import StatusChip from '../call-status-icon-chip.vue';
 import QueuePreviewTimer from '../../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../../mixins/displayInfoMixin';
-import isIncomingRinging from '../../../../../../../features/call/scripts/isIncomingRinging';
+import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 
 export default {
   name: 'active-queue-preview',
@@ -74,7 +74,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('call', {
+    ...mapActions('features/call', {
       answer: 'ANSWER',
       hangup: 'HANGUP',
     }),

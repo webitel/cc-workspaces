@@ -31,7 +31,7 @@ export default {
     isDropzoneVisible: false,
   }),
   methods: {
-    ...mapActions('chat', {
+    ...mapActions('features/chat', {
       sendFile: 'SEND_FILE',
     }),
     handleDragEnter() {

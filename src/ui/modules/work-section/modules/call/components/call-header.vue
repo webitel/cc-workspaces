@@ -118,18 +118,17 @@
     },
 
     computed: {
-      ...mapState('call', {
+      ...mapState('features/call', {
         call: (state) => state.callOnWorkspace,
         callList: (state) => state.callList,
-        newNumber: (state) => state.callOnWorkspace.newNumber,
       }),
-      ...mapGetters('call', {
+      ...mapGetters('features/call', {
         isNewCall: 'IS_NEW_CALL',
       }),
 
       number: {
         get() {
-          return this.newNumber;
+          return this.call.newNumber;
         },
         set(value) {
           this.setNumber(value);
@@ -182,7 +181,7 @@
         }
       },
 
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         makeCall: 'CALL',
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_NUMBER',

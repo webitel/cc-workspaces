@@ -32,7 +32,7 @@
       isNumpadOpened: false,
     }),
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         input: 'ADD_DIGIT',
       }),
     },

@@ -47,11 +47,11 @@ export default {
   }),
 
   computed: {
-    ...mapState('call', {
+    ...mapState('features/call', {
       call: (state) => state.callOnWorkspace,
     }),
 
-    ...mapGetters('call', {
+    ...mapGetters('features/call', {
       computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
     }),
 

@@ -1,8 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
-import Vuex from 'vuex';
-// import workspaceModule from '../../../../../src/store/modules/agent-workspace/agent-workspace';
-import callModule from '../../../../../../../features/call/call';
 import TheCall
   from '../the-call.vue';
 import CallPreview
@@ -15,191 +12,125 @@ import Transfer
   from '../call-transfer/call-transfer-container.vue';
 import Bridge
   from '../call-merge/call-bridge-container.vue';
-import workspaceModule from '../../../../../../store/agent-workspace';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-describe('callOnWorkspace on call component', () => {
-  const { state, actions, mutations } = callModule;
-  let store;
-
-  beforeEach(() => {
-    store = new Vuex.Store({
-      modules: {
-        workspace: workspaceModule,
-        call: {
-          namespaced: true,
-          state,
-          actions,
-          mutations,
-        },
-      },
-    });
-  });
-
+describe('call on call component', () => {
   it('Draws Active component when ringing event fires', async () => {
-    state.callOnWorkspace = {
+    const call = {
       direction: CallDirection.Inbound,
       state: CallActions.Ringing,
     };
     const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed: {
+        call: () => call,
+      },
     });
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(CallPreview)
-      .exists())
+    expect(wrapper.findComponent(CallPreview)
+                  .exists())
       .toBeTruthy();
   });
 
   it('Draws Preview component when Outbound Call '
-    + 'from preview dialer is set', async () => {
-    state.callOnWorkspace = {
+       + 'from preview dialer is set', async () => {
+    const call = {
       direction: CallDirection.Outbound,
       queue: { queue_type: 'preview' },
       state: CallActions.Ringing,
     };
     const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed: {
+        call: () => call,
+      },
     });
-    expect(wrapper.find(CallPreview)
-      .exists())
+    expect(wrapper.findComponent(CallPreview)
+                  .exists())
       .toBeTruthy();
   });
 
   it('Draws Preview component when Inbound Call ringing call is set', async () => {
-    state.callOnWorkspace = {
+    const call = {
       direction: CallDirection.Inbound,
       state: CallActions.Ringing,
     };
     const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed: {
+        call: () => call,
+      },
     });
-    expect(wrapper.find(CallPreview)
-      .exists())
+    expect(wrapper.findComponent(CallPreview)
+                  .exists())
       .toBeTruthy();
   });
 });
 
 describe('Make new call functionality', () => {
-  let state;
-  // const { actions, mutations } = workspaceModule;
-  let store;
-
-  beforeEach(() => {
-    state = {};
-    store = new Vuex.Store({
-      modules: {
-        call: {
-          namespaced: true,
-          state,
-        },
-      },
-    });
-  });
-
   it('Draws a numpad on open', () => {
-    state.callOnWorkspace = {
+    const call = {
       _isNew: true,
     };
     const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
+      computed: {
+        call: () => call,
+      },
     });
-    const numpad = wrapper.find(Numpad);
+    const numpad = wrapper.findComponent(Numpad);
     expect(numpad.isVisible())
       .toBeTruthy();
   });
 });
 
 describe('Transfer functionality', () => {
-  const { state } = callModule;
-  // const { actions, mutations } = workspaceModule;
-  let store;
-
-  beforeEach(() => {
-    store = new Vuex.Store({
-      modules: {
-        call: {
-          namespaced: true,
-          state,
-        },
+  it('Opens transfer tab on event emit', async () => {
+    const call = { state: CallActions.Active };
+    const wrapper = shallowMount(TheCall, {
+      computed: {
+        call: () => call,
       },
     });
-  });
-
-  it('Opens transfer tab on event emit', async () => {
-    state.callOnWorkspace = { state: CallActions.Active };
-    const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
-      stubs: { Icon: true },
-    });
-    const callHeader = wrapper.find(CallHeader);
+    const callHeader = wrapper.findComponent(CallHeader);
     callHeader.vm.$emit('openTab', 'transfer');
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find(Transfer)
-      .exists())
+    expect(wrapper.findComponent(Transfer)
+                  .exists())
       .toBeTruthy();
   });
 
   it('Opens transfer tab on transfer event from preview', async () => {
-    state.callOnWorkspace = {
+    const call = {
       state: CallActions.Ringing,
       direction: CallDirection.Inbound,
     };
     const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed: {
+        call: () => call,
+      },
     });
-    wrapper.find(CallPreview).vm.$emit('transfer');
+    wrapper.findComponent(CallPreview).vm.$emit('transfer');
     await wrapper.vm.$nextTick();
-    expect(wrapper.find(Transfer)
-      .exists())
+    expect(wrapper.findComponent(Transfer)
+                  .exists())
       .toBeTruthy();
   });
 });
 
 describe('Bridge functionality', () => {
-  const { state } = callModule;
-  // const { actions, mutations } = workspaceModule;
-  let store;
-
-  beforeEach(() => {
-    store = new Vuex.Store({
-      modules: {
-        call: {
-          namespaced: true,
-          state,
-        },
-      },
-    });
-  });
-
   it('Opens bridge tab on event emit', async () => {
-    state.callOnWorkspace = {
+    const call = {
       state: CallActions.Active,
     };
     const wrapper = shallowMount(TheCall, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed: {
+        call: () => call,
+      },
     });
 
-    const callHeader = wrapper.find(CallHeader);
+    const callHeader = wrapper.findComponent(CallHeader);
     callHeader.vm.$emit('openTab', 'bridge');
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find(Bridge)
-      .exists())
+    expect(wrapper.findComponent(Bridge)
+                  .exists())
       .toBeTruthy();
   });
 });

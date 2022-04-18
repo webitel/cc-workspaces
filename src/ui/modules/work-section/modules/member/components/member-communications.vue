@@ -20,14 +20,14 @@
     name: 'member-communications',
 
     computed: {
-      ...mapState('member', {
+      ...mapState('features/member', {
         communications: (state) => state.memberOnWorkspace.communications,
         selectedCommId: (state) => state.selectedCommId,
       }),
     },
 
     methods: {
-      ...mapActions('member', {
+      ...mapActions('features/member', {
         selectCommunication: 'SELECT_COMMUNICATION',
       }),
     },

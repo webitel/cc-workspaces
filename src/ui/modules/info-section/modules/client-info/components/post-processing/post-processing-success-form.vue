@@ -22,7 +22,7 @@ import { mapGetters } from 'vuex';
   export default {
     name: 'post-processing-success-form',
     computed: {
-      ...mapGetters('reporting', {
+      ...mapGetters('features/reporting', {
         taskPostProcessing: 'TASK_POST_PROCESSING',
       }),
       ...mapGetters('workspace', {

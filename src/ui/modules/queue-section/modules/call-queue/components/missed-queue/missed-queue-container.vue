@@ -27,16 +27,16 @@
     },
 
     computed: {
-      ...mapState('call/missed', {
+      ...mapState('features/call/missed', {
         missedList: (state) => state.missedList,
       }),
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         openNewCall: 'OPEN_NEW_CALL',
       }),
-      ...mapActions('call/missed', {
+      ...mapActions('features/call/missed', {
         loadMissedList: 'LOAD_DATA_LIST',
         resetNewMissed: 'RESET_NEW_MISSED',
       }),

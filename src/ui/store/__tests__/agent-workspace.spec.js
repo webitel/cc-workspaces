@@ -31,27 +31,27 @@ describe('workspace store: actions', () => {
 
   it('OPEN_SESSION dispatches call/SUBSCRIBE_CALLS (subscribes to calls)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('call/SUBSCRIBE_CALLS', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('features/call/SUBSCRIBE_CALLS', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches chat/SUBSCRIBE_CHATS (subscribes to chats)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('chat/SUBSCRIBE_CHATS', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('features/chat/SUBSCRIBE_CHATS', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches status/SUBSCRIBE_STATUS (subscribes to agent status)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('status/SUBSCRIBE_STATUS', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('features/status/SUBSCRIBE_STATUS', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches call/missed/LOAD_DATA_LIST (loads missed calls list)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('call/missed/LOAD_DATA_LIST', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('features/call/missed/LOAD_DATA_LIST', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches member/LOAD_DATA_LIST (loads offline queue members)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('member/LOAD_DATA_LIST', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('features/member/LOAD_DATA_LIST', null, { root: true });
   });
 
   it('CLOSE_SESSION dispatches now/CLEAR_NOW_WATCHER (clears reactive time watcher)', () => {

@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../../../../store/agent-workspace';
-import callModule from '../../../../../../../../features/call/call';
+import callModule from '../../../../../../../../features/modules/call/call';
 import ActiveQueue
   from '../active-queue-container.vue';
 import ActivePreview
@@ -34,11 +34,16 @@ describe('Ringing and Hangup events call functionality', () => {
       },
       modules: {
         workspace: workspaceModule,
-        call: {
+        features: {
           namespaced: true,
-          state,
-          actions,
-          mutations,
+          modules: {
+            call: {
+              namespaced: true,
+              state,
+              actions,
+              mutations,
+            },
+          },
         },
       },
     });
@@ -49,7 +54,7 @@ describe('Ringing and Hangup events call functionality', () => {
       store,
       localVue,
     });
-    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
+    await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.ringing({});
     expect(wrapper.findAll(ActivePreview).length).toEqual(2);
   });
@@ -59,7 +64,7 @@ describe('Ringing and Hangup events call functionality', () => {
       store,
       localVue,
     });
-    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
+    await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.hangup(initialCall);
     expect(wrapper.findAll(ActivePreview).length).toEqual(0);
   });

@@ -68,17 +68,19 @@ export default {
     ...mapState('now', {
       now: (state) => state.now,
     }),
-    ...mapState('status', {
+    ...mapState('features/status', {
       agent: (state) => state.agent,
-      agentStatus: (state) => state.agent.status,
     }),
     isBreakPopup() {
       return this.isBreakPopupValue && this.agentStatus === AgentStatus.Pause;
     },
+    agentStatus() {
+      return this.agent.status;
+    },
   },
 
   methods: {
-    ...mapActions('status', {
+    ...mapActions('features/status', {
       setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
       agentLogout: 'AGENT_LOGOUT',
     }),

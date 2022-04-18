@@ -1,128 +1,86 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
-import findRoundedActionByIcon from '../../../../../../../../tests/utils/findRoundedActionByIcon';
-import callModule from '../../../../../../../features/call/call';
-import CallHeader
-  from '../call-header.vue';
-import webSocketClientController
-  from '../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import findRoundedActionByIcon
+  from '../../../../../../../../tests/utils/findRoundedActionByIcon';
+import CallHeader from '../call-header.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+let callOnWorkspace;
 
-// Make new call on number test
-const mockCliCall = jest.fn();
+let callList;
 
-jest.spyOn(webSocketClientController, 'getCliInstance')
-  .mockImplementation(() => ({ call: mockCliCall }));
-
-
+const computed = {
+  call: () => callOnWorkspace,
+  callList: () => callList,
+  isNewCall: () => callOnWorkspace._isNew,
+};
 
 describe('Make new call functionality', () => {
   const findCallBtn = findRoundedActionByIcon('call-ringing');
 
-  let state;
-  let store;
-
   beforeEach(() => {
-    state = {
-      callOnWorkspace: {
-        _isNew: true,
-        newNumber: '',
-      },
-      callList: [],
+    callOnWorkspace = {
+      _isNew: true,
+      newNumber: '',
     };
-    store = new Vuex.Store({
-      state: {
-        client: webSocketClientController,
-      },
-      modules: {
-        call: {
-          ...callModule,
-          state,
-        },
-      },
-    });
+
+    callList = [];
   });
 
-  it('Draws a number input and "call" btn on open', async () => {
+  it('calls "setNumber" action at number input ', () => {
+    const mock = jest.fn();
+    jest.spyOn(CallHeader.methods, 'setNumber')
+      .mockImplementationOnce(mock);
+
     const wrapper = shallowMount(CallHeader, {
-      store,
-      localVue,
+      computed,
     });
     const numberInput = wrapper.find('.call-header__form-number__input');
     expect(numberInput.exists())
       .toBeTruthy();
 
-    numberInput.element.value = 100;
+    const numberValue = '100';
+
+    numberInput.element.value = numberValue;
     numberInput.trigger('input');
 
-    await wrapper.vm.$nextTick();
-    const callBtn = findCallBtn(wrapper);
-    expect(callBtn.exists())
-      .toBeTruthy();
+    expect(mock).toHaveBeenCalledWith(numberValue);
   });
 
-  it('Make new call on number', async () => {
+  it('Make new call on number', () => {
+    callOnWorkspace.newNumber = '100';
+
+    const mock = jest.fn();
+    jest.spyOn(CallHeader.methods, 'makeCall')
+        .mockImplementationOnce(mock);
+
     const wrapper = shallowMount(CallHeader, {
-      store,
-      localVue,
+      computed,
     });
-    const inputValue = '123';
-    // find input and emit some value from it
-    const numberInput = wrapper.find('.call-header__form-number__input');
-    expect(numberInput.exists())
-      .toBeTruthy();
-    numberInput.element.value = inputValue;
-    numberInput.trigger('input');
 
     // then find "call" button and trigger click
-    await wrapper.vm.$nextTick();
     const callBtn = findCallBtn(wrapper);
     callBtn.vm.$emit('click', {});
 
-    // then mock a getCliInstance fn
-    // and check if cli.call() fn is triggered with proper destination
-    await wrapper.vm.$nextTick();
-    expect(mockCliCall)
+    expect(mock)
       .toHaveBeenCalled();
-    // FIRST CALL FIRST PARAM
-    expect(mockCliCall.mock.calls[0][0].destination)
-      .toEqual(inputValue);
   });
 });
 
 describe('Transfer functionality', () => {
   const findTransferBtn = findRoundedActionByIcon('call-transfer');
 
-  let state;
-  let store;
-
   beforeEach(() => {
-    state = {
-      callList: [],
-      callOnWorkspace: {
-        blindTransfer: jest.fn(),
-      },
+    callList = [];
+    callOnWorkspace = {
+      blindTransfer: jest.fn(),
     };
-    store = new Vuex.Store({
-      modules: {
-        call: {
-          ...callModule,
-          state,
-        },
-      },
-    });
   });
 
   it('Opens transfer tab from call-header', () => {
-    state.callOnWorkspace = {
-      allowHangup: true,
-    };
+    callOnWorkspace.allowHangup = true;
+
     const wrapper = shallowMount(CallHeader, {
-      store,
-      localVue,
+      computed,
     });
     const transferBtn = findTransferBtn(wrapper);
     transferBtn.vm.$emit('click');
@@ -133,10 +91,6 @@ describe('Transfer functionality', () => {
 
 describe('Bridge functionality', () => {
   const findBridgeBtn = findRoundedActionByIcon('call-add-to');
-
-  let state;
-  const { getters, actions, mutations } = callModule;
-  let store;
 
   const call1 = {
     id: 1,
@@ -149,28 +103,14 @@ describe('Bridge functionality', () => {
   };
 
   beforeEach(() => {
-    state = {
-      callList: [call1, call2],
-      callOnWorkspace: call1,
-    };
-    store = new Vuex.Store({
-      modules: {
-        call: {
-          namespaced: true,
-          state,
-          getters,
-          actions,
-          mutations,
-        },
-      },
-    });
+    callList = [call1, call2];
+    callOnWorkspace = call1;
   });
 
   it('Doesnt show merge btn with only 1 active call', () => {
-    state.callList = state.callList.slice(1);
+    callList = callList.slice(1);
     const wrapper = shallowMount(CallHeader, {
-      store,
-      localVue,
+      computed,
     });
     const bridgeBtn = findBridgeBtn(wrapper);
     expect(bridgeBtn).toBeFalsy();
@@ -178,8 +118,7 @@ describe('Bridge functionality', () => {
 
   it('Shows merge btn with only 2 active call', () => {
     const wrapper = shallowMount(CallHeader, {
-      store,
-      localVue,
+      computed,
     });
     const bridgeBtn = findBridgeBtn(wrapper);
     expect(bridgeBtn.exists()).toBe(true);
@@ -187,8 +126,7 @@ describe('Bridge functionality', () => {
 
   it('Opens bridge tab from call-header', () => {
     const wrapper = shallowMount(CallHeader, {
-      store,
-      localVue,
+      computed,
     });
     const bridgeBtn = findBridgeBtn(wrapper);
     expect(bridgeBtn.exists()).toBe(true);

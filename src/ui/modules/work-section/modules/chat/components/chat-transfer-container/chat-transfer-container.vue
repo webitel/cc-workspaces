@@ -80,7 +80,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('chat', {
+    ...mapActions('features/chat', {
       transfer: 'TRANSFER',
     }),
     async handleTransfer(item) {

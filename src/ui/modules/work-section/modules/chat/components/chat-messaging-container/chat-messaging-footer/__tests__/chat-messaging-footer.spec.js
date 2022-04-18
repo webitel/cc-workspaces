@@ -15,7 +15,7 @@ const chat = {
 
 describe('Chat Messaging Footer: Chat Preview', () => {
   const store = new Vuex.Store({
-    modules: { chat },
+    modules: { features: { namespaced: true, modules: { chat } } },
   });
 
   const mountOptions = {
@@ -47,8 +47,8 @@ describe('Chat Messaging Footer: Active Chat', () => {
   chat.getters.ALLOW_CHAT_JOIN = () => false;
   chat.getters.IS_CHAT_ACTIVE = () => true;
   const store = new Vuex.Store({
-    modules: { chat },
-  });
+                                 modules: { features: { namespaced: true, modules: { chat } } },
+                               });
 
   const mountOptions = {
     localVue,

@@ -40,7 +40,7 @@ import WorkspaceSection from '../modules/work-section/components/the-agent-works
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
 import WelcomePopup from '../modules/popups/welcome-popup/welcome-popup.vue';
-import appNotificationMixin from '../../features/notifications/mixins/appNotificationMixin';
+import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
 
 export default {
   name: 'the-agent-workspace',

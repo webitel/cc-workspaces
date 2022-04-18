@@ -40,7 +40,7 @@ export default {
     isMounted: false,
   }),
   computed: {
-    ...mapState('chat', {
+    ...mapState('features/chat', {
       chat: (state) => state.chatOnWorkspace,
     }),
     messages() {
@@ -57,7 +57,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('chat', {
+    ...mapActions('features/chat', {
       openMedia: 'OPEN_MEDIA',
       attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',

@@ -29,12 +29,12 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'disconnect-popup',
   computed: {
-    ...mapState('globals', {
+    ...mapState('features/globals', {
       isDisconnectPopup: (state) => state.isDisconnectPopup,
     }),
   },
   methods: {
-    ...mapActions('globals', {
+    ...mapActions('features/globals', {
       closePopup: 'CLOSE_DISCONNECT_POPUP',
     }),
     reloadPage() {

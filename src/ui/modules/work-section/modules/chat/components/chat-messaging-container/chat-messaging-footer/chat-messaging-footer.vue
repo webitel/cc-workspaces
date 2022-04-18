@@ -84,13 +84,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('chat', {
+    ...mapGetters('features/chat', {
       isChatPreview: 'ALLOW_CHAT_JOIN',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
   },
   methods: {
-    ...mapActions('chat', {
+    ...mapActions('features/chat', {
       accept: 'ACCEPT',
       decline: 'CLOSE',
       send: 'SEND',

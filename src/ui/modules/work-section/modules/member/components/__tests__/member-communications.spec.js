@@ -1,16 +1,8 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
-import workspaceModule from '../../../../../../store/agent-workspace';
-import memberModule from '../../../../../../../features/member/member';
+import { shallowMount } from '@vue/test-utils';
 import MemberCommunications
   from '../member-communications.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
 describe('Member communications', () => {
-  const { state, actions, mutations } = memberModule;
-  let store;
 
   const member = {
     name: 'jest',
@@ -22,27 +14,19 @@ describe('Member communications', () => {
       },
     ],
   };
-  state.memberOnWorkspace = member;
 
-  beforeEach(() => {
-    store = new Vuex.Store({
-      modules: {
-        workspace: workspaceModule,
-        member: {
-          namespaced: true,
-          state,
-          actions,
-          mutations,
-        },
-      },
-    });
-  });
+  const computed = {
+    communications() {
+      return member.communications;
+    },
+    selectedCommId() {
+      return member.communications[0].id;
+    },
+  };
 
   it('Draws member communications from member communications list', async () => {
     const wrapper = shallowMount(MemberCommunications, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed,
     });
     expect(wrapper.findAll('.workspace-member-communication')
       .length)
@@ -50,20 +34,18 @@ describe('Member communications', () => {
   });
 
   it('Selects member communication', async () => {
+    const mock = jest.fn();
+    jest.spyOn(MemberCommunications.methods, 'selectCommunication').mockImplementationOnce(mock);
     const wrapper = shallowMount(MemberCommunications, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed,
     });
     wrapper.find('.workspace-member-communication').trigger('click');
-    expect(memberModule.state.selectedCommId).toEqual(member.communications[0].id);
+    expect(mock).toHaveBeenCalledWith(member.communications[0]);
   });
 
   it('Draws border around selected communication', async () => {
     const wrapper = shallowMount(MemberCommunications, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed,
     });
     const comm = wrapper.find('.workspace-member-communication');
     comm.trigger('click');

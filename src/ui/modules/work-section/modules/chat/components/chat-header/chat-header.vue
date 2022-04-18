@@ -36,13 +36,13 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'chat-header',
   computed: {
-    ...mapGetters('chat', {
+    ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',
     }),
   },
   methods: {
-    ...mapActions('chat', {
+    ...mapActions('features/chat', {
       close: 'CLOSE',
     }),
   },

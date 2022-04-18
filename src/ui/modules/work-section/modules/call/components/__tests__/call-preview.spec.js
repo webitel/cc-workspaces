@@ -1,28 +1,9 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-import workspaceModule from '../../../../../../store/agent-workspace';
-import call from '../../../../../../../features/call/call';
-import CallPreview
-  from '../call-preview.vue';
-import PreviewProfile from '../call-preview-profile.vue';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import { shallowMount } from '@vue/test-utils';
+import CallPreview from '../call-preview.vue';
 
 describe('Transfer functionality', () => {
-  let store;
-
-  beforeEach(() => {
-    store = new Vuex.Store({
-      modules: { call },
-    });
-  });
-
   it('Opens transfer tab from call-preview', () => {
-    const wrapper = shallowMount(CallPreview, {
-      store,
-      localVue,
-    });
+    const wrapper = shallowMount(CallPreview);
     const transferBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(1);
     transferBtn.vm.$emit('click', {});
     expect(wrapper.emitted().transfer)
@@ -31,87 +12,26 @@ describe('Transfer functionality', () => {
 });
 
 describe('Answer and Hangup functionality', () => {
-  let state;
-  let store;
-
-  beforeEach(() => {
-    state = {
-      callOnWorkspace: {
-        allowAnswer: true,
-        allowHangup: true,
-        answer: jest.fn(),
-        hangup: jest.fn(),
-      },
-    };
-    store = new Vuex.Store({
-      modules: {
-        workspace: workspaceModule,
-        call: {
-          ...call,
-          state,
-        },
-      },
-    });
-  });
-
   it('Answers on call', () => {
-    const wrapper = shallowMount(CallPreview, {
-      store,
-      localVue,
-    });
+    const mock = jest.fn();
+    jest.spyOn(CallPreview.methods, 'answer')
+      .mockImplementationOnce(mock);
+
+    const wrapper = shallowMount(CallPreview);
     const answerBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(0);
     answerBtn.vm.$emit('click', {});
-    expect(state.callOnWorkspace.answer)
-      .toHaveBeenCalled();
+    expect(mock).toHaveBeenCalled();
   });
 
   it('Hangups call', () => {
-    const wrapper = shallowMount(CallPreview, {
-      store,
-      localVue,
-    });
+    const mock = jest.fn();
+    jest.spyOn(CallPreview.methods, 'hangup')
+        .mockImplementationOnce(mock);
+
+    const wrapper = shallowMount(CallPreview);
     const hangupBtn = wrapper.findAllComponents({ name: 'wt-rounded-action' }).at(2);
     hangupBtn.vm.$emit('click', {});
-    expect(state.callOnWorkspace.hangup)
+    expect(mock)
       .toHaveBeenCalled();
-  });
-});
-
-describe('preview-profile displays', () => {
-  let state;
-  let store;
-  const display = 'jest';
-
-  beforeEach(() => {
-    state = {
-      callOnWorkspace: {
-        displayName: display,
-        displayNumber: display,
-      },
-    };
-    store = new Vuex.Store({
-      modules: {
-        call: {
-          ...call,
-          state,
-        },
-      },
-    });
-  });
-
-  it('Correctly displays call displayName', () => {
-    const wrapper = shallowMount(PreviewProfile, {
-      store,
-      localVue,
-    });
-    expect(wrapper.find('.preview-profile__name').text()).toEqual(display);
-  });
-
-  it('Correctly displays call displayNumber', () => {
-    const wrapper = shallowMount(PreviewProfile, {
-      store,
-      localVue,
-    });
-    expect(wrapper.find('.preview-profile__number').text()).toEqual(display);
   });
 });

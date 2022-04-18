@@ -29,8 +29,8 @@
 
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import parseUserStatus from '../../../../../../../features/agent-status/statusUtils/parseUserStatus';
-import UserStatus from '../../../../../../../features/agent-status/statusUtils/UserStatus';
+import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
+import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import lookupItemMixin from './mixins/lookupItemMixin';
 

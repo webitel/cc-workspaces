@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import MediaViewer
   from '../media-viewer.vue';
-import chat from '../../../../../../../../features/chat/store/chat';
+import chat from '../../../../../../../../features/modules/chat/store/chat';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

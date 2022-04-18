@@ -40,7 +40,7 @@
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         answer: 'ANSWER',
         hangup: 'HANGUP',
       }),

@@ -90,7 +90,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('reporting', {
+    ...mapGetters('features/reporting', {
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP', // used for setDraft() watcher
     }),
     isNewCommunication() {

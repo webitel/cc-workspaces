@@ -66,7 +66,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('reporting', {
+    ...mapGetters('features/reporting', {
       isTaskReporting: 'IS_TASK_REPORTING',
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
@@ -84,7 +84,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('reporting', {
+    ...mapActions('features/reporting', {
       initReportingForm: 'INIT_POST_PROCESSING_FORM',
     }),
     sendReporting() {
@@ -92,6 +92,7 @@ export default {
     },
     setSuccess(value) {
       this.taskPostProcessing.success = value;
+      console.info(this.taskPostProcessing.success);
     },
     closeCommunicationPopup() {
       if (this.taskPostProcessing.editedCommunication) {

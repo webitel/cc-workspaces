@@ -61,22 +61,22 @@
       ...mapState('workspace', {
         workspaceState: (state) => state.workspaceState,
       }),
-      ...mapState('call', {
+      ...mapState('features/call', {
         call: (state) => state.callOnWorkspace,
       }),
-      ...mapState('member', {
+      ...mapState('features/member', {
         member: (state) => state.memberOnWorkspace,
       }),
       ...mapState('userinfo', {
         userId: (state) => state.userId,
       }),
-      ...mapGetters('call', {
+      ...mapGetters('features/call', {
         isNewCall: 'IS_NEW_CALL',
       }),
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         setNumber: 'SET_NEW_NUMBER',
       }),
 

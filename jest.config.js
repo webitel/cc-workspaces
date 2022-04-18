@@ -23,13 +23,13 @@ module.exports = {
   collectCoverageFrom: [
     '!src/**/api/**/*.{js,vue}',
 
-    'src/**.components/**/*.{js,vue}',
+    // 'src/**.components/**/*.{js,vue}',
 
-    'src/**/store/**/*.{js,vue}',
+    // 'src/**/store/**/*.{js,vue}',
 
-    'src/**/shared/**/*.{js,vue}',
+    // 'src/**/shared/**/*.{js,vue}',
 
-    'src/**/mixins/**/*.{js,vue}',
+    'src/**/*.{js,vue}',
 
     // '!src/components/utils/*.{js,vue}',
     '!src/**/index.js', // No need to cover bootstrap file

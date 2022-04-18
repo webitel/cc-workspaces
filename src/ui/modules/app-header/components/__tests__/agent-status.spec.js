@@ -1,54 +1,20 @@
-import Vuex from 'vuex';
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import { AgentStatus } from 'webitel-sdk';
+import { shallowMount } from '@vue/test-utils';
 import StatusSelect from '../agent-status-select.vue';
-import statusModule from '../../../../../features/agent-status/agent-status';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 const lastStatusChange = Date.now() - 12 * 60 * 60 * 10 ** 3; // '12:00:00'
 
 describe('Agent Status Select', () => {
-  let store;
-  let state;
-  let getters;
-  let actions;
-  let agent = {};
-
-  beforeEach(() => {
-    agent = {
-      status: AgentStatus.Waiting,
-      lastStatusChange,
-    };
-    state = { agent };
-    actions = {
-      SET_AGENT_WAITING_STATUS: jest.fn(),
-      AGENT_LOGOUT: jest.fn(),
-    };
-    getters = {
-      IS_AGENT: statusModule.getters.IS_AGENT,
-    };
-    store = new Vuex.Store({
-      modules: {
-        status: {
-          namespaced: true,
-          state,
-          getters,
-          actions,
+  it('renders a component', () => {
+    const wrapper = shallowMount(StatusSelect, {
+      computed: {
+        now() {
+          return Date.now();
         },
-        now: {
-          namespaced: true,
-          state: {
-            now: Date.now(),
-          },
+        agent() {
+          return { lastStatusChange };
         },
       },
     });
-  });
-
-  it('renders a component', () => {
-    const wrapper = shallowMount(StatusSelect, { store, localVue });
     expect(wrapper.exists()).toBe(true);
   });
 

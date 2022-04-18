@@ -27,7 +27,7 @@ export default {
   },
 
   computed: {
-    ...mapState('member', {
+    ...mapState('features/member', {
       dataList: (state) => state.membersList,
     }),
     ...mapGetters('workspace', {
@@ -40,7 +40,7 @@ export default {
       this.loadList({ search: this.search, page: this.page, size: this.size });
     },
 
-    ...mapActions('member', {
+    ...mapActions('features/member', {
       loadList: 'LOAD_DATA_LIST',
       openMember: 'OPEN_MEMBER_ON_WORKSPACE',
     }),

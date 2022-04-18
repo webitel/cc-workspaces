@@ -69,7 +69,7 @@
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         blindTransfer: 'BLIND_TRANSFER',
       }),
       fetch(params) {

@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import call from '../../../../../../../../features/call/call';
+import call from '../../../../../../../../features/modules/call/call';
 import userinfo from '../../../../../../userinfo/userinfo';
 import MissedQueueContainer
   from '../missed-queue-container.vue';

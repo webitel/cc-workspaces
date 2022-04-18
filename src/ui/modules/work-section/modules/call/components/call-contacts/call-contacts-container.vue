@@ -49,7 +49,7 @@
     }),
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         makeCall: 'CALL',
       }),
 

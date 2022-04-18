@@ -22,7 +22,7 @@ import { mapActions, mapGetters, mapState } from 'vuex';
     },
 
     computed: {
-      ...mapState('call', {
+      ...mapState('features/call', {
         callList: (state) => state.callList,
       }),
       ...mapGetters('workspace', {
@@ -31,7 +31,7 @@ import { mapActions, mapGetters, mapState } from 'vuex';
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         openCall: 'OPEN_ACTIVE_CALL',
       }),
     },

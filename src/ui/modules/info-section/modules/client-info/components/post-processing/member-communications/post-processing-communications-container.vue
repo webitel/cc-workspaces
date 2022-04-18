@@ -29,7 +29,7 @@ export default {
   components: { Communication },
 
   computed: {
-    ...mapGetters('reporting', {
+    ...mapGetters('features/reporting', {
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isCommunicationPopup: 'IS_COMMUNICATION_POPUP',
     }),

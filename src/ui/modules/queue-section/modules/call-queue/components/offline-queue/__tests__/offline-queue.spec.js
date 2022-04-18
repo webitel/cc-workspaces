@@ -1,7 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import workspaceModule from '../../../../../../../store/agent-workspace';
-import memberModule from '../../../../../../../../features/member/member';
+import memberModule
+  from '../../../../../../../../features/modules/member/member';
 import OfflineQueue
   from '../offline-queue-container.vue';
 import OfflinePreview
@@ -19,7 +20,7 @@ const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
 jest.spyOn(webSocketClientController, 'getCliInstance')
-  .mockImplementation(() => mockSocket);
+    .mockImplementation(() => mockSocket);
 
 describe('Members list functionality', () => {
   let state;
@@ -34,19 +35,23 @@ describe('Members list functionality', () => {
       membersList: [],
     };
     store = new Vuex.Store({
-      modules: {
-        state: {
-          client: webSocketClientController,
-        },
-        workspace: workspaceModule,
-        member: {
-          namespaced: true,
-          state,
-          actions,
-          mutations,
-        },
-      },
-    });
+                             modules: {
+                               state: {
+                                 client: webSocketClientController,
+                               },
+                               workspace: workspaceModule,
+                               features: {
+                                 namespaced: true, modules: {
+                                   member: {
+                                     namespaced: true,
+                                     state,
+                                     actions,
+                                     mutations,
+                                   },
+                                 },
+                               },
+                             },
+                           });
   });
 
   it('Opens selected member on workspace', async () => {

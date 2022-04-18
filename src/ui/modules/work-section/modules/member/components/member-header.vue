@@ -37,18 +37,16 @@
 
   export default {
     name: 'workspace-member-header',
-
     props: {
       currentTab: {
         type: String,
       },
     },
-
     computed: {
-      ...mapState('member', {
+      ...mapState('features/member', {
         member: (state) => state.memberOnWorkspace,
       }),
-      ...mapGetters('member', {
+      ...mapGetters('features/member', {
         isCommSelected: 'IS_COMMUNICATION_SELECTED',
       }),
 
@@ -62,7 +60,7 @@
     },
 
     methods: {
-      ...mapActions('member', {
+      ...mapActions('features/member', {
         makeCall: 'CALL',
       }),
     },

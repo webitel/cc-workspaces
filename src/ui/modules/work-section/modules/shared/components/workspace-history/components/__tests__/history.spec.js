@@ -1,8 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
-import callModule from '../../../../../../../../../features/call/call';
-import workspaceModule from '../../../../../../../../store/agent-workspace';
 import HistoryContainer
   from '../history-container.vue';
 import HistoryLookupItem
@@ -14,9 +11,6 @@ import APIRepository from '../../../../../../../../../app/api/APIRepository';
 // const historyAPI = require('../../../../../../src/api/agent-workspace/history/HistoryAPIRepository');
 const historyAPI = APIRepository.history;
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
 const historyList = [
   {
     id: '36',
@@ -27,53 +21,42 @@ const historyList = [
 ];
 historyAPI.getAgentHistory = () => historyList;
 
+const call = {
+  _isNew: true,
+};
+
+const computed = {
+  call() {
+    return call;
+  },
+};
+
 describe('Agent History functionality', () => {
-  const { state, actions, mutations } = callModule;
-  let store;
-
-  beforeEach(() => {
-    state.callOnWorkspace = { _isNew: true };
-    store = new Vuex.Store({
-      modules: {
-        workspace: workspaceModule,
-        call: {
-          namespaced: true,
-          state,
-          actions,
-          mutations,
-        },
-      },
-    });
-  });
-
   it('renders a component', async () => {
     const wrapper = shallowMount(HistoryContainer, {
-      store,
-      localVue,
-      stubs: { Icon: true },
+      computed,
     });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('Creates history components from data list', () => {
     const wrapper = shallowMount(HistoryContainer, {
-      store,
-      localVue,
-      stubs: { Icon: true },
       data: () => ({ dataList: historyList, isLoading: false }),
+      computed,
     });
     expect(wrapper.findAllComponents({ name: 'history-lookup-item' }).length).toEqual(historyList.length);
   });
 
   it('Selects history item and sets its number to new number input', async () => {
+    const mock = jest.fn();
+    jest.spyOn(HistoryContainer.methods, 'setNumber')
+      .mockImplementationOnce(mock);
     const wrapper = shallowMount(HistoryContainer, {
-      store,
-      localVue,
-      stubs: { Icon: true },
       data: () => ({ dataList: historyList, isLoading: false }),
+      computed,
     });
     wrapper.findComponent({ name: 'history-lookup-item' }).vm.$emit('input');
-    expect(state.callOnWorkspace.newNumber).toEqual(historyList[0].destination);
+    expect(mock).toHaveBeenCalledWith(historyList[0].destination);
   });
 
   it('Properly displays history item duration', async () => {
@@ -84,9 +67,6 @@ describe('Agent History functionality', () => {
       duration: 60,
     };
     const wrapper = shallowMount(HistoryLookupItem, {
-      store,
-      localVue,
-      stubs: { Icon: true },
       propsData: { item },
     });
     expect(wrapper.text())

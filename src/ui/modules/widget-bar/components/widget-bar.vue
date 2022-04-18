@@ -82,7 +82,7 @@ export default {
 
   computed: {
     // agent status
-    ...mapState('status', {
+    ...mapState('features/status', {
       agent: (state) => state.agent,
     }),
   },

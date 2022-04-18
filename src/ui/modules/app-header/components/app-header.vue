@@ -52,14 +52,14 @@ export default {
   },
 
   computed: {
-    ...mapState('call', {
+    ...mapState('features/call', {
       isVideo: (state) => state.isVideo,
     }),
     ...mapState('userinfo', {
       user: (state) => state,
       currentApp: (state) => state.thisApp,
     }),
-    ...mapGetters('status', {
+    ...mapGetters('features/status', {
       isAgent: 'IS_AGENT',
     }),
     ...mapGetters('userinfo', {
@@ -97,10 +97,10 @@ export default {
   },
 
   methods: {
-    ...mapActions('status', {
+    ...mapActions('features/status', {
       toggleCCenterMode: 'TOGGLE_CONTACT_CENTER_MODE',
     }),
-    ...mapActions('call', {
+    ...mapActions('features/call', {
       toggleVideo: 'TOGGLE_VIDEO',
       restoreVideoParam: 'RESTORE_VIDEO_PARAM',
     }),

@@ -1,139 +1,60 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
 import Header from '../app-header.vue';
-import statusModule from '../../../../../features/agent-status/agent-status';
-import call from '../../../../../features/call/call';
-import userinfo from '../../../userinfo/userinfo';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+const agent = {};
+
+const computed = {
+  agent: () => agent,
+  user: () => ({}),
+  checkAccess: () => () => true,
+  currentApp: () => true,
+  isAgent: () => true,
+};
+
+jest.spyOn(Header.methods, 'restoreVideoParam').mockImplementation();
 
 describe('Header on agent Waiting', () => {
-  let state;
-  const { getters, actions } = statusModule;
-  let store;
-
-  beforeEach(() => {
-    state = {
-      agent: {
-        status: AgentStatus.Waiting,
-      },
-    };
-    actions.AGENT_LOGOUT = jest.fn();
-    store = new Vuex.Store({
-      modules: {
-        call,
-        userinfo,
-        status: {
-          namespaced: true,
-          state,
-          getters,
-          actions,
-        },
-      },
-    });
-  });
+  agent.status = AgentStatus.Waiting;
 
   it('Logs agent out', () => {
-    const wrapper = shallowMount(Header, { store, localVue });
+    const mock = jest.fn();
+    jest.spyOn(Header.methods, 'toggleCCenterMode').mockImplementationOnce(mock);
+
+    const wrapper = shallowMount(Header, { computed });
     /*
       last switcher is ccenter mode,
       unfortunately, have no other ways
       (except $t label string to discover switcher programmatically)
     */
-    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' }).wrappers.pop();
+    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' })
+                                   .wrappers
+                                   .pop();
     ccenterSwitcher.vm.$emit('change');
-    expect(actions.AGENT_LOGOUT)
-      .toHaveBeenCalled();
+    expect(mock).toHaveBeenCalled();
   });
 });
-
-// describe('Header on agent Pause', () => {
-//   let state;
-//   let store;
-//
-//   beforeEach(() => {
-//     state = {
-//       agent: {
-//         status: AgentStatus.Pause,
-//       },
-//     };
-//     store = new Vuex.Store({
-//       modules: {
-//         call,
-//         userinfo,
-//         status: {
-//           ...statusModule,
-//           state,
-//         },
-//       },
-//     });
-//   });
-// });
 
 describe('Header on agent Offline', () => {
-  let state;
-  const { getters, actions } = statusModule;
-  let store;
-
-  beforeEach(() => {
-    state = {
-      agent: {
-        status: AgentStatus.Offline,
-      },
-    };
-    actions.SET_AGENT_WAITING_STATUS = jest.fn();
-    store = new Vuex.Store({
-      modules: {
-        call,
-        userinfo,
-        status: {
-          namespaced: true,
-          state,
-          getters,
-          actions,
-        },
-      },
-    });
-  });
-
+  agent.status = AgentStatus.Offline;
   it('Logs agent in', () => {
+    const mock = jest.fn();
+    jest.spyOn(Header.methods, 'toggleCCenterMode')
+        .mockImplementationOnce(mock);
+
     const wrapper = shallowMount(Header, {
-      store,
-      localVue,
+      computed,
     });
     /*
       last switcher is ccenter mode,
       unfortunately, have no other ways
       (except $t label string to discover switcher programmatically)
     */
-    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' }).wrappers.pop();
+    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' })
+                                   .wrappers
+                                   .pop();
     ccenterSwitcher.vm.$emit('change');
-    expect(actions.SET_AGENT_WAITING_STATUS)
+    expect(mock)
       .toHaveBeenCalled();
-  });
-});
-
-describe('Agent status getter', () => {
-  it('Returns True on Waiting agent state', () => {
-    const state = { agent: { status: AgentStatus.Waiting } };
-    const isAgent = statusModule.getters.IS_AGENT(state);
-    expect(isAgent)
-      .toBeTruthy();
-  });
-
-  it('Returns True on Pause agent state', () => {
-    const state = { agent: { status: AgentStatus.Pause } };
-    const isAgent = statusModule.getters.IS_AGENT(state);
-    expect(isAgent)
-      .toBeTruthy();
-  });
-
-  it('Returns False on Offline agent state', () => {
-    const state = { agent: { status: AgentStatus.Offline } };
-    const isAgent = statusModule.getters.IS_AGENT(state);
-    expect(isAgent)
-      .toBeFalsy();
   });
 });

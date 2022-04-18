@@ -9,24 +9,29 @@ const agent = {};
 const LOAD_AGENT_INFO_MOCK = jest.fn();
 
 const store = new Vuex.Store({
-  modules: {
-    status: {
-      namespaced: true,
-      state: { agent },
-    },
-    agentInfo: {
-      namespaced: true,
-      state: {
-        status: {},
-        queues: [],
-        pauseCauses: [],
-      },
-      actions: {
-        LOAD_AGENT_INFO: LOAD_AGENT_INFO_MOCK,
-      },
-    },
-  },
-});
+                               modules: {
+                                 features: {
+                                   namespaced: true,
+                                   modules: {
+                                     status: {
+                                       namespaced: true,
+                                       state: { agent },
+                                     },
+                                   },
+                                 },
+                                 agentInfo: {
+                                   namespaced: true,
+                                   state: {
+                                     status: {},
+                                     queues: [],
+                                     pauseCauses: [],
+                                   },
+                                   actions: {
+                                     LOAD_AGENT_INFO: LOAD_AGENT_INFO_MOCK,
+                                   },
+                                 },
+                               },
+                             });
 
 const mountOptions = {
   localVue,
@@ -40,7 +45,7 @@ describe('General Info Tab', () => {
   });
   it('calls LOAD_AGENT_INFO after agent change', async () => {
     const wrapper = shallowMount(GeneralInfoTab, mountOptions);
-    store.state.status.agent = {}; // update agent and trigger watcher
+    store.state.features.status.agent = {}; // update agent and trigger watcher
     await wrapper.vm.$nextTick();
     expect(LOAD_AGENT_INFO_MOCK).toHaveBeenCalled();
   });

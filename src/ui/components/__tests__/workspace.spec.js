@@ -2,9 +2,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../store/agent-workspace';
-import callModule from '../../../features/call/call';
+import callModule from '../../../features/modules/call/call';
 import nowModule from '../../modules/reactive-now/reactive-now';
-import statusModule from '../../../features/agent-status/agent-status';
+import statusModule from '../../../features/modules/agent-status/agent-status';
 import userinfoModule from '../../modules/userinfo/userinfo';
 import Workspace from '../the-agent-workspace.vue';
 import Call
@@ -51,7 +51,7 @@ xdescribe('Hangup event on call component', () => {
       store,
       localVue,
     });
-    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
+    await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     const call = {};
     await mockSocket.ringing(call);
     await mockSocket.hangup(call);
@@ -66,7 +66,7 @@ xdescribe('Hangup event on call component', () => {
       store,
       localVue,
     });
-    await wrapper.vm.$store.dispatch('call/SUBSCRIBE_CALLS');
+    await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.ringing(call);
     await mockSocket.hangup(call);
     expect(wrapper.find(Call)

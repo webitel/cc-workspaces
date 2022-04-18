@@ -50,7 +50,7 @@ export default {
   name: 'post-processing-failure-form',
   components: { MemberCommunications },
   computed: {
-    ...mapGetters('reporting', {
+    ...mapGetters('features/reporting', {
       taskPostProcessing: 'TASK_POST_PROCESSING',
       isMember: 'IS_MEMBER',
     }),

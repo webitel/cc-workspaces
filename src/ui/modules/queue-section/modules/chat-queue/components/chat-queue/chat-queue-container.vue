@@ -21,7 +21,7 @@ export default {
   },
 
   computed: {
-    ...mapState('chat', {
+    ...mapState('features/chat', {
       taskList: (state) => state.chatList,
     }),
     ...mapGetters('workspace', {
@@ -29,7 +29,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('chat', {
+    ...mapActions('features/chat', {
       openTask: 'OPEN_CHAT',
     }),
   },

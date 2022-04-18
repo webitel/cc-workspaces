@@ -78,7 +78,7 @@
     }),
 
     computed: {
-      ...mapState('call', {
+      ...mapState('features/call', {
         call: (state) => state.callOnWorkspace,
       }),
 
@@ -117,7 +117,7 @@
     },
 
     methods: {
-      ...mapActions('call', {
+      ...mapActions('features/call', {
         hangup: 'HANGUP',
         toggleMute: 'TOGGLE_MUTE',
       }),

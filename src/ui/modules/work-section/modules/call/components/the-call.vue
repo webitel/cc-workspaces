@@ -31,7 +31,7 @@
   import Transfer from './call-transfer/call-transfer-container.vue';
   import Bridge from './call-merge/call-bridge-container.vue';
   import Numpad from './call-numpad/numpad.vue';
-  import isIncomingRinging from '../../../../../../features/call/scripts/isIncomingRinging';
+  import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
 
   export default {
     name: 'the-call',
@@ -59,7 +59,7 @@
     },
 
     computed: {
-      ...mapState('call', {
+      ...mapState('features/call', {
         call: (state) => state.callOnWorkspace,
       }),
 

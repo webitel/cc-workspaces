@@ -1,18 +1,15 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
 import CommunicationsContainer
   from '../post-processing-communications-container.vue';
-import reportingModule
-  from '../../../../../../../../../features/reporting/store/post-processing';
-import Reporting from '../../../../../../../../../features/reporting/store/Reporting';
+import Reporting
+  from '../../../../../../../../../features/modules/reporting/store/Reporting';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-const commList = [{
-  id: '123',
-  destination: '123',
-}];
+const commList = [
+  {
+    id: '123',
+    destination: '123',
+  },
+];
 
 const taskOnWorkspace = {
   memberCommunication: {},
@@ -20,36 +17,30 @@ const taskOnWorkspace = {
   getMember: jest.fn(() => ({ communications: commList })),
 };
 
+let taskPostProcessing;
+let reporting;
+
 describe('Existing member communication actions', () => {
-  let store;
-  let reporting;
-
   beforeEach(() => {
-    store = new Vuex.Store({
-      modules: {
-        reporting: reportingModule,
-        workspace: {
-          namespaced: true,
-          getters: {
-            TASK_ON_WORKSPACE: () => taskOnWorkspace,
-          },
-        },
-      },
-    });
-
     taskOnWorkspace.getMember.mockClear();
-
     reporting = new Reporting(taskOnWorkspace);
     taskOnWorkspace.postProcessData = reporting;
+    taskPostProcessing = reporting;
   });
 
+  const computed = {
+    taskPostProcessing() {
+      return taskPostProcessing;
+    },
+  };
+
   it('renders a component', () => {
-    const wrapper = shallowMount(CommunicationsContainer, { store, localVue });
+    const wrapper = shallowMount(CommunicationsContainer, { computed });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('loads communications from getMember() task method and renders them', async () => {
-    const wrapper = shallowMount(CommunicationsContainer, { store, localVue });
+    const wrapper = shallowMount(CommunicationsContainer, { computed });
     await wrapper.vm.$nextTick(); // async gentMember() call
     expect(taskOnWorkspace.getMember).toHaveBeenCalled();
     const commComponents = wrapper.findAllComponents({ name: 'post-processing-communication' });
@@ -59,58 +50,56 @@ describe('Existing member communication actions', () => {
   it('at communication click, calls selectNextCommunication() method with clicked comm object', () => {
     const selectCommunicationMock = jest.fn();
     jest.spyOn(reporting, 'selectNextCommunication')
-      .mockImplementation(selectCommunicationMock);
+        .mockImplementation(selectCommunicationMock);
     const wrapper = shallowMount(CommunicationsContainer, {
-      store,
-      localVue,
       computed: {
+        ...computed,
         communicationsList() {
           return commList;
         },
       },
     });
     wrapper.findAllComponents({ name: 'post-processing-communication' })
-      .at(0)
-      .trigger('click.native');
+           .at(0)
+           .trigger('click.native');
     expect(selectCommunicationMock).toHaveBeenCalledWith(commList[0]);
   });
 
   it('at communication edit event, calls startCommunicationEditing() method with this comm object', () => {
     const startCommunicationEditingMock = jest.fn();
     jest.spyOn(reporting, 'startCommunicationEditing')
-      .mockImplementation(startCommunicationEditingMock);
-    const wrapper = shallowMount(CommunicationsContainer, { store, localVue });
+        .mockImplementation(startCommunicationEditingMock);
+    const wrapper = shallowMount(CommunicationsContainer, { computed });
     const editedComm = commList[0];
     wrapper.findAllComponents({ name: 'post-processing-communication' })
-      .at(0)
-      .vm.$emit('edit', editedComm);
+           .at(0)
+           .vm.$emit('edit', editedComm);
     expect(startCommunicationEditingMock).toHaveBeenCalledWith(editedComm);
   });
 
   it('at communication delete event, calls deleteCommunication() method with this comm object', () => {
     const deleteCommunicationMock = jest.fn();
     jest.spyOn(reporting, 'deleteCommunication')
-      .mockImplementation(deleteCommunicationMock);
+        .mockImplementation(deleteCommunicationMock);
     const wrapper = shallowMount(CommunicationsContainer, {
-      store,
-      localVue,
       computed: {
+        ...computed,
         communicationsList() {
           return commList;
         },
       },
     });
     wrapper.findAllComponents({ name: 'post-processing-communication' })
-      .at(0)
-      .vm.$emit('delete');
+           .at(0)
+           .vm.$emit('delete');
     expect(deleteCommunicationMock).toHaveBeenCalledWith(commList[0]);
   });
 
   it('at button "add" click event, calls startCommunicationAdding() method', () => {
     const startCommunicationAdding = jest.fn();
     jest.spyOn(reporting, 'startCommunicationAdding')
-      .mockImplementation(startCommunicationAdding);
-    const wrapper = shallowMount(CommunicationsContainer, { store, localVue });
+        .mockImplementation(startCommunicationAdding);
+    const wrapper = shallowMount(CommunicationsContainer, { computed });
     wrapper.getComponent({ name: 'wt-button' }).vm.$emit('click');
     expect(startCommunicationAdding).toHaveBeenCalled();
   });

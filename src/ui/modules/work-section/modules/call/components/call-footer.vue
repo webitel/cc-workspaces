@@ -73,10 +73,10 @@ export default {
   },
 
   computed: {
-    ...mapState('call', {
+    ...mapState('features/call', {
       call: (state) => state.callOnWorkspace,
     }),
-    ...mapGetters('call', {
+    ...mapGetters('features/call', {
       isNewCall: 'IS_NEW_CALL',
     }),
 
@@ -132,7 +132,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('call', {
+    ...mapActions('features/call', {
       toggleMute: 'TOGGLE_MUTE',
       toggleHold: 'TOGGLE_HOLD',
     }),

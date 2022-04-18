@@ -32,7 +32,7 @@ export default {
     ...mapState('workspace', {
       workspaceState: (state) => state.workspaceState,
     }),
-    ...mapGetters('call', {
+    ...mapGetters('features/call', {
       isNewCall: 'IS_NEW_CALL',
     }),
 
@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('call', {
+    ...mapActions('features/call', {
       openNewCall: 'OPEN_NEW_CALL',
       closeNewCall: 'CLOSE_NEW_CALL',
     }),
