@@ -1,5 +1,5 @@
 import workspaceModule from '../agent-workspace';
-import WorkspaceStates from '../workspaceUtils/WorkspaceStates';
+import WorkspaceStates from '../../enums/WorkspaceState.enum';
 import webSocketClientController from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
 
 const destroyCliInstanceMock = jest.fn();
@@ -21,12 +21,12 @@ describe('workspace store: actions', () => {
 
   it('OPEN_SESSION dispatches userinfo/OPEN_SESSION (restores user data)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('userinfo/OPEN_SESSION', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('ui/userinfo/OPEN_SESSION', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches now/SET_NOW_WATCHER (inits reactive time)', async () => {
     await workspaceModule.actions.OPEN_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('now/SET_NOW_WATCHER', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('ui/now/SET_NOW_WATCHER', null, { root: true });
   });
 
   it('OPEN_SESSION dispatches call/SUBSCRIBE_CALLS (subscribes to calls)', async () => {
@@ -56,7 +56,7 @@ describe('workspace store: actions', () => {
 
   it('CLOSE_SESSION dispatches now/CLEAR_NOW_WATCHER (clears reactive time watcher)', () => {
     workspaceModule.actions.CLOSE_SESSION(context);
-    expect(context.dispatch).toHaveBeenCalledWith('now/CLEAR_NOW_WATCHER', null, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('ui/now/CLEAR_NOW_WATCHER', null, { root: true });
   });
 
   it('CLOSE_SESSION calls calls destroy cli instance method', () => {

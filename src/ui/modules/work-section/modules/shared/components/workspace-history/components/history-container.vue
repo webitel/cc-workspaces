@@ -31,7 +31,7 @@
   import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
   import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
   import WorkspaceStates
-    from '../../../../../../../store/workspaceUtils/WorkspaceStates';
+    from '../../../../../../../enums/WorkspaceState.enum';
   import APIRepository from '../../../../../../../../app/api/APIRepository';
 
   const historyAPI = APIRepository.history;
@@ -67,7 +67,7 @@
       ...mapState('features/member', {
         member: (state) => state.memberOnWorkspace,
       }),
-      ...mapState('userinfo', {
+      ...mapState('ui/userinfo', {
         userId: (state) => state.userId,
       }),
       ...mapGetters('features/call', {

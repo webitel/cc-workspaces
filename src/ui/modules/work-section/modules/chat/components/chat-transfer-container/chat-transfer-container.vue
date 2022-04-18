@@ -74,7 +74,7 @@ export default {
   }),
 
   computed: {
-    ...mapState('userinfo', {
+    ...mapState('ui/userinfo', {
       userId: (state) => state.userId,
     }),
   },

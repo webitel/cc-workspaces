@@ -19,7 +19,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import WorkspaceStates
-  from '../../../store/workspaceUtils/WorkspaceStates';
+  from '../../../enums/WorkspaceState.enum';
 
 export default {
   name: 'the-agent-queue-section',

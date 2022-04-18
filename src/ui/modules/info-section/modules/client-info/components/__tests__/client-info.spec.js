@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import ClientInfo
   from '../client-info-tab.vue';
 import WorkspaceStates
-  from '../../../../../../store/workspaceUtils/WorkspaceStates';
+  from '../../../../../../enums/WorkspaceState.enum';
 import workspaceModule from '../../../../../../store/agent-workspace';
 
 const localVue = createLocalVue();

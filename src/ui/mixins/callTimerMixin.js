@@ -3,7 +3,7 @@ import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 export default {
   computed: {
-    ...mapState('now', {
+    ...mapState('ui/now', {
       now: (state) => state.now,
     }),
 

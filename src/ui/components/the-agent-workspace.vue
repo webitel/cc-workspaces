@@ -64,7 +64,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('userinfo', {
+    ...mapGetters('ui/userinfo', {
       checkAppAccess: 'CHECK_APP_ACCESS',
     }),
     hasAccess() {

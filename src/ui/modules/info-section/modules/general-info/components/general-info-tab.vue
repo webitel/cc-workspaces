@@ -37,7 +37,7 @@
     mixins: [autoRefreshMixin],
     components: { AgentOrgStructure, AgentQueues, AgentPauseCauses },
     data: () => ({
-      namespace: 'agentInfo',
+      namespace: 'ui/agentInfo',
       isLoaded: false,
     }),
     watch: {

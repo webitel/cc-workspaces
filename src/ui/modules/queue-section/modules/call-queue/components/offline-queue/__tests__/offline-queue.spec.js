@@ -8,7 +8,7 @@ import OfflineQueue
 import OfflinePreview
   from '../offline-queue-preview.vue';
 import WorkspaceStates
-  from '../../../../../../../store/workspaceUtils/WorkspaceStates';
+  from '../../../../../../../enums/WorkspaceState.enum';
 import MockSocket from '../../../../../../../../../tests/unit/mocks/MockSocket';
 import webSocketClientController
   from '../../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';

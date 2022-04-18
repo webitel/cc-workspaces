@@ -1,4 +1,4 @@
-import WorkspaceStates from '../../../ui/store/workspaceUtils/WorkspaceStates';
+import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 
 const state = {
   agent: null,

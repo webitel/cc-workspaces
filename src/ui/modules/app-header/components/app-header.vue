@@ -55,14 +55,14 @@ export default {
     ...mapState('features/call', {
       isVideo: (state) => state.isVideo,
     }),
-    ...mapState('userinfo', {
+    ...mapState('ui/userinfo', {
       user: (state) => state,
       currentApp: (state) => state.thisApp,
     }),
     ...mapGetters('features/status', {
       isAgent: 'IS_AGENT',
     }),
-    ...mapGetters('userinfo', {
+    ...mapGetters('ui/userinfo', {
       checkAccess: 'CHECK_APP_ACCESS',
     }),
     apps() {

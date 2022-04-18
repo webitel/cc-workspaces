@@ -1,5 +1,5 @@
 import ChatTransferDestination from '../../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
-import WorkspaceStates from '../../../../../ui/store/workspaceUtils/WorkspaceStates';
+import WorkspaceStates from '../../../../../ui/enums/WorkspaceState.enum';
 import chatModule from '../chat';
 
 const chat = {

@@ -7,7 +7,7 @@
 <script>
 import { mapState } from 'vuex';
 import WorkspaceStates
-  from '../../../store/workspaceUtils/WorkspaceStates';
+  from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
 import Chat from '../modules/chat/components/the-chat.vue';
 import Member from '../modules/member/components/the-member.vue';

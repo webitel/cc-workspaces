@@ -65,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapState('now', {
+    ...mapState('ui/now', {
       now: (state) => state.now,
     }),
     ...mapState('features/status', {
