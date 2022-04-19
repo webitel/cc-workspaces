@@ -6,7 +6,7 @@
       :call="missed"
       :index="key"
       :key="missed.id"
-      @click.native.prevent="openCall(key)"
+      @click="openCall"
     ></missed-preview>
   </section>
 </template>
@@ -41,8 +41,8 @@
         resetNewMissed: 'RESET_NEW_MISSED',
       }),
 
-      openCall(index) {
-        const newNumber = this.missedList[index].from.number;
+      openCall(missed) {
+        const newNumber = missed.from.number;
         this.openNewCall({ newNumber });
       },
     },

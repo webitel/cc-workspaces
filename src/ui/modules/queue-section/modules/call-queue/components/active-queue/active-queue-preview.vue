@@ -1,33 +1,37 @@
 <template>
-  <article class="queue-preview" :class="{'queue-preview--opened': opened}">
-      <header class="queue-preview-header">
-        <status-chip :state="computePreviewStatusClass"/>
-        <span class="queue-preview-header__name">{{ displayName | truncate(27) }}</span>
-        <queue-preview-timer :task="call" :bold="!isRinging"/>
-      </header>
+  <article
+    :class="{ 'queue-preview--opened': opened }"
+    class="queue-preview"
+    @click="$emit('click', call)"
+  >
+    <header class="queue-preview-header">
+      <status-chip :state="computePreviewStatusClass" />
+      <span class="queue-preview-header__name">{{ displayName | truncate(27) }}</span>
+      <queue-preview-timer :bold="!isRinging" :task="call" />
+    </header>
     <section class="queue-preview-body">
       <div class="active-preview__number">
         {{ displayNumber | truncateFromEnd(33) }}
       </div>
     </section>
-    <section class="queue-preview-chips" v-if="displayQueueName">
+    <section v-if="displayQueueName" class="queue-preview-chips">
       <wt-chip color="secondary">
         {{ displayQueueName }}
       </wt-chip>
     </section>
-    <footer class="queue-preview-footer" v-if="isRinging">
+    <footer v-if="isRinging" class="queue-preview-footer">
       <div
         class="queue-preview-actions"
       >
         <wt-button
           color="success"
-          @click="answer({ callId: call.id })"
+          @click.prevent="$emit('answer', call)"
         >
           {{ $t('reusable.answer') }}
         </wt-button>
         <wt-button
           color="danger"
-          @click="hangup({ callId: call.id })"
+          @click.prevent="$emit('hangup', call)"
         >
           {{ $t('reusable.reject') }}
         </wt-button>
@@ -37,7 +41,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import StatusChip from '../call-status-icon-chip.vue';
 import QueuePreviewTimer from '../../../shared/queue-preview-timer.vue';
 import displayInfo from '../../../../../../mixins/displayInfoMixin';
@@ -71,13 +74,6 @@ export default {
     computePreviewStatusClass() {
       return this.call.isHold ? 'hold' : 'call';
     },
-  },
-
-  methods: {
-    ...mapActions('features/call', {
-      answer: 'ANSWER',
-      hangup: 'HANGUP',
-    }),
   },
 };
 </script>

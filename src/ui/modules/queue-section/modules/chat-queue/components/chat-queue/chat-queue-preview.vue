@@ -1,5 +1,9 @@
 <template>
-  <article class="queue-preview" :class="{ 'queue-preview--opened': opened }">
+  <article
+    class="queue-preview"
+    :class="{ 'queue-preview--opened': opened }"
+    @click="$emit('click', task)"
+  >
     <header class="queue-preview-header">
       <wt-icon icon-prefix="messenger" :icon="displayIcon" size="sm"></wt-icon>
       <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
@@ -55,8 +55,8 @@ export default {
     ...mapState('features/call/missed', {
       isNewMissed: (state) => state.isNewMissed,
     }),
-    ...mapGetters('features/member', {
-      membersCount: 'MEMBERS_LENGTH',
+    ...mapState('features/member', {
+      membersList: (state) => state.membersList,
     }),
 
     tabs() {
@@ -76,7 +76,7 @@ export default {
           value: 'offline',
           icon: 'call',
           iconColor: 'accent',
-          attention: !!this.membersCount,
+          attention: this.membersList.length,
         },
       ];
     },

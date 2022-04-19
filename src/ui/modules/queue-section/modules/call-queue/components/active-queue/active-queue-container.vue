@@ -6,7 +6,9 @@
       :opened="call === taskOnWorkspace"
       :index="key"
       :key="key"
-      @click.native.prevent="openCall(key)"
+      @click="openCall"
+      @answer="answer({ callId: call.id })"
+      @hangup="hangup({ callId: call.id })"
     ></active-preview>
   </section>
 </template>
@@ -33,6 +35,8 @@ import { mapActions, mapGetters, mapState } from 'vuex';
     methods: {
       ...mapActions('features/call', {
         openCall: 'OPEN_ACTIVE_CALL',
+        answer: 'ANSWER',
+        hangup: 'HANGUP',
       }),
     },
   };

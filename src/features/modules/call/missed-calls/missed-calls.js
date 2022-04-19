@@ -28,7 +28,7 @@ const getters = {
 
 const actions = {
   LOAD_DATA_LIST: async (context) => {
-    const { userId } = context.rootState.userinfo;
+    const { userId } = context.rootState.ui.userinfo;
     const params = {
       ...requestParams,
       userId,

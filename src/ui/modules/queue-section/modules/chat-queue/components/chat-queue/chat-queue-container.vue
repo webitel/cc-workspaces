@@ -5,7 +5,7 @@
       :task="task"
       :opened="task === taskOnWorkspace"
       :key="task.id"
-      @click.native.prevent="openTask(task)"
+      @click="openTask"
     ></chat-preview>
   </section>
 </template>

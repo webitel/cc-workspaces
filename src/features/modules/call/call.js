@@ -132,8 +132,7 @@ const actions = {
     }
   },
 
-  OPEN_ACTIVE_CALL: (context, index) => {
-    const call = context.state.callList[index];
+  OPEN_ACTIVE_CALL: (context, call) => {
     context.dispatch('SET_WORKSPACE', call);
   },
 
@@ -142,7 +141,7 @@ const actions = {
 
   CLOSE_NEW_CALL: (context) => {
     if (context.state.callList.length) {
-      return context.dispatch('OPEN_ACTIVE_CALL', 0);
+      return context.dispatch('OPEN_ACTIVE_CALL', context.state.callList[0]);
     }
     if (context.rootState.features.chat.chatList.length) {
       const chat = context.rootState.features.chat.chatList[0];

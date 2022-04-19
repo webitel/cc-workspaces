@@ -1,12 +1,15 @@
 <template>
-  <article class="queue-preview">
+  <article
+    class="queue-preview"
+    @click="$emit('click', call)"
+  >
 
     <header class="queue-preview-header">
       <status-chip state="missed"/>
       <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
       <!--v-for for timer not to resize on digit width change-->
       <div class="missed-preview__call-time">
-        {{$t('queueSec.call.at')}}: {{displayTime}}
+        {{$t('queueSec.call.at')}}: {{ displayTime }}
       </div>
     </header>
 
@@ -20,7 +23,6 @@
 </template>
 
 <script>
-  // import { mapState, mapActions } from 'vuex';
   import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
   import StatusChip from '../call-status-icon-chip.vue';
 

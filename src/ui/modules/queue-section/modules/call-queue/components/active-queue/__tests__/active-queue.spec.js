@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import { CallActions, CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../../../store/agent-workspace';
 import callModule from '../../../../../../../../features/modules/call/call';
 import ActiveQueue
@@ -67,5 +68,36 @@ describe('Ringing and Hangup events call functionality', () => {
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.hangup(initialCall);
     expect(wrapper.findAll(ActivePreview).length).toEqual(0);
+  });
+});
+
+describe('Answer and Hangup', () => {
+  const callList = [{}];
+
+  const computed = {
+    callList: () => callList,
+    taskOnWorkspace: () => ({}),
+  };
+
+  it('Answers to call', () => {
+    const mock = jest.fn();
+    jest.spyOn(ActiveQueue.methods, 'answer').mockImplementationOnce(mock);
+
+    const wrapper = shallowMount(ActiveQueue, {
+      computed,
+    });
+    wrapper.findComponent({ name: 'active-queue-preview' }).vm.$emit('answer');
+    expect(mock).toHaveBeenCalled();
+  });
+
+  it('Hangups to call', () => {
+    const mock = jest.fn();
+    jest.spyOn(ActiveQueue.methods, 'hangup').mockImplementationOnce(mock);
+
+    const wrapper = shallowMount(ActiveQueue, {
+      computed,
+    });
+    wrapper.findComponent({ name: 'active-queue-preview' }).vm.$emit('hangup');
+    expect(mock).toHaveBeenCalled();
   });
 });

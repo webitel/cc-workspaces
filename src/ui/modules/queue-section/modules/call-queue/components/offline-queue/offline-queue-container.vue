@@ -1,11 +1,11 @@
 <template>
   <section class="queue-task-container" ref="scroll-wrap">
     <offline-preview
-      v-for="(member, key) of dataList"
+      v-for="(member) of dataList"
       :member="member"
       :opened="member === taskOnWorkspace"
       :key="member.id"
-      @click.native.prevent="openMember(key)"
+      @click="openMember"
     ></offline-preview>
 
     <observer

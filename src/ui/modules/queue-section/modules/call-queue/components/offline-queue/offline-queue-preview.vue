@@ -1,5 +1,9 @@
 <template>
-  <article class="queue-preview offline-queue" :class="{'queue-preview--opened': opened}">
+  <article
+    class="queue-preview offline-queue"
+    :class="{'queue-preview--opened': opened}"
+    @click="$emit('click', member)"
+  >
 
     <header class="queue-preview-header">
       <status-chip/>
