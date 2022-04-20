@@ -1,0 +1,57 @@
+@import '~@webitel/ui-sdk/src/css/main';
+@import 'utils/helper-classes';
+
+@import '../../ui/css/agent-workspace';
+
+
+html {
+  height: 100%;
+}
+
+body {
+  @extend %typo-body-1;
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
+  font-size: 100%;
+  background: var(--page-bg-color);
+
+  @media screen and (max-height: 610px) {
+   min-height: 610px;
+  }
+}
+
+main {
+  min-height: 100%;
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  font-weight: normal;
+}
+
+//reset ul styles
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+iframe {
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}

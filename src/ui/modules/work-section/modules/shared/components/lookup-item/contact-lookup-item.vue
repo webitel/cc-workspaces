@@ -1,0 +1,60 @@
+<template>
+  <lookup-item>
+    <template slot="before">
+      <wt-avatar
+        :status="userStatus"
+        badge
+      ></wt-avatar>
+    </template>
+
+    <template slot="title">
+      {{ item.name || item.username }}
+    </template>
+
+    <template slot="subtitle">
+      {{ item.extension }}
+    </template>
+
+    <template slot="after">
+      <wt-rounded-action
+        icon="call-ringing"
+        color="success"
+        rounded
+        @click="handleInput"
+      ></wt-rounded-action>
+    </template>
+  </lookup-item>
+</template>
+
+<script>
+import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
+import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
+import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
+import lookupItemMixin from './mixins/lookupItemMixin';
+
+export default {
+  name: 'contact-lookup-item',
+  mixins: [lookupItemMixin],
+  computed: {
+    userStatus() {
+      const status = parseUserStatus(this.item.presence);
+      switch (status) {
+        case UserStatus.ACTIVE:
+          return AbstractUserStatus.ACTIVE;
+        case UserStatus.DND:
+          return AbstractUserStatus.DND;
+        case UserStatus.OFFLINE:
+          return AbstractUserStatus.OFFLINE;
+        case UserStatus.BUSY:
+          return AbstractUserStatus.BUSY;
+        default:
+          return null;
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+
+</style>

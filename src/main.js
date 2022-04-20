@@ -1,17 +1,17 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import deepmerge from 'deepmerge';
-import App from './the-app.vue';
-import router from './router';
-import store from './store';
-import i18n from './locale/i18n';
+import App from './app/the-app.vue';
+import router from './app/router';
+import store from './app/store';
+import i18n from './app/locale/i18n';
 
-import './plugins';
+import './app/plugins';
 
 // import './css/fonts.scss';
-import './css/main.scss';
+import './app/css/main.scss';
 
-import './assets/icons/sprite';
+import './app/assets/icons/sprite';
 
 Vue.config.productionTip = false;
 
