@@ -8,9 +8,6 @@ import i18n from './app/locale/i18n';
 
 import './app/plugins';
 
-// import './css/fonts.scss';
-import './app/css/main.scss';
-
 import './app/assets/icons/sprite';
 
 Vue.config.productionTip = false;
