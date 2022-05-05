@@ -9,3 +9,7 @@ import './ws-widget-inbound.svg';
 import './ws-widget-missed.svg';
 import './ws-widget-occupancy.svg';
 import './ws-widget-utilization.svg';
+import './ws-client-info.svg';
+import './ws-general-info.svg';
+import './ws-knowledge-base.svg';
+import './ws-processing.svg';

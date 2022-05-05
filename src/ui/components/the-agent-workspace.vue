@@ -111,6 +111,7 @@ export default {
   box-sizing: border-box;
   min-height: 0;
   padding: var(--spacing-sm);
+  background: var(--page-bg-color);
 
   @media screen and (max-height: 768px) {
     //padding: 15px;
