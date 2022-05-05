@@ -1,4 +1,4 @@
-import { DeviceNotFoundError } from 'webitel-sdk';
+import { DeviceNotFoundError, DeviceNotAllowPermissionError } from 'webitel-sdk';
 
 export default {
   reusable: {
@@ -166,6 +166,7 @@ export default {
   error: {
     websocket: {
       [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
+      [DeviceNotAllowPermissionError.id]: 'Microphone access is denied. Cannot perform action.',
     },
   },
   notifications: {
