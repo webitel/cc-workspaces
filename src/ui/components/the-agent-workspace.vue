@@ -79,8 +79,19 @@ export default {
     }),
 
     async initSession() {
-      await this.openSession();
-      this.isWelcomePopup = false;
+      try {
+        await this.openSession();
+        if (this.$route.query.failureRefresh) {
+          this.$router.push({ ...this.$router.currentRoute, query: { failureRefresh: undefined } });
+        }
+      } catch (err) {
+        if (!this.$route.query.failureRefresh) {
+          await this.$router.push({ ...this.$router.currentRoute, query: { failureRefresh: 'true' } });
+          document.location.reload();
+        }
+      } finally {
+        this.isWelcomePopup = false;
+      }
     },
 
     preventDrop(event) {
