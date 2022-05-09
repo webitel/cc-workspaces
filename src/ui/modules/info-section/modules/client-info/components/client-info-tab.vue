@@ -2,20 +2,17 @@
   <section class="client-info">
     <client-info-chips/>
     <client-info-markdown/>
-    <post-processing/>
   </section>
 </template>
 
 <script>
 import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
-import PostProcessing from './post-processing/post-processing.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 
 export default {
   name: 'client-info-tab',
   components: {
     ClientInfoMarkdown,
-    PostProcessing,
     ClientInfoChips,
   },
 };
