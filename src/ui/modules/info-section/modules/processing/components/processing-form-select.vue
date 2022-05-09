@@ -3,6 +3,7 @@
     v-bind="$attrs"
     :options="options"
     :track-by="trackBy"
+    v-on="$listeners"
   ></wt-select>
 </template>
 

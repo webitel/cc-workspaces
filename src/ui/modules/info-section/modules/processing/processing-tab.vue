@@ -2,11 +2,11 @@
   <section class="info-section-content processing">
     <component
       v-for="(el, key) of form.body"
-      :is="el.view.component"
+      :is="processingComponent[el.view.component] || el.view.component"
       :key="el.id+key.toString()"
       v-bind="el.view"
       :label-props="{
-        hint: el.view.hint,
+        hint: el.view.hint
       }"
       v-model="el.value"
     ></component>
@@ -45,6 +45,9 @@
     },
     data: () => ({
       namespace: 'ui/agentInfo',
+      processingComponent: {
+        'wt-select': 'form-select',
+      },
     }),
     computed: {
       form() {
