@@ -27,7 +27,7 @@
 
 <script>
 import MarkdownIt from 'markdown-it';
-import patchMDRender from '../../client-info/components/client-info-markdown/scripts/patchMDRender';
+import patchMDRender from '../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 
 const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);

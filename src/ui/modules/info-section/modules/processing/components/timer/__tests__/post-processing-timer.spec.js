@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ProcessingTimer from '../processing-timer.vue';
-import nowModule from '../../../../../reactive-now/reactive-now';
+import nowModule from '../../../../../../reactive-now/reactive-now';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

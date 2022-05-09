@@ -23,7 +23,7 @@ import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
-import Processing from '../modules/processing/processing-tab.vue';
+import Processing from '../modules/processing/components/processing-tab.vue';
 import InfoSectionHeader from './agent-info-section-tab-utils/the-agent-info-section-tab-header.vue';
 
 export default {
@@ -51,13 +51,14 @@ export default {
     taskState() {
       if ((this.taskState === CallActions.Hangup
         || this.taskState === ConversationState.Closed)
-        && this.showProcessing()) {
+        && this.showProcessing) {
         this.currentTab = this.tabsObject.processing;
       }
     },
     showProcessing(value) {
       if (!value) {
-        this.currentTab = this.tabsObject.generalInfo;
+        if (this.showClientInfo) this.currentTab = this.tabsObject.clientInfo;
+        else this.currentTab = this.tabsObject.generalInfo;
       }
     },
   },

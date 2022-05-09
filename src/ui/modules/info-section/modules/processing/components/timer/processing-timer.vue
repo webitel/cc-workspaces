@@ -20,7 +20,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import RadialProgress from '../../../../../../app/components/utils/radial-progress.vue';
+import RadialProgress from '../../../../../../../app/components/utils/radial-progress.vue';
 
 const ms = 1000;
 

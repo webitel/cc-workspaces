@@ -54,7 +54,7 @@
       },
     },
     data: () => ({
-      namespace: 'ui/agentInfo',
+      namespace: 'ui/infoSec/processing',
       processingComponent: {
         'wt-select': 'form-select',
       },
@@ -69,7 +69,7 @@
     },
     methods: {
       sendAction(action) {
-        const form = this.form.body.reduce((form, { id, value }) => ({...form, [id]: value }), {});
+        const form = this.form.body.reduce((form, { id, value }) => ({ ...form, [id]: value }), {});
         this.task.task.formAction(action.id, form);
         console.info('send action', action);
       },

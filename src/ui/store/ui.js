@@ -1,12 +1,11 @@
-import agentInfo
-  from '../modules/info-section/modules/general-info/store/agent-info';
 import now from '../modules/reactive-now/reactive-now';
 import userinfo from '../modules/userinfo/userinfo';
+import infoSec from '../modules/info-section/store/infoSec';
 
 const modules = {
   userinfo,
   now,
-  agentInfo,
+  infoSec,
 };
 
 export default {
