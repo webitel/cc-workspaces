@@ -51,8 +51,13 @@ export default {
     taskState() {
       if ((this.taskState === CallActions.Hangup
         || this.taskState === ConversationState.Closed)
-        && this.taskOnWorkspace.allowReporting) {
-        this.currentTab = this.tabsObject.clientInfo;
+        && this.showProcessing()) {
+        this.currentTab = this.tabsObject.processing;
+      }
+    },
+    showProcessing(value) {
+      if (!value) {
+        this.currentTab = this.tabsObject.generalInfo;
       }
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="post-processing-timer">
+  <div class="processing-timer">
     <radial-progress
       :max="processingEndSec"
       :value="processingProgressSec"
@@ -20,12 +20,12 @@
 
 <script>
 import { mapState } from 'vuex';
-import RadialProgress from '../../../../../../../../app/components/utils/radial-progress.vue';
+import RadialProgress from '../../../../../../app/components/utils/radial-progress.vue';
 
 const ms = 1000;
 
 export default {
-  name: 'post-processing-timer',
+  name: 'processing-timer',
   components: {
     RadialProgress,
   },
@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.post-processing-timer {
+.processing-timer {
   display: inline-block;
 
   .wt-icon-btn ::v-deep .wt-tooltip {

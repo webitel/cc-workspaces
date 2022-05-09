@@ -21,7 +21,7 @@
         type="number"
         :label="$t('infoSec.postProcessing.communicationPriority')"
       ></wt-input>
-      <post-processing-timer-wrapper/>
+<!--      <post-processing-timer-wrapper/>-->
     </template>
     <template slot="actions">
       <wt-button
@@ -44,7 +44,7 @@
 import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import deepCopy from 'deep-copy';
-import PostProcessingTimerWrapper from '../_internals/post-processing-timer-wrapper.vue';
+// import PostProcessingTimerWrapper from '../_internals/post-processing-timer-wrapper.vue';
 import PostProcessingWrapper from '../_internals/post-processing-wrapper.vue';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 
@@ -58,7 +58,7 @@ const defaultCommunication = () => ({
 
 export default {
   name: 'post-processing-communication-popup',
-  components: { PostProcessingWrapper, PostProcessingTimerWrapper },
+  components: { PostProcessingWrapper },
   data: () => ({
     draft: {},
   }),

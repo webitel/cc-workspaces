@@ -33,7 +33,7 @@
         </div>
         <success-form v-show="taskPostProcessing.success" />
         <failure-form v-show="!taskPostProcessing.success" />
-        <post-processing-timer-wrapper />
+<!--        <post-processing-timer-wrapper />-->
       </template>
       <template slot="actions">
         <wt-button
@@ -49,7 +49,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import PostProcessingTimerWrapper from './_internals/post-processing-timer-wrapper.vue';
+// import PostProcessingTimerWrapper from './_internals/post-processing-timer-wrapper.vue';
 import PostProcessingWrapper from './_internals/post-processing-wrapper.vue';
 import CommunicationPopup from './member-communications/post-processing-communication-popup.vue';
 import FailureForm from './post-processing-failure-form.vue';
@@ -61,7 +61,7 @@ export default {
     PostProcessingWrapper,
     SuccessForm,
     FailureForm,
-    PostProcessingTimerWrapper,
+    // PostProcessingTimerWrapper,
     CommunicationPopup,
   },
 
