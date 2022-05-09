@@ -1,5 +1,5 @@
 <template>
-  <article class="processing-form-text">
+  <article class="markdown-body processing-form-text">
     <div class="processing-form-text__icon-wrapper">
       <wt-icon
         icon="attention"
