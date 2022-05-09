@@ -1,5 +1,8 @@
 <template>
-  <section class="info-section-content processing">
+  <section
+    class="info-section-content processing"
+    ref="processing"
+  >
     <component
       v-for="(el, key) of formBody"
       :is="processingComponent[el.view.component] || el.view.component"
@@ -86,6 +89,10 @@ export default {
         }
       });
     },
+    setupAutofocus() {
+      const input = this.$refs.processing.querySelector('input, textarea');
+      if (input) input.focus();
+    },
   },
   watch: {
     formBody: {
@@ -94,6 +101,9 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    this.setupAutofocus();
   },
 };
 </script>
