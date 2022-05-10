@@ -38,8 +38,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../../../../../node_modules/github-markdown-css/github-markdown.css';
-
 .md {
   @extend %typo-body-2;
 }
