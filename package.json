@@ -13,7 +13,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@webitel/cc-ui-sdk": "^0.1.22",
+    "@webitel/cc-ui-sdk": "^0.1.25",
     "@webitel/ui-sdk": "^1.0.37",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
@@ -51,7 +51,7 @@
     "eslint-plugin-vue": "^8.7.1",
     "husky": "^7.0.0",
     "jsdom": "^16.4.0",
-    "sass": "^1.49.11",
+    "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
     "svg-sprite-loader": "^6.0.11",
     "vue-template-compiler": "^2.6.11"
