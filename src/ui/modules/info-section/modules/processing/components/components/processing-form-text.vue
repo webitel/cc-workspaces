@@ -1,5 +1,8 @@
 <template>
-  <article class="markdown-body processing-form-text">
+  <article
+    class="markdown-body processing-form-text"
+    :class="[`markdown-body processing-form-text--color-${color}`]"
+  >
     <div class="processing-form-text__icon-wrapper">
       <wt-icon
         icon="attention"
@@ -47,6 +50,11 @@ export default {
       type: String,
       default: '',
     },
+    color: {
+      type: String,
+      default: 'default',
+      options: ['default', 'secondary', 'accent', 'success', 'danger'],
+    },
   },
   computed: {
     content() {
@@ -57,28 +65,66 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$text-semantic-color: #1A90E5;
+$default-color: #1A90E5;
 
 .processing-form-text {
   position: relative;
   padding: var(--spacing-sm);
-  border: 1px dashed $text-semantic-color;
+  border: 1px dashed $default-color;
   border-radius: var(--border-radius);
 
-  &__title {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-  }
-
-  &__icon-wrapper {
+  .processing-form-text__icon-wrapper {
     position: absolute;
     top: 0;
     right: var(--spacing-xs);
     padding: var(--spacing-3xs);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
-    background: $text-semantic-color;
     line-height: 0;
+    background: $default-color;
+  }
+
+  &--color {
+    &-default {
+      border-color: $default-color;
+
+      .processing-form-text__icon-wrapper {
+        background: $default-color;
+      }
+    }
+    &-secondary {
+      border-color: var(--secondary-color);
+
+      .processing-form-text__icon-wrapper {
+        background: var(--secondary-color);
+      }
+    }
+    &-accent {
+      border-color: var(--accent-color);
+
+      .processing-form-text__icon-wrapper {
+        background: var(--accent-color);
+      }
+    }
+    &-success {
+      border-color: var(--true-color);
+
+      .processing-form-text__icon-wrapper {
+        background: var(--true-color);
+      }
+    }
+    &-danger {
+      border-color: var(--false-color);
+
+      .processing-form-text__icon-wrapper {
+        background: var(--false-color);
+      }
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
   }
 }
 </style>

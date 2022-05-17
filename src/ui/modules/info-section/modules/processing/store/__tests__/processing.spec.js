@@ -10,7 +10,7 @@ describe('processing: actions', () => {
   });
 
   it('SEND_FORM calls passed task "formAction" method with passed form', () => {
-    const body = [{ id: 'jest', value: 'jest1' }];
+    const body = [{ id: 'jest', value: 'jest1', view: {} }];
     const expectedForm = { jest: 'jest1' };
     const action = { id: 'jst' };
     const task = {
