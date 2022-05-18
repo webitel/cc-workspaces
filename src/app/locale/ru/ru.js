@@ -70,6 +70,13 @@ export default {
     knowledgeBase: 'База знаний',
     processing: {
       title: 'Обработка задачи',
+      reporting: {
+        isSuccess: 'Была ли задача успешной?',
+        yes: 'Да',
+        no: 'Нет',
+        nextDistributeAtTitle: 'Запланировать следующую задачу?',
+        nextDistributeAt: 'Время следующей задачи',
+      },
     },
   },
   workspaceSec: {

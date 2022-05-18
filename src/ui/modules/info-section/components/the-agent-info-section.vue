@@ -41,7 +41,10 @@ export default {
   }),
 
   watch: {
-    taskOnWorkspace() {
+    currentTab(to, from) {
+      console.warn(to, from);
+    },
+    taskId() {
       if (this.showClientInfo) {
         this.currentTab = this.tabsObject.clientInfo;
       } else {
@@ -67,6 +70,12 @@ export default {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
+    ...mapGetters('ui/infoSec/processing', {
+      showProcessing: 'ALLOW_PROCESSING',
+    }),
+    taskId() {
+      return this.taskOnWorkspace.id;
+    },
     taskState() {
       return this.taskOnWorkspace.state;
     },
@@ -78,9 +87,6 @@ export default {
     hasKnowledgeBase() {
       const { variables } = this.taskOnWorkspace;
       return !!variables?.knowledge_base;
-    },
-    showProcessing() {
-      return this.taskOnWorkspace.task?.form;
     },
 
     tabs() {
