@@ -1,12 +1,12 @@
 import { shallowMount } from '@vue/test-utils';
 import FailureForm from '../reporting-failure-form.vue';
-import Reporting from '../../../../../../../../features/modules/reporting/store/Reporting';
+import ReportingForm from '../../store/ReportingForm';
 
-const mockReporting = jest.fn();
+const mockReportingForm = jest.fn();
 const callOnWorkspace = {
-  reporting: mockReporting,
+  reporting: mockReportingForm,
 };
-callOnWorkspace.postProcessData = new Reporting(callOnWorkspace);
+callOnWorkspace.postProcessData = new ReportingForm(callOnWorkspace);
 
 describe('Post processing Failure form', () => {
   it('renders a component', () => {
