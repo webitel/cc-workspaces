@@ -67,6 +67,9 @@ export default {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
+    ...mapGetters('ui/infoSec/processing', {
+      showProcessing: 'ALLOW_PROCESSING',
+    }),
     taskState() {
       return this.taskOnWorkspace.state;
     },
@@ -78,9 +81,6 @@ export default {
     hasKnowledgeBase() {
       const { variables } = this.taskOnWorkspace;
       return !!variables?.knowledge_base;
-    },
-    showProcessing() {
-      return this.taskOnWorkspace.task?.form;
     },
 
     tabs() {

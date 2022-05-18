@@ -67,6 +67,11 @@ export default {
     knowledgeBase: 'Knowledge base',
     processing: {
       title: 'Task processing',
+      reporting: {
+        isSuccess: 'Was this task successful?',
+        yes: 'Yes',
+        no: 'No',
+      },
     },
   },
   workspaceSec: {

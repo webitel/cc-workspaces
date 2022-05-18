@@ -1,0 +1,56 @@
+<template>
+  <article class="processing-wrapper">
+    <slot name="form"></slot>
+    <processing-timer
+      v-if="showTimer"
+      :start-processing-at="task.task.startProcessingAt"
+      :processing-timeout-at="task.task.processingTimeoutAt"
+      :processing-sec="task.task.processingSec"
+      :renewal-sec="task.task.renewalSec"
+      @click="task.task.renew()"
+    ></processing-timer>
+    <footer class="processing-actions">
+      <slot name="actions"></slot>
+    </footer>
+  </article>
+</template>
+
+<script>
+import ProcessingTimer from './timer/processing-timer.vue';
+
+export default {
+  name: 'processing-wrapper',
+  components: { ProcessingTimer },
+  props: {
+    task: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    showTimer() {
+      return this.task.task?.processingSec;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.processing-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.processing-timer {
+  margin: auto;
+}
+
+.processing-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+</style>
