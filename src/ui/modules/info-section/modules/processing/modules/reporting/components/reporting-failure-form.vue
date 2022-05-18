@@ -3,17 +3,17 @@
   <section>
     <div class="processing-form__input" v-if="member">
       <h2 class="processing-form__schedule-call-select__title">
-        {{ $t('infoSec.postProcessing.nextDistributeAtTitle') }}
+        {{ $t('infoSec.processing.reporting.nextDistributeAtTitle') }}
       </h2>
       <div class="processing-form__schedule-call-select-wrapper">
         <wt-radio
           v-model="reporting.isScheduleCall"
-          :label="$t('infoSec.postProcessing.yes')"
+          :label="$t('infoSec.processing.reporting.yes')"
           :value="true"
         ></wt-radio>
         <wt-radio
           v-model="reporting.isScheduleCall"
-          :label="$t('infoSec.postProcessing.no')"
+          :label="$t('infoSec.processing.reporting.no')"
           :value="false"
         ></wt-radio>
       </div>
@@ -27,7 +27,7 @@
       <wt-datetimepicker
         v-model="reporting.nextDistributeAt"
         :disabled-dates="{ to: new Date() }"
-        :label="$t('infoSec.postProcessing.nextDistributeAt')"
+        :label="$t('infoSec.processing.reporting.nextDistributeAt')"
       ></wt-datetimepicker>
     </div>
   </section>

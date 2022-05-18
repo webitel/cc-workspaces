@@ -74,6 +74,8 @@ export default {
         isSuccess: 'Задача була успішна?',
         yes: 'Так',
         no: 'Ні',
+        nextDistributeAtTitle: 'Запланувати наступну задачу?',
+        nextDistributeAt: 'Час наступної задачі',
       },
     },
   },

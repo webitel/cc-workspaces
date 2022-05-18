@@ -5,10 +5,10 @@
     :task="task"
   >
     <template v-slot:form>
-      <h3>
+      <h3 class="reporting__title">
         {{ $t('infoSec.processing.reporting.isSuccess') }}
       </h3>
-      <div class="post-processing__status-wrapper">
+      <div class="reporting__status-wrapper">
         <wt-button
           :outline="!taskReporting.success"
           class="post-processing__status-control"
@@ -24,8 +24,9 @@
         >{{ $t('infoSec.processing.reporting.no') }}
         </wt-button>
       </div>
-      <form class="processing-form processing-form__success">
+      <form class="reporting-form">
         <failure-form
+          class="reporting-form"
           v-show="!taskReporting.success"
           :member="task.isMember"
           :reporting="taskReporting"
@@ -98,22 +99,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.post-processing__status-wrapper {
+.reporting__title {
+  @extend %typo-body-1;
+  text-align: center;
+}
+
+.reporting__status-wrapper {
   display: flex;
   align-items: center;
-  justify-content: stretch;
-  margin-bottom: 20px;
+  justify-content: center;
+  gap: var(--spacing-xs);
 
-  .post-processing__status-control {
-    width: 100%;
-
-    &:first-child {
-      margin-right: 10px;
-    }
+  .wt-button {
+    width: 120px;
   }
 }
 
-.post-processing-timer {
-  margin: var(--spacing-sm) auto;
+.reporting-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 </style>

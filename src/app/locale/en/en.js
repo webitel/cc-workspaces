@@ -71,6 +71,8 @@ export default {
         isSuccess: 'Was this task successful?',
         yes: 'Yes',
         no: 'No',
+        nextDistributeAtTitle: 'Schedule next task?',
+        nextDistributeAt: 'Next task time',
       },
     },
   },

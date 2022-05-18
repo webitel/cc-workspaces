@@ -41,7 +41,10 @@ export default {
   }),
 
   watch: {
-    taskOnWorkspace() {
+    currentTab(to, from) {
+      console.warn(to, from);
+    },
+    taskId() {
       if (this.showClientInfo) {
         this.currentTab = this.tabsObject.clientInfo;
       } else {
@@ -70,6 +73,9 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
+    taskId() {
+      return this.taskOnWorkspace.id;
+    },
     taskState() {
       return this.taskOnWorkspace.state;
     },
