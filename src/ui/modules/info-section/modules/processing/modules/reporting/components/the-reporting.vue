@@ -4,10 +4,10 @@
     class="reporting"
     :task="task"
   >
+    <template v-slot:title>
+      {{ $t('infoSec.processing.reporting.isSuccess') }}
+    </template>
     <template v-slot:form>
-      <h3 class="reporting__title">
-        {{ $t('infoSec.processing.reporting.isSuccess') }}
-      </h3>
       <div class="reporting__status-wrapper">
         <wt-button
           :outline="!taskReporting.success"
@@ -99,11 +99,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.reporting__title {
-  @extend %typo-body-1;
-  text-align: center;
-}
-
 .reporting__status-wrapper {
   display: flex;
   align-items: center;

@@ -3,6 +3,9 @@
     :task="task"
     ref="processing-form"
   >
+    <template v-slot:title v-if="formTitle">
+      {{ formTitle }}
+    </template>
     <template v-slot:form>
       <component
         :is="processingComponent[el.view.component] || el.view.component"
@@ -47,6 +50,9 @@ export default {
     },
   }),
   computed: {
+    formTitle() {
+      return this.task.task.form.title;
+    },
     formBody() {
       return this.task.task.form.body || [];
     },
