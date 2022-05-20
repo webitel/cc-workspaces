@@ -1,5 +1,8 @@
 <template>
   <article class="processing-wrapper">
+    <header class="processing-header">
+      <slot name="title"></slot>
+    </header>
     <slot name="form"></slot>
     <processing-timer
       v-if="showTimer"
@@ -40,6 +43,11 @@ export default {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+}
+
+.processing-header {
+  @extend %typo-heading-2;
+  text-align: center;
 }
 
 .processing-timer {
