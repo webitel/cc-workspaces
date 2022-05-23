@@ -41,11 +41,10 @@ export default {
   }),
 
   watch: {
-    currentTab(to, from) {
-      console.warn(to, from);
-    },
     taskId() {
-      if (this.showClientInfo) {
+      if (this.showProcessing) {
+        this.currentTab = this.tabsObject.processing;
+      } else if (this.showClientInfo) {
         this.currentTab = this.tabsObject.clientInfo;
       } else {
         this.currentTab = this.tabsObject.generalInfo;
@@ -59,7 +58,9 @@ export default {
       }
     },
     showProcessing(value) {
-      if (!value) {
+      if (value) {
+        this.currentTab = this.tabsObject.processing;
+      } else {
         if (this.showClientInfo) this.currentTab = this.tabsObject.clientInfo;
         else this.currentTab = this.tabsObject.generalInfo;
       }
