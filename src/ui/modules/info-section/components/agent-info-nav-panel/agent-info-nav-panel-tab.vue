@@ -1,16 +1,22 @@
 <template>
-  <button
+  <wt-tooltip
     class="agent-info-nav-panel-tab"
     :class="{ 'agent-info-nav-panel-tab--active': active }"
-    type="button"
-    @click="$emit('click')"
   >
-    <wt-icon
-      :icon="icon"
-      icon-prefix="ws"
-    ></wt-icon>
-    <wt-tooltip v-if="title">{{ title }}</wt-tooltip>
-  </button>
+    <template v-slot:activator>
+      <button
+        class="agent-info-nav-panel-tab__button"
+        type="button"
+        @click="$emit('click')"
+      >
+        <wt-icon
+          :icon="icon"
+          icon-prefix="ws"
+        ></wt-icon>
+      </button>
+    </template>
+    {{ title }}
+  </wt-tooltip>
 </template>
 
 <script>
@@ -44,22 +50,14 @@ export default {
 
   &:hover {
     background: var(--main-color);
-
-    .wt-tooltip {
-      opacity: 1;
-    }
   }
 
   &--active {
     background: var(--secondary-color-50);
   }
 
-  .wt-tooltip {
-    position: absolute;
-    top: 50%;
-    left: calc(-100% + var(--spacing-lg));
-    transform: translate(-100%, -50%);
-    white-space: nowrap;
+  &__button {
+    line-height: 0;
   }
 }
 </style>

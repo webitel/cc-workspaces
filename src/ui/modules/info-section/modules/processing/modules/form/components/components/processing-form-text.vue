@@ -13,13 +13,9 @@
     <h4 class="processing-form-text__title">
       {{ label }}
 
-      <wt-icon-btn
+      <wt-hint
         v-if="hint"
-        class="wt-label__hint"
-        icon="rounded-info"
-        color="outline"
-        :tooltip="hint"
-      ></wt-icon-btn>
+      >{{ hint }}</wt-hint>
     </h4>
     <p
       class="processing-form-text__content"
