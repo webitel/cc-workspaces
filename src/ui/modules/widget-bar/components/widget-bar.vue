@@ -33,7 +33,7 @@ import APIRepository from '../../../../app/api/APIRepository';
 import Widgets from '../utils/Widgets';
 
 const WidgetsAPI = APIRepository.widgets;
-const REFRESH_INTERVAL_DURATION = 60 * 10 ** 3; // 1 min
+const REFRESH_INTERVAL_DURATION = 20 * 1000; // 20 sec
 
 export default {
   name: 'widget-bar',
@@ -44,21 +44,14 @@ export default {
   data: () => ({
     widgets: Widgets,
     data: {
-      count: 0,
-      handles: 0,
-      abandoned: 0,
-      avgHoldSec: '00:00:00',
-      avgTalkSec: '00:00:00',
-      maxHoldSec: 0,
-      maxTalkSec: 0,
-      minHoldSec: 0,
-      minTalkSec: 0,
-      sumHoldSec: 0,
-      sumTalkSec: 0,
-      occupancy: '0.00%',
-      utilization: '0.00%',
+      callHandled: 0,
+      callMissed: 0,
+      avgHoldSec: 0,
+      avgTalkSec: 0,
+      occupancy: 0,
+      utilization: 0,
       chatAccepts: 0,
-      chatAht: '00:00:00',
+      chatAht: 0,
     },
     refreshIntervalInstance: null,
     selectionMode: false,
@@ -73,7 +66,6 @@ export default {
 
   created() {
     this.getWidgetsFromLocalStorage();
-    this.setRefreshInterval();
   },
 
   destroyed() {
