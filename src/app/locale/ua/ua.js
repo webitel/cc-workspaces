@@ -37,9 +37,9 @@ export default {
     },
   },
   widgets: {
-    inbound: 'Вхідних',
-    handles: 'Опрацьовано',
-    missed: 'Пропущено',
+    callInbound: 'Вхідних дзвінків',
+    callHandled: 'Опрацьовано дзвінків',
+    callMissed: 'Пропущено дзвінків',
     avgTalk: 'Средній час розмови',
     avgHold: 'Средній час утримання',
     utilization: 'Утилізація',

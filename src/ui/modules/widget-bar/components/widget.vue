@@ -63,7 +63,7 @@ export default {
 
 <style lang="scss" scoped>
 $widget-inbound-color: var(--accent-color);
-$widget-handles-color: var(--true-color);
+$widget-handled-color: var(--true-color);
 $widget-missed-color: var(--false-color);
 $widget-avg-talk-color: #239AC0;
 $widget-avg-hold-color: var(--accent-color);
@@ -112,17 +112,17 @@ $widget-chat-aht-color:  var(--true-color);
 .widget-icon {
   margin-right: 10px;
 
-  &--widget-inbound.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-call-inbound.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-inbound-color;
     stroke: $widget-inbound-color;
   }
 
-  &--widget-handles.wt-icon ::v-deep .wt-icon__icon {
-    fill: $widget-handles-color;
-    stroke: $widget-handles-color;
+  &--widget-call-handled.wt-icon ::v-deep .wt-icon__icon {
+    fill: $widget-handled-color;
+    stroke: $widget-handled-color;
   }
 
-  &--widget-missed.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-call-missed.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-missed-color;
     stroke: $widget-missed-color;
   }

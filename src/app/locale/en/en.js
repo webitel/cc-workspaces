@@ -34,9 +34,9 @@ export default {
     },
   },
   widgets: {
-    inbound: 'Inbound',
-    handles: 'Processed Calls',
-    missed: 'Missed Calls',
+    callInbound: 'Inbound calls',
+    callHandled: 'Processed Calls',
+    callMissed: 'Missed Calls',
     avgTalk: 'Avg Talk Time',
     avgHold: 'Avg Hold Time',
     utilization: 'Utilization',
