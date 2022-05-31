@@ -1,16 +1,18 @@
 <template>
-  <div class="user-dnd-switcher">
-    <wt-switcher
-      :value="isDnd"
-      :label="$t('header.dnd.label')"
-      @change="toggleDnd"
-    ></wt-switcher>
-    <wt-tooltip nowrap>{{ $t('header.dnd.tooltip') }}</wt-tooltip>
-  </div>
+  <wt-tooltip>
+    <template v-slot:activator>
+      <wt-switcher
+        :label="$t('header.dnd.label')"
+        :value="isDnd"
+        @change="toggleDnd"
+      ></wt-switcher>
+    </template>
+    {{ $t('header.dnd.tooltip') }}
+  </wt-tooltip>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 
 export default {
@@ -32,17 +34,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-dnd-switcher {
-  position: relative;
 
-  .wt-tooltip {
-    position: absolute;
-  }
-
-  &:hover {
-    .wt-tooltip {
-      opacity: 1;
-    }
-  }
-}
 </style>

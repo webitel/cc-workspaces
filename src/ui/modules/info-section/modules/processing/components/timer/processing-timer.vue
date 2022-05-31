@@ -1,16 +1,19 @@
 <template>
   <div class="processing-timer">
     <radial-progress
+      :color="progressColor"
       :max="processingEndSec"
       :value="processingProgressSec"
-      :color="progressColor"
     >
-      <wt-icon-btn
-        v-show="showRenewalButton"
-        icon="plus"
-        :tooltip="renewalTooltip"
-        @click="handleClick"
-      ></wt-icon-btn>
+      <wt-tooltip v-show="showRenewalButton">
+        <template v-slot:activator>
+          <wt-icon-btn
+            icon="plus"
+            @click="handleClick"
+          ></wt-icon-btn>
+        </template>
+        {{ renewalTooltip }}
+      </wt-tooltip>
       <span
         v-show="!showRenewalButton"
       >{{ processingSecLeft }}</span>
@@ -89,9 +92,5 @@ export default {
 <style lang="scss" scoped>
 .processing-timer {
   display: inline-block;
-
-  .wt-icon-btn ::v-deep .wt-tooltip {
-    white-space: nowrap;
-  }
 }
 </style>

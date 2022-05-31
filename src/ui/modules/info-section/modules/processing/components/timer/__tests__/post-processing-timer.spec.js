@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ProcessingTimer from '../processing-timer.vue';
 import nowModule from '../../../../../../reactive-now/reactive-now';
@@ -56,7 +56,7 @@ describe('Post Processing Timer', () => {
     expect(wrapper.vm.showRenewalButton).toBe(true);
   });
   it('at plus click emits "click" event', () => {
-    const wrapper = shallowMount(ProcessingTimer, mountOptions);
+    const wrapper = mount(ProcessingTimer, mountOptions);
     wrapper.findComponent({ name: 'wt-icon-btn' }).vm.$emit('click');
     expect(wrapper.emitted().click.length).toBe(1);
   });
