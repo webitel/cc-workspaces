@@ -5,7 +5,7 @@
     @click="$emit('click', task)"
   >
     <header class="queue-preview-header">
-      <wt-icon icon-prefix="messenger" :icon="displayIcon" size="sm"></wt-icon>
+      <wt-icon :icon="displayIcon" size="sm"></wt-icon>
       <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
       <queue-preview-timer :task="task" bold/>
     </header>
@@ -54,15 +54,17 @@ export default {
       const member = this.task.members[0];
       switch (member.type) {
         case MessengerType.TELEGRAM:
-          return 'telegram';
+          return 'messenger-telegram';
         case MessengerType.VIBER:
-          return 'viber';
+          return 'messenger-viber';
         case MessengerType.FACEBOOK:
-          return 'facebook';
+          return 'messenger-facebook';
         case MessengerType.WHATSAPP:
-          return 'whatsapp';
+          return 'messenger-whatsapp';
         case MessengerType.WEB_CHAT:
-          return 'web-chat';
+          return 'messenger-web-chat';
+        case MessengerType.INSTAGRAM:
+          return 'instagram';
         default:
           return member.type;
       }
