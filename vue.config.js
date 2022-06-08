@@ -13,18 +13,15 @@ process.env.VUE_APP_APPLICATION_HUB_URL = process.env.NODE_ENV === 'production' 
 process.env.VUE_APP_PACKAGE_VERSION = require('./package.json').version;
 
 module.exports = {
-  transpileDependencies: [
-    '@webitel/ui-sdk/src',
-    '@webitel/cc-ui-sdk/src',
-  ],
+  transpileDependencies: true,
 // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
   publicPath: '/workspace',
   lintOnSave: false,
   css: {
     loaderOptions: {
       sass: {
-        prependData: `
-          @import "@/css/main.scss";
+        additionalData: `
+          @import "@/app/css/main.scss";
         `,
       },
     },

@@ -1,0 +1,15 @@
+import './ws-agent.svg';
+import './ws-bot.svg';
+import './ws-widget-avg-hold.svg';
+import './ws-widget-avg-talk.svg';
+import './ws-widget-chat-accepts.svg';
+import './ws-widget-chat-aht.svg';
+import './ws-widget-call-handled.svg';
+import './ws-widget-call-inbound.svg';
+import './ws-widget-call-missed.svg';
+import './ws-widget-occupancy.svg';
+import './ws-widget-utilization.svg';
+import './ws-client-info.svg';
+import './ws-general-info.svg';
+import './ws-knowledge-base.svg';
+import './ws-processing.svg';
