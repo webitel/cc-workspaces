@@ -4,8 +4,8 @@ import notificationsModule from '../notifications';
 import '../../../../../../tests/unit/mocks/broadcastChannelMock';
 
 const state = {
-  windowId: null,
-  broadcastChannel: new BroadcastChannel('appNotifications'),
+  thisTabId: null,
+  broadcastChannel: new BroadcastChannel('WtAppNotifications'),
   unreadCount: 0,
   currentlyPlaying: false,
   isCall: false,
@@ -32,75 +32,80 @@ describe('features/notifications store: actions', () => {
     context.commit.mockClear();
   });
 
-  it('INIT_NOTIFICATIONS action dispatches SETUP_WINDOW_ID action', () => {
-    notificationsModule.actions.INIT_NOTIFICATIONS(context);
-    expect(context.dispatch.mock.calls[0][0]).toContain('SETUP_WINDOW_ID');
+  it('INITIALIZE action dispatches _SETUP_THIS_TAB_ID action', () => {
+    notificationsModule.actions.INITIALIZE(context);
+    expect(context.dispatch.mock.calls[0][0]).toContain('_SETUP_THIS_TAB_ID');
   });
 
-  it('INIT_NOTIFICATIONS action commits SET_BROADCAST_CHANNEL mutation', () => {
-    notificationsModule.actions.INIT_NOTIFICATIONS(context);
+  it('INITIALIZE action dispatches _SETUP_UNREAD_COUND_BROADCAST_LISTENING action', () => {
+    notificationsModule.actions.INITIALIZE(context);
+    expect(context.dispatch.mock.calls[1][0]).toContain('_SETUP_UNREAD_COUND_BROADCAST_LISTENING');
+  });
+
+  it('INITIALIZE action commits _SETUP_THIS_TAB_ID action', () => {
+    notificationsModule.actions.INITIALIZE(context);
+    expect(context.dispatch).toHaveBeenCalledWith('_SETUP_THIS_TAB_ID');
+  });
+
+  it('HANDLE_CHAT_EVENT action dispatches _PLAY_NOTIFICATION_SOUND action', () => {
+    notificationsModule.actions.HANDLE_CHAT_EVENT(context, { action: ChatActions.Message, chat });
+    expect(context.dispatch.mock.calls[0][0]).toContain('_PLAY_NOTIFICATION_SOUND');
+  });
+
+  it('HANDLE_CHAT_EVENT action dispatches SEND_NOTIFICATION action if chat is not open as TASK_ON_WORKSPACE', () => {
+    notificationsModule.actions.HANDLE_CHAT_EVENT(context, { action: ChatActions.Message, chat });
+    expect(context.dispatch.mock.calls[1][0]).toContain('SEND_NOTIFICATION');
+  });
+
+  it('HANDLE_CHAT_EVENT action does not dispatch SEND_NOTIFICATION action if chat is open as TASK_ON_WORKSPACE', () => {
+    context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId = '1';
+    notificationsModule.actions.HANDLE_CHAT_EVENT(context, { action: ChatActions.Message, chat });
+    expect(context.dispatch.mock.calls[0][0]).not.toContain('SEND_NOTIFICATION');
+  });
+
+  it('INCREMENT_UNREAD_COUNT action dispatches _SET_UNREAD_COUNT and increases unreadCount', () => {
+    notificationsModule.actions.INCREMENT_UNREAD_COUNT(context);
+    expect(context.dispatch).toHaveBeenCalledWith('_SET_UNREAD_COUNT', context.state.unreadCount + 1);
+  });
+
+  it('_SETUP_UNREAD_COUND_BROADCAST_LISTENING action commits SET_BROADCAST_CHANNEL mutation', () => {
+    notificationsModule.actions._SETUP_UNREAD_COUND_BROADCAST_LISTENING(context);
     expect(context.commit.mock.calls[0][0]).toContain('SET_BROADCAST_CHANNEL');
   });
 
-  it('INIT_NOTIFICATIONS action commits SETUP_WINDOW_ID action', () => {
-    notificationsModule.actions.INIT_NOTIFICATIONS(context);
-    expect(context.dispatch).toHaveBeenCalledWith('SETUP_WINDOW_ID');
-  });
-
-  it('NOTIFY action dispatches PLAY_NOTIFICATION_SOUND action', () => {
-    notificationsModule.actions.NOTIFY(context, { action: ChatActions.Message, chat });
-    expect(context.dispatch.mock.calls[0][0]).toContain('PLAY_NOTIFICATION_SOUND');
-  });
-
-  it('NOTIFY action dispatches SHOW_NOTIFICATION action if chat is not open as TASK_ON_WORKSPACE', () => {
-    notificationsModule.actions.NOTIFY(context, { action: ChatActions.Message, chat });
-    expect(context.dispatch.mock.calls[1][0]).toContain('SHOW_NOTIFICATION');
-  });
-
-  it('NOTIFY action does not dispatch SHOW_NOTIFICATION action if chat is open as TASK_ON_WORKSPACE', () => {
-    context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId = '1';
-    notificationsModule.actions.NOTIFY(context, { action: ChatActions.Message, chat });
-    expect(context.dispatch.mock.calls[0][0]).not.toContain('SHOW_NOTIFICATION');
-  });
-
-  it('INCREMENT_UNREAD_COUNT action dispatches SET_UNREAD_COUNT and increases unreadCount', () => {
-    notificationsModule.actions.INCREMENT_UNREAD_COUNT(context);
-    expect(context.dispatch).toHaveBeenCalledWith('SET_UNREAD_COUNT', context.state.unreadCount + 1);
-  });
-
-  it('SET_UNREAD_COUNT dispatches SET_TAB_TITLE action', () => {
+  it('_SET_UNREAD_COUNT dispatches _SET_TAB_TITLE action', () => {
     const unreadCount = 5;
-    notificationsModule.actions.SET_UNREAD_COUNT(context, unreadCount);
-    expect(context.dispatch).toHaveBeenCalledWith('SET_TAB_TITLE');
+    notificationsModule.actions._SET_UNREAD_COUNT(context, unreadCount);
+    expect(context.dispatch).toHaveBeenCalledWith('_SET_TAB_TITLE');
   });
 
-  it('SET_UNREAD_COUNT action commits SET_UNREAD_COUNT mutation with count', () => {
+  it('_SET_UNREAD_COUNT action commits _SET_UNREAD_COUNT mutation with count', () => {
     const unreadCount = 5;
-    notificationsModule.actions.SET_UNREAD_COUNT(context, unreadCount);
+    notificationsModule.actions._SET_UNREAD_COUNT(context, unreadCount);
     expect(context.commit).toHaveBeenCalledWith('SET_UNREAD_COUNT', unreadCount);
   });
 
-  it('RESET_UNREAD_COUNT action does not dispatch if unread count is 0', () => {
-    notificationsModule.actions.RESET_UNREAD_COUNT(context);
-    expect(context.dispatch).not.toHaveBeenCalledWith('SET_UNREAD_COUNT');
+  it('_RESET_UNREAD_COUNT action does not dispatch if unread count is 0', () => {
+    notificationsModule.actions._RESET_UNREAD_COUNT(context);
+    expect(context.dispatch).not.toHaveBeenCalledWith('_SET_UNREAD_COUNT');
   });
 
-  it('RESET_UNREAD_COUNT action dispatches SET_UNREAD_COUNT passing unread count equal to 0', () => {
+  it('_RESET_UNREAD_COUNT action dispatches _SET_UNREAD_COUNT passing unread count equal to 0', () => {
     context.state.unreadCount = 1;
-    notificationsModule.actions.RESET_UNREAD_COUNT(context);
-    expect(context.dispatch).toHaveBeenCalledWith('SET_UNREAD_COUNT', 0);
+    notificationsModule.actions._RESET_UNREAD_COUNT(context);
+    expect(context.dispatch).toHaveBeenCalledWith('_SET_UNREAD_COUNT', 0);
   });
 
-  it('PLAY_NOTIFICATION_SOUND action dispatches PLAY_SOUND action with sound audio', () => {
+  it('_PLAY_NOTIFICATION_SOUND action dispatches PLAY_SOUND action with sound audio', () => {
     const sound = new Audio(audio);
-    notificationsModule.actions.PLAY_NOTIFICATION_SOUND(context, sound);
+    notificationsModule.actions._PLAY_NOTIFICATION_SOUND(context, sound);
     expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', sound);
   });
 
-  it('RING_CALL action dispatches PLAY_SOUND action with sound audio', () => {
+  it('HANDLE_ANY_CALL_RINGING action dispatches PLAY_SOUND action with sound audio', () => {
     const sound = new Audio(audio);
     sound.loop = true;
-    notificationsModule.actions.RING_CALL(context);
+    notificationsModule.actions.HANDLE_ANY_CALL_RINGING(context);
     expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', sound);
   });
 
@@ -116,16 +121,16 @@ describe('features/notifications store: actions', () => {
     expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', sound);
   });
 
-  it('STOP_PLAYING action commits RESET_CURRENTLY_PLAYING mutation', () => {
+  it('STOP_SOUND action commits RESET_CURRENTLY_PLAYING mutation', () => {
     const sound = new Audio(audio);
-    notificationsModule.actions.STOP_PLAYING(context, sound);
+    notificationsModule.actions.STOP_SOUND(context, sound);
     expect(context.commit).toHaveBeenCalledWith('RESET_CURRENTLY_PLAYING');
   });
 
-  it('STOP_PLAYING action removes localStorage isPlaying', () => {
+  it('STOP_SOUND action removes localStorage isPlaying', () => {
     const sound = new Audio(audio);
     localStorage.setItem('isPlaying', true);
-    notificationsModule.actions.STOP_PLAYING(context, sound);
+    notificationsModule.actions.STOP_SOUND(context, sound);
     expect(localStorage.getItem('isPlaying')).toBeFalsy();
   });
 
@@ -152,10 +157,10 @@ describe('features/notifications store: actions', () => {
 });
 
 describe('features/notifications store: mutations', () => {
-  it('SET_WINDOW_ID sets window id to state', () => {
-    const windowId = 'windowId';
-    notificationsModule.mutations.SET_WINDOW_ID(state, windowId);
-    expect(state.windowId).toBe(windowId);
+  it('SET_THIS_TAB_ID sets window id to state', () => {
+    const thisTabId = 'thisTabId';
+    notificationsModule.mutations.SET_THIS_TAB_ID(state, thisTabId);
+    expect(state.thisTabId).toBe(thisTabId);
   });
 
   it('SET_BROADCAST_CHANNEL sets broadcastChannel to state', () => {
@@ -176,7 +181,7 @@ describe('features/notifications store: mutations', () => {
     expect(state.currentlyPlaying).toBe(false);
   });
 
-  it('SET_UNREAD_COUNT mutation sets unreadCount to state', () => {
+  it('_SET_UNREAD_COUNT mutation sets unreadCount to state', () => {
     const unreadCount = 15;
     notificationsModule.mutations.SET_UNREAD_COUNT(state, unreadCount);
     expect(state.unreadCount).toEqual(unreadCount);

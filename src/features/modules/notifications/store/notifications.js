@@ -24,74 +24,102 @@ const getNotificationSound = (action) => {
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
-const getStorageId = () => localStorage.getItem('windowId');
+const getCurrentTabId = () => localStorage.getItem('currentTabId');
 
-const setStorageId = (context, value) => {
-  localStorage.setItem('windowId', value);
-  context.commit('SET_STORAGE_ID', context.state.windowId);
-};
+const setCurrentTabId = (value) => localStorage.setItem('currentTabId', value);
 
 const state = {
-  windowId: null,
-  storageId: null,
+  thisTabId: null, // this tab
+  currentTabId: null, // current tab is localStorage
   broadcastChannel: null, // in order to reset the tab title with unread number
   unreadCount: 0,
   currentlyPlaying: false,
-  isCall: false,
 };
 
 const getters = {
-  IS_MAIN_TAB: (state) => state.windowId === state.storageId,
-  IS_SOUND_ALLOWED: (state) => !state.isCall && !state.currentlyPlaying,
+  IS_MAIN_TAB: (state) => state.thisTabId === state.currentTabId,
+  IS_SOUND_ALLOWED: (state, getters) => getters.IS_MAIN_TAB && !state.currentlyPlaying,
 };
 
 const actions = {
-  INIT_NOTIFICATIONS: (context) => {
-    context.dispatch('SETUP_WINDOW_ID');
-
-    const broadcastChannel = new BroadcastChannel('appNotifications');
-    broadcastChannel.addEventListener('message', ({ data }) => {
-      context.dispatch('SET_UNREAD_COUNT', data.count);
-    });
-
-    document.documentElement.addEventListener('click', () => {
-      context.dispatch('RESET_UNREAD_COUNT');
-    });
-    context.dispatch('SUBSCRIBE_TAB_CLOSING');
-    context.commit('SET_BROADCAST_CHANNEL', broadcastChannel);
-  },
-
-  SUBSCRIBE_TAB_CLOSING: (context) => {
-    window.addEventListener('storage', () => {
-      if (!getStorageId()) {
-        setStorageId(context, context.state.windowId);
-      }
-    });
-  },
-
-  SETUP_WINDOW_ID: (context) => {
-    const windowId = Math.random().toString();
-    context.commit('SET_WINDOW_ID', windowId);
-    setStorageId(context, windowId);
-  },
-
-  NOTIFY: (context, { action, chat }) => {
-    const sound = getNotificationSound(action);
-    context.dispatch('PLAY_NOTIFICATION_SOUND', sound);
-    if ((!document.hasFocus() || context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !== chat.channelId)
-    && context.getters.IS_MAIN_TAB) {
-      const name = getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
-      context.dispatch('SHOW_NOTIFICATION', { action, name });
+  // utils
+  HANDLE_CHAT_EVENT: (context, { action, chat }) => {
+    context.dispatch('PLAY_SOUND', { action });
+    if ((!document.hasFocus() ||
+        context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !==
+        chat.channelId)
+      && context.getters.IS_MAIN_TAB) {
+      const name = getLastMessage(chat)?.member?.name ||
+        chat.messages[0].member.name;
+        const text = i18n.t(`notifications.${snakeToCamel(action)}`, { name });
+        context.dispatch('SEND_NOTIFICATION', { text });
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
 
-  SHOW_NOTIFICATION: async (context, { action, name }) => {
-    const notificationText = i18n.t(`notifications.${snakeToCamel(action)}`, { name });
+  HANDLE_CALL_START: async (context) => {
+    await context.dispatch('STOP_SOUND'); // ringing
+    localStorage.setItem('wtIsPlaying', 'true');
+    context.commit('SET_CURRENTLY_PLAYING', true);
+  },
 
-    const notification = new Notification(notificationText, {
-      icon: notificationIcon,
-    });
+  HANDLE_CALL_END: (context) => {
+    localStorage.setItem('wtIsPlaying', 'false');
+    context.commit('SET_CURRENTLY_PLAYING', false);
+  },
+
+  HANDLE_ANY_CALL_RINGING: (context) => {
+    const sound = new Audio(ringingSound);
+    sound.loop = true;
+    context.dispatch('PLAY_SOUND', { sound });
+  },
+
+  // interface
+  INITIALIZE: (context) => Promise
+    .allSettled([
+                  context.dispatch('_SETUP_THIS_TAB_ID'),
+                  context.dispatch('_SETUP_UNREAD_COUND_BROADCAST_LISTENING'),
+                  context.dispatch('_SUBSCRIBE_TAB_CLOSING'),
+                ]),
+
+  DESTROY: (context) => Promise
+    .allSettled([
+                  context.dispatch('STOP_SOUND'),
+                  context.dispatch('_REMOVE_CURRENT_TAB_ID'),
+                ]),
+
+  PLAY_SOUND: (context, {
+    action,
+    sound = getNotificationSound(action),
+  }) => {
+    console.info(sound);
+    if (context.getters.IS_SOUND_ALLOWED
+      && !(localStorage.getItem('wtIsPlaying') === 'true')
+    ) {
+      const audio = sound instanceof Audio ? sound : new Audio(sound);
+      audio.addEventListener('ended', () => {
+        context.dispatch('STOP_SOUND');
+      }, { once: true });
+      audio.play();
+      localStorage.setItem('wtIsPlaying', 'true');
+      context.commit('SET_CURRENTLY_PLAYING', audio);
+    }
+  },
+
+  STOP_SOUND: (context) => {
+    const { currentlyPlaying } = context.state;
+    if (currentlyPlaying) currentlyPlaying.pause();
+    localStorage.removeItem('wtIsPlaying');
+    context.commit('RESET_CURRENTLY_PLAYING');
+  },
+
+  SEND_NOTIFICATION: (context, {
+    locale,
+    text = i18n.t(locale),
+    icon = notificationIcon,
+    interval = NOTIFICATION_VISIBLE_INTERVAL,
+  }) => {
+    const notification = new Notification(text, { icon });
 
     notification.addEventListener('click', () => {
       window.focus();
@@ -99,93 +127,74 @@ const actions = {
 
     setTimeout(() => {
       notification.close();
-    }, NOTIFICATION_VISIBLE_INTERVAL);
+    }, interval);
   },
 
   INCREMENT_UNREAD_COUNT: (context) => {
     const count = context.state.unreadCount + 1;
-    context.dispatch('SET_UNREAD_COUNT', count);
+    context.dispatch('_SET_UNREAD_COUNT', count);
     context.state.broadcastChannel.postMessage({ count });
   },
 
-  SET_UNREAD_COUNT: (context, count) => {
-    context.commit('SET_UNREAD_COUNT', count);
-    context.dispatch('SET_TAB_TITLE');
+  // -----
+  _SUBSCRIBE_TAB_CLOSING: (context) => {
+    window.addEventListener('storage', () => {
+      if (!getCurrentTabId()) {
+        setCurrentTabId(context.state.thisTabId);
+      }
+      context.commit('SET_CURRENT_TAB_ID', getCurrentTabId());
+    });
   },
 
-  RESET_UNREAD_COUNT: (context) => {
+  _SETUP_THIS_TAB_ID: (context) => {
+    const thisTabId = Math.random().toString();
+    context.commit('SET_THIS_TAB_ID', thisTabId);
+    setCurrentTabId(thisTabId);
+    context.commit('SET_CURRENT_TAB_ID', thisTabId);
+  },
+
+  _SETUP_UNREAD_COUND_BROADCAST_LISTENING: (context) => {
+    const broadcastChannel = new BroadcastChannel('WtAppNotifications');
+    broadcastChannel.addEventListener('message', ({ data }) => {
+      context.dispatch('_SET_UNREAD_COUNT', data.count);
+    });
+
+    document.documentElement.addEventListener('click', () => {
+      context.dispatch('_RESET_UNREAD_COUNT');
+    });
+    context.commit('SET_BROADCAST_CHANNEL', broadcastChannel);
+  },
+
+  _SET_UNREAD_COUNT: (context, count) => {
+    context.commit('SET_UNREAD_COUNT', count);
+    context.dispatch('_SET_TAB_TITLE');
+  },
+
+  _RESET_UNREAD_COUNT: (context) => {
     if (context.state.unreadCount === 0) return;
     const count = 0;
-    context.dispatch('SET_UNREAD_COUNT', count);
+    context.dispatch('_SET_UNREAD_COUNT', count);
     context.state.broadcastChannel.postMessage({ count });
   },
 
-  SET_TAB_TITLE: (context) => {
+  _SET_TAB_TITLE: (context) => {
     const count = context.state.unreadCount;
     const titleText = document.title.replace(/\s*\(.*?\)\s*/g, '');
     document.title = count ? `(${count}) ${titleText}` : titleText;
   },
 
-  PLAY_NOTIFICATION_SOUND: (context, sound) => {
-    if (context.getters.IS_SOUND_ALLOWED
-      && context.getters.IS_MAIN_TAB
-      && !localStorage.getItem('isPlaying')
-      && !localStorage.getItem('isCall')
-      ) {
-      try {
-        sound.addEventListener('ended', () => {
-          context.dispatch('STOP_PLAYING', sound);
-        }, { once: true });
-        context.dispatch('PLAY_SOUND', sound);
-      } catch (err) {
-        throw err;
-      }
-    }
-  },
-
-  RING_CALL: (context) => {
-    const sound = new Audio(ringingSound);
-    sound.loop = true;
-    context.dispatch('PLAY_SOUND', sound);
-  },
-
-  PLAY_SOUND: (context, sound) => {
-    sound.play();
-    localStorage.setItem('isPlaying', 'true');
-    context.commit('SET_CURRENTLY_PLAYING', sound);
-  },
-
-  STOP_PLAYING: (context, sound) => {
-    const currentSound = sound ?? context.state.currentlyPlaying;
-    if (currentSound) {
-      currentSound.pause();
-    }
-    localStorage.removeItem('isPlaying');
-    context.commit('RESET_CURRENTLY_PLAYING');
-  },
-
-  HANDLE_CALL_START: (context) => {
-    localStorage.setItem('isCall', 'true');
-    context.commit('HANDLE_CALL_START');
-  },
-
-  HANDLE_CALL_END: (context) => {
-    localStorage.removeItem('isCall');
-    context.commit('HANDLE_CALL_END');
-  },
-
-  REMOVE_STORAGE_ID: () => {
-    localStorage.removeItem('windowId');
+  _REMOVE_CURRENT_TAB_ID: () => {
+    localStorage.removeItem('currentTabId');
   },
 };
 
 const mutations = {
-  SET_WINDOW_ID: (state, windowId) => {
-    state.windowId = windowId;
+  SET_THIS_TAB_ID: (state, thisTabId) => {
+    state.thisTabId = thisTabId;
   },
 
-  SET_STORAGE_ID: (state, storageId) => {
-    state.storageId = storageId;
+  SET_CURRENT_TAB_ID: (state, currentTabId) => {
+    state.currentTabId = currentTabId;
   },
 
   SET_BROADCAST_CHANNEL: (state, channel) => {
@@ -199,12 +208,6 @@ const mutations = {
   },
   SET_UNREAD_COUNT: (state, count) => {
     state.unreadCount = count;
-  },
-  HANDLE_CALL_START: (state) => {
-    state.isCall = true;
-  },
-  HANDLE_CALL_END: (state) => {
-    state.isCall = false;
   },
 };
 
