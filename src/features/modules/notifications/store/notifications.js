@@ -64,8 +64,8 @@ const actions = {
   },
 
   HANDLE_CALL_END: (context) => {
-    localStorage.setItem('wtIsPlaying', 'false');
-    context.commit('SET_CURRENTLY_PLAYING', false);
+    localStorage.removeItem('wtIsPlaying');
+    context.commit('SET_CURRENTLY_PLAYING', null);
   },
 
   HANDLE_ANY_CALL_RINGING: (context) => {
@@ -92,9 +92,8 @@ const actions = {
     action,
     sound = getNotificationSound(action),
   }) => {
-    console.info(sound);
     if (context.getters.IS_SOUND_ALLOWED
-      && !(localStorage.getItem('wtIsPlaying') === 'true')
+      && !localStorage.getItem('wtIsPlaying')
     ) {
       const audio = sound instanceof Audio ? sound : new Audio(sound);
       audio.addEventListener('ended', () => {

@@ -8,7 +8,7 @@ const state = {
   broadcastChannel: new BroadcastChannel('WtAppNotifications'),
   unreadCount: 0,
   currentlyPlaying: false,
-  isCall: false,
+  wtIsPlaying: false,
 };
 
 const chat = { id: '1', messages: [{ member: { name: 'name' } }] };
@@ -49,7 +49,7 @@ describe('features/notifications store: actions', () => {
 
   it('HANDLE_CHAT_EVENT action dispatches _PLAY_NOTIFICATION_SOUND action', () => {
     notificationsModule.actions.HANDLE_CHAT_EVENT(context, { action: ChatActions.Message, chat });
-    expect(context.dispatch.mock.calls[0][0]).toContain('_PLAY_NOTIFICATION_SOUND');
+    expect(context.dispatch.mock.calls[0][0]).toContain('PLAY_SOUND');
   });
 
   it('HANDLE_CHAT_EVENT action dispatches SEND_NOTIFICATION action if chat is not open as TASK_ON_WORKSPACE', () => {
@@ -71,6 +71,12 @@ describe('features/notifications store: actions', () => {
   it('_SETUP_UNREAD_COUND_BROADCAST_LISTENING action commits SET_BROADCAST_CHANNEL mutation', () => {
     notificationsModule.actions._SETUP_UNREAD_COUND_BROADCAST_LISTENING(context);
     expect(context.commit.mock.calls[0][0]).toContain('SET_BROADCAST_CHANNEL');
+  });
+
+  it('PLAY_SOUND action commits SET_CURRENTLY_PLAIYNG mutation with sound', async () => {
+    const sound = new Audio(audio);
+    await notificationsModule.actions.PLAY_SOUND(context, { sound });
+    expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', sound);
   });
 
   it('_SET_UNREAD_COUNT dispatches _SET_TAB_TITLE action', () => {
@@ -96,63 +102,49 @@ describe('features/notifications store: actions', () => {
     expect(context.dispatch).toHaveBeenCalledWith('_SET_UNREAD_COUNT', 0);
   });
 
-  it('_PLAY_NOTIFICATION_SOUND action dispatches PLAY_SOUND action with sound audio', () => {
-    const sound = new Audio(audio);
-    notificationsModule.actions._PLAY_NOTIFICATION_SOUND(context, sound);
-    expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', sound);
-  });
-
   it('HANDLE_ANY_CALL_RINGING action dispatches PLAY_SOUND action with sound audio', () => {
     const sound = new Audio(audio);
     sound.loop = true;
     notificationsModule.actions.HANDLE_ANY_CALL_RINGING(context);
-    expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', sound);
+    expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', { sound });
   });
 
-  it('PLAY_SOUND action sets localStorage isPlaying to true', () => {
+  it('PLAY_SOUND action sets localStorage wtIsPlaying to true', () => {
     const sound = new Audio(audio);
-    notificationsModule.actions.PLAY_SOUND(context, sound);
-    expect(localStorage.getItem('isPlaying')).toBeTruthy();
-  });
-
-  it('PLAY_SOUND action commits SET_CURRENTLY_PLAIYNG mutation with sound', () => {
-    const sound = new Audio(audio);
-    notificationsModule.actions.PLAY_SOUND(context, sound);
-    expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', sound);
+    notificationsModule.actions.PLAY_SOUND(context, { sound });
+    expect(localStorage.getItem('wtIsPlaying')).toBeTruthy();
   });
 
   it('STOP_SOUND action commits RESET_CURRENTLY_PLAYING mutation', () => {
-    const sound = new Audio(audio);
-    notificationsModule.actions.STOP_SOUND(context, sound);
+    notificationsModule.actions.STOP_SOUND(context);
     expect(context.commit).toHaveBeenCalledWith('RESET_CURRENTLY_PLAYING');
   });
 
-  it('STOP_SOUND action removes localStorage isPlaying', () => {
-    const sound = new Audio(audio);
-    localStorage.setItem('isPlaying', true);
-    notificationsModule.actions.STOP_SOUND(context, sound);
-    expect(localStorage.getItem('isPlaying')).toBeFalsy();
+  it('STOP_SOUND action removes localStorage wtIsPlaying', () => {
+    localStorage.setItem('wtIsPlaying', 'true');
+    notificationsModule.actions.STOP_SOUND(context);
+    expect(localStorage.getItem('wtIsPlaying')).toBeFalsy();
   });
 
-  it('HANDLE_CALL_START action sets localStorage isCall', () => {
-    notificationsModule.actions.HANDLE_CALL_START(context);
-    expect(localStorage.getItem('isCall')).toBeTruthy();
+  it('HANDLE_CALL_START action sets localStorage wtIsPlaying', async () => {
+    await notificationsModule.actions.HANDLE_CALL_START(context);
+    expect(localStorage.getItem('wtIsPlaying')).toBeTruthy();
   });
 
-  it('HANDLE_CALL_START action commits HANDLE_CALL_START mutation', () => {
-    notificationsModule.actions.HANDLE_CALL_START(context);
-    expect(context.commit).toHaveBeenCalledWith('HANDLE_CALL_START');
+  it('HANDLE_CALL_START action commits SET_CURRENTLY_PLAYING mutation', async () => {
+    await notificationsModule.actions.HANDLE_CALL_START(context);
+    expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', true);
   });
 
-  it('HANDLE_CALL_END action removes localStorage isCall', () => {
-    localStorage.setItem('isCall', true);
+  it('HANDLE_CALL_END action removes localStorage wtIsPlaying', () => {
+    localStorage.setItem('wtIsPlaying', true);
     notificationsModule.actions.HANDLE_CALL_END(context);
-    expect(localStorage.getItem('isCall')).toBeFalsy();
+    expect(localStorage.getItem('wtIsPlaying')).toBeFalsy();
   });
 
-  it('HANDLE_CALL_END action commits HANDLE_CALL_END mutation', () => {
+  it('HANDLE_CALL_END action commits SET_CURRENTLY_PLAYING mutation', () => {
     notificationsModule.actions.HANDLE_CALL_END(context);
-    expect(context.commit).toHaveBeenCalledWith('HANDLE_CALL_END');
+    expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', null);
   });
 });
 
@@ -171,8 +163,8 @@ describe('features/notifications store: mutations', () => {
   });
 
   it('SET_CURRENTLY_PLAIYNG mutation sets currentlyPlaying to state', () => {
-    const isPlaying = true;
-    notificationsModule.mutations.SET_CURRENTLY_PLAYING(state, isPlaying);
+    const wtIsPlaying = true;
+    notificationsModule.mutations.SET_CURRENTLY_PLAYING(state, wtIsPlaying);
     expect(state.currentlyPlaying).toBe(true);
   });
 
@@ -185,15 +177,5 @@ describe('features/notifications store: mutations', () => {
     const unreadCount = 15;
     notificationsModule.mutations.SET_UNREAD_COUNT(state, unreadCount);
     expect(state.unreadCount).toEqual(unreadCount);
-  });
-
-  it('HANDLE_CALL_START mutation sets isCoversation to true', () => {
-    notificationsModule.mutations.HANDLE_CALL_START(state);
-    expect(state.isCall).toBe(true);
-  });
-
-  it('HANDLE_CALL_END mutation sets isCall to false', () => {
-    notificationsModule.mutations.HANDLE_CALL_END(state);
-    expect(state.isCall).toBe(false);
   });
 });
