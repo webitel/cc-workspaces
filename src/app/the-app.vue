@@ -14,7 +14,7 @@
 
       // we have to listen to the window event:
       window.addEventListener('beforeunload', async (e) => {
-        await this.$store.state.client.destroyCliInstance();
+        await this.$store.dispatch('workspace/CLOSE_SESSION');
         // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload
         // https://my.webitel.com/browse/WTEL-2397
         delete e.returnValue; // page will always reload

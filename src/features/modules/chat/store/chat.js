@@ -111,12 +111,12 @@ const actions = {
     context.commit('SET_MEDIA_VIEW', null);
   },
 
-  NOTIFY: (context, { action, chat }) => {
-    context.dispatch('features/notifications/NOTIFY', { action, chat }, { root: true });
+  HANDLE_CHAT_EVENT: (context, { action, chat }) => {
+    context.dispatch('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
   },
 
-  RESET_UNREAD_COUNT: (context) => {
-    context.dispatch('features/notifications/RESET_UNREAD_COUNT', null, { root: true });
+  _RESET_UNREAD_COUNT: (context) => {
+    context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true });
   },
 
   INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.state.chatOnWorkspace }) => {
