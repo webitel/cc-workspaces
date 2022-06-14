@@ -11,6 +11,7 @@ import WorkspaceStates
 import Call from '../modules/call/components/the-call.vue';
 import Chat from '../modules/chat/components/the-chat.vue';
 import Member from '../modules/member/components/the-member.vue';
+import Job from '../modules/job/components/the-job.vue';
 import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspace-empty.vue';
 
 export default {
@@ -19,6 +20,7 @@ export default {
     Call,
     Chat,
     Member,
+    Job,
     EmptyWorkspace,
   },
 
@@ -34,6 +36,8 @@ export default {
           return 'chat';
         case WorkspaceStates.MEMBER:
           return 'member';
+        case WorkspaceStates.JOB:
+          return 'job';
         default:
           return 'empty-workspace';
       }

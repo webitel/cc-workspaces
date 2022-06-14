@@ -21,7 +21,7 @@ const store = new Vuex.Store({
 
 describe('client-info-chips.vue', () => {
   beforeEach(() => {
-    task.task = {};
+    task.attempt = {};
   });
   it('Should render component', () => {
     const wrapper = shallowMount(ClientInfoChips, {
@@ -32,7 +32,7 @@ describe('client-info-chips.vue', () => {
   });
   it('Should correctly display task QueueName', () => {
     const display = 'jest';
-    task.task = {
+    task.attempt = {
       queue: {
         name: display,
       },

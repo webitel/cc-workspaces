@@ -3,6 +3,7 @@
     <div class="queue-section-wrapper">
       <call-queue/>
       <chat-queue/>
+      <job-queue/>
     </div>
     <wt-rounded-action
       color="success"
@@ -18,6 +19,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
+import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 
@@ -26,6 +28,7 @@ export default {
   components: {
     CallQueue,
     ChatQueue,
+    JobQueue,
   },
 
   computed: {
@@ -85,6 +88,11 @@ export default {
 }
 
 .chat-queue {
-  flex: 2 1 auto;
+  flex: 0 1 auto;
+  margin-bottom: 10px;
+}
+
+.job-queue {
+  flex: 0 1 auto;
 }
 </style>

@@ -16,7 +16,7 @@ export default {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
     queueName() {
-      return this.taskOnWorkspace.task?.queue?.name;
+      return this.taskOnWorkspace.attempt.queue?.name;
     },
   },
 };

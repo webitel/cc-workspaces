@@ -3,7 +3,7 @@ const actions = {
     context,
     { action, task = context.rootGetters.TASK_ON_WORKSPACE } = {},
   ) => {
-    const form = task.task.form.body.reduce((form, { id, value, view }) => {
+    const form = task.attempt.form.body.reduce((form, { id, value, view }) => {
       let _value = value;
       if (view.component === 'form-text') return form;
       if (view.component === 'wt-select') {
@@ -18,7 +18,7 @@ const actions = {
         [id]: _value,
       };
     }, {});
-    return task.task.formAction(action.id, form);
+    return task.attempt.formAction(action.id, form);
   },
 };
 

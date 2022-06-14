@@ -11,7 +11,7 @@ export default {
     },
     // Refactor to task after calls preview props
     displayQueueName() {
-      return this.call?.task?.queue?.name || this.task?.task?.queue?.name;
+      return this.call?.attempt?.queue?.name || this.task?.attempt?.queue?.name;
     },
   },
 };

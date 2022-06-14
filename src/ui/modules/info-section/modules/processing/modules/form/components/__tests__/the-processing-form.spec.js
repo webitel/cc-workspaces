@@ -14,7 +14,7 @@ describe('TheProcessingForm', () => {
   };
 
   beforeEach(() => {
-    task.task = {
+    task.attempt = {
       form: {
         body: [],
         actions: [],
@@ -33,7 +33,7 @@ describe('TheProcessingForm', () => {
   it('initializes components with initialValues', () => {
     const value = 'jest';
     const component = { value: '', view: { initialValue: value } };
-    task.task.form.body.push(component);
+    task.attempt.form.body.push(component);
     shallowMount(TheProcessingForm, {
       propsData,
       mocks,

@@ -19,6 +19,6 @@ describe('form: actions', () => {
       },
     };
     form.actions.SEND_FORM(context, { action, task });
-    expect(task.task.formAction).toHaveBeenLastCalledWith(action.id, expectedForm);
+    expect(task.attempt.formAction).toHaveBeenLastCalledWith(action.id, expectedForm);
   });
 });

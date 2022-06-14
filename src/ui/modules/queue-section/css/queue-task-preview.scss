@@ -11,7 +11,7 @@
   border-radius: var(--border-radius);
   cursor: pointer;
 
-  &--opened {
+  &--opened, &:focus {
     border-color: var(--accent-color);
   }
 

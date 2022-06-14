@@ -67,7 +67,7 @@ export default {
       return this.task.postProcessData;
     },
     reportingSent() {
-      return this.task.task.reportedAt;
+      return this.task.attempt.reportedAt;
     },
     reportButtonColor() {
       return this.reportingSent ? 'secondary' : 'primary';
