@@ -4,7 +4,7 @@ export default {
       return this.task?.displayName;
     },
     displayNumber() {
-      return this.task?.displayName;
+      return this.task?.displayNumber;
     },
     displayQueueName() {
       return this.task?.attempt?.queue?.name;

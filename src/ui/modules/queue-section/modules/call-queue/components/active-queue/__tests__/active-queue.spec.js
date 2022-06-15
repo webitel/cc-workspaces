@@ -1,6 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import { CallActions, CallDirection } from 'webitel-sdk';
 import workspaceModule from '../../../../../../../store/agent-workspace';
 import callModule from '../../../../../../../../features/modules/call/call';
 import ActiveQueue
@@ -57,7 +56,7 @@ describe('Ringing and Hangup events call functionality', () => {
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.ringing({});
-    expect(wrapper.findAll(ActivePreview).length).toEqual(2);
+    expect(wrapper.findAllComponents(ActivePreview).length).toEqual(2);
   });
 
   it('Removes a call when ringing event fires', async () => {
@@ -67,7 +66,7 @@ describe('Ringing and Hangup events call functionality', () => {
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.hangup(initialCall);
-    expect(wrapper.findAll(ActivePreview).length).toEqual(0);
+    expect(wrapper.findAllComponents(ActivePreview).length).toEqual(0);
   });
 });
 

@@ -1,13 +1,6 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-import chat from '../../../../../../../features/modules/chat/store/chat';
-import ChatQueuePreview
-  from '../chat-queue-preview.vue';
+import { shallowMount } from '@vue/test-utils';
+import ChatQueuePreview from '../chat-queue-preview.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-const store = new Vuex.Store({ modules: { chat } });
 const displayName = 'jest';
 const lastMessage = 'jest2';
 const task = {
@@ -18,12 +11,12 @@ const task = {
 
 describe('ChatQueuePreview', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task } });
+    const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('correctly computes last message text', () => {
-    const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task } });
+    const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
     expect(wrapper.vm.lastMessage).toBe(lastMessage);
   });
 
@@ -31,35 +24,19 @@ describe('ChatQueuePreview', () => {
     const filename = 'jest';
     const testTask = { ...task, messages: [{ file: { name: filename } }] };
     const wrapper = shallowMount(ChatQueuePreview, {
-      localVue,
-      store,
       propsData: { task: testTask },
     });
     expect(wrapper.vm.lastMessage).toBe(filename);
   });
 
   it('correctly computes chat participants name to display', () => {
-    const wrapper = shallowMount(ChatQueuePreview, { localVue, store, propsData: { task } });
+    const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
     expect(wrapper.vm.displayName).toBe(displayName);
-  });
-
-  it('Correctly displays chat displayQueueName', () => {
-    const queueName = 'jest3';
-    const testTask = { ...task, task: { queue: { name: queueName } } };
-    const wrapper = shallowMount(ChatQueuePreview, {
-      store,
-      localVue,
-      propsData: { task: testTask },
-    });
-    expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(queueName);
   });
 
   it('if chat has no queue, queue chip is absent', () => {
     const testTask = { ...task, task: {} };
     const wrapper = shallowMount(ChatQueuePreview, {
-      store,
-      localVue,
       propsData: { task: testTask },
     });
     expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);

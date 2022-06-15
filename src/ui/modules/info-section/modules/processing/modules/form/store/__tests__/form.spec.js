@@ -13,7 +13,7 @@ describe('form: actions', () => {
     const expectedForm = { jest: 'jest1' };
     const action = { id: 'jst' };
     const task = {
-      task: {
+      attempt: {
         form: { body },
         formAction: jest.fn(),
       },
