@@ -1,4 +1,4 @@
-import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
+import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 
 const state = {
