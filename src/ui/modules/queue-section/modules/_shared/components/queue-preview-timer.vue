@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import callTimer from '../../../../mixins/callTimerMixin';
+import callTimer from '../../../../../mixins/callTimerMixin';
 
 export default {
   name: 'queue-preview-timer',

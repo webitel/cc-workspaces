@@ -82,17 +82,23 @@ export default {
   min-height: 0;
 }
 
-.call-queue {
-  flex: 0 2 auto;
-  margin-bottom: 10px;
-}
+.task-queue {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 
-.chat-queue {
-  flex: 0 1 auto;
-  margin-bottom: 10px;
-}
+  &.call-queue {
+    flex: 0 2 auto;
+    margin-bottom: 10px;
+  }
 
-.job-queue {
-  flex: 0 1 auto;
+  &.chat-queue {
+    flex: 0 1 auto;
+    margin-bottom: 10px;
+  }
+
+  &.job-queue {
+    flex: 0 0 auto;
+  }
 }
 </style>

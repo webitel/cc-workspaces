@@ -11,5 +11,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/queue-task-container';
+.queue-task-container {
+  @extend %wt-scrollbar;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+}
 </style>

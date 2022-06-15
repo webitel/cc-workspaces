@@ -1,47 +1,29 @@
 <template>
-  <article
-    class="queue-preview"
-    :class="{ 'queue-preview--opened': opened }"
+  <task-queue-preview
+    :task="task"
+    :title="displayName"
+    :opened="opened"
     @click="$emit('click', task)"
   >
-    <header class="queue-preview-header">
-      <wt-icon :icon="displayIcon" size="sm"></wt-icon>
-      <span class="queue-preview-header__name">{{ displayName | truncate(18) }}</span>
-      <queue-preview-timer :task="task" bold/>
-    </header>
-    <section class="queue-preview-body">
-      <div class="chat-preview__message">
-        {{ lastMessage | truncate(30) }}
-      </div>
-    </section>
-    <section class="queue-preview-chips" v-if="displayQueueName">
-      <wt-chip color="secondary">
-        {{ displayQueueName }}
-      </wt-chip>
-    </section>
-    <!--    <footer class="queue-preview-footer"></footer>-->
-  </article>
+    <template v-slot:icon>
+      <wt-icon
+        :icon="displayIcon"
+        size="sm"
+      ></wt-icon>
+    </template>
+    <template v-slot:body>
+      {{ lastMessage | truncate(30) }}
+    </template>
+  </task-queue-preview>
 </template>
 
 <script>
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
-import QueuePreviewTimer from '../../../shared/queue-preview-timer.vue';
-import displayInfo from '../../../../../../mixins/displayInfoMixin';
+import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',
-  components: { QueuePreviewTimer },
-  mixins: [displayInfo],
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-    opened: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  mixins: [taskPreviewMixin],
   computed: {
     displayName() {
       return this.task.members.map((member) => member.name).join(', ');
@@ -74,5 +56,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../css/queue-task-preview';
 </style>

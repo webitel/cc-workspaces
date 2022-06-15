@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import now from '../../../../reactive-now/reactive-now';
+import now from '../../../../../reactive-now/reactive-now';
 import QueuePreviewTimer from '../queue-preview-timer.vue';
 
 const localVue = createLocalVue();

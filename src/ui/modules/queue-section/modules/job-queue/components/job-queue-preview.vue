@@ -1,7 +1,8 @@
 <template>
-  <task-queue-preview-wrapper
+  <task-queue-preview
     :task="task"
     :title="task.displayName"
+    :opened="opened"
     @click="$emit('click', task)"
   >
     <template v-slot:icon>
@@ -17,32 +18,30 @@
       v-slot:actions
       v-if="task.allowAccept"
     >
-      <wt-button color="task" @click="task.accept()">
+      <wt-button
+        color="task"
+        @click.prevent="$emit('accept', task)"
+        @keydown.enter.prevent="$emit('accept', task)"
+      >
         {{ $t('reusable.accept') }}
       </wt-button>
-      <wt-button color="secondary" @click="task.decline()">
+      <wt-button
+        color="secondary"
+        @click.prevent="$emit('decline', task)"
+        @keydown.enter.prevent="$emit('decline', task)"
+      >
         {{ $t('reusable.decline') }}
       </wt-button>
     </template>
-  </task-queue-preview-wrapper>
+  </task-queue-preview>
 </template>
 
 <script>
-import TaskQueuePreviewWrapper from '../../shared/task-queue-preview-wrapper.vue';
+import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',
-  components: { TaskQueuePreviewWrapper },
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-    opened: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  mixins: [taskPreviewMixin],
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
-  <the-agent-task-queue-wrapper
-    class="job-queue"
+  <the-agent-task-queue
+    class="task-queue job-queue"
     :title="$t('queueSec.job.jobs')"
   >
     <task-queue-container>
@@ -10,21 +10,23 @@
         :opened="task === taskOnWorkspace"
         :key="task.id"
         @click="openTask(task)"
+        @accept="task.accept()"
+        @decline="task.decline()"
       ></job-queue-preview>
     </task-queue-container>
-  </the-agent-task-queue-wrapper>
+  </the-agent-task-queue>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import TheAgentTaskQueueWrapper from '../../shared/the-agent-task-queue-wrapper.vue';
-import TaskQueueContainer from '../../shared/task-queue-container.vue';
+import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
+import TaskQueueContainer from '../../_shared/components/task-queue-container.vue';
 import JobQueuePreview from './job-queue-preview.vue';
 
 export default {
   name: 'the-agent-job-queue',
   components: {
-    TheAgentTaskQueueWrapper,
+    TheAgentTaskQueue,
     TaskQueueContainer,
     JobQueuePreview,
   },
