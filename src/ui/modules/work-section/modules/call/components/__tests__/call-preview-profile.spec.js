@@ -3,17 +3,17 @@ import PreviewProfile from '../call-preview-profile.vue';
 
 describe('PreviewProfile', () => {
   const display = 'jest';
-  let call;
+  let task;
   const computed = {
-    call: () => call,
+    task: () => task,
   };
 
   beforeEach(() => {
-    call = {};
+    task = {};
   });
 
   it('Correctly displays call displayName', () => {
-    call.displayName = display;
+    task.displayName = display;
     const wrapper = shallowMount(PreviewProfile, {
       computed,
     });
@@ -21,7 +21,7 @@ describe('PreviewProfile', () => {
   });
 
   it('Correctly displays call displayNumber', () => {
-    call.displayNumber = display;
+    task.displayNumber = display;
     const wrapper = shallowMount(PreviewProfile, {
       computed,
     });

@@ -6,11 +6,11 @@
     <slot name="form"></slot>
     <processing-timer
       v-if="showTimer"
-      :start-processing-at="task.task.startProcessingAt"
-      :processing-timeout-at="task.task.processingTimeoutAt"
-      :processing-sec="task.task.processingSec"
-      :renewal-sec="task.task.renewalSec"
-      @click="task.task.renew()"
+      :start-processing-at="task.attempt.startProcessingAt"
+      :processing-timeout-at="task.attempt.processingTimeoutAt"
+      :processing-sec="task.attempt.processingSec"
+      :renewal-sec="task.attempt.renewalSec"
+      @click="task.attempt.renew()"
     ></processing-timer>
     <footer class="processing-actions">
       <slot name="actions"></slot>
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     showTimer() {
-      return this.task.task?.processingSec;
+      return this.task.attempt?.processingSec;
     },
   },
 };

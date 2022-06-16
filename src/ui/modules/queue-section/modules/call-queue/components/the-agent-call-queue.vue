@@ -1,32 +1,39 @@
 <template>
-  <section class="task-queue call-queue">
-    <header class="task-queue__header">
-      <h2 class="task-queue__header__title">{{ $t('queueSec.call.calls') }}</h2>
-      <wt-tabs
-        v-model="currentTab"
-        :tabs="tabs"
-      >
-        <template
-          v-for="(tab, key) of tabs"
-          :slot="tab.value"
+  <the-agent-task-queue
+    class="task-queue call-queue"
+  >
+    <template v-slot:title>
+      <div class="call-queue__title-wrapper">
+        <span class="call-queue__title">{{ $t('queueSec.call.calls') }}</span>
+        <wt-tabs
+          v-model="currentTab"
+          :tabs="tabs"
         >
-          <div class="queue-tab__wrap" :key="key">
-            <div
-              v-show="tab.attention"
-              class="queue-tab__indicator"
-              :class="tab.value"
-            ></div>
-            <wt-icon :icon="tab.icon" :color="tab.iconColor"></wt-icon>
-          </div>
-        </template>
-      </wt-tabs>
-    </header>
-    <component :is="currentTabComponent"></component>
-  </section>
+          <template
+            v-for="(tab, key) of tabs"
+            :slot="tab.value"
+          >
+            <div class="queue-tab__wrap" :key="key">
+              <div
+                v-show="tab.attention"
+                class="queue-tab__indicator"
+                :class="tab.value"
+              ></div>
+              <wt-icon :icon="tab.icon" :color="tab.iconColor"></wt-icon>
+            </div>
+          </template>
+        </wt-tabs>
+      </div>
+    </template>
+    <component
+      :is="currentTabComponent"
+    ></component>
+  </the-agent-task-queue>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
@@ -34,6 +41,7 @@ import MissedQueue from './missed-queue/missed-queue-container.vue';
 export default {
   name: 'the-agent-call-queue',
   components: {
+    TheAgentTaskQueue,
     ActiveQueue,
     OfflineQueue,
     MissedQueue,
@@ -95,33 +103,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.call-queue {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-@import '../../../css/task-queue';
-
-.task-queue__header {
+.call-queue__title-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  //padding: var;
-
-  @media screen and (max-width: 1336px) {
-    //padding: 0;
-  }
 }
 
-.task-queue__header__title {
+.call-queue__title {
   @media screen and (max-width: 1336px) {
     display: none;
   }
 }
 
-.task-queue__header .wt-tabs {
+.wt-tabs {
   width: fit-content;
 
   .queue-tab__wrap {

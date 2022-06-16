@@ -1,28 +1,33 @@
 <template>
-  <section class="queue-task-container" ref="scroll-wrap">
-    <offline-preview
-      v-for="(member) of dataList"
-      :member="member"
-      :opened="member === taskOnWorkspace"
-      :key="member.id"
-      @click="openMember"
-    ></offline-preview>
+  <task-queue-container>
+    <div ref="scroll-wrap">
+      <offline-preview
+        v-for="(task) of dataList"
+        :key="task.id"
+        :opened="task === taskOnWorkspace"
+        :task="task"
+        @click="openMember"
+      ></offline-preview>
 
-    <observer
-      :options="obsOptions"
-      @intersect="handleIntersect"/>
-  </section>
+      <observer
+        :options="obsOptions"
+        @intersect="handleIntersect"
+      />
+    </div>
+  </task-queue-container>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
-import OfflinePreview from './offline-queue-preview.vue';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
+import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
   name: 'offline-queue-container',
   mixins: [infiniteScrollMixin],
   components: {
+    TaskQueueContainer,
     OfflinePreview,
   },
 
@@ -49,5 +54,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../css/queue-task-container';
 </style>

@@ -1,47 +1,48 @@
 <template>
-  <section class="queue-task-container">
+  <task-queue-container>
     <active-preview
-      v-for="(call, key) of callList"
-      :call="call"
-      :opened="call === taskOnWorkspace"
-      :index="key"
+      v-for="(task, key) of callList"
       :key="key"
+      :index="key"
+      :opened="task === taskOnWorkspace"
+      :task="task"
+      @answer="answer({ callId: task.id })"
       @click="openCall"
-      @answer="answer({ callId: call.id })"
-      @hangup="hangup({ callId: call.id })"
+      @hangup="hangup({ callId: task.id })"
     ></active-preview>
-  </section>
+  </task-queue-container>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-  import ActivePreview from './active-queue-preview.vue';
+import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import ActivePreview from './active-queue-preview.vue';
 
-  export default {
-    name: 'active-queue-container',
-    components: {
-      ActivePreview,
-    },
+export default {
+  name: 'active-queue-container',
+  components: {
+    TaskQueueContainer,
+    ActivePreview,
+  },
 
-    computed: {
-      ...mapState('features/call', {
-        callList: (state) => state.callList,
-      }),
-      ...mapGetters('workspace', {
-        taskOnWorkspace: 'TASK_ON_WORKSPACE',
-      }),
-    },
+  computed: {
+    ...mapState('features/call', {
+      callList: (state) => state.callList,
+    }),
+    ...mapGetters('workspace', {
+      taskOnWorkspace: 'TASK_ON_WORKSPACE',
+    }),
+  },
 
-    methods: {
-      ...mapActions('features/call', {
-        openCall: 'OPEN_ACTIVE_CALL',
-        answer: 'ANSWER',
-        hangup: 'HANGUP',
-      }),
-    },
-  };
+  methods: {
+    ...mapActions('features/call', {
+      openCall: 'OPEN_ACTIVE_CALL',
+      answer: 'ANSWER',
+      hangup: 'HANGUP',
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../css/queue-task-container';
 </style>

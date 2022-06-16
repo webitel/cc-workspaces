@@ -7,7 +7,7 @@ describe('MissedQueuePreview', () => {
     const wrapper = shallowMount(MissedQueuePreview, {
       propsData: {
         index: 1,
-        call: {},
+        task: {},
       },
     });
     expect(wrapper.exists()).toBe(true);

@@ -1,7 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import call from '../../../../../../../../features/modules/call/call';
-import userinfo from '../../../../../../userinfo/userinfo';
 import MissedQueueContainer
   from '../missed-queue-container.vue';
 
@@ -10,7 +9,7 @@ localVue.use(Vuex);
 
 describe('MissedQueueContainer', () => {
   const store = new Vuex.Store({
-    modules: { call, userinfo },
+    modules: { features: { namespaced: true, modules: { call } } },
   });
   it('renders a component', () => {
     const wrapper = shallowMount(MissedQueueContainer, {

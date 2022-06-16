@@ -1,64 +1,49 @@
 <template>
-  <article
-    class="queue-preview"
-    @click="$emit('click', call)"
+  <task-queue-preview
+    :task="task"
+    :title="displayName"
+    @click="$emit('click', task)"
   >
-
-    <header class="queue-preview-header">
+    <template v-slot:icon>
       <status-chip state="missed"/>
-      <span class="queue-preview-header__name">{{displayName | truncate(18)}}</span>
-      <!--v-for for timer not to resize on digit width change-->
-      <div class="missed-preview__call-time">
-        {{$t('queueSec.call.at')}}: {{ displayTime }}
-      </div>
-    </header>
-
-    <section class="queue-preview-body">
-      <div class="missed-preview__number">
-        {{ displayNumber | truncateFromEnd(18) }}
-      </div>
-    </section>
-<!--    <footer class="queue-preview-footer"></footer>-->
-  </article>
+    </template>
+    <template v-slot:timer>
+      {{ $t('queueSec.call.at') }}: {{ displayTime }}
+    </template>
+    <template v-slot:body>
+      {{ displayNumber | truncateFromEnd(18) }}
+    </template>
+  </task-queue-preview>
 </template>
 
 <script>
   import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+  import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
   import StatusChip from '../call-status-icon-chip.vue';
 
   export default {
     name: 'missed-queue-preview',
+    mixins: [taskPreviewMixin],
     components: {
       StatusChip,
     },
 
-    props: {
-      // item is for UI computing
-      call: {
-        type: Object,
-        required: true,
-      },
-    },
-
     computed: {
       displayName() {
-        return this.call.from?.name || '';
+        return this.task.from?.name || '';
       },
       displayNumber() {
-        return this.call.from?.number || '';
+        return this.task.from?.number || '';
       },
       displayTime() {
-        return prettifyTime(this.call.createdAt);
+        return prettifyTime(this.task.createdAt);
       },
     },
-
-    methods: {},
   };
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/queue-task-preview';
-  .missed-preview__call-time {
+  .missed-preview__task-time {
     @extend %typo-body-2;
   }
 </style>

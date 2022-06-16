@@ -51,13 +51,13 @@ export default {
   }),
   computed: {
     formTitle() {
-      return this.task.task?.form?.title || '';
+      return this.task.attempt.form?.title || '';
     },
     formBody() {
-      return this.task.task?.form?.body || [];
+      return this.task.attempt.form?.body || [];
     },
     formActions() {
-      return this.task.task?.form?.actions || [];
+      return this.task.attempt.form?.actions || [];
     },
   },
   methods: {

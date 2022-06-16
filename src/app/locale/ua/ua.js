@@ -1,6 +1,6 @@
 import {
   DeviceNotAllowPermissionError,
-  DeviceNotFoundError,
+  DeviceNotFoundError, JobState,
 } from 'webitel-sdk';
 
 export default {
@@ -54,6 +54,9 @@ export default {
     },
     chat: {
       chats: 'Чати',
+    },
+    job: {
+      jobs: 'Завдання',
     },
   },
   infoSec: {
@@ -169,6 +172,7 @@ export default {
     message: 'Нове повідомлення від {name}',
     userInvite: 'Новий чат з {name}',
     closeConversation: '{name} вийшов з чату',
+    [JobState.Distribute]: 'Нове завдання: {name}',
   },
   emojiPicker: {
     categoriesLabel: 'Категорії',

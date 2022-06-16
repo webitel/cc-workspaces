@@ -1,59 +1,33 @@
 import { shallowMount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
-import ActivePreview
-  from '../active-queue-preview.vue';
+import ActivePreview from '../active-queue-preview.vue';
 
 describe('Other UIs', () => {
-  let call;
+  let task;
   const display = 'jest';
 
   beforeEach(() => {
-    call = {
+    task = {
       displayName: display,
       displayNumber: display,
       isHold: true,
     };
   });
 
-  it('Correctly displays call displayName', () => {
-    const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
-    });
-    expect(wrapper.find('.queue-preview-header__name').text()).toEqual(display);
-  });
-
-  it('Correctly displays call displayNumber', () => {
-    const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
-    });
-    expect(wrapper.find('.active-preview__number').text()).toEqual(display);
-  });
-
-  it('Correctly displays call displayQueueName', () => {
-    call.task = {
-      queue: { name: display },
-    };
-    const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
-    });
-    expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(display);
-  });
-
   it('if call has no queue, queue chip is absent', () => {
-    call.task = {};
+    task.task = {};
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
+      propsData: { task },
     });
     expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
   });
 });
 
 describe('Preview Actions', () => {
-  let call;
+  let task;
 
   beforeEach(() => {
-    call = {
+    task = {
       state: CallActions.Ringing,
       direction: CallDirection.Inbound,
     };
@@ -61,33 +35,33 @@ describe('Preview Actions', () => {
 
   it('Shows preview actions on Inbound Ringing', () => {
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
+      propsData: { task },
     });
-    expect(wrapper.find('.queue-preview-actions')
+    expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
       .toBeTruthy();
   });
 
   it('Shows preview actions on Preview Dialer', () => {
-    call = {
+    task = {
       state: CallActions.Ringing,
       direction: CallDirection.Outbound,
       queue: { queue_type: 'preview' },
     };
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
+      propsData: { task },
     });
-    expect(wrapper.find('.queue-preview-actions')
+    expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
       .toBeTruthy();
   });
 
   it('Hides preview actions on Outbound calls', () => {
-    call = {
+    task = {
       direction: CallDirection.Outbound,
     };
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { call },
+      propsData: { task },
     });
     expect(wrapper.find('.preview-actions')
                   .exists())

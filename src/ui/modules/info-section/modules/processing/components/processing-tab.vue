@@ -1,7 +1,7 @@
 <template>
   <section class="info-section-content processing">
     <the-processing-form
-      v-if="task.task.hasForm"
+      v-if="task.attempt.hasForm"
       :task="task"
     ></the-processing-form>
     <the-reporting

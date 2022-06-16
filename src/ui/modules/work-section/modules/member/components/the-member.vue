@@ -1,53 +1,50 @@
 <template>
-  <section class="ws-worksection workspace-member">
-    <member-header
-      :current-tab="currentTab"
-      @openTab="openHistory"
-    ></member-header>
-    <div class="ws-worksection-wrap">
-      <history v-show="isHistoryOpened"/>
-      <member-communications v-show="!isHistoryOpened"/>
-    </div>
-  </section>
+  <task-container>
+    <template v-slot:header>
+      <member-header
+        :current-tab="currentTab"
+        @openTab="openHistory"
+      ></member-header>
+    </template>
+    <template v-slot:body>
+      <history v-show="isHistoryOpened" />
+      <member-communications v-show="!isHistoryOpened" />
+    </template>
+  </task-container>
 </template>
 
 <script>
-  import MemberHeader from './member-header.vue';
-  import MemberCommunications from './member-communications.vue';
-  import History from '../../shared/components/workspace-history/components/history-container.vue';
+import TaskContainer from '../../_shared/components/task-container/task-container.vue';
+import History from '../../_shared/components/workspace-history/components/history-container.vue';
+import MemberCommunications from './member-communications.vue';
+import MemberHeader from './member-header.vue';
 
-  export default {
-    name: 'the-member',
-    components: {
-      MemberHeader,
-      MemberCommunications,
-      History,
+export default {
+  name: 'the-member',
+  components: {
+    TaskContainer,
+    MemberHeader,
+    MemberCommunications,
+    History,
+  },
+
+  data: () => ({
+    currentTab: '',
+  }),
+
+  computed: {
+    isHistoryOpened() {
+      return this.currentTab === 'history';
     },
+  },
 
-    data: () => ({
-      currentTab: '',
-    }),
-
-    computed: {
-      isHistoryOpened() {
-        return this.currentTab === 'history';
-      },
+  methods: {
+    openHistory(tab) {
+      this.currentTab = this.currentTab ? '' : tab;
     },
-
-    methods: {
-      openHistory(tab) {
-        this.currentTab = this.currentTab ? '' : tab;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .workspace-member {
-    box-sizing: border-box;
-
-    .ws-worksection__list {
-      overflow: auto;
-    }
-  }
 </style>

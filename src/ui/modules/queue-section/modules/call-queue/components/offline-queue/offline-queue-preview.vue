@@ -1,52 +1,35 @@
 <template>
-  <article
-    class="queue-preview offline-queue"
-    :class="{'queue-preview--opened': opened}"
-    @click="$emit('click', member)"
+  <task-queue-preview
+    :task="task"
+    :title="displayName"
+    :opened="opened"
+    @click="$emit('click', task)"
   >
-
-    <header class="queue-preview-header">
+    <template v-slot:icon>
       <status-chip/>
-      <span class="queue-preview-header__name">{{ displayName }}</span>
-    </header>
-
-<!--    <section class="queue-preview-body"></section>-->
-<!--    <footer class="queue-preview-footer"></footer>-->
-  </article>
+    </template>
+  </task-queue-preview>
 </template>
 
 <script>
+  import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
   import StatusChip from '../call-status-icon-chip.vue';
 
   export default {
     name: 'offline-queue-preview',
+    mixins: [taskPreviewMixin],
     components: {
       StatusChip,
-    },
-    props: {
-      member: {
-        type: Object,
-        required: true,
-      },
-      opened: {
-        type: Boolean,
-        default: false,
-      },
     },
 
     computed: {
       displayName() {
-        return this.member.name;
+        return this.task.name;
       },
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../../css/queue-task-preview';
-  .queue-preview-header__name {
-    @media screen and (max-width: 1336px) {
-      display: block;
-    }
-  }
+
 </style>

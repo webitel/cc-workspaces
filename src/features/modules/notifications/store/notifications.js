@@ -21,6 +21,15 @@ const actions = {
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
+  HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
+    context.dispatch('PLAY_SOUND', { action });
+    if (!document.hasFocus() && context.getters.IS_MAIN_TAB) {
+      const name = job.displayName;
+      const text = i18n.t(`notifications.${snakeToCamel(action)}`, { name });
+      context.dispatch('SEND_NOTIFICATION', { text });
+    }
+    context.dispatch('INCREMENT_UNREAD_COUNT');
+  },
 
   HANDLE_CALL_START: async (context) => {
     await context.dispatch('STOP_SOUND'); // ringing

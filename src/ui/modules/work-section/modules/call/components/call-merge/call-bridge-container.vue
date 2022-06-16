@@ -14,7 +14,7 @@
 
 <script>
   import { mapState, mapActions } from 'vuex';
-  import MergeLookupItem from '../../../shared/components/lookup-item/merge-lookup-item.vue';
+  import MergeLookupItem from '../../../_shared/components/lookup-item/merge-lookup-item.vue';
 
   export default {
     name: 'call-transfer-container',
