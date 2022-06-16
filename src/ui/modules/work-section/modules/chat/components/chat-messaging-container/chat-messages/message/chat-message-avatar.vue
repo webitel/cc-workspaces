@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import botAvatar from '../../../../../shared/assets/avatars/bot-avatar.svg';
-import defaultAvatar from '../../../../../shared/assets/avatars/default-avatar.svg';
+import botAvatar from '../../../../../_shared/assets/avatars/bot-avatar.svg';
+import defaultAvatar from '../../../../../_shared/assets/avatars/default-avatar.svg';
 import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
 
 export default {

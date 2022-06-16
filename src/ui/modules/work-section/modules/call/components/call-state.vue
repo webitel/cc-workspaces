@@ -99,9 +99,6 @@ export default {
   &__primary-text {
     @extend %typo-heading-1;
     text-align: center;
-    height: 40px; // line height + 2 margins
-    margin-top: 25px; // FIXME ANIMATION
-    margin-bottom: 25px;
 
     .numpad-state__primary-text__time-digit {
       display: inline-block;
@@ -117,7 +114,6 @@ export default {
 
   &__secondary-text {
     @extend %typo-subtitle-1;
-    min-height: 16px;
   }
 }
 </style>

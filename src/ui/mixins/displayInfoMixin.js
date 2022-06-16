@@ -1,13 +1,13 @@
 export default {
   computed: {
     displayName() {
-      return this.task?.displayName;
+      return (this.task || this.call)?.displayName;
     },
     displayNumber() {
-      return this.task?.displayNumber;
+      return (this.task || this.call)?.displayNumber;
     },
     displayQueueName() {
-      return this.task?.attempt?.queue?.name;
+      return (this.task || this.call)?.attempt?.queue?.name;
     },
   },
 };

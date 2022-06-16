@@ -14,7 +14,7 @@
 <script>
   import MemberHeader from './member-header.vue';
   import MemberCommunications from './member-communications.vue';
-  import History from '../../shared/components/workspace-history/components/history-container.vue';
+  import History from '../../_shared/components/workspace-history/components/history-container.vue';
 
   export default {
     name: 'the-member',

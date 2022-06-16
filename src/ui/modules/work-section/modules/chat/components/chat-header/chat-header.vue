@@ -4,7 +4,7 @@
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper">
-      <img src="../../../shared/assets/avatars/default-avatar.svg" alt="client pic">
+      <img src="../../../_shared/assets/avatars/default-avatar.svg" alt="client pic">
     </div>
     <div class="chat-header__cell-wrapper"></div>
     <div class="chat-header__cell-wrapper">

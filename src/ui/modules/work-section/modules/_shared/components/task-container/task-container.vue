@@ -24,15 +24,11 @@ export default {
   flex-direction: column;
   height: 100%;
 
-  .task-container__header-wrapper,
-  .task-container__footer-wrapper {
-    padding: 10px;
-  }
-
   .task-container__body-wrapper {
     flex-grow: 1;
     height: auto;
     min-height: 0;
+    padding: 0 10px;
   }
 }
 </style>

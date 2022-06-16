@@ -2,7 +2,7 @@
   <div class="preview-profile">
     <img
       class="preview-profile__pic"
-      src="../../shared/assets/avatars/default-avatar.svg"
+      src="../../_shared/assets/avatars/default-avatar.svg"
       alt="client photo"
     >
     <div class="preview-profile__name">

@@ -14,7 +14,7 @@
       </div>
       <img
         class="call-header__profile-pic"
-        src="../../shared/assets/avatars/default-avatar.svg"
+        src="../../_shared/assets/avatars/default-avatar.svg"
         alt="client photo"
       >
       <div class="actions-wrap actions-wrap__right">
@@ -68,5 +68,4 @@
 </script>
 
 <style lang="scss" scoped>
-@import '../../call/css/call-header';
 </style>

@@ -4,7 +4,7 @@
       <div class="task-header-actions__action-section">
         <slot name="before-avatar"></slot>
       </div>
-      <wt-avatar size="sm"></wt-avatar>
+      <wt-avatar></wt-avatar>
       <div class="task-header-actions__action-section">
         <slot name="after-avatar"></slot>
       </div>
@@ -27,15 +27,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.task-header-actions {
-  box-sizing: border-box;
-  height: 50px;
-  display: flex;
-  grid-gap: 10px;
+.task-header {
   padding: 10px;
+}
+
+.task-header-actions {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: 1fr 40px 1fr;
+  grid-gap: 10px;
+  margin-bottom: 10px;
 
   &__action-section {
-    flex: 1 0 auto;
+    display: flex;
+    gap: 10px;
+
     &:nth-child(2) {
       justify-content: flex-end;
     }
@@ -52,6 +58,7 @@ export default {
   &__title {
     @extend %typo-subtitle-2;
   }
+
   &__subtitle {
     @extend %typo-body-2;
   }

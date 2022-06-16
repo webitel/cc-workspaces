@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TaskHeader from '../../../shared/components/task-header/task-header.vue';
+import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 
 export default {
   name: 'job-header',

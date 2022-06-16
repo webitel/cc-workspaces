@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import TaskContainer from '../../shared/components/task-container/task-container.vue';
+import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import JobHeader from './job-header/job-header.vue';
 import JobFooter from './job-footer/job-footer.vue';
 import JobVariablesContainer from './job-variables-container/job-variables-container.vue';
