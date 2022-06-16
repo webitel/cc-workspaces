@@ -1,70 +1,65 @@
 <template>
-  <header class="call-header">
-    <div class="call-header__actions">
-      <div class="actions-wrap actions-wrap__left">
-        <wt-rounded-action
-          class="call-action"
-          :active="isOnHistory"
-          icon="history"
-          color="secondary"
-          rounded
-          wide
-          @click="$emit('openTab', 'history')"
-        ></wt-rounded-action>
-      </div>
-      <img
-        class="call-header__profile-pic"
-        src="../../_shared/assets/avatars/default-avatar.svg"
-        alt="client photo"
-      >
-      <div class="actions-wrap actions-wrap__right">
-        <wt-rounded-action
-          :class="{ 'hidden': !isCall }"
-          icon="call-ringing"
-          color="success"
-          rounded
-          wide
-          @click="makeCall"
-        ></wt-rounded-action>
-      </div>
-    </div>
-    <h1 class="call-header__name">{{member.name}}</h1>
-  </header>
+  <task-header>
+    <template v-slot:before-avatar>
+      <wt-rounded-action
+        :active="isOnHistory"
+        class="call-action"
+        color="secondary"
+        icon="history"
+        rounded
+        wide
+        @click="$emit('openTab', 'history')"
+      ></wt-rounded-action>
+    </template>
+    <template v-slot:after-avatar>
+      <wt-rounded-action
+        :class="{ 'hidden': !isCall }"
+        color="success"
+        icon="call-ringing"
+        rounded
+        wide
+        @click="makeCall"
+      ></wt-rounded-action>
+    </template>
+    <template v-slot:title>{{ member.name }}</template>
+  </task-header>
 </template>
 
 <script>
-  import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
+import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
-  export default {
-    name: 'workspace-member-header',
-    props: {
-      currentTab: {
-        type: String,
-      },
+export default {
+  name: 'workspace-member-header',
+  components: { TaskHeader },
+  props: {
+    currentTab: {
+      type: String,
     },
-    computed: {
-      ...mapState('features/member', {
-        member: (state) => state.memberOnWorkspace,
-      }),
-      ...mapGetters('features/member', {
-        isCommSelected: 'IS_COMMUNICATION_SELECTED',
-      }),
+  },
+  computed: {
+    ...mapState('features/member', {
+      member: (state) => state.memberOnWorkspace,
+    }),
+    ...mapGetters('features/member', {
+      isCommSelected: 'IS_COMMUNICATION_SELECTED',
+    }),
 
-      isOnHistory() {
-        return this.currentTab === 'history';
-      },
-
-      isCall() {
-        return this.isCommSelected;
-      },
+    isOnHistory() {
+      return this.currentTab === 'history';
     },
 
-    methods: {
-      ...mapActions('features/member', {
-        makeCall: 'CALL',
-      }),
+    isCall() {
+      return this.isCommSelected;
     },
-  };
+  },
+
+  methods: {
+    ...mapActions('features/member', {
+      makeCall: 'CALL',
+    }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>

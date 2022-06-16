@@ -55,6 +55,9 @@ export default {
     chat: {
       chats: 'Чати',
     },
+    job: {
+      jobs: 'Завдання',
+    },
   },
   infoSec: {
     generalInfo: {

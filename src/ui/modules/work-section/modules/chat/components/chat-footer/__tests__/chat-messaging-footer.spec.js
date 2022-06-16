@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import ChatMessagingFooter
-  from '../chat-messaging-footer.vue';
+  from '../chat-footer.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

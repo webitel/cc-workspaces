@@ -1,5 +1,5 @@
 <template>
-  <footer
+  <task-footer
     class="chat-footer"
   >
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
@@ -19,8 +19,7 @@
         @paste="handleFilePaste"
       ></wt-textarea>
       <div class="chat-footer__actions">
-        <div class="chat-footer__cell-wrapper"></div>
-        <div class="chat-footer__cell-wrapper">
+        <div class="file-input-wrapper">
           <wt-rounded-action
             class="rounded-action-file-input"
             color="secondary"
@@ -37,14 +36,9 @@
             @change="handleAttachments"
           >
         </div>
-        <div class="chat-footer__cell-wrapper">
           <chat-emoji
             @insert-emoji="insertEmoji"
           ></chat-emoji>
-        </div>
-        <div class="chat-footer__cell-wrapper"></div>
-        <div class="chat-footer__cell-wrapper"></div>
-        <div class="chat-footer__cell-wrapper">
           <wt-rounded-action
             icon="chat-send"
             color="secondary"
@@ -52,20 +46,23 @@
             wide
             @click="sendMessage"
           ></wt-rounded-action>
-        </div>
       </div>
     </div>
-  </footer>
+  </task-footer>
 </template>
 
 <script>
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
+import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import ChatEmoji from './chat-emoji.vue';
 
 export default {
   name: 'chat-footer',
-  components: { ChatEmoji },
+  components: {
+    ChatEmoji,
+    TaskFooter,
+  },
   data: () => ({
     draft: '',
   }),
@@ -149,7 +146,6 @@ export default {
   display: flex;
   align-items: stretch;
   flex-direction: column;
-  padding: 10px;
 }
 
 .chat-footer__chat-preview {
@@ -179,21 +175,14 @@ export default {
   }
 
   .chat-footer__actions {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 10px;
-
-    .chat-footer__cell-wrapper {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
+    display: flex;
+    gap: 10px;
   }
 }
 
-.chat-footer__cell-wrapper {
+.file-input-wrapper {
   position: relative;
+  width: 100%;
   .rounded-action-file-input__input {
     position: absolute;
     width: 0;

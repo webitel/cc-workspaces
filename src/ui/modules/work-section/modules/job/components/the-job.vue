@@ -4,7 +4,9 @@
       <job-header></job-header>
     </template>
     <template v-slot:body>
-      <job-variables-container></job-variables-container>
+      <job-variables-container
+        :task="task"
+      ></job-variables-container>
     </template>
     <template v-slot:footer>
       <job-footer

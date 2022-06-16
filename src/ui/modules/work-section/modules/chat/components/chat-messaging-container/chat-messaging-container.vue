@@ -10,7 +10,6 @@
       @drop="handleDrop"
     ></dropzone>
     <messages-container/>
-    <messaging-footer/>
   </div>
 </template>
 
@@ -18,14 +17,12 @@
 import { mapActions } from 'vuex';
 import Dropzone from '../../../../../../../app/components/utils/dropzone.vue';
 import MessagesContainer from './chat-messages/chat-messages-container.vue';
-import MessagingFooter from './chat-messaging-footer/chat-messaging-footer.vue';
 
 export default {
   name: 'chat-messaging-container',
   components: {
     Dropzone,
     MessagesContainer,
-    MessagingFooter,
   },
   data: () => ({
     isDropzoneVisible: false,
