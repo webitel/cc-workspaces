@@ -26,26 +26,6 @@ describe('Make new call functionality', () => {
     callList = [];
   });
 
-  it('calls "setNumber" action at number input ', () => {
-    const mock = jest.fn();
-    jest.spyOn(CallHeader.methods, 'setNumber')
-      .mockImplementationOnce(mock);
-
-    const wrapper = shallowMount(CallHeader, {
-      computed,
-    });
-    const numberInput = wrapper.find('.call-header__form-number__input');
-    expect(numberInput.exists())
-      .toBeTruthy();
-
-    const numberValue = '100';
-
-    numberInput.element.value = numberValue;
-    numberInput.trigger('input');
-
-    expect(mock).toHaveBeenCalledWith(numberValue);
-  });
-
   it('Make new call on number', () => {
     callOnWorkspace.newNumber = '100';
 
