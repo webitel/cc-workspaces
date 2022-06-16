@@ -2,7 +2,7 @@
   <task-footer class="job-footer">
     <wt-button
       v-if="task.allowAccept"
-      color="task"
+      color="job"
       wide
       @click="task.accept()"
     >{{ $t('reusable.accept') }}

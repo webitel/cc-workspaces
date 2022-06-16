@@ -7,8 +7,8 @@
   >
     <template v-slot:icon>
       <wt-icon
-        icon="task"
-        color="task"
+        icon="job"
+        color="job"
       ></wt-icon>
     </template>
     <template v-slot:body>
@@ -19,7 +19,7 @@
       v-if="task.allowAccept"
     >
       <wt-button
-        color="task"
+        color="job"
         @click.prevent="$emit('accept', task)"
         @keydown.enter.prevent="$emit('accept', task)"
       >

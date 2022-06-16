@@ -1,4 +1,8 @@
-import { DeviceNotFoundError, DeviceNotAllowPermissionError } from 'webitel-sdk';
+import {
+  DeviceNotFoundError,
+  DeviceNotAllowPermissionError,
+  JobState,
+} from 'webitel-sdk';
 
 export default {
   reusable: {
@@ -169,6 +173,7 @@ export default {
     message: 'New message from {name}',
     userInvite: 'New chat invite from {name}',
     closeConversation: '{name} left the chat',
+    [JobState.Distribute]: 'New job: {name}',
   },
   emojiPicker: {
     categoriesLabel: 'Categories',
