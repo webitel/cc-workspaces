@@ -52,7 +52,7 @@ import { mapActions, mapGetters, mapState } from 'vuex';
       }),
       setNumberFocus() {
         const input = this.$refs['number-input'].$el.querySelector('input');
-        input.focus();
+        if (input) input.focus();
       },
       handleNumpadInput(value) {
         this.input(value);

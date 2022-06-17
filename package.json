@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@webitel/cc-ui-sdk": "^0.1.25",
-    "@webitel/ui-sdk": "^2.0.11-1",
+    "@webitel/ui-sdk": "^2.0.12",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
     "deep-copy": "^1.4.2",

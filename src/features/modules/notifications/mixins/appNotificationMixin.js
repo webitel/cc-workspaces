@@ -6,14 +6,13 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 export default {
   watch: {
     isAnyRinging(value) {
+      console.warn('is any ringing', value);
       if (value) this.playRinging();
+      else this.stopPlaying();
     },
   },
 
   computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
     ...mapGetters('features/call', {
       isAnyRinging: 'IS_ANY_RINGING',
     }),

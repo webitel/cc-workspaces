@@ -37,7 +37,8 @@ const actions = {
     context.commit('SET_CURRENTLY_PLAYING', true);
   },
 
-  HANDLE_CALL_END: (context) => {
+  HANDLE_CALL_END: async (context) => {
+    await context.dispatch('STOP_SOUND'); // ringing
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
   },

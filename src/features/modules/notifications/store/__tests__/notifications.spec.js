@@ -62,14 +62,14 @@ describe('features/notifications store: actions', () => {
     expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', true);
   });
 
-  it('HANDLE_CALL_END action removes localStorage wtIsPlaying', () => {
+  it('HANDLE_CALL_END action removes localStorage wtIsPlaying', async () => {
     localStorage.setItem('wtIsPlaying', true);
-    notificationsModule.actions.HANDLE_CALL_END(context);
+    await notificationsModule.actions.HANDLE_CALL_END(context);
     expect(localStorage.getItem('wtIsPlaying')).toBeFalsy();
   });
 
-  it('HANDLE_CALL_END action commits SET_CURRENTLY_PLAYING mutation', () => {
-    notificationsModule.actions.HANDLE_CALL_END(context);
+  it('HANDLE_CALL_END action commits SET_CURRENTLY_PLAYING mutation', async () => {
+    await notificationsModule.actions.HANDLE_CALL_END(context);
     expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', null);
   });
 });
