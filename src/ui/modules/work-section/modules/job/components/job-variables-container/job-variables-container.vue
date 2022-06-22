@@ -42,6 +42,9 @@ export default {
 
 <style lang="scss" scoped>
 .job-variables-container {
+  @extend %wt-scrollbar;
+
   height: 100%;
+  overflow: auto;
 }
 </style>
