@@ -1,7 +1,9 @@
 <template>
   <task-container class="the-job">
     <template v-slot:header>
-      <job-header></job-header>
+      <job-header
+        :task="task"
+      ></job-header>
     </template>
     <template v-slot:body>
       <job-variables-container

@@ -1,4 +1,4 @@
-import { JobState } from 'webitel-sdk';
+import { CallDirection, JobState } from 'webitel-sdk';
 
 const handler = (context) => (action, job) => {
   switch (action) {
@@ -23,6 +23,9 @@ const actions = {
   HANDLE_DISTRIBUTE_ACTION: async (context, { action, job }) => {
     context.commit('ADD_JOB', job);
     await context.dispatch('features/notifications/HANDLE_JOB_DISTRIBUTE', { action, job }, { root: true });
+    if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
+      context.dispatch('OPEN_JOB', job);
+    }
   },
   HANDLE_DESTROY_ACTION: (context, { job }) => context.dispatch('REMOVE_JOB', job),
 };
