@@ -79,7 +79,7 @@ export default {
     },
     setupAutofocus() {
       const input = this.$refs['processing-form'].$el.querySelector('input, textarea');
-      if (input) input.focus();
+      if (input && !input.className.includes('select')) input.focus();
     },
   },
   watch: {
