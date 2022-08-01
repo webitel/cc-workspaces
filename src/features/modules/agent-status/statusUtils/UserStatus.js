@@ -1,6 +1,6 @@
 export default Object.freeze({
-  ACTIVE: 'active',
+  SIP: 'sip',
+  WEB: 'web',
   DND: 'dnd',
   BUSY: 'busy',
-  OFFLINE: 'offline',
 });
