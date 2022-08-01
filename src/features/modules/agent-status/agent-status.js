@@ -7,7 +7,7 @@ const usersAPI = APIRepository.users;
 
 const state = {
   agent: {},
-  user: {},
+  user: { status: {} },
 };
 
 const getters = {
@@ -39,7 +39,7 @@ const actions = {
   },
 
   TOGGLE_USER_DND: async (context) => {
-    const status = context.state.user.status === UserStatus.DND ? '' : UserStatus.DND;
+    const status = context.state.user.status?.[UserStatus.DND] ? '' : UserStatus.DND;
     await usersAPI.setUserStatus(status);
   },
 

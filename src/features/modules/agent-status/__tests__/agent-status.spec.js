@@ -49,7 +49,7 @@ describe('features/status store client handlers: actions', () => {
   it('TOGGLE_USER_DND calls setUserStatus API method with \'\', if current status is dnd', () => {
     const setUserStatusMock = jest.fn();
     usersAPIRepository.setUserStatus = setUserStatusMock;
-    context.state.user = { status: UserStatus.DND };
+    context.state.user = { status: { [UserStatus.DND]: true } };
     statusModule.actions.TOGGLE_USER_DND(context);
     expect(setUserStatusMock).toHaveBeenCalledWith('');
   });

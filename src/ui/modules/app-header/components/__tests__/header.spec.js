@@ -6,7 +6,8 @@ const agent = {};
 
 const computed = {
   agent: () => agent,
-  user: () => ({}),
+  user: () => ({ status: {} }),
+  userinfo: () => ({}),
   checkAccess: () => () => true,
   currentApp: () => true,
   isAgent: () => true,
