@@ -1,7 +1,7 @@
 <template>
   <wt-app-header>
     <wt-chip
-      :color="this.user.status[UserStatus.SIP] ? 'success' : 'secondary-50'"
+      :color="this.isPhoneReg ? 'success' : 'secondary-50'"
     >SIP
     </wt-chip>
     <break-timer-popup/>
@@ -61,8 +61,8 @@ export default {
     ...mapState('features/call', {
       isVideo: (state) => state.isVideo,
     }),
-    ...mapState('features/status', {
-      user: (state) => state.user,
+    ...mapState('features/globals', {
+      isPhoneReg: (state) => state.isPhoneReg,
     }),
     ...mapState('ui/userinfo', {
       userinfo: (state) => state,
