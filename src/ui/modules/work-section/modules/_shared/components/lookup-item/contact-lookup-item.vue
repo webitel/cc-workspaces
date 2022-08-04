@@ -38,18 +38,10 @@ export default {
   computed: {
     userStatus() {
       const status = parseUserStatus(this.item.presence);
-      switch (status) {
-        case UserStatus.ACTIVE:
-          return AbstractUserStatus.ACTIVE;
-        case UserStatus.DND:
-          return AbstractUserStatus.DND;
-        case UserStatus.OFFLINE:
-          return AbstractUserStatus.OFFLINE;
-        case UserStatus.BUSY:
-          return AbstractUserStatus.BUSY;
-        default:
-          return null;
-      }
+      if (status[UserStatus.DND]) return AbstractUserStatus.DND;
+      if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
+      if (status[UserStatus.SIP] || status[UserStatus.WEB]) return AbstractUserStatus.ACTIVE;
+      return AbstractUserStatus.OFFLINE;
     },
   },
 };
