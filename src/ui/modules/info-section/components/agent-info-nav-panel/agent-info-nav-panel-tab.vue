@@ -42,7 +42,6 @@ export default {
 <style lang="scss" scoped>
 .agent-info-nav-panel-tab {
   position: relative;
-  padding: var(--spacing-xs);
   border-radius: var(--border-radius);
   transition: var(--transition);
   outline: none;
@@ -57,6 +56,7 @@ export default {
   }
 
   &__button {
+    padding: var(--spacing-xs);
     line-height: 0;
   }
 }

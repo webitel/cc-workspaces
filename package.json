@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@webitel/cc-ui-sdk": "^0.1.25",
-    "@webitel/ui-sdk": "^2.0.5-2",
+    "@webitel/ui-sdk": "^2.0.19",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
     "deep-copy": "^1.4.2",
@@ -25,13 +25,13 @@
     "insert-text-at-cursor": "^0.3.0",
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "vue": "^2.6.14",
     "vue-i18n": "^8.15.3",
     "vue-router": "^3.5.3",
     "vuelidate": "^0.7.5",
     "vuex": "^3.6.2",
-    "webitel-sdk": "^0.1.125"
+    "webitel-sdk": "^0.1.146"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",

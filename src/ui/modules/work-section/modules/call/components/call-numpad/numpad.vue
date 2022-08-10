@@ -1,10 +1,16 @@
 <template>
   <div class="numpad">
     <call-state/>
+    <wt-input
+      v-if="isNewCall"
+      ref="number-input"
+      v-model="call.newNumber"
+      @keypress.enter="makeCall"
+    ></wt-input>
     <numpad-numbers
       ref="numpad-numbers"
       :class="{'numpad-numbers--opened': isNumpadOpened}"
-      @input="input"
+      @input="handleNumpadInput"
     ></numpad-numbers>
     <numpad-expansion-btn
       class="numpad-btn"
@@ -15,13 +21,13 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
   import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
   import NumpadExpansionBtn from './numpad-expansion-btn.vue';
 
   export default {
-    name: 'numpad',
+    name: 'the-numpad',
     components: {
       CallState,
       NumpadNumbers,
@@ -31,10 +37,30 @@
     data: () => ({
       isNumpadOpened: false,
     }),
+    computed: {
+      ...mapState('features/call', {
+        call: (state) => state.callOnWorkspace,
+      }),
+      ...mapGetters('features/call', {
+        isNewCall: 'IS_NEW_CALL',
+      }),
+    },
     methods: {
       ...mapActions('features/call', {
         input: 'ADD_DIGIT',
+        makeCall: 'CALL',
       }),
+      setNumberFocus() {
+        const input = this.$refs['number-input'].$el.querySelector('input');
+        if (input) input.focus();
+      },
+      handleNumpadInput(value) {
+        this.input(value);
+        this.setNumberFocus();
+      },
+    },
+    mounted() {
+      this.setNumberFocus();
     },
   };
 </script>
@@ -45,6 +71,12 @@
     display: flex;
     flex-direction: column;
     flex-basis: 100%; // make child height 100& of container
+    gap: 25px;
+    height: 100%;
+
+    .wt-input ::v-deep .wt-input__input {
+      text-align: center;
+    }
 
     .numpad-btn {
       display: none;
@@ -62,11 +94,13 @@
 
     .numpad-state {
       @media screen and (max-height: 810px) {
-        margin: auto;
+        margin: 0 auto;
       }
     }
 
     .numpad-numbers {
+      align-self: flex-end;
+
       @media screen and (max-height: 810px) {
         position: absolute;
         bottom: 53px;

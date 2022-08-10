@@ -13,12 +13,12 @@ describe('form: actions', () => {
     const expectedForm = { jest: 'jest1' };
     const action = { id: 'jst' };
     const task = {
-      task: {
+      attempt: {
         form: { body },
         formAction: jest.fn(),
       },
     };
     form.actions.SEND_FORM(context, { action, task });
-    expect(task.task.formAction).toHaveBeenLastCalledWith(action.id, expectedForm);
+    expect(task.attempt.formAction).toHaveBeenLastCalledWith(action.id, expectedForm);
   });
 });

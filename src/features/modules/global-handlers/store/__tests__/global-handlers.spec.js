@@ -32,6 +32,13 @@ describe('global handlers store: actions', () => {
     expect(context.dispatch).toHaveBeenCalledWith('OPEN_DISCONNECT_POPUP');
   });
 
+  it(`SUBSCRIBE_TO_PHONE_REGISTRATION subscription commits SET_PHONE_REG
+   on "phone_registered" event`, async () => {
+    await globalsModule.actions.SUBSCRIBE_TO_PHONE_REGISTRATION(context);
+    await setTimeout(() => {}, 0); // wait for async getCliInstance()
+    expect(context.commit).toHaveBeenCalledWith('SET_PHONE_REG', 'phone_registered');
+  });
+
   it('OPEN_DISCONNECT_POPUP commits SET_DISCONNECT_POPUP with "true" value', () => {
     globalsModule.actions.OPEN_DISCONNECT_POPUP(context);
     expect(context.commit).toHaveBeenCalledWith('SET_DISCONNECT_POPUP', true);
@@ -49,5 +56,11 @@ describe('global handlers store: mutations', () => {
     const state = { isDisconnectPopup: false };
     globalsModule.mutations.SET_DISCONNECT_POPUP(state, value);
     expect(state.isDisconnectPopup).toEqual(value);
+  });
+  it('SET_PHONE_REG sets passed value to state isPhoneReg prop', () => {
+    const value = true;
+    const state = { isPhoneReg: false };
+    globalsModule.mutations.SET_PHONE_REG(state, value);
+    expect(state.isPhoneReg).toEqual(value);
   });
 });

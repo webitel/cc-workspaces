@@ -6,43 +6,22 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 export default {
   watch: {
     isAnyRinging(value) {
-      if (value) {
-        this.playRinging();
-      } else {
-        this.stopPlaying();
-      }
+      console.warn('is any ringing', value);
+      if (value) this.playRinging();
+      else this.stopPlaying();
     },
   },
 
   computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
     ...mapGetters('features/call', {
       isAnyRinging: 'IS_ANY_RINGING',
-    }),
-    ...mapGetters('features/notifications', {
-      isSoundPlaying: 'IS_PLAYING',
     }),
   },
 
   methods: {
     ...mapActions('features/notifications', {
-      playRinging: 'RING_CALL',
-      stopPlaying: 'STOP_PLAYING',
-      resetUnreadCount: 'RESET_UNREAD_COUNT',
-      removeStorageId: 'REMOVE_STORAGE_ID',
+      playRinging: 'HANDLE_ANY_CALL_RINGING',
+      stopPlaying: 'STOP_SOUND',
     }),
-
-    handleDestroy() {
-      if (this.isSoundPlaying) {
-        this.stopPlaying();
-      }
-      this.removeStorageId();
-    },
-  },
-
-  beforeDestroy() {
-    this.handleDestroy();
   },
 };

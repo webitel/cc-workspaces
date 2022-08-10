@@ -1,5 +1,9 @@
 <template>
   <wt-app-header>
+    <wt-chip
+      :color="this.isPhoneReg ? 'success' : 'secondary-50'"
+    >SIP
+    </wt-chip>
     <break-timer-popup/>
     <user-dnd-switcher></user-dnd-switcher>
 <!--    <wt-switcher-->
@@ -17,7 +21,7 @@
 
     <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
     <wt-header-actions
-      :user="user"
+      :user="userinfo"
       :build-info="buildInfo"
       @settings="settings"
       @logout="logoutUser"
@@ -32,6 +36,7 @@ import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
+import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 
 export default {
   name: 'app-header',
@@ -46,6 +51,7 @@ export default {
       release: process.env.VUE_APP_PACKAGE_VERSION,
       build: process.env.VUE_APP_BUILD_NUMBER,
     },
+    UserStatus,
   }),
   created() {
     this.restoreVideoParam();
@@ -55,8 +61,11 @@ export default {
     ...mapState('features/call', {
       isVideo: (state) => state.isVideo,
     }),
+    ...mapState('features/globals', {
+      isPhoneReg: (state) => state.isPhoneReg,
+    }),
     ...mapState('ui/userinfo', {
-      user: (state) => state,
+      userinfo: (state) => state,
       currentApp: (state) => state.thisApp,
     }),
     ...mapGetters('features/status', {

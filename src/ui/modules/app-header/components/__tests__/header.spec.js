@@ -6,9 +6,10 @@ const agent = {};
 
 const computed = {
   agent: () => agent,
-  user: () => ({}),
+  isPhoneReg: () => true,
+  userinfo: () => ({}),
   checkAccess: () => () => true,
-  currentApp: () => true,
+  currentApp: () => 'true',
   isAgent: () => true,
 };
 

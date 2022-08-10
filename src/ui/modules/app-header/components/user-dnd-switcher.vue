@@ -22,7 +22,7 @@ export default {
       user: (state) => state.user,
     }),
     isDnd() {
-      return this.user.status === UserStatus.DND;
+      return this.user.status?.[UserStatus.DND];
     },
   },
   methods: {

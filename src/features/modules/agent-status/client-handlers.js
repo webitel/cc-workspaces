@@ -1,5 +1,5 @@
-import parseUserStatus from './statusUtils/parseUserStatus';
 import APIRepository from '../../../app/api/APIRepository';
+import parseUserStatus from './statusUtils/parseUserStatus';
 
 const usersAPI = APIRepository.users;
 
@@ -9,10 +9,11 @@ const userStatusHandler = (user) => ({
 
 const actions = {
   // main action to start initialization
-  SUBSCRIBE_STATUS: async (context) => {
-    context.dispatch('SUBSCRIBE_AGENT_STATUS');
-    context.dispatch('SUBSCRIBE_USER_STATUS');
-  },
+  SUBSCRIBE_STATUS: async (context) => Promise
+    .allSettled([
+                  context.dispatch('SUBSCRIBE_AGENT_STATUS'),
+                  context.dispatch('SUBSCRIBE_USER_STATUS'),
+                ]),
 
   // main agent subscribe action
   SUBSCRIBE_AGENT_STATUS: async (context) => {

@@ -1,14 +1,8 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
 import OfflinePreview
   from '../offline-queue-preview.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
 describe('Other UIs', () => {
-  let state;
-  let store;
   let member;
   const name = 'jest';
 
@@ -16,28 +10,14 @@ describe('Other UIs', () => {
     member = {
       name,
     };
-    state = {
-      membersList: [member],
-    };
-    store = new Vuex.Store({
-      modules: {
-        member: {
-          namespaced: true,
-          state,
-        },
-      },
-    });
   });
 
   it('Correctly displays member name', () => {
     const wrapper = shallowMount(OfflinePreview, {
-      store,
-      localVue,
-      stubs: { Icon: true },
       propsData: {
-        member,
+        task: member,
       },
     });
-    expect(wrapper.find('.queue-preview-header__name').text()).toEqual(name);
+    expect(wrapper.vm.displayName).toBe(name);
   });
 });

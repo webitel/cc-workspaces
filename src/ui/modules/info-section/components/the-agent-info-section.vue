@@ -17,8 +17,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { CallActions, ConversationState } from 'webitel-sdk';
+import { mapGetters, mapState } from 'vuex';
+import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
@@ -52,7 +53,8 @@ export default {
     },
     taskState() {
       if ((this.taskState === CallActions.Hangup
-        || this.taskState === ConversationState.Closed)
+        || this.taskState === ConversationState.Closed
+        || this.taskState === JobState.Processing)
         && this.showProcessing) {
         this.currentTab = this.tabsObject.processing;
       }
@@ -68,6 +70,9 @@ export default {
   },
 
   computed: {
+    ...mapState('workspace', {
+      workspaceState: (state) => state.workspaceState,
+    }),
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
@@ -82,7 +87,7 @@ export default {
     },
 
     showClientInfo() {
-      return this.taskOnWorkspace?.id;
+      return this.taskOnWorkspace?.id && this.workspaceState !== WorkspaceState.JOB;
     },
 
     hasKnowledgeBase() {

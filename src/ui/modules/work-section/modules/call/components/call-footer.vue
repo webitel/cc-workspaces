@@ -1,71 +1,52 @@
 <template>
-  <footer class="call-footer">
-    <wt-divider/>
-    <div class="call-footer__actions">
-      <wt-rounded-action
-        class="call-action"
-        :class="{
+  <task-footer>
+    <wt-rounded-action
+      :active="isOnNumpad"
+      :class="{
           'hidden': !isNumpad,
          }"
-        :active="isOnNumpad"
-        icon="numpad"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', 'numpad')"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        class="call-action"
-        :class="{
+      class="call-action"
+      color="secondary"
+      icon="numpad"
+      rounded
+      wide
+      @click="$emit('openTab', 'numpad')"
+    ></wt-rounded-action>
+    <wt-rounded-action
+      :active="isOnHold"
+      :class="{
           'hidden': !isHold,
           'hold': isOnHold,
         }"
-        icon="hold"
-        :color="isOnHold ? 'hold' : 'secondary'"
-        :active="isOnHold"
-        rounded
-        wide
-        @click="toggleHold"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        class="call-action call-action__mic"
-        :class="{
+      :color="isOnHold ? 'hold' : 'secondary'"
+      class="call-action"
+      icon="hold"
+      rounded
+      wide
+      @click="toggleHold"
+    ></wt-rounded-action>
+    <wt-rounded-action
+      :active="isOnMuted"
+      :class="{
           'hidden': !isMuted,
         }"
-        :icon="isOnMuted ? 'mic-muted' : 'mic'"
-        :active="isOnMuted"
-        color="secondary"
-        rounded
-        wide
-        @click="toggleMute"
-      ></wt-rounded-action>
-<!--      <wt-rounded-action-->
-<!--        class="call-action"-->
-<!--        :class="{-->
-<!--          'hidden': !isRecord,-->
-<!--          'active': isOnRecord,-->
-<!--        }"-->
-<!--        :icon="isOnRecord ? 'rec-off' : 'rec'"-->
-<!--        color="secondary"-->
-<!--      ></wt-rounded-action>-->
-<!--      <wt-rounded-action-->
-<!--        class="call-action"-->
-<!--        :class="{-->
-<!--          'hidden': !isNote,-->
-<!--          'active': isOnNote,-->
-<!--        }"-->
-<!--        icon="note"-->
-<!--        color="secondary"-->
-<!--      ></wt-rounded-action>-->
-    </div>
-  </footer>
+      :icon="isOnMuted ? 'mic-muted' : 'mic'"
+      class="call-action call-action__mic"
+      color="secondary"
+      rounded
+      wide
+      @click="toggleMute"
+    ></wt-rounded-action>
+  </task-footer>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
+import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 
 export default {
   name: 'call-footer',
+  components: { TaskFooter },
   props: {
     currentTab: {
       type: String,
@@ -141,16 +122,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.call-footer {
-  display: flex;
-  flex-direction: column;
-}
-
-.call-footer__actions {
-  display: flex;
-  justify-content: space-evenly;
-  padding: 10px 0;
-  gap: 10px;
-  margin: 0 20px;
-}
 </style>

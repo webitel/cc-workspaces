@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import ProcessingTab from '../processing-tab.vue';
 
 describe('ProcessingTab', () => {
-  const task = { task: {} };
+  const task = { attempt: {} };
 
   const propsData = {
     task,

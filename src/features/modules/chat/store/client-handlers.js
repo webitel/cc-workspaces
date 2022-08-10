@@ -36,13 +36,13 @@ const actions = {
     if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       context.dispatch('SET_WORKSPACE', chat);
     }
-    context.dispatch('NOTIFY', { action, chat });
+    context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
   },
 
   HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
     const message = chat.messages[chat.messages.length - 1];
     if (!context.getters.IS_MY_MESSAGE(message)) {
-      context.dispatch('NOTIFY', { action, chat });
+      context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
     }
     context.dispatch('CHAT_INSERT_TO_START', chat);
   },
@@ -50,11 +50,11 @@ const actions = {
   HANDLE_DESTROY_ACTION: (context, { chat }) => {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
-    context.dispatch('RESET_UNREAD_COUNT');
+    context.dispatch('_RESET_UNREAD_COUNT');
   },
 
   HANDLE_CLOSE_ACTION: (context, { action, chat }) => {
-    context.dispatch('NOTIFY', { action, chat });
+    context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
   },
 };
 

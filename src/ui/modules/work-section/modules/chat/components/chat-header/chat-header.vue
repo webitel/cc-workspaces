@@ -1,40 +1,33 @@
 <template>
-  <header class="chat-header">
-    <div class="chat-header__cell-wrapper"></div>
-    <div class="chat-header__cell-wrapper"></div>
-    <div class="chat-header__cell-wrapper"></div>
-    <div class="chat-header__cell-wrapper">
-      <img src="../../../shared/assets/avatars/default-avatar.svg" alt="client pic">
-    </div>
-    <div class="chat-header__cell-wrapper"></div>
-    <div class="chat-header__cell-wrapper">
+  <task-header>
+    <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
-        icon="chat-transfer"
         color="transfer"
+        icon="chat-transfer"
         rounded
         wide
         @click="$emit('openTab', 'transfer')"
       ></wt-rounded-action>
-    </div>
-    <div class="chat-header__cell-wrapper">
       <wt-rounded-action
         v-show="isCloseAction"
-        icon="chat-end"
         color="danger"
+        icon="chat-end"
         rounded
         wide
         @click="close"
       ></wt-rounded-action>
-    </div>
-  </header>
+    </template>
+  </task-header>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 
 export default {
   name: 'chat-header',
+  components: { TaskHeader },
   computed: {
     ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
@@ -50,18 +43,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-header {
-  box-sizing: border-box;
-  height: 100px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-gap: 10px;
-  padding: 10px;
-
-  .chat-header__cell-wrapper {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-  }
-}
 </style>

@@ -133,15 +133,15 @@ describe('features/chat store: actions', () => {
     expect(context.commit).toHaveBeenCalledWith('SET_MEDIA_VIEW', null);
   });
 
-  it('NOTIFY action dispatches global NOTIFY action with action and chat params', () => {
+  it('HANDLE_CHAT_EVENT action dispatches global HANDLE_CHAT_EVENT action with action and chat params', () => {
     const action = 'message';
-    chatModule.actions.NOTIFY(context, { action, chat });
-    expect(context.dispatch).toHaveBeenCalledWith('features/notifications/NOTIFY', { action, chat }, { root: true });
+    chatModule.actions.HANDLE_CHAT_EVENT(context, { action, chat });
+    expect(context.dispatch).toHaveBeenCalledWith('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
   });
 
-  it('RESET_UNREAD_COUNT action dispatches global RESET_UNREAD_COUNT action', () => {
-    chatModule.actions.RESET_UNREAD_COUNT(context);
-    expect(context.dispatch).toHaveBeenCalledWith('features/notifications/RESET_UNREAD_COUNT', null, { root: true });
+  it('_RESET_UNREAD_COUNT action dispatches global _RESET_UNREAD_COUNT action', () => {
+    chatModule.actions._RESET_UNREAD_COUNT(context);
+    expect(context.dispatch).toHaveBeenCalledWith('features/notifications/_RESET_UNREAD_COUNT', null, { root: true });
   });
 
   it('INITIALIZE_CHAT_PLAYERS sets array with passed player to chatOnWorkspace in state', () => {
