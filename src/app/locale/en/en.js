@@ -168,6 +168,9 @@ export default {
       [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
       [DeviceNotAllowPermissionError.id]: 'Microphone access is denied. Cannot perform action.',
     },
+    endpoint: {
+      noLicense: 'You can not work in Workspace because your license has expired.',
+    },
   },
   notifications: {
     message: 'New message from {name}',

@@ -167,6 +167,9 @@ export default {
       [DeviceNotFoundError.id]: 'Мікрофон не під\'єднаний. Неможливо виконати дію.',
       [DeviceNotAllowPermissionError.id]: 'Немає доступу до мікрофона. Неможливо виконати дію.',
     },
+    endpoint: {
+      noLicense: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
+    },
   },
   notifications: {
     message: 'Нове повідомлення від {name}',

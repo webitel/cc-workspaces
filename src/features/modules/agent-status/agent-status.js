@@ -6,7 +6,7 @@ import UserStatus from './statusUtils/UserStatus';
 const usersAPI = APIRepository.users;
 
 const state = {
-  agent: {},
+  agent: { status: AgentStatus.Offline },
   user: { status: {} },
 };
 

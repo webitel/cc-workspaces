@@ -44,6 +44,7 @@ export default {
   data: () => ({
     widgets: Widgets,
     data: {
+      callInbound: 0,
       callHandled: 0,
       callMissed: 0,
       avgHoldSec: 0,
