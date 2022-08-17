@@ -41,6 +41,7 @@
     <template slot="actions">
       <wt-button
         wide
+        :loading="loading"
         @click="close"
       >
         {{ $t('reusable.ok') }}
@@ -52,6 +53,12 @@
 <script>
 export default {
   name: 'welcome-popup',
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
     mic: {
       status: false,
@@ -64,7 +71,7 @@ export default {
   }),
   methods: {
     close() {
-      this.$emit('input');
+      if (!this.loading) this.$emit('input');
     },
     async checkMic() {
       try {

@@ -10,6 +10,7 @@
 
     <welcome-popup
       v-if="isWelcomePopup"
+      :loading="isInitLoading"
       @input="initSession"
     ></welcome-popup>
 
@@ -56,6 +57,7 @@ export default {
     WelcomePopup,
   },
   data: () => ({
+    isInitLoading: false,
     isWelcomePopup: true,
   }),
 
@@ -80,6 +82,7 @@ export default {
 
     async initSession() {
       try {
+        this.isInitLoading = true;
         await this.openSession();
         if (this.$route.query.failureRefresh) {
           this.$router.push({ ...this.$router.currentRoute, query: { failureRefresh: undefined } });
@@ -90,6 +93,7 @@ export default {
           document.location.reload();
         }
       } finally {
+        this.isInitLoading = false;
         this.isWelcomePopup = false;
       }
     },
