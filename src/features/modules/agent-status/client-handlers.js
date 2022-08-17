@@ -1,4 +1,6 @@
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import APIRepository from '../../../app/api/APIRepository';
+import i18n from '../../../app/locale/i18n';
 import parseUserStatus from './statusUtils/parseUserStatus';
 
 const usersAPI = APIRepository.users;
@@ -18,9 +20,15 @@ const actions = {
   // main agent subscribe action
   SUBSCRIBE_AGENT_STATUS: async (context) => {
     const client = await context.rootState.client.getCliInstance();
-    try {
-      const agent = await client.agentSession();
 
+    let agent;
+    try {
+      agent = await client.agentSession();
+    } catch (err) {
+      eventBus.$emit('notification', { type: 'error', text: i18n.t('error.endpoint.noLicense') });
+    }
+
+    try {
       await client.subscribeAgentsStatus(async (state, agent) => {
         context.commit('SET_AGENT_INSTANCE', agent);
       }, { agent_id: agent.agentId });
