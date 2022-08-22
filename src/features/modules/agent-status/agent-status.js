@@ -6,12 +6,13 @@ import UserStatus from './statusUtils/UserStatus';
 const usersAPI = APIRepository.users;
 
 const state = {
-  agent: { status: AgentStatus.Offline },
+  agent: null,
   user: { status: {} },
 };
 
 const getters = {
-  IS_AGENT: (state) => state.agent.status !== AgentStatus.Offline,
+  IS_AGENT: (state) => !!state.agent,
+  IS_CCENTER_ON: (state, getters) => getters.IS_AGENT && state.agent.status !== AgentStatus.Offline,
 };
 
 const actions = {
@@ -20,21 +21,24 @@ const actions = {
   SET_AGENT_WAITING_STATUS: (context) => {
     try {
       context.state.agent.online();
-    } catch {
+    } catch (err) {
+      throw err;
     }
   },
 
   SET_AGENT_PAUSE_STATUS: (context, note = '') => {
     try {
       context.state.agent.pause(note);
-    } catch {
+    } catch (err) {
+      throw err;
     }
   },
 
   AGENT_LOGOUT: (context) => {
     try {
       context.state.agent.offline();
-    } catch {
+    } catch (err) {
+      throw err;
     }
   },
 
@@ -45,7 +49,7 @@ const actions = {
 
   TOGGLE_CONTACT_CENTER_MODE: async (context) => {
     try {
-      if (context.getters.IS_AGENT) {
+      if (context.getters.IS_CCENTER_ON) {
         await context.dispatch('AGENT_LOGOUT');
       } else {
         await context.dispatch('SET_AGENT_WAITING_STATUS');

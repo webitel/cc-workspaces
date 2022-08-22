@@ -1,3 +1,4 @@
+import { throwError } from '@vue/vue2-jest/lib/utils';
 import clientHandlers from '../client-handlers';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
@@ -41,6 +42,23 @@ describe('features/status store client handlers: actions', () => {
     await clientHandlers.actions.SUBSCRIBE_AGENT_STATUS(context);
     mockSocket.changeAgentStatus(null, agent);
     expect(context.commit).toHaveBeenCalledWith('SET_AGENT_INSTANCE', agent);
+  });
+
+  it('SUBSCRIBE_AGENT_STATUS does commit agent object', async () => {
+    const agent = {};
+    mockSocket.agentSession = jest.fn(() => agent);
+    mockSocket.subscribeAgentsStatus = jest.fn();
+    await clientHandlers.actions.SUBSCRIBE_AGENT_STATUS(context);
+    expect(mockSocket.agentSession).toHaveBeenCalled();
+    expect(context.commit).toHaveBeenCalledWith('SET_AGENT_INSTANCE', agent);
+  });
+
+  it('if SUBSCRIBE_AGENT_STATUS agentSession throws error, doesnt commit agent change', async () => {
+    mockSocket.agentSession = jest.fn(() => throwError('msg'));
+    mockSocket.subscribeAgentsStatus = jest.fn();
+    await clientHandlers.actions.SUBSCRIBE_AGENT_STATUS(context);
+    expect(mockSocket.agentSession).toHaveBeenCalled();
+    expect(context.commit).not.toHaveBeenCalled();
   });
 
   it('SUBSCRIBE_USER_STATUS calls subscribeUsersStatus() and dispatches GET_CURRENT_USER_STATUS', async () => {

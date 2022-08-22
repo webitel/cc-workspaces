@@ -1,5 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
+import BreakTimerPopup from '../../../popups/break-popup/break-timer-popup.vue';
+import AgentStatusSelect from '../agent-status-select.vue';
 import Header from '../app-header.vue';
 
 const agent = {};
@@ -10,6 +12,7 @@ const computed = {
   userinfo: () => ({}),
   checkAccess: () => () => true,
   currentApp: () => 'true',
+  isCcenterOn: () => true,
   isAgent: () => true,
 };
 
@@ -57,5 +60,40 @@ describe('Header on agent Offline', () => {
     ccenterSwitcher.vm.$emit('change');
     expect(mock)
       .toHaveBeenCalled();
+  });
+
+  it('hide ccenter switcher if isAgent is falsy', () => {
+    const wrapper = shallowMount(Header, {
+      computed: {
+        ...computed,
+        isAgent() { return false; },
+      },
+    });
+    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' })
+                                   .wrappers
+                                   .find((switcher) => switcher.vm.label.includes('callCenter'));
+    expect(ccenterSwitcher).toBeFalsy();
+  });
+
+  it('hide ccenter status select if isAgent is falsy', () => {
+    const wrapper = shallowMount(Header, {
+      computed: {
+        ...computed,
+        isAgent() { return false; },
+      },
+    });
+    const statusSelect = wrapper.findComponent(AgentStatusSelect);
+    expect(statusSelect.exists()).toBe(false);
+  });
+
+  it('hide break timer popup if isAgent is falsy', () => {
+    const wrapper = shallowMount(Header, {
+      computed: {
+        ...computed,
+        isAgent() { return false; },
+      },
+    });
+    const component = wrapper.findComponent(BreakTimerPopup);
+    expect(component.exists()).toBe(false);
   });
 });

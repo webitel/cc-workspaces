@@ -4,7 +4,9 @@
       :color="this.isPhoneReg ? 'success' : 'secondary-50'"
     >SIP
     </wt-chip>
-    <break-timer-popup/>
+    <break-timer-popup
+      v-if="isAgent"
+    ></break-timer-popup>
     <user-dnd-switcher></user-dnd-switcher>
 <!--    <wt-switcher-->
 <!--      :value="isVideo"-->
@@ -12,12 +14,15 @@
 <!--      @change="toggleVideo"-->
 <!--    ></wt-switcher>-->
     <wt-switcher
-      :value="isAgent"
+      v-if="isAgent"
+      :value="isCcenterOn"
       :label="$t('agentStatus.callCenter')"
       @change="toggleCCenterMode"
     ></wt-switcher>
 
-    <agent-status-select/>
+    <agent-status-select
+      v-if="isAgent"
+    ></agent-status-select>
 
     <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
     <wt-header-actions
@@ -70,6 +75,7 @@ export default {
     }),
     ...mapGetters('features/status', {
       isAgent: 'IS_AGENT',
+      isCcenterOn: 'IS_CCENTER_ON',
     }),
     ...mapGetters('ui/userinfo', {
       checkAccess: 'CHECK_APP_ACCESS',
