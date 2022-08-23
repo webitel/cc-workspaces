@@ -58,9 +58,6 @@
     },
 
     computed: {
-      ...mapState('workspace', {
-        workspaceState: (state) => state.workspaceState,
-      }),
       ...mapState('features/call', {
         call: (state) => state.callOnWorkspace,
       }),
@@ -69,6 +66,9 @@
       }),
       ...mapState('ui/userinfo', {
         userId: (state) => state.userId,
+      }),
+      ...mapGetters('workspace', {
+        workspaceState: 'WORKSRACE_STATE',
       }),
       ...mapGetters('features/call', {
         isNewCall: 'IS_NEW_CALL',

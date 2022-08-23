@@ -94,7 +94,7 @@ const actions = {
   },
 
   SET_WORKSPACE: (context, chat) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CHAT, { root: true });
+    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true });
     context.commit('SET_WORKSPACE', chat);
   },
 

@@ -45,7 +45,7 @@ const actions = {
   },
 
   SET_WORKSPACE: (context, memberOnWs) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.MEMBER, { root: true });
+    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER, task: memberOnWs }, { root: true });
     context.commit('SET_WORKSPACE', memberOnWs);
   },
 };

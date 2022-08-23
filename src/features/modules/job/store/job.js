@@ -9,7 +9,7 @@ const state = {
 const actions = {
   ...clientHandlers.actions,
   OPEN_JOB: (context, job) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.JOB, { root: true });
+    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.JOB, task: job }, { root: true });
     context.commit('SET_WORKSPACE', job);
   },
   REMOVE_JOB: (context, job) => {

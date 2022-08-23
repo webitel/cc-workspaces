@@ -186,7 +186,7 @@ const actions = {
   },
 
   SET_WORKSPACE: (context, call) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CALL, { root: true });
+    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CALL, task: call }, { root: true });
     context.commit('SET_WORKSPACE', call);
   },
 
