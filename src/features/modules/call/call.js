@@ -5,7 +5,6 @@ import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
   callList: [],
-  callOnWorkspace: {},
   isVideo: false,
 };
 const getters = {
