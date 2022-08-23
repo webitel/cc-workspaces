@@ -1,5 +1,6 @@
 <template>
-  <wt-popup v-if="isDisconnectPopup" class="disconnect-popup" min-width="480" @close="closePopup">
+<!--  v-show instead of v-if: https://my.webitel.com/browse/WTEL-2827 -->
+  <wt-popup v-show="isDisconnectPopup" class="disconnect-popup" min-width="480" @close="closePopup">
     <template slot="title">{{ $t('disconnectPopup.title') }}</template>
     <template slot="main">
       <article class="disconnect-popup__main">
@@ -7,7 +8,6 @@
           class="disconnect-popup__img"
           src="../assets/disconnect-popup-animation.svg"
           alt="disconnect pic"
-          loading="lazy"
         >
         <p class="disconnect-popup__main__text">{{ $t('disconnectPopup.mainText') }}</p>
       </article>
@@ -26,6 +26,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 
+// HOW TO TEST DISCONNECT: await cli.socket.close(3001)
 export default {
   name: 'disconnect-popup',
   computed: {
