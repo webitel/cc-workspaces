@@ -7,25 +7,25 @@ const job = {
 
 describe('features/job store: actions', () => {
   const context = {
-    state: { jobOnWorkspace: job },
+    getters: { JOB_ON_WORKSPACE: job },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };
 
   beforeEach(() => {
-    context.state = { jobOnWorkspace: job };
+    context.getters = { JOB_ON_WORKSPACE: job };
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
 
   it('OPEN_JOB dispatches SET_WORKSPACE_STATE action with passed job as param', () => {
     jobModule.actions.OPEN_JOB(context, job);
-    expect(context.dispatch).toHaveBeenCalledWith('workspace/SET_WORKSPACE_STATE', WorkspaceStates.JOB, { root: true });
+    expect(context.dispatch).toHaveBeenCalledWith('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.JOB, task: job }, { root: true });
   });
 
-  it('REMOVE_JOB commits REMOVE_JOB mutation', () => {
+  it('REMOVE_JOB dispatches RESET_WORKSPACE mutation if passed job is equal to job on workspace', () => {
     jobModule.actions.REMOVE_JOB(context, job);
-    expect(context.commit).toHaveBeenCalledWith('REMOVE_JOB', job);
+    expect(context.dispatch).toHaveBeenCalledWith('RESET_WORKSPACE');
   });
 
   it('RESET_WORKSPACE dispatches RESET_WORKSPACE_STATE action with passed null as param', () => {

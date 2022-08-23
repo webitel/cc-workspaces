@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 
 export default {
@@ -54,10 +54,8 @@ export default {
   },
 
   computed: {
-    ...mapState('features/call', {
-      call: (state) => state.callOnWorkspace,
-    }),
     ...mapGetters('features/call', {
+      call: 'CALL_ON_WORKSPACE',
       isNewCall: 'IS_NEW_CALL',
     }),
 

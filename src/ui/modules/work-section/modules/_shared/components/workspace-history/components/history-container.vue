@@ -58,19 +58,17 @@
     },
 
     computed: {
-      ...mapState('workspace', {
-        workspaceState: (state) => state.workspaceState,
-      }),
-      ...mapState('features/call', {
-        call: (state) => state.callOnWorkspace,
-      }),
-      ...mapState('features/member', {
-        member: (state) => state.memberOnWorkspace,
-      }),
       ...mapState('ui/userinfo', {
         userId: (state) => state.userId,
       }),
+      ...mapGetters('workspace', {
+        workspaceState: 'WORKSRACE_STATE',
+      }),
+      ...mapGetters('features/member', {
+        member: 'MEMBER_ON_WORKSPACE',
+      }),
       ...mapGetters('features/call', {
+        call: 'CALL_ON_WORKSPACE',
         isNewCall: 'IS_NEW_CALL',
       }),
     },

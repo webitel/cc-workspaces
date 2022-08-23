@@ -33,7 +33,7 @@ export default {
 
   computed: {
     ...mapState('features/member', {
-      dataList: (state) => state.membersList,
+      dataList: (state) => state.memberList,
     }),
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
 export default {
@@ -38,8 +38,8 @@ export default {
     },
   },
   computed: {
-    ...mapState('features/member', {
-      member: (state) => state.memberOnWorkspace,
+    ...mapGetters('features/member', {
+      member: 'MEMBER_ON_WORKSPACE',
     }),
     ...mapGetters('features/member', {
       isCommSelected: 'IS_COMMUNICATION_SELECTED',

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
@@ -25,8 +25,8 @@ export default {
   },
 
   computed: {
-    ...mapState('workspace', {
-      state: (state) => state.workspaceState,
+    ...mapGetters('workspace', {
+      state: 'WORKSRACE_STATE',
     }),
     workspaceComponent() {
       switch (this.state) {

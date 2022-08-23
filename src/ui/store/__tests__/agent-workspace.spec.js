@@ -9,12 +9,18 @@ jest.spyOn(webSocketClientController, 'destroyCliInstance')
 
 describe('workspace store: actions', () => {
   const context = {
+    state: {
+      stateHistory: [],
+    },
     rootState: { client: webSocketClientController },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };
 
   beforeEach(() => {
+    context.state = {
+      stateHistory: [],
+    };
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
@@ -64,21 +70,31 @@ describe('workspace store: actions', () => {
     expect(destroyCliInstanceMock).toHaveBeenCalled();
   });
 
-  it('SET_WORKSPACE_STATE commits SET_WORKSPACE_STATE with passed state', () => {
-    workspaceModule.actions.SET_WORKSPACE_STATE(context, WorkspaceStates.CALL);
-    expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE_STATE', WorkspaceStates.CALL);
+  it('SET_WORKSPACE_STATE commits ADD_WORKSPACE_STATE with passed state', () => {
+    const task = {};
+    workspaceModule.actions.SET_WORKSPACE_STATE(context, { type: WorkspaceStates.CALL, task });
+    expect(context.commit).toHaveBeenCalledWith('ADD_WORKSPACE_STATE', { type: WorkspaceStates.CALL, task });
   });
 
-  it('RESET_WORKSPACE_STATE commits SET_WORKSPACE_STATE with empty value', () => {
+  it('RESET_WORKSPACE_STATE commits SET_STATE_HISTORY with empty array, if init length is 0 too', () => {
+    context.state.stateHistory = [];
     workspaceModule.actions.RESET_WORKSPACE_STATE(context);
-    expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE_STATE', null);
+    expect(context.commit).toHaveBeenCalledWith('SET_STATE_HISTORY', []);
   });
 });
 
-describe('workspace store: actions', () => {
+describe('workspace store: mutations', () => {
   it('SET_WORKSPACE_STATE sets passed value to workspaceState state prop', () => {
-    const state = { workspaceState: null };
-    workspaceModule.mutations.SET_WORKSPACE_STATE(state, WorkspaceStates.CALL);
-    expect(state.workspaceState).toBe(WorkspaceStates.CALL);
+    const state = { stateHistory: [] };
+    const task = {};
+    const _state = { type: WorkspaceStates.CALL, task };
+    workspaceModule.mutations.ADD_WORKSPACE_STATE(state, _state);
+    expect(state.stateHistory).toEqual([_state]);
+  });
+  it('SET_STATE_HISTORY sets passed value to state', () => {
+    const state = { stateHistory: [] };
+    const stateHistory = [1, 2, 3];
+    workspaceModule.mutations.SET_STATE_HISTORY(state, stateHistory);
+    expect(state.stateHistory).toBe(stateHistory);
   });
 });

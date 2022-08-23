@@ -64,7 +64,7 @@ export default {
       isNewMissed: (state) => state.isNewMissed,
     }),
     ...mapState('features/member', {
-      membersList: (state) => state.membersList,
+      membersList: (state) => state.memberList,
     }),
 
     tabs() {

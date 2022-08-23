@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
@@ -70,10 +70,8 @@ export default {
   },
 
   computed: {
-    ...mapState('workspace', {
-      workspaceState: (state) => state.workspaceState,
-    }),
     ...mapGetters('workspace', {
+      workspaceState: 'WORKSRACE_STATE',
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
     ...mapGetters('ui/infoSec/processing', {
