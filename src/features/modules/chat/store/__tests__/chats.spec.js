@@ -2,7 +2,7 @@ import ChatTransferDestination from '../../../../../ui/modules/work-section/modu
 import WorkspaceStates from '../../../../../ui/enums/WorkspaceState.enum';
 import chatModule from '../chat';
 
-const chat = {
+const chatOnWorkspace = {
   id: '1',
   join: jest.fn(),
   decline: jest.fn(),
@@ -15,36 +15,38 @@ const chat = {
 
 describe('features/chat store: actions', () => {
   const context = {
-    state: { chatOnWorkspace: chat },
+    state: {},
+    getters: { CHAT_ON_WORKSPACE: chatOnWorkspace },
     dispatch: jest.fn(),
     commit: jest.fn(),
   };
 
   beforeEach(() => {
-    context.state = { chatOnWorkspace: chat };
-    chat.join.mockClear();
-    chat.leave.mockClear();
-    chat.decline.mockClear();
-    chat.transferToUser.mockClear();
-    chat.transferToPlan.mockClear();
+    context.state = {};
+    context.getters = { CHAT_ON_WORKSPACE: chatOnWorkspace };
+    chatOnWorkspace.join.mockClear();
+    chatOnWorkspace.leave.mockClear();
+    chatOnWorkspace.decline.mockClear();
+    chatOnWorkspace.transferToUser.mockClear();
+    chatOnWorkspace.transferToPlan.mockClear();
     context.dispatch.mockClear();
     context.commit.mockClear();
   });
 
   it('ACCEPT action calls chat join() method', () => {
     chatModule.actions.ACCEPT(context);
-    expect(chat.join).toHaveBeenCalled();
+    expect(chatOnWorkspace.join).toHaveBeenCalled();
   });
 
   it('ACCEPT action calls chat join() method', () => {
     chatModule.actions.ACCEPT(context);
-    expect(chat.join).toHaveBeenCalled();
+    expect(chatOnWorkspace.join).toHaveBeenCalled();
   });
 
   it('SEND action calls chat send() method', () => {
     const message = 'jest';
     chatModule.actions.SEND(context, message);
-    expect(chat.send).toHaveBeenCalledWith(message);
+    expect(chatOnWorkspace.send).toHaveBeenCalledWith(message);
   });
 
   it('SEND_FILE action calls chat send() method, if 1 file is passed', () => {
@@ -65,31 +67,31 @@ describe('features/chat store: actions', () => {
     const id = 'jest';
     const payload = { destination: ChatTransferDestination.USER, item: { id } };
     chatModule.actions.TRANSFER(context, payload);
-    expect(chat.transferToUser).toHaveBeenCalledWith(id);
+    expect(chatOnWorkspace.transferToUser).toHaveBeenCalledWith(id);
   });
 
   it('TRANSFER action calls chat transferToPlan() method is passed destination is CHATPLAN', () => {
     const id = 'jest';
     const payload = { destination: ChatTransferDestination.CHATPLAN, item: { id } };
     chatModule.actions.TRANSFER(context, payload);
-    expect(chat.transferToPlan).toHaveBeenCalledWith(id);
+    expect(chatOnWorkspace.transferToPlan).toHaveBeenCalledWith(id);
   });
 
   it('CLOSE action calls chat leave() method, if allowLeave is true', () => {
-    chat.allowLeave = true;
+    chatOnWorkspace.allowLeave = true;
     chatModule.actions.CLOSE(context);
-    expect(chat.leave).toHaveBeenCalled();
+    expect(chatOnWorkspace.leave).toHaveBeenCalled();
   });
 
   it('CLOSE action calls chat decline() method', () => {
-    chat.allowLeave = false;
+    chatOnWorkspace.allowLeave = false;
     chatModule.actions.CLOSE(context);
-    expect(chat.decline).toHaveBeenCalled();
+    expect(chatOnWorkspace.decline).toHaveBeenCalled();
   });
 
   it('OPEN_CHAT dispatches SET_WORKSPACE action with passed chat as param', () => {
-    chatModule.actions.OPEN_CHAT(context, chat);
-    expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', chat);
+    chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
+    expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', chatOnWorkspace);
   });
 
   it('CHAT_INSERT_TO_START changes passed chat position to start in chatList array', () => {
@@ -103,23 +105,13 @@ describe('features/chat store: actions', () => {
   });
 
   it('SET_WORKSPACE dispatches global SET_WORKSPACE_STATE action', () => {
-    chatModule.actions.SET_WORKSPACE(context, chat);
-    expect(context.dispatch).toHaveBeenCalledWith('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CHAT, { root: true });
-  });
-
-  it('SET_WORKSPACE commits local SET_WORKSPACE with passed chat', () => {
-    chatModule.actions.SET_WORKSPACE(context, chat);
-    expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE', chat);
+    chatModule.actions.SET_WORKSPACE(context, chatOnWorkspace);
+    expect(context.dispatch).toHaveBeenCalledWith('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chatOnWorkspace }, { root: true });
   });
 
   it('RESET_WORKSPACE dispatches global SET_WORKSPACE_STATE action', () => {
     chatModule.actions.RESET_WORKSPACE(context);
     expect(context.dispatch).toHaveBeenCalledWith('workspace/RESET_WORKSPACE_STATE', null, { root: true });
-  });
-
-  it('RESET_WORKSPACE commits local SET_WORKSPACE with empty object', () => {
-    chatModule.actions.RESET_WORKSPACE(context);
-    expect(context.commit).toHaveBeenCalledWith('SET_WORKSPACE', {});
   });
 
   it('OPEN_MEDIA commits SET_MEDIA_VIEW mutation with passed message to open', () => {
@@ -135,8 +127,8 @@ describe('features/chat store: actions', () => {
 
   it('HANDLE_CHAT_EVENT action dispatches global HANDLE_CHAT_EVENT action with action and chat params', () => {
     const action = 'message';
-    chatModule.actions.HANDLE_CHAT_EVENT(context, { action, chat });
-    expect(context.dispatch).toHaveBeenCalledWith('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
+    chatModule.actions.HANDLE_CHAT_EVENT(context, { action, chat: chatOnWorkspace });
+    expect(context.dispatch).toHaveBeenCalledWith('features/notifications/HANDLE_CHAT_EVENT', { action, chat: chatOnWorkspace }, { root: true });
   });
 
   it('_RESET_UNREAD_COUNT action dispatches global _RESET_UNREAD_COUNT action', () => {
@@ -146,21 +138,21 @@ describe('features/chat store: actions', () => {
 
   it('INITIALIZE_CHAT_PLAYERS sets array with passed player to chatOnWorkspace in state', () => {
     const player = { jest: 1 };
-    expect(context.state.chatOnWorkspace.players).toBeFalsy();
+    expect(chatOnWorkspace.players).toBeFalsy();
     chatModule.actions.INITIALIZE_CHAT_PLAYERS(context, { player });
-    expect(context.state.chatOnWorkspace.players).toEqual([player]);
+    expect(chatOnWorkspace.players).toEqual([player]);
   });
 
   it('CLEAN_CHAT_PLAYERS removes chat.players property', () => {
-    context.state.chatOnWorkspace.players = ['jest'];
+    chatOnWorkspace.players = ['jest'];
     chatModule.actions.CLEAN_CHAT_PLAYERS(context);
-    expect(context.state.chatOnWorkspace.players).toBe(undefined);
+    expect(chatOnWorkspace.players).toBe(undefined);
   });
 
   it('ATTACH_PLAYER_TO_CHAT dispatches INITIALIZE_CHAT_PLAYERS if chatOnWorkspace has no players', () => {
     const player = { on: jest.fn() };
     chatModule.actions.ATTACH_PLAYER_TO_CHAT(context, { player });
-    expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_CHAT_PLAYERS', { player, chat: context.state.chatOnWorkspace });
+    expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_CHAT_PLAYERS', { player, chat: chatOnWorkspace });
   });
 
   it('ATTACH_PLAYER_TO_CHAT sets working watcher on player "play" event', () => {
@@ -178,7 +170,7 @@ describe('features/chat store: actions', () => {
   it('PAUSE_ALL_CHAT_PLAYERS_EXCEPT triggers player.pause() on all players in chatOnWorkspace (except the passed one)', () => {
     const player = { pause: jest.fn() };
     const player2 = { pause: jest.fn() };
-    context.state.chatOnWorkspace.players = [player, player2];
+    chatOnWorkspace.players = [player, player2];
     chatModule.actions.PAUSE_ALL_CHAT_PLAYERS_EXCEPT(context, { player });
     expect(player.pause).not.toHaveBeenCalled();
     expect(player2.pause).toHaveBeenCalled();
@@ -187,31 +179,24 @@ describe('features/chat store: actions', () => {
 
 describe('features/chat store: mutations', () => {
   it('SET_CHAT_LIST sets chatList to state', () => {
-    const chatList = [chat];
+    const chatList = [chatOnWorkspace];
     const state = { chatList: [] };
     chatModule.mutations.SET_CHAT_LIST(state, chatList);
     expect(state.chatList).toEqual(chatList);
   });
 
   it('ADD_CHAT pushes new chat to chatList', () => {
-    const chatList = [chat];
+    const chatList = [chatOnWorkspace];
     const state = { chatList: [] };
-    chatModule.mutations.ADD_CHAT(state, chat);
+    chatModule.mutations.ADD_CHAT(state, chatOnWorkspace);
     expect(state.chatList).toEqual(chatList);
   });
 
   it('REMOVE_CHAT removes existing chat from chatList', () => {
     const chatList = [];
-    const state = { chatList: [chat] };
-    chatModule.mutations.REMOVE_CHAT(state, chat);
+    const state = { chatList: [chatOnWorkspace] };
+    chatModule.mutations.REMOVE_CHAT(state, chatOnWorkspace);
     expect(state.chatList).toEqual(chatList);
-  });
-
-  it('SET_WORKSPACE sets passed chat to chatOnWorkspace state prop', () => {
-    const chatOnWorkspace = chat;
-    const state = { chatOnWorkspace: {} };
-    chatModule.mutations.SET_WORKSPACE(state, chat);
-    expect(state.chatOnWorkspace).toEqual(chatOnWorkspace);
   });
 
   it('SET_MEDIA_VIEW sets passed message to mediaView state prop', () => {

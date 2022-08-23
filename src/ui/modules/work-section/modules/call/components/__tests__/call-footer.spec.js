@@ -9,11 +9,12 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('Footer buttons', () => {
-  let state;
+  let getters;
   let store;
+  let callOnWorkspace;
 
   beforeEach(() => {
-    const callOnWorkspace = {
+    callOnWorkspace = {
         // id: 1,
         mute: jest.fn(),
         muted: false,
@@ -22,8 +23,8 @@ describe('Footer buttons', () => {
         isHold: false,
         allowHold: true,
     };
-    state = {
-      callOnWorkspace,
+    getters = {
+      CALL_ON_WORKSPACE: () => callOnWorkspace,
       // callList: [callOnWorkspace],
     };
     store = new Vuex.Store({
@@ -33,7 +34,7 @@ describe('Footer buttons', () => {
           modules: {
             call: {
               ...callModule,
-              state,
+              getters,
             },
           },
         },
@@ -61,8 +62,8 @@ describe('Footer buttons', () => {
       .not
       .toContain('hidden');
     mute.vm.$emit('click');
-    expect(state.callOnWorkspace.mute)
-      .toHaveBeenCalledWith(!state.callOnWorkspace.muted);
+    expect(callOnWorkspace.mute)
+      .toHaveBeenCalledWith(!callOnWorkspace.muted);
   });
 
   it('Holds call', () => {
@@ -75,7 +76,7 @@ describe('Footer buttons', () => {
       .not
       .toContain('hidden');
     hold.vm.$emit('click');
-    expect(state.callOnWorkspace.toggleHold)
+    expect(callOnWorkspace.toggleHold)
       .toHaveBeenCalled();
   });
 });
