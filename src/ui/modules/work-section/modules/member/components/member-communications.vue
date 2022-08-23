@@ -14,16 +14,21 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
   export default {
     name: 'member-communications',
 
     computed: {
       ...mapState('features/member', {
-        communications: (state) => state.memberOnWorkspace.communications,
         selectedCommId: (state) => state.selectedCommId,
       }),
+      ...mapGetters('features/member', {
+        member: 'MEMBER_ON_WORKSPACE',
+      }),
+      communications() {
+        return this.member.communications;
+      },
     },
 
     methods: {

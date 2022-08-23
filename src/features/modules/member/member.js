@@ -2,12 +2,15 @@ import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 
 const state = {
   agent: null,
-  membersList: [],
+  memberList: [],
   memberOnWorkspace: {},
   selectedCommId: null,
 };
 
 const getters = {
+  MEMBER_ON_WORKSPACE: (s, g, rS, rootGetters) => (
+    rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.MEMBER && rootGetters['workspace/TASK_ON_WORKSPACE']
+  ),
   IS_COMMUNICATION_SELECTED: (state) => (Number.isInteger(state.selectedCommId)),
 };
 
@@ -38,7 +41,7 @@ const actions = {
   },
 
   CALL: async (context) => {
-    const memberId = state.memberOnWorkspace.id;
+    const memberId = context.getters.MEMBER_ON_WORKSPACE.id;
     const commId = state.selectedCommId;
     const { agent } = context.state;
     await agent.directMember(memberId, commId);
@@ -46,7 +49,6 @@ const actions = {
 
   SET_WORKSPACE: (context, memberOnWs) => {
     context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER, task: memberOnWs }, { root: true });
-    context.commit('SET_WORKSPACE', memberOnWs);
   },
 };
 
@@ -57,18 +59,14 @@ const mutations = {
 
   SET_DATA_LIST: (state, { page, items }) => {
     if (page === 1) {
-      state.membersList = items; // if component is re-rendered, reset persistent storage data
+      state.memberList = items; // if component is re-rendered, reset persistent storage data
     } else {
-      state.membersList = [...state.membersList, ...items];
+      state.memberList = [...state.memberList, ...items];
     }
   },
 
   SET_SELECTED_COMMUNICATION: (state, commId) => {
     state.selectedCommId = commId;
-  },
-
-  SET_WORKSPACE: (state, member) => {
-    state.memberOnWorkspace = member;
   },
 };
 
