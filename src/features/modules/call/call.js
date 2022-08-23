@@ -7,6 +7,7 @@ const state = {
   callList: [],
   isVideo: false,
 };
+
 const getters = {
   CALL_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.CALL && rootGetters['workspace/TASK_ON_WORKSPACE']
