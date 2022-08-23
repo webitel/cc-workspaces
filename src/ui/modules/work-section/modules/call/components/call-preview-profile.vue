@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
 
 export default {
   name: 'call-preview-profile',
   mixins: [displayInfoMixin],
   computed: {
-    ...mapState('workspace', {
-      task: (state) => state.taskOnWorkspace,
+    ...mapGetters('workspace', {
+      task: 'TASK_ON_WORKSPACE',
     }),
   },
 };

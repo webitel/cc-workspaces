@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 import callTimer from '../../../../../mixins/callTimerMixin';
 
@@ -47,11 +47,8 @@ export default {
   }),
 
   computed: {
-    ...mapState('features/call', {
-      call: (state) => state.callOnWorkspace,
-    }),
-
     ...mapGetters('features/call', {
+      call: 'CALL_ON_WORKSPACE',
       computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
     }),
 

@@ -2,7 +2,7 @@
   <div class="numpad">
     <call-state/>
     <wt-input
-      v-if="isNewCall"
+      v-show="isNewCall"
       ref="number-input"
       v-model="call.newNumber"
       @keypress.enter="makeCall"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
   import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
   import NumpadExpansionBtn from './numpad-expansion-btn.vue';
@@ -38,10 +38,8 @@ import { mapActions, mapGetters, mapState } from 'vuex';
       isNumpadOpened: false,
     }),
     computed: {
-      ...mapState('features/call', {
-        call: (state) => state.callOnWorkspace,
-      }),
       ...mapGetters('features/call', {
+        call: 'CALL_ON_WORKSPACE',
         isNewCall: 'IS_NEW_CALL',
       }),
     },

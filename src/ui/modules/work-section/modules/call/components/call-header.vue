@@ -86,10 +86,10 @@
 
     computed: {
       ...mapState('features/call', {
-        call: (state) => state.callOnWorkspace,
         callList: (state) => state.callList,
       }),
       ...mapGetters('features/call', {
+        call: 'CALL_ON_WORKSPACE',
         isNewCall: 'IS_NEW_CALL',
       }),
 

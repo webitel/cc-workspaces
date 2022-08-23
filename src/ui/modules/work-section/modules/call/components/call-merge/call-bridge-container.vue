@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
   import MergeLookupItem from '../../../_shared/components/lookup-item/merge-lookup-item.vue';
 
   export default {
@@ -22,8 +22,10 @@
 
     computed: {
       ...mapState('features/call', {
-        callOnWorkspace: (state) => state.callOnWorkspace,
         callList: (state) => state.callList,
+      }),
+      ...mapGetters('features/call', {
+        callOnWorkspace: 'CALL_ON_WORKSPACE',
       }),
 
       bridgeList() {
