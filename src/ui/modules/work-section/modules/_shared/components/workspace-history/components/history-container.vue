@@ -82,7 +82,7 @@
         let destination = '';
         if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
         if (item.direction === CallDirection.Outbound) destination = item.destination;
-        this.setNumber(destination);
+        this.setNumber({ value: destination });
       },
 
       async fetch(argParams) {

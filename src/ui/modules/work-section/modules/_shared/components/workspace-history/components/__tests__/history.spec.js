@@ -56,7 +56,7 @@ describe('Agent History functionality', () => {
       computed,
     });
     wrapper.findComponent({ name: 'history-lookup-item' }).vm.$emit('input');
-    expect(mock).toHaveBeenCalledWith(historyList[0].destination);
+    expect(mock).toHaveBeenCalledWith({ value: historyList[0].destination });
   });
 
   it('Properly displays history item duration', async () => {
