@@ -17,6 +17,7 @@ const actions = {
     context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.JOB, task: job }, { root: true });
   },
   REMOVE_JOB: (context, job) => {
+    context.commit('REMOVE_JOB', job);
     if (job === context.getters.JOB_ON_WORKSPACE) context.dispatch('RESET_WORKSPACE');
   },
   RESET_WORKSPACE: (context) => {
