@@ -95,6 +95,7 @@ export default {
         title: 'Перетяните файлы сюда',
         description: 'Чтобы отправить их',
       },
+      confirmClose: 'Вы уверенны что хотите закрыть активный чат?',
     },
   },
   emptyWorkspace: {
@@ -210,5 +211,8 @@ export default {
       symbols: 'Символы',
       flags: 'Флаги',
     },
+  },
+  confirmationPopup: {
+    title: 'Подтвердите действие',
   },
 };
