@@ -47,8 +47,7 @@ describe('Chat Header', () => {
                           .mockImplementation(() => {
                           });
     const wrapper = shallowMount(ChatHeader, mountOptions);
-    wrapper.findAllComponents({ name: 'wt-rounded-action' }).wrappers
-           .find((wrapper) => wrapper.attributes('icon') === 'chat-end')
+    wrapper.findComponent({ name: 'chat-header-close-action' })
            .vm.$emit('click');
     expect(closeMock).toHaveBeenCalled();
   });

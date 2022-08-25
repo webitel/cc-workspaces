@@ -96,6 +96,7 @@ export default {
         title: 'Drop your files here',
         description: 'To upload them',
       },
+      confirmClose: 'Are you sure you want to close active chat?',
     },
   },
   emptyWorkspace: {
@@ -211,5 +212,8 @@ export default {
       symbols: 'Symbols',
       flags: 'Flags',
     },
+  },
+  confirmationPopup: {
+    title: 'Confirm action',
   },
 };

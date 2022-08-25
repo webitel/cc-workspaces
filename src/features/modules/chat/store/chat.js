@@ -12,9 +12,10 @@ const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.CHAT && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
-  ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave,
+  ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
   ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,
+  ASK_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   IS_CHAT_ACTIVE: (state, getters) => getters.CHAT_ON_WORKSPACE.state === ConversationState.Active,
   IS_MY_MESSAGE: () => (message) => message.member?.self,
 };
