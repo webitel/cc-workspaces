@@ -153,12 +153,17 @@ const actions = {
     } else {
       // else user types a number
       const newNumber = call.newNumber + value;
-      context.dispatch('SET_NEW_NUMBER', { call, value: newNumber });
+
+      // cannot mutate newCall because its instance only on 'workspace' state
+      // eslint-disable-next-line no-param-reassign
+      context.getters.CALL_ON_WORKSPACE.newNumber = newNumber;
     }
   },
 
-  SET_NEW_NUMBER: (context, { call, value }) => {
-    context.commit('SET_NEW_NUMBER', { call, value });
+  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value }) => {
+    // cannot mutate newCall because its instance only on 'workspace' state
+    // eslint-disable-next-line no-param-reassign
+    call.newNumber = value;
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {
@@ -191,10 +196,6 @@ const actions = {
 
 const mutations = {
   ...clientHandlers.mutations,
-
-  SET_NEW_NUMBER: (state, { call, value }) => {
-    state.callList.find((c) => c === call).newNumber = value;
-  },
 
   SET_VIDEO: (state, value) => {
     state.isVideo = value;
