@@ -62,14 +62,14 @@ describe('features/status store client handlers: actions', () => {
     expect(setUserStatusMock).toHaveBeenCalledWith(UserStatus.DND);
   });
 
-  it('TOGGLE_CONTACT_CENTER_MODE dispatches AGENT_LOGOUT if IS_AGENT getter == true', async () => {
-    context.getters.IS_AGENT = true;
+  it('TOGGLE_CONTACT_CENTER_MODE dispatches AGENT_LOGOUT if IS_CCENTER_ON getter == true', async () => {
+    context.getters.IS_CCENTER_ON = true;
     await statusModule.actions.TOGGLE_CONTACT_CENTER_MODE(context);
     expect(context.dispatch).toHaveBeenCalledWith('AGENT_LOGOUT');
   });
 
-  it('TOGGLE_CONTACT_CENTER_MODE dispatches SET_AGENT_WAITING_STATUS if IS_AGENT getter == false', async () => {
-    context.getters.IS_AGENT = false;
+  it('TOGGLE_CONTACT_CENTER_MODE dispatches SET_AGENT_WAITING_STATUS if IS_CCENTER_ON getter == false', async () => {
+    context.getters.IS_CCENTER_ON = false;
     await statusModule.actions.TOGGLE_CONTACT_CENTER_MODE(context);
     expect(context.dispatch).toHaveBeenCalledWith('SET_AGENT_WAITING_STATUS');
   });
