@@ -20,13 +20,13 @@
     <template v-slot:actions>
       <wt-button
         @click="confirm"
-      >{{ $t('reusable.ok') }}
+      >{{ $t('vocabulary.yes') }}
       </wt-button>
       <wt-button
         color="secondary"
         @click="close"
       >
-        {{ $t('reusable.cancel') }}
+        {{ $t('vocabulary.no') }}
       </wt-button>
     </template>
   </wt-popup>
@@ -51,5 +51,6 @@ export default {
 .confirmation-popup__attention-icon {
   text-align: center;
   line-height: 0;
+  margin-bottom: var(--spacing-sm);
 }
 </style>

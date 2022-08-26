@@ -95,7 +95,7 @@ export default {
         title: 'Перетяните файлы сюда',
         description: 'Чтобы отправить их',
       },
-      confirmClose: 'Вы уверенны что хотите закрыть активный чат?',
+      confirmClose: 'Вы уверенны, что хотите закрыть активный чат?',
     },
   },
   emptyWorkspace: {
