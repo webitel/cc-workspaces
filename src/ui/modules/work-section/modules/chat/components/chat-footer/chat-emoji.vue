@@ -59,6 +59,7 @@ export default {
 <style lang="scss" scoped>
 .chat-emoji {
   width: 100%;
+  position: relative;
 
   ::v-deep emoji-picker {
     position: absolute;
