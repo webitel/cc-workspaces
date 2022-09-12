@@ -1,19 +1,16 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-import call from '../../../../../../../../features/modules/call/call';
+import { shallowMount } from '@vue/test-utils';
 import MissedQueueContainer
   from '../missed-queue-container.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
 describe('MissedQueueContainer', () => {
-  const store = new Vuex.Store({
-    modules: { features: { namespaced: true, modules: { call } } },
-  });
+  jest.spyOn(MissedQueueContainer.methods, 'loadMissedList').mockImplementation(() => {});
+  jest.spyOn(MissedQueueContainer.methods, 'resetNewMissed').mockImplementation(() => {});
+
   it('renders a component', () => {
     const wrapper = shallowMount(MissedQueueContainer, {
-      localVue, store,
+      computed: {
+        missedList: () => [{ id: 'jest' }],
+      },
     });
     expect(wrapper.exists()).toBe(true);
   });
