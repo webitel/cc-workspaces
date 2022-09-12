@@ -185,13 +185,9 @@ const actions = {
     if (value) context.commit('SET_VIDEO', JSON.parse(value));
   },
 
-  SET_WORKSPACE: (context, call) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CALL, task: call }, { root: true });
-  },
+  SET_WORKSPACE: (context, call) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CALL, task: call }, { root: true }),
 
-  RESET_WORKSPACE: (context) => {
-    context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
-  },
+  RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
 };
 
 const mutations = {
