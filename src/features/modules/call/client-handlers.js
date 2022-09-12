@@ -9,7 +9,7 @@ const callHandler = (context) => (action, call) => {
       context.dispatch('HOLD_OTHER_CALLS', call);
       break;
     case CallActions.Hangup:
-      context.dispatch('HANDLE_HANGUP_ACTION', call);
+      // context.dispatch('HANDLE_HANGUP_ACTION', call);
       break;
     case CallActions.Destroy:
       context.dispatch('HANDLE_DESTROY_ACTION', call);
@@ -38,21 +38,14 @@ const actions = {
     }
   },
 
-  HANDLE_HANGUP_ACTION: (context, call) => {
-    if (!call.allowReporting || call.reportingAt) {
-      context.commit('REMOVE_CALL', call);
-      context.dispatch('RESET_WORKSPACE');
-    }
-    context.dispatch('HANDLE_CALL_END');
-  },
-
-  HANDLE_DESTROY_ACTION: (context, call) => {
-    context.commit('REMOVE_CALL', call);
+  HANDLE_DESTROY_ACTION: async (context, call) => {
     if (call.direction === CallDirection.Inbound && !call.answeredAt) {
-      context.dispatch('missed/PUSH_MISSED_STUB', call);
+      await context.dispatch('missed/PUSH_MISSED_STUB', call);
     }
-    context.dispatch('HANDLE_CALL_END');
-    context.dispatch('RESET_WORKSPACE');
+    await context.dispatch('HANDLE_CALL_END');
+    await context.dispatch('RESET_WORKSPACE');
+    // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
+    context.commit('REMOVE_CALL', call);
   },
 
   HANDLE_STREAM_ACTION: (context, call) => {
@@ -65,13 +58,9 @@ const actions = {
     }
   },
 
-  HANDLE_START_TALKING: (context) => {
-    context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true });
-  },
+  HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),
 
-  HANDLE_CALL_END: (context) => {
-    context.dispatch('features/notifications/HANDLE_CALL_END', null, { root: true });
-  },
+  HANDLE_CALL_END: (context) => context.dispatch('features/notifications/HANDLE_CALL_END', null, { root: true }),
 };
 
 export default {
