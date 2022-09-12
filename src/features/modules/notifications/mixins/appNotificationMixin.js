@@ -1,4 +1,4 @@
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 // ATTENTION! Mixin must be imported into the-agent-workspace to correctly notify new call ringing!
 // This mixin is needed for watcher to watch ringing; it is not possible to watch inside store
@@ -6,7 +6,6 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 export default {
   watch: {
     isAnyRinging(value) {
-      console.warn('is any ringing', value);
       if (value) this.playRinging();
       else this.stopPlaying();
     },

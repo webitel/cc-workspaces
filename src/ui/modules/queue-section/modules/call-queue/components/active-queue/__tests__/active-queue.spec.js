@@ -59,13 +59,15 @@ describe('Ringing and Hangup events call functionality', () => {
     expect(wrapper.findAllComponents(ActivePreview).length).toEqual(2);
   });
 
-  it('Removes a call when ringing event fires', async () => {
+  it('Removes a call when destroy event fires', async () => {
     const wrapper = shallowMount(ActiveQueue, {
       store,
       localVue,
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
-    await mockSocket.hangup(initialCall);
+    await mockSocket.destroyCall(initialCall);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     expect(wrapper.findAllComponents(ActivePreview).length).toEqual(0);
   });
 });
