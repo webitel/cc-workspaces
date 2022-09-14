@@ -33,6 +33,11 @@ export default class MockSocket {
     this.callCallback(action, call);
   };
 
+  destroyCall = (call = this.call) => {
+    const action = CallActions.Destroy;
+    this.callCallback(action, call);
+  };
+
   invite = (chat = this.chat) => {
     const action = ChatActions.UserInvite;
     this.chatCallback(action, chat);
