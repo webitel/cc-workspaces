@@ -35,6 +35,7 @@ import { mapActions } from 'vuex';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
+import RichTextEditor from './components/rich-text-editor.vue';
 
 export default {
   name: 'the-processing-form',
@@ -42,6 +43,7 @@ export default {
   components: {
     FormText,
     FormSelect,
+    RichTextEditor,
   },
   data: () => ({
     namespace: 'ui/infoSec/processing/form',

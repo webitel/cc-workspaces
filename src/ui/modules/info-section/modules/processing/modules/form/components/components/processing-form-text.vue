@@ -27,25 +27,15 @@
 <script>
 import MarkdownIt from 'markdown-it';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
+import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);
 
 export default {
   name: 'form-text',
+  mixins: [processingFormComponentMixin],
   props: {
-    initialValue: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    hint: {
-      type: String,
-      default: '',
-    },
     color: {
       type: String,
       default: 'default',
