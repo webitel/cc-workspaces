@@ -44,8 +44,11 @@ import 'tinymce/skins/ui/oxide/skin.css';
 /* A theme is also required */
 import 'tinymce/themes/silver';
 
+import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
+
 export default {
   name: 'rich-text-editor',
+  mixins: [processingFormComponentMixin],
   components: {
     Editor,
   },
@@ -62,22 +65,7 @@ export default {
       type: [Number, String],
       default: '300',
     },
-    initialValue: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    hint: {
-      type: String,
-      default: '',
-    },
   },
-  data: () => ({
-    draft: '',
-  }),
   computed: {
     config() {
       return {
