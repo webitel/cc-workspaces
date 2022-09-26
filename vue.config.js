@@ -28,19 +28,6 @@ module.exports = {
       },
     },
   },
-  configureWebpack: {
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-        cacheGroups: {
-          tinymceVendor: {
-            test: /[\\/]node_modules[\\/](tinymce)[\\/](.*js|.*skin.css)|[\\/]plugins[\\/]/,
-            name: 'tinymce',
-          },
-        },
-      },
-    },
-  },
   chainWebpack: (config) => {
     config.plugin('webpack-bundle-analyzer').use(new BundleAnalyzerPlugin({
                                                                             analyzerHost: '127.0.0.1:8082',

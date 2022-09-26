@@ -35,8 +35,8 @@ import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
 
 /* Import content css */
-import contentCss from 'tinymce/skins/content/default/content.min.css';
-import contentUiCss from 'tinymce/skins/ui/oxide/content.min.css';
+// import contentCss from 'tinymce/skins/content/default/content.min.css';
+// import contentUiCss from 'tinymce/skins/ui/oxide/content.min.css';
 
 /* Import the skin */
 import 'tinymce/skins/ui/oxide/skin.css';
@@ -75,7 +75,7 @@ export default {
         height: +this.height,
         menubar: false,
         statusbar: this.isHtml,
-        content_style: `${contentUiCss}\n${contentCss}`,
+        // content_style: `${contentUiCss}\n${contentCss}`,
       };
     },
     isHtml() {
