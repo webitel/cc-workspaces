@@ -16,10 +16,15 @@
       <wt-hint
         v-if="hint"
       >{{ hint }}</wt-hint>
+      <wt-icon-btn
+        :icon="rolledUp ? 'arrow-right' : 'arrow-down'"
+        @click="handlerFolding"
+      ></wt-icon-btn>
     </h4>
     <p
       class="processing-form-text__content"
       v-html="content"
+      v-show="rolledUp"
     ></p>
   </article>
 </template>
@@ -51,11 +56,26 @@ export default {
       default: 'default',
       options: ['default', 'secondary', 'accent', 'success', 'danger'],
     },
+    collapsible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data: () => ({
+    rolledUp: true,
+  }),
+  methods: {
+    handlerFolding() {
+      this.rolledUp = !this.rolledUp;
+    },
   },
   computed: {
     content() {
       return md.render(this.initialValue);
     },
+  },
+  mounted() {
+    this.rolledUp = this.collapsible;
   },
 };
 </script>
@@ -120,7 +140,9 @@ $default-color: #1A90E5;
   &__title {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    justify-content: space-between;
+    margin-right: var(--spacing-sm);
   }
 }
+
 </style>
