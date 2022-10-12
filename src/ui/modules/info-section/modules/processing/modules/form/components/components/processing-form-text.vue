@@ -16,10 +16,15 @@
       <wt-hint
         v-if="hint"
       >{{ hint }}</wt-hint>
+      <wt-icon-btn
+        :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+        @click="handleCollapse"
+      ></wt-icon-btn>
     </h4>
     <p
       class="processing-form-text__content"
       v-html="content"
+      v-show="collapsed"
     ></p>
   </article>
 </template>
@@ -41,11 +46,26 @@ export default {
       default: 'default',
       options: ['default', 'secondary', 'accent', 'success', 'danger'],
     },
+    collapsible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data: () => ({
+    collapsed: true,
+  }),
+  methods: {
+    handleCollapse() {
+      this.collapsed = !this.collapsed;
+    },
   },
   computed: {
     content() {
       return md.render(this.initialValue);
     },
+  },
+  mounted() {
+    this.collapsed = this.collapsible;
   },
 };
 </script>
@@ -110,7 +130,9 @@ $default-color: #1A90E5;
   &__title {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    justify-content: space-between;
+    margin-right: var(--spacing-sm);
   }
 }
+
 </style>
