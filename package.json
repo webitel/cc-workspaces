@@ -17,6 +17,7 @@
     "@webitel/cc-ui-sdk": "^0.1.25",
     "@webitel/ui-sdk": "^2.1.3",
     "axios": "^0.27.2",
+    "clipboard-copy": "^4.0.1",
     "core-js": "^3.6.4",
     "deep-copy": "^1.4.2",
     "deep-equal": "^2.0.3",

@@ -16,10 +16,18 @@
       <wt-hint
         v-if="hint"
       >{{ hint }}</wt-hint>
-      <wt-icon-btn
-        :icon="collapsed ? 'arrow-right' : 'arrow-down'"
-        @click="handleCollapse"
-      ></wt-icon-btn>
+      <div>
+        <wt-icon-btn
+          icon="copy"
+          v-show="collapsed"
+          class="processing-form-text__copy"
+          @click="copyText"
+        ></wt-icon-btn>
+        <wt-icon-btn
+          :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+          @click="handleCollapse"
+        ></wt-icon-btn>
+      </div>
     </h4>
     <p
       class="processing-form-text__content"
@@ -32,6 +40,7 @@
 <script>
 import MarkdownIt from 'markdown-it';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
+import clipboardCopy from 'clipboard-copy';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 const md = new MarkdownIt({ linkify: true });
@@ -57,6 +66,9 @@ export default {
   methods: {
     handleCollapse() {
       this.collapsed = !this.collapsed;
+    },
+    copyText() {
+      clipboardCopy(this.initialValue);
     },
   },
   computed: {
@@ -132,6 +144,10 @@ $default-color: #1A90E5;
     align-items: center;
     justify-content: space-between;
     margin-right: var(--spacing-sm);
+  }
+
+  &__copy {
+    margin-right: var(--spacing-xs);
   }
 }
 
