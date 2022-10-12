@@ -29,7 +29,6 @@ export default {
     height: auto;
     min-height: 0;
     padding: 0 10px;
-    overflow: auto;
   }
 }
 </style>
