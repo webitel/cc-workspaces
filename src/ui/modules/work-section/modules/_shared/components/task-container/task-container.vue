@@ -22,13 +22,14 @@ export default {
 .task-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
 
   .task-container__body-wrapper {
     flex-grow: 1;
     height: auto;
     min-height: 0;
     padding: 0 10px;
+    overflow: auto;
   }
 }
 </style>

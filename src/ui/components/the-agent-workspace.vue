@@ -120,6 +120,7 @@ export default {
 }
 
 .workspace-wrap {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   flex-grow: 1;

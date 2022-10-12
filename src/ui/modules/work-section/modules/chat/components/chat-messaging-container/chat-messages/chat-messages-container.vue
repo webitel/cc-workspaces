@@ -110,7 +110,7 @@ export default {
   box-sizing: border-box;
   flex: 1 1;
   overflow-x: hidden;
-  overflow-y: scroll;
+  //overflow-y: scroll;
   height: 100%;
   padding: 20px 10px;
 }
