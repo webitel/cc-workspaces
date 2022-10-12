@@ -93,7 +93,7 @@ export default {
   }
 
   .chat-transfer-container.ws-worksection {
-    height: auto;
+    //height: auto;
     min-height: 0;
   }
 }
