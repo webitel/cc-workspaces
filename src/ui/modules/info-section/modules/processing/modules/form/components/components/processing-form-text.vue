@@ -17,14 +17,14 @@
         v-if="hint"
       >{{ hint }}</wt-hint>
       <wt-icon-btn
-        :icon="rolledUp ? 'arrow-right' : 'arrow-down'"
-        @click="handlerFolding"
+        :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+        @click="handleCollapse"
       ></wt-icon-btn>
     </h4>
     <p
       class="processing-form-text__content"
       v-html="content"
-      v-show="rolledUp"
+      v-show="collapsed"
     ></p>
   </article>
 </template>
@@ -62,11 +62,11 @@ export default {
     },
   },
   data: () => ({
-    rolledUp: true,
+    collapsed: true,
   }),
   methods: {
-    handlerFolding() {
-      this.rolledUp = !this.rolledUp;
+    handleCollapse() {
+      this.collapsed = !this.collapsed;
     },
   },
   computed: {
@@ -75,7 +75,7 @@ export default {
     },
   },
   mounted() {
-    this.rolledUp = this.collapsible;
+    this.collapsed = this.collapsible;
   },
 };
 </script>
