@@ -16,10 +16,17 @@
       <wt-hint
         v-if="hint"
       >{{ hint }}</wt-hint>
-      <wt-icon-btn
-        :icon="collapsed ? 'arrow-right' : 'arrow-down'"
-        @click="handleCollapse"
-      ></wt-icon-btn>
+      <div class="processing-form-text__actions-wrapper">
+        <div class="processing-form-text__copy">
+          <wt-copy-action
+            :value="initialValue"
+          ></wt-copy-action>
+        </div>
+        <wt-icon-btn
+          :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+          @click="handleCollapse"
+        ></wt-icon-btn>
+      </div>
     </h4>
     <p
       class="processing-form-text__content"
@@ -132,6 +139,14 @@ $default-color: #1A90E5;
     align-items: center;
     justify-content: space-between;
     margin-right: var(--spacing-sm);
+  }
+
+  &__actions-wrapper {
+    display: flex;
+
+    &__copy {
+      margin-right: var(--spacing-xs);
+    }
   }
 }
 
