@@ -59,11 +59,13 @@ class WebSocketClientController {
       debug: this._config.debug,
     };
     const cli = new Client(config);
+
+    this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
+    this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
+
     await cli.connect();
 
     await cli.auth();
-    this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
-    this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
 
     window.cli = cli;
     return cli;
