@@ -20,7 +20,7 @@
         <div class="processing-form-text__copy">
           <wt-copy-action
             :value="initialValue"
-            v-show="!collapsed"
+            v-show="!collapsed || !collapsible"
           ></wt-copy-action>
         </div>
         <wt-icon-btn
