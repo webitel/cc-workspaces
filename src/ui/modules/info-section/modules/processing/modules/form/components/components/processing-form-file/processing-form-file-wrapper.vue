@@ -8,8 +8,8 @@
       ></wt-icon>
     </div>
     <form-file
-      v-for="(el, key) of parseInitialValue"
-      :key="el.id+key.toString()"
+      v-for="el of parseInitialValue"
+      :key="el.id"
       v-bind="el"
     ></form-file>
   </div>
@@ -43,11 +43,11 @@ export default {
   },
   computed: {
     parseInitialValue() {
-      return typeof this.initialValue === 'string' ? JSON.parse(this.initialValue) : this.initialValue;
+      return JSON.parse(this.initialValue);
     },
   },
   mounted() {
-    this.$attrs.value = typeof this.$attrs.value === 'string' ? JSON.parse(this.$attrs.value) : this.$attrs.value;
+    this.$attrs.value = JSON.parse(this.$attrs.value);
   },
 };
 </script>
@@ -57,18 +57,18 @@ $default-color: #1A90E5;
 
 .processing-form-file-wrapper {
   position: relative;
-  padding: var(--spacing-sm);
   border: 1px dashed $default-color;
   border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
 
   .processing-form-file-wrapper__attach {
     position: absolute;
     top: 0;
     right: var(--spacing-xs);
-    padding: var(--spacing-3xs);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
-    line-height: 0;
+    padding: var(--spacing-3xs);
     background: $default-color;
+    line-height: 0;
   }
 }
 </style>
