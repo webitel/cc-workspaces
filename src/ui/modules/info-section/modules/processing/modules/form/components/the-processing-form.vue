@@ -35,7 +35,7 @@ import { mapActions } from 'vuex';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
-import FormFileWrapper from './components/processing-form-file-wrapper.vue';
+import FormFileWrapper from './components/processing-form-file/processing-form-file-wrapper.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {

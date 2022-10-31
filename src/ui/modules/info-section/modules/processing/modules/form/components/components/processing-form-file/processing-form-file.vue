@@ -1,24 +1,27 @@
 <template>
-  <div
+  <a
     class="processing-form-file"
-    @click="downloadDocument"
+    :href="url"
+    :download="name"
+    target="_blank"
   >
-    <div class="processing-form-file__doc">
-        <div class="processing-form-file__triangle-white"></div>
-        <div class="processing-form-file__triangle-blue"></div>
+    <div class="processing-form-file__header">
+        <div class="processing-form-file__triangle--outer"></div>
+        <div class="processing-form-file__triangle--inner"></div>
 
       <wt-icon
-        icon="ws-doc"
+        icon="doc"
         size="xl"
         color="contrast"
+        icon-prefix="ws"
       ></wt-icon>
     </div>
 
     <div class="processing-form-file__info">
-      <a class="processing-form-file__name" :title="name">{{ name }}</a>
-      <div class="processing-form-file__size">{{ fileSize(size) }}</div>
+      <div class="processing-form-file__name" :title="name">{{ name }}</div>
+      <div class="processing-form-file__size">{{ fileSize }}</div>
     </div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -52,26 +55,18 @@ export default {
      ...mapState({
        client: (state) => state.client,
      }),
+    fileSize() {
+      return prettifyFileSize(this.size);
+    },
    },
   methods: {
-    async handleFileDownload() {
+    async urlInitialization() {
       const response = await this.client.getCliInstance();
       this.url = response.fileUrlDownload(this.id);
     },
-    downloadDocument() {
-      const a = document.createElement('a');
-      a.href = this.url;
-      a.target = '_blank';
-      a.download = this.name;
-      a.click();
-    },
-    fileSize(value) {
-      if (!value) return '';
-      return prettifyFileSize(value);
-    },
   },
   mounted() {
-   this.handleFileDownload();
+   this.urlInitialization();
   },
 };
 </script>
@@ -79,44 +74,44 @@ export default {
 <style lang="scss" scoped>
 $default-color: #1A90E5;
 
-.processing-form-file{
+.processing-form-file {
+  display: block;
   margin-top: var(--spacing-sm);
-  cursor: pointer;
 
-  .processing-form-file__doc{
+  .processing-form-file__header {
     position: relative;
     display: flex;
     align-items: center;
     border-radius: var(--border-radius) var(--border-radius) 0px 0px;
-    background-color: $default-color;
     padding: var(--spacing-xs);
+    background-color: $default-color;
 
-    .processing-form-file__triangle-blue {
+    .processing-form-file__triangle--inner {
       position: absolute;
       top: 0;
       right: 0;
       width: 0;
       height: 0;
       border: 0 solid transparent;
+      border-bottom: var(--spacing-md) solid var(--task-accent-deep-color);
       border-right-width: var(--spacing-md);
       border-left-width: 0px;
-      border-bottom: var(--spacing-md) solid var(--task-accent-deep-color);
     }
 
-    .processing-form-file__triangle-white {
+    .processing-form-file__triangle--outer {
       position: absolute;
       top: 0;
       right: 0;
       width: 0;
       height: 0;
       border: 0 solid transparent;
+      border-top: var(--spacing-md) solid var(--main-color);
       border-left-width: var(--spacing-md);
       border-right-width: 0px;
-      border-top: var(--spacing-md) solid var(--main-color);
     }
   }
 
-  .processing-form-file__info{
+  .processing-form-file__info {
     box-shadow: var(--elevation-10);
     padding: var(--spacing-sm);
 
