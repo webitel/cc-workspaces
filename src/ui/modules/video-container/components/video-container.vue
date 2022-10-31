@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
   // import RoundedAction from '../../utils/rounded-action.vue';
 
   export default {
@@ -78,8 +78,8 @@
     }),
 
     computed: {
-      ...mapState('features/call', {
-        call: (state) => state.callOnWorkspace,
+      ...mapGetters('features/call', {
+        call: 'CALL_ON_WORKSPACE',
       }),
 
       peerStreams() {

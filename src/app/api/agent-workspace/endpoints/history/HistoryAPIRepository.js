@@ -19,9 +19,11 @@ const _getHistory = (getList) => function ({
                                              direction,
                                              isMissed,
                                            }) {
-  const params = [page, size, undefined, sort, fields, createdAtFrom, createdAtTo, userId, undefined,
+  const params = [page, size, undefined, sort, fields, createdAtFrom, createdAtTo, undefined, undefined,
     undefined, undefined, memberId, undefined, undefined, undefined, undefined, undefined,
-    cause, undefined, undefined, search, direction, undefined, undefined, isMissed];
+    cause, undefined, undefined, search, direction, undefined, undefined, isMissed,
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+    undefined, undefined, undefined, userId];
   return getList(params);
 };
 

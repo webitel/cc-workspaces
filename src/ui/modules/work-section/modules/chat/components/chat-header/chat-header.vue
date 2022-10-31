@@ -9,14 +9,10 @@
         wide
         @click="$emit('openTab', 'transfer')"
       ></wt-rounded-action>
-      <wt-rounded-action
+      <chat-header-close-action
         v-show="isCloseAction"
-        color="danger"
-        icon="chat-end"
-        rounded
-        wide
         @click="close"
-      ></wt-rounded-action>
+      ></chat-header-close-action>
     </template>
   </task-header>
 </template>
@@ -24,10 +20,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
+import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
   name: 'chat-header',
-  components: { TaskHeader },
+  components: {
+    TaskHeader,
+    ChatHeaderCloseAction,
+  },
   computed: {
     ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',

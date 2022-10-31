@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import EmptyWorkspace from '../../empty-workspace/components/empty-workspace.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging-container/chat-messaging-container.vue';
@@ -47,6 +48,9 @@ export default {
     currentTab: { component: defaultTab },
   }),
   computed: {
+    ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+    }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
@@ -69,6 +73,11 @@ export default {
       this.currentTab = { component: defaultTab };
     },
   },
+  watch: {
+    chat() {
+      this.resetTab();
+    },
+  },
 };
 </script>
 
@@ -86,6 +95,7 @@ export default {
   .chat-transfer-container.ws-worksection {
     height: auto;
     min-height: 0;
+    max-height: 100%;
   }
 }
 </style>

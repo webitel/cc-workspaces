@@ -12,6 +12,8 @@ process.env.VUE_APP_APPLICATION_HUB_URL = process.env.NODE_ENV === 'production' 
 
 process.env.VUE_APP_PACKAGE_VERSION = require('./package.json').version;
 
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 module.exports = {
   transpileDependencies: true,
 // publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
@@ -27,6 +29,12 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
+    config.plugin('webpack-bundle-analyzer').use(new BundleAnalyzerPlugin({
+                                                                            analyzerHost: '127.0.0.1:8082',
+            // analyzerMode: 'static',
+            analyzerMode: 'disabled',
+          }));
+
     config.module
       .rule('svg')
       .exclude.add(/^(.*sprite).*\.svg/); // same as in svg-sprite-loader

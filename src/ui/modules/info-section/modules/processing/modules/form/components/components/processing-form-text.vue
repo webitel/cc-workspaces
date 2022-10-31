@@ -16,10 +16,24 @@
       <wt-hint
         v-if="hint"
       >{{ hint }}</wt-hint>
+      <div class="processing-form-text__actions-wrapper">
+        <div class="processing-form-text__copy">
+          <wt-copy-action
+            :value="initialValue"
+            v-show="!collapsed || !collapsible"
+          ></wt-copy-action>
+        </div>
+        <wt-icon-btn
+          :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+          v-show="collapsible || !collapsed"
+          @click="handleCollapse"
+        ></wt-icon-btn>
+      </div>
     </h4>
     <p
       class="processing-form-text__content"
       v-html="content"
+      v-show="!collapsed || !collapsible"
     ></p>
   </article>
 </template>
@@ -27,29 +41,31 @@
 <script>
 import MarkdownIt from 'markdown-it';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
+import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);
 
 export default {
   name: 'form-text',
+  mixins: [processingFormComponentMixin],
   props: {
-    initialValue: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    hint: {
-      type: String,
-      default: '',
-    },
     color: {
       type: String,
       default: 'default',
       options: ['default', 'secondary', 'accent', 'success', 'danger'],
+    },
+    collapsible: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data: () => ({
+    collapsed: true,
+  }),
+  methods: {
+    handleCollapse() {
+      this.collapsed = !this.collapsed;
     },
   },
   computed: {
@@ -120,7 +136,17 @@ $default-color: #1A90E5;
   &__title {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    justify-content: space-between;
+    margin-right: var(--spacing-sm);
+  }
+
+  &__actions-wrapper {
+    display: flex;
+
+    &__copy {
+      margin-right: var(--spacing-xs);
+    }
   }
 }
+
 </style>

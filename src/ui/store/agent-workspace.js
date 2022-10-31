@@ -1,15 +1,11 @@
 const state = {
-  workspaceState: null,
+  stateHistory: [],
 };
 
 const getters = {
-  TASK_ON_WORKSPACE: (state, getters, rootState) => (
-    state.workspaceState
-      ? rootState.features[`${state.workspaceState}`][`${state.workspaceState}OnWorkspace`]
-      : {}
-  ),
-
-  IS_EMPTY_WORKSPACE: (state) => !state.workspaceState,
+  TASK_ON_WORKSPACE: (state) => state.stateHistory.at(-1)?.task || {},
+  WORKSRACE_STATE: (state) => state.stateHistory.at(-1)?.type,
+  IS_EMPTY_WORKSPACE: (state, getters) => !getters.WORKSRACE_STATE,
 };
 
 const actions = {
@@ -44,17 +40,28 @@ const actions = {
                   context.dispatch('features/notifications/DESTROY', null, { root: true }),
                 ]),
 
-  SET_WORKSPACE_STATE: (context, wsState) => {
-    context.commit('SET_WORKSPACE_STATE', wsState);
+  SET_WORKSPACE_STATE: (context, payload) => {
+    context.commit('ADD_WORKSPACE_STATE', payload);
   },
   RESET_WORKSPACE_STATE: (context) => {
-    context.commit('SET_WORKSPACE_STATE', null);
+    const stateHistory = [...context.state.stateHistory];
+    while (stateHistory.length) {
+      const { type, task } = stateHistory.at(-1);
+      if (context.rootState.features[type][`${type}List`].includes(task)) {
+        break;
+      }
+      stateHistory.pop();
+    }
+    context.commit('SET_STATE_HISTORY', stateHistory);
   },
 };
 
 const mutations = {
-  SET_WORKSPACE_STATE: (state, wsState) => {
-    state.workspaceState = wsState;
+  SET_STATE_HISTORY: (state, stateHistory) => {
+    state.stateHistory = stateHistory;
+  },
+  ADD_WORKSPACE_STATE: (state, { type, task }) => {
+    state.stateHistory.push({ type, task });
   },
 };
 

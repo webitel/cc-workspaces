@@ -1,3 +1,4 @@
+import { RolePermissionError } from 'webitel-sdk';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import APIRepository from '../../../app/api/APIRepository';
 import i18n from '../../../app/locale/i18n';
@@ -25,7 +26,10 @@ const actions = {
     try {
       agent = await client.agentSession();
     } catch (err) {
-      eventBus.$emit('notification', { type: 'error', text: i18n.t('error.endpoint.noLicense') });
+      if (err.id === RolePermissionError.id) {
+        eventBus.$emit('notification', { type: 'error', text: i18n.t('error.endpoint.noLicense') });
+      }
+      return; // abort action, if no agent
     }
 
     try {

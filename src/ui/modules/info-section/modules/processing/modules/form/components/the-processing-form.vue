@@ -1,9 +1,9 @@
 <template>
   <processing-wrapper
-    :task="task"
     ref="processing-form"
+    :task="task"
   >
-    <template v-slot:title v-if="formTitle">
+    <template v-if="formTitle" v-slot:title>
       {{ formTitle }}
     </template>
     <template v-slot:form>
@@ -32,9 +32,11 @@
 
 <script>
 import { mapActions } from 'vuex';
+import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
-import processingModuleMixin from '../../../mixins/processingModuleMixin';
+import FormFileWrapper from './components/processing-form-file/processing-form-file-wrapper.vue';
+import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
   name: 'the-processing-form',
@@ -42,11 +44,19 @@ export default {
   components: {
     FormText,
     FormSelect,
+    FormFileWrapper,
+    RichTextEditor: () => ({
+      component: import(
+        './components/rich-text-editor.vue'
+        ),
+      loading: RichTextEditorSkeleton,
+    }),
   },
   data: () => ({
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
+      'form-file': 'form-file-wrapper',
     },
   }),
   computed: {

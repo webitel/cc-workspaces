@@ -5,16 +5,19 @@ import clientHandlers from './client-handlers';
 
 const state = {
   chatList: [],
-  chatOnWorkspace: {},
   mediaView: null,
 };
 
 const getters = {
-  ALLOW_CHAT_TRANSFER: (state) => state.chatOnWorkspace.allowLeave,
-  ALLOW_CHAT_JOIN: (state) => state.chatOnWorkspace.allowJoin,
-  ALLOW_CHAT_CLOSE: (state) => state.chatOnWorkspace.allowLeave || state.chatOnWorkspace.allowDecline,
-  IS_CHAT_ACTIVE: (state) => state.chatOnWorkspace.state === ConversationState.Active,
-  IS_MY_MESSAGE: (state) => (message) => message.member?.self,
+  CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
+    rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.CHAT && rootGetters['workspace/TASK_ON_WORKSPACE']
+  ),
+  ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
+  ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
+  ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,
+  ASK_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
+  IS_CHAT_ACTIVE: (state, getters) => getters.CHAT_ON_WORKSPACE.state === ConversationState.Active,
+  IS_MY_MESSAGE: () => (message) => message.member?.self,
 };
 
 const actions = {
@@ -30,7 +33,7 @@ const actions = {
 
   ACCEPT: async (context) => {
     try {
-      await context.state.chatOnWorkspace.join();
+      await context.getters.CHAT_ON_WORKSPACE.join();
     } catch (err) {
       throw err;
     }
@@ -38,7 +41,7 @@ const actions = {
 
   SEND: async (context, message) => {
     try {
-      await context.state.chatOnWorkspace.send(message);
+      await context.getters.CHAT_ON_WORKSPACE.send(message);
     } catch (err) {
       throw err;
     }
@@ -57,7 +60,7 @@ const actions = {
 
   TRANSFER: async (
     context,
-    { chat = context.state.chatOnWorkspace, destination, item },
+    { chat = context.getters.CHAT_ON_WORKSPACE, destination, item },
   ) => {
     if (destination === ChatTransferDestination.USER) {
       return chat.transferToUser(item.id);
@@ -69,7 +72,7 @@ const actions = {
   },
 
   CLOSE: async (context) => {
-    const { chatOnWorkspace } = context.state;
+    const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
     try {
       if (chatOnWorkspace.allowLeave) {
         await chatOnWorkspace.leave();
@@ -94,13 +97,11 @@ const actions = {
   },
 
   SET_WORKSPACE: (context, chat) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CHAT, { root: true });
-    context.commit('SET_WORKSPACE', chat);
+    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true });
   },
 
   RESET_WORKSPACE: (context) => {
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
-    context.commit('SET_WORKSPACE', {});
   },
 
   OPEN_MEDIA: (context, message) => {
@@ -119,12 +120,12 @@ const actions = {
     context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true });
   },
 
-  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.state.chatOnWorkspace }) => {
+  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     // eslint-disable-next-line no-param-reassign
     chat.players = player ? [player] : [];
   },
 
-  CLEAN_CHAT_PLAYERS: (context, { chat = context.state.chatOnWorkspace } = {}) => {
+  CLEAN_CHAT_PLAYERS: (context, { chat = context.getters.CHAT_ON_WORKSPACE } = {}) => {
     /*
     * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
     * in memory when they are really destroyed
@@ -132,7 +133,7 @@ const actions = {
     // eslint-disable-next-line no-param-reassign
     delete chat.players;
   },
-  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     if (chat.players) {
       chat.players.push(player);
     } else {
@@ -142,7 +143,7 @@ const actions = {
       context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
     });
   },
-  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.state.chatOnWorkspace }) => {
+  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     chat.players.forEach((chatPlayer) => {
       if (chatPlayer !== player) chatPlayer.pause();
     });
@@ -158,9 +159,6 @@ const mutations = {
   },
   REMOVE_CHAT: (state, removedChat) => {
     state.chatList = state.chatList.filter((chat) => chat !== removedChat);
-  },
-  SET_WORKSPACE: (state, chat) => {
-    state.chatOnWorkspace = chat;
   },
   SET_MEDIA_VIEW: (state, mediaView) => {
     state.mediaView = mediaView;

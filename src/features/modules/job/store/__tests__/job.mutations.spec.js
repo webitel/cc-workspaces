@@ -25,11 +25,4 @@ describe('features/job store: mutations', () => {
     jobModule.mutations.REMOVE_JOB(state, job);
     expect(state.jobList).toEqual(jobList);
   });
-
-  it('SET_WORKSPACE sets passed job to jobOnWorkspace state prop', () => {
-    const jobOnWorkspace = job;
-    const state = { jobOnWorkspace: {} };
-    jobModule.mutations.SET_WORKSPACE(state, job);
-    expect(state.jobOnWorkspace).toEqual(jobOnWorkspace);
-  });
 });

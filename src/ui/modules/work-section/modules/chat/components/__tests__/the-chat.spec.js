@@ -4,7 +4,13 @@ import TheChat
 
 describe('The Chat', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(TheChat);
+    const wrapper = shallowMount(TheChat, {
+      computed: {
+        chat() {
+          return { id: '1', messages: [] };
+          },
+      },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 });

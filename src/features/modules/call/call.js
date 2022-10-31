@@ -5,18 +5,22 @@ import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
   callList: [],
-  callOnWorkspace: {},
   isVideo: false,
 };
+
 const getters = {
+  CALL_ON_WORKSPACE: (s, g, rS, rootGetters) => (
+    rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.CALL && rootGetters['workspace/TASK_ON_WORKSPACE']
+  ),
+
   GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id === callId),
 
-  IS_NEW_CALL: (state) => state.callOnWorkspace._isNew,
+  IS_NEW_CALL: (state, getters) => !!getters.CALL_ON_WORKSPACE._isNew,
 
-  GET_CURRENT_CALL_DIGITS: (state) => {
-    if (state.callOnWorkspace.digits
-      && state.callOnWorkspace.digits.length) {
-      return state.callOnWorkspace.digits;
+  GET_CURRENT_CALL_DIGITS: (state, getters) => {
+    if (getters.CALL_ON_WORKSPACE.digits
+      && getters.CALL_ON_WORKSPACE.digits.length) {
+      return getters.CALL_ON_WORKSPACE.digits;
     }
     return '';
   },
@@ -41,7 +45,7 @@ const actions = {
     const CALL_PARAMS = { disableStun: true };
     let destination = user
       ? user.extension
-      : context.state.callOnWorkspace.newNumber;
+      : context.getters.CALL_ON_WORKSPACE.newNumber;
     // eslint-disable-next-line no-useless-escape
     destination = destination.replace(/[^0-9a-zA-z\+\*#]/g, '');
     const client = await context.rootState.client.getCliInstance();
@@ -56,7 +60,7 @@ const actions = {
     const ANSWER_PARAMS = { useAudio: true, disableStun: true };
     const call = callId
       ? context.getters.GET_CALL_BY_ID(callId)
-      : context.state.callOnWorkspace;
+      : context.getters.CALL_ON_WORKSPACE;
     if (call.allowAnswer) {
       const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
       try {
@@ -68,7 +72,7 @@ const actions = {
   },
 
   BLIND_TRANSFER: async (context, number) => {
-    const call = context.state.callOnWorkspace;
+    const call = context.getters.CALL_ON_WORKSPACE;
     try {
       await call.blindTransfer(number);
       // context.commit('REMOVE_CALL', call);
@@ -78,7 +82,7 @@ const actions = {
   },
 
   BRIDGE: async (context, callToBridge) => {
-    const call = context.state.callOnWorkspace;
+    const call = context.getters.CALL_ON_WORKSPACE;
     try {
       await call.bridgeTo(callToBridge);
       // context.commit('REMOVE_CALL', call);
@@ -88,13 +92,13 @@ const actions = {
   },
 
   TOGGLE_MUTE: async (context, { callId } = {}) => {
-    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.state.callOnWorkspace;
+    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.getters.CALL_ON_WORKSPACE;
     const isMuted = call.muted;
     await call.mute(!isMuted);
   },
 
   TOGGLE_HOLD: async (context, { callId } = {}) => {
-    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.state.callOnWorkspace;
+    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.getters.CALL_ON_WORKSPACE;
     if ((!call.isHold && call.allowHold)
       || (call.isHold && call.allowUnHold)) {
       try {
@@ -111,7 +115,7 @@ const actions = {
   },
 
   SEND_DTMF: async (context, value) => {
-    const call = context.state.callOnWorkspace;
+    const call = context.getters.CALL_ON_WORKSPACE;
     if (call.allowDtmf) {
       try {
         await call.sendDTMF(value);
@@ -123,7 +127,7 @@ const actions = {
   HANGUP: async (context, { callId } = {}) => {
     const call = callId
       ? context.getters.GET_CALL_BY_ID(callId)
-      : context.state.callOnWorkspace;
+      : context.getters.CALL_ON_WORKSPACE;
     if (call.allowHangup) {
       try {
         await call.hangup();
@@ -139,31 +143,27 @@ const actions = {
   // new number destructuring to prevent mouse event
   OPEN_NEW_CALL: (context, { newNumber } = {}) => context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' }),
 
-  CLOSE_NEW_CALL: (context) => {
-    if (context.state.callList.length) {
-      return context.dispatch('OPEN_ACTIVE_CALL', context.state.callList[0]);
-    }
-    if (context.rootState.features.chat.chatList.length) {
-      const chat = context.rootState.features.chat.chatList[0];
-      return context.dispatch('features/chat/OPEN_CHAT', chat, { root: true });
-    }
-    return context.dispatch('RESET_WORKSPACE');
-  },
+  CLOSE_NEW_CALL: (context) => context.dispatch('RESET_WORKSPACE'),
 
   ADD_DIGIT: async (context, value) => {
-    const call = context.state.callOnWorkspace;
+    const call = context.getters.CALL_ON_WORKSPACE;
     if (call.allowDtmf) {
       // if there's a call, send dtmf
       context.dispatch('SEND_DTMF', value);
     } else {
       // else user types a number
       const newNumber = call.newNumber + value;
-      context.dispatch('SET_NEW_NUMBER', newNumber);
+
+      // cannot mutate newCall because its instance only on 'workspace' state
+      // eslint-disable-next-line no-param-reassign
+      context.getters.CALL_ON_WORKSPACE.newNumber = newNumber;
     }
   },
 
-  SET_NEW_NUMBER: (context, value) => {
-    context.commit('SET_NEW_NUMBER', value);
+  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value }) => {
+    // cannot mutate newCall because its instance only on 'workspace' state
+    // eslint-disable-next-line no-param-reassign
+    call.newNumber = value;
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {
@@ -185,27 +185,13 @@ const actions = {
     if (value) context.commit('SET_VIDEO', JSON.parse(value));
   },
 
-  SET_WORKSPACE: (context, call) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', WorkspaceStates.CALL, { root: true });
-    context.commit('SET_WORKSPACE', call);
-  },
+  SET_WORKSPACE: (context, call) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CALL, task: call }, { root: true }),
 
-  RESET_WORKSPACE: (context) => {
-    context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
-    context.commit('SET_WORKSPACE', {});
-  },
+  RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
 };
 
 const mutations = {
   ...clientHandlers.mutations,
-
-  SET_WORKSPACE: (state, call) => {
-    state.callOnWorkspace = call;
-  },
-
-  SET_NEW_NUMBER: (state, value) => {
-    state.callOnWorkspace.newNumber = value;
-  },
 
   SET_VIDEO: (state, value) => {
     state.isVideo = value;

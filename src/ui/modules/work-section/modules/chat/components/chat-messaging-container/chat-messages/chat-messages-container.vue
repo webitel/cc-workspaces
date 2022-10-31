@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import Message from './message/chat-message.vue';
 import MessageDate from './chat-date.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
@@ -40,8 +40,8 @@ export default {
     isMounted: false,
   }),
   computed: {
-    ...mapState('features/chat', {
-      chat: (state) => state.chatOnWorkspace,
+    ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
     }),
     messages() {
       return this.chat.messages;

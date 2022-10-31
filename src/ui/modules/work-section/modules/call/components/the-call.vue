@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
@@ -65,8 +65,8 @@ export default {
   },
 
   computed: {
-    ...mapState('features/call', {
-      call: (state) => state.callOnWorkspace,
+    ...mapGetters('features/call', {
+      call: 'CALL_ON_WORKSPACE',
     }),
 
     isPreviewCall() {

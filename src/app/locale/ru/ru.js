@@ -1,6 +1,6 @@
 import {
   DeviceNotAllowPermissionError,
-  DeviceNotFoundError, JobState,
+  DeviceNotFoundError, JobState, LicencePermissionError,
 } from 'webitel-sdk';
 
 export default {
@@ -95,6 +95,7 @@ export default {
         title: 'Перетяните файлы сюда',
         description: 'Чтобы отправить их',
       },
+      confirmClose: 'Вы уверенны, что хотите закрыть активный чат?',
     },
   },
   emptyWorkspace: {
@@ -166,6 +167,7 @@ export default {
     websocket: {
       [DeviceNotFoundError.id]: 'Микрофон не подсоединён. Невозможно выполнить действие.',
       [DeviceNotAllowPermissionError.id]: 'Нет доступа к микрофону. Невозможно выполнить действие.',
+      [LicencePermissionError.id.replaceAll('.', '_')]: 'Невозможно работать в Workspace. Истёк срок действия лицензии.',
     },
     endpoint: {
       noLicense: 'Невозможно работать в Workspace. Истёк срок действия лицензии.',
@@ -210,5 +212,8 @@ export default {
       symbols: 'Символы',
       flags: 'Флаги',
     },
+  },
+  confirmationPopup: {
+    title: 'Подтвердите действие',
   },
 };

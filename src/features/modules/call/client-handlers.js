@@ -39,13 +39,14 @@ const actions = {
   },
 
   HANDLE_DESTROY_ACTION: async (context, call) => {
+    // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
+    await context.dispatch('HANDLE_CALL_END');
+
+    context.commit('REMOVE_CALL', call);
     if (call.direction === CallDirection.Inbound && !call.answeredAt) {
       await context.dispatch('missed/PUSH_MISSED_STUB', call);
     }
-    await context.dispatch('HANDLE_CALL_END');
     await context.dispatch('RESET_WORKSPACE');
-    // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
-    context.commit('REMOVE_CALL', call);
   },
 
   HANDLE_STREAM_ACTION: (context, call) => {
