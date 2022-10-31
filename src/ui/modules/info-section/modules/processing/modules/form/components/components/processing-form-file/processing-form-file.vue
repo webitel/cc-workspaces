@@ -60,13 +60,13 @@ export default {
     },
    },
   methods: {
-    async urlInitialization() {
+    async initUrl() {
       const response = await this.client.getCliInstance();
       this.url = response.fileUrlDownload(this.id);
     },
   },
-  mounted() {
-   this.urlInitialization();
+  created() {
+   this.initUrl();
   },
 };
 </script>
