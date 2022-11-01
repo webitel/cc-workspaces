@@ -1,6 +1,7 @@
 import {
   DeviceNotFoundError,
   DeviceNotAllowPermissionError,
+  LicencePermissionError,
   JobState,
 } from 'webitel-sdk';
 
@@ -168,6 +169,7 @@ export default {
     websocket: {
       [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
       [DeviceNotAllowPermissionError.id]: 'Microphone access is denied. Cannot perform action.',
+      [LicencePermissionError.id.replaceAll('.', '_')]: 'You can not work in Workspace because your license has expired.',
     },
     endpoint: {
       noLicense: 'You can not work in Workspace because your license has expired.',

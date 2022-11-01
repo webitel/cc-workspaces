@@ -20,10 +20,12 @@
         <div class="processing-form-text__copy">
           <wt-copy-action
             :value="initialValue"
+            v-show="!collapsed || !collapsible"
           ></wt-copy-action>
         </div>
         <wt-icon-btn
           :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+          v-show="collapsible || !collapsed"
           @click="handleCollapse"
         ></wt-icon-btn>
       </div>
@@ -31,7 +33,7 @@
     <p
       class="processing-form-text__content"
       v-html="content"
-      v-show="collapsed"
+      v-show="!collapsed || !collapsible"
     ></p>
   </article>
 </template>
@@ -70,9 +72,6 @@ export default {
     content() {
       return md.render(this.initialValue);
     },
-  },
-  mounted() {
-    this.collapsed = this.collapsible;
   },
 };
 </script>
