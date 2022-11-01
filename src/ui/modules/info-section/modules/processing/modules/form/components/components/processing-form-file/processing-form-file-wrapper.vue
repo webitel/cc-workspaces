@@ -57,12 +57,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$default-color: #1A90E5;
 
 .processing-form-file-wrapper {
   position: relative;
   padding: var(--spacing-sm);
-  border: 1px dashed $default-color;
+  border: 1px dashed var(--job-color);
   border-radius: var(--border-radius);
 
   .processing-form-file-wrapper__attach {
@@ -72,7 +71,7 @@ $default-color: #1A90E5;
     padding: var(--spacing-3xs);
     line-height: 0;
     border-radius: 0 0 var(--border-radius) var(--border-radius);
-    background: $default-color;
+    background: var(--job-color);
   }
 
   .processing-form-file-wrapper__title {
