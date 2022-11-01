@@ -72,7 +72,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$default-color: #1A90E5;
 
 .processing-form-file {
   display: block;
@@ -84,7 +83,7 @@ $default-color: #1A90E5;
     align-items: center;
     border-radius: var(--border-radius) var(--border-radius) 0px 0px;
     padding: var(--spacing-xs);
-    background-color: $default-color;
+    background-color: var(--job-color);
 
     .processing-form-file__triangle--inner {
       position: absolute;
@@ -93,7 +92,7 @@ $default-color: #1A90E5;
       width: 0;
       height: 0;
       border: 0 solid transparent;
-      border-bottom: var(--spacing-md) solid var(--task-accent-deep-color);
+      border-bottom: var(--spacing-md) solid var(--job--hover-color);
       border-right-width: var(--spacing-md);
       border-left-width: 0px;
     }
@@ -116,8 +115,7 @@ $default-color: #1A90E5;
     padding: var(--spacing-sm);
 
     .processing-form-file__name {
-      @extend %typo-body-2;
-      font-weight: bold;
+      @extend %typo-subtitle-2;
     }
 
     .processing-form-file__size {

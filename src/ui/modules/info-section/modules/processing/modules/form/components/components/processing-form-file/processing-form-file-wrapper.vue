@@ -53,11 +53,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$default-color: #1A90E5;
 
 .processing-form-file-wrapper {
   position: relative;
-  border: 1px dashed $default-color;
+  border: 1px dashed var(--job-color);
   border-radius: var(--border-radius);
   padding: var(--spacing-sm);
 
@@ -67,7 +66,7 @@ $default-color: #1A90E5;
     right: var(--spacing-xs);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
     padding: var(--spacing-3xs);
-    background: $default-color;
+    background: var(--job-color);
     line-height: 0;
   }
 }
