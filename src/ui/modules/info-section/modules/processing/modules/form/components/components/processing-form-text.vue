@@ -142,6 +142,7 @@ $default-color: #1A90E5;
 
   &__actions-wrapper {
     display: flex;
+    margin-left: auto;
 
     &__copy {
       margin-right: var(--spacing-xs);
