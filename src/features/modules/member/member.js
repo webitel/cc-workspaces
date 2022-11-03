@@ -33,7 +33,7 @@ const actions = {
   },
 
   OPEN_MEMBER_ON_WORKSPACE: (context, member) => {
-    context.dispatch('SET_WORKSPACE', member);
+    return context.dispatch('SET_WORKSPACE', member);
   },
 
   SELECT_COMMUNICATION: (context, communication) => {
@@ -45,6 +45,7 @@ const actions = {
     const commId = state.selectedCommId;
     const { agent } = context.state;
     await agent.directMember(memberId, commId);
+    return context.dispatch('LOAD_DATA_LIST');
   },
 
   SET_WORKSPACE: (context, memberOnWs) => {
