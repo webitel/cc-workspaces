@@ -136,7 +136,6 @@ $default-color: #1A90E5;
   &__title {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin-right: var(--spacing-sm);
   }
 
