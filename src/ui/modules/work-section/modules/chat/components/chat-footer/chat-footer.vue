@@ -11,7 +11,7 @@
     <div v-else-if="isChatActive" class="chat-footer__chat-active">
       <wt-textarea
         ref="message-draft"
-        v-model="draft"
+        v-model="chat.draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         chat-mode
         name="draft"
@@ -63,9 +63,6 @@ export default {
     ChatEmoji,
     TaskFooter,
   },
-  data: () => ({
-    draft: '',
-  }),
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
   },
@@ -73,15 +70,16 @@ export default {
     this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
   },
   watch: {
-    isChatActive: {
-      handler(value) {
-        if (value) this.$nextTick(() => this.setDraftFocus());
+    chat: {
+      handler() {
+        this.$nextTick(() => this.setDraftFocus());
       },
       immediate: true,
     },
   },
   computed: {
     ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
       isChatPreview: 'ALLOW_CHAT_JOIN',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
@@ -129,12 +127,12 @@ export default {
     },
 
     async sendMessage() {
-      const { draft } = this;
+      const { draft } = this.chat;
       try {
-        this.draft = '';
+        this.chat.draft = '';
         await this.send(draft);
       } catch {
-        this.draft = draft;
+        this.chat.draft = draft;
       }
     },
   },

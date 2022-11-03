@@ -46,6 +46,10 @@ describe('Chat Messaging Footer: Chat Preview', () => {
 describe('Chat Messaging Footer: Active Chat', () => {
   chat.getters.ALLOW_CHAT_JOIN = () => false;
   chat.getters.IS_CHAT_ACTIVE = () => true;
+
+  const chatOnWorkspace = {};
+  chat.getters.CHAT_ON_WORKSPACE = () => chatOnWorkspace;
+
   const store = new Vuex.Store({
                                  modules: { features: { namespaced: true, modules: { chat } } },
                                });
