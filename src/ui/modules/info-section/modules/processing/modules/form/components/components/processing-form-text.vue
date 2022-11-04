@@ -21,6 +21,7 @@
           <wt-copy-action
             :value="initialValue"
             v-show="!collapsed || !collapsible"
+            v-if="enableCopying"
           ></wt-copy-action>
         </div>
         <wt-icon-btn
@@ -58,6 +59,10 @@ export default {
     collapsible: {
       type: Boolean,
       default: true,
+    },
+    enableCopying: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({
