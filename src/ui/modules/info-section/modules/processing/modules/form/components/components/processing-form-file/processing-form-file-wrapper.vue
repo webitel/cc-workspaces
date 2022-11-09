@@ -19,10 +19,12 @@
       :key="el.id"
       v-bind="el"
     ></form-file>
+    <input type="file" @input="handleFileInput">
   </div>
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
 import FormFile from './processing-form-file.vue';
 
 export default {
@@ -47,10 +49,25 @@ export default {
       type: Boolean,
       default: false,
     },
+    attemptId: {
+      type: Number,
+    },
   },
   computed: {
+    ...mapState({
+                  client: (state) => state.client,
+                }),
     parseFiles() {
       return JSON.parse(this.initialValue);
+    },
+  },
+  methods: {
+    async handleFileInput(event) {
+      const files = Array.from(event.target.files);
+      const client = await this.client.getCliInstance();
+      const progress = (e) => { console.info(e); };
+      const storedFiles = await client.storeFile(this.attemptId, files, progress);
+      console.info(storedFiles, files);
     },
   },
 };

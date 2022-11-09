@@ -12,9 +12,8 @@
         v-for="(el, key) of formBody"
         :key="el.id+key.toString()"
         v-model="el.value"
-        :label-props="{
-        hint: el.view.hint
-      }"
+        :label-props="{ hint: el.view.hint }"
+        :attempt-id="task.attempt.id"
         v-bind="el.view"
       ></component>
     </template>
