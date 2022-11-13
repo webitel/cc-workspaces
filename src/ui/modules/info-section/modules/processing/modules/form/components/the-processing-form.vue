@@ -34,7 +34,7 @@ import { mapActions } from 'vuex';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
-import FormFileWrapper from './components/processing-form-file/processing-form-file-wrapper.vue';
+import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
@@ -43,7 +43,7 @@ export default {
   components: {
     FormText,
     FormSelect,
-    FormFileWrapper,
+    FormFile,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -55,7 +55,6 @@ export default {
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
-      'form-file': 'form-file-wrapper',
     },
   }),
   computed: {

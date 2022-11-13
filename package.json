@@ -15,7 +15,7 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.8",
     "@webitel/cc-ui-sdk": "^0.1.25",
-    "@webitel/ui-sdk": "^2.1.19",
+    "@webitel/ui-sdk": "^2.1.22",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
     "deep-copy": "^1.4.2",

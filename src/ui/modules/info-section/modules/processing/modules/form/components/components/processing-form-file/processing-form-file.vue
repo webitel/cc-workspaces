@@ -1,76 +1,124 @@
 <template>
-  <a
-    class="processing-form-file"
-    :href="url"
-    :download="name"
-    target="_blank"
-  >
-    <div class="processing-form-file__header">
-        <div class="processing-form-file__triangle--outer"></div>
-        <div class="processing-form-file__triangle--inner"></div>
-
+  <div class="processing-form-file">
+    <div class="processing-form-file__icon">
       <wt-icon
-        icon="doc"
-        size="xl"
         color="contrast"
-        icon-prefix="ws"
+        icon="docs"
+        size="sm"
       ></wt-icon>
     </div>
-
-    <div class="processing-form-file__info">
-      <div class="processing-form-file__name" :title="name">{{ name }}</div>
-      <div class="processing-form-file__size">{{ fileSize }}</div>
+    <h4 class="processing-form-file__title">
+      {{ label }}
+      <wt-hint
+        v-if="hint"
+      >{{ hint }}
+      </wt-hint>
+      <div class="processing-form-file__actions-wrapper">
+<!--        <wt-tooltip v-if="readonly">-->
+<!--          <template v-slot:activator>-->
+<!--            <wt-icon-btn-->
+<!--              icon="download"-->
+<!--              @click="downloadAll"-->
+<!--            ></wt-icon-btn>-->
+<!--          </template>-->
+<!--          {{ $t('reusable.downloadAll') }}-->
+<!--        </wt-tooltip>-->
+        <wt-icon-btn
+          v-show="collapsible || !collapsed"
+          :icon="collapsed ? 'arrow-right' : 'arrow-down'"
+          @click="handleCollapse"
+        ></wt-icon-btn>
+      </div>
+    </h4>
+    <div
+      v-show="!collapsible || !collapsed"
+      class="processing-form-file__content-wrapper"
+    >
+      <form-file-line
+        v-for="{ name, mime, size, id } of parseFiles"
+        :id="id"
+        :key="id"
+        :name="name"
+        :type="mime"
+        :readonly="readonly"
+        :size="size"
+      ></form-file-line>
     </div>
-  </a>
+    <!--    <input type="file" @input="handleFileInput">-->
+  </div>
 </template>
 
 <script>
-import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import { mapState } from 'vuex';
+import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsibleProcessingFormComponentMixin';
+import processingFormComponentMixin from '../../../mixins/processingFormComponentMixin';
+import FormFileLine from './processing-form-file-line.vue';
 
 export default {
   name: 'processing-form-file',
+  components: { FormFileLine },
+  mixins: [processingFormComponentMixin, collapsibleProcessingFormComponentMixin],
   props: {
-    id: {
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+    attemptId: {
       type: Number,
-      default: 0,
-    },
-    mime: {
-      type: String,
-      default: '',
-    },
-    name: {
-      type: String,
-      default: '',
-    },
-    size: {
-      type: Number,
-      default: 0,
     },
   },
-  data: () => ({
-    url: '',
-  }),
   computed: {
-     ...mapState({
-       client: (state) => state.client,
-     }),
-    fileSize() {
-      return prettifyFileSize(this.size);
+    ...mapState({
+                  client: (state) => state.client,
+                }),
+    parseFiles() {
+      return JSON.parse(this.initialValue);
     },
-   },
+  },
   methods: {
-    async initUrl() {
-      const response = await this.client.getCliInstance();
-      this.url = response.fileUrlDownload(this.id);
+    // downloadAll() {
+    //   document.querySelectorAll('.processing-form-file-line__name').forEach((el) => el.click());
+    // },
+    async handleFileInput(event) {
+      const files = Array.from(event.target.files);
+      const client = await this.client.getCliInstance();
+      const progress = (e) => { console.info(e); };
+      const storedFiles = await client.storeFile(this.attemptId, files, progress);
+      console.info(storedFiles, files);
     },
   },
-  created() {
-   this.initUrl();
-  },
+  mounted() {},
 };
 </script>
 
 <style lang="scss" scoped>
 
+.processing-form-file {
+  position: relative;
+  padding: var(--spacing-sm);
+  border: 1px dashed var(--job-color);
+  border-radius: var(--border-radius);
+
+  .processing-form-file__icon {
+    position: absolute;
+    top: 0;
+    right: var(--spacing-xs);
+    padding: var(--spacing-3xs);
+    line-height: 0;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    background: var(--job-color);
+  }
+
+  .processing-form-file__title {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.processing-form-file__actions-wrapper {
+  display: flex;
+  margin-left: auto;
+  line-height: 0;
+  gap: var(--spacing-xs);
+}
 </style>
