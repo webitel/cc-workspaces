@@ -35,13 +35,14 @@
       class="processing-form-file__content-wrapper"
     >
       <form-file-line
-        v-for="{ name, mime, size, id } of parseFiles"
-        :id="id"
-        :key="id"
-        :name="name"
-        :type="mime"
+        v-for="file of value"
+        :id="file.id"
+        :key="file.id"
+        :name="file.name"
+        :type="file.mime"
         :readonly="readonly"
-        :size="size"
+        :size="file.size"
+        @delete="removeFile(file)"
       ></form-file-line>
     </div>
     <!--    <input type="file" @input="handleFileInput">-->
@@ -59,6 +60,10 @@ export default {
   components: { FormFileLine },
   mixins: [processingFormComponentMixin, collapsibleProcessingFormComponentMixin],
   props: {
+    value: {
+      type: [String, Array],
+      required: true,
+    },
     readonly: {
       type: Boolean,
       default: false,
@@ -71,14 +76,15 @@ export default {
     ...mapState({
                   client: (state) => state.client,
                 }),
-    parseFiles() {
-      return JSON.parse(this.initialValue);
-    },
   },
   methods: {
     // downloadAll() {
     //   document.querySelectorAll('.processing-form-file-line__name').forEach((el) => el.click());
     // },
+    removeFile(file) {
+      const value = this.value.slice().splice(this.value.indexOf(file), 1);
+      this.$emit('input', value);
+    },
     async handleFileInput(event) {
       const files = Array.from(event.target.files);
       const client = await this.client.getCliInstance();
@@ -87,7 +93,6 @@ export default {
       console.info(storedFiles, files);
     },
   },
-  mounted() {},
 };
 </script>
 

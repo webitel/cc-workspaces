@@ -80,8 +80,11 @@ export default {
     initializeValues() {
       this.formBody.forEach((component) => {
         if (!component.value && component.view.initialValue) {
-          // eslint-disable-next-line no-param-reassign
-          component.value = component.view.initialValue;
+          try {
+            component.value = JSON.parse(component.view.initialValue);
+          } catch {
+            component.value = component.view.initialValue;
+          }
         }
       });
     },

@@ -27,6 +27,14 @@
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import { mapState } from 'vuex';
 
+const FileStatus = Object.freeze({
+  ERROR: 'error',
+  PROGRESS: 'progress',
+  DONE: 'done',
+  AFTER_DONE: 'afterDone',
+  AFTER_ERROR: 'afterError',
+                                 });
+
 export default {
   name: 'processing-form-file-line',
   props: {
@@ -62,6 +70,10 @@ export default {
       if (this.type.includes('video')) return 'preview-tag-video';
       if (this.type.includes('audio')) return 'preview-tag-audio';
       return 'docs';
+    },
+    status() {
+      if (this.id) return FileStatus.DONE;
+      if (this.progress) return FileStatus.PROGRESS;
     },
   },
   methods: {
