@@ -75,7 +75,7 @@ $default-color: #1A90E5;
 
 .processing-form-text {
   position: relative;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);
   border: 1px dashed $default-color;
   border-radius: var(--border-radius);
 

@@ -23,6 +23,22 @@
 <!--          </template>-->
 <!--          {{ $t('reusable.downloadAll') }}-->
 <!--        </wt-tooltip>-->
+        <wt-tooltip v-if="!readonly" class="processing-form-file-attach">
+          <template v-slot:activator>
+            <wt-icon-btn
+              icon="attach"
+              @click="$refs['file-input'].click()"
+            ></wt-icon-btn>
+            <input
+              type="file"
+              class="processing-form-file-attach__input"
+              ref="file-input"
+              multiple
+              @input="handleFileInput"
+            >
+          </template>
+          {{ $t('reusable.import') }}
+        </wt-tooltip>
         <wt-icon-btn
           v-show="collapsible || !collapsed"
           :icon="collapsed ? 'arrow-right' : 'arrow-down'"
@@ -35,17 +51,13 @@
       class="processing-form-file__content-wrapper"
     >
       <form-file-line
-        v-for="file of value"
-        :id="file.id"
-        :key="file.id"
-        :name="file.name"
-        :type="file.mime"
+        v-for="(file, index) of value.concat(uploadingFiles)"
+        :key="file.id || file.name + index"
+        :file="file"
         :readonly="readonly"
-        :size="file.size"
         @delete="removeFile(file)"
       ></form-file-line>
     </div>
-    <!--    <input type="file" @input="handleFileInput">-->
   </div>
 </template>
 
@@ -72,6 +84,9 @@ export default {
       type: Number,
     },
   },
+  data: () => ({
+    uploadingFiles: [],
+  }),
   computed: {
     ...mapState({
                   client: (state) => state.client,
@@ -82,15 +97,50 @@ export default {
     //   document.querySelectorAll('.processing-form-file-line__name').forEach((el) => el.click());
     // },
     removeFile(file) {
-      const value = this.value.slice().splice(this.value.indexOf(file), 1);
+      const value = this.value.slice();
+      value.splice(this.value.indexOf(file), 1);
       this.$emit('input', value);
     },
     async handleFileInput(event) {
-      const files = Array.from(event.target.files);
+      Array.from(event.target.files).forEach((file) => this.uploadFile(file));
+      this.$refs['file-input'].value = '';
+    },
+    async uploadFile(file) {
+      const snapshot = {
+        name: file.name,
+        mime: file.type,
+        size: file.size,
+        metadata: {
+          progress: {
+            total: 0,
+            loaded: 0,
+          },
+          done: false,
+          close: false,
+          error: false,
+        },
+      };
+      this.uploadingFiles.push(snapshot);
       const client = await this.client.getCliInstance();
-      const progress = (e) => { console.info(e); };
-      const storedFiles = await client.storeFile(this.attemptId, files, progress);
-      console.info(storedFiles, files);
+      const fileUploadProgress = ({ loaded, total }) => {
+        snapshot.metadata.progress = { loaded, total };
+      };
+      try {
+        const storedFile = await client.storeFile(this.attemptId, [file], fileUploadProgress);
+        snapshot.metadata.done = true;
+        setTimeout(() => {
+          this.uploadingFiles.splice(this.uploadingFiles.indexOf(snapshot), 1);
+          this.addStoredFile(storedFile);
+        }, 800);
+      } catch (err) {
+        snapshot.metadata.error = true;
+        setTimeout(() => {
+          snapshot.metadata.close = () => this.uploadingFiles.splice(this.uploadingFiles.indexOf(snapshot), 1);
+        }, 800);
+      }
+    },
+    addStoredFile(file) {
+      this.$emit('input', this.value.concat(file));
     },
   },
 };
@@ -100,7 +150,7 @@ export default {
 
 .processing-form-file {
   position: relative;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);
   border: 1px dashed var(--job-color);
   border-radius: var(--border-radius);
 
@@ -125,5 +175,11 @@ export default {
   margin-left: auto;
   line-height: 0;
   gap: var(--spacing-xs);
+}
+
+.processing-form-file-attach {
+  &__input {
+    display: none;
+  }
 }
 </style>
