@@ -21,6 +21,12 @@
         :max="file.metadata.progress.total"
         :value="file.metadata.progress.loaded"
       ></wt-load-bar>
+      <p
+        v-else-if="status === FileStatus.AFTER_ERROR || status === FileStatus.ERROR"
+        class="processing-form-file-line__error-message"
+      >
+        {{ $tc('vocabulary.errors', 1) }}
+      </p>
     </div>
     <div v-if="!readonly">
       <component
@@ -120,6 +126,10 @@ export default {
 
   .processing-form-file-line__name {
     word-break: break-all;
+  }
+
+  .processing-form-file-line__error-message {
+    color: var(--false-color);
   }
 
   .wt-load-bar {

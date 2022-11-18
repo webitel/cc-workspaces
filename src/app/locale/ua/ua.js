@@ -80,6 +80,11 @@ export default {
         nextDistributeAtTitle: 'Запланувати наступну задачу?',
         nextDistributeAt: 'Час наступної задачі',
       },
+      form: {
+        formFile: {
+          deleteConfirmation: 'Ви впевнені, що хочете видалити цей файл?',
+        },
+      },
     },
   },
   workspaceSec: {
