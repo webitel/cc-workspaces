@@ -122,9 +122,8 @@ export default {
     word-break: break-all;
   }
 
-  .processing-form-file-line__load-wrapper {
-    display: flex;
-    align-items: center;
+  .wt-load-bar {
+    margin-top: 8px; // align to first line center: 24px line height/2 - 8px load bar height/2
   }
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
-  <div class="processing-form-file">
-    <div class="processing-form-file__icon">
+  <article class="processing-form-file">
+    <aside class="processing-form-file__icon">
       <wt-icon
         color="contrast"
         icon="docs"
         size="sm"
       ></wt-icon>
-    </div>
-    <h4 class="processing-form-file__title">
+    </aside>
+    <header class="processing-form-file__title">
       {{ label }}
       <wt-hint
         v-if="hint"
@@ -23,7 +23,10 @@
 <!--          </template>-->
 <!--          {{ $t('reusable.downloadAll') }}-->
 <!--        </wt-tooltip>-->
-        <wt-tooltip v-if="!readonly" class="processing-form-file-attach">
+        <wt-tooltip
+          v-if="!readonly"
+          class="processing-form-file-attach"
+        >
           <template v-slot:activator>
             <wt-icon-btn
               icon="attach"
@@ -45,20 +48,22 @@
           @click="handleCollapse"
         ></wt-icon-btn>
       </div>
-    </h4>
-    <div
+    </header>
+
+    <section
       v-show="!collapsible || !collapsed"
       class="processing-form-file__content-wrapper"
     >
+<!--   :key by id or name+index cause uploading files doesnt have an id   -->
       <form-file-line
-        v-for="(file, index) of value.concat(uploadingFiles)"
+        v-for="(file, index) of value.concat(uploadingSnapshots)"
         :key="file.id || file.name + index"
         :file="file"
         :readonly="readonly"
         @delete="removeFile(file)"
       ></form-file-line>
-    </div>
-  </div>
+    </section>
+  </article>
 </template>
 
 <script>
@@ -67,13 +72,28 @@ import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsible
 import processingFormComponentMixin from '../../../mixins/processingFormComponentMixin';
 import FormFileLine from './processing-form-file-line.vue';
 
+const makeFileSnapshot = (file) => ({
+  name: file.name,
+  mime: file.type,
+  size: file.size,
+  metadata: {
+    progress: {
+      total: 0,
+      loaded: 0,
+    },
+    done: false,
+    close: false,
+    error: false,
+  },
+});
+
 export default {
   name: 'processing-form-file',
   components: { FormFileLine },
   mixins: [processingFormComponentMixin, collapsibleProcessingFormComponentMixin],
   props: {
     value: {
-      type: [String, Array],
+      type: Array,
       required: true,
     },
     readonly: {
@@ -85,7 +105,7 @@ export default {
     },
   },
   data: () => ({
-    uploadingFiles: [],
+    uploadingSnapshots: [],
   }),
   computed: {
     ...mapState({
@@ -96,58 +116,63 @@ export default {
     // downloadAll() {
     //   document.querySelectorAll('.processing-form-file-line__name').forEach((el) => el.click());
     // },
+    async handleFileInput(event) {
+      Array.from(event.target.files).forEach((file) => this.uploadFile(file));
+      this.$refs['file-input'].value = ''; // reset input value
+    },
+    async uploadFile(uploadedFile) {
+      const snapshot = makeFileSnapshot(uploadedFile);
+      this.uploadingSnapshots.push(snapshot);
+
+      try {
+        const fileUploadProgress = ({ loaded, total }) => {
+          snapshot.metadata.progress = { loaded, total };
+        };
+        const client = await this.client.getCliInstance();
+        const storedFile = await client.storeFile(this.attemptId, [uploadedFile], fileUploadProgress);
+
+        this.handleFileSuccessUpload({ snapshot, file: storedFile });
+      } catch (err) {
+        console.info(err);
+        this.handleFileErrorUpload({ snapshot, err });
+      }
+    },
+
+    handleFileSuccessUpload({ snapshot, file }) {
+      // eslint-disable-next-line no-param-reassign
+      snapshot.metadata.done = true;
+      setTimeout(() => {
+        this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1);
+        this.addStoredFile(file);
+      }, 1600);
+    },
+
+    handleFileErrorUpload({ snapshot }) {
+      // eslint-disable-next-line no-param-reassign
+      snapshot.metadata.error = true;
+
+      setTimeout(() => {
+        // eslint-disable-next-line no-param-reassign
+        snapshot.metadata.close = () => (
+          this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1)
+        );
+      }, 1600);
+    },
+
+    addStoredFile(file) {
+      this.$emit('input', this.value.concat(file));
+    },
+
     removeFile(file) {
       const value = this.value.slice();
       value.splice(this.value.indexOf(file), 1);
       this.$emit('input', value);
-    },
-    async handleFileInput(event) {
-      Array.from(event.target.files).forEach((file) => this.uploadFile(file));
-      this.$refs['file-input'].value = '';
-    },
-    async uploadFile(file) {
-      const snapshot = {
-        name: file.name,
-        mime: file.type,
-        size: file.size,
-        metadata: {
-          progress: {
-            total: 0,
-            loaded: 0,
-          },
-          done: false,
-          close: false,
-          error: false,
-        },
-      };
-      this.uploadingFiles.push(snapshot);
-      const client = await this.client.getCliInstance();
-      const fileUploadProgress = ({ loaded, total }) => {
-        snapshot.metadata.progress = { loaded, total };
-      };
-      try {
-        const storedFile = await client.storeFile(this.attemptId, [file], fileUploadProgress);
-        snapshot.metadata.done = true;
-        setTimeout(() => {
-          this.uploadingFiles.splice(this.uploadingFiles.indexOf(snapshot), 1);
-          this.addStoredFile(storedFile);
-        }, 800);
-      } catch (err) {
-        snapshot.metadata.error = true;
-        setTimeout(() => {
-          snapshot.metadata.close = () => this.uploadingFiles.splice(this.uploadingFiles.indexOf(snapshot), 1);
-        }, 800);
-      }
-    },
-    addStoredFile(file) {
-      this.$emit('input', this.value.concat(file));
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .processing-form-file {
   position: relative;
   padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);
