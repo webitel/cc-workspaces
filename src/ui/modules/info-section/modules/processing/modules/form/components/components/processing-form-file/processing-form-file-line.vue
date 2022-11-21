@@ -42,20 +42,13 @@
 <script>
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import { mapState } from 'vuex';
-
-const FileStatus = Object.freeze({
-  ERROR: 'error',
-  PROGRESS: 'progress',
-  DONE: 'done',
-  AFTER_DONE: 'afterDone',
-  AFTER_ERROR: 'afterError',
-                                 });
+import FileStatus from '../../../enums/FormFileStatus.enum';
 
 export default {
   name: 'processing-form-file-line',
   props: {
     file: {
-      type: [File, Object],
+      type: Object,
       required: true,
     },
     readonly: {
@@ -92,6 +85,7 @@ export default {
       }
     },
     status() {
+      // order is important cause properties are set one after another
       if (this.file.id) return FileStatus.DONE;
       if (this.file.metadata?.done) return FileStatus.AFTER_DONE;
       if (this.file.metadata?.close) return FileStatus.ERROR;

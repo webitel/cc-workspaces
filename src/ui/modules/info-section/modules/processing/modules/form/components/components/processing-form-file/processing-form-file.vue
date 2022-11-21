@@ -186,7 +186,6 @@ export default {
 
         this.handleFileSuccessUpload({ snapshot, file: storedFile });
       } catch (err) {
-        console.info(err);
         this.handleFileErrorUpload({ snapshot, err });
       }
     },
@@ -194,6 +193,7 @@ export default {
     handleFileSuccessUpload({ snapshot, file }) {
       // eslint-disable-next-line no-param-reassign
       snapshot.metadata.done = true;
+
       setTimeout(() => {
         this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1);
         this.addStoredFile(file);
