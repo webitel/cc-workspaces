@@ -1,5 +1,9 @@
 <template>
-  <article class="processing-form-file" @dragenter.prevent="handleDragEnter">
+  <article
+    :class="{ 'processing-form-file--empty': !value.concat(uploadingSnapshots).length }"
+    class="processing-form-file"
+    @dragenter.prevent="handleDragEnter"
+  >
     <dropzone
       v-show="isDropzoneVisible"
       @drop="handleDrop"
@@ -32,15 +36,15 @@
         ></wt-icon>
       </aside>
       <div class="processing-form-file__actions-wrapper">
-        <!--        <wt-tooltip v-if="readonly">-->
-        <!--          <template v-slot:activator>-->
-        <!--            <wt-icon-btn-->
-        <!--              icon="download"-->
-        <!--              @click="downloadAll"-->
-        <!--            ></wt-icon-btn>-->
-        <!--          </template>-->
-        <!--          {{ $t('reusable.downloadAll') }}-->
-        <!--        </wt-tooltip>-->
+        <wt-tooltip v-if="readonly">
+          <template v-slot:activator>
+            <wt-icon-btn
+              icon="download"
+              @click="downloadAll"
+            ></wt-icon-btn>
+          </template>
+          {{ $t('reusable.downloadAll') }}
+        </wt-tooltip>
         <wt-tooltip
           v-if="!readonly"
           class="processing-form-file-attach"
@@ -86,6 +90,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import JSZip from 'jszip';
+import jszipUtils from 'jszip-utils';
+import saveAs from 'file-saver';
 import ConfirmationPopup from '../../../../../../../../../../app/components/utils/confirmation-popup.vue';
 import dropzoneMixin from '../../../../../../../../../../app/mixins/dropzoneMixin';
 import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsibleProcessingFormComponentMixin';
@@ -134,13 +141,29 @@ export default {
   }),
   computed: {
     ...mapState({
-      client: (state) => state.client,
-    }),
+                  client: (state) => state.client,
+                }),
   },
   methods: {
-    // downloadAll() {
-    //   document.querySelectorAll('.processing-form-file-line__name').forEach((el) => el.click());
-    // },
+    async downloadAll() {
+      const zip = new JSZip();
+      const cli = await this.client.getCliInstance();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { name, id } of this.value) {
+        const url = cli.fileUrlDownload(id);
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((resolve, reject) => {
+          jszipUtils.getBinaryContent(url, (err, file) => {
+            if (err) reject(err);
+            console.info(file);
+            zip.file(name, file);
+            resolve();
+          });
+        });
+      }
+      const blob = await zip.generateAsync({ type: 'blob' });
+      saveAs(blob, this.label);
+    },
     handleDrop(e) {
       Array.from(e.dataTransfer.files).forEach((file) => this.uploadFile(file));
       this.handleDragLeave();
@@ -150,6 +173,7 @@ export default {
       this.$refs['file-input'].value = ''; // reset input value
     },
     async uploadFile(uploadedFile) {
+      this.collapsed = false; // open, if collapsed
       const snapshot = makeFileSnapshot(uploadedFile);
       this.uploadingSnapshots.push(snapshot);
 
@@ -214,6 +238,10 @@ export default {
   border: 1px dashed var(--job-color);
   border-radius: var(--border-radius);
   gap: var(--spacing-sm);
+
+  &--empty {
+    gap: 0;
+  }
 
   .processing-form-file__icon {
     position: absolute;
