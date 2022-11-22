@@ -12,9 +12,8 @@
         v-for="(el, key) of formBody"
         :key="el.id+key.toString()"
         v-model="el.value"
-        :label-props="{
-        hint: el.view.hint
-      }"
+        :label-props="{ hint: el.view.hint }"
+        :attempt-id="task.attempt.id"
         v-bind="el.view"
       ></component>
     </template>
@@ -35,7 +34,7 @@ import { mapActions } from 'vuex';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
-import FormFileWrapper from './components/processing-form-file/processing-form-file-wrapper.vue';
+import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
@@ -44,7 +43,7 @@ export default {
   components: {
     FormText,
     FormSelect,
-    FormFileWrapper,
+    FormFile,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -56,7 +55,6 @@ export default {
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
-      'form-file': 'form-file-wrapper',
     },
   }),
   computed: {
@@ -82,8 +80,11 @@ export default {
     initializeValues() {
       this.formBody.forEach((component) => {
         if (!component.value && component.view.initialValue) {
-          // eslint-disable-next-line no-param-reassign
-          component.value = component.view.initialValue;
+          try {
+            component.value = JSON.parse(component.view.initialValue);
+          } catch {
+            component.value = component.view.initialValue;
+          }
         }
       });
     },
