@@ -31,6 +31,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
@@ -79,7 +80,7 @@ export default {
                   }),
     initializeValues() {
       this.formBody.forEach((component) => {
-        if (!component.value && component.view.initialValue) {
+        if (isEmpty(component.value) && component.view.initialValue) {
           try {
             component.value = JSON.parse(component.view.initialValue);
           } catch {
