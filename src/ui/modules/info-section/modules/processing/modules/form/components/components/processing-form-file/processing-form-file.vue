@@ -1,11 +1,12 @@
 <template>
+<!-- show form-file only if its write mode, or if it has value to show -->
   <article
-    :class="{ 'processing-form-file--empty': !value.concat(uploadingSnapshots).length }"
+    v-if="isFormFile"
     class="processing-form-file"
     @dragenter.prevent="handleDragEnter"
   >
     <dropzone
-      v-show="isDropzoneVisible"
+      v-show="!readonly && isDropzoneVisible"
       @drop="handleDrop"
       @dragenter.prevent
       @dragleave.prevent="handleDragLeave"
@@ -84,6 +85,10 @@
         :readonly="readonly"
         @delete="askDeleteFile(file)"
       ></form-file-line>
+      <p
+        class="processing-form-file__empty-wrapper"
+        v-show="!value.concat(uploadingSnapshots).length"
+      >{{ $t('infoSec.processing.form.formFile.empty') }}</p>
     </section>
   </article>
 </template>
@@ -93,6 +98,7 @@ import { mapState } from 'vuex';
 import JSZip from 'jszip';
 import jszipUtils from 'jszip-utils';
 import saveAs from 'file-saver';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import ConfirmationPopup from '../../../../../../../../../../app/components/utils/confirmation-popup.vue';
 import dropzoneMixin from '../../../../../../../../../../app/mixins/dropzoneMixin';
 import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsibleProcessingFormComponentMixin';
@@ -143,6 +149,9 @@ export default {
     ...mapState({
                   client: (state) => state.client,
                 }),
+    isFormFile() {
+      return !this.readonly || !isEmpty(this.value);
+    },
   },
   methods: {
     async downloadAll() {
@@ -216,9 +225,9 @@ export default {
       this.$emit('input', this.value.concat(file));
     },
 
-    handleDeleteConfirm(file) {
+    handleDeleteConfirm() {
       const value = this.value.slice();
-      value.splice(this.value.indexOf(file), 1);
+      value.splice(this.value.indexOf(this.deletedFile), 1);
       this.$emit('input', value);
     },
 
@@ -238,10 +247,6 @@ export default {
   border: 1px dashed var(--job-color);
   border-radius: var(--border-radius);
   gap: var(--spacing-sm);
-
-  &--empty {
-    gap: 0;
-  }
 
   .processing-form-file__icon {
     position: absolute;
@@ -270,5 +275,10 @@ export default {
   &__input {
     display: none;
   }
+}
+
+.processing-form-file__empty-wrapper {
+  text-align: center;
+  padding: var(--spacing-sm);
 }
 </style>

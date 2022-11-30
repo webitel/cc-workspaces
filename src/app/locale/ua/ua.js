@@ -83,6 +83,7 @@ export default {
       form: {
         formFile: {
           deleteConfirmation: 'Ви впевнені, що хочете видалити цей файл?',
+          empty: 'Поки тут немає файлів',
         },
       },
     },

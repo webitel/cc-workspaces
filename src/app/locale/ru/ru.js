@@ -83,6 +83,7 @@ export default {
       form: {
         formFile: {
           deleteConfirmation: 'Вы уверенны, что хотите удалить этот файл?',
+          empty: 'Пока здесь нет файлов',
         },
       },
     },
@@ -97,7 +98,7 @@ export default {
       acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
       draftPlaceholder: 'Напишите сообщение...',
       dropzone: {
-        title: 'Перетяните файлы сюда',
+        title: 'Перетащите файлы сюда',
         description: 'Чтобы отправить их',
       },
       confirmClose: 'Вы уверенны, что хотите закрыть активный чат?',

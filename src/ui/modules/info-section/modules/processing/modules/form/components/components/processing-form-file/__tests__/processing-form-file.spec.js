@@ -174,7 +174,8 @@ describe('ProcessingFormFile', () => {
       },
       computed,
     });
-    wrapper.vm.handleDeleteConfirm(file);
+    wrapper.setData({ deletedFile: file });
+    wrapper.vm.handleDeleteConfirm();
     expect(wrapper.emitted().input[0][0]).toEqual([{ id: 2 }]);
   });
 });

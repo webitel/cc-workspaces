@@ -120,6 +120,12 @@ export default {
 
   .processing-form-file-line__name {
     word-break: break-all;
+    color: var(--link-color);
+    transition: var(--transition);
+
+    &:hover {
+      color: var(--link--hover-color);
+    }
   }
 
   .processing-form-file-line__error-message {
