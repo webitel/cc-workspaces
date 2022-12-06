@@ -32,6 +32,7 @@
 
 <script>
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import debounce from '@webitel/ui-sdk/src/scripts/debounce';
 import { mapActions, mapGetters } from 'vuex';
 import CcHeader from '../modules/app-header/components/app-header.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
@@ -61,10 +62,6 @@ export default {
     isWelcomePopup: true,
   }),
 
-  destroyed() {
-    this.closeSession();
-  },
-
   computed: {
     ...mapGetters('ui/userinfo', {
       checkAppAccess: 'CHECK_APP_ACCESS',
@@ -78,6 +75,7 @@ export default {
     ...mapActions('workspace', {
       openSession: 'OPEN_SESSION',
       closeSession: 'CLOSE_SESSION',
+      setScreenWidth: 'SET_SCREEN_WIDTH',
     }),
 
     async initSession() {
@@ -107,6 +105,25 @@ export default {
       const adminUrl = process.env.VUE_APP_APPLICATION_HUB_URL;
       window.location.href = adminUrl;
     },
+
+    subscribeResize() {
+      window.addEventListener('resize', this.atResize);
+    },
+    unsubscribeResize() {
+      window.removeEventListener('resize', this.atResize);
+    },
+    atResize({ target }) {
+      console.warn(target.screen.width);
+    },
+  },
+
+  mounted() {
+    this.atResize = debounce(this.atResize);
+    this.subscribeResize();
+  },
+  destroyed() {
+    this.closeSession();
+    this.unsubscribeResize();
   },
 };
 </script>
