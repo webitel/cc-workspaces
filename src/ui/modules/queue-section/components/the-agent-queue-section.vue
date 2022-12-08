@@ -1,5 +1,10 @@
 <template>
   <section class="workspace-section queue-section">
+    <wt-button
+      v-if="collapsible"
+      @click="collapsed = !collapsed"
+    >{{ collapsed }}</wt-button>
+    {{ size }}
     <div class="queue-section-wrapper">
       <call-queue/>
       <chat-queue/>
@@ -30,7 +35,9 @@ export default {
     ChatQueue,
     JobQueue,
   },
-
+  data: () => ({
+    collapsed: false,
+  }),
   computed: {
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
@@ -46,6 +53,16 @@ export default {
     // used as isNewCallBtn check
     isCallWorkspace() {
       return this.workspaceState === WorkspaceStates.CALL;
+    },
+
+    size() {
+      if (this.collapsible && this.collapsed) return 'sm';
+      if (this.$breakpoint.md) return 'sm';
+      if (this.$breakpoint.lg) return 'md';
+      return 'md';
+    },
+    collapsible() {
+      return this.$breakpoint.mdAndUp;
     },
   },
 

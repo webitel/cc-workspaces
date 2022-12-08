@@ -6,6 +6,7 @@
     @dragenter.prevent
     @dragover.prevent
   >
+    {{ $breakpoint }}
     <disconnect-popup />
 
     <welcome-popup
@@ -32,17 +33,16 @@
 
 <script>
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
-import debounce from '@webitel/ui-sdk/src/scripts/debounce';
 import { mapActions, mapGetters } from 'vuex';
+import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
 import CcHeader from '../modules/app-header/components/app-header.vue';
-import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
-import QueueSection from '../modules/queue-section/components/the-agent-queue-section.vue';
 import InfoSection from '../modules/info-section/components/the-agent-info-section.vue';
-import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
-import VideoContainer from '../modules/video-container/components/video-container.vue';
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
 import WelcomePopup from '../modules/popups/welcome-popup/welcome-popup.vue';
-import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
+import QueueSection from '../modules/queue-section/components/the-agent-queue-section.vue';
+import VideoContainer from '../modules/video-container/components/video-container.vue';
+import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
+import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
 
 export default {
   name: 'the-agent-workspace',
@@ -105,25 +105,10 @@ export default {
       const adminUrl = process.env.VUE_APP_APPLICATION_HUB_URL;
       window.location.href = adminUrl;
     },
-
-    subscribeResize() {
-      window.addEventListener('resize', this.atResize);
-    },
-    unsubscribeResize() {
-      window.removeEventListener('resize', this.atResize);
-    },
-    atResize({ target }) {
-      console.warn(target.screen.width);
-    },
   },
 
-  mounted() {
-    this.atResize = debounce(this.atResize);
-    this.subscribeResize();
-  },
   destroyed() {
     this.closeSession();
-    this.unsubscribeResize();
   },
 };
 </script>
@@ -132,7 +117,6 @@ export default {
 .main-agent-workspace {
   display: flex;
   flex-direction: column;
-  min-width: 1280px;
   max-height: 100%;
 }
 

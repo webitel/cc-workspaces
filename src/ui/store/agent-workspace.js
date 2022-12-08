@@ -1,5 +1,4 @@
 const state = {
-  screenWidth: window.screen.width,
   stateHistory: [],
 };
 
@@ -55,9 +54,6 @@ const actions = {
     }
     context.commit('SET_STATE_HISTORY', stateHistory);
   },
-  SET_SCREEN_WIDTH: (context, width) => {
-    context.commit('SET_SCREEN_WIDTH', width);
-  },
 };
 
 const mutations = {
@@ -66,9 +62,6 @@ const mutations = {
   },
   ADD_WORKSPACE_STATE: (state, { type, task }) => {
     state.stateHistory.push({ type, task });
-  },
-  SET_SCREEN_WIDTH: (state, width) => {
-    state.width = width;
   },
 };
 
