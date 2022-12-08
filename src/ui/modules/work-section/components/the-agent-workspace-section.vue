@@ -48,6 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-section {
+  flex-basis: 550px;
   //padding: var(--spacing-sm);
 }
 </style>

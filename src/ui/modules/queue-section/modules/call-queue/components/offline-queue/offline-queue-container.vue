@@ -6,6 +6,7 @@
         :key="task.id"
         :opened="task === taskOnWorkspace"
         :task="task"
+        :size="size"
         @click="openMember"
       ></offline-preview>
 
@@ -20,12 +21,13 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
   name: 'offline-queue-container',
-  mixins: [infiniteScrollMixin],
+  mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     TaskQueueContainer,
     OfflinePreview,

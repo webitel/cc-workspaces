@@ -1,14 +1,29 @@
 <template>
-  <section class="workspace-section queue-section">
-    <wt-button
-      v-if="collapsible"
-      @click="collapsed = !collapsed"
-    >{{ collapsed }}</wt-button>
-    {{ size }}
+  <section
+    class="workspace-section queue-section"
+    :class="[
+      `queue-section--${size}`
+    ]"
+  >
+
     <div class="queue-section-wrapper">
-      <call-queue/>
-      <chat-queue/>
-      <job-queue/>
+      <wt-icon-btn
+        style="margin-bottom: 5px;"
+        v-if="collapsible"
+        :icon="collapsed ? 'expand' : 'collapse'"
+        size="sm"
+        @click="collapsed = !collapsed"
+      >{{ collapsed }}
+      </wt-icon-btn>
+      <call-queue
+        :size="size"
+      ></call-queue>
+      <chat-queue
+        :size="size"
+      ></chat-queue>
+      <job-queue
+        :size="size"
+      ></job-queue>
     </div>
     <wt-rounded-action
       color="success"
@@ -84,6 +99,17 @@ export default {
   display: flex;
   flex-direction: column;
   background: transparent;
+
+  will-change: width;
+  transition: var(--transition);
+
+  &--md {
+    width: 320px;
+  }
+
+  &--sm {
+    width: 120px; // TODO make me 72px
+  }
 
   .wt-rounded-action {
     position: absolute;

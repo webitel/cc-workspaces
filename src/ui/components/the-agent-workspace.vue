@@ -6,7 +6,6 @@
     @dragenter.prevent
     @dragover.prevent
   >
-    {{ $breakpoint }}
     <disconnect-popup />
 
     <welcome-popup
@@ -75,7 +74,6 @@ export default {
     ...mapActions('workspace', {
       openSession: 'OPEN_SESSION',
       closeSession: 'CLOSE_SESSION',
-      setScreenWidth: 'SET_SCREEN_WIDTH',
     }),
 
     async initSession() {
@@ -128,32 +126,30 @@ export default {
   min-height: 0;
   padding: var(--spacing-sm);
   background: var(--page-bg-color);
-
-  @media screen and (max-height: 768px) {
-    //padding: 15px;
-  }
 }
 
 .workspace {
-  display: grid;
   flex-grow: 1;
   min-height: 0;
   margin-top: var(--spacing-sm);
-  grid-template-columns: 340px 550px 1fr;
-  grid-gap: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-sm);
+  //display: grid;
+  //grid-template-columns: 320px 550px 1fr;
+  //grid-gap: var(--spacing-sm);
 
-  @media screen and (max-width: 1336px) {
-    grid-template-columns: 120px 550px 1fr; // changed 1st col width
-  }
-
-  @media screen and (max-width: 1336px) {
-    grid-template-columns: 120px 550px 1fr; // changed 1st col width
-  }
-
-  @media screen and (max-height: 768px) {
-    //grid-gap: 15px;
-    //margin-top: 15px;
-  }
+  //@media screen and (max-width: 1336px) {
+  //  grid-template-columns: 120px 550px 1fr; // changed 1st col width
+  //}
+  //
+  //@media screen and (max-width: 1336px) {
+  //  grid-template-columns: 120px 550px 1fr; // changed 1st col width
+  //}
+  //
+  //@media screen and (max-height: 768px) {
+  //  //grid-gap: 15px;
+  //  //margin-top: 15px;
+  //}
 }
 
 </style>

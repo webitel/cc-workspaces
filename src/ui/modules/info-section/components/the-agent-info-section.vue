@@ -133,6 +133,7 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-section {
+  flex-grow: 1;
   display: flex;
   flex-direction: row-reverse;
   gap: var(--spacing-3xs); // to separate side panel from scroll
