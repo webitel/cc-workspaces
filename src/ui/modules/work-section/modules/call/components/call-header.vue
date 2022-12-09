@@ -50,7 +50,7 @@
         @click="hangup"
       ></wt-rounded-action>
       <wt-rounded-action
-        v-if="isCall"
+        v-if="isCall && activeItemCallHistory"
         class="call-action"
         icon="call-ringing"
         color="success"
@@ -87,6 +87,9 @@
     computed: {
       ...mapState('features/call', {
         callList: (state) => state.callList,
+      }),
+      ...mapState('workspace', {
+        activeItemCallHistory: (state) => state.activeItemCallHistory,
       }),
       ...mapGetters('features/call', {
         call: 'CALL_ON_WORKSPACE',

@@ -1,5 +1,6 @@
 const state = {
   stateHistory: [],
+  activeItemCallHistory: '',
 };
 
 const getters = {
@@ -54,6 +55,9 @@ const actions = {
     }
     context.commit('SET_STATE_HISTORY', stateHistory);
   },
+  SET_ACTIVE_ITEM_CALL_HISTORY: (context, payload) => {
+    context.commit('UPDATE_ACTIVE_ITEM_CALL_HISTORY', payload);
+  },
 };
 
 const mutations = {
@@ -62,6 +66,9 @@ const mutations = {
   },
   ADD_WORKSPACE_STATE: (state, { type, task }) => {
     state.stateHistory.push({ type, task });
+  },
+  UPDATE_ACTIVE_ITEM_CALL_HISTORY: (state, value) => {
+    state.activeItemCallHistory = value;
   },
 };
 

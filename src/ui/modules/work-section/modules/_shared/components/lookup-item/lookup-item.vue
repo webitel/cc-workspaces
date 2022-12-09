@@ -1,6 +1,6 @@
 <template>
   <article class="lookup-item">
-    <lookup-item-wrapper>
+    <lookup-item-wrapper :style="id === activeItemCallHistory && 'border-color: var(--accent-color)'">
       <template slot="before" v-if="!noBefore">
         <slot name="before">
           <wt-avatar></wt-avatar>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import LookupItemWrapper from './lookup-item-wrapper.vue';
 
 export default {
@@ -55,6 +56,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    id: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    ...mapState('workspace', {
+      activeItemCallHistory: (state) => state.activeItemCallHistory,
+    }),
   },
 };
 </script>

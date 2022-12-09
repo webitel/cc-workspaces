@@ -1,5 +1,7 @@
 <template>
-  <lookup-item @click.native="handleInput">
+  <lookup-item
+    :id="item.id"
+    @click.native="handleInput">
     <template slot="title">
       {{ shownDestination | truncateFromEnd(24) }}
     </template>
