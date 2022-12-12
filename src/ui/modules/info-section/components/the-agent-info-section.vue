@@ -1,5 +1,18 @@
 <template>
-  <section class="workspace-section">
+  <section
+    class="workspace-section info-section"
+    :class="[
+      `info-section--${size}`
+    ]"
+  >
+    <wt-icon-btn
+      style="position:absolute; left: 5px; top: 5px; z-index: 1;"
+      v-if="collapsible"
+      :icon="collapsed ? 'expand' : 'collapse'"
+      size="sm"
+      @click="$emit('resize')"
+    >{{ collapsed }}
+    </wt-icon-btn>
     <the-agent-info-nav-panel
       v-model="currentTab"
       :tabs="tabs"
@@ -19,6 +32,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
@@ -36,6 +50,17 @@ export default {
     ClientInfo,
     KnowledgeBase,
     Processing,
+  },
+  mixins: [sizeMixin],
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false,
+    },
+    collapsible: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     currentTab: '',
@@ -140,6 +165,18 @@ export default {
   box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
+}
+
+.info-section {
+  will-change: width;
+  transition: var(--transition);
+
+  &--md {
+    flex: 1 1 auto;
+  }
+  &--sm {
+    flex: 0 0 550px;
+  }
 }
 
 .info-tab {

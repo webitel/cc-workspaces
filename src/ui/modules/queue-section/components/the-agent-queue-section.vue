@@ -8,11 +8,11 @@
 
     <div class="queue-section-wrapper">
       <wt-icon-btn
-        style="margin-bottom: 5px;"
+        style="position:absolute; left: 5px; top: 5px; z-index: 1;"
         v-if="collapsible"
         :icon="collapsed ? 'expand' : 'collapse'"
         size="sm"
-        @click="collapsed = !collapsed"
+        @click="$emit('resize')"
       >{{ collapsed }}
       </wt-icon-btn>
       <call-queue
@@ -37,21 +37,31 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import sizeMixin from '../../../../app/mixins/sizeMixin';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
-import WorkspaceStates
-  from '../../../enums/WorkspaceState.enum';
+import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 
 export default {
   name: 'the-agent-queue-section',
+  mixins: [sizeMixin],
   components: {
     CallQueue,
     ChatQueue,
     JobQueue,
   },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false,
+    },
+    collapsible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
-    collapsed: false,
   }),
   computed: {
     ...mapGetters('workspace', {
@@ -68,16 +78,6 @@ export default {
     // used as isNewCallBtn check
     isCallWorkspace() {
       return this.workspaceState === WorkspaceStates.CALL;
-    },
-
-    size() {
-      if (this.collapsible && this.collapsed) return 'sm';
-      if (this.$breakpoint.md) return 'sm';
-      if (this.$breakpoint.lg) return 'md';
-      return 'md';
-    },
-    collapsible() {
-      return this.$breakpoint.mdAndUp;
     },
   },
 

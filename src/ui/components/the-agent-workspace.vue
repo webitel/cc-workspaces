@@ -19,9 +19,24 @@
     <div class="workspace-wrap">
       <widget-bar />
       <section class="workspace">
-        <queue-section />
-        <workspace-section />
-        <info-section />
+        <queue-section
+          :size="queueSecSize"
+          :collapsed="queueSecCollapsed"
+          :collapsible="collapsible"
+          @resize="resizeQueuePanel"
+        ></queue-section>
+        <workspace-section
+          :size="workspaceSecSize"
+          :collapsed="workspaceSecCollapsed"
+          :collapsible="collapsible"
+          @resize="resizeWorkspacePanel"
+        ></workspace-section>
+        <info-section
+          :size="infoSecSize"
+          :collapsed="infoSecCollapsed"
+          :collapsible="collapsible"
+          @resize="resizeInfoPanel"
+        ></info-section>
       </section>
     </div>
 
@@ -34,6 +49,7 @@
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { mapActions, mapGetters } from 'vuex';
 import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
+import panelSizeControllerMixin from '../mixins/panelSizeControllerMixin';
 import CcHeader from '../modules/app-header/components/app-header.vue';
 import InfoSection from '../modules/info-section/components/the-agent-info-section.vue';
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
@@ -45,7 +61,10 @@ import WorkspaceSection from '../modules/work-section/components/the-agent-works
 
 export default {
   name: 'the-agent-workspace',
-  mixins: [appNotificationMixin],
+  mixins: [
+    appNotificationMixin,
+    panelSizeControllerMixin,
+  ],
   components: {
     CcHeader,
     WidgetBar,
@@ -150,6 +169,10 @@ export default {
   //  //grid-gap: 15px;
   //  //margin-top: 15px;
   //}
+}
+
+.workspace-section {
+  position: relative;
 }
 
 </style>

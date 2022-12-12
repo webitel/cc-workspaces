@@ -1,11 +1,25 @@
 <template>
-  <section class="workspace-section">
+  <section
+    class="workspace-section work-section"
+    :class="[
+      `work-section--${size}`
+    ]"
+  >
+    <wt-icon-btn
+      style="position:absolute; left: 5px; top: 5px; z-index: 1;"
+      v-if="collapsible"
+      :icon="collapsed ? 'expand' : 'collapse'"
+      size="sm"
+      @click="$emit('resize')"
+    >{{ collapsed }}
+    </wt-icon-btn>
     <component :is="workspaceComponent"/>
   </section>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
@@ -22,6 +36,17 @@ export default {
     Member,
     Job,
     EmptyWorkspace,
+  },
+  mixins: [sizeMixin],
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false,
+    },
+    collapsible: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -47,8 +72,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.workspace-section {
-  flex-basis: 550px;
-  //padding: var(--spacing-sm);
+.work-section {
+  will-change: width;
+  transition: var(--transition);
+
+  &--md {
+    flex: 1 1 auto;
+  }
+  &--sm {
+    flex: 0 0 400px;
+  }
 }
 </style>
