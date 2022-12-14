@@ -37,6 +37,7 @@ import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
+import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
 
 export default {
   name: 'the-processing-form',
@@ -45,6 +46,7 @@ export default {
     FormText,
     FormSelect,
     FormFile,
+    FormDatetimepicker,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -56,6 +58,7 @@ export default {
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
+      'wt-datetimepicker': 'form-datetimepicker',
     },
   }),
   computed: {
