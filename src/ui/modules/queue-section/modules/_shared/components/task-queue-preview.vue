@@ -1,6 +1,9 @@
 <template>
   <article
-    :class="{ 'queue-preview--opened': opened }"
+    :class="[
+      { 'queue-preview--opened': opened },
+      `queue-preview--${size}`
+    ]"
     class="queue-preview"
     tabindex="0"
     @click="$emit('click', task)"
@@ -42,13 +45,14 @@
 </template>
 
 <script>
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import displayInfo from '../../../../../mixins/displayInfoMixin';
 import QueuePreviewTimer from './queue-preview-timer.vue';
 
 export default {
   name: 'task-queue-preview',
   components: { QueuePreviewTimer },
-  mixins: [displayInfo],
+  mixins: [displayInfo, sizeMixin],
   props: {
     task: {
       type: Object,
@@ -67,80 +71,43 @@ export default {
 
 <style lang="scss" scoped>
 .queue-preview {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
   box-sizing: border-box;
-  position: relative;
-  padding: var(--spacing-xs);
   margin-bottom: 1px;
-  border: 1px solid transparent;
-  background: var(--main-color);
-  border-radius: var(--border-radius);
+  padding: var(--spacing-xs);
   cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  background: var(--main-color);
+  gap: var(--spacing-xs);
 
   &--opened, &:focus {
     border-color: var(--accent-color);
   }
 
-  @media screen and (max-width: 1336px) {
+  .queue-preview-header {
     display: flex;
-    align-items: center;
-    padding: var(--spacing-xs);
-    height: 36px;
-
-    .call-status-chip {
-      position: static;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-width: 0; // prevents queue-preview-header content overflowing
+    .wt-icon {
       margin-right: var(--spacing-xs);
     }
   }
-}
 
-.queue-preview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  min-width: 0; // prevents queue-preview-header content overflowing
-
-  &__name {
+  .queue-preview-header__name {
     @extend %typo-subtitle-1;
+    overflow: hidden;
     flex-grow: 1;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
-
-    @media screen and (max-width: 1336px) {
-      display: none;
-    }
   }
-  .wt-icon {
-    margin-right: var(--spacing-xs);
-  }
-}
 
-//.offline-queue .queue-preview-header__name {
-//  @media screen and (max-width: 1336px) {
-//    display: block;
-//  }
-//}
-
-.queue-preview-body {
-  @extend %typo-body-2;
-  color:var(--text-outline-color);
-  @media screen and (max-width: 1336px) {
-    display: none;
-  }
-}
-
-.queue-preview-chips {
-  @media screen and (max-width: 1336px) {
-    display: none;
-  }
-}
-
-.queue-preview-footer {
-  @media screen and (max-width: 1336px) {
-    display: none;
+  .queue-preview-body {
+    @extend %typo-body-2;
+    color: var(--text-outline-color);
   }
 
   .queue-preview-actions {
@@ -154,5 +121,34 @@ export default {
       }
     }
   }
+
+  &--sm {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    padding: var(--spacing-xs);
+
+    .call-status-chip {
+      position: static;
+      margin-right: var(--spacing-xs);
+    }
+
+    .queue-preview-header__name {
+      display: none;
+    }
+
+    .queue-preview-body {
+      display: none;
+    }
+
+    .queue-preview-chips {
+      display: none;
+    }
+
+    .queue-preview-footer {
+      display: none;
+    }
+  }
 }
+
 </style>

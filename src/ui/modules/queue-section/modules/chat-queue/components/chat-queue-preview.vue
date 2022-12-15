@@ -3,6 +3,7 @@
     :task="task"
     :title="displayName"
     :opened="opened"
+    :size="size"
     @click="$emit('click', task)"
   >
     <template v-slot:icon>
@@ -19,11 +20,12 @@
 
 <script>
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',
-  mixins: [taskPreviewMixin],
+  mixins: [taskPreviewMixin, sizeMixin],
   computed: {
     displayName() {
       return this.task.members.map((member) => member.name).join(', ');

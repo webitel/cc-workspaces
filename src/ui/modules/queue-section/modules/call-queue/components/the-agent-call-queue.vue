@@ -1,6 +1,9 @@
 <template>
   <the-agent-task-queue
     class="task-queue call-queue"
+    :class="[
+      `call-queue--${size}`
+    ]"
   >
     <template v-slot:title>
       <div class="call-queue__title-wrapper">
@@ -19,7 +22,11 @@
                 class="queue-tab__indicator"
                 :class="tab.value"
               ></div>
-              <wt-icon :icon="tab.icon" :color="tab.iconColor"></wt-icon>
+              <wt-icon
+                :icon="tab.icon"
+                :color="tab.iconColor"
+                :size="size"
+              ></wt-icon>
             </div>
           </template>
         </wt-tabs>
@@ -27,6 +34,7 @@
     </template>
     <component
       :is="currentTabComponent"
+      :size="size"
     ></component>
   </the-agent-task-queue>
 </template>
@@ -37,9 +45,11 @@ import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'the-agent-call-queue',
+  mixins: [sizeMixin],
   components: {
     TheAgentTaskQueue,
     ActiveQueue,
@@ -103,15 +113,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.call-queue__title-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.call-queue {
+  .call-queue__title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-.call-queue__title {
-  @media screen and (max-width: 1336px) {
-    display: none;
+  &--sm {
+    .call-queue__title-wrapper {
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
   }
 }
 

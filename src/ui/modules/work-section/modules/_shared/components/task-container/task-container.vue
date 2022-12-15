@@ -22,7 +22,6 @@ export default {
 .task-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
 
   .task-container__body-wrapper {
     flex-grow: 1;

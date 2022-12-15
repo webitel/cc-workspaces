@@ -6,6 +6,7 @@
       :index="key"
       :opened="task === taskOnWorkspace"
       :task="task"
+      :size="size"
       @answer="answer({ callId: task.id })"
       @click="openCall"
       @hangup="hangup({ callId: task.id })"
@@ -15,11 +16,13 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ActivePreview from './active-queue-preview.vue';
 
 export default {
   name: 'active-queue-container',
+  mixins: [sizeMixin],
   components: {
     TaskQueueContainer,
     ActivePreview,
