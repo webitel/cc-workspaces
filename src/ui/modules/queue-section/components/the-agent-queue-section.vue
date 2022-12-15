@@ -7,14 +7,13 @@
   >
 
     <div class="queue-section-wrapper">
-      <wt-icon-btn
-        style="position:absolute; left: 5px; top: 5px; z-index: 1;"
-        v-if="collapsible"
-        :icon="collapsed ? 'expand' : 'collapse'"
-        size="sm"
-        @click="$emit('resize')"
-      >{{ collapsed }}
-      </wt-icon-btn>
+      <div class="workspace-section__collapse-actions">
+        <collapse-action
+          v-if="collapsible"
+          :collapsed="collapsed"
+          @click="$emit('resize')"
+        ></collapse-action>
+      </div>
       <call-queue
         :size="size"
       ></call-queue>
@@ -37,6 +36,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
@@ -50,6 +50,7 @@ export default {
     CallQueue,
     ChatQueue,
     JobQueue,
+    CollapseAction,
   },
   props: {
     collapsed: {
@@ -99,16 +100,17 @@ export default {
   display: flex;
   flex-direction: column;
   background: transparent;
+  min-width: 0;
 
   will-change: width;
   transition: var(--transition);
 
   &--md {
-    width: 320px;
+    flex: 0 0 320px;
   }
 
   &--sm {
-    width: 120px; // TODO make me 72px
+    flex: 0 0 120px; // TODO make me 72px
   }
 
   .wt-rounded-action {
@@ -123,6 +125,13 @@ export default {
   flex-direction: column;
   flex-grow: 1;
   min-height: 0;
+}
+
+.workspace-section__collapse-actions {
+  padding: var(--spacing-sm);
+  background: var(--main-color);
+  margin-bottom: 10px;
+  border-radius: var(--border-radius);
 }
 
 .task-queue {

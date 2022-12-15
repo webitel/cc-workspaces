@@ -1,18 +1,23 @@
 <template>
   <section
-    class="workspace-section info-section"
     :class="[
-      `info-section--${size}`
+      `info-section--${size}`,
+      { 'info-section--unpinned': !pin },
     ]"
+    class="workspace-section info-section"
   >
-    <wt-icon-btn
-      style="position:absolute; left: 5px; top: 5px; z-index: 1;"
-      v-if="collapsible"
-      :icon="collapsed ? 'expand' : 'collapse'"
-      size="sm"
-      @click="$emit('resize')"
-    >{{ collapsed }}
-    </wt-icon-btn>
+    <div class="workspace-section__collapse-actions">
+      <collapse-action
+        v-if="collapsible"
+        :collapsed="collapsed"
+        @click="$emit('resize')"
+      ></collapse-action>
+      <pin-action
+        v-if="collapsible"
+        :pinned="pin"
+        @click="pin = !pin"
+      ></pin-action>
+    </div>
     <the-agent-info-nav-panel
       v-model="currentTab"
       :tabs="tabs"
@@ -32,13 +37,15 @@
 <script>
 import { mapGetters } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
+import PinAction from '../../../../app/components/utils/pin-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
-import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
+import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
 import InfoSectionHeader from './agent-info-section-tab-utils/the-agent-info-section-tab-header.vue';
 
 export default {
@@ -50,6 +57,8 @@ export default {
     ClientInfo,
     KnowledgeBase,
     Processing,
+    CollapseAction,
+    PinAction,
   },
   mixins: [sizeMixin],
   props: {
@@ -64,6 +73,7 @@ export default {
   },
   data: () => ({
     currentTab: '',
+    pin: true,
   }),
 
   watch: {
@@ -78,8 +88,8 @@ export default {
     },
     taskState() {
       if ((this.taskState === CallActions.Hangup
-        || this.taskState === ConversationState.Closed
-        || this.taskState === JobState.Processing)
+          || this.taskState === ConversationState.Closed
+          || this.taskState === JobState.Processing)
         && this.showProcessing) {
         this.currentTab = this.tabsObject.processing;
       }
@@ -158,37 +168,55 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-section {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row-reverse;
-  gap: var(--spacing-3xs); // to separate side panel from scroll
-  box-sizing: border-box;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.info-section {
-  will-change: width;
-  transition: var(--transition);
-
-  &--md {
-    flex: 1 1 auto;
-  }
-  &--sm {
-    flex: 0 0 550px;
-  }
-}
-
-.info-tab {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  box-sizing: border-box;
+  min-width: 0;
+  gap: var(--spacing-3xs); // to separate side panel from scroll
+
+  &.info-section {
+    width: auto;
+    height: auto;
+
+    transition: var(--transition);
+    will-change: width;
+
+    &--md {
+      flex: 1 1 auto;
+    }
+
+    &--sm {
+      flex: 0 0 550px;
+    }
+
+    &--unpinned {
+      position: fixed;
+      z-index: 111; // overlap header actions
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
+
+.workspace-section__collapse-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+}
+
+.info-tab {
+  position: relative;
+  display: flex;
+  overflow: scroll;
+  flex-direction: column;
+  flex-grow: 1;
   min-height: 0;
+  @extend %wt-scrollbar;
   max-height: 100%;
   padding: var(--spacing-sm);
-  @extend %wt-scrollbar;
-  position: relative;
-  overflow: scroll;
 
   .agent-info-section-tab-header {
     margin-bottom: var(--spacing-sm);

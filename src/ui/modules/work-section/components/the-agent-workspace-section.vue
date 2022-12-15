@@ -5,20 +5,23 @@
       `work-section--${size}`
     ]"
   >
-    <wt-icon-btn
-      style="position:absolute; left: 5px; top: 5px; z-index: 1;"
-      v-if="collapsible"
-      :icon="collapsed ? 'expand' : 'collapse'"
-      size="sm"
-      @click="$emit('resize')"
-    >{{ collapsed }}
-    </wt-icon-btn>
-    <component :is="workspaceComponent"/>
+    <div class="workspace-section__collapse-actions">
+      <collapse-action
+        v-if="collapsible"
+        :collapsed="collapsed"
+        @click="$emit('resize')"
+      ></collapse-action>
+    </div>
+    <component
+      class="work-section__main-content"
+      :is="workspaceComponent"
+    />
   </section>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
@@ -36,6 +39,7 @@ export default {
     Member,
     Job,
     EmptyWorkspace,
+    CollapseAction,
   },
   mixins: [sizeMixin],
   props: {
@@ -73,6 +77,9 @@ export default {
 
 <style lang="scss" scoped>
 .work-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   will-change: width;
   transition: var(--transition);
 
@@ -82,5 +89,14 @@ export default {
   &--sm {
     flex: 0 0 400px;
   }
+}
+
+.workspace-section__collapse-actions {
+  padding: var(--spacing-sm);
+}
+
+.work-section__main-content {
+  flex-grow: 1;
+  min-height: 0;
 }
 </style>
