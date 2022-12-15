@@ -1,0 +1,28 @@
+<template>
+  <wt-datetimepicker
+    v-bind="$attrs"
+    v-on="$listeners"
+    :value="value"
+  ></wt-datetimepicker>
+</template>
+
+<script>
+export default {
+  name: 'processing-form-datetimepicker',
+  props: {
+    value: {
+      type: [String, Number],
+      default: '',
+    },
+  },
+  created() {
+    if (this.value === 'now') {
+      this.$emit('input', Date.now());
+    }
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+
+</style>
