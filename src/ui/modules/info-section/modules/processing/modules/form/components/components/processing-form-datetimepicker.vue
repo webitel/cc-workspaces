@@ -1,6 +1,8 @@
 <template>
   <wt-datetimepicker
-    v-model="estimatedTime"
+    v-bind="$attrs"
+    v-on="$listeners"
+    :value="value"
   ></wt-datetimepicker>
 </template>
 
@@ -13,14 +15,9 @@ export default {
       default: '',
     },
   },
-  data: () => ({
-    estimatedTime: '',
-  }),
   created() {
     if (this.value === 'now') {
-      this.estimatedTime = Date.now();
-    } else {
-      this.estimatedTime = this.value;
+      this.$emit('input', Date.now());
     }
   },
 };
