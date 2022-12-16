@@ -205,6 +205,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: var(--spacing-sm);
+  line-height: 0;
 }
 
 .info-tab {

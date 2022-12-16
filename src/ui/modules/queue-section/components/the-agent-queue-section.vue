@@ -132,6 +132,7 @@ export default {
   background: var(--main-color);
   margin-bottom: 10px;
   border-radius: var(--border-radius);
+  line-height: 0;
 }
 
 .task-queue {
