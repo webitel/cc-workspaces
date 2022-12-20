@@ -5,13 +5,13 @@
       `work-section--${size}`
     ]"
   >
-    <div class="workspace-section__collapse-actions">
-      <collapse-action
-        v-if="collapsible"
-        :collapsed="collapsed"
-        @click="$emit('resize')"
-      ></collapse-action>
-    </div>
+<!--    <div class="workspace-section__collapse-actions">-->
+<!--      <collapse-action-->
+<!--        v-if="collapsible"-->
+<!--        :collapsed="collapsed"-->
+<!--        @click="$emit('resize')"-->
+<!--      ></collapse-action>-->
+<!--    </div>-->
     <component
       class="work-section__main-content"
       :is="workspaceComponent"

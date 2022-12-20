@@ -6,18 +6,18 @@
     ]"
     class="workspace-section info-section"
   >
-    <div class="workspace-section__collapse-actions">
-      <collapse-action
-        v-if="collapsible"
-        :collapsed="collapsed"
-        @click="$emit('resize')"
-      ></collapse-action>
-      <pin-action
-        v-if="collapsible"
-        :pinned="pin"
-        @click="pin = !pin"
-      ></pin-action>
-    </div>
+<!--    <div class="workspace-section__collapse-actions">-->
+<!--      <collapse-action-->
+<!--        v-if="collapsible"-->
+<!--        :collapsed="collapsed"-->
+<!--        @click="$emit('resize')"-->
+<!--      ></collapse-action>-->
+<!--      <pin-action-->
+<!--        v-if="collapsible"-->
+<!--        :pinned="pin"-->
+<!--        @click="pin = !pin"-->
+<!--      ></pin-action>-->
+<!--    </div>-->
     <the-agent-info-nav-panel
       v-model="currentTab"
       :tabs="tabs"
@@ -169,7 +169,7 @@ export default {
 <style lang="scss" scoped>
 .workspace-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   flex-grow: 1;
   box-sizing: border-box;
   min-width: 0;
