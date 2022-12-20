@@ -20,7 +20,11 @@ const fetchConfig = async () => {
   const fileConfig = (await fileResponse.json()) || {};
   const apiResponse = async () => {
     try {
-      const response = await fetch('/api/user/settings/phone');
+      const response = await fetch('/api/user/settings/phone',{
+        headers: {
+          'X-Webitel-Access': localStorage.getItem('access-token') || '',
+        },
+      });
       await response.json();
     } catch (error) {
       return {};
