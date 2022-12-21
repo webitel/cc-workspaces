@@ -27,7 +27,9 @@ const fetchConfig = async () => {
       });
       const body = await response.json();
       return {
-        CLI: body,
+        CLI: {
+          registerWebDevice: body.webrtc,
+        },
       };
     } catch (error) {
       return {};
