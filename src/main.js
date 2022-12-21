@@ -25,12 +25,17 @@ const fetchConfig = async () => {
           'X-Webitel-Access': localStorage.getItem('access-token') || '',
         },
       });
-      await response.json();
+      const body = await response.json();
+      return {
+        CLI: {
+          registerWebDevice: body.webrtc,
+        },
+      };
     } catch (error) {
       return {};
     }
   };
-  return deepmerge(fileConfig, apiResponse, electronConfig);
+  return deepmerge(fileConfig, await apiResponse(), electronConfig);
 };
 
 const createVueInstance = () => {
