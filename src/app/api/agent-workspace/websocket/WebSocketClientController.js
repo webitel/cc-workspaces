@@ -25,6 +25,7 @@ class WebSocketClientController {
   cli = null;
   Event = WebSocketClientEvent;
 
+  _config = getConfig();
   _on = {
     [WebSocketClientEvent.ERROR]: [websocketErrorEventHandler],
     [WebSocketClientEvent.AFTER_AUTH]: [],
