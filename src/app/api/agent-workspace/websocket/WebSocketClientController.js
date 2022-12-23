@@ -25,7 +25,6 @@ class WebSocketClientController {
   cli = null;
   Event = WebSocketClientEvent;
 
-  _config = getConfig(); // readonly, used on init
   _on = {
     [WebSocketClientEvent.ERROR]: [websocketErrorEventHandler],
     [WebSocketClientEvent.AFTER_AUTH]: [],
@@ -51,12 +50,17 @@ class WebSocketClientController {
 
   _createCliInstance = async () => {
     const token = localStorage.getItem('access-token');
+    const configCli = getConfig();
+
+    if (typeof configCli.registerWebDevice === 'undefined') {
+      configCli.registerWebDevice = true;
+    }
 
     const config = {
       endpoint,
       token,
-      registerWebDevice: this._config.registerWebDevice,
-      debug: this._config.debug,
+      registerWebDevice: configCli.registerWebDevice,
+      debug: configCli.debug,
     };
     const cli = new Client(config);
 
