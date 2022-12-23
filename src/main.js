@@ -29,6 +29,7 @@ const fetchConfig = async () => {
       return {
         CLI: {
           registerWebDevice: body.webrtc,
+          stun: body.stun,
         },
       };
     } catch (error) {
