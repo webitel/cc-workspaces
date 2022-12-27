@@ -12,9 +12,8 @@
         v-for="(el, key) of formBody"
         :key="el.id+key.toString()"
         v-model="el.value"
-        :label-props="{
-        hint: el.view.hint
-      }"
+        :label-props="{ hint: el.view.hint }"
+        :attempt-id="task.attempt.id"
         v-bind="el.view"
       ></component>
     </template>
@@ -32,11 +31,13 @@
 
 <script>
 import { mapActions } from 'vuex';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
-import FormFileWrapper from './components/processing-form-file/processing-form-file-wrapper.vue';
+import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
+import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
 
 export default {
   name: 'the-processing-form',
@@ -44,7 +45,8 @@ export default {
   components: {
     FormText,
     FormSelect,
-    FormFileWrapper,
+    FormFile,
+    FormDatetimepicker,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -56,7 +58,7 @@ export default {
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
-      'form-file': 'form-file-wrapper',
+      'wt-datetimepicker': 'form-datetimepicker',
     },
   }),
   computed: {
@@ -81,9 +83,12 @@ export default {
                   }),
     initializeValues() {
       this.formBody.forEach((component) => {
-        if (!component.value && component.view.initialValue) {
-          // eslint-disable-next-line no-param-reassign
-          component.value = component.view.initialValue;
+        if (isEmpty(component.value) && component.view.initialValue) {
+          try {
+            component.value = JSON.parse(component.view.initialValue);
+          } catch {
+            component.value = component.view.initialValue;
+          }
         }
       });
     },

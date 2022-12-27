@@ -1,11 +1,28 @@
 <template>
-  <section class="workspace-section">
-    <component :is="workspaceComponent"/>
+  <section
+    class="workspace-section work-section"
+    :class="[
+      `work-section--${size}`
+    ]"
+  >
+<!--    <div class="workspace-section__collapse-actions">-->
+<!--      <collapse-action-->
+<!--        v-if="collapsible"-->
+<!--        :collapsed="collapsed"-->
+<!--        @click="$emit('resize')"-->
+<!--      ></collapse-action>-->
+<!--    </div>-->
+    <component
+      class="work-section__main-content"
+      :is="workspaceComponent"
+    />
   </section>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
+import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
@@ -22,6 +39,18 @@ export default {
     Member,
     Job,
     EmptyWorkspace,
+    CollapseAction,
+  },
+  mixins: [sizeMixin],
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false,
+    },
+    collapsible: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -47,7 +76,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.workspace-section {
-  //padding: var(--spacing-sm);
+.work-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  will-change: width;
+  transition: var(--transition);
+
+  &--md {
+    flex: 1 1 auto;
+  }
+  &--sm {
+    flex: 0 0 400px;
+  }
+}
+
+.workspace-section__collapse-actions {
+  padding: var(--spacing-sm);
+  line-height: 0;
+}
+
+.work-section__main-content {
+  flex-grow: 1;
+  min-height: 0;
 }
 </style>

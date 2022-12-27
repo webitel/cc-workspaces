@@ -9,6 +9,7 @@
         :task="task"
         :opened="task === taskOnWorkspace"
         :key="task.id"
+        :size="size"
         @click="openTask(task)"
         @accept="task.accept()"
         @decline="task.decline()"
@@ -19,6 +20,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
 import TaskQueueContainer from '../../_shared/components/task-queue-container.vue';
 import JobQueuePreview from './job-queue-preview.vue';
@@ -30,7 +32,7 @@ export default {
     TaskQueueContainer,
     JobQueuePreview,
   },
-
+  mixins: [sizeMixin],
   computed: {
     ...mapState('features/job', {
       taskList: (state) => state.jobList,

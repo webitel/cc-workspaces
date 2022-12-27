@@ -39,7 +39,5 @@ export default {
   gap: var(--spacing-sm);
   padding: var(--spacing-sm);
   background: var(--secondary-color);
-  width: fit-content;
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 </style>

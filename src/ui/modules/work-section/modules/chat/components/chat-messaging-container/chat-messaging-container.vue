@@ -15,28 +15,19 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Dropzone from '../../../../../../../app/components/utils/dropzone.vue';
+import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
 import MessagesContainer from './chat-messages/chat-messages-container.vue';
 
 export default {
   name: 'chat-messaging-container',
+  mixins: [dropzoneMixin],
   components: {
-    Dropzone,
     MessagesContainer,
   },
-  data: () => ({
-    isDropzoneVisible: false,
-  }),
   methods: {
     ...mapActions('features/chat', {
       sendFile: 'SEND_FILE',
     }),
-    handleDragEnter() {
-      this.isDropzoneVisible = true;
-    },
-    handleDragLeave() {
-      this.isDropzoneVisible = false;
-    },
     handleDrop(event) {
       const files = Array.from(event.dataTransfer.files);
       this.sendFile(files);

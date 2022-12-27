@@ -42,7 +42,7 @@ const actions = {
 
   // destructuring arg in order to skip mouse events
   CALL: async (context, { user }) => {
-    const CALL_PARAMS = { disableStun: true };
+    const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun };
     let destination = user
       ? user.extension
       : context.getters.CALL_ON_WORKSPACE.newNumber;
@@ -57,7 +57,7 @@ const actions = {
   },
 
   ANSWER: async (context, { callId } = {}) => {
-    const ANSWER_PARAMS = { useAudio: true, disableStun: true };
+    const ANSWER_PARAMS = { useAudio: true, disableStun: !context.rootState.config.CLI.stun };
     const call = callId
       ? context.getters.GET_CALL_BY_ID(callId)
       : context.getters.CALL_ON_WORKSPACE;

@@ -3,6 +3,7 @@
     :task="task"
     :title="task.displayName"
     :opened="opened"
+    :size="size"
     @click="$emit('click', task)"
   >
     <template v-slot:icon>
@@ -37,13 +38,14 @@
 </template>
 
 <script>
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import StatusChip from '../call-status-icon-chip.vue';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'active-queue-preview',
-  mixins: [taskPreviewMixin],
+  mixins: [taskPreviewMixin, sizeMixin],
   components: { StatusChip },
   computed: {
     isHold() {

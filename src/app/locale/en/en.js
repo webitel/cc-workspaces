@@ -82,6 +82,12 @@ export default {
         nextDistributeAtTitle: 'Schedule next task?',
         nextDistributeAt: 'Next task time',
       },
+      form: {
+        formFile: {
+          deleteConfirmation: 'Are you sure you want to delete this file?',
+          empty: 'There are no files yet',
+        },
+      },
     },
   },
   workspaceSec: {
