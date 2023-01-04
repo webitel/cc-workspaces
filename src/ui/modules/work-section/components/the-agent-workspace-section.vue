@@ -87,7 +87,7 @@ export default {
     flex: 1 1 auto;
   }
   &--sm {
-    flex: 0 0 400px;
+    flex: 0 0 550px;
   }
 }
 
