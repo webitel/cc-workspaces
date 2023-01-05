@@ -18,19 +18,21 @@
         @click="pin = !pin"
       ></pin-action>
     </div>
-    <the-agent-info-nav-panel
-      v-model="currentTab"
-      :tabs="tabs"
-    ></the-agent-info-nav-panel>
-    <article class="info-tab">
-      <info-section-header>
-        {{ currentTab.text }}
-      </info-section-header>
-      <component
-        :is="currentTab.value"
-        :task="taskOnWorkspace"
-      ></component>
-    </article>
+    <div class="info-tab-wrapper">
+      <the-agent-info-nav-panel
+        v-model="currentTab"
+        :tabs="tabs"
+      ></the-agent-info-nav-panel>
+      <article class="info-tab">
+        <info-section-header>
+          {{ currentTab.text }}
+        </info-section-header>
+        <component
+          :is="currentTab.value"
+          :task="taskOnWorkspace"
+        ></component>
+      </article>
+    </div>
   </section>
 </template>
 
@@ -139,18 +141,22 @@ export default {
       const generalInfo = {
         text: this.$t('infoSec.generalInfo.generalInfo'),
         value: 'general-info',
+        icon: 'ws-general-info',
       };
       const clientInfo = {
         text: this.$t('infoSec.clientInfo'),
         value: 'client-info',
+        icon: 'ws-client-info',
       };
       const knowledgeBase = {
         text: this.$t('infoSec.knowledgeBase'),
         value: 'knowledge-base',
+        icon: 'ws-knowledge-base',
       };
       const processing = {
         text: this.$t('infoSec.processing.title'),
         value: 'processing',
+        icon: 'ws-processing',
       };
       return {
         generalInfo,
@@ -173,7 +179,8 @@ export default {
   flex-grow: 1;
   box-sizing: border-box;
   min-width: 0;
-  gap: var(--spacing-3xs); // to separate side panel from scroll
+  padding: var(--spacing-sm);
+  gap: var(--spacing-2xs);
 
   &.info-section {
     width: auto;
@@ -204,8 +211,14 @@ export default {
 .workspace-section__collapse-actions {
   display: flex;
   justify-content: space-between;
-  padding: var(--spacing-sm);
   line-height: 0;
+}
+
+.info-tab-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: var(--spacing-sm);
 }
 
 .info-tab {
@@ -217,7 +230,6 @@ export default {
   min-height: 0;
   @extend %wt-scrollbar;
   max-height: 100%;
-  padding: var(--spacing-sm);
 
   .agent-info-section-tab-header {
     margin-bottom: var(--spacing-sm);
