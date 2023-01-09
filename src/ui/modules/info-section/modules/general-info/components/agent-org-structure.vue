@@ -8,22 +8,22 @@
       <template>
         <ul>
           <li class="agent-org-structure__item">
-            <div class="agent-org-structure__item-title">{{ $tc('objects.team', 1) }}</div>
-            <div class="agent-org-structure__item-value">{{ team }}</div>
+            <div class="agent-org-structure__title">{{ $tc('objects.team', 1) }}</div>
+            <div class="agent-org-structure__value">{{ team }}</div>
           </li>
           <li class="agent-org-structure__item">
-            <div class="agent-org-structure__item-title">{{ $tc('objects.supervisor', 1) }}</div>
+            <div class="agent-org-structure__title">{{ $tc('objects.supervisor', 1) }}</div>
             <div
-              class="agent-org-structure__item-value"
+              class="agent-org-structure__value"
               v-for="(sup, key) of supervisors"
               :key="key"
             >{{ sup }}
             </div>
           </li>
           <li class="agent-org-structure__item">
-            <div class="agent-org-structure__item-title">{{ $tc('objects.auditor', 1) }}</div>
+            <div class="agent-org-structure__title">{{ $tc('objects.auditor', 1) }}</div>
             <div
-              class="agent-org-structure__item-value"
+              class="agent-org-structure__value"
               v-for="(auditor, key) of auditors"
               :key="key"
             >{{ auditor }}
@@ -79,19 +79,19 @@ export default {
   &:last-child {
     justify-self: start;
   }
+}
 
-  &-value {
-    overflow-wrap: break-word;
-    word-break: break-all;
-  }
+.agent-org-structure__value {
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
 
-  &-title {
-    @extend %typo-subtitle-1;
-  }
+.agent-org-structure__title {
+  @extend %typo-subtitle-1;
 }
 
 .agent-org-structure--sm {
-  &-title {
+  .agent-org-structure__title {
     @extend %typo-subtitle-2;
   }
 }

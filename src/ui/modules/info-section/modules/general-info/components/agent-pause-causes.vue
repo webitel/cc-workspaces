@@ -11,7 +11,7 @@
             :key="cause.id"
           >
             <span class="agent-pause-causes__name">{{ cause.name }}</span>
-            <div class="agent-pause-causes__item-inner">
+            <div class="agent-pause-causes__inner">
               <span>{{ duration(cause) }}</span>
               <wt-progress-bar
                 :max="cause.limitMin"
@@ -59,12 +59,12 @@ export default {
     border-bottom: 1px solid var(--secondary-color);
   }
 
-  &__name {
+  .agent-pause-causes__name {
     overflow-wrap: break-word;
     word-break: break-all;
   }
 
-  .agent-pause-causes__item-inner {
+  .agent-pause-causes__inner {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     text-align: center;
@@ -83,7 +83,7 @@ export default {
     margin-bottom: var(--spacing-xs);
   }
 
-  .agent-pause-causes__item-inner {
+  .agent-pause-causes__inner {
     grid-template-columns: 1fr 10fr 1fr;
   }
 }

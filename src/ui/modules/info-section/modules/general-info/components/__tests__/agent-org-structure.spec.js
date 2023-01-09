@@ -17,10 +17,10 @@ describe('General Info: Agent Org Structure', () => {
     const wrapper = shallowMount(AgentOrgStructure, {
       propsData: { agent: { supervisor } },
     });
-    const supervisorsUIWrappers = wrapper.findAll('.agent-org-structure__item--supervisors .agent-org-structure__item__value');
-    expect(supervisorsUIWrappers.length).toBe(2);
-    expect(supervisorsUIWrappers.at(0).text()).toBe(sup1);
-    expect(supervisorsUIWrappers.at(1).text()).toBe(sup2);
+    const supervisorsUIWrappers = wrapper.findAll('.agent-org-structure__item-value');
+    expect(supervisorsUIWrappers.length).toBe(3);
+    expect(supervisorsUIWrappers.at(1).text()).toBe(sup1);
+    expect(supervisorsUIWrappers.at(2).text()).toBe(sup2);
   });
   it('correctly renders agent auditors', () => {
     const aud1 = 'aud1';
@@ -29,9 +29,9 @@ describe('General Info: Agent Org Structure', () => {
     const wrapper = shallowMount(AgentOrgStructure, {
       propsData: { agent: { auditor } },
     });
-    const auditorsUIWrappers = wrapper.findAll('.agent-org-structure__item--auditors .agent-org-structure__item__value');
-    expect(auditorsUIWrappers.length).toBe(2);
-    expect(auditorsUIWrappers.at(0).text()).toBe(aud1);
-    expect(auditorsUIWrappers.at(1).text()).toBe(aud2);
+    const auditorsUIWrappers = wrapper.findAll('.agent-org-structure__item-value');
+    expect(auditorsUIWrappers.length).toBe(3);
+    expect(auditorsUIWrappers.at(1).text()).toBe(aud1);
+    expect(auditorsUIWrappers.at(2).text()).toBe(aud2);
   });
 });

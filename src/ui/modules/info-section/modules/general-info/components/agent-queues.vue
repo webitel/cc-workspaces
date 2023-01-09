@@ -1,7 +1,7 @@
 <template>
   <article class="agent-queues">
     <wt-expansion-panel :size="size">
-      <template slot="title">{{$t('infoSec.generalInfo.queue')}}</template>
+      <template slot="title">{{ $t('infoSec.generalInfo.queue') }}</template>
       <template>
         <ul>
           <li
@@ -9,8 +9,8 @@
             v-for="queue in queues"
             :key="queue.queue.id"
           >
-            <div class="agent-queues__item-title">{{ queue.queue.name }}</div>
-            <div class="agent-queues__item-inner">
+            <div class="agent-queues__title">{{ queue.queue.name }}</div>
+            <div class="agent-queues__inner">
               <table-agents
                 :agents="queue.agents"
                 :size="size"
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import tableAgents from './table-agents.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import tableAgents from './table-agents.vue';
 import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
 
 export default {
@@ -52,7 +52,7 @@ export default {
   align-items: center;
   padding: var(--spacing-xs);
 
-  .agent-queues__item-inner {
+  .agent-queues__inner {
     display: flex;
     justify-content: space-between;
 
@@ -66,7 +66,7 @@ export default {
     border-bottom: 1px solid var(--secondary-color);
   }
 
-  &-title {
+  .agent-queues__title {
     overflow-wrap: break-word;
     word-break: break-all;
 
