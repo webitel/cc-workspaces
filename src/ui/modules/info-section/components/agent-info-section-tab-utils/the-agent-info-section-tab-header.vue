@@ -18,7 +18,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--secondary-color-50);
   border-radius: var(--border-radius);
 }
 

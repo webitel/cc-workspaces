@@ -68,6 +68,8 @@ export default {
       total: 'Всі',
       paused: 'Пауза',
       free: 'Вільні',
+      agentTeam: 'Команда',
+      reasonPauses: 'Причина пауз',
     },
     clientInfo: 'Інформація',
     knowledgeBase: 'База знань',

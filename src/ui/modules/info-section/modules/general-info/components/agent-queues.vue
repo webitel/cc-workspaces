@@ -1,46 +1,41 @@
 <template>
   <article class="agent-queues">
-
-    <div class="agent-queues__headers">
-      <div
-        class="agent-queues__headers-item"
-        v-for="(header, index) in headers"
-        :key="index"
-      >
-        {{ $t(header.locale) }}
-      </div>
-    </div>
-
-    <div
-      class="agent-queues__queue"
-      v-for="queue in queues"
-      :key="queue.queue.id"
-    >
-      <div class="agent-queues__queue-item">{{ queue.queue.name }}</div>
-
-      <table-agents
-        :agents="queue.agents"
-      ></table-agents>
-
-      <div class="agent-queues__queue-item">
-        <wt-chip>{{ queue.waitingMembers }}</wt-chip>
-      </div>
-    </div>
+    <wt-expansion-panel :size="size">
+      <template slot="title">{{$t('infoSec.generalInfo.queue')}}</template>
+      <template>
+        <ul>
+          <li
+            class="agent-queues__item"
+            v-for="queue in queues"
+            :key="queue.queue.id"
+          >
+            <div class="agent-queues__item-title">{{ queue.queue.name }}</div>
+            <div class="agent-queues__item-inner">
+              <table-agents
+                :agents="queue.agents"
+                :size="size"
+              ></table-agents>
+              <wt-chip>{{ queue.waitingMembers }}</wt-chip>
+            </div>
+          </li>
+        </ul>
+      </template>
+    </wt-expansion-panel>
   </article>
 </template>
 
 <script>
 import tableAgents from './table-agents.vue';
-import headers from '../store/_internals/agentQueuesHeaders';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
 
 export default {
   name: 'agent-queues',
   components: {
+    WtExpansionPanel,
     tableAgents,
   },
-  data: () => ({
-    headers,
-  }),
+  mixins: [sizeMixin],
   props: {
     queues: {
       type: Array,
@@ -51,39 +46,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.agent-queues {
-  @extend %typo-body-1;
-}
-
-.agent-queues__headers {
-  @extend %typo-subtitle-1;
+.agent-queues__item {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
-  justify-items: center;
-
-  .agent-queues__headers-item:first-child {
-    justify-self: start;
-  }
-}
-
-.agent-queues__queue {
-  display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 3fr 1fr;
   align-items: center;
-  gap: 4px;
-  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs);
 
-  .agent-queues__queue-item {
+  .agent-queues__item-inner {
+    display: flex;
+    justify-content: space-between;
+
+    .wt-chip {
+      height: fit-content;
+      margin: auto 0;
+    }
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--secondary-color);
+  }
+
+  &-title {
     overflow-wrap: break-word;
     word-break: break-all;
 
     &:last-of-type {
-      justify-self: center;
+      justify-self: end;
     }
-  }
-
-  .wt-chip {
-    @extend %typo-caption;
   }
 }
 </style>

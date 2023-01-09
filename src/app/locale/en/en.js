@@ -70,6 +70,8 @@ export default {
       total: 'Total',
       paused: 'Paused',
       free: 'Free',
+      agentTeam: 'Agent team',
+      reasonPauses: 'Reason of pauses',
     },
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',

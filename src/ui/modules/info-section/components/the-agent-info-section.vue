@@ -30,6 +30,7 @@
         <component
           :is="currentTab.value"
           :task="taskOnWorkspace"
+          :size="size"
         ></component>
       </article>
     </div>
@@ -212,6 +213,7 @@ export default {
   display: flex;
   justify-content: space-between;
   line-height: 0;
+  padding: var(--spacing-sm);
 }
 
 .info-tab-wrapper {
@@ -230,6 +232,7 @@ export default {
   min-height: 0;
   @extend %wt-scrollbar;
   max-height: 100%;
+  padding: var(--spacing-sm);
 
   .agent-info-section-tab-header {
     margin-bottom: var(--spacing-sm);
