@@ -24,9 +24,6 @@
         :tabs="tabs"
       ></the-agent-info-nav-panel>
       <article class="info-tab">
-        <info-section-header>
-          {{ currentTab.text }}
-        </info-section-header>
         <component
           :is="currentTab.value"
           :task="taskOnWorkspace"
@@ -49,13 +46,11 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
-import InfoSectionHeader from './agent-info-section-tab-utils/the-agent-info-section-tab-header.vue';
 
 export default {
   name: 'the-agent-info-section',
   components: {
     TheAgentInfoNavPanel,
-    InfoSectionHeader,
     GeneralInfo,
     ClientInfo,
     KnowledgeBase,
@@ -233,9 +228,5 @@ export default {
   @extend %wt-scrollbar;
   max-height: 100%;
   padding: var(--spacing-sm);
-
-  .agent-info-section-tab-header {
-    margin-bottom: var(--spacing-sm);
-  }
 }
 </style>

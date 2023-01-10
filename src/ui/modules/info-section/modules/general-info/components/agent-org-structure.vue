@@ -4,26 +4,26 @@
     :class="[`agent-org-structure--${size}`]"
   >
     <wt-expansion-panel :size="size">
-      <template slot="title">{{ $t('infoSec.generalInfo.agentTeam') }}</template>
+      <template slot="title">{{ $tc('objects.team', 1) }}</template>
       <template>
         <ul>
-          <li class="agent-org-structure__item">
-            <div class="agent-org-structure__title">{{ $tc('objects.team', 1) }}</div>
-            <div class="agent-org-structure__value">{{ team }}</div>
+          <li class="agent-org-structure-item">
+            <div class="agent-org-structure-item__title">{{ $t('reusable.name') }}</div>
+            <div class="agent-org-structure-item__value">{{ team }}</div>
           </li>
-          <li class="agent-org-structure__item">
-            <div class="agent-org-structure__title">{{ $tc('objects.supervisor', 1) }}</div>
+          <li class="agent-org-structure-item">
+            <div class="agent-org-structure-item__title">{{ $tc('objects.supervisor', 1) }}</div>
             <div
-              class="agent-org-structure__value"
+              class="agent-org-structure-item__value"
               v-for="(sup, key) of supervisors"
               :key="key"
             >{{ sup }}
             </div>
           </li>
-          <li class="agent-org-structure__item">
-            <div class="agent-org-structure__title">{{ $tc('objects.auditor', 1) }}</div>
+          <li class="agent-org-structure-item">
+            <div class="agent-org-structure-item__title">{{ $tc('objects.auditor', 1) }}</div>
             <div
-              class="agent-org-structure__value"
+              class="agent-org-structure-item__value"
               v-for="(auditor, key) of auditors"
               :key="key"
             >{{ auditor }}
@@ -66,33 +66,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.agent-org-structure__item {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  justify-items: flex-start;
-  padding: var(--spacing-xs);
+.agent-org-structure {
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--secondary-color);
+  &-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    justify-items: flex-start;
+    padding: var(--spacing-xs);
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--secondary-color);
+    }
+
+    &:last-child {
+      justify-self: start;
+    }
+
+    &__value {
+      overflow-wrap: break-word;
+      word-break: break-all;
+    }
+
+    &__title {
+      @extend %typo-subtitle-1;
+    }
   }
 
-  &:last-child {
-    justify-self: start;
-  }
-}
-
-.agent-org-structure__value {
-  overflow-wrap: break-word;
-  word-break: break-all;
-}
-
-.agent-org-structure__title {
-  @extend %typo-subtitle-1;
-}
-
-.agent-org-structure--sm {
-  .agent-org-structure__title {
-    @extend %typo-subtitle-2;
+  &--sm {
+    .agent-org-structure-item__title {
+      @extend %typo-subtitle-2;
+    }
   }
 }
 </style>

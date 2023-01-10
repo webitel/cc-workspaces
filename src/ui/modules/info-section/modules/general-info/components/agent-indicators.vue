@@ -1,7 +1,7 @@
 <template>
   <div
-    class="table-agents"
-    :class="[`table-agents--${size}`]"
+    class="agent-indicators"
+    :class="[`agent-indicators--${size}`]"
   >
     <wt-indicator
       color="primary"
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'table-agents',
+  name: 'agent-indicators',
   props: {
     agents: {
       type: Object,
@@ -42,16 +42,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-agents {
+.agent-indicators {
   display: flex;
   justify-content: space-evenly;
   gap: 4px;
 
-  &__total {
-    @extend %typo-subtitle-1;
+  &--sm {
+    flex-direction: column;
   }
-}
-.table-agents--sm {
-  flex-direction: column;
 }
 </style>
