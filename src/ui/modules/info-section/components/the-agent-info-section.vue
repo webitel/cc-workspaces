@@ -23,13 +23,12 @@
         v-model="currentTab"
         :tabs="tabs"
       ></the-agent-info-nav-panel>
-      <article class="info-tab">
-        <component
-          :is="currentTab.value"
-          :task="taskOnWorkspace"
-          :size="size"
-        ></component>
-      </article>
+      <component
+        class="info-tab"
+        :is="currentTab.value"
+        :task="taskOnWorkspace"
+        :size="size"
+      ></component>
     </div>
   </section>
 </template>
@@ -227,6 +226,5 @@ export default {
   min-height: 0;
   @extend %wt-scrollbar;
   max-height: 100%;
-  padding: var(--spacing-sm);
 }
 </style>

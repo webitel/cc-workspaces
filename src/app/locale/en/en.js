@@ -68,7 +68,7 @@ export default {
       queue: 'Queue | Queues',
       agents: 'Agents',
       total: 'Total',
-      paused: 'Paused | Pauses',
+      pauses: 'Pauses',
       free: 'Free',
     },
     clientInfo: 'Client info',

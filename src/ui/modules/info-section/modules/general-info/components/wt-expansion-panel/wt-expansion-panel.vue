@@ -40,11 +40,12 @@ export default {
 .wt-expansion-panel {
   @extend %typo-body-1;
 
-  &-header {
+  .wt-expansion-panel-header {
     @extend %typo-subtitle-1;
     display: flex;
     align-items: center;
     padding: var(--spacing-2xs) var(--spacing-xs);
+    border-radius: var(--spacing-2xs);
     background-color: var(--secondary-color-50);
     cursor: pointer;
   }

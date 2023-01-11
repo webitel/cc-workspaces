@@ -13,20 +13,24 @@
           </li>
           <li class="agent-org-structure-item">
             <div class="agent-org-structure-item__title">{{ $tc('objects.supervisor', 1) }}</div>
-            <div
-              class="agent-org-structure-item__value"
-              v-for="(sup, key) of supervisors"
-              :key="key"
-            >{{ sup }}
+            <div>
+              <div
+                class="agent-org-structure-item__value"
+                v-for="(sup, key) of supervisors"
+                :key="key"
+              >{{ sup }}
+              </div>
             </div>
           </li>
           <li class="agent-org-structure-item">
             <div class="agent-org-structure-item__title">{{ $tc('objects.auditor', 1) }}</div>
-            <div
-              class="agent-org-structure-item__value"
-              v-for="(auditor, key) of auditors"
-              :key="key"
-            >{{ auditor }}
+            <div>
+              <div
+                class="agent-org-structure-item__value"
+                v-for="(auditor, key) of auditors"
+                :key="key"
+              >{{ auditor }}
+              </div>
             </div>
           </li>
         </ul>
@@ -68,7 +72,7 @@ export default {
 <style lang="scss" scoped>
 .agent-org-structure {
 
-  &-item {
+  .agent-org-structure-item {
     display: grid;
     grid-template-columns: 3fr 1fr;
     justify-items: flex-start;

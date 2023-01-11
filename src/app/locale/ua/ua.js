@@ -66,7 +66,7 @@ export default {
       queue: 'Черга | Черги',
       agents: 'Оператори',
       total: 'Всі',
-      paused: 'Пауза | Паузи',
+      pauses: 'Паузи',
       free: 'Вільні',
     },
     clientInfo: 'Інформація',

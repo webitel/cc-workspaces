@@ -4,7 +4,7 @@
     :class="[`agent-pause-causes--${size}`]"
   >
     <wt-expansion-panel :size="size">
-      <template slot="title">{{ $tc('infoSec.generalInfo.paused', 2) }}</template>
+      <template slot="title">{{ $t('infoSec.generalInfo.pauses') }}</template>
       <template>
         <ul>
           <li
@@ -52,7 +52,7 @@ export default {
 
 <style lang="scss" scoped>
 .agent-pause-causes {
-  &-item {
+  .agent-pause-causes-item {
     display: grid;
     grid-template-columns: 3fr 1fr;
     align-items: center;
@@ -70,10 +70,16 @@ export default {
     &__wrapper {
       display: grid;
       grid-template-columns: 1fr 3fr 1fr;
-      text-align: center;
+
+      :first-child {
+        text-align: start;
+      }
+
+      :last-child {
+        text-align: end;
+      }
 
       .wt-progress-bar {
-        margin: 0 var(--spacing-xs);
         width: auto;
       }
     }

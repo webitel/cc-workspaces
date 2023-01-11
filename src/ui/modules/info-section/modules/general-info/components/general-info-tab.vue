@@ -10,18 +10,18 @@
       ></wt-cc-agent-status-timers>
       <agent-queues
         v-if="agentInfo.queues.length"
-        class="general-info__article general-info__article--padded general-info__article--outlined"
+        class="general-info__article"
         :queues="agentInfo.queues"
         :size="size"
       ></agent-queues>
       <agent-org-structure
-        class="general-info__article general-info__article--padded general-info__article--outlined"
+        class="general-info__article"
         :agent="agentInfo.agent"
         :size="size"
       ></agent-org-structure>
       <agent-pause-causes
         v-if="agentInfo.pauseCauses.length"
-        class="general-info__article general-info__article--padded general-info__article--outlined"
+        class="general-info__article"
         :pause-causes="agentInfo.pauseCauses"
         :size="size"
       ></agent-pause-causes>
@@ -98,15 +98,6 @@
 .general-info__article {
   margin-top: var(--spacing-sm);
   justify-content: center;
-
-  &--padded {
-    padding: var(--spacing-2xs);
-  }
-
-  &--outlined {
-    border: 1px solid var(--secondary-color);
-    border-radius: var(--border-radius);
-  }
 }
 .agent-status-timer--sm {
   @extend %typo-subtitle-2;
