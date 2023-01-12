@@ -1,10 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
-import HistoryContainer
-  from '../history-container.vue';
-import HistoryLookupItem
-  from '../../../lookup-item/history-lookup-item.vue';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
+import HistoryLookupItem from '../../../lookup-item/history-lookup-item.vue';
+import HistoryContainer from '../history-container.vue';
 // import { truncateFromEnd } from '../../../../../../src/filters/truncate/truncate';
 
 // import historyAPI through require to override functions with mock
@@ -44,19 +42,26 @@ describe('Agent History functionality', () => {
       data: () => ({ dataList: historyList, isLoading: false }),
       computed,
     });
-    expect(wrapper.findAllComponents({ name: 'history-lookup-item' }).length).toEqual(historyList.length);
+    expect(wrapper.findAllComponents({ name: 'history-lookup-item' }).length)
+    .toEqual(historyList.length);
   });
 
   it('Selects history item and sets its number to new number input', async () => {
     const mock = jest.fn();
     jest.spyOn(HistoryContainer.methods, 'setNumber')
-      .mockImplementationOnce(mock);
+    .mockImplementationOnce(mock);
     const wrapper = shallowMount(HistoryContainer, {
       data: () => ({ dataList: historyList, isLoading: false }),
       computed,
     });
     wrapper.findComponent({ name: 'history-lookup-item' }).vm.$emit('input');
-    expect(mock).toHaveBeenCalledWith({ value: historyList[0].destination });
+    expect(mock)
+    .toHaveBeenCalledWith({
+      value: {
+        destination: historyList[0].destination,
+        id: historyList[0].id,
+      },
+    });
   });
 
   it('Properly displays history item duration', async () => {
@@ -70,6 +75,6 @@ describe('Agent History functionality', () => {
       propsData: { item },
     });
     expect(wrapper.text())
-      .toContain('00:01:00');
+    .toContain('00:01:00');
   });
 });
