@@ -50,7 +50,7 @@
         @click="hangup"
       ></wt-rounded-action>
       <wt-rounded-action
-        v-if="isCall"
+        v-if="isCall && call.historyId"
         class="call-action"
         icon="call-ringing"
         color="success"

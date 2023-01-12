@@ -82,7 +82,8 @@
         let destination = '';
         if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
         if (item.direction === CallDirection.Outbound) destination = item.destination;
-        this.setNumber({ value: destination });
+        const { id } = item;
+        this.setNumber({ value: { destination, id }});
       },
 
       async fetch(argParams) {
