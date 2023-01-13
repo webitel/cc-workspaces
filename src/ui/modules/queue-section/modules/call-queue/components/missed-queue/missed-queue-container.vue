@@ -48,8 +48,8 @@ export default {
 
     openCall(missed) {
       const newNumber = missed.from.number;
-      const { id } = missed;
-      this.openNewCall({ newNumber, id });
+      const historyId = missed.id;
+      this.openNewCall({ newNumber, historyId });
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <lookup-item
-    :id="item.id"
+    :active="displayActiveItem"
     @click.native="handleInput" >
     <template slot="title">
       {{ shownDestination | truncateFromEnd(24) }}
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
@@ -58,6 +59,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters('features/call', {
+      call: 'CALL_ON_WORKSPACE',
+    }),
+
     shownDestination() {
       return this.forNumber ? this.destinationForNumber : this.destination;
     },
@@ -104,6 +109,9 @@ export default {
         return 'accent';
       }
       return 'success';
+    },
+    displayActiveItem() {
+      return this.item.id === this.call.historyId;
     },
   },
 };

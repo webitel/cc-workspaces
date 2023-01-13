@@ -1,6 +1,6 @@
 <template>
   <article class="lookup-item">
-    <lookup-item-wrapper :class="{ 'lookup-item--active': id === call.historyId }">
+    <lookup-item-wrapper :class="{ 'lookup-item--active': active }">
       <template slot="before" v-if="!noBefore">
         <slot name="before">
           <wt-avatar></wt-avatar>
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import LookupItemWrapper from './lookup-item-wrapper.vue';
 
 export default {
@@ -56,15 +55,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    id: {
-      type: String,
-      default: '',
+    active: {
+      type: Boolean,
+      default: false,
     },
-  },
-  computed: {
-    ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
-    }),
   },
 };
 </script>

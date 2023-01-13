@@ -59,8 +59,8 @@ describe('Agent History functionality', () => {
     .toHaveBeenCalledWith({
       value: {
         destination: historyList[0].destination,
-        id: historyList[0].id,
       },
+      historyId: historyList[0].id,
     });
   });
 
@@ -73,6 +73,7 @@ describe('Agent History functionality', () => {
     };
     const wrapper = shallowMount(HistoryLookupItem, {
       propsData: { item },
+      computed,
     });
     expect(wrapper.text())
     .toContain('00:01:00');
