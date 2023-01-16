@@ -13,6 +13,7 @@
         :key="item.id"
         :item="item"
         :for-number="historyNumber"
+        :active="displayActiveItem(item)"
         @input="select(item)"
       ></history-lookup-item>
     </div>
@@ -82,7 +83,8 @@
         let destination = '';
         if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
         if (item.direction === CallDirection.Outbound) destination = item.destination;
-        this.setNumber({ value: destination });
+        const historyId = item.id;
+        this.setNumber({ value: { destination }, historyId });
       },
 
       async fetch(argParams) {
@@ -124,6 +126,10 @@
 
       resetHistoryNumber() {
         this.historyNumber = '';
+      },
+
+      displayActiveItem(item) {
+        return item.id === this.call.historyId;
       },
     },
   };
