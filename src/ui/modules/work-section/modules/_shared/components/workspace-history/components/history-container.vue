@@ -13,6 +13,7 @@
         :key="item.id"
         :item="item"
         :for-number="historyNumber"
+        :active="displayActiveItem(item)"
         @input="select(item)"
       ></history-lookup-item>
     </div>
@@ -125,6 +126,10 @@
 
       resetHistoryNumber() {
         this.historyNumber = '';
+      },
+
+      displayActiveItem(item) {
+        return item.id === this.call.historyId;
       },
     },
   };

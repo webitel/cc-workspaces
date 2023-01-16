@@ -50,7 +50,7 @@
         @click="hangup"
       ></wt-rounded-action>
       <wt-rounded-action
-        v-if="currentTab === 'history' ? call.historyId && isCall : isCall"
+        v-if="isDisplayCallRingingButton"
         class="call-action"
         icon="call-ringing"
         color="success"
@@ -125,6 +125,11 @@
       isCall() {
         return this.isNewCall && this.call.newNumber;
       },
+      // The call button should be displayed in the dialing tab after the user enters it.
+      // In the history tab, need to display after choosing a number from list and if it is possible to make a call
+      isDisplayCallRingingButton() {
+        return this.isOnHistory ? this.call.historyId && this.isCall : this.isCall;
+      }
     },
 
     methods: {
