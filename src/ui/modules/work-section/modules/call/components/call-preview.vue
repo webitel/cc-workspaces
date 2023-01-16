@@ -65,7 +65,7 @@
     justify-content: space-evenly;
 
     .wt-rounded-action {
-      margin: 0 15px;
+      margin: 0 var(--spacing-sm);
     }
   }
 </style>

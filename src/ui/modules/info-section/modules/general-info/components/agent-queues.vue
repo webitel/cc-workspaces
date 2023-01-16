@@ -1,16 +1,19 @@
 <template>
-  <article class="agent-queues">
+  <article
+    :class="[`agent-queues--${size}`]"
+    class="agent-queues"
+  >
     <wt-expansion-panel :size="size">
       <template slot="title">{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
       <template>
         <ul>
           <li
-            class="agent-queues-item"
             v-for="queue in queues"
             :key="queue.queue.id"
+            class="agent-queues-item"
           >
             <div class="agent-queues-item__title">{{ queue.queue.name }}</div>
-            <div class="agent-queues-item__wrapper">
+            <div class="agent-queues-item__status-wrapper">
               <agent-indicators
                 :agents="queue.agents"
                 :size="size"
@@ -46,32 +49,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.agent-queues-item {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  align-items: center;
-  padding: var(--spacing-xs);
+.agent-queues {
+  .agent-queues-item {
+    display: grid;
+    align-items: center;
+    padding: var(--spacing-xs);
+    grid-template-columns: 2fr 1fr;
 
-  &__wrapper {
-    display: flex;
-    justify-content: space-between;
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--secondary-color);
+    }
 
     .wt-chip {
-      height: fit-content;
-      margin: auto 0;
+      width: fit-content;
+      justify-self: flex-end;
+    }
+
+    &__title {
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
+
+    .agent-queues-item__status-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--secondary-color);
-  }
-
-  &__title {
-    overflow-wrap: break-word;
-    word-break: break-all;
-
-    &:last-of-type {
-      justify-self: end;
+  &--sm {
+    .agent-queues-item {
+      grid-template-columns: 3fr 2fr;
     }
   }
 }

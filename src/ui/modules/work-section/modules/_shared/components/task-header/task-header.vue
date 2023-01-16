@@ -28,19 +28,19 @@ export default {
 
 <style lang="scss" scoped>
 .task-header {
-  padding: 10px;
+  padding: var(--spacing-xs);
 }
 
 .task-header-actions {
   display: grid;
   box-sizing: border-box;
   grid-template-columns: 1fr 40px 1fr;
-  grid-gap: 10px;
-  margin-bottom: 10px;
+  grid-gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
 
   &__action-section {
     display: flex;
-    gap: 10px;
+    gap: var(--spacing-xs);
 
     &:nth-child(2) {
       justify-content: flex-end;

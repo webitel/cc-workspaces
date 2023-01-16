@@ -1,34 +1,35 @@
 <template>
   <div
-    class="wt-expansion-panel"
     :class="[{'wt-expansion-panel--opened':open},
     `wt-expansion-panel--${size}`]"
+    class="wt-expansion-panel"
   >
     <div
       class="wt-expansion-panel-header"
+      tabindex="0"
       @click="open = !open"
+      @keypress.enter="open = !open"
     >
-      <div>
-        <slot name="title"></slot>
-      </div>
+      <slot name="title"></slot>
       <wt-icon
         icon="arrow-right"
       ></wt-icon>
     </div>
-    <transition name="fade">
+    <wt-expand-transition>
       <div v-show="open">
         <slot></slot>
       </div>
-    </transition>
-
+    </wt-expand-transition>
   </div>
 </template>
 
 <script>
+import WtExpandTransition from '@webitel/ui-sdk/src/components/transitions/wt-expand-transition.vue';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'wt-expansion-panel',
+  components: { WtExpandTransition },
   mixins: [sizeMixin],
   data: () => ({
     open: true,
@@ -38,16 +39,14 @@ export default {
 
 <style lang="scss" scoped>
 .wt-expansion-panel {
-  @extend %typo-body-1;
-
   .wt-expansion-panel-header {
     @extend %typo-subtitle-1;
     display: flex;
     align-items: center;
     padding: var(--spacing-2xs) var(--spacing-xs);
+    cursor: pointer;
     border-radius: var(--spacing-2xs);
     background-color: var(--secondary-color-50);
-    cursor: pointer;
   }
 
   .wt-icon {
@@ -55,8 +54,6 @@ export default {
   }
 
   &--sm {
-    @extend %typo-body-2;
-
     .wt-expansion-panel-header {
       @extend %typo-subtitle-2;
     }
@@ -67,10 +64,5 @@ export default {
       transform: rotate(90deg);
     }
   }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: var(--transition);
 }
 </style>

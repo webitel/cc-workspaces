@@ -84,7 +84,8 @@ export default {
   transition: var(--transition);
 
   &--md {
-    flex: 1 1 auto;
+    /* should be bigger than info-section 1 1 320px cause info section should */
+    flex: 100 100 auto;
   }
   &--sm {
     flex: 0 0 400px;

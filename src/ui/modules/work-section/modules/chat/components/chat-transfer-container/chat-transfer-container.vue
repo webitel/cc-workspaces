@@ -122,8 +122,8 @@ export default {
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  margin-bottom: 10px;
-  padding: 0 10px;
+  margin-bottom: var(--spacing-xs);
+  padding: 0 var(--spacing-xs);
 
   .ws-worksection__search {
     flex: 1 1 auto;
@@ -134,7 +134,7 @@ export default {
 
   .wt-rounded-action, .wt-icon-btn {
     flex: 0 0 auto;
-    margin-left: 10px;
+    margin-left: var(--spacing-xs);
   }
 }
 </style>

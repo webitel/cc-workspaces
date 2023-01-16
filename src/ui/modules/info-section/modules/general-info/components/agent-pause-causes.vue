@@ -1,24 +1,24 @@
 <template>
   <article
-    class="agent-pause-causes"
     :class="[`agent-pause-causes--${size}`]"
+    class="agent-pause-causes"
   >
     <wt-expansion-panel :size="size">
       <template slot="title">{{ $t('infoSec.generalInfo.pauses') }}</template>
       <template>
         <ul>
           <li
-            class="agent-pause-causes-item"
             v-for="(cause) of pauseCauses"
             :key="cause.id"
+            class="agent-pause-causes-item"
           >
             <span class="agent-pause-causes-item__name">{{ cause.name }}</span>
             <div class="agent-pause-causes-item__wrapper">
               <span>{{ duration(cause) }}</span>
               <wt-progress-bar
+                :color="pauseCauseProgressColor(cause)"
                 :max="cause.limitMin"
                 :value="cause.durationMin"
-                :color="pauseCauseProgressColor(cause)"
               ></wt-progress-bar>
               <span>
           {{ prettifyPauseCauseDuration(cause.limitMin) }}
@@ -54,33 +54,28 @@ export default {
 .agent-pause-causes {
   .agent-pause-causes-item {
     display: grid;
-    grid-template-columns: 3fr 1fr;
     align-items: center;
     padding: var(--spacing-xs);
+    grid-template-columns: 2fr 1fr;
 
     &:not(:last-child) {
       border-bottom: 1px solid var(--secondary-color);
     }
 
     &__name {
-      overflow-wrap: break-word;
       word-break: break-all;
+      overflow-wrap: break-word;
     }
 
     &__wrapper {
       display: grid;
+      align-items: center;
       grid-template-columns: 1fr 3fr 1fr;
-
-      :first-child {
-        text-align: start;
-      }
-
-      :last-child {
-        text-align: end;
-      }
+      gap: var(--spacing-2xs);
 
       .wt-progress-bar {
         width: auto;
+        height: fit-content;
       }
     }
   }

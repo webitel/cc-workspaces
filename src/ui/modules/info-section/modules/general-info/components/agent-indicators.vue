@@ -45,7 +45,7 @@ export default {
 .agent-indicators {
   display: flex;
   justify-content: space-evenly;
-  gap: 4px;
+  gap: var(--spacing-2xs);
 
   &--sm {
     flex-direction: column;

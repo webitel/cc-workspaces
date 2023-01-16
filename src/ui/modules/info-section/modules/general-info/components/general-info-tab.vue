@@ -1,89 +1,87 @@
 <template>
   <section class="general-info">
     <wt-loader v-show="!isLoaded"></wt-loader>
-    <div class="general-info__content-wrapper" v-show="isLoaded">
+    <div v-show="isLoaded" class="general-info__content-wrapper">
       <wt-cc-agent-status-timers
-        class="general-info__article"
-        :class="[`agent-status-timer--${size}`]"
-        :status="agentInfo.agent"
         :size="size"
+        :status="agentInfo.agent"
+        class="general-info__article"
       ></wt-cc-agent-status-timers>
       <agent-queues
         v-if="agentInfo.queues.length"
-        class="general-info__article"
         :queues="agentInfo.queues"
         :size="size"
+        class="general-info__article"
       ></agent-queues>
       <agent-org-structure
-        class="general-info__article"
         :agent="agentInfo.agent"
         :size="size"
+        class="general-info__article"
       ></agent-org-structure>
       <agent-pause-causes
         v-if="agentInfo.pauseCauses.length"
-        class="general-info__article"
         :pause-causes="agentInfo.pauseCauses"
         :size="size"
+        class="general-info__article"
       ></agent-pause-causes>
     </div>
   </section>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
-  import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-  import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
-  import AgentOrgStructure from './agent-org-structure.vue';
-  import AgentQueues from './agent-queues.vue';
-  import AgentPauseCauses from './agent-pause-causes.vue';
-  import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { mapActions, mapState } from 'vuex';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import AgentOrgStructure from './agent-org-structure.vue';
+import AgentPauseCauses from './agent-pause-causes.vue';
+import AgentQueues from './agent-queues.vue';
 
-  export default {
-    name: 'general-info-tab',
-    mixins: [autoRefreshMixin, sizeMixin],
-    components: { AgentOrgStructure, AgentQueues, AgentPauseCauses },
-    data: () => ({
-      namespace: 'ui/infoSec/agentInfo',
-      isLoaded: false,
+export default {
+  name: 'general-info-tab',
+  mixins: [autoRefreshMixin, sizeMixin],
+  components: { AgentOrgStructure, AgentQueues, AgentPauseCauses },
+  data: () => ({
+    namespace: 'ui/infoSec/agentInfo',
+    isLoaded: false,
+  }),
+  watch: {
+    agent: { // wait for agent to load to get agentId
+      async handler() {
+        if (this.agent) await this.loadAgentInfo();
+      },
+      immediate: true,
+    },
+  },
+  computed: {
+    ...mapState('features/status', {
+      agent: (state) => state.agent,
     }),
-    watch: {
-      agent: { // wait for agent to load to get agentId
-        async handler() {
-          if (this.agent) await this.loadAgentInfo();
-        },
-        immediate: true,
-      },
+    ...mapState({
+                  agentInfo(state) {
+                    return getNamespacedState(state, this.namespace);
+                  },
+                }),
+  },
+  methods: {
+    ...mapActions({
+                    dispatchLoadAgentInfo(dispatch, payload) {
+                      return dispatch(`${this.namespace}/LOAD_AGENT_INFO`, payload);
+                    },
+                  }),
+    async loadAgentInfo(payload) {
+      await this.dispatchLoadAgentInfo(payload);
+      this.isLoaded = true;
     },
-    computed: {
-      ...mapState('features/status', {
-        agent: (state) => state.agent,
-      }),
-      ...mapState({
-        agentInfo(state) {
-          return getNamespacedState(state, this.namespace);
-        },
-      }),
+    async makeAutoRefresh() {
+      return this.loadAgentInfo();
     },
-    methods: {
-      ...mapActions({
-        dispatchLoadAgentInfo(dispatch, payload) {
-          return dispatch(`${this.namespace}/LOAD_AGENT_INFO`, payload);
-        },
-      }),
-      async loadAgentInfo(payload) {
-        await this.dispatchLoadAgentInfo(payload);
-        this.isLoaded = true;
-      },
-      async makeAutoRefresh() {
-        return this.loadAgentInfo();
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .general-info {
-  @extend %wt-scrollbar;
   position: relative;
   overflow: scroll;
 
@@ -95,14 +93,13 @@
   }
 }
 
-.general-info__article {
-  margin-top: var(--spacing-sm);
-  justify-content: center;
+.general-info__content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
-.agent-status-timer--sm {
-  @extend %typo-subtitle-2;
-  padding: calc(var(--spacing-xs) * 2);
-  border: 1px solid var(--secondary-color);
-  justify-content: space-between;
+
+.general-info__article {
+  justify-content: center;
 }
 </style>

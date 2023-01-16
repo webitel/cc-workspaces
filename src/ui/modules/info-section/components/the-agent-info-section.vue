@@ -189,7 +189,8 @@ export default {
     }
 
     &--sm {
-      flex: 0 0 550px;
+      /* should have 1 flex-grow/shrink in order to fit all available space if all 3 panels are minified */
+      flex: 1 1 320px;
     }
 
     &--unpinned {
@@ -207,7 +208,6 @@ export default {
   display: flex;
   justify-content: space-between;
   line-height: 0;
-  padding: var(--spacing-sm);
 }
 
 .info-tab-wrapper {
@@ -226,5 +226,6 @@ export default {
   min-height: 0;
   @extend %wt-scrollbar;
   max-height: 100%;
+  padding-right: var(--spacing-2xs); // scrollbar offset
 }
 </style>

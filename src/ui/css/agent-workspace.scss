@@ -68,8 +68,8 @@
   display: flex;
   justify-content: stretch;
   align-items: stretch;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
   border-radius: var(--border-radius);
   transition: var(--transition);
 
@@ -86,7 +86,7 @@
 
   &__text {
     flex: 1 0 auto;
-    margin: 0 15px;
+    margin: 0 var(--spacing-sm);
 
     .flex-wrap {
       display: flex;

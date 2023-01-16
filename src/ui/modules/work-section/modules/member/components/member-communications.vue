@@ -42,8 +42,8 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 <style lang="scss" scoped>
 
   .workspace-member-communication {
-    padding: 10px 20px;
-    margin-bottom: 10px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
     border: 1px solid transparent;
     border-radius: var(--border-radius);
     transition: var(--transition);

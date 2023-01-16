@@ -19,9 +19,8 @@ export default {
     },
     infoSecSize() {
       if (this.collapsible && this.infoSecCollapsed) return 'sm';
-      if (this.$breakpoint.sm) return 'md';
-      if (this.$breakpoint.md) return 'md';
-      // if (this.$breakpoint.lg) return 'md';
+      if (this.$breakpoint.mdAndDown) return 'sm';
+      if (this.$breakpoint.lg) return 'md';
       return 'md';
     },
     collapsible() {

@@ -13,7 +13,7 @@ export default {
 <style lang="scss" scoped>
 .task-footer {
   display: flex;
-  gap: 10px;
-  padding: 10px;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
 }
 </style>

@@ -57,7 +57,7 @@ export default {
     team() {
       return this.agent.team?.name || '';
     },
-    supervisors() {
+      supervisors() {
       if (!this.agent.supervisor) return '';
       return this.agent.supervisor.map((supervisor) => supervisor.name);
     },
@@ -74,16 +74,12 @@ export default {
 
   .agent-org-structure-item {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 2fr 1fr;
     justify-items: flex-start;
     padding: var(--spacing-xs);
 
     &:not(:last-child) {
       border-bottom: 1px solid var(--secondary-color);
-    }
-
-    &:last-child {
-      justify-self: start;
     }
 
     &__value {
@@ -97,6 +93,9 @@ export default {
   }
 
   &--sm {
+    .agent-org-structure-item {
+      grid-template-columns: 3fr 2fr;
+    }
     .agent-org-structure-item__title {
       @extend %typo-subtitle-2;
     }
