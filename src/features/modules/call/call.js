@@ -166,6 +166,7 @@ const actions = {
     // cannot mutate newCall because its instance only on 'workspace' state
     // eslint-disable-next-line no-param-reassign
     call.newNumber = value;
+    // reset historyId if user clicked to same history record twice
     call.historyId = call.historyId === historyId ? '' : historyId;
   },
 
