@@ -174,7 +174,6 @@ export default {
   flex-grow: 1;
   box-sizing: border-box;
   min-width: 0;
-  padding: var(--spacing-sm);
   gap: var(--spacing-2xs);
 
   &.info-section {

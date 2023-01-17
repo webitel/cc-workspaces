@@ -21,5 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.collapse-action {
+  line-height: 0;
+}
 </style>

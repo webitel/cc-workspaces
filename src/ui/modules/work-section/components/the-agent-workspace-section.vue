@@ -93,7 +93,6 @@ export default {
 }
 
 .workspace-section__collapse-actions {
-  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-2xs);
   line-height: 0;
 }
 

@@ -1,19 +1,16 @@
 <template>
   <section
-    class="workspace-section queue-section"
     :class="[
       `queue-section--${size}`
     ]"
+    class="workspace-section queue-section"
   >
-
+    <collapse-action
+      v-if="collapsible"
+      :collapsed="collapsed"
+      @click="$emit('resize')"
+    ></collapse-action>
     <div class="queue-section-wrapper">
-      <div class="workspace-section__collapse-actions">
-        <collapse-action
-          v-if="collapsible"
-          :collapsed="collapsed"
-          @click="$emit('resize')"
-        ></collapse-action>
-      </div>
       <call-queue
         :size="size"
       ></call-queue>
@@ -25,23 +22,23 @@
       ></job-queue>
     </div>
     <wt-rounded-action
-      color="success"
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
-      size="lg"
+      color="success"
       rounded
+      size="lg"
       @click="toggleNewCall"
     ></wt-rounded-action>
   </section>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
+import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
-import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 
 export default {
   name: 'the-agent-queue-section',
@@ -62,8 +59,7 @@ export default {
       default: false,
     },
   },
-  data: () => ({
-  }),
+  data: () => ({}),
   computed: {
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
@@ -99,11 +95,11 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: transparent;
   min-width: 0;
+  gap: var(--spacing-2xs);
 
-  will-change: width;
   transition: var(--transition);
+  will-change: width;
 
   &--md {
     flex: 0 0 320px;
@@ -127,18 +123,10 @@ export default {
   min-height: 0;
 }
 
-.workspace-section__collapse-actions {
-  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-2xs);
-  background: var(--main-color);
-  margin-bottom: var(--spacing-xs);
-  border-radius: var(--border-radius);
-  line-height: 0;
-}
-
 .task-queue {
-  min-height: 0;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 
   &.call-queue {
     flex: 0 2 auto;

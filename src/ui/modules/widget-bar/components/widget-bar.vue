@@ -129,7 +129,7 @@ export default {
 
 .widget-bar {
   display: flex;
-  background: #fff;
+  background: var(--main-color);
   border-radius: var(--border-radius);
 }
 
