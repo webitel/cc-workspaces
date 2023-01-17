@@ -88,7 +88,7 @@
     display: flex;
     align-items: center;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
 
     .ws-worksection__search {
       flex: 1 1 auto;
@@ -99,7 +99,7 @@
 
     .wt-button {
       flex: 0 0 auto;
-      margin-left: 10px;
+      margin-left: var(--spacing-xs);
     }
   }
 </style>

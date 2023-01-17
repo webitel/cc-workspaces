@@ -55,7 +55,7 @@ export default {
 .processing-form__schedule-call-select__title {
   @extend %typo-body-1;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: var(--spacing-xs);
 }
 
 .processing-form__schedule-call-select-wrapper {
@@ -64,7 +64,7 @@ export default {
   align-items: center;
 
   .wt-radio:first-child {
-    margin-right: 10px;
+    margin-right: var(--spacing-xs);
   }
 }
 

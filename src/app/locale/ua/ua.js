@@ -63,10 +63,10 @@ export default {
     generalInfo: {
       generalInfo: 'Основна інформація',
       queueWaiting: 'Очікують',
-      queue: 'Черга',
+      queue: 'Черга | Черги',
       agents: 'Оператори',
       total: 'Всі',
-      paused: 'Пауза',
+      pauses: 'Паузи',
       free: 'Вільні',
     },
     clientInfo: 'Інформація',

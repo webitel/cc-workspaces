@@ -89,7 +89,7 @@ export default {
   &__animation {
     width: 52px;
     height: 52px;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
     overflow: hidden;
   }
 

@@ -17,7 +17,10 @@ describe('General Info: Agent Org Structure', () => {
     const wrapper = shallowMount(AgentOrgStructure, {
       propsData: { agent: { supervisor } },
     });
-    const supervisorsUIWrappers = wrapper.findAll('.agent-org-structure__item--supervisors .agent-org-structure__item__value');
+    const supervisorsUIWrappers = wrapper
+      .findAll('.agent-org-structure-item')
+      .at(1)
+      .findAll('.agent-org-structure-item__value');
     expect(supervisorsUIWrappers.length).toBe(2);
     expect(supervisorsUIWrappers.at(0).text()).toBe(sup1);
     expect(supervisorsUIWrappers.at(1).text()).toBe(sup2);
@@ -29,7 +32,10 @@ describe('General Info: Agent Org Structure', () => {
     const wrapper = shallowMount(AgentOrgStructure, {
       propsData: { agent: { auditor } },
     });
-    const auditorsUIWrappers = wrapper.findAll('.agent-org-structure__item--auditors .agent-org-structure__item__value');
+    const auditorsUIWrappers = wrapper
+      .findAll('.agent-org-structure-item')
+      .at(2)
+      .findAll('.agent-org-structure-item__value');
     expect(auditorsUIWrappers.length).toBe(2);
     expect(auditorsUIWrappers.at(0).text()).toBe(aud1);
     expect(auditorsUIWrappers.at(1).text()).toBe(aud2);

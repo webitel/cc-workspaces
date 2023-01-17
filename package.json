@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.8",
-    "@webitel/cc-ui-sdk": "^0.1.25",
-    "@webitel/ui-sdk": "^2.1.29",
+    "@webitel/cc-ui-sdk": "^0.1.26",
+    "@webitel/ui-sdk": "^2.1.31",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
     "deep-copy": "^1.4.2",
@@ -56,8 +56,8 @@
     "eslint-plugin-vue": "^8.7.1",
     "husky": "^7.0.0",
     "jsdom": "^16.4.0",
-    "sass": "^1.51.0",
-    "sass-loader": "^12.6.0",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
     "svg-sprite-loader": "^6.0.11",
     "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^4.6.1"

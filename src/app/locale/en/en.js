@@ -65,10 +65,10 @@ export default {
     generalInfo: {
       generalInfo: 'General info',
       queueWaiting: 'Waiting',
-      queue: 'Queue',
+      queue: 'Queue | Queues',
       agents: 'Agents',
       total: 'Total',
-      paused: 'Paused',
+      pauses: 'Pauses',
       free: 'Free',
     },
     clientInfo: 'Client info',

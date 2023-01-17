@@ -48,12 +48,12 @@
   .empty-search__pic {
     width: 130px;
     height: 130px;
-    margin: auto auto 15px;
+    margin: auto auto var(--spacing-sm);
   }
 
   .empty-search__heading {
     @extend %typo-subtitle-1;
-    margin-bottom: 5px;
+    margin-bottom: var(--spacing-2xs);
   }
 
   .empty-search__text {

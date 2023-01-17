@@ -115,8 +115,8 @@ export default {
 
   .wt-rounded-action {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: var(--spacing-xs);
+    left: var(--spacing-xs);
   }
 }
 
@@ -130,7 +130,7 @@ export default {
 .workspace-section__collapse-actions {
   padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-2xs);
   background: var(--main-color);
-  margin-bottom: 10px;
+  margin-bottom: var(--spacing-xs);
   border-radius: var(--border-radius);
   line-height: 0;
 }
@@ -142,12 +142,12 @@ export default {
 
   &.call-queue {
     flex: 0 2 auto;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
   }
 
   &.chat-queue {
     flex: 0 1 auto;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
   }
 
   &.job-queue {

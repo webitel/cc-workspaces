@@ -84,7 +84,7 @@ export default {
   }
 
   &__footer {
-    height: 15px;
+    height: var(--spacing-sm);
     box-shadow: var(--elevation-2);
   }
 }

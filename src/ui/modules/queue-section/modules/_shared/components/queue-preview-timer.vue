@@ -40,7 +40,7 @@ export default {
 
     /*semicolons*/
     &:nth-child(3), &:nth-child(6) {
-      width: (5px);
+      width: var(--spacing-2xs);
     }
   }
 

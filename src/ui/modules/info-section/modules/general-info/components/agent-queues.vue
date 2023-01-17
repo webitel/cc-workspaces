@@ -1,46 +1,44 @@
 <template>
-  <article class="agent-queues">
-
-    <div class="agent-queues__headers">
-      <div
-        class="agent-queues__headers-item"
-        v-for="(header, index) in headers"
-        :key="index"
-      >
-        {{ $t(header.locale) }}
-      </div>
-    </div>
-
-    <div
-      class="agent-queues__queue"
-      v-for="queue in queues"
-      :key="queue.queue.id"
-    >
-      <div class="agent-queues__queue-item">{{ queue.queue.name }}</div>
-
-      <table-agents
-        :agents="queue.agents"
-      ></table-agents>
-
-      <div class="agent-queues__queue-item">
-        <wt-chip>{{ queue.waitingMembers }}</wt-chip>
-      </div>
-    </div>
+  <article
+    :class="[`agent-queues--${size}`]"
+    class="agent-queues"
+  >
+    <wt-expansion-panel :size="size">
+      <template slot="title">{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
+      <template>
+        <ul>
+          <li
+            v-for="queue in queues"
+            :key="queue.queue.id"
+            class="agent-queues-item"
+          >
+            <div class="agent-queues-item__title">{{ queue.queue.name }}</div>
+            <div class="agent-queues-item__status-wrapper">
+              <agent-indicators
+                :agents="queue.agents"
+                :size="size"
+              ></agent-indicators>
+              <wt-chip>{{ queue.waitingMembers }}</wt-chip>
+            </div>
+          </li>
+        </ul>
+      </template>
+    </wt-expansion-panel>
   </article>
 </template>
 
 <script>
-import tableAgents from './table-agents.vue';
-import headers from '../store/_internals/agentQueuesHeaders';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import agentIndicators from './agent-indicators.vue';
+import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
 
 export default {
   name: 'agent-queues',
   components: {
-    tableAgents,
+    WtExpansionPanel,
+    agentIndicators,
   },
-  data: () => ({
-    headers,
-  }),
+  mixins: [sizeMixin],
   props: {
     queues: {
       type: Array,
@@ -52,38 +50,37 @@ export default {
 
 <style lang="scss" scoped>
 .agent-queues {
-  @extend %typo-body-1;
-}
+  .agent-queues-item {
+    display: grid;
+    align-items: center;
+    padding: var(--spacing-xs);
+    grid-template-columns: 2fr 1fr;
 
-.agent-queues__headers {
-  @extend %typo-subtitle-1;
-  display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
-  justify-items: center;
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--secondary-color);
+    }
 
-  .agent-queues__headers-item:first-child {
-    justify-self: start;
-  }
-}
+    .wt-chip {
+      width: fit-content;
+      justify-self: flex-end;
+    }
 
-.agent-queues__queue {
-  display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
-  align-items: center;
-  gap: 4px;
-  margin-top: var(--spacing-sm);
+    &__title {
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
 
-  .agent-queues__queue-item {
-    overflow-wrap: break-word;
-    word-break: break-all;
-
-    &:last-of-type {
-      justify-self: center;
+    .agent-queues-item__status-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 
-  .wt-chip {
-    @extend %typo-caption;
+  &--sm {
+    .agent-queues-item {
+      grid-template-columns: 3fr 2fr;
+    }
   }
 }
 </style>
