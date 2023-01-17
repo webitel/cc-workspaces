@@ -57,9 +57,7 @@ describe('Agent History functionality', () => {
     wrapper.findComponent({ name: 'history-lookup-item' }).vm.$emit('input');
     expect(mock)
     .toHaveBeenCalledWith({
-      value: {
-        destination: historyList[0].destination,
-      },
+      value: historyList[0].destination,
       historyId: historyList[0].id,
     });
   });
