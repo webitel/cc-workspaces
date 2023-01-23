@@ -1,40 +1,57 @@
 <template>
-  <task-queue-preview
-    :task="task"
-    :title="task.displayName"
+  <component
+    :is="`task-queue-preview-${size}`"
     :opened="opened"
-    :size="size"
+    :task="task"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
+    <template
+      v-if="size === 'md'"
+      v-slot:icon
+    >
       <wt-icon
-        icon="job"
         color="job"
+        icon="job"
       ></wt-icon>
+    </template>
+    <template v-slot:avatar>
+      <wt-icon
+        color="job"
+        icon="job"
+      ></wt-icon>
+    </template>
+    <template v-slot:title>
+      {{ task.displayName }}
     </template>
     <template v-slot:body>
       {{ task.displayNumber }}
     </template>
     <template
-      v-slot:actions
       v-if="task.allowAccept"
+      v-slot:actions
     >
-      <wt-button
+      <component
+        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
         color="job"
+        icon="job--accept"
+        size="sm"
         @click.prevent="$emit('accept', task)"
         @keydown.enter.prevent="$emit('accept', task)"
       >
         {{ $t('reusable.accept') }}
-      </wt-button>
+      </component>
       <wt-button
-        color="secondary"
+        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
+        color="danger"
+        icon="job--end"
+        size="sm"
         @click.prevent="$emit('decline', task)"
         @keydown.enter.prevent="$emit('decline', task)"
       >
         {{ $t('reusable.decline') }}
       </wt-button>
     </template>
-  </task-queue-preview>
+  </component>
 </template>
 
 <script>

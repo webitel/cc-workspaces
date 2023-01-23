@@ -1,6 +1,6 @@
 <template>
   <task-queue-container>
-    <div ref="scroll-wrap">
+    <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
       <offline-preview
         v-for="(task) of dataList"
         :key="task.id"
@@ -44,7 +44,7 @@ export default {
 
   methods: {
     loadDataList() {
-      this.loadList({ search: this.search, page: this.page, size: this.size });
+      this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
     },
 
     ...mapActions('features/member', {
@@ -56,4 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.offline-queue-container__scroll-wrap {
+  display: contents;
+}
 </style>

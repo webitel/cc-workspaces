@@ -2,7 +2,7 @@
   <div class="queue-preview-timer" :class="{ 'queue-preview-timer--bold': bold }">
     <!--v-for for timer not to resize on digit width change-->
     <span
-      class="call-preview-timer__digit"
+      class="queue-preview-timer__digit"
       v-for="(digit, key) of startTime.split('')"
       :key="key"
     >{{ digit }}</span>
@@ -36,7 +36,7 @@ export default {
   &__digit {
     @extend %typo-body-2;
     text-align: center;
-    width: (9.5px);
+    width: 7.5px;
 
     /*semicolons*/
     &:nth-child(3), &:nth-child(6) {

@@ -1,5 +1,8 @@
 <template>
-  <section class="task-queue">
+  <section
+    class="task-queue"
+    :class="[`task-queue--${size}`]"
+  >
     <header class="task-queue-header">
       <h2 class="task-queue-header__title">
         <slot name="title">
@@ -12,8 +15,11 @@
 </template>
 
 <script>
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+
 export default {
   name: 'the-agent-task-queue',
+  mixins: [sizeMixin],
   props: {
     title: {
       type: String,
@@ -26,11 +32,16 @@ export default {
 .task-queue {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-}
 
-.task-queue-header__title {
-  @extend %typo-body-1;
+  .task-queue-header__title {
+    @extend %typo-body-1;
+  }
+
+  &--sm {
+    .task-queue-header__title {
+      text-align: center;
+    }
+  }
 }
 
 </style>

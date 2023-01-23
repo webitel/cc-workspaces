@@ -1,6 +1,7 @@
 <template>
   <the-agent-task-queue
     class="task-queue chat-queue"
+    :size="size"
     :title="$t('queueSec.chat.chats')"
   >
     <task-queue-container>

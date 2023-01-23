@@ -92,13 +92,15 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-section.queue-section {
+  @extend %wt-scrollbar;
   position: relative;
   display: flex;
+  overflow: auto;
   flex-direction: column;
   min-width: 0;
-  gap: var(--spacing-2xs);
-
   transition: var(--transition);
+
+  gap: var(--spacing-2xs);
   will-change: width;
 
   &--md {
@@ -106,13 +108,13 @@ export default {
   }
 
   &--sm {
-    flex: 0 0 120px; // TODO make me 72px
+    flex: 0 0 114px;
   }
 
   .wt-rounded-action {
-    position: absolute;
-    bottom: var(--spacing-xs);
-    left: var(--spacing-xs);
+    position: fixed;
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
   }
 }
 
@@ -120,26 +122,12 @@ export default {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-height: 0;
+  gap: var(--spacing-sm);
 }
 
 .task-queue {
   display: flex;
   flex-direction: column;
   min-height: 0;
-
-  &.call-queue {
-    flex: 0 2 auto;
-    margin-bottom: var(--spacing-xs);
-  }
-
-  &.chat-queue {
-    flex: 0 1 auto;
-    margin-bottom: var(--spacing-xs);
-  }
-
-  &.job-queue {
-    flex: 0 0 auto;
-  }
 }
 </style>

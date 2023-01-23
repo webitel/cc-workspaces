@@ -1,6 +1,7 @@
 <template>
   <the-agent-task-queue
     class="task-queue job-queue"
+    :size="size"
     :title="$t('queueSec.job.jobs')"
   >
     <task-queue-container>
