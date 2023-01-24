@@ -1,52 +1,58 @@
 <template>
-  <task-queue-preview
-    :task="task"
-    :title="task.displayName"
+  <component
+    :is="`task-queue-preview-${size}`"
     :opened="opened"
-    :size="size"
+    :task="task"
     @click="$emit('click', task)"
   >
     <template v-slot:icon>
-      <status-chip :state="computePreviewStatusClass" />
+      <img
+        alt=""
+        src="../../../../../../../app/assets/call-sonars/active-sonar.svg"
+      >
     </template>
     <template v-slot:title>
-      {{ task.displayName | truncate(27) }}
+      {{ task.displayName }}
     </template>
     <template v-slot:body>
       {{ task.displayNumber | truncateFromEnd(33) }}
     </template>
     <template
-      v-slot:actions
       v-if="isRinging"
+      v-slot:actions
     >
-      <wt-button
+      <component
+        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
         color="success"
+        icon="call-ringing"
+        :size="size"
         @click.prevent="$emit('answer', task)"
         @keydown.enter.prevent="$emit('answer', task)"
       >
         {{ $t('reusable.answer') }}
-      </wt-button>
-      <wt-button
+      </component>
+      <component
+        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
         color="danger"
+        icon="call-end"
+        :size="size"
         @click.prevent="$emit('hangup', task)"
         @keydown.enter.prevent="$emit('hangup', task)"
       >
         {{ $t('reusable.reject') }}
-      </wt-button>
+      </component>
     </template>
-  </task-queue-preview>
+  </component>
 </template>
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import StatusChip from '../call-status-icon-chip.vue';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'active-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
-  components: { StatusChip },
   computed: {
     isHold() {
       return this.task.isHold;

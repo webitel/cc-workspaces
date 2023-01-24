@@ -35,7 +35,7 @@ describe('Preview Actions', () => {
 
   it('Shows preview actions on Inbound Ringing', () => {
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task },
+      propsData: { task, size: 'md' },
     });
     expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
@@ -49,7 +49,7 @@ describe('Preview Actions', () => {
       queue: { queue_type: 'preview' },
     };
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task },
+      propsData: { task, size: 'md' },
     });
     expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())

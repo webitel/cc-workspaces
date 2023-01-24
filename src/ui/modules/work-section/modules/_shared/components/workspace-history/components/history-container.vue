@@ -1,7 +1,7 @@
 <template>
   <div class="ws-worksection">
     <wt-search-bar
-      v-model="search"
+      v-model="dataSearch"
       @search="resetData"
     ></wt-search-bar>
     <section class="ws-worksection__list" ref="scroll-wrap">
@@ -48,7 +48,7 @@
     data: () => ({
       dataList: '',
       historyNumber: '',
-      fields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
+      dataFields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
     }),
 
     watch: {

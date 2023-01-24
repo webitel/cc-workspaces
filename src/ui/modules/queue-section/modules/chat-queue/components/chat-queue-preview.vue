@@ -1,21 +1,31 @@
 <template>
-  <task-queue-preview
+  <component
+    :is="`task-queue-preview-${size}`"
     :task="task"
-    :title="displayName"
     :opened="opened"
-    :size="size"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
+    <template
+      v-slot:icon
+      v-if="size === 'md'"
+    >
       <wt-icon
         :icon="displayIcon"
-        size="sm"
       ></wt-icon>
     </template>
-    <template v-slot:body>
-      {{ lastMessage | truncate(30) }}
+    <template v-slot:avatar>
+      <wt-icon
+        :icon="displayIcon"
+        size="md"
+      ></wt-icon>
     </template>
-  </task-queue-preview>
+    <template v-slot:title>
+      {{ displayName }}
+    </template>
+    <template v-slot:body>
+      {{ lastMessage }}
+    </template>
+  </component>
 </template>
 
 <script>

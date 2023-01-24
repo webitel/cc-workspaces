@@ -2,7 +2,7 @@
   <div class="ws-worksection chat-transfer-container">
     <div class="ws-worksection__search-wrap">
       <wt-search-bar
-        v-model="search"
+        v-model="dataSearch"
         class="ws-worksection__search"
         debounce
         @search="resetData"

@@ -3,7 +3,7 @@
     <div class="ws-worksection__search-wrap">
       <wt-search-bar
         class="ws-worksection__search"
-        v-model="search"
+        v-model="dataSearch"
         @search="resetData"
       ></wt-search-bar>
       <wt-button
@@ -54,9 +54,9 @@
 
     data: () => ({
       dataList: [],
-      filters: 'presence.status=sip,!dnd',
-      sort: 'presence.status',
-      fields: ['name', 'id', 'extension', 'presence'],
+      dataFilters: 'presence.status=sip,!dnd',
+      dataSort: 'presence.status',
+      dataFields: ['name', 'id', 'extension', 'presence'],
     }),
 
     computed: {
@@ -76,7 +76,7 @@
         return usersAPI.getUsers({ ...params, notId: [this.userId] });
       },
       transfer(item = {}) {
-        const number = item.extension || this.search;
+        const number = item.extension || this.dataSearch;
         this.blindTransfer(number);
       },
     },
