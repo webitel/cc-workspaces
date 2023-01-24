@@ -11,7 +11,6 @@
     >
       <wt-icon
         :icon="displayIcon"
-        size="sm"
       ></wt-icon>
     </template>
     <template v-slot:avatar>

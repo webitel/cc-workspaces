@@ -49,12 +49,10 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
-import StatusChip from '../call-status-icon-chip.vue';
 
 export default {
   name: 'active-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
-  components: { StatusChip },
   computed: {
     isHold() {
       return this.task.isHold;

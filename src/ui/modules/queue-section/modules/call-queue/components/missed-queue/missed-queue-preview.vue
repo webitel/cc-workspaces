@@ -37,14 +37,10 @@
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
-import StatusChip from '../call-status-icon-chip.vue';
 
 export default {
   name: 'missed-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
-  components: {
-    StatusChip,
-  },
 
   computed: {
     displayName() {
