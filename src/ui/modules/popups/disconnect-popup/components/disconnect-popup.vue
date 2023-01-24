@@ -57,6 +57,6 @@ export default {
 .disconnect-popup__img {
   width: 180px;
   height: 180px;
-  margin: 15px;
+  margin: var(--spacing-sm);
 }
 </style>

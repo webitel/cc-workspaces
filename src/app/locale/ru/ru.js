@@ -63,10 +63,10 @@ export default {
     generalInfo: {
       generalInfo: 'Основная информация',
       queueWaiting: 'Ожидают',
-      queue: 'Очередь',
+      queue: 'Очередь | Очереди',
       agents: 'Операторы',
       total: 'Все',
-      paused: 'Пауза',
+      pauses: 'Паузы',
       free: 'Свободно',
     },
     clientInfo: 'Информация',

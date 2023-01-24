@@ -173,6 +173,7 @@ export default {
 
 .workspace-section {
   position: relative;
+  padding: var(--spacing-sm);
 }
 
 </style>

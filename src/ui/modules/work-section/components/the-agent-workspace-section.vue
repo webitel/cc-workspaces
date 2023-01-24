@@ -5,13 +5,13 @@
       `work-section--${size}`
     ]"
   >
-<!--    <div class="workspace-section__collapse-actions">-->
-<!--      <collapse-action-->
-<!--        v-if="collapsible"-->
-<!--        :collapsed="collapsed"-->
-<!--        @click="$emit('resize')"-->
-<!--      ></collapse-action>-->
-<!--    </div>-->
+    <div class="workspace-section__collapse-actions">
+      <collapse-action
+        v-if="collapsible"
+        :collapsed="collapsed"
+        @click="$emit('resize')"
+      ></collapse-action>
+    </div>
     <component
       class="work-section__main-content"
       :is="workspaceComponent"
@@ -84,7 +84,8 @@ export default {
   transition: var(--transition);
 
   &--md {
-    flex: 1 1 auto;
+    /* should be bigger than info-section 1 1 320px cause info section should */
+    flex: 100 100 auto;
   }
   &--sm {
     flex: 0 0 400px;
@@ -92,7 +93,6 @@ export default {
 }
 
 .workspace-section__collapse-actions {
-  padding: var(--spacing-sm);
   line-height: 0;
 }
 
