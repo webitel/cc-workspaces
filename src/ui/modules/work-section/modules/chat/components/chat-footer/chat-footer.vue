@@ -147,7 +147,7 @@ export default {
 }
 
 .chat-footer__chat-preview {
-  padding: 20px;
+  padding: var(--spacing-sm);
   border: 1px solid var(--main-page-bg-color);
 
   .chat-footer__chat-preview-wrapper {
@@ -169,12 +169,12 @@ export default {
 
 .chat-footer__chat-active {
   .wt-textarea {
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
   }
 
   .chat-footer__actions {
     display: flex;
-    gap: 10px;
+    gap: var(--spacing-xs);
   }
 }
 

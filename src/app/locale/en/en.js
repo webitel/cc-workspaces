@@ -65,10 +65,10 @@ export default {
     generalInfo: {
       generalInfo: 'General info',
       queueWaiting: 'Waiting',
-      queue: 'Queue',
+      queue: 'Queue | Queues',
       agents: 'Agents',
       total: 'Total',
-      paused: 'Paused',
+      pauses: 'Pauses',
       free: 'Free',
     },
     clientInfo: 'Client info',
@@ -81,6 +81,12 @@ export default {
         no: 'No',
         nextDistributeAtTitle: 'Schedule next task?',
         nextDistributeAt: 'Next task time',
+      },
+      form: {
+        formFile: {
+          deleteConfirmation: 'Are you sure you want to delete this file?',
+          empty: 'There are no files yet',
+        },
       },
     },
   },

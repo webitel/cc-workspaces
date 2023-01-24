@@ -6,6 +6,7 @@
       :key="task.id"
       :task="task"
       :index="key"
+      :size="size"
       @click="openCall"
     ></missed-preview>
   </task-queue-container>
@@ -13,11 +14,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
 export default {
   name: 'missed-queue-container',
+  mixins: [sizeMixin],
   components: {
     TaskQueueContainer,
     MissedPreview,
@@ -45,7 +48,8 @@ export default {
 
     openCall(missed) {
       const newNumber = missed.from.number;
-      this.openNewCall({ newNumber });
+      const historyId = missed.id;
+      this.openNewCall({ newNumber, historyId });
     },
   },
 };

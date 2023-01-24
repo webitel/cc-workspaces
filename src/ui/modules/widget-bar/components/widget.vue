@@ -75,12 +75,12 @@ $widget-chat-aht-color:  var(--true-color);
   align-items: center;
   width: fit-content;
   height: 24px; // checkbox height
-  padding: 5px;
+  padding: var(--spacing-2xs);
   white-space: nowrap;
 
   .widget__title {
     @extend %typo-caption;
-    margin-right: 5px;
+    margin-right: var(--spacing-2xs);
   }
 
   .widget__value {
@@ -105,12 +105,12 @@ $widget-chat-aht-color:  var(--true-color);
 }
 
 .widget-checkbox {
-  margin-right: 10px;
+  margin-right: var(--spacing-xs);
   pointer-events: none; // prevent checkbox own click event
 }
 
 .widget-icon {
-  margin-right: 10px;
+  margin-right: var(--spacing-xs);
 
   &--widget-call-inbound.wt-icon ::v-deep .wt-icon__icon {
     fill: $widget-inbound-color;

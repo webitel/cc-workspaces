@@ -1,7 +1,7 @@
 <template>
   <div class="ws-worksection">
     <wt-search-bar
-      v-model="search"
+      v-model="dataSearch"
       @search="resetData"
     ></wt-search-bar>
 
@@ -44,8 +44,8 @@
 
     data: () => ({
       dataList: [],
-      sort: 'presence.status',
-      fields: ['name', 'id', 'extension', 'presence', 'username'],
+      dataSort: 'presence.status',
+      dataFields: ['name', 'id', 'extension', 'presence', 'username'],
     }),
 
     methods: {

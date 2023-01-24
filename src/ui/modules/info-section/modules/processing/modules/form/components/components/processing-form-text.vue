@@ -43,34 +43,23 @@
 import MarkdownIt from 'markdown-it';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
+import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 
 const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);
 
 export default {
   name: 'form-text',
-  mixins: [processingFormComponentMixin],
+  mixins: [processingFormComponentMixin, collapsibleProcessingFormComponentMixin],
   props: {
     color: {
       type: String,
       default: 'default',
       options: ['default', 'secondary', 'accent', 'success', 'danger'],
     },
-    collapsible: {
-      type: Boolean,
-      default: true,
-    },
     enableCopying: {
       type: Boolean,
       default: false,
-    },
-  },
-  data: () => ({
-    collapsed: true,
-  }),
-  methods: {
-    handleCollapse() {
-      this.collapsed = !this.collapsed;
     },
   },
   computed: {
@@ -86,7 +75,7 @@ $default-color: #1A90E5;
 
 .processing-form-text {
   position: relative;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);
   border: 1px dashed $default-color;
   border-radius: var(--border-radius);
 

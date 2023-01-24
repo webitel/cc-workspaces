@@ -1,29 +1,41 @@
 <template>
-  <task-queue-preview
+  <component
+    :is="`task-queue-preview-${size}`"
     :task="task"
-    :title="displayName"
     :opened="opened"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
+    <template
+      v-slot:icon
+      v-if="size === 'md'"
+    >
       <wt-icon
         :icon="displayIcon"
-        size="sm"
       ></wt-icon>
     </template>
-    <template v-slot:body>
-      {{ lastMessage | truncate(30) }}
+    <template v-slot:avatar>
+      <wt-icon
+        :icon="displayIcon"
+        size="md"
+      ></wt-icon>
     </template>
-  </task-queue-preview>
+    <template v-slot:title>
+      {{ displayName }}
+    </template>
+    <template v-slot:body>
+      {{ lastMessage }}
+    </template>
+  </component>
 </template>
 
 <script>
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',
-  mixins: [taskPreviewMixin],
+  mixins: [taskPreviewMixin, sizeMixin],
   computed: {
     displayName() {
       return this.task.members.map((member) => member.name).join(', ');

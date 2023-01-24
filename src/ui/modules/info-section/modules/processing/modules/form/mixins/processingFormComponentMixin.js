@@ -1,7 +1,7 @@
 export default {
   props: {
     initialValue: {
-      type: String,
+      type: [String, Array],
       default: '',
     },
     label: {

@@ -1,49 +1,64 @@
 <template>
-  <task-queue-preview
+  <component
+    :is="`task-queue-preview-${size}`"
     :task="task"
-    :title="displayName"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
-      <status-chip state="missed"/>
+    <template
+      v-if="size === 'md'"
+      v-slot:icon
+    >
+      <wt-icon
+        color="danger"
+        icon="call-disconnect"
+      ></wt-icon>
+    </template>
+    <template v-slot:avatar>
+      <wt-icon
+        color="danger"
+        icon="call-disconnect"
+      ></wt-icon>
     </template>
     <template v-slot:timer>
-      {{ $t('queueSec.call.at') }}: {{ displayTime }}
+      <span class="missed-preview__task-time">
+        {{ displayTime }}
+      </span>
+    </template>
+    <template v-slot:title>
+      {{ displayName }}
     </template>
     <template v-slot:body>
       {{ displayNumber | truncateFromEnd(18) }}
     </template>
-  </task-queue-preview>
+  </component>
 </template>
 
 <script>
-  import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-  import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
-  import StatusChip from '../call-status-icon-chip.vue';
+import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
-  export default {
-    name: 'missed-queue-preview',
-    mixins: [taskPreviewMixin],
-    components: {
-      StatusChip,
-    },
+export default {
+  name: 'missed-queue-preview',
+  mixins: [taskPreviewMixin, sizeMixin],
 
-    computed: {
-      displayName() {
-        return this.task.from?.name || '';
-      },
-      displayNumber() {
-        return this.task.from?.number || '';
-      },
-      displayTime() {
-        return prettifyTime(this.task.createdAt);
-      },
+  computed: {
+    displayName() {
+      return this.task.from?.name || '';
     },
-  };
+    displayNumber() {
+      return this.task.from?.number || '';
+    },
+    displayTime() {
+      return prettifyTime(this.task.createdAt);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .missed-preview__task-time {
-    @extend %typo-body-2;
-  }
+.missed-preview__task-time {
+  @extend %typo-body-2;
+  text-align: center;
+}
 </style>

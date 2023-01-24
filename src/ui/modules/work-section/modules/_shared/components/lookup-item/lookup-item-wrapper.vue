@@ -37,10 +37,6 @@ export default {
   border-radius: var(--border-radius);
   gap: var(--spacing-xs);
 
-  &:hover {
-    border-color: var(--accent-color);
-  }
-
   &__main {
     flex-grow: 1;
   }

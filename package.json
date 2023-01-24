@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "22.09.2",
+  "version": "22.12.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,26 +14,29 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.8",
-    "@webitel/cc-ui-sdk": "^0.1.25",
-    "@webitel/ui-sdk": "^2.1.19",
+    "@webitel/cc-ui-sdk": "^0.1.26",
+    "@webitel/ui-sdk": "^2.1.31",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
     "deep-copy": "^1.4.2",
     "deep-equal": "^2.0.3",
     "deepmerge": "^4.2.2",
     "emoji-picker-element": "^1.10.1",
+    "file-saver": "^2.0.5",
     "github-markdown-css": "^4.0.0",
     "insert-text-at-cursor": "^0.3.0",
+    "jszip": "^3.10.1",
+    "jszip-utils": "^0.1.0",
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
     "markdown-it": "^12.3.2",
-    "tinymce": "^6.2.0",
+    "tinymce": "^6.3.1",
     "vue": "^2.6.14",
     "vue-i18n": "^8.15.3",
     "vue-router": "^3.5.3",
     "vuelidate": "^0.7.5",
     "vuex": "^3.6.2",
-    "webitel-sdk": "^0.1.167"
+    "webitel-sdk": "^0.1.168"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
@@ -53,8 +56,8 @@
     "eslint-plugin-vue": "^8.7.1",
     "husky": "^7.0.0",
     "jsdom": "^16.4.0",
-    "sass": "^1.51.0",
-    "sass-loader": "^12.6.0",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
     "svg-sprite-loader": "^6.0.11",
     "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^4.6.1"
