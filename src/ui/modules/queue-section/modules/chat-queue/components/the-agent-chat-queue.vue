@@ -1,6 +1,7 @@
 <template>
   <the-agent-task-queue
     class="task-queue chat-queue"
+    :size="size"
     :title="$t('queueSec.chat.chats')"
   >
     <task-queue-container>
@@ -9,6 +10,7 @@
         :task="task"
         :opened="task === taskOnWorkspace"
         :key="task.id"
+        :size="size"
         @click="openTask"
       ></chat-queue-preview>
     </task-queue-container>
@@ -17,12 +19,14 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
 import TaskQueueContainer from '../../_shared/components/task-queue-container.vue';
 import ChatQueuePreview from './chat-queue-preview.vue';
 
 export default {
   name: 'the-agent-chat-queue',
+  mixins: [sizeMixin],
   components: {
     TheAgentTaskQueue,
     TaskQueueContainer,

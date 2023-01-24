@@ -31,7 +31,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  margin-left: 10px;
+  margin-left: var(--spacing-xs);
 }
 
 .chat-message-meta__sent-at {

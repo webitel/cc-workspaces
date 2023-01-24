@@ -1,11 +1,12 @@
 <template>
   <task-queue-container>
-    <div ref="scroll-wrap">
+    <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
       <offline-preview
         v-for="(task) of dataList"
         :key="task.id"
         :opened="task === taskOnWorkspace"
         :task="task"
+        :size="size"
         @click="openMember"
       ></offline-preview>
 
@@ -20,12 +21,13 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
   name: 'offline-queue-container',
-  mixins: [infiniteScrollMixin],
+  mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     TaskQueueContainer,
     OfflinePreview,
@@ -42,7 +44,7 @@ export default {
 
   methods: {
     loadDataList() {
-      this.loadList({ search: this.search, page: this.page, size: this.size });
+      this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
     },
 
     ...mapActions('features/member', {
@@ -54,4 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.offline-queue-container__scroll-wrap {
+  display: contents;
+}
 </style>

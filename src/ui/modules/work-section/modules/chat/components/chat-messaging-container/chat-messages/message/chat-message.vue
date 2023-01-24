@@ -89,7 +89,7 @@ export default {
   position: relative;
   display: flex;
   max-width: 80%;
-  gap: 10px;
+  gap: var(--spacing-xs);
 
   .chat-message-avatar {
     flex: 0 0 32px;
@@ -100,11 +100,11 @@ export default {
     flex-direction: column;
     width: fit-content;
     min-width: 0;
-    padding: 8px 10px;
+    padding: var(--spacing-xs) var(--spacing-xs);
     line-height: 0; // prevents height difference from its content
     border-radius: var(--border-radius);
     background: var(--chat-client-message-bg-color);
-    gap: 10px;
+    gap: var(--spacing-xs);
   }
 
   &--right {

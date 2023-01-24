@@ -1,23 +1,33 @@
 <template>
-  <div class="table-agents">
+  <div
+    class="agent-indicators"
+    :class="[`agent-indicators--${size}`]"
+  >
     <wt-indicator
       color="primary"
       :text="pause"
+      :size="size"
     ></wt-indicator>
     <wt-indicator
       color="success"
       :text="free"
+      :size="size"
     ></wt-indicator>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'table-agents',
+  name: 'agent-indicators',
   props: {
     agents: {
       type: Object,
       required: true,
+    },
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
     },
   },
   computed: {
@@ -32,13 +42,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-agents {
+.agent-indicators {
   display: flex;
   justify-content: space-evenly;
-  gap: 4px;
+  gap: var(--spacing-2xs);
 
-  &__total {
-    @extend %typo-subtitle-1;
+  &--sm {
+    flex-direction: column;
   }
 }
 </style>

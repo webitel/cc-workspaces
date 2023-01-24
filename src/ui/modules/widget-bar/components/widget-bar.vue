@@ -129,7 +129,7 @@ export default {
 
 .widget-bar {
   display: flex;
-  background: #fff;
+  background: var(--main-color);
   border-radius: var(--border-radius);
 }
 
@@ -141,7 +141,7 @@ export default {
   /*display: grid;*/
   /*grid-template-columns: repeat(auto-fit, minmax(200px, max-content));*/
   width: 100%;
-  padding: 5px 20px;
+  padding: var(--spacing-2xs) var(--spacing-sm);
 
   // &--wide {
   // grid-template-columns: repeat(auto-fit, minmax(250px, max-content));

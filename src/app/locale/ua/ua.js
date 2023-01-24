@@ -63,10 +63,10 @@ export default {
     generalInfo: {
       generalInfo: 'Основна інформація',
       queueWaiting: 'Очікують',
-      queue: 'Черга',
+      queue: 'Черга | Черги',
       agents: 'Оператори',
       total: 'Всі',
-      paused: 'Пауза',
+      pauses: 'Паузи',
       free: 'Вільні',
     },
     clientInfo: 'Інформація',
@@ -79,6 +79,12 @@ export default {
         no: 'Ні',
         nextDistributeAtTitle: 'Запланувати наступну задачу?',
         nextDistributeAt: 'Час наступної задачі',
+      },
+      form: {
+        formFile: {
+          deleteConfirmation: 'Ви впевнені, що хочете видалити цей файл?',
+          empty: 'Поки тут немає файлів',
+        },
       },
     },
   },

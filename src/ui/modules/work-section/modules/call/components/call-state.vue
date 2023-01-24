@@ -4,15 +4,15 @@
       <img
         v-show="isCallActive"
         alt=""
-        src="../assets/call-sonars/active-sonar.svg">
+        src="../../../../../../app/assets/call-sonars/active-sonar.svg">
       <img
         v-show="isCallRinging"
         alt=""
-        src="../assets/call-sonars/ringing-sonar.svg">
+        src="../../../../../../app/assets/call-sonars/ringing-sonar.svg">
       <img
         v-show="isCallOnHold"
         alt=""
-        src="../assets/call-sonars/hold-sonar.svg">
+        src="../../../../../../app/assets/call-sonars/hold-sonar.svg">
     </div>
     <div
       v-if="!isCallActive"
@@ -89,7 +89,7 @@ export default {
   &__animation {
     width: 52px;
     height: 52px;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
     overflow: hidden;
   }
 

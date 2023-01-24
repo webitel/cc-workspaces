@@ -55,7 +55,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 10px;
+    margin-right: var(--spacing-xs);
     border-radius: var(--border-radius);
     background: var(--chat-client-attachment-bg-color);
   }
@@ -84,7 +84,7 @@ export default {
 
     .chat-message-document__icon-wrapper {
       margin-right: 0;
-      margin-left: 10px;
+      margin-left: var(--spacing-xs);
       background: var(--chat-agent-attachment-bg-color);
     }
   }

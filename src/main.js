@@ -15,10 +15,28 @@ Vue.config.productionTip = false;
 Vue.use(Vuelidate);
 
 const fetchConfig = async () => {
-  const windowConfig = window._config || {}; // Electron sets config to window
-  const response = await fetch(`${process.env.BASE_URL}config.json`);
-  const fileConfig = (await response.json()) || {};
-  return deepmerge(fileConfig, windowConfig);
+  const electronConfig = window._config || {}; // Electron sets config to window
+  const fileResponse = await fetch(`${process.env.BASE_URL}config.json`);
+  const fileConfig = (await fileResponse.json()) || {};
+  const apiResponse = async () => {
+    try {
+      const response = await fetch('/api/user/settings/phone',{
+        headers: {
+          'X-Webitel-Access': localStorage.getItem('access-token') || '',
+        },
+      });
+      const body = await response.json();
+      return {
+        CLI: {
+          registerWebDevice: body.webrtc,
+          stun: body.stun,
+        },
+      };
+    } catch (error) {
+      return {};
+    }
+  };
+  return deepmerge(fileConfig, await apiResponse(), electronConfig);
 };
 
 const createVueInstance = () => {
@@ -33,6 +51,7 @@ const createVueInstance = () => {
 // init IIFE
 (async () => {
   const config = await fetchConfig();
+  store.dispatch('SET_CONFIG', config);
   Vue.prototype.$config = config;
   localStorage.setItem('CONFIG', JSON.stringify(config));
   createVueInstance();

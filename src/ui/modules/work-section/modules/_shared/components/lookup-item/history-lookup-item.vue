@@ -1,5 +1,7 @@
 <template>
-  <lookup-item @click.native="handleInput">
+  <lookup-item
+    :active="active"
+    @click.native="handleInput" >
     <template slot="title">
       {{ shownDestination | truncateFromEnd(24) }}
     </template>
@@ -52,6 +54,10 @@ export default {
     forNumber: {
       type: String,
       required: false,
+    },
+    active: {
+      type: Boolean,
+      default: false,
     },
   },
 

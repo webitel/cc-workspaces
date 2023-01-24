@@ -21,6 +21,7 @@ describe('Make new call functionality', () => {
     callOnWorkspace = {
       _isNew: true,
       newNumber: '',
+      historyId: '',
     };
 
     callList = [];
@@ -28,10 +29,11 @@ describe('Make new call functionality', () => {
 
   it('Make new call on number', () => {
     callOnWorkspace.newNumber = '100';
+    callOnWorkspace.historyId = '10';
 
     const mock = jest.fn();
     jest.spyOn(CallHeader.methods, 'makeCall')
-        .mockImplementationOnce(mock);
+    .mockImplementationOnce(mock);
 
     const wrapper = shallowMount(CallHeader, {
       computed,
@@ -42,7 +44,7 @@ describe('Make new call functionality', () => {
     callBtn.vm.$emit('click', {});
 
     expect(mock)
-      .toHaveBeenCalled();
+    .toHaveBeenCalled();
   });
 });
 
@@ -65,7 +67,7 @@ describe('Transfer functionality', () => {
     const transferBtn = findTransferBtn(wrapper);
     transferBtn.vm.$emit('click');
     expect(wrapper.emitted().openTab[0])
-      .toEqual(['transfer']);
+    .toEqual(['transfer']);
   });
 });
 
@@ -112,6 +114,6 @@ describe('Bridge functionality', () => {
     expect(bridgeBtn.exists()).toBe(true);
     bridgeBtn.vm.$emit('click');
     expect(wrapper.emitted().openTab[0])
-      .toEqual(['bridge']);
+    .toEqual(['bridge']);
   });
 });

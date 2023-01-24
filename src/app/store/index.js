@@ -10,6 +10,17 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     client: webSocketClientController,
+    config: {},
+  },
+  actions: {
+    SET_CONFIG: (context, callList) => {
+      context.commit('SET_CONFIG', callList);
+    },
+  },
+  mutations: {
+    SET_CONFIG: (state, config) => {
+      state.config = config;
+    },
   },
   modules: {
     features,

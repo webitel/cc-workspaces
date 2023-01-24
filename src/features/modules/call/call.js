@@ -42,7 +42,7 @@ const actions = {
 
   // destructuring arg in order to skip mouse events
   CALL: async (context, { user }) => {
-    const CALL_PARAMS = { disableStun: true };
+    const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun };
     let destination = user
       ? user.extension
       : context.getters.CALL_ON_WORKSPACE.newNumber;
@@ -57,7 +57,7 @@ const actions = {
   },
 
   ANSWER: async (context, { callId } = {}) => {
-    const ANSWER_PARAMS = { useAudio: true, disableStun: true };
+    const ANSWER_PARAMS = { useAudio: true, disableStun: !context.rootState.config.CLI.stun };
     const call = callId
       ? context.getters.GET_CALL_BY_ID(callId)
       : context.getters.CALL_ON_WORKSPACE;
@@ -141,7 +141,9 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (context, { newNumber } = {}) => context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' }),
+  OPEN_NEW_CALL: (context, { newNumber, historyId } = {}) => {
+    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '', historyId });
+  },
 
   CLOSE_NEW_CALL: (context) => context.dispatch('RESET_WORKSPACE'),
 
@@ -160,10 +162,12 @@ const actions = {
     }
   },
 
-  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value }) => {
+  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value, historyId }) => {
     // cannot mutate newCall because its instance only on 'workspace' state
     // eslint-disable-next-line no-param-reassign
     call.newNumber = value;
+    // reset historyId if user clicked to same history record twice
+    call.historyId = call.historyId === historyId ? '' : historyId;
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {
