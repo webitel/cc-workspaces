@@ -15,7 +15,17 @@
           size="sm"
         ></wt-icon-btn>
       </template>
-      {{ displayName }}
+      <span
+        class="queue-preview--offline-queue__name"
+      >{{ displayName }}
+      </span>
+      <div
+        v-if="displayQueueName"
+      >
+        <wt-chip color="secondary">
+          {{ displayQueueName }}
+        </wt-chip>
+      </div>
     </wt-tooltip>
 
     <wt-icon
@@ -42,22 +52,26 @@ export default {
     displayName() {
       return this.task.name;
     },
+    displayQueueName() {
+      return this.task.queue?.name;
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+// removed "scoped" to style a tooltip content
+<style lang="scss">
 .queue-preview {
-  &.queue-preview--offline-queue {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: var(--spacing-2xs);
-  }
+&.queue-preview--offline-queue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--spacing-2xs);
+}
 
   .queue-preview--offline-queue__title {
-    @extend %typo-body-1;
+    @extend %typo-subtitle-1;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
@@ -77,5 +91,9 @@ export default {
       @extend %typo-body-2;
     }
   }
+}
+
+.queue-preview--offline-queue__name {
+  @extend %typo-subtitle-1;
 }
 </style>

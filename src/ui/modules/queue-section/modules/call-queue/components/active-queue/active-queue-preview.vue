@@ -8,7 +8,7 @@
     <template v-slot:icon>
       <img
         alt=""
-        src="../../../../../../../app/assets/call-sonars/active-sonar.svg"
+        :src="sonarIcon"
       >
     </template>
     <template v-slot:title>
@@ -49,6 +49,8 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
+import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 
 export default {
   name: 'active-queue-preview',
@@ -62,8 +64,8 @@ export default {
       return isIncomingRinging(this.task);
     },
 
-    computePreviewStatusClass() {
-      return this.task.isHold ? 'hold' : 'call';
+    sonarIcon() {
+      return this.task.isHold ? holdSonar : activeSonar;
     },
   },
 };
