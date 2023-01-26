@@ -53,6 +53,7 @@ export default {
 <style lang="scss" scoped>
 .agent-pause-causes {
   .agent-pause-causes-item {
+    @extend %typo-body-1;
     display: grid;
     align-items: center;
     padding: var(--spacing-xs);
@@ -82,6 +83,7 @@ export default {
 
   &--sm {
     .agent-pause-causes-item {
+      @extend %typo-body-2;
       grid-template-columns: 1fr;
 
       &__name {

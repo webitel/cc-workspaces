@@ -65,7 +65,8 @@ export default {
       justify-self: flex-end;
     }
 
-    &__title {
+    .agent-queues-item__title {
+      @extend %typo-body-1;
       word-break: break-all;
       overflow-wrap: break-word;
     }
@@ -80,6 +81,10 @@ export default {
   &--sm {
     .agent-queues-item {
       grid-template-columns: 3fr 2fr;
+
+      .agent-queues-item__title {
+        @extend %typo-body-2;
+      }
     }
   }
 }
