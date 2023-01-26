@@ -83,6 +83,7 @@ export default {
     }
 
     &__value {
+      @extend %typo-body-1;
       overflow-wrap: break-word;
       word-break: break-all;
     }
@@ -98,6 +99,9 @@ export default {
     }
     .agent-org-structure-item__title {
       @extend %typo-subtitle-2;
+    }
+    .agent-org-structure-item__value {
+      @extend %typo-body-2;
     }
   }
 }
