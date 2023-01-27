@@ -1,16 +1,18 @@
 <template>
-  <task-header>
+  <task-header :size="size">
     <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
+        :size="size"
         color="transfer"
-        icon="chat-transfer"
+        icon="chat-transfer--filled"
         rounded
         wide
         @click="$emit('openTab', 'transfer')"
       ></wt-rounded-action>
       <chat-header-close-action
         v-show="isCloseAction"
+        :size="size"
         @click="close"
       ></chat-header-close-action>
     </template>
@@ -19,11 +21,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
   name: 'chat-header',
+  mixins: [sizeMixin],
   components: {
     TaskHeader,
     ChatHeaderCloseAction,

@@ -18,6 +18,7 @@
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
         color="secondary"
         icon="ws-bot"
+        rounded
         @click="transferDestination = TransferDestination.CHATPLAN"
       ></wt-rounded-action>
       <wt-icon-btn
@@ -123,7 +124,8 @@ export default {
   box-sizing: border-box;
   width: 100%;
   margin-bottom: var(--spacing-xs);
-  padding: 0 var(--spacing-xs);
+  padding: var(--spacing-xs);
+  background-color: var(--secondary-color);
 
   .ws-worksection__search {
     flex: 1 1 auto;

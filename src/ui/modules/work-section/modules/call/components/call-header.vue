@@ -1,9 +1,10 @@
 <template>
-  <task-header>
+  <task-header :size="size">
     <template v-slot:before-avatar>
       <wt-rounded-action
         class="call-action"
         :active="isOnHistory"
+        :size="size"
         icon="history"
         color="secondary"
         rounded
@@ -13,6 +14,7 @@
       <wt-rounded-action
         class="call-action"
         :active="isOnContacts"
+        :size="size"
         icon="contacts"
         color="secondary"
         rounded
@@ -25,6 +27,7 @@
         v-if="isBridge"
         class="call-action"
         :active="isOnBridge"
+        :size="size"
         icon="call-add-to"
         color="secondary"
         rounded
@@ -34,7 +37,8 @@
       <wt-rounded-action
         v-if="isTransfer"
         class="call-action"
-        icon="call-transfer"
+        :size="size"
+        icon="call-transfer--filled"
         color="transfer"
         rounded
         wide
@@ -43,16 +47,18 @@
       <wt-rounded-action
         v-if="isHangup"
         class="call-action"
-        icon="call-end"
+        :size="size"
+        icon="call-end--filled"
         color="danger"
         rounded
         wide
         @click="hangup"
       ></wt-rounded-action>
       <wt-rounded-action
-        v-if="isDisplayCallRingingButton"
+        v-if="isOnNumpad || isOnBridge && isCall"
         class="call-action"
-        icon="call-ringing"
+        :size="size"
+        icon="call-ringing--filled"
         color="success"
         rounded
         wide
@@ -72,11 +78,12 @@
   import { mapState, mapActions, mapGetters } from 'vuex';
   import { CallActions } from 'webitel-sdk';
   import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
+  import sizeMixin from '../../../../../../app/mixins/sizeMixin';
   import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
   export default {
     name: 'call-header',
-    mixins: [displayInfoMixin],
+    mixins: [displayInfoMixin, sizeMixin],
     components: { TaskHeader },
     props: {
       currentTab: {
@@ -105,6 +112,10 @@
         return this.currentTab === 'bridge';
       },
 
+      isOnNumpad() {
+        return this.currentTab === 'numpad';
+      },
+
       isBridge() {
         return (this.call.state !== CallActions.Hangup
           || this.call.state !== CallActions.Ringing)
@@ -125,11 +136,6 @@
       isCall() {
         return this.isNewCall && this.call.newNumber;
       },
-      // The call button should be displayed in the dialing tab after the user enters it.
-      // In the history tab, need to display after choosing a number from list and if it is possible to make a call
-      isDisplayCallRingingButton() {
-        return this.isOnHistory ? this.call.historyId && this.isCall : this.isCall;
-      }
     },
 
     methods: {

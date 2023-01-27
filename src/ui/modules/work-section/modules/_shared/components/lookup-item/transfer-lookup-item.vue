@@ -5,6 +5,7 @@
     <template slot="before">
       <wt-avatar
         :status="userStatus"
+        :size="size"
         badge
       ></wt-avatar>
     </template>
@@ -20,7 +21,8 @@
     <template slot="after">
       <wt-icon-btn
         color="transfer"
-        icon="chat-transfer--filled"
+        :icon="switchIcon"
+        :size="size"
         @click="handleInput"
       ></wt-icon-btn>
     </template>
@@ -33,14 +35,18 @@ import parseUserStatus from '../../../../../../../features/modules/agent-status/
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import lookupItemMixin from './mixins/lookupItemMixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'transfer-lookup-item',
-  mixins: [lookupItemMixin],
+  mixins: [lookupItemMixin, sizeMixin],
   props: {
     type: {
       type: String,
       default: TransferDestination.USER,
+    },
+    currentTab: {
+      type: String,
     },
   },
   data: () => ({
@@ -53,6 +59,9 @@ export default {
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
       if (status[UserStatus.SIP] || status[UserStatus.WEB]) return AbstractUserStatus.ACTIVE;
       return AbstractUserStatus.OFFLINE;
+    },
+    switchIcon() {
+      return this.currentTab === 'chat-transfer-container' ? 'chat-transfer--filled' : 'call-transfer--filled';
     },
   },
 };

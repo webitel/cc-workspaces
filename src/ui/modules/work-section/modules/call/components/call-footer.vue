@@ -5,6 +5,7 @@
       :class="{
           'hidden': !isNumpad,
          }"
+      :size="size"
       class="call-action"
       color="secondary"
       icon="numpad"
@@ -19,6 +20,7 @@
           'hold': isOnHold,
         }"
       :color="isOnHold ? 'hold' : 'secondary'"
+      :size="size"
       class="call-action"
       icon="hold"
       rounded
@@ -31,6 +33,7 @@
           'hidden': !isMuted,
         }"
       :icon="isOnMuted ? 'mic-muted' : 'mic'"
+      :size="size"
       class="call-action call-action__mic"
       color="secondary"
       rounded
@@ -43,10 +46,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'call-footer',
   components: { TaskFooter },
+  mixins: [sizeMixin],
   props: {
     currentTab: {
       type: String,

@@ -3,6 +3,7 @@
     <template slot="before">
       <wt-avatar
         :status="userStatus"
+        :size="size"
         badge
       ></wt-avatar>
     </template>
@@ -17,7 +18,8 @@
 
     <template slot="after">
       <wt-rounded-action
-        icon="call-ringing"
+        :size="size"
+        icon="call--filled"
         color="success"
         rounded
         @click="handleInput"
@@ -31,10 +33,11 @@ import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/Abs
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import lookupItemMixin from './mixins/lookupItemMixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'contact-lookup-item',
-  mixins: [lookupItemMixin],
+  mixins: [lookupItemMixin, sizeMixin],
   computed: {
     userStatus() {
       const status = parseUserStatus(this.item.presence);

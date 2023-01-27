@@ -15,6 +15,7 @@
     <component
       class="work-section__main-content"
       :is="workspaceComponent"
+      :size="size"
     />
   </section>
 </template>

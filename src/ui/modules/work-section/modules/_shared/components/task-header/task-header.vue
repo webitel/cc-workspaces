@@ -1,10 +1,13 @@
 <template>
-  <header class="task-header">
+  <header
+    class="task-header"
+    :class="[`task-header--${size}`]"
+    >
     <div class="task-header-actions">
       <div class="task-header-actions__action-section">
         <slot name="before-avatar"></slot>
       </div>
-      <wt-avatar></wt-avatar>
+      <wt-avatar :size="size"></wt-avatar>
       <div class="task-header-actions__action-section">
         <slot name="after-avatar"></slot>
       </div>
@@ -21,14 +24,23 @@
 </template>
 
 <script>
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+
 export default {
   name: 'task-header',
+  mixins: [sizeMixin],
 };
 </script>
 
 <style lang="scss" scoped>
 .task-header {
   padding: var(--spacing-xs);
+
+  &--sm {
+    .task-header-actions{
+      grid-template-columns: 1fr 32px 1fr;
+    }
+  }
 }
 
 .task-header-actions {

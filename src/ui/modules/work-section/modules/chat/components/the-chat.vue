@@ -3,6 +3,7 @@
     <template v-slot:header>
       <chat-header
         v-show="isChatHeader"
+        :size="size"
         @openTab="openTab"
       ></chat-header>
       <media-viewer />
@@ -10,13 +11,18 @@
     <template v-slot:body>
       <component
         :is="currentTab.component"
+        :size="size"
+        :current-tab="currentTab.component"
         v-bind="currentTab.props"
         @closeTab="resetTab"
         @openTab="openTab"
       ></component>
     </template>
     <template v-slot:footer>
-      <chat-footer></chat-footer>
+      <chat-footer
+        v-if="isChatFooter"
+        :size="size"
+      ></chat-footer>
     </template>
   </task-container>
 </template>
@@ -30,11 +36,13 @@ import ChatFooter from './chat-footer/chat-footer.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 const defaultTab = 'chat-messaging-container';
 
 export default {
   name: 'the-chat',
+  mixins: [sizeMixin],
   components: {
     TaskContainer,
     MediaViewer,
@@ -53,6 +61,10 @@ export default {
     }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
+    },
+    // hide footer in transfer tab
+    isChatFooter() {
+      return this.currentTab.component !== 'chat-transfer-container';
     },
   },
   methods: {

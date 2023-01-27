@@ -24,6 +24,7 @@
             class="rounded-action-file-input"
             color="secondary"
             icon="attach"
+            :size="size"
             rounded
             wide
             @click="triggerAttachmentInput"
@@ -37,11 +38,14 @@
           >
         </div>
           <chat-emoji
+            :size="size"
             @insert-emoji="insertEmoji"
           ></chat-emoji>
           <wt-rounded-action
+            class="rounded-action-chat-send"
             icon="chat-send"
-            color="secondary"
+            color="secondary-50"
+            :size="size"
             rounded
             wide
             @click="sendMessage"
@@ -54,6 +58,7 @@
 <script>
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import ChatEmoji from './chat-emoji.vue';
 
@@ -63,6 +68,7 @@ export default {
     ChatEmoji,
     TaskFooter,
   },
+  mixins: [sizeMixin],
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
   },
@@ -186,6 +192,15 @@ export default {
     width: 0;
     height: 0;
     visibility: hidden;
+  }
+}
+
+.wt-button.wt-rounded-action.rounded-action-chat-send{
+    background: var(--accent-color);
+
+  &:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
   }
 }
 </style>

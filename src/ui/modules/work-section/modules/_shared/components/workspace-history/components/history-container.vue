@@ -14,6 +14,7 @@
         :item="item"
         :for-number="historyNumber"
         :active="displayActiveItem(item)"
+        :size="size"
         @input="select(item)"
       ></history-lookup-item>
     </div>
@@ -31,6 +32,7 @@
   import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
   import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
   import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
+  import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
   import WorkspaceStates
     from '../../../../../../../enums/WorkspaceState.enum';
   import APIRepository from '../../../../../../../../app/api/APIRepository';
@@ -39,7 +41,7 @@
 
   export default {
     name: 'history-container',
-    mixins: [infiniteScrollMixin],
+    mixins: [infiniteScrollMixin, sizeMixin],
     components: {
       HistoryLookupItem,
       EmptySearch,

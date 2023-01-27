@@ -4,21 +4,24 @@
       <preview-profile/>
       <div class="call-preview__actions">
         <wt-rounded-action
-          icon="call"
+          :size="size"
+          icon="call--filled"
           color="success"
           rounded
           wide
           @click="answer"
         ></wt-rounded-action>
         <wt-rounded-action
-          icon="call-transfer"
+          :size="size"
+          icon="call-transfer--filled"
           color="transfer"
           rounded
           wide
           @click="openTransfer"
         ></wt-rounded-action>
         <wt-rounded-action
-          icon="call-end"
+          :size="size"
+          icon="call-end--filled"
           color="danger"
           rounded
           wide
@@ -31,10 +34,12 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import sizeMixin from '../../../../../../app/mixins/sizeMixin';
   import PreviewProfile from './call-preview-profile.vue';
 
   export default {
     name: 'call-preview',
+    mixins: [sizeMixin],
     components: {
       PreviewProfile,
     },
@@ -62,10 +67,6 @@
 
   .call-preview__actions {
     display: flex;
-    justify-content: space-evenly;
-
-    .wt-rounded-action {
-      margin: 0 var(--spacing-sm);
-    }
+    gap: var(--spacing-2xs);
   }
 </style>

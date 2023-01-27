@@ -1,7 +1,18 @@
 <template>
   <lookup-item
     :active="active"
-    @click.native="handleInput" >
+    :size="size"
+    @click.native="handleInput">
+    <template slot="before">
+      <div class="history-lookup-item-wrapper">
+        <wt-avatar :size="size"></wt-avatar>
+        <wt-icon
+          :icon="statusIcon"
+          :color="statusIconColor"
+          :size="size"
+        ></wt-icon>
+      </div>
+    </template>
     <template slot="title">
       {{ shownDestination | truncateFromEnd(24) }}
     </template>
@@ -15,19 +26,25 @@
     </template>
 
     <template slot="after">
-      <wt-icon
-        :icon="statusIcon"
-        :color="statusIconColor"
-      ></wt-icon>
+      <wt-rounded-action
+        icon="call--filled"
+        color="success"
+        rounded
+        :size="size"
+        wide
+        @click="makeCall"
+      ></wt-rounded-action>
     </template>
   </lookup-item>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
 import lookupItemMixin from './mixins/lookupItemMixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 const isTheSameDate = (date1, date2) => (
   date1.getDate() === date2.getDate()
@@ -49,7 +66,7 @@ const isYesterday = (createdAt) => {
 };
 export default {
   name: 'history-lookup-item',
-  mixins: [lookupItemMixin],
+  mixins: [lookupItemMixin, sizeMixin],
   props: {
     forNumber: {
       type: String,
@@ -96,10 +113,10 @@ export default {
 
     statusIcon() {
       if (this.item.direction === CallDirection.Inbound) {
-        if (!this.item.answeredAt) return 'call-disconnect';
-        return 'call-inbound';
+        if (!this.item.answeredAt) return 'call-disconnect--filled';
+        return 'call-inbound--filled';
       }
-      return 'call-outbound';
+      return 'call-outbound--filled';
     },
 
     statusIconColor() {
@@ -110,11 +127,22 @@ export default {
       return 'success';
     },
   },
+  methods: {
+    ...mapActions('features/call', {
+      makeCall: 'CALL',
+    }),
+  },
 };
 </script>
 
 <style lang="scss" scoped>
   .lookup-item {
     cursor: pointer;
+  }
+
+  .history-lookup-item-wrapper{
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
   }
 </style>
