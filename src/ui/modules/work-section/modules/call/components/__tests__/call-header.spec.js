@@ -12,16 +12,18 @@ const computed = {
   call: () => callOnWorkspace,
   callList: () => callList,
   isNewCall: () => callOnWorkspace._isNew,
+  isOnNumpad: () => callOnWorkspace.currentTab,
 };
 
 describe('Make new call functionality', () => {
-  const findCallBtn = findRoundedActionByIcon('call-ringing');
+  const findCallBtn = findRoundedActionByIcon('call-ringing--filled');
 
   beforeEach(() => {
     callOnWorkspace = {
       _isNew: true,
       newNumber: '',
       historyId: '',
+      currentTab: '',
     };
 
     callList = [];
@@ -30,6 +32,7 @@ describe('Make new call functionality', () => {
   it('Make new call on number', () => {
     callOnWorkspace.newNumber = '100';
     callOnWorkspace.historyId = '10';
+    callOnWorkspace.currentTab = 'numpad';
 
     const mock = jest.fn();
     jest.spyOn(CallHeader.methods, 'makeCall')
@@ -49,7 +52,7 @@ describe('Make new call functionality', () => {
 });
 
 describe('Transfer functionality', () => {
-  const findTransferBtn = findRoundedActionByIcon('call-transfer');
+  const findTransferBtn = findRoundedActionByIcon('call-transfer--filled');
 
   beforeEach(() => {
     callList = [];
