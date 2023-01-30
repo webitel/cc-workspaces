@@ -51,6 +51,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import APIRepository from '../../../../../../../app/api/APIRepository';
 import TransferDestination from '../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
@@ -61,8 +62,8 @@ const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
 
 export default {
-  name: 'call-transfer-container',
-  mixins: [infiniteScrollMixin],
+  name: 'chat-transfer-container',
+  mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     TransferLookupItem,
     EmptySearch,
