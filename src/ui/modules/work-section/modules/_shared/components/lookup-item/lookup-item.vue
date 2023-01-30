@@ -1,6 +1,6 @@
 <template>
   <article class="lookup-item">
-    <lookup-item-wrapper :class="{ 'lookup-item--active': active }">
+    <lookup-item-wrapper>
       <template slot="before" v-if="!noBefore">
         <slot name="before">
           <wt-avatar></wt-avatar>
@@ -55,10 +55,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    active: {
-      type: Boolean,
-      default: false,
-    },
   },
 };
 </script>
@@ -97,9 +93,5 @@ export default {
     @extend %typo-body-2;
     overflow-wrap: anywhere;
   }
-}
-
-.lookup-item--active {
-  border-color: var(--accent-color);
 }
 </style>
