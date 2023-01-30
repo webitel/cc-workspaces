@@ -141,9 +141,7 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (context, { newNumber, historyId } = {}) => {
-    context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '', historyId });
-  },
+  OPEN_NEW_CALL: (context, { newNumber } = {}) => context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' }),
 
   CLOSE_NEW_CALL: (context) => context.dispatch('RESET_WORKSPACE'),
 
@@ -162,12 +160,10 @@ const actions = {
     }
   },
 
-  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value, historyId }) => {
+  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value }) => {
     // cannot mutate newCall because its instance only on 'workspace' state
     // eslint-disable-next-line no-param-reassign
     call.newNumber = value;
-    // reset historyId if user clicked to same history record twice
-    call.historyId = call.historyId === historyId ? '' : historyId;
   },
 
   HOLD_OTHER_CALLS: (context, activeCall) => {

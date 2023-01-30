@@ -1,7 +1,7 @@
 <template>
   <div class="ws-worksection">
     <wt-search-bar
-      v-model="dataSearch"
+      v-model="dataFields"
       @search="resetData"
     ></wt-search-bar>
     <section class="ws-worksection__list" ref="scroll-wrap">
@@ -13,8 +13,6 @@
         :key="item.id"
         :item="item"
         :for-number="historyNumber"
-        :active="displayActiveItem(item)"
-        :size="size"
         @input="select(item)"
       ></history-lookup-item>
     </div>
@@ -32,7 +30,6 @@
   import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
   import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
   import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
-  import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
   import WorkspaceStates
     from '../../../../../../../enums/WorkspaceState.enum';
   import APIRepository from '../../../../../../../../app/api/APIRepository';
@@ -41,7 +38,7 @@
 
   export default {
     name: 'history-container',
-    mixins: [infiniteScrollMixin, sizeMixin],
+    mixins: [infiniteScrollMixin],
     components: {
       HistoryLookupItem,
       EmptySearch,
@@ -85,8 +82,7 @@
         let destination = '';
         if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
         if (item.direction === CallDirection.Outbound) destination = item.destination;
-        const historyId = item.id;
-        this.setNumber({ value: destination, historyId });
+        this.setNumber({ value: destination });
       },
 
       async fetch(argParams) {
@@ -128,10 +124,6 @@
 
       resetHistoryNumber() {
         this.historyNumber = '';
-      },
-
-      displayActiveItem(item) {
-        return item.id === this.call.historyId;
       },
     },
   };

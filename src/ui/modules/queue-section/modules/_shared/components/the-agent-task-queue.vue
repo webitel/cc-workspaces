@@ -39,6 +39,7 @@ export default {
 
   &--sm {
     .task-queue-header__title {
+      @extend %typo-body-2;
       text-align: center;
     }
   }

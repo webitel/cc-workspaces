@@ -58,7 +58,6 @@ describe('Agent History functionality', () => {
     expect(mock)
     .toHaveBeenCalledWith({
       value: historyList[0].destination,
-      historyId: historyList[0].id,
     });
   });
 
