@@ -1,6 +1,11 @@
 <template>
-  <div class="call-preview-wrap">
-    <div class="call-preview">
+  <div
+    :class="[
+      `call-preview--${size}`,
+    ]"
+    class="call-preview"
+  >
+    <div class="call-preview-wrap">
       <preview-profile/>
       <div class="call-preview__actions">
         <wt-rounded-action
@@ -58,15 +63,21 @@
 </script>
 
 <style lang="scss" scoped>
-  .call-preview-wrap {
+  .call-preview {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-  }
 
-  .call-preview__actions {
-    display: flex;
-    gap: var(--spacing-2xs);
+    .call-preview__actions {
+      display: flex;
+      gap: var(--spacing-2xs);
+    }
+
+    &--md {
+      .call-preview-wrap {
+        width: 100%;
+      }
+    }
   }
 </style>
