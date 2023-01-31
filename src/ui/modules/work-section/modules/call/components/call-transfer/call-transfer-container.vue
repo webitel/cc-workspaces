@@ -23,7 +23,6 @@
           :key="`${item.id}${key}`"
           :item="item"
           :size="size"
-          :current-tab="currentTab"
           @input="transfer"
         ></transfer-lookup-item>
       </div>
@@ -48,11 +47,6 @@
   export default {
     name: 'call-transfer-container',
     mixins: [infiniteScrollMixin, sizeMixin],
-    props: {
-      currentTab: {
-        type: String,
-      },
-    },
     components: {
       TransferLookupItem,
       EmptySearch,

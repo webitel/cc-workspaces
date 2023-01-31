@@ -10,9 +10,11 @@
     <div class="preview-profile__number">
       {{ displayNumber }}
     </div>
-    <div class="preview-profile__queue">
+    <wt-chip
+      v-if="displayQueueName"
+      color="secondary">
       {{ displayQueueName }}
-    </div>
+    </wt-chip>
   </div>
 </template>
 
@@ -49,6 +51,7 @@ export default {
 
   &__number {
     @extend %typo-body-2;
+    margin-bottom: var(--spacing-sm);
   }
 }
 </style>

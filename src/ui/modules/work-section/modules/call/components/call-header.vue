@@ -55,7 +55,7 @@
         @click="hangup"
       ></wt-rounded-action>
       <wt-rounded-action
-        v-if="isOnNumpad || isOnBridge && isCall"
+        v-if="isDisplayCallButton"
         class="call-action"
         :size="size"
         icon="call-ringing--filled"
@@ -135,6 +135,10 @@
 
       isCall() {
         return this.isNewCall && this.call.newNumber;
+      },
+
+      isDisplayCallButton() {
+        return this.isOnNumpad && this.isCall || this.isOnBridge && this.isCall;
       },
     },
 

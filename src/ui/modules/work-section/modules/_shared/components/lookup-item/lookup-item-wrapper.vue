@@ -44,10 +44,5 @@ export default {
   &__main {
     flex-grow: 1;
   }
-
-  &__before,
-  &__after {
-    flex: 0 0 var(--icon-xl-size);
-  }
 }
 </style>

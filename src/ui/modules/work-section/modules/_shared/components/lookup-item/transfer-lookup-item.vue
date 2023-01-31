@@ -1,12 +1,10 @@
 <template>
-  <lookup-item
-    :no-before="type === TransferDestination.CHATPLAN"
-  >
+  <lookup-item>
     <template slot="before">
       <wt-avatar
-        :status="userStatus"
+        :src="src"
         :size="size"
-        badge
+        :badge="type !== TransferDestination.CHATPLAN"
       ></wt-avatar>
     </template>
 
@@ -21,7 +19,7 @@
     <template slot="after">
       <wt-icon-btn
         color="transfer"
-        :icon="switchIcon"
+        :icon="`${state}-transfer--filled`"
         :size="size"
         @click="handleInput"
       ></wt-icon-btn>
@@ -31,6 +29,7 @@
 
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
+import { mapGetters } from 'vuex';
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
@@ -45,7 +44,7 @@ export default {
       type: String,
       default: TransferDestination.USER,
     },
-    currentTab: {
+    src: {
       type: String,
     },
   },
@@ -53,15 +52,15 @@ export default {
     TransferDestination,
   }),
   computed: {
+    ...mapGetters('workspace', {
+      state: 'WORKSRACE_STATE',
+    }),
     userStatus() {
       const status = parseUserStatus(this.item.presence);
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
       if (status[UserStatus.SIP] || status[UserStatus.WEB]) return AbstractUserStatus.ACTIVE;
       return AbstractUserStatus.OFFLINE;
-    },
-    switchIcon() {
-      return this.currentTab === 'chat-transfer-container' ? 'chat-transfer--filled' : 'call-transfer--filled';
     },
   },
 };

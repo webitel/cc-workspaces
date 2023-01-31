@@ -36,6 +36,8 @@
           :id="`scroll-item-${key}`"
           :key="`${item.id}${key}`"
           :item="item"
+          :size="size"
+          :src="botAvatar"
           :type="transferDestination"
           @input="handleTransfer"
         ></transfer-lookup-item>
@@ -57,6 +59,7 @@ import TransferDestination from '../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import botAvatar from '../../../_shared/assets/avatars/bot-avatar.svg';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
@@ -73,6 +76,7 @@ export default {
     dataList: [],
     TransferDestination,
     transferDestination: TransferDestination.CHATPLAN,
+    botAvatar,
   }),
 
   computed: {

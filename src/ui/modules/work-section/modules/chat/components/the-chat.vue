@@ -12,7 +12,6 @@
       <component
         :is="currentTab.component"
         :size="size"
-        :current-tab="currentTab.component"
         v-bind="currentTab.props"
         @closeTab="resetTab"
         @openTab="openTab"
