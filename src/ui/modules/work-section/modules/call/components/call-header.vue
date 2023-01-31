@@ -138,7 +138,7 @@
       },
 
       isDisplayCallButton() {
-        return this.isOnNumpad && this.isCall || this.isOnBridge && this.isCall;
+        return (this.isOnNumpad || this.isOnBridge) && this.isCall;
       },
     },
 

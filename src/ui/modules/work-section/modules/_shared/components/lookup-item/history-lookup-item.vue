@@ -1,6 +1,5 @@
 <template>
   <lookup-item
-    :active="active"
     :size="size"
     @click.native="handleInput">
     <template slot="before">
@@ -71,10 +70,6 @@ export default {
     forNumber: {
       type: String,
       required: false,
-    },
-    active: {
-      type: Boolean,
-      default: false,
     },
   },
 
