@@ -8,6 +8,7 @@
         <wt-rounded-action
           :icon="tab.icon || tab.value"
           :active="tab.value === currentTab.value"
+          :size="size"
           rounded
           wide
           @click="$emit('input', tab)"
@@ -20,8 +21,10 @@
 </template>
 
 <script>
+import sizeMixin from '../../../../../app/mixins/sizeMixin';
 export default {
   name: 'the-agent-info-section-nav-panel',
+  mixins: [sizeMixin],
   props: {
     currentTab: {
       type: Object,

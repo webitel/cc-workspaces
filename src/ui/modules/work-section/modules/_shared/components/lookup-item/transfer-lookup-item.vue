@@ -17,12 +17,13 @@
     </template>
 
     <template slot="after">
-      <wt-icon-btn
+      <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
         :size="size"
+        rounded
         @click="handleInput"
-      ></wt-icon-btn>
+      ></wt-rounded-action>
     </template>
   </lookup-item>
 </template>

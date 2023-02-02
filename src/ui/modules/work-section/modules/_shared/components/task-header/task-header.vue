@@ -34,8 +34,6 @@ export default {
 
 <style lang="scss" scoped>
 .task-header {
-  padding: var(--spacing-xs);
-
   .task-header-actions {
     display: grid;
     box-sizing: border-box;

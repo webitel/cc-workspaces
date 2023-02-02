@@ -112,7 +112,6 @@ export default {
   overflow-x: hidden;
   overflow-y: scroll;
   height: 100%;
-  padding: var(--spacing-sm) var(--spacing-xs);
 }
 
 .chat-message {

@@ -1,13 +1,13 @@
 <template>
   <div class="numpad">
+    <wt-input
+      v-show="isNewCall"
+      ref="number-input"
+      v-model="call.newNumber"
+      @keypress.enter="makeCall"
+    ></wt-input>
     <call-state/>
     <div class="numpad-wrapper">
-      <wt-input
-        v-show="isNewCall"
-        ref="number-input"
-        v-model="call.newNumber"
-        @keypress.enter="makeCall"
-      ></wt-input>
       <numpad-numbers
         ref="numpad-numbers"
         :size="size"
@@ -122,13 +122,6 @@ import { mapActions, mapGetters } from 'vuex';
           pointer-events: auto;
         }
       }
-    }
-  }
-  .numpad-wrapper {
-    margin: auto 0;
-
-    .wt-input {
-      margin-bottom: var(--spacing-md);
     }
   }
 </style>

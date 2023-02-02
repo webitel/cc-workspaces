@@ -14,6 +14,5 @@ export default {
 .task-footer {
   display: flex;
   gap: var(--spacing-xs);
-  padding: var(--spacing-xs);
 }
 </style>

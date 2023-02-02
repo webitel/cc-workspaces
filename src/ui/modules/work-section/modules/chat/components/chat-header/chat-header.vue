@@ -16,23 +16,30 @@
         @click="close"
       ></chat-header-close-action>
     </template>
+    <template v-slot:title>
+      {{ displayChatName }}
+    </template>
   </task-header>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
   name: 'chat-header',
-  mixins: [sizeMixin],
+  mixins: [sizeMixin, displayInfoMixin],
   components: {
     TaskHeader,
     ChatHeaderCloseAction,
   },
   computed: {
+    ...mapGetters('workspace', {
+      task: 'TASK_ON_WORKSPACE',
+    }),
     ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',

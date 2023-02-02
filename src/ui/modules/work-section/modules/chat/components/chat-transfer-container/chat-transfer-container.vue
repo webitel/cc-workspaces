@@ -5,6 +5,7 @@
         v-model="dataSearch"
         class="ws-worksection__search"
         debounce
+        :size="size"
         @search="resetData"
       ></wt-search-bar>
 
@@ -16,9 +17,9 @@
 <!--      ></wt-rounded-action>-->
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
-        color="secondary"
         icon="ws-bot"
         rounded
+        :size="size"
         @click="transferDestination = TransferDestination.CHATPLAN"
       ></wt-rounded-action>
       <wt-icon-btn
