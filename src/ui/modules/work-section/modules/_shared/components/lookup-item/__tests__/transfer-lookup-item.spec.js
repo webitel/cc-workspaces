@@ -27,7 +27,7 @@ describe('TransferLookupItem', () => {
       propsData: { item, type },
       computed,
     });
-    wrapper.findComponent({ name: 'wt-icon-btn' }).vm.$emit('click');
+    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
     expect(wrapper.emitted().input[0]).toEqual([item]);
   });
 

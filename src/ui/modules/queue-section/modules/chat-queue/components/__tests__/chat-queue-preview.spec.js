@@ -31,7 +31,7 @@ describe('ChatQueuePreview', () => {
 
   it('correctly computes chat participants name to display', () => {
     const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
-    expect(wrapper.vm.displayName).toBe(displayName);
+    expect(wrapper.vm.displayChatName).toBe(displayName);
   });
 
   it('if chat has no queue, queue chip is absent', () => {
