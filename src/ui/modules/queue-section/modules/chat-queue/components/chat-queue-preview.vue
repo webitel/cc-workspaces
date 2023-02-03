@@ -20,7 +20,7 @@
       ></wt-icon>
     </template>
     <template v-slot:title>
-      {{ displayName }}
+      {{ displayChatName }}
     </template>
     <template v-slot:body>
       {{ lastMessage }}
@@ -31,15 +31,13 @@
 <script>
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',
-  mixins: [taskPreviewMixin, sizeMixin],
+  mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
-    displayName() {
-      return this.task.members.map((member) => member.name).join(', ');
-    },
     lastMessage() {
       const lastMessage = this.task.messages[this.task.messages.length - 1];
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;

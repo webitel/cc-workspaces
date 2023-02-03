@@ -1,26 +1,31 @@
 <template>
   <div class="preview-profile">
-    <img
-      class="preview-profile__pic"
-      src="../../_shared/assets/avatars/default-avatar.svg"
-      alt="client photo"
-    >
+      <wt-avatar
+        size="xl"
+        class="preview-profile__pic"
+      ></wt-avatar>
     <div class="preview-profile__name">
       {{ displayName }}
     </div>
     <div class="preview-profile__number">
       {{ displayNumber }}
     </div>
+    <wt-chip
+      v-if="displayQueueName"
+      color="secondary">
+      {{ displayQueueName }}
+    </wt-chip>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'call-preview-profile',
-  mixins: [displayInfoMixin],
+  mixins: [displayInfoMixin, sizeMixin],
   computed: {
     ...mapGetters('workspace', {
       task: 'TASK_ON_WORKSPACE',
@@ -34,21 +39,19 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-sm);
 
   &__pic {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
+    margin-bottom: var(--spacing-sm);
   }
 
   &__name {
-    @extend %typo-subtitle-1;
+    @extend %typo-subtitle-2;
   }
 
   &__number {
     @extend %typo-body-2;
+    margin-bottom: var(--spacing-sm);
   }
 }
 </style>

@@ -13,8 +13,6 @@
       >{{$t('transfer.transfer')}}
       </wt-button>
     </div>
-    <p class="ws-worksection__list-instruction">{{$t('transfer.selectAgent')}}</p>
-
     <section class="ws-worksection__list" ref="scroll-wrap">
       <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
@@ -24,6 +22,7 @@
           :id="`scroll-item-${key}`"
           :key="`${item.id}${key}`"
           :item="item"
+          :size="size"
           @input="transfer"
         ></transfer-lookup-item>
       </div>
@@ -38,6 +37,7 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
+  import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
   import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
   import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
   import APIRepository from '../../../../../../../app/api/APIRepository';
@@ -46,7 +46,7 @@
 
   export default {
     name: 'call-transfer-container',
-    mixins: [infiniteScrollMixin],
+    mixins: [infiniteScrollMixin, sizeMixin],
     components: {
       TransferLookupItem,
       EmptySearch,

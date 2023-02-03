@@ -15,6 +15,7 @@
     <component
       class="work-section__main-content"
       :is="workspaceComponent"
+      :size="size"
     />
   </section>
 </template>
@@ -81,6 +82,7 @@ export default {
   flex-direction: column;
   min-width: 0;
   will-change: width;
+  gap: var(--spacing-2xs);
   transition: var(--transition);
 
   &--md {

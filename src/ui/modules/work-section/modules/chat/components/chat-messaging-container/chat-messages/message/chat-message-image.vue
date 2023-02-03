@@ -17,7 +17,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$max-width: 240px;
+
 .chat-message-image {
+  max-width: $max-width;
   cursor: pointer;
 
   &__img {

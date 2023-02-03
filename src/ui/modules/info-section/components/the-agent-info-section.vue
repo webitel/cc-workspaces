@@ -22,6 +22,7 @@
       <the-agent-info-nav-panel
         v-model="currentTab"
         :tabs="tabs"
+        :size="size"
       ></the-agent-info-nav-panel>
       <component
         class="info-tab"

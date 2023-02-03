@@ -5,6 +5,7 @@
         v-model="dataSearch"
         class="ws-worksection__search"
         debounce
+        :size="size"
         @search="resetData"
       ></wt-search-bar>
 
@@ -16,8 +17,9 @@
 <!--      ></wt-rounded-action>-->
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
-        color="secondary"
         icon="ws-bot"
+        rounded
+        :size="size"
         @click="transferDestination = TransferDestination.CHATPLAN"
       ></wt-rounded-action>
       <wt-icon-btn
@@ -35,6 +37,8 @@
           :id="`scroll-item-${key}`"
           :key="`${item.id}${key}`"
           :item="item"
+          :size="size"
+          :src="botAvatar"
           :type="transferDestination"
           @input="handleTransfer"
         ></transfer-lookup-item>
@@ -50,18 +54,20 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import APIRepository from '../../../../../../../app/api/APIRepository';
 import TransferDestination from '../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import botAvatar from '../../../_shared/assets/avatars/bot-avatar.svg';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
 
 export default {
-  name: 'call-transfer-container',
-  mixins: [infiniteScrollMixin],
+  name: 'chat-transfer-container',
+  mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     TransferLookupItem,
     EmptySearch,
@@ -71,6 +77,7 @@ export default {
     dataList: [],
     TransferDestination,
     transferDestination: TransferDestination.CHATPLAN,
+    botAvatar,
   }),
 
   computed: {
@@ -123,7 +130,8 @@ export default {
   box-sizing: border-box;
   width: 100%;
   margin-bottom: var(--spacing-xs);
-  padding: 0 var(--spacing-xs);
+  padding: var(--spacing-xs);
+  background-color: var(--secondary-color);
 
   .ws-worksection__search {
     flex: 1 1 auto;

@@ -1,17 +1,20 @@
 <template>
   <div class="numpad">
-    <call-state/>
     <wt-input
       v-show="isNewCall"
       ref="number-input"
       v-model="call.newNumber"
       @keypress.enter="makeCall"
     ></wt-input>
-    <numpad-numbers
-      ref="numpad-numbers"
-      :class="{'numpad-numbers--opened': isNumpadOpened}"
-      @input="handleNumpadInput"
-    ></numpad-numbers>
+    <call-state/>
+    <div class="numpad-wrapper">
+      <numpad-numbers
+        ref="numpad-numbers"
+        :size="size"
+        :class="{'numpad-numbers--opened': isNumpadOpened}"
+        @input="handleNumpadInput"
+      ></numpad-numbers>
+    </div>
     <numpad-expansion-btn
       class="numpad-btn"
       :is-opened="isNumpadOpened"
@@ -25,9 +28,11 @@ import { mapActions, mapGetters } from 'vuex';
   import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
   import NumpadExpansionBtn from './numpad-expansion-btn.vue';
+  import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
   export default {
     name: 'the-numpad',
+    mixins: [sizeMixin],
     components: {
       CallState,
       NumpadNumbers,
