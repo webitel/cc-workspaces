@@ -42,9 +42,9 @@
             @insert-emoji="insertEmoji"
           ></chat-emoji>
           <wt-rounded-action
-            class="rounded-action-chat-send"
             icon="chat-send"
-            color="secondary-50"
+            color="accent"
+            filled
             :size="size"
             rounded
             wide
@@ -192,15 +192,6 @@ export default {
     width: 0;
     height: 0;
     visibility: hidden;
-  }
-}
-
-.wt-button.wt-rounded-action.rounded-action-chat-send{
-    background: var(--accent-color);
-
-  &:hover {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
   }
 }
 </style>
