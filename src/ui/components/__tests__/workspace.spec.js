@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { CallDirection } from 'webitel-sdk';
+import nowModule from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import workspaceModule from '../../store/agent-workspace';
 import callModule from '../../../features/modules/call/call';
-import nowModule from '../../modules/reactive-now/reactive-now';
 import statusModule from '../../../features/modules/agent-status/agent-status';
 import userinfoModule from '../../modules/userinfo/userinfo';
 import Workspace from '../the-agent-workspace.vue';

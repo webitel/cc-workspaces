@@ -1,4 +1,4 @@
-import now from '../modules/reactive-now/reactive-now';
+import now from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import userinfo from '../modules/userinfo/userinfo';
 import infoSec from '../modules/info-section/store/infoSec';
 
