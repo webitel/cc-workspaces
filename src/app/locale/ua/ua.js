@@ -102,6 +102,7 @@ export default {
         description: 'Щоб надіслати їх',
       },
       confirmClose: 'Ви впевнені, що хочете закрити активний чат?',
+      closedСhat: 'Чат закрито',
     },
   },
   emptyWorkspace: {
