@@ -2,6 +2,7 @@
   <task-container class="the-job">
     <template v-slot:header>
       <job-header
+        :size="size"
         :task="task"
       ></job-header>
     </template>
@@ -24,6 +25,7 @@ import TaskContainer from '../../_shared/components/task-container/task-containe
 import JobHeader from './job-header/job-header.vue';
 import JobFooter from './job-footer/job-footer.vue';
 import JobVariablesContainer from './job-variables-container/job-variables-container.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'the-job',
@@ -33,6 +35,7 @@ export default {
     JobFooter,
     JobVariablesContainer,
   },
+  mixins: [sizeMixin],
   computed: {
     ...mapGetters('workspace', {
       task: 'TASK_ON_WORKSPACE',
