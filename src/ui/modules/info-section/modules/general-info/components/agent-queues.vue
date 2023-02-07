@@ -80,6 +80,7 @@ export default {
 
   &--sm {
     .agent-queues-item {
+      @extend %typo-body-2;
       grid-template-columns: 3fr 2fr;
 
       .agent-queues-item__title {

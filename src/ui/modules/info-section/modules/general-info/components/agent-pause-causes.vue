@@ -70,9 +70,11 @@ export default {
 
     &__wrapper {
       display: grid;
-      align-items: center;
       grid-template-columns: 1fr 3fr 1fr;
-      gap: var(--spacing-2xs);
+
+      :last-child {
+        text-align: end;
+      }
 
       .wt-progress-bar {
         width: auto;
@@ -92,6 +94,7 @@ export default {
 
       &__wrapper {
         grid-template-columns: 1fr 10fr 1fr;
+        gap: var(--spacing-xs);
       }
     }
   }
