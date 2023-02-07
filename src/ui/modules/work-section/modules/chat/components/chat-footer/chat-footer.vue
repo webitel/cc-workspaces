@@ -8,6 +8,14 @@
         <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
+    <div
+      v-else-if="chat.closedAt"
+      class="chat-footer__chat-closed">
+      <img
+        alt="chat closed pic"
+        src="../../../_shared/assets/chat-closed/chat-closed.svg"/>
+      <p class="chat-footer__chat-closed__text">{{$t('workspaceSec.chat.closedСhat')}}</p>
+    </div>
     <div v-else-if="isChatActive" class="chat-footer__chat-active">
       <wt-textarea
         ref="message-draft"
@@ -192,6 +200,16 @@ export default {
     width: 0;
     height: 0;
     visibility: hidden;
+  }
+}
+
+.chat-footer__chat-closed{
+  width: 180px;
+  margin: 0 auto;
+  text-align: center;
+
+  &__text {
+    @extend %typo-subtitle-2;
   }
 }
 </style>
