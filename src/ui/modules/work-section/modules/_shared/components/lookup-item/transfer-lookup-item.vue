@@ -20,7 +20,6 @@
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
-        :size="size"
         rounded
         @click="handleInput"
       ></wt-rounded-action>
