@@ -5,11 +5,15 @@ import ChatMessagingFooter
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+const chatOnWorkspace = {
+  closedAt: 0,
+};
 const chat = {
   namespaced: true,
   getters: {
     ALLOW_CHAT_JOIN: () => true,
     IS_CHAT_ACTIVE: () => false,
+    CHAT_ON_WORKSPACE: () => chatOnWorkspace,
   },
 };
 
@@ -32,6 +36,7 @@ describe('Chat Messaging Footer: Chat Preview', () => {
     const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(true);
     expect(wrapper.find('.chat-footer__chat-active').exists()).toBe(false);
+    expect(wrapper.find('.chat-footer__chat-closed').exists()).toBe(false);
   });
 
   it('calls accept() chat method at accept chat button click', () => {
@@ -47,9 +52,6 @@ describe('Chat Messaging Footer: Active Chat', () => {
   chat.getters.ALLOW_CHAT_JOIN = () => false;
   chat.getters.IS_CHAT_ACTIVE = () => true;
 
-  const chatOnWorkspace = {};
-  chat.getters.CHAT_ON_WORKSPACE = () => chatOnWorkspace;
-
   const store = new Vuex.Store({
                                  modules: { features: { namespaced: true, modules: { chat } } },
                                });
@@ -62,6 +64,7 @@ describe('Chat Messaging Footer: Active Chat', () => {
     const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     expect(wrapper.find('.chat-footer__chat-active').exists()).toBe(true);
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(false);
+    expect(wrapper.find('.chat-footer__chat-closed').exists()).toBe(false);
   });
 
   // TODO: FIX THIS TEST ON BAMBOO :/
@@ -102,5 +105,31 @@ describe('Chat Messaging Footer: Active Chat', () => {
     const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
     wrapper.vm.handleAttachments({ target: { files } });
     expect(sendFileMock).toHaveBeenCalledWith(files);
+  });
+});
+
+describe('Chat Messaging Footer: Chat Closed', () => {
+  chat.getters.ALLOW_CHAT_JOIN = () => false;
+  chat.getters.IS_CHAT_ACTIVE = () => false;
+
+  const chatOnWorkspace = {
+    closedAt: 6154165456465,
+  };
+  chat.getters.CHAT_ON_WORKSPACE = () => chatOnWorkspace;
+
+  const store = new Vuex.Store({
+    modules: { features: { namespaced: true, modules: { chat } } },
+  });
+
+  const mountOptions = {
+    localVue,
+    store,
+  };
+
+  it('renders chat footer closer if closedAt computed is truthy', () => {
+    const wrapper = shallowMount(ChatMessagingFooter, mountOptions);
+    expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(false);
+    expect(wrapper.find('.chat-footer__chat-active').exists()).toBe(false);
+    expect(wrapper.find('.chat-footer__chat-closed').exists()).toBe(true);
   });
 });
