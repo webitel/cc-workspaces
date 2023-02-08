@@ -9,7 +9,7 @@
       </div>
     </div>
     <div
-      v-else-if="chat.closedAt"
+      v-else-if="chat.closedAt && !chat.isTransferred"
       class="chat-footer__chat-closed">
       <img
         alt="chat closed pic"
