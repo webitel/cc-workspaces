@@ -61,9 +61,9 @@ export default {
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
-    // hide footer in transfer and empty-workspace tab
+    // hide footer in transfer tab and after chat transfer
     isChatFooter() {
-      return this.currentTab.component !== ('chat-transfer-container' && 'empty-workspace');
+      return (this.currentTab.component !== 'chat-transfer-container') && !this.chat.isTransferred;
     },
   },
   methods: {
