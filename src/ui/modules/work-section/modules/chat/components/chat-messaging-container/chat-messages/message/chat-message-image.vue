@@ -3,7 +3,9 @@
     <img
       class="chat-message-image__img"
       :src="image.url"
-      :alt="image.name">
+      :alt="image.name"
+      draggable="false"
+    >
   </div>
 </template>
 
