@@ -1,8 +1,11 @@
 <template>
-  <task-header>
+  <task-header
+    :size="size"
+  >
     <template v-slot:before-avatar>
       <wt-rounded-action
         :active="isOnHistory"
+        :size="size"
         class="call-action"
         color="secondary"
         icon="history"
@@ -14,6 +17,7 @@
     <template v-slot:after-avatar>
       <wt-rounded-action
         :class="{ 'hidden': !isCall }"
+        :size="size"
         color="success"
         icon="call-ringing"
         rounded
@@ -27,11 +31,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
 export default {
   name: 'workspace-member-header',
   components: { TaskHeader },
+  mixins: [sizeMixin],
   props: {
     currentTab: {
       type: String,

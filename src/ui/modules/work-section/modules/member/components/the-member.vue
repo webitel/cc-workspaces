@@ -3,6 +3,7 @@
     <template v-slot:header>
       <member-header
         :current-tab="currentTab"
+        :size="size"
         @openTab="openHistory"
       ></member-header>
     </template>
@@ -18,6 +19,7 @@ import TaskContainer from '../../_shared/components/task-container/task-containe
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
 import MemberCommunications from './member-communications.vue';
 import MemberHeader from './member-header.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'the-member',
@@ -27,6 +29,7 @@ export default {
     MemberCommunications,
     History,
   },
+  mixins: [sizeMixin],
 
   data: () => ({
     currentTab: '',

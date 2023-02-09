@@ -101,6 +101,10 @@ import { mapActions, mapGetters } from 'vuex';
       }
     }
 
+    .numpad-wrapper {
+      margin: auto;
+    }
+
     .numpad-numbers {
       align-self: flex-end;
 
