@@ -1,6 +1,7 @@
 <template>
   <task-footer
     class="chat-footer"
+    :class="[`chat-footer--${size}`]"
   >
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
@@ -10,7 +11,6 @@
     </div>
     <div
       v-else-if="chat.closedAt"
-      :class="[`chat-footer__chat-closed--${size}`]"
       class="chat-footer__chat-closed">
       <img
         alt="chat closed pic"
@@ -159,6 +159,12 @@ export default {
   display: flex;
   align-items: stretch;
   flex-direction: column;
+
+  &--sm {
+    .chat-footer__chat-closed {
+      width: 122px;
+    }
+  }
 }
 
 .chat-footer__chat-preview {
@@ -204,7 +210,7 @@ export default {
   }
 }
 
-.chat-footer__chat-closed{
+.chat-footer__chat-closed {
   width: 180px;
   margin: 0 auto;
   text-align: center;
@@ -212,10 +218,6 @@ export default {
 
   &__text {
     @extend %typo-subtitle-2;
-  }
-
-  &--sm {
-    width: 122px;
   }
 }
 </style>
