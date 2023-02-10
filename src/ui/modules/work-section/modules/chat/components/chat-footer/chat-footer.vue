@@ -1,6 +1,7 @@
 <template>
   <task-footer
     class="chat-footer"
+    :class="[`chat-footer--${size}`]"
   >
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
@@ -158,6 +159,12 @@ export default {
   display: flex;
   align-items: stretch;
   flex-direction: column;
+
+  &--sm {
+    .chat-footer__chat-closed {
+      width: 122px;
+    }
+  }
 }
 
 .chat-footer__chat-preview {
@@ -203,10 +210,11 @@ export default {
   }
 }
 
-.chat-footer__chat-closed{
+.chat-footer__chat-closed {
   width: 180px;
   margin: 0 auto;
   text-align: center;
+  white-space: nowrap;
 
   &__text {
     @extend %typo-subtitle-2;
