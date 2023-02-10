@@ -10,6 +10,7 @@
     </div>
     <div
       v-else-if="chat.closedAt"
+      :class="[`chat-footer__chat-closed--${size}`]"
       class="chat-footer__chat-closed">
       <img
         alt="chat closed pic"
@@ -207,9 +208,14 @@ export default {
   width: 180px;
   margin: 0 auto;
   text-align: center;
+  white-space: nowrap;
 
   &__text {
     @extend %typo-subtitle-2;
+  }
+
+  &--sm {
+    width: 122px;
   }
 }
 </style>
