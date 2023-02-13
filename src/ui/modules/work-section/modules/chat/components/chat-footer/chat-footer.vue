@@ -1,8 +1,5 @@
 <template>
-  <task-footer
-    class="chat-footer"
-    :class="[`chat-footer--${size}`]"
-  >
+  <task-footer class="chat-footer">
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
@@ -159,12 +156,6 @@ export default {
   display: flex;
   align-items: stretch;
   flex-direction: column;
-
-  &--sm {
-    .chat-footer__chat-closed {
-      width: 122px;
-    }
-  }
 }
 
 .chat-footer__chat-preview {
@@ -211,7 +202,7 @@ export default {
 }
 
 .chat-footer__chat-closed {
-  width: 180px;
+  width: 122px;
   margin: 0 auto;
   text-align: center;
   white-space: nowrap;
