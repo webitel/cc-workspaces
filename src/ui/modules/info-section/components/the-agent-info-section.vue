@@ -1,14 +1,14 @@
 <template>
   <section
     :class="[
-      `info-section--${size}`,
-      { 'info-section--unpinned': !pin },
+      `info-section--${infoSecSize}`,
+      { 'info-section--pinned': pin },
     ]"
     class="workspace-section info-section"
   >
     <div class="workspace-section__collapse-actions">
       <collapse-action
-        v-if="collapsible"
+        v-if="collapsible && !pin"
         :collapsed="collapsed"
         @click="$emit('resize')"
       ></collapse-action>
@@ -22,13 +22,13 @@
       <the-agent-info-nav-panel
         v-model="currentTab"
         :tabs="tabs"
-        :size="size"
+        :size="infoSecSize"
       ></the-agent-info-nav-panel>
       <component
         class="info-tab"
         :is="currentTab.value"
         :task="taskOnWorkspace"
-        :size="size"
+        :size="infoSecSize"
       ></component>
     </div>
   </section>
@@ -71,7 +71,7 @@ export default {
   },
   data: () => ({
     currentTab: '',
-    pin: true,
+    pin: false,
   }),
 
   watch: {
@@ -110,6 +110,11 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
+    infoSecSize() {
+      // should be always md if pinned
+      if (this.pin) return 'md';
+      return this.size;
+    },
     taskId() {
       return this.taskOnWorkspace.id;
     },
@@ -193,7 +198,7 @@ export default {
       flex: 1 1 320px;
     }
 
-    &--unpinned {
+    &--pinned {
       position: fixed;
       z-index: 111; // overlap header actions
       top: 0;
@@ -208,6 +213,10 @@ export default {
   display: flex;
   justify-content: space-between;
   line-height: 0;
+}
+
+.pin-action {
+  margin-left: auto;
 }
 
 .info-tab-wrapper {
