@@ -95,7 +95,7 @@ export default {
       hangup: 'Кінець',
     },
     chat: {
-      acceptPreviewText: 'Якщо Ви готові відповісти, натисніть кнопку "Відповісти"',
+      acceptPreviewText: 'Якщо Ви готові відповісти, натисніть кнопку "Прийняти"',
       draftPlaceholder: 'Напишіть повідомлення...',
       dropzone: {
         title: 'Перетягніть файли сюди',
