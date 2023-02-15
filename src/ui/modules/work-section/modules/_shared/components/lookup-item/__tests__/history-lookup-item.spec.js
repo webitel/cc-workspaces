@@ -3,12 +3,16 @@ import { CallDirection } from 'webitel-sdk';
 import HistoryLookupItem from '../history-lookup-item.vue';
 
 describe('HistoryLookupItem', () => {
-  const item = {
-    direction: CallDirection.Outbound,
-    to: {},
-    from: {},
-    duration: 60,
-  };
+  let item;
+
+  beforeEach(() => {
+    item = {
+      direction: CallDirection.Outbound,
+      to: {},
+      from: {},
+      duration: 60,
+    };
+  });
 
   it('renders a component', () => {
     const wrapper = shallowMount(HistoryLookupItem, {
@@ -23,5 +27,33 @@ describe('HistoryLookupItem', () => {
     });
     wrapper.trigger('click');
     expect(wrapper.emitted().input[0]).toEqual([item]);
+  });
+
+  it('calls to inbound call number', () => {
+    const mock = jest.fn();
+    item.direction = CallDirection.Inbound;
+    item.from.number = 'true';
+    item.to.number = 'false';
+
+    jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
+    const wrapper = shallowMount(HistoryLookupItem, {
+      propsData: { item },
+    });
+    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
+    expect(mock).toHaveBeenCalledWith({ number: 'true' });
+  });
+
+  it('calls to outbound call number', () => {
+    const mock = jest.fn();
+    item.direction = CallDirection.Outbound;
+    item.from.number = 'false';
+    item.to.number = 'true';
+
+    jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
+    const wrapper = shallowMount(HistoryLookupItem, {
+      propsData: { item },
+    });
+    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
+    expect(mock).toHaveBeenCalledWith({ number: 'true' });
   });
 });

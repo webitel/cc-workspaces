@@ -41,11 +41,18 @@ const actions = {
   },
 
   // destructuring arg in order to skip mouse events
-  CALL: async (context, { user }) => {
+  CALL: async (context, { user, number }) => {
     const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun };
-    let destination = user
-      ? user.extension
-      : context.getters.CALL_ON_WORKSPACE.newNumber;
+    let destination;
+
+    if (number) {
+      destination = number;
+    } else if (user) {
+      destination = user.extension;
+    } else {
+      destination = context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
+    }
+
     // eslint-disable-next-line no-useless-escape
     destination = destination.replace(/[^0-9a-zA-z\+\*#]/g, '');
     const client = await context.rootState.client.getCliInstance();
