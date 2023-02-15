@@ -31,7 +31,7 @@
         rounded
         :size="size"
         wide
-        @click="makeCall"
+        @click="call"
       ></wt-rounded-action>
     </template>
   </lookup-item>
@@ -126,6 +126,17 @@ export default {
     ...mapActions('features/call', {
       makeCall: 'CALL',
     }),
+    call() {
+      let number;
+
+      if (this.item.direction === CallDirection.Inbound) {
+        number = this.item.from.number;
+      } else {
+        number = this.item.to.number || this.item.destination;
+      }
+
+      return this.makeCall({ number });
+    },
   },
 };
 </script>
