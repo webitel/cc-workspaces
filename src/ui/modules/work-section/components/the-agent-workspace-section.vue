@@ -87,7 +87,7 @@ export default {
 
   &--md {
     /* should be bigger than info-section 1 1 320px cause info section should */
-    flex: 100 100 auto;
+    flex: 10 10 400px;
   }
   &--sm {
     flex: 0 0 400px;
