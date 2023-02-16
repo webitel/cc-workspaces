@@ -3,6 +3,7 @@
     <the-processing-form
       v-if="task.attempt.hasForm"
       :task="task"
+      :size="size"
     ></the-processing-form>
     <the-reporting
       v-else
@@ -12,11 +13,13 @@
 </template>
 
 <script>
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import TheProcessingForm from '../modules/form/components/the-processing-form.vue';
 import TheReporting from '../modules/reporting/components/the-reporting.vue';
 
 export default {
   name: 'processing-tab',
+  mixins: [sizeMixin],
   components: {
     TheProcessingForm,
     TheReporting,

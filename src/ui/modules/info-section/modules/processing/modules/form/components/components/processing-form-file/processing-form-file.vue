@@ -83,6 +83,7 @@
         :key="file.id || file.name + index"
         :file="file"
         :readonly="readonly"
+        :size="size"
         @delete="askDeleteFile(file)"
       ></form-file-line>
       <p
@@ -101,6 +102,7 @@ import saveAs from 'file-saver';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import ConfirmationPopup from '../../../../../../../../../../app/components/utils/confirmation-popup.vue';
 import dropzoneMixin from '../../../../../../../../../../app/mixins/dropzoneMixin';
+import sizeMixin from '../../../../../../../../../../app/mixins/sizeMixin';
 import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsibleProcessingFormComponentMixin';
 import processingFormComponentMixin from '../../../mixins/processingFormComponentMixin';
 import FormFileLine from './processing-form-file-line.vue';
@@ -127,6 +129,7 @@ export default {
     processingFormComponentMixin,
     collapsibleProcessingFormComponentMixin,
     dropzoneMixin,
+    sizeMixin,
   ],
   props: {
     value: {
