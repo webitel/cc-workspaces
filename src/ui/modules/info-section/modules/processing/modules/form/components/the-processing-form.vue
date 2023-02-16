@@ -7,6 +7,7 @@
       {{ formTitle }}
     </template>
     <template v-slot:form>
+<!--      pass size prop only to form file component -->
       <component
         :is="processingComponent[el.view.component] || el.view.component"
         v-for="(el, key) of formBody"
@@ -14,6 +15,7 @@
         v-model="el.value"
         :label-props="{ hint: el.view.hint }"
         :attempt-id="task.attempt.id"
+        :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
       ></component>
     </template>
@@ -32,6 +34,7 @@
 <script>
 import { mapActions } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
@@ -41,7 +44,10 @@ import FormDatetimepicker from './components/processing-form-datetimepicker.vue'
 
 export default {
   name: 'the-processing-form',
-  mixins: [processingModuleMixin],
+  mixins: [
+    processingModuleMixin,
+    sizeMixin,
+  ],
   components: {
     FormText,
     FormSelect,

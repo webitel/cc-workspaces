@@ -1,9 +1,15 @@
 <template>
   <div
-    :class="{ 'processing-form-file-line--readonly': readonly }"
+    :class="[
+      `processing-form-file-line--${size}`,
+     {
+      'processing-form-file-line--readonly': readonly,
+     },
+     ]"
     class="processing-form-file-line"
   >
     <wt-icon
+      class="processing-form-file-line__type-icon"
       :icon="typeIcon"
     ></wt-icon>
     <a
@@ -28,7 +34,10 @@
         {{ $tc('vocabulary.errors', 1) }}
       </p>
     </div>
-    <div v-if="!readonly">
+    <div
+      v-if="!readonly"
+      class="processing-form-file-line__action-icon"
+    >
       <component
         :is="actionIcon.component"
         :icon="actionIcon.icon"
@@ -43,9 +52,11 @@
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import { mapState } from 'vuex';
 import FileStatus from '../../../enums/FormFileStatus.enum';
+import sizeMixin from '../../../../../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'processing-form-file-line',
+  mixins: [sizeMixin],
   props: {
     file: {
       type: Object,
@@ -134,6 +145,37 @@ export default {
 
   .wt-load-bar {
     margin-top: 8px; // align to first line center: 24px line height/2 - 8px load bar height/2
+  }
+
+  .processing-form-file-line__action-icon {
+    line-height: 0;
+  }
+
+  &:not(.processing-form-file-line--readonly).processing-form-file-line--sm {
+    display: grid;
+    grid-template-columns: 24px repeat(7, 1fr) 24px;
+    grid-template-areas: 'type-icon name name name name name name name action-icon'
+                            '. size size size loader loader loader loader .';
+
+    .processing-form-file-line__type-icon {
+      grid-area: type-icon;
+    }
+
+    .processing-form-file-line__name {
+      grid-area: name;
+    }
+
+    .processing-form-file-line__action-icon {
+      grid-area: action-icon;
+    }
+
+    .processing-form-file-line__size {
+      grid-area: size;
+    }
+
+    .processing-form-file-line__load-wrapper {
+      grid-area: loader;
+    }
   }
 }
 </style>
