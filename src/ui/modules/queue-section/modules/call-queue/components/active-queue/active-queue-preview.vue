@@ -11,6 +11,16 @@
         :src="sonarIcon"
       >
     </template>
+    <template
+      v-slot:additional-status
+      v-if="eavesdropStatusIcon"
+    >
+      <wt-icon
+        :icon="eavesdropStatusIcon"
+        color="danger"
+        :size="size"
+      ></wt-icon>
+    </template>
     <template v-slot:title>
       {{ task.displayName }}
     </template>
@@ -66,6 +76,11 @@ export default {
 
     sonarIcon() {
       return this.task.isHold ? holdSonar : activeSonar;
+    },
+    eavesdropStatusIcon() {
+      if (this.task.eavesdropIsConference) return 'conference';
+      if (this.task.eavesdropIsPrompt) return 'prompter';
+      return null;
     },
   },
 };
