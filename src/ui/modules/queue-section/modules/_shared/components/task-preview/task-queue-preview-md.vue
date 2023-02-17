@@ -10,7 +10,7 @@
   >
 
     <header class="queue-preview-header">
-      <div class="queue-review-header__icon">
+      <div class="queue-preview-header__icon">
         <slot name="icon"></slot>
       </div>
       <div class="queue-preview-header__text-wrapper">
@@ -30,12 +30,20 @@
     </header>
 
     <section
-      v-if="displayQueueName"
-      class="queue-preview-chips"
+      v-if="displayQueueName || $slots['additional-status']"
+      class="queue-preview-main-section"
     >
-      <wt-chip color="secondary">
-        {{ displayQueueName }}
-      </wt-chip>
+      <article class="queue-preview-chips">
+        <wt-chip
+          v-if="displayQueueName"
+          color="secondary"
+        >
+          {{ displayQueueName }}
+        </wt-chip>
+      </article>
+      <div class="queue-preview-additional-status">
+        <slot name="additional-status"></slot>
+      </div>
     </section>
 
     <footer
@@ -78,7 +86,7 @@ export default {
 @import '../../css/queue-preview';
 
 .queue-preview--md {
-    .queue-review-header__icon {
+    .queue-preview-header__icon {
     flex: 0 0 24px;
   }
 
@@ -88,6 +96,12 @@ export default {
     flex-direction: column;
     gap: var(--spacing-2xs);
     min-width: 0; // prevents content overflowing
+  }
+
+  .queue-preview-main-section {
+    display: grid;
+    grid-template-columns: 1fr 24px;
+    gap: var(--spacing-xs);
   }
 
   .queue-preview-actions {

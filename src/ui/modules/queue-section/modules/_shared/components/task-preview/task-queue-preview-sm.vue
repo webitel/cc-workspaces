@@ -10,8 +10,11 @@
   >
 
     <header class="queue-preview-header">
-      <div class="queue-review-header__icon">
+      <div class="queue-preview-header__icon">
         <slot name="icon"></slot>
+      </div>
+      <div class="queue-preview-additional-status">
+        <slot name="additional-status"></slot>
       </div>
       <wt-tooltip>
         <template v-slot:activator>
@@ -95,7 +98,7 @@ export default {
 @import '../../css/queue-preview';
 
 .queue-preview--sm {
-  .queue-review-header__icon {
+  .queue-preview-header__icon {
     width: 16px;
     height: 16px;
   }
