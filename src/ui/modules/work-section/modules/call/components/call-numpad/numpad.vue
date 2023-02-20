@@ -87,16 +87,14 @@ import { mapActions, mapGetters } from 'vuex';
       bottom: -24px;
       left: 50%;
       transform: translateX(-50%);
-      @media screen and (max-height: 810px) {
+      z-index: 1;
+      @media screen and (max-height: 720px) {
         display: block;
-      }
-      @media screen and (max-height: 768px) {
-        bottom: -18px;
       }
     }
 
     .numpad-state {
-      @media screen and (max-height: 810px) {
+      @media screen and (max-height: 720px) {
         margin: 0 auto;
       }
     }
@@ -104,7 +102,7 @@ import { mapActions, mapGetters } from 'vuex';
     .numpad-numbers {
       align-self: flex-end;
 
-      @media screen and (max-height: 810px) {
+      @media screen and (max-height: 720px) {
         position: absolute;
         bottom: 53px;
         left: 50%;
