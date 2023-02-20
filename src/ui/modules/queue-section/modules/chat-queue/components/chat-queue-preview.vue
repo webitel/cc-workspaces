@@ -49,14 +49,14 @@ export default {
           return 'messenger-telegram';
         case MessengerType.VIBER:
           return 'messenger-viber';
-        case MessengerType.FACEBOOK:
-          return 'messenger-facebook';
         case MessengerType.WHATSAPP:
           return 'messenger-whatsapp';
         case MessengerType.WEB_CHAT:
           return 'messenger-web-chat';
         case MessengerType.INSTAGRAM:
           return 'instagram';
+        case 'facebook':
+          return 'messenger-facebook';
         default:
           return member.type;
       }
