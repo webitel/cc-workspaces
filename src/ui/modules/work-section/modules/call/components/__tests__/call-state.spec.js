@@ -17,7 +17,7 @@ describe('Call state', () => {
         now() {
           return Date.now();
         },
-        computeDTMFDigits() {
+        dtmf() {
           return '';
         },
       },

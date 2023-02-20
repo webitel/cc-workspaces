@@ -29,7 +29,10 @@
         class="numpad-state__primary-text__time-digit"
       >{{ digit }}</span>
     </div>
-    <div class="numpad-state__secondary-text">{{ computeDTMFDigits }}</div>
+    <div
+      v-if="dtmf"
+      class="numpad-state__secondary-text"
+    >{{ dtmf.join('') }}</div>
   </div>
 </template>
 
@@ -49,9 +52,8 @@ export default {
   computed: {
     ...mapGetters('features/call', {
       call: 'CALL_ON_WORKSPACE',
-      computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
+      dtmf: 'GET_CURRENT_CALL_DIGITS',
     }),
-
     callState() {
       switch (this.call.state) {
         case CallActions.Ringing:
@@ -85,6 +87,7 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  max-width: 100%;
 
   &__animation {
     width: 52px;
@@ -111,6 +114,13 @@ export default {
 
   &__secondary-text {
     @extend %typo-subtitle-1;
+    text-align: center;
+    min-height: 40px;
+    width: 100%;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--contrast-color);
+    border-radius: var(--border-radius);
+    word-wrap: break-word;
   }
 }
 </style>
