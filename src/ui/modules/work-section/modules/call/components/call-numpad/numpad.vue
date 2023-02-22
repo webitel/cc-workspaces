@@ -84,7 +84,7 @@ import { mapActions, mapGetters } from 'vuex';
     .numpad-btn {
       display: none;
       position: absolute;
-      bottom: -24px;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1;
