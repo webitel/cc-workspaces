@@ -7,7 +7,7 @@
         :opened="task === taskOnWorkspace"
         :task="task"
         :size="size"
-        @click="openMember"
+        @click="toggleMemberDisplay(task)"
       ></offline-preview>
 
       <observer
@@ -50,7 +50,14 @@ export default {
     ...mapActions('features/member', {
       loadList: 'LOAD_DATA_LIST',
       openMember: 'OPEN_MEMBER_ON_WORKSPACE',
+      resetWorkspace: 'RESET_WORKSPACE',
     }),
+    toggleMemberDisplay(task) {
+     this.taskOnWorkspace.id === task.id ? this.resetWorkspace(task) : this.openMember(task);
+    },
+  },
+  beforeDestroy() {
+    this.resetWorkspace();
   },
 };
 </script>

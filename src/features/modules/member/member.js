@@ -51,6 +51,10 @@ const actions = {
   SET_WORKSPACE: (context, memberOnWs) => {
     context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER, task: memberOnWs }, { root: true });
   },
+
+  RESET_WORKSPACE: (context, member) => {
+    context.dispatch('workspace/RESET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER, task: member }, { root: true });
+  },
 };
 
 const mutations = {
