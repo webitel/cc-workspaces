@@ -24,12 +24,14 @@
         :tabs="tabs"
         :size="infoSecSize"
       ></the-agent-info-nav-panel>
-      <component
-        class="info-tab"
-        :is="currentTab.value"
-        :task="taskOnWorkspace"
-        :size="infoSecSize"
-      ></component>
+      <keep-alive>
+        <component
+          class="info-tab"
+          :is="currentTab.value"
+          :task="taskOnWorkspace"
+          :size="infoSecSize"
+        ></component>
+      </keep-alive>
     </div>
   </section>
 </template>
