@@ -49,7 +49,7 @@ export default {
           return 'messenger-telegram';
         case MessengerType.VIBER:
           return 'messenger-viber';
-        case MessengerType.WHATSAPP:
+        case 'whatsapp':
           return 'messenger-whatsapp';
         case MessengerType.WEB_CHAT:
           return 'messenger-web-chat';
