@@ -56,11 +56,14 @@
 </template>
 
 <script>
+import { CallActions, CallDirection } from 'webitel-sdk';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
+import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-sonar.svg';
+import inboundSonar from '../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
 
 export default {
   name: 'active-queue-preview',
@@ -75,7 +78,12 @@ export default {
     },
 
     sonarIcon() {
-      return this.task.isHold ? holdSonar : activeSonar;
+      if (this.task.isHold) return holdSonar;
+      if (this.task.state === CallActions.Ringing) {
+        if (this.task.direction === CallDirection.Inbound) return inboundSonar;
+        return ringingSonar;
+      }
+      return activeSonar;
     },
     eavesdropStatusIcon() {
       if (this.task.eavesdropIsConference) return 'conference';

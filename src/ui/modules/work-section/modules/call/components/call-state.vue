@@ -2,17 +2,9 @@
   <div class="numpad-state">
     <div class="numpad-state__animation">
       <img
-        v-show="isCallActive"
         alt=""
-        src="../../../../../../app/assets/call-sonars/active-sonar.svg">
-      <img
-        v-show="isCallRinging"
-        alt=""
-        src="../../../../../../app/assets/call-sonars/ringing-sonar.svg">
-      <img
-        v-show="isCallOnHold"
-        alt=""
-        src="../../../../../../app/assets/call-sonars/hold-sonar.svg">
+        :src="sonarIcon"
+      >
     </div>
     <div
       v-if="!isCallActive"
@@ -38,7 +30,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { CallActions } from 'webitel-sdk';
+import { CallActions, CallDirection } from 'webitel-sdk';
+import activeSonar from '../../../../../../app/assets/call-sonars/active-sonar.svg';
+import holdSonar from '../../../../../../app/assets/call-sonars/hold-sonar.svg';
+import inboundSonar from '../../../../../../app/assets/call-sonars/inbound-sonar.svg';
+import ringingSonar from '../../../../../../app/assets/call-sonars/ringing-sonar.svg';
 import callTimer from '../../../../../mixins/callTimerMixin';
 
 export default {
@@ -72,11 +68,14 @@ export default {
     isCallActive() {
       return this.call.state === CallActions.Active;
     },
-    isCallRinging() {
-      return this.call.state === CallActions.Ringing;
-    },
-    isCallOnHold() {
-      return this.call.state === CallActions.Hold;
+    sonarIcon() {
+      if (this.call.isHold) return holdSonar;
+      if (this.call.state === CallActions.Ringing) {
+        if (this.call.direction === CallDirection.Inbound) return inboundSonar;
+        return ringingSonar;
+      }
+      if (this.isCallActive) return activeSonar;
+      return '';
     },
   },
 };
