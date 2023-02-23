@@ -57,6 +57,11 @@ export default {
     },
   },
   destroyed() {
+    /*
+    [WTEL-3064]
+    When unmounting a offline-queue-container component (for example, when clicking on missed calls),
+    in agent-workspace-action panel should display the last active event, except for the offline queue
+    */
     this.resetWorkspace();
   },
 };
