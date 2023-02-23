@@ -52,8 +52,8 @@ const actions = {
     context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER, task: memberOnWs }, { root: true });
   },
 
-  RESET_WORKSPACE: (context, member) => {
-    context.dispatch('workspace/RESET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER, task: member }, { root: true });
+  RESET_WORKSPACE: (context) => {
+    context.dispatch('workspace/RESET_WORKSPACE_STATE', { type: WorkspaceStates.MEMBER }, { root: true });
   },
 };
 

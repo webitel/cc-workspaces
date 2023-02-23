@@ -53,10 +53,10 @@ export default {
       resetWorkspace: 'RESET_WORKSPACE',
     }),
     toggleMemberDisplay(task) {
-     this.taskOnWorkspace.id === task.id ? this.resetWorkspace(task) : this.openMember(task);
+     this.taskOnWorkspace.id === task.id ? this.resetWorkspace() : this.openMember(task);
     },
   },
-  beforeDestroy() {
+  destroyed() {
     this.resetWorkspace();
   },
 };
