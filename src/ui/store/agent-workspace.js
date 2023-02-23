@@ -56,7 +56,7 @@ const actions = {
     if (config) {
       const { type } = config;
 
-      if (config.type) {
+      if (type) {
         stateHistory = stateHistory.filter(({ type: typeName }) => type !== typeName);
       }
     }
