@@ -43,8 +43,24 @@ const actions = {
   SET_WORKSPACE_STATE: (context, payload) => {
     context.commit('ADD_WORKSPACE_STATE', payload);
   },
-  RESET_WORKSPACE_STATE: (context) => {
-    const stateHistory = [...context.state.stateHistory];
+  RESET_WORKSPACE_STATE: (context, config) => {
+    let stateHistory = [...context.state.stateHistory];
+
+    /* Filter the history from tasks if this type was previously selected [WTEL-3064]
+
+      When repeatedly clicking on a member in an offline queue,
+      the last active event should be displayed in agent-workspace-action panel,
+      excluding all offline queues
+      */
+
+    if (config) {
+      const { type } = config;
+
+      if (type) {
+        stateHistory = stateHistory.filter(({ type: typeName }) => type !== typeName);
+      }
+    }
+
     while (stateHistory.length) {
       const { type, task } = stateHistory.at(-1);
       if (context.rootState.features[type][`${type}List`].includes(task)) {
