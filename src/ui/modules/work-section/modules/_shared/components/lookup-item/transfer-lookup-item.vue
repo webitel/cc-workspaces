@@ -5,6 +5,7 @@
         :src="src"
         :size="size"
         :badge="type !== TransferDestination.CHATPLAN"
+        :status="userStatus"
       ></wt-avatar>
     </template>
 

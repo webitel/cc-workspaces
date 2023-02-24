@@ -64,7 +64,7 @@
         userId: (state) => state.userId,
       }),
       isTransferToNumberDisabled() {
-        return !this.search;
+        return !this.dataSearch;
       },
     },
 
