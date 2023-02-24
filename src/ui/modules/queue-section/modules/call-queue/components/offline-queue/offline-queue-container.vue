@@ -7,7 +7,7 @@
         :opened="task === taskOnWorkspace"
         :task="task"
         :size="size"
-        @click="openMember"
+        @click="toggleMemberDisplay(task)"
       ></offline-preview>
 
       <observer
@@ -50,7 +50,19 @@ export default {
     ...mapActions('features/member', {
       loadList: 'LOAD_DATA_LIST',
       openMember: 'OPEN_MEMBER_ON_WORKSPACE',
+      resetWorkspace: 'RESET_WORKSPACE',
     }),
+    toggleMemberDisplay(task) {
+     this.taskOnWorkspace.id === task.id ? this.resetWorkspace() : this.openMember(task);
+    },
+  },
+  destroyed() {
+    /*
+    [WTEL-3064]
+    When unmounting a offline-queue-container component (for example, when clicking on missed calls),
+    in agent-workspace-action panel should display the last active event, except for the offline queue
+    */
+    this.resetWorkspace();
   },
 };
 </script>

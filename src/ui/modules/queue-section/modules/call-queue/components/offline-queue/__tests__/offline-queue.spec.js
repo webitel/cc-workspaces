@@ -11,7 +11,7 @@ describe('Members list functionality', () => {
 
   it('Opens selected member on workspace', () => {
     const mock = jest.fn();
-    jest.spyOn(OfflineQueue.methods, 'openMember')
+    jest.spyOn(OfflineQueue.methods, 'toggleMemberDisplay')
       .mockImplementationOnce(mock);
     const wrapper = shallowMount(OfflineQueue, {
       computed,
