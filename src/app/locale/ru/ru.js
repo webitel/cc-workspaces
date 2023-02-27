@@ -63,10 +63,10 @@ export default {
     generalInfo: {
       generalInfo: 'Основная информация',
       queueWaiting: 'Ожидают',
-      queue: 'Очередь',
+      queue: 'Очередь | Очереди',
       agents: 'Операторы',
       total: 'Все',
-      paused: 'Пауза',
+      pauses: 'Паузы',
       free: 'Свободно',
     },
     clientInfo: 'Информация',
@@ -102,6 +102,7 @@ export default {
         description: 'Чтобы отправить их',
       },
       confirmClose: 'Вы уверенны, что хотите закрыть активный чат?',
+      closedСhat: 'Чат был закрыт',
     },
   },
   emptyWorkspace: {

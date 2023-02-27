@@ -1,35 +1,43 @@
 <template>
-  <task-queue-preview
+  <component
+    :is="`task-queue-preview-${size}`"
     :task="task"
-    :title="displayName"
     :opened="opened"
-    :size="size"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
+    <template
+      v-slot:icon
+      v-if="size === 'md'"
+    >
       <wt-icon
         :icon="displayIcon"
-        size="sm"
       ></wt-icon>
     </template>
-    <template v-slot:body>
-      {{ lastMessage | truncate(30) }}
+    <template v-slot:avatar>
+      <wt-icon
+        :icon="displayIcon"
+        size="md"
+      ></wt-icon>
     </template>
-  </task-queue-preview>
+    <template v-slot:title>
+      {{ displayChatName }}
+    </template>
+    <template v-slot:body>
+      {{ lastMessage }}
+    </template>
+  </component>
 </template>
 
 <script>
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',
-  mixins: [taskPreviewMixin, sizeMixin],
+  mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
-    displayName() {
-      return this.task.members.map((member) => member.name).join(', ');
-    },
     lastMessage() {
       const lastMessage = this.task.messages[this.task.messages.length - 1];
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
@@ -41,14 +49,14 @@ export default {
           return 'messenger-telegram';
         case MessengerType.VIBER:
           return 'messenger-viber';
-        case MessengerType.FACEBOOK:
-          return 'messenger-facebook';
-        case MessengerType.WHATSAPP:
+        case 'whatsapp':
           return 'messenger-whatsapp';
         case MessengerType.WEB_CHAT:
           return 'messenger-web-chat';
         case MessengerType.INSTAGRAM:
           return 'instagram';
+        case 'facebook':
+          return 'messenger-facebook';
         default:
           return member.type;
       }

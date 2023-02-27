@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import ProcessingFormFile from '../processing-form-file.vue';
 
 describe('ProcessingFormFile', () => {
@@ -41,7 +41,7 @@ describe('ProcessingFormFile', () => {
     const mock = jest.fn();
     jest.spyOn(ProcessingFormFile.methods, 'uploadFile')
         .mockImplementationOnce(mock);
-    const wrapper = shallowMount(ProcessingFormFile, {
+    const wrapper = mount(ProcessingFormFile, {
       propsData: {
         value: [],
       },

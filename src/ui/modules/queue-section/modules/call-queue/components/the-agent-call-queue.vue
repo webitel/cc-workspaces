@@ -1,6 +1,7 @@
 <template>
   <the-agent-task-queue
     class="task-queue call-queue"
+    :size="size"
     :class="[
       `call-queue--${size}`
     ]"

@@ -1,12 +1,18 @@
 <template>
-  <task-footer
-    class="chat-footer"
-  >
+  <task-footer class="chat-footer">
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
         <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
+    </div>
+    <div
+      v-else-if="chat.closedAt"
+      class="chat-footer__chat-closed">
+      <img
+        alt="chat closed pic"
+        src="../../../_shared/assets/chat-closed/chat-closed.svg"/>
+      <p class="chat-footer__chat-closed__text">{{$t('workspaceSec.chat.closedСhat')}}</p>
     </div>
     <div v-else-if="isChatActive" class="chat-footer__chat-active">
       <wt-textarea
@@ -24,6 +30,7 @@
             class="rounded-action-file-input"
             color="secondary"
             icon="attach"
+            :size="size"
             rounded
             wide
             @click="triggerAttachmentInput"
@@ -37,11 +44,14 @@
           >
         </div>
           <chat-emoji
+            :size="size"
             @insert-emoji="insertEmoji"
           ></chat-emoji>
           <wt-rounded-action
             icon="chat-send"
-            color="secondary"
+            color="accent"
+            filled
+            :size="size"
             rounded
             wide
             @click="sendMessage"
@@ -54,6 +64,7 @@
 <script>
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import ChatEmoji from './chat-emoji.vue';
 
@@ -63,6 +74,7 @@ export default {
     ChatEmoji,
     TaskFooter,
   },
+  mixins: [sizeMixin],
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
   },
@@ -147,7 +159,7 @@ export default {
 }
 
 .chat-footer__chat-preview {
-  padding: 20px;
+  padding: var(--spacing-sm);
   border: 1px solid var(--main-page-bg-color);
 
   .chat-footer__chat-preview-wrapper {
@@ -169,12 +181,12 @@ export default {
 
 .chat-footer__chat-active {
   .wt-textarea {
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
   }
 
   .chat-footer__actions {
     display: flex;
-    gap: 10px;
+    gap: var(--spacing-xs);
   }
 }
 
@@ -186,6 +198,17 @@ export default {
     width: 0;
     height: 0;
     visibility: hidden;
+  }
+}
+
+.chat-footer__chat-closed {
+  width: 122px;
+  margin: 0 auto;
+  text-align: center;
+  white-space: nowrap;
+
+  &__text {
+    @extend %typo-subtitle-2;
   }
 }
 </style>

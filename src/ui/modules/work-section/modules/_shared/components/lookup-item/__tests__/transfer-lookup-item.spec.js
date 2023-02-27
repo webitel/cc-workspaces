@@ -5,6 +5,11 @@ import ContactLookupItem from '../contact-lookup-item';
 import TransferLookupItem from '../transfer-lookup-item.vue';
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
 
+const computed = {
+  state() {
+    return 'chat';
+  },
+};
 describe('TransferLookupItem', () => {
   const item = {};
   const type = ChatTransferDestination.USER;
@@ -12,6 +17,7 @@ describe('TransferLookupItem', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(TransferLookupItem, {
       propsData: { item, type },
+      computed,
     });
     expect(wrapper.exists()).toBe(true);
   });
@@ -19,8 +25,9 @@ describe('TransferLookupItem', () => {
   it('emits input event at wt-icon-btn click', () => {
     const wrapper = shallowMount(TransferLookupItem, {
       propsData: { item, type },
+      computed,
     });
-    wrapper.findComponent({ name: 'wt-icon-btn' }).vm.$emit('click');
+    wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
     expect(wrapper.emitted().input[0]).toEqual([item]);
   });
 

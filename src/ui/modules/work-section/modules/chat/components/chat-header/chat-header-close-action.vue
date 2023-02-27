@@ -1,8 +1,9 @@
 <template>
   <div class="chat-header-close-action">
     <wt-rounded-action
+      :size="size"
       color="danger"
-      icon="chat-end"
+      icon="chat-end--filled"
       rounded
       wide
       @click="handleCloseAction"
@@ -21,10 +22,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import ConfirmationPopup from '../../../../../../../app/components/utils/confirmation-popup.vue';
 
 export default {
   name: 'chat-header-close-action',
+  mixins: [sizeMixin],
   components: {
     ConfirmationPopup,
   },

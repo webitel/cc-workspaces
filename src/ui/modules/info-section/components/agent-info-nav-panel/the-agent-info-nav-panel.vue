@@ -1,21 +1,30 @@
 <template>
   <nav class="agent-info-nav-panel">
-    <nav-panel-tab
+    <wt-tooltip
       v-for="(tab) of tabs"
       :key="tab.value"
-      :icon="tab.icon || tab.value"
-      :title="tab.text"
-      :active="tab.value === currentTab.value"
-      @click="$emit('input', tab)"
-    ></nav-panel-tab>
+    >
+      <template v-slot:activator>
+        <wt-rounded-action
+          :icon="tab.icon || tab.value"
+          :active="tab.value === currentTab.value"
+          :size="size"
+          rounded
+          wide
+          @click="$emit('input', tab)"
+        ></wt-rounded-action>
+      </template>
+      {{ tab.text }}
+    </wt-tooltip>
+
   </nav>
 </template>
 
 <script>
-import NavPanelTab from './agent-info-nav-panel-tab.vue';
-
+import sizeMixin from '../../../../../app/mixins/sizeMixin';
 export default {
   name: 'the-agent-info-section-nav-panel',
+  mixins: [sizeMixin],
   props: {
     currentTab: {
       type: Object,
@@ -25,7 +34,6 @@ export default {
       default: () => [],
     },
   },
-  components: { NavPanelTab },
   model: {
     prop: 'currentTab',
   },
@@ -34,10 +42,8 @@ export default {
 
 <style lang="scss" scoped>
 .agent-info-nav-panel {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background: var(--secondary-color);
+  grid-template-columns: repeat(4, 1fr);
 }
 </style>

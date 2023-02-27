@@ -1,36 +1,38 @@
 <template>
   <section
     :class="[
-      `info-section--${size}`,
-      { 'info-section--unpinned': !pin },
+      `info-section--${infoSecSize}`,
+      { 'info-section--pinned': pin },
     ]"
     class="workspace-section info-section"
   >
-<!--    <div class="workspace-section__collapse-actions">-->
-<!--      <collapse-action-->
-<!--        v-if="collapsible"-->
-<!--        :collapsed="collapsed"-->
-<!--        @click="$emit('resize')"-->
-<!--      ></collapse-action>-->
-<!--      <pin-action-->
-<!--        v-if="collapsible"-->
-<!--        :pinned="pin"-->
-<!--        @click="pin = !pin"-->
-<!--      ></pin-action>-->
-<!--    </div>-->
-    <the-agent-info-nav-panel
-      v-model="currentTab"
-      :tabs="tabs"
-    ></the-agent-info-nav-panel>
-    <article class="info-tab">
-      <info-section-header>
-        {{ currentTab.text }}
-      </info-section-header>
-      <component
-        :is="currentTab.value"
-        :task="taskOnWorkspace"
-      ></component>
-    </article>
+    <div class="workspace-section__collapse-actions">
+      <collapse-action
+        v-if="collapsible && !pin"
+        :collapsed="collapsed"
+        @click="$emit('resize')"
+      ></collapse-action>
+      <pin-action
+        v-if="collapsible"
+        :pinned="pin"
+        @click="pin = !pin"
+      ></pin-action>
+    </div>
+    <div class="info-tab-wrapper">
+      <the-agent-info-nav-panel
+        v-model="currentTab"
+        :tabs="tabs"
+        :size="infoSecSize"
+      ></the-agent-info-nav-panel>
+      <keep-alive>
+        <component
+          class="info-tab"
+          :is="currentTab.value"
+          :task="taskOnWorkspace"
+          :size="infoSecSize"
+        ></component>
+      </keep-alive>
+    </div>
   </section>
 </template>
 
@@ -46,13 +48,11 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
-import InfoSectionHeader from './agent-info-section-tab-utils/the-agent-info-section-tab-header.vue';
 
 export default {
   name: 'the-agent-info-section',
   components: {
     TheAgentInfoNavPanel,
-    InfoSectionHeader,
     GeneralInfo,
     ClientInfo,
     KnowledgeBase,
@@ -73,7 +73,7 @@ export default {
   },
   data: () => ({
     currentTab: '',
-    pin: true,
+    pin: false,
   }),
 
   watch: {
@@ -112,6 +112,11 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
+    infoSecSize() {
+      // should be always md if pinned
+      if (this.pin) return 'md';
+      return this.size;
+    },
     taskId() {
       return this.taskOnWorkspace.id;
     },
@@ -139,18 +144,22 @@ export default {
       const generalInfo = {
         text: this.$t('infoSec.generalInfo.generalInfo'),
         value: 'general-info',
+        icon: 'ws-general-info',
       };
       const clientInfo = {
         text: this.$t('infoSec.clientInfo'),
         value: 'client-info',
+        icon: 'ws-client-info',
       };
       const knowledgeBase = {
         text: this.$t('infoSec.knowledgeBase'),
         value: 'knowledge-base',
+        icon: 'ws-knowledge-base',
       };
       const processing = {
         text: this.$t('infoSec.processing.title'),
         value: 'processing',
+        icon: 'ws-processing',
       };
       return {
         generalInfo,
@@ -169,11 +178,11 @@ export default {
 <style lang="scss" scoped>
 .workspace-section {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: column;
   flex-grow: 1;
   box-sizing: border-box;
   min-width: 0;
-  gap: var(--spacing-3xs); // to separate side panel from scroll
+  gap: var(--spacing-2xs);
 
   &.info-section {
     width: auto;
@@ -183,14 +192,15 @@ export default {
     will-change: width;
 
     &--md {
-      flex: 1 1 auto;
+      flex: 1 1 320px;
     }
 
     &--sm {
-      flex: 0 0 550px;
+      /* should have 1 flex-grow/shrink in order to fit all available space if all 3 panels are minified */
+      flex: 1 1 320px;
     }
 
-    &--unpinned {
+    &--pinned {
       position: fixed;
       z-index: 111; // overlap header actions
       top: 0;
@@ -204,8 +214,18 @@ export default {
 .workspace-section__collapse-actions {
   display: flex;
   justify-content: space-between;
-  padding: var(--spacing-sm);
   line-height: 0;
+}
+
+.pin-action {
+  margin-left: auto;
+}
+
+.info-tab-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: var(--spacing-sm);
 }
 
 .info-tab {
@@ -217,10 +237,6 @@ export default {
   min-height: 0;
   @extend %wt-scrollbar;
   max-height: 100%;
-  padding: var(--spacing-sm);
-
-  .agent-info-section-tab-header {
-    margin-bottom: var(--spacing-sm);
-  }
+  padding-right: var(--spacing-2xs); // scrollbar offset
 }
 </style>

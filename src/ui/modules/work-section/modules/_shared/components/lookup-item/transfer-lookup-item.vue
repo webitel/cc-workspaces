@@ -1,11 +1,11 @@
 <template>
-  <lookup-item
-    :no-before="type === TransferDestination.CHATPLAN"
-  >
+  <lookup-item>
     <template slot="before">
       <wt-avatar
+        :src="src"
+        :size="size"
+        :badge="type !== TransferDestination.CHATPLAN"
         :status="userStatus"
-        badge
       ></wt-avatar>
     </template>
 
@@ -18,35 +18,44 @@
     </template>
 
     <template slot="after">
-      <wt-icon-btn
+      <wt-rounded-action
         color="transfer"
-        icon="chat-transfer--filled"
+        :icon="`${state}-transfer--filled`"
+        rounded
         @click="handleInput"
-      ></wt-icon-btn>
+      ></wt-rounded-action>
     </template>
   </lookup-item>
 </template>
 
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
+import { mapGetters } from 'vuex';
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import lookupItemMixin from './mixins/lookupItemMixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'transfer-lookup-item',
-  mixins: [lookupItemMixin],
+  mixins: [lookupItemMixin, sizeMixin],
   props: {
     type: {
       type: String,
       default: TransferDestination.USER,
+    },
+    src: {
+      type: String,
     },
   },
   data: () => ({
     TransferDestination,
   }),
   computed: {
+    ...mapGetters('workspace', {
+      state: 'WORKSRACE_STATE',
+    }),
     userStatus() {
       const status = parseUserStatus(this.item.presence);
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;

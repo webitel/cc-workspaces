@@ -1,17 +1,20 @@
 <template>
   <div class="numpad">
-    <call-state/>
     <wt-input
       v-show="isNewCall"
       ref="number-input"
       v-model="call.newNumber"
       @keypress.enter="makeCall"
     ></wt-input>
-    <numpad-numbers
-      ref="numpad-numbers"
-      :class="{'numpad-numbers--opened': isNumpadOpened}"
-      @input="handleNumpadInput"
-    ></numpad-numbers>
+    <call-state/>
+    <div class="numpad-wrapper">
+      <numpad-numbers
+        ref="numpad-numbers"
+        :size="size"
+        :class="{'numpad-numbers--opened': isNumpadOpened}"
+        @input="handleNumpadInput"
+      ></numpad-numbers>
+    </div>
     <numpad-expansion-btn
       class="numpad-btn"
       :is-opened="isNumpadOpened"
@@ -25,9 +28,11 @@ import { mapActions, mapGetters } from 'vuex';
   import CallState from '../call-state.vue';
   import NumpadNumbers from './numpad-numbers.vue';
   import NumpadExpansionBtn from './numpad-expansion-btn.vue';
+  import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
   export default {
     name: 'the-numpad',
+    mixins: [sizeMixin],
     components: {
       CallState,
       NumpadNumbers,
@@ -79,19 +84,17 @@ import { mapActions, mapGetters } from 'vuex';
     .numpad-btn {
       display: none;
       position: absolute;
-      bottom: -24px;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      @media screen and (max-height: 810px) {
+      z-index: 1;
+      @media screen and (max-height: 719px) {
         display: block;
-      }
-      @media screen and (max-height: 768px) {
-        bottom: -18px;
       }
     }
 
     .numpad-state {
-      @media screen and (max-height: 810px) {
+      @media screen and (max-height: 719px) {
         margin: 0 auto;
       }
     }
@@ -99,12 +102,12 @@ import { mapActions, mapGetters } from 'vuex';
     .numpad-numbers {
       align-self: flex-end;
 
-      @media screen and (max-height: 810px) {
+      @media screen and (max-height: 719px) {
         position: absolute;
         bottom: 53px;
         left: 50%;
-        padding: 10px;
-        background: #fff;
+        padding: var(--spacing-xs);
+        background: var(--main-color);
         border-radius: var(--border-radius);
         box-shadow: var(--box-shadow);
         opacity: 0;

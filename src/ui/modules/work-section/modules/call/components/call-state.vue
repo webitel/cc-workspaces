@@ -2,17 +2,9 @@
   <div class="numpad-state">
     <div class="numpad-state__animation">
       <img
-        v-show="isCallActive"
         alt=""
-        src="../assets/call-sonars/active-sonar.svg">
-      <img
-        v-show="isCallRinging"
-        alt=""
-        src="../assets/call-sonars/ringing-sonar.svg">
-      <img
-        v-show="isCallOnHold"
-        alt=""
-        src="../assets/call-sonars/hold-sonar.svg">
+        :src="sonarIcon"
+      >
     </div>
     <div
       v-if="!isCallActive"
@@ -29,13 +21,20 @@
         class="numpad-state__primary-text__time-digit"
       >{{ digit }}</span>
     </div>
-    <div class="numpad-state__secondary-text">{{ computeDTMFDigits }}</div>
+    <div
+      v-if="dtmf"
+      class="numpad-state__secondary-text"
+    >{{ dtmf.join('') }}</div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { CallActions } from 'webitel-sdk';
+import { CallActions, CallDirection } from 'webitel-sdk';
+import activeSonar from '../../../../../../app/assets/call-sonars/active-sonar.svg';
+import holdSonar from '../../../../../../app/assets/call-sonars/hold-sonar.svg';
+import inboundSonar from '../../../../../../app/assets/call-sonars/inbound-sonar.svg';
+import ringingSonar from '../../../../../../app/assets/call-sonars/ringing-sonar.svg';
 import callTimer from '../../../../../mixins/callTimerMixin';
 
 export default {
@@ -49,9 +48,8 @@ export default {
   computed: {
     ...mapGetters('features/call', {
       call: 'CALL_ON_WORKSPACE',
-      computeDTMFDigits: 'GET_CURRENT_CALL_DIGITS',
+      dtmf: 'GET_CURRENT_CALL_DIGITS',
     }),
-
     callState() {
       switch (this.call.state) {
         case CallActions.Ringing:
@@ -70,11 +68,14 @@ export default {
     isCallActive() {
       return this.call.state === CallActions.Active;
     },
-    isCallRinging() {
-      return this.call.state === CallActions.Ringing;
-    },
-    isCallOnHold() {
-      return this.call.state === CallActions.Hold;
+    sonarIcon() {
+      if (this.call.isHold) return holdSonar;
+      if (this.call.state === CallActions.Ringing) {
+        if (this.call.direction === CallDirection.Inbound) return inboundSonar;
+        return ringingSonar;
+      }
+      if (this.isCallActive) return activeSonar;
+      return '';
     },
   },
 };
@@ -85,11 +86,12 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  max-width: 100%;
 
   &__animation {
     width: 52px;
     height: 52px;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
     overflow: hidden;
   }
 
@@ -111,6 +113,13 @@ export default {
 
   &__secondary-text {
     @extend %typo-subtitle-1;
+    text-align: center;
+    min-height: 40px;
+    width: 100%;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--contrast-color);
+    border-radius: var(--border-radius);
+    word-wrap: break-word;
   }
 }
 </style>

@@ -1,32 +1,46 @@
 <template>
-  <article class="agent-pause-causes">
-    <ul class="agent-pause-causes__list-wrapper">
-      <li
-        class="agent-pause-cause"
-        v-for="(cause) of pauseCauses"
-        :key="cause.id"
-      >
-        <span class="agent-pause-cause__name">{{ cause.name }}</span>
-        <span class="agent-pause-cause__duration">{{ duration(cause) }}</span>
-        <wt-progress-bar
-          :max="cause.limitMin"
-          :value="cause.durationMin"
-          :color="pauseCauseProgressColor(cause)"
-        ></wt-progress-bar>
-        <span class="agent-pause-cause__duration">
+  <article
+    :class="[`agent-pause-causes--${size}`]"
+    class="agent-pause-causes"
+  >
+    <wt-expansion-panel :size="size">
+      <template slot="title">{{ $t('infoSec.generalInfo.pauses') }}</template>
+      <template>
+        <ul>
+          <li
+            v-for="(cause) of pauseCauses"
+            :key="cause.id"
+            class="agent-pause-causes-item"
+          >
+            <span class="agent-pause-causes-item__name">{{ cause.name }}</span>
+            <div class="agent-pause-causes-item__wrapper">
+              <span>{{ duration(cause) }}</span>
+              <wt-progress-bar
+                :color="pauseCauseProgressColor(cause)"
+                :max="cause.limitMin"
+                :value="cause.durationMin"
+              ></wt-progress-bar>
+              <span>
           {{ prettifyPauseCauseDuration(cause.limitMin) }}
         </span>
-      </li>
-    </ul>
+            </div>
+          </li>
+        </ul>
+      </template>
+    </wt-expansion-panel>
   </article>
 </template>
 
 <script>
-import agentPauseCauseRepresentationMixin from '@webitel/cc-ui-sdk/src/mixins/agentPauseCauseRepresentation/agentPauseCauseRepresentationMixin';
+import agentPauseCauseRepresentationMixin
+  from '@webitel/cc-ui-sdk/src/mixins/agentPauseCauseRepresentation/agentPauseCauseRepresentationMixin';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
 
 export default {
   name: 'agent-pause-causes',
-  mixins: [agentPauseCauseRepresentationMixin],
+  components: { WtExpansionPanel },
+  mixins: [agentPauseCauseRepresentationMixin, sizeMixin],
   props: {
     pauseCauses: {
       type: Array,
@@ -37,21 +51,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.agent-pause-cause {
-  @extend %typo-body-1;
+.agent-pause-causes {
+  .agent-pause-causes-item {
+    @extend %typo-body-1;
+    display: grid;
+    align-items: center;
+    padding: var(--spacing-xs);
+    grid-template-columns: 2fr 1fr;
 
-  display: grid;
-  grid-template-columns: 1fr 50px minmax(100px, 1fr) 45px;
-  grid-gap: var(--spacing-sm);
-  align-items: center;
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--secondary-color);
+    }
 
-  &:not(:last-child) {
-    margin-bottom: var(--spacing-sm);
+    &__name {
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
+
+    &__wrapper {
+      display: grid;
+      grid-template-columns: 1fr 3fr 1fr;
+
+      :last-child {
+        text-align: end;
+      }
+
+      .wt-progress-bar {
+        width: auto;
+        height: fit-content;
+      }
+    }
   }
 
-  &__name {
-    overflow-wrap: break-word;
-    word-break: break-all;
+  &--sm {
+    .agent-pause-causes-item {
+      @extend %typo-body-2;
+      grid-template-columns: 1fr;
+
+      &__name {
+        margin-bottom: var(--spacing-xs);
+      }
+
+      &__wrapper {
+        grid-template-columns: 1fr 10fr 1fr;
+        gap: var(--spacing-xs);
+      }
+    }
   }
 }
 </style>

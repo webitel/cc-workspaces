@@ -4,6 +4,7 @@
     class="chat-emoji"
   >
     <wt-rounded-action
+      :size="size"
       color="secondary"
       icon="chat-emoji"
       rounded
@@ -20,9 +21,11 @@
 
 <script>
 import { Picker } from 'emoji-picker-element';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'chat-emoji',
+  mixins: [sizeMixin],
   data: () => ({
     picker: {},
     isOpened: false,

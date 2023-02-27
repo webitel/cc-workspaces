@@ -1,7 +1,7 @@
 <template>
   <div class="ws-worksection">
     <wt-search-bar
-      v-model="search"
+      v-model="dataSearch"
       @search="resetData"
     ></wt-search-bar>
     <section class="ws-worksection__list" ref="scroll-wrap">
@@ -12,6 +12,7 @@
         v-for="(item) of dataList"
         :key="item.id"
         :item="item"
+        :size="size"
         :for-number="historyNumber"
         @input="select(item)"
       ></history-lookup-item>
@@ -30,6 +31,7 @@
   import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
   import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
   import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
+  import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
   import WorkspaceStates
     from '../../../../../../../enums/WorkspaceState.enum';
   import APIRepository from '../../../../../../../../app/api/APIRepository';
@@ -38,7 +40,7 @@
 
   export default {
     name: 'history-container',
-    mixins: [infiniteScrollMixin],
+    mixins: [infiniteScrollMixin, sizeMixin],
     components: {
       HistoryLookupItem,
       EmptySearch,
@@ -47,7 +49,7 @@
     data: () => ({
       dataList: '',
       historyNumber: '',
-      fields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
+      dataFields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
     }),
 
     watch: {

@@ -27,7 +27,7 @@ export default {
     flex-grow: 1;
     height: auto;
     min-height: 0;
-    padding: 0 10px;
+    padding: var(--spacing-xs) 0;
   }
 }
 </style>

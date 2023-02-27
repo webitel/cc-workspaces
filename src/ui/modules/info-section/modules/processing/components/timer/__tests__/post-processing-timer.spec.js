@@ -1,7 +1,7 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import nowModule from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import ProcessingTimer from '../processing-timer.vue';
-import nowModule from '../../../../../../reactive-now/reactive-now';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

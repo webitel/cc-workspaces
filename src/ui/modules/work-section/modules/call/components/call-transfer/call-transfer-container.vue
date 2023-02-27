@@ -3,7 +3,7 @@
     <div class="ws-worksection__search-wrap">
       <wt-search-bar
         class="ws-worksection__search"
-        v-model="search"
+        v-model="dataSearch"
         @search="resetData"
       ></wt-search-bar>
       <wt-button
@@ -13,8 +13,6 @@
       >{{$t('transfer.transfer')}}
       </wt-button>
     </div>
-    <p class="ws-worksection__list-instruction">{{$t('transfer.selectAgent')}}</p>
-
     <section class="ws-worksection__list" ref="scroll-wrap">
       <wt-loader v-if="isLoading"/>
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
@@ -24,6 +22,7 @@
           :id="`scroll-item-${key}`"
           :key="`${item.id}${key}`"
           :item="item"
+          :size="size"
           @input="transfer"
         ></transfer-lookup-item>
       </div>
@@ -38,6 +37,7 @@
 <script>
   import { mapActions, mapState } from 'vuex';
   import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
+  import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
   import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
   import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
   import APIRepository from '../../../../../../../app/api/APIRepository';
@@ -46,7 +46,7 @@
 
   export default {
     name: 'call-transfer-container',
-    mixins: [infiniteScrollMixin],
+    mixins: [infiniteScrollMixin, sizeMixin],
     components: {
       TransferLookupItem,
       EmptySearch,
@@ -54,9 +54,9 @@
 
     data: () => ({
       dataList: [],
-      filters: 'presence.status=sip,!dnd',
-      sort: 'presence.status',
-      fields: ['name', 'id', 'extension', 'presence'],
+      dataFilters: 'presence.status=sip,!dnd',
+      dataSort: 'presence.status',
+      dataFields: ['name', 'id', 'extension', 'presence'],
     }),
 
     computed: {
@@ -64,7 +64,7 @@
         userId: (state) => state.userId,
       }),
       isTransferToNumberDisabled() {
-        return !this.search;
+        return !this.dataSearch;
       },
     },
 
@@ -76,7 +76,7 @@
         return usersAPI.getUsers({ ...params, notId: [this.userId] });
       },
       transfer(item = {}) {
-        const number = item.extension || this.search;
+        const number = item.extension || this.dataSearch;
         this.blindTransfer(number);
       },
     },
@@ -88,7 +88,7 @@
     display: flex;
     align-items: center;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-xs);
 
     .ws-worksection__search {
       flex: 1 1 auto;
@@ -99,7 +99,7 @@
 
     .wt-button {
       flex: 0 0 auto;
-      margin-left: 10px;
+      margin-left: var(--spacing-xs);
     }
   }
 </style>

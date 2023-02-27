@@ -6,9 +6,9 @@ export default {
   },
 
   data: () => ({
-    page: 1,
-    size: 20,
-    search: '',
+    dataPage: 1,
+    dataSize: 20,
+    dataSearch: '',
     rootMargin: '200px',
     isMounted: false, // isMounted recomputes observerOptions with $ref, when component renders
     isNext: true,
@@ -34,7 +34,7 @@ export default {
 
   methods: {
     setData(items) {
-      if (this.page === 1) {
+      if (this.dataPage === 1) {
         this.dataList = items; // if component is re-rendered, reset persistent storage data
       } else {
         this.dataList = [...this.dataList, ...items];
@@ -42,7 +42,7 @@ export default {
     },
 
     resetData() {
-      this.page = 1;
+      this.dataPage = 1;
       this.loadDataList();
     },
 
@@ -52,7 +52,7 @@ export default {
       const { items, next } = await this.fetch(params);
       this.isNext = next;
       this.setData(items);
-      this.page += 1;
+      this.dataPage += 1;
       this.isLoading = false;
     },
 
@@ -64,13 +64,13 @@ export default {
 
     collectParams() {
       const params = {
-        page: this.page,
-        size: this.size,
-        search: this.search,
+        page: this.dataPage,
+        size: this.dataSize,
+        search: this.dataSearch,
       };
-      if (this.fields) params.fields = this.fields;
-      if (this.sort) params.sort = this.sort;
-      if (this.filters) params.filters = this.filters;
+      if (this.dataFields) params.fields = this.dataFields;
+      if (this.dataSort) params.sort = this.dataSort;
+      if (this.dataFilters) params.filters = this.dataFilters;
       return params;
     },
 

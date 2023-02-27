@@ -1,13 +1,13 @@
 <template>
   <task-queue-container>
-    <div ref="scroll-wrap">
+    <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
       <offline-preview
         v-for="(task) of dataList"
         :key="task.id"
         :opened="task === taskOnWorkspace"
         :task="task"
         :size="size"
-        @click="openMember"
+        @click="toggleMemberDisplay(task)"
       ></offline-preview>
 
       <observer
@@ -44,16 +44,31 @@ export default {
 
   methods: {
     loadDataList() {
-      this.loadList({ search: this.search, page: this.page, size: this.size });
+      this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
     },
 
     ...mapActions('features/member', {
       loadList: 'LOAD_DATA_LIST',
       openMember: 'OPEN_MEMBER_ON_WORKSPACE',
+      resetWorkspace: 'RESET_WORKSPACE',
     }),
+    toggleMemberDisplay(task) {
+     this.taskOnWorkspace.id === task.id ? this.resetWorkspace() : this.openMember(task);
+    },
+  },
+  destroyed() {
+    /*
+    [WTEL-3064]
+    When unmounting a offline-queue-container component (for example, when clicking on missed calls),
+    in agent-workspace-action panel should display the last active event, except for the offline queue
+    */
+    this.resetWorkspace();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.offline-queue-container__scroll-wrap {
+  display: contents;
+}
 </style>

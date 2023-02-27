@@ -63,10 +63,10 @@ export default {
     generalInfo: {
       generalInfo: 'Основна інформація',
       queueWaiting: 'Очікують',
-      queue: 'Черга',
+      queue: 'Черга | Черги',
       agents: 'Оператори',
       total: 'Всі',
-      paused: 'Пауза',
+      pauses: 'Паузи',
       free: 'Вільні',
     },
     clientInfo: 'Інформація',
@@ -95,13 +95,14 @@ export default {
       hangup: 'Кінець',
     },
     chat: {
-      acceptPreviewText: 'Якщо Ви готові відповісти, натисніть кнопку "Відповісти"',
+      acceptPreviewText: 'Якщо Ви готові відповісти, натисніть кнопку "Прийняти"',
       draftPlaceholder: 'Напишіть повідомлення...',
       dropzone: {
         title: 'Перетягніть файли сюди',
         description: 'Щоб надіслати їх',
       },
       confirmClose: 'Ви впевнені, що хочете закрити активний чат?',
+      closedСhat: 'Чат закрито',
     },
   },
   emptyWorkspace: {

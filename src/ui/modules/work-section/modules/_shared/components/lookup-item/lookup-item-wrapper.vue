@@ -26,7 +26,7 @@ export default {
 
 <style lang="scss" scoped>
 .lookup-item-wrapper {
-  $min-height: 52px;
+  $min-height: 50px;
 
   display: flex;
   box-sizing: border-box;
@@ -43,11 +43,6 @@ export default {
 
   &__main {
     flex-grow: 1;
-  }
-
-  &__before,
-  &__after {
-    flex: 0 0 var(--icon-xl-size);
   }
 }
 </style>

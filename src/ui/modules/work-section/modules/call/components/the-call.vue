@@ -1,6 +1,7 @@
 <template>
   <call-preview
     v-if="isPreviewCall"
+    :size="size"
     @transfer="openTransfer"
   ></call-preview>
 
@@ -8,17 +9,21 @@
     <template v-slot:header>
       <call-header
         :current-tab="currentTab"
+        :size="size"
         @openTab="currentTab = $event"
       ></call-header>
     </template>
 
     <template v-slot:body>
-      <component :is="currentTab" />
+      <component
+        :is="currentTab"
+        :size="size"/>
     </template>
 
     <template v-slot:footer>
       <call-footer
         :current-tab="currentTab"
+        :size="size"
         @openTab="currentTab = $event"
       ></call-footer>
     </template>
@@ -37,9 +42,11 @@ import Bridge from './call-merge/call-bridge-container.vue';
 import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/call-transfer-container.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'the-call',
+  mixins: [sizeMixin],
   components: {
     TaskContainer,
     CallPreview,

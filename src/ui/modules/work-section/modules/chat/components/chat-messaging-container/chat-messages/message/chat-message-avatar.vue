@@ -2,18 +2,16 @@
   <div
     class="chat-message-avatar"
   >
-    <img
+    <wt-avatar
       v-if="showAvatar"
       :src="avatarPic"
-      alt="avatar"
-      class="chat-message-avatar__img"
-    >
+      size="sm"
+    ></wt-avatar>
   </div>
 </template>
 
 <script>
 import botAvatar from '../../../../../_shared/assets/avatars/bot-avatar.svg';
-import defaultAvatar from '../../../../../_shared/assets/avatars/default-avatar.svg';
 import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
 
 export default {
@@ -31,7 +29,7 @@ export default {
   },
   computed: {
     avatarPic() {
-      return this.bot ? botAvatar : defaultAvatar;
+      return this.bot ? botAvatar : null;
     },
   },
 };
@@ -39,13 +37,6 @@ export default {
 
 <style lang="scss" scoped>
 .chat-message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
   pointer-events: none; // prevents dragging to upload file area
-
-  &__img {
-    height: 100%;
-  }
 }
 </style>

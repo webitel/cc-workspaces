@@ -1,7 +1,7 @@
 <template>
   <div class="ws-worksection">
     <wt-search-bar
-      v-model="search"
+      v-model="dataSearch"
       @search="resetData"
     ></wt-search-bar>
 
@@ -14,6 +14,7 @@
           v-for="(item) of dataList"
           :key="item.id"
           :item="item"
+          :size="size"
           @input="makeCall({ user: $event })"
         ></contact-lookup-item>
       </div>
@@ -28,6 +29,7 @@
 <script>
   import { mapActions } from 'vuex';
   import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
+  import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
   import ContactLookupItem from '../../../_shared/components/lookup-item/contact-lookup-item.vue';
   import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
   import APIRepository from '../../../../../../../app/api/APIRepository';
@@ -36,7 +38,7 @@
 
   export default {
     name: 'call-contacts-container',
-    mixins: [infiniteScrollMixin],
+    mixins: [infiniteScrollMixin, sizeMixin],
     components: {
       ContactLookupItem,
       EmptySearch,
@@ -44,8 +46,8 @@
 
     data: () => ({
       dataList: [],
-      sort: 'presence.status',
-      fields: ['name', 'id', 'extension', 'presence', 'username'],
+      dataSort: 'presence.status',
+      dataFields: ['name', 'id', 'extension', 'presence', 'username'],
     }),
 
     methods: {
