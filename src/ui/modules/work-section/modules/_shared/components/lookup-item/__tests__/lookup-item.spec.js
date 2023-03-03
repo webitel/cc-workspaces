@@ -5,7 +5,7 @@ describe('LookupItem', () => {
   const item = {};
   it('renders a component', () => {
     const wrapper = shallowMount(LookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.exists()).toBe(true);
   });

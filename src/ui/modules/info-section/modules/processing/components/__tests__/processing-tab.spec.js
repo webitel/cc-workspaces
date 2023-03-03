@@ -4,13 +4,13 @@ import ProcessingTab from '../processing-tab.vue';
 describe('ProcessingTab', () => {
   const task = { attempt: {} };
 
-  const propsData = {
+  const props = {
     task,
   };
 
   it('renders a component', () => {
     const wrapper = shallowMount(ProcessingTab, {
-      propsData,
+      props,
     });
     expect(wrapper.isVisible()).toBe(true);
   });

@@ -33,26 +33,15 @@ const actions = {
   },
 
   CLOSE_SESSION: (context) => Promise
-  .allSettled([
-    context.dispatch('ui/now/CLEAR_NOW_WATCHER', null, { root: true }),
-    context.rootState.client.destroyCliInstance(),
-    context.dispatch('features/globals/RESET_GLOBAL_HANDLERS', null, { root: true }),
-    context.dispatch('features/notifications/DESTROY', null, { root: true }),
-  ]),
+    .allSettled([
+                  context.dispatch('ui/now/CLEAR_NOW_WATCHER', null, { root: true }),
+                  context.rootState.client.destroyCliInstance(),
+                  context.dispatch('features/globals/RESET_GLOBAL_HANDLERS', null, { root: true }),
+                  context.dispatch('features/notifications/DESTROY', null, { root: true }),
+                ]),
 
   SET_WORKSPACE_STATE: (context, payload) => {
     context.commit('ADD_WORKSPACE_STATE', payload);
-  },
-  UPDATE_STATE_HISTORY_RECORD: (context, newTask) => {
-    const stateHistory = [...context.state.stateHistory];
-    const replacedTask = stateHistory
-    .find(({ task }) => task.task.id === newTask.task.id);
-    if (!replacedTask) return;
-    stateHistory.splice(stateHistory.indexOf(replacedTask), 1, {
-      type: replacedTask.type,
-      task: newTask,
-    });
-    context.commit('SET_STATE_HISTORY', stateHistory);
   },
   RESET_WORKSPACE_STATE: (context, config) => {
     let stateHistory = [...context.state.stateHistory];
@@ -68,8 +57,7 @@ const actions = {
       const { type } = config;
 
       if (type) {
-        stateHistory = stateHistory.filter(({ type: typeName }) => type !==
-          typeName);
+        stateHistory = stateHistory.filter(({ type: typeName }) => type !== typeName);
       }
     }
 

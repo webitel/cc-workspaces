@@ -4,7 +4,7 @@ import AgentQueues from '../agent-queues.vue';
 describe('General Info: Agent Queues', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(AgentQueues, {
-      propsData: {
+      props: {
         queues: [],
       },
     });

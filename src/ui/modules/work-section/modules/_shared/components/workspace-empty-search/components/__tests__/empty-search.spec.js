@@ -4,7 +4,7 @@ import EmptySearch from '../empty-search.vue';
 describe('EmptySearch', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(EmptySearch, {
-      propsData: {
+      props: {
         type: 'history',
       },
     });

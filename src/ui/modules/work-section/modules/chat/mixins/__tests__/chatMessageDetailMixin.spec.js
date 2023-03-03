@@ -15,7 +15,7 @@ describe('chatMessageDetailMixin', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.exists()).toBe(true);
   });
@@ -24,7 +24,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'image' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.image).toBe(file);
   });
@@ -33,7 +33,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'video' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.image).toBeFalsy();
   });
@@ -42,7 +42,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'audio' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.audio).toBe(file);
   });
@@ -51,7 +51,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'video' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.audio).toBe(file);
   });
@@ -60,7 +60,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'image' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.audio).toBeFalsy();
   });
@@ -69,7 +69,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'image' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.showDocument).toBe(false);
   });
@@ -78,7 +78,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'video' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.showDocument).toBe(false);
   });
@@ -87,7 +87,7 @@ describe('chatMessageDetailMixin', () => {
     const file = { mime: 'pdf' };
     message.file = file;
     const wrapper = shallowMount(Component, {
-      propsData: { message },
+      props: { message },
     });
     expect(wrapper.vm.showDocument).toBe(true);
   });

@@ -1,4 +1,5 @@
 import { Client } from 'webitel-sdk';
+import { reactive } from 'vue';
 import call from '../../../../features/modules/call/call';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -29,7 +30,7 @@ class WebSocketClientController {
   _on = {
     [WebSocketClientEvent.ERROR]: [websocketErrorEventHandler],
     [WebSocketClientEvent.AFTER_AUTH]: [],
-  }
+  };
 
   getCliInstance() {
     if (!this.cli) this.cli = this._createCliInstance();
@@ -63,7 +64,14 @@ class WebSocketClientController {
       registerWebDevice: configCli.registerWebDevice,
       debug: configCli.debug,
     };
-    const cli = new Client(config);
+
+    // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
+    const cli = reactive(new Client(config));
+
+    // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
+    cli.conversationStore = reactive(cli.conversationStore);
+    cli.callStore = reactive(cli.callStore);
+    cli.jobStore = reactive(cli.jobStore);
 
     this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
     this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
@@ -74,7 +82,7 @@ class WebSocketClientController {
 
     window.cli = cli;
     return cli;
-  }
+  };
 }
 
 const webSocketClientController = new WebSocketClientController();

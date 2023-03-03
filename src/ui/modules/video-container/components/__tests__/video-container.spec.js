@@ -7,7 +7,7 @@ describe('VideoContainer', () => {
       computed: {
         call: () => ({}),
       },
-      propsData: {
+      props: {
         index: 1,
         call: {},
       },

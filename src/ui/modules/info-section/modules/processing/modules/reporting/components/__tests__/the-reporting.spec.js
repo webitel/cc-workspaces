@@ -16,7 +16,7 @@ const taskOnWorkspace = {
 let reporting = new ReportingForm(taskOnWorkspace);
 taskOnWorkspace.postProcessData = reporting;
 
-const propsData = {
+const props = {
   task: taskOnWorkspace,
 };
 
@@ -27,7 +27,7 @@ const computed = {
 };
 
 const options = {
-  propsData,
+  props,
   computed,
 };
 

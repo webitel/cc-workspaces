@@ -1,12 +1,9 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import findRoundedActionByIcon from '../../../../../../../../tests/utils/findRoundedActionByIcon';
 import callModule from '../../../../../../../features/modules/call/call';
 import CallFooter
   from '../call-footer.vue';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 describe('Footer buttons', () => {
   let getters;
@@ -27,7 +24,7 @@ describe('Footer buttons', () => {
       CALL_ON_WORKSPACE: () => callOnWorkspace,
       // callList: [callOnWorkspace],
     };
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         features: {
           namespaced: true,
@@ -44,8 +41,7 @@ describe('Footer buttons', () => {
 
   it('opens numpad', () => {
     const wrapper = shallowMount(CallFooter, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     const numpad = findRoundedActionByIcon('numpad')(wrapper);
     numpad.vm.$emit('click');
@@ -54,8 +50,7 @@ describe('Footer buttons', () => {
 
   it('Mutes call', () => {
     const wrapper = shallowMount(CallFooter, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     const mute = findRoundedActionByIcon('mic')(wrapper);
     expect(mute.classes())
@@ -68,8 +63,7 @@ describe('Footer buttons', () => {
 
   it('Holds call', () => {
     const wrapper = shallowMount(CallFooter, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     const hold = findRoundedActionByIcon('hold')(wrapper);
     expect(hold.classes())

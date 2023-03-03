@@ -1,11 +1,9 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import chat from '../../../../../../../features/modules/chat/store/chat';
 import ChatQueue from '../the-agent-chat-queue.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-const store = new Vuex.Store({
+const store = createStore({
                                modules: {
                                  features: {
                                    namespaced: true,
@@ -16,7 +14,9 @@ const store = new Vuex.Store({
 
 describe('ChatQueue', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatQueue, { localVue, store });
+    const wrapper = shallowMount(ChatQueue, {
+      global: { plugins: [store] },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 });

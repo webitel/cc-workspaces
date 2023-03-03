@@ -17,7 +17,7 @@ describe('Other UIs', () => {
   it('if call has no queue, queue chip is absent', () => {
     task.task = {};
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task },
+      props: { task },
     });
     expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
   });
@@ -35,7 +35,7 @@ describe('Preview Actions', () => {
 
   it('Shows preview actions on Inbound Ringing', () => {
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task, size: 'md' },
+      props: { task, size: 'md' },
     });
     expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
@@ -49,7 +49,7 @@ describe('Preview Actions', () => {
       queue: { queue_type: 'preview' },
     };
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task, size: 'md' },
+      props: { task, size: 'md' },
     });
     expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
@@ -61,7 +61,7 @@ describe('Preview Actions', () => {
       direction: CallDirection.Outbound,
     };
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task },
+      props: { task },
     });
     expect(wrapper.find('.preview-actions')
                   .exists())

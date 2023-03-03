@@ -1,11 +1,6 @@
 import { ChatActions } from 'webitel-sdk';
 
 const callHandler = (context) => async (action, chat) => {
-  context.commit('SET_CHAT_LIST', []);
-  const client = await context.rootState.client.getCliInstance();
-  const chatList = client.allConversations();
-  context.commit('SET_CHAT_LIST', chatList);
-  await context.dispatch('workspace/UPDATE_STATE_HISTORY_RECORD', chat, { root: true });
   switch (action) {
     case ChatActions.UserInvite:
       context.dispatch('HANDLE_INVITE_ACTION', { action, chat });

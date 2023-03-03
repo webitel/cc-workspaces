@@ -62,9 +62,10 @@ export default {
   }),
 
   watch: {
-    // callList() {
-    //   this.currentTab = { value: 'active' };
-    // },
+    // watch for callList length instead of actual call list because it throws a Vue internals error
+    callListLength() {
+      this.currentTab = { value: 'active' };
+    },
   },
 
   computed: {
@@ -102,6 +103,9 @@ export default {
 
     currentTabComponent() {
       return `${this.currentTab.value}-queue`;
+    },
+    callListLength() {
+      return this.callList.length;
     },
   },
 

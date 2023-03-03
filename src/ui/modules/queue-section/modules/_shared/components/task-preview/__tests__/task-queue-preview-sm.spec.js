@@ -9,7 +9,7 @@ const task = {
 
 describe('TaskQueuePreviewSm', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(TaskQueuePreviewSm, { propsData: { task } });
+    const wrapper = shallowMount(TaskQueuePreviewSm, { props: { task } });
     expect(wrapper.exists()).toBe(true);
   });
 });

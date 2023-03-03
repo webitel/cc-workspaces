@@ -10,7 +10,7 @@ describe('ChatMessageImage component', () => {
   });
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessageImage, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageImage, { props: { message } });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -20,7 +20,7 @@ describe('ChatMessageImage component', () => {
         mime: 'image/png',
       },
     };
-    const wrapper = shallowMount(ChatMessageImage, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageImage, { props: { message } });
     expect(wrapper.vm.image).toBeTruthy();
   });
 });

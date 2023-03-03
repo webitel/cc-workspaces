@@ -69,7 +69,7 @@ describe('Agent History functionality', () => {
       duration: 60,
     };
     const wrapper = shallowMount(HistoryLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.text())
     .toContain('00:01:00');

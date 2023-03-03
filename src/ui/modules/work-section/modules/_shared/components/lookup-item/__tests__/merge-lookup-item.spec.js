@@ -12,7 +12,7 @@ describe('MergeLookupItem', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(MergeLookupItem, {
-      propsData: { item },
+      props: { item },
       computed,
     });
     expect(wrapper.exists()).toBe(true);
@@ -20,7 +20,7 @@ describe('MergeLookupItem', () => {
 
   it('emits input event at wt-rounded-action click', () => {
     const wrapper = shallowMount(MergeLookupItem, {
-      propsData: { item },
+      props: { item },
       computed,
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');

@@ -5,7 +5,7 @@ import MissedQueuePreview
 describe('MissedQueuePreview', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(MissedQueuePreview, {
-      propsData: {
+      props: {
         index: 1,
         task: {},
       },

@@ -1,5 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import nowModule from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import workspaceModule from '../../store/agent-workspace';
@@ -13,21 +13,17 @@ import MockSocket from '../../../../tests/unit/mocks/MockSocket';
 import webSocketClientController
   from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
 let call = {};
 const mockSocket = new MockSocket();
 
 jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
-// TODO REMOVE "X' FROM NAME
-xdescribe('Hangup event on call component', () => {
+describe.skip('Hangup event on call component', () => {
   const { state, actions, mutations } = callModule;
   let store;
 
   beforeEach(() => {
-    store = new Vuex.Store({
+    store = createStore({
       state: {
         client: webSocketClientController,
       },
@@ -48,8 +44,7 @@ xdescribe('Hangup event on call component', () => {
 
   it('Removes Call component when hangup event fires', async () => {
     const wrapper = shallowMount(Workspace, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     const call = {};
@@ -63,8 +58,7 @@ xdescribe('Hangup event on call component', () => {
   it('Removes Call component when Inbound Call hangup event fires', async () => {
     call = { direction: CallDirection.Inbound };
     const wrapper = shallowMount(Workspace, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.ringing(call);
@@ -75,7 +69,9 @@ xdescribe('Hangup event on call component', () => {
   });
 
   it('ignores all drop events', () => {
-    const wrapper = shallowMount(Workspace, { store, localVue });
+    const wrapper = shallowMount(Workspace, {
+      global: { plugins: [store] },
+    });
     const event = {
       preventDefault: jest.fn(),
       stopPropagation: jest.fn(),
