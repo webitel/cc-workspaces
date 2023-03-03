@@ -25,7 +25,7 @@
       {{ task.displayName }}
     </template>
     <template v-slot:body>
-      {{ task.displayNumber | truncateFromEnd(33) }}
+      {{ task.displayNumber }}
     </template>
     <template
       v-if="isRinging"

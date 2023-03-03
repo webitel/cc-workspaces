@@ -75,6 +75,7 @@ export default {
     TaskFooter,
   },
   mixins: [sizeMixin],
+  inject: ['$eventBus'],
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
   },

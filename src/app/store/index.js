@@ -1,13 +1,10 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import webSocketClientController from '../api/agent-workspace/websocket/WebSocketClientController';
  import features from '../../features/store/features';
 import workspace from '../../ui/store/agent-workspace';
 import ui from '../../ui/store/ui';
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     client: webSocketClientController,
     config: {},

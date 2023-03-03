@@ -1,9 +1,9 @@
 <template>
   <wt-popup @close="close">
-    <template slot="title">
+    <template v-slot:title>
       {{ $t('welcomePopup.title') }}
     </template>
-    <template slot="main">
+    <template v-slot:main>
       <p>{{ $t('welcomePopup.subtitle') }}</p>
       <div class="welcome-popup-permission">
         <div class="welcome-popup-permission__status">
@@ -38,7 +38,7 @@
         </p>
       </div>
     </template>
-    <template slot="actions">
+    <template v-slot:actions>
       <wt-button
         wide
         :loading="loading"

@@ -4,13 +4,13 @@
     v-show="isBreakPopup"
     @close="close"
   >
-    <template slot="title">
+    <template v-slot:title>
       <div class="break-timer-popup__title-wrapper">
         <span class="popup-indicator__break"></span>
         {{ $t('agentStatus.breakTimer.heading') }}
       </div>
     </template>
-    <template slot="main">
+    <template v-slot:main>
       <div class="break-timer-wrap__timer-wrap">
         <div class="break-timer-wrap__timer">
             <span
@@ -23,7 +23,7 @@
         </div>
       </div>
     </template>
-    <template slot="actions">
+    <template v-slot:actions>
       <wt-button
         color="success"
         @click="setAgentWaiting"

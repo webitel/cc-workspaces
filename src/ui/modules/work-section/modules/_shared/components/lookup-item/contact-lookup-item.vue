@@ -1,6 +1,6 @@
 <template>
   <lookup-item>
-    <template slot="before">
+    <template v-slot:before>
       <wt-avatar
         :status="userStatus"
         :size="size"
@@ -8,15 +8,15 @@
       ></wt-avatar>
     </template>
 
-    <template slot="title">
+    <template v-slot:title>
       {{ item.name || item.username }}
     </template>
 
-    <template slot="subtitle">
+    <template v-slot:subtitle>
       {{ item.extension }}
     </template>
 
-    <template slot="after">
+    <template v-slot:after>
       <wt-rounded-action
         :size="size"
         icon="call--filled"

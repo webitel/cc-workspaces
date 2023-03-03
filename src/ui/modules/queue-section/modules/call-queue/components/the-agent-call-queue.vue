@@ -15,7 +15,7 @@
         >
           <template
             v-for="(tab, key) of tabs"
-            :slot="tab.value"
+            v-slot:[tab.value]
           >
             <div class="queue-tab__wrap" :key="key">
               <div
@@ -62,9 +62,9 @@ export default {
   }),
 
   watch: {
-    callList() {
-      this.currentTab = { value: 'active' };
-    },
+    // callList() {
+    //   this.currentTab = { value: 'active' };
+    // },
   },
 
   computed: {

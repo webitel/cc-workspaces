@@ -32,7 +32,6 @@ export default {
     TaskQueueContainer,
     ChatQueuePreview,
   },
-
   computed: {
     ...mapState('features/chat', {
       taskList: (state) => state.chatList,
