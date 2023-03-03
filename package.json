@@ -36,7 +36,7 @@
     "vue-router": "^3.5.3",
     "vuelidate": "^0.7.5",
     "vuex": "^3.6.2",
-    "webitel-sdk": "^0.1.176"
+    "webitel-sdk": "^0.1.178"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
