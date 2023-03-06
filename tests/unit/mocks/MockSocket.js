@@ -16,6 +16,8 @@ export default class MockSocket {
 
   allConversations = () => [];
 
+  phoneIsRegister = () => true;
+
   ringing = (call = this.call) => {
     const action = CallActions.Ringing;
     this.callCallback(action, call);

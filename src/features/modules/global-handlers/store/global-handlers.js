@@ -21,7 +21,7 @@ const actions = {
     const client = await context.rootState.client.getCliInstance();
     client.on('phone_registered', (isPhoneReg) => context.commit('SET_PHONE_REG', isPhoneReg));
     if (client.phoneIsRegister()) {
-      context.commit('SET_PHONE_REG', true)
+      context.commit('SET_PHONE_REG', true);
     }
   },
   OPEN_DISCONNECT_POPUP: (context) => context.commit('SET_DISCONNECT_POPUP', true),
