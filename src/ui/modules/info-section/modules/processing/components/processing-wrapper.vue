@@ -1,6 +1,6 @@
 <template>
   <article class="processing-wrapper">
-    <div>
+    <div class="processing-content">
       <header class="processing-header">
         <slot name="title"></slot>
       </header>
@@ -46,7 +46,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--spacing-xs);
 }
 
 .processing-header {
@@ -61,9 +60,6 @@ export default {
 }
 
 .processing-actions {
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,5 +67,11 @@ export default {
   flex-wrap: wrap;
   padding-top: var(--spacing-sm);
   background-color: var(--main-color);
+}
+
+.processing-content {
+  @extend %wt-scrollbar;
+  overflow-y: scroll;
+  flex-grow: 1;
 }
 </style>
