@@ -1,18 +1,18 @@
 <template>
   <lookup-item no-before>
-    <template slot="title">
+    <template v-slot:title>
       {{ displayName }}
     </template>
 
-    <template slot="subtitle">
+    <template v-slot:subtitle>
       {{ displayNumber }}
     </template>
 
-    <template slot="info-title">
+    <template v-slot:info-title>
       {{ startTime }}
     </template>
 
-    <template slot="after">
+    <template v-slot:after>
       <wt-rounded-action
         icon="call-add-to"
         color="secondary"

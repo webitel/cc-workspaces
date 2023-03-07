@@ -11,12 +11,12 @@ const task = {
 
 describe('ChatQueuePreview', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
+    const wrapper = shallowMount(ChatQueuePreview, { props: { task } });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('correctly computes last message text', () => {
-    const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
+    const wrapper = shallowMount(ChatQueuePreview, { props: { task } });
     expect(wrapper.vm.lastMessage).toBe(lastMessage);
   });
 
@@ -24,20 +24,20 @@ describe('ChatQueuePreview', () => {
     const filename = 'jest';
     const testTask = { ...task, messages: [{ file: { name: filename } }] };
     const wrapper = shallowMount(ChatQueuePreview, {
-      propsData: { task: testTask },
+      props: { task: testTask },
     });
     expect(wrapper.vm.lastMessage).toBe(filename);
   });
 
   it('correctly computes chat participants name to display', () => {
-    const wrapper = shallowMount(ChatQueuePreview, { propsData: { task } });
+    const wrapper = shallowMount(ChatQueuePreview, { props: { task } });
     expect(wrapper.vm.displayChatName).toBe(displayName);
   });
 
   it('if chat has no queue, queue chip is absent', () => {
     const testTask = { ...task, task: {} };
     const wrapper = shallowMount(ChatQueuePreview, {
-      propsData: { task: testTask },
+      props: { task: testTask },
     });
     expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
   });

@@ -1,9 +1,7 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ChatMessagingFooter from '../chat-footer.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
 let chatOnWorkspace = {
   closedAt: 0,
 };

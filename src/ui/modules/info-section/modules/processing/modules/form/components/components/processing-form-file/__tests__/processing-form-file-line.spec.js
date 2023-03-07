@@ -14,7 +14,7 @@ describe('ProcessingFormFileLine', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.isVisible()).toBe(true);
   });
@@ -31,7 +31,7 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.DONE);
   });
@@ -46,7 +46,7 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.ERROR);
   });
@@ -60,7 +60,7 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.AFTER_ERROR);
   });
@@ -74,13 +74,13 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.AFTER_DONE);
   });
   it('at "done" status, action icon click triggers delete event', () => {
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
       computed: {
         status: () => FormFileStatus.DONE,
       },
@@ -92,7 +92,7 @@ describe('ProcessingFormFileLine', () => {
   it('at "error" status, action icon click triggers passed to "close" method', () => {
     const close = jest.fn();
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file: { mime: '', metadata: { close } } },
+      props: { file: { mime: '', metadata: { close } } },
       computed: {
         status: () => FormFileStatus.ERROR,
       },

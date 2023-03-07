@@ -4,7 +4,7 @@
     class="agent-queues"
   >
     <wt-expansion-panel :size="size">
-      <template slot="title">{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
+      <template v-slot:title>{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
       <template>
         <ul>
           <li

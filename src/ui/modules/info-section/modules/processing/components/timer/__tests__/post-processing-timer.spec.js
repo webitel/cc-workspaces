@@ -13,13 +13,13 @@ describe('Post Processing Timer', () => {
   const mountOptions = {
     localVue,
     store,
-    propsData: {},
+    props: {},
     computed: {},
   };
   let now;
   beforeEach(() => {
     now = nowModule.state.now;
-    mountOptions.propsData = {
+    mountOptions.props = {
       startProcessingAt: now,
       processingTimeoutAt: now + 30 * 1000,
       renewalSec: 15,

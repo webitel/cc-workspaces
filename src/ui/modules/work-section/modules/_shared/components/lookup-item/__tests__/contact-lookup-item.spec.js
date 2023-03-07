@@ -8,14 +8,14 @@ describe('ContactLookupItem', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('emits input event at wt-rounded-action click', () => {
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
     expect(wrapper.emitted().input[0]).toEqual([item]);
@@ -24,7 +24,7 @@ describe('ContactLookupItem', () => {
   it('correctly comoputes user ACTIVE status: web', () => {
     item.presence = { status: 'web' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ACTIVE);
   });
@@ -32,7 +32,7 @@ describe('ContactLookupItem', () => {
   it('correctly comoputes user ACTIVE status: sip', () => {
     item.presence = { status: 'sip' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ACTIVE);
   });
@@ -40,7 +40,7 @@ describe('ContactLookupItem', () => {
   it('correctly comoputes user BUSY status: dlg', () => {
     item.presence = { status: 'dlg' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.BUSY);
   });
@@ -48,7 +48,7 @@ describe('ContactLookupItem', () => {
   it('correctly comoputes user DND status: dnd', () => {
     item.presence = { status: 'dnd' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.DND);
   });

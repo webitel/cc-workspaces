@@ -1,11 +1,9 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import job from '../../../../../../../features/modules/job/store/job';
 import JobQueue from '../the-agent-job-queue.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-const store = new Vuex.Store({
+const store = createStore({
                                modules: {
                                  features: {
                                    namespaced: true,
@@ -16,7 +14,9 @@ const store = new Vuex.Store({
 
 describe('JobQueue', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(JobQueue, { localVue, store });
+    const wrapper = shallowMount(JobQueue, {
+      global: { plugins: [store] },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 });

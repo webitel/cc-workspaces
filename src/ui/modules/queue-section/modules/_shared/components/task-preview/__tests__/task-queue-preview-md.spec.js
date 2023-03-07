@@ -9,7 +9,7 @@ const task = {
 
 describe('TaskQueuePreviewMd', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(TaskQueuePreviewMd, { propsData: { task } });
+    const wrapper = shallowMount(TaskQueuePreviewMd, { props: { task } });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -17,7 +17,7 @@ describe('TaskQueuePreviewMd', () => {
     const queueName = 'jest3';
     const testTask = { ...task, attempt: { queue: { name: queueName } } };
     const wrapper = shallowMount(TaskQueuePreviewMd, {
-      propsData: { task: testTask },
+      props: { task: testTask },
     });
     expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
     expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(queueName);

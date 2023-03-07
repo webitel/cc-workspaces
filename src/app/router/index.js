@@ -1,9 +1,6 @@
 import Auth from '@webitel/ui-sdk/src/modules/Userinfo/components/the-auth.vue';
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
-
-Vue.use(VueRouter);
 
 const routes = [
   {
@@ -17,18 +14,17 @@ const routes = [
     component: AgentWorkspace,
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     name: 'not-found',
     // component: notFound
   },
 ];
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {
-    return { x: 0, y: 0 };
+    return { left: 0, top: 0 };
   },
   routes,
 });

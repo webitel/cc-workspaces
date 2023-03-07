@@ -6,7 +6,7 @@ const task = {
 
 describe('JobQueuePreview', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(JobQueuePreview, { propsData: { task } });
+    const wrapper = shallowMount(JobQueuePreview, { props: { task } });
     expect(wrapper.exists()).toBe(true);
   });
 });
