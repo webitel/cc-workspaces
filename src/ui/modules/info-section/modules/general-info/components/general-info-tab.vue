@@ -44,6 +44,7 @@ export default {
   data: () => ({
     namespace: 'ui/infoSec/agentInfo',
     isLoaded: false,
+    autoRefreshTimeout: 5 * 1000,
   }),
   watch: {
     agent: { // wait for agent to load to get agentId
