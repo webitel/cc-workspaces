@@ -66,7 +66,8 @@ class WebSocketClientController {
     };
 
     // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
-    const cli = reactive(new Client(config));
+    // const cli = reactive(new Client(config));
+    const cli = new Client(config);
 
     // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
     cli.conversationStore = reactive(cli.conversationStore);

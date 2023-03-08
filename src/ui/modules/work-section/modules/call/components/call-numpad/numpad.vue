@@ -3,7 +3,8 @@
     <wt-input
       v-show="isNewCall"
       ref="number-input"
-      v-model="call.newNumber"
+      :model-value="call.newNumber"
+      @update:modelValue="call.newNumber = $event"
       @keypress.enter="makeCall"
     ></wt-input>
     <call-state/>
