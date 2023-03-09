@@ -13,6 +13,8 @@ describe('Members list functionality', () => {
     const mock = jest.fn();
     jest.spyOn(OfflineQueue.methods, 'toggleMemberDisplay')
       .mockImplementationOnce(mock);
+    jest.spyOn(OfflineQueue.methods, 'loadDataList')
+      .mockImplementationOnce(jest.fn());
     const wrapper = shallowMount(OfflineQueue, {
       computed,
     });
