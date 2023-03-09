@@ -20,6 +20,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
@@ -27,12 +28,14 @@ import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
   name: 'offline-queue-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  mixins: [autoRefreshMixin, infiniteScrollMixin, sizeMixin],
   components: {
     TaskQueueContainer,
     OfflinePreview,
   },
-
+  data: () => ({
+    autoRefreshTimeout: 5 * 1000,
+  }),
   computed: {
     ...mapState('features/member', {
       dataList: (state) => state.memberList,
@@ -43,6 +46,9 @@ export default {
   },
 
   methods: {
+    makeAutoRefresh() {
+      this.loadDataList();
+    },
     loadDataList() {
       this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
     },
@@ -55,6 +61,9 @@ export default {
     toggleMemberDisplay(task) {
      this.taskOnWorkspace.id === task.id ? this.resetWorkspace() : this.openMember(task);
     },
+  },
+  mounted() {
+    this.loadDataList();
   },
   destroyed() {
     /*
