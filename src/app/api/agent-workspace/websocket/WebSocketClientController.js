@@ -1,5 +1,5 @@
 import { Client } from 'webitel-sdk';
-import { reactive } from 'vue';
+import { reactive, markRaw, toRaw, shallowReactive } from 'vue';
 import call from '../../../../features/modules/call/call';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -66,13 +66,12 @@ class WebSocketClientController {
     };
 
     // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
-    // const cli = reactive(new Client(config));
-    const cli = new Client(config);
+    // const cli = new Client(config);
+    const cli = shallowReactive(new Client(config));
 
     // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
     cli.conversationStore = reactive(cli.conversationStore);
     cli.callStore = reactive(cli.callStore);
-    cli.jobStore = reactive(cli.jobStore);
 
     this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
     this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
