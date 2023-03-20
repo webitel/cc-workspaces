@@ -1,17 +1,19 @@
 <template>
   <article class="processing-wrapper">
-    <header class="processing-header">
-      <slot name="title"></slot>
-    </header>
-    <slot name="form"></slot>
-    <processing-timer
-      v-if="showTimer"
-      :start-processing-at="task.attempt.startProcessingAt"
-      :processing-timeout-at="task.attempt.processingTimeoutAt"
-      :processing-sec="task.attempt.processingSec"
-      :renewal-sec="task.attempt.renewalSec"
-      @click="task.attempt.renew()"
-    ></processing-timer>
+    <div class="processing-content">
+      <header class="processing-header">
+        <slot name="title"></slot>
+      </header>
+      <slot name="form"></slot>
+      <processing-timer
+        v-if="showTimer"
+        :start-processing-at="task.attempt.startProcessingAt"
+        :processing-timeout-at="task.attempt.processingTimeoutAt"
+        :processing-sec="task.attempt.processingSec"
+        :renewal-sec="task.attempt.renewalSec"
+        @click="task.attempt.renew()"
+      ></processing-timer>
+    </div>
     <footer class="processing-actions">
       <slot name="actions"></slot>
     </footer>
@@ -40,9 +42,10 @@ export default {
 
 <style lang="scss" scoped>
 .processing-wrapper {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  justify-content: space-between;
 }
 
 .processing-header {
@@ -51,7 +54,9 @@ export default {
 }
 
 .processing-timer {
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--spacing-sm);
 }
 
 .processing-actions {
@@ -60,5 +65,13 @@ export default {
   justify-content: center;
   gap: var(--spacing-xs);
   flex-wrap: wrap;
+  padding-top: var(--spacing-sm);
+  background-color: var(--main-color);
+}
+
+.processing-content {
+  @extend %wt-scrollbar;
+  overflow-y: scroll;
+  flex-grow: 1;
 }
 </style>

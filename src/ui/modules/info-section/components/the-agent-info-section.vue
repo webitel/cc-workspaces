@@ -226,12 +226,13 @@ export default {
   flex-direction: column;
   min-height: 0;
   gap: var(--spacing-sm);
+  flex-grow: 1;
 }
 
 .info-tab {
   position: relative;
   display: flex;
-  overflow: scroll;
+  overflow-y: scroll;
   flex-direction: column;
   flex-grow: 1;
   min-height: 0;
