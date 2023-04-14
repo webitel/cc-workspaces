@@ -22,7 +22,17 @@
       ></job-queue>
     </div>
     <wt-rounded-action
-      :icon="isNewCallButton ? 'call-ringing' : 'close'"
+      v-if="isNewCallButton"
+      icon="call-ringing"
+      color="success"
+      rounded
+      filled
+      size="lg"
+      @click="toggleNewCall"
+    ></wt-rounded-action>
+    <wt-rounded-action
+      v-else
+      icon="close"
       color="success"
       rounded
       filled
