@@ -106,14 +106,7 @@ export default {
 
   .queue-preview-actions {
     display: flex;
-
-    .wt-button {
-      flex-grow: 1;
-
-      &:first-child {
-        margin-right: var(--spacing-xs);
-      }
-    }
+    gap: var(--spacing-xs);
   }
 }
 

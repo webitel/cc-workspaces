@@ -36,6 +36,7 @@
         color="success"
         icon="call-ringing"
         :size="size"
+        wide
         @click.prevent="$emit('answer', task)"
         @keydown.enter.prevent="$emit('answer', task)"
       >
@@ -46,6 +47,7 @@
         color="danger"
         icon="call-end"
         :size="size"
+        wide
         @click.prevent="$emit('hangup', task)"
         @keydown.enter.prevent="$emit('hangup', task)"
       >
