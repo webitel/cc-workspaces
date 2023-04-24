@@ -1,6 +1,5 @@
 <template>
   <section class="general-info">
-    <wt-loader v-show="!isLoaded"></wt-loader>
     <div v-show="isLoaded" class="general-info__content-wrapper">
       <wt-cc-agent-status-timers
         :size="size"
