@@ -73,5 +73,8 @@ export default {
   @extend %wt-scrollbar;
   overflow-y: scroll;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 </style>
