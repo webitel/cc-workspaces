@@ -5,7 +5,7 @@
       ref="number-input"
       :model-value="call.newNumber"
       @update:modelValue="call.newNumber = $event"
-      @keypress.enter="makeCall"
+      @keyup.enter="makeCall"
     ></wt-input>
     <call-state/>
     <div class="numpad-wrapper">
