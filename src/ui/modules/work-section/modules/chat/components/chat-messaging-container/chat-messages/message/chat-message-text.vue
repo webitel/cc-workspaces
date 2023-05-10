@@ -7,7 +7,8 @@
 </template>
 
 <script>
-import linkifyHtml from 'linkify-html';
+import anchorme from 'anchorme';
+import purify from 'dompurify';
 import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
 
 export default {
@@ -16,9 +17,16 @@ export default {
   computed: {
     text() {
       if (!this.message.text) return '';
-      return linkifyHtml(this.message.text, {
-        className: 'chat-message-text__link',
-        target: '_blank',
+      // ATTENTION: not all libs are suitable for this case, because we want to preserve "<" signs
+      // https://my.webitel.com/browse/DEV-2848
+      return anchorme({
+        input: purify.sanitize(this.message.text),
+        options: {
+          attributes: {
+            target: '_blank',
+            class: 'chat-message-text__link',
+          },
+        },
       });
     },
   },
