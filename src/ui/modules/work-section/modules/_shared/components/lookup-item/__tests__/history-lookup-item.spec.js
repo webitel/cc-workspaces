@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
 import HistoryLookupItem from '../history-lookup-item.vue';
 
@@ -36,7 +36,7 @@ describe('HistoryLookupItem', () => {
     item.to.number = 'false';
 
     jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
-    const wrapper = shallowMount(HistoryLookupItem, {
+    const wrapper = mount(HistoryLookupItem, {
       props: { item },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
@@ -50,7 +50,7 @@ describe('HistoryLookupItem', () => {
     item.to.number = 'true';
 
     jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
-    const wrapper = shallowMount(HistoryLookupItem, {
+    const wrapper = mount(HistoryLookupItem, {
       props: { item },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');

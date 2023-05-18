@@ -1,11 +1,9 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ChatHeader
   from '../chat-header.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-const store = new Vuex.Store({
+const store = createStore({
                                modules: {
                                  chat: {
                                    namespaced: true,
@@ -18,8 +16,7 @@ const store = new Vuex.Store({
 
 describe('Chat Header', () => {
   const mountOptions = {
-    localVue,
-    store,
+    global: { plugins: [store] },
   };
   it('renders a component', () => {
     const wrapper = shallowMount(ChatHeader, mountOptions);
@@ -27,7 +24,7 @@ describe('Chat Header', () => {
   });
 
   it('$emits openTab event at transfer button click', () => {
-    const wrapper = shallowMount(ChatHeader, {
+    const wrapper = mount(ChatHeader, {
       ...mountOptions,
       computed: {
         isTransferAction() {
@@ -35,7 +32,7 @@ describe('Chat Header', () => {
         },
       },
     });
-    wrapper.findAllComponents({ name: 'wt-rounded-action' }).wrappers
+    wrapper.findAllComponents({ name: 'wt-rounded-action' })
            .find((wrapper) => wrapper.attributes('icon')
              === 'chat-transfer--filled')
            .vm.$emit('click');
@@ -46,7 +43,7 @@ describe('Chat Header', () => {
     const closeMock = jest.spyOn(ChatHeader.methods, 'close')
                           .mockImplementation(() => {
                           });
-    const wrapper = shallowMount(ChatHeader, mountOptions);
+    const wrapper = mount(ChatHeader, mountOptions);
     wrapper.findComponent({ name: 'chat-header-close-action' })
            .vm.$emit('click');
     expect(closeMock).toHaveBeenCalled();

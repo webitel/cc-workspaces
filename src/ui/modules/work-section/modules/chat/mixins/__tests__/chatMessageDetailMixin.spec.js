@@ -26,7 +26,7 @@ describe('chatMessageDetailMixin', () => {
     const wrapper = shallowMount(Component, {
       props: { message },
     });
-    expect(wrapper.vm.image).toBe(file);
+    expect(wrapper.vm.image).toEqual(file);
   });
 
   it('correctly computes "image": False case', () => {
@@ -44,7 +44,7 @@ describe('chatMessageDetailMixin', () => {
     const wrapper = shallowMount(Component, {
       props: { message },
     });
-    expect(wrapper.vm.audio).toBe(file);
+    expect(wrapper.vm.audio).toEqual(file);
   });
 
   it('correctly computes "audio": Video case', () => {
@@ -53,7 +53,7 @@ describe('chatMessageDetailMixin', () => {
     const wrapper = shallowMount(Component, {
       props: { message },
     });
-    expect(wrapper.vm.audio).toBe(file);
+    expect(wrapper.vm.audio).toEqual(file);
   });
 
   it('correctly computes "audio": False case', () => {

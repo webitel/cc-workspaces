@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
 import HistoryLookupItem from '../../../lookup-item/history-lookup-item.vue';
@@ -68,7 +68,7 @@ describe('Agent History functionality', () => {
       from: {},
       duration: 60,
     };
-    const wrapper = shallowMount(HistoryLookupItem, {
+    const wrapper = mount(HistoryLookupItem, {
       props: { item },
     });
     expect(wrapper.text())

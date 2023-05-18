@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import ContactLookupItem from '../contact-lookup-item.vue';
@@ -14,7 +14,7 @@ describe('ContactLookupItem', () => {
   });
 
   it('emits input event at wt-rounded-action click', () => {
-    const wrapper = shallowMount(ContactLookupItem, {
+    const wrapper = mount(ContactLookupItem, {
       props: { item },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');

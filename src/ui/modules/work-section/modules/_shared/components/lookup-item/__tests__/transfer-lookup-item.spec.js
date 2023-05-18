@@ -1,7 +1,7 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import ContactLookupItem from '../contact-lookup-item';
+import ContactLookupItem from '../contact-lookup-item.vue';
 import TransferLookupItem from '../transfer-lookup-item.vue';
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
 
@@ -23,7 +23,7 @@ describe('TransferLookupItem', () => {
   });
 
   it('emits input event at wt-icon-btn click', () => {
-    const wrapper = shallowMount(TransferLookupItem, {
+    const wrapper = mount(TransferLookupItem, {
       props: { item, type },
       computed,
     });

@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import findRoundedActionByIcon from '../../../../../../../../tests/utils/findRoundedActionByIcon';
 import callModule from '../../../../../../../features/modules/call/call';
@@ -40,7 +40,7 @@ describe('Footer buttons', () => {
   });
 
   it('opens numpad', () => {
-    const wrapper = shallowMount(CallFooter, {
+    const wrapper = mount(CallFooter, {
       global: { plugins: [store] },
     });
     const numpad = findRoundedActionByIcon('numpad')(wrapper);
@@ -49,7 +49,7 @@ describe('Footer buttons', () => {
   });
 
   it('Mutes call', () => {
-    const wrapper = shallowMount(CallFooter, {
+    const wrapper = mount(CallFooter, {
       global: { plugins: [store] },
     });
     const mute = findRoundedActionByIcon('mic')(wrapper);
@@ -62,7 +62,7 @@ describe('Footer buttons', () => {
   });
 
   it('Holds call', () => {
-    const wrapper = shallowMount(CallFooter, {
+    const wrapper = mount(CallFooter, {
       global: { plugins: [store] },
     });
     const hold = findRoundedActionByIcon('hold')(wrapper);

@@ -1,18 +1,15 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import nowModule from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import ProcessingTimer from '../processing-timer.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-const store = new Vuex.Store({
+const store = createStore({
   modules: { now: nowModule },
 });
 
 describe('Post Processing Timer', () => {
   const mountOptions = {
-    localVue,
-    store,
+    global: { plugins: [store] },
     props: {},
     computed: {},
   };
@@ -28,7 +25,8 @@ describe('Post Processing Timer', () => {
 
     const localNow = now + 20 * 1000;
       mountOptions.computed = {
-      now() { return localNow; },
+        ...ProcessingTimer.computed,
+       now() { return localNow; },
     };
   });
   it('renders a component', () => {

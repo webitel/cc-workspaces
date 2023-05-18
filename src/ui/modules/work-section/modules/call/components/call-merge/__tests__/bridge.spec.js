@@ -18,6 +18,7 @@ describe('Bridge functionality', () => {
   const callList = [call1, call2];
 
   const computed = {
+    ...Bridge.computed,
     callOnWorkspace() {
       return callOnWorkspace;
     },

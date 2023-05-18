@@ -1,5 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import workspaceModule from '../../../../../../../store/agent-workspace';
 import callModule from '../../../../../../../../features/modules/call/call';
 import ActiveQueue
@@ -9,9 +9,6 @@ import ActivePreview
 import MockSocket from '../../../../../../../../../tests/unit/mocks/MockSocket';
 import webSocketClientController
   from '../../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 const initialCall = {};
 
@@ -28,7 +25,7 @@ describe('Ringing and Hangup events call functionality', () => {
     state = {
       callList: [initialCall],
     };
-    store = new Vuex.Store({
+    store = createStore({
       state: {
         client: webSocketClientController,
       },
@@ -50,9 +47,8 @@ describe('Ringing and Hangup events call functionality', () => {
   });
 
   it('Draws new call when ringing event fires', async () => {
-    const wrapper = shallowMount(ActiveQueue, {
-      store,
-      localVue,
+    const wrapper = mount(ActiveQueue, {
+      global: { plugins: [store] },
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.ringing({});
@@ -61,8 +57,7 @@ describe('Ringing and Hangup events call functionality', () => {
 
   it('Removes a call when destroy event fires', async () => {
     const wrapper = shallowMount(ActiveQueue, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
     await mockSocket.destroyCall(initialCall);
@@ -84,7 +79,7 @@ describe('Answer and Hangup', () => {
     const mock = jest.fn();
     jest.spyOn(ActiveQueue.methods, 'answer').mockImplementationOnce(mock);
 
-    const wrapper = shallowMount(ActiveQueue, {
+    const wrapper = mount(ActiveQueue, {
       computed,
     });
     wrapper.findComponent({ name: 'active-queue-preview' }).vm.$emit('answer');
@@ -95,7 +90,7 @@ describe('Answer and Hangup', () => {
     const mock = jest.fn();
     jest.spyOn(ActiveQueue.methods, 'hangup').mockImplementationOnce(mock);
 
-    const wrapper = shallowMount(ActiveQueue, {
+    const wrapper = mount(ActiveQueue, {
       computed,
     });
     wrapper.findComponent({ name: 'active-queue-preview' }).vm.$emit('hangup');

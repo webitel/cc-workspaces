@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import globals from '../../../../../features/modules/global-handlers/store/global-handlers';
 import DisconnectPopup from '../components/disconnect-popup.vue';
 
@@ -31,7 +31,7 @@ describe('disconnect popup', () => {
 
   it('calls router go() method at "reload" btn', () => {
     const goMock = jest.fn();
-    const wrapper = shallowMount(DisconnectPopup, {
+    const wrapper = mount(DisconnectPopup, {
       global: {
         plugins: [store],
         mocks: { $router: { go: goMock } },

@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
 import BreakTimerPopup from '../../../popups/break-popup/break-timer-popup.vue';
 import AgentStatusSelect from '../agent-status-select.vue';
@@ -25,15 +25,22 @@ describe('Header on agent Waiting', () => {
     const mock = jest.fn();
     jest.spyOn(Header.methods, 'toggleCCenterMode').mockImplementationOnce(mock);
 
-    const wrapper = shallowMount(Header, { computed });
+    const wrapper = mount(Header, {
+      computed,
+      shallow: true,
+      global: {
+        stubs: {
+          WtAppHeader: false,
+          WtSwitcher: false,
+        },
+      },
+    });
     /*
       last switcher is ccenter mode,
       unfortunately, have no other ways
       (except $t label string to discover switcher programmatically)
     */
-    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' })
-                                   .wrappers
-                                   .pop();
+    const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' }).at(0);
     ccenterSwitcher.vm.$emit('change');
     expect(mock).toHaveBeenCalled();
   });
@@ -46,8 +53,15 @@ describe('Header on agent Offline', () => {
     jest.spyOn(Header.methods, 'toggleCCenterMode')
         .mockImplementationOnce(mock);
 
-    const wrapper = shallowMount(Header, {
+    const wrapper = mount(Header, {
       computed,
+      shallow: true,
+      global: {
+        stubs: {
+          WtAppHeader: false,
+          WtSwitcher: false,
+        },
+      },
     });
     /*
       last switcher is ccenter mode,
@@ -55,7 +69,6 @@ describe('Header on agent Offline', () => {
       (except $t label string to discover switcher programmatically)
     */
     const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' })
-                                   .wrappers
                                    .pop();
     ccenterSwitcher.vm.$emit('change');
     expect(mock)
@@ -63,23 +76,36 @@ describe('Header on agent Offline', () => {
   });
 
   it('hide ccenter switcher if isAgent is falsy', () => {
-    const wrapper = shallowMount(Header, {
+    const wrapper = mount(Header, {
       computed: {
         ...computed,
         isAgent() { return false; },
       },
+      shallow: true,
+      global: {
+        stubs: {
+          WtAppHeader: false,
+          WtSwitcher: false,
+        },
+      },
     });
     const ccenterSwitcher = wrapper.findAllComponents({ name: 'wt-switcher' })
-                                   .wrappers
                                    .find((switcher) => switcher.vm.label.includes('callCenter'));
     expect(ccenterSwitcher).toBeFalsy();
   });
 
   it('hide ccenter status select if isAgent is falsy', () => {
-    const wrapper = shallowMount(Header, {
+    const wrapper = mount(Header, {
       computed: {
         ...computed,
         isAgent() { return false; },
+      },
+      shallow: true,
+      global: {
+        stubs: {
+          WtAppHeader: false,
+          WtSwitcher: false,
+        },
       },
     });
     const statusSelect = wrapper.findComponent(AgentStatusSelect);
@@ -87,10 +113,17 @@ describe('Header on agent Offline', () => {
   });
 
   it('hide break timer popup if isAgent is falsy', () => {
-    const wrapper = shallowMount(Header, {
+    const wrapper = mount(Header, {
       computed: {
         ...computed,
         isAgent() { return false; },
+      },
+      shallow: true,
+      global: {
+        stubs: {
+          WtAppHeader: false,
+          WtSwitcher: false,
+        },
       },
     });
     const component = wrapper.findComponent(BreakTimerPopup);

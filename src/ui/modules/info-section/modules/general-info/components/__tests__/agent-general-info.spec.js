@@ -14,6 +14,7 @@ const computed = {
 
 describe('General Info Tab', () => {
   it('renders a component', () => {
+    jest.spyOn(GeneralInfoTab.methods, 'loadAgentInfo').mockImplementationOnce(jest.fn());
     const wrapper = shallowMount(GeneralInfoTab, { computed });
     expect(wrapper.exists()).toBe(true);
   });

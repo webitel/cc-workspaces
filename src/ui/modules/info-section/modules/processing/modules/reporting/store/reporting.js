@@ -11,7 +11,7 @@ const getters = {
 const actions = {
   INIT_REPORTING_FORM: (context, task = context.rootGetters['workspace/TASK_ON_WORKSPACE']) => {
     if (context.rootGetters['ui/infoSec/processing/ALLOW_PROCESSING'] && isEmpty(task.postProcessData)) {
-      Vue.set(task, 'postProcessData', new ReportingForm(task));
+      task.postProcessData = new ReportingForm(task);
     }
   },
 };

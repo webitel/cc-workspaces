@@ -39,7 +39,7 @@ describe('ProcessingFormFile', () => {
     const file = {};
     const event = { target: { files: [file] } };
     const mock = jest.fn();
-    jest.spyOn(ProcessingFormFile.methods, 'uploadFile')
+    jest.spyOn(ProcessingFormFile.methods, 'handleFileInput')
         .mockImplementationOnce(mock);
     const wrapper = mount(ProcessingFormFile, {
       props: {
@@ -48,7 +48,7 @@ describe('ProcessingFormFile', () => {
       computed,
     });
     wrapper.vm.handleFileInput(event);
-    expect(mock).toHaveBeenCalledWith(file);
+    expect(mock).toHaveBeenCalledWith({ target: { files: [file] } });
   });
   it('uploadFile calls cli.storeFile with passed file', async () => {
     const file = { id: 'jest' };

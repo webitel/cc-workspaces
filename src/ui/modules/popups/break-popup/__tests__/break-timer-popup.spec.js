@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
 import TimerPopup from '../break-timer-popup.vue';
 
@@ -34,7 +34,7 @@ describe('Break timer popup', () => {
     const mock = jest.fn();
     jest.spyOn(TimerPopup.methods, 'setAgentWaiting')
         .mockImplementationOnce(mock);
-    const wrapper = shallowMount(TimerPopup, { computed });
+    const wrapper = mount(TimerPopup, { computed });
 
     wrapper.findAllComponents({ name: 'wt-button' }).at(0).vm.$emit('click');
     expect(mock).toHaveBeenCalled();
@@ -44,7 +44,7 @@ describe('Break timer popup', () => {
     const mock = jest.fn();
     jest.spyOn(TimerPopup.methods, 'agentLogout')
       .mockImplementationOnce(mock);
-    const wrapper = shallowMount(TimerPopup, { computed });
+    const wrapper = mount(TimerPopup, { computed });
 
     wrapper.findAllComponents({ name: 'wt-button' }).at(1).vm.$emit('click');
     expect(mock).toHaveBeenCalled();

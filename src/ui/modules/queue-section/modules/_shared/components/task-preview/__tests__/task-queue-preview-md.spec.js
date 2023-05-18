@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import TaskQueuePreviewMd from '../task-queue-preview-md.vue';
 
 const task = {
@@ -16,8 +16,11 @@ describe('TaskQueuePreviewMd', () => {
   it('Correctly displays task displayQueueName', () => {
     const queueName = 'jest3';
     const testTask = { ...task, attempt: { queue: { name: queueName } } };
-    const wrapper = shallowMount(TaskQueuePreviewMd, {
+    const wrapper = mount(TaskQueuePreviewMd, {
       props: { task: testTask },
+      global: {
+        stubs: { QueuePreviewTimer: true },
+      },
     });
     expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
     expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(queueName);

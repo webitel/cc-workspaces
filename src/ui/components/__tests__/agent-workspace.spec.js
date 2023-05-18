@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+import BreakpointPlugin from '../../../app/plugins/breakpoint.plugin';
 import AgentWorkspace from '../the-agent-workspace.vue';
 
 const store = createStore({
@@ -24,7 +25,7 @@ describe('Agent Workspace', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(AgentWorkspace, {
-      global: { plugins: [store] },
+      global: { plugins: [store, BreakpointPlugin] },
       computed: {
         hasAccess() { return appAccess; },
       },

@@ -1,14 +1,11 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ClientInfoChips
   from '../client-info-chips.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
 const task = { task: {} };
 
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     workspace: {
       namespaced: true,
@@ -25,8 +22,7 @@ describe('client-info-chips.vue', () => {
   });
   it('Should render component', () => {
     const wrapper = shallowMount(ClientInfoChips, {
-      localVue,
-      store,
+      global: { plugins: [store] },
     });
     expect(wrapper.exists()).toBe(true);
   });
@@ -37,17 +33,15 @@ describe('client-info-chips.vue', () => {
         name: display,
       },
     };
-    const wrapper = shallowMount(ClientInfoChips, {
-      localVue,
-      store,
+    const wrapper = mount(ClientInfoChips, {
+      global: { plugins: [store] },
     });
     expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
     expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(display);
   });
   it('if task has no queue, queue chip is absent', () => {
     const wrapper = shallowMount(ClientInfoChips, {
-      localVue,
-      store,
+      global: { plugins: [store] },
     });
     expect(wrapper.find('.client-info-chips').exists()).toBe(false);
   });
