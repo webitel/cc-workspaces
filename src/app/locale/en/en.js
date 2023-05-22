@@ -48,6 +48,8 @@ export default {
     occupancy: 'Occupancy',
     chatAccepts: 'Accepted chats',
     chatAht: 'Chat Handling Time',
+    scoreCount: 'Rated calls',
+    scoreAvg: 'Total score',
   },
   queueSec: {
     call: {
@@ -70,6 +72,7 @@ export default {
       total: 'Total',
       pauses: 'Pauses',
       free: 'Free',
+      score: 'Agent score',
     },
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',

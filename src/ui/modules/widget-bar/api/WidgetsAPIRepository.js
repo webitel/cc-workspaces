@@ -12,6 +12,7 @@ const itemResponseHandler = (stats) => ({
   avgTalkSec: convertDuration(stats.avgTalkSec),
   occupancy: `${stats.occupancy.toFixed(2)}%`,
   utilization: `${stats.utilization.toFixed(2)}%`,
+  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed(2)}%`,
   chatAht: convertDuration(stats.chatAht),
 });
 
@@ -25,6 +26,8 @@ const defaultSingleObject = {
   utilization: 0,
   chatAccepts: 0,
   chatAht: 0,
+  scoreCount: 0,
+  scoreRequiredAvg: 0,
 };
 
 const getter = new SdkGetterApiConsumer(agentService.agentTodayStatistics, {

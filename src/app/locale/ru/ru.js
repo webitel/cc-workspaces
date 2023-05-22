@@ -46,6 +46,8 @@ export default {
     occupancy: 'Занятость',
     chatAccepts: 'Количество принятых чатов',
     chatAht: 'Среднее время обработки чата',
+    scoreCount: 'Оценено звонков',
+    scoreAvg: 'Общая оценка',
   },
   queueSec: {
     call: {
@@ -68,6 +70,7 @@ export default {
       total: 'Все',
       pauses: 'Паузы',
       free: 'Свободно',
+      score: 'Оценка оператора',
     },
     clientInfo: 'Информация',
     knowledgeBase: 'База знаний',
