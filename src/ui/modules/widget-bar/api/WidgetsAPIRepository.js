@@ -12,7 +12,7 @@ const itemResponseHandler = (stats) => ({
   avgTalkSec: convertDuration(stats.avgTalkSec),
   occupancy: `${stats.occupancy.toFixed(2)}%`,
   utilization: `${stats.utilization.toFixed(2)}%`,
-  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed(2)}%`,
+  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed()}`,
   chatAht: convertDuration(stats.chatAht),
 });
 
