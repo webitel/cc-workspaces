@@ -6,14 +6,6 @@
         :status="agentInfo.agent"
         class="general-info__article"
       ></wt-cc-agent-status-timers>
-      <agent-score
-        :score="{
-          scoreCount: agentInfo.agent.scoreCount,
-          scoreAvg: agentInfo.agent.scoreRequiredAvg,
-        }"
-        :size="size"
-        class="general-info__article"
-      ></agent-score>
       <agent-queues
         v-if="agentInfo.queues.length"
         :queues="agentInfo.queues"
@@ -31,6 +23,14 @@
         :size="size"
         class="general-info__article"
       ></agent-pause-causes>
+      <agent-score
+        :score="{
+          scoreCount: agentInfo.agent.scoreCount,
+          scoreAvg: agentInfo.agent.scoreRequiredAvg,
+        }"
+        :size="size"
+        class="general-info__article"
+      ></agent-score>
     </div>
   </section>
 </template>
