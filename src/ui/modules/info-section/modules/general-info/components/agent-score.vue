@@ -30,7 +30,7 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ score.scoreAvg }}
+              {{ (+score.scoreAvg || 0).toFixed() }}%
             </div>
           </li>
         </ul>
