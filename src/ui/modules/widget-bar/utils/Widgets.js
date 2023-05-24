@@ -62,18 +62,18 @@ export default {
     locale: 'widgets.chatAht',
     show: false,
   },
-  SCORE_COUNT: {
-    type: 'scoreCount',
-    field: 'scoreCount',
-    icon: 'ws-widget-score-count',
-    locale: 'widgets.scoreCount',
-    show: false,
-  },
-  SCORE_REQUIRED_AVG: {
-    type: 'scoreRequiredAvg',
-    field: 'scoreRequiredAvg',
-    icon: 'ws-widget-score-avg',
-    locale: 'widgets.scoreAvg',
-    show: false,
-  },
+  // SCORE_COUNT: {
+  //   type: 'scoreCount',
+  //   field: 'scoreCount',
+  //   icon: 'ws-widget-score-count',
+  //   locale: 'widgets.scoreCount',
+  //   show: false,
+  // },
+  // SCORE_REQUIRED_AVG: {
+  //   type: 'scoreRequiredAvg',
+  //   field: 'scoreRequiredAvg',
+  //   icon: 'ws-widget-score-avg',
+  //   locale: 'widgets.scoreAvg',
+  //   show: false,
+  // },
 };

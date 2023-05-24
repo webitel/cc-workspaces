@@ -17,7 +17,7 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ score.scoreCount }}
+              {{ score.scoreCount || 0 }}
             </div>
           </li>
           <li class="agent-score-item">
@@ -30,7 +30,7 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ (+score.scoreAvg || 0).toFixed() }}
+              {{ (+score.scoreAvg || 0).toFixed(2) }}
             </div>
           </li>
         </ul>
