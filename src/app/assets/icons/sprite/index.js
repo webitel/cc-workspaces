@@ -16,3 +16,5 @@ import './ws-general-info.svg';
 import './ws-knowledge-base.svg';
 import './ws-processing.svg';
 import './ws-doc.svg';
+import './ws-pause.svg';
+import './ws-breakout.svg';

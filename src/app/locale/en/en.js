@@ -3,6 +3,7 @@ import {
   DeviceNotAllowPermissionError,
   LicencePermissionError,
   JobState,
+  AgentStatus,
 } from 'webitel-sdk';
 
 export default {
@@ -149,7 +150,11 @@ export default {
       },
     },
     breakTimer: {
-      heading: 'You are in break mode now',
+      heading: 'You are in {mode} mode now',
+      mode: {
+        [AgentStatus.Pause]: 'break',
+        [AgentStatus.BreakOut]: 'break out',
+      },
       continueWork: 'Continue work',
     },
   },

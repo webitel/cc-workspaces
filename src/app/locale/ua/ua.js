@@ -1,4 +1,5 @@
 import {
+  AgentStatus,
   DeviceNotAllowPermissionError,
   DeviceNotFoundError, JobState, LicencePermissionError,
 } from 'webitel-sdk';
@@ -147,7 +148,11 @@ export default {
       },
     },
     breakTimer: {
-      heading: 'Ви знаходитесь у режимі паузи',
+      heading: 'Ви знаходитесь у режимі {mode}',
+      mode: {
+        [AgentStatus.Pause]: 'паузи',
+        [AgentStatus.BreakOut]: 'примусової паузи',
+      },
       continueWork: 'Продовжити роботу',
     },
   },

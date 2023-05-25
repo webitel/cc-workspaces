@@ -2,24 +2,34 @@
   <wt-popup
     class="break-timer-popup"
     v-show="isBreakPopup"
+    width="560"
     @close="close"
   >
     <template v-slot:title>
-      <div class="break-timer-popup__title-wrapper">
-        <span class="popup-indicator__break"></span>
-        {{ $t('agentStatus.breakTimer.heading') }}
-      </div>
+      {{ $t('agentStatus.breakTimer.heading', { mode: $t(`agentStatus.breakTimer.mode.${agentStatus}`) }) }}
     </template>
     <template v-slot:main>
-      <div class="break-timer-wrap__timer-wrap">
-        <div class="break-timer-wrap__timer">
+      <div class="break-timer-popup__main-wrapper">
+        <div class="break-timer-popup__icon-wrapper">
+          <wt-icon
+            :icon="agentStatus === AgentStatus.Pause ? 'pause' : 'breakout'"
+            icon-prefix="ws"
+            size="3xl"
+          ></wt-icon>
+        </div>
+        <div class="break-timer-popup__timer-wrap">
+          <div class="break-timer-popup-timer">
             <span
-              class="break-timer-wrap__timer__digit"
+              class="break-timer-popup-timer__digit"
               v-for="(digit, key) of duration.split('')"
               :key="key"
             >
               {{ digit }}
             </span>
+          </div>
+          <div class="break-timer-popup-pause-cause">
+            {{ breakInfo }}
+          </div>
         </div>
       </div>
     </template>
@@ -46,6 +56,7 @@ import { AgentStatus } from 'webitel-sdk';
 export default {
   name: 'break-timer-popup',
   data: () => ({
+    AgentStatus,
     duration: '00:00:00',
     isBreakPopupValue: false,
   }),
@@ -58,7 +69,8 @@ export default {
     },
     agentStatus: {
       handler() {
-        if (this.agentStatus === AgentStatus.Pause) this.isBreakPopupValue = true;
+        if (this.agentStatus === AgentStatus.Pause
+          || this.agentStatus === AgentStatus.BreakOut) this.isBreakPopupValue = true;
       },
       immediate: true,
     },
@@ -72,10 +84,16 @@ export default {
       agent: (state) => state.agent,
     }),
     isBreakPopup() {
-      return this.isBreakPopupValue && this.agentStatus === AgentStatus.Pause;
+      return this.isBreakPopupValue
+        && (this.agentStatus === AgentStatus.Pause || this.agentStatus === AgentStatus.BreakOut);
     },
     agentStatus() {
       return this.agent.status;
+    },
+    breakInfo() {
+      return this.agentStatus === AgentStatus.Pause
+        ? this.agent.statusPayload
+        : this.$t(`agentStatus.breakTimer.mode.${AgentStatus.BreakOut}`);
     },
   },
 
@@ -92,64 +110,51 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.typo-timer-digits {
+%typo-timer-digits {
   font-family: 'Montserrat', monospace;
-  font-size: 82px;
-  line-height: 82px;
-  font-weight: 600;
-
-  @media screen and (max-width: 1336px) {
-    font-size: 60px;
-    line-height: 60px;
-  }
+  font-size: 64px;
+  line-height: 78px;
+  font-weight: 700;
 }
 
-.break-timer-popup__title-wrapper {
+.break-timer-popup__main-wrapper {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  .popup-indicator__break {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-right: 11px;
-    border-radius: 50%;
-    background: var(--accent-color);
-  }
+  gap: var(--spacing-sm);
+  background: var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
 }
 
-.break-timer-wrap__timer-wrap {
-  padding: 27px 51px;
-  background: var(--accent-color);
+.break-timer-popup__icon-wrapper {
+  padding: var(--spacing-sm);
+  line-height: 0;
+  background: var(--main-color);
   border-radius: var(--border-radius);
 }
 
-.break-timer-wrap__timer {
+.break-timer-popup-timer {
   width: fit-content;
-  width: -moz-fit-content;
   margin: auto;
 }
 
-.break-timer-wrap__timer__digit {
-  @extend .typo-timer-digits;
+.break-timer-popup-timer__digit {
+  @extend %typo-timer-digits;
   text-align: center;
   display: inline-block;
-  width: 55px;
+  width: 40px;
   color: var(--text-primary-color);
 
   /*semicolons*/
   &:nth-child(3), &:nth-child(6) {
-    width: 28px;
+    width: 24px;
   }
+}
 
-  @media screen and (max-width: 1336px) {
-    width: 40px;
-
-    /*semicolons*/
-    &:nth-child(3), &:nth-child(6) {
-      width: 20px;
-    }
-  }
+.break-timer-popup-pause-cause {
+  @extend %typo-subtitle-2;
+  text-align: center;
 }
 </style>
