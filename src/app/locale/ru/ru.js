@@ -153,6 +153,7 @@ export default {
         [AgentStatus.Pause]: 'паузы',
         [AgentStatus.BreakOut]: 'принудительной паузы',
       },
+      [AgentStatus.BreakOut]: 'Принудительная пауза',
       continueWork: 'Продолжить работу',
     },
   },

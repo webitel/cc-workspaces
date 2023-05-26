@@ -155,6 +155,7 @@ export default {
         [AgentStatus.Pause]: 'break',
         [AgentStatus.BreakOut]: 'break out',
       },
+      [AgentStatus.BreakOut]: 'Break out',
       continueWork: 'Continue work',
     },
   },

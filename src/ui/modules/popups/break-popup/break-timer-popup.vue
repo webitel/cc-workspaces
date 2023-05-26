@@ -36,11 +36,13 @@
     <template v-slot:actions>
       <wt-button
         color="success"
+        wide
         @click="setAgentWaiting"
       >{{ $t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
         color="danger"
+        wide
         @click="agentLogout"
       >{{ $t('reusable.logout') }}
       </wt-button>
@@ -93,7 +95,7 @@ export default {
     breakInfo() {
       return this.agentStatus === AgentStatus.Pause
         ? this.agent.statusPayload
-        : this.$t(`agentStatus.breakTimer.mode.${AgentStatus.BreakOut}`);
+        : this.$t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`);
     },
   },
 

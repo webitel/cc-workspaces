@@ -153,6 +153,7 @@ export default {
         [AgentStatus.Pause]: 'паузи',
         [AgentStatus.BreakOut]: 'примусової паузи',
       },
+      [AgentStatus.BreakOut]: 'Примусова пауза',
       continueWork: 'Продовжити роботу',
     },
   },
