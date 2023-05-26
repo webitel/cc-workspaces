@@ -25,7 +25,7 @@ const actions = {
     context.dispatch('PLAY_SOUND', { action });
     if (!document.hasFocus() && context.getters.IS_MAIN_TAB) {
       const name = job.displayName;
-      const text = i18n.t(`notifications.${snakeToCamel(action)}`, { name });
+      const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, { name });
       context.dispatch('SEND_NOTIFICATION', { text });
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
