@@ -9,7 +9,7 @@ describe('Chat Message component', () => {
   });
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessage, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessage, { props: { message } });
     expect(wrapper.exists()).toBe(true);
   });
 });

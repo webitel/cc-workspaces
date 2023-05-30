@@ -1,10 +1,11 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import MergeLookupItem
   from '../merge-lookup-item.vue';
 
 describe('MergeLookupItem', () => {
   const item = {};
   const computed = {
+    ...MergeLookupItem.computed,
     now() {
       return 0;
     },
@@ -12,15 +13,15 @@ describe('MergeLookupItem', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(MergeLookupItem, {
-      propsData: { item },
+      props: { item },
       computed,
     });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('emits input event at wt-rounded-action click', () => {
-    const wrapper = shallowMount(MergeLookupItem, {
-      propsData: { item },
+    const wrapper = mount(MergeLookupItem, {
+      props: { item },
       computed,
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');

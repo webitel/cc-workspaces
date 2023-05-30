@@ -24,11 +24,12 @@
       v-if="member"
       v-show="reporting.isScheduleCall"
     >
-      <wt-datetimepicker
+      <wt-datepicker
         v-model="reporting.nextDistributeAt"
-        :disabled-dates="{ to: new Date() }"
+        :disabled-dates="(d) => d.getTime() < new Date().setDate(new Date().getDate() - 1)"
         :label="$t('infoSec.processing.reporting.nextDistributeAt')"
-      ></wt-datetimepicker>
+        mode="datetime"
+      ></wt-datepicker>
     </div>
   </section>
 </template>

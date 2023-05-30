@@ -1,6 +1,5 @@
 <template>
   <section class="general-info">
-    <wt-loader v-show="!isLoaded"></wt-loader>
     <div v-show="isLoaded" class="general-info__content-wrapper">
       <wt-cc-agent-status-timers
         :size="size"
@@ -24,6 +23,14 @@
         :size="size"
         class="general-info__article"
       ></agent-pause-causes>
+      <agent-score
+        :score="{
+          scoreCount: agentInfo.agent.scoreCount,
+          scoreAvg: agentInfo.agent.scoreRequiredAvg,
+        }"
+        :size="size"
+        class="general-info__article"
+      ></agent-score>
     </div>
   </section>
 </template>
@@ -33,6 +40,7 @@ import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefr
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import AgentScore from './agent-score.vue';
 import AgentOrgStructure from './agent-org-structure.vue';
 import AgentPauseCauses from './agent-pause-causes.vue';
 import AgentQueues from './agent-queues.vue';
@@ -40,7 +48,12 @@ import AgentQueues from './agent-queues.vue';
 export default {
   name: 'general-info-tab',
   mixins: [autoRefreshMixin, sizeMixin],
-  components: { AgentOrgStructure, AgentQueues, AgentPauseCauses },
+  components: {
+    AgentScore,
+    AgentOrgStructure,
+    AgentQueues,
+    AgentPauseCauses,
+  },
   data: () => ({
     namespace: 'ui/infoSec/agentInfo',
     isLoaded: false,

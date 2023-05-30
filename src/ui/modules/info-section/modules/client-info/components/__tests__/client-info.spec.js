@@ -1,13 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ClientInfo
   from '../client-info-tab.vue';
 import WorkspaceStates
   from '../../../../../../enums/WorkspaceState.enum';
 import workspaceModule from '../../../../../../store/agent-workspace';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 describe('Client Info Tab', () => {
   let state;
@@ -18,7 +15,7 @@ describe('Client Info Tab', () => {
         variables: {},
       },
     };
-    store = new Vuex.Store({
+    store = createStore({
       state,
       modules: {
         workspace: {
@@ -37,15 +34,13 @@ describe('Client Info Tab', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(ClientInfo, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     expect(wrapper.exists()).toBe(true);
   });
   it('renders a component client-info-chips', () => {
     const wrapper = shallowMount(ClientInfo, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     expect(wrapper.findComponent({ name: 'client-info-chips' }).exists()).toBe(true);
   });

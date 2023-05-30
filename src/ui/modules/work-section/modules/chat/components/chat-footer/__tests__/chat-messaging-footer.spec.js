@@ -1,13 +1,11 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount, mount } from '@vue/test-utils';
 import ChatMessagingFooter from '../chat-footer.vue';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
 let chatOnWorkspace = {
   closedAt: 0,
 };
 const computed = {
+  ...ChatMessagingFooter.computed,
   isChatPreview: () => true,
   isChatActive: () => false,
   chat: () => chatOnWorkspace,
@@ -22,7 +20,7 @@ describe('Chat Messaging Footer: Chat Preview', () => {
   });
 
   it('renders chat preview actions if isChatActive computed is falsy', () => {
-    const wrapper = shallowMount(ChatMessagingFooter, {
+    const wrapper = mount(ChatMessagingFooter, {
       computed,
     });
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(true);
@@ -34,7 +32,7 @@ describe('Chat Messaging Footer: Chat Preview', () => {
     const acceptMock = jest.spyOn(ChatMessagingFooter.methods, 'accept')
     .mockImplementation(() => {
     });
-    const wrapper = shallowMount(ChatMessagingFooter, {
+    const wrapper = mount(ChatMessagingFooter, {
       computed,
     });
     wrapper.getComponent({ name: 'wt-button' }).vm.$emit('click');
@@ -44,7 +42,12 @@ describe('Chat Messaging Footer: Chat Preview', () => {
 
 describe('Chat Messaging Footer: Active Chat', () => {
   it('renders active chat actions if isChatActive computed is truthy', () => {
-    const wrapper = shallowMount(ChatMessagingFooter, {
+    const wrapper = mount(ChatMessagingFooter, {
+      global: {
+        stubs: {
+          ChatEmoji: true,
+        },
+      },
       computed: {
         ...computed,
         isChatPreview: () => false,
@@ -119,7 +122,7 @@ describe('Chat Messaging Footer: Chat Closed', () => {
   });
 
   it('renders chat footer closer if closedAt computed is truthy', () => {
-    const wrapper = shallowMount(ChatMessagingFooter, {
+    const wrapper = mount(ChatMessagingFooter, {
       computed: {
         ...computed,
         isChatPreview: () => false,

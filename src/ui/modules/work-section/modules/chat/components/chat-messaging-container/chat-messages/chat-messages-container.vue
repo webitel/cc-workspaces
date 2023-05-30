@@ -36,6 +36,7 @@ export default {
     MessageDate,
     ScrollObserver,
   },
+  inject: ['$eventBus'],
   data: () => ({
     isMounted: false,
   }),

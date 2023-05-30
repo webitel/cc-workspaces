@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
 import HistoryLookupItem from '../history-lookup-item.vue';
 
@@ -16,14 +16,14 @@ describe('HistoryLookupItem', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(HistoryLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('emits input event at component click', () => {
     const wrapper = shallowMount(HistoryLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     wrapper.trigger('click');
     expect(wrapper.emitted().input[0]).toEqual([item]);
@@ -36,8 +36,8 @@ describe('HistoryLookupItem', () => {
     item.to.number = 'false';
 
     jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
-    const wrapper = shallowMount(HistoryLookupItem, {
-      propsData: { item },
+    const wrapper = mount(HistoryLookupItem, {
+      props: { item },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
     expect(mock).toHaveBeenCalledWith({ number: 'true' });
@@ -50,8 +50,8 @@ describe('HistoryLookupItem', () => {
     item.to.number = 'true';
 
     jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
-    const wrapper = shallowMount(HistoryLookupItem, {
-      propsData: { item },
+    const wrapper = mount(HistoryLookupItem, {
+      props: { item },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
     expect(mock).toHaveBeenCalledWith({ number: 'true' });

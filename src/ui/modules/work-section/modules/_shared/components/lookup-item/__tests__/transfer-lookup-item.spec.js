@@ -1,7 +1,7 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import ContactLookupItem from '../contact-lookup-item';
+import ContactLookupItem from '../contact-lookup-item.vue';
 import TransferLookupItem from '../transfer-lookup-item.vue';
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
 
@@ -16,15 +16,15 @@ describe('TransferLookupItem', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(TransferLookupItem, {
-      propsData: { item, type },
+      props: { item, type },
       computed,
     });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('emits input event at wt-icon-btn click', () => {
-    const wrapper = shallowMount(TransferLookupItem, {
-      propsData: { item, type },
+    const wrapper = mount(TransferLookupItem, {
+      props: { item, type },
       computed,
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click');
@@ -34,7 +34,7 @@ describe('TransferLookupItem', () => {
   it('correctly comoputes user ACTIVE status: web', () => {
     item.presence = { status: 'web' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ACTIVE);
   });
@@ -42,7 +42,7 @@ describe('TransferLookupItem', () => {
   it('correctly comoputes user ACTIVE status: sip', () => {
     item.presence = { status: 'sip' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ACTIVE);
   });
@@ -50,7 +50,7 @@ describe('TransferLookupItem', () => {
   it('correctly comoputes user BUSY status: dlg', () => {
     item.presence = { status: 'dlg' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.BUSY);
   });
@@ -58,7 +58,7 @@ describe('TransferLookupItem', () => {
   it('correctly comoputes user DND status: dnd', () => {
     item.presence = { status: 'dnd' };
     const wrapper = shallowMount(ContactLookupItem, {
-      propsData: { item },
+      props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.DND);
   });

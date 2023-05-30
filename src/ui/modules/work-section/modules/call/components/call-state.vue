@@ -47,11 +47,11 @@ export default {
 
   computed: {
     ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
+      task: 'CALL_ON_WORKSPACE',
       dtmf: 'GET_CURRENT_CALL_DIGITS',
     }),
     callState() {
-      switch (this.call.state) {
+      switch (this.task.state) {
         case CallActions.Ringing:
           return this.$t('workspaceSec.callState.ringing');
         case CallActions.Hold:
@@ -61,17 +61,17 @@ export default {
         case CallActions.Active:
           return this.startTime;
         default:
-          return this.call.state || '';
+          return this.task.state || '';
       }
     },
 
     isCallActive() {
-      return this.call.state === CallActions.Active;
+      return this.task.state === CallActions.Active;
     },
     sonarIcon() {
-      if (this.call.isHold) return holdSonar;
-      if (this.call.state === CallActions.Ringing) {
-        if (this.call.direction === CallDirection.Inbound) return inboundSonar;
+      if (this.task.isHold) return holdSonar;
+      if (this.task.state === CallActions.Ringing) {
+        if (this.task.direction === CallDirection.Inbound) return inboundSonar;
         return ringingSonar;
       }
       if (this.isCallActive) return activeSonar;

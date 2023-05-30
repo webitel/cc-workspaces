@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import QueueSection
   from '../the-agent-queue-section.vue';
 
@@ -7,10 +7,16 @@ describe('Make new call functionality', () => {
     const mock = jest.fn();
     jest.spyOn(QueueSection.methods, 'openNewCall')
       .mockImplementationOnce(mock);
-    const wrapper = shallowMount(QueueSection, {
+    const wrapper = mount(QueueSection, {
+      shallow: true,
+      global: {
+        stubs: {
+          WtRoundedAction: false,
+        },
+      },
       computed: {
-        isNewCall() {
-          return false;
+        isNewCallButton() {
+          return true;
         },
       },
     });

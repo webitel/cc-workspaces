@@ -28,7 +28,7 @@
       {{ displayName }}
     </template>
     <template v-slot:body>
-      {{ displayNumber | truncateFromEnd(18) }}
+      {{ displayNumber }}
     </template>
   </component>
 </template>

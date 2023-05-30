@@ -10,7 +10,7 @@ describe('ChatMessageDocument component', () => {
   });
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessageDocument, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageDocument, { props: { message } });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -18,7 +18,7 @@ describe('ChatMessageDocument component', () => {
     message = {
       file: { id: '123', mime: '' },
     };
-    const wrapper = shallowMount(ChatMessageDocument, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageDocument, { props: { message } });
     expect(wrapper.vm.document).toEqual(message.file);
   });
 
@@ -32,7 +32,7 @@ describe('ChatMessageDocument component', () => {
     const link = {
       click: jest.fn(),
     };
-    const wrapper = shallowMount(ChatMessageDocument, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageDocument, { props: { message } });
     jest.spyOn(document, 'createElement').mockImplementation(() => link);
     wrapper.vm.downloadDocument();
     expect(link.click).toHaveBeenCalled();

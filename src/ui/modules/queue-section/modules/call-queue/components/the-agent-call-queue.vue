@@ -15,7 +15,7 @@
         >
           <template
             v-for="(tab, key) of tabs"
-            :slot="tab.value"
+            v-slot:[tab.value]
           >
             <div class="queue-tab__wrap" :key="key">
               <div
@@ -62,7 +62,8 @@ export default {
   }),
 
   watch: {
-    callList() {
+    // watch for callList length instead of actual call list because it throws a Vue internals error
+    callListLength() {
       this.currentTab = { value: 'active' };
     },
   },
@@ -102,6 +103,9 @@ export default {
 
     currentTabComponent() {
       return `${this.currentTab.value}-queue`;
+    },
+    callListLength() {
+      return this.callList.length;
     },
   },
 

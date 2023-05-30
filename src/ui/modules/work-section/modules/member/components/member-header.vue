@@ -14,7 +14,7 @@
     </template>
     <template v-slot:after-avatar>
       <wt-rounded-action
-        :class="{ 'hidden': !isCall }"
+        v-show="isCall"
         :size="size"
         color="success"
         icon="call-ringing"

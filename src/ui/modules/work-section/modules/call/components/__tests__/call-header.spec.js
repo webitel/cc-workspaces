@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
 import findRoundedActionByIcon
   from '../../../../../../../../tests/utils/findRoundedActionByIcon';
@@ -9,6 +9,7 @@ let callOnWorkspace;
 let callList;
 
 const computed = {
+  ...CallHeader.computed,
   call: () => callOnWorkspace,
   callList: () => callList,
   isNewCall: () => callOnWorkspace._isNew,
@@ -38,7 +39,7 @@ describe('Make new call functionality', () => {
     jest.spyOn(CallHeader.methods, 'makeCall')
     .mockImplementationOnce(mock);
 
-    const wrapper = shallowMount(CallHeader, {
+    const wrapper = mount(CallHeader, {
       computed,
     });
 
@@ -64,7 +65,7 @@ describe('Transfer functionality', () => {
   it('Opens transfer tab from call-header', () => {
     callOnWorkspace.allowHangup = true;
 
-    const wrapper = shallowMount(CallHeader, {
+    const wrapper = mount(CallHeader, {
       computed,
     });
     const transferBtn = findTransferBtn(wrapper);
@@ -102,7 +103,7 @@ describe('Bridge functionality', () => {
   });
 
   it('Shows merge btn with only 2 active call', () => {
-    const wrapper = shallowMount(CallHeader, {
+    const wrapper = mount(CallHeader, {
       computed,
     });
     const bridgeBtn = findBridgeBtn(wrapper);
@@ -110,7 +111,7 @@ describe('Bridge functionality', () => {
   });
 
   it('Opens bridge tab from call-header', () => {
-    const wrapper = shallowMount(CallHeader, {
+    const wrapper = mount(CallHeader, {
       computed,
     });
     const bridgeBtn = findBridgeBtn(wrapper);

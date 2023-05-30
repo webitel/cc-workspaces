@@ -13,7 +13,7 @@ describe('ProcessingFormFile', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -27,7 +27,7 @@ describe('ProcessingFormFile', () => {
     jest.spyOn(ProcessingFormFile.methods, 'uploadFile')
         .mockImplementationOnce(mock);
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -39,23 +39,23 @@ describe('ProcessingFormFile', () => {
     const file = {};
     const event = { target: { files: [file] } };
     const mock = jest.fn();
-    jest.spyOn(ProcessingFormFile.methods, 'uploadFile')
+    jest.spyOn(ProcessingFormFile.methods, 'handleFileInput')
         .mockImplementationOnce(mock);
     const wrapper = mount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
     });
     wrapper.vm.handleFileInput(event);
-    expect(mock).toHaveBeenCalledWith(file);
+    expect(mock).toHaveBeenCalledWith({ target: { files: [file] } });
   });
   it('uploadFile calls cli.storeFile with passed file', async () => {
     const file = { id: 'jest' };
     const mock = jest.fn();
     clientInstance.storeFile = mock;
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -66,7 +66,7 @@ describe('ProcessingFormFile', () => {
   });
   it('uploadFile adds file snapshot to uploadingSnapshots list', async () => {
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -80,7 +80,7 @@ describe('ProcessingFormFile', () => {
     jest.spyOn(ProcessingFormFile.methods, 'handleFileSuccessUpload')
         .mockImplementationOnce(mock);
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -93,7 +93,7 @@ describe('ProcessingFormFile', () => {
     jest.spyOn(ProcessingFormFile.methods, 'handleFileErrorUpload')
         .mockImplementationOnce(mock);
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -106,7 +106,7 @@ describe('ProcessingFormFile', () => {
   });
   it('handleFileSuccessUpload sets passed snapshot "done" flag to true', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -118,7 +118,7 @@ describe('ProcessingFormFile', () => {
   jest.useFakeTimers();
   it('handleFileSuccessUpload replaces snapshot with a passed file', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -137,7 +137,7 @@ describe('ProcessingFormFile', () => {
   });
   it('handleFileErrorUpload sets passed snapshot "error" flag to true', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -149,7 +149,7 @@ describe('ProcessingFormFile', () => {
   jest.useFakeTimers();
   it('handleFileErrorUpload adds close method to snapshot which deletes it from uploadingSnapshots', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [],
       },
       computed,
@@ -169,7 +169,7 @@ describe('ProcessingFormFile', () => {
   it('handleDeleteConfirm emits input event without passed file', () => {
     const file = { id: 1 };
     const wrapper = shallowMount(ProcessingFormFile, {
-      propsData: {
+      props: {
         value: [file, { id: 2 }],
       },
       computed,

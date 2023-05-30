@@ -4,7 +4,7 @@
     class="agent-pause-causes"
   >
     <wt-expansion-panel :size="size">
-      <template slot="title">{{ $t('infoSec.generalInfo.pauses') }}</template>
+      <template v-slot:title>{{ $t('infoSec.generalInfo.pauses') }}</template>
       <template>
         <ul>
           <li

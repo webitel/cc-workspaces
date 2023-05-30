@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import ActivePreview from '../active-queue-preview.vue';
 
@@ -17,7 +17,7 @@ describe('Other UIs', () => {
   it('if call has no queue, queue chip is absent', () => {
     task.task = {};
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task },
+      props: { task },
     });
     expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
   });
@@ -34,8 +34,15 @@ describe('Preview Actions', () => {
   });
 
   it('Shows preview actions on Inbound Ringing', () => {
-    const wrapper = shallowMount(ActivePreview, {
-      propsData: { task, size: 'md' },
+    const wrapper = mount(ActivePreview, {
+      props: { task, size: 'md' },
+      shallow: true,
+      global: {
+        stubs: {
+          TaskQueuePreview: false,
+          WtButton: false,
+        },
+      },
     });
     expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
@@ -48,8 +55,15 @@ describe('Preview Actions', () => {
       direction: CallDirection.Outbound,
       queue: { queue_type: 'preview' },
     };
-    const wrapper = shallowMount(ActivePreview, {
-      propsData: { task, size: 'md' },
+    const wrapper = mount(ActivePreview, {
+      props: { task, size: 'md' },
+      shallow: true,
+      global: {
+        stubs: {
+          TaskQueuePreview: false,
+          WtButton: false,
+        },
+      },
     });
     expect(wrapper.findComponent({ name: 'wt-button' })
                   .exists())
@@ -61,7 +75,7 @@ describe('Preview Actions', () => {
       direction: CallDirection.Outbound,
     };
     const wrapper = shallowMount(ActivePreview, {
-      propsData: { task },
+      props: { task },
     });
     expect(wrapper.find('.preview-actions')
                   .exists())

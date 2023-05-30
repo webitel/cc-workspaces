@@ -9,6 +9,7 @@ describe('InfoSection', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(InfoSection, {
       computed: {
+        ...InfoSection.computed,
         showProcessing: () => true,
         taskOnWorkspace: () => callOnWorkspace,
       },

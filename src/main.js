@@ -1,18 +1,15 @@
-import Vue from 'vue';
-import Vuelidate from 'vuelidate';
+import { createApp } from 'vue';
 import deepmerge from 'deepmerge';
 import App from './app/the-app.vue';
 import router from './app/router';
 import store from './app/store';
 import i18n from './app/locale/i18n';
 
-import './app/plugins';
+import WebitelUi from './app/plugins/webitel-ui';
+import WebitelCCUI from './app/plugins/webitel-cc-ui';
+import BreakpointPlugin from './app/plugins/breakpoint.plugin';
 
 import './app/assets/icons/sprite';
-
-Vue.config.productionTip = false;
-
-Vue.use(Vuelidate);
 
 const fetchConfig = async () => {
   const electronConfig = window._config || {}; // Electron sets config to window
@@ -40,19 +37,22 @@ const fetchConfig = async () => {
 };
 
 const createVueInstance = () => {
-  new Vue({
-    router,
-    store,
-    i18n,
-    render: (h) => h(App),
-  }).$mount('#app');
+  const app = createApp(App)
+  .use(i18n)
+  .use(router)
+  .use(store)
+  .use(...WebitelUi)
+  .use(WebitelCCUI)
+  .use(BreakpointPlugin);
+  return app;
 };
 
 // init IIFE
 (async () => {
   const config = await fetchConfig();
   store.dispatch('SET_CONFIG', config);
-  Vue.prototype.$config = config;
   localStorage.setItem('CONFIG', JSON.stringify(config));
-  createVueInstance();
+  const app = createVueInstance();
+  app.provide('$config', config);
+  app.mount('#app');
 })();

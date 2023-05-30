@@ -41,7 +41,7 @@ export default {
     initPicker() {
       // https://github.com/nolanlawson/emoji-picker-element#javascript-api
       this.picker = new Picker({
-                                 i18n: this.$i18n.t('emojiPicker'),
+                                 i18n: this.$i18n.messages[this.$i18n.locale].emojiPicker,
                                });
       this.appendPicker();
     },

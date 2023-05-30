@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { reactive } from 'vue';
 import { mapState } from 'vuex';
 import JSZip from 'jszip';
 import jszipUtils from 'jszip-utils';
@@ -107,7 +108,7 @@ import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsible
 import processingFormComponentMixin from '../../../mixins/processingFormComponentMixin';
 import FormFileLine from './processing-form-file-line.vue';
 
-const makeFileSnapshot = (file) => ({
+const makeFileSnapshot = (file) => reactive({
   name: file.name,
   mime: file.type,
   size: file.size,

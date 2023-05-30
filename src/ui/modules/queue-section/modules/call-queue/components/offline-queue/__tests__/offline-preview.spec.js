@@ -14,7 +14,7 @@ describe('Other UIs', () => {
 
   it('Correctly displays member name', () => {
     const wrapper = shallowMount(OfflinePreview, {
-      propsData: {
+      props: {
         task: member,
       },
     });

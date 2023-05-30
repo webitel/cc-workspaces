@@ -1,4 +1,5 @@
 import {
+  AgentStatus,
   DeviceNotAllowPermissionError,
   DeviceNotFoundError, JobState, LicencePermissionError,
 } from 'webitel-sdk';
@@ -46,6 +47,8 @@ export default {
     occupancy: 'Занятость',
     chatAccepts: 'Количество принятых чатов',
     chatAht: 'Среднее время обработки чата',
+    scoreCount: 'Оценено звонков',
+    scoreAvg: 'Общая оценка',
   },
   queueSec: {
     call: {
@@ -68,6 +71,7 @@ export default {
       total: 'Все',
       pauses: 'Паузы',
       free: 'Свободно',
+      score: 'Оценка оператора',
     },
     clientInfo: 'Информация',
     knowledgeBase: 'База знаний',
@@ -144,7 +148,12 @@ export default {
       },
     },
     breakTimer: {
-      heading: 'Вы находитесь в режиме паузы',
+      heading: 'Вы находитесь в режиме {mode}',
+      mode: {
+        [AgentStatus.Pause]: 'паузы',
+        [AgentStatus.BreakOut]: 'принудительной паузы',
+      },
+      [AgentStatus.BreakOut]: 'Принудительная пауза',
       continueWork: 'Продолжить работу',
     },
   },

@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import FormFileStatus from '../../../../enums/FormFileStatus.enum';
 import ProcessingFormFileLine from '../processing-form-file-line.vue';
 
@@ -14,7 +14,7 @@ describe('ProcessingFormFileLine', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.isVisible()).toBe(true);
   });
@@ -31,7 +31,7 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.DONE);
   });
@@ -46,7 +46,7 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.ERROR);
   });
@@ -60,7 +60,7 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.AFTER_ERROR);
   });
@@ -74,14 +74,15 @@ describe('ProcessingFormFileLine', () => {
     };
 
     const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+      props: { file },
     });
     expect(wrapper.vm.status).toBe(FormFileStatus.AFTER_DONE);
   });
   it('at "done" status, action icon click triggers delete event', () => {
-    const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file },
+    const wrapper = mount(ProcessingFormFileLine, {
+      props: { file },
       computed: {
+        ...ProcessingFormFileLine.computed,
         status: () => FormFileStatus.DONE,
       },
     });
@@ -91,9 +92,10 @@ describe('ProcessingFormFileLine', () => {
   });
   it('at "error" status, action icon click triggers passed to "close" method', () => {
     const close = jest.fn();
-    const wrapper = shallowMount(ProcessingFormFileLine, {
-      propsData: { file: { mime: '', metadata: { close } } },
+    const wrapper = mount(ProcessingFormFileLine, {
+      props: { file: { mime: '', metadata: { close } } },
       computed: {
+        ...ProcessingFormFileLine.computed,
         status: () => FormFileStatus.ERROR,
       },
     });

@@ -25,7 +25,7 @@
       {{ task.displayName }}
     </template>
     <template v-slot:body>
-      {{ task.displayNumber | truncateFromEnd(33) }}
+      {{ task.displayNumber }}
     </template>
     <template
       v-if="isRinging"
@@ -36,6 +36,7 @@
         color="success"
         icon="call-ringing"
         :size="size"
+        wide
         @click.prevent="$emit('answer', task)"
         @keydown.enter.prevent="$emit('answer', task)"
       >
@@ -46,6 +47,7 @@
         color="danger"
         icon="call-end"
         :size="size"
+        wide
         @click.prevent="$emit('hangup', task)"
         @keydown.enter.prevent="$emit('hangup', task)"
       >

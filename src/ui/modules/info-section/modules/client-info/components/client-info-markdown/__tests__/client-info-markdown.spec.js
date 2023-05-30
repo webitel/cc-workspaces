@@ -1,13 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ClientInfoMarkdown
   from '../client-info-markdown.vue';
 import WorkspaceStates
   from '../../../../../../../enums/WorkspaceState.enum';
 import workspaceModule from '../../../../../../../store/agent-workspace';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 describe('Client Info MD from Call', () => {
   let state;
@@ -19,7 +16,7 @@ describe('Client Info MD from Call', () => {
         variables: {},
       },
     };
-    store = new Vuex.Store({
+    store = createStore({
       state,
       modules: {
         workspace: {
@@ -38,8 +35,7 @@ describe('Client Info MD from Call', () => {
 
   it('Correctly renders empty variables', () => {
     const wrapper = shallowMount(ClientInfoMarkdown, {
-      store,
-      localVue,
+      global: { plugins: [store] },
     });
     const md = wrapper.find('.md');
     expect(md.element).toBeEmptyDOMElement();

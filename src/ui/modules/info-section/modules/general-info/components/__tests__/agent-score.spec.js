@@ -1,11 +1,11 @@
 import { shallowMount } from '@vue/test-utils';
-import EmptySearch from '../empty-search.vue';
+import AgentScore from '../agent-Score.vue';
 
-describe('EmptySearch', () => {
+describe('General Info: Agent Score', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(EmptySearch, {
+    const wrapper = shallowMount(AgentScore, {
       props: {
-        type: 'history',
+        score: {},
       },
     });
     expect(wrapper.exists()).toBe(true);

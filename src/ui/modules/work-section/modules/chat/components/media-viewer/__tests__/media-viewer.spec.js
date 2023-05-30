@@ -1,16 +1,16 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import MediaViewer
   from '../media-viewer.vue';
 import chat from '../../../../../../../../features/modules/chat/store/chat';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-const store = new Vuex.Store({ modules: { chat } });
+const store = createStore({ modules: { chat } });
 
 describe('Media Viewer', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(MediaViewer, { localVue, store });
+    const wrapper = shallowMount(MediaViewer, {
+      global: { plugins: [store] },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 });

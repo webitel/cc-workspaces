@@ -25,6 +25,7 @@ describe('Chat Messages Container', () => {
     chat.messages = messages;
     const wrapper = shallowMount(ChatMessagesContainer, {
       computed: {
+        ...ChatMessagesContainer.computed,
         chat() {
           return chat;
         },
@@ -41,6 +42,7 @@ describe('Chat Messages Container', () => {
     chat.messages = messages;
     const wrapper = shallowMount(ChatMessagesContainer, {
       computed: {
+        ...ChatMessagesContainer.computed,
         chat() {
           return chat;
         },
@@ -56,6 +58,7 @@ describe('Chat Messages Container', () => {
     chat.messages = messages;
     const wrapper = shallowMount(ChatMessagesContainer, {
       computed: {
+        ...ChatMessagesContainer.computed,
         chat() {
           return chat;
         },
@@ -70,6 +73,7 @@ describe('Chat Messages Container', () => {
     chat.messages = messages;
     const wrapper = shallowMount(ChatMessagesContainer, {
       computed: {
+        ...ChatMessagesContainer.computed,
         chat() {
           return chat;
         },
@@ -81,8 +85,9 @@ describe('Chat Messages Container', () => {
   it('event bus emits input focus event at message container click', () => {
     const $eventBus = { $emit: jest.fn() };
     const wrapper = shallowMount(ChatMessagesContainer, {
-      mocks: { $eventBus },
+      global: { provide: { $eventBus } },
       computed: {
+        ...ChatMessagesContainer.computed,
         chat() {
           return chat;
         },
