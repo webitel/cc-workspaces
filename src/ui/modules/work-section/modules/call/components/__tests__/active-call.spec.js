@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import TheCall
   from '../the-call.vue';
@@ -19,12 +19,18 @@ describe('call on call component', () => {
       direction: CallDirection.Inbound,
       state: CallActions.Ringing,
     };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          CallPreview: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });
-    await wrapper.vm.$nextTick();
     expect(wrapper.findComponent(CallPreview)
                   .exists())
       .toBeTruthy();
@@ -37,8 +43,15 @@ describe('call on call component', () => {
       queue: { queue_type: 'preview' },
       state: CallActions.Ringing,
     };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          CallPreview: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });
@@ -52,8 +65,15 @@ describe('call on call component', () => {
       direction: CallDirection.Inbound,
       state: CallActions.Ringing,
     };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          CallPreview: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });
@@ -64,12 +84,20 @@ describe('call on call component', () => {
 });
 
 describe('Make new call functionality', () => {
-  it('Draws a numpad on open', () => {
+  it('Draws a numpad on open', async () => {
     const call = {
       _isNew: true,
     };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          TaskContainer: false,
+          Numpad: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });
@@ -82,8 +110,17 @@ describe('Make new call functionality', () => {
 describe('Transfer functionality', () => {
   it('Opens transfer tab on event emit', async () => {
     const call = { state: CallActions.Active };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          TaskContainer: false,
+          CallHeader: false,
+          Transfer: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });
@@ -101,8 +138,17 @@ describe('Transfer functionality', () => {
       state: CallActions.Ringing,
       direction: CallDirection.Inbound,
     };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          TaskContainer: false,
+          CallPreview: false,
+          Transfer: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });
@@ -119,8 +165,17 @@ describe('Bridge functionality', () => {
     const call = {
       state: CallActions.Active,
     };
-    const wrapper = shallowMount(TheCall, {
+    const wrapper = mount(TheCall, {
+      shallow: true,
+      global: {
+        stubs: {
+          TaskContainer: false,
+          CallHeader: false,
+          Bridge: false,
+        },
+      },
       computed: {
+        ...TheCall.computed,
         call: () => call,
       },
     });

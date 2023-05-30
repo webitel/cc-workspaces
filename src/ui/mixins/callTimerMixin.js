@@ -8,9 +8,8 @@ export default {
     }),
 
     startTime() {
-      const task = this.call || this.task;
-      const start = task.answeredAt
-        ? task.answeredAt : task.createdAt;
+      const start = this.task.answeredAt
+        ? this.task.answeredAt : this.task.createdAt;
       let sec = Math.round((this.now - start) / 10 ** 3);
       sec = sec <= 0 ? 0 : sec; // handles -1 time after answer
       return convertDuration(sec);

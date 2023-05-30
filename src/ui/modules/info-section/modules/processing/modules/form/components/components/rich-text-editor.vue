@@ -75,6 +75,7 @@ export default {
         height: +this.height,
         menubar: false,
         statusbar: this.isHtml,
+        toolbar_mode: 'sliding',
         // content_style: `${contentUiCss}\n${contentCss}`,
       };
     },

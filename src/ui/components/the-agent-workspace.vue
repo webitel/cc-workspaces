@@ -134,7 +134,7 @@ export default {
 .main-agent-workspace {
   display: flex;
   flex-direction: column;
-  max-height: 100%;
+  height: 100vh;
 }
 
 .workspace-wrap {

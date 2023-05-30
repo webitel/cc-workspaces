@@ -4,7 +4,7 @@
     :class="[`agent-org-structure--${size}`]"
   >
     <wt-expansion-panel :size="size">
-      <template slot="title">{{ $tc('objects.team', 1) }}</template>
+      <template v-slot:title>{{ $tc('objects.team', 1) }}</template>
       <template>
         <ul>
           <li class="agent-org-structure-item">

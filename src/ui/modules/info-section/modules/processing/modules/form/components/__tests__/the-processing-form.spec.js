@@ -4,7 +4,7 @@ import TheProcessingForm from '../the-processing-form.vue';
 describe('TheProcessingForm', () => {
   const task = { task: {} };
 
-  const propsData = {
+  const props = {
     task,
   };
   const mocks = {
@@ -24,7 +24,7 @@ describe('TheProcessingForm', () => {
 
   it('renders a component', () => {
     const wrapper = shallowMount(TheProcessingForm, {
-      propsData,
+      props,
       mocks,
     });
     expect(wrapper.isVisible()).toBe(true);
@@ -35,7 +35,7 @@ describe('TheProcessingForm', () => {
     const component = { value: '', view: { initialValue: value } };
     task.attempt.form.body.push(component);
     shallowMount(TheProcessingForm, {
-      propsData,
+      props,
       mocks,
     });
     expect(component.value).toBe(value);

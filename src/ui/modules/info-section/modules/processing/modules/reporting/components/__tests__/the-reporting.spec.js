@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import deepmerge from 'deepmerge';
 import FailureForm
   from '../reporting-failure-form.vue';
@@ -16,18 +16,19 @@ const taskOnWorkspace = {
 let reporting = new ReportingForm(taskOnWorkspace);
 taskOnWorkspace.postProcessData = reporting;
 
-const propsData = {
+const props = {
   task: taskOnWorkspace,
 };
 
 const computed = {
+  ...TheReporting.computed,
   isTaskReporting: () => true,
   taskPostProcessing() { return reporting; },
   reportingSent: () => false,
 };
 
 const options = {
-  propsData,
+  props,
   computed,
 };
 
@@ -100,7 +101,7 @@ describe('Post processing Success reporting', () => {
     const sendReportMock = jest.spyOn(TheReporting.methods, 'sendReporting')
                                .mockImplementation(() => {
                                });
-    const wrapper = shallowMount(TheReporting, options);
+    const wrapper = mount(TheReporting, options);
     wrapper.findAllComponents({ name: 'wt-button' }).at(-1).vm.$emit('click');
     expect(sendReportMock).toHaveBeenCalled();
   });
@@ -112,14 +113,14 @@ describe('Post processing Failure reporting', () => {
   });
 
   it('post processing failure form is initially invisible', async () => {
-    const wrapper = shallowMount(TheReporting, options);
+    const wrapper = mount(TheReporting, options);
     const failureForm = wrapper.findComponent(FailureForm);
     expect(failureForm.isVisible()).toBe(false);
   });
 
   it('post processing failure form is shown if reporting.success is falsy', async () => {
     reporting.success = false;
-    const wrapper = shallowMount(TheReporting, options);
+    const wrapper = mount(TheReporting, options);
     await wrapper.vm.$nextTick(); // re-render
     const failureForm = wrapper.findComponent(FailureForm);
     expect(failureForm.exists()).toBe(true);

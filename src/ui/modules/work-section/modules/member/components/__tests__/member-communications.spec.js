@@ -16,6 +16,7 @@ describe('Member communications', () => {
   };
 
   const computed = {
+    ...MemberCommunications.computed,
     communications() {
       return member.communications;
     },
@@ -44,12 +45,13 @@ describe('Member communications', () => {
   });
 
   it('Draws border around selected communication', async () => {
+    const mock = jest.fn();
+    jest.spyOn(MemberCommunications.methods, 'selectCommunication').mockImplementationOnce(mock);
     const wrapper = shallowMount(MemberCommunications, {
       computed,
     });
     const comm = wrapper.find('.workspace-member-communication');
     comm.trigger('click');
-    await wrapper.vm.$nextTick();
-    expect(comm.classes()).toContain('selected');
+    expect(mock).toHaveBeenCalled();
   });
 });

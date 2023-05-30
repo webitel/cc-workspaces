@@ -1,9 +1,10 @@
 <template>
-  <wt-datetimepicker
+  <wt-datepicker
     v-bind="$attrs"
-    v-on="$listeners"
     :value="value"
-  ></wt-datetimepicker>
+    mode="datetime"
+    @input="$emit('input', $event)"
+  ></wt-datepicker>
 </template>
 
 <script>

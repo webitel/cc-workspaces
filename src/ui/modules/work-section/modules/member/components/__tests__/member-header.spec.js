@@ -1,10 +1,11 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import MemberHeader
   from '../member-header.vue';
 
 const member = {};
 
 const computed = {
+  ...MemberHeader.computed,
   member() {
     return member;
   },
@@ -24,7 +25,7 @@ describe('Member header', () => {
   });
 
   it('Shows "Call" btn if communication was selected', () => {
-    const wrapper = shallowMount(MemberHeader, {
+    const wrapper = mount(MemberHeader, {
       computed: {
         ...computed,
         isCommSelected() { return true; },
@@ -38,7 +39,7 @@ describe('Member header', () => {
     const mock = jest.fn();
     jest.spyOn(MemberHeader.methods, 'makeCall')
       .mockImplementationOnce(mock);
-    const wrapper = shallowMount(MemberHeader, {
+    const wrapper = mount(MemberHeader, {
       computed: {
         ...computed,
         isCommSelected() { return true; },

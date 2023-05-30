@@ -4,7 +4,7 @@ import Widget from '../widget.vue';
 describe('Widget', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(Widget, {
-      propsData: {
+      props: {
         widget: {
           icon: '',
           text: jest.fn(),
@@ -15,7 +15,7 @@ describe('Widget', () => {
   });
   it('widget emits "select" event at click, if selectionMode is true', () => {
     const wrapper = shallowMount(Widget, {
-      propsData: {
+      props: {
         widget: {
           icon: '',
           text: jest.fn(),
@@ -28,7 +28,7 @@ describe('Widget', () => {
   });
   it('widget does not emit "select" event at click, if selectionMode is true', () => {
     const wrapper = shallowMount(Widget, {
-      propsData: {
+      props: {
         widget: {
           icon: '',
           text: jest.fn(),

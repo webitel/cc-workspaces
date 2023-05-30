@@ -2,7 +2,7 @@
   <task-queue-container>
     <active-preview
       v-for="(task, key) of callList"
-      :key="key"
+      :key="task.id"
       :index="key"
       :opened="task === taskOnWorkspace"
       :task="task"

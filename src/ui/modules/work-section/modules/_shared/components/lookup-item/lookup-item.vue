@@ -1,12 +1,12 @@
 <template>
   <article class="lookup-item">
     <lookup-item-wrapper>
-      <template slot="before" v-if="!noBefore">
+      <template v-slot:before v-if="!noBefore">
         <slot name="before">
           <wt-avatar></wt-avatar>
         </slot>
       </template>
-      <template slot="main" v-if="!noMain">
+      <template v-slot:main v-if="!noMain">
         <div class="lookup-item__main">
           <div class="lookup-item__main-content">
             <div class="lookup-item__title">
@@ -29,7 +29,7 @@
           </div>
         </div>
       </template>
-      <template slot="after" v-if="!noAfter">
+      <template v-slot:after v-if="!noAfter">
         <slot name="after"></slot>
       </template>
     </lookup-item-wrapper>

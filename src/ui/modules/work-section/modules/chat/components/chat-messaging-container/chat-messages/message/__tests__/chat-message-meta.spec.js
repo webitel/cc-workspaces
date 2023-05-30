@@ -10,13 +10,13 @@ describe('ChatMessageMeta component', () => {
   });
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessageMeta, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageMeta, { props: { message } });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('correctly computes sentAt time', () => {
     message.createdAt = '0';
-    const wrapper = shallowMount(ChatMessageMeta, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageMeta, { props: { message } });
     expect(wrapper.vm.sentAt).toBeTruthy();
   });
 });

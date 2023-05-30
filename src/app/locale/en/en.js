@@ -3,6 +3,7 @@ import {
   DeviceNotAllowPermissionError,
   LicencePermissionError,
   JobState,
+  AgentStatus,
 } from 'webitel-sdk';
 
 export default {
@@ -48,6 +49,8 @@ export default {
     occupancy: 'Occupancy',
     chatAccepts: 'Accepted chats',
     chatAht: 'Chat Handling Time',
+    scoreCount: 'Rated calls',
+    scoreAvg: 'Total score',
   },
   queueSec: {
     call: {
@@ -70,6 +73,7 @@ export default {
       total: 'Total',
       pauses: 'Pauses',
       free: 'Free',
+      score: 'Agent score',
     },
     clientInfo: 'Client info',
     knowledgeBase: 'Knowledge base',
@@ -146,7 +150,12 @@ export default {
       },
     },
     breakTimer: {
-      heading: 'You are in break mode now',
+      heading: 'You are in {mode} mode now',
+      mode: {
+        [AgentStatus.Pause]: 'break',
+        [AgentStatus.BreakOut]: 'break out',
+      },
+      [AgentStatus.BreakOut]: 'Break out',
       continueWork: 'Continue work',
     },
   },

@@ -1,8 +1,8 @@
 <template>
 <!--  v-show instead of v-if: https://my.webitel.com/browse/WTEL-2827 -->
   <wt-popup v-show="isDisconnectPopup" class="disconnect-popup" min-width="480" @close="closePopup">
-    <template slot="title">{{ $t('disconnectPopup.title') }}</template>
-    <template slot="main">
+    <template v-slot:title>{{ $t('disconnectPopup.title') }}</template>
+    <template v-slot:main>
       <article class="disconnect-popup__main">
         <img
           class="disconnect-popup__img"
@@ -12,7 +12,7 @@
         <p class="disconnect-popup__main__text">{{ $t('disconnectPopup.mainText') }}</p>
       </article>
     </template>
-    <template slot="actions">
+    <template v-slot:actions>
       <wt-button ref="jest" color="success" @click="reloadPage">
         {{ $t('disconnectPopup.reloadBtn') }}
       </wt-button>

@@ -1,6 +1,6 @@
 import { ChatActions } from 'webitel-sdk';
 
-const callHandler = (context) => (action, chat) => {
+const callHandler = (context) => async (action, chat) => {
   switch (action) {
     case ChatActions.UserInvite:
       context.dispatch('HANDLE_INVITE_ACTION', { action, chat });

@@ -35,6 +35,7 @@
         color="job"
         icon="job--accept"
         size="sm"
+        wide
         @click.prevent="$emit('accept', task)"
         @keydown.enter.prevent="$emit('accept', task)"
       >
@@ -45,6 +46,7 @@
         color="danger"
         icon="job--end"
         size="sm"
+        wide
         @click.prevent="$emit('decline', task)"
         @keydown.enter.prevent="$emit('decline', task)"
       >

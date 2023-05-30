@@ -1,10 +1,10 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import AgentOrgStructure from '../agent-org-structure.vue';
 
 describe('General Info: Agent Org Structure', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(AgentOrgStructure, {
-      propsData: {
+      props: {
         agent: {},
       },
     });
@@ -14,8 +14,8 @@ describe('General Info: Agent Org Structure', () => {
     const sup1 = 'sup1';
     const sup2 = 'sup2';
     const supervisor = [{ name: sup1 }, { name: sup2 }];
-    const wrapper = shallowMount(AgentOrgStructure, {
-      propsData: { agent: { supervisor } },
+    const wrapper = mount(AgentOrgStructure, {
+      props: { agent: { supervisor } },
     });
     const supervisorsUIWrappers = wrapper
       .findAll('.agent-org-structure-item')
@@ -29,8 +29,8 @@ describe('General Info: Agent Org Structure', () => {
     const aud1 = 'aud1';
     const aud2 = 'aud2';
     const auditor = [{ name: aud1 }, { name: aud2 }];
-    const wrapper = shallowMount(AgentOrgStructure, {
-      propsData: { agent: { auditor } },
+    const wrapper = mount(AgentOrgStructure, {
+      props: { agent: { auditor } },
     });
     const auditorsUIWrappers = wrapper
       .findAll('.agent-org-structure-item')

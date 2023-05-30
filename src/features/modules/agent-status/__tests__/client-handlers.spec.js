@@ -1,4 +1,3 @@
-import { throwError } from '@vue/vue2-jest/lib/utils';
 import clientHandlers from '../client-handlers';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';

@@ -10,13 +10,13 @@ describe('ChatMessageText component', () => {
   });
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessageText, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageText, { props: { message } });
     expect(wrapper.exists()).toBe(true);
   });
   it('correctly computes message text', () => {
     const text = 'jest';
     message.text = text;
-    const wrapper = shallowMount(ChatMessageText, { propsData: { message } });
+    const wrapper = shallowMount(ChatMessageText, { props: { message } });
     expect(wrapper.vm.text).toBe(text);
   });
 });

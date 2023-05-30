@@ -1,6 +1,6 @@
 <template>
   <lookup-item>
-    <template slot="before">
+    <template v-slot:before>
       <wt-avatar
         :src="src"
         :size="size"
@@ -9,15 +9,15 @@
       ></wt-avatar>
     </template>
 
-    <template slot="title">
+    <template v-slot:title>
       {{ item.name || item.username }}
     </template>
 
-    <template slot="subtitle">
+    <template v-slot:subtitle>
       {{ item.extension }}
     </template>
 
-    <template slot="after">
+    <template v-slot:after>
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
