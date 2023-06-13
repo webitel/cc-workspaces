@@ -50,7 +50,7 @@ export default {
     UserDndSwitcher,
     BreakTimerPopup,
   },
-
+  inject: ['$config'],
   data: () => ({
     buildInfo: {
       release: process.env.VUE_APP_PACKAGE_VERSION,
