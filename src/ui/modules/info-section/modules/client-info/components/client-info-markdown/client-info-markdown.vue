@@ -2,7 +2,8 @@
   <article v-if="userDescription" class="user-description">
     <div class="user-description__head">
       <wt-icon
-        icon="ws-user-description"
+        icon="user-description"
+        icon-prefix="ws"
       ></wt-icon>
       <span class="user-description__title">{{$t('reusable.description')}}:</span>
     </div>
@@ -45,12 +46,7 @@ export default {
       return res;
     },
     userDescription() {
-      const description = this.taskOnWorkspace.task?.communication?.description;
-      let res = '';
-      if (description) {
-        return res = description;
-      }
-      return res;
+      return this.taskOnWorkspace.task?.communication?.description || '';
     },
   },
 };
@@ -58,16 +54,16 @@ export default {
 
 <style lang="scss" scoped>
 .user-description {
+  margin-bottom: var(--spacing-sm);
   border-radius: var(--spacing-2xs);
+  padding: var(--spacing-sm);
   background: var(--secondary-color);
   color: var(--contrast-color);
-  padding: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
 }
 
 .user-description__head {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: var(--spacing-xs);
   margin-bottom: var(--spacing-xs);
 }
