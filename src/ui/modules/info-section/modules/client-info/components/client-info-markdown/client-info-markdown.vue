@@ -1,14 +1,14 @@
 <template>
   <article v-if="userDescription" class="user-description">
-    <div class="user-description__head">
+    <header class="user-description__head">
       <wt-icon
         icon="user-description"
         icon-prefix="ws"
       ></wt-icon>
       <span class="user-description__title">{{$t('reusable.description')}}:</span>
-    </div>
+    </header>
     <div>
-      <span class="user-description__body">{{ userDescription }}</span>
+      <p class="user-description__body">{{ userDescription }}</p>
     </div>
   </article>
   <article class="md markdown-body" v-html="computeHTML"></article>
