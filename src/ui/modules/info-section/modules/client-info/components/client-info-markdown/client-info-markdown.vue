@@ -1,4 +1,15 @@
 <template>
+  <article v-if="userDescription" class="user-description">
+    <div class="user-description__head">
+      <wt-icon
+        icon="ws-user-description"
+      ></wt-icon>
+      <span class="user-description__title">{{$t('reusable.description')}}:</span>
+    </div>
+    <div>
+      <span class="user-description__body">{{ userDescription }}</span>
+    </div>
+  </article>
   <article class="md markdown-body" v-html="computeHTML"></article>
 </template>
 
@@ -33,11 +44,42 @@ export default {
       }
       return res;
     },
+    userDescription() {
+      const description = this.taskOnWorkspace.task?.communication?.description;
+      let res = '';
+      if (description) {
+        return res = description;
+      }
+      return res;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.user-description {
+  border-radius: var(--spacing-2xs);
+  background: var(--secondary-color);
+  color: var(--contrast-color);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.user-description__head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.user-description__title {
+  @extend %typo-subtitle-1;
+}
+
+.user-description__body {
+  @extend %typo-body-1;
+}
+
 .md {
   @extend %typo-body-2;
 }
