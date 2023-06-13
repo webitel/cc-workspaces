@@ -7,9 +7,7 @@
       ></wt-icon>
       <span class="user-description__title">{{$t('reusable.description')}}:</span>
     </header>
-    <div>
-      <p class="user-description__body">{{ userDescription }}</p>
-    </div>
+    <p class="user-description__body">{{ userDescription }}</p>
   </article>
   <article class="md markdown-body" v-html="computeHTML"></article>
 </template>
