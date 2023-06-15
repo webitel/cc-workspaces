@@ -75,6 +75,11 @@ export default {
 }
 
 .md {
-  @extend %typo-body-2;
+  padding-left: var(--spacing-sm);
+  @extend %typo-body-1;
+}
+
+.md strong {
+  @extend %typo-subtitle-1;
 }
 </style>
