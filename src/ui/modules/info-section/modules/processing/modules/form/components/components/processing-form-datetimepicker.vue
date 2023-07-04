@@ -3,7 +3,7 @@
     v-bind="$attrs"
     :value="value"
     mode="datetime"
-    @input="$emit('input', $event)"
+    @input="$emit('change', $event)"
   ></wt-datepicker>
 </template>
 
