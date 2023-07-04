@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import anchorme from 'anchorme';
-import purify from 'dompurify';
+import Autolinker from 'autolinker';
 import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
 
 export default {
@@ -19,14 +18,10 @@ export default {
       if (!this.message.text) return '';
       // ATTENTION: not all libs are suitable for this case, because we want to preserve "<" signs
       // https://my.webitel.com/browse/DEV-2848
-      return anchorme({
-        input: purify.sanitize(this.message.text),
-        options: {
-          attributes: {
-            target: '_blank',
-            class: 'chat-message-text__link',
-          },
-        },
+      return Autolinker.link(this.message.text, {
+        newWindow: true,
+        sanitizeHtml: true, // DONT FORGET TO SANITIZE, OR USE DOM PURIFY
+        className: 'chat-message-text__link',
       });
     },
   },
