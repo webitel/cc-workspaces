@@ -61,7 +61,7 @@ export default {
       chats: 'Chats',
     },
     job: {
-      jobs: 'Jobs',
+      jobs: 'Tasks',
     },
   },
   infoSec: {
@@ -195,7 +195,7 @@ export default {
     message: 'New message from {name}',
     userInvite: 'New chat invite from {name}',
     closeConversation: '{name} left the chat',
-    [JobState.Distribute]: 'New job: {name}',
+    [JobState.Distribute]: 'New task: {name}',
   },
   emojiPicker: {
     categoriesLabel: 'Categories',
