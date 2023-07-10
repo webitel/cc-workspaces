@@ -1,6 +1,6 @@
 import { EndpointListGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
 import { objCamelToSnake } from '@webitel/ui-sdk/src/scripts/caseConverters';
-import instance from '../../../instance';
+import instance from '../../../old/instance';
 
 const baseUrl = '/users';
 
