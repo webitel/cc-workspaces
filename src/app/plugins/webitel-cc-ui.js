@@ -7,8 +7,8 @@ import WebitelCCUIRu from '@webitel/cc-ui-sdk/src/locale/ru/ru';
 import WebitelCCUIUa from '@webitel/cc-ui-sdk/src/locale/ua/ua';
 import i18n from '../locale/i18n';
 
-import instance from '../api/instance';
-import openAPIConfig from '../api/openAPIConfig';
+import instance from '../api/old/instance';
+import openAPIConfig from '../api/old/openAPIConfig';
 
 export default WebitelCCUI;
 InstallOptionsRepository.setBulk({ instance, openAPIConfig });
