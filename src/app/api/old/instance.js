@@ -1,6 +1,10 @@
 import axios from 'axios';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import { objCamelToSnake, objSnakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
+import updateTokenInterceptor
+  from '@webitel/ui-sdk/src/api/interceptors/request/updateToken.interceptor';
+import handleUnauthorizedInterceptor
+  from '@webitel/ui-sdk/src/api/interceptors/response/handleUnauthorized.interceptor';
 import attachStarToRequestUrlSearchQuery from '../interceptors/request/attachStarToRequestUrlSearchQuery.interceptor';
 
 // global API configuration
@@ -33,6 +37,8 @@ instance.interceptors.request.use(
 
 instance.interceptors.request.use(...attachStarToRequestUrlSearchQuery.default);
 
+instance.interceptors.request.use(...updateTokenInterceptor);
+
 instance.interceptors.response.use(
   (response) => objSnakeToCamel(response.data),
   (error) => { // catches 401 error across all api's
@@ -45,5 +51,7 @@ instance.interceptors.response.use(
     return Promise.reject(error.response.data);
   },
 );
+
+instance.interceptors.response.use(...handleUnauthorizedInterceptor);
 
 export default instance;
