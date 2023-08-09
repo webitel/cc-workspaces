@@ -13,7 +13,7 @@ authAPI.setInstance(instance);
 userinfoAPI.setInstance(instance);
 
 const state = {
-  thisApp: WebitelApplications.HISTORY,
+  thisApp: WebitelApplications.AGENT,
 };
 
 const actions = {
