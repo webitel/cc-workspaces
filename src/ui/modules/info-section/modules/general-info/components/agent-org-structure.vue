@@ -41,8 +41,6 @@
 
 <script>
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
-
 export default {
   name: 'agent-org-structure',
   props: {
@@ -51,7 +49,6 @@ export default {
       required: true,
     },
   },
-  components: { WtExpansionPanel },
   mixins: [sizeMixin],
   computed: {
     team() {
