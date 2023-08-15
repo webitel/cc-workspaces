@@ -16,7 +16,7 @@ const listResponseHandler = (response) => {
     ...item,
     agents: {
       pause: item.agents.pause || 0,
-      free: item.agents.free || 0,
+      online: item.agents.online || 0,
     },
   }));
   return {

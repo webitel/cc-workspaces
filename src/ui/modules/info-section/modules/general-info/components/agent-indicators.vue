@@ -10,7 +10,7 @@
     ></wt-indicator>
     <wt-indicator
       color="success"
-      :text="free"
+      :text="online"
       :size="size"
     ></wt-indicator>
   </div>
@@ -34,8 +34,8 @@ export default {
     pause() {
       return this.agents.pause;
     },
-    free() {
-      return this.agents.free;
+    online() {
+      return this.agents.online;
     },
   },
 };
