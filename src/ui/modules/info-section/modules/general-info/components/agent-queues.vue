@@ -30,12 +30,10 @@
 <script>
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import agentIndicators from './agent-indicators.vue';
-import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
 
 export default {
   name: 'agent-queues',
   components: {
-    WtExpansionPanel,
     agentIndicators,
   },
   mixins: [sizeMixin],

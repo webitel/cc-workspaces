@@ -35,11 +35,9 @@
 import agentPauseCauseRepresentationMixin
   from '@webitel/cc-ui-sdk/src/mixins/agentPauseCauseRepresentation/agentPauseCauseRepresentationMixin';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import WtExpansionPanel from './wt-expansion-panel/wt-expansion-panel.vue';
 
 export default {
   name: 'agent-pause-causes',
-  components: { WtExpansionPanel },
   mixins: [agentPauseCauseRepresentationMixin, sizeMixin],
   props: {
     pauseCauses: {

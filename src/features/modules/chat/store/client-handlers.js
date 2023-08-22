@@ -1,9 +1,13 @@
 import { ChatActions } from 'webitel-sdk';
+import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
 const callHandler = (context) => async (action, chat) => {
   switch (action) {
     case ChatActions.UserInvite:
       context.dispatch('HANDLE_INVITE_ACTION', { action, chat });
+      break;
+    case ChatActions.Joined:
+      context.dispatch('HANDLE_JOINED_ACTION', { action, chat });
       break;
     case ChatActions.Message:
       context.dispatch('HANDLE_MESSAGE_ACTION', { action, chat });
@@ -37,6 +41,10 @@ const actions = {
       context.dispatch('SET_WORKSPACE', chat);
     }
     context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
+  },
+
+  HANDLE_JOINED_ACTION: (context, { chat }) => {
+    openLinkFromVariable(chat);
   },
 
   HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
