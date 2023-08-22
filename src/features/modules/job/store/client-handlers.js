@@ -1,9 +1,13 @@
-import { CallDirection, JobState } from 'webitel-sdk';
+import { JobState } from 'webitel-sdk';
+import OpenLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
 const handler = (context) => (action, job) => {
   switch (action) {
     case JobState.Distribute:
       context.dispatch('HANDLE_DISTRIBUTE_ACTION', { action, job });
+      break;
+    case JobState.Bridged:
+      context.dispatch('HANDLE_BRIDGED_ACTION', { action, job });
       break;
     case JobState.Destroy:
       context.dispatch('HANDLE_DESTROY_ACTION', { action, job });
@@ -27,6 +31,7 @@ const actions = {
       context.dispatch('OPEN_JOB', job);
     }
   },
+  HANDLE_BRIDGED_ACTION: (context, { job }) => OpenLinkFromVariable(job),
   HANDLE_DESTROY_ACTION: (context, { job }) => context.dispatch('REMOVE_JOB', job),
 };
 
