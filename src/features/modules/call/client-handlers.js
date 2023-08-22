@@ -1,4 +1,5 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
+import openLinkFromVariable from '../../../app/scripts/openLinkFromVariable';
 
 const callHandler = (context) => (action, call) => {
   switch (action) {
@@ -6,7 +7,7 @@ const callHandler = (context) => (action, call) => {
       context.dispatch('HANDLE_RINGING_ACTION', call);
       break;
     case CallActions.Active:
-      context.dispatch('HOLD_OTHER_CALLS', call);
+      context.dispatch('HANDLE_ACTIVE_ACTION', call);
       break;
     case CallActions.Hangup:
       // context.dispatch('HANDLE_HANGUP_ACTION', call);
@@ -36,6 +37,11 @@ const actions = {
       || context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       context.dispatch('SET_WORKSPACE', call);
     }
+  },
+
+  HANDLE_ACTIVE_ACTION: async (context, call) => {
+    if (call.firstActive) openLinkFromVariable(call);
+    context.dispatch('HOLD_OTHER_CALLS', call);
   },
 
   HANDLE_DESTROY_ACTION: async (context, call) => {
