@@ -2,7 +2,16 @@ import { mount } from '@vue/test-utils';
 import OfflineQueue from '../offline-queue-container.vue';
 
 describe('Members list functionality', () => {
-  const member = {};
+  let member;
+
+  beforeEach(() => {
+    member = {
+      communications: [
+        { destination: '123' },
+        { destination: '456' },
+      ],
+    };
+  });
 
   const computed = {
     dataList: () => [member],
@@ -17,6 +26,8 @@ describe('Members list functionality', () => {
       .mockImplementation(jest.fn());
     const wrapper = mount(OfflineQueue, {
       computed,
+
+
       shallow: true,
       global: {
         stubs: {
