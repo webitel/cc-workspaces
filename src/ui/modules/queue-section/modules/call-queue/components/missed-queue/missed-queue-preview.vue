@@ -2,7 +2,7 @@
   <component
     :is="`task-queue-preview-${size}`"
     :task="task"
-    @click="$emit('click', task)"
+    @click="$emit('click', task);"
   >
     <template
       v-if="size === 'md'"
@@ -30,11 +30,21 @@
     <template v-slot:body>
       {{ displayNumber }}
     </template>
+    <template v-slot:callback>
+      <wt-rounded-action
+        :size="size"
+        color="success"
+        icon="call--filled"
+        rounded
+        @click.stop="makeCall"
+      ></wt-rounded-action>
+    </template>
   </component>
 </template>
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import { mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
@@ -43,6 +53,10 @@ export default {
   mixins: [taskPreviewMixin, sizeMixin],
 
   computed: {
+    ...mapState({
+      client: (state) => state.client,
+      config: (state) => state.config,
+    }),
     displayName() {
       return this.task.from?.name || '';
     },
@@ -53,12 +67,31 @@ export default {
       return prettifyTime(this.task.createdAt);
     },
   },
+  methods: {
+    async makeCall() {
+      const CALL_PARAMS = { disableStun: this.config.CLI.stun };
+      const params = {
+        ...CALL_PARAMS,
+        video: false,
+      };
+      const destination = this.task.from.number;
+      const client = await this.client.getCliInstance();
+      await client.call({
+        destination,
+        params,
+      });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .missed-preview__task-time {
   @extend %typo-body-2;
+  overflow: hidden;
+  flex-grow: 1;
   text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

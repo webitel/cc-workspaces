@@ -68,6 +68,10 @@
       </slot>
     </footer>
 
+    <div class="callback-container">
+      <slot name="callback"></slot>
+    </div>
+
   </article>
 </template>
 
@@ -114,6 +118,11 @@ export default {
   .queue-preview-actions {
     display: flex;
     justify-content: space-between;
+  }
+
+  .callback-container {
+    display: flex;
+    justify-content: center;
   }
 }
 

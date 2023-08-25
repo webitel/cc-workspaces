@@ -9,54 +9,58 @@
     @keydown.enter="$emit('click', task)"
   >
 
-    <header class="queue-preview-header">
-      <div class="queue-preview-header__icon">
-        <slot name="icon"></slot>
-      </div>
-      <div class="queue-preview-header__text-wrapper">
+    <div class="queue-preview-body">
+      <header class="queue-preview-header">
+        <div class="queue-preview-header__icon">
+          <slot name="icon"></slot>
+        </div>
+        <div class="queue-preview-header__text-wrapper">
       <span class="queue-preview-header__title">
         <slot name="title"></slot>
       </span>
-        <p class="queue-preview-header__subtitle">
-          <slot name="body"></slot>
-        </p>
-      </div>
-
-      <slot name="timer">
-        <queue-preview-timer
-          :task="task"
-        ></queue-preview-timer>
-      </slot>
-    </header>
-
-    <section
-      v-if="displayQueueName || $slots['additional-status']"
-      class="queue-preview-main-section"
-    >
-      <article class="queue-preview-chips">
-        <wt-chip
-          v-if="displayQueueName"
-          color="secondary"
-        >
-          {{ displayQueueName }}
-        </wt-chip>
-      </article>
-      <div class="queue-preview-additional-status">
-        <slot name="additional-status"></slot>
-      </div>
-    </section>
-
-    <footer
-      v-if="$slots.footer || $slots.actions"
-      class="queue-preview-footer"
-    >
-      <slot name="footer">
-        <div class="queue-preview-actions">
-          <slot name="actions"></slot>
+          <p class="queue-preview-header__subtitle">
+            <slot name="body"></slot>
+          </p>
         </div>
-      </slot>
-    </footer>
 
+        <slot name="timer">
+          <queue-preview-timer
+            :task="task"
+          ></queue-preview-timer>
+        </slot>
+      </header>
+
+      <section
+        v-if="displayQueueName || $slots['additional-status']"
+        class="queue-preview-main-section"
+      >
+        <article class="queue-preview-chips">
+          <wt-chip
+            v-if="displayQueueName"
+            color="secondary"
+          >
+            {{ displayQueueName }}
+          </wt-chip>
+        </article>
+        <div class="queue-preview-additional-status">
+          <slot name="additional-status"></slot>
+        </div>
+      </section>
+
+      <footer
+        v-if="$slots.footer || $slots.actions"
+        class="queue-preview-footer"
+      >
+        <slot name="footer">
+          <div class="queue-preview-actions">
+            <slot name="actions"></slot>
+          </div>
+        </slot>
+      </footer>
+    </div>
+
+
+    <slot name="callback"></slot>
   </article>
 </template>
 
@@ -86,7 +90,18 @@ export default {
 @import '../../css/queue-preview';
 
 .queue-preview--md {
-    .queue-preview-header__icon {
+  flex-direction: row;
+  justify-content: space-between;
+
+  .queue-preview-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: var(--spacing-xs);
+  }
+
+  .queue-preview-header__icon {
     flex: 0 0 24px;
   }
 
