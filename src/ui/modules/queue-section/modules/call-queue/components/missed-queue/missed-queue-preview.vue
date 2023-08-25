@@ -1,6 +1,7 @@
 <template>
   <component
     :is="`task-queue-preview-${size}`"
+    class="queue-preview--missed"
     :task="task"
     @click="$emit('click', task)"
   >
@@ -30,6 +31,9 @@
     <template v-slot:body>
       {{ displayNumber }}
     </template>
+    <template v-slot:footer>
+      <wt-icon icon="edit"></wt-icon>
+    </template>
   </component>
 </template>
 
@@ -57,6 +61,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.queue-preview--missed {
+  &.queue-preview--md {
+    flex-direction: row;
+    :deep(.queue-preview-header) {
+      flex-grow: 1;
+    }
+  }
+  &.queue-preview--sm {
+    :deep(.queue-preview-footer) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 .missed-preview__task-time {
   @extend %typo-body-2;
   text-align: center;
