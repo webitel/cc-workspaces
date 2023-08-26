@@ -67,11 +67,6 @@
         </div>
       </slot>
     </footer>
-
-    <div class="callback-container">
-      <slot name="callback"></slot>
-    </div>
-
   </article>
 </template>
 

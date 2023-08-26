@@ -28,16 +28,22 @@
       </div>
     </wt-tooltip>
 
-    <wt-icon
-      color="hold"
-      icon="call"
-      size="md"
-    ></wt-icon>
+    <div class="queue-preview--offline-queue__icon">
+      <wt-icon
+        color="hold"
+        icon="call"
+        size="md"
+      ></wt-icon>
+    </div>
+
 
     <section class="queue-preview--offline-queue__title">
       {{ displayName }}
     </section>
-    <div class="queue-preview--offline-queue__callback-container">
+    <!--@click.stop needed to prevent click on wt-context-menu parent-->
+    <div
+      @click.stop
+      class="queue-preview--offline-queue__callback-container">
       <!-- If there's only one communication, show a single call button -->
       <template v-if="task.communications.length === 1">
         <wt-rounded-action
@@ -118,7 +124,7 @@ export default {
 };
 </script>
 
-// removed "scoped" to style a tooltip content
+<!--// removed "scoped" to style a tooltip content-->
 <style lang="scss">
 .queue-preview {
   &.queue-preview--offline-queue {
@@ -133,9 +139,18 @@ export default {
     overflow: hidden;
     @extend %typo-subtitle-1;
     width: 100%;
-    text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  &.queue-preview--sm {
+    .queue-preview--offline-queue__title {
+      text-align: center;
+    }
+  }
+
+  .queue-preview--offline-queue__icon {
+    display: flex;
   }
 
   .queue-preview--offline-queue__callback-container {

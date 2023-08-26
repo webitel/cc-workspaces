@@ -2,6 +2,7 @@
   <component
     :is="`task-queue-preview-${size}`"
     :task="task"
+    class="queue-preview--missed"
     @click="$emit('click', task);"
   >
     <template
@@ -30,14 +31,16 @@
     <template v-slot:body>
       {{ displayNumber }}
     </template>
-    <template v-slot:callback>
-      <wt-rounded-action
-        :size="size"
-        color="success"
-        icon="call--filled"
-        rounded
-        @click.stop="makeCall"
-      ></wt-rounded-action>
+    <template v-slot:footer>
+      <div class="queue-preview--missed__recall-wrapper">
+        <wt-rounded-action
+          :size="size"
+          color="success"
+          icon="call--filled"
+          rounded
+          @click.stop="makeCall"
+        ></wt-rounded-action>
+      </div>
     </template>
   </component>
 </template>
@@ -86,6 +89,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.queue-preview--missed {
+  &.queue-preview--md {
+    flex-direction: row;
+  }
+  &.queue-preview--sm {
+    .queue-preview--missed__recall-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 .missed-preview__task-time {
   @extend %typo-body-2;
   overflow: hidden;
