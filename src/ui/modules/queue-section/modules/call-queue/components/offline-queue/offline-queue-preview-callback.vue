@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'offline-queue-preview-callback',
@@ -52,10 +52,6 @@ export default {
     },
   },
   computed: {
-    ...mapState({
-      client: (state) => state.client,
-      config: (state) => state.config,
-    }),
     options() {
       return this.task.communications.map((el) => ({
         text: el.destination,
