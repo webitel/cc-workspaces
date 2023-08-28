@@ -2,7 +2,8 @@
   <component
     :is="`task-queue-preview-${size}`"
     :task="task"
-    @click="$emit('click', task)"
+    class="queue-preview--missed"
+    @click="$emit('click', task);"
   >
     <template
       v-if="size === 'md'"
@@ -30,11 +31,23 @@
     <template v-slot:body>
       {{ displayNumber }}
     </template>
+    <template v-slot:footer>
+      <div class="queue-preview--missed__callback-wrapper">
+        <wt-rounded-action
+          :size="size"
+          color="success"
+          icon="call--filled"
+          rounded
+          @click.stop="call"
+        ></wt-rounded-action>
+      </div>
+    </template>
   </component>
 </template>
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
@@ -53,12 +66,38 @@ export default {
       return prettifyTime(this.task.createdAt);
     },
   },
+  methods: {
+    ...mapActions('features/call', {
+      makeCall: 'CALL',
+    }),
+    call() {
+      const { number } = this.task.from;
+      return this.makeCall({ number });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.queue-preview--missed {
+  &.queue-preview--md {
+    flex-direction: row;
+  }
+  &.queue-preview--sm {
+    .queue-preview--missed__callback-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 .missed-preview__task-time {
   @extend %typo-body-2;
+  overflow: hidden;
+  flex-grow: 1;
   text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

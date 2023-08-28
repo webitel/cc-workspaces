@@ -67,7 +67,6 @@
         </div>
       </slot>
     </footer>
-
   </article>
 </template>
 

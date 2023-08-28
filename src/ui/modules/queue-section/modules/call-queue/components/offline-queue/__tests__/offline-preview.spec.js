@@ -9,6 +9,10 @@ describe('Other UIs', () => {
   beforeEach(() => {
     member = {
       name,
+      communications: [
+        { destination: '123' },
+        { destination: '456' },
+      ],
     };
   });
 

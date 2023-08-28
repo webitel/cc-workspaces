@@ -1,7 +1,7 @@
 <template>
   <article
-    class="queue-preview queue-preview--offline-queue"
     :class="`queue-preview--${size}`"
+    class="queue-preview queue-preview--offline-queue"
     tabindex="0"
     @click="$emit('click', task)"
     @keydown.enter="$emit('click', task)"
@@ -28,25 +28,33 @@
       </div>
     </wt-tooltip>
 
-    <wt-icon
-      size="md"
-      color="hold"
-      icon="call"
-    ></wt-icon>
+    <div class="queue-preview--offline-queue__icon">
+      <wt-icon
+        color="hold"
+        icon="call"
+        size="md"
+      ></wt-icon>
+    </div>
+
 
     <section class="queue-preview--offline-queue__title">
       {{ displayName }}
     </section>
+    <offline-queue-preview-callback
+      :task="task"
+    />
   </article>
 </template>
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import offlineQueuePreviewCallback from './offline-queue-preview-callback.vue';
 
 export default {
   name: 'offline-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
+  components: { offlineQueuePreviewCallback },
 
   computed: {
     displayName() {
@@ -59,23 +67,46 @@ export default {
 };
 </script>
 
-// removed "scoped" to style a tooltip content
+<!--// removed "scoped" to style a tooltip content-->
 <style lang="scss">
 .queue-preview {
-&.queue-preview--offline-queue {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: var(--spacing-2xs);
-}
+  &.queue-preview--offline-queue {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: var(--spacing-2xs);
+  }
 
   .queue-preview--offline-queue__title {
+    overflow: hidden;
     @extend %typo-subtitle-1;
     width: 100%;
-    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  &.queue-preview--sm {
+    .queue-preview--offline-queue__title {
+      text-align: center;
+    }
+  }
+
+  .queue-preview--offline-queue__icon {
+    display: flex;
+  }
+
+  .queue-preview--offline-queue__callback-container {
+    display: flex;
+    justify-content: center;
+
+    .wt-context-menu__option {
+      padding: 0;
+    }
+
+    .queue-preview--offline-queue__callback-button {
+      padding: var(--spacing-xs);
+    }
   }
 
   .wt-tooltip {

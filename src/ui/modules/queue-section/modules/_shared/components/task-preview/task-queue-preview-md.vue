@@ -8,7 +8,6 @@
     @click="$emit('click', task)"
     @keydown.enter="$emit('click', task)"
   >
-
     <header class="queue-preview-header">
       <div class="queue-preview-header__icon">
         <slot name="icon"></slot>
@@ -56,7 +55,6 @@
         </div>
       </slot>
     </footer>
-
   </article>
 </template>
 
@@ -86,7 +84,7 @@ export default {
 @import '../../css/queue-preview';
 
 .queue-preview--md {
-    .queue-preview-header__icon {
+  .queue-preview-header__icon {
     flex: 0 0 24px;
   }
 
