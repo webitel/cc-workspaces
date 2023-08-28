@@ -32,13 +32,13 @@
       {{ displayNumber }}
     </template>
     <template v-slot:footer>
-      <div class="queue-preview--missed__recall-wrapper">
+      <div class="queue-preview--missed__callback-wrapper">
         <wt-rounded-action
           :size="size"
           color="success"
           icon="call--filled"
           rounded
-          @click.stop="makeCall"
+          @click.stop="call"
         ></wt-rounded-action>
       </div>
     </template>
@@ -47,7 +47,7 @@
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
@@ -71,18 +71,12 @@ export default {
     },
   },
   methods: {
-    async makeCall() {
-      const CALL_PARAMS = { disableStun: this.config.CLI.stun };
-      const params = {
-        ...CALL_PARAMS,
-        video: false,
-      };
-      const destination = this.task.from.number;
-      const client = await this.client.getCliInstance();
-      await client.call({
-        destination,
-        params,
-      });
+    ...mapActions('features/call', {
+      makeCall: 'CALL',
+    }),
+    call() {
+      const { number } = this.task.from;
+      return this.makeCall({ number });
     },
   },
 };
@@ -94,7 +88,7 @@ export default {
     flex-direction: row;
   }
   &.queue-preview--sm {
-    .queue-preview--missed__recall-wrapper {
+    .queue-preview--missed__callback-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;

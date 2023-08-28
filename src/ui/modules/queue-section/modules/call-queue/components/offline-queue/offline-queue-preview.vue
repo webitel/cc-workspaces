@@ -40,85 +40,28 @@
     <section class="queue-preview--offline-queue__title">
       {{ displayName }}
     </section>
-    <!--@click.stop needed to prevent click on wt-context-menu parent-->
-    <div
-      @click.stop
-      class="queue-preview--offline-queue__callback-container">
-      <!-- If there's only one communication, show a single call button -->
-      <template v-if="task.communications.length === 1">
-        <wt-rounded-action
-          :size="size"
-          color="success"
-          icon="call--filled"
-          rounded
-          @click.stop="makeCall(task.communications[0].destination)"
-        ></wt-rounded-action>
-      </template>
-      <!-- If there are multiple communications, show a context menu with call options -->
-      <template v-else>
-        <wt-context-menu
-          :options="options"
-          max-width="300px"
-        >
-          <template v-slot:activator>
-            <wt-rounded-action
-              :size="size"
-              color="success"
-              icon="call--filled"
-              rounded
-            ></wt-rounded-action>
-          </template>
-          <template v-slot:option="{ text }">
-            <!-- Clicking an option makes a call -->
-            <div
-              class="queue-preview--offline-queue__callback-button"
-              @click="makeCall(text)"
-            ><span>{{ text }}</span></div>
-          </template>
-        </wt-context-menu>
-      </template>
-    </div>
+    <offline-queue-preview-callback
+      :task="task"
+    />
   </article>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import offlineQueuePreviewCallback from './offline-queue-preview-callback.vue';
 
 export default {
   name: 'offline-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
+  components: { offlineQueuePreviewCallback },
 
   computed: {
-    ...mapState({
-      client: (state) => state.client,
-      config: (state) => state.config,
-    }),
     displayName() {
       return this.task.name;
     },
     displayQueueName() {
       return this.task.queue?.name;
-    },
-    options() {
-      return this.task.communications.map((el) => ({
-        text: el.destination,
-      }));
-    },
-  },
-  methods: {
-    async makeCall(destination) {
-      const CALL_PARAMS = { disableStun: this.config.CLI.stun };
-      const params = {
-        ...CALL_PARAMS,
-        video: false,
-      };
-      const client = await this.client.getCliInstance();
-      await client.call({
-        destination,
-        params,
-      });
     },
   },
 };

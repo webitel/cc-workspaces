@@ -114,11 +114,6 @@ export default {
     display: flex;
     justify-content: space-between;
   }
-
-  .callback-container {
-    display: flex;
-    justify-content: center;
-  }
 }
 
 // tooltip content styling
