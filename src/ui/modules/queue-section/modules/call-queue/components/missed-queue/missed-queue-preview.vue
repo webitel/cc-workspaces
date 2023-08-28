@@ -56,10 +56,6 @@ export default {
   mixins: [taskPreviewMixin, sizeMixin],
 
   computed: {
-    ...mapState({
-      client: (state) => state.client,
-      config: (state) => state.config,
-    }),
     displayName() {
       return this.task.from?.name || '';
     },
