@@ -8,20 +8,20 @@
       <template>
         <ul>
           <li
-            v-for="(cause) of pauseCauses"
+            v-for="(cause) of representablePauseCause"
             :key="cause.id"
             class="agent-pause-causes-item"
           >
             <span class="agent-pause-causes-item__name">{{ cause.name }}</span>
             <div class="agent-pause-causes-item__wrapper">
-              <span>{{ duration(cause) }}</span>
+              <span>{{ cause.duration }}</span>
               <wt-progress-bar
-                :color="pauseCauseProgressColor(cause)"
+                :color="cause.progressColor"
                 :max="cause.limitMin"
                 :value="cause.durationMin"
               ></wt-progress-bar>
               <span>
-          {{ prettifyPauseCauseDuration(cause.limitMin) }}
+          {{ cause.limit }}
         </span>
             </div>
           </li>
@@ -31,21 +31,26 @@
   </article>
 </template>
 
-<script>
-import agentPauseCauseRepresentationMixin
-  from '@webitel/cc-ui-sdk/src/mixins/agentPauseCauseRepresentation/agentPauseCauseRepresentationMixin';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+<script setup>
+import {
+  useRepresentableAgentPauseCause,
+} from '@webitel/ui-sdk/src/composables/useRepresentableAgentPauseCause/useRepresentableAgentPauseCause';
+import { toRef } from 'vue';
 
-export default {
-  name: 'agent-pause-causes',
-  mixins: [agentPauseCauseRepresentationMixin, sizeMixin],
-  props: {
-    pauseCauses: {
-      type: Array,
-      required: true,
-    },
+const props = defineProps({
+  pauseCauses: {
+    type: Array,
+    required: true,
   },
-};
+  size: {
+    type: String,
+    default: '',
+  },
+});
+
+const pauseCauses = toRef(props, 'pauseCauses');
+
+const { representablePauseCause } = useRepresentableAgentPauseCause(pauseCauses);
 </script>
 
 <style lang="scss" scoped>
