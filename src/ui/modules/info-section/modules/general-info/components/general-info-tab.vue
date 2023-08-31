@@ -38,6 +38,7 @@
 <script>
 import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import WtCcAgentStatusTimers from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import AgentScore from './agent-score.vue';
@@ -53,6 +54,7 @@ export default {
     AgentOrgStructure,
     AgentQueues,
     AgentPauseCauses,
+    WtCcAgentStatusTimers,
   },
   data: () => ({
     namespace: 'ui/infoSec/agentInfo',

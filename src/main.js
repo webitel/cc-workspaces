@@ -6,7 +6,6 @@ import store from './app/store';
 import i18n from './app/locale/i18n';
 
 import WebitelUi from './app/plugins/webitel-ui';
-import WebitelCCUI from './app/plugins/webitel-cc-ui';
 import BreakpointPlugin from './app/plugins/breakpoint.plugin';
 
 import './app/assets/icons/sprite';
@@ -42,7 +41,6 @@ const createVueInstance = () => {
   .use(router)
   .use(store)
   .use(...WebitelUi)
-  .use(WebitelCCUI)
   .use(BreakpointPlugin);
   return app;
 };

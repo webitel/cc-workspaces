@@ -52,7 +52,7 @@ export default {
     display: grid;
     align-items: center;
     padding: var(--spacing-xs);
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 2fr;
 
     &:not(:last-child) {
       border-bottom: 1px solid var(--secondary-color);
