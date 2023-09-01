@@ -21,7 +21,6 @@
 <script>
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import { mapActions, mapGetters, mapState } from 'vuex';
-import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
@@ -29,7 +28,7 @@ import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
   name: 'offline-queue-container',
-  mixins: [autoRefreshMixin, infiniteScrollMixin, sizeMixin],
+  mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     TaskQueueContainer,
     OfflinePreview,

@@ -1,7 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
+import ReactiveNowStoreModule
+  from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-import nowModule from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import workspaceModule from '../../store/agent-workspace';
 import callModule from '../../../features/modules/call/call';
 import statusModule from '../../../features/modules/agent-status/agent-status';
@@ -35,7 +36,7 @@ describe.skip('Hangup event on call component', () => {
           actions,
           mutations,
         },
-        now: nowModule,
+        now: new ReactiveNowStoreModule().getModule(),
         status: statusModule,
         userinfo: userinfoModule,
       },
