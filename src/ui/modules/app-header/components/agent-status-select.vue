@@ -9,9 +9,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import WtCcAgentStatusSelect
-  from '@webitel/cc-ui-sdk/src/packages/wt-cc-agent-status-select/components/wt-cc-agent-status-select.vue';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import WtCcAgentStatusSelect from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/wt-cc-agent-status-select.vue';
 
 export default {
   name: 'agent-status-select',
