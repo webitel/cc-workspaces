@@ -36,8 +36,9 @@
 </template>
 
 <script>
-import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import WtCcAgentStatusTimers from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import AgentScore from './agent-score.vue';
@@ -47,18 +48,22 @@ import AgentQueues from './agent-queues.vue';
 
 export default {
   name: 'general-info-tab',
-  mixins: [autoRefreshMixin, sizeMixin],
+  mixins: [sizeMixin],
   components: {
     AgentScore,
     AgentOrgStructure,
     AgentQueues,
     AgentPauseCauses,
+    WtCcAgentStatusTimers,
   },
   data: () => ({
     namespace: 'ui/infoSec/agentInfo',
     isLoaded: false,
-    autoRefreshTimeout: 5 * 1000,
   }),
+  setup() {
+    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+    return { subscribe };
+  },
   watch: {
     agent: { // wait for agent to load to get agentId
       async handler() {
@@ -87,9 +92,9 @@ export default {
       await this.dispatchLoadAgentInfo(payload);
       this.isLoaded = true;
     },
-    async makeAutoRefresh() {
-      return this.loadAgentInfo();
-    },
+  },
+  mounted() {
+    this.subscribe(this.loadAgentInfo);
   },
 };
 </script>

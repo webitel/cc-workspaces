@@ -19,8 +19,8 @@
 </template>
 
 <script>
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import { mapActions, mapGetters, mapState } from 'vuex';
-import autoRefreshMixin from '@webitel/cc-ui-sdk/src/mixins/autoRefresh/autoRefreshMixin';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
@@ -28,14 +28,15 @@ import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
   name: 'offline-queue-container',
-  mixins: [autoRefreshMixin, infiniteScrollMixin, sizeMixin],
+  mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     TaskQueueContainer,
     OfflinePreview,
   },
-  data: () => ({
-    autoRefreshTimeout: 5 * 1000,
-  }),
+  setup() {
+    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+    return { subscribe };
+  },
   computed: {
     ...mapState('features/member', {
       dataList: (state) => state.memberList,
@@ -46,9 +47,6 @@ export default {
   },
 
   methods: {
-    makeAutoRefresh() {
-      this.loadDataList();
-    },
     loadDataList() {
       this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
     },
@@ -63,7 +61,7 @@ export default {
     },
   },
   mounted() {
-    this.loadDataList();
+    this.subscribe(this.loadDataList);
   },
   destroyed() {
     /*

@@ -1,9 +1,10 @@
 import { shallowMount } from '@vue/test-utils';
+import ReactiveNowStoreModule
+  from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
-import now from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import QueuePreviewTimer from '../queue-preview-timer.vue';
 
-const store = createStore({ modules: { now } });
+const store = createStore({ modules: { now: new ReactiveNowStoreModule().getModule() } });
 const task = { createdAt: Date.now() };
 
 describe('QueuePreviewTimer', () => {

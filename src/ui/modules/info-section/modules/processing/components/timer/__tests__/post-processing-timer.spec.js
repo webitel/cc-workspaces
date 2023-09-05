@@ -1,10 +1,11 @@
 import { shallowMount, mount } from '@vue/test-utils';
+import ReactiveNowStoreModule
+  from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
-import nowModule from '@webitel/cc-ui-sdk/src/store/modules/now/reactive-now';
 import ProcessingTimer from '../processing-timer.vue';
 
 const store = createStore({
-  modules: { now: nowModule },
+  modules: { now: new ReactiveNowStoreModule().getModule() },
 });
 
 describe('Post Processing Timer', () => {
