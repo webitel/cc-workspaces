@@ -40,7 +40,7 @@ const props = defineProps({
 });
 
 const pause = computed(() => {
-  return props.agents.allowPause ? `${props.agents.pause} / ${props.agents.allowPause}` : props.agents.pause;
+  return props.agents.allowPause !== undefined ? `${props.agents.pause} / ${props.agents.allowPause}` : props.agents.pause;
 });
 
 const online = computed(() => {

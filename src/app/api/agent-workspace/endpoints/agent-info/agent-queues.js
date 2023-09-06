@@ -25,7 +25,7 @@ const getList = async (params) => {
       agents: {
         pause: item.agents.pause || 0,
         online: item.agents.online || 0,
-        allowPause: item.agents.allowPause || 0,
+        allowPause: item.agents.allowPause,
       },
     }));
   };
