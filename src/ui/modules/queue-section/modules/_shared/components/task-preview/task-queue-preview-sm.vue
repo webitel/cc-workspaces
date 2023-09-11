@@ -111,6 +111,7 @@ export default {
   }
 
   .queue-preview-actions {
+    gap: calc(var(--spacing-xs) - 3px);
     display: flex;
     justify-content: space-between;
   }

@@ -31,22 +31,24 @@
       v-slot:actions
     >
       <component
-        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
+        :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
         color="job"
         icon="job--accept"
         size="sm"
-        wide
+        :wide="size === 'md'"
+        :rounded="size === 'sm'"
         @click.prevent="$emit('accept', task)"
         @keydown.enter.prevent="$emit('accept', task)"
       >
         {{ $t('reusable.accept') }}
       </component>
       <wt-button
-        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
+        :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
         color="danger"
         icon="job--end"
         size="sm"
-        wide
+        :wide="size === 'md'"
+        :rounded="size === 'sm'"
         @click.prevent="$emit('decline', task)"
         @keydown.enter.prevent="$emit('decline', task)"
       >

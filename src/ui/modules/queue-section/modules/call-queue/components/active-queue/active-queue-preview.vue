@@ -32,22 +32,24 @@
       v-slot:actions
     >
       <component
-        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
+        :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
         color="success"
         icon="call-ringing"
         :size="size"
-        wide
+        :wide="size === 'md'"
+        :rounded="size === 'sm'"
         @click.prevent="$emit('answer', task)"
         @keydown.enter.prevent="$emit('answer', task)"
       >
         {{ $t('reusable.answer') }}
       </component>
       <component
-        :is="size === 'sm' ? 'wt-icon-btn' : 'wt-button'"
+        :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
         color="danger"
         icon="call-end"
         :size="size"
-        wide
+        :wide="size === 'md'"
+        :rounded="size === 'sm'"
         @click.prevent="$emit('hangup', task)"
         @keydown.enter.prevent="$emit('hangup', task)"
       >

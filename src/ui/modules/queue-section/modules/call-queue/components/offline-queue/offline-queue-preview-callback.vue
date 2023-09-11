@@ -50,6 +50,10 @@ export default {
       required: true,
       type: Object,
     },
+    size: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     options() {
