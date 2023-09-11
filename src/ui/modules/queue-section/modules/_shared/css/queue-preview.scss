@@ -26,6 +26,7 @@
     justify-content: space-between;
     min-width: 0; // prevents queue-preview-header content overflowing
     gap: var(--spacing-xs);
+    width: 100%;
   }
 
   .queue-preview-header__title {

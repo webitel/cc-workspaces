@@ -111,6 +111,7 @@ export default {
   }
 
   .queue-preview-actions {
+    width: 100%;
     display: flex;
     justify-content: space-between;
   }

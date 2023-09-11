@@ -88,7 +88,7 @@ export default {
         },
         {
           value: 'missed',
-          icon: 'call-disconnect',
+          icon: 'call-missed',
           iconColor: 'danger',
           attention: this.isNewMissed,
         },

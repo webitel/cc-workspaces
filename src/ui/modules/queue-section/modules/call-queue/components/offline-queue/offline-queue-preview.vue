@@ -42,6 +42,7 @@
     </section>
     <offline-queue-preview-callback
       :task="task"
+      :size="size"
     />
   </article>
 </template>

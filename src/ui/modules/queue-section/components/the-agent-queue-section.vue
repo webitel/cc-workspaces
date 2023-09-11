@@ -122,7 +122,7 @@ export default {
   }
 
   &--sm {
-    flex: 0 0 114px;
+    flex: 0 0 125px;
   }
 
   .wt-rounded-action {

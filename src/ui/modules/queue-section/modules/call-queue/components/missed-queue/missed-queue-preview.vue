@@ -1,9 +1,7 @@
 <template>
   <component
     :is="`task-queue-preview-${size}`"
-    :task="task"
     class="queue-preview--missed"
-    @click="$emit('click', task);"
   >
     <template
       v-if="size === 'md'"
@@ -11,13 +9,13 @@
     >
       <wt-icon
         color="danger"
-        icon="call-disconnect"
+        icon="call-missed"
       ></wt-icon>
     </template>
     <template v-slot:avatar>
       <wt-icon
         color="danger"
-        icon="call-disconnect"
+        icon="call-missed"
       ></wt-icon>
     </template>
     <template v-slot:timer>
@@ -38,7 +36,7 @@
           color="success"
           icon="call--filled"
           rounded
-          @click.stop="call"
+          @click="call"
         ></wt-rounded-action>
       </div>
     </template>
@@ -82,12 +80,18 @@ export default {
 .queue-preview--missed {
   &.queue-preview--md {
     flex-direction: row;
+    :deep .missed-preview__task-time {
+      text-align: end;
+    }
   }
   &.queue-preview--sm {
     .queue-preview--missed__callback-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    :deep .missed-preview__task-time {
+      text-align: center;
     }
   }
 }
@@ -96,7 +100,6 @@ export default {
   @extend %typo-body-2;
   overflow: hidden;
   flex-grow: 1;
-  text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
