@@ -76,7 +76,7 @@ describe('TheReport appearance and form setting', () => {
       },
     ));
     const { reportButtonText } = wrapper.vm;
-    expect(reportButtonText).toBe('reusable.edit');
+    expect(reportButtonText).toBe('Edit');
   });
 
   it('should render report button color "primary"', () => {
@@ -88,7 +88,7 @@ describe('TheReport appearance and form setting', () => {
   it('should render report button text "Send"', () => {
     const wrapper = shallowMount(TheReporting, options);
     const { reportButtonText } = wrapper.vm;
-    expect(reportButtonText).toBe('reusable.send');
+    expect(reportButtonText).toBe('Send');
   });
 });
 

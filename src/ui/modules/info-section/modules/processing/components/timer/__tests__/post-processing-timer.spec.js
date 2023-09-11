@@ -16,7 +16,7 @@ describe('Post Processing Timer', () => {
   };
   let now;
   beforeEach(() => {
-    now = nowModule.state.now;
+    now = store.state.now.now;
     mountOptions.props = {
       startProcessingAt: now,
       processingTimeoutAt: now + 30 * 1000,
