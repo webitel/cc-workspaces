@@ -8,6 +8,7 @@ describe('Widget', () => {
         widget: {
           icon: '',
           text: jest.fn(),
+          locale: '',
         },
       },
     });
@@ -19,6 +20,7 @@ describe('Widget', () => {
         widget: {
           icon: '',
           text: jest.fn(),
+          locale: '',
         },
         selectionMode: true,
       },
@@ -32,6 +34,7 @@ describe('Widget', () => {
         widget: {
           icon: '',
           text: jest.fn(),
+          locale: '',
         },
         selectionMode: false,
       },
