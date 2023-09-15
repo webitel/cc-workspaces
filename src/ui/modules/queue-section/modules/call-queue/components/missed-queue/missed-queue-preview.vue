@@ -4,19 +4,16 @@
     class="queue-preview--missed"
   >
     <template
-      v-if="size === 'md'"
       v-slot:icon
     >
       <wt-icon
         color="danger"
         icon="call-missed"
+        :size="size"
       ></wt-icon>
     </template>
     <template v-slot:avatar>
-      <wt-icon
-        color="danger"
-        icon="call-missed"
-      ></wt-icon>
+      <wt-avatar size="sm"></wt-avatar>
     </template>
     <template v-slot:timer>
       <span class="missed-preview__task-time">
@@ -45,7 +42,7 @@
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
@@ -92,6 +89,7 @@ export default {
     }
     :deep .missed-preview__task-time {
       text-align: center;
+      display: block;
     }
   }
 }
