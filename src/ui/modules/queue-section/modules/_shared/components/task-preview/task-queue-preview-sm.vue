@@ -19,7 +19,7 @@
       <wt-tooltip>
         <template v-slot:activator>
           <wt-icon-btn
-            color="secondary"
+            color="transfer"
             icon="rounded-info"
             size="sm"
           ></wt-icon-btn>
@@ -51,11 +51,16 @@
       </slot>
     </section>
 
-    <slot name="timer">
-      <queue-preview-timer
-        :task="task"
-      ></queue-preview-timer>
-    </slot>
+    <div>
+      <div class="queue-preview__title">
+        <slot name="title"></slot>
+      </div>
+      <slot name="timer">
+        <queue-preview-timer
+          :task="task"
+        ></queue-preview-timer>
+      </slot>
+    </div>
 
     <footer
       v-if="$slots.footer || $slots.actions"
@@ -107,13 +112,23 @@ export default {
   }
 
   .queue-preview-timer {
-    margin: auto;
+    justify-content: center;
   }
 
   .queue-preview-actions {
-    width: 100%;
     display: flex;
     justify-content: space-between;
+    width: 100%;
+  }
+
+  .queue-preview__title {
+    @extend %typo-subtitle-2;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: var(--spacing-2xs);
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 

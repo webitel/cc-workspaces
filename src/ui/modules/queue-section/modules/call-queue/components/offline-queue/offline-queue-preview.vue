@@ -7,33 +7,48 @@
     @keydown.enter="$emit('click', task)"
   >
 
-    <wt-tooltip v-if="size === 'sm'">
-      <template v-slot:activator>
-        <wt-icon-btn
-          color="secondary"
-          icon="rounded-info"
-          size="sm"
-        ></wt-icon-btn>
-      </template>
-      <span
-        class="queue-preview--offline-queue__name"
-      >{{ displayName }}
-      </span>
-      <div
-        v-if="displayQueueName"
-      >
-        <wt-chip color="secondary">
-          {{ displayQueueName }}
-        </wt-chip>
+    <template v-if="size === 'sm'">
+      <div class="queue-preview--offline-queue__header">
+        <wt-icon
+          :size="size"
+          color="hold"
+          icon="call"
+        ></wt-icon>
+        <wt-tooltip>
+          <template v-slot:activator>
+            <wt-icon-btn
+              color="transfer"
+              icon="rounded-info"
+              size="sm"
+            ></wt-icon-btn>
+          </template>
+          <span
+            class="queue-preview--offline-queue__name"
+          >{{ displayName }}
+          </span>
+          <div
+            v-if="displayQueueName"
+          >
+            <wt-chip color="secondary">
+              {{ displayQueueName }}
+            </wt-chip>
+          </div>
+        </wt-tooltip>
       </div>
-    </wt-tooltip>
+    </template>
+
 
     <div class="queue-preview--offline-queue__icon">
       <wt-icon
+        v-if="size === 'md'"
         color="hold"
         icon="call"
         size="md"
       ></wt-icon>
+      <wt-avatar
+        v-else
+        size="sm"
+      ></wt-avatar>
     </div>
 
 
@@ -41,8 +56,8 @@
       {{ displayName }}
     </section>
     <offline-queue-preview-callback
-      :task="task"
       :size="size"
+      :task="task"
     />
   </article>
 </template>
@@ -76,7 +91,13 @@ export default {
     align-items: center;
     flex-wrap: nowrap;
     justify-content: center;
-    gap: var(--spacing-2xs);
+    gap: var(--spacing-xs);
+  }
+
+  .queue-preview--offline-queue__header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .queue-preview--offline-queue__title {
@@ -120,7 +141,7 @@ export default {
 
   &--sm {
     .queue-preview--offline-queue__title {
-      @extend %typo-body-2;
+      @extend %typo-subtitle-2;
     }
   }
 }
