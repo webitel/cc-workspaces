@@ -24,6 +24,8 @@ const actions = {
           context.dispatch('features/chat/SUBSCRIBE_CHATS', null, { root: true }),
           context.dispatch('features/job/SUBSCRIBE_JOBS', null, { root: true }),
           context.dispatch('features/call/missed/LOAD_DATA_LIST', null, { root: true }),
+          context.dispatch('features/call/manual/INITIALIZE_MANUAL_LIST', null, { root: true }),
+          context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, { root: true }),
           context.dispatch('features/member/LOAD_DATA_LIST', null, { root: true }),
         ],
       );

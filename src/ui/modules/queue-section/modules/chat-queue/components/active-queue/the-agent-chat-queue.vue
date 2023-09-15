@@ -19,9 +19,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
-import TaskQueueContainer from '../../_shared/components/task-queue-container.vue';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import TheAgentTaskQueue from '../../../_shared/components/the-agent-task-queue.vue';
+import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ChatQueuePreview from './chat-queue-preview.vue';
 
 export default {

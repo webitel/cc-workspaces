@@ -2,6 +2,7 @@ import { ConversationState } from 'webitel-sdk';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
+import manual from '../modules/manual/store/manual';
 
 const state = {
   chatList: [],
@@ -171,4 +172,7 @@ export default {
   getters,
   actions,
   mutations,
+  modules: {
+    manual,
+  },
 };

@@ -52,7 +52,7 @@ import CollapseAction from '../../../../app/components/utils/collapse-action.vue
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
-import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
+import ChatQueue from '../modules/chat-queue/components/active-queue/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 
 export default {
