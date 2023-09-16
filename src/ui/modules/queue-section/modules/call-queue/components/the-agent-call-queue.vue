@@ -77,6 +77,9 @@ export default {
     ...mapState('features/call/missed', {
       isNewMissed: (state) => state.isNewMissed,
     }),
+    ...mapState('features/call/manual', {
+      manualList: (state) => state.manualList,
+    }),
     ...mapState('features/member', {
       membersList: (state) => state.memberList,
     }),
@@ -102,8 +105,9 @@ export default {
         },
         {
           value: 'manual',
-          icon: 'call',
-          iconColor: 'secondary',
+          icon: 'call-ringing',
+          iconColor: 'default',
+          attention: this.manualList.length,
         },
       ];
     },
@@ -167,6 +171,10 @@ export default {
 
     &.missed {
       background: var(--icon-false-color);
+    }
+
+    &.manual {
+      background: var(--icon-color);
     }
   }
 }

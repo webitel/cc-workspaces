@@ -1,106 +1,113 @@
 <template>
   <component
-    :is="`task-queue-preview-${size}`"
-    class="queue-preview--missed"
+    :is="component"
+    class="queue-preview--manual"
+    @click="emit('click', task)"
   >
     <template
       v-if="size === 'md'"
       v-slot:icon
     >
       <wt-icon
-        color="danger"
-        icon="call-missed"
+        icon="call-ringing"
       ></wt-icon>
     </template>
     <template v-slot:avatar>
       <wt-icon
-        color="danger"
-        icon="call-missed"
+        icon="call-ringing"
       ></wt-icon>
     </template>
     <template v-slot:timer>
-      <span class="missed-preview__task-time">
-        {{ displayTime }}
-      </span>
+      <div class="queue-preview--manual__timer">
+        {{ wait }}
+      </div>
     </template>
     <template v-slot:title>
-      {{ displayName }}
+      fill my name
     </template>
     <template v-slot:body>
-      {{ displayNumber }}
+      fill my number
     </template>
     <template v-slot:footer>
-      <div class="queue-preview--missed__callback-wrapper">
-        <wt-rounded-action
-          :size="size"
-          color="success"
-          icon="call--filled"
-          rounded
-          @click="call"
-        ></wt-rounded-action>
-      </div>
+      <wt-rounded-action
+        :size="size"
+        color="success"
+        icon="call--filled"
+        rounded
+        @click="emit('accept', task)"
+      ></wt-rounded-action>
+      <manual-deadline-progress-bar
+        :deadline="task.deadline"
+      ></manual-deadline-progress-bar>
     </template>
   </component>
 </template>
 
-<script>
-import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-import { mapActions, mapState } from 'vuex';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+<script setup>
+import { computed } from 'vue';
+import ManualDeadlineProgressBar
+  from '../../../../../../../features/modules/call/manual/components/manual-deadline-progress-bar.vue';
+import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 
-export default {
-  name: 'manual-queue-preview',
-  mixins: [taskPreviewMixin, sizeMixin],
+const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
+  },
+  opened: {
+    type: Boolean,
+    default: false,
+  },
+  size: {
+    type: String,
+    default: 'md',
+  },
+});
 
-  computed: {
-    displayName() {
-      return this.task.from?.name || '';
-    },
-    displayNumber() {
-      return this.task.from?.number || '';
-    },
-    displayTime() {
-      return prettifyTime(this.task.createdAt);
-    },
-  },
-  methods: {
-    ...mapActions('features/call', {
-      makeCall: 'CALL',
-    }),
-    call() {
-      const { number } = this.task.from;
-      return this.makeCall({ number });
-    },
-  },
-};
+const emit = defineEmits(['click', 'accept']);
+
+const component = computed(() => {
+  switch (props.size) {
+    case 'md':
+      return TaskQueuePreviewMd;
+    case 'sm':
+      return TaskQueuePreviewSm;
+    default:
+      return TaskQueuePreviewMd;
+  }
+});
+
+const wait = computed(() => {
+  const waitTime = props.task.wait;
+  const minutes = Math.floor(waitTime / 60);
+  let seconds = waitTime % 60;
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+  return `${minutes}:${seconds}`;
+});
 </script>
 
 <style lang="scss" scoped>
-.queue-preview--missed {
+.queue-preview--manual {
   &.queue-preview--md {
     flex-direction: row;
-    :deep .missed-preview__task-time {
-      text-align: end;
-    }
   }
+
   &.queue-preview--sm {
-    .queue-preview--missed__callback-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    :deep .missed-preview__task-time {
-      text-align: center;
+    .wt-rounded-action {
+      display: block;
+      margin: auto;
     }
   }
 }
 
-.missed-preview__task-time {
-  @extend %typo-body-2;
-  overflow: hidden;
-  flex-grow: 1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.queue-preview--manual__timer {
+  text-align: center;
+}
+
+.manual-deadline-progress-bar {
+  margin-top: var(--spacing-xs);
 }
 </style>
