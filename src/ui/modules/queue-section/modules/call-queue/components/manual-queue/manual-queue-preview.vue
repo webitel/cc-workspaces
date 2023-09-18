@@ -23,10 +23,10 @@
       </div>
     </template>
     <template v-slot:title>
-      fill my name
+      {{ task.displayName }}
     </template>
     <template v-slot:body>
-      fill my number
+      {{ task.displayNumber }}
     </template>
     <template v-slot:footer>
       <wt-rounded-action
