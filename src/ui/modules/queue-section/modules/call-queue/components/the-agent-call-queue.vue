@@ -46,6 +46,7 @@ import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
+import ManualQueue from './manual-queue/manual-queue-container.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
@@ -56,6 +57,7 @@ export default {
     ActiveQueue,
     OfflineQueue,
     MissedQueue,
+    ManualQueue,
   },
   data: () => ({
     currentTab: { value: 'active' },
@@ -74,6 +76,9 @@ export default {
     }),
     ...mapState('features/call/missed', {
       isNewMissed: (state) => state.isNewMissed,
+    }),
+    ...mapState('features/call/manual', {
+      manualList: (state) => state.manualList,
     }),
     ...mapState('features/member', {
       membersList: (state) => state.memberList,
@@ -97,6 +102,12 @@ export default {
           icon: 'call',
           iconColor: 'accent',
           attention: this.membersList.length,
+        },
+        {
+          value: 'manual',
+          icon: 'call-ringing',
+          iconColor: 'default',
+          attention: this.manualList.length,
         },
       ];
     },
@@ -160,6 +171,10 @@ export default {
 
     &.missed {
       background: var(--icon-false-color);
+    }
+
+    &.manual {
+      background: var(--icon-color);
     }
   }
 }

@@ -1,6 +1,7 @@
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import missed from './missed-calls/missed-calls';
+import manual from './manual/store/manual';
 import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
@@ -223,5 +224,5 @@ export default {
   getters,
   actions,
   mutations,
-  modules: { missed },
+  modules: { missed, manual },
 };
