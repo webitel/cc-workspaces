@@ -35,7 +35,7 @@ import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'chat-queue-preview',
+  name: 'active-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {

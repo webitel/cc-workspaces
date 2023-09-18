@@ -20,8 +20,7 @@ const actions = {
   },
   ACCEPT_TASK: async (context, task) => {
     const cli = await context.rootState.client.getCliInstance();
-    // return cli.agent.interceptAttempt(task.attemptId);
-    return cli.agent.interceptAttempt(task.attempt_id);
+    return cli.agent.interceptAttempt(task.attemptId);
   },
 };
 

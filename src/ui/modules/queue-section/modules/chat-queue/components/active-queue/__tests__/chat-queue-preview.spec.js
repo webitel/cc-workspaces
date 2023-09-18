@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ChatQueuePreview from '../chat-queue-preview.vue';
+import ChatQueuePreview from '../active-queue-preview.vue';
 
 const displayName = 'jest';
 const lastMessage = 'jest2';

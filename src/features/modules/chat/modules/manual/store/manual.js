@@ -10,7 +10,8 @@ const actions = {
     context.commit('SET_MANUAL_LIST', manualList);
   },
   ACCEPT_TASK: async (context, task) => {
-    return await context.rootState.client.getCliInstance().agent.interceptAttempt(task.attemptId);
+    const cli = await context.rootState.client.getCliInstance();
+    return cli.agent.interceptAttempt(task.attemptId);
   },
 };
 
