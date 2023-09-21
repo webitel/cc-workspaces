@@ -35,68 +35,44 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import WtCcAgentStatusTimers from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
+import WtCcAgentStatusTimers
+  from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
-import { mapActions, mapState } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import { useStore } from 'vuex';
+import { watchOnce } from '@vueuse/core';
 import AgentScore from './agent-score.vue';
 import AgentOrgStructure from './agent-org-structure.vue';
 import AgentPauseCauses from './agent-pause-causes.vue';
 import AgentQueues from './agent-queues.vue';
 
-export default {
-  name: 'general-info-tab',
-  mixins: [sizeMixin],
-  components: {
-    AgentScore,
-    AgentOrgStructure,
-    AgentQueues,
-    AgentPauseCauses,
-    WtCcAgentStatusTimers,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  data: () => ({
-    namespace: 'ui/infoSec/agentInfo',
-    isLoaded: false,
-  }),
-  setup() {
-    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
-    return { subscribe };
-  },
-  watch: {
-    agent: { // wait for agent to load to get agentId
-      async handler() {
-        if (this.agent) await this.loadAgentInfo();
-      },
-      immediate: true,
-    },
-  },
-  computed: {
-    ...mapState('features/status', {
-      agent: (state) => state.agent,
-    }),
-    ...mapState({
-                  agentInfo(state) {
-                    return getNamespacedState(state, this.namespace);
-                  },
-                }),
-  },
-  methods: {
-    ...mapActions({
-                    dispatchLoadAgentInfo(dispatch, payload) {
-                      return dispatch(`${this.namespace}/LOAD_AGENT_INFO`, payload);
-                    },
-                  }),
-    async loadAgentInfo(payload) {
-      await this.dispatchLoadAgentInfo(payload);
-      this.isLoaded = true;
-    },
-  },
-  mounted() {
-    this.subscribe(this.loadAgentInfo);
-  },
-};
+});
+
+const namespace = 'ui/infoSec/agentInfo';
+
+const store = useStore();
+const isLoaded = ref(false);
+
+const agent = computed(() => store.state.features.status.agent);
+const agentInfo = computed(() => getNamespacedState(store.state, namespace));
+
+const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+
+async function loadAgentInfo(payload) {
+  await store.dispatch(`${namespace}/LOAD_AGENT_INFO`, payload);
+  isLoaded.value = true;
+}
+
+watchOnce(agent, () => {
+  subscribe(loadAgentInfo);
+});
 </script>
 
 <style lang="scss" scoped>

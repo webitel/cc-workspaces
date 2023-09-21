@@ -5,7 +5,7 @@ const websocketErrorEventHandler = (error) => {
   const errLocale = `error.websocket.${error.id.replaceAll('.', '_')}`;
   const message = {
     type: 'error',
-    text: i18n.te(errLocale) ? i18n.t(errLocale) : error,
+    text: i18n.global.te(errLocale) ? i18n.global.t(errLocale) : error,
   };
   eventBus.$emit('notification', message);
   return error;
