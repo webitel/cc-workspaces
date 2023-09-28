@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "23.07.3",
+  "version": "23.09.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -15,7 +15,7 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.8",
     "@vueuse/core": "^10.4.1",
-    "@webitel/ui-sdk": "^3.2.169",
+    "@webitel/ui-sdk": "^23.9.0",
     "autolinker": "^4.0.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
