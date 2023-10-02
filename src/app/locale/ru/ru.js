@@ -49,6 +49,12 @@ export default {
     chatAht: 'Среднее время обработки чата',
     scoreCount: 'Оценено звонков',
     scoreAvg: 'Общая оценка',
+    sumTalk: 'Общее время разговора',
+    processing: 'Время после вызова',
+    available: 'Готов к работе',
+    voiceMail: 'Время работы с VM',
+    queueTalk: 'Время в разговоре (входящая + исходящая линии)',
+    taskAccepts: 'Количество отработанных задач',
   },
   queueSec: {
     call: {

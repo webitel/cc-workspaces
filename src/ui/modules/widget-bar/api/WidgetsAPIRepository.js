@@ -14,6 +14,10 @@ const itemResponseHandler = (stats) => ({
   utilization: `${stats.utilization.toFixed(2)}%`,
   scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed()}`,
   chatAht: convertDuration(stats.chatAht),
+  sumTalkSec: convertDuration(stats.sumTalkSec),
+  processing: convertDuration(stats.processing),
+  voiceMail: convertDuration(stats.voiceMail),
+  queueTalkSec: convertDuration(stats.queueTalkSec),
 });
 
 const defaultSingleObject = {
@@ -28,6 +32,12 @@ const defaultSingleObject = {
   chatAht: 0,
   scoreCount: 0,
   scoreRequiredAvg: 0,
+  sumTalkSec: 0,
+  processing: 0,
+  available: 0,
+  voiceMail: 0,
+  queueTalkSec: 0,
+  taskAccepts: 0,
 };
 
 const getter = new SdkGetterApiConsumer(agentService.agentTodayStatistics, {
