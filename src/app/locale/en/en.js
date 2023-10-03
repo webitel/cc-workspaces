@@ -51,6 +51,12 @@ export default {
     chatAht: 'Chat Handling Time',
     scoreCount: 'Rated calls',
     scoreAvg: 'Total score',
+    sumTalk: 'Total Talk Time',
+    processing: 'After Call Work Time',
+    available: 'Available',
+    voiceMail: 'Total VM Time',
+    queueTalk: 'Queue Talk Time',
+    taskAccepts: 'Task Quantity',
   },
   queueSec: {
     call: {
