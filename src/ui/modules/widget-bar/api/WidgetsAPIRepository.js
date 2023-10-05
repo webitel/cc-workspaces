@@ -18,6 +18,7 @@ const itemResponseHandler = (stats) => ({
   processing: convertDuration(stats.processing),
   voiceMail: convertDuration(stats.voiceMail),
   queueTalkSec: convertDuration(stats.queueTalkSec),
+  available: convertDuration(stats.available),
 });
 
 const defaultSingleObject = {
