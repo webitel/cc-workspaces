@@ -11,7 +11,7 @@
         color="success"
         icon="call--filled"
         rounded
-        @click.stop="call(task.communications[0].destination)"
+        @click.stop="call(task.id, task.communication[0].id)"
       ></wt-rounded-action>
     </template>
     <!-- If there are multiple communications, show a context menu with call options -->
@@ -28,11 +28,10 @@
             rounded
           ></wt-rounded-action>
         </template>
-        <template v-slot:option="{ text }">
-          <!-- Clicking an option makes a call -->
+        <template v-slot:option="{ text, communicationId }">
           <div
             class="queue-preview--offline-queue__callback-button"
-            @click="call(text)"
+            @click="call(task.id, communicationId)"
           ><span>{{ text }}</span>
           </div>
         </template>
@@ -59,15 +58,16 @@ export default {
     options() {
       return this.task.communications.map((el) => ({
         text: el.destination,
+        communicationId: el.id,
       }));
     },
   },
   methods: {
-    ...mapActions('features/call', {
+    ...mapActions('features/member', {
       makeCall: 'CALL',
     }),
-    call(number) {
-      return this.makeCall({ number });
+    call(id, communicationId) {
+      return this.makeCall({ id, communicationId });
     },
   },
 };

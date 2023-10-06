@@ -40,9 +40,9 @@ const actions = {
     context.commit('SET_SELECTED_COMMUNICATION', communication.id);
   },
 
-  CALL: async (context) => {
-    const memberId = context.getters.MEMBER_ON_WORKSPACE.id;
-    const commId = state.selectedCommId;
+  CALL: async (context, { id, communicationId }) => {
+    const memberId = id || context.getters.MEMBER_ON_WORKSPACE.id;
+    const commId = communicationId || state.selectedCommId;
     const { agent } = context.state;
     await agent.directMember(memberId, commId);
     return context.dispatch('LOAD_DATA_LIST');
