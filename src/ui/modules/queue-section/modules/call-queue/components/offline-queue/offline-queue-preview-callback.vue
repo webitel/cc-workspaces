@@ -11,7 +11,7 @@
         color="success"
         icon="call--filled"
         rounded
-        @click.stop="call(task.id, task.communication[0].id)"
+        @click.stop="call(task.id, task.communications[0].id)"
       ></wt-rounded-action>
     </template>
     <!-- If there are multiple communications, show a context menu with call options -->
