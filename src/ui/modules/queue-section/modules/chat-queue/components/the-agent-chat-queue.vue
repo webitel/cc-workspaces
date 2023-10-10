@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
 import ActiveQueue from './active-queue/active-queue-container.vue';
@@ -84,6 +84,13 @@ const currentTabComponent = computed(() => {
       return ActiveQueue;
   }
 });
+
+watch(() => manualList.value.length, (currentLength, newLength) => {
+  if (newLength > currentLength) {
+    currentTab.value = tabs.value[0];
+  };
+})
+
 </script>
 
 <style lang="scss" scoped>
