@@ -19,7 +19,7 @@
         <wt-button
           :outline="taskReporting.success"
           class="post-processing__status-control"
-          color="danger"
+          color="error"
           @click="setSuccess(false)"
         >{{ $t('infoSec.processing.reporting.no') }}
         </wt-button>

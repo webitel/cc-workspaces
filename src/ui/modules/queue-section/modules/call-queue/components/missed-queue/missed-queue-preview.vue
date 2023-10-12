@@ -8,13 +8,13 @@
       v-slot:icon
     >
       <wt-icon
-        color="danger"
+        color="error"
         icon="call-missed"
       ></wt-icon>
     </template>
     <template v-slot:avatar>
       <wt-icon
-        color="danger"
+        color="error"
         icon="call-missed"
       ></wt-icon>
     </template>

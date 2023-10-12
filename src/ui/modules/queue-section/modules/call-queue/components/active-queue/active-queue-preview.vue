@@ -17,7 +17,7 @@
     >
       <wt-icon
         :icon="eavesdropStatusIcon"
-        color="danger"
+        color="error"
         :size="size"
       ></wt-icon>
     </template>

@@ -3,7 +3,6 @@
     class="collapse-action"
     :icon="collapsed ? 'expand' : 'collapse'"
     size="sm"
-    color="icon-secondary"
     @click="$emit('click')"
   ></wt-icon-btn>
 </template>

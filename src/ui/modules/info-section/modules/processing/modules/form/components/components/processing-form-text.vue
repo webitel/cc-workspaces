@@ -7,7 +7,7 @@
       <wt-icon
         icon="attention"
         size="sm"
-        color="contrast"
+        color="on-dark"
       ></wt-icon>
     </div>
     <h4 class="processing-form-text__title">
@@ -105,10 +105,10 @@ $default-color: #1A90E5;
       }
     }
     &-accent {
-      border-color: var(--accent-color);
+      border-color: var(--primary-color);
 
       .processing-form-text__icon-wrapper {
-        background: var(--accent-color);
+        background: var(--primary-color);
       }
     }
     &-success {

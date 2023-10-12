@@ -10,7 +10,7 @@
       <div class="confirmation-popup__attention-icon">
         <wt-icon
           icon="attention"
-          color="danger"
+          color="error"
         ></wt-icon>
       </div>
       <p class="confirmation-popup__text">

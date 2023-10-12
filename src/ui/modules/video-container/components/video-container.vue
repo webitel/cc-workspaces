@@ -186,7 +186,7 @@
       width: fit-content;
       width: -moz-fit-content;
       height: fit-content;
-      border: 2px solid var(--accent-color);
+      border: 2px solid var(--primary-color);
       z-index: 2;
     }
 

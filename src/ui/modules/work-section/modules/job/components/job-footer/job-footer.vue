@@ -9,7 +9,7 @@
     </wt-button>
     <wt-button
       v-if="task.allowAccept"
-      color="danger"
+      color="error"
       wide
       @click="task.decline()"
     >{{ $t('reusable.decline') }}

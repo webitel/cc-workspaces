@@ -9,7 +9,6 @@
       <wt-icon
         class="chat-message-document__icon"
         icon="attach"
-        :color="my ? 'primary' : 'contrast'"
       ></wt-icon>
     </div>
     <div class="chat-message-document__info-wrapper">

@@ -116,8 +116,8 @@ export default {
 
     statusIconColor() {
       if (this.item.direction === CallDirection.Inbound) {
-        if (!this.item.answeredAt) return 'danger';
-        return 'accent';
+        if (!this.item.answeredAt) return 'error';
+        return 'warning';
       }
       return 'success';
     },

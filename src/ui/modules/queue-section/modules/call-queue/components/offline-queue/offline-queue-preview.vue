@@ -10,7 +10,7 @@
     <wt-tooltip v-if="size === 'sm'">
       <template v-slot:activator>
         <wt-icon-btn
-          color="secondary"
+          color="info"
           icon="rounded-info"
           size="sm"
         ></wt-icon-btn>
@@ -30,7 +30,6 @@
 
     <div class="queue-preview--offline-queue__icon">
       <wt-icon
-        color="hold"
         icon="call"
         size="md"
       ></wt-icon>

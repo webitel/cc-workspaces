@@ -38,7 +38,7 @@ export default {
   gap: var(--spacing-xs);
 
   &:hover {
-    border-color: var(--accent-color);
+    border-color: var(--primary-color);
   }
 
   &__main {
