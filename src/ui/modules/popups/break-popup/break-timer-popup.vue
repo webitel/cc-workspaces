@@ -133,7 +133,7 @@ export default {
 .break-timer-popup__icon-wrapper {
   padding: var(--spacing-sm);
   line-height: 0;
-  background: var(--main-color);
+  background: var(--content-wrapper-color);
   border-radius: var(--border-radius);
 }
 

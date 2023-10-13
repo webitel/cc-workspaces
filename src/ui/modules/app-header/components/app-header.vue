@@ -127,7 +127,9 @@ export default {
       const settingsUrl = process.env.VUE_APP_SETTINGS_URL;
       window.open(settingsUrl);
     },
-
+    toggleDarkTheme() {
+      document.documentElement.classList.toggle('theme--dark');
+    },
     async logoutUser() {
       try {
         await authAPI.logout();

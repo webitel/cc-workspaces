@@ -65,7 +65,7 @@ export default {
 $widget-inbound-color: var(--primary-color);
 $widget-handled-color: var(--success-color);
 $widget-missed-color: var(--error-color);
-$widget-avg-talk-color: #239AC0;
+$widget-avg-talk-color: var(--success-color);
 $widget-avg-hold-color: var(--primary-color);
 $widget-chat-accepts-color:  var(--success-color);
 $widget-chat-aht-color:  var(--success-color);

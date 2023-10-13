@@ -45,7 +45,7 @@
       </component>
       <component
         :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
-        color="danger"
+        color="error"
         icon="call-end"
         :size="size"
         :wide="size === 'md'"

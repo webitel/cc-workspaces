@@ -21,25 +21,10 @@
         :size="size"
       ></job-queue>
     </div>
-<!--    https://my.webitel.com/browse/WTEL-3299
-  I don't know why, but only on prod build if you write icon using ternary isNewCallBtn ? 'call-ringing' : 'close'
-  it brakes and doesn't work (only on prod build, so that I decided to split it into separate component usages and add v-if
--->
     <wt-rounded-action
-      v-if="isNewCallButton"
-      icon="call-ringing"
-      color="success"
-      filled
-      rounded
-      size="lg"
-      @click="toggleNewCall"
-    ></wt-rounded-action>
-    <wt-rounded-action
-      v-else
-      icon="close"
+      :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
       rounded
-      filled
       size="lg"
       @click="toggleNewCall"
     ></wt-rounded-action>
@@ -129,6 +114,12 @@ export default {
     position: fixed;
     bottom: var(--spacing-md);
     left: var(--spacing-md);
+    background: var(--success-color);
+    border-color: var(--success-color);
+
+    :deep .wt-icon__icon {
+      fill: var(--icon-on-dark-color);
+    }
   }
 }
 

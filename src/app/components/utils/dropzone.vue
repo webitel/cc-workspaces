@@ -24,7 +24,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--main-color);
+  background: var(--content-wrapper-color);
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   z-index: 10;

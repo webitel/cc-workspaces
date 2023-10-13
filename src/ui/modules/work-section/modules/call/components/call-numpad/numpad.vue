@@ -108,7 +108,7 @@ import { mapActions, mapGetters } from 'vuex';
         bottom: 53px;
         left: 50%;
         padding: var(--spacing-xs);
-        background: var(--main-color);
+        background: var(--content-wrapper-color);
         border-radius: var(--border-radius);
         box-shadow: var(--box-shadow);
         opacity: 0;

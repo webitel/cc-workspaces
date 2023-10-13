@@ -27,7 +27,7 @@
         <wt-rounded-action
           :size="size"
           icon="call-end--filled"
-          color="danger"
+          color="error"
           rounded
           wide
           @click="hangup"

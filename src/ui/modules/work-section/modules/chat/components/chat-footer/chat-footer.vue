@@ -50,7 +50,6 @@
           <wt-rounded-action
             icon="chat-send"
             color="accent"
-            filled
             :size="size"
             rounded
             wide

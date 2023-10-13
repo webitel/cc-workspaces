@@ -29,8 +29,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$numpad-color: #808080;
-
 .numpad-numbers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

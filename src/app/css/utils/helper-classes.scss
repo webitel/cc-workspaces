@@ -19,18 +19,6 @@
   pointer-events: none;
 }
 
-.icon-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-
-  &:hover .icon,
-  &.opened .icon {
-    fill: #000;
-    stroke: #000;
-  }
-}
-
 .uppercase {
   text-transform: uppercase;
 }
