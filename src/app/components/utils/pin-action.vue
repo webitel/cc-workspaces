@@ -3,7 +3,6 @@
     class="pin-action"
     :icon="pinned ? 'unpin' : 'pin'"
     size="sm"
-    color="icon-secondary"
     @click="$emit('click')"
   ></wt-icon-btn>
 </template>

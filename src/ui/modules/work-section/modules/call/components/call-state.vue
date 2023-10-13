@@ -117,7 +117,7 @@ export default {
     min-height: 40px;
     width: 100%;
     padding: var(--spacing-xs);
-    border: 1px solid var(--contrast-color);
+    border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     word-wrap: break-word;
   }

@@ -62,13 +62,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$widget-inbound-color: var(--accent-color);
-$widget-handled-color: var(--true-color);
-$widget-missed-color: var(--false-color);
-$widget-avg-talk-color: #239AC0;
-$widget-avg-hold-color: var(--accent-color);
-$widget-chat-accepts-color:  var(--true-color);
-$widget-chat-aht-color:  var(--true-color);
+$widget-inbound-color: var(--primary-color);
+$widget-handled-color: var(--success-color);
+$widget-missed-color: var(--error-color);
+$widget-avg-talk-color: var(--success-color);
+$widget-avg-hold-color: var(--primary-color);
+$widget-chat-accepts-color:  var(--success-color);
+$widget-chat-aht-color:  var(--success-color);
 
 .widget {
   display: flex;

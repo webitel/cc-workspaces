@@ -19,7 +19,7 @@
       <wt-tooltip>
         <template v-slot:activator>
           <wt-icon-btn
-            color="secondary"
+            color="info"
             icon="rounded-info"
             size="sm"
           ></wt-icon-btn>

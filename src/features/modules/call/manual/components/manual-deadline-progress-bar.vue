@@ -32,14 +32,14 @@ const width = computed(() => (props.deadline <= 100 ? `${props.deadline}%` : '10
 
   .manual-deadline-progress-bar__progress {
     height: 1px;
-    background-color: var(--true-color);
+    background-color: var(--success-color);
 
     &--warning {
-      background-color: var(--accent-color);
+      background-color: var(--warning-color);
     }
 
     &--danger {
-      background-color: var(--false-color);
+      background-color: var(--error-color);
     }
   }
 }

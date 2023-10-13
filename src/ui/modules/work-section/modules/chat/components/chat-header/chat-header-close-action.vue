@@ -2,7 +2,7 @@
   <div class="chat-header-close-action">
     <wt-rounded-action
       :size="size"
-      color="danger"
+      color="error"
       icon="chat-end--filled"
       rounded
       wide

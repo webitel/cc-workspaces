@@ -61,13 +61,13 @@ const tabs = computed(() => [
   {
     value: 'active',
     icon: 'chat',
-    iconColor: 'transfer',
+    iconColor: 'chat',
     attention: chatList.value.length,
   },
   {
     value: 'manual',
     icon: 'chat-join',
-    iconColor: 'transfer',
+    iconColor: 'chat',
     attention: manualList.value.length,
   },
 ]);
@@ -128,11 +128,11 @@ watch(() => manualList.value.length, (currentLength, newLength) => {
     border-radius: 50%;
 
     &.active {
-      background: var(--transfer-color);
+      background: var(--chat-color);
     }
 
     &.manual {
-      background: var(--transfer-color);
+      background: var(--chat-color);
     }
   }
 }

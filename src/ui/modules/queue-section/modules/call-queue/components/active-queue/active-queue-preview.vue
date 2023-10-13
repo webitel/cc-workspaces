@@ -17,7 +17,7 @@
     >
       <wt-icon
         :icon="eavesdropStatusIcon"
-        color="danger"
+        color="error"
         :size="size"
       ></wt-icon>
     </template>
@@ -45,7 +45,7 @@
       </component>
       <component
         :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
-        color="danger"
+        color="error"
         icon="call-end"
         :size="size"
         :wide="size === 'md'"

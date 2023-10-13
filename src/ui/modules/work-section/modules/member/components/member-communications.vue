@@ -55,7 +55,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 
     &:hover,
     &.selected {
-      border-color: var(--accent-color);
+      border-color: var(--primary-color);
     }
 
     &__type {

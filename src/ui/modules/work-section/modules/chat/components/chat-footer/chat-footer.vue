@@ -3,7 +3,7 @@
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
-        <wt-button color="success" @click="accept">{{ $t('reusable.accept') }}</wt-button>
+        <wt-button color="chat" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
     <div
@@ -50,7 +50,6 @@
           <wt-rounded-action
             icon="chat-send"
             color="accent"
-            filled
             :size="size"
             rounded
             wide

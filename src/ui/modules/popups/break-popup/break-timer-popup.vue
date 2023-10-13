@@ -41,7 +41,7 @@
       >{{ $t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
-        color="danger"
+        color="error"
         wide
         @click="agentLogout"
       >{{ $t('reusable.logout') }}
@@ -125,7 +125,7 @@ export default {
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  background: var(--accent-color);
+  background: var(--warning-color);
   border-radius: var(--border-radius);
   padding: var(--spacing-lg);
 }
@@ -133,7 +133,7 @@ export default {
 .break-timer-popup__icon-wrapper {
   padding: var(--spacing-sm);
   line-height: 0;
-  background: var(--main-color);
+  background: var(--content-wrapper-color);
   border-radius: var(--border-radius);
 }
 

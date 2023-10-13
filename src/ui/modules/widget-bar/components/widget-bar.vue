@@ -135,7 +135,7 @@ export default {
 
 .widget-bar {
   display: flex;
-  background: var(--main-color);
+  background: var(--content-wrapper-color);
   border-radius: var(--border-radius);
 }
 
@@ -168,7 +168,7 @@ export default {
   }
 
   .icon {
-    margin: 6px auto 0;
+    margin: 4px auto 0;
   }
 }
 

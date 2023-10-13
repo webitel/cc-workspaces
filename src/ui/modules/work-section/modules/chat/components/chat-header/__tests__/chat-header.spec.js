@@ -33,7 +33,7 @@ describe('Chat Header', () => {
       },
     });
     wrapper.findAllComponents({ name: 'wt-rounded-action' })
-           .find((wrapper) => wrapper.attributes('icon')
+           .find((wrapper) => wrapper.props('icon')
              === 'chat-transfer--filled')
            .vm.$emit('click');
     expect(wrapper.emitted().openTab[0]).toEqual(['transfer']);

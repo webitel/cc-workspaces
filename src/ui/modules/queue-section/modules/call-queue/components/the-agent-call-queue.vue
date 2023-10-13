@@ -94,19 +94,17 @@ export default {
         {
           value: 'missed',
           icon: 'call-missed',
-          iconColor: 'danger',
+          iconColor: 'error',
           attention: this.isNewMissed,
         },
         {
           value: 'offline',
           icon: 'call',
-          iconColor: 'accent',
           attention: this.membersList.length,
         },
         {
           value: 'manual',
           icon: 'call-ringing',
-          iconColor: 'default',
           attention: this.manualList.length,
         },
       ];

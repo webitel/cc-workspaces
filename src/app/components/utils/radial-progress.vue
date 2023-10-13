@@ -294,10 +294,10 @@ export default {
 
 .radial-progress-bar__radial-gradient__stop {
   &--primary {
-    stop-color: var(--accent-color);
+    stop-color: var(--primary-color);
   }
   &--success {
-    stop-color: var(--true-color);
+    stop-color: var(--success-color);
   }
   &--danger {
     stop-color: var(--false-color);

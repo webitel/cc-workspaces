@@ -7,7 +7,7 @@
       <wt-icon
         icon="attention"
         size="sm"
-        color="contrast"
+        color="on-dark"
       ></wt-icon>
     </div>
     <h4 class="processing-form-text__title">
@@ -71,12 +71,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$default-color: #1A90E5;
-
 .processing-form-text {
   position: relative;
   padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);
-  border: 1px dashed $default-color;
+  border: 1px dashed var(--info-color);
   border-radius: var(--border-radius);
 
   .processing-form-text__icon-wrapper {
@@ -86,15 +84,15 @@ $default-color: #1A90E5;
     padding: var(--spacing-3xs);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
     line-height: 0;
-    background: $default-color;
+    background: var(--info-color);
   }
 
   &--color {
     &-default {
-      border-color: $default-color;
+      border-color: var(--info-color);
 
       .processing-form-text__icon-wrapper {
-        background: $default-color;
+        background: var(--info-color);
       }
     }
     &-secondary {
@@ -105,10 +103,10 @@ $default-color: #1A90E5;
       }
     }
     &-accent {
-      border-color: var(--accent-color);
+      border-color: var(--primary-color);
 
       .processing-form-text__icon-wrapper {
-        background: var(--accent-color);
+        background: var(--primary-color);
       }
     }
     &-success {

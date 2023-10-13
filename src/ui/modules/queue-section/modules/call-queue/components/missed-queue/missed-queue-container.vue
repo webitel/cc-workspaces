@@ -60,6 +60,5 @@ export default {
   margin-bottom: 1px;
   text-align: center;
   color: var(--text-outline-color);
-  background: var(--main-color);
 }
 </style>

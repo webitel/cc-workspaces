@@ -73,7 +73,7 @@ export default {
       animation-duration: 1.5s;
       animation-iteration-count: infinite;
       opacity: 0.2;
-      background: linear-gradient(to right, var(--main-color), var(--secondary-color-50));
+      background: linear-gradient(to right, var(--dp-20-surface-color), var(--dp-16-surface-color));
 
       @keyframes gradient-animation {
         to {

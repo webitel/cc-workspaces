@@ -66,7 +66,7 @@ export default {
   gap: var(--spacing-xs);
   flex-wrap: wrap;
   padding-top: var(--spacing-sm);
-  background-color: var(--main-color);
+  background-color: var(--content-wrapper-color);
 }
 
 .processing-content {
