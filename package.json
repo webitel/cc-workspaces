@@ -15,7 +15,7 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.8",
     "@vueuse/core": "^10.4.1",
-    "@webitel/ui-sdk": "^23.12.16",
+    "@webitel/ui-sdk": "^23.12.32",
     "autolinker": "^4.0.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
@@ -50,6 +50,7 @@
     "@vue/eslint-config-airbnb": "^6.0.0",
     "@vue/test-utils": "^2.3.0",
     "@vue/vue3-jest": "^29.2.2",
+    "babel-preset-vite": "^1.1.0",
     "bamboo-jest-reporter": "^1.0.3",
     "eslint": "^8.14.0",
     "eslint-plugin-import": "^2.20.1",
