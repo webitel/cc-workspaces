@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "23.09.0",
+  "version": "23.09.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -36,7 +36,7 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^23.9.5"
+    "webitel-sdk": "^23.9.11"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
