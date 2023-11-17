@@ -82,6 +82,16 @@ export default {
       score: 'Agent score',
     },
     clientInfo: 'Client info',
+    contacts: {
+      client: 'Client',
+      manager: 'Owner',
+      timezone: 'Timezone',
+      select: 'Select',
+      title: 'Title',
+      emptyContact: 'No contact found',
+      communications: 'Communication options',
+      destination: 'Destination',
+    },
     knowledgeBase: 'Knowledge base',
     processing: {
       title: 'Task processing',

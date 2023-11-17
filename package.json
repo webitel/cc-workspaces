@@ -13,6 +13,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@egjs/flicking-plugins": "^4.7.1",
+    "@egjs/vue3-flicking": "^4.11.1",
     "@tinymce/tinymce-vue": "^3.2.8",
     "@vueuse/core": "^10.4.1",
     "@webitel/ui-sdk": "^23.12.39",
@@ -36,7 +38,7 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^23.9.11"
+    "webitel-sdk": "^23.12.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
