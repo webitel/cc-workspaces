@@ -1,4 +1,4 @@
-import WebitelUI from '@webitel/ui-sdk/dist/ui-sdk.common';
+import WebitelUI from '@webitel/ui-sdk/dist/ui-sdk.umd';
 import WebitelUIEn from '@webitel/ui-sdk/src/locale/en/en';
 import WebitelUIRu from '@webitel/ui-sdk/src/locale/ru/ru';
 import WebitelUIUa from '@webitel/ui-sdk/src/locale/ua/ua';
