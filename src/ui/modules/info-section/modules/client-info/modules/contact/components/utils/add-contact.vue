@@ -58,6 +58,7 @@
 
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 import TimezonesAPI from '../../api/TimezonesAPI';
 import UsersAPI from '../../api/UsersAPI';
 import LabelsAPI from '../../api/LabelsAPI';
@@ -65,6 +66,7 @@ import ContactsAPI from '../../api/ContactsAPI';
 
 const { t } = useI18n();
 const isSaving = ref(false);
+const store = useStore();
 
 const props = defineProps({
   size: {
@@ -75,6 +77,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['saved', 'close']);
+const call = computed(() => store.state.features.call.callList[0]);
 
 const draft = ref({
   name: {
@@ -87,15 +90,15 @@ const draft = ref({
   createdBy: '',
 });
 
-function close() {
-  emit('close');
+function close(id) {
+  emit('close', id);
 }
 
 async function save() {
   try {
     isSaving.value = false;
-    await ContactsAPI.add({ itemInstance: draft.value });
-    close();
+    const contact = await ContactsAPI.add({ itemInstance: draft.value });
+    close(contact.id);
   } finally {
     isSaving.value = false;
   }

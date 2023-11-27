@@ -16,18 +16,10 @@ import { ContactsApiFactory } from 'webitel-sdk';
 //   from '../../../app/api/defaults/getDefaultGetListResponse';
 import configuration from '../../../../../../../../app/api/openAPIConfig';
 import instance from '../../../../../../../../app/api/instance';
+import getDefaultGetListResponse from './getDefaultGetListResponse';
 
 const service = new ContactsApiFactory(configuration, '', instance);
 
-const fieldsToSend = ['name', 'labels', 'about', 'managers', 'timezones'];
-//
-// const formatAccessMode = (item) => ({
-//   ...item,
-//   access: {
-//     edit: item.mode.includes('w'),
-//     delete: item.mode.includes('d'),
-//   },
-// });
 const sanitizeManagers = (itemInstance) => {
   // handle many managers and even no managers field cases
   const managers = (itemInstance.managers ||
@@ -43,28 +35,20 @@ const sanitizeTimezones = (itemInstance) => {
 };
 
 const getList = async (params) => {
-  console.log(params);
   const fieldsToSend = ['page', 'size', 'q', 'sort', 'fields', 'id', 'qin'];
-  // let searchValue = '';
-  // let searchKey = '';
-  //
-  // if (params[SearchMode.NAME]) {
-  //   searchValue = params[SearchMode.NAME];
-  //   searchKey = SearchMode.NAME;
-  // } else if (params[SearchMode.VARIABLES]) {
-  //   searchValue = params[SearchMode.VARIABLES];
-  //   searchKey = SearchMode.VARIABLES;
-  // } else if (params[SearchMode.DESTINATION]) {
-  //   searchValue = params[SearchMode.DESTINATION];
-  //   searchKey = 'emails,phones';
-  // }
-  //
-  // const changedParams = {
-  //   ...params,
-  //   q: searchValue,
-  //   qin: searchKey,
-  // };
-  //
+
+  const listResponseHandler = (items) => {
+    return items.map((item) => ({
+      ...item,
+      managers: [...item.managers.data],
+      labels: [...item.labels.data],
+      variables: [...item.variables.data],
+      timezones: [...item.timezones.data],
+      phones: [...item.phones.data],
+      emails: [...item.emails.data],
+    }));
+  };
+
   const transformations = [
     sanitize(fieldsToSend),
     merge(getDefaultGetParams()),
@@ -98,12 +82,12 @@ const getList = async (params) => {
     );
     const { data, next } = applyTransform(response.data, [
       snakeToCamel(),
-      // merge(getDefaultGetListResponse()),
+      merge(getDefaultGetListResponse()),
     ]);
-    return {
-      items: data,
-      next,
-    };
+    return applyTransform(data, [
+      snakeToCamel(),
+      listResponseHandler,
+    ]);
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -137,6 +121,8 @@ const get = async ({ itemId: id }) => {
   }
 };
 
+const fieldsToSend = ['name', 'labels', 'about', 'managers', 'timezones'];
+
 const add = async ({ itemInstance }) => {
   const item = applyTransform(itemInstance, [
     sanitizeManagers,
@@ -157,16 +143,6 @@ const add = async ({ itemInstance }) => {
   }
 };
 
-const set = async ({ id }) => {
-  try {
-    const response = await service(id);
-    return applyTransform(response.data, []);
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  }
-};
 
 
 

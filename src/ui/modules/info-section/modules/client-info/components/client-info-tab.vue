@@ -10,6 +10,7 @@
 
 <script>
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+import { mapGetters } from 'vuex';
 import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 import Contact from '../modules/contact/components/the-contact.vue';
@@ -29,8 +30,11 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('features/call', {
+      call: 'CALL_ON_WORKSPACE',
+    }),
     isHideContact() {
-      return !isEmpty(this.task) ? this.task.contact.hide : true;
+      return !isEmpty(this.call) ? this.call.hideContact : true;
     },
   },
 };

@@ -3,21 +3,18 @@
        :class="[`contact-info-phones--${props.size}`]">
     <ul>
       <li
-        v-for="(phone, key) of phones" :key="key"
+        v-for="({ id, number, type }) of phones" :key="id"
         class="contact-info-phones__item"
       >
-        <div>{{ phone.name }}</div>
-        <div>{{ phone.type }}</div>
+        <div>{{ number }}</div>
+        <div>{{ type.name }}</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
+import { computed } from 'vue';
 
 const props = defineProps({
   size: {
@@ -25,18 +22,12 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+  contact: {
+    type: Object,
+  },
 });
 
-const phones = reactive([
-  {
-    name: '+32222222',
-    type: 'type',
-  },
-  {
-    name: '+39654555',
-    type: 'type',
-  },
-]);
+const phones = computed(() => props.contact.phones);
 </script>
 
 <style lang="scss" scoped>

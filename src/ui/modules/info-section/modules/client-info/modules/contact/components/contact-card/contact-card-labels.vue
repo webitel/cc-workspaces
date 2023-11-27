@@ -4,7 +4,7 @@
     <template>
         <div class="contact-info-labels">
           <wt-chip
-            v-for="({ label, id }) of labels"
+            v-for="({ label, id }) of props.labels"
             :key="id"
           >{{ label }}
           </wt-chip>
@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -25,16 +24,10 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+  labels: {
+    type: Array,
+  },
 });
-
-const labels = reactive([{
-  label: 'color',
-  id: '11',
-},
-  {
-    label: 'page',
-    id: '22',
-  }]);
 </script>
 
 <style lang="scss" scoped>

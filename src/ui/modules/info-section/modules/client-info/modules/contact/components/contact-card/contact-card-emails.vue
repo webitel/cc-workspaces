@@ -3,21 +3,18 @@
        :class="[`contact-info-emails--${props.size}`]">
     <ul>
       <li
-        v-for="(email, key) of emails" :key="key"
+        v-for="({ id, email, type }) of emails" :key="id"
         class="contact-info-emails__item"
       >
-        <div>{{ email.name }}</div>
-        <div>{{ email.type }}</div>
+        <div>{{ email }}</div>
+        <div>{{ type.name }}</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
+import { computed } from 'vue';
 
 const props = defineProps({
   size: {
@@ -25,18 +22,12 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+  contact: {
+    type: Object,
+  },
 });
 
-const emails = reactive([
-  {
-    name: 'kjfdflk@gmail.com',
-    type: 'type',
-  },
-  {
-    name: 'kjfdflk5465156@gmail.com',
-    type: 'type',
-  },
-]);
+const emails = computed(() => props.contact.emails.data);
 </script>
 
 <style lang="scss" scoped>

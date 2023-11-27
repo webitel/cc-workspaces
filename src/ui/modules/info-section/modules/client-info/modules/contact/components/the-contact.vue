@@ -14,8 +14,19 @@
         </div>
       </template>
       <template>
-        <contact-info :size="props.size" />
-        <!--        <add-contact v-if="showContact === 3" :size="props.size"/>-->
+        <wrapper-contact
+          v-if="currentViewState === viewStateList.VIEW"
+          :size="props.size"
+          :listContact="listContacts">
+        </wrapper-contact>
+<!--        <contact-card-->
+<!--          v-if="currentViewState === viewStateList.VIEW"-->
+<!--          :size="props.size"-->
+<!--          :contact="currentContact"/>-->
+<!--        <add-contact-->
+<!--          v-if="isAddContact"-->
+<!--          :size="props.size"-->
+<!--          @close="closeAddContact"/>-->
         <!--        <empty-contact-->
         <!--          v-if="showContact === 2"-->
         <!--          :size="props.size"-->
@@ -30,13 +41,14 @@
 import { computed, ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum';
-import ContactInfo from './contact-info/the-contact-info.vue';
+import ContactCard from './contact-card/the-contact-card.vue';
 import EmptyContact from './utils/empty-contact.vue';
 import AddContact from './utils/add-contact.vue';
 import SearchContact from './utils/search-contact.vue';
 import { useStore } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import ContactsAPI from '../api/ContactsAPI';
+import WrapperContact from './utils/wrapper-contact.vue';
 
 const props = defineProps({
   size: {
@@ -50,38 +62,50 @@ const store = useStore();
 
 const call = computed(() => store.state.features.call.callList[0]);
 const contactId = computed(() => store.getters['features/call/CALL_ON_WORKSPACE'].contactId);
-const hideContact = computed(() => store.getters['features/call/CALL_ON_WORKSPACE'].hideContact);
-
-const searchKey = ref('');
-const searchValue = ref('');
 
 const number = computed(() => call.value.from.number);
-const namespace = 'ui/infoSec/client/contact';
-const selectedContact = computed(() => store.state.ui.infoSec.client.contact.selectedContact);
-const listContact = computed(() => store.state.ui.infoSec.client.contact.listContact);
+const currentContact = computed(() => store.state.ui.infoSec.client.contact.currentContact);
+const listContacts = computed(() => store.state.ui.infoSec.client.contact.listContacts);
+const viewStateList = Object.freeze({
+  SEARCH: 'search',
+  ADD: 'add',
+  VIEW: 'view',
+});
+const currentViewState = ref('');
 
-// function updateSearchKey({ key, value }) {
-//   searchKey.value = key;
-//   searchValue.value = value;
+const namespace = 'ui/infoSec/client/contact';
+
+async function getCurrentContact(id) {
+  const contact = await ContactsAPI.get({ itemId: id });
+  return store.dispatch(`${namespace}/SET_CURRENT_CONTACT`, contact);
+}
+async function setContact(id) {
+  return await call.value.setContact(Number(id));
+}
+
+// async function closeAddContact(id) {
+//   await setContact(id);
+//   await getCurrentContact(id);
+//   isAddContact.value = !isAddContact.value;
 // }
 
-async function loadContact() {
-  if (contactId.value) {
-    const contact = await ContactsAPI.get({ itemId: contactId.value });
-    return store.dispatch(`${namespace}/LOAD_CONTACT`, contact);
-  } else {
-    const listContacts = await ContactsAPI.getList({ fields: ['managers', 'labels', 'about'], qin: 'emails,phones', q: `${number.value}*` });
-    if (listContacts.items.length === 1) {
-      const setContact = await call.value.setContact(383);
-      return store.dispatch(`${namespace}/LOAD_CONTACT`, listContacts.items[0]);
-    } else {
-      return store.dispatch(`${namespace}/LOAD_LIST_CONTACTS`, listContacts);
-    }
-  }
+async function initContacts() {
+  // if (contactId.value) {
+  //   getCurrentContact(contactId.value);
+  // } else {
+    const listContacts = await ContactsAPI.getList({ fields: ['variables', 'mode', 'timezones', 'phones', 'emails', 'name', 'managers', 'labels', 'about'], qin: 'emails,phones', q: `${number.value}*` });
+    // if (listContacts.length === 1) {
+    //   setContact(listContacts[0].id);
+    //   return store.dispatch(`${namespace}/SET_CURRENT_CONTACT`, listContacts[0]);
+    // } else {
+      return store.dispatch(`${namespace}/SET_LIST_CONTACTS`, listContacts);
+  //   }
+  // }
 }
 
 onMounted(() => {
-  loadContact();
+  initContacts();
+  currentViewState.value = viewStateList.VIEW;
 });
 </script>
 

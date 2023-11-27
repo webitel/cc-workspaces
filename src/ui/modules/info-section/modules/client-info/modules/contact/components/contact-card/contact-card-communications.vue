@@ -6,11 +6,12 @@
         <wt-tabs
           :current="currentTab"
           :tabs="tabs"
-          @click="currentTab === $event"
+          @change="changeTab"
         ></wt-tabs>
         <component
           :is="currentTab.component"
           :size="props.size"
+          :contact="props.contact"
         ></component>
       </div>
     </template>
@@ -18,10 +19,10 @@
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import ContactInfoPhones from './contact-info-phones.vue';
-import ContactInfoEmails from './contact-info-emails.vue';
+import ContactCardPhones from './contact-card-phones.vue';
+import ContactCardEmails from './contact-card-emails.vue';
 
 const { t } = useI18n();
 
@@ -31,22 +32,31 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+  contact: {
+    type: Object,
+  },
 });
 
 const tabs = computed(() => [
   {
     text: t('vocabulary.phones', 2),
     value: 'phones',
-    component: ContactInfoPhones,
+    component: ContactCardPhones,
   },
   {
     text: t('vocabulary.emails', 2),
     value: 'emails',
-    component: ContactInfoEmails,
+    component: ContactCardEmails,
   },
 ]);
 
-const currentTab = reactive(tabs.value[0]);
+const currentTab = ref({});
+
+function changeTab(tab) {
+  currentTab.value = tab;
+}
+
+onMounted(() => changeTab(tabs.value[0]));
 </script>
 
 <style lang="scss" scoped>

@@ -7,10 +7,10 @@
         class="contact-info-variables">
         <ul>
           <li
-            v-for="(variable, key) of variables" :key="key"
+            v-for="({ key, value, id }) of props.variables" :key="id"
             class="contact-info-variables__item">
-            <div>{{ variable.name }}</div>
-            <div>{{ variable.value }}</div>
+            <div>{{ key }}</div>
+            <div>{{ value }}</div>
           </li>
         </ul>
       </div>
@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -30,17 +29,10 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
-});
-
-const variables = reactive([
-  {
-    name: 'var1',
-    value: 'value1',
+  variables: {
+    type: Array,
   },
-  {
-    name: 'var2',
-    value: 'value2',
-  }]);
+});
 </script>
 
 <style lang="scss" scoped>

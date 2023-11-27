@@ -1,12 +1,11 @@
 <template>
   <div
-    v-if="showContact"
     class="contact-info-general"
     :class="[`contact-info-general--${props.size}`]"
   >
     <wt-avatar
       size="2xl"
-      :username="commonName"
+      :username="name"
     ></wt-avatar>
 
     <div class="contact-info-general__wrapper">
@@ -15,7 +14,7 @@
           target="_blank"
           link="https://dev.webitel.com/crm/contacts/201/communications"
           class="contact-info-general__link"
-        >{{ commonName }}
+        >{{ name }}
         </wt-item-link>
 
         <wt-icon-btn
@@ -49,7 +48,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -58,14 +57,16 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+  contact: {
+    type: Object,
+  },
 });
 
 const { t } = useI18n();
 
-const commonName = ref('Lera lera');
-const manager = ref('manager manager');
-const timezone = ref('timezones');
-const showContact = computed(() => true);
+const name = computed(() => props.contact.name?.commonName);
+const manager = computed(() => props.contact.managers[0].user.name);
+const timezone = computed(() => props.contact.timezones[0].timezone.name);
 </script>
 
 <style lang="scss" scoped>

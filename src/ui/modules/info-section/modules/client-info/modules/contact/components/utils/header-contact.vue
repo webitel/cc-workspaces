@@ -1,7 +1,5 @@
 <template>
-  <div class="flicking-header">
-
-  </div>
+  <div></div>
 
 </template>
 
