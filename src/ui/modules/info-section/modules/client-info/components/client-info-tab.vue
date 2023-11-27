@@ -3,22 +3,22 @@
     <client-info-chips/>
     <client-info-markdown/>
     <contact
-      v-if="!isHideContact"
-      :size="size"/>
+      v-if="!hideContact"
+      :size="size"
+      :task="task"
+    />
   </section>
 </template>
 
 <script>
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
-import { mapGetters } from 'vuex';
 import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 import Contact from '../modules/contact/components/the-contact.vue';
-import SizeMixin from '../../../../../../app/mixins/sizeMixin';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'client-info-tab',
-  mixins: [SizeMixin],
+  mixins: [sizeMixin],
   components: {
     ClientInfoMarkdown,
     ClientInfoChips,
@@ -30,11 +30,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
-    }),
-    isHideContact() {
-      return !isEmpty(this.call) ? this.call.hideContact : true;
+    hideContact() {
+      return this.task?.hideContact;
     },
   },
 };
