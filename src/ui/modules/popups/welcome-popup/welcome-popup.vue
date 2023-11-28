@@ -10,7 +10,7 @@
           <wt-icon icon="mic"></wt-icon>
           {{ $t('welcomePopup.mic.status') }}:
           <wt-indicator
-            :color="mic.status ? 'success' : 'danger'"
+            :color="mic.status ? 'success' : 'error'"
             size="sm"
           ></wt-indicator>
         </div>
@@ -26,7 +26,7 @@
           <wt-icon icon="bell"></wt-icon>
           {{ $t('welcomePopup.notifications.status') }}:
           <wt-indicator
-            :color="notification.status ? 'success' : 'danger'"
+            :color="notification.status ? 'success' : 'error'"
             size="sm"
           ></wt-indicator>
         </div>
