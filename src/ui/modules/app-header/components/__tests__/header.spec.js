@@ -29,6 +29,7 @@ describe('Header on agent Waiting', () => {
       computed,
       shallow: true,
       global: {
+        renderStubDefaultSlot: true,
         stubs: {
           WtAppHeader: false,
           WtSwitcher: false,
@@ -57,6 +58,7 @@ describe('Header on agent Offline', () => {
       computed,
       shallow: true,
       global: {
+        renderStubDefaultSlot: true,
         stubs: {
           WtAppHeader: false,
           WtSwitcher: false,
