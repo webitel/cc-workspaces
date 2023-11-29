@@ -73,23 +73,30 @@ function initializeContact() {
 function loadContact(contactId) {
   return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
 }
-let unwatchContactIdWatcher = null;
-function setupWatchForContactId() {
-  return watch(() => props.task.contactId, (contactId) => {
-    if(contactId) loadContact(contactId);
-  });
-}
 
-watch(() => props.task, () => {
-  initializeContact();
-  if (unwatchContactIdWatcher) unwatchContactIdWatcher();
-  unwatchContactIdWatcher = setupWatchForContactId();
+/*
+  we need to watch both for task itself and for task.contactId, because we want to handle 2 cases:
+  1. contactId appears after linking contact to task => we need to load this contact
+  2. task is changes => we need to reset contact
+
+  but we need to prevent both of these cases handlers fire at one time because if task changes, task.contactId changes too
+  so there would be 2 calls of loadContact() and initializeContact() at one time
+ */
+watch([() => props.task, () => props.task.contactId], ([task, prevTask], [contactId, prevContactId]) => {
+  if (task.id !== prevTask.id) {
+    changeMode(ContactMode.VIEW);
+    initializeContact();
+    return;
+  }
+
+  if (task.id === prevTask.id && contactId !== prevContactId) {
+    if (contactId) {
+      loadContact(contactId);
+      changeMode(ContactMode.VIEW);
+    }
+    return;
+  }
 }, { immediate: true });
-
-// onMounted(() => {
-//   console.log('mounted')
-//   initializeContact();
-// });
 </script>
 
 <style lang="scss" scoped>
