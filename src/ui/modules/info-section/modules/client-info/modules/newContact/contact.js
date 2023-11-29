@@ -58,10 +58,10 @@ const mutations = {
   },
 };
 
-export default {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations,
-};
+// export default {
+//   namespaced: true,
+//   state,
+//   getters,
+//   actions,
+//   mutations,
+// };

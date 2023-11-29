@@ -15,6 +15,7 @@ import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue'
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 import Contact from '../modules/contact/components/the-contact.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 
 export default {
   name: 'client-info-tab',
@@ -31,7 +32,7 @@ export default {
   },
   computed: {
     hideContact() {
-      return this.task?.hideContact;
+      return !isEmpty(this.task) ? this.task.contact.hide : true;
     },
   },
 };

@@ -35,17 +35,20 @@ const sanitizeTimezones = (itemInstance) => {
 };
 
 const getList = async (params) => {
-  const fieldsToSend = ['page', 'size', 'q', 'sort', 'fields', 'id', 'qin'];
+  console.log(params);
+  const fieldsToSend = ['page', 'size', 'q', 'sort', 'fields', 'qin'];
 
+  params.fields = ['id','etag', 'name', 'managers', 'labels', 'about', 'variables', 'timezones', 'phones', 'emails'];
+  console.log(params);
   const listResponseHandler = (items) => {
     return items.map((item) => ({
       ...item,
-      managers: [...item.managers.data],
-      labels: [...item.labels.data],
-      variables: [...item.variables.data],
-      timezones: [...item.timezones.data],
-      phones: [...item.phones.data],
-      emails: [...item.emails.data],
+      managers: item.managers ? [...item.managers.data] : [],
+      labels: item.labels ? [...item.labels.data] : [],
+      variables: item.variables ? [...item.variables.data] : [],
+      timezones: item.timezones ? [...item.timezones.data] : [],
+      phones: item.phones ? [...item.phones.data] : [],
+      emails: item.emails ? [...item.emails.data] : [],
     }));
   };
 
@@ -55,14 +58,14 @@ const getList = async (params) => {
     camelToSnake(),
   ];
   //
-  // // This code needed for adding starToSearch method to applyTransform while searchKey !== SearchMode.VARIABLES because '*' in variables search mode brokes backend logic.
-  // if (searchKey !== SearchMode.VARIABLES) {
-  //   transformations.push(starToSearch('q'));
-  // }
+  // This code needed for adding starToSearch method to applyTransform while searchKey !== SearchMode.VARIABLES because '*' in variables search mode brokes backend logic.
+  if (params.qin !== 'variable') {
+    transformations.push(starToSearch('q'));
+  }
 
   const {
     page,
-    size,
+    size = 5000,
     q,
     sort,
     fields,
@@ -84,6 +87,7 @@ const getList = async (params) => {
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
+    console.log(data)
     return applyTransform(data, [
       snakeToCamel(),
       listResponseHandler,
@@ -95,8 +99,10 @@ const getList = async (params) => {
   }
 };
 
-const get = async ({ itemId: id }) => {
-  const fields = ['name', 'about', 'labels', 'etag', 'mode', 'managers', 'timezones'];
+const get = async ({ contactId: id }) => {
+  const fields = ['id', 'name', 'about', 'labels', 'mode', 'managers', 'timezones', 'etag', 'variables', 'phones', 'emails'];
+
+  console.log(id)
 
   const defaultObject = {};
   const itemResponseHandler = (item) => {

@@ -3,110 +3,93 @@
     class="contact"
   >
     <wt-expansion-panel>
-      <template v-slot:title>{{ $t('infoSec.contacts.client') }}
+      <template v-slot:title>{{ t('infoSec.contacts.client') }}
         <div class="contact-actions">
           <wt-icon-btn
             icon="search"
+            @click.stop="changeMode(ContactMode.SEARCH)"
           ></wt-icon-btn>
           <wt-icon-btn
             icon="plus"
+            @click.stop="changeMode(ContactMode.ADD)"
           ></wt-icon-btn>
         </div>
       </template>
       <template>
-        <wrapper-contact
-          v-if="currentViewState === viewStateList.VIEW"
-          :size="props.size"
-          :listContact="listContacts">
-        </wrapper-contact>
-<!--        <contact-card-->
-<!--          v-if="currentViewState === viewStateList.VIEW"-->
-<!--          :size="props.size"-->
-<!--          :contact="currentContact"/>-->
-<!--        <add-contact-->
-<!--          v-if="isAddContact"-->
-<!--          :size="props.size"-->
-<!--          @close="closeAddContact"/>-->
-        <!--        <empty-contact-->
-        <!--          v-if="showContact === 2"-->
-        <!--          :size="props.size"-->
-        <!--        />-->
-        <!--        <search-contact v-if="showContact === 4" :size="props.size" @search="updateSearchKey({key, value})"/>-->
+        <add-contact
+          v-if="mode === ContactMode.ADD"
+          :namespace="namespace"
+          @close="changeMode(ContactMode.VIEW)"
+        />
+        <search-contact
+          v-if="mode === ContactMode.SEARCH"
+          :namespace="namespace"
+          @close="changeMode(ContactMode.VIEW)"
+        />
+        <view-contact
+          v-if="mode === ContactMode.VIEW && !isEmpty(props.task)"
+          :mode="mode"
+          :namespace="namespace"
+        />
       </template>
     </wt-expansion-panel>
   </article>
 </template>
 
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum';
-import ContactCard from './contact-card/the-contact-card.vue';
-import EmptyContact from './utils/empty-contact.vue';
-import AddContact from './utils/add-contact.vue';
-import SearchContact from './utils/search-contact.vue';
-import { useStore } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
-import ContactsAPI from '../api/ContactsAPI';
-import WrapperContact from './utils/wrapper-contact.vue';
+import { onMounted, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
+import AddContact from './views/add-contact.vue';
+import SearchContact from './views/search-contact.vue';
+import ViewContact from './views/view-contact.vue';
+import ContactMode from '../enums/ContactMode.enum';
 
 const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
+  },
   size: {
     type: String,
-    default: 'sm',
+    default: 'md',
   },
 });
 
-const { t } = useI18n();
 const store = useStore();
-
-const call = computed(() => store.state.features.call.callList[0]);
-const contactId = computed(() => store.getters['features/call/CALL_ON_WORKSPACE'].contactId);
-
-const number = computed(() => call.value.from.number);
-const currentContact = computed(() => store.state.ui.infoSec.client.contact.currentContact);
-const listContacts = computed(() => store.state.ui.infoSec.client.contact.listContacts);
-const viewStateList = Object.freeze({
-  SEARCH: 'search',
-  ADD: 'add',
-  VIEW: 'view',
-});
-const currentViewState = ref('');
-
+const { t } = useI18n();
+const mode = ref(ContactMode.VIEW);
 const namespace = 'ui/infoSec/client/contact';
 
-async function getCurrentContact(id) {
-  const contact = await ContactsAPI.get({ itemId: id });
-  return store.dispatch(`${namespace}/SET_CURRENT_CONTACT`, contact);
-}
-async function setContact(id) {
-  return await call.value.setContact(Number(id));
-}
+const changeMode = (newMode) => {
+  mode.value = newMode;
+};
 
-// async function closeAddContact(id) {
-//   await setContact(id);
-//   await getCurrentContact(id);
-//   isAddContact.value = !isAddContact.value;
-// }
-
-async function initContacts() {
-  // if (contactId.value) {
-  //   getCurrentContact(contactId.value);
-  // } else {
-    const listContacts = await ContactsAPI.getList({ fields: ['variables', 'mode', 'timezones', 'phones', 'emails', 'name', 'managers', 'labels', 'about'], qin: 'emails,phones', q: `${number.value}*` });
-    // if (listContacts.length === 1) {
-    //   setContact(listContacts[0].id);
-    //   return store.dispatch(`${namespace}/SET_CURRENT_CONTACT`, listContacts[0]);
-    // } else {
-      return store.dispatch(`${namespace}/SET_LIST_CONTACTS`, listContacts);
-  //   }
-  // }
+function initializeContact() {
+  return store.dispatch(`${namespace}/INITIALIZE_CONTACT`);
 }
 
-onMounted(() => {
-  initContacts();
-  currentViewState.value = viewStateList.VIEW;
-});
+function loadContact(contactId) {
+  return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
+}
+let unwatchContactIdWatcher = null;
+function setupWatchForContactId() {
+  return watch(() => props.task.contactId, (contactId) => {
+    if(contactId) loadContact(contactId);
+  });
+}
+
+watch(() => props.task, () => {
+  initializeContact();
+  if (unwatchContactIdWatcher) unwatchContactIdWatcher();
+  unwatchContactIdWatcher = setupWatchForContactId();
+}, { immediate: true });
+
+// onMounted(() => {
+//   console.log('mounted')
+//   initializeContact();
+// });
 </script>
 
 <style lang="scss" scoped>
@@ -119,7 +102,7 @@ onMounted(() => {
     display: flex;
     flex: 1;
     justify-content: end;
-    gap: calc(var(--spacing-xs) / 2);
+    gap: calc(var(--spacing-xs) / 2); ///спитати Женю
   }
 }
 </style>

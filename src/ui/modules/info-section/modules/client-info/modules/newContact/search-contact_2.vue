@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import ContactsListWrapper from './contacts-list-wrapper.vue';
+import ContactsListWrapper from './contacts-list-wrapper_2.vue';
 
 const props = defineProps({
   namespace: {

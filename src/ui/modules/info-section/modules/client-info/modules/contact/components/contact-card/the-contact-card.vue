@@ -2,7 +2,10 @@
   <div class="contact-info">
     <general
       :contact="props.contact"
-      :size="props.size"/>
+      :size="props.size"
+      :linked="props.linked"
+      @link="emit('link')"
+    />
     <labels
       v-if="!isEmpty(labels)"
       :labels="labels"
@@ -22,8 +25,8 @@
   </div>
 </template>
 <script setup>
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import { computed } from 'vue';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import Communications from './contact-card-communications.vue';
 import Description from './contact-card-desc.vue';
 import General from './contact-card-general.vue';
@@ -37,13 +40,22 @@ const props = defineProps({
   },
   contact: {
     type: Object,
+    required: true,
+  },
+  linked: {
+    type: Boolean,
+    default: false,
   },
 });
 
-const labels = computed(() => props.contact.labels);
-const variables = computed(() => props.contact.variables);
-const description = computed(() => props.contact.about);
-const isCommunications = computed(() => !isEmpty(props.contact.emails) || !isEmpty(props.contact.phones));
+const emit = defineEmits([
+  'link',
+]);
+
+const labels = computed(() => props.contact?.labels);
+const variables = computed(() => props.contact?.variables);
+const description = computed(() => props.contact?.about);
+const isCommunications = computed(() => !isEmpty(props.contact?.emails) || !isEmpty(props.contact?.phones));
 </script>
 
 <style lang="scss" scoped>

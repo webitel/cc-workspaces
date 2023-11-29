@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
-import ContactCard from './contact-card.vue';
-import ContactHeader from './contact-header.vue';
+import ContactCard from './contact-card_2.vue';
+import ContactHeader from './contact-header_2.vue';
 
 const props = defineProps({
   list: {

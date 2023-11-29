@@ -91,6 +91,8 @@ export default {
       emptyContact: 'No contact found',
       communications: 'Communication options',
       destination: 'Destination',
+      foundOneContact: '{ count } found contact',
+      foundSomeContact: '{ current } of { count } contacts',
     },
     knowledgeBase: 'Knowledge base',
     processing: {

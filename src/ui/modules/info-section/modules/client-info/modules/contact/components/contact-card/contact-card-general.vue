@@ -40,8 +40,10 @@
       </ul>
     </div>
     <wt-button
+      v-if="!props.linked"
       color="success"
       class="contact-info-general__button"
+      @click="emit('link')"
     > {{ t('infoSec.contacts.select') }}
     </wt-button>
   </div>
@@ -60,13 +62,21 @@ const props = defineProps({
   contact: {
     type: Object,
   },
+  linked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { t } = useI18n();
 
+const emit = defineEmits([
+  'link',
+]);
+
 const name = computed(() => props.contact.name?.commonName);
-const manager = computed(() => props.contact.managers[0].user.name);
-const timezone = computed(() => props.contact.timezones[0].timezone.name);
+const manager = computed(() => props.contact?.managers[0]?.user.name);
+const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 </script>
 
 <style lang="scss" scoped>

@@ -34,9 +34,9 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import AddContact from './add-contact.vue';
-import SearchContact from './search-contact.vue';
-import ViewContact from './view-contact.vue';
+import AddContact from './add-contact_2.vue';
+import SearchContact from './search-contact_2.vue';
+import ViewContact from './view-contact_2.vue';
 
 const props = defineProps({
   task: {

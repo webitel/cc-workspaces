@@ -54,30 +54,33 @@
   </form>
 
 </template>
-<script setup>
 
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+<script setup>
+import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 import TimezonesAPI from '../../api/TimezonesAPI';
 import UsersAPI from '../../api/UsersAPI';
 import LabelsAPI from '../../api/LabelsAPI';
-import ContactsAPI from '../../api/ContactsAPI';
-
-const { t } = useI18n();
-const isSaving = ref(false);
-const store = useStore();
 
 const props = defineProps({
+  namespace: {
+    type: String,
+    required: true,
+  },
   size: {
     type: String,
     default: 'md',
-    options: ['sm', 'md'],
   },
 });
 
-const emit = defineEmits(['saved', 'close']);
-const call = computed(() => store.state.features.call.callList[0]);
+const emit = defineEmits([
+  'close',
+]);
+
+const store = useStore();
+const { t } = useI18n();
+const isSaving = ref(false);
 
 const draft = ref({
   name: {
@@ -90,15 +93,15 @@ const draft = ref({
   createdBy: '',
 });
 
-function close(id) {
-  emit('close', id);
+function close() {
+  emit('close');
 }
 
 async function save() {
   try {
     isSaving.value = false;
-    const contact = await ContactsAPI.add({ itemInstance: draft.value });
-    close(contact.id);
+    store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+    close();
   } finally {
     isSaving.value = false;
   }
