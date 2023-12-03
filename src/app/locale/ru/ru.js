@@ -80,6 +80,18 @@ export default {
       score: 'Оценка оператора',
     },
     clientInfo: 'Информация',
+    contacts: {
+      client: 'Клиент',
+      manager: 'Владелец',
+      emptyTab: 'Нет { title }',
+      emptyContact: 'Контактов не найдено',
+      foundOneContact: 'Найдено { count } контактов',
+      foundSomeContact: '{ current } с { count } контактов',
+      select: 'Выбрать',
+      destination: 'Назначение',
+      communications: 'Средства связи',
+      placeholder: 'Введите критерии для поиска',
+    },
     knowledgeBase: 'База знаний',
     processing: {
       title: 'Обработка задачи',

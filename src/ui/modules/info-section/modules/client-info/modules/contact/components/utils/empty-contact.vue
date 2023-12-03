@@ -1,23 +1,20 @@
 <template>
-  <div class="empty-contact"
-       :class="[`empty-contact--${props.size}`]">
-    <wt-avatar
-      size="2xl"
-    ></wt-avatar>
-
-    <p class="empty-contact__title">{{ t('emptyContact') }}</p>
+  <div
+    class="empty-contact"
+    :class="[`empty-contact--${props.size}`]"
+  >
+    <wt-avatar size="2xl"></wt-avatar>
+    <p class="empty-contact__title">{{ $t('infoSec.contacts.emptyContact') }}</p>
 
     <wt-button
       class="empty-contact__button"
-    > {{ t('reusable.add') }}
+      @click="add"
+    > {{ $t('reusable.add') }}
     </wt-button>
   </div>
 </template>
+
 <script setup>
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
-
 const props = defineProps({
   size: {
     type: String,
@@ -25,6 +22,12 @@ const props = defineProps({
     options: ['sm', 'md'],
   },
 });
+
+const emit = defineEmits(['add']);
+
+function add() {
+  emit('add');
+}
 </script>
 
 <style lang="scss" scoped>
@@ -40,8 +43,8 @@ const props = defineProps({
   }
 
   &--sm {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
 
     .empty-contact__button {
       width: 100%;

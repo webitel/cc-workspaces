@@ -4,24 +4,30 @@
       <contact-header
         :isNext="isNext"
         :isPrev="isPrev"
-        :lenght="props.list?.length"
+        :length="props.list?.length"
         :index="index"
         @next="next"
         @prev="prev"
       ></contact-header>
+      <wt-loader v-show="props.isLoading"></wt-loader>
       <contact-card
-        :size="size"
+        v-if="!isLoading && !isEmptyContact"
+        :size="props.size"
         :contact="currentContact"
         :linked="!!props.linkedContact?.id"
         @link="linkedContact"
       ></contact-card>
-      </div>
-    <empty-contact v-if="props.list.length && props.mode === ContactMode.VIEW"></empty-contact>
     </div>
+    <empty-contact
+      v-if="!isLoading && isEmptyContact"
+      :size="props.size"
+      @add="add"
+    ></empty-contact>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import ContactMode from '../../enums/ContactMode.enum';
 import ContactCard from '../contact-card/the-contact-card.vue';
 import ContactHeader from './contact-header.vue';
@@ -40,10 +46,17 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
+  mode: {
+    type: String,
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits([
-  'link',
+  'link', 'add',
 ]);
 
 const index = ref(0);
@@ -52,6 +65,7 @@ const isNext = computed(() => index.value < props.list.length - 1);
 const isPrev = computed(() => index.value > 0);
 
 const currentContact = computed(() => props.list[index.value]);
+const isEmptyContact = computed(() => !props.list.length && props.mode === ContactMode.VIEW);
 
 function linkedContact() {
   try {
@@ -69,10 +83,17 @@ function next() {
 function prev() {
   index.value -= 1;
 }
+
+function add() {
+  emit('add');
+}
+
+watch(() => props.list, () => index.value = 0);
 </script>
 
 <style scoped lang="scss">
 .contact-list-wrapper {
   padding: var(--spacing-xs);
+  flex-grow: 1;
 }
 </style>

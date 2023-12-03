@@ -3,8 +3,7 @@ import {
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults';
 import applyTransform, {
-  camelToSnake,
-  merge, notify, sanitize, snakeToCamel,
+  merge, notify, snakeToCamel,
   starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers';
 import { CalendarServiceApiFactory } from 'webitel-sdk';

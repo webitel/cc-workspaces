@@ -2,21 +2,33 @@
   <wt-expansion-panel :size="props.size">
     <template v-slot:title>{{ t('vocabulary.labels', 2) }}</template>
     <template>
-        <div class="contact-info-labels">
+      <div class="contact-card-labels">
+        <div
+          v-if="props.labels.length"
+          class="contact-card-labels__wrapper"
+        >
           <wt-chip
             v-for="({ label, id }) of props.labels"
             :key="id"
           >{{ label }}
           </wt-chip>
         </div>
+        <div v-else>{{
+            t(
+              'infoSec.contacts.emptyTab',
+              { title: kebabCase(t('vocabulary.labels', 2)) },
+            )
+          }}
+        </div>
+      </div>
+
     </template>
   </wt-expansion-panel>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
+import { kebabCase } from 'eslint-plugin-vue/lib/utils/casing';
 
 const props = defineProps({
   size: {
@@ -28,13 +40,18 @@ const props = defineProps({
     type: Array,
   },
 });
+
+const { t } = useI18n();
 </script>
 
 <style lang="scss" scoped>
-.contact-info-labels {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs);
+.contact-card-labels {
   padding: var(--spacing-xs);
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
 }
 </style>

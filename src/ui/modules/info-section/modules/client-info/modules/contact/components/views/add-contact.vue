@@ -6,13 +6,14 @@
     <wt-input
       :value="draft.name.commonName"
       :label="t('reusable.name')"
+      :v="v$.draft.name.commonName"
       required
       prevent-trim
       @input="draft.name.commonName = $event"
     ></wt-input>
     <wt-select
       :value="draft.timezones[0]?.timezone"
-      :label="t('infoSec.contacts.timezone')"
+      :label="t('date.timezone', 1)"
       :search-method="TimezonesAPI.getLookup"
       @input="draft.timezones[0] = { timezone: $event }"
     ></wt-select>
@@ -37,7 +38,7 @@
       @input="draft.about = $event"
     ></wt-textarea>
 
-    <div class="add-contact-actions">
+    <div class="add-contact__actions">
       <wt-button
         color="secondary"
         @click="close"
@@ -46,6 +47,7 @@
       </wt-button>
       <wt-button
         :loading="isSaving"
+        :disabled="v$.$invalid"
         @click="save"
       >
         {{ t('reusable.add') }}
@@ -56,7 +58,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import TimezonesAPI from '../../api/TimezonesAPI';
@@ -80,8 +84,8 @@ const emit = defineEmits([
 
 const store = useStore();
 const { t } = useI18n();
-const isSaving = ref(false);
 
+const isSaving = ref(false);
 const draft = ref({
   name: {
     commonName: '',
@@ -93,19 +97,42 @@ const draft = ref({
   createdBy: '',
 });
 
+const v$ = useVuelidate(computed(() => ({
+  draft: {
+    name: {
+      commonName: { required },
+    },
+  },
+})), { draft }, { $autoDirty: true });
+
+v$.value.$touch();
+
+const userinfo = computed(() => store.state.ui.userinfo);
+
 function close() {
   emit('close');
 }
 
 async function save() {
   try {
-    isSaving.value = false;
-    store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+    isSaving.value = true;
+    await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
     close();
   } finally {
     isSaving.value = false;
   }
 }
+
+function setDefaultManager() {
+  draft.value.managers[0] = {
+    user: {
+      id: userinfo.value.userId,
+      name: userinfo.value.name,
+    },
+  };
+}
+
+onMounted(() => setDefaultManager());
 </script>
 
 <style lang="scss" scoped>
@@ -115,7 +142,7 @@ async function save() {
   padding: var(--spacing-xs);
   gap: var(--spacing-xs);
 
-  &-actions {
+  &__actions {
     display: flex;
     gap: var(--spacing-xs);
 
@@ -125,12 +152,8 @@ async function save() {
   }
 
   &--sm {
-    .add-contact-actions {
+    .add-contact__actions {
       flex-direction: column;
-
-      .wt-button:last-child {
-        order: 1; /////не працює
-      }
     }
   }
 }

@@ -10,22 +10,26 @@ const getters = {};
 
 const actions = {
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
-    const number = task.from.number; // for CALLS
-    const searchParams = { q: number, qin: 'emails,phones' }; // load all
+    const number = task.displayNumber; // for CALLS
+    const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
     const contacts = await ContactsAPI.getList(searchParams);
-    console.log(contacts)
+    if (contacts.length === 1) {
+      return context.dispatch('LINK_CONTACT', contacts[0]);
+    }
     context.commit('SET_CONTACTS_BY_DESTINATION', contacts);
   },
   SEARCH_CONTACTS: async (context, searchParams) => {
-    console.log(searchParams);
     const contacts = await ContactsAPI.getList(searchParams);
     context.commit('SET_CONTACTS_BY_SEARCH', contacts);
+  },
+  DELETE_CONTACTS_BY_SEARCH: async (context) => {
+    context.commit('SET_CONTACTS_BY_SEARCH', []);
   },
   LOAD_CONTACT: async (context, contactId) => {
     const contact = await ContactsAPI.get({ contactId });
     context.commit('SET_CONTACT', contact);
-    context.commit('SET_CONTACTS_BY_DESTINATION', []);
     context.commit('SET_CONTACTS_BY_SEARCH', []);
+    context.dispatch('DELETE_CONTACTS_BY_SEARCH', []);
   },
   LINK_CONTACT: async (context, contact) => {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
@@ -40,6 +44,7 @@ const actions = {
     if (task.contact.id) {
       return context.dispatch('LOAD_CONTACT', task.contact.id);
     } else {
+      context.commit('SET_CONTACT', null);
       return context.dispatch('LOAD_CONTACTS_BY_DESTINATION', task);
     }
   },

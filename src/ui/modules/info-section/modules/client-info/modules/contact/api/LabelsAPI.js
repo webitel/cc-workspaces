@@ -16,9 +16,6 @@ const getList = async (params) => {
     page,
     size,
     search,
-    // sort,
-    // fields,
-    // id,
   } = applyTransform(params, [
     sanitize(fieldsToSend),
     merge(getDefaultGetParams()),

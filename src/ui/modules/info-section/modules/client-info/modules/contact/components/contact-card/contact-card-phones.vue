@@ -1,12 +1,19 @@
 <template>
-  <div class="contact-info-phones"
-       :class="[`contact-info-phones--${props.size}`]">
+  <div class="contact-card-phones"
+       :class="[`contact-card-phones--${props.size}`]">
     <ul>
       <li
-        v-for="({ id, number, type }) of phones" :key="id"
-        class="contact-info-phones__item"
+        v-for="({ id, number, type, primary }) of phones" :key="id"
+        class="contact-card-phones__item"
       >
-        <div>{{ number }}</div>
+        <div class="contact-card-phones__wrapper">
+          <div>{{ number }}</div>
+          <wt-icon
+            v-if="primary"
+            icon="tick"
+            color="success"
+          ></wt-icon>
+        </div>
         <div>{{ type.name }}</div>
       </li>
     </ul>
@@ -31,7 +38,7 @@ const phones = computed(() => props.contact.phones);
 </script>
 
 <style lang="scss" scoped>
-.contact-info-phones {
+.contact-card-phones {
   &__item {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -43,11 +50,15 @@ const phones = computed(() => props.contact.phones);
     }
   }
 
+  &__wrapper {
+    display: flex;
+    gap: var(--spacing-xs)
+  }
+
   &--sm {
-    .contact-info-phones__item {
+    .contact-card-phones__item {
       display: block;
     }
   }
 }
-
 </style>

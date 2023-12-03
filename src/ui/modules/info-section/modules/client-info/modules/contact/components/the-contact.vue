@@ -18,18 +18,24 @@
       <template>
         <add-contact
           v-if="mode === ContactMode.ADD"
+          :size="props.size"
           :namespace="namespace"
           @close="changeMode(ContactMode.VIEW)"
         />
         <search-contact
           v-if="mode === ContactMode.SEARCH"
+          :size="props.size"
           :namespace="namespace"
+          @add="changeMode(ContactMode.ADD)"
           @close="changeMode(ContactMode.VIEW)"
         />
         <view-contact
-          v-if="mode === ContactMode.VIEW && !isEmpty(props.task)"
+          v-if="mode === ContactMode.VIEW"
           :mode="mode"
+          :size="props.size"
           :namespace="namespace"
+          :isLoading="isLoading"
+          @add="changeMode(ContactMode.ADD)"
         />
       </template>
     </wt-expansion-panel>
@@ -37,14 +43,13 @@
 </template>
 
 <script setup>
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
 import ViewContact from './views/view-contact.vue';
-import ContactMode from '../enums/ContactMode.enum';
 
 const props = defineProps({
   task: {
@@ -60,6 +65,7 @@ const props = defineProps({
 const store = useStore();
 const { t } = useI18n();
 const mode = ref(ContactMode.VIEW);
+const isLoading = ref(false);
 const namespace = 'ui/infoSec/client/contact';
 
 const changeMode = (newMode) => {
@@ -82,34 +88,43 @@ function loadContact(contactId) {
   but we need to prevent both of these cases handlers fire at one time because if task changes, task.contactId changes too
   so there would be 2 calls of loadContact() and initializeContact() at one time
  */
-watch([() => props.task, () => props.task.contactId], ([task, prevTask], [contactId, prevContactId]) => {
-  if (task.id !== prevTask.id) {
-    changeMode(ContactMode.VIEW);
-    initializeContact();
+
+watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [prevTaskId, prevContactId]) => {
+  if (taskId !== prevTaskId) {
+    try {
+      isLoading.value = true;
+      changeMode(ContactMode.VIEW);
+      initializeContact();
+    } finally {
+      isLoading.value = false;
+    }
     return;
   }
 
-  if (task.id === prevTask.id && contactId !== prevContactId) {
+  if (taskId === prevTaskId && contactId !== prevContactId) {
     if (contactId) {
-      loadContact(contactId);
-      changeMode(ContactMode.VIEW);
+      try {
+        isLoading.value = true;
+        loadContact(contactId);
+        changeMode(ContactMode.VIEW);
+      } finally {
+        isLoading.value = false;
+      }
     }
-    return;
   }
 }, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
 .contact {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  flex-grow: 1;
 
   &-actions {
     display: flex;
     flex: 1;
     justify-content: end;
-    gap: calc(var(--spacing-xs) / 2); ///спитати Женю
+    gap: var(--spacing-xs);
+    margin: auto var(--spacing-xs);
   }
 }
 </style>

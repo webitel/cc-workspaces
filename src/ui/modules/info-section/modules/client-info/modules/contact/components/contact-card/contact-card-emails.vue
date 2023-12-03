@@ -1,12 +1,22 @@
 <template>
-  <div class="contact-info-emails"
-       :class="[`contact-info-emails--${props.size}`]">
+  <div
+    class="contact-card-emails"
+    :class="[`contact-card-emails--${props.size}`]"
+  >
     <ul>
       <li
-        v-for="({ id, email, type }) of emails" :key="id"
-        class="contact-info-emails__item"
+        v-for="({ id, email, type, primary }) of emails"
+        :key="id"
+        class="contact-card-emails__item"
       >
-        <div>{{ email }}</div>
+        <div class="contact-card-emails__wrapper">
+          <div>{{ email }}</div>
+          <wt-icon
+            v-if="primary"
+            icon="tick"
+            color="success"
+          ></wt-icon>
+        </div>
         <div>{{ type.name }}</div>
       </li>
     </ul>
@@ -31,7 +41,7 @@ const emails = computed(() => props.contact.emails.data);
 </script>
 
 <style lang="scss" scoped>
-.contact-info-emails {
+.contact-card-emails {
   &__item {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -43,11 +53,15 @@ const emails = computed(() => props.contact.emails.data);
     }
   }
 
+  &__wrapper {
+    display: flex;
+    gap: var(--spacing-xs)
+  }
+
   &--sm {
-    .contact-info-emails__item {
+    .contact-card-emails__item {
       display: block;
     }
   }
 }
-
 </style>

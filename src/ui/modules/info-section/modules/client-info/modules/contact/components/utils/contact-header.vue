@@ -1,6 +1,7 @@
 <template>
   <header
-    class="contact-header" >
+    class="contact-header"
+  >
     <div>
       <wt-icon-btn
         v-if="props.isPrev"
@@ -8,7 +9,7 @@
         @click="emit('prev')"
       ></wt-icon-btn>
     </div>
-    <div>{{title}}</div>
+    <div>{{ title }}</div>
     <div>
       <wt-icon-btn
         v-if="props.isNext"
@@ -20,8 +21,8 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   isNext: {
@@ -32,7 +33,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  lenght: {
+  length: {
     type: Number,
     default: 0,
   },
@@ -43,39 +44,30 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['next', 'prev']);
+
 const { t } = useI18n();
 
 const current = computed(() => props.index + 1);
 
 const title = computed(() => {
-  console.log(props.lenght)
-  if (props.lenght === 1) {
-
+  if (props.length === 1) {
     return t(
       'infoSec.contacts.foundOneContact',
-      { count: props.lenght },
+      { count: props.length },
     );
   } else {
     return t(
       'infoSec.contacts.foundSomeContact',
-      { current: current.value, count: props.lenght },
+      { current: current.value, count: props.length },
     );
   }
 });
 </script>
 <style lang="scss" scoped>
-//.header {
-//  display: grid;
-//  grid-template-columns: 24px 1fr 24px;
-//}
-
 .contact-header {
   display: flex;
   justify-content: space-between;
   padding: var(--spacing-xs);
-  border: var(--input-border);
-  border-color: var(--form-border-color);
-  border-radius: 4px;
-  border: 1px solid var(--wt-table-header-border-color, #737EA1); ////перепитати Женю
+  border: 1px solid var(--table-head-border-color);
 }
 </style>

@@ -7,6 +7,6 @@ export default Object.freeze([
     mode: 'emails,phones',
   }, {
     label: 'vocabulary.variables',
-    mode: 'variable',
+    mode: 'variables',
   },
 ]);

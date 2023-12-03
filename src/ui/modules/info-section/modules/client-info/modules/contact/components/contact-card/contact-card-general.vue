@@ -1,39 +1,43 @@
 <template>
   <div
-    class="contact-info-general"
-    :class="[`contact-info-general--${props.size}`]"
+    class="contact-card-general"
+    :class="[`contact-card-general--${props.size}`]"
   >
     <wt-avatar
       size="2xl"
       :username="name"
     ></wt-avatar>
 
-    <div class="contact-info-general__wrapper">
-      <div class="contact-info-general__name">
-        <wt-item-link
+    <div class="contact-card-general__wrapper">
+      <div class="contact-card-general__name">
+        <a
           target="_blank"
-          link="https://dev.webitel.com/crm/contacts/201/communications"
-          class="contact-info-general__link"
+          :href="contactLink"
+          class="contact-card-general__link"
         >{{ name }}
-        </wt-item-link>
+          <wt-icon
+            icon="link"
+          ></wt-icon>
+        </a>
 
-        <wt-icon-btn
-          icon="link"
-        ></wt-icon-btn>
       </div>
 
 
-      <ul class="contact-info-general__list">
-        <li class="contact-info-general__item" v-if="manager">
-          <div class="contact-info-general__title">
+      <ul class="contact-card-general__list">
+        <li
+          v-if="manager"
+          class="contact-card-general__item">
+          <div class="contact-card-general__title">
             {{ t('infoSec.contacts.manager') }}
           </div>
           <div>{{ manager }}</div>
         </li>
 
-        <li class="contact-info-general__item" v-if="timezone">
-          <div class="contact-info-general__title">
-            {{ t('infoSec.contacts.timezone') }}
+        <li
+          v-if="timezone"
+          class="contact-card-general__item" >
+          <div class="contact-card-general__title">
+            {{ t('date.timezone', 1) }}
           </div>
           <div>{{ timezone }}</div>
         </li>
@@ -42,7 +46,7 @@
     <wt-button
       v-if="!props.linked"
       color="success"
-      class="contact-info-general__button"
+      class="contact-card-general__button"
       @click="emit('link')"
     > {{ t('infoSec.contacts.select') }}
     </wt-button>
@@ -77,15 +81,16 @@ const emit = defineEmits([
 const name = computed(() => props.contact.name?.commonName);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
+const contactLink = computed(() => `${process.env.VUE_APP_CRM_URL}/contacts/${props.contact.id}/communications`);
 </script>
 
 <style lang="scss" scoped>
-.contact-info-general {
-    display: flex;
-    gap: var(--spacing-sm);
-    justify-content: space-between;
-    padding: var(--spacing-xs);
-    align-items: flex-start;
+.contact-card-general {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--spacing-xs);
 
   &__wrapper {
     flex-grow: 1;
@@ -98,7 +103,11 @@ const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 
   &__link {
     @extend %typo-heading-2;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
     color: var(--link-color);
+    cursor: pointer;
   }
 
   &__item {
@@ -110,17 +119,11 @@ const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
     @extend %typo-subtitle-1;
   }
 
-  &__panels {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
-
   &--sm {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
 
-    .contact-info-general {
+    .contact-card-general {
       &__list {
         order: 1;
         align-self: flex-start;
@@ -140,5 +143,4 @@ const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
     }
   }
 }
-
 </style>

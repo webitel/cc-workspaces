@@ -5,8 +5,8 @@ import {
 import applyTransform, {
   camelToSnake,
   merge, notify, snakeToCamel,
-  starToSearch, log, sanitize,
-  generateUrl, mergeEach,
+  starToSearch, sanitize,
+  generateUrl,
 } from '@webitel/ui-sdk/src/api/transformers';
 import instance from '../../../../../../../../app/api/instance';
 

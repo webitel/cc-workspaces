@@ -2,7 +2,7 @@
   <wt-expansion-panel :size="props.size">
     <template v-slot:title>{{ t('infoSec.contacts.communications') }}</template>
     <template>
-      <div class="contact-info-communications">
+      <div class="contact-card-communications">
         <wt-tabs
           :current="currentTab"
           :tabs="tabs"
@@ -24,8 +24,6 @@ import { useI18n } from 'vue-i18n';
 import ContactCardPhones from './contact-card-phones.vue';
 import ContactCardEmails from './contact-card-emails.vue';
 
-const { t } = useI18n();
-
 const props = defineProps({
   size: {
     type: String,
@@ -36,6 +34,9 @@ const props = defineProps({
     type: Object,
   },
 });
+
+const { t } = useI18n();
+const currentTab = ref({});
 
 const tabs = computed(() => [
   {
@@ -50,8 +51,6 @@ const tabs = computed(() => [
   },
 ]);
 
-const currentTab = ref({});
-
 function changeTab(tab) {
   currentTab.value = tab;
 }
@@ -60,7 +59,7 @@ onMounted(() => changeTab(tabs.value[0]));
 </script>
 
 <style lang="scss" scoped>
-.contact-info-communications {
+.contact-card-communications {
   padding: var(--spacing-xs);
 }
 </style>
