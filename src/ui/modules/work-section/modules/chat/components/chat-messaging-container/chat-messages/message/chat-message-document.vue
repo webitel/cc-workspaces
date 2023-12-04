@@ -56,7 +56,7 @@ export default {
     justify-content: center;
     margin-right: var(--spacing-xs);
     border-radius: var(--border-radius);
-    background: var(--chat-client-attachment-bg-color);
+    background: var(--primary-light-color);
   }
 
   &__info-wrapper {
@@ -75,7 +75,7 @@ export default {
 
   &__size {
     @extend %typo-caption;
-    color: var(--text-outline-color);
+    color: var(--text-main-color);
   }
 
   &--my {
@@ -84,7 +84,7 @@ export default {
     .chat-message-document__icon-wrapper {
       margin-right: 0;
       margin-left: var(--spacing-xs);
-      background: var(--chat-agent-attachment-bg-color);
+      background: var(--secondary-light-color);
     }
   }
 }

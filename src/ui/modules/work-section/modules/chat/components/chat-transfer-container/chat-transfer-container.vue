@@ -41,7 +41,14 @@
           :src="botAvatar"
           :type="transferDestination"
           @input="handleTransfer"
-        ></transfer-lookup-item>
+        >
+          <template v-slot:before>
+            <wt-icon
+              icon="bot"
+              icon-prefix="ws"
+            ></wt-icon>
+          </template>
+        </transfer-lookup-item>
       </div>
 
       <observer

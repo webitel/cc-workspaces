@@ -51,7 +51,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  background: var(--popup-shadow-color);
+  background: var(--wt-popup-shadow-color);
   z-index: 0;
 }
 

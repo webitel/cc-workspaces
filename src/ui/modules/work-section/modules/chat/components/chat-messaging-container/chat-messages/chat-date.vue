@@ -25,6 +25,6 @@ export default {
   @extend %typo-caption;
   text-align: center;
   margin: 30px 0;
-  color: var(--text-outline-color);
+  color: var(--text-main-color);
 }
 </style>

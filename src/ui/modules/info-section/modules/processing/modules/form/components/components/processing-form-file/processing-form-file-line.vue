@@ -131,16 +131,16 @@ export default {
 
   .processing-form-file-line__name {
     word-break: break-all;
-    color: var(--link-color);
+    color: var(--info-color);
     transition: var(--transition);
 
     &:hover {
-      color: var(--link--hover-color);
+      color: var(--info-hover-color);
     }
   }
 
   .processing-form-file-line__error-message {
-    color: var(--false-color);
+    color: var(--error-color);
   }
 
   .wt-load-bar {

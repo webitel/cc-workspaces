@@ -8,6 +8,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    bot: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     image() {

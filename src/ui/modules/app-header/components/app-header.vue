@@ -1,5 +1,8 @@
 <template>
   <wt-app-header>
+    <wt-switcher
+      @change="toggleDarkTheme"
+    ></wt-switcher>
     <wt-chip
       :color="this.isPhoneReg ? 'success' : 'secondary-50'"
     >SIP

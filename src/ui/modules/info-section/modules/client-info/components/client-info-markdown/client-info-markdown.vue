@@ -55,8 +55,8 @@ export default {
   margin-bottom: var(--spacing-sm);
   border-radius: var(--spacing-2xs);
   padding: var(--spacing-sm);
-  background: var(--secondary-color);
-  color: var(--contrast-color);
+  background: var(--secondary-light-color);
+  color: var(--secondary-on-color);
 }
 
 .user-description__head {
@@ -77,6 +77,7 @@ export default {
 .md {
   padding-left: var(--spacing-sm);
   @extend %typo-body-1;
+  color: var(--text-main-color);
 }
 
 .md strong {

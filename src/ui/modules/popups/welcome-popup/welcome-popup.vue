@@ -138,7 +138,7 @@ export default {
 
   &__detail {
     @extend %typo-body-2;
-    color: var(--false-color);
+    color: var(--text-error-color);
   }
 }
 </style>
