@@ -3,7 +3,7 @@
     <client-info-chips/>
     <client-info-markdown/>
     <contact
-      v-if="!hideContact"
+      v-if="!hideContact && hasAccessOnCrm"
       :size="size"
       :task="task"
     />
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 import Contact from '../modules/contact/components/the-contact.vue';
@@ -31,6 +33,12 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('ui/userinfo', {
+      checkAppAccess: 'CHECK_APP_ACCESS',
+    }),
+    hasAccessOnCrm() {
+      return this.checkAppAccess(WebitelApplications.CRM);
+    },
     hideContact() {
       return !isEmpty(this.task) ? this.task.contact.hide : true;
     },

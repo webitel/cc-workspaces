@@ -3,41 +3,42 @@
     class="add-contact"
     :class="[`add-contact--${props.size}`]"
   >
-    <wt-input
-      :value="draft.name.commonName"
-      :label="t('reusable.name')"
-      :v="v$.draft.name.commonName"
-      required
-      prevent-trim
-      @input="draft.name.commonName = $event"
-    ></wt-input>
-    <wt-select
-      :value="draft.timezones[0]?.timezone"
-      :label="t('date.timezone', 1)"
-      :search-method="TimezonesAPI.getLookup"
-      @input="draft.timezones[0] = { timezone: $event }"
-    ></wt-select>
-    <wt-select
-      :value="draft.managers[0]?.user"
-      :label="t('infoSec.contacts.manager')"
-      :search-method="UsersAPI.getLookup"
-      @input="draft.managers[0] = { user: $event }"
-    ></wt-select>
-    <wt-tags-input
-      :value="draft.labels"
-      :label="t('vocabulary.labels', 2)"
-      :search-method="LabelsAPI.getList"
-      option-label="label"
-      track-by="label"
-      taggable
-      @input="draft.labels = $event"
-    ></wt-tags-input>
-    <wt-textarea
-      :value="draft.about"
-      :label="t('vocabulary.description')"
-      @input="draft.about = $event"
-    ></wt-textarea>
-
+    <div>
+      <wt-input
+        :value="draft.name.commonName"
+        :label="t('reusable.name')"
+        :v="v$.draft.name.commonName"
+        required
+        prevent-trim
+        @input="draft.name.commonName = $event"
+      ></wt-input>
+      <wt-select
+        :value="draft.timezones[0]?.timezone"
+        :label="t('date.timezone', 1)"
+        :search-method="TimezonesAPI.getLookup"
+        @input="draft.timezones[0] = { timezone: $event }"
+      ></wt-select>
+      <wt-select
+        :value="draft.managers[0]?.user"
+        :label="t('infoSec.contacts.manager')"
+        :search-method="UsersAPI.getLookup"
+        @input="draft.managers[0] = { user: $event }"
+      ></wt-select>
+      <wt-tags-input
+        :value="draft.labels"
+        :label="t('vocabulary.labels', 2)"
+        :search-method="LabelsAPI.getList"
+        option-label="label"
+        track-by="label"
+        taggable
+        @input="draft.labels = $event"
+      ></wt-tags-input>
+      <wt-textarea
+        :value="draft.about"
+        :label="t('vocabulary.description')"
+        @input="draft.about = $event"
+      ></wt-textarea>
+    </div>
     <div class="add-contact__actions">
       <wt-button
         color="secondary"
@@ -46,7 +47,7 @@
         {{ t('reusable.cancel') }}
       </wt-button>
       <wt-button
-        :loading="isSaving"
+        :loading="isLoading"
         :disabled="v$.$invalid"
         @click="save"
       >
@@ -59,10 +60,11 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import TimezonesAPI from '../../api/TimezonesAPI';
 import UsersAPI from '../../api/UsersAPI';
 import LabelsAPI from '../../api/LabelsAPI';
@@ -85,7 +87,6 @@ const emit = defineEmits([
 const store = useStore();
 const { t } = useI18n();
 
-const isSaving = ref(false);
 const draft = ref({
   name: {
     commonName: '',
@@ -108,19 +109,15 @@ const v$ = useVuelidate(computed(() => ({
 v$.value.$touch();
 
 const userinfo = computed(() => store.state.ui.userinfo);
+const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 
 function close() {
   emit('close');
 }
 
 async function save() {
-  try {
-    isSaving.value = true;
-    await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
-    close();
-  } finally {
-    isSaving.value = false;
-  }
+  await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+  close();
 }
 
 function setDefaultManager() {
@@ -138,9 +135,9 @@ onMounted(() => setDefaultManager());
 <style lang="scss" scoped>
 .add-contact {
   display: flex;
+  gap: var(--spacing-xs);
   flex-direction: column;
   padding: var(--spacing-xs);
-  gap: var(--spacing-xs);
 
   &__actions {
     display: flex;

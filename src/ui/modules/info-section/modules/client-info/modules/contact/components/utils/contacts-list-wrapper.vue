@@ -9,9 +9,7 @@
         @next="next"
         @prev="prev"
       ></contact-header>
-      <wt-loader v-show="props.isLoading"></wt-loader>
       <contact-card
-        v-if="!isLoading && !isEmptyContact"
         :size="props.size"
         :contact="currentContact"
         :linked="!!props.linkedContact?.id"
@@ -19,7 +17,7 @@
       ></contact-card>
     </div>
     <empty-contact
-      v-if="!isLoading && isEmptyContact"
+      v-if="isEmptyContact"
       :size="props.size"
       @add="add"
     ></empty-contact>
@@ -28,6 +26,8 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { useStore } from 'vuex';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import ContactMode from '../../enums/ContactMode.enum';
 import ContactCard from '../contact-card/the-contact-card.vue';
 import ContactHeader from './contact-header.vue';
@@ -49,9 +49,9 @@ const props = defineProps({
   mode: {
     type: String,
   },
-  isLoading: {
-    type: Boolean,
-    default: false,
+  namespace: {
+    type: String,
+    required: true,
   },
 });
 
@@ -60,12 +60,15 @@ const emit = defineEmits([
 ]);
 
 const index = ref(0);
+const store = useStore();
+
+const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 
 const isNext = computed(() => index.value < props.list.length - 1);
 const isPrev = computed(() => index.value > 0);
 
 const currentContact = computed(() => props.list[index.value]);
-const isEmptyContact = computed(() => !props.list.length && props.mode === ContactMode.VIEW);
+const isEmptyContact = computed(() => !props.list.length && props.mode === ContactMode.VIEW && !isLoading.value);
 
 function linkedContact() {
   try {

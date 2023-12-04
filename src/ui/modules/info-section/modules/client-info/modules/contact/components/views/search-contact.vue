@@ -108,43 +108,40 @@ const keyVariable = ref('');
 const valueVariables = ref('');
 
 const searchMode = ref(SearchOptions[0].mode);
-const isLoading = ref(false);
 const dummy = ref({});
 
 const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
+const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const contactsBySearch = computed(() => getNamespacedState(store.state, props.namespace).contactsBySearch);
 const searchValue = computed(() => {
   if (isSearchNotByVariables.value) return search.value;
   return `${keyVariable.value}=${valueVariables.value}`;
 });
 
+const checkForStar = (value) => value !== '*';
+
 const v$ = useVuelidate(computed(() => ({
-  search: { required: requiredIf(() => isSearchNotByVariables.value) },
-  keyVariable: { required: requiredIf(() => !isSearchNotByVariables.value) },
-  valueVariables: { required: requiredIf(() => !isSearchNotByVariables.value) },
+  search: { required: requiredIf(() => isSearchNotByVariables.value), checkForStar },
+  keyVariable: { required: requiredIf(() => !isSearchNotByVariables.value), checkForStar },
+  valueVariables: { required: requiredIf(() => !isSearchNotByVariables.value), checkForStar },
 })), { search, keyVariable, valueVariables }, { $autoDirty: true });
 
 v$.value.$touch();
 
 async function callSearch() {
-  try {
-    isLoading.value = true;
-    await store.dispatch(`${props.namespace}/SEARCH_CONTACTS`, {
-      q: searchValue.value,
-      qin: searchMode.value,
-      size: 5000,
-    });
-    if (!contactsBySearch.value.length) {
-      return dummy.value = {
-        src: dummyPicAfterSearch,
-        text: t('infoSec.contacts.emptyContact'),
-      };
-    } else return dummy.value = {
-      src: dummyPic,
+  await store.dispatch(`${props.namespace}/SEARCH_CONTACTS`, {
+    q: searchValue.value,
+    qin: searchMode.value,
+    size: 5000,
+  });
+  if (!contactsBySearch.value.length) {
+    return dummy.value = {
+      src: dummyPicAfterSearch,
+      text: t('infoSec.contacts.emptyContact'),
     };
-  } finally {
-    isLoading.value = false;
-  }
+  } else return dummy.value = {
+    src: dummyPic,
+  };
 }
 
 async function changeSearchMode(event) {

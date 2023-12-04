@@ -2,6 +2,7 @@ import ContactsAPI from '../api/ContactsAPI';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
+  isLoading: false,
   contactsByDestination: [], // contacts, loaded by initial search by destination (number, email, etc.)
   contactsBySearch: [], // contacts, loaded by user manual search
 };
@@ -12,32 +13,54 @@ const actions = {
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
     const number = task.displayNumber; // for CALLS
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
-    const contacts = await ContactsAPI.getList(searchParams);
-    if (contacts.length === 1) {
-      return context.dispatch('LINK_CONTACT', contacts[0]);
+    try {
+      context.commit('SET_IS_LOADING', true);
+      const contacts = await ContactsAPI.getList(searchParams);
+
+      if (contacts.length === 1) {
+        return context.dispatch('LINK_CONTACT', contacts[0]);
+      }
+
+      context.commit('SET_CONTACTS_BY_DESTINATION', contacts);
+    } finally {
+      context.commit('SET_IS_LOADING', false);
     }
-    context.commit('SET_CONTACTS_BY_DESTINATION', contacts);
   },
   SEARCH_CONTACTS: async (context, searchParams) => {
-    const contacts = await ContactsAPI.getList(searchParams);
-    context.commit('SET_CONTACTS_BY_SEARCH', contacts);
+    try {
+      context.commit('SET_IS_LOADING', true);
+      const contacts = await ContactsAPI.getList(searchParams);
+      context.commit('SET_CONTACTS_BY_SEARCH', contacts);
+    } finally {
+      context.commit('SET_IS_LOADING', false);
+    }
   },
   DELETE_CONTACTS_BY_SEARCH: async (context) => {
     context.commit('SET_CONTACTS_BY_SEARCH', []);
   },
   LOAD_CONTACT: async (context, contactId) => {
-    const contact = await ContactsAPI.get({ contactId });
-    context.commit('SET_CONTACT', contact);
-    context.commit('SET_CONTACTS_BY_SEARCH', []);
-    context.dispatch('DELETE_CONTACTS_BY_SEARCH', []);
+    try {
+      context.commit('SET_IS_LOADING', true);
+      const contact = await ContactsAPI.get({ contactId });
+      context.commit('SET_CONTACT', contact);
+      context.commit('SET_CONTACTS_BY_SEARCH', []);
+      context.dispatch('DELETE_CONTACTS_BY_SEARCH', []);
+    } finally {
+      context.commit('SET_IS_LOADING', false);
+    }
   },
   LINK_CONTACT: async (context, contact) => {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
     return task.setContact(Number(contact.id));
   },
   ADD_CONTACT: async (context, draft) => {
-    const newContact = await ContactsAPI.add({ itemInstance: draft });
-    return context.dispatch('LINK_CONTACT', newContact);
+    try {
+      context.commit('SET_IS_LOADING', true);
+      const newContact = await ContactsAPI.add({ itemInstance: draft });
+      context.dispatch('LINK_CONTACT', newContact);
+    } finally {
+      context.commit('SET_IS_LOADING', false);
+    }
   },
   INITIALIZE_CONTACT: async (context) => {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
@@ -51,6 +74,9 @@ const actions = {
 };
 
 const mutations = {
+  SET_IS_LOADING: (state, value) => {
+    state.isLoading = value;
+  },
   SET_CONTACT: (state, contact) => {
     state.contact = contact;
   },

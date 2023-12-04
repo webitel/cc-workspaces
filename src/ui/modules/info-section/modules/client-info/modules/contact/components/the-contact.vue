@@ -7,11 +7,11 @@
         <div class="contact-actions">
           <wt-icon-btn
             icon="search"
-            @click.stop="changeMode(ContactMode.SEARCH)"
+            @click="changeMode(ContactMode.SEARCH)"
           ></wt-icon-btn>
           <wt-icon-btn
             icon="plus"
-            @click.stop="changeMode(ContactMode.ADD)"
+            @click="changeMode(ContactMode.ADD)"
           ></wt-icon-btn>
         </div>
       </template>
@@ -34,7 +34,6 @@
           :mode="mode"
           :size="props.size"
           :namespace="namespace"
-          :isLoading="isLoading"
           @add="changeMode(ContactMode.ADD)"
         />
       </template>
@@ -65,7 +64,6 @@ const props = defineProps({
 const store = useStore();
 const { t } = useI18n();
 const mode = ref(ContactMode.VIEW);
-const isLoading = ref(false);
 const namespace = 'ui/infoSec/client/contact';
 
 const changeMode = (newMode) => {
@@ -91,25 +89,15 @@ function loadContact(contactId) {
 
 watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [prevTaskId, prevContactId]) => {
   if (taskId !== prevTaskId) {
-    try {
-      isLoading.value = true;
-      changeMode(ContactMode.VIEW);
-      initializeContact();
-    } finally {
-      isLoading.value = false;
-    }
+    changeMode(ContactMode.VIEW);
+    initializeContact();
     return;
   }
 
   if (taskId === prevTaskId && contactId !== prevContactId) {
     if (contactId) {
-      try {
-        isLoading.value = true;
-        loadContact(contactId);
-        changeMode(ContactMode.VIEW);
-      } finally {
-        isLoading.value = false;
-      }
+      loadContact(contactId);
+      changeMode(ContactMode.VIEW);
     }
   }
 }, { immediate: true });

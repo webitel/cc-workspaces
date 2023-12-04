@@ -1,13 +1,16 @@
 <template>
-  <contacts-list-wrapper
-    :mode="props.mode"
-    :size="props.size"
-    :list="listedContacts"
-    :linked-contact="contact"
-    :isLoading="props.isLoading"
-    @link="linkContact"
-    @add="add"
-  ></contacts-list-wrapper>
+  <div>
+    <wt-loader v-show="isLoading"></wt-loader>
+    <contacts-list-wrapper
+      :mode="props.mode"
+      :size="props.size"
+      :list="listedContacts"
+      :linked-contact="contact"
+      :namespace="props.namespace"
+      @link="linkContact"
+      @add="add"
+    ></contacts-list-wrapper>
+  </div>
 </template>
 
 <script setup>
@@ -28,15 +31,12 @@ const props = defineProps({
   mode: {
     type: String,
   },
-  isLoading: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 const store = useStore();
 
 const contact = computed(() => getNamespacedState(store.state, props.namespace).contact);
+const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const contactsByDestination = computed(() => getNamespacedState(store.state, props.namespace).contactsByDestination);
 const listedContacts = computed(() => {
   return contact.value ? [contact.value] : [...contactsByDestination.value];
