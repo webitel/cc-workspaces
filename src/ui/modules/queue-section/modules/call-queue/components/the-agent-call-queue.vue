@@ -160,15 +160,15 @@ export default {
     border-radius: 50%;
 
     &.active {
-      background: var(--icon-true-color);
+      background: var(--icon-success-color);
     }
 
     &.offline {
-      background: var(--icon-accent-color);
+      background: var(--icon-primary-color);
     }
 
     &.missed {
-      background: var(--icon-false-color);
+      background: var(--icon-error-color);
     }
 
     &.manual {

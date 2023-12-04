@@ -144,7 +144,7 @@ export default {
   box-sizing: border-box;
   min-height: 0;
   padding: var(--spacing-sm);
-  background: var(--page-bg-color);
+  background: var(--wt-page-wrapper-background-color);
 }
 
 .workspace {
@@ -153,6 +153,7 @@ export default {
   margin-top: var(--spacing-sm);
   display: flex;
   gap: var(--spacing-sm);
+  background: var(--wt-page-wrapper-background-color);
   //display: grid;
   //grid-template-columns: 320px 550px 1fr;
   //grid-gap: var(--spacing-sm);

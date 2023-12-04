@@ -147,7 +147,7 @@ export default {
   text-align: center;
   display: inline-block;
   width: 40px;
-  color: var(--text-primary-color);
+  color: var(--primary-on-color);
 
   /*semicolons*/
   &:nth-child(3), &:nth-child(6) {

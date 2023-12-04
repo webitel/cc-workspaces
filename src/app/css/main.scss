@@ -15,7 +15,8 @@ body {
   height: 100%;
   margin: 0;
   font-size: 100%;
-  background: var(--page-bg-color);
+  color: var(--text-main-color);
+  background: var(--wt-page-wrapper-background-color);
 
   @media screen and (max-height: 610px) {
    min-height: 610px;

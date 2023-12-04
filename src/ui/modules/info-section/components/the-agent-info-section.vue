@@ -233,6 +233,7 @@ export default {
   position: relative;
   display: flex;
   overflow-y: scroll;
+  //overflow: auto;
   flex-direction: column;
   flex-grow: 1;
   min-height: 0;

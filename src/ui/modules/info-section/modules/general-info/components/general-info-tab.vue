@@ -78,7 +78,7 @@ watchOnce(agent, () => {
 <style lang="scss" scoped>
 .general-info {
   position: relative;
-  overflow: scroll;
+  //overflow: scroll;
 
   .wt-loader {
     position: absolute;

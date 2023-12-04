@@ -3,10 +3,14 @@
     class="chat-message-avatar"
   >
     <wt-avatar
-      v-if="showAvatar"
+      v-if="showAvatar && !bot"
       :src="avatarPic"
       size="sm"
     ></wt-avatar>
+    <wt-icon
+      v-else-if="showAvatar"
+      icon="ws-bot"
+    ></wt-icon>
   </div>
 </template>
 

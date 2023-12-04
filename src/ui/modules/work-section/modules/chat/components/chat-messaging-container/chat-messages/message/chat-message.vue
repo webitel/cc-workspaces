@@ -24,6 +24,7 @@
       ></message-document>
       <message-text
         :message="message"
+        :bot="isBot"
         :my="my"
       ></message-text>
     </div>
@@ -103,7 +104,7 @@ export default {
     padding: var(--spacing-xs) var(--spacing-xs);
     line-height: 0; // prevents height difference from its content
     border-radius: var(--border-radius);
-    background: var(--chat-client-message-bg-color);
+    background: var(--primary-light-color);
     gap: var(--spacing-xs);
   }
 
@@ -112,7 +113,7 @@ export default {
     margin-left: auto;
 
     .chat-message__main-wrapper {
-      background: var(--chat-agent-message-bg-color);
+      background: var(--secondary-light-color);
     }
   }
 }

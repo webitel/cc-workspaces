@@ -300,7 +300,7 @@ export default {
     stop-color: var(--success-color);
   }
   &--danger {
-    stop-color: var(--false-color);
+    stop-color: var(--error-color);
   }
 }
 </style>

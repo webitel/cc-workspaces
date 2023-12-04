@@ -65,6 +65,9 @@ export default {
   position: relative;
 
   ::v-deep emoji-picker {
+    --background: var(--content-wrapper-color);
+    --border-color: var(--secondary-color);
+
     position: absolute;
     z-index: 1;
     bottom: calc(100% + var(--spacing-sm));
