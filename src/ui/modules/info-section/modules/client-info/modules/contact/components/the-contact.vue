@@ -3,15 +3,16 @@
     class="contact"
   >
     <wt-expansion-panel>
-      <template v-slot:title>{{ t('infoSec.contacts.client') }}
+      <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
+      <template v-slot:actions="{ open, toggleOpen }">
         <div class="contact-actions">
           <wt-icon-btn
             icon="search"
-            @click="changeMode(ContactMode.SEARCH)"
+            @click="openingExpantionPanel(open, ContactMode.SEARCH, toggleOpen)"
           ></wt-icon-btn>
           <wt-icon-btn
             icon="plus"
-            @click="changeMode(ContactMode.ADD)"
+            @click="openingExpantionPanel(open, ContactMode.ADD, toggleOpen)"
           ></wt-icon-btn>
         </div>
       </template>
@@ -78,6 +79,11 @@ function loadContact(contactId) {
   return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
 }
 
+function openingExpantionPanel(open, mode, fn) {
+  if (open) fn();
+  changeMode(mode);
+}
+
 /*
   we need to watch both for task itself and for task.contactId, because we want to handle 2 cases:
   1. contactId appears after linking contact to task => we need to load this contact
@@ -105,6 +111,7 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 
 <style lang="scss" scoped>
 .contact {
+  position: relative;
   flex-grow: 1;
 
   &-actions {
@@ -112,7 +119,6 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
     flex: 1;
     justify-content: end;
     gap: var(--spacing-xs);
-    margin: auto var(--spacing-xs);
   }
 }
 </style>

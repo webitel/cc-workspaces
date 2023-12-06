@@ -208,11 +208,19 @@ onMounted(() => dummy.value = {
 
   &__variables {
     display: flex;
+    flex-grow: 1;
     gap: var(--spacing-xs);
-    justify-content: space-between;
+
+    .wt-input {
+      width: 100%;
+    }
   }
 
   &__actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     gap: var(--spacing-xs);
     flex: 0 0 auto;

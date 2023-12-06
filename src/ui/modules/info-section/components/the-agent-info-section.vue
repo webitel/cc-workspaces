@@ -170,8 +170,7 @@ export default {
     },
   },
   created() {
-
-    this.currentTab = this.tabsObject.clientInfo;
+    this.currentTab = this.tabsObject.generalInfo;
   },
 };
 </script>
