@@ -2,6 +2,10 @@
   <p
     v-if="text"
     class="chat-message-text"
+    :class="{
+      'chat-message-text--my': my,
+      'chat-message-text--bot': bot,
+     }"
     v-html="text"
   ></p>
 </template>
@@ -35,9 +39,18 @@ export default {
   white-space: pre-line; // read \n as "new line"
 
   // reset links inside text
-  ::v-deep .chat-message-text__link {
+  :deep(.chat-message-text__link) {
     color: revert;
     text-decoration: revert;
+  }
+// client
+  &:not(.chat-message-text--my) {
+    color: var(--primary-on-color);
+  }
+
+  &.chat-message-text--my,
+  &.chat-message-text--bot, {
+    color: var(--secondary-on-color);
   }
 }
 </style>

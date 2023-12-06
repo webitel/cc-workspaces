@@ -35,7 +35,7 @@ export default {
 
 .chat-message-meta__sent-at {
   @extend %typo-caption;
-  color: var(--text-outline-color);
+  color: var(--text-main-color);
   white-space: nowrap;
 }
 </style>

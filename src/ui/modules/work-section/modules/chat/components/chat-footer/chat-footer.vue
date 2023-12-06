@@ -175,7 +175,7 @@ export default {
     @extend %typo-body-1;
     margin-bottom: 20px;
     text-align: center;
-    color: var(--text-outline-color);
+    color: var(--text-main-color);
   }
 }
 

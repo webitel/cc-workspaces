@@ -1,12 +1,14 @@
 <template>
   <lookup-item>
     <template v-slot:before>
-      <wt-avatar
-        :src="src"
-        :size="size"
-        :badge="type !== TransferDestination.CHATPLAN"
-        :status="userStatus"
-      ></wt-avatar>
+      <slot name="before">
+        <wt-avatar
+          :src="src"
+          :size="size"
+          :badge="type !== TransferDestination.CHATPLAN"
+          :status="userStatus"
+        ></wt-avatar>
+      </slot>
     </template>
 
     <template v-slot:title>

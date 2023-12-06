@@ -1,5 +1,9 @@
 <template>
   <wt-app-header>
+    <wt-dark-mode-switcher
+      namespace="ui/appearance"
+    />
+
     <wt-chip
       :color="this.isPhoneReg ? 'success' : 'secondary-50'"
     >SIP
@@ -38,6 +42,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
+import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
@@ -46,6 +51,7 @@ import UserStatus from '../../../../features/modules/agent-status/statusUtils/Us
 export default {
   name: 'app-header',
   components: {
+    WtDarkModeSwitcher,
     AgentStatusSelect,
     UserDndSwitcher,
     BreakTimerPopup,
@@ -127,9 +133,6 @@ export default {
       const settingsUrl = process.env.VUE_APP_SETTINGS_URL;
       window.open(settingsUrl);
     },
-    toggleDarkTheme() {
-      document.documentElement.classList.toggle('theme--dark');
-    },
     async logoutUser() {
       try {
         await authAPI.logout();
@@ -143,6 +146,10 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
+  .wt-dark-mode-switcher {
+    margin-right: auto;
+  }
+
   .wt-switcher, .user-dnd-switcher{
     margin-left: var(--spacing-sm);
   }

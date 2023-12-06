@@ -110,17 +110,17 @@ export default {
       }
     }
     &-success {
-      border-color: var(--true-color);
+      border-color: var(--success-color);
 
       .processing-form-text__icon-wrapper {
-        background: var(--true-color);
+        background: var(--success-color);
       }
     }
     &-danger {
-      border-color: var(--false-color);
+      border-color: var(--error-color);
 
       .processing-form-text__icon-wrapper {
-        background: var(--false-color);
+        background: var(--error-color);
       }
     }
   }
