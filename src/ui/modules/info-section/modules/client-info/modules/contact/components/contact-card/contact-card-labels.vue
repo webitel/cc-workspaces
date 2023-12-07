@@ -16,19 +16,17 @@
         <div v-else>{{
             t(
               'infoSec.contacts.emptyTab',
-              { title: kebabCase(t('vocabulary.labels', 2)) },
+              { title: t('vocabulary.labels', 2).toLowerCase() },
             )
           }}
         </div>
       </div>
-
     </template>
   </wt-expansion-panel>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { kebabCase } from 'eslint-plugin-vue/lib/utils/casing';
 
 const props = defineProps({
   size: {

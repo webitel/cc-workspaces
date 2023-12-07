@@ -27,7 +27,7 @@
 <script setup>
 import { computed } from 'vue';
 import Communications from './contact-card-communications.vue';
-import Description from './contact-card-desc.vue';
+import Description from './contact-card-description.vue';
 import General from './contact-card-general.vue';
 import Labels from './contact-card-labels.vue';
 import Variables from './contact-card-variables.vue';

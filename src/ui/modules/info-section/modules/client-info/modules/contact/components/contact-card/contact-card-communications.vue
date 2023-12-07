@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ContactCardPhones from './contact-card-phones.vue';
 import ContactCardEmails from './contact-card-emails.vue';
@@ -32,11 +32,11 @@ const props = defineProps({
   },
   contact: {
     type: Object,
+    required: true,
   },
 });
 
 const { t } = useI18n();
-const currentTab = ref({});
 
 const tabs = computed(() => [
   {
@@ -51,11 +51,11 @@ const tabs = computed(() => [
   },
 ]);
 
+const currentTab = ref(tabs.value[0]);
+
 function changeTab(tab) {
   currentTab.value = tab;
 }
-
-onMounted(() => changeTab(tabs.value[0]));
 </script>
 
 <style lang="scss" scoped>

@@ -9,7 +9,7 @@
         @click="emit('prev')"
       ></wt-icon-btn>
     </div>
-    <div>{{ title }}</div>
+    <p>{{ title }}</p>
     <div>
       <wt-icon-btn
         v-if="props.isNext"
@@ -68,6 +68,7 @@ const title = computed(() => {
   display: flex;
   justify-content: space-between;
   padding: var(--spacing-xs);
-  border: 1px solid var(--table-head-border-color);
+  border: 1px solid var(--wt-table-head-border-color);
+  border-radius: var(--spacing-2xs);
 }
 </style>

@@ -8,18 +8,21 @@
       >
         <ul v-if="props.variables.length">
           <li
-            v-for="({ key, value, id }) of props.variables"
+            v-for="({ key, value, id }, idx) of props.variables"
             :key="id"
             class="contact-card-variables__item"
           >
-            <div>{{ key }}</div>
-            <div>{{ value }}</div>
+            <wt-divider v-if="idx"></wt-divider>
+            <div class="contact-card-variables__inner">
+              <p>{{ key }}</p>
+              <p>{{ value }}</p>
+            </div>
           </li>
         </ul>
         <div v-else>{{
             t(
               'infoSec.contacts.emptyTab',
-              { title: kebabCase(t('vocabulary.variables', 2)) },
+              { title: t('vocabulary.variables', 2).toLowerCase() },
             )
           }}
         </div>
@@ -29,7 +32,6 @@
 </template>
 
 <script setup>
-import { kebabCase } from 'eslint-plugin-vue/lib/utils/casing';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -48,21 +50,20 @@ const { t } = useI18n();
 
 <style lang="scss" scoped>
 .contact-card-variables {
-  padding: var(--spacing-xs);
-
   &__item {
+    display: flex;
+    flex-direction: column;
+    justify-items: flex-start;
+  }
+
+  &__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    justify-items: flex-start;
     padding: var(--spacing-xs);
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--secondary-color);
-    }
   }
 
   &--sm {
-    .contact-card-variables__item {
+    .contact-card-variables__inner {
       display: block;
     }
   }

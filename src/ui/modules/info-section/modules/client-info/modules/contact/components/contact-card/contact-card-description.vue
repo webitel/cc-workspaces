@@ -1,17 +1,17 @@
 <template>
   <wt-expansion-panel
     :size="props.size"
-    class="contact-card-desc"
+    class="contact-card-description"
   >
     <template v-slot:title>{{ $t('vocabulary.description') }}</template>
     <template>
-      <div class="contact-card-desc__text">
-        <div v-if="props.description">
+      <div class="contact-card-description__text">
+        <p v-if="props.description">
           {{ props.description }}
-        </div>
+        </p>
         <div v-else>{{ $t(
           'infoSec.contacts.emptyTab',
-          { title: kebabCase( $tc('vocabulary.description', 2) ) },
+          { title: $tc('vocabulary.description', 2).toLowerCase() },
         ) }}</div>
       </div>
     </template>
@@ -19,8 +19,6 @@
 </template>
 
 <script setup>
-import { kebabCase } from 'eslint-plugin-vue/lib/utils/casing';
-
 const props = defineProps({
   size: {
     type: String,
@@ -35,7 +33,7 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.contact-card-desc__text {
+.contact-card-description__text {
   padding: var(--spacing-xs);
 }
 </style>

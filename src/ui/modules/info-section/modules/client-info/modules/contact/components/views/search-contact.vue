@@ -3,12 +3,12 @@
     class="search-contact"
     :class="[`search-contact--${props.size}`]"
   >
-    <div class="search-contact__header">
+    <header class="search-contact__header">
       <wt-search-bar
         v-if="isSearchNotByVariables"
         :value="search"
         :v="v$.search"
-        :placeholder="t('infoSec.contacts.placeholder')"
+        :placeholder="t('infoSec.contacts.searchPlaceholder')"
         @input="search = $event"
       >
       </wt-search-bar>
@@ -34,7 +34,7 @@
       >
         {{ t('webitelUI.searchBar.placeholder') }}
       </wt-button>
-    </div>
+    </header>
 
     <div class="search-contact__options">
       <wt-radio
@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
@@ -107,15 +107,28 @@ const search = ref('');
 const keyVariable = ref('');
 const valueVariables = ref('');
 
+const alreadySearched = ref(false);
 const searchMode = ref(SearchOptions[0].mode);
-const dummy = ref({});
 
-const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
 const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const contactsBySearch = computed(() => getNamespacedState(store.state, props.namespace).contactsBySearch);
+const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
+
 const searchValue = computed(() => {
   if (isSearchNotByVariables.value) return search.value;
   return `${keyVariable.value}=${valueVariables.value}`;
+});
+
+const dummy = computed(() => {
+  if (alreadySearched.value) {
+    return {
+      src: dummyPicAfterSearch,
+      text: t('infoSec.contacts.emptyContact'),
+    };
+  }
+  return {
+    src: dummyPic,
+  };
 });
 
 const checkForStar = (value) => value !== '*';
@@ -134,22 +147,24 @@ async function callSearch() {
     qin: searchMode.value,
     size: 5000,
   });
-  if (!contactsBySearch.value.length) {
-    return dummy.value = {
-      src: dummyPicAfterSearch,
-      text: t('infoSec.contacts.emptyContact'),
-    };
-  } else return dummy.value = {
-    src: dummyPic,
-  };
+  alreadySearched.value = true;
 }
 
-async function changeSearchMode(event) {
-  await store.dispatch(`${props.namespace}/DELETE_CONTACTS_BY_SEARCH`);
-  searchMode.value = event;
+async function cleanContactsBySearch() {
+  await store.dispatch(`${props.namespace}/CLEAN_CONTACTS_BY_SEARCH`);
+}
+
+function cleanSearchValue() {
   search.value = '';
   keyVariable.value = '';
   valueVariables.value = '';
+}
+
+function changeSearchMode(event) {
+  cleanContactsBySearch();
+  cleanSearchValue();
+  searchMode.value = event;
+  alreadySearched.value = false;
 }
 
 function close() {
@@ -168,15 +183,9 @@ async function linkContact(contact) {
 
 watch([() => search.value, () => keyVariable.value, () => valueVariables.value], () => {
   if (!search.value && !keyVariable.value && !valueVariables.value) {
-    dummy.value = {
-      src: dummyPic,
-    };
+    alreadySearched.value = false;
     changeSearchMode(searchMode.value);
   }
-});
-
-onMounted(() => dummy.value = {
-  src: dummyPic,
 });
 </script>
 

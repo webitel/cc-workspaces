@@ -35,7 +35,7 @@ const actions = {
       context.commit('SET_IS_LOADING', false);
     }
   },
-  DELETE_CONTACTS_BY_SEARCH: async (context) => {
+  CLEAN_CONTACTS_BY_SEARCH: async (context) => {
     context.commit('SET_CONTACTS_BY_SEARCH', []);
   },
   LOAD_CONTACT: async (context, contactId) => {
@@ -44,7 +44,7 @@ const actions = {
       const contact = await ContactsAPI.get({ contactId });
       context.commit('SET_CONTACT', contact);
       context.commit('SET_CONTACTS_BY_SEARCH', []);
-      context.dispatch('DELETE_CONTACTS_BY_SEARCH', []);
+      context.dispatch('CLEAN_CONTACTS_BY_SEARCH', []);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }

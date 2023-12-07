@@ -3,18 +3,22 @@
        :class="[`contact-card-phones--${props.size}`]">
     <ul>
       <li
-        v-for="({ id, number, type, primary }) of phones" :key="id"
+        v-for="({ id, number, type, primary }, idx) of phones"
+        :key="id"
         class="contact-card-phones__item"
       >
+        <wt-divider v-if="idx"></wt-divider>
         <div class="contact-card-phones__wrapper">
-          <div>{{ number }}</div>
-          <wt-icon
-            v-if="primary"
-            icon="tick"
-            color="success"
-          ></wt-icon>
+          <div class="contact-card-phones__inner">
+            <p>{{ number }}</p>
+            <wt-icon
+              v-if="primary"
+              icon="tick"
+              color="success"
+            ></wt-icon>
+          </div>
+          <p>{{ type.name }}</p>
         </div>
-        <div>{{ type.name }}</div>
       </li>
     </ul>
   </div>
@@ -40,23 +44,24 @@ const phones = computed(() => props.contact.phones);
 <style lang="scss" scoped>
 .contact-card-phones {
   &__item {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     justify-items: flex-start;
-    padding: var(--spacing-xs);
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--secondary-color);
-    }
   }
 
   &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: var(--spacing-xs);
+  }
+
+  &__inner {
     display: flex;
-    gap: var(--spacing-xs)
+    gap: var(--spacing-xs);
   }
 
   &--sm {
-    .contact-card-phones__item {
+    .contact-card-phones__wrapper {
       display: block;
     }
   }

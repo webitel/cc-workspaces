@@ -4,15 +4,15 @@
   >
     <wt-expansion-panel>
       <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
-      <template v-slot:actions="{ open, toggleOpen }">
+      <template v-slot:actions="{ open }">
         <div class="contact-actions">
           <wt-icon-btn
             icon="search"
-            @click="openingExpantionPanel(open, ContactMode.SEARCH, toggleOpen)"
+            @click.stop="openView(open, ContactMode.SEARCH)"
           ></wt-icon-btn>
           <wt-icon-btn
             icon="plus"
-            @click="openingExpantionPanel(open, ContactMode.ADD, toggleOpen)"
+            @click.stop="openView(open, ContactMode.ADD)"
           ></wt-icon-btn>
         </div>
       </template>
@@ -79,8 +79,8 @@ function loadContact(contactId) {
   return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
 }
 
-function openingExpantionPanel(open, mode, fn) {
-  if (open) fn();
+function openView(open, mode) {
+  open();
   changeMode(mode);
 }
 
@@ -111,7 +111,8 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 
 <style lang="scss" scoped>
 .contact {
-  position: relative;
+  @extend %wt-scrollbar;
+  overflow: auto;
   flex-grow: 1;
 
   &-actions {

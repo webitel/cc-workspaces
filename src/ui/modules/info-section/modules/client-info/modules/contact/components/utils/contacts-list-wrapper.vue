@@ -74,8 +74,8 @@ function linkedContact() {
   try {
     emit('link', currentContact.value);
     index.value = 0;
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    throw err;
   }
 }
 

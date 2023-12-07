@@ -21,6 +21,7 @@ export default {
     description: 'Description',
     settings: 'Settings',
     edit: 'Edit',
+    select: 'Select',
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -89,10 +90,9 @@ export default {
       emptyContact: 'No contact found',
       foundOneContact: '{ count } found contact',
       foundSomeContact: '{ current } of { count } contacts',
-      select: 'Select',
       communications: 'Communication options',
       destination: 'Destination',
-      placeholder: 'Enter search criterias',
+      searchPlaceholder: 'Enter search criterias',
     },
     knowledgeBase: 'Knowledge base',
     processing: {

@@ -36,7 +36,7 @@ export default {
       scope: (state) => state.scope,
     }),
     hasLicenseOnCrm() {
-      return !isEmpty(this.scope.filter((item) => item.class === 'contacts'));
+      return this.scope.some((item) => item.class === 'contacts');
     },
     hideContact() {
       return !isEmpty(this.task) ? this.task.contact.hide : true;

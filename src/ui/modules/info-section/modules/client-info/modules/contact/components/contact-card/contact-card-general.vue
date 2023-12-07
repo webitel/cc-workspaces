@@ -27,19 +27,19 @@
         <li
           v-if="manager"
           class="contact-card-general__item">
-          <div class="contact-card-general__title">
+          <p class="contact-card-general__title">
             {{ t('infoSec.contacts.manager') }}
-          </div>
-          <div>{{ manager }}</div>
+          </p>
+          <p>{{ manager }}</p>
         </li>
 
         <li
           v-if="timezone"
           class="contact-card-general__item" >
-          <div class="contact-card-general__title">
+          <p class="contact-card-general__title">
             {{ t('date.timezone', 1) }}
-          </div>
-          <div>{{ timezone }}</div>
+          </p>
+          <p>{{ timezone }}</p>
         </li>
       </ul>
     </div>
@@ -48,7 +48,7 @@
       color="success"
       class="contact-card-general__button"
       @click="emit('link')"
-    > {{ t('infoSec.contacts.select') }}
+    > {{ t('reusable.select') }}
     </wt-button>
   </div>
 </template>

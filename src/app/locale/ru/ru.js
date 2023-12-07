@@ -19,6 +19,7 @@ export default {
     description: 'Описание',
     settings: 'Настройки',
     edit: 'Редактировать',
+    select: 'Выбрать',
   },
   appNavigator: {
     title: 'Приложения Webitel',
@@ -87,10 +88,9 @@ export default {
       emptyContact: 'Контактов не найдено',
       foundOneContact: 'Найдено { count } контактов',
       foundSomeContact: '{ current } с { count } контактов',
-      select: 'Выбрать',
       destination: 'Назначение',
       communications: 'Средства связи',
-      placeholder: 'Введите критерии для поиска',
+      searchPlaceholder: 'Введите критерии для поиска',
     },
     knowledgeBase: 'База знаний',
     processing: {
