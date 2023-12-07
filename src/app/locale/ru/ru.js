@@ -19,6 +19,7 @@ export default {
     description: 'Описание',
     settings: 'Настройки',
     edit: 'Редактировать',
+    select: 'Выбрать',
   },
   appNavigator: {
     title: 'Приложения Webitel',
@@ -80,6 +81,17 @@ export default {
       score: 'Оценка оператора',
     },
     clientInfo: 'Информация',
+    contacts: {
+      client: 'Клиент',
+      manager: 'Владелец',
+      emptyTab: 'Нет { title }',
+      emptyContact: 'Контактов не найдено',
+      foundOneContact: 'Найдено { count } контактов',
+      foundSomeContact: '{ current } с { count } контактов',
+      destination: 'Назначение',
+      communications: 'Средства связи',
+      searchPlaceholder: 'Введите критерии для поиска',
+    },
     knowledgeBase: 'База знаний',
     processing: {
       title: 'Обработка задачи',

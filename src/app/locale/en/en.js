@@ -21,6 +21,7 @@ export default {
     description: 'Description',
     settings: 'Settings',
     edit: 'Edit',
+    select: 'Select',
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -82,6 +83,17 @@ export default {
       score: 'Agent score',
     },
     clientInfo: 'Client info',
+    contacts: {
+      client: 'Client',
+      manager: 'Owner',
+      emptyTab: 'There are no { title }',
+      emptyContact: 'No contact found',
+      foundOneContact: '{ count } found contact',
+      foundSomeContact: '{ current } of { count } contacts',
+      communications: 'Communication options',
+      destination: 'Destination',
+      searchPlaceholder: 'Enter search criterias',
+    },
     knowledgeBase: 'Knowledge base',
     processing: {
       title: 'Task processing',
