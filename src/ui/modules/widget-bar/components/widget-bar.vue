@@ -26,13 +26,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import preventHiddenPageCallsDecorator from '@webitel/ui-sdk/src/scripts/preventHiddenPageCallsDecorator';
 import Widget from './widget.vue';
-import APIRepository from '../../../../app/api/APIRepository';
 import Widgets from '../utils/Widgets';
 
-const WidgetsAPI = APIRepository.widgets;
 const REFRESH_INTERVAL_DURATION = 20 * 1000; // 20 sec
 
 export default {
@@ -43,23 +41,6 @@ export default {
 
   data: () => ({
     widgets: Widgets,
-    data: {
-      callInbound: 0,
-      callHandled: 0,
-      callMissed: 0,
-      avgHoldSec: 0,
-      avgTalkSec: 0,
-      occupancy: 0,
-      utilization: 0,
-      chatAccepts: 0,
-      chatAht: 0,
-      sumTalkSec: 0,
-      processing: 0,
-      available: 0,
-      voiceMail: 0,
-      queueTalkSec: 0,
-      taskAccepts: 0,
-    },
     refreshIntervalInstance: null,
     selectionMode: false,
   }),
@@ -84,8 +65,16 @@ export default {
     ...mapState('features/status', {
       agent: (state) => state.agent,
     }),
+    ...mapState('ui/widget', {
+      data: (state) => state.data,
+    }),
   },
   methods: {
+    ...mapActions({
+      loadWidgetData(dispatch, payload) {
+        return dispatch('ui/widget/LOAD_WIDGET_DATA', payload);
+      },
+    }),
     toggleSelect(key) {
       this.widgets[key].show = !this.widgets[key].show;
       this.setWidgetsToLocalStorage();
@@ -124,7 +113,7 @@ export default {
     async loadWidgetsData() {
       if (!this.selectionMode) {
         const { agentId } = this.agent;
-        this.data = await WidgetsAPI.getWidgets({ agentId });
+        this.loadWidgetData(agentId);
       }
     },
   },
