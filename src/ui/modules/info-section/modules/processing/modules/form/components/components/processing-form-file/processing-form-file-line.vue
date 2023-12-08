@@ -46,6 +46,7 @@
       ></component>
     </div>
   </div>
+  <wt-divider />
 </template>
 
 <script>
@@ -121,7 +122,6 @@ export default {
 .processing-form-file-line {
   display: grid;
   padding: var(--spacing-xs) 0;
-  border-bottom: 1px solid var(--secondary-color);
   grid-template-columns: 24px 1fr 100px 100px 24px;
   gap: var(--spacing-xs);
 

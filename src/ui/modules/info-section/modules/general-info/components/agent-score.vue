@@ -20,6 +20,7 @@
               {{ score.scoreCount || 0 }}
             </div>
           </li>
+          <wt-divider />
           <li class="agent-score-item">
             <div class="agent-score-item__title">
               {{ $t('widgets.scoreAvg') }}
@@ -61,10 +62,6 @@ export default {
     align-items: center;
     padding: var(--spacing-xs);
     grid-template-columns: 3fr 2fr;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--secondary-color);
-    }
 
     .agent-score-item__title {
       @extend %typo-body-1;

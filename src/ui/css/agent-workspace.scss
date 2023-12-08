@@ -107,3 +107,11 @@
 .ws-contact-item__number {
   @extend %typo-caption;
 }
+
+.markdown-body {
+  color: var(--text-main-color);
+}
+
+.theme--dark .markdown-body table * {
+  background: var(--content-wrapper-color);
+}

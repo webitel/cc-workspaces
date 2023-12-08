@@ -4,18 +4,20 @@
   >
     <wt-avatar
       v-if="showAvatar && !bot"
-      :src="avatarPic"
       size="sm"
     ></wt-avatar>
-    <wt-icon
+    <div
       v-else-if="showAvatar"
-      icon="ws-bot"
-    ></wt-icon>
+      class="chat-message-avatar__bot-avatar-wrapper"
+    >
+      <wt-icon
+        icon="ws-bot"
+      ></wt-icon>
+    </div>
   </div>
 </template>
 
 <script>
-import botAvatar from '../../../../../_shared/assets/avatars/bot-avatar.svg';
 import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
 
 export default {
@@ -31,16 +33,21 @@ export default {
       default: true,
     },
   },
-  computed: {
-    avatarPic() {
-      return this.bot ? botAvatar : null;
-    },
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 .chat-message-avatar {
   pointer-events: none; // prevents dragging to upload file area
+
+  &__bot-avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--wt-avatar-size--size-sm);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+  }
 }
 </style>

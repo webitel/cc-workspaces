@@ -55,7 +55,7 @@ export default {
     grid-template-columns: 2fr 2fr;
 
     &:not(:last-child) {
-      border-bottom: 1px solid var(--secondary-color);
+      border-bottom: 1px solid var(--divider-border-color);
     }
 
     .wt-chip {
