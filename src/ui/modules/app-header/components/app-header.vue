@@ -28,7 +28,11 @@
       v-if="isAgent"
     ></agent-status-select>
 
-    <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
+    <wt-app-navigator
+      :current-app="currentApp"
+      :apps="apps"
+      :dark-mode="darkMode"
+    ></wt-app-navigator>
     <wt-header-actions
       :user="userinfo"
       :build-info="buildInfo"
@@ -85,6 +89,9 @@ export default {
     }),
     ...mapGetters('ui/userinfo', {
       checkAccess: 'CHECK_APP_ACCESS',
+    }),
+    ...mapGetters('ui/appearance', {
+      darkMode: 'DARK_MODE',
     }),
     apps() {
       const agent = {
