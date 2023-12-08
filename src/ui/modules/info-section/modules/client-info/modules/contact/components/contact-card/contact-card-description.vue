@@ -1,0 +1,39 @@
+<template>
+  <wt-expansion-panel
+    :size="props.size"
+    class="contact-card-description"
+  >
+    <template v-slot:title>{{ $t('vocabulary.description') }}</template>
+    <template>
+      <div class="contact-card-description__text">
+        <p v-if="props.description">
+          {{ props.description }}
+        </p>
+        <div v-else>{{ $t(
+          'infoSec.contacts.emptyTab',
+          { title: $tc('vocabulary.description', 2).toLowerCase() },
+        ) }}</div>
+      </div>
+    </template>
+  </wt-expansion-panel>
+</template>
+
+<script setup>
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
+    options: ['sm', 'md'],
+  },
+  description: {
+    type: String,
+    default: '',
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+.contact-card-description__text {
+  padding: var(--spacing-xs);
+}
+</style>
