@@ -1,5 +1,8 @@
 <template>
   <wt-app-header>
+    <wt-logo
+      :dark-mode="darkMode"
+    />
     <wt-dark-mode-switcher
       namespace="ui/appearance"
     />
