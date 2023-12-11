@@ -8,18 +8,22 @@
       <template>
         <ul>
           <li
-            v-for="queue in queues"
+            v-for="(queue, idx) in queues"
             :key="queue.queue.id"
             class="agent-queues-item"
           >
-            <div class="agent-queues-item__title">{{ queue.queue.name }}</div>
-            <div class="agent-queues-item__status-wrapper">
-              <agent-indicators
-                :agents="queue.agents"
-                :size="size"
-              ></agent-indicators>
-              <wt-chip>{{ queue.waitingMembers }}</wt-chip>
+            <wt-divider v-if="idx"></wt-divider>
+            <div class="agent-queues-item__inner">
+              <div class="agent-queues-item__title">{{ queue.queue.name }}</div>
+              <div class="agent-queues-item__status-wrapper">
+                <agent-indicators
+                  :agents="queue.agents"
+                  :size="size"
+                ></agent-indicators>
+                <wt-chip>{{ queue.waitingMembers }}</wt-chip>
+              </div>
             </div>
+
           </li>
         </ul>
       </template>
@@ -49,13 +53,11 @@ export default {
 <style lang="scss" scoped>
 .agent-queues {
   .agent-queues-item {
-    display: grid;
-    align-items: center;
-    padding: var(--spacing-xs);
-    grid-template-columns: 2fr 2fr;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--divider-border-color);
+    &__inner {
+      display: grid;
+      align-items: center;
+      padding: var(--spacing-xs);
+      grid-template-columns: 2fr 2fr;
     }
 
     .wt-chip {
@@ -63,13 +65,13 @@ export default {
       justify-self: flex-end;
     }
 
-    .agent-queues-item__title {
+    &__title {
       @extend %typo-body-1;
       word-break: break-all;
       overflow-wrap: break-word;
     }
 
-    .agent-queues-item__status-wrapper {
+    &__status-wrapper {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -78,10 +80,12 @@ export default {
 
   &--sm {
     .agent-queues-item {
-      @extend %typo-body-2;
-      grid-template-columns: 3fr 2fr;
+      &__inner {
+        @extend %typo-body-2;
+        grid-template-columns: 3fr 2fr;
+      }
 
-      .agent-queues-item__title {
+      &__title {
         @extend %typo-body-2;
       }
     }
