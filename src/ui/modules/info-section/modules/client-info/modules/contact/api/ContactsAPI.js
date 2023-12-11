@@ -130,8 +130,24 @@ const get = async ({ contactId: id }) => {
 
 const fieldsToSend = ['name', 'labels', 'about', 'managers', 'timezones'];
 
+const sanitizeManagers = (itemInstance) => {
+  // handle many managers and even no managers field cases
+  const managers = (itemInstance.managers ||
+    []).filter(({ user } = {}) => user.id);
+  return { ...itemInstance, managers };
+};
+
+const sanitizeTimezones = (itemInstance) => {
+  // handle many timezones and even no timezones field cases
+  const timezones = (itemInstance.timezones ||
+    []).filter(({ timezone } = {}) => timezone.id);
+  return { ...itemInstance, timezones };
+};
+
 const add = async ({ itemInstance }) => {
   const item = applyTransform(itemInstance, [
+    sanitizeManagers,
+    sanitizeTimezones,
     sanitize(fieldsToSend),
     camelToSnake(),
 
