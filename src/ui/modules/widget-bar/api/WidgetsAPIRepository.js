@@ -46,10 +46,8 @@ const getter = new SdkGetterApiConsumer(userHelperService.activityWorkspaceWidge
   itemResponseHandler,
 });
 
-const getWidgets = async ({
-                              agentId,
-                            }) => {
-  return getter.getItem({ itemId: agentId });
+const getWidgets = async () => {
+  return getter.getItem({});
 };
 
 const widgetsAPIRepository = {
