@@ -17,7 +17,7 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ score.scoreCount || 0 }}
+              {{ scoreCount || 0 }}
             </div>
           </li>
           <wt-divider />
@@ -31,7 +31,7 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ (+score.scoreAvg || 0).toFixed(2) }}
+              {{ (+scoreAvg || 0).toFixed(2) }}
             </div>
           </li>
         </ul>
@@ -41,16 +41,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'agent-score',
   mixins: [sizeMixin],
-  props: {
-    score: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapGetters('ui/widget', {
+      scoreCount: 'SCORE_COUNT',
+      scoreAvg: 'SCORE_REQUIRED_AVG',
+    }),
   },
 };
 </script>

@@ -1,10 +1,10 @@
-import { AgentServiceApiFactory } from 'webitel-sdk';
+import { UserHelperServiceApiFactory } from 'webitel-sdk';
 import { SdkGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import configuration from '../../../../app/api/old/openAPIConfig';
 import instance from '../../../../app/api/old/instance';
 
-const agentService = new AgentServiceApiFactory(configuration, '', instance);
+const userHelperService = new UserHelperServiceApiFactory(configuration, '', instance);
 
 const itemResponseHandler = (stats) => ({
   ...stats,
@@ -12,7 +12,7 @@ const itemResponseHandler = (stats) => ({
   avgTalkSec: convertDuration(stats.avgTalkSec),
   occupancy: `${stats.occupancy.toFixed(2)}%`,
   utilization: `${stats.utilization.toFixed(2)}%`,
-  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed()}`,
+  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed(2)}`,
   chatAht: convertDuration(stats.chatAht),
   sumTalkSec: convertDuration(stats.sumTalkSec),
   processing: convertDuration(stats.processing),
@@ -41,7 +41,7 @@ const defaultSingleObject = {
   taskAccepts: 0,
 };
 
-const getter = new SdkGetterApiConsumer(agentService.agentTodayStatistics, {
+const getter = new SdkGetterApiConsumer(userHelperService.activityWorkspaceWidget, {
   defaultSingleObject,
   itemResponseHandler,
 });

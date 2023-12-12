@@ -2,33 +2,29 @@
   <section class="general-info">
     <div v-show="isLoaded" class="general-info__content-wrapper">
       <wt-cc-agent-status-timers
-        :size="size"
+        :size="props.size"
         :status="agentInfo.agent"
         class="general-info__article"
       ></wt-cc-agent-status-timers>
       <agent-queues
         v-if="agentInfo.queues.length"
         :queues="agentInfo.queues"
-        :size="size"
+        :size="props.size"
         class="general-info__article"
       ></agent-queues>
       <agent-org-structure
         :agent="agentInfo.agent"
-        :size="size"
+        :size="props.size"
         class="general-info__article"
       ></agent-org-structure>
       <agent-pause-causes
         v-if="agentInfo.pauseCauses.length"
         :pause-causes="agentInfo.pauseCauses"
-        :size="size"
+        :size="props.size"
         class="general-info__article"
       ></agent-pause-causes>
       <agent-score
-        :score="{
-          scoreCount: agentInfo.agent.scoreCount,
-          scoreAvg: agentInfo.agent.scoreRequiredAvg,
-        }"
-        :size="size"
+        :size="props.size"
         class="general-info__article"
       ></agent-score>
     </div>
