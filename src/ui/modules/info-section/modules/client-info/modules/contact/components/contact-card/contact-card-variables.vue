@@ -19,13 +19,8 @@
             </div>
           </li>
         </ul>
-        <div v-else>{{
-            t(
-              'infoSec.contacts.emptyTab',
-              { title: t('vocabulary.variables', 2).toLowerCase() },
-            )
-          }}
-        </div>
+        <div v-else>{{ t('infoSec.contacts.emptyVariables') }}
+      </div>
       </div>
     </template>
   </wt-expansion-panel>

@@ -13,12 +13,7 @@
           >{{ label }}
           </wt-chip>
         </div>
-        <div v-else>{{
-            t(
-              'infoSec.contacts.emptyTab',
-              { title: t('vocabulary.labels', 2).toLowerCase() },
-            )
-          }}
+        <div v-else>{{ t('infoSec.contacts.emptyLabels') }}
         </div>
       </div>
     </template>

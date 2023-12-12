@@ -9,10 +9,8 @@
         <p v-if="props.description">
           {{ props.description }}
         </p>
-        <div v-else>{{ $t(
-          'infoSec.contacts.emptyTab',
-          { title: $tc('vocabulary.description', 2).toLowerCase() },
-        ) }}</div>
+        <div v-else>{{ $t('infoSec.contacts.emptyDescription') }}
+        </div>
       </div>
     </template>
   </wt-expansion-panel>

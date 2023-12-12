@@ -84,8 +84,10 @@ export default {
     contacts: {
       client: 'Клієнт',
       manager: 'Власник',
-      emptyTab: 'Немає { title }',
       emptyContact: 'Контактів не знайдено',
+      emptyLabels: 'Немає міток',
+      emptyVariables: 'Немає змінних',
+      emptyDescription: 'Немає опису',
       foundOneContact: 'Знайдено { count } контактів',
       foundSomeContact: '{ current } з { count } контактів',
       destination: 'Призначення',
