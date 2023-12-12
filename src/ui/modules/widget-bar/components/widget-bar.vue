@@ -112,8 +112,7 @@ export default {
 
     async loadWidgetsData() {
       if (!this.selectionMode) {
-        const { agentId } = this.agent;
-        this.loadWidgetData(agentId);
+        this.loadWidgetData();
       }
     },
   },

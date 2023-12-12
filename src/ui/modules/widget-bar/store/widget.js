@@ -28,8 +28,8 @@ const getters = {
 };
 
 const actions = {
-  LOAD_WIDGET_DATA: async (context, agentId) => {
-    const data = await WidgetsAPI.getWidgets({ agentId });
+  LOAD_WIDGET_DATA: async (context) => {
+    const data = await WidgetsAPI.getWidgets();
     context.commit('SET_WIDGET_DATA', data);
   },
 };
