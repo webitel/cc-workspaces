@@ -111,6 +111,7 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 
 <style lang="scss" scoped>
 .contact {
+  @extend %typo-body-1;
   @extend %wt-scrollbar;
   overflow: auto;
   flex-grow: 1;

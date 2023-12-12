@@ -50,6 +50,8 @@ const { t } = useI18n();
 
 <style lang="scss" scoped>
 .contact-card-variables {
+  padding: var(--spacing-xs);
+
   &__item {
     display: flex;
     flex-direction: column;
@@ -59,7 +61,8 @@ const { t } = useI18n();
   &__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xs) 0;
+
   }
 
   &--sm {

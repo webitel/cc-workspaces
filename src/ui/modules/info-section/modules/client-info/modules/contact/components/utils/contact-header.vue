@@ -5,7 +5,7 @@
     <div>
       <wt-icon-btn
         v-if="props.isPrev"
-        icon="arrow-left"
+        icon="back"
         @click="emit('prev')"
       ></wt-icon-btn>
     </div>
@@ -13,7 +13,7 @@
     <div>
       <wt-icon-btn
         v-if="props.isNext"
-        icon="arrow-right"
+        icon="send-arrow"
         @click="emit('next')"
       ></wt-icon-btn>
     </div>

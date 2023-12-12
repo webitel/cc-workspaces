@@ -55,6 +55,7 @@
     ></wt-dummy>
     <contacts-list-wrapper
       v-if="!isLoading && contactsBySearch.length"
+      :size="props.size"
       :list="contactsBySearch"
       @link="linkContact"
     ></contacts-list-wrapper>
@@ -240,6 +241,8 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
   }
 
   &--sm {
+    display: block;
+
     .search-contact__header,
     .search-contact__actions,
     .search-contact__variables {
