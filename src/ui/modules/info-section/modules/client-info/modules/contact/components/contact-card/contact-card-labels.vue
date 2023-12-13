@@ -1,5 +1,8 @@
 <template>
-  <wt-expansion-panel :size="props.size">
+  <wt-expansion-panel
+    :size="props.size"
+    collapsed
+  >
     <template v-slot:title>{{ t('vocabulary.labels', 2) }}</template>
     <template>
       <div class="contact-card-labels">

@@ -1,6 +1,7 @@
 <template>
   <wt-expansion-panel
     :size="props.size"
+    collapsed
     class="contact-card-description"
   >
     <template v-slot:title>{{ $t('vocabulary.description') }}</template>
