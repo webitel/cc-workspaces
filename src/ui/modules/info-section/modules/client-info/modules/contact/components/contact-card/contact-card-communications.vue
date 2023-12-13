@@ -1,5 +1,7 @@
 <template>
-  <wt-expansion-panel :size="props.size">
+  <wt-expansion-panel
+    :size="props.size"
+    collapsed>
     <template v-slot:title>{{ t('infoSec.contacts.communications') }}</template>
     <template>
       <div class="contact-card-communications">
