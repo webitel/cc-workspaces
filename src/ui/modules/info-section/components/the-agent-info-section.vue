@@ -125,7 +125,7 @@ export default {
     },
 
     showClientInfo() {
-      return this.taskOnWorkspace?.id && this.workspaceState !== WorkspaceState.JOB;
+      return this.taskOnWorkspace?.id;
     },
 
     hasKnowledgeBase() {
