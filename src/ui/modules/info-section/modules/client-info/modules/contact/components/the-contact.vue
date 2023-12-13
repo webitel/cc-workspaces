@@ -114,7 +114,6 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
   @extend %typo-body-1;
   @extend %wt-scrollbar;
   overflow: auto;
-  flex-grow: 1;
 
   &-actions {
     display: flex;

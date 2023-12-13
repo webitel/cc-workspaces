@@ -81,6 +81,8 @@ export default {
       score: 'Оцінка оператора',
     },
     clientInfo: 'Інформація',
+    memberDescription: 'Опис абонента',
+    callVariables: 'Змінні дзвінка',
     contacts: {
       client: 'Клієнт',
       manager: 'Власник',

@@ -227,9 +227,9 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
   }
 
   &__actions {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    //position: absolute;
+    //bottom: 0;
+    //left: 0;
     width: 100%;
     display: flex;
     gap: var(--spacing-xs);
