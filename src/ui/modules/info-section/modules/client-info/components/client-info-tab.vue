@@ -1,12 +1,12 @@
 <template>
   <section class="client-info">
     <client-info-chips/>
-    <client-info-markdown/>
     <contact
       v-if="!hideContact && hasLicenseOnCrm"
       :size="size"
       :task="task"
     />
+    <client-info-markdown/>
   </section>
 </template>
 

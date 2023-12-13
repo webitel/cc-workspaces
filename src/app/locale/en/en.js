@@ -83,6 +83,8 @@ export default {
       score: 'Agent score',
     },
     clientInfo: 'Client info',
+    memberDescription: 'Member description',
+    callVariables: 'Call variables',
     contacts: {
       client: 'Client',
       manager: 'Owner',
