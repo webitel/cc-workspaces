@@ -1,25 +1,29 @@
 <template>
-  <div class="client-info-markdown">
-    <wt-expansion-panel collapsed>
+  <div class="client-info-member">
+    <wt-expansion-panel
+      v-if="memberDescription"
+      collapsed>
       <template v-slot:title>{{ $t('infoSec.memberDescription') }}</template>
       <template>
-        <p class="client-info-markdown-description">{{ memberDescription }}</p>
+        <p class="client-info-member-description">{{ memberDescription }}</p>
       </template>
     </wt-expansion-panel>
 
-    <wt-expansion-panel collapsed>
+    <wt-expansion-panel
+      v-if="callVariables.length"
+      collapsed>
       <template v-slot:title>{{ $t('infoSec.callVariables') }}</template>
       <template>
-        <ul class="client-info-markdown-list">
+        <ul class="client-info-member-list">
           <li
             v-for="({ key, value }, idx) of callVariables"
             :key="key"
-            class="client-info-markdown-item"
+            class="client-info-member-item"
           >
             <wt-divider v-if="idx"></wt-divider>
-            <div class="client-info-markdown-wrapper">
-              <p class="client-info-markdown-item__key">{{ key }}:</p>
-              <p class="client-info-markdown-item__value">{{ value }}</p>
+            <div class="client-info-member-wrapper">
+              <p class="client-info-member-item__key">{{ key }}:</p>
+              <p class="client-info-member-item__value">{{ value }}</p>
             </div>
           </li>
         </ul>
@@ -32,7 +36,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'client-info-markdown',
+  name: 'client-info-member',
   computed: {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
@@ -49,7 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.client-info-markdown {
+.client-info-member {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
