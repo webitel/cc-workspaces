@@ -65,6 +65,7 @@ import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { EngineCommunicationChannels } from 'webitel-sdk';
 import TimezonesAPI from '../../api/TimezonesAPI';
 import UsersAPI from '../../api/UsersAPI';
 import LabelsAPI from '../../api/LabelsAPI';
@@ -119,7 +120,7 @@ function close() {
 }
 
 async function createCommunication() {
-  const { items } = await CommunicationsAPI.getList({ channel: 'Phone', defaultValue: true });
+  const { items } = await CommunicationsAPI.getList({ channel: EngineCommunicationChannels.Phone, defaultValue: true });
   if (!displayNumber.value && !items.length) return;
   draft.value.phones = [{
     number: displayNumber.value,
