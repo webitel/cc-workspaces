@@ -128,7 +128,7 @@ const get = async ({ contactId: id }) => {
   }
 };
 
-const fieldsToSend = ['name', 'labels', 'about', 'managers', 'timezones'];
+const fieldsToSend = ['name', 'labels', 'about', 'managers', 'timezones', 'phones'];
 
 const sanitizeManagers = (itemInstance) => {
   // handle many managers and even no managers field cases
