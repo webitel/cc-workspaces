@@ -54,6 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .client-info-member {
+  @extend %typo-body-1;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
