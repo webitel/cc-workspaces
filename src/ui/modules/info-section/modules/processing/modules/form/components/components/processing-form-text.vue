@@ -45,7 +45,7 @@ import patchMDRender from '../../../../../client-info/components/client-info-mar
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 
-const md = new MarkdownIt({ linkify: true });
+const md = new MarkdownIt({ linkify: true, html: true });
 patchMDRender(md);
 
 export default {
