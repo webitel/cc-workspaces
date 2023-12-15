@@ -51,5 +51,6 @@ export default {
   max-height: 100%;
   min-height: 0;
   overflow: auto;
+  word-break: break-all;
 }
 </style>
