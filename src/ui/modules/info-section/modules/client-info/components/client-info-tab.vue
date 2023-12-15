@@ -39,7 +39,7 @@ export default {
       return this.scope.some((item) => item.class === 'contacts');
     },
     hideContact() {
-      return !isEmpty(this.task) ? this.task.contact.hide : true;
+      return !isEmpty(this.task?.contact) ? this.task.contact.hide : true;
     },
   },
 };
