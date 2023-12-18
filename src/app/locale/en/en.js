@@ -88,9 +88,10 @@ export default {
     contacts: {
       client: 'Client',
       manager: 'Owner',
+      attributes: 'Attribute | Attributes',
       emptyContact: 'No contact found',
       emptyLabels: 'There are no labels',
-      emptyVariables: 'There are no variables',
+      emptyAttributes: 'There are no attributes',
       emptyDescription: 'There are no description',
       foundOneContact: '{ count } found contact',
       foundSomeContact: '{ current } of { count } contacts',
