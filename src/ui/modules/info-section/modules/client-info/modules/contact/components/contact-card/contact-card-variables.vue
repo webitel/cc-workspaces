@@ -2,7 +2,7 @@
   <wt-expansion-panel
     :size="props.size"
     collapsed>
-    <template v-slot:title>{{ t('vocabulary.variables', 2) }}</template>
+    <template v-slot:title>{{ t('infoSec.contacts.attributes', 2) }}</template>
     <template>
       <div
         class="contact-card-variables"
@@ -21,7 +21,7 @@
             </div>
           </li>
         </ul>
-        <div v-else>{{ t('infoSec.contacts.emptyVariables') }}
+        <div v-else>{{ t('infoSec.contacts.emptyAttributes') }}
       </div>
       </div>
     </template>
