@@ -61,7 +61,11 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Calls',
+      call: 'Call | Calls',
+      active: 'Active',
+      missed: 'Missed',
+      offline: 'Offline',
+      manual: 'Manual',
       at: 'at', // missed call "at 10:10"
     },
     chat: {

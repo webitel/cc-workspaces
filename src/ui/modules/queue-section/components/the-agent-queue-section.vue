@@ -10,17 +10,28 @@
       :collapsed="collapsed"
       @click="$emit('resize')"
     ></collapse-action>
-    <div class="queue-section-wrapper">
-      <call-queue
-        :size="size"
-      ></call-queue>
-      <chat-queue
-        :size="size"
-      ></chat-queue>
-      <job-queue
-        :size="size"
-      ></job-queue>
-    </div>
+    <wt-tabs
+      class="queue-section-tabs"
+      v-model="currentTab"
+      :tabs="tabs"
+    >
+      <template
+        v-for="(tab, key) of tabs"
+        v-slot:[tab.value]
+      >
+        <wt-icon
+          :key="key"
+          :color="tab.iconColor"
+          :icon="tab.icon"
+          :size="size"
+        ></wt-icon>
+      </template>
+    </wt-tabs>
+    <component
+      class="queue-section-wrapper"
+      :size="size"
+      :is="`${currentTab.value}-queue`"
+    ></component>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
@@ -59,7 +70,9 @@ export default {
       default: false,
     },
   },
-  data: () => ({}),
+  data: () => ({
+    currentTab: {},
+  }),
   computed: {
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
@@ -67,6 +80,25 @@ export default {
     ...mapGetters('features/call', {
       isNewCall: 'IS_NEW_CALL',
     }),
+    tabs() {
+      return [
+        {
+          value: 'call',
+          icon: 'call',
+          iconColor: 'success',
+        },
+        {
+          value: 'chat',
+          icon: 'chat',
+          iconColor: 'chat',
+        },
+        {
+          value: 'job',
+          icon: 'job',
+          iconColor: 'job',
+        },
+      ];
+    },
     isNewCallButton() {
       return !this.isNewCall || !this.isCallWorkspace;
     },
@@ -85,6 +117,9 @@ export default {
     toggleNewCall() {
       return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
     },
+  },
+  created() {
+    this.currentTab = this.tabs[0];
   },
 };
 </script>
@@ -114,8 +149,8 @@ export default {
     position: fixed;
     bottom: var(--spacing-md);
     left: var(--spacing-md);
-    background: var(--success-color);
     border-color: var(--success-color);
+    background: var(--success-color);
 
     :deep .wt-icon__icon {
       fill: var(--icon-on-dark-color);
@@ -123,11 +158,15 @@ export default {
   }
 }
 
+// increase specificity
+.queue-section-tabs.wt-tabs {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .queue-section-wrapper {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
-  gap: var(--spacing-sm);
 }
 
 .task-queue {

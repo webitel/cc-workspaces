@@ -1,48 +1,30 @@
 <template>
-  <the-agent-task-queue
+  <article
     class="task-queue call-queue"
-    :size="size"
     :class="[
       `call-queue--${size}`
     ]"
   >
-    <template v-slot:title>
-      <div class="call-queue__title-wrapper">
-        <span class="call-queue__title">{{ $t('queueSec.call.calls') }}</span>
-        <wt-tabs
-          v-model="currentTab"
-          :tabs="tabs"
-        >
-          <template
-            v-for="(tab, key) of tabs"
-            v-slot:[tab.value]
-          >
-            <div class="queue-tab__wrap" :key="key">
-              <div
-                v-show="tab.attention"
-                class="queue-tab__indicator"
-                :class="tab.value"
-              ></div>
-              <wt-icon
-                :icon="tab.icon"
-                :color="tab.iconColor"
-                :size="size"
-              ></wt-icon>
-            </div>
-          </template>
-        </wt-tabs>
-      </div>
-    </template>
-    <component
-      :is="currentTabComponent"
+    <wt-expansion-panel
       :size="size"
-    ></component>
-  </the-agent-task-queue>
+    >
+      <template v-slot:title>
+        {{ `${$t('queueSec.call.active')} ${$t('queueSec.call.call', 2).toLowerCase()}` }}
+      </template>
+      <template v-slot:actions>
+        <wt-chip :size="size">{{ callList.length }}</wt-chip>
+      </template>
+      <template>
+        <active-queue
+          :size="size"
+        />
+      </template>
+    </wt-expansion-panel>
+  </article>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
@@ -53,22 +35,13 @@ export default {
   name: 'the-agent-call-queue',
   mixins: [sizeMixin],
   components: {
-    TheAgentTaskQueue,
     ActiveQueue,
     OfflineQueue,
     MissedQueue,
     ManualQueue,
   },
   data: () => ({
-    currentTab: { value: 'active' },
   }),
-
-  watch: {
-    // watch for callList length instead of actual call list because it throws a Vue internals error
-    callListLength() {
-      this.currentTab = { value: 'active' };
-    },
-  },
 
   computed: {
     ...mapState('features/call', {
@@ -84,12 +57,11 @@ export default {
       membersList: (state) => state.memberList,
     }),
 
-    tabs() {
+    expansions() {
       return [
         {
           value: 'active',
-          icon: 'call',
-          iconColor: 'success',
+          counter: this.callList.length,
         },
         {
           value: 'missed',
@@ -108,13 +80,6 @@ export default {
           attention: this.manualList.length,
         },
       ];
-    },
-
-    currentTabComponent() {
-      return `${this.currentTab.value}-queue`;
-    },
-    callListLength() {
-      return this.callList.length;
     },
   },
 
