@@ -6,17 +6,27 @@
     ]"
   >
     <wt-expansion-panel
+      v-for="({ value, counters }) in expansions"
       :size="size"
+      :key="value"
     >
       <template v-slot:title>
-        {{ `${$t('queueSec.call.active')} ${$t('queueSec.call.call', 2).toLowerCase()}` }}
+        {{ `${$t(`queueSec.call.${value}`)} ${$t('queueSec.call.call', 2).toLowerCase()}` }}
       </template>
       <template v-slot:actions>
-        <wt-chip :size="size">{{ callList.length }}</wt-chip>
+        <wt-chip
+          v-for="({ color, count }, key) in counters"
+          v-if="count"
+          :size="size"
+          :color="color"
+          :key="key"
+        >{{ count }}
+        </wt-chip>
       </template>
       <template>
-        <active-queue
+        <component
           :size="size"
+          :is="`${value}-queue`"
         />
       </template>
     </wt-expansion-panel>
@@ -25,6 +35,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import { CallActions } from 'webitel-sdk';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
@@ -48,7 +59,7 @@ export default {
       callList: (state) => state.callList,
     }),
     ...mapState('features/call/missed', {
-      isNewMissed: (state) => state.isNewMissed,
+      missedList: (state) => state.missedList,
     }),
     ...mapState('features/call/manual', {
       manualList: (state) => state.manualList,
@@ -56,28 +67,39 @@ export default {
     ...mapState('features/member', {
       membersList: (state) => state.memberList,
     }),
+    ringingCallsCount() {
+      return this.callList.filter((call) => call.state === CallActions.Ringing).length;
+    },
+    activeCallsCount() {
+      return this.callList.length = this.ringingCallsCount;
+    },
 
     expansions() {
       return [
         {
           value: 'active',
-          counter: this.callList.length,
+          counters: [
+            { color: 'main', count: this.activeCallsCount },
+            { color: 'success', count: this.ringingCallsCount },
+          ],
         },
         {
           value: 'missed',
-          icon: 'call-missed',
-          iconColor: 'error',
-          attention: this.isNewMissed,
+          counters: [
+            { color: 'secondary', count: this.missedList.length },
+          ],
         },
         {
           value: 'offline',
-          icon: 'call',
-          attention: this.membersList.length,
+          counters: [
+            { color: 'secondary', count: this.membersList.length },
+          ],
         },
         {
           value: 'manual',
-          icon: 'call-ringing',
-          attention: this.manualList.length,
+          counters: [
+            { color: 'secondary', count: this.manualList.length },
+          ],
         },
       ];
     },

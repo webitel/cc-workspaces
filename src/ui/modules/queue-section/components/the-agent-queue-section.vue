@@ -173,5 +173,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  gap: var(--spacing-xs);
 }
 </style>
