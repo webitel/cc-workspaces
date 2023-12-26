@@ -18,7 +18,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.4.1",
-    "@webitel/ui-sdk": "^23.12.128",
+    "@webitel/ui-sdk": "^23.12.129",
     "autolinker": "^4.0.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.4",
