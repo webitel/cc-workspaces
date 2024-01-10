@@ -42,8 +42,10 @@ export default {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
     callVariables() {
-      return Object.keys(this.taskOnWorkspace.variables)
-      .map((key) => ({ key, value: this.taskOnWorkspace.variables[key] }));
+      if (this.taskOnWorkspace.variables) {
+        return Object.keys(this.taskOnWorkspace?.variables)
+        .map((key) => ({ key, value: this.taskOnWorkspace.variables[key] }));
+      } return [];
     },
     memberDescription() {
       return this.taskOnWorkspace.task?.communication?.description || '';
