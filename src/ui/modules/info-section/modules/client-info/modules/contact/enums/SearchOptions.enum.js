@@ -6,7 +6,7 @@ export default Object.freeze([
     label: 'infoSec.contacts.destination',
     mode: 'emails,phones',
   }, {
-    label: 'vocabulary.variables',
+    label: 'infoSec.contacts.attributes',
     mode: 'variables',
   },
 ]);

@@ -83,8 +83,10 @@ import { required, requiredIf } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import SearchOptions from '../../enums/SearchOptions.enum';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
-import dummyPic from '../../../../../../../../../app/assets/contacts/dummyPic.svg';
-import dummyPicAfterSearch from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearch.svg';
+import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
+import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
+import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
+import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchDark.svg';
 
 const props = defineProps({
   namespace: {
@@ -114,6 +116,7 @@ const searchMode = ref(SearchOptions[0].mode);
 const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const contactsBySearch = computed(() => getNamespacedState(store.state, props.namespace).contactsBySearch);
 const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
+const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
 const searchValue = computed(() => {
   if (isSearchNotByVariables.value) return search.value;
@@ -123,12 +126,12 @@ const searchValue = computed(() => {
 const dummy = computed(() => {
   if (alreadySearched.value) {
     return {
-      src: dummyPicAfterSearch,
+      src: darkMode.value ? dummyPicAfterSearchDark : dummyPicAfterSearchLight,
       text: t('infoSec.contacts.emptyContact'),
     };
   }
   return {
-    src: dummyPic,
+    src: darkMode.value ? dummyPicDark : dummyPicLight,
   };
 });
 
