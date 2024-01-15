@@ -71,7 +71,7 @@ export default {
       return this.callList.filter((call) => call.state === CallActions.Ringing).length;
     },
     activeCallsCount() {
-      return this.callList.length = this.ringingCallsCount;
+      return this.callList.length - this.ringingCallsCount;
     },
 
     expansions() {

@@ -20,7 +20,6 @@ export default {
   flex-direction: column;
   min-height: 0;
   max-height: 100%;
-  margin-top: var(--spacing-xs);
   gap: var(--spacing-xs);
 
   &--empty {
