@@ -1,6 +1,5 @@
 <template>
   <task-queue-container>
-    <h3 class="queue-task-container__heading">{{ $t('history.today') }}</h3>
     <missed-preview
       v-for="(task, key) of missedList"
       :key="task.id"
@@ -9,6 +8,11 @@
       :size="size"
       @click="openCall"
     ></missed-preview>
+    <a
+      class="missed-queue-container__more"
+      @click.prevent="loadMore"
+    >morrr
+    </a>
   </task-queue-container>
 </template>
 
@@ -43,6 +47,7 @@ export default {
     }),
     ...mapActions('features/call/missed', {
       loadMissedList: 'LOAD_DATA_LIST',
+      loadMore: 'LOAD_NEXT_PAGE',
       resetNewMissed: 'RESET_NEW_MISSED',
     }),
 
@@ -55,10 +60,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.queue-task-container__heading {
-  @extend %typo-body-2;
-  margin-bottom: 1px;
+.missed-queue-container__more {
+  display: block;
   text-align: center;
-  color: var(--text-main-color);
+  color: var(--info-color);
 }
 </style>

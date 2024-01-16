@@ -1,4 +1,3 @@
-import { CallDirection } from 'webitel-sdk';
 import APIRepository from '../../../../app/api/APIRepository';
 
 const historyAPI = APIRepository.history;
@@ -6,10 +5,10 @@ const historyAPI = APIRepository.history;
 // NO_ANSWER cause - це коли до тебе має іти дзвінок 20 сєк, і якщо ти не піднімеш то буде помилка
 // ORIGINATOR_CANCEL cause - це коли до тебе має іти дзвінок 20 сєк, але клієнт на 10 секунді сам відхиляє дзвінок
 const requestParams = {
-  size: 100,
+  size: 10,
   answeredAtFrom: 0,
   answeredAtTo: 0,
-  createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
+  // createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: new Date().setHours(23, 59, 59, 999), // today end
   fields: ['from', 'created_at'],
   isMissed: true,
@@ -18,21 +17,35 @@ const requestParams = {
 const state = {
   isNewMissed: false, // UI flag
   missedList: [],
+  page: 0,
+  next: false,
 };
 
 const getters = {
+  REQUEST_PARAMS: (s, g, rootState) => {
+    const { userId } = rootState.ui.userinfo;
+    return {
+      ...requestParams,
+      userId,
+      page: state.page,
+    };
+  },
   MISSED_LENGTH: (state) => (state.missedList.length),
 };
 
 const actions = {
   LOAD_DATA_LIST: async (context) => {
-    const { userId } = context.rootState.ui.userinfo;
-    const params = {
-      ...requestParams,
-      userId,
-    };
-    const response = await historyAPI.getHistory(params);
-    context.commit('SET_DATA_LIST', response.items);
+    const { items, next } = await historyAPI.getHistory(context.getters.REQUEST_PARAMS);
+    context.commit('SET_NEXT', next);
+    context.commit('SET_DATA_LIST', items);
+  },
+
+  LOAD_NEXT_PAGE: async (context) => {
+    context.commit('INCREMENT_PAGE');
+
+    const { items, next } = await historyAPI.getHistory(context.getters.REQUEST_PARAMS);
+    context.commit('SET_NEXT', next);
+    context.commit('SET_DATA_LIST', [...context.state.missedList, ...items]);
   },
 
   PUSH_MISSED_STUB: (context, { from = {} }) => {
@@ -60,6 +73,14 @@ const mutations = {
 
   RESET_NEW_MISSED: (state) => {
     state.isNewMissed = false;
+  },
+
+  INCREMENT_PAGE: (state) => {
+    state.page += 1;
+  },
+
+  SET_NEXT: (state, next) => {
+    state.next = next;
   },
 };
 
