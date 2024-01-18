@@ -1,16 +1,21 @@
 <template>
   <section
-    :class="{ 'queue-task-container--empty': !$slots.default }"
     class="queue-task-container"
+    :class="{
+    'queue-task-container--empty': empty,
+    }"
   >
     <slot></slot>
   </section>
 </template>
 
-<script>
-export default {
-  name: 'task-queue-container',
-};
+<script setup>
+const props = defineProps({
+  empty: {
+    type: Boolean,
+    default: true,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -22,8 +27,8 @@ export default {
   max-height: 100%;
   gap: var(--spacing-xs);
 
-  &--empty {
-    margin-top: 0;
+  &:not(.queue-task-container--empty) {
+    padding: var(--spacing-xs) 0;
   }
 }
 </style>

@@ -22,7 +22,7 @@ const state = {
 };
 
 const getters = {
-  REQUEST_PARAMS: (s, g, rootState) => {
+  REQUEST_PARAMS: (state, g, rootState) => {
     const { userId } = rootState.ui.userinfo;
     return {
       ...requestParams,
@@ -41,11 +41,16 @@ const actions = {
   },
 
   LOAD_NEXT_PAGE: async (context) => {
-    context.commit('INCREMENT_PAGE');
+    context.commit('SET_PAGE', context.state.page + 1);
 
     const { items, next } = await historyAPI.getHistory(context.getters.REQUEST_PARAMS);
     context.commit('SET_NEXT', next);
     context.commit('SET_DATA_LIST', [...context.state.missedList, ...items]);
+  },
+
+  RESET_MISSED_LIST: (context) => {
+    context.commit('SET_DATA_LIST', []);
+    context.commit('SET_PAGE', 0);
   },
 
   PUSH_MISSED_STUB: (context, { from = {} }) => {
@@ -75,8 +80,8 @@ const mutations = {
     state.isNewMissed = false;
   },
 
-  INCREMENT_PAGE: (state) => {
-    state.page += 1;
+  SET_PAGE: (state, page) => {
+    state.page = page;
   },
 
   SET_NEXT: (state, next) => {

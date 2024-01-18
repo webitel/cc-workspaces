@@ -1,5 +1,7 @@
 <template>
-  <task-queue-container>
+  <task-queue-container
+    :empty="!manualList.length"
+  >
     <manual-preview
       v-for="(task, key) of manualList"
       :key="task.id"

@@ -1,5 +1,7 @@
 <template>
-  <task-queue-container>
+  <task-queue-container
+    :empty="!missedList.length"
+  >
     <missed-preview
       v-for="(task, key) of missedList"
       :key="task.id"
@@ -10,8 +12,9 @@
     ></missed-preview>
     <a
       class="missed-queue-container__more"
+      v-show="next"
       @click.prevent="loadMore"
-    >morrr
+    >{{ $t('reusable.more') }}
     </a>
   </task-queue-container>
 </template>
@@ -30,14 +33,10 @@ export default {
     MissedPreview,
   },
 
-  created() {
-    this.loadMissedList();
-    this.resetNewMissed(); // reset UI flag
-  },
-
   computed: {
     ...mapState('features/call/missed', {
       missedList: (state) => state.missedList,
+      next: (state) => state.next,
     }),
   },
 
@@ -49,12 +48,22 @@ export default {
       loadMissedList: 'LOAD_DATA_LIST',
       loadMore: 'LOAD_NEXT_PAGE',
       resetNewMissed: 'RESET_NEW_MISSED',
+      resetMissed: 'RESET_MISSED_LIST',
     }),
 
     openCall(missed) {
       const newNumber = missed.from.number;
       this.openNewCall({ newNumber });
     },
+  },
+
+  created() {
+    this.loadMissedList();
+    this.resetNewMissed(); // reset UI flag
+  },
+
+  unmounted() {
+    this.resetMissed();
   },
 };
 </script>
@@ -64,5 +73,6 @@ export default {
   display: block;
   text-align: center;
   color: var(--info-color);
+  cursor: pointer;
 }
 </style>

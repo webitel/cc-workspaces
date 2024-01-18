@@ -1,5 +1,7 @@
 <template>
-  <task-queue-container>
+  <task-queue-container
+    :empty="!callList.length"
+  >
     <active-preview
       v-for="(task, key) of callList"
       :key="task.id"
