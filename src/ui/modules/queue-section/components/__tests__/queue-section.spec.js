@@ -18,6 +18,9 @@ describe('Make new call functionality', () => {
         isNewCallButton() {
           return true;
         },
+        tabs() {
+          return [{}];
+        },
       },
     });
     wrapper.findComponent({ name: 'wt-rounded-action' }).vm.$emit('click', {});

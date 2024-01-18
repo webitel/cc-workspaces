@@ -16,7 +16,6 @@
       <template v-slot:actions>
         <wt-chip
           v-for="({ color, count }, key) in counters"
-          v-if="count"
           :size="size"
           :color="color"
           :key="key"
@@ -81,25 +80,25 @@ export default {
           counters: [
             { color: 'main', count: this.activeCallsCount },
             { color: 'success', count: this.ringingCallsCount },
-          ],
+          ].filter(({ count }) => count),
         },
         {
           value: 'missed',
           counters: [
             { color: 'secondary', count: this.missedList.length },
-          ],
+          ].filter(({ count }) => count),
         },
         {
           value: 'offline',
           counters: [
             { color: 'secondary', count: this.membersList.length },
-          ],
+          ].filter(({ count }) => count),
         },
         {
           value: 'manual',
           counters: [
             { color: 'secondary', count: this.manualList.length },
-          ],
+          ].filter(({ count }) => count),
         },
       ];
     },

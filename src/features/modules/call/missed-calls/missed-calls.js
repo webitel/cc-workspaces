@@ -8,7 +8,7 @@ const requestParams = {
   size: 10,
   answeredAtFrom: 0,
   answeredAtTo: 0,
-  // createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
+  createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
   createdAtTo: new Date().setHours(23, 59, 59, 999), // today end
   fields: ['from', 'created_at'],
   isMissed: true,
