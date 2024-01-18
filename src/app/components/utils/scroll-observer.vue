@@ -40,6 +40,8 @@
   };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.observer {
+  display: contents;
+}
 </style>

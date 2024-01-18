@@ -11,6 +11,7 @@
 
 <script setup>
 const props = defineProps({
+  // because we can't check for empty slot in vue 3 because v-for=0 => non-empty slot :(
   empty: {
     type: Boolean,
     default: true,
@@ -28,7 +29,7 @@ const props = defineProps({
   gap: var(--spacing-xs);
 
   &:not(.queue-task-container--empty) {
-    padding: var(--spacing-xs) 0;
+    padding-top: var(--spacing-xs);
   }
 }
 </style>
