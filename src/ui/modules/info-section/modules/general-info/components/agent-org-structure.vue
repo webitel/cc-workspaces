@@ -11,6 +11,7 @@
             <div class="agent-org-structure-item__title">{{ $t('reusable.name') }}</div>
             <div class="agent-org-structure-item__value">{{ team }}</div>
           </li>
+          <wt-divider />
           <li class="agent-org-structure-item">
             <div class="agent-org-structure-item__title">{{ $tc('objects.supervisor', 1) }}</div>
             <div>
@@ -22,6 +23,7 @@
               </div>
             </div>
           </li>
+          <wt-divider />
           <li class="agent-org-structure-item">
             <div class="agent-org-structure-item__title">{{ $tc('objects.auditor', 1) }}</div>
             <div>
@@ -75,9 +77,6 @@ export default {
     justify-items: flex-start;
     padding: var(--spacing-xs);
 
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--secondary-color);
-    }
 
     &__value {
       @extend %typo-body-1;

@@ -1,8 +1,12 @@
 <template>
   <wt-app-header>
-    <wt-switcher
-      @change="toggleDarkTheme"
-    ></wt-switcher>
+    <wt-logo
+      :dark-mode="darkMode"
+    />
+    <wt-dark-mode-switcher
+      namespace="ui/appearance"
+    />
+
     <wt-chip
       :color="this.isPhoneReg ? 'success' : 'secondary-50'"
     >SIP
@@ -27,7 +31,11 @@
       v-if="isAgent"
     ></agent-status-select>
 
-    <wt-app-navigator :current-app="currentApp" :apps="apps"></wt-app-navigator>
+    <wt-app-navigator
+      :current-app="currentApp"
+      :apps="apps"
+      :dark-mode="darkMode"
+    ></wt-app-navigator>
     <wt-header-actions
       :user="userinfo"
       :build-info="buildInfo"
@@ -41,6 +49,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
+import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
@@ -49,6 +58,7 @@ import UserStatus from '../../../../features/modules/agent-status/statusUtils/Us
 export default {
   name: 'app-header',
   components: {
+    WtDarkModeSwitcher,
     AgentStatusSelect,
     UserDndSwitcher,
     BreakTimerPopup,
@@ -82,6 +92,9 @@ export default {
     }),
     ...mapGetters('ui/userinfo', {
       checkAccess: 'CHECK_APP_ACCESS',
+    }),
+    ...mapGetters('ui/appearance', {
+      darkMode: 'DARK_MODE',
     }),
     apps() {
       const agent = {
@@ -130,9 +143,6 @@ export default {
       const settingsUrl = process.env.VUE_APP_SETTINGS_URL;
       window.open(settingsUrl);
     },
-    toggleDarkTheme() {
-      document.documentElement.classList.toggle('theme--dark');
-    },
     async logoutUser() {
       try {
         await authAPI.logout();
@@ -146,6 +156,10 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
+  .wt-dark-mode-switcher {
+    margin-right: auto;
+  }
+
   .wt-switcher, .user-dnd-switcher{
     margin-left: var(--spacing-sm);
   }

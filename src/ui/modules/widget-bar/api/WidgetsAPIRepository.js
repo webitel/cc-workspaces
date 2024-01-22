@@ -1,22 +1,10 @@
-import { AgentServiceApiFactory } from 'webitel-sdk';
-import {
-  getDefaultGetListResponse,
-  getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults';
-import applyTransform, {
-  camelToSnake,
-  merge,
-  mergeEach,
-  notify,
-  sanitize,
-  snakeToCamel,
-  starToSearch,
-} from '@webitel/ui-sdk/src/api/transformers';
+import { UserHelperServiceApiFactory } from 'webitel-sdk';
+import { SdkGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import configuration from '../../../../app/api/old/openAPIConfig';
-import instance from '../../../../app/api/instance';
+import instance from '../../../../app/api/old/instance';
 
-const agentService = new AgentServiceApiFactory(configuration, '', instance);
+const userHelperService = new UserHelperServiceApiFactory(configuration, '', instance);
 
 const itemResponseHandler = (stats) => ({
   ...stats,
@@ -24,7 +12,7 @@ const itemResponseHandler = (stats) => ({
   avgTalkSec: convertDuration(stats.avgTalkSec),
   occupancy: `${stats.occupancy.toFixed(2)}%`,
   utilization: `${stats.utilization.toFixed(2)}%`,
-  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed()}`,
+  scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed(2)}`,
   chatAht: convertDuration(stats.chatAht),
   sumTalkSec: convertDuration(stats.sumTalkSec),
   processing: convertDuration(stats.processing),
@@ -53,23 +41,13 @@ const defaultSingleObject = {
   taskAccepts: 0,
 };
 
-// const getter = new SdkGetterApiConsumer(agentService.agentTodayStatistics, {
-//   defaultSingleObject,
-//   itemResponseHandler,
-// });
+const getter = new SdkGetterApiConsumer(userHelperService.activityWorkspaceWidget, {
+  defaultSingleObject,
+  itemResponseHandler,
+});
 
-const getWidgets = async ({ itemId: id }) => {
-  try {
-    const response = await agentService.agentTodayStatistics(id);
-    return applyTransform(response.data, [
-      merge(defaultSingleObject),
-      itemResponseHandler,
-    ]);
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  }
+const getWidgets = async () => {
+  return getter.getItem({});
 };
 
 const widgetsAPIRepository = {

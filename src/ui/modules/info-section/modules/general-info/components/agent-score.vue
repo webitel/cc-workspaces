@@ -17,9 +17,10 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ score.scoreCount || 0 }}
+              {{ scoreCount || 0 }}
             </div>
           </li>
+          <wt-divider />
           <li class="agent-score-item">
             <div class="agent-score-item__title">
               {{ $t('widgets.scoreAvg') }}
@@ -30,7 +31,7 @@
                 icon-prefix="ws"
                 :size="size"
               ></wt-icon>
-              {{ (+score.scoreAvg || 0).toFixed(2) }}
+              {{ (+scoreAvg || 0).toFixed(2) }}
             </div>
           </li>
         </ul>
@@ -40,16 +41,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'agent-score',
   mixins: [sizeMixin],
-  props: {
-    score: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapGetters('ui/widget', {
+      scoreCount: 'SCORE_COUNT',
+      scoreAvg: 'SCORE_REQUIRED_AVG',
+    }),
   },
 };
 </script>
@@ -61,10 +63,6 @@ export default {
     align-items: center;
     padding: var(--spacing-xs);
     grid-template-columns: 3fr 2fr;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--secondary-color);
-    }
 
     .agent-score-item__title {
       @extend %typo-body-1;

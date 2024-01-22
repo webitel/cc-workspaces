@@ -158,5 +158,6 @@ export default {
 .break-timer-popup-pause-cause {
   @extend %typo-subtitle-2;
   text-align: center;
+  color: var(--primary-on-color);
 }
 </style>

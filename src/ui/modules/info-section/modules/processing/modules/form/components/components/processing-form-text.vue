@@ -45,7 +45,7 @@ import patchMDRender from '../../../../../client-info/components/client-info-mar
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 
-const md = new MarkdownIt({ linkify: true });
+const md = new MarkdownIt({ linkify: true, html: true });
 patchMDRender(md);
 
 export default {
@@ -54,8 +54,8 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'default',
-      options: ['default', 'secondary', 'accent', 'success', 'danger'],
+      default: 'info',
+      options: ['info', 'secondary', 'primary', 'success', 'error'],
     },
     enableCopying: {
       type: Boolean,
@@ -88,7 +88,8 @@ export default {
   }
 
   &--color {
-    &-default {
+    &-default, // deprecated, remove me in 2025
+    &-info { // new name
       border-color: var(--info-color);
 
       .processing-form-text__icon-wrapper {
@@ -102,7 +103,8 @@ export default {
         background: var(--secondary-color);
       }
     }
-    &-accent {
+    &-accent, // deprecated, remove me in 2025
+    &-primary { // new name
       border-color: var(--primary-color);
 
       .processing-form-text__icon-wrapper {
@@ -116,7 +118,8 @@ export default {
         background: var(--success-color);
       }
     }
-    &-danger {
+    &-danger, // deprecated, remove me in 2025
+    &-error { // new name
       border-color: var(--error-color);
 
       .processing-form-text__icon-wrapper {

@@ -1,19 +1,46 @@
 <template>
   <section class="client-info">
     <client-info-chips/>
-    <client-info-markdown/>
+    <contact
+      v-if="!hideContact && hasLicenseOnCrm"
+      :size="size"
+      :task="task"
+    />
+    <client-info-member/>
   </section>
 </template>
 
 <script>
-import ClientInfoMarkdown from './client-info-markdown/client-info-markdown.vue';
+import { mapState } from 'vuex';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+import ClientInfoMember from './client-info-member/client-info-member.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
+import Contact from '../modules/contact/components/the-contact.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
   name: 'client-info-tab',
+  mixins: [sizeMixin],
   components: {
-    ClientInfoMarkdown,
+    ClientInfoMember,
     ClientInfoChips,
+    Contact,
+  },
+  props: {
+    task: {
+      type: Object,
+    },
+  },
+  computed: {
+    ...mapState('ui/userinfo', {
+      scope: (state) => state.scope,
+    }),
+    hasLicenseOnCrm() {
+      return this.scope.some((item) => item.class === 'contacts');
+    },
+    hideContact() {
+      return !isEmpty(this.task?.contact) ? this.task.contact.hide : true;
+    },
   },
 };
 </script>
@@ -24,5 +51,6 @@ export default {
   max-height: 100%;
   min-height: 0;
   overflow: auto;
+  word-break: break-all;
 }
 </style>
