@@ -1,8 +1,20 @@
 import { AgentServiceApiFactory } from 'webitel-sdk';
-import { SdkGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
+import {
+  getDefaultGetListResponse,
+  getDefaultGetParams,
+} from '@webitel/ui-sdk/src/api/defaults';
+import applyTransform, {
+  camelToSnake,
+  merge,
+  mergeEach,
+  notify,
+  sanitize,
+  snakeToCamel,
+  starToSearch,
+} from '@webitel/ui-sdk/src/api/transformers';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import configuration from '../../../../app/api/old/openAPIConfig';
-import instance from '../../../../app/api/old/instance';
+import instance from '../../../../app/api/instance';
 
 const agentService = new AgentServiceApiFactory(configuration, '', instance);
 
@@ -41,15 +53,23 @@ const defaultSingleObject = {
   taskAccepts: 0,
 };
 
-const getter = new SdkGetterApiConsumer(agentService.agentTodayStatistics, {
-  defaultSingleObject,
-  itemResponseHandler,
-});
+// const getter = new SdkGetterApiConsumer(agentService.agentTodayStatistics, {
+//   defaultSingleObject,
+//   itemResponseHandler,
+// });
 
-const getWidgets = async ({
-                              agentId,
-                            }) => {
-  return getter.getItem({ itemId: agentId });
+const getWidgets = async ({ itemId: id }) => {
+  try {
+    const response = await agentService.agentTodayStatistics(id);
+    return applyTransform(response.data, [
+      merge(defaultSingleObject),
+      itemResponseHandler,
+    ]);
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
 };
 
 const widgetsAPIRepository = {
