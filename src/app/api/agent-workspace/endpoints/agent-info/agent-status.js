@@ -14,17 +14,17 @@ import applyTransform, {
   starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers';
 import instance from '../../../instance';
-import configuration from '../../../old/openAPIConfig';
+import configuration from '../../../openAPIConfig';
 
 const agentService = new AgentServiceApiFactory(configuration, '', instance);
 
-const itemResponseHandler = (item) => ({
-  ...item,
-  statusDuration: convertDuration(item.statusDuration),
-  online: convertDuration(item.online),
-  offline: convertDuration(item.offline),
-  pause: convertDuration(item.pause),
-});
+// const itemResponseHandler = (item) => ({
+//   ...item,
+//   statusDuration: convertDuration(item.statusDuration),
+//   online: convertDuration(item.online),
+//   offline: convertDuration(item.offline),
+//   pause: convertDuration(item.pause),
+// });
 
 // const _getAgent = (get) => function ({
 //    itemId,
@@ -39,7 +39,27 @@ const itemResponseHandler = (item) => ({
 //   itemResponseHandler,
 // }).setGetMethod(_getAgent);
 
-const getAgent = (params) => sdkGetterApiConsumer.getItem(params);
+const getAgent = async ({ itemId: id }) => {
+  const responseHandler = (item) =>  ({
+    ...item,
+    statusDuration: convertDuration(item.statusDuration),
+    online: convertDuration(item.online),
+    offline: convertDuration(item.offline),
+    pause: convertDuration(item.pause),
+  });
+
+  try {
+    const response = await agentService.searchAgentStatusStatisticItem(id);
+    return applyTransform(response.data, [
+      snakeToCamel(),
+      responseHandler,
+    ]);
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
 
 export default {
   get: getAgent,
