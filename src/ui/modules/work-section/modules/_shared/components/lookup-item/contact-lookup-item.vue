@@ -40,7 +40,7 @@ export default {
   mixins: [lookupItemMixin, sizeMixin],
   computed: {
     userStatus() {
-      const status = parseUserStatus(this.item.presence);
+      const status = parseUserStatus(this.item);
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
       return this.item.status;

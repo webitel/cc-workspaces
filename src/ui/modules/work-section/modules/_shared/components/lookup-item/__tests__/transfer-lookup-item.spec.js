@@ -31,24 +31,32 @@ describe('TransferLookupItem', () => {
     expect(wrapper.emitted().input[0]).toEqual([item]);
   });
 
-  it('correctly comoputes user ACTIVE status: web', () => {
-    item.presence = { status: 'web' };
+  it('correctly comoputes user PAUSE status: pause', () => {
+    item.status = 'pause';
     const wrapper = shallowMount(ContactLookupItem, {
       props: { item },
     });
-    expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ACTIVE);
+    expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.PAUSE);
   });
 
-  it('correctly comoputes user ACTIVE status: sip', () => {
-    item.presence = { status: 'sip' };
+  it('correctly comoputes user ONLINE status: online', () => {
+    item.status = 'online';
     const wrapper = shallowMount(ContactLookupItem, {
       props: { item },
     });
-    expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ACTIVE);
+    expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ONLINE);
+  });
+
+  it('correctly comoputes user OFFLINE status: offline', () => {
+    item.status = 'offline';
+    const wrapper = shallowMount(ContactLookupItem, {
+      props: { item },
+    });
+    expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.OFFLINE);
   });
 
   it('correctly comoputes user BUSY status: dlg', () => {
-    item.presence = { status: 'dlg' };
+    item.presence = 'dlg';
     const wrapper = shallowMount(ContactLookupItem, {
       props: { item },
     });
@@ -56,7 +64,7 @@ describe('TransferLookupItem', () => {
   });
 
   it('correctly comoputes user DND status: dnd', () => {
-    item.presence = { status: 'dnd' };
+    item.presence = 'dnd';
     const wrapper = shallowMount(ContactLookupItem, {
       props: { item },
     });
