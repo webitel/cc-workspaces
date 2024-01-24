@@ -1,39 +1,59 @@
+import { AgentServiceApiFactory } from 'webitel-sdk';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults';
 import applyTransform, {
-  camelToSnake,
-  generateUrl,
+  mergeEach,
   merge,
   notify,
-  sanitize,
   snakeToCamel,
-  starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers';
 import instance from '../../../instance';
+import configuration from '../../../openAPIConfig';
 
-const baseUrl = '/users';
+const service = new AgentServiceApiFactory(configuration, '', instance);
 
 const getUsers = async (params) => {
-  const fieldsToSend = ['page', 'size', 'q', 'sort', 'fields', 'id'];
+  const defaultObject = {
+    extension: '',
+    id: '',
+    name: '',
+    presence: [],
+    status: '',
+  };
 
-  const url = applyTransform(params, [
+  const listResponseHandler = (items) => {
+    return items.map((item) => ({
+      ...item,
+    }));
+  };
+
+  const {
+    page,
+    size,
+    search,
+  } = applyTransform(params, [
     merge(getDefaultGetParams()),
-    starToSearch('search'),
-    (params) => ({ ...params, q: params.search }),
-    sanitize(fieldsToSend),
-    camelToSnake(),
-    generateUrl(baseUrl),
+    snakeToCamel(),
   ]);
+
   try {
-    const response = await instance.get(url);
+    const response = await service.searchUserStatus(
+      page,
+      size,
+      search,
+    );
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
+
     return {
-      items,
+      items: applyTransform(items, [
+        mergeEach(defaultObject),
+        listResponseHandler,
+      ]),
       next,
     };
   } catch (err) {
