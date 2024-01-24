@@ -1,5 +1,3 @@
-import { EndpointListGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
-import { objCamelToSnake } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
@@ -8,7 +6,6 @@ import applyTransform, {
   camelToSnake,
   generateUrl,
   merge,
-  mergeEach,
   notify,
   sanitize,
   snakeToCamel,
@@ -17,12 +14,6 @@ import applyTransform, {
 import instance from '../../../instance';
 
 const baseUrl = '/users';
-
-// const listGetter = new EndpointListGetterApiConsumer({ baseUrl, instance });
-
-// async getUsers(params) {
-//   return listGetter.getList(objCamelToSnake(params));
-// };
 
 const getUsers = async (params) => {
   const fieldsToSend = ['page', 'size', 'q', 'sort', 'fields', 'id'];
@@ -52,19 +43,10 @@ const getUsers = async (params) => {
   }
 };
 
-// async setUserStatus(status) {
-//   const url = '/presence';
-//   try {
-//     await instance.patch(url, { status });
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-const setUserStatus = async (changes) => {
+const setUserStatus = async (status) => {
   const url = '/presence';
   try {
-    await instance.patch(url, { changes });
+    await instance.patch(url, { status });
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -72,23 +54,12 @@ const setUserStatus = async (changes) => {
   }
 };
 
-// async getUserStatus() {
-//   const url = '/user';
-//
-//   try {
-//     const response = await instance.get(url);
-//     return response.presence;
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
 const getUserStatus = async () => {
   const url = '/user';
 
   try {
     const response = await instance.get(url);
-    return response.presence;
+    return response.data.presence;
   } catch (err) {
     throw applyTransform(err, [
       notify,
