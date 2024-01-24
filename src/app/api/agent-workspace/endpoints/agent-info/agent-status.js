@@ -51,4 +51,3 @@ const getAgent = async (params) => {
 export default {
   get: getAgent,
 };
-

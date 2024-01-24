@@ -11,8 +11,6 @@ import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
 
-// const listGetter = new SdkListGetterApiConsumer(communicationService.searchCommunicationType);
-
 const getCommunicationsList = async (params) => {
   const {
       page,
