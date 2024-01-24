@@ -39,12 +39,12 @@ export default {
   name: 'contact-lookup-item',
   mixins: [lookupItemMixin, sizeMixin],
   computed: {
+    // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
     userStatus() {
-      const status = parseUserStatus(this.item.presence);
+      const status = parseUserStatus(this.item);
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
-      if (status[UserStatus.SIP] || status[UserStatus.WEB]) return AbstractUserStatus.ACTIVE;
-      return AbstractUserStatus.OFFLINE;
+      return this.item.status;
     },
   },
 };
