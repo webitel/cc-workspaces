@@ -6,11 +6,10 @@ import {
 import applyTransform, {
   merge, mergeEach, notify, snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers';
-import instance from '../../../old/instance';
-import instanceNew from '../../../instance';
+import instance from '../../../instance';
 import configuration from '../../../openAPIConfig';
 
-const service = new AgentServiceApiFactory(configuration, '', instanceNew);
+const service = new AgentServiceApiFactory(configuration, '', instance);
 
 const usersAPIRepository = {
   async getUsers(params) {
