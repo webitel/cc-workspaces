@@ -30,7 +30,7 @@
 
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import { parseUserPresence } from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
+import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import lookupItemMixin from './mixins/lookupItemMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
@@ -41,7 +41,7 @@ export default {
   computed: {
     // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
     userStatus() {
-      const status = parseUserPresence(this.item);
+      const status = parseUserStatus(this.item, 'presence');
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
       return this.item.status;
