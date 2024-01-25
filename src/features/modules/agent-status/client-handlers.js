@@ -8,7 +8,7 @@ import parseUserStatus from './statusUtils/parseUserStatus';
 const usersAPI = APIRepository.users;
 
 const userStatusHandler = (user) => ({
-  status: parseUserStatus(user),
+  status: parseUserStatus(user, 'status'),
 });
 
 const actions = {

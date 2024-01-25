@@ -41,7 +41,7 @@ export default {
   computed: {
     // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
     userStatus() {
-      const status = parseUserStatus(this.item);
+      const status = parseUserStatus(this.item, 'presence');
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
       return this.item.status;
