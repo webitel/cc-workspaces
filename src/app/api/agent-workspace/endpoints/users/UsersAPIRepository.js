@@ -4,80 +4,93 @@ import {
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults';
 import applyTransform, {
-  merge, mergeEach, notify, snakeToCamel,
+  mergeEach,
+  merge,
+  notify,
+  snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers';
 import instance from '../../../instance';
 import configuration from '../../../openAPIConfig';
 
 const service = new AgentServiceApiFactory(configuration, '', instance);
 
-const usersAPIRepository = {
-  async getUsers(params) {
-    const defaultObject = {
-      extension: '',
-      id: '',
-      name: '',
-      presence: [],
-      status: '',
-    };
+const getUsers = async (params) => {
+  const defaultObject = {
+    extension: '',
+    id: '',
+    name: '',
+    presence: [],
+    status: '',
+  };
 
-    const listResponseHandler = (items) => {
-      return items.map((item) => ({
-        ...item,
-      }));
-    };
+  const listResponseHandler = (items) => {
+    return items.map((item) => ({
+      ...item,
+    }));
+  };
 
-    const {
+  const {
+    page,
+    size,
+    search,
+  } = applyTransform(params, [
+    merge(getDefaultGetParams()),
+    snakeToCamel(),
+  ]);
+
+  try {
+    const response = await service.searchUserStatus(
       page,
       size,
       search,
-    } = applyTransform(params, [
-      merge(getDefaultGetParams()),
+    );
+    const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
+      merge(getDefaultGetListResponse()),
     ]);
 
-    try {
-      const response = await service.searchUserStatus(
-        page,
-        size,
-        search,
-      );
-      const { items, next } = applyTransform(response.data, [
-        snakeToCamel(),
-        merge(getDefaultGetListResponse()),
-      ]);
+    return {
+      items: applyTransform(items, [
+        mergeEach(defaultObject),
+        listResponseHandler,
+      ]),
+      next,
+    };
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
 
-      return {
-        items: applyTransform(items, [
-          mergeEach(defaultObject),
-          listResponseHandler,
-        ]),
-        next,
-      };
-    } catch (err) {
-      throw applyTransform(err, [
-        notify,
-      ]);
-    }
-  },
-  async setUserStatus(status) {
-    const url = '/presence';
-    try {
-      await instance.patch(url, { status });
-    } catch (err) {
-      throw err;
-    }
-  },
-  async getUserStatus() {
-    const url = '/user';
+const setUserStatus = async (status) => {
+  const url = '/presence';
+  try {
+    await instance.patch(url, { status });
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
 
-    try {
-      const response = await instance.get(url);
-      return response.presence;
-    } catch (err) {
-      throw err;
-    }
-  },
+const getUserStatus = async () => {
+  const url = '/user';
+
+  try {
+    const response = await instance.get(url);
+    return response.data.presence;
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
+
+const usersAPIRepository = {
+  getUsers,
+  setUserStatus,
+  getUserStatus,
 };
 
 export default usersAPIRepository;

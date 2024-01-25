@@ -1,26 +1,58 @@
 import { RoutingChatPlanServiceApiFactory } from 'webitel-sdk';
-import { SdkListGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
-import instance from '../../../old/instance';
-import configuration from '../../../old/openAPIConfig';
+import {
+  getDefaultGetListResponse,
+  getDefaultGetParams,
+} from '@webitel/ui-sdk/src/api/defaults';
+import applyTransform, {
+  merge,
+  notify,
+  snakeToCamel,
+  starToSearch,
+} from '@webitel/ui-sdk/src/api/transformers';
+import instance from '../../../instance';
+import configuration from '../../../openAPIConfig';
 
 const chatplanService = new RoutingChatPlanServiceApiFactory(configuration, '', instance);
 
-const _getChatplans = (getList) => function ({
-                                                     page,
-                                                     size,
-                                                     search,
-                                                     fields,
-                                                     sort,
-                                                     id,
-                                                     enabled,
-                                                   } = {}) {
-  const params = [page, size, search, sort, fields, id, undefined, enabled];
-  return getList(params);
-};
-const listGetter = new SdkListGetterApiConsumer(chatplanService.searchChatPlan)
-  .setGetListMethod(_getChatplans);
+const getChatplans= async (params) => {
+  const {
+    page,
+    size,
+    search,
+    fields,
+    sort,
+    id,
+    enabled,
+  } = applyTransform(params, [
+    merge(getDefaultGetParams()),
+    starToSearch('search'),
+  ]);
 
-const getChatplans = (params) => listGetter.getList(params);
+  try {
+    const response = await chatplanService.searchChatPlan(
+      page,
+      size,
+      search,
+      sort,
+      fields,
+      id,
+      undefined,
+      enabled,
+    );
+    const { items, next } = applyTransform(response.data, [
+      snakeToCamel(),
+      merge(getDefaultGetListResponse()),
+    ]);
+    return {
+      items,
+      next,
+    };
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
 
 const chatplanAPIRepository = {
   getChatplans,
