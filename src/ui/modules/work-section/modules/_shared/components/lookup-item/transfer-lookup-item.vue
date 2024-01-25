@@ -33,7 +33,7 @@
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import { mapGetters } from 'vuex';
-import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
+import { parseUserPresence } from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import lookupItemMixin from './mixins/lookupItemMixin';
@@ -59,11 +59,10 @@ export default {
       state: 'WORKSRACE_STATE',
     }),
     userStatus() {
-      const status = parseUserStatus(this.item.presence);
+      const status = parseUserPresence(this.item);
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
-      if (status[UserStatus.SIP] || status[UserStatus.WEB]) return AbstractUserStatus.ACTIVE;
-      return AbstractUserStatus.OFFLINE;
+      return this.item.status;
     },
   },
 };
