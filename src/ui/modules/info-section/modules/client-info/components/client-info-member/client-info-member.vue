@@ -80,6 +80,7 @@ export default {
   &-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
     padding: var(--spacing-xs) 0;
   }
 
