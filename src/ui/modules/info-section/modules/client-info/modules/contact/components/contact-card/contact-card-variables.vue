@@ -65,7 +65,7 @@ const { t } = useI18n();
 
   &--sm {
     .contact-card-variables__inner {
-      display: block;
+      grid-template-columns: 1fr;
     }
   }
 }

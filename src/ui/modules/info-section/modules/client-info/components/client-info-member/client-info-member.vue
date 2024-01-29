@@ -90,7 +90,7 @@ export default {
 
   &--sm {
     .client-info-member-wrapper {
-      display: block;
+      grid-template-columns: 1fr;
     }
   }
 }
