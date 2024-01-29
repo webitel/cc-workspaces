@@ -58,13 +58,14 @@ const { t } = useI18n();
   &__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
     padding: var(--spacing-xs) 0;
 
   }
 
   &--sm {
     .contact-card-variables__inner {
-      display: block;
+      grid-template-columns: 1fr;
     }
   }
 }

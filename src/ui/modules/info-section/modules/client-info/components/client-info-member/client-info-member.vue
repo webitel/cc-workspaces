@@ -1,5 +1,8 @@
 <template>
-  <div class="client-info-member">
+  <div
+    class="client-info-member"
+    :class="[`client-info-member--${size}`]"
+  >
     <wt-expansion-panel
       v-if="memberDescription"
       collapsed>
@@ -37,6 +40,13 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'client-info-member',
+  props: {
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
+    },
+  },
   computed: {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
@@ -68,11 +78,20 @@ export default {
   }
 
   &-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
     padding: var(--spacing-xs) 0;
   }
 
   &-item__key {
     @extend %typo-subtitle-1;
+  }
+
+  &--sm {
+    .client-info-member-wrapper {
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>
