@@ -138,7 +138,8 @@ export default {
   width: 100%;
   margin-bottom: var(--spacing-xs);
   padding: var(--spacing-xs);
-  background-color: var(--secondary-color);
+  background-color: var(--dp-18-surface-color);
+  border-radius: var(--spacing-xs);
 
   .ws-worksection__search {
     flex: 1 1 auto;
