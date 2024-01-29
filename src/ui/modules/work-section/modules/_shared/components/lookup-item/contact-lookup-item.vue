@@ -44,6 +44,7 @@ export default {
       const status = parseUserStatus(this.item, 'presence');
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
+      if (this.item.status === AbstractUserStatus.OFFLINE && (status[UserStatus.SIP] || status[UserStatus.WEB])) return AbstractUserStatus.ACTIVE;
       return this.item.status;
     },
   },

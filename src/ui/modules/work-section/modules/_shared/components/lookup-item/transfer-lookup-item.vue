@@ -58,11 +58,12 @@ export default {
     ...mapGetters('workspace', {
       state: 'WORKSRACE_STATE',
     }),
+    // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
     userStatus() {
-      // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
       const status = parseUserStatus(this.item, 'presence');
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
+      if (this.item.status === AbstractUserStatus.OFFLINE && (status[UserStatus.SIP] || status[UserStatus.WEB])) return AbstractUserStatus.ACTIVE;
       return this.item.status;
     },
   },
