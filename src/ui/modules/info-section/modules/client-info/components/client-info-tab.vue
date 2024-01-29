@@ -6,7 +6,7 @@
       :size="size"
       :task="task"
     />
-    <client-info-member/>
+    <client-info-member :size="size" />
   </section>
 </template>
 
