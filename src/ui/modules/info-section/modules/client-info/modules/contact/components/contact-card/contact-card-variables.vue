@@ -12,17 +12,18 @@
           <li
             v-for="({ key, value, id }, idx) of props.variables"
             :key="id"
-            class="contact-card-variables__item"
+            class="contact-card-variables-item"
           >
-            <wt-divider v-if="idx"></wt-divider>
-            <div class="contact-card-variables__inner">
-              <p>{{ key }}</p>
-              <p>{{ value }}</p>
+            <wt-divider v-if="idx"/>
+            <div class="contact-card-variables-wrapper">
+              <p class="contact-card-variables-item__key">{{ key }}:</p>
+              <p class="contact-card-variables-item__value">{{ value }}</p>
             </div>
           </li>
         </ul>
-        <div v-else>{{ t('infoSec.contacts.emptyAttributes') }}
-      </div>
+        <div v-else>
+          {{ t('infoSec.contacts.emptyAttributes') }}
+        </div>
       </div>
     </template>
   </wt-expansion-panel>
@@ -49,24 +50,28 @@ const { t } = useI18n();
 .contact-card-variables {
   padding: var(--spacing-xs);
 
-  &__item {
-    display: flex;
-    flex-direction: column;
-    justify-items: flex-start;
-  }
-
-  &__inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) 0;
-
-  }
-
   &--sm {
-    .contact-card-variables__inner {
+    .contact-card-variables-wrapper {
       grid-template-columns: 1fr;
     }
   }
 }
+
+.contact-card-variables-item {
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+
+  &__key {
+    @extend %typo-subtitle-1;
+  }
+}
+
+.contact-card-variables-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+}
+
 </style>
