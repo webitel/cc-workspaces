@@ -22,8 +22,8 @@
           >
             <wt-divider v-if="idx"></wt-divider>
             <div class="client-info-member-wrapper">
-              <p class="client-info-member-item__key">{{ key }}:</p>
-              <p class="client-info-member-item__value">{{ value }}</p>
+              <p class="client-info-member-item__key">{{ key }}</p>
+              <p class="md markdown-body" v-html="value"></p>
             </div>
           </li>
         </ul>
@@ -34,6 +34,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import MarkdownIt from 'markdown-it';
+import patchMDRender from '../client-info-markdown/scripts/patchMDRender';
+
+const md = new MarkdownIt({ linkify: true });
+patchMDRender(md);
 
 export default {
   name: 'client-info-member',
@@ -44,7 +49,10 @@ export default {
     callVariables() {
       if (this.taskOnWorkspace.variables) {
         return Object.keys(this.taskOnWorkspace?.variables)
-        .map((key) => ({ key, value: this.taskOnWorkspace.variables[key] }));
+        .map((key) => ({
+          key,
+          value: md.render(this.taskOnWorkspace.variables[key]),
+        }));
       } return [];
     },
     memberDescription() {
