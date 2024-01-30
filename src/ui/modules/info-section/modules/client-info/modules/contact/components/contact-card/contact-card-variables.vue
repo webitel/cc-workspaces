@@ -50,28 +50,28 @@ const { t } = useI18n();
 .contact-card-variables {
   padding: var(--spacing-xs);
 
-  &-item {
-    display: flex;
-    flex-direction: column;
-    justify-items: flex-start;
-
-    &__key {
-      @extend %typo-subtitle-1;
-    }
-  }
-
-  &-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) 0;
-
-  }
-
   &--sm {
     .contact-card-variables-wrapper {
       grid-template-columns: 1fr;
     }
   }
 }
+
+.contact-card-variables-item {
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+
+  &__key {
+    @extend %typo-subtitle-1;
+  }
+}
+
+.contact-card-variables-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+}
+
 </style>
