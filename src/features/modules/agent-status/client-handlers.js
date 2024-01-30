@@ -3,12 +3,12 @@ import { RolePermissionError } from 'webitel-sdk';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import APIRepository from '../../../app/api/APIRepository';
 import i18n from '../../../app/locale/i18n';
-import parseUserStatus from './statusUtils/parseUserStatus';
+import { parseUserStatus } from './statusUtils/parseUserStatus';
 
 const usersAPI = APIRepository.users;
 
 const userStatusHandler = (user) => ({
-  status: parseUserStatus(user, 'status'),
+  status: parseUserStatus(user),
 });
 
 const actions = {

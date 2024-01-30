@@ -3,4 +3,7 @@ export default Object.freeze({
   WEB: 'web',
   DND: 'dnd',
   BUSY: 'busy',
+  OFFLINE: 'offline',
+  ONLINE: 'online',
+  PAUSE: 'pause',
 });
