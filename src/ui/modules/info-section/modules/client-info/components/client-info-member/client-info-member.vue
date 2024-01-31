@@ -25,8 +25,8 @@
           >
             <wt-divider v-if="idx"></wt-divider>
             <div class="client-info-member-wrapper">
-              <p class="client-info-member-item__key">{{ key }}</p>
-              <p class="md markdown-body" v-html="value"></p>
+              <p class="client-info-member-item__key">{{ key }}:</p>
+              <p class="client-info-member-item__value md markdown-body" v-html="value"></p>
             </div>
           </li>
         </ul>
@@ -94,6 +94,10 @@ export default {
 
   &-item__key {
     @extend %typo-subtitle-1;
+  }
+
+  &-item__value {
+    @extend %typo-body-1;
   }
 
   &--sm {
