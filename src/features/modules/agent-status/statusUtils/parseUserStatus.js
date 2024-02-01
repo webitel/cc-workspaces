@@ -1,9 +1,10 @@
 import UserStatus from './UserStatus';
 
-const parseUserStatus = (object, propertyName) => ({
-  [UserStatus.DND]: object?.[propertyName]?.includes('dnd'),
-  [UserStatus.BUSY]: object?.[propertyName]?.includes('dlg'),
-  [UserStatus.SIP]: object?.[propertyName]?.includes('sip'),
-  [UserStatus.WEB]: object?.[propertyName]?.includes('web'),
+const parseUserStatus = (presence) => ({
+  [UserStatus.DND]: presence?.status?.includes('dnd'),
+  [UserStatus.BUSY]: presence?.status?.includes('dlg'),
+  [UserStatus.WEB]: presence?.status?.includes('sip'),
+  [UserStatus.WEB]: presence?.status?.includes('web'),
 });
+
 export default parseUserStatus;
