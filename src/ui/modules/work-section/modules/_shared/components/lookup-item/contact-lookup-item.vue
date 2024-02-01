@@ -30,7 +30,7 @@
 
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import OperatorStatus from '../../../../../../../features/modules/agent-status/statusUtils/OperatorStatus';
+import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import lookupItemMixin from './mixins/lookupItemMixin';
@@ -45,11 +45,11 @@ export default {
       const status = parseUserStatus(this.item.presence);
       if (status[UserStatus.DND]) return AbstractUserStatus.DND;
       if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
-      if (this.item.status === OperatorStatus.OFFLINE && (status[UserStatus.SIP] || status[UserStatus.WEB])) {
+      if (this.item.status === AgentStatus.OFFLINE && (status[UserStatus.SIP] || status[UserStatus.WEB])) {
         return AbstractUserStatus.ACTIVE;
       }
-      if (this.item.status === OperatorStatus.ONLINE) return AbstractUserStatus.ONLINE;
-      if (this.item.status === OperatorStatus.PAUSE) return AbstractUserStatus.PAUSE;
+      if (this.item.status === AgentStatus.ONLINE) return AbstractUserStatus.ONLINE;
+      if (this.item.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
       return AbstractUserStatus.OFFLINE;
     },
   },
