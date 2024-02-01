@@ -56,7 +56,7 @@ describe('TransferLookupItem', () => {
   });
 
   it('correctly comoputes user BUSY status: dlg', () => {
-    item.presence = 'dlg';
+    item.presence = { status: 'dlg' };
     const wrapper = shallowMount(ContactLookupItem, {
       props: { item },
     });
@@ -64,7 +64,7 @@ describe('TransferLookupItem', () => {
   });
 
   it('correctly comoputes user DND status: dnd', () => {
-    item.presence = 'dnd';
+    item.presence = { status: 'dnd' };
     const wrapper = shallowMount(ContactLookupItem, {
       props: { item },
     });
