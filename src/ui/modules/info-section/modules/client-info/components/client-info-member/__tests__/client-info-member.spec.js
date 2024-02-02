@@ -10,7 +10,7 @@ describe('Client Info Member from Call', () => {
   let state;
   let store;
   const computed = {
-    callVariables() {
+    variables() {
       return [];
     },
     memberDescription() {
