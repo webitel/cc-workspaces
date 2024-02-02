@@ -82,7 +82,7 @@ export default {
     },
     clientInfo: 'Інформація',
     memberDescription: 'Опис абонента',
-    callVariables: 'Змінні дзвінка',
+    variables: 'Змінні',
     contacts: {
       client: 'Клієнт',
       manager: 'Власник',

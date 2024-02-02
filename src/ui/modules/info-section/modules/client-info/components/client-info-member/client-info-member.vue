@@ -13,13 +13,13 @@
     </wt-expansion-panel>
 
     <wt-expansion-panel
-      v-if="callVariables.length"
+      v-if="variables.length"
       collapsed>
-      <template v-slot:title>{{ $t('infoSec.callVariables') }}</template>
+      <template v-slot:title>{{ $t('infoSec.variables') }}</template>
       <template>
         <ul class="client-info-member-list">
           <li
-            v-for="({ key, value }, idx) of callVariables"
+            v-for="({ key, value }, idx) of variables"
             :key="key"
             class="client-info-member-item"
           >
@@ -56,7 +56,7 @@ export default {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
-    callVariables() {
+    variables() {
       if (this.taskOnWorkspace.variables) {
         return Object.keys(this.taskOnWorkspace?.variables)
         .map((key) => ({

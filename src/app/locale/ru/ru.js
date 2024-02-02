@@ -82,7 +82,7 @@ export default {
     },
     clientInfo: 'Информация',
     memberDescription: 'Описание абонента',
-    callVariables: 'Переменные звонка',
+    variables: 'Переменные',
     contacts: {
       client: 'Клиент',
       manager: 'Владелец',
