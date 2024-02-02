@@ -5,7 +5,8 @@
   >
     <wt-expansion-panel
       v-if="memberDescription"
-      collapsed>
+      :collapsed="collapsed"
+    >
       <template v-slot:title>{{ $t('infoSec.memberDescription') }}</template>
       <template>
         <p class="client-info-member-description">{{ memberDescription }}</p>
@@ -14,7 +15,8 @@
 
     <wt-expansion-panel
       v-if="variables.length"
-      collapsed>
+      :collapsed="collapsed"
+    >
       <template v-slot:title>{{ $t('infoSec.variables') }}</template>
       <template>
         <ul class="client-info-member-list">
@@ -50,6 +52,10 @@ export default {
       type: String,
       default: 'md',
       options: ['sm', 'md'],
+    },
+    collapsed: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {
