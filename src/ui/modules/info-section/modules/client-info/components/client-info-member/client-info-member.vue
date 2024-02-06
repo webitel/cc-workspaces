@@ -1,8 +1,12 @@
 <template>
-  <div class="client-info-member">
+  <div
+    class="client-info-member"
+    :class="[`client-info-member--${size}`]"
+  >
     <wt-expansion-panel
       v-if="memberDescription"
-      collapsed>
+      :collapsed="collapsed"
+    >
       <template v-slot:title>{{ $t('infoSec.memberDescription') }}</template>
       <template>
         <p class="client-info-member-description">{{ memberDescription }}</p>
@@ -10,20 +14,21 @@
     </wt-expansion-panel>
 
     <wt-expansion-panel
-      v-if="callVariables.length"
-      collapsed>
-      <template v-slot:title>{{ $t('infoSec.callVariables') }}</template>
+      v-if="variables.length"
+      :collapsed="collapsed"
+    >
+      <template v-slot:title>{{ $t('infoSec.variables') }}</template>
       <template>
         <ul class="client-info-member-list">
           <li
-            v-for="({ key, value }, idx) of callVariables"
+            v-for="({ key, value }, idx) of variables"
             :key="key"
             class="client-info-member-item"
           >
             <wt-divider v-if="idx"></wt-divider>
             <div class="client-info-member-wrapper">
               <p class="client-info-member-item__key">{{ key }}:</p>
-              <p class="client-info-member-item__value">{{ value }}</p>
+              <p class="client-info-member-item__value md markdown-body" v-html="value"></p>
             </div>
           </li>
         </ul>
@@ -34,17 +39,36 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import MarkdownIt from 'markdown-it';
+import patchMDRender from '../client-info-markdown/scripts/patchMDRender';
+
+const md = new MarkdownIt({ linkify: true });
+patchMDRender(md);
 
 export default {
   name: 'client-info-member',
+  props: {
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
+    },
+    collapsed: {
+      type: Boolean,
+      default: true,
+    },
+  },
   computed: {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
-    callVariables() {
+    variables() {
       if (this.taskOnWorkspace.variables) {
         return Object.keys(this.taskOnWorkspace?.variables)
-        .map((key) => ({ key, value: this.taskOnWorkspace.variables[key] }));
+        .map((key) => ({
+          key,
+          value: md.render(this.taskOnWorkspace.variables[key]),
+        }));
       } return [];
     },
     memberDescription() {
@@ -68,11 +92,24 @@ export default {
   }
 
   &-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
     padding: var(--spacing-xs) 0;
   }
 
   &-item__key {
     @extend %typo-subtitle-1;
+  }
+
+  &-item__value {
+    @extend %typo-body-1;
+  }
+
+  &--sm {
+    .client-info-member-wrapper {
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>

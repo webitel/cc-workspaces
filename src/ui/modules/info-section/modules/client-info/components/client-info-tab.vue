@@ -2,11 +2,14 @@
   <section class="client-info">
     <client-info-chips/>
     <contact
-      v-if="!hideContact && hasLicenseOnCrm"
+      v-if="isAllowedContacts"
       :size="size"
       :task="task"
     />
-    <client-info-member/>
+    <client-info-member
+      :collapsed="isAllowedContacts"
+      :size="size"
+    />
   </section>
 </template>
 
@@ -40,6 +43,9 @@ export default {
     },
     hideContact() {
       return !isEmpty(this.task?.contact) ? this.task.contact.hide : true;
+    },
+    isAllowedContacts() {
+      return !this.hideContact && this.hasLicenseOnCrm;
     },
   },
 };

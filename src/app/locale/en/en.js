@@ -88,7 +88,7 @@ export default {
     },
     clientInfo: 'Client info',
     memberDescription: 'Member description',
-    callVariables: 'Call variables',
+    variables: 'Variables',
     contacts: {
       client: 'Client',
       manager: 'Owner',
