@@ -2,7 +2,8 @@
   <div class="client-info-member">
     <wt-expansion-panel
       v-if="memberDescription"
-      collapsed>
+      :collapsed="collapsed"
+    >
       <template v-slot:title>{{ $t('infoSec.memberDescription') }}</template>
       <template>
         <p class="client-info-member-description">{{ memberDescription }}</p>
@@ -11,7 +12,8 @@
 
     <wt-expansion-panel
       v-if="callVariables.length"
-      collapsed>
+      :collapsed="collapsed"
+    >
       <template v-slot:title>{{ $t('infoSec.callVariables') }}</template>
       <template>
         <ul class="client-info-member-list">
@@ -42,6 +44,12 @@ patchMDRender(md);
 
 export default {
   name: 'client-info-member',
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: true,
+    },
+  },
   computed: {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
