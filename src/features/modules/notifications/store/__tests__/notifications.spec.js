@@ -14,8 +14,8 @@ const chat = { id: '1', messages: [{ member: { name: 'name' } }] };
 
 describe('features/notifications store: actions', () => {
   const context = {
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
     getters: {
       IS_MAIN_TAB: () => true,
       IS_SOUND_ALLOWED: () => true,

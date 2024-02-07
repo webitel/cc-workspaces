@@ -4,7 +4,7 @@ import ProcessingFormFileLine from '../processing-form-file-line.vue';
 
 describe('ProcessingFormFileLine', () => {
   let file = {};
-  ProcessingFormFileLine.methods.initHref = jest.fn(); // prevent Jest "unhandled promise rejected" errors
+  ProcessingFormFileLine.methods.initHref = vi.fn(); // prevent Jest "unhandled promise rejected" errors
 
   beforeEach(() => {
     file = {
@@ -91,7 +91,7 @@ describe('ProcessingFormFileLine', () => {
     expect(wrapper.emitted().delete).toBeTruthy();
   });
   it('at "error" status, action icon click triggers passed to "close" method', () => {
-    const close = jest.fn();
+    const close = vi.fn();
     const wrapper = mount(ProcessingFormFileLine, {
       props: { file: { mime: '', metadata: { close } } },
       computed: {

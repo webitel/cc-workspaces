@@ -11,7 +11,7 @@ describe('ChatTransferContainer', () => {
   it('at TransferLookupItem "input" event, calls transfer() with passed item and destination', async () => {
     const transferDestination = ChatTransferDestination.CHATPLAN;
     const item = { id: 'jest' };
-    const mock = jest.spyOn(ChatTransferContainer.methods, 'transfer')
+    const mock = vi.spyOn(ChatTransferContainer.methods, 'transfer')
       .mockImplementationOnce(() => {});
 
     const wrapper = shallowMount(ChatTransferContainer, {

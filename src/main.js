@@ -12,7 +12,7 @@ import './app/assets/icons/sprite';
 
 const fetchConfig = async () => {
   const electronConfig = window._config || {}; // Electron sets config to window
-  const fileResponse = await fetch(`${process.env.BASE_URL}config.json`);
+  const fileResponse = await fetch(`${import.meta.env.BASE_URL}config.json`);
   const fileConfig = (await fileResponse.json()) || {};
   const apiResponse = async () => {
     try {

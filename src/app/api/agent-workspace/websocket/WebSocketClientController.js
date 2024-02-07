@@ -5,7 +5,7 @@ import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 const { hostname, protocol } = window.location;
 const origin = (`${protocol}//${hostname}`).replace(/^http/, 'ws');
-const endpoint = process.env.NODE_ENV === 'production'
+const endpoint = import.meta.env.NODE_ENV === 'production'
   ? `${origin}/ws` : 'wss://dev.webitel.com/ws';
 
 const getConfig = () => {

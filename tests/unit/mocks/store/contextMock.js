@@ -1,10 +1,10 @@
-const getContextMock = (jest) => ({
+const getContextMock = (vi) => ({
   state: {},
   getters: {},
   actions: {},
   mutations: {},
-  dispatch: jest.fn(),
-  commit: jest.fn(),
+  dispatch: vi.fn(),
+  commit: vi.fn(),
 });
 
 export default getContextMock;

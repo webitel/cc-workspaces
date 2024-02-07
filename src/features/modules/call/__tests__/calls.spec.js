@@ -7,8 +7,8 @@ const call = {
 describe('features/call store: actions', () => {
   const context = {
     state: { callOnWorkspace: call },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
     rootGetters: { 'workspace/IS_EMPTY_WORKSPACE': null },
     rootState: {
       config: {
@@ -39,7 +39,7 @@ describe('features/call store: actions', () => {
     expect(context.dispatch).not.toHaveBeenCalledWith('SET_WORKSPACE');
   });
   it('CALL action calls to number in prior to passed user or newNumber', async () => {
-    const call = jest.fn();
+    const call = vi.fn();
     const number = 'number';
     const user = { extension: 'extension' };
     context.rootState.client = { getCliInstance: () => ({ call }) };
@@ -49,7 +49,7 @@ describe('features/call store: actions', () => {
     expect(call.mock.calls[0][0].destination).toBe(number);
   });
   it('CALL action calls to user in prior to newNumber', async () => {
-    const call = jest.fn();
+    const call = vi.fn();
     const user = { extension: 'extension' };
     context.rootState.client = { getCliInstance: () => ({ call }) };
     context.rootGetters['workspace/TASK_ON_WORKSPACE'] = { newNumber: 'newNumber' };
@@ -58,7 +58,7 @@ describe('features/call store: actions', () => {
     expect(call.mock.calls[0][0].destination).toBe('extension');
   });
   it('CALL action with no passed params calls to newNumber', async () => {
-    const call = jest.fn();
+    const call = vi.fn();
     context.rootState.client = { getCliInstance: () => ({ call }) };
     context.rootGetters['workspace/TASK_ON_WORKSPACE'] = { newNumber: 'newNumber' };
 

@@ -36,8 +36,8 @@ describe('Member header', () => {
   });
 
   it('Calls to member', () => {
-    const mock = jest.fn();
-    jest.spyOn(MemberHeader.methods, 'makeCall')
+    const mock = vi.fn();
+    vi.spyOn(MemberHeader.methods, 'makeCall')
       .mockImplementationOnce(mock);
     const wrapper = mount(MemberHeader, {
       computed: {

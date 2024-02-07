@@ -31,8 +31,8 @@ describe('Break timer popup', () => {
   });
 
   it('Correctly goes Waiting', () => {
-    const mock = jest.fn();
-    jest.spyOn(TimerPopup.methods, 'setAgentWaiting')
+    const mock = vi.fn();
+    vi.spyOn(TimerPopup.methods, 'setAgentWaiting')
         .mockImplementationOnce(mock);
     const wrapper = mount(TimerPopup, { computed });
 
@@ -41,8 +41,8 @@ describe('Break timer popup', () => {
   });
 
   it('Correctly goes Offline', () => {
-    const mock = jest.fn();
-    jest.spyOn(TimerPopup.methods, 'agentLogout')
+    const mock = vi.fn();
+    vi.spyOn(TimerPopup.methods, 'agentLogout')
       .mockImplementationOnce(mock);
     const wrapper = mount(TimerPopup, { computed });
 

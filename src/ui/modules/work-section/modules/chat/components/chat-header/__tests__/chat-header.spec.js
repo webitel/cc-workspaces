@@ -40,7 +40,7 @@ describe('Chat Header', () => {
   });
 
   it('calls close() method at close chat button click', () => {
-    const closeMock = jest.spyOn(ChatHeader.methods, 'close')
+    const closeMock = vi.spyOn(ChatHeader.methods, 'close')
                           .mockImplementation(() => {
                           });
     const wrapper = mount(ChatHeader, mountOptions);

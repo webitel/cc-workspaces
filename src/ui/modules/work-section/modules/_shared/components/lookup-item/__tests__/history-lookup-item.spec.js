@@ -30,12 +30,12 @@ describe('HistoryLookupItem', () => {
   });
 
   it('calls to inbound call number', () => {
-    const mock = jest.fn();
+    const mock = vi.fn();
     item.direction = CallDirection.Inbound;
     item.from.number = 'true';
     item.to.number = 'false';
 
-    jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
+    vi.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
     const wrapper = mount(HistoryLookupItem, {
       props: { item },
     });
@@ -44,12 +44,12 @@ describe('HistoryLookupItem', () => {
   });
 
   it('calls to outbound call number', () => {
-    const mock = jest.fn();
+    const mock = vi.fn();
     item.direction = CallDirection.Outbound;
     item.from.number = 'false';
     item.to.number = 'true';
 
-    jest.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
+    vi.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(mock);
     const wrapper = mount(HistoryLookupItem, {
       props: { item },
     });

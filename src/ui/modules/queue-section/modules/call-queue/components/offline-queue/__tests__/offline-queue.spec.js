@@ -19,11 +19,11 @@ describe('Members list functionality', () => {
   };
 
   it('Opens selected member on workspace', () => {
-    const mock = jest.fn();
-    jest.spyOn(OfflineQueue.methods, 'toggleMemberDisplay')
+    const mock = vi.fn();
+    vi.spyOn(OfflineQueue.methods, 'toggleMemberDisplay')
       .mockImplementation(mock);
-    jest.spyOn(OfflineQueue.methods, 'loadDataList')
-      .mockImplementation(jest.fn());
+    vi.spyOn(OfflineQueue.methods, 'loadDataList')
+      .mockImplementation(vi.fn());
     const wrapper = mount(OfflineQueue, {
       computed,
 

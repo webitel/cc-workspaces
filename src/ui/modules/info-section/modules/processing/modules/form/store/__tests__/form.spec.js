@@ -15,7 +15,7 @@ describe('form: actions', () => {
     const task = {
       attempt: {
         form: { body },
-        formAction: jest.fn(),
+        formAction: vi.fn(),
       },
     };
     form.actions.SEND_FORM(context, { action, task });

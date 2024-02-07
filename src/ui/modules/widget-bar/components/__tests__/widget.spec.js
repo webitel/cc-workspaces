@@ -7,7 +7,7 @@ describe('Widget', () => {
       props: {
         widget: {
           icon: '',
-          text: jest.fn(),
+          text: vi.fn(),
           locale: '',
         },
       },
@@ -19,7 +19,7 @@ describe('Widget', () => {
       props: {
         widget: {
           icon: '',
-          text: jest.fn(),
+          text: vi.fn(),
           locale: '',
         },
         selectionMode: true,
@@ -33,7 +33,7 @@ describe('Widget', () => {
       props: {
         widget: {
           icon: '',
-          text: jest.fn(),
+          text: vi.fn(),
           locale: '',
         },
         selectionMode: false,

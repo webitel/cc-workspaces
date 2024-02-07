@@ -13,10 +13,10 @@ describe('Footer buttons', () => {
   beforeEach(() => {
     callOnWorkspace = {
         // id: 1,
-        mute: jest.fn(),
+        mute: vi.fn(),
         muted: false,
 
-        toggleHold: jest.fn(),
+        toggleHold: vi.fn(),
         isHold: false,
         allowHold: true,
     };
