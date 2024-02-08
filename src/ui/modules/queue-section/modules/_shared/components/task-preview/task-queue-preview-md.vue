@@ -12,12 +12,13 @@
       <div class="queue-preview-header__icon">
         <slot name="icon"></slot>
       </div>
+
       <div class="queue-preview-header__text-wrapper">
       <span class="queue-preview-header__title">
         <slot name="title"></slot>
       </span>
         <p class="queue-preview-header__subtitle">
-          <slot name="body"></slot>
+          <slot name="subtitle"></slot>
         </p>
       </div>
 
@@ -26,6 +27,13 @@
           :task="task"
         ></queue-preview-timer>
       </slot>
+
+      <div
+        class="queue-preview-header__quick-action"
+        v-if="$slots['quick-action']"
+      >
+        <slot name="quick-action"></slot>
+      </div>
     </header>
 
     <section
