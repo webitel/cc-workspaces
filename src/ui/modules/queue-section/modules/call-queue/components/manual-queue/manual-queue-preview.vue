@@ -1,7 +1,6 @@
 <template>
   <component
     :is="component"
-    class="queue-preview--manual"
     @click="emit('click', task)"
   >
     <template
@@ -12,23 +11,28 @@
         icon="call-ringing"
       ></wt-icon>
     </template>
+
     <template v-slot:avatar>
       <wt-icon
         icon="call-ringing"
       ></wt-icon>
     </template>
+
     <template v-slot:timer>
       <div class="queue-preview--manual__timer">
         {{ wait }}
       </div>
     </template>
+
     <template v-slot:title>
       {{ task.displayName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ task.displayNumber }}
     </template>
-    <template v-slot:footer>
+
+    <template v-slot:quick-action>
       <wt-rounded-action
         :size="size"
         color="success"
@@ -36,6 +40,9 @@
         rounded
         @click="emit('accept', task)"
       ></wt-rounded-action>
+    </template>
+
+    <template v-slot:footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
       ></manual-deadline-progress-bar>
@@ -90,24 +97,5 @@ const wait = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.queue-preview--manual {
-  &.queue-preview--md {
-    flex-direction: row;
-  }
 
-  &.queue-preview--sm {
-    .wt-rounded-action {
-      display: block;
-      margin: auto;
-    }
-  }
-}
-
-.queue-preview--manual__timer {
-  text-align: center;
-}
-
-.manual-deadline-progress-bar {
-  margin-top: var(--spacing-xs);
-}
 </style>

@@ -1,10 +1,7 @@
 <template>
-  <article
-    :class="`queue-preview--${size}`"
-    class="queue-preview queue-preview--offline-queue"
-    tabindex="0"
-    @click="$emit('click', task)"
-    @keydown.enter="$emit('click', task)"
+  <component
+    :is="component"
+    @click="emit('click', task)"
   >
 
     <wt-tooltip v-if="size === 'sm'">
@@ -43,7 +40,7 @@
       :task="task"
       :size="size"
     />
-  </article>
+  </component>
 </template>
 
 <script>

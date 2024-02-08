@@ -12,7 +12,7 @@
       >
     </template>
     <template
-      v-slot:additional-status
+      v-slot:status
       v-if="eavesdropStatusIcon"
     >
       <wt-icon
@@ -24,7 +24,7 @@
     <template v-slot:title>
       {{ task.displayName }}
     </template>
-    <template v-slot:body>
+    <template v-slot:subtitle>
       {{ task.displayNumber }}
     </template>
     <template

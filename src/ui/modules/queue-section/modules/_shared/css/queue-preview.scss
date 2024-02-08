@@ -43,9 +43,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .queue-preview-timer {
+    @extend %typo-body-2;
+  }
 }
 
-.queue-preview-additional-status {
+.queue-preview-status {
   line-height: 0;
 }
 

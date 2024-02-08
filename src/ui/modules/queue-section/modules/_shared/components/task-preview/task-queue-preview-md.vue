@@ -22,11 +22,16 @@
         </p>
       </div>
 
-      <slot name="timer">
-        <queue-preview-timer
-          :task="task"
-        ></queue-preview-timer>
-      </slot>
+      <div
+        class="queue-preview-timer"
+        v-if="$slots['timer']"
+      >
+        <slot name="timer">
+          <queue-preview-timer
+            :task="task"
+          ></queue-preview-timer>
+        </slot>
+      </div>
 
       <div
         class="queue-preview-header__quick-action"
@@ -37,7 +42,7 @@
     </header>
 
     <section
-      v-if="displayQueueName || $slots['additional-status']"
+      v-if="displayQueueName || $slots['status']"
       class="queue-preview-main-section"
     >
       <article class="queue-preview-chips">
@@ -48,8 +53,8 @@
           {{ displayQueueName }}
         </wt-chip>
       </article>
-      <div class="queue-preview-additional-status">
-        <slot name="additional-status"></slot>
+      <div class="queue-preview-status">
+        <slot name="status"></slot>
       </div>
     </section>
 

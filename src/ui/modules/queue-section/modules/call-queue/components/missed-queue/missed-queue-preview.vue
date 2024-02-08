@@ -12,33 +12,34 @@
         icon="call-missed"
       ></wt-icon>
     </template>
+
     <template v-slot:avatar>
       <wt-icon
         color="error"
         icon="call-missed"
       ></wt-icon>
     </template>
+
     <template v-slot:timer>
-      <span class="missed-preview__task-time">
-        {{ displayTime }}
-      </span>
+      {{ displayTime }}
     </template>
+
     <template v-slot:title>
       {{ displayName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ displayNumber }}
     </template>
-    <template v-slot:footer>
-      <div class="queue-preview--missed__callback-wrapper">
-        <wt-rounded-action
-          :size="size"
-          color="success"
-          icon="call--filled"
-          rounded
-          @click="call"
-        ></wt-rounded-action>
-      </div>
+
+    <template v-slot:quick-action>
+      <wt-rounded-action
+        :size="size"
+        color="success"
+        icon="call--filled"
+        rounded
+        @click="call"
+      ></wt-rounded-action>
     </template>
   </component>
 </template>
@@ -77,30 +78,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.queue-preview--missed {
-  &.queue-preview--md {
-    flex-direction: row;
-    :deep .missed-preview__task-time {
-      text-align: end;
-    }
-  }
-  &.queue-preview--sm {
-    .queue-preview--missed__callback-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    :deep .missed-preview__task-time {
-      text-align: center;
-    }
-  }
-}
-
-.missed-preview__task-time {
-  @extend %typo-body-2;
-  overflow: hidden;
-  flex-grow: 1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
+//.queue-preview--missed {
+//  &.queue-preview--sm {
+//    :deep .missed-preview__task-time {
+//      text-align: center;
+//    }
+//  }
+//}
+//
+//.missed-preview__task-time {
+//  @extend %typo-body-2;
+//  overflow: hidden;
+//  flex-grow: 1;
+//  white-space: nowrap;
+//  text-overflow: ellipsis;
+//}
 </style>
