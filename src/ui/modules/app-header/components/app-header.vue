@@ -66,8 +66,8 @@ export default {
   inject: ['$config'],
   data: () => ({
     buildInfo: {
-      release: import.meta.env.VUE_PACKAGE_VERSION,
-      build: import.meta.env.VUE_BUILD_NUMBER,
+      release: import.meta.env.VITE_PACKAGE_VERSION,
+      build: import.meta.env.VITE_BUILD_NUMBER,
     },
     UserStatus,
   }),
@@ -99,31 +99,31 @@ export default {
     apps() {
       const agent = {
         name: WebitelApplications.AGENT,
-        href: import.meta.env.VUE_AGENT_URL,
+        href: import.meta.env.VITE_AGENT_URL,
       };
       const supervisor = {
         name: WebitelApplications.SUPERVISOR,
-        href: import.meta.env.VUE_SUPERVISOR_URL,
+        href: import.meta.env.VITE_SUPERVISOR_URL,
       };
       const history = {
         name: WebitelApplications.HISTORY,
-        href: import.meta.env.VUE_HISTORY_URL,
+        href: import.meta.env.VITE_HISTORY_URL,
       };
       const audit = {
         name: WebitelApplications.AUDIT,
-        href: import.meta.env.VUE_AUDIT_URL,
+        href: import.meta.env.VITE_AUDIT_URL,
       };
       const admin = {
         name: WebitelApplications.ADMIN,
-        href: import.meta.env.VUE_ADMIN_URL,
+        href: import.meta.env.VITE_ADMIN_URL,
       };
       const grafana = {
         name: WebitelApplications.ANALYTICS,
-        href: import.meta.env.VUE_GRAFANA_URL,
+        href: import.meta.env.VITE_GRAFANA_URL,
       };
       const crm = {
         name: WebitelApplications.CRM,
-        href: import.meta.env.VUE_CRM_URL,
+        href: import.meta.env.VITE_CRM_URL,
       };
       const apps = [admin, supervisor, agent, history, audit, crm];
       if (this.$config?.ON_SITE) apps.push(grafana);
@@ -140,7 +140,7 @@ export default {
       restoreVideoParam: 'RESTORE_VIDEO_PARAM',
     }),
     settings() {
-      const settingsUrl = import.meta.env.VUE_SETTINGS_URL;
+      const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
       window.open(settingsUrl);
     },
     async logoutUser() {

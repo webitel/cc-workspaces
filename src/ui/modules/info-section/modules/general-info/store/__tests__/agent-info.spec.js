@@ -7,7 +7,7 @@ import getContextMock from '../../../../../../../../tests/unit/mocks/store/conte
 describe('Agent Info Module: Actions', () => {
   let context;
   beforeEach(() => {
-    context = getContextMock(jest);
+    context = getContextMock(vi);
   });
   it('LOAD_AGENT_INFO dispatches LOAD_STATUS', () => {
     agentInfo.actions.LOAD_AGENT_INFO(context);
