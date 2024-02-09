@@ -27,7 +27,7 @@ describe('CallTransferContainer', () => {
     expect(mock).toHaveBeenCalledWith(extension);
   });
 
-  it('performs transfer to search value at button click', () => {
+  it('performs transfer to search value at button click', async () => {
     const number = '123';
     const mock = vi.spyOn(CallTransferContainer.methods, 'blindTransfer')
                      .mockImplementationOnce(() => {});

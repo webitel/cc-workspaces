@@ -24,7 +24,7 @@
         >{{ $t('infoSec.processing.reporting.no') }}
         </wt-button>
       </div>
-      <form class="reporting-form">
+      <form class="reportingg-form">
         <failure-form
           class="reporting-form"
           v-show="!taskReporting.success"

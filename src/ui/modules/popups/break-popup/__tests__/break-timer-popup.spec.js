@@ -25,7 +25,7 @@ describe('Break timer popup', () => {
 
   it('Doesn\'t show popup on Online status', () => {
     agent.status = AgentStatus.Online;
-    const wrapper = shallowMount(TimerPopup, { computed });
+    const wrapper = shallowMount(TimerPopup, { computed, attachTo: document.body });
     expect(wrapper.isVisible())
       .toBeFalsy();
   });

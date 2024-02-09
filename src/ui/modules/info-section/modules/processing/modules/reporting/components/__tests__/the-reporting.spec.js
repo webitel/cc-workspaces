@@ -113,7 +113,7 @@ describe('Post processing Failure reporting', () => {
   });
 
   it('post processing failure form is initially invisible', async () => {
-    const wrapper = mount(TheReporting, options);
+    const wrapper = mount(TheReporting, { ...options, attachTo: document.body });
     const failureForm = wrapper.findComponent(FailureForm);
     expect(failureForm.isVisible()).toBe(false);
   });

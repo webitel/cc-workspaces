@@ -3,7 +3,8 @@
     <div class="ws-worksection__search-wrap">
       <wt-search-bar
         class="ws-worksection__search"
-        v-model="dataSearch"
+        :value="dataSearch"
+        @input="dataSearch = $event"
         @search="resetData"
       ></wt-search-bar>
       <wt-button

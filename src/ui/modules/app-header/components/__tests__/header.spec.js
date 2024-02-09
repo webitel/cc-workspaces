@@ -24,6 +24,8 @@ describe('Header on agent Waiting', () => {
   it('Logs agent out', () => {
     const mock = vi.fn();
     vi.spyOn(Header.methods, 'toggleCCenterMode').mockImplementationOnce(mock);
+    vi.spyOn(Header.methods, 'restoreVideoParam')
+    .mockImplementation(vi.fn());
 
     const wrapper = mount(Header, {
       computed,
@@ -53,6 +55,8 @@ describe('Header on agent Offline', () => {
     const mock = vi.fn();
     vi.spyOn(Header.methods, 'toggleCCenterMode')
         .mockImplementationOnce(mock);
+    vi.spyOn(Header.methods, 'restoreVideoParam')
+        .mockImplementation(vi.fn());
 
     const wrapper = mount(Header, {
       computed,
