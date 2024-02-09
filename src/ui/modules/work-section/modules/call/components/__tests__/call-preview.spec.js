@@ -13,8 +13,8 @@ describe('Transfer functionality', () => {
 
 describe('Answer and Hangup functionality', () => {
   it('Answers on call', () => {
-    const mock = jest.fn();
-    jest.spyOn(CallPreview.methods, 'answer')
+    const mock = vi.fn();
+    vi.spyOn(CallPreview.methods, 'answer')
       .mockImplementationOnce(mock);
 
     const wrapper = shallowMount(CallPreview);
@@ -24,8 +24,8 @@ describe('Answer and Hangup functionality', () => {
   });
 
   it('Hangups call', () => {
-    const mock = jest.fn();
-    jest.spyOn(CallPreview.methods, 'hangup')
+    const mock = vi.fn();
+    vi.spyOn(CallPreview.methods, 'hangup')
         .mockImplementationOnce(mock);
 
     const wrapper = shallowMount(CallPreview);

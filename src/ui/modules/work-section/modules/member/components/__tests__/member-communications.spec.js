@@ -35,8 +35,8 @@ describe('Member communications', () => {
   });
 
   it('Selects member communication', async () => {
-    const mock = jest.fn();
-    jest.spyOn(MemberCommunications.methods, 'selectCommunication').mockImplementationOnce(mock);
+    const mock = vi.fn();
+    vi.spyOn(MemberCommunications.methods, 'selectCommunication').mockImplementationOnce(mock);
     const wrapper = shallowMount(MemberCommunications, {
       computed,
     });
@@ -45,8 +45,8 @@ describe('Member communications', () => {
   });
 
   it('Draws border around selected communication', async () => {
-    const mock = jest.fn();
-    jest.spyOn(MemberCommunications.methods, 'selectCommunication').mockImplementationOnce(mock);
+    const mock = vi.fn();
+    vi.spyOn(MemberCommunications.methods, 'selectCommunication').mockImplementationOnce(mock);
     const wrapper = shallowMount(MemberCommunications, {
       computed,
     });

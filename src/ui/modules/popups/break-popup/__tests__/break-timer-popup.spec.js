@@ -25,14 +25,14 @@ describe('Break timer popup', () => {
 
   it('Doesn\'t show popup on Online status', () => {
     agent.status = AgentStatus.Online;
-    const wrapper = shallowMount(TimerPopup, { computed });
+    const wrapper = shallowMount(TimerPopup, { computed, attachTo: document.body });
     expect(wrapper.isVisible())
       .toBeFalsy();
   });
 
   it('Correctly goes Waiting', () => {
-    const mock = jest.fn();
-    jest.spyOn(TimerPopup.methods, 'setAgentWaiting')
+    const mock = vi.fn();
+    vi.spyOn(TimerPopup.methods, 'setAgentWaiting')
         .mockImplementationOnce(mock);
     const wrapper = mount(TimerPopup, { computed });
 
@@ -41,8 +41,8 @@ describe('Break timer popup', () => {
   });
 
   it('Correctly goes Offline', () => {
-    const mock = jest.fn();
-    jest.spyOn(TimerPopup.methods, 'agentLogout')
+    const mock = vi.fn();
+    vi.spyOn(TimerPopup.methods, 'agentLogout')
       .mockImplementationOnce(mock);
     const wrapper = mount(TimerPopup, { computed });
 

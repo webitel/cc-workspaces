@@ -7,7 +7,7 @@ import TheReporting
 import ReportingForm
   from '../../store/ReportingForm';
 
-const mockReporingForm = jest.fn();
+const mockReporingForm = vi.fn();
 const taskOnWorkspace = {
   allowReporting: true,
   reporting: mockReporingForm,
@@ -32,8 +32,8 @@ const options = {
   computed,
 };
 
-const initReportingFormMock = jest.fn();
-jest.spyOn(TheReporting.methods, 'initReportingForm')
+const initReportingFormMock = vi.fn();
+vi.spyOn(TheReporting.methods, 'initReportingForm')
     .mockImplementation(initReportingFormMock);
 
 describe('TheReport appearance and form setting', () => {
@@ -98,7 +98,7 @@ describe('Post processing Success reporting', () => {
   });
 
   it('At success submit, calls taskOnWorkspace sendReport() method', () => {
-    const sendReportMock = jest.spyOn(TheReporting.methods, 'sendReporting')
+    const sendReportMock = vi.spyOn(TheReporting.methods, 'sendReporting')
                                .mockImplementation(() => {
                                });
     const wrapper = mount(TheReporting, options);
@@ -113,7 +113,7 @@ describe('Post processing Failure reporting', () => {
   });
 
   it('post processing failure form is initially invisible', async () => {
-    const wrapper = mount(TheReporting, options);
+    const wrapper = mount(TheReporting, { ...options, attachTo: document.body });
     const failureForm = wrapper.findComponent(FailureForm);
     expect(failureForm.isVisible()).toBe(false);
   });

@@ -4,21 +4,21 @@ import chatModule from '../chat';
 
 const chatOnWorkspace = {
   id: '1',
-  join: jest.fn(),
-  decline: jest.fn(),
-  leave: jest.fn(),
-  send: jest.fn(),
-  sendText: jest.fn(),
-  transferToUser: jest.fn(),
-  transferToPlan: jest.fn(),
+  join: vi.fn(),
+  decline: vi.fn(),
+  leave: vi.fn(),
+  send: vi.fn(),
+  sendText: vi.fn(),
+  transferToUser: vi.fn(),
+  transferToPlan: vi.fn(),
 };
 
 describe('features/chat store: actions', () => {
   const context = {
     state: {},
     getters: { CHAT_ON_WORKSPACE: chatOnWorkspace },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
   };
 
   beforeEach(() => {
@@ -150,7 +150,7 @@ describe('features/chat store: actions', () => {
   });
 
   it('ATTACH_PLAYER_TO_CHAT dispatches INITIALIZE_CHAT_PLAYERS if chatOnWorkspace has no players', () => {
-    const player = { on: jest.fn() };
+    const player = { on: vi.fn() };
     chatModule.actions.ATTACH_PLAYER_TO_CHAT(context, { player });
     expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_CHAT_PLAYERS', { player, chat: chatOnWorkspace });
   });
@@ -168,8 +168,8 @@ describe('features/chat store: actions', () => {
   });
 
   it('PAUSE_ALL_CHAT_PLAYERS_EXCEPT triggers player.pause() on all players in chatOnWorkspace (except the passed one)', () => {
-    const player = { pause: jest.fn() };
-    const player2 = { pause: jest.fn() };
+    const player = { pause: vi.fn() };
+    const player2 = { pause: vi.fn() };
     chatOnWorkspace.players = [player, player2];
     chatModule.actions.PAUSE_ALL_CHAT_PLAYERS_EXCEPT(context, { player });
     expect(player.pause).not.toHaveBeenCalled();

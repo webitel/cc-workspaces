@@ -3,7 +3,6 @@ node_modules
 /dist
 /coverage
 demo.html
-jest.json
 
 # local env files
 .env.local

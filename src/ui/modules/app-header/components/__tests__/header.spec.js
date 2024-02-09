@@ -16,14 +16,16 @@ const computed = {
   isAgent: () => true,
 };
 
-jest.spyOn(Header.methods, 'restoreVideoParam').mockImplementation();
+vi.spyOn(Header.methods, 'restoreVideoParam').mockImplementation();
 
 describe('Header on agent Waiting', () => {
   agent.status = AgentStatus.Waiting;
 
   it('Logs agent out', () => {
-    const mock = jest.fn();
-    jest.spyOn(Header.methods, 'toggleCCenterMode').mockImplementationOnce(mock);
+    const mock = vi.fn();
+    vi.spyOn(Header.methods, 'toggleCCenterMode').mockImplementationOnce(mock);
+    vi.spyOn(Header.methods, 'restoreVideoParam')
+    .mockImplementation(vi.fn());
 
     const wrapper = mount(Header, {
       computed,
@@ -50,9 +52,11 @@ describe('Header on agent Waiting', () => {
 describe('Header on agent Offline', () => {
   agent.status = AgentStatus.Offline;
   it('Logs agent in', () => {
-    const mock = jest.fn();
-    jest.spyOn(Header.methods, 'toggleCCenterMode')
+    const mock = vi.fn();
+    vi.spyOn(Header.methods, 'toggleCCenterMode')
         .mockImplementationOnce(mock);
+    vi.spyOn(Header.methods, 'restoreVideoParam')
+        .mockImplementation(vi.fn());
 
     const wrapper = mount(Header, {
       computed,

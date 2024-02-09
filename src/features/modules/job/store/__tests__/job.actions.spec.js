@@ -8,8 +8,8 @@ const job = {
 describe('features/job store: actions', () => {
   const context = {
     getters: { JOB_ON_WORKSPACE: job },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
   };
 
   beforeEach(() => {

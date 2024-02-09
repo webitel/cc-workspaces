@@ -35,8 +35,8 @@ describe('Make new call functionality', () => {
     callOnWorkspace.historyId = '10';
     callOnWorkspace.currentTab = 'numpad';
 
-    const mock = jest.fn();
-    jest.spyOn(CallHeader.methods, 'makeCall')
+    const mock = vi.fn();
+    vi.spyOn(CallHeader.methods, 'makeCall')
     .mockImplementationOnce(mock);
 
     const wrapper = mount(CallHeader, {
@@ -58,7 +58,7 @@ describe('Transfer functionality', () => {
   beforeEach(() => {
     callList = [];
     callOnWorkspace = {
-      blindTransfer: jest.fn(),
+      blindTransfer: vi.fn(),
     };
   });
 
@@ -80,7 +80,7 @@ describe('Bridge functionality', () => {
 
   const call1 = {
     id: 1,
-    bridgeTo: jest.fn(),
+    bridgeTo: vi.fn(),
     state: CallActions.Active,
   };
   const call2 = {

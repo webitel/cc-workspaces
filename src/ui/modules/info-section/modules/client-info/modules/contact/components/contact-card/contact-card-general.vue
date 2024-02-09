@@ -81,7 +81,7 @@ const emit = defineEmits([
 const name = computed(() => props.contact.name?.commonName);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
-const contactLink = computed(() => `${process.env.VUE_APP_CRM_URL}/contacts/${props.contact.id}/communications`);
+const contactLink = computed(() => `${import.meta.env.VITE_CRM_URL}/contacts/${props.contact.id}/communications`);
 </script>
 
 <style lang="scss" scoped>

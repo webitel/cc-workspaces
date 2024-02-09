@@ -6,15 +6,15 @@ import webSocketClientController
 
 let mockSocket = new MockSocket();
 
-jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
+vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 const agent = { agentId: '1' };
 
 describe('features/status store client handlers: actions', () => {
   const context = {
     rootState: { client: webSocketClientController },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
   };
 
   beforeEach(() => {
@@ -30,8 +30,8 @@ describe('features/status store client handlers: actions', () => {
   });
 
   it('SUBSCRIBE_AGENT_STATUS calls agentSession() and subscribes to agent status', async () => {
-    mockSocket.agentSession = jest.fn(() => agent);
-    mockSocket.subscribeAgentsStatus = jest.fn();
+    mockSocket.agentSession = vi.fn(() => agent);
+    mockSocket.subscribeAgentsStatus = vi.fn();
     await clientHandlers.actions.SUBSCRIBE_AGENT_STATUS(context);
     expect(mockSocket.agentSession).toHaveBeenCalled();
     expect(mockSocket.subscribeAgentsStatus).toHaveBeenCalled();
@@ -45,30 +45,30 @@ describe('features/status store client handlers: actions', () => {
 
   it('SUBSCRIBE_AGENT_STATUS does commit agent object', async () => {
     const agent = {};
-    mockSocket.agentSession = jest.fn(() => agent);
-    mockSocket.subscribeAgentsStatus = jest.fn();
+    mockSocket.agentSession = vi.fn(() => agent);
+    mockSocket.subscribeAgentsStatus = vi.fn();
     await clientHandlers.actions.SUBSCRIBE_AGENT_STATUS(context);
     expect(mockSocket.agentSession).toHaveBeenCalled();
     expect(context.commit).toHaveBeenCalledWith('SET_AGENT_INSTANCE', agent);
   });
 
   it('if SUBSCRIBE_AGENT_STATUS agentSession throws error, doesnt commit agent change', async () => {
-    mockSocket.agentSession = jest.fn(() => throwError('msg'));
-    mockSocket.subscribeAgentsStatus = jest.fn();
+    mockSocket.agentSession = vi.fn(() => throwError('msg'));
+    mockSocket.subscribeAgentsStatus = vi.fn();
     await clientHandlers.actions.SUBSCRIBE_AGENT_STATUS(context);
     expect(mockSocket.agentSession).toHaveBeenCalled();
     expect(context.commit).not.toHaveBeenCalled();
   });
 
   it('SUBSCRIBE_USER_STATUS calls subscribeUsersStatus() and dispatches GET_CURRENT_USER_STATUS', async () => {
-    mockSocket.subscribeUsersStatus = jest.fn(() => agent);
+    mockSocket.subscribeUsersStatus = vi.fn(() => agent);
     await clientHandlers.actions.SUBSCRIBE_USER_STATUS(context);
     expect(mockSocket.subscribeUsersStatus).toHaveBeenCalled();
     expect(context.dispatch).toHaveBeenCalledWith('GET_CURRENT_USER_STATUS');
   });
 
   it('GET_CURRENT_USER_STATUS calls getUserStatus() API', async () => {
-    const getUserStatusMock = jest.fn();
+    const getUserStatusMock = vi.fn();
     usersAPIRepository.getUserStatus = getUserStatusMock;
     await clientHandlers.actions.GET_CURRENT_USER_STATUS(context);
     expect(getUserStatusMock).toHaveBeenCalled();

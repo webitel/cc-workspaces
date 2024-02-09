@@ -7,7 +7,7 @@ import getContextMock from '../../../../../../../../tests/unit/mocks/store/conte
 describe('Agent Info Module: Actions', () => {
   let context;
   beforeEach(() => {
-    context = getContextMock(jest);
+    context = getContextMock(vi);
   });
   it('LOAD_AGENT_INFO dispatches LOAD_STATUS', () => {
     agentInfo.actions.LOAD_AGENT_INFO(context);
@@ -23,7 +23,7 @@ describe('Agent Info Module: Actions', () => {
   });
   it('LOAD_STATUS calls AgentStatus API and commits response to SET_AGENT', async () => {
     const response = { jest: 'jest' };
-    const getMock = jest.fn(() => response);
+    const getMock = vi.fn(() => response);
     AgentStatusAPI.get = getMock;
     await agentInfo.actions.LOAD_STATUS(context);
     expect(getMock).toHaveBeenCalled();
@@ -31,7 +31,7 @@ describe('Agent Info Module: Actions', () => {
   });
   it('LOAD_PAUSE_CAUSES calls AgentPauseCause API and commits response to SET_PAUSE_CAUSES', async () => {
     const response = { items: [] };
-    const getListMock = jest.fn(() => response);
+    const getListMock = vi.fn(() => response);
     AgentPauseCauseAPI.getList = getListMock;
     await agentInfo.actions.LOAD_PAUSE_CAUSES(context);
     expect(getListMock).toHaveBeenCalled();
@@ -39,7 +39,7 @@ describe('Agent Info Module: Actions', () => {
   });
   it('LOAD_QUEUES calls AgentQueues API and commits response to SET_QUEUES', async () => {
     const response = { items: [] };
-    const getListMock = jest.fn(() => response);
+    const getListMock = vi.fn(() => response);
     AgentQueuesAPI.getList = getListMock;
     await agentInfo.actions.LOAD_QUEUES(context);
     expect(getListMock).toHaveBeenCalled();

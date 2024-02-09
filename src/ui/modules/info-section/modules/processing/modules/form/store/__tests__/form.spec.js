@@ -5,7 +5,7 @@ describe('form: actions', () => {
   let context;
 
   beforeEach(() => {
-    context = contextMock(jest);
+    context = contextMock(vi);
   });
 
   it('SEND_FORM calls passed task "formAction" method with passed form', () => {
@@ -15,7 +15,7 @@ describe('form: actions', () => {
     const task = {
       attempt: {
         form: { body },
-        formAction: jest.fn(),
+        formAction: vi.fn(),
       },
     };
     form.actions.SEND_FORM(context, { action, task });

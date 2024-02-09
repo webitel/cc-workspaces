@@ -6,7 +6,7 @@ import Bridge
 describe('Bridge functionality', () => {
   const call1 = {
     id: 1,
-    bridgeTo: jest.fn(),
+    bridgeTo: vi.fn(),
     state: CallActions.Active,
   };
   const call2 = {
@@ -36,8 +36,8 @@ describe('Bridge functionality', () => {
   });
 
   it('Selects call and bridges them', () => {
-    const mock = jest.fn();
-    jest.spyOn(Bridge.methods, 'bridge')
+    const mock = vi.fn();
+    vi.spyOn(Bridge.methods, 'bridge')
       .mockImplementationOnce(mock);
     const wrapper = shallowMount(Bridge, {
       computed,

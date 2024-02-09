@@ -10,8 +10,8 @@ describe('Reporting class', () => {
   beforeEach(() => {
     task = {
       id: '1',
-      reporting: jest.fn(),
-      getMember: jest.fn(() => member),
+      reporting: vi.fn(),
+      getMember: vi.fn(() => member),
     };
     reporting = new ReportingForm(task);
   });

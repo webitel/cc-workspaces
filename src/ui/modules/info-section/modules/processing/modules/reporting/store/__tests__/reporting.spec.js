@@ -7,7 +7,7 @@ describe('reporting module: actions', () => {
   let context;
 
   beforeEach(() => {
-    context = contextMock(jest);
+    context = contextMock(vi);
   });
 
   it('correctly inits reporting form from scratch', async () => {

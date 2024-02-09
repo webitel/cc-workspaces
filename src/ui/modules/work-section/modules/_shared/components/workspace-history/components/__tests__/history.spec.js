@@ -47,8 +47,8 @@ describe('Agent History functionality', () => {
   });
 
   it('Selects history item and sets its number to new number input', async () => {
-    const mock = jest.fn();
-    jest.spyOn(HistoryContainer.methods, 'setNumber')
+    const mock = vi.fn();
+    vi.spyOn(HistoryContainer.methods, 'setNumber')
     .mockImplementationOnce(mock);
     const wrapper = shallowMount(HistoryContainer, {
       data: () => ({ dataList: historyList, isLoading: false }),

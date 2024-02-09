@@ -23,8 +23,8 @@ describe('ProcessingFormFile', () => {
   it('handleDrop calls uploadFile with received file', () => {
     const file = {};
     const event = { dataTransfer: { files: [file] } };
-    const mock = jest.fn();
-    jest.spyOn(ProcessingFormFile.methods, 'uploadFile')
+    const mock = vi.fn();
+    vi.spyOn(ProcessingFormFile.methods, 'uploadFile')
         .mockImplementationOnce(mock);
     const wrapper = shallowMount(ProcessingFormFile, {
       props: {
@@ -38,8 +38,8 @@ describe('ProcessingFormFile', () => {
   it('handleFileInput calls uploadFile with received file', () => {
     const file = {};
     const event = { target: { files: [file] } };
-    const mock = jest.fn();
-    jest.spyOn(ProcessingFormFile.methods, 'handleFileInput')
+    const mock = vi.fn();
+    vi.spyOn(ProcessingFormFile.methods, 'handleFileInput')
         .mockImplementationOnce(mock);
     const wrapper = mount(ProcessingFormFile, {
       props: {
@@ -52,7 +52,7 @@ describe('ProcessingFormFile', () => {
   });
   it('uploadFile calls cli.storeFile with passed file', async () => {
     const file = { id: 'jest' };
-    const mock = jest.fn();
+    const mock = vi.fn();
     clientInstance.storeFile = mock;
     const wrapper = shallowMount(ProcessingFormFile, {
       props: {
@@ -76,8 +76,8 @@ describe('ProcessingFormFile', () => {
     expect(wrapper.vm.uploadingSnapshots.length).toBe(1);
   });
   it('uploadFile calls handleFileSuccessUpload', async () => {
-    const mock = jest.fn();
-    jest.spyOn(ProcessingFormFile.methods, 'handleFileSuccessUpload')
+    const mock = vi.fn();
+    vi.spyOn(ProcessingFormFile.methods, 'handleFileSuccessUpload')
         .mockImplementationOnce(mock);
     const wrapper = shallowMount(ProcessingFormFile, {
       props: {
@@ -89,8 +89,8 @@ describe('ProcessingFormFile', () => {
     expect(mock).toHaveBeenCalled();
   });
   it('uploadFile calls handleFileErrorUpload if error is thrown', async () => {
-    const mock = jest.fn();
-    jest.spyOn(ProcessingFormFile.methods, 'handleFileErrorUpload')
+    const mock = vi.fn();
+    vi.spyOn(ProcessingFormFile.methods, 'handleFileErrorUpload')
         .mockImplementationOnce(mock);
     const wrapper = shallowMount(ProcessingFormFile, {
       props: {
@@ -115,7 +115,7 @@ describe('ProcessingFormFile', () => {
     wrapper.vm.handleFileSuccessUpload({ snapshot });
     expect(snapshot.metadata.done).toBe(true);
   });
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   it('handleFileSuccessUpload replaces snapshot with a passed file', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
       props: {
@@ -131,7 +131,7 @@ describe('ProcessingFormFile', () => {
     expect(wrapper.vm.uploadingSnapshots.length).toBe(1);
     wrapper.vm.handleFileSuccessUpload({ snapshot, file });
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(wrapper.vm.uploadingSnapshots.length).toBe(0);
     expect(wrapper.emitted().input[0][0]).toEqual([file]);
   });
@@ -146,7 +146,7 @@ describe('ProcessingFormFile', () => {
     wrapper.vm.handleFileErrorUpload({ snapshot });
     expect(snapshot.metadata.error).toBe(true);
   });
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   it('handleFileErrorUpload adds close method to snapshot which deletes it from uploadingSnapshots', () => {
     const wrapper = shallowMount(ProcessingFormFile, {
       props: {
@@ -161,7 +161,7 @@ describe('ProcessingFormFile', () => {
 
     wrapper.vm.handleFileErrorUpload({ snapshot });
 
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(snapshot.metadata.close).toBeTruthy();
     snapshot.metadata.close();
     expect(wrapper.vm.uploadingSnapshots.length).toBe(0);

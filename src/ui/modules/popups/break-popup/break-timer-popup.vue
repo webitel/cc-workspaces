@@ -65,7 +65,7 @@ export default {
   watch: {
     now: {
       handler() {
-        this.duration = convertDuration(this.agent.stateDuration);
+        this.duration = convertDuration(this.agent?.stateDuration);
       },
       immediate: true,
     },

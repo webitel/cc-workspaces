@@ -29,7 +29,7 @@ describe('Chat Messaging Footer: Chat Preview', () => {
   });
 
   it('calls accept() chat method at accept chat button click', () => {
-    const acceptMock = jest.spyOn(ChatMessagingFooter.methods, 'accept')
+    const acceptMock = vi.spyOn(ChatMessagingFooter.methods, 'accept')
     .mockImplementation(() => {
     });
     const wrapper = mount(ChatMessagingFooter, {
@@ -75,7 +75,7 @@ describe('Chat Messaging Footer: Active Chat', () => {
   // });
 
   it('calls store sendFile method at textarea pasted attachment', () => {
-    const sendFileMock = jest.spyOn(ChatMessagingFooter.methods, 'sendFile')
+    const sendFileMock = vi.spyOn(ChatMessagingFooter.methods, 'sendFile')
     .mockImplementation(() => {
     });
     const file = { name: 'jest' };
@@ -98,7 +98,7 @@ describe('Chat Messaging Footer: Active Chat', () => {
   });
 
   it('calls store sendFile method at input attachment', () => {
-    const sendFileMock = jest.spyOn(ChatMessagingFooter.methods, 'sendFile')
+    const sendFileMock = vi.spyOn(ChatMessagingFooter.methods, 'sendFile')
     .mockImplementation(() => {
     });
     const files = [{ name: 'jest' }];
