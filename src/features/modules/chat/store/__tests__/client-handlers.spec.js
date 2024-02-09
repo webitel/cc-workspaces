@@ -5,15 +5,15 @@ import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
 
 let mockSocket = new MockSocket();
 
-jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
+vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 const chat = { id: '1', messages: [] };
 
 describe('features/chat store client handlers: actions', () => {
   const context = {
     rootState: { client: webSocketClientController },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
     rootGetters: { 'workspace/IS_EMPTY_WORKSPACE': null },
     actions: {},
     getters: { IS_MY_MESSAGE: () => false },
@@ -26,7 +26,7 @@ describe('features/chat store client handlers: actions', () => {
   });
 
   it('SUBSCRIBE_CHATS subscribes to chats', async () => {
-    const subscribeChatMock = jest.fn();
+    const subscribeChatMock = vi.fn();
     mockSocket.subscribeChat = subscribeChatMock;
     await chatModule.actions.SUBSCRIBE_CHATS(context, chat);
     expect(subscribeChatMock).toHaveBeenCalled();

@@ -2,9 +2,9 @@ import workspaceModule from '../agent-workspace';
 import WorkspaceStates from '../../enums/WorkspaceState.enum';
 import webSocketClientController from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
 
-const destroyCliInstanceMock = jest.fn();
+const destroyCliInstanceMock = vi.fn();
 
-jest.spyOn(webSocketClientController, 'destroyCliInstance')
+vi.spyOn(webSocketClientController, 'destroyCliInstance')
   .mockImplementation(destroyCliInstanceMock);
 
 describe('workspace store: actions', () => {
@@ -13,8 +13,8 @@ describe('workspace store: actions', () => {
       stateHistory: [],
     },
     rootState: { client: webSocketClientController },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
   };
 
   beforeEach(() => {

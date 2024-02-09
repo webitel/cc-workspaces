@@ -6,23 +6,23 @@ import webSocketClientController
   from '../../../../app/api/agent-workspace/websocket/WebSocketClientController';
 
 let mockSocket = new MockSocket();
-jest.spyOn(webSocketClientController, 'getCliInstance')
+vi.spyOn(webSocketClientController, 'getCliInstance')
   .mockImplementation(() => mockSocket);
 
 describe('features/status store client handlers: actions', () => {
   const agent = {
     agentId: '1',
-    online: jest.fn(),
-    pause: jest.fn(),
-    offline: jest.fn(),
+    online: vi.fn(),
+    pause: vi.fn(),
+    offline: vi.fn(),
   };
 
   const context = {
     state: { agent },
     rootState: { client: webSocketClientController },
     getters: {},
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
   };
 
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe('features/status store client handlers: actions', () => {
   });
 
   it('TOGGLE_USER_DND calls setUserStatus API method with \'\', if current status is dnd', () => {
-    const setUserStatusMock = jest.fn();
+    const setUserStatusMock = vi.fn();
     usersAPIRepository.setUserStatus = setUserStatusMock;
     context.state.user = { status: { [UserStatus.DND]: true } };
     statusModule.actions.TOGGLE_USER_DND(context);
@@ -55,7 +55,7 @@ describe('features/status store client handlers: actions', () => {
   });
 
   it('TOGGLE_USER_DND calls setUserStatus API method with \'dnd\', if current status is dnd', () => {
-    const setUserStatusMock = jest.fn();
+    const setUserStatusMock = vi.fn();
     usersAPIRepository.setUserStatus = setUserStatusMock;
     context.state.user = { status: UserStatus.ACTIVE };
     statusModule.actions.TOGGLE_USER_DND(context);

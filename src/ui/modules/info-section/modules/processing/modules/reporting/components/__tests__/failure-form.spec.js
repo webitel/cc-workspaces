@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import FailureForm from '../reporting-failure-form.vue';
 import ReportingForm from '../../store/ReportingForm';
 
-const mockReportingForm = jest.fn();
+const mockReportingForm = vi.fn();
 const callOnWorkspace = {
   reporting: mockReportingForm,
 };

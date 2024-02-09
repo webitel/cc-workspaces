@@ -10,7 +10,7 @@ describe('CallContactsContainer', () => {
 
   it('at ContactLookupItem "input" event, calls transfer() with passed item and destination', async () => {
     const item = { extension: '123' };
-    const mock = jest.spyOn(CallContactsContainer.methods, 'makeCall')
+    const mock = vi.spyOn(CallContactsContainer.methods, 'makeCall')
                      .mockImplementationOnce(() => {});
 
     const wrapper = shallowMount(CallContactsContainer, {

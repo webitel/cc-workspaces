@@ -30,7 +30,7 @@ describe('disconnect popup', () => {
   });
 
   it('calls router go() method at "reload" btn', () => {
-    const goMock = jest.fn();
+    const goMock = vi.fn();
     const wrapper = mount(DisconnectPopup, {
       global: {
         plugins: [store],

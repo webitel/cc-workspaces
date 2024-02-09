@@ -3,8 +3,8 @@ import MissedQueueContainer
   from '../missed-queue-container.vue';
 
 describe('MissedQueueContainer', () => {
-  jest.spyOn(MissedQueueContainer.methods, 'loadMissedList').mockImplementation(() => {});
-  jest.spyOn(MissedQueueContainer.methods, 'resetNewMissed').mockImplementation(() => {});
+  vi.spyOn(MissedQueueContainer.methods, 'loadMissedList').mockImplementation(() => {});
+  vi.spyOn(MissedQueueContainer.methods, 'resetNewMissed').mockImplementation(() => {});
 
   it('renders a component', () => {
     const wrapper = shallowMount(MissedQueueContainer, {

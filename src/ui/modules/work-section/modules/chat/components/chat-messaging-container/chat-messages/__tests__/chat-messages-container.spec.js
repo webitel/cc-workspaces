@@ -83,7 +83,7 @@ describe('Chat Messages Container', () => {
   });
 
   it('event bus emits input focus event at message container click', () => {
-    const $eventBus = { $emit: jest.fn() };
+    const $eventBus = { $emit: vi.fn() };
     const wrapper = shallowMount(ChatMessagesContainer, {
       global: { provide: { $eventBus } },
       computed: {

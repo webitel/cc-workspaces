@@ -5,14 +5,14 @@ import webSocketClientController
 
 const mockSocket = new MockSocket();
 
-jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
+vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 describe('global handlers store: actions', () => {
   const context = {
     state: {},
     rootState: { client: webSocketClientController },
-    dispatch: jest.fn(),
-    commit: jest.fn(),
+    dispatch: vi.fn(),
+    commit: vi.fn(),
   };
 
   beforeEach(() => {

@@ -17,7 +17,7 @@ import webSocketClientController
 let call = {};
 const mockSocket = new MockSocket();
 
-jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
+vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 describe.skip('Hangup event on call component', () => {
   const { state, actions, mutations } = callModule;
@@ -74,8 +74,8 @@ describe.skip('Hangup event on call component', () => {
       global: { plugins: [store] },
     });
     const event = {
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
     };
     wrapper.vm.preventDrop(event);
     expect(event.preventDefault).toHaveBeenCalled();

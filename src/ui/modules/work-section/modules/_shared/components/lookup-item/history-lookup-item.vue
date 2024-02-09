@@ -1,7 +1,7 @@
 <template>
   <lookup-item
     :size="size"
-    @click.native="handleInput">
+    @click="handleInput">
     <template v-slot:before>
       <div class="history-lookup-item-wrapper">
         <wt-avatar :size="size"></wt-avatar>

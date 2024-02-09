@@ -4,8 +4,8 @@ import QueueSection
 
 describe('Make new call functionality', () => {
   it('Opens new call on workspace on "new call" btn click', () => {
-    const mock = jest.fn();
-    jest.spyOn(QueueSection.methods, 'openNewCall')
+    const mock = vi.fn();
+    vi.spyOn(QueueSection.methods, 'openNewCall')
       .mockImplementationOnce(mock);
     const wrapper = mount(QueueSection, {
       shallow: true,

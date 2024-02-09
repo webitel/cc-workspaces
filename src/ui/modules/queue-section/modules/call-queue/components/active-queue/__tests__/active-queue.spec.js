@@ -14,7 +14,7 @@ const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
 
-jest.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
+vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
 
 describe('Ringing and Hangup events call functionality', () => {
   let state;
@@ -76,8 +76,8 @@ describe('Answer and Hangup', () => {
   };
 
   it('Answers to call', () => {
-    const mock = jest.fn();
-    jest.spyOn(ActiveQueue.methods, 'answer').mockImplementationOnce(mock);
+    const mock = vi.fn();
+    vi.spyOn(ActiveQueue.methods, 'answer').mockImplementationOnce(mock);
 
     const wrapper = mount(ActiveQueue, {
       computed,
@@ -87,8 +87,8 @@ describe('Answer and Hangup', () => {
   });
 
   it('Hangups to call', () => {
-    const mock = jest.fn();
-    jest.spyOn(ActiveQueue.methods, 'hangup').mockImplementationOnce(mock);
+    const mock = vi.fn();
+    vi.spyOn(ActiveQueue.methods, 'hangup').mockImplementationOnce(mock);
 
     const wrapper = mount(ActiveQueue, {
       computed,

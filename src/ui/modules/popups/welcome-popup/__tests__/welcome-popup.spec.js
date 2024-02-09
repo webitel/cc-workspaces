@@ -8,34 +8,34 @@ describe('WelcomePopup', () => {
     expect(wrapper.isVisible()).toBe(true);
   });
   it('calls mic check method at component init', () => {
-    const mock = jest.fn();
-    jest.spyOn(WelcomePopup.methods, 'checkMic')
+    const mock = vi.fn();
+    vi.spyOn(WelcomePopup.methods, 'checkMic')
       .mockImplementationOnce(mock);
     shallowMount(WelcomePopup);
     expect(mock).toHaveBeenCalled();
   });
   it('makes mic request at component init', () => {
-    const mock = jest.fn();
+    const mock = vi.fn();
     global.navigator.mediaDevices = { getUserMedia: mock };
     shallowMount(WelcomePopup);
     expect(mock).toHaveBeenCalled();
   });
   it('calls notifications check method at component init', () => {
-    const mock = jest.fn();
-    jest.spyOn(WelcomePopup.methods, 'checkNotifications')
+    const mock = vi.fn();
+    vi.spyOn(WelcomePopup.methods, 'checkNotifications')
       .mockImplementationOnce(mock);
     shallowMount(WelcomePopup);
     expect(mock).toHaveBeenCalled();
   });
   it('makes notifications request at component init', () => {
-    const mock = jest.fn();
+    const mock = vi.fn();
     global.Notification = { requestPermission: mock };
     shallowMount(WelcomePopup);
     expect(mock).toHaveBeenCalled();
   });
   it('calls "handleKeypress" method at window keypress event', () => {
-    const mock = jest.fn();
-    jest.spyOn(WelcomePopup.methods, 'handleKeyPress')
+    const mock = vi.fn();
+    vi.spyOn(WelcomePopup.methods, 'handleKeyPress')
       .mockImplementationOnce(mock);
     shallowMount(WelcomePopup);
     window.dispatchEvent(new Event('keypress', { keyCode: 32 }));

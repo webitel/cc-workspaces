@@ -9,7 +9,7 @@ import '@webitel/ui-sdk/dist/ui-sdk.css';
 import '@webitel/ui-sdk/dist/img/sprite';
 
 const globals = {
-  $baseURL: process.env.BASE_URL,
+  $baseURL: import.meta.env.BASE_URL,
 };
 export default [WebitelUI, { eventBus, globals }];
 

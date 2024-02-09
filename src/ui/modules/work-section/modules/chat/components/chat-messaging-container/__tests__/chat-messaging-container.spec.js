@@ -9,7 +9,7 @@ describe('ChatMessagingContainer', () => {
   });
 
   it('calls store sendFile method at handleDrop method', () => {
-    const sendFileMock = jest.spyOn(ChatMessagingContainer.methods, 'sendFile').mockImplementation(() => {});
+    const sendFileMock = vi.spyOn(ChatMessagingContainer.methods, 'sendFile').mockImplementation(() => {});
     const wrapper = shallowMount(ChatMessagingContainer);
     const files = [{ name: 'jest' }];
     const event = { dataTransfer: { files } };

@@ -231,8 +231,8 @@ export default {
 
     handleDeleteConfirm() {
       const value = this.value.slice();
-      value.splice(this.value.indexOf(this.deletedFile), 1);
-      this.$emit('input', value);
+      const array = value.splice(this.value.indexOf(this.deletedFile), 1);
+      this.$emit('input', array);
     },
 
     askDeleteFile(file) {

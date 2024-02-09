@@ -30,10 +30,10 @@ describe('ChatMessageDocument component', () => {
       name: 'jest',
     };
     const link = {
-      click: jest.fn(),
+      click: vi.fn(),
     };
     const wrapper = shallowMount(ChatMessageDocument, { props: { message } });
-    jest.spyOn(document, 'createElement').mockImplementation(() => link);
+    vi.spyOn(document, 'createElement').mockImplementation(() => link);
     wrapper.vm.downloadDocument();
     expect(link.click).toHaveBeenCalled();
     expect(link.href).toBe(message.file.url);

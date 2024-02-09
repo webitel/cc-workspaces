@@ -11,7 +11,7 @@ describe('CallTransferContainer', () => {
   it('at TransferLookupItem "input" event, calls transfer() with passed item and destination', async () => {
     const extension = '123';
     const item = { extension };
-    const mock = jest.spyOn(CallTransferContainer.methods, 'blindTransfer')
+    const mock = vi.spyOn(CallTransferContainer.methods, 'blindTransfer')
                      .mockImplementationOnce(() => {});
 
     const wrapper = shallowMount(CallTransferContainer, {
@@ -27,9 +27,9 @@ describe('CallTransferContainer', () => {
     expect(mock).toHaveBeenCalledWith(extension);
   });
 
-  it('performs transfer to search value at button click', () => {
+  it('performs transfer to search value at button click', async () => {
     const number = '123';
-    const mock = jest.spyOn(CallTransferContainer.methods, 'blindTransfer')
+    const mock = vi.spyOn(CallTransferContainer.methods, 'blindTransfer')
                      .mockImplementationOnce(() => {});
 
     const wrapper = shallowMount(CallTransferContainer, {});
