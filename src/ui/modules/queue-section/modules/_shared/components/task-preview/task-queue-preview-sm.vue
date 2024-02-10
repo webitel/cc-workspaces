@@ -10,12 +10,15 @@
   >
 
     <header class="queue-preview-header">
+
       <div class="queue-preview-header__icon">
         <slot name="icon"></slot>
       </div>
-      <div class="queue-preview-additional-status">
-        <slot name="additional-status"></slot>
+
+      <div class="queue-preview-status">
+        <slot name="status"></slot>
       </div>
+
       <wt-tooltip>
         <template v-slot:activator>
           <wt-icon-btn
@@ -29,7 +32,7 @@
             <slot name="title"></slot>
           </span>
           <p class="queue-preview-header__subtitle">
-            <slot name="body"></slot>
+            <slot name="subtitle"></slot>
           </p>
           <div
             v-if="displayQueueName"
@@ -51,11 +54,23 @@
       </slot>
     </section>
 
-    <slot name="timer">
-      <queue-preview-timer
-        :task="task"
-      ></queue-preview-timer>
-    </slot>
+    <div
+      v-if="$slots['timer']"
+      class="queue-preview-timer"
+    >
+      <slot name="timer">
+        <queue-preview-timer
+          :task="task"
+        ></queue-preview-timer>
+      </slot>
+    </div>
+
+    <div
+      v-if="$slots['quick-action']"
+      class="queue-preview-header__quick-action"
+    >
+      <slot name="quick-action"></slot>
+    </div>
 
     <footer
       v-if="$slots.footer || $slots.actions"
@@ -98,8 +113,8 @@ export default {
 
 .queue-preview--sm {
   .queue-preview-header__icon {
-    width: 16px;
-    height: 16px;
+    width: var(--icon-sm-size);
+    height: var(--icon-sm-size);
   }
 
   .queue-preview-avatar {
@@ -111,9 +126,9 @@ export default {
   }
 
   .queue-preview-actions {
-    width: 100%;
     display: flex;
     justify-content: space-between;
+    width: 100%;
   }
 }
 

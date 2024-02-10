@@ -42,16 +42,18 @@
     </header>
 
     <section
-      v-if="displayQueueName || $slots['status']"
+      v-if="displayQueueName || $slots.chips || $slots['status']"
       class="queue-preview-main-section"
     >
       <article class="queue-preview-chips">
-        <wt-chip
-          v-if="displayQueueName"
-          color="secondary"
-        >
-          {{ displayQueueName }}
-        </wt-chip>
+        <slot name="chips">
+          <wt-chip
+            v-if="displayQueueName"
+            color="secondary"
+          >
+            {{ displayQueueName }}
+          </wt-chip>
+        </slot>
       </article>
       <div class="queue-preview-status">
         <slot name="status"></slot>

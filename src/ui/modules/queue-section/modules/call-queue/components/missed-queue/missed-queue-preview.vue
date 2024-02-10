@@ -46,7 +46,7 @@
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 

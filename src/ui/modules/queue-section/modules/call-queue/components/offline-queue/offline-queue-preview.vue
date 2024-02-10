@@ -1,50 +1,42 @@
 <template>
   <component
     :is="component"
-    @click="emit('click', task)"
+    :task="task"
+    @click="$emit('click', task)"
   >
-
-    <wt-tooltip v-if="size === 'sm'">
-      <template v-slot:activator>
-        <wt-icon-btn
-          color="info"
-          icon="rounded-info"
-          size="sm"
-        ></wt-icon-btn>
-      </template>
-      <span
-        class="queue-preview--offline-queue__name"
-      >{{ displayName }}
-      </span>
-      <div
-        v-if="displayQueueName"
-      >
-        <wt-chip color="secondary">
-          {{ displayQueueName }}
-        </wt-chip>
-      </div>
-    </wt-tooltip>
-
-    <div class="queue-preview--offline-queue__icon">
+    <template v-slot:icon>
       <wt-icon
+        :size="size"
         icon="call"
-        size="md"
       ></wt-icon>
-    </div>
+    </template>
 
-
-    <section class="queue-preview--offline-queue__title">
+    <template v-slot:title>
       {{ displayName }}
-    </section>
-    <offline-queue-preview-callback
-      :task="task"
-      :size="size"
-    />
+    </template>
+
+    <template v-slot:chips>
+      <wt-chip
+        v-if="displayQueueName"
+        color="secondary"
+      >
+        {{ displayQueueName }}
+      </wt-chip>
+    </template>
+
+    <template v-slot:quick-action>
+      <offline-queue-preview-callback
+        :size="size"
+        :task="task"
+      />
+    </template>
   </component>
 </template>
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import offlineQueuePreviewCallback from './offline-queue-preview-callback.vue';
 
@@ -52,7 +44,7 @@ export default {
   name: 'offline-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
   components: { offlineQueuePreviewCallback },
-
+  emits: ['click'],
   computed: {
     displayName() {
       return this.task.name;
@@ -60,68 +52,71 @@ export default {
     displayQueueName() {
       return this.task.queue?.name;
     },
+    component() {
+      return this.size === 'sm' ? TaskQueuePreviewSm : TaskQueuePreviewMd;
+    },
   },
 };
 </script>
 
 <!--// removed "scoped" to style a tooltip content-->
 <style lang="scss">
-.queue-preview {
-  &.queue-preview--offline-queue {
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: var(--spacing-2xs);
-  }
-
-  .queue-preview--offline-queue__title {
-    overflow: hidden;
-    @extend %typo-subtitle-1;
-    width: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  &.queue-preview--sm {
-    .queue-preview--offline-queue__title {
-      text-align: center;
-    }
-  }
-
-  .queue-preview--offline-queue__icon {
-    display: flex;
-  }
-
-  .queue-preview--offline-queue__callback-container {
-    display: flex;
-    justify-content: center;
-
-    .wt-context-menu__option {
-      padding: 0;
-    }
-
-    .queue-preview--offline-queue__callback-button {
-      padding: var(--spacing-xs);
-    }
-  }
-
-  .wt-tooltip {
-    align-self: flex-end;
-  }
-
-  &--md.queue-preview--offline-queue {
-    flex-direction: row;
-  }
-
-  &--sm {
-    .queue-preview--offline-queue__title {
-      @extend %typo-body-2;
-    }
-  }
-}
-
-.queue-preview--offline-queue__name {
-  @extend %typo-subtitle-1;
-}
+//.queue-preview {
+//  &.queue-preview--offline-queue {
+//    display: flex;
+//    align-items: center;
+//    flex-wrap: nowrap;
+//    justify-content: center;
+//    gap: var(--spacing-2xs);
+//  }
+//
+//  .queue-preview--offline-queue__title {
+//    overflow: hidden;
+//    @extend %typo-subtitle-1;
+//    width: 100%;
+//    white-space: nowrap;
+//    text-overflow: ellipsis;
+//  }
+//
+//  &.queue-preview--sm {
+//    .queue-preview--offline-queue__title {
+//      text-align: center;
+//    }
+//  }
+//
+//  .queue-preview--offline-queue__icon {
+//    display: flex;
+//  }
+//
+//  .queue-preview--offline-queue__callback-container {
+//    display: flex;
+//    justify-content: center;
+//
+//    .wt-context-menu__option {
+//      padding: 0;
+//    }
+//
+//    .queue-preview--offline-queue__callback-button {
+//      padding: var(--spacing-xs);
+//    }
+//  }
+//
+//  .wt-tooltip {
+//    align-self: flex-end;
+//  }
+//
+//  &--md.queue-preview--offline-queue {
+//    flex-direction: row;
+//  }
+//
+//  &--sm {
+//    .queue-preview--offline-queue__title {
+//      @extend %typo-body-2;
+//    }
+//  }
+//}
+//
+//.queue-preview--offline-queue__name {
+//  @extend %typo-subtitle-1;
+//}
 </style>
