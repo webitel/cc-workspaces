@@ -113,53 +113,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.call-queue {
-  .call-queue__title-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
 
-  &--sm {
-    .call-queue__title-wrapper {
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
-  }
-}
-
-.wt-tabs {
-  width: fit-content;
-
-  .queue-tab__wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .queue-tab__indicator {
-    position: absolute;
-    top: 0;
-    right: -3px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-
-    &.active {
-      background: var(--icon-success-color);
-    }
-
-    &.offline {
-      background: var(--icon-primary-color);
-    }
-
-    &.missed {
-      background: var(--icon-error-color);
-    }
-
-    &.manual {
-      background: var(--icon-color);
-    }
-  }
-}
 </style>

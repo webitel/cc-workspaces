@@ -59,8 +59,8 @@
 </template>
 
 <script>
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import taskPreviewMixin from '../../_shared/mixins/task-preview-mixin';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
   name: 'chat-queue-preview',

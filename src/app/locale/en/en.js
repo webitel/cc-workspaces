@@ -65,11 +65,13 @@ export default {
       active: 'Active',
       missed: 'Missed',
       offline: 'Offline',
-      manual: 'Manual',
+      manual: 'Manually distributed',
       at: 'at', // missed call "at 10:10"
     },
     chat: {
       chats: 'Chats',
+      active: 'Active',
+      manual: 'Manually distributed',
     },
     job: {
       jobs: 'Tasks',

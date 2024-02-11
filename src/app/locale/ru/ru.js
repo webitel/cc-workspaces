@@ -60,10 +60,16 @@ export default {
   queueSec: {
     call: {
       calls: 'Звонки',
+      active: 'Активные',
+      missed: 'Пропущенные',
+      offline: 'Оффлайн',
+      manual: 'Manually distributed',
       at: 'в', // missed call "at 10:10"
     },
     chat: {
       chats: 'Чаты',
+      active: 'Active',
+      manual: 'Manually distributed',
     },
     job: {
       jobs: 'Задания',

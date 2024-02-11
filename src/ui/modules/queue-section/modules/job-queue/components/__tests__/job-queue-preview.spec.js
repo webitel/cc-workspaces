@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import JobQueuePreview from '../job-queue-preview.vue';
+import JobQueuePreview from '../active/job-queue-preview.vue';
 
 const task = {
 };

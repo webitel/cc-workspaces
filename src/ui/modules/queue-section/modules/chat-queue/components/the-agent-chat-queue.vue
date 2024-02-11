@@ -1,47 +1,41 @@
 <template>
-  <the-agent-task-queue
+  <article
     class="task-queue chat-queue"
-    :size="size"
-    :title="$t('queueSec.chat.chats')"
+    :class="[
+      `chat-queue--${size}`
+    ]"
   >
-    <template v-slot:title>
-      <div class="call-queue__title-wrapper">
-        <span class="call-queue__title">{{ $t('queueSec.chat.chats') }}</span>
-        <wt-tabs
-          v-model="currentTab"
-          :tabs="tabs"
-        >
-          <template
-            v-for="(tab, key) of tabs"
-            v-slot:[tab.value]
-          >
-            <div class="queue-tab__wrap" :key="key">
-              <div
-                v-show="tab.attention"
-                class="queue-tab__indicator"
-                :class="tab.value"
-              ></div>
-              <wt-icon
-                :icon="tab.icon"
-                :color="tab.iconColor"
-                :size="size"
-              ></wt-icon>
-            </div>
-          </template>
-        </wt-tabs>
-      </div>
-    </template>
-    <component
-      :is="currentTabComponent"
+    <wt-expansion-panel
+      v-for="({ value, counters }) in expansions"
       :size="size"
-    ></component>
-  </the-agent-task-queue>
+      :key="value"
+    >
+      <template v-slot:title>
+        {{ `${$t(`queueSec.chat.${value}`)} ${$t('queueSec.chat.chats', 2).toLowerCase()}` }}
+      </template>
+      <template v-slot:actions>
+        <wt-chip
+          v-for="({ color, count }, key) in counters"
+          :size="size"
+          :color="color"
+          :key="key"
+        >{{ count }}
+        </wt-chip>
+      </template>
+      <template>
+        <component
+          :size="size"
+          :is="getComponent(value)"
+        />
+      </template>
+    </wt-expansion-panel>
+  </article>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
-import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
+import { ChatActions } from 'webitel-sdk';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
 
@@ -57,83 +51,47 @@ const store = useStore();
 const chatList = computed(() => store.state.features.chat.chatList);
 const manualList = computed(() => store.state.features.chat.manual.manualList);
 
-const tabs = computed(() => [
+const invitedChats = computed(() => chatList.value.filter((chat) => chat.state === ChatActions.UserInvite));
+
+const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ChatActions.UserInvite));
+
+const expansions = computed(() => [
   {
     value: 'active',
-    icon: 'chat',
-    iconColor: 'chat',
-    attention: chatList.value.length,
+    counters: [
+      {
+        color: 'main',
+        count: activeChats.value.length,
+      },
+      {
+        color: 'success',
+        count: invitedChats.value.length,
+      },
+    ].filter(({ count }) => count),
   },
   {
     value: 'manual',
-    icon: 'chat-join',
-    iconColor: 'chat',
-    attention: manualList.value.length,
+    counters: [
+      {
+        color: 'secondary',
+        count: manualList.value.length,
+      },
+    ].filter(({ count }) => count),
   },
 ]);
 
-const currentTab = ref(tabs.value[0]);
-
-const currentTabComponent = computed(() => {
-  switch (currentTab.value.value) {
+const getComponent = (value) => {
+  switch (value) {
     case 'active':
       return ActiveQueue;
     case 'manual':
       return ManualQueue;
     default:
-      return ActiveQueue;
+      return null;
   }
-});
-
-watch(() => manualList.value.length, (currentLength, newLength) => {
-  if (newLength > currentLength) {
-    currentTab.value = tabs.value[0];
-  };
-})
-
+};
 </script>
 
 <style lang="scss" scoped>
-.chat-queue {
-  .call-queue__title-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
 
-  &--sm {
-    .call-queue__title-wrapper {
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
-  }
-}
-
-
-.wt-tabs {
-  width: fit-content;
-
-  .queue-tab__wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .queue-tab__indicator {
-    position: absolute;
-    top: 0;
-    right: -3px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-
-    &.active {
-      background: var(--chat-color);
-    }
-
-    &.manual {
-      background: var(--chat-color);
-    }
-  }
-}
 </style>
