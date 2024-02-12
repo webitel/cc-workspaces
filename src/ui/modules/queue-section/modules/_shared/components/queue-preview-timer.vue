@@ -26,7 +26,7 @@ export default {
 
 <style lang="scss" scoped>
 .queue-preview-timer {
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
 
   &__digit {

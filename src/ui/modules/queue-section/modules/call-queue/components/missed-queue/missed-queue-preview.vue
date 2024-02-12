@@ -1,27 +1,12 @@
 <template>
-  <component
-    :is="`task-queue-preview-${size}`"
-    class="queue-preview--missed"
+  <task-queue-preview-md
+    v-if="size === 'md'"
   >
-    <template
-      v-if="size === 'md'"
-      v-slot:icon
-    >
+    <template v-slot:icon>
       <wt-icon
         color="error"
         icon="call-missed"
       ></wt-icon>
-    </template>
-
-    <template v-slot:avatar>
-      <wt-icon
-        color="error"
-        icon="call-missed"
-      ></wt-icon>
-    </template>
-
-    <template v-slot:timer>
-      {{ displayTime }}
     </template>
 
     <template v-slot:title>
@@ -32,16 +17,63 @@
       {{ displayNumber }}
     </template>
 
-    <template v-slot:quick-action>
+    <template v-slot:timer>
+      {{ displayTime }}
+    </template>
+
+    <wt-rounded-action
+      color="success"
+      icon="call--filled"
+      rounded
+      size="md"
+      @click="call"
+    ></wt-rounded-action>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+  >
+    <template v-slot:icon>
+      <wt-icon
+        color="error"
+        size="sm"
+        icon="call-missed"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ displayName }}
+    </template>
+
+    <template v-slot:tooltip-subtitle>
+      {{ displayNumber }}
+    </template>
+
+    <template v-slot:title>
+      {{ displayName }}
+    </template>
+
+    <template v-slot:subtitle>
+      {{ displayTime }}
+    </template>
+
+    <template v-slot:actions>
       <wt-rounded-action
-        :size="size"
         color="success"
         icon="call--filled"
         rounded
+        size="sm"
         @click="call"
       ></wt-rounded-action>
     </template>
-  </component>
+  </task-queue-preview-sm>
+
+  <div
+    v-else
+  >unknown task size
+    <br>
+    {{ task }}
+  </div>
 </template>
 
 <script>
@@ -78,19 +110,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//.queue-preview--missed {
-//  &.queue-preview--sm {
-//    :deep .missed-preview__task-time {
-//      text-align: center;
-//    }
-//  }
-//}
-//
-//.missed-preview__task-time {
-//  @extend %typo-body-2;
-//  overflow: hidden;
-//  flex-grow: 1;
-//  white-space: nowrap;
-//  text-overflow: ellipsis;
-//}
+
 </style>

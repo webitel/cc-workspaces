@@ -1,31 +1,64 @@
 <template>
-  <component
-    :is="`task-queue-preview-${size}`"
-    :task="task"
+  <task-queue-preview-md
+    v-if="size === 'md'"
     :opened="opened"
+    :queue-name="displayQueueName"
     @click="$emit('click', task)"
   >
-    <template
-      v-slot:icon
-      v-if="size === 'md'"
-    >
+
+    <template v-slot:icon>
       <wt-icon
         :icon="displayIcon"
       ></wt-icon>
     </template>
-    <template v-slot:avatar>
-      <wt-icon
-        :icon="displayIcon"
-        size="md"
-      ></wt-icon>
-    </template>
+
     <template v-slot:title>
       {{ displayChatName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ lastMessage }}
     </template>
-  </component>
+
+    <template v-slot:timer>
+      <queue-preview-timer
+        :task="task"
+      ></queue-preview-timer>
+    </template>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+    :opened="opened"
+    :queue-name="displayQueueName"
+    @click="$emit('click', task)"
+  >
+
+    <template v-slot:icon>
+      <wt-icon
+        :icon="displayIcon"
+        size="sm"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ displayChatName }}
+    </template>
+
+    <template v-slot:tooltip-subtitle>
+      {{ lastMessage }}
+    </template>
+
+    <template v-slot:title>
+      {{ displayChatName }}
+    </template>
+
+    <template v-slot:subtitle>
+      <queue-preview-timer
+        :task="task"
+      ></queue-preview-timer>
+    </template>
+  </task-queue-preview-sm>
 </template>
 
 <script>

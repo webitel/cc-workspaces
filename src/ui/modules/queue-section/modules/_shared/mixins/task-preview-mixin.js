@@ -1,10 +1,12 @@
 import TaskQueuePreviewMd from '../components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../components/task-preview/task-queue-preview-sm.vue';
+import QueuePreviewTimer from '../components/queue-preview-timer.vue';
 
 export default {
   components: {
     TaskQueuePreviewMd,
     TaskQueuePreviewSm,
+    QueuePreviewTimer,
   },
   props: {
     // item is for UI computing

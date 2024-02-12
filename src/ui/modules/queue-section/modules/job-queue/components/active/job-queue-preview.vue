@@ -1,31 +1,23 @@
 <template>
-  <component
-    :is="`task-queue-preview-${size}`"
+  <task-queue-preview-md
     :opened="opened"
-    :task="task"
     @click="$emit('click', task)"
   >
-    <template
-      v-if="size === 'md'"
-      v-slot:icon
-    >
+    <template v-slot:icon>
       <wt-icon
         color="job"
         icon="job"
       ></wt-icon>
     </template>
-    <template v-slot:avatar>
-      <wt-icon
-        color="job"
-        icon="job"
-      ></wt-icon>
-    </template>
+
     <template v-slot:title>
       {{ task.displayName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ task.displayNumber }}
     </template>
+
     <template
       v-if="task.allowAccept"
       v-slot:actions
@@ -55,7 +47,29 @@
         {{ $t('reusable.decline') }}
       </wt-button>
     </template>
-  </component>
+  </task-queue-preview-md>
+
+
+  <task-queue-preview-sm
+    :opened="opened"
+    @click="$emit('click', task)"
+    >
+    <template v-slot:icon>
+      <wt-icon
+        color="job"
+        icon="job"
+        size="sm"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ task.displayName }}
+    </template>
+
+    <template v-slot:tooltip-subtitle>
+      {{ task.displayNumber }}
+    </template>
+  </task-queue-preview-sm>
 </template>
 
 <script>

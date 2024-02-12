@@ -13,7 +13,10 @@
       <template v-slot:title>
         {{ `${$t(`queueSec.call.${value}`)} ${$t('queueSec.call.call', 2).toLowerCase()}` }}
       </template>
-      <template v-slot:actions>
+      <template
+        v-if="size === 'md'"
+        v-slot:actions
+      >
         <wt-chip
           v-for="({ color, count }, key) in counters"
           :size="size"

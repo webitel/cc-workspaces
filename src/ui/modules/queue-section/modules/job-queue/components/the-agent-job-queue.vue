@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import { JobState } from 'webitel-sdk';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import JobQueue from './active/job-queue-container.vue';

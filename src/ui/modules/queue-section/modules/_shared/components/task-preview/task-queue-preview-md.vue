@@ -3,93 +3,89 @@
     :class="[
       { 'queue-preview--opened': opened },
     ]"
-    class="queue-preview queue-preview--md"
+    class="queue-preview queue-preview-md"
     tabindex="0"
-    @click="$emit('click', task)"
-    @keydown.enter="$emit('click', task)"
+    @click="$emit('click')"
+    @keydown.enter="$emit('click')"
   >
     <header class="queue-preview-header">
-      <div class="queue-preview-header__icon">
+      <div class="queue-preview-icon">
         <slot name="icon"></slot>
       </div>
 
-      <div class="queue-preview-header__text-wrapper">
-      <span class="queue-preview-header__title">
+      <div class="queue-preview-header-text-content">
+      <span class="queue-preview-title">
         <slot name="title"></slot>
       </span>
-        <p class="queue-preview-header__subtitle">
+        <p class="queue-preview-subtitle">
           <slot name="subtitle"></slot>
         </p>
       </div>
 
       <div
-        class="queue-preview-timer"
         v-if="$slots['timer']"
+        class="queue-preview-timer"
       >
-        <slot name="timer">
-          <queue-preview-timer
-            :task="task"
-          ></queue-preview-timer>
-        </slot>
+        <slot name="timer"></slot>
       </div>
 
       <div
-        class="queue-preview-header__quick-action"
         v-if="$slots['quick-action']"
+        class="queue-preview-quick-action"
       >
         <slot name="quick-action"></slot>
       </div>
     </header>
 
     <section
-      v-if="displayQueueName || $slots.chips || $slots['status']"
       class="queue-preview-main-section"
     >
       <article class="queue-preview-chips">
-        <slot name="chips">
-          <wt-chip
-            v-if="displayQueueName"
-            color="secondary"
-          >
-            {{ displayQueueName }}
-          </wt-chip>
-        </slot>
+        <wt-chip
+          v-if="queueName"
+          color="secondary"
+        >
+          {{ queueName }}
+        </wt-chip>
       </article>
-      <div class="queue-preview-status">
-        <slot name="status"></slot>
+      <div
+        v-if="$slots['icon-status']"
+        class="queue-preview-icon-status"
+      >
+        <slot name="icon-status"></slot>
       </div>
     </section>
 
+    <div
+      class="queue-preview-actions"
+      v-if="$slots.actions"
+    >
+      <slot name="actions"></slot>
+    </div>
+
     <footer
-      v-if="$slots.footer || $slots.actions"
+      v-if="$slots.footer"
       class="queue-preview-footer"
     >
-      <slot name="footer">
-        <div class="queue-preview-actions">
-          <slot name="actions"></slot>
-        </div>
-      </slot>
+      <slot name="footer"></slot>
     </footer>
   </article>
 </template>
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import displayInfo from '../../../../../../mixins/displayInfoMixin';
-import QueuePreviewTimer from '../queue-preview-timer.vue';
 
 export default {
   name: 'task-queue-preview',
-  components: { QueuePreviewTimer },
-  mixins: [displayInfo, sizeMixin],
+  mixins: [sizeMixin],
   props: {
-    task: {
-      type: Object,
-      required: true,
-    },
     opened: {
       type: Boolean,
       default: false,
+    },
+    queueName: {
+      type: String,
+      default: '',
     },
   },
 };
@@ -98,22 +94,22 @@ export default {
 <style lang="scss" scoped>
 @import '../../css/queue-preview';
 
-.queue-preview--md {
-  .queue-preview-header__icon {
-    flex: 0 0 24px;
+.queue-preview-md {
+  .queue-preview-icon {
+    flex: 0 0 var(--icon-md-size);
   }
 
-  .queue-preview-header__text-wrapper {
+  .queue-preview-header-text-content {
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
-    gap: var(--spacing-2xs);
+    flex-grow: 1;
     min-width: 0; // prevents content overflowing
+    gap: var(--spacing-2xs);
   }
 
   .queue-preview-main-section {
     display: grid;
-    grid-template-columns: 1fr 24px;
+    grid-template-columns: 1fr var(--icon-md-size);
     gap: var(--spacing-xs);
   }
 

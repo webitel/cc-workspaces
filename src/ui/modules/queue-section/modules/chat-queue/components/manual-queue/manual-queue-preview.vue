@@ -1,49 +1,80 @@
 <template>
-  <component
-    :is="component"
-    :task="task"
+  <task-queue-preview-md
+    v-if="size === 'md'"
     :opened="opened"
-    class="queue-preview--manual"
     @click="emit('click', task)"
   >
-    <template
-      v-slot:icon
-      v-if="size === 'md'"
-    >
+    <template v-slot:icon>
       <wt-icon
         :icon="displayIcon"
       ></wt-icon>
     </template>
-    <template v-slot:avatar>
-      <wt-icon
-        :icon="displayIcon"
-        size="md"
-      ></wt-icon>
-    </template>
-    <template v-slot:timer>
-      <div class="queue-preview--manual__timer">
-        {{ wait }}
-      </div>
-    </template>
+
     <template v-slot:title>
       {{ task.displayName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ lastMessage }}
     </template>
-    <template v-slot:footer>
+
+    <template v-slot:timer>
+      {{ wait }}
+    </template>
+
+    <template v-slot:quick-action>
       <wt-rounded-action
-        :size="size"
+        size="md"
         color="transfer"
         icon="chat-join"
         rounded
         @click="emit('accept', task)"
       ></wt-rounded-action>
+    </template>
+
+    <template v-slot:footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
       ></manual-deadline-progress-bar>
     </template>
-  </component>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+    :opened="opened"
+    @click="emit('click', task)"
+  >
+    <template v-slot:icon>
+      <wt-icon
+        :icon="displayIcon"
+        size="sm"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:title>
+      {{ task.displayName }}
+    </template>
+
+    <template v-slot:subtitle>
+      {{ wait }}
+    </template>
+
+    <template v-slot:actions>
+      <wt-rounded-action
+        size="md"
+        color="transfer"
+        icon="chat-join"
+        rounded
+        @click="emit('accept', task)"
+      ></wt-rounded-action>
+    </template>
+
+    <template v-slot:footer>
+      <manual-deadline-progress-bar
+        :deadline="task.deadline"
+      ></manual-deadline-progress-bar>
+    </template>
+  </task-queue-preview-sm>
 </template>
 
 <script setup>
@@ -70,17 +101,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['click', 'accept']);
-
-const component = computed(() => {
-  switch (props.size) {
-    case 'md':
-      return TaskQueuePreviewMd;
-    case 'sm':
-      return TaskQueuePreviewSm;
-    default:
-      return TaskQueuePreviewMd;
-  }
-});
 
 const lastMessage = computed(() => {
   return props.task.message;
@@ -118,24 +138,5 @@ const wait = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.queue-preview--manual {
-  &.queue-preview--md {
-    flex-direction: row;
-  }
 
-  &.queue-preview--sm {
-    .wt-rounded-action {
-      display: block;
-      margin: auto;
-    }
-  }
-}
-
-.queue-preview--manual__timer {
-  text-align: center;
-}
-
-.manual-deadline-progress-bar {
-  margin-top: var(--spacing-xs);
-}
 </style>
