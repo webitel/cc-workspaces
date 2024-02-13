@@ -11,7 +11,7 @@
       :key="value"
     >
       <template v-slot:title>
-        {{ `${$t(`queueSec.chat.${value}`)} ${$t('queueSec.chat.chats', 2).toLowerCase()}` }}
+        {{ $t(`queueSec.chat.preview.${size}.${value}`) }}
       </template>
       <template v-slot:actions>
         <wt-chip

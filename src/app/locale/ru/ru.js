@@ -59,20 +59,47 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Звонки',
-      active: 'Активные',
-      missed: 'Пропущенные',
-      offline: 'Оффлайн',
-      manual: 'Manually distributed',
-      at: 'в', // missed call "at 10:10"
+      calls: 'Звонок | Звонки',
+      preview: {
+        md: {
+          active: 'Активные звонки',
+          missed: 'Пропущенные звонки',
+          offline: 'Оффлайн звонки',
+          manual: 'Самостоятельно назначенные звонки',
+        },
+        sm: {
+          active: 'Активные',
+          missed: 'Пропущенные',
+          offline: 'Оффлайн',
+          manual: 'Самостоятельно назначенные',
+        },
+      },
     },
     chat: {
-      chats: 'Чаты',
-      active: 'Active',
-      manual: 'Manually distributed',
+      chats: 'Звонки | Чаты',
+      preview: {
+        md: {
+          active: 'Активные чаты',
+          manual: 'Самостоятельно назначенные чаты',
+        },
+        sm: {
+          active: 'Активные',
+          manual: 'Самостоятельно назначенные',
+        },
+
+      },
     },
     job: {
-      jobs: 'Задания',
+      jobs: 'Задание | Задания',
+      preview: {
+        md: {
+          active: 'Активные задания',
+        },
+        sm: {
+          active: 'Активные',
+        },
+
+      },
     },
   },
   infoSec: {

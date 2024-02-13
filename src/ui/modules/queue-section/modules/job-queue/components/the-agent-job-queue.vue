@@ -11,7 +11,7 @@
       :size="size"
     >
       <template v-slot:title>
-        {{ `${$t(`queueSec.chat.${value}`)} ${$t('queueSec.chat.chats', 2).toLowerCase()}` }}
+        {{ $t(`queueSec.job.preview.${size}.${value}`) }}
       </template>
       <template v-slot:actions>
         <wt-chip
@@ -36,12 +36,12 @@
 import { mapState } from 'vuex';
 import { JobState } from 'webitel-sdk';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import JobQueue from './active/job-queue-container.vue';
+import ActiveQueue from './active/job-queue-container.vue';
 
 export default {
   name: 'the-agent-job-queue',
   components: {
-    JobQueue,
+    ActiveQueue,
   },
   mixins: [sizeMixin],
   computed: {
@@ -57,7 +57,7 @@ export default {
     expansions() {
       return [
         {
-          value: 'job',
+          value: 'active',
           counters: [
             {
               color: 'main',

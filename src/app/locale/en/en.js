@@ -62,19 +62,45 @@ export default {
   queueSec: {
     call: {
       call: 'Call | Calls',
-      active: 'Active',
-      missed: 'Missed',
-      offline: 'Offline',
-      manual: 'Manually distributed',
-      at: 'at', // missed call "at 10:10"
+      preview: {
+        md: {
+          active: 'Active calls',
+          missed: 'Missed calls',
+          offline: 'Offline calls',
+          manual: 'Self-assigned calls',
+        },
+        sm: {
+          active: 'Active',
+          missed: 'Missed',
+          offline: 'Offline',
+          manual: 'Self-assigned',
+        },
+
+      },
     },
     chat: {
-      chats: 'Chats',
-      active: 'Active',
-      manual: 'Manually distributed',
+      chats: 'Chat | Chats',
+      preview: {
+        md: {
+          active: 'Active chats',
+          manual: 'Self-assigned chats',
+        },
+        sm: {
+          active: 'Active',
+          manual: 'Self-assigned',
+        },
+      },
     },
     job: {
-      jobs: 'Tasks',
+      jobs: 'Task | Tasks',
+      preview: {
+        md: {
+          active: 'Active tasks',
+        },
+        sm: {
+          active: 'Active',
+        },
+      },
     },
   },
   infoSec: {

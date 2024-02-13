@@ -11,7 +11,7 @@
       :key="value"
     >
       <template v-slot:title>
-        {{ `${$t(`queueSec.call.${value}`)} ${$t('queueSec.call.call', 2).toLowerCase()}` }}
+        {{ $t(`queueSec.call.preview.${size}.${value}`) }}
       </template>
       <template
         v-if="size === 'md'"

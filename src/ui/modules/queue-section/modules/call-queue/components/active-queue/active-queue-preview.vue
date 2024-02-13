@@ -21,7 +21,7 @@
     </template>
 
     <template v-slot:timer>
-      <span v-if="isRinging">{{ $t('rrr') }}</span>
+      <span v-if="isRinging">{{ $$t('workspaceSec.callState.ringing') }}</span>
       <queue-preview-timer
         v-else
         :task="task"
