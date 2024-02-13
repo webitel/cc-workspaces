@@ -21,7 +21,11 @@
     </template>
 
     <template v-slot:timer>
-      <queue-preview-timer :task="task" />
+      <span v-if="isRinging">{{ $t('rrr') }}</span>
+      <queue-preview-timer
+        v-else
+        :task="task"
+      />
     </template>
 
     <template

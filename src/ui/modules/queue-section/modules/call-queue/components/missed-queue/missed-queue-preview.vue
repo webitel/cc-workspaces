@@ -21,13 +21,15 @@
       {{ displayTime }}
     </template>
 
-    <wt-rounded-action
-      color="success"
-      icon="call--filled"
-      rounded
-      size="md"
-      @click="call"
-    ></wt-rounded-action>
+    <template v-slot:quick-action>
+      <wt-rounded-action
+        color="success"
+        icon="call--filled"
+        rounded
+        size="md"
+        @click="call"
+      ></wt-rounded-action>
+    </template>
   </task-queue-preview-md>
 
   <task-queue-preview-sm

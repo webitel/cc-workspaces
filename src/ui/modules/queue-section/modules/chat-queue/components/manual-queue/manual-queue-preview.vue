@@ -2,6 +2,7 @@
   <task-queue-preview-md
     v-if="size === 'md'"
     :opened="opened"
+    :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
     <template v-slot:icon>
@@ -42,6 +43,7 @@
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
     :opened="opened"
+    :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
     <template v-slot:icon>
@@ -49,6 +51,10 @@
         :icon="displayIcon"
         size="sm"
       ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ task.displayName }}
     </template>
 
     <template v-slot:title>

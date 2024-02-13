@@ -1,6 +1,8 @@
 <template>
   <task-queue-preview-md
+    v-if="size === 'md'"
     :opened="opened"
+    :queue-name="task.distribute.queue_name"
     @click="$emit('click', task)"
   >
     <template v-slot:icon>
@@ -18,29 +20,25 @@
       {{ task.displayNumber }}
     </template>
 
+    <template v-slot:timer>
+      <queue-preview-timer :task="task" />
+    </template>
+
     <template
       v-if="task.allowAccept"
       v-slot:actions
     >
-      <component
-        :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
+      <wt-button
         color="job"
-        icon="job--accept"
-        size="sm"
-        :wide="size === 'md'"
-        :rounded="size === 'sm'"
+        wide
         @click.prevent="$emit('accept', task)"
         @keydown.enter.prevent="$emit('accept', task)"
       >
         {{ $t('reusable.accept') }}
-      </component>
+      </wt-button>
       <wt-button
-        :is="size === 'sm' ? 'wt-rounded-action' : 'wt-button'"
         color="error"
-        icon="job--end"
-        size="sm"
-        :wide="size === 'md'"
-        :rounded="size === 'sm'"
+        wide
         @click.prevent="$emit('decline', task)"
         @keydown.enter.prevent="$emit('decline', task)"
       >
@@ -51,7 +49,9 @@
 
 
   <task-queue-preview-sm
+    v-else-if="size === 'sm'"
     :opened="opened"
+    :queue-name="task.distribute.queue_name"
     @click="$emit('click', task)"
     >
     <template v-slot:icon>
@@ -69,6 +69,36 @@
     <template v-slot:tooltip-subtitle>
       {{ task.displayNumber }}
     </template>
+
+    <template v-slot:subtitle>
+      <queue-preview-timer :task="task" />
+    </template>
+
+    <template
+      v-if="task.allowAccept"
+      v-slot:actions
+    >
+      <wt-rounded-action
+        color="job"
+        size="sm"
+        icon="job--accept"
+        rounded
+        @click.prevent="$emit('accept', task)"
+        @keydown.enter.prevent="$emit('accept', task)"
+      >
+        {{ $t('reusable.accept') }}
+      </wt-rounded-action>
+      <wt-rounded-action
+        color="error"
+        size="sm"
+        icon="job--end"
+        rounded
+        @click.prevent="$emit('decline', task)"
+        @keydown.enter.prevent="$emit('decline', task)"
+      >
+        {{ $t('reusable.decline') }}
+      </wt-rounded-action>
+    </template>
   </task-queue-preview-sm>
 </template>
 
@@ -77,7 +107,7 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'chat-queue-preview',
+  name: 'job-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
 };
 </script>

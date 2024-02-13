@@ -33,6 +33,10 @@
       ></wt-icon>
     </template>
 
+    <template v-slot:tooltip-title>
+      {{ displayName }}
+    </template>
+
     <template v-slot:title>
       {{ displayName }}
     </template>
