@@ -11,26 +11,33 @@
       @click="$emit('resize')"
     ></collapse-action>
     <wt-tabs
-      class="queue-section-tabs"
       v-model="currentTab"
       :tabs="tabs"
+      class="queue-section-tabs"
+      @change="handleTabChange"
     >
       <template
         v-for="(tab, key) of tabs"
+        :key="key"
         v-slot:[tab.value]
       >
-        <wt-icon
-          :key="key"
-          :color="tab.iconColor"
-          :icon="tab.icon"
-          :size="size"
-        ></wt-icon>
+        <div class="queue-section-tab-wrapper">
+          <wt-badge
+            v-if="tab.showIndicator"
+            :color-variable="`${tab.iconColor}-color`"
+          ></wt-badge>
+          <wt-icon
+            :color="tab.iconColor"
+            :icon="tab.icon"
+            :size="size"
+          ></wt-icon>
+        </div>
       </template>
     </wt-tabs>
     <component
-      class="queue-section-wrapper"
-      :size="size"
       :is="`${currentTab.value}-queue`"
+      :size="size"
+      class="queue-section-wrapper"
     ></component>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
@@ -43,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates from '../../../enums/WorkspaceState.enum';
@@ -72,8 +79,20 @@ export default {
   },
   data: () => ({
     currentTab: {},
+    isNewCall: false,
+    isNewChat: false,
+    isNewJob: false,
   }),
   computed: {
+    ...mapState('features/call', {
+      callList: (state) => state.callList,
+    }),
+    ...mapState('features/chat', {
+      chatList: (state) => state.chatList,
+    }),
+    ...mapState('features/job', {
+      jobList: (state) => state.jobList,
+    }),
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
     }),
@@ -86,16 +105,19 @@ export default {
           value: 'call',
           icon: 'call',
           iconColor: 'success',
+          showIndicator: this.isNewCall,
         },
         {
           value: 'chat',
           icon: 'chat',
           iconColor: 'chat',
+          showIndicator: this.isNewChat,
         },
         {
           value: 'job',
           icon: 'job',
           iconColor: 'job',
+          showIndicator: this.isNewJob,
         },
       ];
     },
@@ -116,6 +138,41 @@ export default {
     }),
     toggleNewCall() {
       return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
+    },
+    hideIndicator(value) {
+      switch (value) {
+        case 'call':
+          this.isNewCall = false;
+          break;
+        case 'chat':
+          this.isNewChat = false;
+          break;
+        case 'job':
+          this.isNewJob = false;
+          break;
+        default:
+          break;
+      }
+    },
+    handleTabChange(tab) {
+      this.hideIndicator(tab.value);
+    },
+  },
+  watch: {
+    callList(newVal, oldVal) {
+      if (newVal.length > oldVal.length) {
+        this.isNewCall = true;
+      }
+    },
+    chatList(newVal, oldVal) {
+      if (newVal.length > oldVal.length) {
+        this.isNewChat = true;
+      }
+    },
+    jobList(newVal, oldVal) {
+      if (newVal.length > oldVal.length) {
+        this.isNewJob = true;
+      }
     },
   },
   created() {
@@ -160,9 +217,13 @@ export default {
 
 // increase specificity
 .queue-section-tabs.wt-tabs {
-  width: 100%;
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(3, 1fr);
+}
+
+.queue-section-tab-wrapper {
+  position: relative;
 }
 
 .queue-section-wrapper {

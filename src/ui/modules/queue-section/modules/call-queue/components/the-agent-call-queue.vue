@@ -6,9 +6,12 @@
     ]"
   >
     <wt-expansion-panel
-      v-for="({ value, counters }) in expansions"
+      v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :size="size"
       :key="value"
+      :collapsed="initiallyCollapsed[value]"
+      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="cacheExpansionState({expansion: value, state: false })"
     >
       <template v-slot:title>
         {{ $t(`queueSec.call.preview.${size}.${value}`) }}
@@ -27,92 +30,97 @@
       </template>
       <template>
         <component
+          :is="getComponent(value)"
           :size="size"
-          :is="`${value}-queue`"
         />
       </template>
     </wt-expansion-panel>
   </article>
 </template>
 
-<script>
-import { mapActions, mapState } from 'vuex';
+<script setup>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 import { CallActions } from 'webitel-sdk';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 
-export default {
-  name: 'the-agent-call-queue',
-  mixins: [sizeMixin],
-  components: {
-    ActiveQueue,
-    OfflineQueue,
-    MissedQueue,
-    ManualQueue,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  data: () => ({
-  }),
+});
 
-  computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
-    ...mapState('features/call/missed', {
-      missedList: (state) => state.missedList,
-    }),
-    ...mapState('features/call/manual', {
-      manualList: (state) => state.manualList,
-    }),
-    ...mapState('features/member', {
-      membersList: (state) => state.memberList,
-    }),
-    ringingCallsCount() {
-      return this.callList.filter((call) => call.state === CallActions.Ringing).length;
-    },
-    activeCallsCount() {
-      return this.callList.length - this.ringingCallsCount;
-    },
+const store = useStore();
 
-    expansions() {
-      return [
-        {
-          value: 'active',
-          counters: [
-            { color: 'main', count: this.activeCallsCount },
-            { color: 'success', count: this.ringingCallsCount },
-          ].filter(({ count }) => count),
-        },
-        {
-          value: 'missed',
-          counters: [
-            { color: 'secondary', count: this.missedList.length },
-          ].filter(({ count }) => count),
-        },
-        {
-          value: 'offline',
-          counters: [
-            { color: 'secondary', count: this.membersList.length },
-          ].filter(({ count }) => count),
-        },
-        {
-          value: 'manual',
-          counters: [
-            { color: 'secondary', count: this.manualList.length },
-          ].filter(({ count }) => count),
-        },
-      ];
-    },
+const {
+  cacheExpansionState,
+  restoreExpansionState,
+} = useCachedExpansionState({ entity: 'call' });
+
+const callList = computed(() => store.state.features.call.callList);
+
+const missedList = computed(() => store.state.features.call.missed.missedList);
+const manualList = computed(() => store.state.features.call.manual.manualList);
+const membersList = computed(() => store.state.features.member.memberList);
+
+const ringingCallsCount = computed(() => callList.value.filter((call) => call.state === CallActions.Ringing).length);
+const activeCallsCount = computed(() => callList.value.length - ringingCallsCount.value);
+
+const expansions = computed(() => [
+  {
+    value: 'active',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
+    counters: [
+      { color: 'main', count: activeCallsCount.value },
+      { color: 'success', count: ringingCallsCount.value },
+    ].filter(({ count }) => count),
   },
-
-  methods: {
-    ...mapActions('features/call', {
-      openNewCall: 'OPEN_NEW_CALL',
-    }),
+  {
+    value: 'missed',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'missed' }),
+    counters: [
+      { color: 'secondary', count: missedList.value.length },
+    ].filter(({ count }) => count),
   },
-};
+  {
+    value: 'offline',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'offline' }),
+    counters: [
+      { color: 'secondary', count: membersList.value.length },
+    ].filter(({ count }) => count),
+  },
+  {
+    value: 'manual',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'manual' }),
+    counters: [
+      { color: 'secondary', count: manualList.value.length },
+    ].filter(({ count }) => count),
+  },
+]);
+
+const getComponent = (value) => {
+  switch (value) {
+    case 'active':
+      return ActiveQueue;
+    case 'missed':
+      return MissedQueue;
+    case 'offline':
+      return OfflineQueue;
+    case 'manual':
+      return ManualQueue;
+    default:
+      return null;
+  }
+}
+
+function openNewCall(payload) {
+  return store.dispatch('features/call/OPEN_NEW_CALL', payload);
+}
 </script>
 
 <style lang="scss" scoped>

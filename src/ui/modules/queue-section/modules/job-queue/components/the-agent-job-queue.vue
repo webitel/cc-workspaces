@@ -6,9 +6,12 @@
     class="task-queue job-queue"
   >
     <wt-expansion-panel
-      v-for="({ value, counters }) in expansions"
+      v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :key="value"
       :size="size"
+      :collapsed="initiallyCollapsed[value]"
+      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="cacheExpansionState({expansion: value, state: false })"
     >
       <template v-slot:title>
         {{ $t(`queueSec.job.preview.${size}.${value}`) }}
@@ -24,7 +27,7 @@
       </template>
       <template>
         <component
-          :is="`${value}-queue`"
+          :is="getComponent(value)"
           :size="size"
         />
       </template>
@@ -32,46 +35,55 @@
   </article>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { useStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 import ActiveQueue from './active/job-queue-container.vue';
 
-export default {
-  name: 'the-agent-job-queue',
-  components: {
-    ActiveQueue,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [sizeMixin],
-  computed: {
-    ...mapState('features/job', {
-      taskList: (state) => state.jobList,
-    }),
-    distributedTasks() {
-      return this.taskList.filter((task) => task.state === JobState.Distribute);
-    },
-    activeTasks() {
-      return this.taskList.filter((task) => task.state !== JobState.Distribute);
-    },
-    expansions() {
-      return [
-        {
-          value: 'active',
-          counters: [
-            {
-              color: 'main',
-              count: this.activeTasks.length,
-            },
-            {
-              color: 'success',
-              count: this.distributedTasks.length,
-            },
-          ].filter(({ count }) => count),
-        },
-      ];
-    },
+});
+
+const store = useStore();
+
+const {
+  cacheExpansionState,
+  restoreExpansionState,
+} = useCachedExpansionState({ entity: 'job' });
+
+const taskList = computed(() => store.state.features.job.jobList);
+
+const distributedTasks = computed(() => taskList.value.filter((task) => task.state === JobState.Distribute));
+const activeTasks = computed(() => taskList.value.filter((task) => task.state !== JobState.Distribute));
+
+const expansions = computed(() => [
+  {
+    value: 'active',
+    initiallyCollapsed: restoreExpansionState('active'),
+    counters: [
+      {
+        color: 'main',
+        count: activeTasks.value.length,
+      },
+      {
+        color: 'success',
+        count: distributedTasks.value.length,
+      },
+    ].filter(({ count }) => count),
   },
+]);
+
+const getComponent = (value) => {
+  switch (value) {
+    case 'active':
+      return ActiveQueue;
+    default:
+      return null;
+  }
 };
 </script>
 
