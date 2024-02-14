@@ -67,6 +67,7 @@ export default {
         page: this.dataPage,
         size: this.dataSize,
         search: this.dataSearch,
+        searchKey: this.filterQuery,
       };
       if (this.dataFields) params.fields = this.dataFields;
       if (this.dataSort) params.sort = this.dataSort;

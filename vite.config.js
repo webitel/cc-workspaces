@@ -46,7 +46,7 @@ export default ({ mode }) => {
         },
       }),
       createSvgSpritePlugin({
-        include: '/**/sprite/*.svg',
+        include: '**/sprite/*.svg',
       }),
     ],
     test: {

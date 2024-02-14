@@ -48,7 +48,11 @@ const actions = {
 
     if (number) {
       destination = number;
-    } else if (user) {
+    }
+    else if (user.phones) {
+      destination = user.phones.data.find(phone => phone.primary === true).number;
+    }
+    else if (user) {
       destination = user.extension;
     } else {
       destination = context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
