@@ -1,28 +1,17 @@
 import { shallowMount, mount } from '@vue/test-utils';
 import TaskQueuePreviewMd from '../task-queue-preview-md.vue';
 
-const task = {
-  id: '1',
-  members: [{ name: 'jest' }],
-  messages: [{ text: 'jest1' }, { text: 'jest2' }],
-};
-
 describe('TaskQueuePreviewMd', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(TaskQueuePreviewMd, { props: { task } });
+    const wrapper = shallowMount(TaskQueuePreviewMd);
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('Correctly displays task displayQueueName', () => {
-    const queueName = 'jest3';
-    const testTask = { ...task, attempt: { queue: { name: queueName } } };
+  it('Correctly displays queue name, passed as prop', () => {
+    const queueName = 'queue name';
     const wrapper = mount(TaskQueuePreviewMd, {
-      props: { task: testTask },
-      global: {
-        stubs: { QueuePreviewTimer: true },
-      },
+      props: { queueName },
     });
-    expect(wrapper.findComponent({ name: 'wt-chip' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'wt-chip' }).text()).toBe(queueName);
+    expect(wrapper.find('.queue-preview-chips .wt-chip').text()).toBe(queueName);
   });
 });
