@@ -8,13 +8,16 @@
     <wt-expansion-panel
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :key="value"
-      :collapsed="initiallyCollapsed[value]"
+      :collapsed="initiallyCollapsed"
       :size="size"
       @closed="cacheExpansionState({expansion: value, state: false })"
       @opened="cacheExpansionState({expansion: value, state: true })"
     >
       <template v-slot:title>
-        {{ $t(`queueSec.chat.preview.${size}.${value}`) }}
+        <span
+          class="task-queue-name"
+          :title="$t(`queueSec.chat.preview.${size}.${value}`)"
+        >{{ $t(`queueSec.chat.preview.${size}.${value}`) }}</span>
       </template>
       <template v-slot:actions>
         <wt-chip
@@ -104,5 +107,8 @@ const getComponent = (value) => {
 </script>
 
 <style lang="scss" scoped>
-
+.task-queue-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>

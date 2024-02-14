@@ -9,12 +9,18 @@
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :size="size"
       :key="value"
-      :collapsed="initiallyCollapsed[value]"
+      :collapsed="initiallyCollapsed"
       @opened="cacheExpansionState({expansion: value, state: true })"
       @closed="cacheExpansionState({expansion: value, state: false })"
     >
       <template v-slot:title>
-        {{ $t(`queueSec.call.preview.${size}.${value}`) }}
+<!--         title is for tooltip -->
+        <span
+          class="task-queue-name"
+          :title="$t(`queueSec.call.preview.${size}.${value}`)"
+        >
+          {{ $t(`queueSec.call.preview.${size}.${value}`) }}
+        </span>
       </template>
       <template
         v-if="size === 'md'"
@@ -123,6 +129,9 @@ function openNewCall(payload) {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.task-queue-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
