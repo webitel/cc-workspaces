@@ -1,46 +1,93 @@
 <template>
-  <component
-    :is="component"
-    class="queue-preview--manual"
-    @click="emit('click', task)"
+  <task-queue-preview-md
+    v-if="size === 'md'"
+    :queue-name="task.queue.name"
   >
-    <template
-      v-if="size === 'md'"
-      v-slot:icon
-    >
+    <template v-slot:icon>
       <wt-icon
         icon="call-ringing"
       ></wt-icon>
     </template>
-    <template v-slot:avatar>
-      <wt-icon
-        icon="call-ringing"
-      ></wt-icon>
-    </template>
-    <template v-slot:timer>
-      <div class="queue-preview--manual__timer">
-        {{ wait }}
-      </div>
-    </template>
+
     <template v-slot:title>
       {{ task.displayName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ task.displayNumber }}
     </template>
-    <template v-slot:footer>
+
+    <template v-slot:timer>
+      {{ wait }}
+    </template>
+
+    <template v-slot:quick-action>
       <wt-rounded-action
-        :size="size"
         color="success"
         icon="call--filled"
         rounded
+        size="md"
         @click="emit('accept', task)"
       ></wt-rounded-action>
+    </template>
+
+    <template v-slot:footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
       ></manual-deadline-progress-bar>
     </template>
-  </component>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+    :queue-name="task.queue.name"
+  >
+    <template v-slot:icon>
+      <wt-icon
+        icon="call-ringing"
+        size="sm"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ task.displayName }}
+    </template>
+
+    <template v-slot:tooltip-subtitle>
+      {{ task.displayNumber }}
+    </template>
+
+    <template v-slot:title>
+      {{ task.displayName }}
+    </template>
+
+    <template v-slot:subtitle>
+      {{ wait }}
+    </template>
+
+    <template v-slot:actions>
+      <wt-rounded-action
+        color="success"
+        icon="call--filled"
+        rounded
+        size="sm"
+        @click="emit('accept', task)"
+      ></wt-rounded-action>
+    </template>
+
+    <template v-slot:footer>
+      <manual-deadline-progress-bar
+        :deadline="task.deadline"
+      ></manual-deadline-progress-bar>
+    </template>
+  </task-queue-preview-sm>
+
+  <div
+    v-else
+  >unknown task size
+    <br>
+    {{ task }}
+  </div>
 </template>
 
 <script setup>
@@ -67,17 +114,6 @@ const props = defineProps({
 
 const emit = defineEmits(['click', 'accept']);
 
-const component = computed(() => {
-  switch (props.size) {
-    case 'md':
-      return TaskQueuePreviewMd;
-    case 'sm':
-      return TaskQueuePreviewSm;
-    default:
-      return TaskQueuePreviewMd;
-  }
-});
-
 const wait = computed(() => {
   const waitTime = props.task.wait;
   const minutes = Math.floor(waitTime / 60);
@@ -90,24 +126,5 @@ const wait = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.queue-preview--manual {
-  &.queue-preview--md {
-    flex-direction: row;
-  }
 
-  &.queue-preview--sm {
-    .wt-rounded-action {
-      display: block;
-      margin: auto;
-    }
-  }
-}
-
-.queue-preview--manual__timer {
-  text-align: center;
-}
-
-.manual-deadline-progress-bar {
-  margin-top: var(--spacing-xs);
-}
 </style>

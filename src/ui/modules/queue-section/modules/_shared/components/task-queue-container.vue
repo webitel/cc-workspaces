@@ -1,16 +1,22 @@
 <template>
   <section
-    :class="{ 'queue-task-container--empty': !$slots.default }"
     class="queue-task-container"
+    :class="{
+    'queue-task-container--empty': empty,
+    }"
   >
     <slot></slot>
   </section>
 </template>
 
-<script>
-export default {
-  name: 'task-queue-container',
-};
+<script setup>
+const props = defineProps({
+  // because we can't check for empty slot in vue 3 because v-for=0 => non-empty slot :(
+  empty: {
+    type: Boolean,
+    default: true,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -20,11 +26,10 @@ export default {
   flex-direction: column;
   min-height: 0;
   max-height: 100%;
-  margin-top: var(--spacing-xs);
   gap: var(--spacing-xs);
 
-  &--empty {
-    margin-top: 0;
+  &:not(.queue-task-container--empty) {
+    padding-top: var(--spacing-xs);
   }
 }
 </style>

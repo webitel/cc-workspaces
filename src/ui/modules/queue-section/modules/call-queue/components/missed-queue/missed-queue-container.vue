@@ -1,6 +1,7 @@
 <template>
-  <task-queue-container>
-    <h3 class="queue-task-container__heading">{{ $t('history.today') }}</h3>
+  <task-queue-container
+    :empty="!missedList.length"
+  >
     <missed-preview
       v-for="(task, key) of missedList"
       :key="task.id"
@@ -9,6 +10,12 @@
       :size="size"
       @click="openCall"
     ></missed-preview>
+    <a
+      class="missed-queue-container__more"
+      v-show="next"
+      @click.prevent="loadMore"
+    >{{ $t('reusable.more') }}
+    </a>
   </task-queue-container>
 </template>
 
@@ -26,14 +33,10 @@ export default {
     MissedPreview,
   },
 
-  created() {
-    this.loadMissedList();
-    this.resetNewMissed(); // reset UI flag
-  },
-
   computed: {
     ...mapState('features/call/missed', {
       missedList: (state) => state.missedList,
+      next: (state) => state.next,
     }),
   },
 
@@ -43,7 +46,9 @@ export default {
     }),
     ...mapActions('features/call/missed', {
       loadMissedList: 'LOAD_DATA_LIST',
+      loadMore: 'LOAD_NEXT_PAGE',
       resetNewMissed: 'RESET_NEW_MISSED',
+      resetMissed: 'RESET_MISSED_LIST',
     }),
 
     openCall(missed) {
@@ -51,14 +56,23 @@ export default {
       this.openNewCall({ newNumber });
     },
   },
+
+  created() {
+    this.loadMissedList();
+    this.resetNewMissed(); // reset UI flag
+  },
+
+  unmounted() {
+    this.resetMissed();
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.queue-task-container__heading {
-  @extend %typo-body-2;
-  margin-bottom: 1px;
+.missed-queue-container__more {
+  display: block;
   text-align: center;
-  color: var(--text-main-color);
+  color: var(--info-color);
+  cursor: pointer;
 }
 </style>

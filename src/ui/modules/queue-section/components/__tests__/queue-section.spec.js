@@ -1,8 +1,17 @@
-import { mount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import QueueSection
   from '../the-agent-queue-section.vue';
+import store from '../../../../../app/store';
 
-describe('Make new call functionality', () => {
+describe('Queue Section', () => {
+  it('renders a component', () => {
+    const wrapper = shallowMount(QueueSection, {
+      global: {
+        plugins: [store],
+      },
+    });
+    expect(wrapper.exists()).toBeTruthy();
+  });
   it('Opens new call on workspace on "new call" btn click', () => {
     const mock = vi.fn();
     vi.spyOn(QueueSection.methods, 'openNewCall')
@@ -17,6 +26,9 @@ describe('Make new call functionality', () => {
       computed: {
         isNewCallButton() {
           return true;
+        },
+        tabs() {
+          return [{}];
         },
       },
     });

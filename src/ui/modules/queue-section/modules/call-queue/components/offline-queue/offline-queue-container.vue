@@ -1,5 +1,7 @@
 <template>
-  <task-queue-container>
+  <task-queue-container
+    :empty="!dataList.length"
+  >
     <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
       <offline-preview
         v-for="(task) of dataList"

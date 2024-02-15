@@ -1,51 +1,86 @@
 <template>
-  <component
-    :is="`task-queue-preview-${size}`"
-    class="queue-preview--missed"
+  <task-queue-preview-md
+    v-if="size === 'md'"
   >
-    <template
-      v-if="size === 'md'"
-      v-slot:icon
-    >
+    <template v-slot:icon>
       <wt-icon
         color="error"
         icon="call-missed"
       ></wt-icon>
     </template>
-    <template v-slot:avatar>
-      <wt-icon
-        color="error"
-        icon="call-missed"
-      ></wt-icon>
-    </template>
-    <template v-slot:timer>
-      <span class="missed-preview__task-time">
-        {{ displayTime }}
-      </span>
-    </template>
+
     <template v-slot:title>
       {{ displayName }}
     </template>
-    <template v-slot:body>
+
+    <template v-slot:subtitle>
       {{ displayNumber }}
     </template>
-    <template v-slot:footer>
-      <div class="queue-preview--missed__callback-wrapper">
-        <wt-rounded-action
-          :size="size"
-          color="success"
-          icon="call--filled"
-          rounded
-          @click="call"
-        ></wt-rounded-action>
-      </div>
+
+    <template v-slot:timer>
+      {{ displayTime }}
     </template>
-  </component>
+
+    <template v-slot:quick-action>
+      <wt-rounded-action
+        color="success"
+        icon="call--filled"
+        rounded
+        size="md"
+        @click="call"
+      ></wt-rounded-action>
+    </template>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+  >
+    <template v-slot:icon>
+      <wt-icon
+        color="error"
+        size="sm"
+        icon="call-missed"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ displayName }}
+    </template>
+
+    <template v-slot:tooltip-subtitle>
+      {{ displayNumber }}
+    </template>
+
+    <template v-slot:title>
+      {{ displayName }}
+    </template>
+
+    <template v-slot:subtitle>
+      {{ displayTime }}
+    </template>
+
+    <template v-slot:actions>
+      <wt-rounded-action
+        color="success"
+        icon="call--filled"
+        rounded
+        size="sm"
+        @click="call"
+      ></wt-rounded-action>
+    </template>
+  </task-queue-preview-sm>
+
+  <div
+    v-else
+  >unknown task size
+    <br>
+    {{ task }}
+  </div>
 </template>
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
@@ -77,30 +112,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.queue-preview--missed {
-  &.queue-preview--md {
-    flex-direction: row;
-    :deep .missed-preview__task-time {
-      text-align: end;
-    }
-  }
-  &.queue-preview--sm {
-    .queue-preview--missed__callback-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    :deep .missed-preview__task-time {
-      text-align: center;
-    }
-  }
-}
 
-.missed-preview__task-time {
-  @extend %typo-body-2;
-  overflow: hidden;
-  flex-grow: 1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
 </style>

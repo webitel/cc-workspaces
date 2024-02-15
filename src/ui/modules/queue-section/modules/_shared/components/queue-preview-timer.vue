@@ -1,5 +1,5 @@
 <template>
-  <div class="queue-preview-timer" :class="{ 'queue-preview-timer--bold': bold }">
+  <div class="queue-preview-timer">
     <!--v-for for timer not to resize on digit width change-->
     <span
       class="queue-preview-timer__digit"
@@ -20,17 +20,13 @@ export default {
       type: Object,
       required: true,
     },
-    bold: {
-      type: Boolean,
-      default: false,
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .queue-preview-timer {
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
 
   &__digit {
@@ -42,10 +38,6 @@ export default {
     &:nth-child(3), &:nth-child(6) {
       width: var(--spacing-2xs);
     }
-  }
-
-  &--bold .queue-preview-timer__digit {
-    @extend %typo-subtitle-2;
   }
 }
 </style>

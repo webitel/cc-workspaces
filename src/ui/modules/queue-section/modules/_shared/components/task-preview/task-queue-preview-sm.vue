@@ -3,19 +3,22 @@
     :class="[
       { 'queue-preview--opened': opened },
     ]"
-    class="queue-preview queue-preview--sm"
+    class="queue-preview queue-preview-sm"
     tabindex="0"
-    @click="$emit('click', task)"
-    @keydown.enter="$emit('click', task)"
+    @click="$emit('click')"
+    @keydown.enter="$emit('click')"
   >
 
     <header class="queue-preview-header">
-      <div class="queue-preview-header__icon">
+
+      <div class="queue-preview-icon">
         <slot name="icon"></slot>
       </div>
-      <div class="queue-preview-additional-status">
-        <slot name="additional-status"></slot>
+
+      <div class="queue-preview-icon-status">
+        <slot name="icon-status"></slot>
       </div>
+
       <wt-tooltip>
         <template v-slot:activator>
           <wt-icon-btn
@@ -24,19 +27,25 @@
             size="sm"
           ></wt-icon-btn>
         </template>
-        <div class="queue-preview-info">
-          <span class="queue-preview-header__title">
-            <slot name="title"></slot>
+        <div class="queue-preview-tooltip-content">
+          <span
+            v-if="$slots['tooltip-title']"
+            class="queue-preview-tooltip-title"
+          >
+            <slot name="tooltip-title"></slot>
           </span>
-          <p class="queue-preview-header__subtitle">
-            <slot name="body"></slot>
-          </p>
+          <span
+            v-if="$slots['tooltip-subtitle']"
+            class="queue-preview-tooltip-subtitle"
+          >
+            <slot name="tooltip-subtitle"></slot>
+          </span>
           <div
-            v-if="displayQueueName"
-            class="queue-preview-chips"
+            v-if="queueName"
+            class="queue-preview-tooltip-chips"
           >
             <wt-chip color="secondary">
-              {{ displayQueueName }}
+              {{ queueName }}
             </wt-chip>
           </div>
         </div>
@@ -51,42 +60,50 @@
       </slot>
     </section>
 
-    <slot name="timer">
-      <queue-preview-timer
-        :task="task"
-      ></queue-preview-timer>
-    </slot>
+    <div
+      v-if="$slots.title"
+      class="queue-preview-title"
+    >
+      <slot name="title"></slot>
+    </div>
+
+    <div
+      v-if="$slots.subtitle"
+      class="queue-preview-subtitle"
+    >
+      <slot name="subtitle"></slot>
+    </div>
+
+    <div
+      v-if="$slots.actions"
+      class="queue-preview-actions"
+    >
+      <slot name="actions"></slot>
+    </div>
 
     <footer
-      v-if="$slots.footer || $slots.actions"
+      v-if="$slots.footer"
       class="queue-preview-footer"
     >
-      <slot name="footer">
-        <div class="queue-preview-actions">
-          <slot name="actions"></slot>
-        </div>
-      </slot>
+      <slot name="footer"></slot>
     </footer>
   </article>
 </template>
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import displayInfo from '../../../../../../mixins/displayInfoMixin';
-import QueuePreviewTimer from '../queue-preview-timer.vue';
 
 export default {
-  name: 'task-queue-preview',
-  components: { QueuePreviewTimer },
-  mixins: [displayInfo, sizeMixin],
+  name: 'task-queue-preview-sm',
+  mixins: [sizeMixin],
   props: {
-    task: {
-      type: Object,
-      required: true,
-    },
     opened: {
       type: Boolean,
       default: false,
+    },
+    queueName: {
+      type: String,
+      default: '',
     },
   },
 };
@@ -96,41 +113,33 @@ export default {
 // styles should be unscoped due to tooltip contents styling
 @import '../../css/queue-preview';
 
-.queue-preview--sm {
-  .queue-preview-header__icon {
-    width: 16px;
-    height: 16px;
+.queue-preview-sm {
+  .queue-preview-icon {
+    flex: 0 0 var(--icon-sm-size);
   }
 
   .queue-preview-avatar {
     margin: auto;
   }
 
-  .queue-preview-timer {
-    margin: auto;
+  .queue-preview-title,
+  .queue-preview-subtitle {
+    text-align: center;
   }
 
   .queue-preview-actions {
-    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    width: 100%;
   }
 }
 
 // tooltip content styling
-.queue-preview-info {
+.queue-preview-tooltip-content {
   display: flex;
   flex-direction: column;
   max-width: 400px;
   gap: var(--spacing-2xs);
-
-  .queue-preview-header__title {
-    @extend %typo-subtitle-2;
-  }
-
-  .queue-preview-header__subtitle {
-    @extend %typo-body-2;
-  }
 }
 
 </style>
