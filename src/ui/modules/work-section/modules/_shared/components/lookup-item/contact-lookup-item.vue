@@ -1,10 +1,12 @@
 <template>
   <lookup-item>
     <template v-slot:before>
-      <wt-avatar
-        :size="size"
-        :username="item.name.commonName"
-      ></wt-avatar>
+      <a :href="crmContactLink" target="_blank">
+        <wt-avatar
+          :size="size"
+          :username="item.name.commonName"
+        ></wt-avatar>
+      </a>
     </template>
 
     <template v-slot:title>
@@ -17,9 +19,10 @@
 
     <template v-slot:after>
       <wt-rounded-action
+        :disabled="isCallActionDisabled"
         :size="size"
-        icon="call--filled"
         color="success"
+        icon="call--filled"
         rounded
         @click="handleInput"
       ></wt-rounded-action>
@@ -37,6 +40,12 @@ export default {
   computed: {
     primaryPhoneNumber() {
       return this.item.phones?.data.find(phone => phone.primary === true).number;
+    },
+    isCallActionDisabled() {
+      return !(!!this.item.phones);
+    },
+    crmContactLink() {
+      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}`;
     },
   },
 };

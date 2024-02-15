@@ -49,11 +49,16 @@ export default {
     async loadDataList() {
       if (!this.dataList.length) this.isLoading = true;
       const params = this.collectParams();
-      const { items, next } = await this.fetch(params);
-      this.isNext = next;
-      this.setData(items);
-      this.dataPage += 1;
-      this.isLoading = false;
+      try {
+        const { items, next } = await this.fetch(params);
+        this.isNext = next;
+        this.setData(items);
+        this.dataPage += 1;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     async handleIntersect() {
