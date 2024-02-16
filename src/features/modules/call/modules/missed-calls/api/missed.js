@@ -1,6 +1,9 @@
-import { getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults';
+import {
+  getDefaultGetListResponse,
+  getDefaultGetParams,
+} from '@webitel/ui-sdk/src/api/defaults';
 import applyTransform, {
-  merge, notify,
+  merge, notify, snakeToCamel,
   starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers';
 import { CallServiceApiFactory } from 'webitel-sdk';
@@ -13,7 +16,7 @@ const getMissedCalls = async (params) => {
   const defaultParams = {
     answeredAtFrom: 0,
     answeredAtTo: 0,
-    createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
+    // createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
     createdAtTo: new Date().setHours(23, 59, 59, 999), // today end
     fields: ['from', 'created_at'],
     isMissed: true,
@@ -56,12 +59,21 @@ const getMissedCalls = async (params) => {
         from: answeredAtFrom,
         to: answeredAtTo,
       },
-      user_id: userId,
+      user_id: [userId],
       member_id: memberId,
       cause,
       direction,
       missed: isMissed,
     });
+
+    const { items, next } = applyTransform(response.data, [
+      snakeToCamel(),
+      merge(getDefaultGetListResponse()),
+    ]);
+    return {
+      items,
+      next,
+    };
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -72,7 +84,7 @@ const getMissedCalls = async (params) => {
 const redialToMissed = async ({ callId }) => {
   try {
     const response = await callService.redialCall(callId, {});
-    return response;
+    return response.data;
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -85,7 +97,7 @@ const hideMissedCall = async ({ callId }) => {
     const response = await callService.patchHistoryCall(callId, {
       hide_missed: true,
     });
-    return response;
+    return response.data;
   } catch (err) {
     throw applyTransform(err, [
       notify,

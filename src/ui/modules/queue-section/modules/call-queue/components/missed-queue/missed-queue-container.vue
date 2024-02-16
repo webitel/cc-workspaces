@@ -8,7 +8,9 @@
       :task="task"
       :index="key"
       :size="size"
-      @click="openCall"
+      @hide="hideMissed(task)"
+      @call="call(task)"
+      @click="openCall(task)"
     ></missed-preview>
     <a
       class="missed-queue-container__more"
@@ -43,17 +45,23 @@ export default {
   methods: {
     ...mapActions('features/call', {
       openNewCall: 'OPEN_NEW_CALL',
+      makeCall: 'CALL',
     }),
     ...mapActions('features/call/missed', {
       loadMissedList: 'LOAD_DATA_LIST',
       loadMore: 'LOAD_NEXT_PAGE',
+      hideMissed: 'HIDE_MISSED',
       resetNewMissed: 'RESET_NEW_MISSED',
       resetMissed: 'RESET_MISSED_LIST',
     }),
+    call(missed) {
+      const { number } = missed.from;
+      return this.makeCall({ number });
+    },
 
     openCall(missed) {
-      const newNumber = missed.from.number;
-      this.openNewCall({ newNumber });
+      const { number } = missed.from;
+      this.openNewCall({ newNumber: number });
     },
   },
 

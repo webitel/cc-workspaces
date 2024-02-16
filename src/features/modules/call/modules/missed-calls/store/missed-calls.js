@@ -29,9 +29,16 @@ const actions = {
   LOAD_NEXT_PAGE: async (context) => {
     context.commit('SET_PAGE', context.state.page + 1);
 
-    const { items, next } = await historyAPI.getHistory(context.getters.REQUEST_PARAMS);
+    const { items, next } = await missedAPI.getMissedCalls(context.getters.REQUEST_PARAMS);
     context.commit('SET_NEXT', next);
     context.commit('SET_DATA_LIST', [...context.state.missedList, ...items]);
+  },
+
+  HIDE_MISSED: async (context, missed) => {
+    try {
+      await missedAPI.hideMissedCall(missed.id);
+      context.commit('REMOVE_HIDDEN_MISSED_FROM_LIST', missed);
+    } catch (err) {}
   },
 
   RESET_MISSED_LIST: (context) => {
@@ -60,6 +67,10 @@ const mutations = {
 
   SET_NEW_MISSED: (state) => {
     state.isNewMissed = true;
+  },
+
+  REMOVE_HIDDEN_MISSED_FROM_LIST: (state, missed) => {
+    state.missedList.splice(state.missedList.indexOf(missed), 1);
   },
 
   RESET_NEW_MISSED: (state) => {
