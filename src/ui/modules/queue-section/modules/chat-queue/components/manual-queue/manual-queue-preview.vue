@@ -87,7 +87,7 @@
 import { computed } from 'vue';
 import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import ManualDeadlineProgressBar
-  from '../../../../../../../features/modules/call/manual/components/manual-deadline-progress-bar.vue';
+  from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 
