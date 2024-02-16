@@ -1,10 +1,5 @@
 <template>
-  <div
-    @blur="isExpanded = false"
-    @focus="isExpanded = true"
-    @mouseenter="isExpanded = true"
-    @mouseleave="isExpanded = false"
-  >
+  <div>
     <div>
       <slot name="header" v-bind="{ isExpanded }"></slot>
     </div>
@@ -25,8 +20,13 @@ export default {
   name: 'call-window-wrapper',
   components: { WtExpandTransition },
   data: () => ({
-    isExpanded: false,
   }),
+  props: {
+    isExpanded: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 

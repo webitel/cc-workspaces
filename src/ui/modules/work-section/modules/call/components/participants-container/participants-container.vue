@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <wt-tabs
+  <wt-tabs
       :current="currentTab"
       :tabs="tabs"
       @change="changeTab"
-    ></wt-tabs>
-  </div>
+  ></wt-tabs>
   <component
-    :is="currentTab.component"
-    :size="size"
+      :is="currentTab.component"
+      :size="size"
   ></component>
 </template>
 
@@ -66,7 +64,11 @@ function changeTab(tab) {
 </script>
 
 <style lang="scss" scoped>
-.wt-tabs:deep(button) {
-  width: 100%;
+.wt-tabs {
+  margin-bottom: var(--spacing-sm);
+
+  &:deep(button) {
+    width: 100%;
+  }
 }
 </style>

@@ -19,12 +19,12 @@
 
     <template v-slot:after>
       <wt-rounded-action
-        :disabled="isCallActionDisabled"
-        :size="size"
-        color="success"
-        icon="call--filled"
-        rounded
-        @click="handleInput"
+          :disabled="isCallActionDisabled"
+          :size="size"
+          color="success"
+          icon="call--filled"
+          rounded
+          @click="handleCallClick"
       ></wt-rounded-action>
     </template>
   </lookup-item>
@@ -39,13 +39,22 @@ export default {
   mixins: [lookupItemMixin, sizeMixin],
   computed: {
     primaryPhoneNumber() {
-      return this.item.phones?.data.find(phone => phone.primary === true).number;
+      return this.item.phones?.data.find(phone => phone.primary === true)?.number;
     },
     isCallActionDisabled() {
       return !(!!this.item.phones);
     },
     crmContactLink() {
       return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}`;
+    },
+  },
+  methods: {
+    handleCallClick() {
+      if (this.item.phones.data.length > 1) {
+        this.$emit('toggleExpansion', this.item)
+      } else {
+        this.handleInput();
+      }
     },
   },
 };

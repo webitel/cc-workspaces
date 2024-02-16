@@ -42,12 +42,17 @@
       <wt-loader v-if="isLoading" />
       <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
       <div v-else class="ws-worksection__list-wrap">
-        <expansion-panel v-for="(item) of dataList" :key="item.id">
+        <expansion-panel
+            v-for="(item, index) in dataList"
+            :key="item.id"
+            :is-expanded="item.isExpanded"
+        >
           <template v-slot:header>
             <contact-lookup-item
-              :item="item"
-              :size="size"
-              @input="makeCall({ user: $event })"
+                :item="item"
+                :size="size"
+                @input="makeCall({ user: $event })"
+                @toggleExpansion="toggleExpansion(index)"
             ></contact-lookup-item>
           </template>
           <template v-slot:content>
@@ -179,7 +184,14 @@ export default {
       this.filterQuery = value;
       this.resetData();
     },
-
+    toggleExpansion(index) {
+      this.dataList = this.dataList.map((item, i) => {
+        if (i === index) {
+          return { ...item, isExpanded: !item.isExpanded };
+        }
+        return item;
+      });
+    },
     fetch(params) {
       return contactsAPI.getList(params);
     },
