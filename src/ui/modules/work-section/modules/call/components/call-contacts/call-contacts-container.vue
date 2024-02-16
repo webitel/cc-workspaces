@@ -147,11 +147,11 @@ export default {
         },
         {
           value: SearchMode.VARIABLES,
-           text: this.$t('contacts.attributes', 1),
+           text: this.$t('infoSec.contacts.attributes', 1),
         },
         {
           value: SearchMode.DESTINATION,
-           text: this.$t('contacts.destination'),
+           text: this.$t('infoSec.contacts.destination'),
         },
       ];
     },
