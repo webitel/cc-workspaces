@@ -60,34 +60,13 @@
               v-if="item?.phones?.data.length > 1"
               class="contact-communications-list"
             >
-              <div
-                v-for="phonesList in item?.phones?.data"
-                :key="phonesList.id"
-                class="contact-communications-item"
-              >
-                <div class="contact-communications-item__before">
-                  <wt-icon
-                    :icon="phonesList.primary ? 'chat-message-status-sent' : ''"
-                    :size="size"
-                    color="success"
-                  />
-                </div>
-                <div class="contact-communications-item__main">
-                  <span class="contact-communications-item__title">{{ phonesList.number }}</span>
-                </div>
-                <div class="contact-communications-item__after">
-                  <button
-                    class="contact-communications-item__call"
-                    @click="makeCall({ user: item, number: phonesList.number })"
-                  >
-                    <wt-icon
-                      :size="size"
-                      color="success"
-                      icon="call--filled"
-                    />
-                  </button>
-                </div>
-              </div>
+              <contact-communication-item
+                  v-for="phonesList in item?.phones?.data"
+                  :key="phonesList.id"
+                  :phonesList="phonesList"
+                  :item="item"
+                  :size="size"
+              />
             </div>
           </template>
         </expansion-panel>
@@ -111,6 +90,7 @@ import ContactLookupItem from '../../../_shared/components/lookup-item/contact-l
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import APIRepository from '../../../../../../../app/api/APIRepository';
 import ExpansionPanel from '../expansion-panel.vue';
+import ContactCommunicationItem from './contact-communication-item.vue';
 
 const contactsAPI = APIRepository.contacts;
 
@@ -118,6 +98,7 @@ export default {
   name: 'call-contacts-container',
   mixins: [infiniteScrollMixin, sizeMixin],
   components: {
+    ContactCommunicationItem,
     ContactLookupItem,
     EmptySearch,
     ExpansionPanel,
@@ -205,42 +186,5 @@ export default {
   flex-direction: column;
   padding: var(--spacing-xs) 0;
   gap: var(--spacing-xs);
-}
-
-.contact-communications-item {
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-xs);
-  transition: var(--transition);
-  border: 1px solid transparent;
-  border-radius: var(--spacing-xs);
-  gap: 8px;
-
-  &:hover {
-    border-color: var(--primary-color);
-
-    .contact-communications-item__call {
-      display: flex;
-    }
-  }
-}
-
-.contact-communications-item__before {
-  display: flex;
-  min-width: 16px;
-}
-
-.contact-communications-item__main {
-  flex-grow: 1;
-  line-height: 1;
-}
-
-.contact-communications-item__title {
-  @extend %typo-body-2;
-  overflow-wrap: anywhere;
-}
-
-.contact-communications-item__call {
-  display: none;
 }
 </style>
