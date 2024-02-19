@@ -16,9 +16,9 @@ const getMissedCalls = async (params) => {
   const defaultParams = {
     answeredAtFrom: 0,
     answeredAtTo: 0,
-    // createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
+    createdAtFrom: new Date().setHours(0, 0, 0, 0), // today
     createdAtTo: new Date().setHours(23, 59, 59, 999), // today end
-    fields: ['from', 'created_at'],
+    fields: ['from', 'created_at', 'id'],
     isMissed: true,
   };
 
@@ -83,7 +83,9 @@ const getMissedCalls = async (params) => {
 
 const redialToMissed = async ({ callId }) => {
   try {
-    const response = await callService.redialCall(callId, {});
+    const response = await callService.redialCall(callId, {
+      call_id: callId,
+    });
     return response.data;
   } catch (err) {
     throw applyTransform(err, [

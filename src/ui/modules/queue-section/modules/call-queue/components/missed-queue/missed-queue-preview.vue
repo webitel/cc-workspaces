@@ -127,6 +127,8 @@ export default {
 
 <style lang="scss" scoped>
 .missed-queue-preview {
+  cursor: auto;
+
   .missed-queue-preview-icon-wrapper {
     position: relative;
   }

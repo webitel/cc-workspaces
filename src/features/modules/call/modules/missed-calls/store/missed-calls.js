@@ -34,11 +34,22 @@ const actions = {
     context.commit('SET_DATA_LIST', [...context.state.missedList, ...items]);
   },
 
+  REDIAL: async (context, missed) => {
+    try {
+      await missedAPI.redialToMissed({ callId: missed.id });
+      context.commit('REMOVE_HIDDEN_MISSED_FROM_LIST', missed);
+    } catch (err) {
+      throw err;
+    }
+  },
+
   HIDE_MISSED: async (context, missed) => {
     try {
-      await missedAPI.hideMissedCall(missed.id);
+      await missedAPI.hideMissedCall({ callId: missed.id });
       context.commit('REMOVE_HIDDEN_MISSED_FROM_LIST', missed);
-    } catch (err) {}
+    } catch (err) {
+      throw err;
+    }
   },
 
   RESET_MISSED_LIST: (context) => {
