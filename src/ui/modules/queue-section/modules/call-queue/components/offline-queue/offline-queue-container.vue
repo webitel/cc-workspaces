@@ -36,7 +36,7 @@ export default {
     OfflinePreview,
   },
   setup() {
-    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+    const { subscribe } = useCachedInterval({ timeout: 15 * 1000 });
     return { subscribe };
   },
   computed: {
