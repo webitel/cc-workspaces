@@ -15,7 +15,7 @@
           :key="item.id"
           :item="item"
           :size="size"
-          @input="makeCall({ user: $event })"
+          @input="makeCall({ number: item.extension })"
         ></user-lookup-item>
       </div>
 
@@ -55,9 +55,7 @@
         makeCall: 'CALL',
       }),
 
-      fetch(params) {
-        return usersAPI.getUsers(params);
-      },
+      fetch: usersAPI.getUsers,
     },
   };
 </script>

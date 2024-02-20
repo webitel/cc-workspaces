@@ -11,9 +11,10 @@ import {
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults';
 import { ContactsApiFactory } from 'webitel-sdk';
-import configuration from '../../../../../../../../app/api/openAPIConfig';
-import instance from '../../../../../../../../app/api/instance';
-import getDefaultGetListResponse from './getDefaultGetListResponse';
+import configuration from '../../../openAPIConfig';
+import instance from '../../../instance';
+import getDefaultGetListResponse from './defaults/getDefaultGetListResponse';
+import SearchMode from './enums/SearchMode.enum';
 
 const service = new ContactsApiFactory(configuration, '', instance);
 
@@ -50,7 +51,7 @@ const getList = async (params) => {
   ];
   //
   // This code needed for adding starToSearch method to applyTransform while searchKey !== SearchMode.VARIABLES because '*' in variables search mode brokes backend logic.
-  if (params.qin !== 'variable') {
+  if (params.qin !== SearchMode.VARIABLES) {
     transformations.push(starToSearch('q'));
   }
 

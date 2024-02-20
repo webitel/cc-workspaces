@@ -51,7 +51,7 @@
             <contact-lookup-item
                 :item="item"
                 :size="size"
-                @input="makeCall({ user: $event })"
+                @input="call(item)"
                 @toggleExpansion="toggleExpansion(index)"
             ></contact-lookup-item>
           </template>
@@ -88,11 +88,9 @@ import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollM
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import ContactLookupItem from '../../../_shared/components/lookup-item/contact-lookup-item.vue';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import APIRepository from '../../../../../../../app/api/APIRepository';
+import contactsAPI from '../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import ExpansionPanel from '../expansion-panel.vue';
 import ContactCommunicationItem from './contact-communication-item.vue';
-
-const contactsAPI = APIRepository.contacts;
 
 export default {
   name: 'call-contacts-container',
@@ -161,6 +159,10 @@ export default {
     ...mapActions('features/call', {
       makeCall: 'CALL',
     }),
+    call(contact) {
+      throw new Error('fixme: implement call method for contact');
+      // this.makeCall({ number: contact.extension });
+    },
     changeMode({ value }) {
       this.filterQuery = value;
       this.resetData();
@@ -174,7 +176,7 @@ export default {
       });
     },
     fetch(params) {
-      return contactsAPI.getList(params);
+      return contactsAPI.getList({ ...params, qin: this.filterQuery });
     },
   },
 };
