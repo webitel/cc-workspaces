@@ -1,179 +1,137 @@
 <template>
-  <the-agent-task-queue
+  <article
     class="task-queue call-queue"
-    :size="size"
     :class="[
       `call-queue--${size}`
     ]"
   >
-    <template v-slot:title>
-      <div class="call-queue__title-wrapper">
-        <span class="call-queue__title">{{ $t('queueSec.call.calls') }}</span>
-        <wt-tabs
-          v-model="currentTab"
-          :tabs="tabs"
-        >
-          <template
-            v-for="(tab, key) of tabs"
-            v-slot:[tab.value]
-          >
-            <div class="queue-tab__wrap" :key="key">
-              <div
-                v-show="tab.attention"
-                class="queue-tab__indicator"
-                :class="tab.value"
-              ></div>
-              <wt-icon
-                :icon="tab.icon"
-                :color="tab.iconColor"
-                :size="size"
-              ></wt-icon>
-            </div>
-          </template>
-        </wt-tabs>
-      </div>
-    </template>
-    <component
-      :is="currentTabComponent"
+    <wt-expansion-panel
+      v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :size="size"
-    ></component>
-  </the-agent-task-queue>
+      :key="value"
+      :collapsed="initiallyCollapsed"
+      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="cacheExpansionState({expansion: value, state: false })"
+    >
+      <template v-slot:title>
+<!--         title is for tooltip -->
+        <span
+          class="task-queue-name"
+          :title="$t(`queueSec.call.preview.${size}.${value}`)"
+        >
+          {{ $t(`queueSec.call.preview.${size}.${value}`) }}
+        </span>
+      </template>
+      <template
+        v-if="size === 'md'"
+        v-slot:actions
+      >
+        <wt-chip
+          v-for="({ color, count }, key) in counters"
+          :size="size"
+          :color="color"
+          :key="key"
+        >{{ count }}
+        </wt-chip>
+      </template>
+      <template>
+        <component
+          :is="getComponent(value)"
+          :size="size"
+        />
+      </template>
+    </wt-expansion-panel>
+  </article>
 </template>
 
-<script>
-import { mapActions, mapState } from 'vuex';
-import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
+<script setup>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
+import { CallActions } from 'webitel-sdk';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 
-export default {
-  name: 'the-agent-call-queue',
-  mixins: [sizeMixin],
-  components: {
-    TheAgentTaskQueue,
-    ActiveQueue,
-    OfflineQueue,
-    MissedQueue,
-    ManualQueue,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  data: () => ({
-    currentTab: { value: 'active' },
-  }),
+});
 
-  watch: {
-    // watch for callList length instead of actual call list because it throws a Vue internals error
-    callListLength() {
-      this.currentTab = { value: 'active' };
-    },
+const store = useStore();
+
+const {
+  cacheExpansionState,
+  restoreExpansionState,
+} = useCachedExpansionState({ entity: 'call' });
+
+const callList = computed(() => store.state.features.call.callList);
+
+const missedList = computed(() => store.state.features.call.missed.missedList);
+const manualList = computed(() => store.state.features.call.manual.manualList);
+const membersList = computed(() => store.state.features.member.memberList);
+
+const ringingCallsCount = computed(() => callList.value.filter((call) => call.state === CallActions.Ringing).length);
+const activeCallsCount = computed(() => callList.value.length - ringingCallsCount.value);
+
+const expansions = computed(() => [
+  {
+    value: 'active',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
+    counters: [
+      { color: 'main', count: activeCallsCount.value },
+      { color: 'success', count: ringingCallsCount.value },
+    ].filter(({ count }) => count),
   },
-
-  computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
-    ...mapState('features/call/missed', {
-      isNewMissed: (state) => state.isNewMissed,
-    }),
-    ...mapState('features/call/manual', {
-      manualList: (state) => state.manualList,
-    }),
-    ...mapState('features/member', {
-      membersList: (state) => state.memberList,
-    }),
-
-    tabs() {
-      return [
-        {
-          value: 'active',
-          icon: 'call',
-          iconColor: 'success',
-        },
-        {
-          value: 'missed',
-          icon: 'call-missed',
-          iconColor: 'error',
-          attention: this.isNewMissed,
-        },
-        {
-          value: 'offline',
-          icon: 'call',
-          attention: this.membersList.length,
-        },
-        {
-          value: 'manual',
-          icon: 'call-ringing',
-          attention: this.manualList.length,
-        },
-      ];
-    },
-
-    currentTabComponent() {
-      return `${this.currentTab.value}-queue`;
-    },
-    callListLength() {
-      return this.callList.length;
-    },
+  {
+    value: 'missed',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'missed' }),
+    counters: [
+      { color: 'secondary', count: missedList.value.length },
+    ].filter(({ count }) => count),
   },
-
-  methods: {
-    ...mapActions('features/call', {
-      openNewCall: 'OPEN_NEW_CALL',
-    }),
+  {
+    value: 'offline',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'offline' }),
+    counters: [
+      { color: 'secondary', count: membersList.value.length },
+    ].filter(({ count }) => count),
   },
-};
-</script>
+  {
+    value: 'manual',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'manual' }),
+    counters: [
+      { color: 'secondary', count: manualList.value.length },
+    ].filter(({ count }) => count),
+  },
+]);
 
-<style lang="scss" scoped>
-.call-queue {
-  .call-queue__title-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &--sm {
-    .call-queue__title-wrapper {
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
+const getComponent = (value) => {
+  switch (value) {
+    case 'active':
+      return ActiveQueue;
+    case 'missed':
+      return MissedQueue;
+    case 'offline':
+      return OfflineQueue;
+    case 'manual':
+      return ManualQueue;
+    default:
+      return null;
   }
 }
 
-.wt-tabs {
-  width: fit-content;
+function openNewCall(payload) {
+  return store.dispatch('features/call/OPEN_NEW_CALL', payload);
+}
+</script>
 
-  .queue-tab__wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .queue-tab__indicator {
-    position: absolute;
-    top: 0;
-    right: -3px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-
-    &.active {
-      background: var(--icon-success-color);
-    }
-
-    &.offline {
-      background: var(--icon-primary-color);
-    }
-
-    &.missed {
-      background: var(--icon-error-color);
-    }
-
-    &.manual {
-      background: var(--icon-color);
-    }
-  }
+<style lang="scss">
+.task-queue-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

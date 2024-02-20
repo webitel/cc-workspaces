@@ -59,14 +59,46 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Дзвінки',
-      at: 'о', // missed call "at 10:10"
+      calls: 'Дзвінок | Дзвінки',
+      preview: {
+        md: {
+          active: 'Активні дзвінки',
+          missed: 'Пропущені дзвінки',
+          offline: 'Офлайн дзвінки',
+          manual: 'Самостійно призначені дзвінки',
+        },
+        sm: {
+          active: 'Активні',
+          missed: 'Пропущені',
+          offline: 'Офлайн',
+          manual: 'Самостійно призначені',
+
+        },
+      },
     },
     chat: {
-      chats: 'Чати',
+      chats: 'Чат | Чати',
+      preview: {
+        md: {
+          active: 'Активні чати',
+          manual: 'Самостійно призначені чати',
+        },
+        sm: {
+          active: 'Активні',
+          manual: 'Самостійно призначені',
+        },
+      },
     },
     job: {
-      jobs: 'Завдання',
+      jobs: 'Завдання | Завдання',
+      preview: {
+        md: {
+          active: 'Активні завдання',
+        },
+        sm: {
+          active: 'Активні',
+        },
+      },
     },
   },
   infoSec: {

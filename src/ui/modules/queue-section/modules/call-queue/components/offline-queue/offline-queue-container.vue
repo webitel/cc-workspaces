@@ -1,5 +1,7 @@
 <template>
-  <task-queue-container>
+  <task-queue-container
+    :empty="!dataList.length"
+  >
     <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
       <offline-preview
         v-for="(task) of dataList"
@@ -34,7 +36,7 @@ export default {
     OfflinePreview,
   },
   setup() {
-    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+    const { subscribe } = useCachedInterval({ timeout: 15 * 1000 });
     return { subscribe };
   },
   computed: {

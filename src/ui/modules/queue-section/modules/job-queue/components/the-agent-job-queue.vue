@@ -1,54 +1,101 @@
 <template>
-  <the-agent-task-queue
+  <article
+    :class="[
+      `job-queue--${size}`
+    ]"
     class="task-queue job-queue"
-    :size="size"
-    :title="$t('queueSec.job.jobs')"
   >
-    <task-queue-container>
-      <job-queue-preview
-        v-for="task of taskList"
-        :task="task"
-        :opened="task === taskOnWorkspace"
-        :key="task.id"
-        :size="size"
-        @click="openTask(task)"
-        @accept="task.accept()"
-        @decline="task.decline()"
-      ></job-queue-preview>
-    </task-queue-container>
-  </the-agent-task-queue>
+    <wt-expansion-panel
+      v-for="({ value, initiallyCollapsed, counters }) in expansions"
+      :key="value"
+      :size="size"
+      :collapsed="initiallyCollapsed"
+      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="cacheExpansionState({expansion: value, state: false })"
+    >
+      <template v-slot:title>
+        <span
+          class="task-queue-name"
+          :title="$t(`queueSec.job.preview.${size}.${value}`)"
+        >
+          {{ $t(`queueSec.job.preview.${size}.${value}`) }}
+        </span>
+      </template>
+      <template v-slot:actions>
+        <wt-chip
+          v-for="({ color, count }, key) in counters"
+          :key="key"
+          :color="color"
+          :size="size"
+        >{{ count }}
+        </wt-chip>
+      </template>
+      <template>
+        <component
+          :is="getComponent(value)"
+          :size="size"
+        />
+      </template>
+    </wt-expansion-panel>
+  </article>
 </template>
 
-<script>
-import { mapActions, mapGetters, mapState } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import TheAgentTaskQueue from '../../_shared/components/the-agent-task-queue.vue';
-import TaskQueueContainer from '../../_shared/components/task-queue-container.vue';
-import JobQueuePreview from './job-queue-preview.vue';
+<script setup>
+import { useStore } from 'vuex';
+import { JobState } from 'webitel-sdk';
+import { computed } from 'vue';
+import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import ActiveQueue from './active/job-queue-container.vue';
 
-export default {
-  name: 'the-agent-job-queue',
-  components: {
-    TheAgentTaskQueue,
-    TaskQueueContainer,
-    JobQueuePreview,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [sizeMixin],
-  computed: {
-    ...mapState('features/job', {
-      taskList: (state) => state.jobList,
-    }),
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
+});
+
+const store = useStore();
+
+const {
+  cacheExpansionState,
+  restoreExpansionState,
+} = useCachedExpansionState({ entity: 'job' });
+
+const taskList = computed(() => store.state.features.job.jobList);
+
+const distributedTasks = computed(() => taskList.value.filter((task) => task.state === JobState.Distribute));
+const activeTasks = computed(() => taskList.value.filter((task) => task.state !== JobState.Distribute));
+
+const expansions = computed(() => [
+  {
+    value: 'active',
+    initiallyCollapsed: restoreExpansionState('active'),
+    counters: [
+      {
+        color: 'main',
+        count: activeTasks.value.length,
+      },
+      {
+        color: 'success',
+        count: distributedTasks.value.length,
+      },
+    ].filter(({ count }) => count),
   },
-  methods: {
-    ...mapActions('features/job', {
-      openTask: 'OPEN_JOB',
-    }),
-  },
+]);
+
+const getComponent = (value) => {
+  switch (value) {
+    case 'active':
+      return ActiveQueue;
+    default:
+      return null;
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+.task-queue-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>

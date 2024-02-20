@@ -10,17 +10,35 @@
       :collapsed="collapsed"
       @click="$emit('resize')"
     ></collapse-action>
-    <div class="queue-section-wrapper">
-      <call-queue
-        :size="size"
-      ></call-queue>
-      <chat-queue
-        :size="size"
-      ></chat-queue>
-      <job-queue
-        :size="size"
-      ></job-queue>
-    </div>
+    <wt-tabs
+      v-model="currentTab"
+      :tabs="tabs"
+      class="queue-section-tabs"
+      @change="handleTabChange"
+    >
+      <template
+        v-for="(tab, key) of tabs"
+        :key="key"
+        v-slot:[tab.value]
+      >
+        <div class="queue-section-tab-wrapper">
+          <wt-badge
+            v-if="tab.showIndicator"
+            :color-variable="`${tab.iconColor}-color`"
+          ></wt-badge>
+          <wt-icon
+            :color="tab.iconColor"
+            :icon="tab.icon"
+            :size="size"
+          ></wt-icon>
+        </div>
+      </template>
+    </wt-tabs>
+    <component
+      :is="`${currentTab.value}-queue`"
+      :size="size"
+      class="queue-section-wrapper"
+    ></component>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
@@ -32,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates from '../../../enums/WorkspaceState.enum';
@@ -59,14 +77,50 @@ export default {
       default: false,
     },
   },
-  data: () => ({}),
+  data: () => ({
+    currentTab: {},
+    isNewCall: false,
+    isNewChat: false,
+    isNewJob: false,
+  }),
   computed: {
+    ...mapState('features/call', {
+      callList: (state) => state.callList,
+    }),
+    ...mapState('features/chat', {
+      chatList: (state) => state.chatList,
+    }),
+    ...mapState('features/job', {
+      jobList: (state) => state.jobList,
+    }),
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
     }),
     ...mapGetters('features/call', {
       isNewCall: 'IS_NEW_CALL',
     }),
+    tabs() {
+      return [
+        {
+          value: 'call',
+          icon: 'call',
+          iconColor: 'success',
+          showIndicator: this.isNewCall,
+        },
+        {
+          value: 'chat',
+          icon: 'chat',
+          iconColor: 'chat',
+          showIndicator: this.isNewChat,
+        },
+        {
+          value: 'job',
+          icon: 'job',
+          iconColor: 'job',
+          showIndicator: this.isNewJob,
+        },
+      ];
+    },
     isNewCallButton() {
       return !this.isNewCall || !this.isCallWorkspace;
     },
@@ -85,6 +139,44 @@ export default {
     toggleNewCall() {
       return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
     },
+    hideIndicator(value) {
+      switch (value) {
+        case 'call':
+          this.isNewCall = false;
+          break;
+        case 'chat':
+          this.isNewChat = false;
+          break;
+        case 'job':
+          this.isNewJob = false;
+          break;
+        default:
+          break;
+      }
+    },
+    handleTabChange(tab) {
+      this.hideIndicator(tab.value);
+    },
+  },
+  watch: {
+    callList(newVal, oldVal) {
+      if (newVal.length > oldVal.length) {
+        this.isNewCall = true;
+      }
+    },
+    chatList(newVal, oldVal) {
+      if (newVal.length > oldVal.length) {
+        this.isNewChat = true;
+      }
+    },
+    jobList(newVal, oldVal) {
+      if (newVal.length > oldVal.length) {
+        this.isNewJob = true;
+      }
+    },
+  },
+  created() {
+    this.currentTab = this.tabs[0];
   },
 };
 </script>
@@ -114,8 +206,8 @@ export default {
     position: fixed;
     bottom: var(--spacing-md);
     left: var(--spacing-md);
-    background: var(--success-color);
     border-color: var(--success-color);
+    background: var(--success-color);
 
     :deep .wt-icon__icon {
       fill: var(--icon-on-dark-color);
@@ -123,16 +215,25 @@ export default {
   }
 }
 
+// increase specificity
+.queue-section-tabs.wt-tabs {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.queue-section-tab-wrapper {
+  position: relative;
+}
+
 .queue-section-wrapper {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
-  gap: var(--spacing-sm);
 }
 
 .task-queue {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  gap: var(--spacing-xs);
 }
 </style>

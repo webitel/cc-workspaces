@@ -1,61 +1,72 @@
 <template>
-  <article
-    :class="`queue-preview--${size}`"
-    class="queue-preview queue-preview--offline-queue"
-    tabindex="0"
-    @click="$emit('click', task)"
-    @keydown.enter="$emit('click', task)"
+  <task-queue-preview-md
+    v-if="size === 'md'"
+    :queue-name="displayQueueName"
   >
-
-    <wt-tooltip v-if="size === 'sm'">
-      <template v-slot:activator>
-        <wt-icon-btn
-          color="info"
-          icon="rounded-info"
-          size="sm"
-        ></wt-icon-btn>
-      </template>
-      <span
-        class="queue-preview--offline-queue__name"
-      >{{ displayName }}
-      </span>
-      <div
-        v-if="displayQueueName"
-      >
-        <wt-chip color="secondary">
-          {{ displayQueueName }}
-        </wt-chip>
-      </div>
-    </wt-tooltip>
-
-    <div class="queue-preview--offline-queue__icon">
+    <template v-slot:icon>
       <wt-icon
         icon="call"
         size="md"
       ></wt-icon>
-    </div>
+    </template>
 
-
-    <section class="queue-preview--offline-queue__title">
+    <template v-slot:title>
       {{ displayName }}
-    </section>
-    <offline-queue-preview-callback
-      :task="task"
-      :size="size"
-    />
-  </article>
+    </template>
+
+    <template v-slot:quick-action>
+      <offline-queue-preview-callback
+        :task="task"
+        size="md"
+      />
+    </template>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+    :queue-name="displayQueueName"
+  >
+    <template v-slot:icon>
+      <wt-icon
+        icon="call"
+        size="sm"
+      ></wt-icon>
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ displayName }}
+    </template>
+
+    <template v-slot:title>
+      {{ displayName }}
+    </template>
+
+    <template v-slot:actions>
+      <offline-queue-preview-callback
+        :task="task"
+        size="sm"
+      />
+    </template>
+  </task-queue-preview-sm>
+
+  <div
+    v-else
+  >unknown task size
+    <br>
+    {{ task }}
+  </div>
 </template>
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
-import offlineQueuePreviewCallback from './offline-queue-preview-callback.vue';
+import OfflineQueuePreviewCallback from './offline-queue-preview-callback.vue';
 
 export default {
   name: 'offline-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin],
-  components: { offlineQueuePreviewCallback },
-
+  components: { OfflineQueuePreviewCallback },
+  emits: ['click'],
   computed: {
     displayName() {
       return this.task.name;
@@ -67,64 +78,7 @@ export default {
 };
 </script>
 
-<!--// removed "scoped" to style a tooltip content-->
-<style lang="scss">
-.queue-preview {
-  &.queue-preview--offline-queue {
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: var(--spacing-2xs);
-  }
 
-  .queue-preview--offline-queue__title {
-    overflow: hidden;
-    @extend %typo-subtitle-1;
-    width: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+<style lang="scss" scoped>
 
-  &.queue-preview--sm {
-    .queue-preview--offline-queue__title {
-      text-align: center;
-    }
-  }
-
-  .queue-preview--offline-queue__icon {
-    display: flex;
-  }
-
-  .queue-preview--offline-queue__callback-container {
-    display: flex;
-    justify-content: center;
-
-    .wt-context-menu__option {
-      padding: 0;
-    }
-
-    .queue-preview--offline-queue__callback-button {
-      padding: var(--spacing-xs);
-    }
-  }
-
-  .wt-tooltip {
-    align-self: flex-end;
-  }
-
-  &--md.queue-preview--offline-queue {
-    flex-direction: row;
-  }
-
-  &--sm {
-    .queue-preview--offline-queue__title {
-      @extend %typo-body-2;
-    }
-  }
-}
-
-.queue-preview--offline-queue__name {
-  @extend %typo-subtitle-1;
-}
 </style>
