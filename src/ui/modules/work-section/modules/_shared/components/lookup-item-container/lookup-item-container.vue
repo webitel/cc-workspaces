@@ -120,7 +120,8 @@ const showEmpty = computed(() => !props.loading && props.empty);
   display: flex;
   gap: var(--spacing-xs);
 
-  .wt-search-bar {
+  // :deep is used for search bars, passed as slot, cause they do not belong to this scope directly
+  :deep(.wt-search-bar) {
     flex-grow: 1;
   }
 }
