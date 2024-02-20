@@ -19,7 +19,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', 'participants-container')"
+        @click="$emit('openTab', 'contacts')"
       ></wt-rounded-action>
     </template>
     <template v-slot:after-avatar>
@@ -101,7 +101,7 @@
       }),
 
       isOnContacts() {
-        return this.currentTab === 'participants';
+        return this.currentTab === 'contacts';
       },
 
       isOnHistory() {

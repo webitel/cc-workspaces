@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import CallContactsContainer
-  from '../call-users-container.vue';
+  from '../users-container.vue';
 
 describe('CallContactsContainer', () => {
   it('renders a component', () => {

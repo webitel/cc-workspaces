@@ -75,14 +75,17 @@ const getList = async (params) => {
       id,
       qin,
     );
-    const { data } = applyTransform(response.data, [
+    const { data, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
-    return applyTransform(data, [
-      snakeToCamel(),
-      listResponseHandler,
-    ]);
+    return {
+      data: applyTransform(data, [
+        snakeToCamel(),
+        listResponseHandler,
+      ]),
+      next,
+    };
   } catch (err) {
     throw applyTransform(err, [
       notify,

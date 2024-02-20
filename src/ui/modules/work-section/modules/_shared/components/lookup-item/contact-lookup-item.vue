@@ -39,7 +39,7 @@ export default {
   mixins: [lookupItemMixin, sizeMixin],
   computed: {
     primaryPhoneNumber() {
-      return this.item.phones?.data.find(phone => phone.primary === true)?.number;
+      return this.item.phones?.find(phone => phone.primary === true)?.number;
     },
     isCallActionDisabled() {
       return !(!!this.item.phones);
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     handleCallClick() {
-      if (this.item.phones.data.length > 1) {
+      if (this.item.phones.length > 1) {
         this.$emit('toggleExpansion', this.item)
       } else {
         this.handleInput();
