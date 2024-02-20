@@ -45,6 +45,7 @@ const getList = async (params) => {
   }));
 
   const transformations = [
+    ({ search, q, ...rest }) => ({ ...rest, q: q || search }),
     sanitize(fieldsToSend),
     merge(getDefaultGetParams()),
     camelToSnake(),

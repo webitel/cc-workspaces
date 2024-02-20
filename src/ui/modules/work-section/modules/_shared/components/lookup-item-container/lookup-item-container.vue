@@ -105,8 +105,8 @@ const showEmpty = computed(() => !props.loading && props.empty);
 .lookup-item-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 100%;
+  min-height: 0;
   gap: var(--spacing-xs);
 }
 

@@ -1,92 +1,71 @@
 <template>
-  <div class="contact-communications-item">
+  <div
+    class="contact-communications-item"
+    :class="`contact-communications-item--size-${size}`"
+  >
     <div class="contact-communications-item__before">
       <wt-icon
-          :icon="phonesList.primary ? 'chat-message-status-sent' : ''"
-          :size="size"
-          color="success"
+        v-if="phone.primary"
+        :size="size"
+        icon="tick"
+        color="success"
       />
     </div>
     <div class="contact-communications-item__main">
-      <span class="contact-communications-item__title">{{ phonesList.number }}</span>
+      <span class="contact-communications-item__title">{{ phone.number }}</span>
     </div>
     <div class="contact-communications-item__after">
-      <button
-          class="contact-communications-item__call"
-          @click="makeCall({ user: item, number: phonesList.number })"
-      >
-        <wt-icon
-            :size="size"
-            color="success"
-            icon="call--filled"
-        />
-      </button>
+      <wt-icon-btn
+        icon="call--filled"
+        color="success"
+        :size="size"
+        @click="emit('call', phone)"
+      ></wt-icon-btn>
     </div>
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
+<script setup>
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
+  },
+  phone: {
+    type: Object,
+    required: true,
+  },
+});
 
-export default {
-  name: 'contact-communication-item',
-  props: {
-    item: {
-      type: Object,
-      required: true,
-    },
-    size: {
-      type: String,
-      default: 'sm',
-    },
-    phonesList: {
-      type: Object,
-      required: true,
-    },
-  },
-  methods: {
-    ...mapActions('features/call', {
-      makeCall: 'CALL',
-    }),
-  },
-};
+const emit = defineEmits(['call']);
 </script>
 
 <style lang="scss" scoped>
 .contact-communications-item {
-  display: flex;
+  display: grid;
   align-items: center;
+  gap: var(--spacing-xs);
   padding: var(--spacing-xs);
-  transition: var(--transition);
   border: 1px solid transparent;
-  border-radius: var(--spacing-xs);
-  gap: 8px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
 
-  &:hover {
-    border-color: var(--primary-color);
-
-    .contact-communications-item__call {
-      display: flex;
+  &--size {
+    &-sm {
+      grid-template-columns: var(--icon-sm-size) 1fr var(--icon-sm-size);
+    }
+    &-md {
+      grid-template-columns: var(--icon-md-size) 1fr var(--icon-md-size);
     }
   }
 
-  &__before {
-    display: flex;
-    min-width: 16px;
-  }
-
-  &__main {
-    flex-grow: 1;
-    line-height: 1;
+  &:hover {
+    border-color: var(--primary-color);
   }
 
   &__title {
     @extend %typo-body-2;
     overflow-wrap: anywhere;
-  }
-
-  &__call {
-    display: none;
   }
 }
 </style>

@@ -17,44 +17,55 @@
       {{ primaryPhoneNumber }}
     </template>
 
-    <template v-slot:after>
+    <template v-slot:after="{ toggle }">
       <wt-rounded-action
-          :disabled="isCallActionDisabled"
-          :size="size"
-          color="success"
-          icon="call--filled"
-          rounded
-          @click="handleCallClick"
+        v-if="item.phones.length"
+        :size="size"
+        color="success"
+        icon="call--filled"
+        rounded
+        @click="item.phones.length > 1 ? toggle() : call()"
       ></wt-rounded-action>
+    </template>
+
+    <template
+      v-if="item.phones.length > 1"
+      v-slot:expansion
+    >
+      <contact-communication-item
+        v-for="phone in item.phones"
+        :key="phone.id"
+        :phone="phone"
+        :size="size"
+        @call="call"
+      ></contact-communication-item>
     </template>
   </lookup-item>
 </template>
 
 <script>
-import lookupItemMixin from './mixins/lookupItemMixin';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
+import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/lookupItemMixin';
+import ContactCommunicationItem from './contact-communication-item.vue';
 
 export default {
   name: 'contact-lookup-item',
+  components: { ContactCommunicationItem },
   mixins: [lookupItemMixin, sizeMixin],
+  emits: [
+    'call',
+  ],
   computed: {
     primaryPhoneNumber() {
       return this.item.phones?.find(phone => phone.primary === true)?.number;
-    },
-    isCallActionDisabled() {
-      return !(!!this.item.phones);
     },
     crmContactLink() {
       return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}`;
     },
   },
   methods: {
-    handleCallClick() {
-      if (this.item.phones.length > 1) {
-        this.$emit('toggleExpansion', this.item)
-      } else {
-        this.handleInput();
-      }
+    call(item = this.item) {
+      this.$emit('call', item);
     },
   },
 };
