@@ -34,7 +34,7 @@ import LookupItemContainer from '../../../../_shared/components/lookup-item-cont
 const usersAPI = APIRepository.users;
 
 export default {
-  name: 'call-contacts-container',
+  name: 'users-container',
   mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     UserLookupItem,

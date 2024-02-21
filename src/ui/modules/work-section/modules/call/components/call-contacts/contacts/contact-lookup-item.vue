@@ -24,7 +24,7 @@
         color="success"
         icon="call--filled"
         rounded
-        @click="item.phones.length > 1 ? toggle() : call()"
+        @click="item.phones.length > 1 ? toggle() : call(item.phones[0])"
       ></wt-rounded-action>
     </template>
 

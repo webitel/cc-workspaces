@@ -48,7 +48,7 @@ import ContactLookupItem from './contact-lookup-item.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 
 export default {
-  name: 'call-contacts-container',
+  name: 'contacts-container',
   mixins: [infiniteScrollMixin, sizeMixin],
   components: {
     ContactLookupItem,
