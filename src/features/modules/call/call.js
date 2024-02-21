@@ -43,13 +43,15 @@ const actions = {
 
   // destructuring arg in order to skip mouse events
   CALL: async (context, { user, number }) => {
+
+    // deprecated from 20.02.2024. remove me in 6 months
+    if (user) throw new Error('{ user } param for CALL is deprecated');
+
     const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun };
     let destination;
 
     if (number) {
       destination = number;
-    } else if (user) {
-      destination = user.extension;
     } else {
       destination = context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
     }
@@ -60,7 +62,8 @@ const actions = {
     const params = { ...CALL_PARAMS, video: context.state.isVideo };
     try {
       await client.call({ destination, params });
-    } catch {
+    } catch (err) {
+      throw err;
     }
   },
 

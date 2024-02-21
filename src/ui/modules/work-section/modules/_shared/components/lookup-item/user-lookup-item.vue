@@ -37,7 +37,7 @@ import lookupItemMixin from './mixins/lookupItemMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'contact-lookup-item',
+  name: 'user-lookup-item',
   mixins: [lookupItemMixin, sizeMixin],
   computed: {
     // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798

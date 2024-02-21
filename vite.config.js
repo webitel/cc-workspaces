@@ -46,13 +46,13 @@ export default ({ mode }) => {
         },
       }),
       createSvgSpritePlugin({
-        include: '/**/sprite/*.svg',
+        include: '**/sprite/*.svg',
       }),
     ],
     test: {
       globals: true,
       coverage: {
-        enabled: true,
+        enabled: false,
         reporter: 'json',
       },
       alias: {

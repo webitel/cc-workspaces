@@ -7,13 +7,25 @@
   export default {
     props: {
       options: Object,
+      root: HTMLElement,
+      rootMargin: {
+        type: String,
+        default: '200px',
+      },
     },
+    emits: ['intersect'],
     data: () => ({
       observer: null,
     }),
 
     watch: {
       options: {
+        handler() {
+          this.setObserver();
+        },
+        immediate: true,
+      },
+      root: {
         handler() {
           this.setObserver();
         },
@@ -26,13 +38,18 @@
     },
 
     methods: {
-      setObserver() {
-        if (this.options && !this.observer) { // if parent rendered and we can set root within options
+      async setObserver() {
+        await this.$nextTick(); // wait for component to render, so that this.$el which is watched by Observer is available
+
+        if ((this.options || this.root) && !this.observer) { // if parent rendered and we can set root within options
           this.observer = new IntersectionObserver(([entry]) => {
             if (entry && entry.isIntersecting) {
               this.$emit('intersect');
             }
-          }, this.options);
+          }, {
+            root: this.root,
+            rootMargin: this.rootMargin,
+          });
           this.observer.observe(this.$el);
         }
       },
@@ -42,6 +59,6 @@
 
 <style lang="scss" scoped>
 .observer {
-  display: contents;
+  //display: contents;
 }
 </style>

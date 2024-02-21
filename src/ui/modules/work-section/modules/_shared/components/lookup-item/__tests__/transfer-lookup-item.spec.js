@@ -1,7 +1,7 @@
 import { shallowMount, mount } from '@vue/test-utils';
 import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import ContactLookupItem from '../contact-lookup-item.vue';
+import UserLookupItem from '../user-lookup-item.vue';
 import TransferLookupItem from '../transfer-lookup-item.vue';
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
 
@@ -33,7 +33,7 @@ describe('TransferLookupItem', () => {
 
   it('correctly comoputes user PAUSE status: pause', () => {
     item.status = 'pause';
-    const wrapper = shallowMount(ContactLookupItem, {
+    const wrapper = shallowMount(UserLookupItem, {
       props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.PAUSE);
@@ -41,7 +41,7 @@ describe('TransferLookupItem', () => {
 
   it('correctly comoputes user ONLINE status: online', () => {
     item.status = 'online';
-    const wrapper = shallowMount(ContactLookupItem, {
+    const wrapper = shallowMount(UserLookupItem, {
       props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ONLINE);
@@ -49,7 +49,7 @@ describe('TransferLookupItem', () => {
 
   it('correctly comoputes user OFFLINE status: offline', () => {
     item.status = 'offline';
-    const wrapper = shallowMount(ContactLookupItem, {
+    const wrapper = shallowMount(UserLookupItem, {
       props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.OFFLINE);
@@ -57,7 +57,7 @@ describe('TransferLookupItem', () => {
 
   it('correctly comoputes user BUSY status: dlg', () => {
     item.presence = { status: 'dlg' };
-    const wrapper = shallowMount(ContactLookupItem, {
+    const wrapper = shallowMount(UserLookupItem, {
       props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.BUSY);
@@ -65,7 +65,7 @@ describe('TransferLookupItem', () => {
 
   it('correctly comoputes user DND status: dnd', () => {
     item.presence = { status: 'dnd' };
-    const wrapper = shallowMount(ContactLookupItem, {
+    const wrapper = shallowMount(UserLookupItem, {
       props: { item },
     });
     expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.DND);

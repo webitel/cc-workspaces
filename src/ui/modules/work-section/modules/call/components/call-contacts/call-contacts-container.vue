@@ -1,67 +1,80 @@
 <template>
-  <div class="ws-worksection">
-    <wt-search-bar
-      v-model="dataSearch"
-      @search="resetData"
-    ></wt-search-bar>
-
-    <section class="ws-worksection__list" ref="scroll-wrap">
-
-      <wt-loader v-if="isLoading"/>
-      <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
-      <div v-else class="ws-worksection__list-wrap">
-        <contact-lookup-item
-          v-for="(item) of dataList"
-          :key="item.id"
-          :item="item"
-          :size="size"
-          @input="makeCall({ user: $event })"
-        ></contact-lookup-item>
-      </div>
-
-      <observer
-        :options="obsOptions"
-        @intersect="handleIntersect"/>
-    </section>
+  <div class="call-contacts-container">
+    <wt-tabs
+      :current="currentTab"
+      :tabs="tabs"
+      wide
+      @change="changeTab"
+    ></wt-tabs>
+    <component
+      class="call-contacts-container-content"
+      :is="currentTab.component"
+      :size="size"
+    ></component>
   </div>
 </template>
 
-<script>
-  import { mapActions } from 'vuex';
-  import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
-  import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-  import ContactLookupItem from '../../../_shared/components/lookup-item/contact-lookup-item.vue';
-  import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-  import APIRepository from '../../../../../../../app/api/APIRepository';
+<script setup>
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import ContactsContainer from './contacts/contacts-container.vue';
+import UsersContainer from './users/users-container.vue';
 
-  const usersAPI = APIRepository.users;
+const { t } = useI18n();
+const store = useStore();
 
-  export default {
-    name: 'call-contacts-container',
-    mixins: [infiniteScrollMixin, sizeMixin],
-    components: {
-      ContactLookupItem,
-      EmptySearch,
-    },
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
+    options: ['sm', 'md'],
+  },
+});
 
-    data: () => ({
-      dataList: [],
-      dataSort: 'presence.status',
-      dataFields: ['name', 'id', 'extension', 'presence', 'username'],
-    }),
+const currentTab = ref({});
 
-    methods: {
-      ...mapActions('features/call', {
-        makeCall: 'CALL',
-      }),
+const tabsObject = computed(() => ({
+  CallContactsTab: {
+    text: t('WebitelApplications.crm.sections.contacts', 2),
+    value: 'contacts', // tracked by wt-tabs
+    component: ContactsContainer,
+  },
+  CallUsersTab: {
+    text: t('WebitelApplications.admin.sections.users', 2),
+    value: 'users', // tracked by wt-tabs
+    component: UsersContainer,
+  },
+}));
 
-      fetch(params) {
-        return usersAPI.getUsers(params);
-      },
-    },
-  };
+const scope = computed(() => getNamespacedState(store.state, 'ui/userinfo').scope);
+
+const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === 'contacts'));
+
+const tabs = computed(() => {
+  const tabs = [tabsObject.value.CallUsersTab];
+  if (hasLicenseOnCrm.value) tabs.unshift(tabsObject.value.CallContactsTab);
+  return tabs;
+});
+
+function changeTab(tab) {
+  currentTab.value = tab;
+}
+
+changeTab(tabs.value[0]);
 </script>
 
 <style lang="scss" scoped>
+.call-contacts-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--spacing-xs);
+
+  .call-contacts-container-content {
+    flex: 1;
+  }
+}
 
 </style>

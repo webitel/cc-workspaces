@@ -35,7 +35,6 @@ import { mapGetters } from 'vuex';
 import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
-import Contacts from './call-contacts/call-contacts-container.vue';
 import CallFooter from './call-footer.vue';
 import CallHeader from './call-header.vue';
 import Bridge from './call-merge/call-bridge-container.vue';
@@ -43,6 +42,7 @@ import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/call-transfer-container.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import Contacts from './call-contacts/call-contacts-container.vue';
 
 export default {
   name: 'the-call',

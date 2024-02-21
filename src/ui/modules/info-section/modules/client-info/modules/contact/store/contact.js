@@ -1,4 +1,4 @@
-import ContactsAPI from '../api/ContactsAPI';
+import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
@@ -15,7 +15,7 @@ const actions = {
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
     try {
       context.commit('SET_IS_LOADING', true);
-      const contacts = await ContactsAPI.getList(searchParams);
+      const { data: contacts } = await ContactsAPI.getList(searchParams);
 
       if (contacts.length === 1) {
         return context.dispatch('LINK_CONTACT', contacts[0]);
@@ -28,9 +28,9 @@ const actions = {
   },
   SEARCH_CONTACTS: async (context, searchParams) => {
     try {
-      context.commit('SET_IS_LOADING', true);
-      const contacts = await ContactsAPI.getList(searchParams);
-      context.commit('SET_CONTACTS_BY_SEARCH', contacts);
+      context.commit('SET_IS_LOADING\', true);\n'+
+        '      const { data: contacts } = await ContactsAPI.getList(searchParams);\n'+
+        '      context.commit(\'SET_CONTACTS_BY_SEARCH', contacts);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
