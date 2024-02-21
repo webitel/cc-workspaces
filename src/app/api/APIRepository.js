@@ -1,4 +1,3 @@
-import contactsAPIRepository from './agent-workspace/endpoints/contacts/ContactsAPIRepository';
 import historyAPIRepository from './agent-workspace/endpoints/history/HistoryAPIRepository';
 import communicationsAPIRepository
   from './agent-workspace/endpoints/communications/CommunicationsAPIRepository';
@@ -12,7 +11,6 @@ const APIRepository = {
   users: usersAPIRepository,
   widgets: widgetsAPIRepository,
   chatplans: chatplanAPIRepository,
-  contacts: contactsAPIRepository,
 };
 
 export default APIRepository;

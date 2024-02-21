@@ -29,8 +29,21 @@
           </div>
         </div>
       </template>
-      <template v-slot:after v-if="!noAfter">
-        <slot name="after"></slot>
+      <template
+        v-slot:after="scope"
+        v-if="!noAfter"
+      >
+        <slot
+          name="after"
+          v-bind="scope"
+        ></slot>
+      </template>
+
+      <template
+        v-slot:expansion
+        v-if="$slots.expansion"
+      >
+        <slot name="expansion"></slot>
       </template>
     </lookup-item-wrapper>
   </article>

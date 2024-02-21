@@ -42,7 +42,7 @@ import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/call-transfer-container.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import ParticipantsContainer from './participants-container/participants-container.vue';
+import Contacts from './call-contacts/call-contacts-container.vue';
 
 export default {
   name: 'the-call',
@@ -53,7 +53,7 @@ export default {
     CallHeader,
     CallFooter,
     History,
-    ParticipantsContainer,
+    Contacts,
     Numpad,
     Transfer,
     Bridge,

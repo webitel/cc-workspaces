@@ -49,9 +49,10 @@ export default {
     async loadDataList() {
       if (!this.dataList.length) this.isLoading = true;
       const params = this.collectParams();
-      const { items, next } = await this.fetch(params);
+      // both items and data because contacts return { data }, and other endpoints return { items }
+      const { items, data, next } = await this.fetch(params);
       this.isNext = next;
-      this.setData(items);
+      this.setData(items || data);
       this.dataPage += 1;
       this.isLoading = false;
     },
@@ -67,7 +68,6 @@ export default {
         page: this.dataPage,
         size: this.dataSize,
         search: this.dataSearch,
-        searchKey: this.filterQuery,
       };
       if (this.dataFields) params.fields = this.dataFields;
       if (this.dataSort) params.sort = this.dataSort;

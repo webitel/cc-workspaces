@@ -11,9 +11,10 @@ import {
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults';
 import { ContactsApiFactory } from 'webitel-sdk';
-import configuration from '../../../../../../../../app/api/openAPIConfig';
-import instance from '../../../../../../../../app/api/instance';
-import getDefaultGetListResponse from './getDefaultGetListResponse';
+import configuration from '../../../openAPIConfig';
+import instance from '../../../instance';
+import getDefaultGetListResponse from './defaults/getDefaultGetListResponse';
+import SearchMode from './enums/SearchMode.enum';
 
 const service = new ContactsApiFactory(configuration, '', instance);
 
@@ -44,13 +45,14 @@ const getList = async (params) => {
   }));
 
   const transformations = [
+    ({ search, q, ...rest }) => ({ ...rest, q: q || search }),
     sanitize(fieldsToSend),
     merge(getDefaultGetParams()),
     camelToSnake(),
   ];
   //
   // This code needed for adding starToSearch method to applyTransform while searchKey !== SearchMode.VARIABLES because '*' in variables search mode brokes backend logic.
-  if (params.qin !== 'variable') {
+  if (params.qin !== SearchMode.VARIABLES) {
     transformations.push(starToSearch('q'));
   }
 
@@ -74,14 +76,17 @@ const getList = async (params) => {
       id,
       qin,
     );
-    const { data } = applyTransform(response.data, [
+    const { data, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
-    return applyTransform(data, [
-      snakeToCamel(),
-      listResponseHandler,
-    ]);
+    return {
+      data: applyTransform(data, [
+        snakeToCamel(),
+        listResponseHandler,
+      ]),
+      next,
+    };
   } catch (err) {
     throw applyTransform(err, [
       notify,
