@@ -13,35 +13,12 @@
         :size="size"
         :value="search"
         debounce
+        :search-mode="filterQuery"
+        :search-mode-options="searchModeOptions"
         @input="inputHandler"
         @search="searchHandler"
-      >
-        <template #additional-actions="options">
-          <wt-context-menu
-            :options="searchModeOptions"
-            @click="changeMode($event.option)"
-          >
-            <template #activator>
-              <wt-tooltip>
-                <template #activator>
-                  <wt-icon-btn
-                    :color="options.invalid ? 'error' : 'default'"
-                    icon="filter"
-                  />
-                </template>
-                {{ $t('webitelUI.searchBar.settingsHint') }}
-              </wt-tooltip>
-            </template>
-            <template #option="{ value, text }">
-              <wt-radio
-                :label="text"
-                :selected="filterQuery === value"
-                :value="true"
-              />
-            </template>
-          </wt-context-menu>
-        </template>
-      </wt-search-bar>
+        @change:search-mode="changeMode"
+      ></wt-search-bar>
     </template>
 
     <template v-slot:empty>
@@ -54,7 +31,7 @@
         :key="item.id"
         :item="item"
         :size="size"
-        @call="call(item)"
+        @call="call"
       ></contact-lookup-item>
     </template>
   </lookup-item-container>

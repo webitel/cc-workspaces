@@ -68,4 +68,9 @@ const emit = defineEmits(['call']);
     overflow-wrap: anywhere;
   }
 }
+
+.contact-communications-item__before,
+.contact-communications-item__after {
+  line-height: 0;
+}
 </style>

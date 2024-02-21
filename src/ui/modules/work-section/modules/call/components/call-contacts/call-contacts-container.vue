@@ -3,6 +3,7 @@
     <wt-tabs
       :current="currentTab"
       :tabs="tabs"
+      wide
       @change="changeTab"
     ></wt-tabs>
     <component

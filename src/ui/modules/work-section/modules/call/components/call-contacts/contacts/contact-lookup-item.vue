@@ -19,7 +19,7 @@
 
     <template v-slot:after="{ toggle }">
       <wt-rounded-action
-        v-if="item.phones.length"
+        :disabled="!item.phones.length"
         :size="size"
         color="success"
         icon="call--filled"
@@ -37,7 +37,7 @@
         :key="phone.id"
         :phone="phone"
         :size="size"
-        @call="call"
+        @call="call(phone)"
       ></contact-communication-item>
     </template>
   </lookup-item>
@@ -57,15 +57,15 @@ export default {
   ],
   computed: {
     primaryPhoneNumber() {
-      return this.item.phones?.find(phone => phone.primary === true)?.number;
+      return this.item.phones?.find((phone) => phone.primary === true)?.number;
     },
     crmContactLink() {
       return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}`;
     },
   },
   methods: {
-    call(item = this.item) {
-      this.$emit('call', item);
+    call({ number } = {}) {
+      this.$emit('call', { number: number || this.primaryPhoneNumber });
     },
   },
 };

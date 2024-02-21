@@ -62,7 +62,8 @@ const actions = {
     const params = { ...CALL_PARAMS, video: context.state.isVideo };
     try {
       await client.call({ destination, params });
-    } catch {
+    } catch (err) {
+      throw err;
     }
   },
 
