@@ -59,7 +59,7 @@ const getMissedCalls = async (params) => {
         from: answeredAtFrom,
         to: answeredAtTo,
       },
-      user_id: [userId],
+      owner_id: [userId],
       member_id: memberId,
       cause,
       direction,
@@ -97,6 +97,7 @@ const redialToMissed = async ({ callId }) => {
 const hideMissedCall = async ({ callId }) => {
   try {
     const response = await callService.patchHistoryCall(callId, {
+      id: callId,
       hide_missed: true,
     });
     return response.data;
