@@ -1,6 +1,5 @@
+import { markRaw, reactive, shallowReactive } from 'vue';
 import { Client } from 'webitel-sdk';
-import { reactive, markRaw, toRaw, shallowReactive } from 'vue';
-import call from '../../../../features/modules/call/call';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 const { hostname, protocol } = window.location;
@@ -79,6 +78,30 @@ class WebSocketClientController {
     await cli.connect();
 
     await cli.auth();
+
+    /*
+    cli.phone.ua contains "configuration" property, which has no setter so cannot be wrapped with reactivity.
+    so that, reactivity breaks
+     for more info, see WTEL-4236
+     */
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        console.error('Phone user agent is not connected :(');
+        resolve();
+      }, 5000);
+
+      const markUa = () => cli.phone.ua = markRaw(cli.phone.ua);
+
+      if (cli.phone.ua) {
+        markUa();
+        clearTimeout(timeout);
+        resolve();
+      } else cli.on('phone_connected', () => {
+        markUa();
+        clearTimeout(timeout);
+        resolve();
+      });
+    });
 
     window.cli = cli;
     return cli;
