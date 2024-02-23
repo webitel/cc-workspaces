@@ -23,7 +23,7 @@
       >
         <div class="queue-section-tab-wrapper">
           <wt-badge
-            v-if="tab.showIndicator"
+            v-show="tab.showIndicator"
             :color-variable="`${tab.iconColor}-color`"
           ></wt-badge>
           <wt-icon
@@ -79,9 +79,9 @@ export default {
   },
   data: () => ({
     currentTab: {},
-    isNewCall: false,
-    isNewChat: false,
-    isNewJob: false,
+    callIndicator: false,
+    chatIndicator: false,
+    jobIndicator: false,
   }),
   computed: {
     ...mapState('features/call', {
@@ -105,19 +105,19 @@ export default {
           value: 'call',
           icon: 'call',
           iconColor: 'success',
-          showIndicator: this.isNewCall,
+          showIndicator: this.callIndicator,
         },
         {
           value: 'chat',
           icon: 'chat',
           iconColor: 'chat',
-          showIndicator: this.isNewChat,
+          showIndicator: this.chatIndicator,
         },
         {
           value: 'job',
           icon: 'job',
           iconColor: 'job',
-          showIndicator: this.isNewJob,
+          showIndicator: this.jobIndicator,
         },
       ];
     },
@@ -142,13 +142,13 @@ export default {
     hideIndicator(value) {
       switch (value) {
         case 'call':
-          this.isNewCall = false;
+          this.callIndicator = false;
           break;
         case 'chat':
-          this.isNewChat = false;
+          this.chatIndicator = false;
           break;
         case 'job':
-          this.isNewJob = false;
+          this.jobIndicator = false;
           break;
         default:
           break;
@@ -161,17 +161,17 @@ export default {
   watch: {
     callList(newVal, oldVal) {
       if (newVal.length > oldVal.length) {
-        this.isNewCall = true;
+        this.callIndicator = true;
       }
     },
     chatList(newVal, oldVal) {
       if (newVal.length > oldVal.length) {
-        this.isNewChat = true;
+        this.chatIndicator = true;
       }
     },
     jobList(newVal, oldVal) {
       if (newVal.length > oldVal.length) {
-        this.isNewJob = true;
+        this.jobIndicator = true;
       }
     },
   },
