@@ -71,6 +71,7 @@ const {
 const callList = computed(() => store.state.features.call.callList);
 
 const missedList = computed(() => store.state.features.call.missed.missedList);
+const missedNext = computed(() => store.state.features.call.missed.next);
 const manualList = computed(() => store.state.features.call.manual.manualList);
 const membersList = computed(() => store.state.features.member.memberList);
 
@@ -90,7 +91,7 @@ const expansions = computed(() => [
     value: 'missed',
     initiallyCollapsed: restoreExpansionState({ expansion: 'missed' }),
     counters: [
-      { color: 'secondary', count: missedList.value.length },
+      { color: 'secondary', count: missedNext.value ? `${missedList.value.length}+` : missedList.value.length },
     ].filter(({ count }) => count),
   },
   {
