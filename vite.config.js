@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { VitePWA } from 'vite-plugin-pwa';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 
 export default ({ mode }) => {
@@ -47,6 +48,46 @@ export default ({ mode }) => {
       }),
       createSvgSpritePlugin({
         include: '**/sprite/*.svg',
+      }),
+      VitePWA({
+        registerType: 'autoUpdate',
+        devOptions: {
+          enabled: true,
+        },
+        manifest: {
+          icons: [
+            {
+              'src': '/workspace/pwa-192x192.png',
+              'sizes': '144x144',
+              'type': 'image/png',
+              'purpose': 'any',
+            },
+            {
+              'src': '/workspace/pwa-192x192.png',
+              'sizes': '192x192',
+              'type': 'image/png',
+              'purpose': 'any',
+            },
+            {
+              'src': '/workspace/pwa-512x512.png',
+              'sizes': '512x512',
+              'type': 'image/png',
+              'purpose': 'any',
+            },
+            {
+              'src': '/workspace/pwa-maskable-192x192.png',
+              'sizes': '192x192',
+              'type': 'image/png',
+              'purpose': 'maskable',
+            },
+            {
+              'src': '/workspace/pwa-maskable-512x512.png',
+              'sizes': '512x512',
+              'type': 'image/png',
+              'purpose': 'maskable',
+            },
+          ],
+        },
       }),
     ],
     test: {
