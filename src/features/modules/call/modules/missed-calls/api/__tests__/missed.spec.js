@@ -1,11 +1,14 @@
 import axiosMock from '@webitel/ui-sdk/src/tests/mocks/axiosMock';
 
 describe('missedAPI', () => {
+  const request = vi.fn(() => Promise.resolve({ data: {} }));
+  vi.doMock('axios', axiosMock( { default: { request } }));
+
+  beforeEach(() => {
+    request.mockClear();
+  });
 
   it('redialToMissed sends request with passed callId param', async () => {
-    const request = vi.fn(() => Promise.resolve({ data: {} }));
-    vi.doMock('axios', axiosMock( { default: { request } }));
-
     const callId = '123';
 
     const missedAPI = (await import ('../missed.js')).default;
@@ -18,9 +21,6 @@ describe('missedAPI', () => {
   });
 
   it('hideMissedCall sends request with passed callId and hide_missed: true param', async () => {
-    const request = vi.fn(() => Promise.resolve({ data: {} }));
-    vi.doMock('axios', axiosMock( { default: { request } }));
-
     const callId = '123';
 
     const missedAPI = (await import ('../missed.js')).default;
