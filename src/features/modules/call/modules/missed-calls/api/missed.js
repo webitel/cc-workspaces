@@ -84,7 +84,7 @@ const getMissedCalls = async (params) => {
 const redialToMissed = async ({ callId }) => {
   try {
     const response = await callService.redialCall(callId, {
-      call_id: callId,
+      callId,
     });
     return response.data;
   } catch (err) {
