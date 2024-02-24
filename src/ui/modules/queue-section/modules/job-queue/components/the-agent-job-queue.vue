@@ -8,20 +8,23 @@
     <wt-expansion-panel
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :key="value"
-      :size="size"
       :collapsed="initiallyCollapsed"
-      @opened="cacheExpansionState({expansion: value, state: true })"
+      :size="size"
       @closed="cacheExpansionState({expansion: value, state: false })"
+      @opened="cacheExpansionState({expansion: value, state: true })"
     >
       <template v-slot:title>
         <span
-          class="task-queue-name"
           :title="$t(`queueSec.job.preview.${size}.${value}`)"
+          class="task-queue-name"
         >
           {{ $t(`queueSec.job.preview.${size}.${value}`) }}
         </span>
       </template>
-      <template v-slot:actions>
+      <template
+        v-if="size === 'md'"
+        v-slot:actions
+      >
         <wt-chip
           v-for="({ color, count }, key) in counters"
           :key="key"
@@ -41,9 +44,9 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
-import { computed } from 'vue';
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 import ActiveQueue from './active/job-queue-container.vue';
 

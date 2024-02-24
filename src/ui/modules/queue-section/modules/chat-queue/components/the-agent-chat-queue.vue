@@ -15,11 +15,14 @@
     >
       <template v-slot:title>
         <span
-          class="task-queue-name"
           :title="$t(`queueSec.chat.preview.${size}.${value}`)"
+          class="task-queue-name"
         >{{ $t(`queueSec.chat.preview.${size}.${value}`) }}</span>
       </template>
-      <template v-slot:actions>
+      <template
+        v-if="size === 'md'"
+        v-slot:actions
+      >
         <wt-chip
           v-for="({ color, count }, key) in counters"
           :key="key"
