@@ -1,6 +1,7 @@
 <template>
   <div class="call-contacts-container">
     <wt-tabs
+      v-if="tabs.length > 1"
       :current="currentTab"
       :tabs="tabs"
       wide
