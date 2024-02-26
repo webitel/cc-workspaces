@@ -10,7 +10,9 @@
     </template>
 
     <template v-slot:title>
-      {{ item.name.commonName }}
+      <a :href="crmContactLink" target="_blank">
+        {{ item.name.commonName }}
+      </a>
     </template>
 
     <template v-slot:subtitle>
