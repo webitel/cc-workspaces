@@ -97,7 +97,7 @@ export default {
       this.makeCall({ number });
     },
     changeMode({ value }) {
-      this.filterQuery = value;
+      this.filterQuery = value === SearchMode.DESTINATION ? 'emails,phones' : value;
       this.resetData();
     },
     fetch(params) {
