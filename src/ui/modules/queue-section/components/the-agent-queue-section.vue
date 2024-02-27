@@ -23,7 +23,7 @@
       >
         <div class="queue-section-tab-wrapper">
           <wt-badge
-            v-show="tab.showIndicator"
+            v-show="tab.value !== currentTab.value && tab.showIndicator"
             :color-variable="`${tab.iconColor}-color`"
           ></wt-badge>
           <wt-icon
@@ -51,6 +51,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import { CallActions, ChatActions, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates from '../../../enums/WorkspaceState.enum';
@@ -79,16 +80,19 @@ export default {
   },
   data: () => ({
     currentTab: {},
-    callIndicator: false,
-    chatIndicator: false,
-    jobIndicator: false,
   }),
   computed: {
     ...mapState('features/call', {
       callList: (state) => state.callList,
     }),
+    ...mapState('features/call/manual', {
+      manualCallsList: (state) => state.manualList,
+    }),
     ...mapState('features/chat', {
       chatList: (state) => state.chatList,
+    }),
+    ...mapState('features/chat/manual', {
+      manualChatList: (state) => state.manualList,
     }),
     ...mapState('features/job', {
       jobList: (state) => state.jobList,
@@ -105,19 +109,19 @@ export default {
           value: 'call',
           icon: 'call',
           iconColor: 'success',
-          showIndicator: this.callIndicator,
+          showIndicator: this.callList.some(({ state }) => state === CallActions.Ringing) || this.manualCallsList.length,
         },
         {
           value: 'chat',
           icon: 'chat',
           iconColor: 'chat',
-          showIndicator: this.chatIndicator,
+          showIndicator: this.chatList.some(({ state }) => state === ChatActions.UserInvite) || this.manualChatList.length,
         },
         {
           value: 'job',
           icon: 'job',
           iconColor: 'job',
-          showIndicator: this.jobIndicator,
+          showIndicator: this.jobList.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
         },
       ];
     },
@@ -138,41 +142,6 @@ export default {
     }),
     toggleNewCall() {
       return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
-    },
-    hideIndicator(value) {
-      switch (value) {
-        case 'call':
-          this.callIndicator = false;
-          break;
-        case 'chat':
-          this.chatIndicator = false;
-          break;
-        case 'job':
-          this.jobIndicator = false;
-          break;
-        default:
-          break;
-      }
-    },
-    handleTabChange(tab) {
-      this.hideIndicator(tab.value);
-    },
-  },
-  watch: {
-    callList(newVal, oldVal) {
-      if (newVal.length > oldVal.length) {
-        this.callIndicator = true;
-      }
-    },
-    chatList(newVal, oldVal) {
-      if (newVal.length > oldVal.length) {
-        this.chatIndicator = true;
-      }
-    },
-    jobList(newVal, oldVal) {
-      if (newVal.length > oldVal.length) {
-        this.jobIndicator = true;
-      }
     },
   },
   created() {
