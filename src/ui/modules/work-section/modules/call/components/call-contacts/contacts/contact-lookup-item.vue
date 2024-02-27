@@ -62,7 +62,7 @@ export default {
       return this.item.phones?.find((phone) => phone.primary === true)?.number;
     },
     crmContactLink() {
-      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}`;
+      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}/communications`;
     },
   },
   methods: {
