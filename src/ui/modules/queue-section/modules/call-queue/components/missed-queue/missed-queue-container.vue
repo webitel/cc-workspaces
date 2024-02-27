@@ -43,22 +43,15 @@ export default {
 
   methods: {
     ...mapActions('features/call/missed', {
-      loadMissedList: 'LOAD_DATA_LIST',
+      initializeMissed: 'INITIALIZE_MISSED',
       loadMore: 'LOAD_NEXT_PAGE',
       redial: 'REDIAL',
       hideMissed: 'HIDE_MISSED',
-      resetNewMissed: 'RESET_NEW_MISSED',
-      resetMissed: 'RESET_MISSED_LIST',
     }),
   },
 
   created() {
-    this.loadMissedList();
-    this.resetNewMissed(); // reset UI flag
-  },
-
-  unmounted() {
-    this.resetMissed();
+    this.initializeMissed();
   },
 };
 </script>

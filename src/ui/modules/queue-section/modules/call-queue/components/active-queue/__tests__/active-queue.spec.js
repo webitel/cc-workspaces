@@ -2,6 +2,8 @@ import { shallowMount, mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import workspaceModule from '../../../../../../../store/agent-workspace';
 import callModule from '../../../../../../../../features/modules/call/call';
+import missed
+  from '../../../../../../../../features/modules/call/modules/missed-calls/store/missed-calls';
 import ActiveQueue
   from '../active-queue-container.vue';
 import ActivePreview
@@ -39,6 +41,7 @@ describe('Ringing and Hangup events call functionality', () => {
               state,
               actions,
               mutations,
+              modules: { missed },
             },
           },
         },

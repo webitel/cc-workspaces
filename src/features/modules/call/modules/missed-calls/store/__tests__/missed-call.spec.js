@@ -34,19 +34,19 @@ describe('missed call store', () => {
     expect(context.commit).toHaveBeenCalledWith('SET_NEXT', next);
   });
 
-  it('REDIAL calls api method and calls missed cleanup', async () => {
+  it('REDIAL calls api method and calls missed reinit', async () => {
     const missd = { id: 1 };
     const mock = vi.spyOn(missedAPI, 'redialToMissed').mockImplementationOnce(() => Promise.resolve());
     await missed.actions.REDIAL(context, missd);
     expect(mock).toHaveBeenCalledWith({ callId: missd.id });
-    expect(context.commit).toHaveBeenCalledWith('REMOVE_HIDDEN_MISSED_FROM_LIST', missd);
+    expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_MISSED');
   });
 
-  it('HIDE_MISSED calls api method and calls missed cleanup', async () => {
+  it('HIDE_MISSED calls api method and calls missed reinit', async () => {
     const missd = { id: 1 };
     const mock = vi.spyOn(missedAPI, 'hideMissedCall').mockImplementationOnce(() => Promise.resolve());
     await missed.actions.HIDE_MISSED(context, missd);
     expect(mock).toHaveBeenCalledWith({ callId: missd.id });
-    expect(context.commit).toHaveBeenCalledWith('REMOVE_HIDDEN_MISSED_FROM_LIST', missd);
+    expect(context.dispatch).toHaveBeenCalledWith('INITIALIZE_MISSED');
   });
 });

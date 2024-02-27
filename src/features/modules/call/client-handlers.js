@@ -49,9 +49,11 @@ const actions = {
     await context.dispatch('HANDLE_CALL_END');
 
     context.commit('REMOVE_CALL', call);
-    if (call.direction === CallDirection.Inbound && !call.answeredAt) {
-      await context.dispatch('missed/PUSH_MISSED_STUB', call);
+
+    if (context.getters['missed/IS_CALL_MISSED'](call)) {
+      await context.dispatch('missed/ON_CALL_MISS', call);
     }
+
     await context.dispatch('RESET_WORKSPACE');
   },
 

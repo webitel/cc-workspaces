@@ -10,6 +10,7 @@ describe('features/call store: actions', () => {
     dispatch: vi.fn(),
     commit: vi.fn(),
     rootGetters: { 'workspace/IS_EMPTY_WORKSPACE': null },
+    getters: { 'missed/IS_CALL_MISSED': vi.fn() },
     rootState: {
       config: {
         CLI: {},

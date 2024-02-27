@@ -3,8 +3,7 @@ import MissedQueueContainer
   from '../missed-queue-container.vue';
 
 describe('MissedQueueContainer', () => {
-  const loadMissedListMock = vi.spyOn(MissedQueueContainer.methods, 'loadMissedList').mockImplementation(() => {});
-  vi.spyOn(MissedQueueContainer.methods, 'resetNewMissed').mockImplementation(() => {});
+  const initializeMissedMock = vi.spyOn(MissedQueueContainer.methods, 'initializeMissed').mockImplementation(() => {});
 
   it('renders a component', () => {
     const wrapper = shallowMount(MissedQueueContainer, {
@@ -14,14 +13,14 @@ describe('MissedQueueContainer', () => {
     });
     expect(wrapper.exists()).toBe(true);
   });
-  it('calls loadMissedList on created', () => {
-    loadMissedListMock.mockClear();
+  it('calls initializeMissed on created', () => {
+    initializeMissedMock.mockClear();
     shallowMount(MissedQueueContainer, {
       computed: {
         missedList: () => [{ id: 'jest' }],
       },
     });
-    expect(loadMissedListMock).toHaveBeenCalled();
+    expect(initializeMissedMock).toHaveBeenCalled();
   });
 
   it('calls redial on call preview event', () => {

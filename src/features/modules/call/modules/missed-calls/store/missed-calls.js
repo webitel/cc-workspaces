@@ -1,7 +1,7 @@
+import { CallDirection } from 'webitel-sdk';
 import missedAPI from '../api/missed';
 
 const state = {
-  isNewMissed: false, // UI flag
   missedList: [],
   page: 0,
   next: false,
@@ -16,7 +16,9 @@ const getters = {
       page: state.page,
     };
   },
-  MISSED_LENGTH: (state) => (state.missedList.length),
+
+  // check if passed call is missed
+  IS_CALL_MISSED: () => (call) => call.direction === CallDirection.Inbound && !call.answeredAt,
 };
 
 const actions = {
@@ -37,7 +39,7 @@ const actions = {
   REDIAL: async (context, missed) => {
     try {
       await missedAPI.redialToMissed({ callId: missed.id });
-      context.commit('REMOVE_HIDDEN_MISSED_FROM_LIST', missed);
+      return context.dispatch('INITIALIZE_MISSED');
     } catch (err) {
       throw err;
     }
@@ -46,7 +48,7 @@ const actions = {
   HIDE_MISSED: async (context, missed) => {
     try {
       await missedAPI.hideMissedCall({ callId: missed.id });
-      context.commit('REMOVE_HIDDEN_MISSED_FROM_LIST', missed);
+      return context.dispatch('INITIALIZE_MISSED');
     } catch (err) {
       throw err;
     }
@@ -57,35 +59,19 @@ const actions = {
     context.commit('SET_PAGE', 0);
   },
 
-  PUSH_MISSED_STUB: (context, { from = {} }) => {
-    context.commit('PUSH_SINGLE_MISSED', { from, createdAt: Date.now() });
-    context.commit('SET_NEW_MISSED');
+  INITIALIZE_MISSED: async (context) => {
+    await context.dispatch('RESET_MISSED_LIST');
+    return context.dispatch('LOAD_DATA_LIST');
   },
 
-  RESET_NEW_MISSED: (context) => {
-    context.commit('RESET_NEW_MISSED');
+  ON_CALL_MISS: async (context) => {
+    setTimeout(() => context.dispatch('INITIALIZE_MISSED'), 3000);
   },
 };
 
 const mutations = {
   SET_DATA_LIST: (state, list) => {
     state.missedList = list;
-  },
-
-  PUSH_SINGLE_MISSED: (state, missed) => {
-    state.missedList.push(missed);
-  },
-
-  SET_NEW_MISSED: (state) => {
-    state.isNewMissed = true;
-  },
-
-  REMOVE_HIDDEN_MISSED_FROM_LIST: (state, missed) => {
-    state.missedList.splice(state.missedList.indexOf(missed), 1);
-  },
-
-  RESET_NEW_MISSED: (state) => {
-    state.isNewMissed = false;
   },
 
   SET_PAGE: (state, page) => {
