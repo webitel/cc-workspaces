@@ -10,7 +10,7 @@
     </template>
 
     <template v-slot:title>
-      <a :href="crmContactLink" target="_blank">
+      <a class="contact-lookup-item__title" :href="crmContactLink" target="_blank">
         {{ item.name.commonName }}
       </a>
     </template>
@@ -74,5 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.contact-lookup-item__title {
+  color: var(--text-main-color);
+}
 </style>
