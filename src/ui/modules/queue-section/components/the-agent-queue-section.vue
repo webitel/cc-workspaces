@@ -51,7 +51,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { CallActions, ChatActions, JobState } from 'webitel-sdk';
+import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates from '../../../enums/WorkspaceState.enum';
@@ -115,7 +115,7 @@ export default {
           value: 'chat',
           icon: 'chat',
           iconColor: 'chat',
-          showIndicator: this.chatList.some(({ state }) => state === ChatActions.UserInvite) || this.manualChatList.length,
+          showIndicator: this.chatList.some(({ state }) => state === ConversationState.Invite) || this.manualChatList.length,
         },
         {
           value: 'job',
