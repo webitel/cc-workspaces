@@ -3,7 +3,7 @@ import missedAPI from '../api/missed';
 
 const state = {
   missedList: [],
-  page: 0,
+  page: 1,
   next: false,
 };
 
