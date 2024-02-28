@@ -56,7 +56,7 @@ const actions = {
 
   RESET_MISSED_LIST: (context) => {
     context.commit('SET_DATA_LIST', []);
-    context.commit('SET_PAGE', 0);
+    context.commit('SET_PAGE', 1);
   },
 
   INITIALIZE_MISSED: async (context) => {
