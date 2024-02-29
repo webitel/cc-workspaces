@@ -66,8 +66,8 @@ const {
 
 const taskList = computed(() => store.state.features.job.jobList);
 
-const distributedTasks = computed(() => taskList.value.filter((task) => task.state === JobState.Distribute));
-const activeTasks = computed(() => taskList.value.filter((task) => task.state !== JobState.Distribute));
+const distributedTasks = computed(() => taskList.value.filter((task) => task.state === JobState.Offering));
+const activeTasks = computed(() => taskList.value.filter((task) => task.state !== JobState.Offering));
 
 const expansions = computed(() => [
   {

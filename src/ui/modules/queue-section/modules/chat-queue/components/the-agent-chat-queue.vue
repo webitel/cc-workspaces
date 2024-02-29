@@ -44,7 +44,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { ChatActions } from 'webitel-sdk';
+import { ChatActions, ConversationState } from 'webitel-sdk';
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
@@ -66,9 +66,9 @@ const {
 const chatList = computed(() => store.state.features.chat.chatList);
 const manualList = computed(() => store.state.features.chat.manual.manualList);
 
-const invitedChats = computed(() => chatList.value.filter((chat) => chat.state === ChatActions.UserInvite));
+const invitedChats = computed(() => chatList.value.filter((chat) => chat.state === ConversationState.Invite));
 
-const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ChatActions.UserInvite));
+const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ConversationState.Invite));
 
 const expansions = computed(() => [
   {
