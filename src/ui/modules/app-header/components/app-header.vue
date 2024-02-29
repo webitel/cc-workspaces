@@ -66,7 +66,7 @@ export default {
   inject: ['$config'],
   data: () => ({
     buildInfo: {
-      release: import.meta.env.VITE_PACKAGE_VERSION,
+      release: process.env.npm_package_version,
       build: import.meta.env.VITE_BUILD_NUMBER,
     },
     UserStatus,
