@@ -38,6 +38,7 @@
     "webitel-sdk": "^23.12.22"
   },
   "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vitest/coverage-v8": "^1.2.2",
     "@vue/compiler-sfc": "^3.4.15",
@@ -46,14 +47,13 @@
     "eslint-plugin-vue": "^9.21.1",
     "happy-dom": "^13.3.8",
     "husky": "^7.0.0",
-    "node-polyfill-webpack-plugin": "^2.0.1",
     "sass": "^1.57.1",
-    "svg-sprite-loader": "^6.0.11",
     "vite": "^5.0.12",
     "vite-plugin-node-polyfills": "^0.19.0",
     "vite-plugin-pwa": "^0.19.0",
     "vite-plugin-svg-sprite": "^0.5.1",
     "vitest": "^1.2.2",
-    "webpack-bundle-analyzer": "^4.6.1"
+    "workbox-core": "^7.0.0",
+    "workbox-precaching": "^7.0.0"
   }
 }

@@ -3,6 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -15,6 +16,7 @@ export default ({ mode }) => {
     },
     server: {
       port: 8080,
+      // https: true,
     },
     css: {
       preprocessorOptions: {
@@ -29,6 +31,7 @@ export default ({ mode }) => {
       },
     },
     plugins: [
+      // basicSsl(),
       vue({
         template: {
           compilerOptions: {
@@ -51,8 +54,14 @@ export default ({ mode }) => {
       }),
       VitePWA({
         registerType: 'autoUpdate',
+        strategies: 'injectManifest',
+        base: 'workspace',
+        srcDir: 'src/app/serviceworker',
+        filename: 'sw.js',
+        injectRegister: 'inline',
         devOptions: {
           enabled: true,
+          type: 'module',
         },
         manifest: {
           icons: [
