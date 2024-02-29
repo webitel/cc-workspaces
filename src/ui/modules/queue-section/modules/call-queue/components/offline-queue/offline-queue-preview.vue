@@ -2,6 +2,8 @@
   <task-queue-preview-md
     v-if="size === 'md'"
     :queue-name="displayQueueName"
+    @click="$emit('click')"
+
   >
     <template v-slot:icon>
       <wt-icon
@@ -25,6 +27,7 @@
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
     :queue-name="displayQueueName"
+    @click="$emit('click')"
   >
     <template v-slot:icon>
       <wt-icon
