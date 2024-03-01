@@ -28,9 +28,9 @@ describe('features/call store: actions', () => {
     expect(callModule).toBeTruthy();
   });
 
-  it('HANDLE_RINGING_ACTION action calls SET_WORKSPACE with call if no task on workspace', () => {
+  it('HANDLE_RINGING_ACTION action calls SET_WORKSPACE with call if no task on workspace', async () => {
     context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = true;
-    callModule.actions.HANDLE_RINGING_ACTION(context, call);
+    await callModule.actions.HANDLE_RINGING_ACTION(context, call);
     expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', call);
   });
 
