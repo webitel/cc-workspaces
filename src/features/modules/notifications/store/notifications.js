@@ -43,14 +43,44 @@ const actions = {
     context.commit('SET_CURRENTLY_PLAYING', null);
   },
 
-  HANDLE_ANY_CALL_RINGING: (context) => {
-    context.dispatch('PLAY_SOUND', { action: CallActions.Ringing });
+  // is called on ringing event on call store to send notification
+  HANDLE_INBOUND_CALL_RINGING: async (context, { answer, hangup }) => {
+    await context.dispatch('features/swController/SUBSCRIBE_TO_MESSAGE', {
+      type: 'notificationclick',
+      handler: (action) => {
+        switch (action) {
+          case 'accept':
+            answer();
+            break;
+          case 'decline':
+            hangup();
+            break;
+          default:
+            break;
+        }
+      },
+      once: true, // subscribe for each notification separately, once
+    }, { root: true });
+
+    return context.dispatch('features/swController/SEND_NOTIFICATION', {
+      title: i18n.global.tc('queueSec.call.call', 1),
+      body: call.displayName,
+      actions: [
+        { action: 'accept', title: 'Accept' },
+        { action: 'decline', title: 'Decline' },
+      ],
+    }, { root: true });
+  },
+
+  // is called from mixin watcher on any ringing to play sound
+  HANDLE_ANY_CALL_RINGING: async (context) => {
+    await context.dispatch('PLAY_SOUND', { action: CallActions.Ringing });
   },
 };
 
 const notifications = new NotificationsStoreModule()
-  .getModule({
-               actions,
-             });
+.getModule({
+  actions,
+});
 
 export default notifications;

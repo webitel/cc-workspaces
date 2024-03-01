@@ -3,31 +3,36 @@
 </template>
 
 <script>
-  export default {
-    name: 'the-app',
+import isOnPWA from './scripts/isOnPWA';
 
-    created() {
-      this.setLanguage();
+export default {
+  name: 'the-app',
 
-      // destroy does not execute on F5 as per answer below: https://my.webitel.com/browse/DEV-2144
-      // https://stackoverflow.com/a/34443314/17748106
+  created() {
+    this.setLanguage();
 
-      // we have to listen to the window event:
-      window.addEventListener('beforeunload', async (e) => {
-        await this.$store.dispatch('workspace/CLOSE_SESSION');
-        // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload
-        // https://my.webitel.com/browse/WTEL-2397
-        delete e.returnValue; // page will always reload
-      });
+    // destroy does not execute on F5 as per answer below: https://my.webitel.com/browse/DEV-2144
+    // https://stackoverflow.com/a/34443314/17748106
+
+    // we have to listen to the window event:
+    window.addEventListener('beforeunload', async (e) => {
+      // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload
+      // https://my.webitel.com/browse/WTEL-2397
+      if (isOnPWA()) e.preventDefault();
+    });
+
+    window.addEventListener('unload', () => {
+      this.$store.dispatch('workspace/CLOSE_SESSION');
+    });
+  },
+
+  methods: {
+    setLanguage() {
+      const lang = localStorage.getItem('lang');
+      if (lang) this.$i18n.locale = lang;
     },
-
-    methods: {
-      setLanguage() {
-        const lang = localStorage.getItem('lang');
-        if (lang) this.$i18n.locale = lang;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <style lang="scss">

@@ -14,7 +14,6 @@
       v-model="currentTab"
       :tabs="tabs"
       class="queue-section-tabs"
-      @change="handleTabChange"
     >
       <template
         v-for="(tab, key) of tabs"
