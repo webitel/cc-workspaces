@@ -52,6 +52,7 @@ export default ({ mode }) => {
       createSvgSpritePlugin({
         include: '**/sprite/*.svg',
       }),
+      // https://webitel.atlassian.net/browse/WTEL-4240
       VitePWA({
         registerType: 'autoUpdate',
         strategies: 'injectManifest',

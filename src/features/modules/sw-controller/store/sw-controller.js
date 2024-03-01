@@ -30,6 +30,8 @@ const actions = {
     }
   },
 
+
+  // https://webitel.atlassian.net/browse/WTEL-4240
   SEND_NOTIFICATION: async (context, {
     body,
     title,
