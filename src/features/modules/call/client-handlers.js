@@ -31,11 +31,20 @@ const actions = {
     if (callList.length) context.dispatch('SET_CALL_LIST', callList);
   },
 
-  HANDLE_RINGING_ACTION: (context, call) => {
-    context.dispatch('ADD_CALL', call);
+  HANDLE_RINGING_ACTION: async (context, call) => {
+    await context.dispatch('ADD_CALL', call);
+
     if (call.direction === CallDirection.Outbound
       || context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
-      context.dispatch('SET_WORKSPACE', call);
+      await context.dispatch('SET_WORKSPACE', call);
+    }
+
+    if (call.direction === CallDirection.Inbound) {
+      const callId = call.id;
+      await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {
+        answer: () => context.dispatch('ANSWER', { callId }),
+        hangup: () => context.dispatch('HANGUP', { callId }),
+      }, { root: true });
     }
   },
 

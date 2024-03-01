@@ -5,6 +5,7 @@ import globals from '../modules/global-handlers/store/global-handlers';
 import member from '../modules/member/member';
 import notifications from '../modules/notifications/store/notifications';
 import job from '../modules/job/store/job';
+import swController from '../modules/sw-controller/store/sw-controller';
 
 const modules = {
   status,
@@ -14,6 +15,7 @@ const modules = {
   member,
   globals,
   notifications,
+  swController,
 };
 
 export default {
