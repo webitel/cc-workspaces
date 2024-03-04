@@ -56,7 +56,7 @@ export default ({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         strategies: 'injectManifest',
-        base: 'workspace',
+        // base: 'workspace',
         srcDir: 'src/app/serviceworker',
         filename: 'sw.js',
         injectRegister: 'inline',
