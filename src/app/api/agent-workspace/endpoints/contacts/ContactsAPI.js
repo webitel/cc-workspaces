@@ -52,9 +52,9 @@ const getList = async (params) => {
   ];
   //
   // This code needed for adding starToSearch method to applyTransform while searchKey !== SearchMode.VARIABLES because '*' in variables search mode brokes backend logic.
-  if (params.qin !== SearchMode.VARIABLES) {
+  // if (params.qin !== SearchMode.VARIABLES) {
     transformations.push(starToSearch('q'));
-  }
+  // }
 
   const {
     page,

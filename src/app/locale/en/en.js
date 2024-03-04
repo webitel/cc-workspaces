@@ -192,6 +192,10 @@ export default {
     selectAgent: 'Please select an agent',
     transfer: 'Transfer',
   },
+  contacts: {
+    phones: 'Phone | Phones',
+    emails: 'Email | Emails',
+  },
   agentStatus: {
     callCenter: 'Call Center',
     breakPopup: {

@@ -191,6 +191,10 @@ export default {
     selectAgent: 'Выберите агента',
     transfer: 'Перевести',
   },
+  contacts: {
+    phones: 'Номер телефона | Номера телефонов',
+    emails: 'Электронный адрес | Электронные адреса',
+  },
   agentStatus: {
     callCenter: 'Колл-центр',
     breakPopup: {

@@ -190,6 +190,10 @@ export default {
     selectAgent: 'Оберіть оператора',
     transfer: 'Перевести',
   },
+  contacts: {
+    phones: 'Номер телефону | Номери телефонів',
+    emails: 'Електронна адреса | Електронні адреси',
+  },
   agentStatus: {
     callCenter: 'Кол-центр',
     breakPopup: {

@@ -70,20 +70,12 @@ export default {
           text: this.$t('reusable.name'),
         },
         {
-          value: SearchMode.LABELS,
-          text: this.$t('vocabulary.labels', 1),
+          value: SearchMode.PHONES,
+          text: this.$t('contacts.phones', 2),
         },
         {
-          value: SearchMode.ABOUT,
-          text: this.$t('vocabulary.description'),
-        },
-        {
-          value: SearchMode.VARIABLES,
-          text: this.$t('infoSec.contacts.attributes', 1),
-        },
-        {
-          value: SearchMode.DESTINATION,
-          text: this.$t('infoSec.contacts.destination'),
+          value: SearchMode.EMAILS,
+          text: this.$t('contacts.emails', 2),
         },
       ];
     },
