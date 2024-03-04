@@ -62,7 +62,6 @@ const actions = {
   },
 
   INITIALIZE_MISSED: async (context) => {
-    console.error(subscribedToRefresh);
     if (!subscribedToRefresh) {
       const client = await context.rootState.client.getCliInstance();
       client.on('refresh_missed', () => context.dispatch('INITIALIZE_MISSED'));
