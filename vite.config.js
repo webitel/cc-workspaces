@@ -57,6 +57,7 @@ export default ({ mode }) => {
         registerType: 'autoUpdate',
         strategies: 'injectManifest',
         // base: 'workspace',
+        base: '',
         srcDir: 'src/app/serviceworker',
         filename: 'sw.js',
         injectRegister: 'inline',
