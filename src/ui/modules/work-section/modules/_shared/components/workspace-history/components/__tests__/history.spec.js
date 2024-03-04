@@ -39,7 +39,17 @@ describe('Agent History functionality', () => {
 
   it('Creates history components from data list', () => {
     const wrapper = shallowMount(HistoryContainer, {
-      data: () => ({ dataList: historyList, isLoading: false }),
+      shallow: true,
+      global: {
+        stubs: {
+          LookupItemContainer: false,
+          HistoryLookupItem: false,
+        },
+      },
+      data: () => ({
+        dataList: historyList,
+        isLoading: false,
+      }),
       computed,
     });
     expect(wrapper.findAllComponents({ name: 'history-lookup-item' }).length)
@@ -50,8 +60,18 @@ describe('Agent History functionality', () => {
     const mock = vi.fn();
     vi.spyOn(HistoryContainer.methods, 'setNumber')
     .mockImplementationOnce(mock);
-    const wrapper = shallowMount(HistoryContainer, {
-      data: () => ({ dataList: historyList, isLoading: false }),
+    const wrapper = mount(HistoryContainer, {
+      shallow: true,
+      global: {
+        stubs: {
+          LookupItemContainer: false,
+          HistoryLookupItem: false,
+        },
+      },
+      data: () => ({
+        dataList: historyList,
+        isLoading: false,
+      }),
       computed,
     });
     wrapper.findComponent({ name: 'history-lookup-item' }).vm.$emit('input');

@@ -15,15 +15,23 @@ describe('ChatTransferContainer', () => {
       .mockImplementationOnce(() => {});
 
     const wrapper = shallowMount(ChatTransferContainer, {
+      attachTo: document.body, // for isVisible to work https://github.com/vuejs/vue-test-utils/issues/2073#issuecomment-1732696542
+      shallow: true,
+        global: {
+        stubs: {
+          LookupItemContainer: false,
+            TransferLookupItem: false,
+        },
+      },
       data: () => ({
         dataList: [item],
         transferDestination,
+        isLoading: false,
       }),
     });
-    wrapper.setData({ isLoading: false }); // cannot normally mock data loading cause isLoading mutations are in mixin
     await wrapper.vm.$nextTick();
     expect(wrapper.findComponent({ name: 'wt-loader' }).exists()).toBe(false);
-    expect(wrapper.findComponent({ name: 'empty-search' }).exists()).toBe(false);
+    expect(wrapper.findComponent({ name: 'empty-search' }).isVisible()).toBe(false);
     wrapper.findComponent({ name: 'transfer-lookup-item' }).vm.$emit('input', item);
     expect(mock).toHaveBeenCalledWith({ destination: transferDestination, item });
   });
