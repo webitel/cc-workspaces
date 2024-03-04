@@ -1,6 +1,8 @@
 import { CallDirection } from 'webitel-sdk';
 import missedAPI from '../api/missed';
 
+let subscribedToRefresh = false;
+
 const state = {
   missedList: [],
   page: 1,
@@ -60,6 +62,13 @@ const actions = {
   },
 
   INITIALIZE_MISSED: async (context) => {
+    console.error(subscribedToRefresh);
+    if (!subscribedToRefresh) {
+      const client = await context.rootState.client.getCliInstance();
+      client.on('refresh_missed', () => context.dispatch('INITIALIZE_MISSED'));
+      subscribedToRefresh = true;
+    }
+
     await context.dispatch('RESET_MISSED_LIST');
     return context.dispatch('LOAD_DATA_LIST');
   },

@@ -36,7 +36,7 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^23.12.22"
+    "webitel-sdk": "^24.2.1"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.1.0",
