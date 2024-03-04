@@ -42,6 +42,8 @@ const actions = {
     if (call.direction === CallDirection.Inbound) {
       const callId = call.id;
       await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {
+        displayName: call.displayName,
+        displayNumber: call.displayNumber,
         answer: () => context.dispatch('ANSWER', { callId }),
         hangup: () => context.dispatch('HANGUP', { callId }),
       }, { root: true });
