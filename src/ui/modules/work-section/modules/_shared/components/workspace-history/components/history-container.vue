@@ -1,38 +1,28 @@
 <template>
-  <div class="history-container">
-    <lookup-item-container
-      :empty="!dataList.length"
-      :loading="isLoading"
-      :search="dataSearch"
-      @more="handleIntersect"
-      @search:input="dataSearch = $event"
-      @search:change="resetData"
-    >
-      <template v-slot:search="{ search, inputHandler, searchHandler }">
-        <wt-search-bar
-          :size="size"
-          :value="search"
-          @input="inputHandler"
-          @search="searchHandler"
-        ></wt-search-bar>
-      </template>
+  <lookup-item-container
+    :empty="!dataList.length"
+    :loading="isLoading"
+    :search="dataSearch"
+    @more="handleIntersect"
+    @search:input="dataSearch = $event"
+    @search:change="resetData"
+  >
 
-      <template v-slot:empty>
-        <empty-search type="history" />
-      </template>
+    <template v-slot:empty>
+      <empty-search type="history" />
+    </template>
 
-      <template v-slot:content>
-        <history-lookup-item
-          v-for="(item) of dataList"
-          :key="item.id"
-          :item="item"
-          :size="size"
-          :for-number="historyNumber"
-          @input="select(item)"
-        ></history-lookup-item>
-      </template>
-    </lookup-item-container>
-  </div>
+    <template v-slot:content>
+      <history-lookup-item
+        v-for="(item) of dataList"
+        :key="item.id"
+        :item="item"
+        :size="size"
+        :for-number="historyNumber"
+        @input="select(item)"
+      ></history-lookup-item>
+    </template>
+  </lookup-item-container>
 </template>
 
 <script>
@@ -144,10 +134,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.history-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: var(--spacing-xs);
-}
 </style>

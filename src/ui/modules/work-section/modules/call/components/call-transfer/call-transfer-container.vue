@@ -1,43 +1,36 @@
 <template>
-  <div class="call-transfer-container">
-    <lookup-item-container
-      :empty="!dataList.length"
-      :loading="isLoading"
-      :search="dataSearch"
-      @more="handleIntersect"
-      @search:input="dataSearch = $event"
-      @search:change="resetData"
-    >
-      <template v-slot:search="{ search, inputHandler, searchHandler }">
-        <wt-search-bar
-          :value="search"
-          @input="inputHandler"
-          @search="searchHandler"
-        ></wt-search-bar>
-        <wt-button
-          color="transfer"
-          :disabled="isTransferToNumberDisabled"
-          @click="transfer"
-        >{{ $t('transfer.transfer') }}
-        </wt-button>
-      </template>
+  <lookup-item-container
+    :empty="!dataList.length"
+    :loading="isLoading"
+    :search="dataSearch"
+    @more="handleIntersect"
+    @search:input="dataSearch = $event"
+    @search:change="resetData"
+  >
+    <template v-slot:after-search>
+      <wt-button
+        color="transfer"
+        :disabled="isTransferToNumberDisabled"
+        @click="transfer"
+      >{{ $t('transfer.transfer') }}
+      </wt-button>
+    </template>
 
-      <template v-slot:empty>
-        <empty-search type="contacts" />
-      </template>
+    <template v-slot:empty>
+      <empty-search type="contacts" />
+    </template>
 
-      <template v-slot:content>
-        <transfer-lookup-item
-          v-for="(item, key) of dataList"
-          :id="`scroll-item-${key}`"
-          :key="`${item.id}${key}`"
-          :item="item"
-          :size="size"
-          @input="transfer"
-        ></transfer-lookup-item>
-      </template>
-    </lookup-item-container>
-  </div>
+    <template v-slot:content>
+      <transfer-lookup-item
+        v-for="(item, key) of dataList"
+        :id="`scroll-item-${key}`"
+        :key="`${item.id}${key}`"
+        :item="item"
+        :size="size"
+        @input="transfer"
+      ></transfer-lookup-item>
+    </template>
+  </lookup-item-container>
 </template>
 
 <script>
@@ -92,10 +85,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.call-transfer-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: var(--spacing-xs);
-}
 </style>

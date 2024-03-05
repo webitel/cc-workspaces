@@ -1,60 +1,51 @@
 <template>
-  <div class="chat-transfer-container">
-    <lookup-item-container
-      :empty="!dataList.length"
-      :loading="isLoading"
-      :search="dataSearch"
-      @more="handleIntersect"
-      @search:input="dataSearch = $event"
-      @search:change="resetData"
-    >
-      <template v-slot:search="{ search, inputHandler, searchHandler }">
-        <div class="chat-transfer-container__search-wrap">
-          <wt-search-bar
-            :size="size"
-            :value="search"
-            @input="inputHandler"
-            @search="searchHandler"
-          ></wt-search-bar>
-          <wt-rounded-action
-            :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
-            icon="ws-bot"
-            rounded
-            :size="size"
-            @click="transferDestination = TransferDestination.CHATPLAN"
-          ></wt-rounded-action>
-          <wt-icon-btn
-            icon="close"
-            @click="closeTab"
-          ></wt-icon-btn>
-        </div>
-      </template>
+  <lookup-item-container
+    :empty="!dataList.length"
+    :loading="isLoading"
+    :search="dataSearch"
+    @more="handleIntersect"
+    @search:input="dataSearch = $event"
+    @search:change="resetData"
+  >
 
-      <template v-slot:empty>
-        <empty-search type="contacts" />
-      </template>
+    <template v-slot:after-search>
+      <wt-rounded-action
+        :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
+        icon="ws-bot"
+        rounded
+        :size="size"
+        @click="transferDestination = TransferDestination.CHATPLAN"
+      ></wt-rounded-action>
+      <wt-icon-btn
+        icon="close"
+        @click="closeTab"
+      ></wt-icon-btn>
+    </template>
 
-      <template v-slot:content>
-        <transfer-lookup-item
-          v-for="(item, key) of dataList"
-          :id="`scroll-item-${key}`"
-          :key="`${item.id}${key}`"
-          :item="item"
-          :size="size"
-          :src="botAvatar"
-          :type="transferDestination"
-          @input="handleTransfer"
-        >
-          <template v-slot:before>
-            <wt-icon
-              icon="bot"
-              icon-prefix="ws"
-            ></wt-icon>
-          </template>
-        </transfer-lookup-item>
-      </template>
-    </lookup-item-container>
-  </div>
+    <template v-slot:empty>
+      <empty-search type="contacts" />
+    </template>
+
+    <template v-slot:content>
+      <transfer-lookup-item
+        v-for="(item, key) of dataList"
+        :id="`scroll-item-${key}`"
+        :key="`${item.id}${key}`"
+        :item="item"
+        :size="size"
+        :src="botAvatar"
+        :type="transferDestination"
+        @input="handleTransfer"
+      >
+        <template v-slot:before>
+          <wt-icon
+            icon="bot"
+            icon-prefix="ws"
+          ></wt-icon>
+        </template>
+      </transfer-lookup-item>
+    </template>
+  </lookup-item-container>
 </template>
 
 <script>
@@ -131,22 +122,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-transfer-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: var(--spacing-xs);
-
-  &__search-wrap {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    gap: var(--spacing-xs);
-    width: 100%;
-    margin-bottom: var(--spacing-xs);
-    padding: var(--spacing-xs);
-    background-color: var(--dp-18-surface-color);
-    border-radius: var(--spacing-xs);
-  }
+:deep(.lookup-item-container-search) {
+  padding: var(--spacing-xs);
+  background-color: var(--dp-18-surface-color);
+  border-radius: var(--spacing-xs);
 }
 </style>
