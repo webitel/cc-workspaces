@@ -2,6 +2,7 @@ import NotificationsStoreModule
   from '@webitel/ui-sdk/src/modules/Notifications/store/NotificationsStoreModule';
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { CallActions } from 'webitel-sdk';
+import isOnPWA from '../../../../app/scripts/isOnPWA';
 import i18n from '../../../../app/locale/i18n';
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
@@ -52,7 +53,7 @@ const actions = {
                                         hangup,
                                       },
   ) => {
-    if (context.rootState.config.ON_SITE) {
+    if (isOnPWA()) {
       await context.dispatch('features/swController/SUBSCRIBE_TO_MESSAGE', {
         type: 'notificationclick',
         handler: (action) => {
