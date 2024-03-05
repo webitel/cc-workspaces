@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
 import Bridge
   from '../call-bridge-container.vue';
@@ -28,7 +28,14 @@ describe('Bridge functionality', () => {
   };
 
   it('Fills bridge list active calls', () => {
-    const wrapper = shallowMount(Bridge, {
+    const wrapper = mount(Bridge, {
+      shallow: true,
+      global: {
+        stubs: {
+          LookupItemContainer: false,
+          MergeLookupItem: false,
+        },
+      },
       computed,
     });
     expect(wrapper.findAllComponents({ name: 'merge-lookup-item' }).length)
@@ -39,7 +46,14 @@ describe('Bridge functionality', () => {
     const mock = vi.fn();
     vi.spyOn(Bridge.methods, 'bridge')
       .mockImplementationOnce(mock);
-    const wrapper = shallowMount(Bridge, {
+    const wrapper = mount(Bridge, {
+      shallow: true,
+      global: {
+        stubs: {
+          LookupItemContainer: false,
+          MergeLookupItem: false,
+        },
+      },
       computed,
     });
     wrapper.findComponent({ name: 'merge-lookup-item' })
