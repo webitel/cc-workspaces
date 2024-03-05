@@ -107,7 +107,7 @@ const showEmpty = computed(() => !props.loading && props.empty);
   flex-direction: column;
   width: 100%;
   min-height: 0;
-  max-height: 100%;
+  height: 100%;
   gap: var(--spacing-xs);
 }
 
