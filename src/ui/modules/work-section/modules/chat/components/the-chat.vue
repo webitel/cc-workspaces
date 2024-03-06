@@ -102,11 +102,5 @@ export default {
   .chat-transfer-container {
     flex-grow: 1;
   }
-
-  .chat-transfer-container.ws-worksection {
-    height: auto;
-    min-height: 0;
-    max-height: 100%;
-  }
 }
 </style>

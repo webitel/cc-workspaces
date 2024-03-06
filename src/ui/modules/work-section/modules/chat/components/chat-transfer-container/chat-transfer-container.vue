@@ -1,20 +1,14 @@
 <template>
-  <div class="ws-worksection chat-transfer-container">
-    <div class="ws-worksection__search-wrap">
-      <wt-search-bar
-        v-model="dataSearch"
-        class="ws-worksection__search"
-        debounce
-        :size="size"
-        @search="resetData"
-      ></wt-search-bar>
+  <lookup-item-container
+    :empty="!dataList.length"
+    :loading="isLoading"
+    :search="dataSearch"
+    @more="handleIntersect"
+    @search:input="dataSearch = $event"
+    @search:change="resetData"
+  >
 
-<!--      <wt-rounded-action-->
-<!--        :class="{ 'active': transferDestination === TransferDestination.USER }"-->
-<!--        color="secondary"-->
-<!--        icon="ws-agent"-->
-<!--        @click="transferDestination = TransferDestination.USER"-->
-<!--      ></wt-rounded-action>-->
+    <template v-slot:after-search>
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
         icon="ws-bot"
@@ -26,43 +20,39 @@
         icon="close"
         @click="closeTab"
       ></wt-icon-btn>
-    </div>
+    </template>
 
-    <section ref="scroll-wrap" class="ws-worksection__list">
-      <wt-loader v-if="isLoading" />
-      <empty-search v-else-if="!dataList.length" :type="'contacts'"></empty-search>
-      <div v-else class="ws-worksection__list-wrap">
-        <transfer-lookup-item
-          v-for="(item, key) of dataList"
-          :id="`scroll-item-${key}`"
-          :key="`${item.id}${key}`"
-          :item="item"
-          :size="size"
-          :src="botAvatar"
-          :type="transferDestination"
-          @input="handleTransfer"
-        >
-          <template v-slot:before>
-            <wt-icon
-              icon="bot"
-              icon-prefix="ws"
-            ></wt-icon>
-          </template>
-        </transfer-lookup-item>
-      </div>
+    <template v-slot:empty>
+      <empty-search type="contacts" />
+    </template>
 
-      <observer
-        :options="obsOptions"
-        @intersect="handleIntersect"
-      />
-    </section>
-  </div>
+    <template v-slot:content>
+      <transfer-lookup-item
+        v-for="(item, key) of dataList"
+        :id="`scroll-item-${key}`"
+        :key="`${item.id}${key}`"
+        :item="item"
+        :size="size"
+        :src="botAvatar"
+        :type="transferDestination"
+        @input="handleTransfer"
+      >
+        <template v-slot:before>
+          <wt-icon
+            icon="bot"
+            icon-prefix="ws"
+          ></wt-icon>
+        </template>
+      </transfer-lookup-item>
+    </template>
+  </lookup-item-container>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import APIRepository from '../../../../../../../app/api/APIRepository';
+import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import TransferDestination from '../../enums/ChatTransferDestination.enum';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
@@ -76,6 +66,7 @@ export default {
   name: 'chat-transfer-container',
   mixins: [infiniteScrollMixin, sizeMixin],
   components: {
+    LookupItemContainer,
     TransferLookupItem,
     EmptySearch,
   },
@@ -131,26 +122,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ws-worksection__search-wrap {
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  width: 100%;
-  margin-bottom: var(--spacing-xs);
+:deep(.lookup-item-container-search) {
   padding: var(--spacing-xs);
   background-color: var(--dp-18-surface-color);
   border-radius: var(--spacing-xs);
-
-  .ws-worksection__search {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: auto;
-    margin: 0;
-  }
-
-  .wt-rounded-action, .wt-icon-btn {
-    flex: 0 0 auto;
-    margin-left: var(--spacing-xs);
-  }
 }
 </style>
