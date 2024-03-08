@@ -8,7 +8,9 @@
       ></member-header>
     </template>
     <template v-slot:body>
-      <history v-show="isHistoryOpened" />
+      <history
+        v-show="isHistoryOpened"
+        :size="size" />
       <member-communications v-show="!isHistoryOpened" />
     </template>
   </task-container>
