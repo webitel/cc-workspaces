@@ -21,7 +21,9 @@
     </template>
 
     <template v-slot:timer>
-      <span v-if="isRinging">{{ $t('workspaceSec.callState.ringing') }}</span>
+      <span v-if="isRinging">
+        {{ $t('workspaceSec.callState.ringing') }}
+      </span>
       <queue-preview-timer
         v-else
         :task="task"
@@ -40,7 +42,7 @@
     </template>
 
     <template
-      v-if="isRinging"
+      v-if="isIncomingRinging"
       v-slot:actions
     >
       <wt-button
@@ -98,14 +100,14 @@
     </template>
 
     <template
-      v-if="!isRinging"
+      v-if="!isIncomingRinging"
       v-slot:subtitle
     >
       <queue-preview-timer :task="task" />
     </template>
 
     <template
-      v-if="isRinging"
+      v-if="isIncomingRinging"
       v-slot:actions
     >
       <wt-rounded-action
@@ -158,6 +160,10 @@ export default {
     },
 
     isRinging() {
+      return this.task.state === CallActions.Ringing;
+    },
+
+    isIncomingRinging() {
       return isIncomingRinging(this.task);
     },
 
