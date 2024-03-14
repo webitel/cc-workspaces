@@ -89,7 +89,7 @@ export default {
 .chat-message {
   position: relative;
   display: flex;
-  max-width: 80%;
+  max-width: 100%;
   gap: var(--spacing-xs);
 
   .chat-message-avatar {
