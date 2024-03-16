@@ -8,7 +8,7 @@ export function useCachedExpansionState({ entity }) {
   }
 
   const restoreExpansionState = ({ expansion }) => {
-    return localStorage.getItem(getKey(expansion)) !== 'true';
+    return localStorage.getItem(getKey(expansion)) === 'false';
   }
 
   return {
