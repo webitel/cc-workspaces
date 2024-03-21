@@ -62,7 +62,7 @@ const actions = {
     context.commit('REMOVE_CALL', call);
 
     if (context.getters['missed/IS_CALL_MISSED'](call)) {
-      await context.dispatch('missed/ON_CALL_MISS', call);
+      // await context.dispatch('missed/ON_CALL_MISS', call);
     }
 
     await context.dispatch('RESET_WORKSPACE');

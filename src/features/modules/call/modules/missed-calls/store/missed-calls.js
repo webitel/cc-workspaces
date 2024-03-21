@@ -71,10 +71,6 @@ const actions = {
     await context.dispatch('RESET_MISSED_LIST');
     return context.dispatch('LOAD_DATA_LIST');
   },
-
-  ON_CALL_MISS: async (context) => {
-    setTimeout(() => context.dispatch('INITIALIZE_MISSED'), 3000);
-  },
 };
 
 const mutations = {
