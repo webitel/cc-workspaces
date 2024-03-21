@@ -1,13 +1,12 @@
 {
   "name": "cc-workspaces",
-  "version": "24.02.0",
+  "version": "24.02.1",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test:unit": "vitest",
-    "prepare": "husky install"
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^5.1.1",
@@ -36,7 +35,7 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^24.2.1"
+    "webitel-sdk": "^24.2.4"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.1.0",
@@ -47,7 +46,6 @@
     "eslint": "^8.56.0",
     "eslint-plugin-vue": "^9.21.1",
     "happy-dom": "^13.3.8",
-    "husky": "^7.0.0",
     "sass": "^1.57.1",
     "vite": "^5.0.12",
     "vite-plugin-node-polyfills": "^0.19.0",
