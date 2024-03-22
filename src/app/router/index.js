@@ -1,13 +1,7 @@
-import Auth from '@webitel/ui-sdk/src/modules/Userinfo/components/the-auth.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 
 const routes = [
-  {
-    path: '/auth',
-    name: 'auth',
-    component: Auth,
-  },
   {
     path: '/',
     name: 'agent-ws',
@@ -30,13 +24,18 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('access-token');
-  if (!(to.fullPath === '/auth')) {
-    if (!token) {
-      next('/auth');
-    }
+  if (!localStorage.getItem('access-token') && !to.query.accessToken) {
+    const desiredUrl =  encodeURIComponent(window.location.href);
+    const authUrl = import.meta.env.VITE_AUTH_URL;
+    window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
+  } else if (to.query.accessToken) {
+    // assume that access token was set from query before app initialization in main.js
+    const newQuery = { ...to.query };
+    delete newQuery.accessToken;
+    next({ ...to, query: newQuery });
+  } else {
+    next();
   }
-  next();
 });
 
 export default router;

@@ -10,6 +10,24 @@ import BreakpointPlugin from './app/plugins/breakpoint.plugin';
 
 import './app/assets/icons/sprite';
 
+const setTokenFromUrl = () => {
+  try {
+    const queryMap = window.location.search.slice(1)
+    .split('&')
+    .reduce((obj, query) => {
+      const [key, value] = query.split('=');
+      obj[key] = value;
+      return obj;
+    }, {});
+
+    if (queryMap.accessToken) {
+      localStorage.setItem('access-token', queryMap.accessToken);
+    }
+  } catch (err) {
+    console.error('Error restoring token from url', err);
+  }
+};
+
 const fetchConfig = async () => {
   const electronConfig = window._config || {}; // Electron sets config to window
   const fileResponse = await fetch(`${import.meta.env.BASE_URL}/config.json`);
@@ -47,8 +65,9 @@ const createVueInstance = () => {
 
 // init IIFE
 (async () => {
+  setTokenFromUrl();
   const config = await fetchConfig();
-  store.dispatch('SET_CONFIG', config);
+  await store.dispatch('SET_CONFIG', config);
   localStorage.setItem('CONFIG', JSON.stringify(config));
   const app = createVueInstance();
   app.provide('$config', config);

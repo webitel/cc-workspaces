@@ -50,7 +50,6 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
-import authAPI from '@webitel/ui-sdk/src/modules/Userinfo/api/auth';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
@@ -137,6 +136,9 @@ export default {
   },
 
   methods: {
+    ...mapActions('userinfo', {
+      logout: 'LOGOUT',
+    }),
     ...mapActions('features/status', {
       toggleCCenterMode: 'TOGGLE_CONTACT_CENTER_MODE',
     }),
@@ -149,11 +151,7 @@ export default {
       window.open(settingsUrl);
     },
     async logoutUser() {
-      try {
-        await authAPI.logout();
-        await this.$router.replace('/auth');
-      } catch {
-      }
+      return this.logout();
     },
   },
 };

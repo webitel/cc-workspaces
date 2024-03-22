@@ -1,3 +1,5 @@
+import instance from '../../app/api/instance';
+
 const state = {
   stateHistory: [],
 };
@@ -12,7 +14,7 @@ const actions = {
   OPEN_SESSION: async (context) => {
     try {
       // firstly, try to restore user session
-      await context.dispatch('ui/userinfo/OPEN_SESSION', null, { root: true });
+      await context.dispatch('ui/userinfo/OPEN_SESSION', { instance }, { root: true });
       await context.dispatch('features/status/SUBSCRIBE_STATUS', null, { root: true });
       // then, async open workspace session
       return Promise.allSettled(
