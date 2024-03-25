@@ -5,7 +5,7 @@ describe.skip('processing: actions', () => {
   let context;
 
   beforeEach(() => {
-    context = contextMock(jest);
+    context = contextMock(vi);
   });
 
   it('', () => {});
