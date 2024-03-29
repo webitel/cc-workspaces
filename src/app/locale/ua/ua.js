@@ -1,5 +1,5 @@
 import {
-  AgentStatus,
+  AgentStatus, CallActions,
   DeviceNotAllowPermissionError,
   DeviceNotFoundError, JobState, LicencePermissionError,
 } from 'webitel-sdk';
@@ -253,6 +253,7 @@ export default {
     userInvite: 'Новий чат з {name}',
     closeConversation: '{name} вийшов з чату',
     [JobState.Distribute]: 'Нове завдання: {name}',
+    [CallActions.Ringing]: 'Новий дзвінок',
   },
   emojiPicker: {
     categoriesLabel: 'Категорії',

@@ -4,6 +4,7 @@ import {
   LicencePermissionError,
   JobState,
   AgentStatus,
+  CallActions,
 } from 'webitel-sdk';
 
 export default {
@@ -255,6 +256,7 @@ export default {
     userInvite: 'New chat invite from {name}',
     closeConversation: '{name} left the chat',
     [JobState.Distribute]: 'New task: {name}',
+    [CallActions.Ringing]: 'New call',
   },
   emojiPicker: {
     categoriesLabel: 'Categories',

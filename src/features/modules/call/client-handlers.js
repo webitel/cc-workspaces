@@ -1,4 +1,7 @@
+import { log } from '@webitel/ui-sdk/src/api/transformers';
+import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { CallActions, CallDirection } from 'webitel-sdk';
+import i18n from '../../../app/locale/i18n';
 import openLinkFromVariable from '../../../app/scripts/openLinkFromVariable';
 
 const callHandler = (context) => (action, call) => {
@@ -48,6 +51,9 @@ const actions = {
         hangup: () => context.dispatch('HANGUP', { callId }),
       }, { root: true });
     }
+    await context.dispatch('features/swController/SEND_NOTIFICATION', {
+      title: i18n.global.t(`notifications.${snakeToCamel(CallActions.Ringing)}`),
+    }, { root: true });
   },
 
   HANDLE_ACTIVE_ACTION: async (context, call) => {
