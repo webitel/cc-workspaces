@@ -136,7 +136,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('userinfo', {
+    ...mapActions('ui/userinfo', {
       logout: 'LOGOUT',
     }),
     ...mapActions('features/status', {
