@@ -36,6 +36,7 @@ import { mapActions } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
+import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
@@ -49,6 +50,7 @@ export default {
     sizeMixin,
   ],
   components: {
+    FormIFrame,
     FormText,
     FormSelect,
     FormFile,
@@ -65,6 +67,7 @@ export default {
     processingComponent: {
       'wt-select': 'form-select',
       'wt-datetimepicker': 'form-datetimepicker',
+      'wt-iframe': 'form-i-frame',
     },
   }),
   computed: {
