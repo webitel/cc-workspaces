@@ -67,7 +67,7 @@ export default {
     processingComponent: {
       'wt-select': 'form-select',
       'wt-datetimepicker': 'form-datetimepicker',
-      'wt-iframe': 'form-i-frame',
+      'form-i-frame': 'form-i-frame',
     },
   }),
   computed: {
