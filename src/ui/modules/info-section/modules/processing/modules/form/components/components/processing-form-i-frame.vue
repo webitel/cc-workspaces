@@ -5,7 +5,7 @@
       :hint="hint"
     >{{ label }}</wt-label>
     <iframe
-      class="form-component__iframe"
+      class="form-component__i-frame"
       :height="height"
       :src="initialValue"
       allowfullscreen
@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-component__iframe {
+.form-component__i-frame {
   width: 100%;
 }
 </style>
