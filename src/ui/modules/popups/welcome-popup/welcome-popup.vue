@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import silenceSound from './assets/audio/silence.mp3';
+
 export default {
   name: 'welcome-popup',
   props: {
@@ -70,8 +72,16 @@ export default {
     },
   }),
   methods: {
+    playSilence() {
+      // https://webitel.atlassian.net/browse/WTEL-4389
+      const silence = new Audio(silenceSound);
+      silence.play();
+    },
     close() {
-      if (!this.loading) this.$emit('input');
+      if (!this.loading) {
+        this.playSilence();
+        this.$emit('input');
+      };
     },
     async checkMic() {
       try {
