@@ -18,6 +18,12 @@
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
       ></component>
+      <form-i-frame
+        :height="'450'"
+        :isHeightFixed="false"
+        :initial-value="'https://www.slovoidilo.ua/2024/04/11/novyna/bezpeka/centrenerho-zayavyly-trypilska-tes-povnistyu-zrujnovana-raketnym-udarom'"
+      >
+      </form-i-frame>
     </template>
     <template v-slot:actions>
       <wt-button

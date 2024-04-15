@@ -6,7 +6,7 @@
     >{{ label }}</wt-label>
     <iframe
       class="processing-form-i-frame__iframe"
-      :height="height"
+      :height="iframeHeight"
       :src="initialValue"
       allowfullscreen
     ></iframe>
@@ -22,6 +22,18 @@ export default {
     height: {
       type: String,
       default: '100%',
+    },
+    isHeightFixed: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    iframeHeight() {
+      return this.height + this.heightUnit;
+    },
+    heightUnit() {
+      return this.isHeightFixed ? 'px' : '%';
     },
   },
   mixins: [ProcessingFormComponentMixin],
