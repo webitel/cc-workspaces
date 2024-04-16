@@ -8,6 +8,7 @@
     "serve": "vite preview",
     "test:unit": "vitest"
   },
+  "type": "module",
   "dependencies": {
     "@tinymce/tinymce-vue": "^5.1.1",
     "@vue/compat": "^3.3.9",

@@ -9,6 +9,7 @@
       <wt-icon
         icon="call"
         size="md"
+        color="warning"
       ></wt-icon>
     </template>
 
@@ -33,6 +34,7 @@
       <wt-icon
         icon="call"
         size="sm"
+        color="warning"
       ></wt-icon>
     </template>
 
