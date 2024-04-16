@@ -2,7 +2,6 @@ import NotificationsStoreModule
   from '@webitel/ui-sdk/src/modules/Notifications/store/NotificationsStoreModule';
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { CallActions } from 'webitel-sdk';
-import isOnPWA from '../../../../app/scripts/isOnPWA';
 import i18n from '../../../../app/locale/i18n';
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
@@ -45,42 +44,42 @@ const actions = {
   },
 
   // is called on ringing event on call store to send notification
-  HANDLE_INBOUND_CALL_RINGING: async (context,
-                                      {
-                                        displayName,
-                                        displayNumber,
-                                        answer,
-                                        hangup,
-                                      },
+  HANDLE_INBOUND_CALL_RINGING: async (
+    context,
+    {
+      displayName,
+      displayNumber,
+      answer,
+      hangup,
+    },
   ) => {
-    if (isOnPWA()) {
-      await context.dispatch('features/swController/SUBSCRIBE_TO_MESSAGE', {
-        type: 'notificationclick',
-        handler: (action) => {
-          switch (action) {
-            case 'accept':
-              answer();
-              break;
-            case 'decline':
-              hangup();
-              break;
-            default:
-              break;
-          }
-        },
-        once: true, // subscribe for each notification separately, once
-      }, { root: true });
 
-      // https://webitel.atlassian.net/browse/WTEL-4240
-      return context.dispatch('features/swController/SEND_NOTIFICATION', {
-        title: i18n.global.tc('queueSec.call.call', 1),
-        body: `${displayName}: ${displayNumber}`,
-        actions: [
-          { action: 'accept', title: 'Accept' },
-          { action: 'decline', title: 'Decline' },
-        ],
-      }, { root: true });
-    }
+    await context.dispatch('features/swController/SUBSCRIBE_TO_MESSAGE', {
+      type: 'notificationclick',
+      handler: (action) => {
+        switch (action) {
+          case 'accept':
+            answer();
+            break;
+          case 'decline':
+            hangup();
+            break;
+          default:
+            break;
+        }
+      },
+      once: true, // subscribe for each notification separately, once
+    }, { root: true });
+
+    // https://webitel.atlassian.net/browse/WTEL-4240
+    return context.dispatch('features/swController/SEND_NOTIFICATION', {
+      title: i18n.global.tc('queueSec.call.call', 1),
+      body: `${displayName}: ${displayNumber}`,
+      actions: [
+        { action: 'accept', title: 'Accept' },
+        { action: 'decline', title: 'Decline' },
+      ],
+    }, { root: true });
   },
 
   // is called from mixin watcher on any ringing to play sound
