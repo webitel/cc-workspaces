@@ -255,6 +255,7 @@ export default {
     userInvite: 'New chat invite from {name}',
     closeConversation: '{name} left the chat',
     [JobState.Distribute]: 'New task: {name}',
+    newCall: 'New call',
   },
   emojiPicker: {
     categoriesLabel: 'Categories',

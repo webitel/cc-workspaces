@@ -253,6 +253,7 @@ export default {
     userInvite: 'Новий чат з {name}',
     closeConversation: '{name} вийшов з чату',
     [JobState.Distribute]: 'Нове завдання: {name}',
+    newCall: 'Новий дзвінок',
   },
   emojiPicker: {
     categoriesLabel: 'Категорії',

@@ -39,7 +39,7 @@ const actions = {
       await context.dispatch('SET_WORKSPACE', call);
     }
 
-    if (call.direction === CallDirection.Inbound) {
+    if (call.allowAnswer) {
       const callId = call.id;
       await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {
         displayName: call.displayName,
