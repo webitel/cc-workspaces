@@ -5,6 +5,10 @@ const state = {
   thisApp: WebitelApplications.AGENT,
 };
 
-const userinfo = new UserinfoStoreModule().getModule({ state });
+const getters = {
+  IS_CALL_CENTER_LICENSE: (state, getters) => state.license.find((item) => item.prod === 'CALL_CENTER'),
+};
+
+const userinfo = new UserinfoStoreModule().getModule({ state, getters });
 
 export default userinfo;

@@ -35,7 +35,7 @@ const getFlowSchemasList = async (params) => {
     fields,
     id,
     enabled,
-    parentId,
+    teamId,
   } = applyTransform(params, [
     merge(getDefaultGetParams()),
     starToSearch('search'),
@@ -43,7 +43,7 @@ const getFlowSchemasList = async (params) => {
 
   try {
     const response = await flowSchemaService.searchTeamTrigger(
-      parentId,
+      teamId,
       page,
       size,
       search,
@@ -56,6 +56,7 @@ const getFlowSchemasList = async (params) => {
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
+    console.log('api items:',  items);
     return {
       items: applyTransform(items, [
         mergeEach(defaultObject),
@@ -92,9 +93,9 @@ const runFlowSchema = async ({ itemId: id }) => {
 };
 
 
-const TeamFlowsAPI = {
+const FlowsAPI = {
   getList: getFlowSchemasList,
   run: runFlowSchema,
 };
 
-export default TeamFlowsAPI;
+export default FlowsAPI;

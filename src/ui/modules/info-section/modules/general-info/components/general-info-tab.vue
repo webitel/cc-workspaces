@@ -69,6 +69,7 @@ async function loadAgentInfo(payload) {
 watchOnce(agent, () => {
   subscribe(loadAgentInfo);
 });
+
 </script>
 
 <style lang="scss" scoped>

@@ -48,6 +48,7 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
+import Flow from '../modules/flow/components/flow-tab.vue';
 
 export default {
   name: 'the-agent-info-section',
@@ -59,6 +60,7 @@ export default {
     Processing,
     CollapseAction,
     PinAction,
+    Flow,
   },
   mixins: [sizeMixin],
   props: {
@@ -112,6 +114,15 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
+    // ...mapGetters('ui/infoSec/agentInfo', {
+    //   team: 'AGENT_TEAM',
+    // }),
+    ...mapGetters('ui/userinfo', {
+      isCallCenter: 'IS_CALL_CENTER_LICENSE',
+    }),
+    ...mapGetters('features/status', {
+      isAgent: 'IS_AGENT',
+    }),
     infoSecSize() {
       // should be always md if pinned
       if (this.pin) return 'md';
@@ -128,6 +139,10 @@ export default {
       return this.taskOnWorkspace?.id;
     },
 
+    showFlows() {
+      return this.isAgent && this.isCallCenter;
+    },
+
     hasKnowledgeBase() {
       const { variables } = this.taskOnWorkspace;
       return !!variables?.knowledge_base;
@@ -138,6 +153,7 @@ export default {
       if (this.showClientInfo) tabs.push(this.tabsObject.clientInfo);
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
+      if (this.showFlows) tabs.push(this.tabsObject.flow);
       return tabs;
     },
     tabsObject() {
@@ -161,11 +177,17 @@ export default {
         value: 'processing',
         icon: 'ws-processing',
       };
+      const flow = {
+        text: 'flow',
+        value: 'flow',
+        icon: 'run',
+      };
       return {
         generalInfo,
         clientInfo,
         knowledgeBase,
         processing,
+        flow,
       };
     },
   },

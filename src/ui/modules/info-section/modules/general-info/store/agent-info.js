@@ -10,6 +10,7 @@ const state = {
 
 const getters = {
   AGENT_ID: (state, getters, rootState) => rootState.features.status.agent.agentId, // used for initial agent data loading
+  AGENT_TEAM: (state, getters) => state.agent.team,
 };
 
 const actions = {
