@@ -1,7 +1,7 @@
 import agentInfo from '../modules/general-info/store/agent-info';
 import processing from '../modules/processing/store/processing';
 import client from '../modules/client-info/store/client-info';
-import flow from '../modules/flow/store/flow';
+import flow from '../modules/flows/store/flow';
 
 export default {
   namespaced: true,

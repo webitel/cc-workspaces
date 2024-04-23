@@ -48,7 +48,7 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
-import Flow from '../modules/flow/components/flow-tab.vue';
+import Flows from '../modules/flows/components/flows-tab.vue';
 
 export default {
   name: 'the-agent-info-section',
@@ -153,7 +153,7 @@ export default {
       if (this.showClientInfo) tabs.push(this.tabsObject.clientInfo);
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
-      if (this.showFlows) tabs.push(this.tabsObject.flow);
+      if (this.showFlows) tabs.push(this.tabsObject.flows);
       return tabs;
     },
     tabsObject() {
@@ -178,9 +178,9 @@ export default {
         icon: 'ws-processing',
       };
       const flow = {
-        text: 'flow',
-        value: 'flow',
-        icon: 'run',
+        text: 'flows',
+        value: 'flows',
+        icon: 'flows',
       };
       return {
         generalInfo,
