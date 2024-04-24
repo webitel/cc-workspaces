@@ -60,7 +60,7 @@ export default {
     Processing,
     CollapseAction,
     PinAction,
-    Flow,
+    Flows,
   },
   mixins: [sizeMixin],
   props: {
@@ -177,7 +177,7 @@ export default {
         value: 'processing',
         icon: 'ws-processing',
       };
-      const flow = {
+      const flows = {
         text: 'flows',
         value: 'flows',
         icon: 'flows',
@@ -187,7 +187,7 @@ export default {
         clientInfo,
         knowledgeBase,
         processing,
-        flow,
+        flows,
       };
     },
   },

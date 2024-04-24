@@ -1,15 +1,16 @@
 <template>
-  <section class="flow">
-    FLOW
-    {{ team }}
-    {{ isLoaded ? '!!!!!!!!!!' : '((('}}
+  <section class="flows">
     <ul v-show="isLoaded">
       <li
         v-for="(flow) in flowsList"
         :key="flow.id"
-        class="agent-pause-causes-item"
+        class="flow-item"
       >
-        {{ flow.name }}
+        <div class="flow-item__wrapper">
+          <span class="flow-item__name"> {{ flow.name }} </span>
+          <flow-button :id="flow.id" />
+        </div>
+        <wt-divider />
       </li>
 
     </ul>
@@ -19,12 +20,12 @@
 <script setup>
 import { mapState, useStore } from 'vuex';
 import { watchOnce } from '@vueuse/core';
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+// import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import { computed, ref, defineProps, onMounted } from 'vue';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import FlowsAPI from '../api/flow';
-import infoSec from '../../../store/infoSec';
-import agentInfo from '../../general-info/store/agent-info';
+import FlowsAPI from '../api/flows.js';
+// import infoSec from '../../../store/infoSec';
+// import agentInfo from '../../general-info/store/agent-info';
+import FlowButton from './flow-button.vue';
 
 const props = defineProps({
   // size: {
@@ -42,16 +43,14 @@ const flowsList = ref([]);
 
 const team = computed(() => store.getters["ui/infoSec/agentInfo/AGENT_TEAM"]);
 
-console.log('team:', team);
 
 async function loadFlowsList(id) {
-  console.log('loadFlowsList', id)
   const { items } = await FlowsAPI.getList({ teamId: id });
   flowsList.value = items;
   isLoaded.value = true;
 }
 
-if(team.value.id) loadFlowsList(team.value.id);
+if (team.value.id) loadFlowsList(team.value.id);
 
 // onMounted(() => {
 //   console.log('onMounted team.id', team.id);
@@ -62,8 +61,27 @@ if(team.value.id) loadFlowsList(team.value.id);
 </script>
 
 <style lang="scss" scoped>
-.flow {
+.flows {
   @extend %wt-scrollbar;
+
+  .flow-item {
+
+    &__wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-xs);
+    }
+
+
+
+      &__name {
+        @extend %typo-body-1;
+        overflow-wrap: break-word;
+        word-break: break-all;
+        text-transform: capitalize;
+      }
+  }
   //max-height: 100%;
   //min-height: 0;
   //overflow: auto;

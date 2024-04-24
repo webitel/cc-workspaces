@@ -1,4 +1,4 @@
-import FlowsAPI from '../api/flow.js';
+import FlowsAPI from '../api/flows.js';
 
 const state = {
   flows: [],
