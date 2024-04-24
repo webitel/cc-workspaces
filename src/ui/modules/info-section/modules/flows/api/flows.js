@@ -15,13 +15,6 @@ import configuration from '../../../../../../app/api/openAPIConfig';
 
 const flowSchemaService = new TeamTriggerServiceApi(configuration, '', instance);
 
-const fieldsToSend = ['name', 'schema', 'enabled', 'description'];
-
-// const preRequestHandler = (parentId) => (item) => ({
-//   ...item,
-//   teamId: parentId,
-// });
-
 const getFlowSchemasList = async (params) => {
   const defaultObject = {
     enabled: false,
@@ -56,7 +49,6 @@ const getFlowSchemasList = async (params) => {
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
-    console.log('api items:',  items);
     return {
       items: applyTransform(items, [
         mergeEach(defaultObject),
@@ -70,20 +62,11 @@ const getFlowSchemasList = async (params) => {
   }
 };
 
-//переробити повністю (сире)
 const runFlowSchema = async ({ itemId: id }) => {
-  const defaultObject = {
-    // name: '',
-    // description: '',
-    // enabled: false,
-    // schema: {},
-  };
-
   try {
-    const response = await flowSchemaService.runTeamTrigger(id);
+    const response = await flowSchemaService.runTeamTrigger(id, {});
     return applyTransform(response.data, [
       snakeToCamel(),
-      merge(defaultObject),
     ]);
   } catch (err) {
     throw applyTransform(err, [
@@ -92,10 +75,16 @@ const runFlowSchema = async ({ itemId: id }) => {
   }
 };
 
+const getFlowsLookup = (params) => getFlowSchemasList({
+  ...params,
+  fields: params.fields || ['id', 'name', 'enabled'],
+});
+
 
 const FlowsAPI = {
   getList: getFlowSchemasList,
   run: runFlowSchema,
+  getLookup: getFlowsLookup,
 };
 
 export default FlowsAPI;

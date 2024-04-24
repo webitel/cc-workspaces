@@ -18,23 +18,12 @@
 </template>
 
 <script setup>
-import { mapState, useStore } from 'vuex';
-import { watchOnce } from '@vueuse/core';
-// import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
-import { computed, ref, defineProps, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { computed, ref } from 'vue';
 import FlowsAPI from '../api/flows.js';
-// import infoSec from '../../../store/infoSec';
-// import agentInfo from '../../general-info/store/agent-info';
 import FlowButton from './flow-button.vue';
 
-const props = defineProps({
-  // size: {
-  //   type: String,
-  //   default: 'md',
-  // },
-});
-
-const namespace = 'ui/infoSec/flow';
+const namespace = 'ui/infoSec/flows';
 const agentNamespace = 'ui/infoSec/agentInfo';
 
 const store = useStore();
@@ -45,18 +34,12 @@ const team = computed(() => store.getters["ui/infoSec/agentInfo/AGENT_TEAM"]);
 
 
 async function loadFlowsList(id) {
-  const { items } = await FlowsAPI.getList({ teamId: id });
+  const { items } = await FlowsAPI.getLookup({ teamId: id, enabled: true });
   flowsList.value = items;
   isLoaded.value = true;
 }
 
 if (team.value.id) loadFlowsList(team.value.id);
-
-// onMounted(() => {
-//   console.log('onMounted team.id', team.id);
-//
-//   isLoaded.value = true;
-// });
 
 </script>
 
@@ -72,9 +55,6 @@ if (team.value.id) loadFlowsList(team.value.id);
       align-items: center;
       padding: var(--spacing-xs);
     }
-
-
-
       &__name {
         @extend %typo-body-1;
         overflow-wrap: break-word;
@@ -82,9 +62,5 @@ if (team.value.id) loadFlowsList(team.value.id);
         text-transform: capitalize;
       }
   }
-  //max-height: 100%;
-  //min-height: 0;
-  //overflow: auto;
-  //word-break: break-all;
 }
 </style>
