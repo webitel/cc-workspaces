@@ -177,7 +177,7 @@ export default {
       const flows = {
         text: this.$tc('infoSec.flows.title', 2),
         value: 'flows',
-        icon: 'ws-flows',
+        icon: 'flows',
       };
       return {
         generalInfo,
