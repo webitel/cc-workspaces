@@ -22,6 +22,7 @@ export default {
     settings: 'Settings',
     edit: 'Edit',
     select: 'Select',
+    run: 'Run',
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -147,6 +148,10 @@ export default {
           empty: 'There are no files yet',
         },
       },
+    },
+    flows: {
+      title: 'Flow schema | Flow schemas',
+      dummy: 'No schemes have been configured yet',
     },
   },
   workspaceSec: {

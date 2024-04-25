@@ -5,12 +5,14 @@
       :loading="isLoading"
       @click="runFlow"
     >
-      run
+      {{ $t('reusable.run') }}
     </wt-button>
   </section>
 </template>
 
 <script setup>
+/* created new button component because we need logic for loading until we get api response
+ task: https://webitel.atlassian.net/browse/WTEL-4355 */
 
 import { ref } from 'vue';
 import FlowsAPI from '../api/flows.js';
@@ -29,7 +31,6 @@ async function runFlow () {
     isLoading.value = true;
     await FlowsAPI.run(props.id);
   } finally {
-    console.log('finally FlowApi');
     isLoading.value = false;
   }
 }

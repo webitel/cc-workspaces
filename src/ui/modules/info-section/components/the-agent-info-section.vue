@@ -114,9 +114,6 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
-    // ...mapGetters('ui/infoSec/agentInfo', {
-    //   team: 'AGENT_TEAM',
-    // }),
     ...mapGetters('ui/userinfo', {
       isCallCenter: 'IS_CALL_CENTER_LICENSE',
     }),
@@ -178,9 +175,9 @@ export default {
         icon: 'ws-processing',
       };
       const flows = {
-        text: 'flows',
+        text: this.$tc('infoSec.flows.title', 2),
         value: 'flows',
-        icon: 'flows',
+        icon: 'ws-flows',
       };
       return {
         generalInfo,

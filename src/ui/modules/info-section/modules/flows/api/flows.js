@@ -30,7 +30,6 @@ const getFlowSchemasList = async (params) => {
     enabled,
     teamId,
   } = applyTransform(params, [
-    merge(getDefaultGetParams()),
     starToSearch('search'),
   ]);
 
