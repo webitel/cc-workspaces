@@ -21,11 +21,11 @@ export default {
   props: {
     height: {
       type: String,
-      default: '100%',
+      default: '100',
     },
     isHeightFixed: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   computed: {
