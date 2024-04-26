@@ -120,6 +120,9 @@ export default {
     ...mapGetters('features/status', {
       isAgent: 'IS_AGENT',
     }),
+    ...mapGetters('ui/infoSec/agentInfo', {
+      Agent: 'AGENT',
+    }),
     infoSecSize() {
       // should be always md if pinned
       if (this.pin) return 'md';

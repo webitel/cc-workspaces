@@ -1,5 +1,5 @@
 <template>
-  <section class="flows">
+  <section class="flows-tab">
     <ul v-if="isLoaded">
       <li
         v-for="(flow) in flowsList"
@@ -25,7 +25,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { computed, ref } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import FlowsAPI from '../api/flows.js';
 import FlowButton from './flow-button.vue';
 
@@ -34,12 +34,12 @@ const agentNamespace = 'ui/infoSec/agentInfo';
 
 const store = useStore();
 const isLoaded = ref(false);
-const flowsList = ref([]);
+const flowsList = reactive([]);
 
-const team = computed(() => store.getters['ui/infoSec/agentInfo/AGENT_TEAM']);
+const team = computed(() => store.getters[`${agentNamespace}/AGENT_TEAM`]);
 
-async function loadFlowsList(id) {
-  const { items } = await FlowsAPI.getLookup({ teamId: id, enabled: true });
+async function loadFlowsList(teamId) {
+  const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
   if (items.length) {
     flowsList.value = items;
     isLoaded.value = true;
@@ -51,7 +51,7 @@ if (team.value.id) loadFlowsList(team.value.id);
 </script>
 
 <style lang="scss" scoped>
-.flows {
+.flows-tab {
   @extend %wt-scrollbar;
 
   .flow-item{
@@ -72,8 +72,6 @@ if (team.value.id) loadFlowsList(team.value.id);
     }
 
     &__dummy {
-      //display: flex;
-      //align-items: center;
       flex-grow: 1;
     }
   }

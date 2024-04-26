@@ -61,7 +61,7 @@ const getFlowSchemasList = async (params) => {
   }
 };
 
-const runFlowSchema = async ({ itemId: id }) => {
+const runFlowSchema = async (id) => {
   try {
     const response = await flowSchemaService.runTeamTrigger(id, {});
     return applyTransform(response.data, [
