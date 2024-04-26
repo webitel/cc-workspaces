@@ -30,10 +30,8 @@ export default {
   },
   computed: {
     iframeHeight() {
-      return this.height + this.heightUnit;
-    },
-    heightUnit() {
-      return this.isHeightFixed ? 'px' : '%';
+      const unit = this.isHeightFixed ? 'px' : '%';
+      return this.height + unit;
     },
   },
   mixins: [ProcessingFormComponentMixin],
