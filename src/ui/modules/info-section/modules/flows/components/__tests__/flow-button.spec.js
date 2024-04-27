@@ -4,7 +4,10 @@ import FlowButton
 
 describe('FlowButton', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(FlowButton);
+    const id = 12;
+    const wrapper = shallowMount(FlowButton, {
+      props: { id },
+    });
     expect(wrapper.exists()).toBe(true);
   });
 });

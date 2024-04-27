@@ -33,7 +33,7 @@ describe('FlowsTab', () => {
       global: { plugins: [store] },
       computed: {
         ...FlowsTab.computed,
-        team: () => {},
+        teamId: () => 12,
         // showProcessing: () => true,
         // showFlows: () => true,
         // taskOnWorkspace: () => callOnWorkspace,
