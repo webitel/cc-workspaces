@@ -34,9 +34,9 @@ const agentNamespace = 'ui/infoSec/agentInfo';
 
 const store = useStore();
 const isLoaded = ref(false);
-const flowsList = reactive([]);
+const flowsList = ref([]);
 
-const team = computed(() => store.getters[`${agentNamespace}/AGENT_TEAM`]);
+const teamId = computed(() => store.getters[`${agentNamespace}/AGENT_TEAM`].id);
 
 async function loadFlowsList(teamId) {
   const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
@@ -46,7 +46,7 @@ async function loadFlowsList(teamId) {
   }
 }
 
-if (team.value.id) loadFlowsList(team.value.id);
+if (teamId.value) loadFlowsList(teamId.value);
 
 </script>
 

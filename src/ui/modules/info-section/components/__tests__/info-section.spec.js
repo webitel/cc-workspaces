@@ -11,6 +11,7 @@ describe('InfoSection', () => {
       computed: {
         ...InfoSection.computed,
         showProcessing: () => true,
+        showFlows: () => true,
         taskOnWorkspace: () => callOnWorkspace,
       },
     });
