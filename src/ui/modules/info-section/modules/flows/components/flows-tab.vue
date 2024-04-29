@@ -45,7 +45,7 @@ async function loadFlowsList(teamId) {
       isLoaded.value = true;
     }
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 

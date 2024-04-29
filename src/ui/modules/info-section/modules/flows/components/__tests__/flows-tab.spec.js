@@ -1,10 +1,7 @@
 import { createStore } from 'vuex';
-import { shallowMount, mount } from '@vue/test-utils';
-import FlowsTab
-  from '../flows-tab.vue';
+import { shallowMount } from '@vue/test-utils';
 import FlowsAPI from '../../api/flows.js';
-import axiosMock from '@webitel/ui-sdk/src/tests/mocks/axiosMock';
-import instance from '../../../../../../../app/api/instance';
+import FlowsTab from '../flows-tab.vue';
 
 const flowsData = [{
     id: 1,
@@ -14,8 +11,7 @@ const flowsData = [{
     name: 'flow2'
   }];
 
-vi.mock('../../api/flows.js');
-FlowsAPI.getLookup.mockImplementation(() => Promise.resolve({ items: flowsData }));
+vi.spyOn(FlowsAPI, 'getLookup').mockImplementation(() => ({ items: flowsData }));
 
 const team = { id: 262, name: 'team1' };
 // const flowsList = [{ id: 1, name: 'flow1' }, { id: 2, name: 'flow2' }];
@@ -56,21 +52,13 @@ describe('FlowsTab', () => {
   it('renders flows list', async () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
-      data() {
-        return {
-          isLoaded: true,
-          flowsList: FlowsAPI.getLookup,
-        }
-      }
     });
 
     await wrapper.vm.$nextTick();
-    expect(FlowsAPI.getLookup).toHaveBeenCalled();
-    const items = FlowsAPI.getLookup;
+
     const list = wrapper
       .findAll('.flow-item');
-    console.info('llli', wrapper.html(), "items:", items);
-    // expect(wrapper.).toBe(2);
+    expect(list.length).toBe(2);
   });
   // it('show dummy', () => {
   //   const wrapper = shallowMount(FlowsTab, {
