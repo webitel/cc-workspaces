@@ -45,6 +45,7 @@ describe('FlowsTab', () => {
     });
     expect(wrapper.exists()).toBe(true);
   });
+
   it('renders flows list', async () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
@@ -56,6 +57,7 @@ describe('FlowsTab', () => {
       .findAll('.flow-item');
     expect(list.length).toBe(2);
   });
+
   it('show dummy', () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },

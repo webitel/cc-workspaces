@@ -3,7 +3,6 @@ import FlowButton
   from '../flow-button.vue';
 import FlowsAPI from '../../api/flows';
 
-
 const id = 12;
 
 describe('FlowButton', () => {
@@ -13,6 +12,7 @@ describe('FlowButton', () => {
     });
     expect(wrapper.exists()).toBe(true);
   });
+
   it('run flow', async () => {
     const mock = vi.fn();
     vi.spyOn(FlowsAPI, 'run').mockImplementationOnce(mock);
