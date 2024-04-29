@@ -30,19 +30,22 @@ import FlowsAPI from '../api/flows.js';
 import FlowButton from './flow-button.vue';
 
 const namespace = 'ui/infoSec/flows';
-const agentNamespace = 'ui/infoSec/agentInfo';
 
 const store = useStore();
 const isLoaded = ref(false);
 const flowsList = ref([]);
 
-const teamId = computed(() => store.getters[`${agentNamespace}/AGENT_TEAM`].id);
+const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM`].id);
 
 async function loadFlowsList(teamId) {
-  const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
-  if (items.length) {
-    flowsList.value = items;
-    isLoaded.value = true;
+  try {
+    const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
+    if (items.length) {
+      flowsList.value = items;
+      isLoaded.value = true;
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 

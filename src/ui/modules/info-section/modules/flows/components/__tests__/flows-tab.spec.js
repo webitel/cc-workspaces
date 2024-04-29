@@ -1,66 +1,80 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { shallowMount, mount } from '@vue/test-utils';
 import FlowsTab
   from '../flows-tab.vue';
-import Vuex, { createStore } from 'vuex';
+import FlowsAPI from '../../api/flows.js';
+import axiosMock from '@webitel/ui-sdk/src/tests/mocks/axiosMock';
+import instance from '../../../../../../../app/api/instance';
 
+const flowsData = [{
+    id: 1,
+    name: 'flow1'
+  }, {
+    id: 2,
+    name: 'flow2'
+  }];
+
+const mock = axiosMock();
+vi.doMock('axios', mock);
+
+const team = { id: 262, name: 'team1' };
+// const flowsList = [{ id: 1, name: 'flow1' }, { id: 2, name: 'flow2' }];
+const store = createStore({
+  modules: {
+    ui: {
+      namespaced: true,
+      modules: {
+        infoSec: {
+          namespaced: true,
+          modules: {
+            flows: {
+              namespaced: true,
+              getters: {
+                AGENT_TEAM: () => team,
+              },
+              // state: {
+              //   flows: [],
+              // },
+            },
+          },
+        },
+      },
+    },
+  },
+});
 
 describe('FlowsTab', () => {
-  let state;
-  let store;
-  beforeEach(() => {
-    state = {
-      flows: [],
-    };
-    store = createStore({
-      state,
-      modules: {
-        // workspace: {
-        //   state: {
-        //     workspaceState: WorkspaceStates.CALL,
-        //   },
-        //   ...workspaceModule,
-        // },
-        // call: {
-        //   namespaced: true,
-        //   state,
-        // },
-      },
-    });
-  });
-
   it('renders a component', () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
       computed: {
         ...FlowsTab.computed,
-        teamId: () => 12,
-        // showProcessing: () => true,
-        // showFlows: () => true,
-        // taskOnWorkspace: () => callOnWorkspace,
       },
     });
     expect(wrapper.exists()).toBe(true);
   });
-  // it('renders flows list', () => {
-  //   const flows = [{ id: 1, name: 'flow1' }, { id: 2, name: 'flow2' }];
-  //   const wrapper = mount(FlowsTab, {
-  //     propsData: {
-  //       flowsList: flows,
-  //     }
-  //   });
-  //   const flowsItems = wrapper
-  //     .findAll('.flow-item')
-  //     .at(1);
-  //   expect(flowsItems.length).toBe(2);
-  //   expect(flowsItems.find('.flow-item__name').at(2).text()).toBe('flow1');
-  //   expect(flowsItems.find('.flow-item__name').at(1).text()).toBe('flow2');
-  // });
+  it('renders flows list', async () => {
+    const wrapper = shallowMount(FlowsTab, {
+      global: { plugins: [store] },
+      data() {
+        return {
+          isLoaded: true,
+
+        }
+      }
+    });
+    const getMock = vi.fn();
+    vi.spyOn(FlowsAPI, 'getLookup')
+      .mockImplementation(() => { return { items: flowsData, next: false } });
+    await wrapper.vm.$nextTick();
+    const list = wrapper
+      .findAll('.flow-item');
+    console.info('llli', wrapper.html(), 'getMock:', getMock);
+    expect(list.length).toBe(2);
+  });
   // it('show dummy', () => {
-  //   const flows = [];
-  //   const wrapper = mount(FlowsTab, {
-  //     propsData: {
-  //       flowsList: flows,
-  //     }
+  //   const wrapper = shallowMount(FlowsTab, {
+  //     global: { plugins: [store] },
   //   });
   //   const dummy = wrapper.find('.flow-item__dummy');
   //   expect(dummy.exists()).toBe(true);
