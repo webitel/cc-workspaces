@@ -11,10 +11,9 @@ const flowsData = [{
     name: 'flow2'
   }];
 
-vi.spyOn(FlowsAPI, 'getLookup').mockImplementation(() => ({ items: flowsData }));
-
 const team = { id: 262, name: 'team1' };
-// const flowsList = [{ id: 1, name: 'flow1' }, { id: 2, name: 'flow2' }];
+
+vi.spyOn(FlowsAPI, 'getLookup').mockImplementation(() => ({ items: flowsData }));
 const store = createStore({
   modules: {
     ui: {
@@ -28,9 +27,6 @@ const store = createStore({
               getters: {
                 AGENT_TEAM: () => team,
               },
-              // state: {
-              //   flows: [],
-              // },
             },
           },
         },
@@ -60,11 +56,11 @@ describe('FlowsTab', () => {
       .findAll('.flow-item');
     expect(list.length).toBe(2);
   });
-  // it('show dummy', () => {
-  //   const wrapper = shallowMount(FlowsTab, {
-  //     global: { plugins: [store] },
-  //   });
-  //   const dummy = wrapper.find('.flow-item__dummy');
-  //   expect(dummy.exists()).toBe(true);
-  // });
+  it('show dummy', () => {
+    const wrapper = shallowMount(FlowsTab, {
+      global: { plugins: [store] },
+    });
+    const dummy = wrapper.find('.flow-item__dummy');
+    expect(dummy.exists()).toBe(true);
+  });
 });

@@ -1,7 +1,8 @@
-import { shallowMount } from '@vue/test-utils';
+import { config, shallowMount } from '@vue/test-utils';
 import FlowButton
   from '../flow-button.vue';
 import FlowsAPI from '../../api/flows';
+
 
 const id = 12;
 
@@ -12,13 +13,14 @@ describe('FlowButton', () => {
     });
     expect(wrapper.exists()).toBe(true);
   });
-  it('click button', () => {
+  it('run flow', async () => {
+    const mock = vi.fn();
+    vi.spyOn(FlowsAPI, 'run').mockImplementationOnce(mock);
     const wrapper = shallowMount(FlowButton, {
       props: { id },
     });
-    // const button = wrapper.find('.wt-button');
-    console.info('wrapper:', wrapper);
-    wrapper.trigger('click');
-    expect(wrapper.find('.wt-button--loading').exists()).toBe(true);
+
+    await wrapper.find('wt-button-stub').trigger('click');
+    expect(mock).toHaveBeenCalled();
   });
 });
