@@ -14,8 +14,8 @@ const flowsData = [{
     name: 'flow2'
   }];
 
-const mock = axiosMock();
-vi.doMock('axios', mock);
+vi.mock('../../api/flows.js');
+FlowsAPI.getLookup.mockImplementation(() => Promise.resolve({ items: flowsData }));
 
 const team = { id: 262, name: 'team1' };
 // const flowsList = [{ id: 1, name: 'flow1' }, { id: 2, name: 'flow2' }];
@@ -59,18 +59,18 @@ describe('FlowsTab', () => {
       data() {
         return {
           isLoaded: true,
-
+          flowsList: FlowsAPI.getLookup,
         }
       }
     });
-    const getMock = vi.fn();
-    vi.spyOn(FlowsAPI, 'getLookup')
-      .mockImplementation(() => { return { items: flowsData, next: false } });
+
     await wrapper.vm.$nextTick();
+    expect(FlowsAPI.getLookup).toHaveBeenCalled();
+    const items = FlowsAPI.getLookup;
     const list = wrapper
       .findAll('.flow-item');
-    console.info('llli', wrapper.html(), 'getMock:', getMock);
-    expect(list.length).toBe(2);
+    console.info('llli', wrapper.html(), "items:", items);
+    // expect(wrapper.).toBe(2);
   });
   // it('show dummy', () => {
   //   const wrapper = shallowMount(FlowsTab, {

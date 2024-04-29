@@ -12,9 +12,13 @@ describe('FlowButton', () => {
     });
     expect(wrapper.exists()).toBe(true);
   });
-  // it('click button', () => {
-  //   const wrapper = shallowMount(FlowButton, {
-  //     props: { id },
-  //   });
-  // });
+  it('click button', () => {
+    const wrapper = shallowMount(FlowButton, {
+      props: { id },
+    });
+    // const button = wrapper.find('.wt-button');
+    console.info('wrapper:', wrapper);
+    wrapper.trigger('click');
+    expect(wrapper.find('.wt-button--loading').exists()).toBe(true);
+  });
 });
