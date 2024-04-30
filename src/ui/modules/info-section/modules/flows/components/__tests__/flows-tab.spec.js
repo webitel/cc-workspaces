@@ -48,7 +48,7 @@ describe('FlowsTab', () => {
   });
 
   it('renders flows list', async () => {
-    const wrapper = mount(FlowsTab, {
+    const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
     });
 
