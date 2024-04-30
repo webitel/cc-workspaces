@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import FlowsAPI from '../../api/flows.js';
 import FlowsTab from '../flows-tab.vue';
 
@@ -14,6 +14,7 @@ const flowsData = [{
 const team = { id: 262, name: 'team1' };
 
 vi.spyOn(FlowsAPI, 'getLookup').mockImplementation(() => ({ items: flowsData }));
+
 const store = createStore({
   modules: {
     ui: {
@@ -47,22 +48,25 @@ describe('FlowsTab', () => {
   });
 
   it('renders flows list', async () => {
-    const wrapper = shallowMount(FlowsTab, {
+    const wrapper = mount(FlowsTab, {
       global: { plugins: [store] },
     });
 
     await wrapper.vm.$nextTick();
 
     const list = wrapper
-      .findAll('.flow-item');
-    expect(list.length).toBe(2);
+      .findAll('.flows-tab-item');
+    expect(list.length).toBe(flowsData.length);
   });
 
-  it('show dummy', () => {
+  it('hide dummy', async () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
     });
-    const dummy = wrapper.find('.flow-item__dummy');
-    expect(dummy.exists()).toBe(true);
+
+    await wrapper.vm.$nextTick();
+
+    const dummy = wrapper.find('.flows-tab__dummy');
+    expect(dummy.exists()).toBe(false);
   });
 });

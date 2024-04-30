@@ -4,10 +4,10 @@
       <li
         v-for="(flow) in flowsList"
         :key="flow.id"
-        class="flow-item"
+        class="flows-tab-item"
       >
-        <div class="flow-item__wrapper">
-          <span class="flow-item__name">
+        <div class="flows-tab-item__wrapper">
+          <span class="flows-tab-item__name">
             {{ flow.name }}
           </span>
           <flow-button :id="flow.id"/>
@@ -17,15 +17,15 @@
     </ul>
     <wt-dummy
       v-else
-      class="flow-item__dummy"
+      class="flows-tab__dummy"
       :text="$t('infoSec.flows.dummy')"
     />
   </section>
 </template>
 
 <script setup>
+import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { computed, ref, reactive } from 'vue';
 import FlowsAPI from '../api/flows.js';
 import FlowButton from './flow-button.vue';
 
@@ -38,15 +38,15 @@ const flowsList = ref([]);
 const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM`].id);
 
 async function loadFlowsList(teamId) {
-  try {
-    const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
-    if (items.length) {
-      flowsList.value = items;
-      isLoaded.value = true;
+    try {
+      const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
+      if (items.length) {
+        flowsList.value = items;
+        isLoaded.value = true;
+      }
+    } catch (err) {
+      throw err;
     }
-  } catch (err) {
-    throw err;
-  }
 }
 
 if (teamId.value) loadFlowsList(teamId.value);
@@ -57,7 +57,7 @@ if (teamId.value) loadFlowsList(teamId.value);
 .flows-tab {
   @extend %wt-scrollbar;
 
-  .flow-item{
+  .flows-tab-item{
 
     &__wrapper {
       display: flex;
@@ -73,11 +73,10 @@ if (teamId.value) loadFlowsList(teamId.value);
       word-break: break-all;
       text-transform: capitalize;
     }
-
-    &__dummy {
-      flex-grow: 1;
-    }
   }
 
+  &__dummy {
+    flex-grow: 1;
+  }
 }
 </style>

@@ -1,6 +1,4 @@
-const state = {
-  flows: [],
-};
+const state = {};
 
 const getters = {
   AGENT_TEAM: (state, getters, rootState) => rootState.features.status.agent?.team, // used for initial flow data loading
