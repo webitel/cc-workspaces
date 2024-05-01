@@ -4,8 +4,9 @@
     :class="[`contact-card-general--${props.size}`]"
   >
     <wt-avatar
-      size="2xl"
       :username="name"
+      class="contact-card-general__avatar"
+      size="2xl"
     ></wt-avatar>
 
     <div class="contact-card-general__wrapper">
@@ -91,6 +92,10 @@ const contactLink = computed(() => `${import.meta.env.VITE_CRM_URL}/contacts/${p
   align-items: flex-start;
   justify-content: space-between;
   padding: var(--spacing-xs);
+
+  &__avatar {
+    flex-shrink: 0;
+  }
 
   &__wrapper {
     flex-grow: 1;
