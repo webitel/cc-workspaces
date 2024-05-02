@@ -4,9 +4,8 @@ const state = {};
 
 const getters = {
   AGENT_TEAM: (state, getters, rootState) => rootState.features.status.agent?.team, // used for initial flow data loading
-  IS_CALL_CENTER_LICENSE: (state, getters, rootState) => rootState.ui.userinfo.license.find((item) => item.prod === 'CALL_CENTER'),
   ALLOW_FLOWS: (state, getters, rootState, rootGetters) => (
-      rootGetters['features/status/IS_AGENT'] && getters.IS_CALL_CENTER_LICENSE
+      rootGetters['features/status/IS_AGENT'] && rootGetters['ui/userinfo/IS_CALL_CENTER_LICENSE']
   ),
 };
 

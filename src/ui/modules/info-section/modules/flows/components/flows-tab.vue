@@ -2,16 +2,20 @@
   <section class="flows-tab">
     <wt-loader v-if="isLoading"/>
     <ul v-if="!isLoading && flowsList.length">
-      <li
+      <div
         v-for="(flow) in flowsList"
         :key="flow.id"
-        class="flows-tab-item"
+        class="flows-tab-item-wrapper"
       >
-        <span class="flows-tab-item__name">
-          {{ flow.name }}
-        </span>
-        <flow-button :item="flow"/>
-      </li>
+        <li class="flows-tab-item">
+          <span class="flows-tab-item__name">
+            {{ flow.name }}
+          </span>
+          <flow-button :item="flow"/>
+        </li>
+        <wt-divider />
+      </div>
+
     </ul>
     <wt-dummy
       v-else
@@ -55,6 +59,10 @@ if (teamId.value) loadFlowsList(teamId.value);
 .flows-tab {
   @extend %wt-scrollbar;
 
+  .flows-tab-item-wrapper:last-child hr {
+    display: none;
+  }
+
   .flows-tab-item {
     display: flex;
     justify-content: space-between;
@@ -67,10 +75,6 @@ if (teamId.value) loadFlowsList(teamId.value);
       overflow-wrap: break-word;
       word-break: break-all;
       text-transform: capitalize;
-    }
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--divider-border-color);
     }
   }
 
