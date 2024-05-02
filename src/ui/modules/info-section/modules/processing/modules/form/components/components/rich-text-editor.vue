@@ -5,7 +5,7 @@
       :hint="hint"
     >{{ label }}</wt-label>
     <editor
-      :value="value"
+      :initial-value="value"
       :init="config"
       :output-format="output"
       :plugins="plugins"
