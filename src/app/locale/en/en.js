@@ -150,7 +150,6 @@ export default {
       },
     },
     flows: {
-      title: 'Flow schema | Flow schemas',
       dummy: 'No schemes have been configured yet',
     },
   },

@@ -146,7 +146,6 @@ export default {
       if (this.showClientInfo) tabs.push(this.tabsObject.clientInfo);
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
-      console.log('showFlows:', this.showFlows)
       if (this.showFlows) tabs.push(this.tabsObject.flows);
       return tabs;
     },
