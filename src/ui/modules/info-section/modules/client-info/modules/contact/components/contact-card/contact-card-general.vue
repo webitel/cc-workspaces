@@ -18,6 +18,7 @@
         >{{ name }}
           <wt-icon
             icon="link"
+            class="contact-card-general__link-icon"
           ></wt-icon>
         </a>
 
@@ -93,7 +94,7 @@ const contactLink = computed(() => `${import.meta.env.VITE_CRM_URL}/contacts/${p
   justify-content: space-between;
   padding: var(--spacing-xs);
 
-  &__avatar {
+  &__avatar, &__link-icon {
     flex-shrink: 0;
   }
 
@@ -109,7 +110,7 @@ const contactLink = computed(() => `${import.meta.env.VITE_CRM_URL}/contacts/${p
   &__link {
     @extend %typo-heading-2;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--spacing-xs);
     color: var(--link-color);
     cursor: pointer;
