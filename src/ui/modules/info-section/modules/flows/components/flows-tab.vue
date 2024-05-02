@@ -1,18 +1,16 @@
 <template>
   <section class="flows-tab">
-    <ul v-if="isLoaded">
+    <wt-loader v-if="isLoading"/>
+    <ul v-if="!isLoading && flowsList.length">
       <li
         v-for="(flow) in flowsList"
         :key="flow.id"
         class="flows-tab-item"
       >
-        <div class="flows-tab-item__wrapper">
-          <span class="flows-tab-item__name">
-            {{ flow.name }}
-          </span>
-          <flow-button :id="flow.id"/>
-        </div>
-        <wt-divider/>
+        <span class="flows-tab-item__name">
+          {{ flow.name }}
+        </span>
+        <flow-button :item="flow"/>
       </li>
     </ul>
     <wt-dummy
@@ -24,7 +22,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import FlowsAPI from '../api/flows.js';
 import FlowButton from './flow-button.vue';
@@ -32,20 +30,20 @@ import FlowButton from './flow-button.vue';
 const namespace = 'ui/infoSec/flows';
 
 const store = useStore();
-const isLoaded = ref(false);
+const isLoading = ref(false);
 const flowsList = ref([]);
 
 const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM`].id);
 
 async function loadFlowsList(teamId) {
     try {
+      isLoading.value = true;
       const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
-      if (items.length) {
-        flowsList.value = items;
-        isLoaded.value = true;
-      }
+      flowsList.value = items;
     } catch (err) {
       throw err;
+    } finally {
+      isLoading.value = false;
     }
 }
 
@@ -57,21 +55,22 @@ if (teamId.value) loadFlowsList(teamId.value);
 .flows-tab {
   @extend %wt-scrollbar;
 
-  .flows-tab-item{
-
-    &__wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--spacing-xs);
-      gap: var(--spacing-xs);
-    }
+  .flows-tab-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
 
     &__name {
       @extend %typo-body-1;
       overflow-wrap: break-word;
       word-break: break-all;
       text-transform: capitalize;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--divider-border-color);
     }
   }
 

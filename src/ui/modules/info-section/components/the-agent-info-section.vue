@@ -49,6 +49,9 @@ import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
 import Flows from '../modules/flows/components/flows-tab.vue';
+import WebitelApplications
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import AdminSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AdminSections.enum';
 
 export default {
   name: 'the-agent-info-section',
@@ -114,11 +117,8 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
-    ...mapGetters('ui/userinfo', {
-      isCallCenter: 'IS_CALL_CENTER_LICENSE',
-    }),
-    ...mapGetters('features/status', {
-      isAgent: 'IS_AGENT',
+    ...mapGetters('ui/infoSec/flows', {
+      showFlows: 'ALLOW_FLOWS',
     }),
     infoSecSize() {
       // should be always md if pinned
@@ -136,10 +136,6 @@ export default {
       return this.taskOnWorkspace?.id;
     },
 
-    showFlows() {
-      return this.isAgent && this.isCallCenter;
-    },
-
     hasKnowledgeBase() {
       const { variables } = this.taskOnWorkspace;
       return !!variables?.knowledge_base;
@@ -150,6 +146,7 @@ export default {
       if (this.showClientInfo) tabs.push(this.tabsObject.clientInfo);
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
+      console.log('showFlows:', this.showFlows)
       if (this.showFlows) tabs.push(this.tabsObject.flows);
       return tabs;
     },
@@ -175,7 +172,7 @@ export default {
         icon: 'ws-processing',
       };
       const flows = {
-        text: this.$tc('infoSec.flows.title', 2),
+        text: this.$t(`WebitelApplications.${WebitelApplications.ADMIN}.sections.${AdminSections.FLOW}`),
         value: 'flows',
         icon: 'flows',
       };

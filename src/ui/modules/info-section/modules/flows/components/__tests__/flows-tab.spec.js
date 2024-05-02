@@ -13,7 +13,7 @@ const flowsData = [{
 
 const team = { id: 262, name: 'team1' };
 
-vi.spyOn(FlowsAPI, 'getLookup').mockImplementation(() => ({ items: flowsData }));
+const mock = vi.spyOn(FlowsAPI, 'getLookup').mockImplementation(() => ({ items: flowsData }));
 
 const store = createStore({
   modules: {
@@ -40,9 +40,6 @@ describe('FlowsTab', () => {
   it('renders a component', () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
-      computed: {
-        ...FlowsTab.computed,
-      },
     });
     expect(wrapper.exists()).toBe(true);
   });
@@ -50,9 +47,15 @@ describe('FlowsTab', () => {
   it('renders flows list', async () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
+      data() {
+        return {
+          flowsList: [],
+        }
+      }
     });
 
     await wrapper.vm.$nextTick();
+    await wrapper.setData({ flowsList: mock });
 
     const list = wrapper
       .findAll('.flows-tab-item');
@@ -62,9 +65,15 @@ describe('FlowsTab', () => {
   it('hide dummy', async () => {
     const wrapper = shallowMount(FlowsTab, {
       global: { plugins: [store] },
+      data() {
+        return {
+          flowsList: [],
+        }
+      }
     });
 
     await wrapper.vm.$nextTick();
+    await wrapper.setData({ flowsList: mock });
 
     const dummy = wrapper.find('.flows-tab__dummy');
     expect(dummy.exists()).toBe(false);
