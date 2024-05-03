@@ -48,6 +48,10 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
+import Flows from '../modules/flows/components/flows-tab.vue';
+import WebitelApplications
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import AdminSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AdminSections.enum';
 
 export default {
   name: 'the-agent-info-section',
@@ -59,6 +63,7 @@ export default {
     Processing,
     CollapseAction,
     PinAction,
+    Flows,
   },
   mixins: [sizeMixin],
   props: {
@@ -112,6 +117,9 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
+    ...mapGetters('ui/infoSec/flows', {
+      showFlows: 'ALLOW_FLOWS',
+    }),
     infoSecSize() {
       // should be always md if pinned
       if (this.pin) return 'md';
@@ -138,6 +146,7 @@ export default {
       if (this.showClientInfo) tabs.push(this.tabsObject.clientInfo);
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
+      if (this.showFlows) tabs.push(this.tabsObject.flows);
       return tabs;
     },
     tabsObject() {
@@ -161,11 +170,17 @@ export default {
         value: 'processing',
         icon: 'ws-processing',
       };
+      const flows = {
+        text: this.$tc('objects.flow.name', 2),
+        value: 'flows',
+        icon: 'flows',
+      };
       return {
         generalInfo,
         clientInfo,
         knowledgeBase,
         processing,
+        flows,
       };
     },
   },

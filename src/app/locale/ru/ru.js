@@ -20,6 +20,7 @@ export default {
     settings: 'Настройки',
     edit: 'Редактировать',
     select: 'Выбрать',
+    run: 'Запустить',
   },
   appNavigator: {
     title: 'Приложения Webitel',
@@ -146,6 +147,9 @@ export default {
           empty: 'Пока здесь нет файлов',
         },
       },
+    },
+    flows: {
+      dummy: 'Еще нет настроенных схем',
     },
   },
   workspaceSec: {
