@@ -1,4 +1,4 @@
-import { TeamTriggerServiceApi } from 'webitel-sdk';
+import { TeamTriggerServiceApiFactory } from 'webitel-sdk';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
@@ -13,7 +13,7 @@ import applyTransform, {
 import instance from '../../../../../../app/api/instance';
 import configuration from '../../../../../../app/api/openAPIConfig';
 
-const flowSchemaService = new TeamTriggerServiceApi(configuration, '', instance);
+const flowSchemaService = new TeamTriggerServiceApiFactory(configuration, '', instance);
 
 const getFlowSchemasList = async (params) => {
   const defaultObject = {

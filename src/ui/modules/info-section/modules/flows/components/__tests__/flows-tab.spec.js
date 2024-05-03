@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { shallowMount, mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import FlowsAPI from '../../api/flows.js';
 import FlowsTab from '../flows-tab.vue';
 

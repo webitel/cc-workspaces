@@ -171,7 +171,7 @@ export default {
         icon: 'ws-processing',
       };
       const flows = {
-        text: this.$t(`WebitelApplications.${WebitelApplications.ADMIN}.sections.${AdminSections.FLOW}`),
+        text: this.$tc('objects.flow.name', 2),
         value: 'flows',
         icon: 'flows',
       };
