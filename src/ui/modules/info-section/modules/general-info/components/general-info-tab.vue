@@ -67,6 +67,7 @@ async function loadAgentInfo(payload) {
 }
 
 watchOnce(agent, () => {
+  console.log('agent:', agent);
   subscribe(loadAgentInfo);
 });
 </script>

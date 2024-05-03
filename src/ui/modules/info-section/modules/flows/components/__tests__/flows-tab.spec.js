@@ -26,7 +26,7 @@ const store = createStore({
             flows: {
               namespaced: true,
               getters: {
-                AGENT_TEAM: () => team,
+                AGENT_TEAM_ID: () => team.id,
               },
             },
           },

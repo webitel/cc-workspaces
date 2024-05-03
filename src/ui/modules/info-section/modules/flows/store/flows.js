@@ -1,20 +1,28 @@
-import WorkspaceStates from '../../../../../enums/WorkspaceState.enum';
+import FlowsAPI from '../api/flows';
 
-const state = {};
+const state = {
+  flows: [],
+};
 
 const getters = {
-  AGENT_TEAM: (state, getters, rootState) => rootState.features.status.agent?.team, // used for initial flow data loading
+  AGENT_TEAM_ID: (state, getters, rootState) => rootState.features.status.agent?.team.id, // used for initial flow data loading
   ALLOW_FLOWS: (state, getters, rootState, rootGetters) => (
       rootGetters['features/status/IS_AGENT'] && rootGetters['ui/userinfo/IS_CALL_CENTER_LICENSE']
   ),
 };
 
-const actions = {};
-
-const mutations = {
+const actions = {
+  LOAD_FLOWS_LIST: async (context) => {
+    const { items } = await FlowsAPI.getLookup({ teamId: context.getters.AGENT_TEAM_ID, enabled: true });
+    context.commit('SET_FLOWS', items);
+  },
 };
 
-// empty store for future usage
+const mutations = {
+  SET_FLOWS: (state, flows) => {
+    state.flows = flows;
+  },
+};
 
 export default {
   namespaced: true,
