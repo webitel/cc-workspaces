@@ -77,6 +77,7 @@ export default {
     }),
   },
 
+
   methods: {
     ...mapActions('features/call', {
       setNumber: 'SET_NEW_NUMBER',

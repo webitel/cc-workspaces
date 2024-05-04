@@ -34,10 +34,17 @@ export default {
     ...mapState('features/call', {
       callList: (state) => state.callList,
     }),
+    ...mapState('features/hotkeys', {
+      combinations: (state) => state.hotkeys,
+    }),
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
   },
+
+  // mounted() {
+  //   window.addEventListener('keydown', this.handleHotkey);
+  // },
 
   methods: {
     ...mapActions('features/call', {
@@ -45,6 +52,9 @@ export default {
       answer: 'ANSWER',
       hangup: 'HANGUP',
     }),
+    // ...mapActions('features/hotkeys', {
+    //   handleHotkey: 'HANDLE_HOTKEY',
+    // })
   },
 };
 </script>

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex/dist/vuex.cjs.js';
 import isOnPWA from './scripts/isOnPWA';
 
 export default {
@@ -10,7 +11,6 @@ export default {
 
   created() {
     this.setLanguage();
-
     // destroy does not execute on F5 as per answer below: https://my.webitel.com/browse/DEV-2144
     // https://stackoverflow.com/a/34443314/17748106
 
@@ -26,11 +26,19 @@ export default {
     });
   },
 
+  mounted() {
+    // Global hotkey handling 
+    window.addEventListener('keydown', this.handleHotkey);
+  },
+
   methods: {
     setLanguage() {
       const lang = localStorage.getItem('lang');
       if (lang) this.$i18n.locale = lang;
     },
+    ...mapActions('features/hotkeys', {
+      handleHotkey: 'HANDLE_HOTKEY',
+    }),
   },
 };
 </script>

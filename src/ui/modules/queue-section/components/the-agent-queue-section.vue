@@ -39,6 +39,7 @@
       class="queue-section-wrapper"
     ></component>
     <wt-rounded-action
+      id="some-id"
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
       rounded
