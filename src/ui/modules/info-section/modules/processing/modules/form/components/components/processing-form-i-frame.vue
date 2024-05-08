@@ -3,12 +3,13 @@
     <wt-label
       v-if="label"
       :hint="hint"
-    >{{ label }}</wt-label>
+    >{{ label }}
+    </wt-label>
     <iframe
       class="processing-form-i-frame__iframe"
-      :height="iframeHeight"
       :src="initialValue"
       allowfullscreen
+      :style="{ height: iframeHeight }"
     ></iframe>
   </div>
 </template>
@@ -30,7 +31,7 @@ export default {
   },
   computed: {
     iframeHeight() {
-      const unit = this.isHeightFixed ? 'px' : '%';
+      const unit = this.isHeightFixed ? 'px' : 'vh';
       return this.height + unit;
     },
   },
