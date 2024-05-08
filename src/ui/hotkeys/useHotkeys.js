@@ -35,7 +35,7 @@ const globalListener = (event) => {
     });
   }
 
-  // TRANSFER CALL
+  // TRANSFER
   else if (event.altKey && event.code === 'KeyT') {
     globalSub[HotkeyAction.TRANSFER].forEach((callback) => {
       event.preventDefault();
@@ -74,10 +74,12 @@ export const useHotkeys = (subscribers) => {
 
     globalSub[HotkeyAction[event]].push(callback);
 
+    console.log(globalSub[HotkeyAction[event]])
+
     root.addEventListener(userEvent, globalListener);
 
     const unsubscribe = () => {
-      console.log('unsubscribed')
+      globalSub[HotkeyAction[event]] = globalSub[HotkeyAction[event]].filter(cb => cb !== callback);
       root.removeEventListener(userEvent, globalListener);
     };
     return [...unsubs, unsubscribe];
