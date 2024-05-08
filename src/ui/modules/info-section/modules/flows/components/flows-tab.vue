@@ -1,7 +1,6 @@
 <template>
   <section class="flows-tab">
-    <wt-loader v-if="isLoading"/>
-    <ul v-if="!isLoading && flowsList.length">
+    <ul v-if="flowsList.length">
       <div
         v-for="(flow) in flowsList"
         :key="flow.id"
@@ -15,7 +14,6 @@
         </li>
         <wt-divider />
       </div>
-
     </ul>
     <wt-dummy
       v-else
@@ -28,30 +26,28 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import FlowsAPI from '../api/flows.js';
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import FlowButton from './flow-button.vue';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 
 const namespace = 'ui/infoSec/flows';
 
 const store = useStore();
-const isLoading = ref(false);
-const flowsList = ref([]);
 
-const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM`].id);
+const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM_ID`]);
+const flowsList = computed(() => getNamespacedState(store.state, namespace).flows);
 
-async function loadFlowsList(teamId) {
+const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+
+async function loadFlowsList() {
     try {
-      isLoading.value = true;
-      const { items } = await FlowsAPI.getLookup({ teamId, enabled: true });
-      flowsList.value = items;
+     await store.dispatch(`${namespace}/LOAD_FLOWS_LIST`);
     } catch (err) {
       throw err;
-    } finally {
-      isLoading.value = false;
     }
 }
 
-if (teamId.value) loadFlowsList(teamId.value);
+if (teamId.value) subscribe(loadFlowsList);
 
 </script>
 
