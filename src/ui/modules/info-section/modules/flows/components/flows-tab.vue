@@ -1,6 +1,6 @@
 <template>
   <section class="flows-tab">
-    <ul v-if="!isLoaded && flowsList.length">
+    <ul v-if="flowsList.length">
       <div
         v-for="(flow) in flowsList"
         :key="flow.id"
@@ -14,7 +14,6 @@
         </li>
         <wt-divider />
       </div>
-
     </ul>
     <wt-dummy
       v-else
@@ -34,7 +33,6 @@ import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedS
 const namespace = 'ui/infoSec/flows';
 
 const store = useStore();
-const isLoaded = ref(false);
 
 const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM_ID`]);
 const flowsList = computed(() => getNamespacedState(store.state, namespace).flows);
@@ -46,8 +44,6 @@ async function loadFlowsList() {
      await store.dispatch(`${namespace}/LOAD_FLOWS_LIST`);
     } catch (err) {
       throw err;
-    } finally {
-      isLoaded.value = false;
     }
 }
 
