@@ -47,7 +47,6 @@ const getFlowSchemasList = async (params) => {
       enabled,
       id,
     );
-    console.log('i18n:', i18n.global);
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
