@@ -12,6 +12,9 @@ import applyTransform, {
 } from '@webitel/ui-sdk/src/api/transformers';
 import instance from '../../../../../../app/api/instance';
 import configuration from '../../../../../../app/api/openAPIConfig';
+import i18n from '../../../../../../app/locale/i18n.js';
+
+const { t } = i18n.global;
 
 const flowSchemaService = new TeamTriggerServiceApiFactory(configuration, '', instance);
 
@@ -66,10 +69,17 @@ const runFlowSchema = async ({ id }) => {
     const response = await flowSchemaService.runTeamTrigger(id, {});
     return applyTransform(response.data, [
       snakeToCamel(),
+      notify(({ callback }) => callback({
+        type: 'info',
+        text: t('infoSec.flows.runFlowSuccess'),
+      })),
     ]);
   } catch (err) {
     throw applyTransform(err, [
-      notify,
+      notify(({ callback }) => callback({
+        type: 'error',
+        text: t('infoSec.flows.runFlowError'),
+      })),
     ]);
   }
 };

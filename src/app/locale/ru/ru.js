@@ -150,6 +150,8 @@ export default {
     },
     flows: {
       dummy: 'Еще нет настроенных схем',
+      runFlowSuccess: 'Схема успешно запущена',
+      runFlowError: 'Не удалось запустить схему',
     },
   },
   workspaceSec: {
