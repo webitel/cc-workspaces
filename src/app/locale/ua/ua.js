@@ -149,6 +149,8 @@ export default {
     },
     flows: {
       dummy: 'Жодна схема ще не налаштована',
+      runFlowSuccess: 'Схема запущена успішно',
+      runFlowError: 'Не вдалося запустити схему',
     },
   },
   workspaceSec: {

@@ -151,6 +151,8 @@ export default {
     },
     flows: {
       dummy: 'No schemes have been configured yet',
+      runFlowSuccess: 'Schema launched successfully',
+      runFlowError: 'Failed to run the schema',
     },
   },
   workspaceSec: {
