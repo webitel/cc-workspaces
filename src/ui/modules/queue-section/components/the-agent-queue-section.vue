@@ -58,6 +58,8 @@ import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
+import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../hotkeys/useHotkeys';
 
 export default {
   name: 'the-agent-queue-section',
@@ -80,6 +82,7 @@ export default {
   },
   data: () => ({
     currentTab: {},
+    unsubscribers: [],
   }),
   computed: {
     ...mapState('features/call', {
@@ -147,6 +150,24 @@ export default {
   created() {
     this.currentTab = this.tabs[0];
   },
+
+  mounted() {
+    const subscribers = [
+      {
+        root: window,
+        event: HotkeyAction.NEW_CALL,
+        callback: () => {
+          this.toggleNewCall();
+        },
+      },
+    ];
+
+    this.unsubscribers = useHotkeys(subscribers)
+  },
+  
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+  }
 };
 </script>
 

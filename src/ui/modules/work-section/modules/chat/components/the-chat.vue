@@ -36,6 +36,8 @@ import ChatTransferContainer from './chat-transfer-container/chat-transfer-conta
 import MediaViewer from './media-viewer/media-viewer.vue';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
 const defaultTab = 'chat-messaging-container';
 
@@ -53,7 +55,20 @@ export default {
   },
   data: () => ({
     currentTab: { component: defaultTab },
+    unsubscribers: [],
   }),
+  mounted() {
+    const subscripers = [
+      {
+        event: HotkeyAction.TRANSFER,
+        callback: this.openTab.bind(this, HotkeyAction.TRANSFER.toLowerCase()),
+      },
+    ];
+    this.unsubscribers = useHotkeys(subscripers);
+  },
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+  },
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',

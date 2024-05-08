@@ -46,13 +46,15 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { CallActions } from 'webitel-sdk';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
 const props = defineProps({
   size: {
@@ -123,7 +125,21 @@ const getComponent = (value) => {
     default:
       return null;
   }
-}
+};
+
+const unsubscribers = useHotkeys([
+  {
+    root: window,
+    event: HotkeyAction.DOWN,
+    callback: () => {
+      console.log('DOWN')
+    },
+  },
+]);
+
+onUnmounted(() => {
+  unsubscribers.forEach((unsubscribe) => unsubscribe());
+});
 
 function openNewCall(payload) {
   return store.dispatch('features/call/OPEN_NEW_CALL', payload);

@@ -26,19 +26,12 @@ export default {
     });
   },
 
-  mounted() {
-    // Global hotkey handling 
-    window.addEventListener('keydown', this.handleHotkey);
-  },
 
   methods: {
     setLanguage() {
       const lang = localStorage.getItem('lang');
       if (lang) this.$i18n.locale = lang;
     },
-    ...mapActions('features/hotkeys', {
-      handleHotkey: 'HANDLE_HOTKEY',
-    }),
   },
 };
 </script>

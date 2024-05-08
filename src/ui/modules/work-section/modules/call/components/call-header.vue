@@ -80,6 +80,8 @@
   import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
   import sizeMixin from '../../../../../../app/mixins/sizeMixin';
   import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+  import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+  import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
   export default {
     name: 'call-header',
@@ -89,6 +91,25 @@
       currentTab: {
         type: String,
       },
+    },
+
+    data: () => ({
+      unsubscribers: [],
+    }),
+
+    mounted() {
+      const subscribers = [
+        {
+          event: HotkeyAction.END,
+          callback: this.hangup
+        }
+      ];
+
+      this.unsubscribers = useHotkeys(subscribers);
+    },
+
+    unmounted() {
+      this.unsubscribers.forEach((unsubscribe) => unsubscribe());
     },
 
     computed: {

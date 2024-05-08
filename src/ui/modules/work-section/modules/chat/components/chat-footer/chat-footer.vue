@@ -66,6 +66,8 @@ import { mapActions, mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import ChatEmoji from './chat-emoji.vue';
+import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
 
 export default {
   name: 'chat-footer',
@@ -75,8 +77,22 @@ export default {
   },
   mixins: [sizeMixin],
   inject: ['$eventBus'],
+  data: () => ({
+    unsubscribers: [],
+  }),
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
+
+    const subscripers = [
+      {
+        event: HotkeyAction.ACCEPT,
+        callback: this.accept,
+      },
+    ];
+    this.unsubscribers = useHotkeys(subscripers);
+  },
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
   },
   destroyed() {
     this.$eventBus.$off('chat-input-focus', this.setDraftFocus);

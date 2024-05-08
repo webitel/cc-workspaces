@@ -42,9 +42,6 @@ export default {
     }),
   },
 
-  // mounted() {
-  //   window.addEventListener('keydown', this.handleHotkey);
-  // },
 
   methods: {
     ...mapActions('features/call', {
@@ -52,9 +49,6 @@ export default {
       answer: 'ANSWER',
       hangup: 'HANGUP',
     }),
-    // ...mapActions('features/hotkeys', {
-    //   handleHotkey: 'HANDLE_HOTKEY',
-    // })
   },
 };
 </script>
