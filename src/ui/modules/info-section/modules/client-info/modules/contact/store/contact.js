@@ -28,9 +28,9 @@ const actions = {
   },
   SEARCH_CONTACTS: async (context, searchParams) => {
     try {
-      context.commit('SET_IS_LOADING\', true);\n'+
-        '      const { data: contacts } = await ContactsAPI.getList(searchParams);\n'+
-        '      context.commit(\'SET_CONTACTS_BY_SEARCH', contacts);
+      context.commit('SET_IS_LOADING', true);
+      const {data: contacts} = await ContactsAPI.getList(searchParams);
+      context.commit('SET_CONTACTS_BY_SEARCH', contacts);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
