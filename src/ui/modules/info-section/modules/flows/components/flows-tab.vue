@@ -68,9 +68,9 @@ if (teamId.value) subscribe(loadFlowsList);
 
     &__name {
       @extend %typo-body-1;
+      flex: 1;
       overflow-wrap: break-word;
       word-break: break-all;
-      text-transform: capitalize;
     }
   }
 
