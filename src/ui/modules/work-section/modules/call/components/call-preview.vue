@@ -64,7 +64,7 @@
       openTransfer() {
         this.$emit('transfer');
       },
-      addSubscribersOnHotkeys() {
+      setupHotkeys() {
         const subscribers = [
           {
             event: HotkeyAction.ACCEPT,
@@ -84,7 +84,7 @@
     },
 
     mounted() {
-      this.addSubscribersOnHotkeys();
+      this.setupHotkeys();
     },
 
     unmounted() {

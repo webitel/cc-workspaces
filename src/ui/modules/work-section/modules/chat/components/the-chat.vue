@@ -86,7 +86,7 @@ export default {
     resetTab() {
       this.currentTab = { component: defaultTab };
     },
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscripers = [
         {
           event: HotkeyAction.TRANSFER,
@@ -102,7 +102,7 @@ export default {
     },
   },
   mounted() {
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
   unmounted() {
     this.unsubscribers.forEach((unsubscribe) => unsubscribe());

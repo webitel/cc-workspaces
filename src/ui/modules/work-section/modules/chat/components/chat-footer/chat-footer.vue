@@ -146,7 +146,7 @@ export default {
         this.chat.draft = draft;
       }
     },
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscripers = [
         {
           event: HotkeyAction.ACCEPT,
@@ -158,7 +158,7 @@ export default {
   },
   mounted() {
     this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
   unmounted() {
     this.$eventBus.$off('chat-input-focus', this.setDraftFocus);

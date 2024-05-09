@@ -43,7 +43,7 @@ export default {
     unsubscribers: [],
   }),
   methods: {
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscribers = [
         {
           event: HotkeyAction.ACCEPT,
@@ -63,7 +63,7 @@ export default {
     }
   },
   mounted() {
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
   unmounted() {
     this.unsubscribers.forEach((unsubscribe) => unsubscribe());

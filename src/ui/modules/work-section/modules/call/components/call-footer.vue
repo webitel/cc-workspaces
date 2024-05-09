@@ -126,7 +126,7 @@ export default {
       toggleMute: 'TOGGLE_MUTE',
       toggleHold: 'TOGGLE_HOLD',
     }),
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscribers = [
         {
           event: HotkeyAction.MUTE,
@@ -142,7 +142,7 @@ export default {
   },
 
   mounted() {
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
 
   unmounted() {

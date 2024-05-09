@@ -90,7 +90,7 @@ export default {
       this.isPreviewTransfer = true;
       this.currentTab = 'transfer';
     },
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscribers = [
         {
           event: HotkeyAction.TRANSFER,
@@ -102,7 +102,7 @@ export default {
   },
 
   mounted() {
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
 
   unmounted() {

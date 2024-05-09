@@ -54,7 +54,7 @@ export default {
     ...mapActions('features/chat', {
       close: 'CLOSE',
     }),
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscripers = [
         {
           event: HotkeyAction.END,
@@ -65,7 +65,7 @@ export default {
     },
   },
   mounted() {
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
   unmounted() {
     this.unsubscribers.forEach((unsubscribe) => unsubscribe());

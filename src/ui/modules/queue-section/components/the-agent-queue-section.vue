@@ -145,7 +145,7 @@ export default {
     toggleNewCall() {
       return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
     },
-    addSubscribersOnHotkeys() {
+    setupHotkeys() {
       const subscripers = [
         {
           event: HotkeyAction.NEW_CALL,
@@ -161,7 +161,7 @@ export default {
   },
 
   mounted() { 
-    this.addSubscribersOnHotkeys();
+    this.setupHotkeys();
   },
   
   unmounted() {

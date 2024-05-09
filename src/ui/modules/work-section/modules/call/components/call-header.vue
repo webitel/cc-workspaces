@@ -154,7 +154,7 @@
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_NUMBER',
       }),
-      addSubscribersOnHotkeys() {
+      setupHotkeys() {
         const subscribers = [
           {
             event: HotkeyAction.END,
@@ -166,7 +166,7 @@
     },
 
     mounted() {
-      this.addSubscribersOnHotkeys();
+      this.setupHotkeys();
     },
 
     unmounted() {
