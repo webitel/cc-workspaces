@@ -74,8 +74,6 @@ export const useHotkeys = (subscribers) => {
 
     globalSub[HotkeyAction[event]].push(callback);
 
-    console.log(globalSub[HotkeyAction[event]])
-
     root.addEventListener(userEvent, globalListener);
 
     const unsubscribe = () => {

@@ -80,23 +80,6 @@ export default {
   data: () => ({
     unsubscribers: [],
   }),
-  mounted() {
-    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
-
-    const subscripers = [
-      {
-        event: HotkeyAction.ACCEPT,
-        callback: this.accept,
-      },
-    ];
-    this.unsubscribers = useHotkeys(subscripers);
-  },
-  unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
-  destroyed() {
-    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
-  },
   watch: {
     chat: {
       handler() {
@@ -163,6 +146,23 @@ export default {
         this.chat.draft = draft;
       }
     },
+    addSubscribersOnHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.ACCEPT,
+          callback: this.accept,
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscripers);
+    }
+  },
+  mounted() {
+    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
+    this.addSubscribersOnHotkeys();
+  },
+  unmounted() {
+    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

@@ -39,7 +39,6 @@
       class="queue-section-wrapper"
     ></component>
     <wt-rounded-action
-      id="some-id"
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
       rounded
@@ -146,28 +145,28 @@ export default {
     toggleNewCall() {
       return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
     },
+    addSubscribersOnHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.NEW_CALL,
+          callback: this.toggleNewCall,
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscripers);
+    },
   },
+
   created() {
     this.currentTab = this.tabs[0];
   },
 
-  mounted() {
-    const subscribers = [
-      {
-        root: window,
-        event: HotkeyAction.NEW_CALL,
-        callback: () => {
-          this.toggleNewCall();
-        },
-      },
-    ];
-
-    this.unsubscribers = useHotkeys(subscribers)
+  mounted() { 
+    this.addSubscribersOnHotkeys();
   },
   
   unmounted() {
     this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-  }
+  },
 };
 </script>
 

@@ -67,21 +67,6 @@ export default {
     unsubscribers: [],
   }),
 
-  mounted() {
-    const subscribers = [
-      {
-        event: HotkeyAction.TRANSFER,
-        callback: this.openTransfer,
-      },
-    ];
-
-    this.unsubscribers = useHotkeys(subscribers);
-  },
-
-  unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
-
   watch: {
     call() {
       this.isPreviewTransfer = false;
@@ -105,7 +90,25 @@ export default {
       this.isPreviewTransfer = true;
       this.currentTab = 'transfer';
     },
+    addSubscribersOnHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.TRANSFER,
+          callback: this.openTransfer,
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscribers);
+    }
   },
+
+  mounted() {
+    this.addSubscribersOnHotkeys();
+  },
+
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+  },
+
 };
 </script>
 

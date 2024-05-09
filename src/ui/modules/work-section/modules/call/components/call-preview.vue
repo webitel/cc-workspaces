@@ -55,29 +55,6 @@
       unsubscribers: [],
     }),
 
-    mounted() {
-      const subscribers = [
-        {
-          event: HotkeyAction.ACCEPT,
-          callback: this.answer,
-        },
-        {
-          event: HotkeyAction.END,
-          callback: this.hangup,
-        },
-        {
-          event: HotkeyAction.TRANSFER,
-          callback: this.openTransfer,
-        },
-      ];
-
-      this.unsubscribers = useHotkeys(subscribers);
-    },
-
-    unmounted() {
-      this.unsubscribers.forEach((unsubscribe) => unsubscribe())
-    },
-
     methods: {
       ...mapActions('features/call', {
         answer: 'ANSWER',
@@ -87,6 +64,31 @@
       openTransfer() {
         this.$emit('transfer');
       },
+      addSubscribersOnHotkeys() {
+        const subscribers = [
+          {
+            event: HotkeyAction.ACCEPT,
+            callback: this.answer,
+          },
+          {
+            event: HotkeyAction.END,
+            callback: this.hangup,
+          },
+          {
+            event: HotkeyAction.TRANSFER,
+            callback: this.openTransfer,
+          },
+        ];
+        this.unsubscribers = useHotkeys(subscribers);
+      },
+    },
+
+    mounted() {
+      this.addSubscribersOnHotkeys();
+    },
+
+    unmounted() {
+      this.unsubscribers.forEach((unsubscribe) => unsubscribe())
     },
   };
 </script>

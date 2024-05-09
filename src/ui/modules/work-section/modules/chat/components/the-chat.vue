@@ -57,18 +57,6 @@ export default {
     currentTab: { component: defaultTab },
     unsubscribers: [],
   }),
-  mounted() {
-    const subscripers = [
-      {
-        event: HotkeyAction.TRANSFER,
-        callback: this.openTab.bind(this, HotkeyAction.TRANSFER.toLowerCase()),
-      },
-    ];
-    this.unsubscribers = useHotkeys(subscripers);
-  },
-  unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
@@ -98,11 +86,26 @@ export default {
     resetTab() {
       this.currentTab = { component: defaultTab };
     },
+    addSubscribersOnHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.TRANSFER,
+          callback: this.openTab.bind(this, HotkeyAction.TRANSFER.toLowerCase()),
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscripers);
+    },
   },
   watch: {
     chat() {
       this.resetTab();
     },
+  },
+  mounted() {
+    this.addSubscribersOnHotkeys();
+  },
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

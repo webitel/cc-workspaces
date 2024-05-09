@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex/dist/vuex.cjs.js';
 import isOnPWA from './scripts/isOnPWA';
 
 export default {
@@ -25,7 +24,6 @@ export default {
       this.$store.dispatch('workspace/CLOSE_SESSION');
     });
   },
-
 
   methods: {
     setLanguage() {

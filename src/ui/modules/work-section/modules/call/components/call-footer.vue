@@ -64,25 +64,6 @@ export default {
     unsubscribers: [],
   }),
 
-  mounted() {
-    const subscribers = [
-      {
-        event: HotkeyAction.MUTE,
-        callback: this.toggleMute,
-      },
-      {
-        event: HotkeyAction.HOLD,
-        callback: this.toggleHold,
-      },
-    ];
-
-    this.unsubscribers = useHotkeys(subscribers);
-  },
-
-  unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
-
   computed: {
     ...mapGetters('features/call', {
       call: 'CALL_ON_WORKSPACE',
@@ -145,6 +126,27 @@ export default {
       toggleMute: 'TOGGLE_MUTE',
       toggleHold: 'TOGGLE_HOLD',
     }),
+    addSubscribersOnHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.MUTE,
+          callback: this.toggleMute,
+        },
+        {
+          event: HotkeyAction.HOLD,
+          callback: this.toggleHold,
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscribers);
+    },
+  },
+
+  mounted() {
+    this.addSubscribersOnHotkeys();
+  },
+
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

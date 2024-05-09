@@ -42,23 +42,28 @@ export default {
   data: () => ({
     unsubscribers: [],
   }),
+  methods: {
+    addSubscribersOnHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.ACCEPT,
+          callback: () => {
+            if (this.task.allowAccept) this.task.accept();
+          },
+        },
+        {
+          event: HotkeyAction.END,
+          callback: () => {
+          if (this.task.allowClose) this.task.close();
+          if (this.task.allowAccept) this.task.decline();
+          },
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscribers);
+    }
+  },
   mounted() {
-    const subscribers = [
-      {
-        event: HotkeyAction.ACCEPT,
-        callback: () => {
-          if (this.task.allowAccept) this.task.accept();
-        },
-      },
-      {
-        event: HotkeyAction.END,
-        callback: () => {
-         if (this.task.allowClose) this.task.close();
-         if (this.task.allowAccept) this.task.decline();
-        },
-      },
-    ];
-    this.unsubscribers = useHotkeys(subscribers);
+    this.addSubscribersOnHotkeys();
   },
   unmounted() {
     this.unsubscribers.forEach((unsubscribe) => unsubscribe());

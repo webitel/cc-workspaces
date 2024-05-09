@@ -97,21 +97,6 @@
       unsubscribers: [],
     }),
 
-    mounted() {
-      const subscribers = [
-        {
-          event: HotkeyAction.END,
-          callback: this.hangup
-        }
-      ];
-
-      this.unsubscribers = useHotkeys(subscribers);
-    },
-
-    unmounted() {
-      this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-    },
-
     computed: {
       ...mapState('features/call', {
         callList: (state) => state.callList,
@@ -169,6 +154,23 @@
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_NUMBER',
       }),
+      addSubscribersOnHotkeys() {
+        const subscribers = [
+          {
+            event: HotkeyAction.END,
+            callback: this.hangup
+          }
+        ];
+        this.unsubscribers = useHotkeys(subscribers);
+      }
+    },
+
+    mounted() {
+      this.addSubscribersOnHotkeys();
+    },
+
+    unmounted() {
+      this.unsubscribers.forEach((unsubscribe) => unsubscribe());
     },
   };
 </script>

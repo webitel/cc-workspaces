@@ -41,18 +41,6 @@ export default {
   data: () => ({
     unsubscribers: [],
   }),
-  mounted() {
-    const subscripers = [
-      {
-        event: HotkeyAction.END,
-        callback: this.close,
-      },
-    ];
-    this.unsubscribers = useHotkeys(subscripers);
-  },
-  unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
   computed: {
     ...mapGetters('workspace', {
       task: 'TASK_ON_WORKSPACE',
@@ -66,6 +54,21 @@ export default {
     ...mapActions('features/chat', {
       close: 'CLOSE',
     }),
+    addSubscribersOnHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.END,
+          callback: this.close,
+        },
+      ];
+      this.unsubscribers = useHotkeys(subscripers);
+    },
+  },
+  mounted() {
+    this.addSubscribersOnHotkeys();
+  },
+  unmounted() {
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
