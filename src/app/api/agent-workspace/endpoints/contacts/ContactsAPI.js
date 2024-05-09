@@ -65,6 +65,7 @@ const getList = async (params) => {
     id,
     qin,
   } = applyTransform(params, transformations);
+  console.log('params', q);
 
   try {
     const response = await service.searchContacts(

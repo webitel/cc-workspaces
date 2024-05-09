@@ -12,10 +12,41 @@ const getters = {};
 const actions = {
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
     const number = task.displayNumber; // for CALLS
+    function addPlus(number) {
+      if (!number.startsWith('+')) {
+        return `+${number}`;
+      }
+      return number;
+    }
+    function removePlus(number) {
+      if (number.startsWith('+')) {
+        return number.slice(1);
+      }
+      return number;
+    }
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
     try {
       context.commit('SET_IS_LOADING', true);
       const { data: contacts } = await ContactsAPI.getList(searchParams);
+      if (contacts.length === 0) {
+        // try to search without '+'
+        const numberWithoutPlus = removePlus(number);
+        const searchParamsWithoutPlus = { q: numberWithoutPlus, qin: 'emails,phones', size: 5000 }; // load all
+        const { data: contactsWithoutPlus } = await ContactsAPI.getList(searchParamsWithoutPlus);
+        if (contactsWithoutPlus.length === 0) {
+          // try to search with '+'
+          const numberWithPlus = addPlus(number);
+          const searchParamsWithPlus = { q: numberWithPlus, qin: 'emails,phones', size: 5000 }; // load all
+          const { data: contactsWithPlus } = await ContactsAPI.getList(searchParamsWithPlus);
+          if (contactsWithPlus.length === 0) {
+            return;
+          }
+          return context.dispatch('LINK_CONTACT', contactsWithPlus[0]);
+        }
+
+        return context.dispatch('LINK_CONTACT', contactsWithoutPlus[0]);
+      }
+
 
       if (contacts.length === 1) {
         return context.dispatch('LINK_CONTACT', contacts[0]);
@@ -28,9 +59,9 @@ const actions = {
   },
   SEARCH_CONTACTS: async (context, searchParams) => {
     try {
-      context.commit('SET_IS_LOADING\', true);\n'+
-        '      const { data: contacts } = await ContactsAPI.getList(searchParams);\n'+
-        '      context.commit(\'SET_CONTACTS_BY_SEARCH', contacts);
+      context.commit('SET_IS_LOADING', true);
+      const {data: contacts} = await ContactsAPI.getList(searchParams);
+      context.commit('SET_CONTACTS_BY_SEARCH', contacts);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
