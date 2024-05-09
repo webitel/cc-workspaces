@@ -64,7 +64,7 @@ export default {
   data: () => ({
     currentTab: 'numpad',
     isPreviewTransfer: false,
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
 
   watch: {
@@ -97,7 +97,7 @@ export default {
           callback: this.openTransfer,
         },
       ];
-      this.unsubscribers = useHotkeys(subscribers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
     }
   },
 
@@ -106,7 +106,7 @@ export default {
   },
 
   unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 
 };

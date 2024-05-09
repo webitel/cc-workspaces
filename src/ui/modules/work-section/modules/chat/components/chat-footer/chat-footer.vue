@@ -78,7 +78,7 @@ export default {
   mixins: [sizeMixin],
   inject: ['$eventBus'],
   data: () => ({
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
   watch: {
     chat: {
@@ -153,7 +153,7 @@ export default {
           callback: this.accept,
         },
       ];
-      this.unsubscribers = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     }
   },
   mounted() {
@@ -162,7 +162,7 @@ export default {
   },
   unmounted() {
     this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

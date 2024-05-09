@@ -94,7 +94,7 @@
     },
 
     data: () => ({
-      unsubscribers: [],
+      hotkeyUnsubscribers : [],
     }),
 
     computed: {
@@ -161,7 +161,7 @@
             callback: this.hangup
           }
         ];
-        this.unsubscribers = useHotkeys(subscribers);
+        this.hotkeyUnsubscribers  = useHotkeys(subscribers);
       }
     },
 
@@ -170,7 +170,7 @@
     },
 
     unmounted() {
-      this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+      this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
     },
   };
 </script>

@@ -55,7 +55,7 @@ export default {
   },
   data: () => ({
     currentTab: { component: defaultTab },
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
   computed: {
     ...mapGetters('features/chat', {
@@ -93,7 +93,7 @@ export default {
           callback: this.openTab.bind(this, HotkeyAction.TRANSFER.toLowerCase()),
         },
       ];
-      this.unsubscribers = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
   },
   watch: {
@@ -105,7 +105,7 @@ export default {
     this.setupHotkeys();
   },
   unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

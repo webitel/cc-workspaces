@@ -39,7 +39,7 @@ export default {
     ChatHeaderCloseAction,
   },
   data: () => ({
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
   computed: {
     ...mapGetters('workspace', {
@@ -61,14 +61,14 @@ export default {
           callback: this.close,
         },
       ];
-      this.unsubscribers = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
   },
   mounted() {
     this.setupHotkeys();
   },
   unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

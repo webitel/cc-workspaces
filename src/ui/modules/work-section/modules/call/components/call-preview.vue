@@ -52,7 +52,7 @@
     },
 
     data: () => ({
-      unsubscribers: [],
+      hotkeyUnsubscribers : [],
     }),
 
     methods: {
@@ -79,7 +79,7 @@
             callback: this.openTransfer,
           },
         ];
-        this.unsubscribers = useHotkeys(subscribers);
+        this.hotkeyUnsubscribers  = useHotkeys(subscribers);
       },
     },
 
@@ -88,7 +88,7 @@
     },
 
     unmounted() {
-      this.unsubscribers.forEach((unsubscribe) => unsubscribe())
+      this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe())
     },
   };
 </script>

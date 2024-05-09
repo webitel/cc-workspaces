@@ -22,7 +22,6 @@
     >{{ $t('reusable.close') }}
     </wt-button>
   </task-footer>
-  <button type="button" @click="() => console.log(unsubscribers)">Test</button>
 </template>
 
 <script>
@@ -40,7 +39,7 @@ export default {
     },
   },
   data: () => ({
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
   methods: {
     setupHotkeys() {
@@ -59,14 +58,14 @@ export default {
           },
         },
       ];
-      this.unsubscribers = useHotkeys(subscribers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
     }
   },
   mounted() {
     this.setupHotkeys();
   },
   unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

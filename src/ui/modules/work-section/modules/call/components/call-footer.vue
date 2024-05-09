@@ -61,7 +61,7 @@ export default {
   },
 
   data: () => ({
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
 
   computed: {
@@ -137,7 +137,7 @@ export default {
           callback: this.toggleHold,
         },
       ];
-      this.unsubscribers = useHotkeys(subscribers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
     },
   },
 
@@ -146,7 +146,7 @@ export default {
   },
 
   unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

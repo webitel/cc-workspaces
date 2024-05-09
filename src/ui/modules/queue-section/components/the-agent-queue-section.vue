@@ -81,7 +81,7 @@ export default {
   },
   data: () => ({
     currentTab: {},
-    unsubscribers: [],
+    hotkeyUnsubscribers : [],
   }),
   computed: {
     ...mapState('features/call', {
@@ -152,7 +152,7 @@ export default {
           callback: this.toggleNewCall,
         },
       ];
-      this.unsubscribers = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
   },
 
@@ -165,7 +165,7 @@ export default {
   },
   
   unmounted() {
-    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
