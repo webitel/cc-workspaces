@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "24.02.1",
+  "version": "24.02.2",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "test:unit": "vitest"
   },
   "dependencies": {
-    "@tinymce/tinymce-vue": "^5.1.1",
+    "@tinymce/tinymce-vue": "^3.2.8",
     "@vue/compat": "^3.3.9",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
@@ -54,5 +54,8 @@
     "vitest": "^1.2.2",
     "workbox-core": "^7.0.0",
     "workbox-precaching": "^7.0.0"
+  },
+  "overrides": {
+    "vue": "^3.2.47"
   }
 }
