@@ -10,7 +10,6 @@ export default {
 
   created() {
     this.setLanguage();
-
     // destroy does not execute on F5 as per answer below: https://my.webitel.com/browse/DEV-2144
     // https://stackoverflow.com/a/34443314/17748106
 

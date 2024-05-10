@@ -41,6 +41,8 @@
   import { mapActions } from 'vuex';
   import sizeMixin from '../../../../../../app/mixins/sizeMixin';
   import PreviewProfile from './call-preview-profile.vue';
+  import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+  import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
   export default {
     name: 'call-preview',
@@ -48,6 +50,10 @@
     components: {
       PreviewProfile,
     },
+
+    data: () => ({
+      hotkeyUnsubscribers : [],
+    }),
 
     methods: {
       ...mapActions('features/call', {
@@ -58,6 +64,31 @@
       openTransfer() {
         this.$emit('transfer');
       },
+      setupHotkeys() {
+        const subscribers = [
+          {
+            event: HotkeyAction.ACCEPT,
+            callback: this.answer,
+          },
+          {
+            event: HotkeyAction.END,
+            callback: this.hangup,
+          },
+          {
+            event: HotkeyAction.TRANSFER,
+            callback: this.openTransfer,
+          },
+        ];
+        this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+      },
+    },
+
+    mounted() {
+      this.setupHotkeys();
+    },
+
+    unmounted() {
+      this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe())
     },
   };
 </script>

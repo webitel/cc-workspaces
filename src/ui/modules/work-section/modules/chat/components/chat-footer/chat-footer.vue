@@ -66,6 +66,8 @@ import { mapActions, mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import ChatEmoji from './chat-emoji.vue';
+import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
 
 export default {
   name: 'chat-footer',
@@ -75,12 +77,9 @@ export default {
   },
   mixins: [sizeMixin],
   inject: ['$eventBus'],
-  mounted() {
-    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
-  },
-  destroyed() {
-    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
-  },
+  data: () => ({
+    hotkeyUnsubscribers : [],
+  }),
   watch: {
     chat: {
       handler() {
@@ -147,6 +146,23 @@ export default {
         this.chat.draft = draft;
       }
     },
+    setupHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.ACCEPT,
+          callback: this.accept,
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    }
+  },
+  mounted() {
+    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
+    this.setupHotkeys();
+  },
+  unmounted() {
+    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

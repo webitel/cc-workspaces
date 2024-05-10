@@ -43,6 +43,8 @@ import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/call-transfer-container.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import Contacts from './call-contacts/call-contacts-container.vue';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
 export default {
   name: 'the-call',
@@ -62,6 +64,7 @@ export default {
   data: () => ({
     currentTab: 'numpad',
     isPreviewTransfer: false,
+    hotkeyUnsubscribers : [],
   }),
 
   watch: {
@@ -87,7 +90,25 @@ export default {
       this.isPreviewTransfer = true;
       this.currentTab = 'transfer';
     },
+    setupHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.TRANSFER,
+          callback: this.openTransfer,
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+    }
   },
+
+  mounted() {
+    this.setupHotkeys();
+  },
+
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+  },
+
 };
 </script>
 

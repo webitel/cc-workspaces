@@ -47,6 +47,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
 export default {
   name: 'call-footer',
@@ -57,6 +59,10 @@ export default {
       type: String,
     },
   },
+
+  data: () => ({
+    hotkeyUnsubscribers : [],
+  }),
 
   computed: {
     ...mapGetters('features/call', {
@@ -120,6 +126,27 @@ export default {
       toggleMute: 'TOGGLE_MUTE',
       toggleHold: 'TOGGLE_HOLD',
     }),
+    setupHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.MUTE,
+          callback: this.toggleMute,
+        },
+        {
+          event: HotkeyAction.HOLD,
+          callback: this.toggleHold,
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+    },
+  },
+
+  mounted() {
+    this.setupHotkeys();
+  },
+
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

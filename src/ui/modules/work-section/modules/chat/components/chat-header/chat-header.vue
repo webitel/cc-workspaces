@@ -28,6 +28,8 @@ import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
+import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
 
 export default {
   name: 'chat-header',
@@ -36,6 +38,9 @@ export default {
     TaskHeader,
     ChatHeaderCloseAction,
   },
+  data: () => ({
+    hotkeyUnsubscribers : [],
+  }),
   computed: {
     ...mapGetters('workspace', {
       task: 'TASK_ON_WORKSPACE',
@@ -49,6 +54,21 @@ export default {
     ...mapActions('features/chat', {
       close: 'CLOSE',
     }),
+    setupHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.END,
+          callback: this.close,
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    },
+  },
+  mounted() {
+    this.setupHotkeys();
+  },
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

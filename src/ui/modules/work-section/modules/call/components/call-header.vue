@@ -80,6 +80,8 @@
   import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
   import sizeMixin from '../../../../../../app/mixins/sizeMixin';
   import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+  import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+  import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
   export default {
     name: 'call-header',
@@ -90,6 +92,10 @@
         type: String,
       },
     },
+
+    data: () => ({
+      hotkeyUnsubscribers : [],
+    }),
 
     computed: {
       ...mapState('features/call', {
@@ -148,6 +154,23 @@
         hangup: 'HANGUP',
         setNumber: 'SET_NEW_NUMBER',
       }),
+      setupHotkeys() {
+        const subscribers = [
+          {
+            event: HotkeyAction.END,
+            callback: this.hangup
+          }
+        ];
+        this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+      }
+    },
+
+    mounted() {
+      this.setupHotkeys();
+    },
+
+    unmounted() {
+      this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
     },
   };
 </script>

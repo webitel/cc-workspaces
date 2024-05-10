@@ -46,7 +46,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { CallActions } from 'webitel-sdk';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
@@ -123,7 +123,7 @@ const getComponent = (value) => {
     default:
       return null;
   }
-}
+};
 
 function openNewCall(payload) {
   return store.dispatch('features/call/OPEN_NEW_CALL', payload);

@@ -26,6 +26,8 @@
 
 <script>
 import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
+import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
 
 export default {
   name: 'job-footer',
@@ -35,6 +37,35 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data: () => ({
+    hotkeyUnsubscribers : [],
+  }),
+  methods: {
+    setupHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.ACCEPT,
+          callback: () => {
+            if (this.task.allowAccept) this.task.accept();
+          },
+        },
+        {
+          event: HotkeyAction.END,
+          callback: () => {
+          if (this.task.allowClose) this.task.close();
+          if (this.task.allowAccept) this.task.decline();
+          },
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+    }
+  },
+  mounted() {
+    this.setupHotkeys();
+  },
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
