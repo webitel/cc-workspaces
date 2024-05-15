@@ -1,12 +1,14 @@
 <template>
-  <task-queue-container>
+  <task-queue-container
+    :empty="taskList.length === 0"
+  >
     <active-preview
-      v-for="task of taskList"
+      v-for="(task) of taskList"
       :task="task"
       :opened="task === taskOnWorkspace"
       :key="task.id"
       :size="size"
-      @click="openTask"
+      @click="openTask(task)"
     ></active-preview>
   </task-queue-container>
 </template>

@@ -8,7 +8,7 @@
       :collapsed="collapsed"
     >
       <template v-slot:title>{{ $t('infoSec.memberDescription') }}</template>
-      <template>
+      <template v-slot:default>
         <p class="client-info-member-description">{{ memberDescription }}</p>
       </template>
     </wt-expansion-panel>
@@ -18,7 +18,7 @@
       :collapsed="collapsed"
     >
       <template v-slot:title>{{ $t('infoSec.variables') }}</template>
-      <template>
+      <template v-slot:default>
         <ul class="client-info-member-list">
           <li
             v-for="({ key, value }, idx) of variables"

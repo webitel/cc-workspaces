@@ -4,7 +4,7 @@
     collapsed
   >
     <template v-slot:title>{{ t('vocabulary.labels', 2) }}</template>
-    <template>
+    <template v-slot:default>
       <div class="contact-card-labels">
         <div
           v-if="props.labels.length"

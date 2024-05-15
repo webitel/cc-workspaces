@@ -1,7 +1,7 @@
 export default {
   computed: {
     displayChatName() {
-      return this.task && this.task.members.map((member) => member.name).join(', ');
+      return this.task && this.task?.members?.map((member) => member.name).join(', ');
     },
     displayName() {
       return (this.task || this.call)?.displayName;

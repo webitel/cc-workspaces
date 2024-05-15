@@ -5,7 +5,7 @@
   >
     <wt-expansion-panel :size="size">
       <template v-slot:title>{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
-      <template>
+      <template v-slot:default>
         <ul>
           <li
             v-for="queue in queues"

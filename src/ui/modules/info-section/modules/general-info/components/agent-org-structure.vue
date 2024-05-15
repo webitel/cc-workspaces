@@ -5,7 +5,7 @@
   >
     <wt-expansion-panel :size="size">
       <template v-slot:title>{{ $tc('objects.team', 1) }}</template>
-      <template>
+      <template v-slot:default>
         <ul>
           <li class="agent-org-structure-item">
             <div class="agent-org-structure-item__title">{{ $t('reusable.name') }}</div>

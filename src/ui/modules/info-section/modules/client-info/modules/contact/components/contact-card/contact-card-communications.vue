@@ -3,7 +3,7 @@
     :size="props.size"
     collapsed>
     <template v-slot:title>{{ t('infoSec.contacts.communications') }}</template>
-    <template>
+    <template v-slot:default>
       <div class="contact-card-communications">
         <wt-tabs
           :current="currentTab"

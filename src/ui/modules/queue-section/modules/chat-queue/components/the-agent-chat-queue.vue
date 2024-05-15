@@ -31,7 +31,8 @@
         >{{ count }}
         </wt-chip>
       </template>
-      <template>
+
+      <template v-slot:default>
         <component
           :is="getComponent(value)"
           :size="size"
