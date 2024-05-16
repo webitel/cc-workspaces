@@ -34,9 +34,7 @@ export default {
       return this.audio.streamUrl || this.audio.url;
     },
     videoSizeMd() {
-      if (this.size === 'md' && this.audio.mime.includes('video')) {
-        return true;
-      }
+      return this.size === 'md' && this.audio.mime.includes('video')
     },
   },
   methods: {
