@@ -6,10 +6,10 @@
     >{{ label }}
     </wt-label>
     <iframe
-      class="processing-form-i-frame__iframe"
       :src="initialValue"
+      :style="{ height }"
       allowfullscreen
-      :style="{ height: height }"
+      class="processing-form-i-frame__iframe"
     ></iframe>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.processing-form-i-frame__iframe{
+.processing-form-i-frame__iframe {
   width: 100%;
 }
 </style>
