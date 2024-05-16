@@ -9,7 +9,7 @@
       class="processing-form-i-frame__iframe"
       :src="initialValue"
       allowfullscreen
-      :style="{ height: iframeHeight }"
+      :style="{ height: height }"
     ></iframe>
   </div>
 </template>
@@ -22,17 +22,7 @@ export default {
   props: {
     height: {
       type: String,
-      default: '100',
-    },
-    isHeightFixed: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    iframeHeight() {
-      const unit = this.isHeightFixed ? 'px' : 'vh';
-      return this.height + unit;
+      default: '100px',
     },
   },
   mixins: [ProcessingFormComponentMixin],
