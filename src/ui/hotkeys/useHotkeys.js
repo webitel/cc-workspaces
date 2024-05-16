@@ -15,6 +15,7 @@ const globalSub = Object.values(HotkeyAction).reduce((acc, event) => {
 const globalListener = (event) => {
   // TOGGLE_NEW_CALL
   if (event.altKey && event.code === 'KeyN') {
+    event.preventDefault();
     globalSub[HotkeyAction.NEW_CALL].forEach((callback) => {
       callback(event);
     });
@@ -23,6 +24,7 @@ const globalListener = (event) => {
   // ACCEPT NEW TASK/CALL/TASK
   else if (event.altKey && event.code === 'KeyA') {
     globalSub[HotkeyAction.ACCEPT].forEach((callback) => {
+      event.preventDefault();
       callback(event);
     });
   }
@@ -46,6 +48,7 @@ const globalListener = (event) => {
   // MUTE
   else if (event.altKey && event.code === 'KeyM') {
     globalSub[HotkeyAction.MUTE].forEach((callback) => {
+      event.preventDefault();
       callback(event);
     });
   }
@@ -53,6 +56,7 @@ const globalListener = (event) => {
   // HOLD
   else if (event.altKey && event.code === 'KeyH') {
     globalSub[HotkeyAction.HOLD].forEach((callback) => {
+      event.preventDefault();
       callback(event);
     });
   }
