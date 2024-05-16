@@ -5,7 +5,7 @@
   >
     <wt-expansion-panel :size="size">
       <template v-slot:title>{{ $t('infoSec.generalInfo.pauses') }}</template>
-      <template>
+      <template v-slot:default>
         <ul>
           <li
             v-for="(cause) of representablePauseCause"

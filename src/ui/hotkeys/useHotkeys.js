@@ -58,13 +58,19 @@ const globalListener = (event) => {
   }
 };
 
+const registerListeners = () => {
+  window.addEventListener('keydown', globalListener);
+};
+
+registerListeners();
+
 export const useHotkeys = (subscribers) => {
   return subscribers.reduce((
     unsubs,
     {
-      root = window,
+      // root = window,
       event,
-      userEvent = 'keydown',
+      // userEvent = 'keydown',
       callback,
     },
   ) => {
@@ -74,11 +80,8 @@ export const useHotkeys = (subscribers) => {
 
     globalSub[HotkeyAction[event]].push(callback);
 
-    root.addEventListener(userEvent, globalListener);
-
     const unsubscribe = () => {
       globalSub[HotkeyAction[event]] = globalSub[HotkeyAction[event]].filter(cb => cb !== callback);
-      root.removeEventListener(userEvent, globalListener);
     };
     return [...unsubs, unsubscribe];
   }, []);

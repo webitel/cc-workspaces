@@ -3,7 +3,7 @@
     :size="props.size"
     collapsed>
     <template v-slot:title>{{ t('infoSec.contacts.attributes', 2) }}</template>
-    <template>
+    <template v-slot:default>
       <div
         class="contact-card-variables"
         :class="[`contact-card-variables--${props.size}`]"

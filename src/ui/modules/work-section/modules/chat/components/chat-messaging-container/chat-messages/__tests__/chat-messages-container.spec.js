@@ -1,6 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ChatMessagesContainer
-  from '../chat-messages-container.vue';
+import ChatMessagesContainer from '../chat-messages-container.vue';
 
 const chat = {
   messages: [],
@@ -85,7 +84,7 @@ describe('Chat Messages Container', () => {
   it('event bus emits input focus event at message container click', () => {
     const $eventBus = { $emit: vi.fn() };
     const wrapper = shallowMount(ChatMessagesContainer, {
-      global: { provide: { $eventBus } },
+      // global: { provide: { $eventBus } },
       computed: {
         ...ChatMessagesContainer.computed,
         chat() {
@@ -93,7 +92,8 @@ describe('Chat Messages Container', () => {
         },
       },
     });
-   wrapper.find('.chat-messages-container').trigger('click');
-    expect($eventBus.$emit).toHaveBeenCalledWith('chat-input-focus');
+    const spy = vi.spyOn(wrapper.vm.$eventBus, '$emit');
+    wrapper.find('.chat-messages-container').trigger('click');
+    expect(spy).toHaveBeenCalledWith('chat-input-focus');
   });
 });

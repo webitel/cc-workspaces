@@ -5,7 +5,7 @@
     class="contact-card-description"
   >
     <template v-slot:title>{{ $t('vocabulary.description') }}</template>
-    <template>
+    <template v-slot:default>
       <div class="contact-card-description__text">
         <p v-if="props.description">
           {{ props.description }}

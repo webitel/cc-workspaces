@@ -11,9 +11,10 @@
       @click="$emit('resize')"
     ></collapse-action>
     <wt-tabs
-      v-model="currentTab"
+      :current="currentTab"
       :tabs="tabs"
       class="queue-section-tabs"
+      @change="currentTab = $event"
     >
       <template
         v-for="(tab, key) of tabs"
@@ -160,10 +161,10 @@ export default {
     this.currentTab = this.tabs[0];
   },
 
-  mounted() { 
+  mounted() {
     this.setupHotkeys();
   },
-  
+
   unmounted() {
     this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },

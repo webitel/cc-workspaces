@@ -1,5 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils';
 import ContactLookupItem from '../contact-lookup-item.vue';
+import ContactCommunicationItem from '../contact-communication-item.vue';
 
 describe('ContactLookupItem', () => {
   it('renders a component', () => {
@@ -45,6 +46,7 @@ describe('ContactLookupItem', () => {
           WtRoundedAction: false,
           ContactCommunicationItem: false,
           WtExpandTransition: false,
+          TransitionExpand: false,
         },
       },
     });

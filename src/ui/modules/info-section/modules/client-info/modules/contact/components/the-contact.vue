@@ -16,7 +16,7 @@
           ></wt-icon-btn>
         </div>
       </template>
-      <template>
+      <template v-slot:default>
         <add-contact
           v-if="mode === ContactMode.ADD"
           :size="props.size"

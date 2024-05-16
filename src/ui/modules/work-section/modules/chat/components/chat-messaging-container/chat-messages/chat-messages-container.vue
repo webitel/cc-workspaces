@@ -116,6 +116,6 @@ export default {
 }
 
 .chat-message {
-  margin-top: var(--spacing-xs);
+  margin: var(--spacing-xs) var(--spacing-2xs) 0 0;
 }
 </style>

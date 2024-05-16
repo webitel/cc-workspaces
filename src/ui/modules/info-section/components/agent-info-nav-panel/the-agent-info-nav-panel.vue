@@ -7,7 +7,7 @@
       <template v-slot:activator>
         <wt-rounded-action
           :icon="tab.icon || tab.value"
-          :active="tab.value === currentTab.value"
+          :active="tab.value === currentTab?.value"
           :size="size"
           rounded
           wide

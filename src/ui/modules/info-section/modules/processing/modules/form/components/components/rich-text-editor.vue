@@ -5,18 +5,38 @@
       :hint="hint"
     >{{ label }}</wt-label>
     <editor
+      :model-value="value"
       :initial-value="value"
       :init="config"
       :output-format="output"
       :plugins="plugins"
       :toolbar="toolbar"
-      @input="$emit('input', $event)"
+      @update:modelValue="$emit('input', $event)"
     ></editor>
   </article>
 </template>
 
 <script>
 import Editor from '@tinymce/tinymce-vue';
+
+/**
+ * Тут піздєц. Який? Описую в таску
+ * WTEL-4477
+ */
+const defaultSetup = Editor.setup;
+
+Editor.setup = (props, ctx) => {
+  const _ctx = {
+    ...ctx,
+    attrs: {
+      ...ctx.attrs,
+      'onUpdate:modelValue': true,
+    },
+  };
+  return defaultSetup(props, _ctx);
+}
+
+
 /* Import TinyMCE */
 import 'tinymce/tinymce.min';
 
@@ -66,6 +86,9 @@ export default {
       default: '300',
     },
   },
+  emits: [
+    'input',
+  ],
   computed: {
     config() {
       return {

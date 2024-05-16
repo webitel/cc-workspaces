@@ -5,7 +5,7 @@
   >
     <wt-expansion-panel :size="size">
       <template v-slot:title>{{ $tc('infoSec.generalInfo.score') }}</template>
-      <template>
+      <template v-slot:default>
         <ul>
           <li class="agent-score-item">
             <div class="agent-score-item__title">
