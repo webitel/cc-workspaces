@@ -1,5 +1,10 @@
 <template>
-  <div :class="{'chat-message--right' : isAgentSideMessage }" class="chat-message">
+  <div
+     :class="{
+       'chat-message--right' : isAgentSideMessage,
+       'sm-message': size === 'md',
+     }"
+     class="chat-message">
     <message-avatar
       :bot="isBot"
       :message="message"
@@ -62,6 +67,11 @@ export default {
       type: Boolean,
       default: true,
     },
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
+    },
   },
   computed: {
     my() {
@@ -91,6 +101,10 @@ export default {
   display: flex;
   max-width: 100%;
   gap: var(--spacing-xs);
+
+  &.md-message {
+    max-width: 80%;
+  }
 
   .chat-message-avatar {
     flex: 0 0 32px;
