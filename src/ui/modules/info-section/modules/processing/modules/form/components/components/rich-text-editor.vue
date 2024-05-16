@@ -5,8 +5,8 @@
       :hint="hint"
     >{{ label }}</wt-label>
     <editor
-      :model-value="value"
-      :initial-value="value"
+      :model-value="strValue"
+      :initial-value="strValue"
       :init="config"
       :output-format="output"
       :plugins="plugins"
@@ -90,6 +90,10 @@ export default {
     'input',
   ],
   computed: {
+    strValue() {
+      // editor breaks on Number data type :( [WTEL-4477]
+      return `${this.value}`;
+    },
     config() {
       return {
         toolbar_sticky: true,
