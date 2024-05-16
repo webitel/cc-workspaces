@@ -1,10 +1,5 @@
 <template>
-  <div
-     :class="{
-       'chat-message--right' : isAgentSideMessage,
-       'sm-message': size === 'md',
-     }"
-     class="chat-message">
+  <div :class="{'chat-message--right' : isAgentSideMessage}" class="chat-message">
     <message-avatar
       :bot="isBot"
       :message="message"
@@ -14,6 +9,7 @@
     <!--    click.stop prevents focus on textarea and allows to select the message text -->
     <div class="chat-message__main-wrapper" @click.stop>
       <message-audio
+        :size="size"
         :message="message"
         :my="my"
         @initialized="handlePlayerInitialize"
@@ -101,10 +97,6 @@ export default {
   display: flex;
   max-width: 100%;
   gap: var(--spacing-xs);
-
-  &.md-message {
-    max-width: 80%;
-  }
 
   .chat-message-avatar {
     flex: 0 0 32px;
