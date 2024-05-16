@@ -9,9 +9,9 @@
     <!--    click.stop prevents focus on textarea and allows to select the message text -->
     <div class="chat-message__main-wrapper" @click.stop>
       <message-audio
-        :size="size"
         :message="message"
         :my="my"
+        :size="size"
         @initialized="handlePlayerInitialize"
       ></message-audio>
       <message-image
@@ -24,8 +24,8 @@
         :my="my"
       ></message-document>
       <message-text
-        :message="message"
         :bot="isBot"
+        :message="message"
         :my="my"
       ></message-text>
     </div>
