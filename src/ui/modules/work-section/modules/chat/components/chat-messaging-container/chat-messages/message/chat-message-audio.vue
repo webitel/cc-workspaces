@@ -8,10 +8,11 @@
       :src="audioUrl"
       :mime="audio.mime"
       :autoplay="false"
+      :hide-duration="audio.mime.includes('video')"
       reset-on-end
       reset-volume
       @initialized="handlePlayerInitialize"
-    ></wt-player>
+    />
   </div>
 </template>
 
