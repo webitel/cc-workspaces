@@ -25,6 +25,7 @@
         :key="action.id"
         :color="action.view.color"
         @click="sendForm({ action, task })"
+        ref="form-action-buttons"
       >{{ action.view.text || action.view.id }}
       </wt-button>
     </template>
@@ -42,6 +43,8 @@ import FormText from './components/processing-form-text.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
+import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
+import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 
 export default {
   name: 'the-processing-form',
@@ -69,6 +72,7 @@ export default {
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
     },
+    hotkeyUnsubscribers: [],
   }),
   computed: {
     formTitle() {
@@ -105,6 +109,19 @@ export default {
       const input = this.$refs['processing-form'].$el.querySelector('input, textarea');
       if (input && !input.className.includes('select')) input.focus();
     },
+    setupHotkeys() {
+      const subscripers = [
+        {
+          event: HotkeyAction.SUBMIT_FORM,
+          callback: (event) => {
+            const index = +event.key - 1;
+            const button = this.$refs['form-action-buttons'][index].$el;
+            if (button) button.focus();
+          },
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    },
   },
   watch: {
     formBody: {
@@ -116,10 +133,18 @@ export default {
   },
   mounted() {
     this.setupAutofocus();
+    this.setupHotkeys();
   },
+
+  unmounted() {
+    this.hotkeyUnsubscribers((unsubscribe) => unsubscribe());
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-
+ footer.processing-actions .wt-button:focus {
+    // https://stackoverflow.com/questions/73658895/document-getelementbyid-focus-not-working-on-button
+    outline: -webkit-focus-ring-color auto 1px;
+  }
 </style>

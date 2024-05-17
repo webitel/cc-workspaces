@@ -1,4 +1,5 @@
 import HotkeyAction from "./HotkeysActiom.enum";
+import digitKeys from "./digitKeys";
 
 /*
 NOTE:
@@ -56,6 +57,14 @@ const globalListener = (event) => {
   // HOLD
   else if (event.altKey && event.code === 'KeyH') {
     globalSub[HotkeyAction.HOLD].forEach((callback) => {
+      event.preventDefault();
+      callback(event);
+    });
+  }
+
+  // FORM SUBMITION
+  else if (event.altKey && digitKeys.includes(event.key)) {
+    globalSub[HotkeyAction.SUBMIT_FORM].forEach((callback) => {
       event.preventDefault();
       callback(event);
     });
