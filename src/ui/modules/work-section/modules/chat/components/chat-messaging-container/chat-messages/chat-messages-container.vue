@@ -11,6 +11,7 @@
           :time="message.createdAt"
         ></message-date>
         <message
+          :size="size"
           :message="message"
           :show-avatar="showAvatar(key)"
           @open-image="openImage(message)"
@@ -35,6 +36,13 @@ export default {
     Message,
     MessageDate,
     ScrollObserver,
+  },
+  props: {
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
+    },
   },
   inject: ['$eventBus'],
   data: () => ({

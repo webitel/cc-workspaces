@@ -9,7 +9,9 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     ></dropzone>
-    <messages-container/>
+    <messages-container
+      :size="size"
+    />
   </div>
 </template>
 
@@ -23,6 +25,13 @@ export default {
   mixins: [dropzoneMixin],
   components: {
     MessagesContainer,
+  },
+  props: {
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
+    },
   },
   methods: {
     ...mapActions('features/chat', {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'chat-message--right' : isAgentSideMessage }" class="chat-message">
+  <div :class="{'chat-message--right' : isAgentSideMessage}" class="chat-message">
     <message-avatar
       :bot="isBot"
       :message="message"
@@ -11,6 +11,7 @@
       <message-audio
         :message="message"
         :my="my"
+        :size="size"
         @initialized="handlePlayerInitialize"
       ></message-audio>
       <message-image
@@ -23,8 +24,8 @@
         :my="my"
       ></message-document>
       <message-text
-        :message="message"
         :bot="isBot"
+        :message="message"
         :my="my"
       ></message-text>
     </div>
@@ -61,6 +62,11 @@ export default {
     showAvatar: {
       type: Boolean,
       default: true,
+    },
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
     },
   },
   computed: {
