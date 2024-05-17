@@ -47,18 +47,30 @@
       ></wt-radio>
     </div>
 
-    <wt-loader v-show="isLoading"></wt-loader>
-    <wt-dummy
-      v-if="!isLoading && !contactsBySearch.length"
-      :src="dummy.src"
-      :text="dummy.text"
-    ></wt-dummy>
-    <contacts-list-wrapper
-      v-if="!isLoading && contactsBySearch.length"
-      :size="props.size"
-      :list="contactsBySearch"
-      @link="linkContact"
-    ></contacts-list-wrapper>
+    <div style="overflow: auto">
+      <wt-loader v-show="isLoading"></wt-loader>
+      <wt-dummy
+        v-if="!isLoading && !contactsBySearch.length"
+        :src="dummy.src"
+        :text="dummy.text"
+      ></wt-dummy>
+      <wt-dummy
+        v-if="!isLoading && !contactsBySearch.length"
+        :src="dummy.src"
+        :text="dummy.text"
+      ></wt-dummy>
+      <wt-dummy
+        v-if="!isLoading && !contactsBySearch.length"
+        :src="dummy.src"
+        :text="dummy.text"
+      ></wt-dummy>
+      <contacts-list-wrapper
+        v-if="!isLoading && contactsBySearch.length"
+        :size="props.size"
+        :list="contactsBySearch"
+        @link="linkContact"
+      ></contacts-list-wrapper>
+    </div>
 
     <div class="search-contact__actions">
       <wt-button
@@ -195,8 +207,9 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
 
 <style lang="scss" scoped>
 .search-contact {
+  max-height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs);
 

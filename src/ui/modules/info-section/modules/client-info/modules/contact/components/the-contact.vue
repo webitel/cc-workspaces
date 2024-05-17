@@ -1,8 +1,9 @@
 <template>
   <article
+    style="height: 100%;"
     class="contact"
   >
-    <wt-expansion-panel>
+    <wt-expansion-panel style="height: 100%">
       <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
       <template v-slot:actions="{ open }">
         <div class="contact-actions">
@@ -16,7 +17,7 @@
           ></wt-icon-btn>
         </div>
       </template>
-      <template v-slot:default>
+      <template v-slot:default  style="    max-height: calc(100% - 32px);">
         <add-contact
           v-if="mode === ContactMode.ADD"
           :size="props.size"
@@ -113,12 +114,18 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;
+  height: calc(100% - 8px);
+
 
   &-actions {
     display: flex;
     flex: 1;
     justify-content: end;
     gap: var(--spacing-xs);
+  }
+
+  :deep(.wt-expansion-panel .wt-expansion-panel-body) {
+    max-height: calc(100% - 32px);
   }
 }
 </style>
