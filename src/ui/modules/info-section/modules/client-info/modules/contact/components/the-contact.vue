@@ -1,6 +1,6 @@
 <template>
   <article
-    style="height: 100%;"
+    style="height: calc(100% - 8px)"
     class="contact"
   >
     <wt-expansion-panel style="height: 100%">
@@ -114,7 +114,6 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;
-  height: calc(100% - 8px);
 
 
   &-actions {
@@ -125,7 +124,7 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
   }
 
   :deep(.wt-expansion-panel .wt-expansion-panel-body) {
-    max-height: calc(100% - 32px);
+    height: calc(100% - 32px);
   }
 }
 </style>

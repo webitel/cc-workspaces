@@ -1,6 +1,7 @@
 <template>
   <div
     class="search-contact"
+    style="height: 100%;"
     :class="[`search-contact--${props.size}`]"
   >
     <header class="search-contact__header">
