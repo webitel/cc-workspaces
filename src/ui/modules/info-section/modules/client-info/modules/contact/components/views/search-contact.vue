@@ -48,17 +48,25 @@
     </div>
 
     <wt-loader v-show="isLoading"></wt-loader>
-    <wt-dummy
-      v-if="!isLoading && !contactsBySearch.length"
-      :src="dummy.src"
-      :text="dummy.text"
-    ></wt-dummy>
-    <contacts-list-wrapper
-      v-if="!isLoading && contactsBySearch.length"
-      :size="props.size"
-      :list="contactsBySearch"
-      @link="linkContact"
-    ></contacts-list-wrapper>
+    <div class="" style="overflow: auto">
+      <div>
+        <wt-dummy
+          v-if="!isLoading && !contactsBySearch.length"
+          :src="dummy.src"
+          :text="dummy.text"
+        ></wt-dummy>  <wt-dummy
+          v-if="!isLoading && !contactsBySearch.length"
+          :src="dummy.src"
+          :text="dummy.text"
+        ></wt-dummy>
+        <contacts-list-wrapper
+          v-if="!isLoading && contactsBySearch.length"
+          :size="props.size"
+          :list="contactsBySearch"
+          @link="linkContact"
+        ></contacts-list-wrapper>
+      </div>
+    </div>
 
     <div class="search-contact__actions">
       <wt-button
@@ -195,10 +203,18 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
 
 <style lang="scss" scoped>
 .search-contact {
+  min-height: 0;
+  max-height: 100%;
   display: grid;
+  padding: var(--spacing-xs);
   grid-template-rows: auto 1fr auto;
   gap: var(--spacing-xs);
-  padding: var(--spacing-xs);
+
+  .wt-dummy {
+    min-height: 420px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--secondary-color);
+  }
 
   &__header {
     display: flex;
@@ -233,10 +249,13 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
     //position: absolute;
     //bottom: 0;
     //left: 0;
-    width: 100%;
     display: flex;
-    gap: var(--spacing-xs);
     flex: 0 0 auto;
+    width: 100%;
+    padding: var(--spacing-xs);
+    border-radius: 0 0 5px 5px;
+    background-color: var(--dp-24-surface-color);
+    gap: var(--spacing-xs);
 
     .wt-button {
       width: 100%;
