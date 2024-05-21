@@ -74,10 +74,6 @@
             event: HotkeyAction.END,
             callback: this.hangup,
           },
-          {
-            event: HotkeyAction.TRANSFER,
-            callback: this.openTransfer,
-          },
         ];
         this.hotkeyUnsubscribers  = useHotkeys(subscribers);
       },

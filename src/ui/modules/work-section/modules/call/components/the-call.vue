@@ -69,8 +69,7 @@ export default {
 
   watch: {
     call() {
-      this.isPreviewTransfer = false;
-      this.currentTab = 'numpad';
+      this.openCall();
     },
   },
 
@@ -90,11 +89,17 @@ export default {
       this.isPreviewTransfer = true;
       this.currentTab = 'transfer';
     },
+    openCall() {
+      this.isPreviewTransfer = false;
+      this.currentTab = 'numpad';
+    },
     setupHotkeys() {
       const subscribers = [
         {
           event: HotkeyAction.TRANSFER,
-          callback: this.openTransfer,
+          callback: () => {
+            this.isPreviewTransfer ? this.openCall() : this.openTransfer();
+          },
         },
       ];
       this.hotkeyUnsubscribers  = useHotkeys(subscribers);
