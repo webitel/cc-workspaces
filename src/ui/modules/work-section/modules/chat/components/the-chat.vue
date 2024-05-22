@@ -36,8 +36,6 @@ import ChatTransferContainer from './chat-transfer-container/chat-transfer-conta
 import MediaViewer from './media-viewer/media-viewer.vue';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
 const defaultTab = 'chat-messaging-container';
 
@@ -55,7 +53,6 @@ export default {
   },
   data: () => ({
     currentTab: { component: defaultTab },
-    hotkeyUnsubscribers : [],
   }),
   computed: {
     ...mapGetters('features/chat', {
@@ -86,26 +83,11 @@ export default {
     resetTab() {
       this.currentTab = { component: defaultTab };
     },
-    setupHotkeys() {
-      const subscripers = [
-        {
-          event: HotkeyAction.TRANSFER,
-          callback: this.openTab.bind(this, HotkeyAction.TRANSFER.toLowerCase()),
-        },
-      ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
-    },
   },
   watch: {
     chat() {
       this.resetTab();
     },
-  },
-  mounted() {
-    this.setupHotkeys();
-  },
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

@@ -8,7 +8,7 @@
         icon="chat-transfer--filled"
         rounded
         wide
-        @click="$emit('openTab', 'transfer')"
+        @click="openTab"
       ></wt-rounded-action>
       <chat-header-close-action
         v-show="isCloseAction"
@@ -54,12 +54,21 @@ export default {
     ...mapActions('features/chat', {
       close: 'CLOSE',
     }),
+    openTab() {
+      this.$emit('openTab', 'transfer')
+    },
     setupHotkeys() {
       const subscripers = [
         {
           event: HotkeyAction.END,
           callback: this.close,
         },
+        {
+          event: HotkeyAction.TRANSFER,
+          callback: () => {
+            if (this.isTransferAction) this.openTab();
+          }
+        }
       ];
       this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
