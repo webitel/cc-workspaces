@@ -47,19 +47,20 @@
       ></wt-radio>
     </div>
 
-    <wt-loader v-show="isLoading"></wt-loader>
-    <wt-dummy
-      v-if="!isLoading && !contactsBySearch.length"
-      :src="dummy.src"
-      :text="dummy.text"
-    ></wt-dummy>
-    <contacts-list-wrapper
-      v-if="!isLoading && contactsBySearch.length"
-      :size="props.size"
-      :list="contactsBySearch"
-      @link="linkContact"
-    ></contacts-list-wrapper>
-
+    <div class="search-contact__content">
+      <wt-loader v-show="isLoading"></wt-loader>
+      <wt-dummy
+        v-if="!isLoading && !contactsBySearch.length"
+        :src="dummy.src"
+        :text="dummy.text"
+      ></wt-dummy>
+      <contacts-list-wrapper
+        v-if="!isLoading && contactsBySearch.length"
+        :size="props.size"
+        :list="contactsBySearch"
+        @link="linkContact"
+      ></contacts-list-wrapper>
+    </div>
     <div class="search-contact__actions">
       <wt-button
         color="secondary"
@@ -195,10 +196,12 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
 
 <style lang="scss" scoped>
 .search-contact {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
   padding: var(--spacing-xs);
+  gap: var(--spacing-xs);
 
   &__header {
     display: flex;
@@ -211,6 +214,18 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
 
     .wt-button {
       height: min-content;
+    }
+  }
+
+  &__content {
+    display: flex;
+    overflow: auto;
+    flex: 1;
+    flex-direction: column;
+    @extend %wt-scrollbar;
+
+    .wt-dummy {
+      flex: 1;
     }
   }
 

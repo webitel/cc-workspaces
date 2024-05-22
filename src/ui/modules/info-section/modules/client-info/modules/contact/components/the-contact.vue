@@ -113,12 +113,21 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 
   &-actions {
     display: flex;
     flex: 1;
     justify-content: end;
     gap: var(--spacing-xs);
+  }
+
+  :deep(.wt-expansion-panel), :deep(.wt-expansion-panel .wt-expansion-panel-body) {
+    flex: 1;
+    min-height: 0;
   }
 }
 </style>
