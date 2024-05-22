@@ -1,6 +1,5 @@
 <template>
   <article
-    style="height: calc(100% - 8px)"
     class="contact"
   >
     <wt-expansion-panel style="height: 100%">
@@ -17,7 +16,7 @@
           ></wt-icon-btn>
         </div>
       </template>
-      <template v-slot:default  style="    max-height: calc(100% - 32px);">
+      <template v-slot:default>
         <add-contact
           v-if="mode === ContactMode.ADD"
           :size="props.size"
@@ -114,7 +113,7 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;
-
+  height: 100%;
 
   &-actions {
     display: flex;

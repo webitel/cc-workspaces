@@ -1,7 +1,6 @@
 <template>
   <div
     class="search-contact"
-    style="height: 100%;"
     :class="[`search-contact--${props.size}`]"
   >
     <header class="search-contact__header">
@@ -48,18 +47,8 @@
       ></wt-radio>
     </div>
 
-    <div style="overflow: auto">
+    <div class="search-contact__content">
       <wt-loader v-show="isLoading"></wt-loader>
-      <wt-dummy
-        v-if="!isLoading && !contactsBySearch.length"
-        :src="dummy.src"
-        :text="dummy.text"
-      ></wt-dummy>
-      <wt-dummy
-        v-if="!isLoading && !contactsBySearch.length"
-        :src="dummy.src"
-        :text="dummy.text"
-      ></wt-dummy>
       <wt-dummy
         v-if="!isLoading && !contactsBySearch.length"
         :src="dummy.src"
@@ -72,7 +61,6 @@
         @link="linkContact"
       ></contacts-list-wrapper>
     </div>
-
     <div class="search-contact__actions">
       <wt-button
         color="secondary"
@@ -208,6 +196,7 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
 
 <style lang="scss" scoped>
 .search-contact {
+  height: 100%;
   max-height: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
@@ -226,6 +215,11 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
     .wt-button {
       height: min-content;
     }
+  }
+
+  &__content {
+    overflow: auto;
+    @extend %wt-scrollbar;
   }
 
   &__options {
