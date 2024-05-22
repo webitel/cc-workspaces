@@ -58,6 +58,8 @@ import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollM
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
 import botAvatar from '../../../_shared/assets/avatars/bot-avatar.svg';
+import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
+import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
@@ -76,6 +78,7 @@ export default {
     TransferDestination,
     transferDestination: TransferDestination.CHATPLAN,
     botAvatar,
+    hotkeyUnsubscribers : [],
   }),
 
   computed: {
@@ -112,11 +115,27 @@ export default {
     closeTab() {
       this.$emit('closeTab');
     },
+    setupHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.TRANSFER,
+          callback: this.closeTab,
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+    },
   },
   watch: {
     transferDestination() {
       this.resetData();
     },
+  },
+  mounted() {
+    this.setupHotkeys();
+  },
+
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
