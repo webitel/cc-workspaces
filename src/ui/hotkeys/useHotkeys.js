@@ -1,5 +1,5 @@
 import HotkeyAction from "./HotkeysActiom.enum";
-import digitKeys from "./digitKeys";
+import digitCodes from "./digitCodes";
 
 /*
 NOTE:
@@ -16,8 +16,8 @@ const globalSub = Object.values(HotkeyAction).reduce((acc, event) => {
 const globalListener = (event) => {
   // TOGGLE_NEW_CALL
   if (event.altKey && event.code === 'KeyN') {
-    event.preventDefault();
     globalSub[HotkeyAction.NEW_CALL].forEach((callback) => {
+      event.preventDefault();
       callback(event);
     });
   }
@@ -63,7 +63,7 @@ const globalListener = (event) => {
   }
 
   // FORM SUBMITION
-  else if (event.altKey && digitKeys.includes(event.key)) {
+  else if (event.altKey && digitCodes.includes(event.code)) {
     globalSub[HotkeyAction.SUBMIT_FORM].forEach((callback) => {
       event.preventDefault();
       callback(event);
