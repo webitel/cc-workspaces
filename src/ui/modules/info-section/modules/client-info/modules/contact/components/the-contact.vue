@@ -122,7 +122,11 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
     gap: var(--spacing-xs);
   }
 
-  :deep(.wt-expansion-panel .wt-expansion-panel-body), :deep(.wt-expansion-panel) {
+  :deep(.wt-expansion-panel .wt-expansion-panel-body) {
+    height: calc(100% - 32px);
+  }
+
+  :deep(.wt-expansion-panel) {
     height: 100%;
   }
 }
