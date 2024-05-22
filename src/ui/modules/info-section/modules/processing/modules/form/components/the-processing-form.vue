@@ -114,7 +114,9 @@ export default {
         {
           event: HotkeyAction.SUBMIT_FORM,
           callback: (event) => {
-            const index = +event.key - 1;
+            // get digit form event.code. e.g "1" form "Digit1" string
+            const digit = event.code[event.code.length - 1];
+            const index = +digit - 1;
             const button = this.$refs['form-action-buttons'][index].$el;
             if (button) button.focus();
           },
