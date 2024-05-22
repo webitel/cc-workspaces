@@ -2,7 +2,7 @@
   <article
     class="contact"
   >
-    <wt-expansion-panel style="height: 100%">
+    <wt-expansion-panel style="">
       <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
       <template v-slot:actions="{ open }">
         <div class="contact-actions">
@@ -122,8 +122,8 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
     gap: var(--spacing-xs);
   }
 
-  :deep(.wt-expansion-panel .wt-expansion-panel-body) {
-    height: calc(100% - 32px);
+  :deep(.wt-expansion-panel .wt-expansion-panel-body), :deep(.wt-expansion-panel) {
+    height: 100%;
   }
 }
 </style>
