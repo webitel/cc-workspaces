@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="memberDescription || variables.length"
     class="client-info-member"
     :class="[`client-info-member--${size}`]"
   >

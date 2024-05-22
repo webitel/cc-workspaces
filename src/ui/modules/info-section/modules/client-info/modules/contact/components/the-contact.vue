@@ -113,7 +113,10 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 
   &-actions {
     display: flex;
@@ -122,12 +125,9 @@ watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [
     gap: var(--spacing-xs);
   }
 
-  :deep(.wt-expansion-panel .wt-expansion-panel-body) {
-    height: calc(100% - 32px);
-  }
-
-  :deep(.wt-expansion-panel) {
-    height: 100%;
+  :deep(.wt-expansion-panel), :deep(.wt-expansion-panel .wt-expansion-panel-body) {
+    flex: 1;
+    min-height: 0;
   }
 }
 </style>

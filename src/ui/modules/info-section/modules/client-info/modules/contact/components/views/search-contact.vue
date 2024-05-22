@@ -196,12 +196,12 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
 
 <style lang="scss" scoped>
 .search-contact {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  max-height: 100%;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: var(--spacing-xs);
+  min-height: 0;
   padding: var(--spacing-xs);
+  gap: var(--spacing-xs);
 
   &__header {
     display: flex;
@@ -218,8 +218,15 @@ watch([() => search.value, () => keyVariable.value, () => valueVariables.value],
   }
 
   &__content {
+    display: flex;
     overflow: auto;
+    flex: 1;
+    flex-direction: column;
     @extend %wt-scrollbar;
+
+    .wt-dummy {
+      flex: 1;
+    }
   }
 
   &__options {
