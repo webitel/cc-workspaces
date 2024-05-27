@@ -6,7 +6,6 @@ const openLinkFromVariable = (task) => {
   if (isElectron()) return false;
   return setTimeout(() => window.open(prependHttp(task.variables.link), '_blank'),
     task.variables.link_open_timeout_sec * 1000 || 0)
-  // window.open(prependHttp(task.variables.link), '_blank');
 };
 
 export default openLinkFromVariable;
