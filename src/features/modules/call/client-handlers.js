@@ -10,7 +10,7 @@ const callHandler = (context) => (action, call) => {
       context.dispatch('HANDLE_ACTIVE_ACTION', call);
       break;
     case CallActions.Hangup:
-      // context.dispatch('HANDLE_HANGUP_ACTION', call);
+      context.dispatch('HANDLE_HANGUP_ACTION', call);
       break;
     case CallActions.Destroy:
       context.dispatch('HANDLE_DESTROY_ACTION', call);
@@ -74,7 +74,15 @@ const actions = {
     if (stream) {
       audio.srcObject = stream;
       audio.play();
+      call.workspaceAudio = audio
       context.dispatch('HANDLE_START_TALKING');
+    }
+  },
+
+  HANDLE_HANGUP_ACTION: (context, call) => {
+    if (call.workspaceAudio) {
+      call.workspaceAudio.pause()
+      call.workspaceAudio = null
     }
   },
 
