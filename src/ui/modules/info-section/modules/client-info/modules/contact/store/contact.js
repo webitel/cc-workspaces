@@ -1,4 +1,5 @@
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
+import WorkspaceState from '../../../../../../../enums/WorkspaceState.enum.js';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
@@ -35,6 +36,15 @@ const actions = {
       context.commit('SET_IS_LOADING', false);
     }
   },
+  LOAD_CHAT_CONTACT: async (context, { id }) => {
+    try {
+      context.commit('SET_IS_LOADING', true);
+      const { data: contacts } = await ContactsAPI.getList({ q: id, qin:'imclients' });
+      if(contacts.length) context.commit('SET_CONTACT', contacts[0]);
+    } finally {
+      context.commit('SET_IS_LOADING', false);
+    }
+  },
   CLEAN_CONTACTS_BY_SEARCH: async (context) => {
     context.commit('SET_CONTACTS_BY_SEARCH', []);
   },
@@ -63,12 +73,24 @@ const actions = {
     }
   },
   INITIALIZE_CONTACT: async (context) => {
+    const workspaceState = context.rootGetters['workspace/WORKSRACE_STATE'];
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
-    if (task.contact.id) {
-      return context.dispatch('LOAD_CONTACT', task.contact.id);
-    } else {
-      context.commit('SET_CONTACT', null);
-      return context.dispatch('LOAD_CONTACTS_BY_DESTINATION', task);
+
+    if (workspaceState === WorkspaceState.CHAT) {
+      if(task?.members[0]?.user_id) {
+        return context.dispatch('LOAD_CHAT_CONTACT', { id: task.members[0].user_id });
+      } else {
+        context.commit('SET_CONTACT', null);
+      }
+    }
+
+    if(workspaceState === WorkspaceState.CALL) {
+      if (task.contact.id) {
+        return context.dispatch('LOAD_CONTACT', task.contact.id);
+      } else {
+        context.commit('SET_CONTACT', null);
+        return context.dispatch('LOAD_CONTACTS_BY_DESTINATION', task);
+      }
     }
   },
 };

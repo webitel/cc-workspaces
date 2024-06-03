@@ -66,6 +66,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { EngineCommunicationChannels } from 'webitel-sdk';
+import WorkspaceStates from '../../../../../../../../enums/WorkspaceState.enum.js';
 import TimezonesAPI from '../../api/TimezonesAPI';
 import UsersAPI from '../../api/UsersAPI';
 import LabelsAPI from '../../api/LabelsAPI';
@@ -96,7 +97,6 @@ const draft = ref({
   timezones: [],
   managers: [],
   labels: [],
-  phones: [],
   about: '',
   createdBy: '',
 });
@@ -114,6 +114,7 @@ v$.value.$touch();
 const userinfo = computed(() => store.state.ui.userinfo);
 const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const displayNumber = computed(() => store.getters['workspace/TASK_ON_WORKSPACE'].displayNumber);
+const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 
 function close() {
   emit('close');
@@ -132,7 +133,7 @@ async function createCommunication() {
 }
 
 async function save() {
-  await createCommunication();
+  if (workspaceState.value === WorkspaceStates.CALL) await createCommunication();
   await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
   close();
 }
