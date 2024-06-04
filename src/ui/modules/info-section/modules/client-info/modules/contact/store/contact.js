@@ -73,10 +73,11 @@ const actions = {
     }
   },
   INITIALIZE_CONTACT: async (context) => {
-    const workspaceState = context.rootGetters['workspace/WORKSRACE_STATE'];
+    const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
+    const isChatWorkspace = context.rootGetters['workspace/IS_CHAT_WORKSPACE'];
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
 
-    if (workspaceState === WorkspaceState.CHAT) {
+    if (isChatWorkspace) {
       if(task?.members[0]?.user_id) {
         return context.dispatch('LOAD_CHAT_CONTACT', { id: task.members[0].user_id });
       } else {
@@ -84,7 +85,7 @@ const actions = {
       }
     }
 
-    if(workspaceState === WorkspaceState.CALL) {
+    if(isCallWorkspace) {
       if (task.contact.id) {
         return context.dispatch('LOAD_CONTACT', task.contact.id);
       } else {

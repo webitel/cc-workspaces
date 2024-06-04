@@ -67,7 +67,7 @@ const store = useStore();
 const { t } = useI18n();
 const mode = ref(ContactMode.VIEW);
 const namespace = 'ui/infoSec/client/contact';
-const workspaceState = store.getters['workspace/WORKSRACE_STATE'];
+const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 
 const taskId = computed(() => {
   switch (workspaceState) {
