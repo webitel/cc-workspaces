@@ -11,7 +11,7 @@ const state = {
 
 const getters = {
   CALL_ON_WORKSPACE: (s, g, rS, rootGetters) => (
-    rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.CALL && rootGetters['workspace/TASK_ON_WORKSPACE']
+    rootGetters['workspace/IS_CALL_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
 
   GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id === callId),

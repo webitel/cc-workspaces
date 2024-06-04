@@ -43,9 +43,10 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
@@ -66,6 +67,15 @@ const store = useStore();
 const { t } = useI18n();
 const mode = ref(ContactMode.VIEW);
 const namespace = 'ui/infoSec/client/contact';
+const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
+
+const taskId = computed(() => {
+  switch (workspaceState) {
+    case WorkspaceStates.CHAT: return props.task.conversationId;
+    case WorkspaceStates.CALL: return props.task.id;
+    default: return null;
+  }
+});
 
 const changeMode = (newMode) => {
   mode.value = newMode;
@@ -93,7 +103,8 @@ function openView(open, mode) {
   so there would be 2 calls of loadContact() and initializeContact() at one time
  */
 
-watch([() => props.task.id, () => props.task.contactId], ([taskId, contactId], [prevTaskId, prevContactId]) => {
+watch([() => taskId.value, () => props.task.contactId], ([taskId, contactId], [prevTaskId, prevContactId]) => {
+
   if (taskId !== prevTaskId) {
     changeMode(ContactMode.VIEW);
     initializeContact();

@@ -101,7 +101,7 @@ export default {
       jobList: (state) => state.jobList,
     }),
     ...mapGetters('workspace', {
-      workspaceState: 'WORKSRACE_STATE',
+      isCallWorkspace: 'IS_CALL_WORKSPACE',
     }),
     ...mapGetters('features/call', {
       isNewCall: 'IS_NEW_CALL',
@@ -130,11 +130,6 @@ export default {
     },
     isNewCallButton() {
       return !this.isNewCall || !this.isCallWorkspace;
-    },
-
-    // used as isNewCallBtn check
-    isCallWorkspace() {
-      return this.workspaceState === WorkspaceStates.CALL;
     },
   },
 

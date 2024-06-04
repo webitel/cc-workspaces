@@ -15,7 +15,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 import Contact from '../modules/contact/components/the-contact.vue';
@@ -41,11 +40,8 @@ export default {
     hasLicenseOnCrm() {
       return this.scope.some((item) => item.class === 'contacts');
     },
-    hideContact() {
-      return !isEmpty(this.task?.contact) ? this.task.contact.hide : true;
-    },
     isAllowedContacts() {
-      return !this.hideContact && this.hasLicenseOnCrm;
+      return !this.task?.hideContact || this.hasLicenseOnCrm;
     },
   },
 };

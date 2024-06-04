@@ -1,4 +1,5 @@
 import instance from '../../app/api/instance';
+import WorkspaceStates from '../enums/WorkspaceState.enum.js';
 
 const state = {
   stateHistory: [],
@@ -8,6 +9,8 @@ const getters = {
   TASK_ON_WORKSPACE: (state) => state.stateHistory.at(-1)?.task || {},
   WORKSRACE_STATE: (state) => state.stateHistory.at(-1)?.type,
   IS_EMPTY_WORKSPACE: (state, getters) => !getters.WORKSRACE_STATE,
+  IS_CALL_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CALL,
+  IS_CHAT_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CHAT,
 };
 
 const actions = {
