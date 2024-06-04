@@ -96,7 +96,6 @@ const draft = ref({
   timezones: [],
   managers: [],
   labels: [],
-  phones: [],
   about: '',
   createdBy: '',
 });
@@ -114,6 +113,7 @@ v$.value.$touch();
 const userinfo = computed(() => store.state.ui.userinfo);
 const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const displayNumber = computed(() => store.getters['workspace/TASK_ON_WORKSPACE'].displayNumber);
+const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
 
 function close() {
   emit('close');
@@ -132,7 +132,7 @@ async function createCommunication() {
 }
 
 async function save() {
-  await createCommunication();
+  if (isCallWorkspace.value) await createCommunication();
   await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
   close();
 }

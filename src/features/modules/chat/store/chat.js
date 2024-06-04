@@ -11,7 +11,7 @@ const state = {
 
 const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
-    rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.CHAT && rootGetters['workspace/TASK_ON_WORKSPACE']
+    rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
