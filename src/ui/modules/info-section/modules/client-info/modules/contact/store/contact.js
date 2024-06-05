@@ -40,7 +40,7 @@ const actions = {
     try {
       context.commit('SET_IS_LOADING', true);
       const { data: contacts } = await ContactsAPI.getList({ q: id, qin:'imclients' });
-      if(contacts.length) context.commit('SET_CONTACT', contacts[0]);
+      context.commit('SET_CONTACT', contacts.length ? contacts[0] : null);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
@@ -78,10 +78,8 @@ const actions = {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
 
     if (isChatWorkspace) {
-      if(task?.members[0]?.user_id) {
+      if (task?.members[0]?.user_id) {
         return context.dispatch('LOAD_CHAT_CONTACT', { id: task.members[0].user_id });
-      } else {
-        context.commit('SET_CONTACT', null);
       }
     }
 
