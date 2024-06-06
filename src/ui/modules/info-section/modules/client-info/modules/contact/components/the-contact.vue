@@ -105,7 +105,7 @@ function openView(open, mode) {
 
 watch([() => taskId.value, () => props.task.contactId], ([taskId, contactId], [prevTaskId, prevContactId]) => {
 
-  if (taskId !== prevTaskId) {
+  if (taskId !== prevTaskId || !taskId) {
     changeMode(ContactMode.VIEW);
     initializeContact();
     return;
