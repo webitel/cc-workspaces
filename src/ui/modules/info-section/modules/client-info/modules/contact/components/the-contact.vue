@@ -124,10 +124,8 @@ watch([() => taskId.value, () => props.task.contactId], ([taskId, contactId], [p
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 
   &-actions {
     display: flex;
