@@ -52,7 +52,7 @@ const getList = async (params) => {
   //
   // This code needed for adding starToSearch method to applyTransform while params.qin !== 'imclients' because '*' in variables search mode brokes backend logic.
    if (params.qin !== 'imclients') {
-    transformations.push(starToSearch('q'));
+    // transformations.push(starToSearch('q'));  // WTEL-4265
    }
   const {
     page,
