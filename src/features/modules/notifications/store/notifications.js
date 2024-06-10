@@ -3,6 +3,7 @@ import NotificationsStoreModule
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { CallActions } from 'webitel-sdk';
 import i18n from '../../../../app/locale/i18n';
+import notificationIcon from '@webitel/ui-sdk/src/modules/Notifications/assets/img/notification-icon.png';
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
@@ -31,7 +32,7 @@ const actions = {
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
 
-  HANDLE_CALL_START: async (context) => {
+  HANDLE_CALL_START: async (context, { action, call }) => {
     await context.dispatch('STOP_SOUND'); // ringing
     localStorage.setItem('wtIsPlaying', 'true');
     context.commit('SET_CURRENTLY_PLAYING', true);
@@ -74,7 +75,8 @@ const actions = {
     // https://webitel.atlassian.net/browse/WTEL-4240
     return context.dispatch('features/swController/SEND_NOTIFICATION', {
       title: i18n.global.t('notifications.newCall'),
-      body: `${displayName}: ${displayNumber}`,
+      text: `!!!!!!!${displayName}: ${displayNumber}`,
+      icon: notificationIcon,
       actions: [
         { action: 'accept', title: 'Accept' },
         { action: 'decline', title: 'Decline' },

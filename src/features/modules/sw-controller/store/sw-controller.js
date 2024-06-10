@@ -35,6 +35,7 @@ const actions = {
   SEND_NOTIFICATION: async (context, {
     body,
     title,
+    icon,
     actions,
   }) => {
     return sw.controller.postMessage({
@@ -42,6 +43,7 @@ const actions = {
       payload: {
         body,
         title,
+        icon,
         actions,
       },
     });
