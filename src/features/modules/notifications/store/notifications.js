@@ -75,7 +75,7 @@ const actions = {
     // https://webitel.atlassian.net/browse/WTEL-4240
     return context.dispatch('features/swController/SEND_NOTIFICATION', {
       title: i18n.global.t('notifications.newCall'),
-      text: `!!!!!!!${displayName}: ${displayNumber}`,
+      body: `!!!!!!!${displayName}: ${displayNumber}`,
       icon: notificationIcon,
       actions: [
         { action: 'accept', title: 'Accept' },

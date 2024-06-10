@@ -38,6 +38,10 @@ const actions = {
     icon,
     actions,
   }) => {
+    console.log('notification:', body,
+      title,
+      icon,
+      actions);
     return sw.controller.postMessage({
       type: 'notification',
       payload: {
