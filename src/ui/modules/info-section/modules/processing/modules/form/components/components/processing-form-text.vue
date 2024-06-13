@@ -8,7 +8,7 @@
         icon="attention"
         size="sm"
         color="on-dark"
-      ></wt-icon>
+      />
     </div>
     <h4 class="processing-form-text__title">
       {{ label }}
@@ -22,31 +22,26 @@
             :value="initialValue"
             v-show="!collapsed || !collapsible"
             v-if="enableCopying"
-          ></wt-copy-action>
+          />
         </div>
         <wt-icon-btn
           :icon="collapsed ? 'arrow-right' : 'arrow-down'"
           v-show="collapsible || !collapsed"
           @click="handleCollapse"
-        ></wt-icon-btn>
+        />
       </div>
     </h4>
     <p
       class="processing-form-text__content"
-      v-html="content"
+      v-html="initialValue"
       v-show="!collapsed || !collapsible"
-    ></p>
+    />
   </article>
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it';
-import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
-
-const md = new MarkdownIt({ linkify: true, html: true });
-patchMDRender(md);
 
 export default {
   name: 'form-text',
@@ -60,11 +55,6 @@ export default {
     enableCopying: {
       type: Boolean,
       default: false,
-    },
-  },
-  computed: {
-    content() {
-      return md.render(this.initialValue);
     },
   },
 };
