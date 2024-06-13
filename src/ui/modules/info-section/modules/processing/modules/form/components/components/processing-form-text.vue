@@ -41,6 +41,7 @@
 
 <script>
 import MarkdownIt from 'markdown-it';
+import dompurify from 'dompurify';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
@@ -64,7 +65,7 @@ export default {
   },
   computed: {
     content() {
-      return md.render(this.initialValue);
+      return md.render(dompurify.sanitize(this.initialValue));
     },
   },
 };
