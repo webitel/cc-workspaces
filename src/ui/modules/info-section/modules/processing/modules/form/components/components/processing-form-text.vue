@@ -36,6 +36,7 @@
       v-html="content"
       v-show="!collapsed || !collapsible"
     ></p>
+
   </article>
 </template>
 
@@ -63,6 +64,12 @@ export default {
       default: false,
     },
   },
+  data: () => {
+    return {
+      encodeURI: '',
+      afterRemove: '',
+    }
+  },
   computed: {
     content() {
       let value = dompurify.sanitize(this.initialValue);
@@ -73,7 +80,7 @@ export default {
   methods: {
     replaceURLEncoding(text) {
       // https://webitel.atlassian.net/browse/WTEL-4472
-      const encodeValue = encodeURI(text).replace(/\%0A/g, '%20');
+      const encodeValue = encodeURI(text).replace(/\%0A/g, ' ');
       return decodeURI(encodeValue);
     },
   },
