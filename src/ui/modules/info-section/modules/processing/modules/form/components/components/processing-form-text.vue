@@ -64,12 +64,6 @@ export default {
       default: false,
     },
   },
-  data: () => {
-    return {
-      encodeURI: '',
-      afterRemove: '',
-    }
-  },
   computed: {
     content() {
       let value = dompurify.sanitize(this.initialValue);
