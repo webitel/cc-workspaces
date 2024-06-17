@@ -64,6 +64,7 @@ export default {
 
     &__subtitle {
       @extend %typo-body-2;
+      word-break: break-all;
     }
   }
 

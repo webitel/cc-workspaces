@@ -39,7 +39,7 @@
     "vue-loader": "^15.11.1",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^24.4.3"
+    "webitel-sdk": "^24.4.5"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.1.0",
