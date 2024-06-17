@@ -85,6 +85,7 @@ const getList = async (params) => {
       next,
     };
   } catch (err) {
+    if (err.data.code === 502) return; // https://webitel.atlassian.net/browse/WTEL-4158?focusedCommentId=615727
     throw applyTransform(err, [
       notify,
     ]);

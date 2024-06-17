@@ -65,7 +65,16 @@ export default {
   },
   computed: {
     content() {
-      return md.render(dompurify.sanitize(this.initialValue));
+      let value = dompurify.sanitize(this.initialValue);
+      value = this.replaceURLEncoding(value);
+      return md.render(value);
+    },
+  },
+  methods: {
+    replaceURLEncoding(text) {
+      // https://webitel.atlassian.net/browse/WTEL-4472
+      const encodeValue = encodeURI(text).replace(/\%0A/g, ' ');
+      return decodeURI(encodeValue);
     },
   },
 };
