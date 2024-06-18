@@ -73,7 +73,7 @@ export default {
   methods: {
     replaceURLEncoding(text) {
       // https://webitel.atlassian.net/browse/WTEL-4472
-      const encodeValue = encodeURI(text).replace(/\%0A/g, ' ');
+      const encodeValue = encodeURI(text).replace(/\%0A%20%20%20%20/g, ' ');
       return decodeURI(encodeValue);
     },
   },
