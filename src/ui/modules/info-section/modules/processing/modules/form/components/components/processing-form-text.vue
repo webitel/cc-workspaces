@@ -19,7 +19,7 @@
       <div class="processing-form-text__actions-wrapper">
         <div class="processing-form-text__copy">
           <wt-copy-action
-            :value="initialValue"
+            :value="valueToCopy"
             v-show="!collapsed || !collapsible"
             v-if="enableCopying"
           ></wt-copy-action>
@@ -68,6 +68,9 @@ export default {
       let value = dompurify.sanitize(this.initialValue);
       value = this.replaceURLEncoding(value);
       return md.render(value);
+    },
+    valueToCopy() {
+      return this.initialValue.replace(/<br\s*\/?>/gi, '\n');
     },
   },
   methods: {
