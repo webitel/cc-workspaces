@@ -89,9 +89,9 @@ class WebSocketClientController {
         resolve();
       }, 5000);
 
-      const markUa = () => cli.phone.ua = markRaw(cli.phone.ua);
+      const markUa = () => cli.phone?.ua && (cli.phone.ua = markRaw(cli.phone.ua));
 
-      if (cli.phone.ua) {
+      if (cli.phone?.ua) {
         markUa();
         clearTimeout(timeout);
         resolve();
