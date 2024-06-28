@@ -3,10 +3,11 @@
     class="empty-contact"
     :class="[`empty-contact--${props.size}`]"
   >
-    <wt-avatar size="2xl"></wt-avatar>
+    <wt-avatar size="2xl"/>
     <p class="empty-contact__title">{{ $t('infoSec.contacts.emptyContact') }}</p>
 
     <wt-button
+      v-if="additionIsAllowed"
       class="empty-contact__button"
       @click="add"
     > {{ $t('reusable.add') }}
@@ -21,6 +22,10 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+  additionIsAllowed: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const emit = defineEmits(['add']);

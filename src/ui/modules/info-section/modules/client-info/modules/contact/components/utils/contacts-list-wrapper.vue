@@ -8,19 +8,20 @@
         :index="index"
         @next="next"
         @prev="prev"
-      ></contact-header>
+      />
       <contact-card
         :size="props.size"
         :contact="currentContact"
         :linked="!!props.linkedContact?.id"
         @link="linkedContact"
-      ></contact-card>
+      />
     </div>
     <empty-contact
       v-if="isEmptyContact"
       :size="props.size"
+      :addition-is-allowed="!isTaskActive"
       @add="add"
-    ></empty-contact>
+    />
   </div>
 </template>
 
@@ -69,6 +70,7 @@ const isPrev = computed(() => index.value > 0);
 
 const currentContact = computed(() => props.list[index.value]);
 const isEmptyContact = computed(() => !props.list.length && props.mode === ContactMode.VIEW && !isLoading.value);
+const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
 function linkedContact() {
   try {

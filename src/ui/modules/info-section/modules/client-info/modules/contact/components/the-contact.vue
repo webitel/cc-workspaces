@@ -5,15 +5,19 @@
     <wt-expansion-panel>
       <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
       <template v-slot:actions="{ open }">
-        <div class="contact-actions">
+        isTaskActive: {{ isTaskActive }}
+        <div
+          v-if="isTaskActive"
+          class="contact-actions"
+        >
           <wt-icon-btn
             icon="search"
             @click.stop="openView(open, ContactMode.SEARCH)"
-          ></wt-icon-btn>
+          />
           <wt-icon-btn
             icon="plus"
             @click.stop="openView(open, ContactMode.ADD)"
-          ></wt-icon-btn>
+          />
         </div>
       </template>
       <template v-slot:default>
@@ -68,6 +72,7 @@ const { t } = useI18n();
 const mode = ref(ContactMode.VIEW);
 const namespace = 'ui/infoSec/client/contact';
 const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
+const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
 const taskId = computed(() => {
   switch (workspaceState) {

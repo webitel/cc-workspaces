@@ -11,6 +11,7 @@ const getters = {
   IS_EMPTY_WORKSPACE: (state, getters) => !getters.WORKSRACE_STATE,
   IS_CALL_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CALL,
   IS_CHAT_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CHAT,
+  IS_TASK_ACTIVE: (state,getters) => getters.TASK_ON_WORKSPACE.state === 'active',
 };
 
 const actions = {
