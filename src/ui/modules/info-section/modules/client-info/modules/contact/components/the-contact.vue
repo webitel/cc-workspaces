@@ -5,7 +5,6 @@
     <wt-expansion-panel>
       <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
       <template v-slot:actions="{ open }">
-        isTaskActive: {{ isTaskActive }}
         <div
           v-if="isTaskActive"
           class="contact-actions"
