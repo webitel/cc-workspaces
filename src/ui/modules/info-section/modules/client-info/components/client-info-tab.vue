@@ -41,7 +41,7 @@ export default {
       return this.scope?.some((item) => item.class === 'contacts');
     },
     isAllowedContacts() {
-      return this.hasLicenseOnCrm && !this.task?.hideContact;
+      return this.hasLicenseOnCrm && !this.task?.id;
     },
   },
 };
