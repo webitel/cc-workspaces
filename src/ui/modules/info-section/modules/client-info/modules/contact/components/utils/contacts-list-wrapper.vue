@@ -19,7 +19,7 @@
     <empty-contact
       v-if="isEmptyContact"
       :size="props.size"
-      :addition-is-allowed="!isTaskActive"
+      :addition-is-allowed="isTaskActive"
       @add="add"
     />
   </div>
