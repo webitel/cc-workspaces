@@ -7,7 +7,7 @@
     <p class="empty-contact__title">{{ $t('infoSec.contacts.emptyContact') }}</p>
 
     <wt-button
-      v-if="additionIsAllowed"
+      v-if="allowAddition"
       class="empty-contact__button"
       @click="add"
     > {{ $t('reusable.add') }}
@@ -22,7 +22,7 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
-  additionIsAllowed: {
+  allowAddition: {
     type: Boolean,
     default: false,
   }
