@@ -49,7 +49,7 @@ describe('features/notifications store: actions', () => {
 
   it('HANDLE_ANY_CALL_RINGING action dispatches PLAY_SOUND action with sound audio', () => {
     notificationsModule.actions.HANDLE_ANY_CALL_RINGING(context);
-    expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', { action: CallActions.Ringing });
+    expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', { action: CallActions.Ringing, sound: '' });
   });
 
   it('HANDLE_CALL_START action sets localStorage wtIsPlaying', async () => {
