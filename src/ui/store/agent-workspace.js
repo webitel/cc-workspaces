@@ -12,6 +12,7 @@ const getters = {
   IS_CALL_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CALL,
   IS_CHAT_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CHAT,
   IS_JOB_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.JOB,
+  IS_TASK_ACTIVE: (state,getters) => getters.TASK_ON_WORKSPACE.state === 'active',
 };
 
 const actions = {

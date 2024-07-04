@@ -1,6 +1,6 @@
 <template>
   <div>
-    <wt-loader v-show="isLoading"></wt-loader>
+    <wt-loader v-show="isLoading"/>
     <contacts-list-wrapper
       :mode="props.mode"
       :size="props.size"
@@ -9,7 +9,7 @@
       :namespace="props.namespace"
       @link="linkContact"
       @add="add"
-    ></contacts-list-wrapper>
+    />
   </div>
 </template>
 
