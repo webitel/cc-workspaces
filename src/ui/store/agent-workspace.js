@@ -16,6 +16,7 @@ const getters = {
   IS_TASK_ACTIVE: (state,getters) =>
     getters.TASK_ON_WORKSPACE.state === ConversationState.Active
     || getters.TASK_ON_WORKSPACE.state === CallActions.Active,
+  // because we need to hide contact actions if call or chat not active
 };
 
 const actions = {
