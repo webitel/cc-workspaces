@@ -5,7 +5,6 @@ const state = {
 };
 
 const getters = {
-  AGENT_TEAM_ID: (state, getters, rootState) => rootState.features.status.agent?.team.id, // used for initial flow data loading
   ALLOW_FLOWS: (state, getters, rootState, rootGetters) => (
       rootGetters['features/status/IS_AGENT'] && rootGetters['ui/userinfo/IS_CALL_CENTER_LICENSE']
   ),
@@ -13,7 +12,7 @@ const getters = {
 
 const actions = {
   LOAD_FLOWS_LIST: async (context) => {
-    const { items } = await FlowsAPI.getLookup({ teamId: context.getters.AGENT_TEAM_ID, enabled: true });
+    const { items } = await FlowsAPI.getLookup({ enabled: true });
     context.commit('SET_FLOWS', items);
   },
 };

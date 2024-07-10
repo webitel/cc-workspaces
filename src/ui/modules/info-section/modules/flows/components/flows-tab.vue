@@ -34,7 +34,6 @@ const namespace = 'ui/infoSec/flows';
 
 const store = useStore();
 
-const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM_ID`]);
 const flowsList = computed(() => getNamespacedState(store.state, namespace).flows);
 
 const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
@@ -47,7 +46,7 @@ async function loadFlowsList() {
     }
 }
 
-if (teamId.value) subscribe(loadFlowsList);
+subscribe(loadFlowsList);
 
 </script>
 
