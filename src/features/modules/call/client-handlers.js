@@ -41,6 +41,7 @@ const actions = {
 
     if (call.allowAnswer) {
       const callId = call.id;
+      console.log('HANDLE_RINGING_ACTION call:', call);
       await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {
         displayName: call.displayName,
         displayNumber: call.displayNumber,

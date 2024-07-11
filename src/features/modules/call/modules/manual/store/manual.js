@@ -16,6 +16,7 @@ const actions = {
   INITIALIZE_MANUAL_LIST: async (context) => {
     const cli = await context.rootState.client.getCliInstance();
     const manualList = cli.agent.waitingListCalls;
+    console.log('STORE manualList:', manualList);
     context.commit('SET_MANUAL_LIST', manualList);
   },
   ACCEPT_TASK: async (context, task) => {

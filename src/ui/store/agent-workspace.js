@@ -7,7 +7,10 @@ const state = {
 };
 
 const getters = {
-  TASK_ON_WORKSPACE: (state) => state.stateHistory.at(-1)?.task || {},
+  TASK_ON_WORKSPACE: (state) => {
+    console.log('TASK_ON_WORKSPACE:', state.stateHistory.at(-1)?.task);
+    return state.stateHistory.at(-1)?.task || {}
+  },
   WORKSRACE_STATE: (state) => state.stateHistory.at(-1)?.type,
   IS_EMPTY_WORKSPACE: (state, getters) => !getters.WORKSRACE_STATE,
   IS_CALL_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CALL,
