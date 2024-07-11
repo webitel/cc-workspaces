@@ -15,18 +15,12 @@
         <wt-divider />
       </div>
     </ul>
-    <wt-dummy
-      v-else
-      class="flows-tab__dummy"
-      :text="$t('infoSec.flows.dummy')"
-    />
   </section>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import FlowButton from './flow-button.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 
@@ -34,20 +28,7 @@ const namespace = 'ui/infoSec/flows';
 
 const store = useStore();
 
-const teamId = computed(() => store.getters[`${namespace}/AGENT_TEAM_ID`]);
 const flowsList = computed(() => getNamespacedState(store.state, namespace).flows);
-
-const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
-
-async function loadFlowsList() {
-    try {
-     await store.dispatch(`${namespace}/LOAD_FLOWS_LIST`);
-    } catch (err) {
-      throw err;
-    }
-}
-
-if (teamId.value) subscribe(loadFlowsList);
 
 </script>
 
