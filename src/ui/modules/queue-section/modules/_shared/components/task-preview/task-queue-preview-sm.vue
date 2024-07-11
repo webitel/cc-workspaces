@@ -114,6 +114,8 @@ export default {
 @import '../../css/queue-preview';
 
 .queue-preview-sm {
+  position: relative;
+
   .queue-preview-icon {
     flex: 0 0 var(--icon-sm-size);
   }
@@ -131,6 +133,22 @@ export default {
     display: flex;
     justify-content: space-evenly;
     width: 100%;
+  }
+
+  &:after{
+    content: '';
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #EBEDF2;
+  }
+  &:last-child:after{
+    display: none;
+    height: 0;
+    opacity: 0;
+    background-color: transparent;
   }
 }
 

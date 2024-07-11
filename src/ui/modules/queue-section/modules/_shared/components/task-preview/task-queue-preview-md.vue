@@ -94,7 +94,11 @@ export default {
 <style lang="scss" scoped>
 @import '../../css/queue-preview';
 
+
+
 .queue-preview-md {
+  position: relative;
+
   .queue-preview-icon {
     flex: 0 0 var(--icon-md-size);
   }
@@ -117,6 +121,21 @@ export default {
     display: flex;
     gap: var(--spacing-xs);
   }
-}
 
+  &:after{
+    content: '';
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--divider-border-color);
+  }
+  &:last-child:after{
+    display: none;
+    height: 0;
+    opacity: 0;
+    background-color: transparent;
+  }
+}
 </style>
