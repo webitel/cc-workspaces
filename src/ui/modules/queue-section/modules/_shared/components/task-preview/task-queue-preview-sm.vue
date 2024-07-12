@@ -115,6 +115,11 @@ export default {
 
 .queue-preview-sm {
   position: relative;
+  margin-bottom: 8px;
+
+  &:last-child{
+    margin-bottom: 0;
+  }
 
   .queue-preview-icon {
     flex: 0 0 var(--icon-sm-size);
@@ -133,22 +138,6 @@ export default {
     display: flex;
     justify-content: space-evenly;
     width: 100%;
-  }
-
-  &:after{
-    content: '';
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: var(--divider-border-color);
-  }
-  &:last-child:after{
-    display: none;
-    height: 0;
-    opacity: 0;
-    background-color: transparent;
   }
 }
 

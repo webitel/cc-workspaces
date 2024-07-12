@@ -1,15 +1,17 @@
 <template>
   <task-queue-container>
-    <job-queue-preview
-      v-for="task of taskList"
-      :key="task.id"
-      :opened="task === taskOnWorkspace"
-      :size="size"
-      :task="task"
-      @accept="task.accept()"
-      @click="openTask(task)"
-      @decline="task.decline()"
-    ></job-queue-preview>
+    <div class="job-queue-container" v-for="(task, index) of taskList">
+      <job-queue-preview
+        :key="task.id"
+        :opened="task === taskOnWorkspace"
+        :size="size"
+        :task="task"
+        @accept="task.accept()"
+        @click="openTask(task)"
+        @decline="task.decline()"
+      />
+      <wt-divider v-if="taskList.length > index + 1"/>
+    </div>
   </task-queue-container>
 </template>
 

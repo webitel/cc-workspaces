@@ -2,15 +2,17 @@
   <task-queue-container
     :empty="!manualList.length"
   >
-    <manual-preview
-      v-for="(task, key) of manualList"
-      :key="task.id"
-      :task="task"
-      :index="key"
-      :size="size"
-      @click="openTask"
-      @accept="acceptTask"
-    ></manual-preview>
+    <div v-for="(task, key) of manualList">
+      <manual-preview
+        :key="task.id"
+        :task="task"
+        :index="key"
+        :size="size"
+        @click="openTask"
+        @accept="acceptTask"
+      />
+      <wt-divider v-if="manualList && manualList.length > index + 1"/>
+    </div>
   </task-queue-container>
 </template>
 
@@ -41,5 +43,4 @@ function openTask(task) {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

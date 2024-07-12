@@ -26,10 +26,10 @@ const props = defineProps({
   flex-direction: column;
   min-height: 0;
   max-height: 100%;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
 
   &:not(.queue-task-container--empty) {
-    padding-top: var(--spacing-sm);
+    padding-top: var(--spacing-xs);
   }
 }
 </style>
