@@ -9,20 +9,10 @@ import InfoSection
 const callOnWorkspace = { state: CallActions.Active, allowReporting: true };
 
 describe('InfoSection', () => {
-  let state;
   let store;
-  state = {
-    callOnWorkspace: {
-      variables: {},
-    },
-  };
   store = createStore({
-    state,
     modules: {
-      workspace: {
-        state: {},
-        ...InfoSectionModule,
-      },
+      ...InfoSectionModule,
     },
   });
   it('renders a component', () => {
