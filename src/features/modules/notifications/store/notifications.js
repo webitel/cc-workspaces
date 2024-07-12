@@ -84,7 +84,13 @@ const actions = {
 
   // is called from mixin watcher on any ringing to play sound
   HANDLE_ANY_CALL_RINGING: async (context) => {
-    await context.dispatch('PLAY_SOUND', { action: CallActions.Ringing });
+    const ringtoneName = localStorage.getItem('settings/ringtone');
+    const customRingtone = ringtoneName ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}` : '';
+
+    await context.dispatch('PLAY_SOUND', {
+      action: CallActions.Ringing,
+      sound: customRingtone,
+    });
   },
 };
 

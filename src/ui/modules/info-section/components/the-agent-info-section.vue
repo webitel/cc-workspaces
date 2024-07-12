@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
+import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import PinAction from '../../../../app/components/utils/pin-action.vue';
@@ -49,9 +50,7 @@ import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
 import Flows from '../modules/flows/components/flows-tab.vue';
-import WebitelApplications
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
-import AdminSections from '@webitel/ui-sdk/src/enums/WebitelApplications/AdminSections.enum';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 
 export default {
   name: 'the-agent-info-section',
@@ -79,6 +78,7 @@ export default {
   data: () => ({
     currentTab: '',
     pin: false,
+    flowsNamespace: 'ui/infoSec/flows',
   }),
 
   watch: {
@@ -109,6 +109,11 @@ export default {
     },
   },
 
+  setup() {
+    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+    return { subscribe };
+  },
+
   computed: {
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
@@ -117,8 +122,10 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
-    ...mapGetters('ui/infoSec/flows', {
-      showFlows: 'ALLOW_FLOWS',
+    ...mapState({
+      flowsList(state) {
+        return getNamespacedState(state, `${this.flowsNamespace}`).flows;
+      },
     }),
     infoSecSize() {
       // should be always md if pinned
@@ -134,6 +141,10 @@ export default {
 
     showClientInfo() {
       return this.taskOnWorkspace?.id;
+    },
+
+    showFlows() {
+      return this.flowsList.length
     },
 
     hasKnowledgeBase() {
@@ -184,9 +195,21 @@ export default {
       };
     },
   },
+  methods: {
+    async loadFlowsList() {
+      try {
+        await this.$store.dispatch(`${this.flowsNamespace}/LOAD_FLOWS_LIST`);
+      } catch (err) {
+        throw err;
+      }
+    }
+  },
   created() {
     this.currentTab = this.tabsObject.generalInfo;
   },
+  mounted() {
+    this.subscribe(this.loadFlowsList);
+  }
 };
 </script>
 

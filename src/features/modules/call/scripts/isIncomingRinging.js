@@ -7,6 +7,8 @@ const isIncomingRinging = (call) => {
       call.direction === CallDirection.Inbound
       || (call.direction === CallDirection.Outbound // Outbound preview dialer
         && isPreviewDialer)
+      || (call.direction === CallDirection.Outbound // Outbound call with disable_auto_answer parameter
+      && call.allowAnswer)
     );
 };
 
