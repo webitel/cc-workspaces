@@ -142,7 +142,7 @@ export default {
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: #EBEDF2;
+    background-color: var(--divider-border-color);
   }
   &:last-child:after{
     display: none;
