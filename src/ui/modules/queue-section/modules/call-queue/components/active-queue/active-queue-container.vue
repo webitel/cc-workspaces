@@ -2,7 +2,7 @@
   <task-queue-container
     :empty="!callList.length"
   >
-    <div v-for="(task, key) of callList">
+    <div class="active-queue-container" v-for="(task, key) of callList">
       <active-preview
         :key="task.id"
         :index="key"
@@ -13,7 +13,7 @@
         @click="openCall"
         @hangup="hangup({ callId: task.id })"
       />
-      <wt-divider v-if="callList && callList.length > key + 1"/>
+      <wt-divider v-if="callList.length > key + 1"/>
     </div>
   </task-queue-container>
 </template>
@@ -52,4 +52,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .active-queue-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
 </style>

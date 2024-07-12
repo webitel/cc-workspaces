@@ -2,7 +2,7 @@
   <task-queue-container
     :empty="taskList.length === 0"
   >
-    <div v-for="(task, index) of taskList">
+    <div class="active-queue-container" v-for="(task, index) of taskList">
       <active-preview
         :task="task"
         :opened="task === taskOnWorkspace"
@@ -10,7 +10,7 @@
         :size="size"
         @click="openTask(task)"
       />
-      <wt-divider v-if="taskList && taskList.length > index + 1"/>
+      <wt-divider v-if="taskList.length > index + 1"/>
     </div>
   </task-queue-container>
 </template>
@@ -40,4 +40,9 @@ function openTask(task) {
 </script>
 
 <style lang="scss" scoped>
+  .active-queue-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
 </style>

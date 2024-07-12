@@ -11,8 +11,8 @@
           :task="task"
           :size="size"
           @click="toggleMemberDisplay(task)"
-        ></offline-preview>
-        <wt-divider v-if="dataList && dataList.length > index + 1"/>
+        />
+        <wt-divider v-if="dataList.length > index + 1"/>
       </div>
       <observer
         :options="obsOptions"
@@ -79,7 +79,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.offline-queue-container__scroll-wrap {
-  display: contents;
-}
+  .offline-queue-container__scroll-wrap {
+    display: contents;
+  }
+  .offline-queue-container__items{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
 </style>

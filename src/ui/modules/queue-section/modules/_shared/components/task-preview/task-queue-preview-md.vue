@@ -98,11 +98,6 @@ export default {
 
 .queue-preview-md {
   position: relative;
-  margin-bottom: 8px;
-
-  &:last-child{
-    margin-bottom: 0;
-  }
 
   .queue-preview-icon {
     flex: 0 0 var(--icon-md-size);

@@ -45,4 +45,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .job-queue-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
 </style>
