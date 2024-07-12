@@ -119,7 +119,7 @@ export default {
     contacts: {
       client: 'Клієнт',
       manager: 'Власник',
-      attributes: 'Атрибут | Атрибуты',
+      attributes: 'Атрибут | Атрибути',
       emptyContact: 'Контактів не знайдено',
       emptyLabels: 'Немає міток',
       emptyAttributes: 'Немає атрибутів',
