@@ -2,15 +2,17 @@
   <task-queue-container
     :empty="!missedList.length"
   >
-    <missed-preview
-      v-for="(task, key) of missedList"
-      :key="task.id"
-      :task="task"
-      :index="key"
-      :size="size"
-      @hide="hideMissed(task)"
-      @call="redial(task)"
-    ></missed-preview>
+    <div class="missed-queue-container" v-for="(task, key) of missedList">
+      <missed-preview
+        :key="task.id"
+        :task="task"
+        :index="key"
+        :size="size"
+        @hide="hideMissed(task)"
+        @call="redial(task)"
+      />
+      <wt-divider v-if="missedList.length > key + 1"/>
+    </div>
     <a
       class="missed-queue-container__more"
       v-show="next"
@@ -57,10 +59,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.missed-queue-container__more {
-  display: block;
-  text-align: center;
-  color: var(--info-color);
-  cursor: pointer;
-}
+  .missed-queue-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  .missed-queue-container__more {
+    display: block;
+    text-align: center;
+    color: var(--info-color);
+    cursor: pointer;
+  }
 </style>
