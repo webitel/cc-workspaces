@@ -69,7 +69,7 @@ const runFlowSchema = async ({ id }) => {
     return applyTransform(response.data, [
       snakeToCamel(),
       notify(({ callback }) => callback({
-        type: 'info',
+        type: 'success',
         text: t('infoSec.flows.runFlowSuccess'),
       })),
     ]);
