@@ -6,7 +6,7 @@ import websocketErrorEventHandler from './websocketErrorEventHandler';
 const { hostname, protocol } = window.location;
 const origin = (`${protocol}//${hostname}`).replace(/^http/, 'ws');
 const endpoint = import.meta.env.MODE === 'production'
-  ? `${origin}/ws`  : 'wss://dev.webitel.com/ws';
+  ? `${origin}/ws` : 'wss://dev.webitel.com/ws';
 const getConfig = () => {
   let cliConfig = {};
   try {
@@ -74,7 +74,11 @@ class WebSocketClientController {
 
     this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
     this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
-    cli.on(`show_message`, e => eventBus.$emit('notification',{ type: e.type, text: e.message, timeout: e.timeout }))
+    cli.on(`show_message`, e => eventBus.$emit('notification', {
+      type: e.type,
+      text: e.message,
+      timeout: e.timeout,
+    }));
 
     await cli.connect();
 
