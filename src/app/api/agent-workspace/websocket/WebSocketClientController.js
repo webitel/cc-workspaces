@@ -1,3 +1,4 @@
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { markRaw, reactive, shallowReactive } from 'vue';
 import { Client } from 'webitel-sdk';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
@@ -73,6 +74,7 @@ class WebSocketClientController {
 
     this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
     this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
+    cli.on(`show_message`, e => eventBus.$emit('notification',{ type: e.type, text: e.message, timeout: e.timeout }))
 
     await cli.connect();
 
