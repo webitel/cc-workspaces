@@ -94,7 +94,11 @@ export default {
 <style lang="scss" scoped>
 @import '../../css/queue-preview';
 
+
+
 .queue-preview-md {
+  position: relative;
+
   .queue-preview-icon {
     flex: 0 0 var(--icon-md-size);
   }
@@ -118,5 +122,4 @@ export default {
     gap: var(--spacing-xs);
   }
 }
-
 </style>
