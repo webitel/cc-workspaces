@@ -2,7 +2,7 @@
   <wt-popup
     class="break-timer-popup"
     v-show="isBreakPopup"
-    width="560"
+    size="sm"
     @close="close"
   >
     <template v-slot:title>

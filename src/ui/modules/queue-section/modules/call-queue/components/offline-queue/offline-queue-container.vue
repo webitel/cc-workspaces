@@ -3,15 +3,17 @@
     :empty="!dataList.length"
   >
     <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
-      <offline-preview
-        v-for="(task) of dataList"
-        :key="task.id"
-        :opened="task === taskOnWorkspace"
-        :task="task"
-        :size="size"
-        @click="toggleMemberDisplay(task)"
-      ></offline-preview>
-
+      <div class="offline-queue-container__items"
+           v-for="(task, index) of dataList"
+           :key="task.id">
+        <offline-preview
+          :opened="task === taskOnWorkspace"
+          :task="task"
+          :size="size"
+          @click="toggleMemberDisplay(task)"
+        />
+        <wt-divider v-if="dataList.length > index + 1"/>
+      </div>
       <observer
         :options="obsOptions"
         @intersect="handleIntersect"
@@ -77,7 +79,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.offline-queue-container__scroll-wrap {
-  display: contents;
-}
+  .offline-queue-container__scroll-wrap {
+    display: contents;
+  }
+  .offline-queue-container__items{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
 </style>

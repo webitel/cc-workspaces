@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
 import Contact from '../modules/contact/components/the-contact.vue';
@@ -37,10 +37,14 @@ export default {
     ...mapState('ui/userinfo', {
       scope: (state) => state.scope,
     }),
+    ...mapGetters('workspace', {
+      isJob: 'IS_JOB_WORKSPACE',
+    }),
     hasLicenseOnCrm() {
       return this.scope?.some((item) => item.class === 'contacts');
     },
     isAllowedContacts() {
+      if (this.isJob) return;
       return this.hasLicenseOnCrm && !this.task?.hideContact;
     },
   },

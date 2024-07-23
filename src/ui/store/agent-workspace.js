@@ -1,5 +1,6 @@
 import instance from '../../app/api/instance';
 import WorkspaceStates from '../enums/WorkspaceState.enum.js';
+import { CallActions, ConversationState } from 'webitel-sdk'
 
 const state = {
   stateHistory: [],
@@ -11,6 +12,11 @@ const getters = {
   IS_EMPTY_WORKSPACE: (state, getters) => !getters.WORKSRACE_STATE,
   IS_CALL_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CALL,
   IS_CHAT_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CHAT,
+  IS_JOB_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.JOB,
+  IS_TASK_ACTIVE: (state,getters) =>
+    getters.TASK_ON_WORKSPACE.state === ConversationState.Active
+    || getters.TASK_ON_WORKSPACE.state === CallActions.Active,
+  // because we need to hide contact actions if call or chat not active
 };
 
 const actions = {

@@ -121,7 +121,13 @@ const actions = {
   HANDLE_ANY_CALL_RINGING: async (context) => {
     //цей екшен грає, коли відбувається дзвінок (мав би)
     console.log('HANDLE_ANY_CALL_RINGING');
-    await context.dispatch('PLAY_SOUND', { action: CallActions.Ringing });
+    const ringtoneName = localStorage.getItem('settings/ringtone');
+    const customRingtone = ringtoneName ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}` : undefined;
+
+    await context.dispatch('PLAY_SOUND', {
+      action: CallActions.Ringing,
+      sound: customRingtone,
+    });
   },
 };
 
