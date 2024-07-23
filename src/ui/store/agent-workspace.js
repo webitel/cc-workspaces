@@ -8,7 +8,7 @@ const state = {
 
 const getters = {
   TASK_ON_WORKSPACE: (state) => {
-    console.log('TASK_ON_WORKSPACE:', state.stateHistory.at(-1)?.task);
+    console.log('TASK:', state.stateHistory.at(-1)?.task)
     return state.stateHistory.at(-1)?.task || {}
   },
   WORKSRACE_STATE: (state) => state.stateHistory.at(-1)?.type,

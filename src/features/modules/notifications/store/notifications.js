@@ -54,8 +54,9 @@ const actions = {
       answer,
       hangup,
     } = call;
-    console.log('HANDLE_INBOUND_CALL_RINGING CALL_ON_WORKSPACE:',
-      context.rootGetters['features/member/IS_OFFLINE_CALL']);
+
+    console.log('HANDLE_INBOUND_CALL_RINGING');
+
     await context.dispatch('features/swController/SUBSCRIBE_TO_MESSAGE', {
       type: 'notificationclick',
       handler: (action) => {
@@ -73,7 +74,6 @@ const actions = {
       once: true, // subscribe for each notification separately, once
     }, { root: true });
 
-    //якщо це оффлайн дзвінок або селфасігн дзвінок, то тоді
 
     // https://webitel.atlassian.net/browse/WTEL-4240
     return context.dispatch('features/swController/SEND_NOTIFICATION', {

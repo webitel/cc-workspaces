@@ -13,8 +13,6 @@
       @opened="cacheExpansionState({expansion: value, state: true })"
       @closed="cacheExpansionState({expansion: value, state: false })"
     >
-      initiallyCollapseds: {{ initiallyCollapsed }}
-      value: {{ value }}
       <template v-slot:title>
 <!--         title is for tooltip -->
         <span
@@ -76,9 +74,6 @@ const missedList = computed(() => store.state.features.call.missed.missedList);
 const missedNext = computed(() => store.state.features.call.missed.next);
 const manualList = computed(() => store.state.features.call.manual.manualList);
 const membersList = computed(() => store.state.features.member.memberList);
-
-console.log('membersList:', membersList); // офлайн черги
-console.log('manualList:', manualList); // селф асігнт черги
 
 const ringingCallsCount = computed(() => callList.value.filter((call) => call.state === CallActions.Ringing).length);
 const activeCallsCount = computed(() => callList.value.length - ringingCallsCount.value);

@@ -1,4 +1,5 @@
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
+import { QueueType } from 'webitel-sdk/esm2015/enums';
 import clientHandlers from './client-handlers';
 import missed from './modules/missed-calls/store/missed-calls';
 import manual from './modules/manual/store/manual';
@@ -28,6 +29,8 @@ const getters = {
 
   // every returns true on empty array, so we have to check for array length
   IS_ANY_RINGING: (state) => state.callList.length && state.callList.every((call) => isIncomingRinging(call)),
+
+  IS_OFFLINE_CALL: (state, getters) => getters.CALL_ON_WORKSPACE.queue.queue_type === 'offline',
 };
 
 const actions = {

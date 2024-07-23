@@ -50,7 +50,6 @@ export default {
 
   methods: {
     loadDataList() {
-      console.log('this.dataSearch:', this.dataSearch, 'this.dataPage:', this.dataPage);
       this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
     },
 
@@ -60,7 +59,6 @@ export default {
       resetWorkspace: 'RESET_WORKSPACE',
     }),
     toggleMemberDisplay(task) {
-      console.log('dataList:', this.dataList);
      this.taskOnWorkspace.id === task.id ? this.resetWorkspace() : this.openMember(task);
     },
   },

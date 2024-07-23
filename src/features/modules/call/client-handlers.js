@@ -38,10 +38,12 @@ const actions = {
       || context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       await context.dispatch('SET_WORKSPACE', call);
     }
-
-    if (call.allowAnswer) {
+    console.log('context.getters.IS_OFFLINE_CALL:', context.getters.IS_OFFLINE_CALL);
+    // have to check is call not manual or not from offline queue before send notification https://webitel.atlassian.net/browse/WTEL-4502
+    if (call.allowAnswer && !context.getters.IS_OFFLINE_CALL && !call.queue.manual_distribution) {
+      console.log('AFTER');
       const callId = call.id;
-      console.log('HANDLE_RINGING_ACTION call:', call);
+
       await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {
         displayName: call.displayName,
         displayNumber: call.displayNumber,

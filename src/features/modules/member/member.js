@@ -12,13 +12,6 @@ const getters = {
     rootGetters['workspace/WORKSRACE_STATE'] === WorkspaceStates.MEMBER && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
   IS_COMMUNICATION_SELECTED: (state) => (Number.isInteger(state.selectedCommId)),
-  IS_OFFLINE_CALL: (s, g, rS, rootGetters) => {
-    console.log('IS_OFFLINE_CALL: rootGetters[\'workspace/TASK_ON_WORKSPACE\']', rootGetters['workspace/TASK_ON_WORKSPACE'].queue.member_id
-    );
-    return state.memberList.find((member) => member.id === rootGetters['workspace/TASK_ON_WORKSPACE'].queue.member_id
-
-    );
-  },
 };
 
 const actions = {
@@ -36,7 +29,6 @@ const actions = {
     const agent = context.state.agent
       ? context.state.agent : await context.dispatch('GET_AGENT_INSTANCE');
     const response = await agent.offlineMembers(search, page, size);
-    console.log('STORE offlineMembers list:', response);
     context.commit('SET_DATA_LIST', { page, items: response.items });
   },
 
