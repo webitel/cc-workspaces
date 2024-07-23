@@ -41,7 +41,6 @@ const actions = {
 
     // have to check is call not manual or not from offline queue before send notification https://webitel.atlassian.net/browse/WTEL-4502
     if (call.allowAnswer && !context.getters.IS_OFFLINE_CALL && !call.queue.manual_distribution) {
-      console.log('AFTER');
       const callId = call.id;
 
       await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {

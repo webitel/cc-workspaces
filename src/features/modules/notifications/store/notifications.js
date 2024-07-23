@@ -71,7 +71,6 @@ const actions = {
       once: true, // subscribe for each notification separately, once
     }, { root: true });
 
-
     // https://webitel.atlassian.net/browse/WTEL-4240
     return context.dispatch('features/swController/SEND_NOTIFICATION', {
       title: i18n.global.t('notifications.newCall'),
