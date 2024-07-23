@@ -38,7 +38,7 @@ const actions = {
       || context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       await context.dispatch('SET_WORKSPACE', call);
     }
-    console.log('context.getters.IS_OFFLINE_CALL:', context.getters.IS_OFFLINE_CALL);
+
     // have to check is call not manual or not from offline queue before send notification https://webitel.atlassian.net/browse/WTEL-4502
     if (call.allowAnswer && !context.getters.IS_OFFLINE_CALL && !call.queue.manual_distribution) {
       console.log('AFTER');

@@ -44,18 +44,7 @@ const actions = {
   },
 
   // is called on ringing event on call store to send notification
-  HANDLE_INBOUND_CALL_RINGING: async (
-    context,
-    call,
-  ) => {
-    const {
-      displayName,
-      displayNumber,
-      answer,
-      hangup,
-    } = call;
-
-    console.log('HANDLE_INBOUND_CALL_RINGING');
+  HANDLE_INBOUND_CALL_RINGING: async (context) => {
 
     await context.dispatch('features/swController/SUBSCRIBE_TO_MESSAGE', {
       type: 'notificationclick',
