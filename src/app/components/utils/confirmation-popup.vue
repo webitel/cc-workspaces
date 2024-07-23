@@ -1,6 +1,7 @@
 <template>
   <wt-popup
     class="confirmation-popup"
+    size="sm"
     @close="close"
   >
     <template v-slot:title>

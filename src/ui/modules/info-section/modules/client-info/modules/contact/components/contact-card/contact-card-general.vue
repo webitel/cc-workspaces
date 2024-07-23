@@ -46,7 +46,7 @@
       </ul>
     </div>
     <wt-button
-      v-if="!props.linked"
+      v-if="!props.linked && isTaskActive"
       color="success"
       class="contact-card-general__button"
       @click="emit('link')"
@@ -58,6 +58,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 
 const props = defineProps({
   size: {
@@ -75,11 +76,13 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const store = useStore();
 
 const emit = defineEmits([
   'link',
 ]);
 
+const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 const name = computed(() => props.contact.name?.commonName);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);

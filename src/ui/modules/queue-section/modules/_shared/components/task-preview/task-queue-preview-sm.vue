@@ -114,6 +114,8 @@ export default {
 @import '../../css/queue-preview';
 
 .queue-preview-sm {
+  position: relative;
+
   .queue-preview-icon {
     flex: 0 0 var(--icon-sm-size);
   }

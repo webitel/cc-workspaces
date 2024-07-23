@@ -1,6 +1,6 @@
 <template>
 <!--  v-show instead of v-if: https://my.webitel.com/browse/WTEL-2827 -->
-  <wt-popup v-show="isDisconnectPopup" class="disconnect-popup" min-width="480" @close="closePopup">
+  <wt-popup v-show="isDisconnectPopup" class="disconnect-popup" size="sm" @close="closePopup">
     <template v-slot:title>{{ $t('disconnectPopup.title') }}</template>
     <template v-slot:main>
       <article class="disconnect-popup__main">

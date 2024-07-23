@@ -1,5 +1,5 @@
 <template>
-  <wt-popup @close="close">
+  <wt-popup @close="close" size="sm">
     <template v-slot:title>
       {{ $t('welcomePopup.title') }}
     </template>

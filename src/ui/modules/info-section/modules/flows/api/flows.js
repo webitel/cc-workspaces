@@ -31,14 +31,13 @@ const getFlowSchemasList = async (params) => {
     fields,
     id,
     enabled,
-    teamId,
   } = applyTransform(params, [
     starToSearch('search'),
   ]);
 
   try {
-    const response = await flowSchemaService.searchTeamTrigger(
-      teamId,
+    const response = await flowSchemaService.searchAgentTrigger(
+      undefined,
       page,
       size,
       search,
@@ -70,7 +69,7 @@ const runFlowSchema = async ({ id }) => {
     return applyTransform(response.data, [
       snakeToCamel(),
       notify(({ callback }) => callback({
-        type: 'info',
+        type: 'success',
         text: t('infoSec.flows.runFlowSuccess'),
       })),
     ]);
