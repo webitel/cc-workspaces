@@ -1,5 +1,4 @@
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
-import { QueueType } from 'webitel-sdk/esm2015/enums';
 import clientHandlers from './client-handlers';
 import missed from './modules/missed-calls/store/missed-calls';
 import manual from './modules/manual/store/manual';
