@@ -3,12 +3,10 @@ import NotificationsStoreModule
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { CallActions } from 'webitel-sdk';
 import i18n from '../../../../app/locale/i18n';
-import endCallSound from '../store/end-call.mp3';
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
 const state = {
-  // isHangupAction: false,
   isHangupSoundAllowed: false,
 };
 
