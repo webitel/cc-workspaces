@@ -7,6 +7,11 @@ import endCallSound from '../store/end-call.mp3';
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
+const state = {
+  // isHangupAction: false,
+  isHangupSoundAllowed: false,
+};
+
 const actions = {
   // utils
   HANDLE_CHAT_EVENT: (context, { action, chat }) => {
@@ -38,43 +43,17 @@ const actions = {
     context.commit('SET_CURRENTLY_PLAYING', true);
   },
 
-  HANDLE_CALL_END: async (context) => {
-    console.log('HANDLE_CALL_END context', context);
-    await context.dispatch('PLAY_SOUND', { action: CallActions.Hangup });
-    //булоб гарно програвання звуку засунути саме сюди
+  HANDLE_CALL_END: async (context, call) => {
     await context.dispatch('STOP_SOUND'); // ringing
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    // if (call.state === CallActions.Hangup) {
-    //   await context.dispatch('PLAY_SOUND', { action: CallActions.Hangup });
-    // }
-  },
+    if (call.state === CallActions.Hangup
+      && localStorage.getItem('settings/callEndSound')
+      && context.state.isHangupSoundAllowed) {
 
-  PLAY_SOUND: (context, {
-    action,
-    sound = endCallSound,
-  }) => {
-    if (context.getters.IS_SOUND_ALLOWED
-      && !localStorage.getItem('wtIsPlaying')
-    ) {
-
-      console.log('PLAY_SOUND');
-      // if (action === CallActions.Hangup
-      //   && !localStorage.getItem('settings/callEndSound'))
-      //   return;
-
-      const audio = sound instanceof Audio ? sound : new Audio(sound);
-
-      audio.addEventListener('ended', () => {
-        context.dispatch('STOP_SOUND');
-      }, { once: true });
-
-      if (action === CallActions.Ringing) audio.loop = true;
-
-      audio.play();
-      localStorage.setItem('wtIsPlaying', 'true');
-      context.commit('SET_CURRENTLY_PLAYING', audio);
+      await context.dispatch('PLAY_SOUND', { action: call.state });
+      // context.commit('SET_HANGUP_STATE', false);
     }
   },
 
@@ -119,8 +98,6 @@ const actions = {
 
   // is called from mixin watcher on any ringing to play sound
   HANDLE_ANY_CALL_RINGING: async (context) => {
-    //цей екшен грає, коли відбувається дзвінок (мав би)
-    console.log('HANDLE_ANY_CALL_RINGING');
     const ringtoneName = localStorage.getItem('settings/ringtone');
     const customRingtone = ringtoneName ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}` : undefined;
 
@@ -131,9 +108,17 @@ const actions = {
   },
 };
 
+const mutations = {
+  SET_HANGUP_STATE: (state, value) => {
+    state.isHangupSoundAllowed = value;
+  },
+}
+
 const notifications = new NotificationsStoreModule()
 .getModule({
+  state,
   actions,
+  mutations,
 });
 
 export default notifications;

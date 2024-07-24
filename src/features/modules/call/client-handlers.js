@@ -10,7 +10,6 @@ const callHandler = (context) => (action, call) => {
       context.dispatch('HANDLE_ACTIVE_ACTION', call);
       break;
     case CallActions.Hangup:
-      console.log('callHandler CallActions.Hangup');
       context.dispatch('HANDLE_HANGUP_ACTION', call);
       break;
     case CallActions.Destroy:
@@ -57,9 +56,9 @@ const actions = {
   },
 
   HANDLE_DESTROY_ACTION: async (context, call) => {
-    console.log('HANDLE_DESTROY_ACTION');
+    console.log('HANDLE_DESTROY_ACTION context:', context);
     // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
-    await context.dispatch('HANDLE_CALL_END');
+    await context.dispatch('HANDLE_CALL_END', call);
 
     context.commit('REMOVE_CALL', call);
 
@@ -81,20 +80,22 @@ const actions = {
     }
   },
 
-  HANDLE_HANGUP_ACTION: (context, call) => {
-    console.log('HANDLE_HANGUP_ACTION call.workspaceAudio:', call.workspaceAudio);
+  HANDLE_HANGUP_ACTION: async (context, call) => {
+    // console.log('HANDLE_HANGUP_ACTION context:', context);
     if (call.workspaceAudio) {
       call.workspaceAudio.pause()
       call.workspaceAudio = null
     }
-    // play sound ?
+
+    context.commit('features/notifications/SET_HANGUP_STATE', true, { root: true });
   },
 
   HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),
 
-  HANDLE_CALL_END: (context) => context.dispatch('features/notifications/HANDLE_CALL_END', null, { root: true }),
+  HANDLE_CALL_END: (context,  call) => context.dispatch('features/notifications/HANDLE_CALL_END', call, { root: true }),
 };
 
 export default {
   actions,
+  // mutations,
 };
