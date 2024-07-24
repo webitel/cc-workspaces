@@ -56,7 +56,6 @@ const actions = {
   },
 
   HANDLE_DESTROY_ACTION: async (context, call) => {
-    console.log('HANDLE_DESTROY_ACTION context:', context);
     // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
     await context.dispatch('HANDLE_CALL_END', call);
 
@@ -81,7 +80,6 @@ const actions = {
   },
 
   HANDLE_HANGUP_ACTION: async (context, call) => {
-    // console.log('HANDLE_HANGUP_ACTION context:', context);
     if (call.workspaceAudio) {
       call.workspaceAudio.pause()
       call.workspaceAudio = null
