@@ -25,6 +25,7 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ContactCardPhones from './contact-card-phones.vue';
 import ContactCardEmails from './contact-card-emails.vue';
+import ContactCardMessages from './contact-card-messages.vue';
 
 const props = defineProps({
   size: {
@@ -45,6 +46,11 @@ const tabs = computed(() => [
     text: t('vocabulary.phones', 2),
     value: 'phones',
     component: ContactCardPhones,
+  },
+  {
+    text: t('vocabulary.messaging', 2),
+    value: 'messaging',
+    component: ContactCardMessages,
   },
   {
     text: t('vocabulary.emails', 2),

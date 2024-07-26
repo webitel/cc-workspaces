@@ -9,11 +9,11 @@
       >
         <wt-divider v-if="idx"/>
         <div class="contact-card-messaging__wrapper">
-          <wt-icon
-            :icon="iconType[protocol]"
-          />
           <div class="contact-card-messaging__inner">
-            <p> {{ t(`objects.messengers.${protocol}`) }} </p>
+            <wt-icon
+              :icon="iconType[protocol]"
+            />
+            <p> {{ $t(`objects.messengers.${protocol}`) }} </p>
           </div>
           <p>{{ app.name }}</p>
         </div>
@@ -37,7 +37,7 @@ const props = defineProps({
   },
 });
 
-const chats = computed(() => props.contact.imclients);
+const chats = computed(() => props.contact.imclients.data);
 
 const iconType = {
   [ChatGatewayProvider.TELEGRAM_BOT]: 'telegram-bot',
