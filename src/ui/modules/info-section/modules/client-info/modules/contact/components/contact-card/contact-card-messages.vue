@@ -5,11 +5,11 @@
       <li
         v-for="({ id, protocol, app }, idx) of chats"
         :key="id"
-        class="contact-card-messaging__item"
+        class="contact-card-messaging-item"
       >
         <wt-divider v-if="idx"/>
         <div class="contact-card-messaging__wrapper">
-          <div class="contact-card-messaging__inner">
+          <div class="contact-card-messaging-inner">
             <wt-icon
               :icon="iconType[protocol]"
             />
@@ -53,7 +53,7 @@ const iconType = {
 
 <style lang="scss" scoped>
 .contact-card-messaging {
-  &__item {
+  &-item {
     display: flex;
     flex-direction: column;
     justify-items: flex-start;
@@ -65,7 +65,7 @@ const iconType = {
     padding: var(--spacing-xs);
   }
 
-  &__inner {
+  &-inner {
     display: flex;
     gap: var(--spacing-xs);
   }
