@@ -90,6 +90,8 @@ export default {
           return 'instagram';
         case 'facebook':
           return 'messenger-facebook';
+        case 'custom':
+          return 'messenger-custom';
         default:
           return member.type;
       }
