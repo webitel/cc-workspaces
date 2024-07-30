@@ -9,7 +9,7 @@
       >
         <wt-divider v-if="idx"/>
         <div class="contact-card-messaging__wrapper">
-          <div class="contact-card-messaging-inner">
+          <div class="contact-card-messaging-protocol">
             <wt-icon
               :icon="iconType[protocol]"
             />
@@ -65,7 +65,7 @@ const iconType = {
     padding: var(--spacing-xs);
   }
 
-  &-inner {
+  &-protocol {
     display: flex;
     gap: var(--spacing-xs);
   }
