@@ -22,7 +22,7 @@ const props = defineProps({
     required: true,
   },
   size: {
-    type: Boolean,
+    type: String,
     required: false,
   }
 });
