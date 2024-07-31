@@ -10,7 +10,9 @@
           <span class="flows-tab-item__name">
             {{ flow.name }}
           </span>
-          <flow-button :item="flow"/>
+          <flow-button class="flow-tab__button"
+                       :item="flow" :size="size ? size : 'md'"
+          />
         </li>
         <wt-divider />
       </div>
@@ -25,6 +27,13 @@ import FlowButton from './flow-button.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 
 const namespace = 'ui/infoSec/flows';
+
+const props = defineProps({
+  size: {
+    type: String,
+    required: false,
+  },
+});
 
 const store = useStore();
 
@@ -58,5 +67,8 @@ const flowsList = computed(() => getNamespacedState(store.state, namespace).flow
   &__dummy {
     flex-grow: 1;
   }
+}
+:deep(.flow-tab__button.wt-button.wt-button--size-sm){
+  min-width: 0;
 }
 </style>
