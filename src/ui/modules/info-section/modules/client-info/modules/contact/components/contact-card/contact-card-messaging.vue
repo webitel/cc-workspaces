@@ -71,7 +71,7 @@ const iconType = {
   }
 
   &--sm {
-    .contact-card-emails__wrapper {
+    .contact-card-messaging__wrapper {
       display: block;
     }
   }
