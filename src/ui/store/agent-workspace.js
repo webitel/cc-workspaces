@@ -47,12 +47,12 @@ const actions = {
   },
 
   CLOSE_SESSION: (context) => Promise
-    .allSettled([
-                  context.dispatch('ui/now/CLEAR_NOW_WATCHER', null, { root: true }),
-                  context.rootState.client.destroyCliInstance(),
-                  context.dispatch('features/globals/RESET_GLOBAL_HANDLERS', null, { root: true }),
-                  context.dispatch('features/notifications/DESTROY', null, { root: true }),
-                ]),
+  .allSettled([
+    context.dispatch('ui/now/CLEAR_NOW_WATCHER', null, { root: true }),
+    context.rootState.client.destroyCliInstance(),
+    context.dispatch('features/globals/RESET_GLOBAL_HANDLERS', null, { root: true }),
+    context.dispatch('features/notifications/DESTROY', null, { root: true }),
+  ]),
 
   SET_WORKSPACE_STATE: (context, payload) => {
     context.commit('ADD_WORKSPACE_STATE', payload);
