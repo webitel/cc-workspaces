@@ -10,8 +10,8 @@
       :key="value"
       :collapsed="initiallyCollapsed"
       :size="size"
-      @closed="cacheExpansionState({expansion: value, state: false })"
-      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="cacheExpansionState({ expansion: value, state: false })"
+      @opened="cacheExpansionState({ expansion: value, state: true })"
     >
       <template v-slot:title>
         <span
@@ -72,7 +72,7 @@ const activeTasks = computed(() => taskList.value.filter((task) => task.state !=
 const expansions = computed(() => [
   {
     value: 'active',
-    initiallyCollapsed: restoreExpansionState('active'),
+    initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
     counters: [
       {
         color: 'main',
