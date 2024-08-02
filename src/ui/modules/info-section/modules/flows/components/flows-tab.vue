@@ -11,7 +11,9 @@
             {{ flow.name }}
           </span>
           <flow-button class="flow-tab__button"
-                       :item="flow" :size="size ? size : 'md'"
+                       :item="flow"
+                       :size="size ? size : 'md'"
+                       width-by-content
           />
         </li>
         <wt-divider />
@@ -67,8 +69,5 @@ const flowsList = computed(() => getNamespacedState(store.state, namespace).flow
   &__dummy {
     flex-grow: 1;
   }
-}
-:deep(.flow-tab__button.wt-button.wt-button--size-sm){
-  min-width: 0;
 }
 </style>
