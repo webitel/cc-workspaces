@@ -35,7 +35,6 @@
         :my="my"
       ></message-text>
     </div>
-    {{ taskOnWorkspace.state }}
     <message-meta
       :message="message"
       :my="my"
@@ -44,7 +43,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import MessageAvatar from './chat-message-avatar.vue';
 import MessageAudio from './chat-message-audio.vue';
 import MessageText from './chat-message-text.vue';
@@ -78,9 +76,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
     my() {
       return !!this.message.member?.self;
     },

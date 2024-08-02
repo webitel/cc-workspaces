@@ -29,7 +29,6 @@ const actions = {
   },
 
   ADD_CHAT: (context, chat) => {
-    console.log('ADD_CHAT:', chat)
     context.commit('ADD_CHAT', chat);
   },
 
