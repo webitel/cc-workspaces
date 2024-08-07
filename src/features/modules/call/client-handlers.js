@@ -85,7 +85,8 @@ const actions = {
       call.workspaceAudio = null
     }
 
-    context.commit('features/notifications/SET_HANGUP_STATE', true, { root: true });
+    if (localStorage.getItem('settings/callEndSound'))
+      context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, { root: true });
   },
 
   HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),

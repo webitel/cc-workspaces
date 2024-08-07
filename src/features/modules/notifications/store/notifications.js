@@ -7,7 +7,7 @@ import i18n from '../../../../app/locale/i18n';
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
 const state = {
-  isHangupSoundAllowed: false,
+  isHangupSoundAllowed: false, // for prevent STOP_SOUND before we play hangup sound after call end
 };
 
 const actions = {
@@ -47,11 +47,8 @@ const actions = {
     context.commit('SET_CURRENTLY_PLAYING', null);
 
     if (call.state === CallActions.Hangup
-      && localStorage.getItem('settings/callEndSound')
       && context.state.isHangupSoundAllowed) {
-
       await context.dispatch('PLAY_SOUND', { action: call.state });
-      // context.commit('SET_HANGUP_STATE', false);
     }
   },
 
@@ -107,7 +104,7 @@ const actions = {
 };
 
 const mutations = {
-  SET_HANGUP_STATE: (state, value) => {
+  SET_HANGUP_SOUND_ALLOW: (state, value) => {
     state.isHangupSoundAllowed = value;
   },
 }
