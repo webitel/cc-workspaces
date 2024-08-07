@@ -27,6 +27,8 @@ const getters = {
 
   // every returns true on empty array, so we have to check for array length
   IS_ANY_RINGING: (state) => state.callList.length && state.callList.every((call) => isIncomingRinging(call)),
+
+  IS_OFFLINE_CALL: (state, getters) => getters.CALL_ON_WORKSPACE.queue.queue_type === 'offline',
 };
 
 const actions = {
