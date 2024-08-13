@@ -82,15 +82,10 @@ const actions = {
   },
 
   HANDLE_HANGUP_ACTION: async (context, call) => {
-    const isCallEndSound = localStorage.getItem('settings/callEndSound');
-
     if (call.workspaceAudio) {
       call.workspaceAudio.pause()
       call.workspaceAudio = null
     }
-
-    if (isCallEndSound)
-      context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, { root: true });
   },
 
   HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),

@@ -25,6 +25,7 @@ const actions = {
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
+
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
     context.dispatch('PLAY_SOUND', { action });
     if (!document.hasFocus() && context.getters.IS_MAIN_TAB) {
@@ -42,12 +43,14 @@ const actions = {
   },
 
   HANDLE_CALL_END: async (context, call) => {
+    const isCallEndSound = localStorage.getItem('settings/callEndSound');
+
     await context.dispatch('STOP_SOUND'); // ringing
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    if (call.state === CallActions.Hangup
-      && context.state.isHangupSoundAllowed) {
+    if (call.state === CallActions.Hangup && isCallEndSound) {
+      context.commit('SET_HANGUP_SOUND_ALLOW', true);
       await context.dispatch('PLAY_SOUND', { action: call.state });
     }
   },
@@ -101,6 +104,10 @@ const actions = {
       sound: customRingtone,
     });
   },
+
+  HANDLE_HANGUP_SOUND_ALLOW: (context, payload) => {
+    context.commit('SET_HANGUP_SOUND_ALLOW', payload);
+  }
 };
 
 const mutations = {

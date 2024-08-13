@@ -10,7 +10,7 @@ export default {
       else {
         // need prevent stopPlaying() if we want play hangup sound after call end
         this.isHangupSoundAllowed
-          ? this.setHangupSoundAllowance(false) // must turn back HangupSoundAllowance in default value
+          ? this.changeHangupSoundAllowance(false) // must turn back isHangupSoundAllowed state in default value
           : this.stopPlaying();
       }
     },
@@ -29,9 +29,7 @@ export default {
     ...mapActions('features/notifications', {
       playRinging: 'HANDLE_ANY_CALL_RINGING',
       stopPlaying: 'STOP_SOUND',
-    }),
-    ...mapMutations('features/notifications', {
-      setHangupSoundAllowance: 'SET_HANGUP_SOUND_ALLOW',
+      changeHangupSoundAllowance: 'HANDLE_HANGUP_SOUND_ALLOW',
     }),
   },
 };
