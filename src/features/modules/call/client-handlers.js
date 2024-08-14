@@ -59,7 +59,7 @@ const actions = {
 
   HANDLE_DESTROY_ACTION: async (context, call) => {
     // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
-    await context.dispatch('HANDLE_CALL_END');
+    await context.dispatch('HANDLE_CALL_END', call);
 
     context.commit('REMOVE_CALL', call);
 
@@ -81,7 +81,7 @@ const actions = {
     }
   },
 
-  HANDLE_HANGUP_ACTION: (context, call) => {
+  HANDLE_HANGUP_ACTION: async (context, call) => {
     if (call.workspaceAudio) {
       call.workspaceAudio.pause()
       call.workspaceAudio = null
@@ -90,7 +90,7 @@ const actions = {
 
   HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),
 
-  HANDLE_CALL_END: (context) => context.dispatch('features/notifications/HANDLE_CALL_END', null, { root: true }),
+  HANDLE_CALL_END: (context,  call) => context.dispatch('features/notifications/HANDLE_CALL_END', call, { root: true }),
 };
 
 export default {

@@ -42,7 +42,7 @@
     </template>
 
     <template
-      v-if="isIncomingRinging"
+      v-if="isRinging"
       v-slot:actions
     >
       <wt-button
@@ -100,14 +100,14 @@
     </template>
 
     <template
-      v-if="!isIncomingRinging"
+      v-if="!isRinging"
       v-slot:subtitle
     >
       <queue-preview-timer :task="task" />
     </template>
 
     <template
-      v-if="isIncomingRinging"
+      v-if="isRinging"
       v-slot:actions
     >
       <wt-rounded-action
@@ -160,10 +160,6 @@ export default {
     },
 
     isRinging() {
-      return this.task.state === CallActions.Ringing;
-    },
-
-    isIncomingRinging() {
       return isIncomingRinging(this.task);
     },
 
