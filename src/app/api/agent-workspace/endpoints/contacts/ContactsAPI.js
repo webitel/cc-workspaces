@@ -6,10 +6,10 @@ import applyTransform, {
 
   notify,
   sanitize,
-} from '@webitel/ui-sdk/src/api/transformers';
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
 import {
   getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults';
+} from '@webitel/ui-sdk/src/api/defaults/index.js';
 import { ContactsApiFactory } from 'webitel-sdk';
 import configuration from '../../../openAPIConfig';
 import instance from '../../../instance';

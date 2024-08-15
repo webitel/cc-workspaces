@@ -5,7 +5,7 @@ import applyTransform, {
   notify,
   snakeToCamel,
   starToSearch,
-} from '@webitel/ui-sdk/src/api/transformers';
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
 import instance from '../../../instance';
 import configuration from '../../../openAPIConfig';
 

@@ -4,8 +4,8 @@ import configuration from '../../../openAPIConfig';
 import applyTransform, {
   merge, mergeEach, notify,
   snakeToCamel,
-} from '@webitel/ui-sdk/src/api/transformers';
-import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults';
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
 
 const agentPauseCauseService = new AgentServiceApiFactory(configuration, '', instance);
 
