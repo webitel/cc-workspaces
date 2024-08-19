@@ -49,7 +49,7 @@ const actions = {
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    if (call.state === CallActions.Hangup && isCallEndSound) {
+    if (call.state === CallActions.Hangup && isCallEndSound && call.answeredAt) {
       context.commit('SET_HANGUP_SOUND_ALLOW', true);
       await context.dispatch('PLAY_SOUND', { action: call.state });
     }
