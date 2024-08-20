@@ -144,6 +144,7 @@ export default {
         await this.send(draft);
       } catch {
         this.chat.draft = draft;
+        console.info('FAIL HAPPENeD');
       }
     },
     setupHotkeys() {
