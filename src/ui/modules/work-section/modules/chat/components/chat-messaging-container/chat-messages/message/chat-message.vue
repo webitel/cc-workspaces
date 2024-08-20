@@ -79,11 +79,15 @@ export default {
     my() {
       return !!this.message.member?.self;
     },
+    isAgent() {
+      // after chat transfer we need to identify messages from another agent
+      return this.message.member?.type === 'webitel';
+    },
     isBot() {
       return !this.message.channelId;
     },
     isAgentSideMessage() {
-      return this.my || this.isBot;
+      return this.my || this.isAgent || this.isBot;
     },
   },
   methods: {

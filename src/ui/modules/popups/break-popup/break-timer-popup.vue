@@ -76,6 +76,13 @@ export default {
       },
       immediate: true,
     },
+    breakInfo: {
+      handler() {
+        if (this.agentStatus === AgentStatus.Pause
+          || this.agentStatus === AgentStatus.BreakOut) this.isBreakPopupValue = true;
+      },
+      immediate: true,
+    },
   },
 
   computed: {

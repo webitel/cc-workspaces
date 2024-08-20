@@ -3,6 +3,7 @@
       color="success"
       :loading="isLoading"
       @click="runFlow"
+      :size="size ? size : 'md'"
     >
       {{ $t('reusable.run') }}
     </wt-button>
@@ -20,6 +21,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  size: {
+    type: String,
+    required: false,
+  }
 });
 
 const isLoading = ref(false);

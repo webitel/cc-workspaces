@@ -3,7 +3,7 @@ import applyTransform, {
   merge,
   notify,
   snakeToCamel,
-} from '@webitel/ui-sdk/src/api/transformers';
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import configuration from '../../../../app/api/openAPIConfig';
 import instance from '../../../../app/api/instance';

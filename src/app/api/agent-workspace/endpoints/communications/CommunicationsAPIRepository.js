@@ -6,8 +6,8 @@ import applyTransform, {
   merge, notify,
   snakeToCamel,
   starToSearch
-} from '@webitel/ui-sdk/src/api/transformers';
-import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults';
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
 

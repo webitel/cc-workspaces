@@ -6,6 +6,10 @@ import i18n from '../../../../app/locale/i18n';
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
+const state = {
+  isHangupSoundAllowed: false, // for prevent STOP_SOUND before we play hangup sound after call end
+};
+
 const actions = {
   // utils
   HANDLE_CHAT_EVENT: (context, { action, chat }) => {
@@ -21,6 +25,7 @@ const actions = {
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
+
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
     context.dispatch('PLAY_SOUND', { action });
     if (!document.hasFocus() && context.getters.IS_MAIN_TAB) {
@@ -37,10 +42,20 @@ const actions = {
     context.commit('SET_CURRENTLY_PLAYING', true);
   },
 
-  HANDLE_CALL_END: async (context) => {
+  HANDLE_CALL_END: async (context, call) => {
+    const isCallEndSound = localStorage.getItem('settings/callEndSound');
+
     await context.dispatch('STOP_SOUND'); // ringing
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
+
+    if (call.state === CallActions.Hangup
+      && isCallEndSound // is sound allowed in settings
+      && call.answeredAt // is call was answered
+    ) {
+      context.commit('SET_HANGUP_SOUND_ALLOW', true);
+      await context.dispatch('PLAY_SOUND', { action: call.state });
+    }
   },
 
   // is called on ringing event on call store to send notification
@@ -87,16 +102,32 @@ const actions = {
     const ringtoneName = localStorage.getItem('settings/ringtone');
     const customRingtone = ringtoneName ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}` : undefined;
 
-    await context.dispatch('PLAY_SOUND', {
+    const playSound = () => context.dispatch('PLAY_SOUND', {
       action: CallActions.Ringing,
       sound: customRingtone,
     });
+
+    // sometimes we need to wait when call end sound is finished before playing ringtone
+    // https://webitel.atlassian.net/browse/WTEL-4918
+    context.state.currentlyPlaying ? setTimeout(playSound, 1000) : playSound();
   },
+
+  HANDLE_HANGUP_SOUND_ALLOW: (context, payload) => {
+    context.commit('SET_HANGUP_SOUND_ALLOW', payload);
+  }
 };
+
+const mutations = {
+  SET_HANGUP_SOUND_ALLOW: (state, value) => {
+    state.isHangupSoundAllowed = value;
+  },
+}
 
 const notifications = new NotificationsStoreModule()
 .getModule({
+  state,
   actions,
+  mutations,
 });
 
 export default notifications;
