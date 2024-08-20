@@ -61,8 +61,10 @@
 </template>
 
 <script>
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
+import i18n from '../../../../../../../app/locale/i18n.js';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import ChatEmoji from './chat-emoji.vue';
@@ -144,7 +146,10 @@ export default {
         await this.send(draft);
       } catch {
         this.chat.draft = draft;
-        console.info('FAIL HAPPENeD');
+        this.$eventBus.$emit('notification', {
+          type: 'error',
+          text: this.$t('error.general'),
+        });
       }
     },
     setupHotkeys() {
