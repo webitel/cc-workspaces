@@ -49,7 +49,10 @@ const actions = {
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    if (call.state === CallActions.Hangup && isCallEndSound) {
+    if (call.state === CallActions.Hangup
+      && isCallEndSound // is sound allowed in settings
+      && call.answeredAt // is call was answered
+    ) {
       context.commit('SET_HANGUP_SOUND_ALLOW', true);
       await context.dispatch('PLAY_SOUND', { action: call.state });
     }
@@ -99,10 +102,14 @@ const actions = {
     const ringtoneName = localStorage.getItem('settings/ringtone');
     const customRingtone = ringtoneName ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}` : undefined;
 
-    await context.dispatch('PLAY_SOUND', {
+    const playSound = () => context.dispatch('PLAY_SOUND', {
       action: CallActions.Ringing,
       sound: customRingtone,
     });
+
+    // sometimes we need to wait when call end sound is finished before playing ringtone
+    // https://webitel.atlassian.net/browse/WTEL-4918
+    context.state.currentlyPlaying ? setTimeout(playSound, 1000) : playSound();
   },
 
   HANDLE_HANGUP_SOUND_ALLOW: (context, payload) => {

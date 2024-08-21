@@ -248,6 +248,7 @@ export default {
     },
   },
   error: {
+    general: 'An error occured. Please, try again.',
     websocket: {
       [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
       [DeviceNotAllowPermissionError.id]: 'Microphone access is denied. Cannot perform action.',
