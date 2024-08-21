@@ -25,3 +25,4 @@ import './ws-doc.svg';
 import './ws-pause.svg';
 import './ws-breakout.svg';
 import './ws-user-description.svg';
+import './ws-link.svg';

@@ -13,15 +13,25 @@
     </template>
 
     <template v-slot:content>
-      <history-lookup-item
-        v-for="(item) of dataList"
-        :key="item.id"
-        :item="item"
-        :size="size"
-        :for-number="historyNumber"
-        @input="select(item)"
-      ></history-lookup-item>
+      <div class="historyContainerContact"
+        v-for="dataItem in dataList">
+        <p class="historyContainerContact__caption">
+          {{dataItem.groupName}}
+        </p>
+        <history-lookup-item
+          v-for="(item) of dataItem.groupData"
+          :key="item.id"
+          :item="item"
+          :size="size"
+          :for-number="historyNumber"
+          @input="select(item)"
+          class="historyContainerContact__item"
+        />
+        <wt-divider/>
+      </div>
+
     </template>
+
   </lookup-item-container>
 </template>
 
@@ -57,7 +67,7 @@ export default {
   watch: {
     call() {
       this.resetHistoryNumber();
-      this.loadDataList();
+      this.loadDataListHistory();
     },
   },
 
@@ -135,4 +145,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .historyContainerContact{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+    padding-top: var(--spacing-2xs);
+
+    &__caption{
+      @extend %typo-caption;
+      text-align: center;
+    }
+  }
 </style>
+

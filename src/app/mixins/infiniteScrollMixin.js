@@ -52,10 +52,59 @@ export default {
       // both items and data because contacts return { data }, and other endpoints return { items }
       const { items, data, next } = await this.fetch(params);
       this.isNext = next;
-      this.setData(items || data);
+      const sortedData = await this.groupAndSortByDate(items || data);
+      this.setData(sortedData);
       this.dataPage += 1;
       this.isLoading = false;
     },
+
+    formatDate(timestamp) {
+      const date = new Date(parseInt(timestamp));
+      return `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+    },
+
+    isToday(date) {
+      const today = new Date();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    },
+
+    async loadDataListHistory() {
+      if (!this.dataList.length) this.isLoading = true;
+      const params = this.collectParams();
+      const { items, data, next } = await this.fetch(params);
+
+      this.isNext = next;
+      this.setData(this.groupAndSortByDate(items || data));
+      this.dataPage += 1;
+      this.isLoading = false;
+    },
+
+    groupAndSortByDate(data) {
+       const groupedData = {};
+       data.forEach(item => {
+         const date = new Date(parseInt(item.createdAt));
+         let dateKey;
+
+         this.isToday(date) ? dateKey = this.$t('history.today'):
+         dateKey = this.formatDate(item.createdAt);
+
+         if (!groupedData[dateKey]) groupedData[dateKey] = [];
+         groupedData[dateKey].push(item);
+       });
+
+       const result = Object.keys(groupedData).map(key => {
+         return {
+           groupName: key,
+           groupData: groupedData[key].sort((a, b) => b.createdAt - a.createdAt)
+         };
+       });
+
+       return result;
+},
 
     async handleIntersect() {
       if (this.isNext) {
