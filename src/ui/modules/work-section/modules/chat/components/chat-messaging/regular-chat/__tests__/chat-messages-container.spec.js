@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ChatMessagesContainer from '../chat-messages-container.vue';
+import ChatMessagesContainer from '../regular-chat.vue';
 
 const chat = {
   messages: [],

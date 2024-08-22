@@ -5,19 +5,19 @@
     >
     <div class="task-header-actions">
       <div class="task-header-actions__action-section">
-        <slot name="before-avatar"></slot>
+        <slot name="before-avatar"/>
       </div>
-      <wt-avatar :size="size"></wt-avatar>
+      <wt-avatar :size="size" :username="username"/>
       <div class="task-header-actions__action-section">
-        <slot name="after-avatar"></slot>
+        <slot name="after-avatar"/>
       </div>
     </div>
     <div class="task-header-info">
       <p class="task-header-info__title">
-        <slot name="title"></slot>
+        <slot name="title"/>
       </p>
       <p class="task-header-info__subtitle">
-        <slot name="subtitle"></slot>
+        <slot name="subtitle"/>
       </p>
     </div>
   </header>
@@ -29,6 +29,12 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 export default {
   name: 'task-header',
   mixins: [sizeMixin],
+  props: {
+    username: {
+      type: String,
+      default: '',
+    },
+  },
 };
 </script>
 

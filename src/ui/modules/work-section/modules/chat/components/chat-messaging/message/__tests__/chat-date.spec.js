@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import MessageDate
-  from '../chat-date.vue';
+  from '../chat-message-date.vue';
 
 const time = Date.now();
 describe('Chat Date component', () => {

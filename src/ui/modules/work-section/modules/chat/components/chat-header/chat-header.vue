@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="size">
+  <task-header :size="size" :username="task.contact.id">
     <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
@@ -9,12 +9,12 @@
         rounded
         wide
         @click="openTab"
-      ></wt-rounded-action>
+      />
       <chat-header-close-action
         v-show="isCloseAction"
         :size="size"
         @click="close"
-      ></chat-header-close-action>
+      />
     </template>
     <template v-slot:title>
       {{ displayChatName }}

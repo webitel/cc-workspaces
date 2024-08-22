@@ -19,26 +19,26 @@
         :my="my"
         :size="size"
         @initialized="handlePlayerInitialize"
-      ></message-audio>
+      />
       <message-image
         :message="message"
         :my="my"
         @open="openImage"
-      ></message-image>
+      />
       <message-document
         :message="message"
         :my="my"
-      ></message-document>
+      />
       <message-text
         :bot="isBot"
         :message="message"
         :my="my"
-      ></message-text>
+      />
     </div>
     <message-meta
       :message="message"
       :my="my"
-    ></message-meta>
+    />
   </div>
 </template>
 

@@ -20,7 +20,7 @@
 
 <script>
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
-import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
+import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
 
 export default {
   name: 'chat-message-document',

@@ -12,7 +12,7 @@
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
-import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
+import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
 
 export default {
   name: 'chat-message-meta',
