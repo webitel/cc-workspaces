@@ -246,6 +246,7 @@ export default {
     },
   },
   error: {
+    general: 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
     websocket: {
       [DeviceNotFoundError.id]: 'Микрофон не подсоединён. Невозможно выполнить действие.',
       [DeviceNotAllowPermissionError.id]: 'Нет доступа к микрофону. Невозможно выполнить действие.',
