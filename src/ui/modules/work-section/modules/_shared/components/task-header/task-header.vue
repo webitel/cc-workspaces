@@ -32,7 +32,6 @@ export default {
   props: {
     username: {
       type: String,
-      default: '',
     },
   },
 };

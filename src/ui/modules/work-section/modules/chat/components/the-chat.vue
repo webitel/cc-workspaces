@@ -5,7 +5,7 @@
         v-show="isChatHeader"
         :size="size"
         @openTab="openTab"
-      ></chat-header>
+      />
       <media-viewer />
     </template>
     <template v-slot:body>
@@ -15,13 +15,13 @@
         v-bind="currentTab.props"
         @closeTab="resetTab"
         @openTab="openTab"
-      ></component>
+      />
     </template>
     <template v-slot:footer>
       <chat-footer
         v-if="isChatFooter"
         :size="size"
-      ></chat-footer>
+      />
     </template>
   </task-container>
 </template>

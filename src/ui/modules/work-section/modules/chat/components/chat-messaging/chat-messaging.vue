@@ -9,8 +9,9 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
+    {{ chat.contact?.id }}
     <chat-history
-      v-if="contact.id"
+      v-if="chat.contact?.id"
     />
     <regular-chat
       v-else
@@ -21,7 +22,7 @@
 
 <script>
 // в цьому компоненті визначати, який буде показано чат: звичайний чи історію чатів - перевіряти чи є contact.id
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
 import RegularChat from './regular-chat/regular-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
@@ -39,6 +40,12 @@ export default {
       default: 'md',
       options: ['sm', 'md'],
     },
+  },
+  // тут має бути вотчер, який слідкує за зміною контакт айдішки
+  computed: {
+    ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+    }),
   },
   methods: {
     ...mapActions('features/chat', {
