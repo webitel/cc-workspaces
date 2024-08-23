@@ -1,12 +1,6 @@
 <template>
   <aside class="chat-message-meta">
     <div class="chat-message-meta__sent-at">{{ sentAt }}</div>
-    <wt-icon
-      v-if="my"
-      class="chat-message-meta__status-icon"
-      icon="chat-message-status-sent"
-      size="sm"
-    ></wt-icon>
   </aside>
 </template>
 

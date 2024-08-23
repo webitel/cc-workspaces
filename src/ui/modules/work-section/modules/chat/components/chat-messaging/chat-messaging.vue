@@ -10,11 +10,10 @@
       @drop="handleDrop"
     />
     {{ chat.contact?.id }}
-    <chat-history
-      v-if="chat.contact?.id"
-    />
+<!--    <chat-history-->
+<!--      v-if="chat.contact?.id"-->
+<!--    />-->
     <regular-chat
-      v-else
       :size="size"
     />
   </div>

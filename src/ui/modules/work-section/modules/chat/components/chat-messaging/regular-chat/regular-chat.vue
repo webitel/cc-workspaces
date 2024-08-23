@@ -6,14 +6,11 @@
         @intersect="loadMessages"
       />
       <div v-for="(message, key) of messages" :key="message.id">
-        <message-date
-          v-if="showDate(key)"
-          :time="message.createdAt"
-        />
         <message
           :size="size"
           :message="message"
           :show-avatar="showAvatar(key)"
+          :show-date="showDate(key)"
           @open-image="openImage(message)"
           @initialized-player="handlePlayerInitialize"
         />

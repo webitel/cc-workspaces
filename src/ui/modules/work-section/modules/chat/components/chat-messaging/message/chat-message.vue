@@ -1,4 +1,8 @@
 <template>
+<!--  <message-date-->
+<!--    v-if=""-->
+<!--    :time="message.createdAt"-->
+<!--  />-->
   <div
     :class="{
      'chat-message--right' : isAgentSideMessage,
@@ -69,6 +73,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    showDate: {
+      type: Boolean,
+      default: false,
+    },
     size: {
       type: String,
       default: 'md',
@@ -123,10 +131,10 @@ export default {
     flex-direction: column;
     width: fit-content;
     min-width: 0;
-    padding: var(--spacing-xs) var(--spacing-xs);
+    //padding: var(--spacing-xs) var(--spacing-xs);
     line-height: 0; // prevents height difference from its content
-    border-radius: var(--border-radius);
-    background: var(--primary-light-color);
+    //border-radius: var(--border-radius);
+    //background: var(--primary-light-color);
     gap: var(--spacing-xs);
   }
 

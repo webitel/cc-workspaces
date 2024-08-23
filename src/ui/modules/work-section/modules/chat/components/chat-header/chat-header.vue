@@ -86,7 +86,6 @@ export default {
     },
   },
   mounted() {
-    console.log('contact:', this.contact, 'task:', this.task);
     this.setupHotkeys();
   },
   unmounted() {
