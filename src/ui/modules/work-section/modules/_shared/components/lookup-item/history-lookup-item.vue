@@ -1,6 +1,7 @@
 <template>
   <lookup-item
     :size="size"
+    :key="item.id"
     @click="handleInput">
     <template v-slot:before>
       <div class="history-lookup-item-wrapper">
@@ -38,11 +39,13 @@
           wide
           @click="call"
         />
-        <div class="history-lookup-item-after__dots">
+        <div class="history-lookup-item-after__dots" @click="openContext()">
           <wt-context-menu
             class="history-lookup-item-options"
             :options="contextOptions"
-            @click="$event.option.handler()"
+            @click="$event.options.handler()"
+            :itemIsVisible="isContextVisible"
+            :key="item.id"
           >
             <template #activator>
               <wt-icon
@@ -83,6 +86,12 @@ export default {
       type: String,
       required: false,
     },
+    hideContextItem: Number,
+  },
+  data(){
+    return{
+      isContextVisible: false
+    }
   },
 
   computed: {
@@ -163,6 +172,19 @@ export default {
     goToHistoryItem() {
       window.location.href = this.historyIdLink;
     },
+    openContext() {
+      this.isContextVisible = true;
+    },
+    closeContext(toggle) {
+      this.isContextVisible = toggle ? !this.isContextVisible : false;
+    }
+  },
+  watch: {
+    hideContextItem() {
+      if (this.isContextVisible) {
+        this.closeContext(false);
+      }
+    }
   },
 };
 </script>

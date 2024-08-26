@@ -6,6 +6,7 @@
     @more="handleIntersect"
     @search:input="dataSearch = $event"
     @search:change="resetData"
+    @scroll="updateScroll"
   >
 
     <template v-slot:empty>
@@ -24,6 +25,7 @@
           :item="item"
           :size="size"
           :for-number="historyNumber"
+          :hide-context-item="hideOnScroll"
           @input="select(item)"
           class="historyContainerContact__item"
         />
@@ -62,6 +64,7 @@ export default {
     dataList: '',
     historyNumber: '',
     dataFields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at'],
+    hideOnScroll: 0
   }),
 
   watch: {
@@ -69,6 +72,9 @@ export default {
       this.resetHistoryNumber();
       this.loadDataListHistory();
     },
+    hideOnScroll(newVal) {
+      this.$emit('update:hideContextItem', newVal);
+    }
   },
 
   computed: {
@@ -92,6 +98,9 @@ export default {
     ...mapActions('features/call', {
       setNumber: 'SET_NEW_NUMBER',
     }),
+    updateScroll(){
+      this.hideOnScroll = this.hideOnScroll + 1;
+    },
 
     select(item) {
       let destination = '';

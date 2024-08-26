@@ -64,8 +64,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
+import { ref, onMounted, computed  } from 'vue';
+import debounce from '@webitel/ui-sdk/src/scripts/debounce';
 
 const props = defineProps({
   size: {
@@ -92,13 +93,26 @@ const emit = defineEmits([
   'more',
 ]);
 
+let hideOnScroll = 0;
+
 const inputHandler = (event) => emit('search:input', event);
 const searchHandler = (event) => emit('search:change', event);
+const handleScroll = debounce(() => {
+  hideContext();
+}, 100);
+
+function hideContext(){
+  hideOnScroll = hideOnScroll + 1;
+  emit('scroll', hideOnScroll);
+}
 
 const scrollWrap = ref(null);
-
 const showEmpty = computed(() => !props.loading && props.empty);
 
+onMounted(() => {
+  const container = scrollWrap.value;
+  container ? container.addEventListener('scroll', handleScroll) :console.error('Scroll parent not found');
+});
 </script>
 
 <style scoped lang="scss">
