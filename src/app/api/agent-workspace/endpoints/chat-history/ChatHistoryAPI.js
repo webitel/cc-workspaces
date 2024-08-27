@@ -4,11 +4,11 @@ import applyTransform, {
   notify,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { getDefaultGetListResponse, } from '@webitel/ui-sdk/src/api/defaults/index.js';
-import { ContactsChatCatalogApi } from 'webitel-sdk';
+import { ContactsChatCatalogApiFactory } from 'webitel-sdk';
 import configuration from '../../../openAPIConfig';
 import instance from '../../../instance';
 
-const contactChatService = new ContactsChatCatalogApi(configuration, '', instance);
+const contactChatService = new ContactsChatCatalogApiFactory(configuration, '', instance);
 
 const getMessages = async ({ id }) => {
   try {

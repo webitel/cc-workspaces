@@ -9,10 +9,6 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    {{ chat.contact?.id }}
-<!--    <chat-history-->
-<!--      v-if="chat.contact?.id"-->
-<!--    />-->
     <regular-chat
       :size="size"
     />
@@ -20,18 +16,15 @@
 </template>
 
 <script>
-// в цьому компоненті визначати, який буде показано чат: звичайний чи історію чатів - перевіряти чи є contact.id
 import { mapActions, mapGetters } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
 import RegularChat from './regular-chat/regular-chat.vue';
-import ChatHistory from './chat-history/the-chat-history.vue';
 
 export default {
   name: 'chat-messaging-container',
   mixins: [dropzoneMixin],
   components: {
     RegularChat,
-    ChatHistory,
   },
   props: {
     size: {
@@ -40,7 +33,6 @@ export default {
       options: ['sm', 'md'],
     },
   },
-  // тут має бути вотчер, який слідкує за зміною контакт айдішки
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
@@ -65,9 +57,5 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  //.chat-messages-container {
-  //  flex: 1 1 0;
-  //}
 }
 </style>
