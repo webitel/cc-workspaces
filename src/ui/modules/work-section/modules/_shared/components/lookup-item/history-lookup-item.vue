@@ -44,7 +44,7 @@
             class="history-lookup-item-options"
             :options="contextOptions"
             @click="$event.options.handler()"
-            :itemIsVisible="isContextVisible"
+            :visible="isContextVisible"
             :key="item.id"
           >
             <template #activator>
