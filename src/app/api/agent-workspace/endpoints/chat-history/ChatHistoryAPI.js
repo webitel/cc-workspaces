@@ -29,25 +29,6 @@ const getMessages = async ({ id }) => {
 
 };
 
-const getChat = async ({ contactId, chatId }) => {
-  try {
-    const response = await contactChatService.getContactChatHistory(contactId, chatId);
-    const { items, next } = applyTransform(response.data, [
-      snakeToCamel(),
-      merge(getDefaultGetListResponse()),
-    ]);
-    return {
-      items,
-      next,
-    };
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  }
-};
-
 export default {
   getMessages,
-  getChat,
 };
