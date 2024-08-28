@@ -18,10 +18,10 @@
     </template>
     <template v-slot:title>
       <a
-        v-if="task?.contact?.id"
+        v-if="contact?.id"
         :href="contactLink"
         target="_blank">
-        {{ contact?.name.commonName }}
+        {{ contact?.name?.commonName }}
       </a>
       <p v-else> {{ displayChatName }} </p>
     </template>
@@ -51,15 +51,12 @@ export default {
     ...mapState('ui/infoSec/client/contact', {
       contact: (state) => state.contact,
     }),
-    ...mapGetters('workspace', {
-      task: 'TASK_ON_WORKSPACE',
-    }),
     ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',
     }),
     contactLink() {
-      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.task.contact.id}`
+      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.contact?.id}`
     },
   },
   methods: {

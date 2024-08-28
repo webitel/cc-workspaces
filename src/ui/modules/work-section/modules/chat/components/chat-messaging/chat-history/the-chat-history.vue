@@ -1,6 +1,7 @@
 <template>
   <article class="chat-history">
     ТРАМПАМПАМ!
+    <p> Chat History Empty Component </p>
   </article>
 </template>
 
@@ -8,13 +9,8 @@
 import { ref, watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 
 const props = defineProps({
-  // task: {
-  //   type: Object,
-  //   required: true,
-  // },
   // size: {
   //   type: String,
   //   default: 'md',
