@@ -39,13 +39,13 @@
           wide
           @click="call"
         />
-        <div class="history-lookup-item-after__dots" @click="openContext()">
+        <div class="history-lookup-item-after__dots" @click="openContextMenu()">
           <wt-context-menu
             class="history-lookup-item-options"
-            :options="contextOptions"
-            @click="$event.options.handler()"
-            :visible="isContextVisible"
+            :options="contextMenuOptions"
+            :visible="isContextMenuVisible"
             :key="item.id"
+            @click="$event.option.handler()"
           >
             <template #activator>
               <wt-icon
@@ -55,11 +55,11 @@
             </template>
             <template #option="option">
               <div class="history-lookup-item-options__card">
-                <wt-icon
-                  :icon="option.icon"
-                  :size="size"
-                />
                 <a :href="historyIdLink">
+                  <wt-icon
+                    :icon="option.icon"
+                    :size="size"
+                  />
                   {{ option.text }}
                 </a>
               </div>
@@ -86,11 +86,14 @@ export default {
       type: String,
       required: false,
     },
-    hideContextItem: Number,
+    hideContextMenuItem: {
+      type: Number,
+      default: 0
+    },
   },
   data(){
     return{
-      isContextVisible: false
+      isContextMenuVisible: false
     }
   },
 
@@ -143,11 +146,11 @@ export default {
       return 'success';
     },
 
-    contextOptions(){
+    contextMenuOptions(){
       return [
         {
           text: this.$t('history.openInHistory'),
-          icon: 'ws-link',
+          icon: 'link',
           disabled: false,
           handler: () => this.goToHistoryItem(),
         },
@@ -170,19 +173,19 @@ export default {
       return this.makeCall({ number });
     },
     goToHistoryItem() {
-      window.location.href = this.historyIdLink;
+      window.open(this.historyIdLink, '_blank')
     },
-    openContext() {
-      this.isContextVisible = true;
+    openContextMenu() {
+      this.isContextMenuVisible = true;
     },
-    closeContext(toggle) {
-      this.isContextVisible = toggle ? !this.isContextVisible : false;
+    closeContextMenu() {
+      this.isContextMenuVisible = false;
     }
   },
   watch: {
-    hideContextItem() {
-      if (this.isContextVisible) {
-        this.closeContext(false);
+    hideContextMenuItem() {
+      if (this.isContextMenuVisible) {
+        this.closeContextMenu();
       }
     }
   },
@@ -207,15 +210,24 @@ export default {
       gap: var(--spacing-xs);
       &__dots{
         display: flex;
+
+        :deep(.wt-context-menu__option){
+          padding: 0;
+        }
+        :deep(.wt-tooltip .wt-tooltip-floating){
+          z-index: 10;
+        }
       }
     }
 
     &-options{
-      &__card{
+      &__card a{
         display: flex;
         align-items: center;
         gap: var(--spacing-xs);
+        padding: var(--wt-context-menu-option-padding);
       }
     }
   }
 </style>
+

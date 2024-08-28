@@ -14,9 +14,9 @@
     </template>
 
     <template v-slot:content>
-      <div class="historyContainerContact"
+      <div class="history-container-contact"
         v-for="dataItem in dataList">
-        <p class="historyContainerContact__caption">
+        <p class="history-container-contact__caption">
           {{dataItem.groupName}}
         </p>
         <history-lookup-item
@@ -25,9 +25,9 @@
           :item="item"
           :size="size"
           :for-number="historyNumber"
-          :hide-context-item="hideOnScroll"
+          :hide-context-menu-item="hideOnScroll"
           @input="select(item)"
-          class="historyContainerContact__item"
+          class="history-container-contact__item"
         />
         <wt-divider/>
       </div>
@@ -70,7 +70,6 @@ export default {
   watch: {
     call() {
       this.resetHistoryNumber();
-      this.loadDataListHistory();
     },
     hideOnScroll(newVal) {
       this.$emit('update:hideContextItem', newVal);
@@ -149,12 +148,58 @@ export default {
     resetHistoryNumber() {
       this.historyNumber = '';
     },
+
+    async loadDataList() {
+      if (!this.dataList.length) this.isLoading = true;
+      const params = this.collectParams();
+      // both items and data because contacts return { data }, and other endpoints return { items }
+      const { items, data, next } = await this.fetch(params);
+      this.isNext = next;
+      const sortedData = await this.groupAndSortByDate(items || data);
+      this.setData(sortedData);
+      this.dataPage += 1;
+      this.isLoading = false;
+    },
+    groupAndSortByDate(data) {
+      const groupedData = {};
+      data.forEach(item => {
+        const date = new Date(parseInt(item.createdAt));
+        let dateKey;
+
+        this.isToday(date) ? dateKey = this.$t('history.today'):
+          dateKey = this.formatDate(item.createdAt);
+
+        if (!groupedData[dateKey]) groupedData[dateKey] = [];
+        groupedData[dateKey].push(item);
+      });
+
+      const result = Object.keys(groupedData).map(key => {
+        return {
+          groupName: key,
+          groupData: groupedData[key].sort((a, b) => b.createdAt - a.createdAt)
+        };
+      });
+
+      return result;
+    },
+    isToday(date) {
+      const today = new Date();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    },
+    formatDate(timestamp) {
+      const date = new Date(parseInt(timestamp));
+      return `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  .historyContainerContact{
+  .history-container-contact{
     display: flex;
     flex-direction: column;
     gap: var(--spacing-2xs);
