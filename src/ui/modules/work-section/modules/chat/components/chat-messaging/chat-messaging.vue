@@ -9,7 +9,7 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <regular-chat
+    <current-chat
       :size="size"
     />
   </div>
@@ -18,13 +18,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
-import RegularChat from './regular-chat/regular-chat.vue';
+import CurrentChat from './current-chat/current-chat.vue';
 
 export default {
   name: 'chat-messaging-container',
   mixins: [dropzoneMixin],
   components: {
-    RegularChat,
+    CurrentChat,
   },
   props: {
     size: {

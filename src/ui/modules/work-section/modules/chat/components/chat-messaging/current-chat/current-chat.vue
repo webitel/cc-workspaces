@@ -1,5 +1,5 @@
 <template>
-  <section class="regular-chat chat-messages-container" @click="chatInputFocus">
+  <section class="current-chat chat-messages-container" @click="chatInputFocus">
     <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
       <scroll-observer
         :options="intersectionObserverOptions"
@@ -27,7 +27,7 @@ import ScrollObserver from '../../../../../../../../app/components/utils/scroll-
 import chatScroll from '../../../../../../../../app/directives/chatScroll';
 
 export default {
-  name: 'regular-chat',
+  name: 'current-chat',
   directives: { chatScroll },
   components: {
     Message,
