@@ -39,8 +39,7 @@
           wide
           @click="call"
         />
-        <div class="history-lookup-item-after__icon">
-          <wt-context-menu
+        <wt-context-menu
             class="history-lookup-item-options"
             :options="contextMenuOptions"
             :visible="isContextMenuVisible"
@@ -65,7 +64,6 @@
               </div>
             </template>
           </wt-context-menu>
-        </div>
       </div>
     </template>
   </lookup-item>
@@ -191,15 +189,12 @@ export default {
       display: flex;
       align-items: center;
       gap: var(--spacing-xs);
-      &__icon{
-        display: flex;
 
-        :deep(.wt-context-menu__option){
-          padding: 0;
-        }
-        :deep(.wt-tooltip .wt-tooltip-floating){
-          z-index: 10;
-        }
+      :deep(.wt-context-menu__option){
+        padding: 0;
+      }
+      :deep(.wt-tooltip .wt-tooltip-floating){
+        z-index: 10;
       }
     }
 
