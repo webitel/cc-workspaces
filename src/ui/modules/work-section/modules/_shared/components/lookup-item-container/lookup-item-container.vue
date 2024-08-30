@@ -64,8 +64,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
+import { ref, computed  } from 'vue';
 
 const props = defineProps({
   size: {
@@ -94,11 +94,8 @@ const emit = defineEmits([
 
 const inputHandler = (event) => emit('search:input', event);
 const searchHandler = (event) => emit('search:change', event);
-
 const scrollWrap = ref(null);
-
 const showEmpty = computed(() => !props.loading && props.empty);
-
 </script>
 
 <style scoped lang="scss">

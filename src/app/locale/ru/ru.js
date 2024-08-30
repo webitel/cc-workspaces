@@ -192,6 +192,7 @@ export default {
   history: {
     today: 'Сегодня',
     yesterday: 'Вчера',
+    openInHistory: 'Открыть в History',
   },
   transfer: {
     selectAgent: 'Выберите агента',
