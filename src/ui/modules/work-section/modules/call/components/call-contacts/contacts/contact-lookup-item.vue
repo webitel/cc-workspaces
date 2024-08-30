@@ -1,7 +1,7 @@
 <template>
   <lookup-item>
     <template v-slot:before>
-      <a :href="crmContactLink" target="_blank">
+      <a :href="contactLink(item.id)" target="_blank">
         <wt-avatar
           :size="size"
           :username="item.name.commonName"
@@ -10,7 +10,10 @@
     </template>
 
     <template v-slot:title>
-      <a class="contact-lookup-item__title" :href="crmContactLink" target="_blank">
+      <a
+        class="contact-lookup-item__title"
+        :href="contactLink(item.id)"
+        target="_blank">
         {{ item.name.commonName }}
       </a>
     </template>
@@ -46,6 +49,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/lookupItemMixin';
 import ContactCommunicationItem from './contact-communication-item.vue';
@@ -58,11 +62,11 @@ export default {
     'call',
   ],
   computed: {
+    ...mapGetters('ui/infoSec/client/contact', {
+      contactLink: 'CONTACT_LINK',
+    }),
     primaryPhoneNumber() {
       return this.item.phones?.find((phone) => phone.primary === true)?.number;
-    },
-    crmContactLink() {
-      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.item.id}/communications`;
     },
   },
   methods: {

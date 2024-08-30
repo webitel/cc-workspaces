@@ -8,12 +8,11 @@
       class="contact-card-general__avatar"
       size="2xl"
     ></wt-avatar>
-
     <div class="contact-card-general__wrapper">
       <div class="contact-card-general__name">
         <a
           target="_blank"
-          :href="contactLink"
+          :href="contactLink(props.contact.id)"
           class="contact-card-general__link"
         >{{ name }}
           <wt-icon
@@ -83,10 +82,10 @@ const emit = defineEmits([
 ]);
 
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
+const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONTACT_LINK']);
 const name = computed(() => props.contact.name?.commonName);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
-const contactLink = computed(() => `${import.meta.env.VITE_CRM_URL}/contacts/${props.contact.id}/communications`);
 </script>
 
 <style lang="scss" scoped>

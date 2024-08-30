@@ -19,7 +19,7 @@
     <template v-slot:title>
       <a
         v-if="task?.contact?.id"
-        :href="contactLink"
+        :href="contactLink(task.contact.id)"
         target="_blank">
         {{ contact?.name.commonName }}
       </a>
@@ -58,9 +58,9 @@ export default {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',
     }),
-    contactLink() {
-      return `${import.meta.env.VITE_CRM_URL}/contacts/${this.task.contact.id}`
-    },
+    ...mapGetters('ui/infoSec/client/contact', {
+      contactLink: 'CONTACT_LINK',
+    }),
   },
   methods: {
     ...mapActions('features/chat', {
