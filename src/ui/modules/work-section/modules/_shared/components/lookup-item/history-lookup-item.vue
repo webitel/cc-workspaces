@@ -39,7 +39,7 @@
           wide
           @click="call"
         />
-        <div class="history-lookup-item-after__dots" @click="openContextMenu()">
+        <div class="history-lookup-item-after__icon">
           <wt-context-menu
             class="history-lookup-item-options"
             :options="contextMenuOptions"
@@ -85,10 +85,6 @@ export default {
     forNumber: {
       type: String,
       required: false,
-    },
-    hideContextMenuItem: {
-      type: Number,
-      default: 0
     },
   },
   data(){
@@ -175,19 +171,6 @@ export default {
     goToHistoryItem() {
       window.open(this.historyIdLink, '_blank')
     },
-    openContextMenu() {
-      this.isContextMenuVisible = true;
-    },
-    closeContextMenu() {
-      this.isContextMenuVisible = false;
-    }
-  },
-  watch: {
-    hideContextMenuItem() {
-      if (this.isContextMenuVisible) {
-        this.closeContextMenu();
-      }
-    }
   },
 };
 </script>
@@ -208,7 +191,7 @@ export default {
       display: flex;
       align-items: center;
       gap: var(--spacing-xs);
-      &__dots{
+      &__icon{
         display: flex;
 
         :deep(.wt-context-menu__option){
