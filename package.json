@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "24.04-1.0",
+  "version": "24.08.0",
   "private": true,
   "scripts": {
     "dev": "vite",
