@@ -19,26 +19,26 @@
         :my="my"
         :size="size"
         @initialized="handlePlayerInitialize"
-      ></message-audio>
+      />
       <message-image
         :message="message"
         :my="my"
         @open="openImage"
-      ></message-image>
+      />
       <message-document
         :message="message"
         :my="my"
-      ></message-document>
+      />
       <message-text
         :bot="isBot"
         :message="message"
         :my="my"
-      ></message-text>
+      />
     </div>
     <message-meta
       :message="message"
       :my="my"
-    ></message-meta>
+    />
   </div>
 </template>
 
@@ -68,6 +68,10 @@ export default {
     showAvatar: {
       type: Boolean,
       default: true,
+    },
+    showDate: {
+      type: Boolean,
+      default: false,
     },
     size: {
       type: String,
@@ -123,10 +127,7 @@ export default {
     flex-direction: column;
     width: fit-content;
     min-width: 0;
-    padding: var(--spacing-xs) var(--spacing-xs);
     line-height: 0; // prevents height difference from its content
-    border-radius: var(--border-radius);
-    background: var(--primary-light-color);
     gap: var(--spacing-xs);
   }
 

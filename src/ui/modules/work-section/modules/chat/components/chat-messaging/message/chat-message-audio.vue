@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import chatMessageDetailMixin from '../../../../mixins/chatMessageDetailMixin';
+import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
 
 export default {
   name: 'chat-message-audio',

@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="size">
+  <task-header :size="size" :username="contact?.name?.commonName">
     <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
@@ -9,21 +9,27 @@
         rounded
         wide
         @click="openTab"
-      ></wt-rounded-action>
+      />
       <chat-header-close-action
         v-show="isCloseAction"
         :size="size"
         @click="close"
-      ></chat-header-close-action>
+      />
     </template>
     <template v-slot:title>
-      {{ displayChatName }}
+      <a
+        v-if="task?.contact?.id"
+        :href="contactLink(task.contact.id)"
+        target="_blank">
+        {{ contact?.name.commonName }}
+      </a>
+      <p v-else> {{ displayChatName }} </p>
     </template>
   </task-header>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
@@ -42,12 +48,18 @@ export default {
     hotkeyUnsubscribers : [],
   }),
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contact: (state) => state.contact,
+    }),
     ...mapGetters('workspace', {
       task: 'TASK_ON_WORKSPACE',
     }),
     ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',
+    }),
+    ...mapGetters('ui/infoSec/client/contact', {
+      contactLink: 'CONTACT_LINK',
     }),
   },
   methods: {

@@ -1,22 +1,19 @@
 <template>
-  <section class="chat-messages-container" @click="chatInputFocus">
+  <section class="current-chat chat-messages-container" @click="chatInputFocus">
     <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
       <scroll-observer
         :options="intersectionObserverOptions"
         @intersect="loadMessages"
-      ></scroll-observer>
+      />
       <div v-for="(message, key) of messages" :key="message.id">
-        <message-date
-          v-if="showDate(key)"
-          :time="message.createdAt"
-        ></message-date>
         <message
           :size="size"
           :message="message"
           :show-avatar="showAvatar(key)"
+          :show-date="showDate(key)"
           @open-image="openImage(message)"
           @initialized-player="handlePlayerInitialize"
-        ></message>
+        />
       </div>
     </div>
   </section>
@@ -24,13 +21,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import Message from './message/chat-message.vue';
-import MessageDate from './chat-date.vue';
+import Message from '../message/chat-message.vue';
+import MessageDate from '../message/chat-message-date.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 import chatScroll from '../../../../../../../../app/directives/chatScroll';
 
 export default {
-  name: 'chat-messages-container',
+  name: 'current-chat',
   directives: { chatScroll },
   components: {
     Message,

@@ -10,7 +10,9 @@ const state = {
   contactsBySearch: [], // contacts, loaded by user manual search
 };
 
-const getters = {};
+const getters = {
+  CONTACT_LINK: (state) => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
+};
 
 const actions = {
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {

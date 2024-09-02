@@ -5,7 +5,7 @@
         v-show="isChatHeader"
         :size="size"
         @openTab="openTab"
-      ></chat-header>
+      />
       <media-viewer />
     </template>
     <template v-slot:body>
@@ -15,13 +15,13 @@
         v-bind="currentTab.props"
         @closeTab="resetTab"
         @openTab="openTab"
-      ></component>
+      />
     </template>
     <template v-slot:footer>
       <chat-footer
         v-if="isChatFooter"
         :size="size"
-      ></chat-footer>
+      />
     </template>
   </task-container>
 </template>
@@ -30,7 +30,7 @@
 import { mapGetters } from 'vuex';
 import EmptyWorkspace from '../../empty-workspace/components/empty-workspace.vue';
 import ChatHeader from './chat-header/chat-header.vue';
-import ChatMessagingContainer from './chat-messaging-container/chat-messaging-container.vue';
+import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';

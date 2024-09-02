@@ -1,6 +1,6 @@
 <template>
   <div
-    class="chat-messaging-container"
+    class="chat-messaging"
     @dragenter.prevent="handleDragEnter"
   >
     <dropzone
@@ -8,23 +8,23 @@
       @dragenter.prevent
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
-    ></dropzone>
-    <messages-container
+    />
+    <current-chat
       :size="size"
     />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
-import MessagesContainer from './chat-messages/chat-messages-container.vue';
+import CurrentChat from './current-chat/current-chat.vue';
 
 export default {
   name: 'chat-messaging-container',
   mixins: [dropzoneMixin],
   components: {
-    MessagesContainer,
+    CurrentChat,
   },
   props: {
     size: {
@@ -32,6 +32,11 @@ export default {
       default: 'md',
       options: ['sm', 'md'],
     },
+  },
+  computed: {
+    ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+    }),
   },
   methods: {
     ...mapActions('features/chat', {
@@ -47,14 +52,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-messaging-container {
+.chat-messaging {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  .chat-messages-container {
-    flex: 1 1 0;
-  }
 }
 </style>

@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ChatMessagingContainer
-  from '../chat-messaging-container.vue';
+  from '../chat-messaging.vue';
 
 describe('ChatMessagingContainer', () => {
   it('renders a component', () => {
