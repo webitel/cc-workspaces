@@ -1,5 +1,7 @@
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
-import WorkspaceState from '../../../../../../../enums/WorkspaceState.enum.js';
+import ConfigurationsAPI
+  from '@webitel/ui-sdk/src/api/clients/configurations/configurations.js';
+import { EngineSystemSettingName } from 'webitel-sdk';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
@@ -8,7 +10,9 @@ const state = {
   contactsBySearch: [], // contacts, loaded by user manual search
 };
 
-const getters = {};
+const getters = {
+  CONTACT_LINK: (state) => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
+};
 
 const actions = {
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
@@ -72,6 +76,10 @@ const actions = {
       context.commit('SET_IS_LOADING', false);
     }
   },
+  CHECK_AUTO_LINK_CALL_TO_CONTACT: async () => {
+    const response = await ConfigurationsAPI.getList({ name: EngineSystemSettingName.AutolinkCallToContact });
+    return response.items[0]?.value;
+  },
   INITIALIZE_CONTACT: async (context) => {
     const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
     const isChatWorkspace = context.rootGetters['workspace/IS_CHAT_WORKSPACE'];
@@ -86,6 +94,10 @@ const actions = {
         return context.dispatch('LOAD_CONTACT', task.contact.id);
       } else {
         context.commit('SET_CONTACT', null);
+
+        const autoLink = await context.dispatch('CHECK_AUTO_LINK_CALL_TO_CONTACT');
+        if (autoLink) return;
+
         return context.dispatch('LOAD_CONTACTS_BY_DESTINATION', task);
       }
     }

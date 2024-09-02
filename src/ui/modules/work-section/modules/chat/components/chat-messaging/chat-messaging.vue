@@ -9,12 +9,7 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <chat-history
-      v-if="contactId"
-      :size="size"
-    />
-    <regular-chat
-      v-else
+    <current-chat
       :size="size"
     />
   </div>
@@ -22,17 +17,15 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
-import RegularChat from './regular-chat/regular-chat.vue';
-import ChatHistory from './chat-history/the-chat-history.vue';
+import CurrentChat from './current-chat/current-chat.vue';
 
 export default {
   name: 'chat-messaging-container',
   mixins: [dropzoneMixin],
   components: {
-    RegularChat,
-    ChatHistory,
+    CurrentChat,
   },
   props: {
     size: {
@@ -41,7 +34,6 @@ export default {
       options: ['sm', 'md'],
     },
   },
-  // тут має бути вотчер, який слідкує за зміною контакт айдішки
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
@@ -60,12 +52,6 @@ export default {
       this.handleDragLeave();
     },
   },
-  // mounted() {
-  //   setInterval(() => {
-  //     console.log('chat.contact:', this.chat?.contact);
-  //   }, 3000)
-  //   // this.subscribe(this.loadFlowsList);
-  // }
 };
 </script>
 
@@ -75,9 +61,5 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  //.chat-messages-container {
-  //  flex: 1 1 0;
-  //}
 }
 </style>
