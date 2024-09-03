@@ -1,12 +1,11 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
-    <wt-loader v-show="!isLoaded" />
+    <wt-loader v-show="!isLoaded"/>
     <div
       v-if="isLoaded"
       class="chat-history-messages-wrap chat-messages-items"
       ref="chat-messages-items">
       <div>
-        ТРАМПАМПАМ!
         <p> Chat History Empty Component </p>
         currentChat.contact: {{ currentChat?.contact.id }}
       </div>

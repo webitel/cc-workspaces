@@ -18,7 +18,7 @@
     </template>
     <template v-slot:title>
       <a
-        v-if="contact?.id"
+        v-if="task?.contact?.id"
         :href="contactLink(contact.id)"
         target="_blank">
         {{ contact?.name?.commonName }}
@@ -50,6 +50,9 @@ export default {
   computed: {
     ...mapState('ui/infoSec/client/contact', {
       contact: (state) => state.contact,
+    }),
+    ...mapGetters('workspace', {
+      task: 'TASK_ON_WORKSPACE',
     }),
     ...mapGetters('features/chat', {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
