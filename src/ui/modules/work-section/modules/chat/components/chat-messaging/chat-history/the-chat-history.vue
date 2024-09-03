@@ -1,14 +1,24 @@
 <template>
-  <article class="chat-history">
-    <p> Chat History Empty Component </p>
+  <article class="chat-history" @click="chatInputFocus">
+    <p> Chat History Component </p>
+    <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
+      <chat-message
+        v-for="(message, index) of messages"
+        :key="message.id"
+        :size="size"
+        :message="message"
+      />
+    </div>
   </article>
 </template>
 
 <script setup>
 
-import { computed, watch } from 'vue';
+import { computed, watch, inject } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
+import ChatMessage from '../message/chat-message.vue';
 
 const props = defineProps({
   size: {
@@ -19,6 +29,7 @@ const props = defineProps({
 
 const store = useStore();
 const { t } = useI18n();
+const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
@@ -27,6 +38,9 @@ const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGE
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, contactID.value);
 }
+const chatInputFocus = () => {
+  eventBus.$emit('chat-input-focus');
+};
 
 watch(contactID, loadMessages, { immediate: true });
 
@@ -35,6 +49,18 @@ watch(contactID, loadMessages, { immediate: true });
 <style lang="scss" scoped>
 
 .chat-history {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.chat-messages-items {
+  @extend %wt-scrollbar;
+  box-sizing: border-box;
+  flex: 1 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 </style>
