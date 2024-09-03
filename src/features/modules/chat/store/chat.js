@@ -3,6 +3,7 @@ import ChatTransferDestination from '../../../../ui/modules/work-section/modules
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
+import chatHistory from './chat-history.js';
 
 const state = {
   chatList: [],
@@ -174,5 +175,6 @@ export default {
   mutations,
   modules: {
     manual,
+    chatHistory,
   },
 };
