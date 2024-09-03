@@ -5,6 +5,12 @@ const state = {
   next: false,
 };
 
+const getters = {
+  ALL_CONTACTS_MESSAGES: (s, g, rS, rootGetters) => (
+    [...state.chatHistoryMessages, ...rootGetters['features/chat/CHAT_ON_WORKSPACE']?.messages]
+  ), // chat history messages + current chat messages
+};
+
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
     const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
@@ -21,6 +27,7 @@ const mutations = {
 export default {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations,
 };
