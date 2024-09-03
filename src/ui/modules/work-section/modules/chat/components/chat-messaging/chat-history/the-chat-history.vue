@@ -35,18 +35,6 @@ watch(contactID, loadMessages, { immediate: true });
 <style lang="scss" scoped>
 
 .chat-history {
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-}
-
-.chat-messages-items {
-  @extend %wt-scrollbar;
-  box-sizing: border-box;
-  flex: 1 1;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  height: 100%;
 }
 
 </style>
