@@ -9,22 +9,29 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
+    <chat-history
+      v-if="contactId"
+      :size="size"
+    />
     <current-chat
+      v-else
       :size="size"
     />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
 import CurrentChat from './current-chat/current-chat.vue';
+import ChatHistory from './chat-history/the-chat-history.vue';
 
 export default {
   name: 'chat-messaging-container',
   mixins: [dropzoneMixin],
   components: {
     CurrentChat,
+    ChatHistory,
   },
   props: {
     size: {
@@ -34,6 +41,9 @@ export default {
     },
   },
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contactId: (state) => state.contact?.id,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
