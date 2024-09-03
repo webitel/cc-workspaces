@@ -6,7 +6,7 @@ const state = {
 };
 
 const getters = {
-  ALL_CONTACTS_MESSAGES: (s, g, rS, rootGetters) => (
+  ALL_CONTACTS_MESSAGES: (state, getters, rootState, rootGetters) => (
     [...state.chatHistoryMessages, ...rootGetters['features/chat/CHAT_ON_WORKSPACE']?.messages]
   ), // chat history messages + current chat messages
 };
