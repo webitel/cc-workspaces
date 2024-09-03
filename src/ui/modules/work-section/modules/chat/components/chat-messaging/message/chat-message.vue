@@ -11,7 +11,8 @@
       :message="message"
       :my="my"
       :show-avatar="showAvatar"
-    ></message-avatar>
+      :username="contactName"
+    />
     <!--    click.stop prevents focus on textarea and allows to select the message text -->
     <div class="chat-message__main-wrapper" @click.stop>
       <message-audio
@@ -43,12 +44,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MessageAvatar from './chat-message-avatar.vue';
 import MessageAudio from './chat-message-audio.vue';
 import MessageText from './chat-message-text.vue';
 import MessageImage from './chat-message-image.vue';
 import MessageDocument from './chat-message-document.vue';
 import MessageMeta from './chat-message-meta.vue';
+import MessageDate from './chat-message-date.vue';
 
 export default {
   name: 'chat-message',
@@ -80,18 +83,28 @@ export default {
     },
   },
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contact: (state) => state.contact,
+    }),
     my() {
       return !!this.message.member?.self;
     },
     isAgent() {
       // after chat transfer we need to identify messages from another agent
-      return this.message.member?.type === 'webitel';
+      return this.message.member?.type === 'webitel' // for currentChat
+        || this.message.peer?.type === 'user'; // for chat history
     },
     isBot() {
-      return !this.message.channelId;
+      return !this.message.channelId && !this.contact?.id // for current chat
+        || this.message.peer?.type === 'bot'; // for chat history
     },
     isAgentSideMessage() {
       return this.my || this.isAgent || this.isBot;
+    },
+    contactName() {
+      return !this.isBot && !this.isAgent && !this.my && this.contact?.id
+        ? this.contact.name?.commonName
+        : '';
     },
   },
   methods: {
