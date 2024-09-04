@@ -2,7 +2,8 @@ import axiosMock from '@webitel/ui-sdk/src/tests/mocks/axiosMock';
 
 describe('missedAPI', () => {
   const request = vi.fn(() => Promise.resolve({ data: {} }));
-  vi.doMock('axios', axiosMock( { default: { request } }));
+  const axios = axiosMock({ default: { request } });
+  vi.doMock('@webitel/ui-sdk/src/api/axios/generateInstance.js', () => ({ default: () => axios().default }));
 
   beforeEach(() => {
     request.mockClear();
