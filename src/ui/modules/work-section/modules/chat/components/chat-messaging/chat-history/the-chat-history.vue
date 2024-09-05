@@ -88,7 +88,7 @@ watch(() => props.contactId, loadMessages, { immediate: true });
   height: 100%;
 }
 
-.chat-history__loader {
+.chat-history__loader, .chat-messages-items {
   opacity: 1;
   animation: opacity 0.2s forwards;
 }
@@ -98,14 +98,10 @@ watch(() => props.contactId, loadMessages, { immediate: true });
   100% {opacity: 1;}
 }
 
-.chat-messages-items {
-  transform: translateY(150%);
-  animation: transform 0.2s forwards;
-}
 
-@keyframes transform {
-  0% {transform: translateY(150%);}
-  100% {transform: translateY(0);}
-}
+//@keyframes transform {
+//  0% {transform: translateY(100%);}
+//  100% {transform: translateY(0);}
+//}
 
 </style>

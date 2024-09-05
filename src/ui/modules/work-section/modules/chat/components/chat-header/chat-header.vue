@@ -97,14 +97,7 @@ export default {
 <style lang="scss" scoped>
 a {
   color: var(--link-color);
-  opacity: 1;
-  animation: opacity 0.2s forwards;
   transition: all 0.2s ease-in;
-}
-
-@keyframes opacity {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
 }
 
 a:hover {
