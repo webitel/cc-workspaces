@@ -1,7 +1,8 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
+<!--    temporary text for visual identification chat-history in the development process,-->
+<!--    because for the time being in some cases i cant see the difference -->
     <p> Chat History Component </p>
-    contactId: {{ contactId }}
     <div
       ref="chat-messages-items"
       class="chat-messages-items"
