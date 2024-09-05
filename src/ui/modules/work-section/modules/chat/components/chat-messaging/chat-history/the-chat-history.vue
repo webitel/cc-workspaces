@@ -3,8 +3,10 @@
     <wt-loader v-show="!isLoaded"/>
     <div
       v-if="isLoaded"
+      ref="chat-messages-items"
       class="chat-history-messages-wrap chat-messages-items"
-      ref="chat-messages-items">
+      v-chat-scroll
+    >
       <div>
         <p> Chat History Empty Component </p>
         currentChat.contact: {{ currentChat?.contact.id }}
@@ -28,6 +30,10 @@ import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
 
 const props = defineProps({
+  contactId: {
+    type: String,
+    require: true,
+  },
   size: {
     type: String,
     default: 'md',
@@ -42,18 +48,18 @@ const namespace = 'features/chat/chatHistory';
 
 let isLoaded = ref(false);
 
-const contactID = computed(() => store.state.ui.infoSec.client.contact.contact?.id);
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
 const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
+
 const loadMessages = async () => {
-  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, contactID.value);
+  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 }
 const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
 };
 
-watch(contactID, loadMessages, { immediate: true });
+watch(() => props.contactId, loadMessages, { immediate: true });
 
 </script>
 
@@ -61,11 +67,6 @@ watch(contactID, loadMessages, { immediate: true });
 
 .chat-history {
   height: 100%;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-}
-.chat-messages-container {
   display: flex;
   overflow: hidden;
   flex-direction: column;
