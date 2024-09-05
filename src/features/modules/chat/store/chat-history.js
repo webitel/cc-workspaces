@@ -13,6 +13,7 @@ const getters = {
 
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
+    console.log('LOAD_CHAT_HISTORY contactId:', contactId);
     const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
     context.commit('SET_CHAT_HISTORY', items);
   },
@@ -20,6 +21,7 @@ const actions = {
 
 const mutations = {
   SET_CHAT_HISTORY: (state, messages) => {
+    console.log('set messages');
     state.chatHistoryMessages = messages;
   },
 };

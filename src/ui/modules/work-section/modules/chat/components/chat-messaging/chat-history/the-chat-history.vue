@@ -1,6 +1,7 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
     <p> Chat History Component </p>
+    contactId: {{ contactId }}
     <div
       ref="chat-messages-items"
       class="chat-messages-items"
@@ -41,7 +42,6 @@ const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
-// const contactID = computed(() => store.state.ui.infoSec.client.contact.contact?.id);
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
@@ -52,7 +52,7 @@ const chatInputFocus = () => {
 
 loadMessages();
 
-// watch(props.contactId, loadMessages, { immediate: true });
+watch(props.contactId, loadMessages, { immediate: true });
 
 </script>
 
