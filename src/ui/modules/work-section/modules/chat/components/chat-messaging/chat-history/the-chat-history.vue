@@ -8,6 +8,8 @@
       v-chat-scroll
     >
       <div>
+        <!--    temporary text for visual identification chat-history in the development process,-->
+        <!--    because for the time being in some cases i cant see the difference -->
         <p> Chat History Empty Component </p>
         currentChat.contact: {{ currentChat?.contact.id }}
       </div>
