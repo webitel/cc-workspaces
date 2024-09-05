@@ -18,8 +18,8 @@
     </template>
     <template v-slot:title>
       <a
-        v-if="task?.contact?.id"
-        :href="contactLink(contact.id)"
+        v-if="contact?.id"
+        :href="contactLink(contact?.id)"
         target="_blank">
         {{ contact?.name?.commonName }}
       </a>
@@ -95,4 +95,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a {
+  color: var(--link-color);
+  opacity: 1;
+  animation: opacity 0.2s forwards;
+  transition: all 0.2s ease-in;
+}
+
+@keyframes opacity {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+a:hover {
+  color: var(--link--hover-color);
+}
 </style>
