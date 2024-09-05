@@ -50,9 +50,7 @@ const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
 };
 
-loadMessages();
-
-watch(props.contactId, loadMessages, { immediate: true });
+watch(() => props.contactId, loadMessages, { immediate: true });
 
 </script>
 
