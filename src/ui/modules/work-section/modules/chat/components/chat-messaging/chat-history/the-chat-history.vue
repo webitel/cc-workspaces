@@ -6,13 +6,13 @@
       class="chat-messages-items"
       v-chat-scroll
     >
-      <chat-started />
       <chat-message
         v-for="(message, index) of messages"
         :key="message.id"
         :size="size"
         :message="message"
       />
+      <chat-started :protocol="'webchat'" :gateway="'Liza web chat (Не видаляти)'"/>
     </div>
   </article>
 </template>

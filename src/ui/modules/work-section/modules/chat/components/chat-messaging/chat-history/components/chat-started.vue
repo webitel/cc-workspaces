@@ -1,18 +1,23 @@
 <template>
   <article class="chat-started">
     <wt-divider />
-    <wt-icon
-      icon="chat"
-      color="success"
-    />
-    <p> {{ $t('workspaceSec.chat.chatStarted') }} </p>
-    <wt-tooltip>
-      <div v-if="props.provider" class="chat-protocol">
-        <wt-icon :icon="iconType[props.provider]" />
-        <p> {{ $t(`objects.messengers.${props.provider}`) }} </p>
+      <div class="chat-started__content">
+        <wt-icon
+          icon="chat"
+          color="success"
+          size="sm"
+        />
+        <p> {{ $t('workspaceSec.chat.chatStarted') }} </p>
       </div>
+    <wt-hint v-if="props.protocol">
+      <template>
+        <div class="chat-started-protocol">
+          <wt-icon :icon="iconType[props.protocol]" />
+          <p> {{ props.gateway }} </p>
+        </div>
+      </template>
+    </wt-hint>
 <!--      винести в окремий компонент протокол-інфо ?-->
-    </wt-tooltip>
     <wt-divider />
   </article>
 </template>
@@ -20,13 +25,17 @@
 <script setup>
 
 import ChatGatewayProvider from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ChatGatewayProvider.enum.js';
-import ChatAgent from './chat-agent.vue';
 
 const props = defineProps({
-  provider: {
+  protocol: {
     type: String,
     default: '',
   },
+  gateway: {
+    type: String,
+    default: '',
+  },
+
 });
 
 const iconType = {
@@ -46,10 +55,24 @@ const iconType = {
 .chat-started {
   display: flex;
   gap: var(--spacing-2xs);
+  align-items: center;
+
+  &__content {
+    display: flex;
+    cursor: default;
+    gap: var(--spacing-2xs)
+  }
 
   p {
-    %typo-caption;
+    @extend %typo-caption;
+    min-width: 63px;
   }
+}
+
+.chat-started-protocol {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 </style>
