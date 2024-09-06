@@ -1,21 +1,19 @@
 <template>
   <article class="chat-started">
+    <wt-divider />
     <wt-icon
-      icon="attention"
+      icon="chat"
       color="success"
     />
-    Chat Started локаль
+    <p> {{ $t('workspaceSec.chat.chatStarted') }} </p>
     <wt-tooltip>
-<!--    якщо є шлюз-->
-    <div class="chat-protocol">
-      <wt-icon
-        :icon="iconType[protocol]"
-      />
-      <p> {{ $t(`objects.messengers.${protocol}`) }} </p>
-    </div>
+      <div v-if="props.provider" class="chat-protocol">
+        <wt-icon :icon="iconType[props.provider]" />
+        <p> {{ $t(`objects.messengers.${props.provider}`) }} </p>
+      </div>
 <!--      винести в окремий компонент протокол-інфо ?-->
     </wt-tooltip>
-    <chat-agent v-if="agent" :agent="agent" />
+    <wt-divider />
   </article>
 </template>
 
@@ -25,10 +23,10 @@ import ChatGatewayProvider from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/C
 import ChatAgent from './chat-agent.vue';
 
 const props = defineProps({
-  agent: {
+  provider: {
     type: String,
+    default: '',
   },
-// + шлюз
 });
 
 const iconType = {
@@ -42,3 +40,16 @@ const iconType = {
 };
 
 </script>
+
+<style lang="scss" scoped>
+
+.chat-started {
+  display: flex;
+  gap: var(--spacing-2xs);
+
+  p {
+    %typo-caption;
+  }
+}
+
+</style>

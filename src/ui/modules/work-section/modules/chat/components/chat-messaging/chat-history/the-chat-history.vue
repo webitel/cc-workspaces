@@ -6,6 +6,7 @@
       class="chat-messages-items"
       v-chat-scroll
     >
+      <chat-started />
       <chat-message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -23,6 +24,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
+import ChatStarted from './components/chat-started.vue';
 
 const props = defineProps({
   contactId: {
