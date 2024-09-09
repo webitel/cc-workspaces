@@ -11,7 +11,7 @@
       :message="message"
       :my="my"
       :show-avatar="showAvatar"
-    ></message-avatar>
+    />
     <!--    click.stop prevents focus on textarea and allows to select the message text -->
     <div class="chat-message__main-wrapper" @click.stop>
       <message-audio

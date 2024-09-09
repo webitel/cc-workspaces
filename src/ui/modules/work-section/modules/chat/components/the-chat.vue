@@ -1,5 +1,8 @@
 <template>
-  <task-container class="the-chat">
+  <article class="chat">
+    <Transition name="soft-loading" mode="out-in">
+      <wt-loader v-if="!isLoaded" />
+      <task-container v-else class="chat__wrapper">
     <template v-slot:header>
       <chat-header
         v-show="isChatHeader"
@@ -24,10 +27,12 @@
       />
     </template>
   </task-container>
+    </Transition>
+  </article>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import EmptyWorkspace from '../../empty-workspace/components/empty-workspace.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
@@ -53,8 +58,12 @@ export default {
   },
   data: () => ({
     currentTab: { component: defaultTab },
+    isLoaded: false,
   }),
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      isContactLoading: (state) => state.isLoading,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
@@ -88,19 +97,41 @@ export default {
     chat() {
       this.resetTab();
     },
+    isContactLoading() {
+      if (!this.isContactLoading) this.isLoaded = true;
+      // because we need to watch is contact to finish loading
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.the-chat {
+.chat {
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
   .chat-messaging-container,
   .chat-transfer-container {
     flex-grow: 1;
   }
 }
+
+.soft-loading-enter-active,
+.soft-loading-leave-active {
+  transition: all 0.15s ease-in;
+}
+
+.soft-loading-enter-from,
+.soft-loading-leave-to {
+  opacity: 0;
+}
+
+
 </style>
