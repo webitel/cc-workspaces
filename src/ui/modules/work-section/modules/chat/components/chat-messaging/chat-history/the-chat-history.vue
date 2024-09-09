@@ -12,7 +12,7 @@
         :size="size"
         :message="message"
       />
-      <chat-started :protocol="'webchat'" :gateway="'Liza web chat (Не видаляти)'"/>
+      <chat-started :provider="'webchat'" :gateway="'Liza web chat (Не видаляти)'"/>
     </div>
   </article>
 </template>
