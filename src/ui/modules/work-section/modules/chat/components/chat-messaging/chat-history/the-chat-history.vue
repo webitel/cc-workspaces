@@ -1,7 +1,13 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
+<!--    temporary text for visual identification chat-history in the development process,-->
+<!--    because for the time being in some cases i cant see the difference -->
     <p> Chat History Component </p>
-    <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
+    <div
+      ref="chat-messages-items"
+      class="chat-messages-items"
+      v-chat-scroll
+    >
       <chat-message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -21,6 +27,10 @@ import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
 
 const props = defineProps({
+  contactId: {
+    type: String,
+    require: true,
+  },
   size: {
     type: String,
     default: 'md',
@@ -33,16 +43,15 @@ const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
-const contactID = computed(() => store.state.ui.infoSec.client.contact.contact?.id);
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
 const loadMessages = async () => {
-  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, contactID.value);
+  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 }
 const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
 };
 
-watch(contactID, loadMessages, { immediate: true });
+watch(() => props.contactId, loadMessages, { immediate: true });
 
 </script>
 
