@@ -170,6 +170,7 @@ export default {
       },
       confirmClose: 'Are you sure you want to close active chat?',
       closedСhat: 'The chat was closed',
+      chatEnded: 'Chat ended',
     },
   },
   emptyWorkspace: {

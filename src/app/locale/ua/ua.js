@@ -168,6 +168,7 @@ export default {
       },
       confirmClose: 'Ви впевнені, що хочете закрити активний чат?',
       closedСhat: 'Чат закрито',
+      chatEnded: 'Чат завершено',
     },
   },
   emptyWorkspace: {
