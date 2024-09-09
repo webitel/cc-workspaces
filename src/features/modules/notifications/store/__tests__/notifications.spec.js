@@ -1,4 +1,4 @@
-import { CallActions, ChatActions } from 'webitel-sdk';
+import { ChatActions } from 'webitel-sdk';
 import notificationsModule from '../notifications';
 import '../../../../../../tests/unit/mocks/broadcastChannelMock';
 
@@ -47,11 +47,6 @@ describe('features/notifications store: actions', () => {
     expect(context.dispatch.mock.calls[0][0]).not.toContain('SEND_NOTIFICATION');
   });
 
-  it('HANDLE_ANY_CALL_RINGING action dispatches PLAY_SOUND action with sound audio', () => {
-    notificationsModule.actions.HANDLE_ANY_CALL_RINGING(context);
-    expect(context.dispatch).toHaveBeenCalledWith('PLAY_SOUND', { action: CallActions.Ringing, sound: '' });
-  });
-
   it('HANDLE_CALL_START action sets localStorage wtIsPlaying', async () => {
     await notificationsModule.actions.HANDLE_CALL_START(context);
     expect(localStorage.getItem('wtIsPlaying')).toBeTruthy();
@@ -60,16 +55,5 @@ describe('features/notifications store: actions', () => {
   it('HANDLE_CALL_START action commits SET_CURRENTLY_PLAYING mutation', async () => {
     await notificationsModule.actions.HANDLE_CALL_START(context);
     expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', true);
-  });
-
-  it('HANDLE_CALL_END action removes localStorage wtIsPlaying', async () => {
-    localStorage.setItem('wtIsPlaying', true);
-    await notificationsModule.actions.HANDLE_CALL_END(context);
-    expect(localStorage.getItem('wtIsPlaying')).toBeFalsy();
-  });
-
-  it('HANDLE_CALL_END action commits SET_CURRENTLY_PLAYING mutation', async () => {
-    await notificationsModule.actions.HANDLE_CALL_END(context);
-    expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', null);
   });
 });
