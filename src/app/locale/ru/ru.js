@@ -169,6 +169,10 @@ export default {
       },
       confirmClose: 'Вы уверенны, что хотите закрыть активный чат?',
       closedСhat: 'Чат был закрыт',
+      chatStarted: 'Чат начат',
+      chatEnded: 'Чат завершен',
+      chatTransferred: 'Чат переведен',
+      chatsAgent: '{ agent name } присоединился к чату',
     },
   },
   emptyWorkspace: {

@@ -22,6 +22,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapGetters, mapState } from 'vuex';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
 import CurrentChat from './current-chat/current-chat.vue';

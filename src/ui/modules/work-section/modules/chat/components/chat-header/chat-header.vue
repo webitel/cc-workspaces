@@ -18,10 +18,10 @@
     </template>
     <template v-slot:title>
       <a
-        v-if="task?.contact?.id"
-        :href="contactLink(task.contact.id)"
+        v-if="contact?.id"
+        :href="contactLink(contact?.id)"
         target="_blank">
-        {{ contact?.name.commonName }}
+        {{ contact?.name?.commonName }}
       </a>
       <p v-else> {{ displayChatName }} </p>
     </template>
@@ -95,4 +95,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a {
+  color: var(--link-color);
+  transition: all 0.2s ease-in;
+}
+
+a:hover {
+  color: var(--link--hover-color);
+}
 </style>
