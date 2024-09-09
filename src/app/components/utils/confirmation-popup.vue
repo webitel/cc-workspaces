@@ -49,9 +49,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.confirmation-popup__attention-icon {
-  text-align: center;
-  line-height: 0;
-  margin-bottom: var(--spacing-sm);
+.confirmation-popup {
+
+  &__attention-icon {
+    text-align: center;
+    line-height: 0;
+    margin-bottom: var(--spacing-sm);
+  }
+  &__text {
+    text-align: center;
+  }
+
 }
 </style>
