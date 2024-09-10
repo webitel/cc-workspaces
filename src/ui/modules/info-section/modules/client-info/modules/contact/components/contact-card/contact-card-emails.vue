@@ -19,7 +19,7 @@
               color="success"
             ></wt-icon>
           </div>
-          <p>{{ type.name }}</p>
+          <p>{{ type?.name }}</p>
         </div>
       </li>
     </ul>
@@ -40,7 +40,7 @@ const props = defineProps({
   },
 });
 
-const emails = computed(() => props.contact.emails);
+const emails = computed(() => props.contact?.emails);
 </script>
 
 <style lang="scss" scoped>

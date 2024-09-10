@@ -37,7 +37,7 @@ const props = defineProps({
   },
 });
 
-const chats = computed(() => props.contact.imclients.data);
+const chats = computed(() => props.contact?.imclients?.data);
 
 const iconType = {
   [ChatGatewayProvider.TELEGRAM_BOT]: 'telegram-bot',

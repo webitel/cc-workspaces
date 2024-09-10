@@ -7,7 +7,7 @@
     <template v-slot:default>
       <div class="contact-card-labels">
         <div
-          v-if="props.labels.length"
+          v-if="props.labels?.length"
           class="contact-card-labels__wrapper"
         >
           <wt-chip

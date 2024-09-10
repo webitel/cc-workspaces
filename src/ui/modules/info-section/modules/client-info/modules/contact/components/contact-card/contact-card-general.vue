@@ -83,7 +83,7 @@ const emit = defineEmits([
 ]);
 
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
-const name = computed(() => props.contact.name?.commonName);
+const name = computed(() => props.contact.name);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 const contactLink = computed(() => `${import.meta.env.VITE_CRM_URL}/contacts/${props.contact.id}/communications`);
