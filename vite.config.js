@@ -102,16 +102,21 @@ export default ({ mode }) => {
     ],
     test: {
       globals: true,
-      coverage: {
-        enabled: false,
-        reporter: 'json',
-      },
+      // coverage: {
+      //   enabled: false,
+      //   reporter: 'json',
+      // },
       alias: {
         /**
          * override the default alias vue -> vue/compat for dev and prod,
          * which is creating 2 vue instances while running tests :(
          */
         'vue': 'vue',
+      },
+      server: {
+        deps: {
+          inline: [/@webitel\/.*/],
+        },
       },
       environment: 'happy-dom',
       setupFiles: ['./tests/config/config.js'],

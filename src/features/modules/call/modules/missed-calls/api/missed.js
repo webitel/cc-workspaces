@@ -10,6 +10,8 @@ import { CallServiceApiFactory } from 'webitel-sdk';
 import instance from '../../../../../../app/api/instance';
 import configuration from '../../../../../../app/api/openAPIConfig';
 
+console.info(instance);
+
 const callService = new CallServiceApiFactory(configuration, '', instance);
 
 const getMissedCalls = async (params) => {

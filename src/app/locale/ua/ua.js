@@ -195,6 +195,7 @@ export default {
   history: {
     today: 'Сьогодні',
     yesterday: 'Вчора',
+    openInHistory: 'Відкрити в History',
   },
   transfer: {
     selectAgent: 'Оберіть оператора',

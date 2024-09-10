@@ -197,6 +197,7 @@ export default {
   history: {
     today: 'Today',
     yesterday: 'Yesterday',
+    openInHistory: 'Open in History',
   },
   transfer: {
     selectAgent: 'Please select an agent',
