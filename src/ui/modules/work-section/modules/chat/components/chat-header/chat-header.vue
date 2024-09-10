@@ -23,7 +23,9 @@
         target="_blank">
         {{ contact?.name?.commonName }}
       </a>
-      <p v-else> {{ displayChatName }} </p>
+      <span v-else>
+        {{ displayChatName }}
+      </span>
     </template>
   </task-header>
 </template>
@@ -95,12 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a {
-  color: var(--link-color);
-  transition: all 0.2s ease-in;
-}
-
 a:hover {
-  color: var(--link--hover-color);
+  text-decoration: underline;
 }
 </style>

@@ -1,15 +1,18 @@
 <template>
   <div>
-    <wt-loader v-show="isLoading"/>
-    <contacts-list-wrapper
-      :mode="props.mode"
-      :size="props.size"
-      :list="listedContacts"
-      :linked-contact="contact"
-      :namespace="props.namespace"
-      @link="linkContact"
-      @add="add"
-    />
+    <Transition name="soft-loading" mode="out-in">
+      <wt-loader v-if="isLoading"/>
+      <contacts-list-wrapper
+        v-else
+        :mode="props.mode"
+        :size="props.size"
+        :list="listedContacts"
+        :linked-contact="contact"
+        :namespace="props.namespace"
+        @link="linkContact"
+        @add="add"
+      />
+    </Transition>
   </div>
 </template>
 
@@ -54,5 +57,15 @@ function linkContact(contact) {
 </script>
 
 <style scoped lang="scss">
+
+.soft-loading-enter-active,
+.soft-loading-leave-active {
+  transition: var(--transition);
+}
+
+.soft-loading-enter-from,
+.soft-loading-leave-to {
+  opacity: 0;
+}
 
 </style>

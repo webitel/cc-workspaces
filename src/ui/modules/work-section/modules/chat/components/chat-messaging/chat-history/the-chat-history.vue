@@ -1,20 +1,17 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
-    <wt-loader v-if="!isLoaded" class="chat-history__loader"/>
     <div
-      v-else
-      ref="chat-messages-items"
-      class="chat-messages-items"
+      class="chat-history-messages"
       v-chat-scroll
     >
       <div>
         <!--    temporary text for visual identification chat-history in the development process,-->
-        <!--    because for the time being in some cases i cant see the difference -->
+        <!--    because now in some cases we can't see the difference -->
         <p> Chat History Empty Component </p>
         currentChat.contact: {{ currentChat?.contact?.id }}
       </div>
       <chat-message
-        v-for="(message, index) of messages"
+        v-for="(message) of messages"
         :key="message.id"
         :size="size"
         :message="message"
@@ -55,6 +52,7 @@ const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPAC
 
 
 const loadMessages = async () => {
+  isLoaded.value = false;
   try {
     await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
   } finally {
@@ -79,29 +77,20 @@ watch(() => props.contactId, loadMessages, { immediate: true });
   flex-direction: column;
 }
 
-.chat-messages-items {
+.chat-history-messages {
   @extend %wt-scrollbar;
   box-sizing: border-box;
   flex: 1 1;
   overflow-x: hidden;
   overflow-y: scroll;
   height: 100%;
-}
-
-.chat-history__loader, .chat-messages-items {
   opacity: 1;
-  animation: opacity 0.2s forwards;
+  animation: opacity var(--transition);
 }
 
 @keyframes opacity {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
-
-
-//@keyframes transform {
-//  0% {transform: translateY(100%);}
-//  100% {transform: translateY(0);}
-//}
 
 </style>
