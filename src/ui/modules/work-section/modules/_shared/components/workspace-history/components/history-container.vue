@@ -13,15 +13,25 @@
     </template>
 
     <template v-slot:content>
-      <history-lookup-item
-        v-for="(item) of dataList"
-        :key="item.id"
-        :item="item"
-        :size="size"
-        :for-number="historyNumber"
-        @input="select(item)"
-      ></history-lookup-item>
+      <div class="history-container-contact"
+        v-for="dataItem in dataList">
+        <p class="history-container-contact__caption">
+          {{dataItem.groupName}}
+        </p>
+        <history-lookup-item
+          v-for="(item) of dataItem.groupData"
+          :key="item.id"
+          :item="item"
+          :size="size"
+          :for-number="historyNumber"
+          @input="select(item)"
+          class="history-container-contact__item"
+        />
+        <wt-divider/>
+      </div>
+
     </template>
+
   </lookup-item-container>
 </template>
 
@@ -57,7 +67,6 @@ export default {
   watch: {
     call() {
       this.resetHistoryNumber();
-      this.loadDataList();
     },
   },
 
@@ -82,7 +91,6 @@ export default {
     ...mapActions('features/call', {
       setNumber: 'SET_NEW_NUMBER',
     }),
-
     select(item) {
       let destination = '';
       if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
@@ -130,9 +138,67 @@ export default {
     resetHistoryNumber() {
       this.historyNumber = '';
     },
+
+    async loadDataList() {
+      if (!this.dataList.length) this.isLoading = true;
+      const params = this.collectParams();
+      // both items and data because contacts return { data }, and other endpoints return { items }
+      const { items, data, next } = await this.fetch(params);
+      this.isNext = next;
+      const sortedData = await this.groupAndSortByDate(items || data);
+      this.setData(sortedData);
+      this.dataPage += 1;
+      this.isLoading = false;
+    },
+    groupAndSortByDate(data) {
+      const groupedData = {};
+      data.forEach(item => {
+        const date = new Date(parseInt(item.createdAt));
+        let dateKey;
+
+        this.isToday(date) ? dateKey = this.$t('history.today'):
+          dateKey = this.formatDate(item.createdAt);
+
+        if (!groupedData[dateKey]) groupedData[dateKey] = [];
+        groupedData[dateKey].push(item);
+      });
+
+      const result = Object.keys(groupedData).map(key => {
+        return {
+          groupName: key,
+          groupData: groupedData[key].sort((a, b) => b.createdAt - a.createdAt)
+        };
+      });
+
+      return result;
+    },
+    isToday(date) {
+      const today = new Date();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    },
+    formatDate(timestamp) {
+      const date = new Date(parseInt(timestamp));
+      return `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+  .history-container-contact{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+    padding-top: var(--spacing-2xs);
+
+    &__caption{
+      @extend %typo-caption;
+      text-align: center;
+    }
+  }
 </style>
+
