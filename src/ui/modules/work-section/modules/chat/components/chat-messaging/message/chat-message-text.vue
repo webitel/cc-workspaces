@@ -34,7 +34,7 @@ export default {
 
 <style lang="scss" scoped>
 .chat-message-text {
-  @extend %typo-body-1;
+  @extend %typo-body-2;
   overflow-wrap: break-word;
   white-space: pre-line; // read \n as "new line"
 

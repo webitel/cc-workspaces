@@ -21,11 +21,14 @@
         :size="size"
         @initialized="handlePlayerInitialize"
       />
+<!--      без обгортки-->
+<!--      переназвати, якщо там також і відел в цьому компоненті-->
       <message-image
         :message="message"
         :my="my"
         @open="openImage"
       />
+<!--      без обгортки-->
       <message-document
         :message="message"
         :my="my"
@@ -35,11 +38,14 @@
         :message="message"
         :my="my"
       />
+<!--      потрібна обгортка для тексту-->
     </div>
     <message-meta
       :message="message"
       :my="my"
     />
+<!--    шо буде, якщо прибрати?-->
+<!--    переназвати?-->
   </div>
 </template>
 
@@ -102,7 +108,8 @@ export default {
       return this.my || this.isAgent || this.isBot;
     },
     contactName() {
-      return !this.isBot && !this.isAgent && !this.my && this.contact?.id
+      // чи є якась ознака, що це контакт в message.peer ?
+      return !this.isAgentSideMessage && this.contact?.id
         ? this.contact.name?.commonName
         : '';
     },

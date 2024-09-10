@@ -19,7 +19,18 @@
         :size="size"
         :message="message"
       />
-      <chat-started :provider="'webchat'" :gateway="'Liza web chat (Не видаляти)'"/>
+
+      <chat-message-new :message="messages[7]">
+
+        <template v-slot:before-message>
+          <chat-started :provider="'webchat'" :gateway="'Liza web chat (Не видаляти)'" />
+        </template>
+
+        <template v-slot:after-message>
+          <chat-ended />
+        </template>
+      </chat-message-new>
+
     </div>
   </article>
 </template>
@@ -31,6 +42,8 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
+import ChatMessageNew from '../message/chat-message-new.vue';
+import ChatEnded from './components/chat-ended.vue';
 import ChatStarted from './components/chat-started.vue';
 
 const props = defineProps({
