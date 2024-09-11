@@ -84,13 +84,6 @@ watch(() => props.contactId, loadMessages, { immediate: true });
   overflow-x: hidden;
   overflow-y: scroll;
   height: 100%;
-  opacity: 1;
-  animation: opacity var(--transition);
-}
-
-@keyframes opacity {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 </style>
