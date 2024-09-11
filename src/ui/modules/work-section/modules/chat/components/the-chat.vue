@@ -1,33 +1,31 @@
 <template>
   <article class="chat">
-    <Transition name="soft-loading" mode="out-in">
-      <wt-loader v-if="!isLoaded" />
-      <task-container v-else class="chat__wrapper">
-    <template v-slot:header>
-      <chat-header
-        v-show="isChatHeader"
-        :size="size"
-        @openTab="openTab"
-      />
-      <media-viewer />
-    </template>
-    <template v-slot:body>
-      <component
-        :is="currentTab.component"
-        :size="size"
-        v-bind="currentTab.props"
-        @closeTab="resetTab"
-        @openTab="openTab"
-      />
-    </template>
-    <template v-slot:footer>
-      <chat-footer
-        v-if="isChatFooter"
-        :size="size"
-      />
-    </template>
-  </task-container>
-    </Transition>
+    <wt-loader v-if="!isLoaded" />
+    <task-container v-else class="chat__wrapper">
+      <template v-slot:header>
+        <chat-header
+          v-show="isChatHeader"
+          :size="size"
+          @openTab="openTab"
+        />
+        <media-viewer />
+      </template>
+      <template v-slot:body>
+        <component
+          :is="currentTab.component"
+          :size="size"
+          v-bind="currentTab.props"
+          @closeTab="resetTab"
+          @openTab="openTab"
+        />
+      </template>
+      <template v-slot:footer>
+        <chat-footer
+          v-if="isChatFooter"
+          :size="size"
+        />
+      </template>
+    </task-container>
   </article>
 </template>
 
@@ -63,6 +61,7 @@ export default {
   computed: {
     ...mapState('ui/infoSec/client/contact', {
       isContactLoading: (state) => state.isLoading,
+      contact: (state) => state.contact,
     }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
@@ -97,9 +96,12 @@ export default {
     chat() {
       this.resetTab();
     },
-    isContactLoading() {
-      if (!this.isContactLoading) this.isLoaded = true;
-      // because we need to watch is contact to finish loading
+    isContactLoading: {
+      handler(newValue, oldValue) {
+        if (!newValue && oldValue || this.contact?.id) this.isLoaded = true;
+        // because we need to watch is contact to finish loading
+      },
+      immediate: true,
     }
   },
 };
@@ -108,29 +110,16 @@ export default {
 <style lang="scss" scoped>
 .chat {
   display: flex;
-  flex-direction: column;
   height: 100%;
 
   &__wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    width: 100%;
   }
 
   .chat-messaging-container,
   .chat-transfer-container {
     flex-grow: 1;
   }
-}
-
-.soft-loading-enter-active,
-.soft-loading-leave-active {
-  transition: all 0.15s ease-in;
-}
-
-.soft-loading-enter-from,
-.soft-loading-leave-to {
-  opacity: 0;
 }
 
 

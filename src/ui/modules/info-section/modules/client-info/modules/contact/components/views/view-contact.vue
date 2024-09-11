@@ -1,7 +1,8 @@
 <template>
   <div>
-    <wt-loader v-show="isLoading"/>
+    <wt-loader v-if="isLoading"/>
     <contacts-list-wrapper
+      v-else
       :mode="props.mode"
       :size="props.size"
       :list="listedContacts"
