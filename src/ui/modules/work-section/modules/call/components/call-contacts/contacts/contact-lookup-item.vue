@@ -4,14 +4,14 @@
       <a :href="crmContactLink" target="_blank">
         <wt-avatar
           :size="size"
-          :username="item.name.commonName"
+          :username="item.name"
         ></wt-avatar>
       </a>
     </template>
 
     <template v-slot:title>
       <a class="contact-lookup-item__title" :href="crmContactLink" target="_blank">
-        {{ item.name.commonName }}
+        {{ item.name }}
       </a>
     </template>
 
