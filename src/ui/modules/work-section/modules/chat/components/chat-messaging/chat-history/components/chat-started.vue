@@ -23,6 +23,8 @@
 
 <script setup>
 
+import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
+
 const props = defineProps({
   provider: {
     type: String,

@@ -16,7 +16,6 @@
         :size="size"
         :message="message"
       />
-      <chat-started :provider="'webchat'" :gateway="'Liza web chat (Не видаляти)'"/>
     </div>
   </article>
 </template>
