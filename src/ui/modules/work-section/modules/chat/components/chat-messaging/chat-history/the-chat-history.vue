@@ -53,7 +53,25 @@ const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
-const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
+const data = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
+const currentChatMessages = computed(() => store.getters[`${namespace}/CURRENT_CHAT_MESSAGES`]);
+
+const isChatStarted = (previousItem, item, nextItem) => {
+ return previousItem // it means first(on top) downloaded message in history
+  && previousItem?.chat?.id !== item.chat?.id // messages from different chats
+  || !nextItem && currentChatMessages.value.length; // it means last message in history and after this started current chat messages
+}
+
+const messages = computed(() => data.value.map((item, index, array) => {
+  const start = isChatStarted(array[index-1], item, array[index+1]);
+  const end = start || !currentChatMessages.value.length;
+
+    return {
+      ...item,
+      isChatStarted: start,
+      isChatEnded: end,
+    };
+  }));
 
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);

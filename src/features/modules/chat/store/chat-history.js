@@ -15,22 +15,7 @@ const getters = {
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
     const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
-
-    const messages = items.map((item, index, array) => {
-
-      const isChatStarted = array[index-1] // it means first(on top) downloaded message in history
-        && array[index-1]?.chat?.id !== item.chat?.id // messages from different chats
-        || !array[index+1] && context.getters.CURRENT_CHAT_MESSAGES.length; // it means last message in history and after this started current chat messages
-
-      const isChatEnded = isChatStarted || !context.getters.CURRENT_CHAT_MESSAGES.length
-
-      return {
-        ...item,
-        isChatStarted,
-        isChatEnded,
-      };
-    });
-    context.commit('SET_CHAT_HISTORY', messages);
+    context.commit('SET_CHAT_HISTORY', items);
   },
 };
 
