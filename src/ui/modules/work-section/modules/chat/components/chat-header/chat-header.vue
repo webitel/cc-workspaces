@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="size" :username="contact?.name?.commonName">
+  <task-header :size="size" :username="contact?.name">
     <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
@@ -21,7 +21,7 @@
         v-if="contact?.id"
         :href="contactLink(contact?.id)"
         target="_blank">
-        {{ contact?.name?.commonName }}
+        {{ contact?.name }}
       </a>
       <span v-else>
         {{ displayChatName }}
