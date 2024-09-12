@@ -10,14 +10,13 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="contactId"
-      :contact-id="contactId"
+      :contact-id="'984'"
       :size="size"
     />
-    <current-chat
-      v-else
-      :size="size"
-    />
+<!--    <current-chat-->
+<!--      v-else-->
+<!--      :size="size"-->
+<!--    />-->
   </div>
 </template>
 

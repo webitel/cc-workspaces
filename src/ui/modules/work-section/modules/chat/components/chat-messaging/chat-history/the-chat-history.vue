@@ -9,11 +9,14 @@
         v-for="(message) of messages"
         :key="message.id"
       >
+
         <chat-started
           v-if="message.isChatStarted"
           :provider="message.chat?.via?.type"
           :gateway="message.chat?.via?.name"
         />
+        <chat-ended v-if="message.isChatEnded" />
+
         <chat-message
           :size="size"
           :message="message"
@@ -30,6 +33,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
+import ChatEnded from './components/chat-ended.vue';
 import ChatStarted from './components/chat-started.vue';
 
 const props = defineProps({
