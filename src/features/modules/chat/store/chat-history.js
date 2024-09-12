@@ -15,7 +15,20 @@ const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
     const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
     console.log('items:', items);
-    context.commit('SET_CHAT_HISTORY', items);
+
+    const messages = items.map((item, index) => {
+
+      console.log('chat.id', item.chat.id, 'item[index - 1]?.chat.id:', item[index-1]?.chat.id);
+      const isChatStarted = item[index-1]?.chat.id !== item.chat.id;
+
+      return {
+        ...item,
+        isChatStarted,
+      };
+    });
+
+    console.log('messages:', messages);
+    context.commit('SET_CHAT_HISTORY', messages);
   },
 };
 

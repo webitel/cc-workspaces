@@ -10,12 +10,21 @@
         <p> Chat History Empty Component </p>
         currentChat.contact: {{ currentChat?.contact?.id }}
       </div>
-      <chat-message
+      <div
+        class="chat-history-message-wrapper"
         v-for="(message) of messages"
         :key="message.id"
-        :size="size"
-        :message="message"
-      />
+      >
+        <chat-started
+          v-if="message.isChatStarted"
+          :provider="message.chat?.via.type"
+          :gateway="message.chat?.via.name"
+        />
+        <chat-message
+          :size="size"
+          :message="message"
+        />
+      </div>
     </div>
   </article>
 </template>
