@@ -8,8 +8,10 @@
       class="contact-card-general__avatar"
       size="2xl"
     ></wt-avatar>
+
     <div class="contact-card-general__wrapper">
       <div class="contact-card-general__name">
+
         <a
           target="_blank"
           :href="contactLink(props.contact.id)"
@@ -22,7 +24,6 @@
         </a>
 
       </div>
-
 
       <ul class="contact-card-general__list">
         <li
@@ -82,6 +83,7 @@ const emit = defineEmits([
 ]);
 
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
+const name = computed(() => props.contact.name);
 const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONTACT_LINK']);
 const name = computed(() => props.contact.name?.commonName);
 const manager = computed(() => props.contact?.managers[0]?.user.name);

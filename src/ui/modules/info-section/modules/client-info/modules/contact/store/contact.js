@@ -17,7 +17,7 @@ const actions = {
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
     try {
       context.commit('SET_IS_LOADING', true);
-      const { data: contacts } = await ContactsAPI.getList(searchParams);
+      const { items: contacts } = await ContactsAPI.getList(searchParams);
 
       if (contacts.length === 1) {
         return context.dispatch('LINK_CONTACT', contacts[0]);
@@ -31,7 +31,7 @@ const actions = {
   SEARCH_CONTACTS: async (context, searchParams) => {
     try {
       context.commit('SET_IS_LOADING', true);
-      const {data: contacts} = await ContactsAPI.getList(searchParams);
+      const { items: contacts} = await ContactsAPI.getList(searchParams);
       context.commit('SET_CONTACTS_BY_SEARCH', contacts);
     } finally {
       context.commit('SET_IS_LOADING', false);
@@ -40,8 +40,8 @@ const actions = {
   LOAD_CHAT_CONTACT: async (context, { id }) => {
     try {
       context.commit('SET_IS_LOADING', true);
-      const { data: contacts } = await ContactsAPI.getList({ q: id, qin:'imclients' });
-      context.commit('SET_CONTACT', contacts.length ? contacts[0] : null);
+      const { items: contacts } = await ContactsAPI.getList({ q: id, qin:'imclients' });
+      context.commit('SET_CONTACT', contacts?.length ? contacts[0] : null);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
@@ -52,7 +52,7 @@ const actions = {
   LOAD_CONTACT: async (context, contactId) => {
     try {
       context.commit('SET_IS_LOADING', true);
-      const contact = await ContactsAPI.get({ contactId });
+      const contact = await ContactsAPI.get({ itemId: contactId });
       context.commit('SET_CONTACT', contact);
       context.commit('SET_CONTACTS_BY_SEARCH', []);
       context.dispatch('CLEAN_CONTACTS_BY_SEARCH', []);
@@ -79,6 +79,7 @@ const actions = {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
 
     if (isChatWorkspace) {
+      if(state.contactsByDestination) context.commit('SET_CONTACTS_BY_DESTINATION', []);
       return context.dispatch('LOAD_CHAT_CONTACT', { id: task.members[0].user_id });
     }
 
