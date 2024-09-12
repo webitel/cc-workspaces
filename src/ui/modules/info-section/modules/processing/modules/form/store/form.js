@@ -9,15 +9,17 @@ const actions = {
       if (view.component === 'wt-select') {
         if (Array.isArray(value)) {
           _value = value.map((val) => (
+            // мені здається тут опечатка і має бути typeof val === 'object' ???
             typeof value === 'object' ? val.value : val
           ));
-        } else if (typeof value === 'object') _value = value.value;
+        } else if (typeof value === 'object') _value = value.value; // тут змінював _value = value.value на _value = value, але тоді в формі не таке значення
       }
       return {
         ...form,
         [id]: _value,
       };
     }, {});
+
     return task.attempt.formAction(action.id, form);
   },
 };
