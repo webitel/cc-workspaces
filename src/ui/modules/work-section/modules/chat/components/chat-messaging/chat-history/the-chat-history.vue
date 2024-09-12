@@ -10,12 +10,12 @@
         :key="message.id"
       >
 
+        <chat-ended v-if="message.isChatEnded" />
         <chat-started
           v-if="message.isChatStarted"
           :provider="message.chat?.via?.type"
           :gateway="message.chat?.via?.name"
         />
-        <chat-ended v-if="message.isChatEnded" />
 
         <chat-message
           :size="size"

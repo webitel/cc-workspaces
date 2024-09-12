@@ -6,8 +6,9 @@ const state = {
 };
 
 const getters = {
-  ALL_CONTACTS_MESSAGES: (state, getters, rootState, rootGetters) => (
-    [...state.chatHistoryMessages, ...rootGetters['features/chat/CHAT_ON_WORKSPACE']?.messages]
+  CURRENT_CHAT_MESSAGES: (state, getters, rootState, rootGetters) => rootGetters['features/chat/CHAT_ON_WORKSPACE']?.messages,
+  ALL_CONTACTS_MESSAGES: (state, getters) => (
+    [...state.chatHistoryMessages, ...getters.CURRENT_CHAT_MESSAGES]
   ), // chat history messages + current chat messages
 };
 
@@ -17,11 +18,11 @@ const actions = {
 
     const messages = items.map((item, index, array) => {
 
-      const isChatStarted = array[index-1] // it means first downloaded message in history
+      const isChatStarted = array[index-1] // it means first(on top) downloaded message in history
         && array[index-1]?.chat?.id !== item.chat?.id // messages from different chats
-        || !array[index+1]; // it means last message in history after this started current chat messages
+        || !array[index+1] && context.getters.CURRENT_CHAT_MESSAGES.length; // it means last message in history and after this started current chat messages
 
-      const isChatEnded = isChatStarted || !context.rootGetters['features/chat/CHAT_ON_WORKSPACE']?.messages.length
+      const isChatEnded = isChatStarted || !context.getters.CURRENT_CHAT_MESSAGES.length
 
       return {
         ...item,
