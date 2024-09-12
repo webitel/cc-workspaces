@@ -1,7 +1,7 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
     <div
-      class="chat-history-messages"
+      class="chat-history__messages"
       v-chat-scroll
     >
       <div>
@@ -45,20 +45,12 @@ const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
-let isLoaded = ref(false);
-
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
 const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
 
 const loadMessages = async () => {
-  isLoaded.value = false;
-  try {
-    await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
-  } finally {
-    isLoaded.value = true;
-    // even if loading was with error
-  }
+  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 }
 const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
@@ -75,15 +67,15 @@ watch(() => props.contactId, loadMessages, { immediate: true });
   display: flex;
   overflow: hidden;
   flex-direction: column;
-}
 
-.chat-history-messages {
-  @extend %wt-scrollbar;
-  box-sizing: border-box;
-  flex: 1 1;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  height: 100%;
+  &__messages {
+    @extend %wt-scrollbar;
+    box-sizing: border-box;
+    flex: 1 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+  }
 }
 
 </style>
