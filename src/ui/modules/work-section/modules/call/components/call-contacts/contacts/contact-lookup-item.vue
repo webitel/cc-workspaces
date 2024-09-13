@@ -4,7 +4,7 @@
       <a :href="contactLink(item.id)" target="_blank">
         <wt-avatar
           :size="size"
-          :username="item.name.commonName"
+          :username="item.name"
         ></wt-avatar>
       </a>
     </template>
@@ -14,7 +14,7 @@
         class="contact-lookup-item__title"
         :href="contactLink(item.id)"
         target="_blank">
-        {{ item.name.commonName }}
+        {{ item.name }}
       </a>
     </template>
 

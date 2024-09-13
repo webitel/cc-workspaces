@@ -1,6 +1,6 @@
 <template>
   <article class="chat">
-    <wt-loader v-if="!isLoaded" />
+    <wt-loader v-if="isContactLoading" />
     <task-container v-else class="chat__wrapper">
       <template v-slot:header>
         <chat-header
@@ -56,7 +56,6 @@ export default {
   },
   data: () => ({
     currentTab: { component: defaultTab },
-    isLoaded: false,
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {
@@ -96,13 +95,6 @@ export default {
     chat() {
       this.resetTab();
     },
-    isContactLoading: {
-      handler(newValue, oldValue) {
-        if (!newValue && oldValue || this.contact?.id) this.isLoaded = true;
-        // because we need to watch is contact to finish loading
-      },
-      immediate: true,
-    }
   },
 };
 </script>

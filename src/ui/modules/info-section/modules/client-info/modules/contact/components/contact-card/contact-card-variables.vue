@@ -8,7 +8,7 @@
         class="contact-card-variables"
         :class="[`contact-card-variables--${props.size}`]"
       >
-        <ul v-if="props.variables.length">
+        <ul v-if="props.variables?.length">
           <li
             v-for="({ key, value, id }, idx) of props.variables"
             :key="id"
