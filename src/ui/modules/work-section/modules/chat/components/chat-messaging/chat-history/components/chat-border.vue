@@ -66,7 +66,7 @@ const props = defineProps({
 
   p {
     @extend %typo-caption;
-    min-width: 63px;
+    white-space: nowrap;
   }
 }
 

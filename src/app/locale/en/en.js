@@ -173,7 +173,7 @@ export default {
       chatStarted: 'Chat started',
       chatEnded: 'Chat ended',
       chatTransferred: 'Chat transferred',
-      chatsAgent: '{ agent name } has joined the chat',
+      chatsAgent: '{ agentName } has joined the chat',
     },
   },
   emptyWorkspace: {
