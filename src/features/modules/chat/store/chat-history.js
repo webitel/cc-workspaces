@@ -14,7 +14,6 @@ const getters = {
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
     const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
-    console.log('items:', items);
     context.commit('SET_CHAT_HISTORY', items);
   },
 };
