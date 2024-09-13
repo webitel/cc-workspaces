@@ -1,33 +1,36 @@
 <template>
-  <task-container class="the-chat">
-    <template v-slot:header>
-      <chat-header
-        v-show="isChatHeader"
-        :size="size"
-        @openTab="openTab"
-      />
-      <media-viewer />
-    </template>
-    <template v-slot:body>
-      <component
-        :is="currentTab.component"
-        :size="size"
-        v-bind="currentTab.props"
-        @closeTab="resetTab"
-        @openTab="openTab"
-      />
-    </template>
-    <template v-slot:footer>
-      <chat-footer
-        v-if="isChatFooter"
-        :size="size"
-      />
-    </template>
-  </task-container>
+  <article class="chat">
+    <wt-loader v-if="isContactLoading" />
+    <task-container v-else class="chat__wrapper">
+      <template v-slot:header>
+        <chat-header
+          v-show="isChatHeader"
+          :size="size"
+          @openTab="openTab"
+        />
+        <media-viewer />
+      </template>
+      <template v-slot:body>
+        <component
+          :is="currentTab.component"
+          :size="size"
+          v-bind="currentTab.props"
+          @closeTab="resetTab"
+          @openTab="openTab"
+        />
+      </template>
+      <template v-slot:footer>
+        <chat-footer
+          v-if="isChatFooter"
+          :size="size"
+        />
+      </template>
+    </task-container>
+  </article>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import EmptyWorkspace from '../../empty-workspace/components/empty-workspace.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
@@ -55,6 +58,10 @@ export default {
     currentTab: { component: defaultTab },
   }),
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      isContactLoading: (state) => state.isLoading,
+      contact: (state) => state.contact,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
@@ -93,14 +100,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.the-chat {
+.chat {
   display: flex;
-  flex-direction: column;
   height: 100%;
+
+  &__wrapper {
+    width: 100%;
+  }
 
   .chat-messaging-container,
   .chat-transfer-container {
     flex-grow: 1;
   }
 }
+
+
 </style>

@@ -43,12 +43,11 @@ export default {
     display: grid;
     box-sizing: border-box;
     grid-template-columns: 1fr 40px 1fr;
-    grid-gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-xs);
+    grid-gap: var(--spacing-2xs);
 
     &__action-section {
       display: flex;
-      gap: var(--spacing-xs);
+      gap: var(--spacing-2xs);
 
       &:nth-child(2) {
         justify-content: flex-end;
@@ -57,6 +56,7 @@ export default {
 
     .wt-avatar {
       flex: 0 0 32px;
+      transition: var(--transition);
     }
   }
 
@@ -64,7 +64,7 @@ export default {
     text-align: center;
 
     &__title {
-      @extend %typo-subtitle-2;
+      @extend %typo-subtitle-1;
     }
 
     &__subtitle {
