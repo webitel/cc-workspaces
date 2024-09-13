@@ -1,7 +1,7 @@
 <template>
-  <article class="chat-date">
+  <div class="chat-date">
     {{ formattedDate }}
-  </article>
+  </div>
 </template>
 
 <script setup>
