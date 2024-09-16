@@ -15,7 +15,7 @@
             <div class="chat-activity-info__provider">
               <wt-icon :icon="iconType[props.provider]" />
               <p class="chat-activity-info__provider-title">
-                {{ props.gateway }} || {{ props.provider }}
+                {{ props.gateway || props.provider }}
               </p>
             </div>
           </template>
