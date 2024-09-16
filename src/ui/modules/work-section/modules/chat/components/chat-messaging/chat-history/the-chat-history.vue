@@ -16,8 +16,8 @@
         />
         <chat-activity-info
           v-if="isChatStarted(index)"
-          :provider="message.chat?.via?.type"
-          :gateway="message.chat?.via?.name"
+          :provider="getChatProvider(message).type"
+          :gateway="getChatProvider(message).name"
         />
 
         <chat-message
@@ -57,6 +57,7 @@ const namespace = 'features/chat/chatHistory';
 
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
 const currentChatMessages = computed(() => store.getters[`${namespace}/CURRENT_CHAT_MESSAGES`]);
+const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
 const getMessage = (index) => {
   return {
@@ -64,6 +65,13 @@ const getMessage = (index) => {
     message: messages.value[index],
     nextMessage: messages.value[index + 1],
   }
+}
+const getChatProvider = (message) => {
+  return  message.chat?.via
+    ? { type: message.chat.via.type, // chats from history
+      name: message.chat.via.name }
+    : { type: currentChat.value.members[0].type, // current chat
+      name: currentChat.value.members[0].name }
 }
 const isChatStarted = (index) => {
   const { prevMessage, message, nextMessage } = getMessage(index);
