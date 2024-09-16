@@ -38,7 +38,8 @@ const actions = {
   LOAD_CHAT_CONTACT: async (context, { id }) => {
     try {
       context.commit('SET_IS_LOADING', true);
-      const { items: contacts } = await ContactsAPI.getList({ q: id, qin:'imclients' });
+      // https://webitel.atlassian.net/browse/WTEL-4985
+      const { items: contacts } = await ContactsAPI.getList({ q: id, qin:'imclients{user{id}}' });
       context.commit('SET_CONTACT', contacts?.length ? contacts[0] : null);
     } finally {
       context.commit('SET_IS_LOADING', false);
