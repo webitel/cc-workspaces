@@ -20,8 +20,6 @@
           :gateway="message.chat?.via?.name"
         />
 
-        message.chat?.via?.type: {{ message.chat?.via?.type }}
-
         <chat-message
           :size="size"
           :message="message"
