@@ -66,7 +66,6 @@ export default {
   computed: {
     content() {
       let value = dompurify.sanitize(this.initialValue);
-      value = this.replaceURLEncoding(value);
       return md.render(value);
     },
     valueToCopy() {
@@ -74,9 +73,11 @@ export default {
     },
   },
   methods: {
+    // https://webitel.atlassian.net/browse/WTEL-5112
+    // https://webitel.atlassian.net/browse/WTEL-4472
     replaceURLEncoding(text) {
-      // https://webitel.atlassian.net/browse/WTEL-4472
-      const encodeValue = encodeURI(text).replace(/\%0A/g, ' ');
+      const encodeValue = encodeURI(text)
+      .replaceAll(/\%0A/g, ' ');
       return decodeURI(encodeValue);
     },
   },
