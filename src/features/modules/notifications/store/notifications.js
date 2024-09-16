@@ -107,7 +107,7 @@ const actions = {
     const playSound = () => context.dispatch('PLAY_SOUND', {
       action: CallActions.Ringing,
       sound: customRingtone,
-      volume: ringtoneVolume,  // Pass the volume setting here
+      volume: ringtoneVolume,
     });
 
     // sometimes we need to wait when call end sound is finished before playing ringtone
