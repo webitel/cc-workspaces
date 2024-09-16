@@ -173,7 +173,7 @@ export default {
       chatStarted: 'Чат начат',
       chatEnded: 'Чат завершен',
       chatTransferred: 'Чат переведен',
-      chatsAgent: '{ agent name } присоединился к чату',
+      chatsAgent: '{ agentName } присоединился к чату',
     },
   },
   emptyWorkspace: {

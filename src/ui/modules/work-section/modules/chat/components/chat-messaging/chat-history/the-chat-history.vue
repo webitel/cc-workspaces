@@ -33,8 +33,6 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
-import ChatEnded from './components/chat-ended.vue';
-import ChatStarted from './components/chat-started.vue';
 
 const props = defineProps({
   contactId: {
