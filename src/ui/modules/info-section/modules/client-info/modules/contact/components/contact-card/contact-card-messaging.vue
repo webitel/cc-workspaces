@@ -38,7 +38,7 @@ const props = defineProps({
   },
 });
 
-const chats = computed(() => props.contact.imclients.data);
+const chats = computed(() => props.contact?.imclients?.data);
 
 </script>
 
