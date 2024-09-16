@@ -23,6 +23,7 @@ export default {
     edit: 'Edit',
     select: 'Select',
     run: 'Run',
+    today: 'Today',
   },
   appNavigator: {
     title: 'Webitel applications',

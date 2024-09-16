@@ -21,6 +21,7 @@ export default {
     edit: 'Редагувати',
     select: 'Обрати',
     run: 'Запустити',
+    today: 'Сьогодні',
   },
   appNavigator: {
     title: 'Додатки Webitel',
