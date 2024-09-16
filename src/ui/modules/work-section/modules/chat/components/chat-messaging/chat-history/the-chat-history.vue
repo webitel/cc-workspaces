@@ -6,13 +6,16 @@
     >
       <div
         class="chat-history__message-wrapper"
-        v-for="(message) of messages"
+        v-for="(message, index) of messages"
         :key="message.id"
       >
 
-        <chat-ended v-if="message.isChatEnded" />
-        <chat-started
-          v-if="message.isChatStarted"
+        <chat-activity-info
+          v-if="isChatStarted(index) || isLastMessage(index)"
+          ended
+        />
+        <chat-activity-info
+          v-if="isChatStarted(index)"
           :provider="message.chat?.via?.type"
           :gateway="message.chat?.via?.name"
         />
@@ -33,6 +36,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
+import ChatActivityInfo from './components/chat-activity-info.vue';
 
 const props = defineProps({
   contactId: {
@@ -51,29 +55,32 @@ const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
-const data = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
+const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
 const currentChatMessages = computed(() => store.getters[`${namespace}/CURRENT_CHAT_MESSAGES`]);
 
-const isChatStarted = (previousItem, item, nextItem) => {
- return previousItem // it means first(on top) downloaded message in history
-  && previousItem?.chat?.id !== item.chat?.id // messages from different chats
-  || !nextItem && currentChatMessages.value.length; // it means last message in history and after this started current chat messages
+const getMessage = (index) => {
+  return {
+    prevMessage: messages.value[index - 1],
+    message: messages.value[index],
+    nextMessage: messages.value[index + 1],
+  }
 }
+const isChatStarted = (index) => {
+  const { prevMessage, message, nextMessage } = getMessage(index);
 
-const messages = computed(() => data.value.map((item, index, array) => {
-  const start = isChatStarted(array[index-1], item, array[index+1]);
-  const end = start || !currentChatMessages.value.length;
+ return prevMessage
+   && nextMessage
+   && prevMessage?.chat?.id !== message.chat?.id // messages from different chats
+};
 
-    return {
-      ...item,
-      isChatStarted: start,
-      isChatEnded: end,
-    };
-  }));
+const isLastMessage = (index) => {
+  const { nextMessage } = getMessage(index);
+  !nextMessage && !currentChatMessages.value.length;
+}
 
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
-}
+};
 const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
 };
