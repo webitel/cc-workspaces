@@ -64,14 +64,14 @@ const getMessage = (index) => {
     message: messages.value[index],
     nextMessage: messages.value[index + 1],
   }
-}
+};
 const getChatProvider = (message) => {
   return  message.chat?.via
     ? { type: message.chat.via.type, // chats from history
       name: message.chat.via.name }
     : { type: currentChat.value.members[0].type, // from current chat
       name: currentChat.value.members[0].name }
-}
+};
 const isChatStarted = (index) => {
   const { prevMessage, message, nextMessage } = getMessage(index);
 
@@ -83,7 +83,7 @@ const isChatStarted = (index) => {
 const isLastMessage = (index) => {
   const { nextMessage } = getMessage(index);
   !nextMessage && !currentChatMessages.value.length;
-}
+};
 
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
@@ -108,9 +108,9 @@ watch(() => props.contactId, loadMessages, { immediate: true });
     @extend %wt-scrollbar;
     box-sizing: border-box;
     flex: 1 1;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 100%;
   }
 }
 
