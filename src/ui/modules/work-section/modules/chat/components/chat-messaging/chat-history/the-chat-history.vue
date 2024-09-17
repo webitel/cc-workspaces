@@ -5,7 +5,6 @@
       v-chat-scroll
     >
       <div
-        class="chat-history__message-wrapper"
         v-for="(message, index) of messages"
         :key="message.id"
       >
@@ -70,7 +69,7 @@ const getChatProvider = (message) => {
   return  message.chat?.via
     ? { type: message.chat.via.type, // chats from history
       name: message.chat.via.name }
-    : { type: currentChat.value.members[0].type, // current chat
+    : { type: currentChat.value.members[0].type, // from current chat
       name: currentChat.value.members[0].name }
 }
 const isChatStarted = (index) => {
