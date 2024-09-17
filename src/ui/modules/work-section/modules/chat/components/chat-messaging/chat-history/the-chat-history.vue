@@ -22,7 +22,7 @@
 
 <script setup>
 
-import { ref, computed, watch, inject } from 'vue';
+import { computed, watch, inject } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
