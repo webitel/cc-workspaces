@@ -7,14 +7,14 @@
           :color="content.iconColor"
           size="sm"
         />
-        <p class="chat-activity-info__content-title">
+        <p class="chat-activity-info__title">
           {{ content.title }}
         </p>
         <wt-hint v-if="props.provider">
           <template>
-            <div class="chat-activity-info__provider">
+            <div class="chat-activity-info-provider">
               <wt-icon :icon="iconType[props.provider]" />
-              <p class="chat-activity-info__provider-title">
+              <p class="chat-activity-info-provider__title">
                 {{ props.gateway || props.provider }}
               </p>
             </div>
@@ -74,14 +74,14 @@ const content = computed(() =>
     gap: var(--spacing-2xs)
   }
 
-  &__provider {
+  &-provider {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
   }
 
-  &__content-title,
-  &__provider-title {
+  &__title,
+  &-provider__title {
     @extend %typo-caption;
     white-space: nowrap;
   }
