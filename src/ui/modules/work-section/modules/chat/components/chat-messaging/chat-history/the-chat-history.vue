@@ -14,7 +14,7 @@
           ended
         />
         <chat-date
-          v-if="showChatDate(index) || isChatStarted(index)"
+          v-if="showChatDate(index)"
           :date="message.date || message.createdAt"
         />
         <chat-activity-info
