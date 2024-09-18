@@ -82,7 +82,7 @@ const isChatStarted = (index) => {
 
 const isLastMessage = (index) => {
   const { nextMessage } = getMessage(index);
-  !nextMessage && !currentChatMessages.value.length;
+  return !nextMessage && !currentChatMessages.value.length;
 };
 
 const loadMessages = async () => {
