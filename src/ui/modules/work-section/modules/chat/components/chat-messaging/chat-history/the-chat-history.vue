@@ -4,18 +4,26 @@
       class="chat-history__messages"
       v-chat-scroll
     >
-      <div>
-        <!--    temporary text for visual identification chat-history in the development process,-->
-        <!--    because now in some cases we can't see the difference -->
-        <p> Chat History Empty Component </p>
-        currentChat.contact: {{ currentChat?.contact?.id }}
-      </div>
-      <chat-message
-        v-for="(message) of messages"
+      <div
+        v-for="(message, index) of messages"
         :key="message.id"
-        :size="size"
-        :message="message"
-      />
+      >
+
+        <chat-activity-info
+          v-if="isChatStarted(index) || isLastMessage(index)"
+          ended
+        />
+        <chat-activity-info
+          v-if="isChatStarted(index)"
+          :provider="getChatProvider(message).type"
+          :gateway="getChatProvider(message).name"
+        />
+
+        <chat-message
+          :size="size"
+          :message="message"
+        />
+      </div>
     </div>
   </article>
 </template>
@@ -27,6 +35,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatMessage from '../message/chat-message.vue';
+import ChatActivityInfo from './components/chat-activity-info.vue';
 
 const props = defineProps({
   contactId: {
@@ -46,12 +55,39 @@ const eventBus = inject('$eventBus');
 const namespace = 'features/chat/chatHistory';
 
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
+const currentChatMessages = computed(() => store.getters[`${namespace}/CURRENT_CHAT_MESSAGES`]);
 const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
+const getMessage = (index) => {
+  return {
+    prevMessage: messages.value[index - 1],
+    message: messages.value[index],
+    nextMessage: messages.value[index + 1],
+  }
+};
+const getChatProvider = (message) => {
+  return  message.chat?.via
+    ? { type: message.chat.via.type, // chats from history
+      name: message.chat.via.name }
+    : { type: currentChat.value.members[0].type, // from current chat
+      name: currentChat.value.members[0].name }
+};
+const isChatStarted = (index) => {
+  const { prevMessage, message, nextMessage } = getMessage(index);
+
+ return prevMessage
+   && nextMessage
+   && prevMessage?.chat?.id !== message.chat?.id // messages from different chats
+};
+
+const isLastMessage = (index) => {
+  const { nextMessage } = getMessage(index);
+  return !nextMessage && !currentChatMessages.value.length;
+};
 
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
-}
+};
 const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
 };
@@ -72,9 +108,9 @@ watch(() => props.contactId, loadMessages, { immediate: true });
     @extend %wt-scrollbar;
     box-sizing: border-box;
     flex: 1 1;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 100%;
   }
 }
 
