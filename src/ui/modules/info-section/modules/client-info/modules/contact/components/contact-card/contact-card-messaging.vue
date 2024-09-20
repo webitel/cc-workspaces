@@ -23,8 +23,9 @@
 </template>
 
 <script setup>
+
 import { computed } from 'vue';
-import ChatGatewayProvider from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ChatGatewayProvider.enum';
+import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
 
 const props = defineProps({
   size: {
@@ -37,17 +38,7 @@ const props = defineProps({
   },
 });
 
-const chats = computed(() => props.contact.imclients.data);
-
-const iconType = {
-  [ChatGatewayProvider.TELEGRAM_BOT]: 'telegram-bot',
-  [ChatGatewayProvider.TELEGRAM_APP]: 'messenger-telegram',
-  [ChatGatewayProvider.MESSENGER]: 'meta',
-  [ChatGatewayProvider.VIBER]: 'messenger-viber',
-  [ChatGatewayProvider.WEBCHAT]: 'messenger-web-chat',
-  [ChatGatewayProvider.INFOBIP]: 'messenger-infobip',
-  [ChatGatewayProvider.CUSTOM]: 'custom-chat-gateway',
-};
+const chats = computed(() => props.contact?.imclients?.data);
 
 </script>
 

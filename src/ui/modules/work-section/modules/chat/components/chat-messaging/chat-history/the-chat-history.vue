@@ -1,50 +1,49 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
-    <wt-loader v-if="!isLoaded" class="chat-history__loader"/>
     <div
-      v-else
-      ref="chat-messages-items"
-      class="chat-messages-items"
+      class="chat-history__messages"
       v-chat-scroll
     >
-      <div>
-        <!--    temporary text for visual identification chat-history in the development process,-->
-        <!--    because for the time being in some cases i cant see the difference -->
-        <p> Chat History Empty Component </p>
-        currentChat.contact: {{ currentChat?.contact?.id }}
-      </div>
-      <chat-message
+      <div
         v-for="(message, index) of messages"
         :key="message.id"
-        :size="size"
-        :message="message"
-      />
+      >
 
-      <chat-message-new :message="messages[7]">
+        <chat-activity-info
+          v-if="isChatStarted(index) || isLastMessage(index)"
+          ended
+        />
+        <chat-date
+          v-if="showChatDate(index)"
+          :date="message.date || message.createdAt"
+        />
+        <chat-activity-info
+          v-if="isChatStarted(index)"
+          :provider="getChatProvider(message).type"
+          :gateway="getChatProvider(message).name"
+        />
 
-        <template v-slot:before-message>
-          <chat-started :provider="'webchat'" :gateway="'Liza web chat (Не видаляти)'" />
-        </template>
-
-        <template v-slot:after-message>
-          <chat-ended />
-        </template>
-      </chat-message-new>
-
+        <chat-message
+          :size="size"
+          :message="message"
+        />
+      </div>
     </div>
   </article>
 </template>
 
 <script setup>
 
-import { ref, computed, watch, inject } from 'vue';
+import { computed, watch, inject } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
+import ChatDate from './components/chat-date.vue';
 import ChatMessage from '../message/chat-message.vue';
 import ChatMessageNew from '../message/chat-message-new.vue';
-import ChatEnded from './components/chat-ended.vue';
-import ChatStarted from './components/chat-started.vue';
+import ChatActivityInfo from './components/chat-activity-info.vue';
+import prettifyDate from './scripts/prettifyDate.js';
+
 
 const props = defineProps({
   contactId: {
@@ -63,20 +62,47 @@ const eventBus = inject('$eventBus');
 
 const namespace = 'features/chat/chatHistory';
 
-let isLoaded = ref(false);
-
 const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
+const currentChatMessages = computed(() => store.getters[`${namespace}/CURRENT_CHAT_MESSAGES`]);
 const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
-
-const loadMessages = async () => {
-  try {
-    await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
-  } finally {
-    isLoaded.value = true;
-    // even if loading was with error
+const getMessage = (index) => {
+  return {
+    prevMessage: messages.value[index - 1],
+    message: messages.value[index],
+    nextMessage: messages.value[index + 1],
   }
-}
+};
+const getChatProvider = (message) => {
+  return  message.chat?.via
+    ? { type: message.chat.via.type, // chats from history
+      name: message.chat.via.name }
+    : { type: currentChat.value.members[0].type, // from current chat
+      name: currentChat.value.members[0].name }
+};
+const isChatStarted = (index) => {
+  const { prevMessage, message, nextMessage } = getMessage(index);
+
+ return prevMessage
+   && nextMessage
+   && prevMessage?.chat?.id !== message.chat?.id // messages from different chats
+};
+
+const isLastMessage = (index) => {
+  const { nextMessage } = getMessage(index);
+  return !nextMessage && !currentChatMessages.value.length;
+};
+
+const showChatDate = (index) => {
+  const { prevMessage, message } = getMessage(index);
+  const prevMessageDate = prevMessage?.date || prevMessage?.createdAt;
+  const messageDate = message?.date || message?.createdAt;
+
+  return prettifyDate(prevMessageDate) !== prettifyDate(messageDate)
+};
+const loadMessages = async () => {
+  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
+};
 const chatInputFocus = () => {
   eventBus.$emit('chat-input-focus');
 };
@@ -92,31 +118,15 @@ watch(() => props.contactId, loadMessages, { immediate: true });
   display: flex;
   overflow: hidden;
   flex-direction: column;
+
+  &__messages {
+    @extend %wt-scrollbar;
+    box-sizing: border-box;
+    flex: 1 1;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 }
-
-.chat-messages-items {
-  @extend %wt-scrollbar;
-  box-sizing: border-box;
-  flex: 1 1;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  height: 100%;
-}
-
-.chat-history__loader, .chat-messages-items {
-  opacity: 1;
-  animation: opacity 0.2s forwards;
-}
-
-@keyframes opacity {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
-}
-
-
-//@keyframes transform {
-//  0% {transform: translateY(100%);}
-//  100% {transform: translateY(0);}
-//}
 
 </style>

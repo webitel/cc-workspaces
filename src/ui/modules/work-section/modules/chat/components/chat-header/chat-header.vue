@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="size" :username="contact?.name?.commonName">
+  <task-header :size="size" :username="contact?.name">
     <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
@@ -21,9 +21,11 @@
         v-if="contact?.id"
         :href="contactLink(contact?.id)"
         target="_blank">
-        {{ contact?.name?.commonName }}
+        {{ contact?.name }}
       </a>
-      <p v-else> {{ displayChatName }} </p>
+      <span v-else>
+        {{ displayChatName }}
+      </span>
     </template>
   </task-header>
 </template>
@@ -95,12 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a {
-  color: var(--link-color);
-  transition: all 0.2s ease-in;
-}
-
 a:hover {
-  color: var(--link--hover-color);
+  text-decoration: underline;
 }
 </style>

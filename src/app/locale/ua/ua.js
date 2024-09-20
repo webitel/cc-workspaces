@@ -21,6 +21,7 @@ export default {
     edit: 'Редагувати',
     select: 'Обрати',
     run: 'Запустити',
+    today: 'Сьогодні',
   },
   appNavigator: {
     title: 'Додатки Webitel',
@@ -171,7 +172,7 @@ export default {
       chatStarted: 'Чат розпочато',
       chatEnded: 'Чат завершено',
       chatTransferred: 'Чат переведено',
-      chatsAgent: '{ agent name } долучився до чату',
+      chatsAgent: '{ agentName } долучився до чату',
     },
   },
   emptyWorkspace: {

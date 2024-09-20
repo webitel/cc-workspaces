@@ -5,12 +5,12 @@
   >
     <div>
       <wt-input
-        :value="draft.name.commonName"
+        :value="draft.name"
         :label="t('reusable.name')"
-        :v="v$.draft.name.commonName"
+        :v="v$.draft.name"
         required
         prevent-trim
-        @input="draft.name.commonName = $event"
+        @input="draft.name = $event"
       ></wt-input>
       <wt-select
         :value="draft.timezones[0]?.timezone"
@@ -90,9 +90,7 @@ const store = useStore();
 const { t } = useI18n();
 
 const draft = ref({
-  name: {
-    commonName: '',
-  },
+  name: '',
   timezones: [],
   managers: [],
   labels: [],
@@ -102,9 +100,7 @@ const draft = ref({
 
 const v$ = useVuelidate(computed(() => ({
   draft: {
-    name: {
-      commonName: { required },
-    },
+    name: { required },
   },
 })), { draft }, { $autoDirty: true });
 

@@ -56,7 +56,7 @@ export default {
 
     .wt-avatar {
       flex: 0 0 32px;
-      transition: all 0.1s linear;
+      transition: var(--transition);
     }
   }
 

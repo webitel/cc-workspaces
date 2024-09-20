@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "24.08.0",
+  "version": "24.08.1",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.4.1",
-    "@webitel/ui-sdk": "^24.10.4",
+    "@webitel/ui-sdk": "^24.10.11",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",
     "deep-copy": "^1.4.2",
@@ -31,7 +31,7 @@
     "jszip": "^3.10.1",
     "jszip-utils": "^0.1.0",
     "lodash": "^4.17.21",
-    "markdown-it": "^12.3.2",
+    "markdown-it": "^14.1.0",
     "prepend-http": "^4.0.0",
     "tinymce": "^6.8.3",
     "vue": "^3.4.15",
