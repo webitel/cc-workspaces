@@ -3,8 +3,7 @@
     v-if="text"
     class="chat-message-text"
     :class="{
-      'chat-message-text--my': my,
-      'chat-message-text--bot': bot,
+      'chat-message-text--agent': my || bot,
      }"
     v-html="text"
   ></p>
@@ -37,20 +36,18 @@ export default {
   @extend %typo-body-2;
   overflow-wrap: break-word;
   white-space: pre-line; // read \n as "new line"
+  background: var(--secondary-light-color);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius);
 
   // reset links inside text
   :deep(.chat-message-text__link) {
     color: revert;
     text-decoration: revert;
   }
-// client
-  &:not(.chat-message-text--my) {
-    color: var(--primary-on-color);
-  }
 
-  &.chat-message-text--my,
-  &.chat-message-text--bot, {
-    color: var(--secondary-on-color);
+  &:not(.chat-message-text--agent) {
+    background: var(--primary-light-color);
   }
 }
 </style>

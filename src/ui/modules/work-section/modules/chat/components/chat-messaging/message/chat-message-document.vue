@@ -9,7 +9,7 @@
       <wt-icon
         class="chat-message-document__icon"
         icon="attach"
-      ></wt-icon>
+      />
     </div>
     <div class="chat-message-document__info-wrapper">
       <a class="chat-message-document__name" :title="document.name">{{ document.name }}</a>
@@ -46,21 +46,20 @@ export default {
 <style lang="scss" scoped>
 .chat-message-document {
   display: flex;
+  align-items: flex-start;
   cursor: pointer;
+  padding: var(--spacing-xs);
+  background: var(--primary-light-color);
+  border-radius: var(--border-radius);
 
   &__icon-wrapper {
-    width: 32px;
-    height: 32px;
     display: flex;
-    align-items: center;
     justify-content: center;
     margin-right: var(--spacing-xs);
-    border-radius: var(--border-radius);
-    background: var(--primary-light-color);
+    padding: var(--spacing-2xs);
   }
 
   &__info-wrapper {
-    min-height: 32px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -80,11 +79,11 @@ export default {
 
   &--my {
     flex-direction: row-reverse;
+    background: var(--secondary-light-color);
 
     .chat-message-document__icon-wrapper {
       margin-right: 0;
       margin-left: var(--spacing-xs);
-      background: var(--secondary-light-color);
     }
   }
 }

@@ -66,5 +66,6 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-bottom: var(--spacing-2xs);
 }
 </style>

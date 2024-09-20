@@ -115,12 +115,9 @@ export default {
   @extend %wt-scrollbar;
   box-sizing: border-box;
   flex: 1 1;
+  height: 100%;
+  padding: var(--spacing-2xs) 0;
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 100%;
-}
-
-.chat-message {
-  margin: var(--spacing-xs) var(--spacing-2xs) 0 0;
 }
 </style>
