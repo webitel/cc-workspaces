@@ -4,7 +4,7 @@
       class="chat-history__messages"
       v-chat-scroll
     >
-      <chat-message
+      <message
         v-for="(message, index) of messages"
         :key="message.id"
         :message="message"
@@ -28,7 +28,7 @@
             ended
           />
         </template>
-      </chat-message>
+      </message>
     </div>
   </article>
 </template>
@@ -41,7 +41,7 @@ import { useI18n } from 'vue-i18n';
 import { useChatMessage } from '../message/composables/useChatMessage.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatDate from './components/chat-date.vue';
-import ChatMessage from '../message/chat-message.vue';
+import Message from '../message/chat-message.vue';
 import ChatActivityInfo from './components/chat-activity-info.vue';
 
 
@@ -92,7 +92,6 @@ watch(() => props.contactId, loadMessages, { immediate: true });
     box-sizing: border-box;
     flex: 1 1;
     height: 100%;
-    padding: var(--spacing-2xs) 0;
     overflow-x: hidden;
     overflow-y: scroll;
   }

@@ -5,7 +5,7 @@
         :options="intersectionObserverOptions"
         @intersect="loadMessages"
       />
-      <chat-message
+      <message
         v-for="(message, key) of messages"
         :key="message.id"
         :message="message"
@@ -20,30 +20,26 @@
             :date="message.date || message.createdAt"
           />
         </template>
-      </chat-message>
+      </message>
     </div>
   </section>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import ChatMessage from '../message/chat-message.vue';
+import { useChatMessage } from '../message/composables/useChatMessage.js';
 import Message from '../message/chat-message.vue';
+import chatDate from '../chat-history/components/chat-date.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 import chatScroll from '../../../../../../../../app/directives/chatScroll';
-import chatDate from '../chat-history/components/chat-date.vue';
-import chatActivityInfo from '../chat-history/components/chat-activity-info.vue';
-import { useChatMessage } from '../message/composables/useChatMessage.js';
 
 export default {
   name: 'current-chat',
   directives: { chatScroll },
   components: {
-    ChatMessage,
     Message,
-    ScrollObserver,
-    chatActivityInfo,
     chatDate,
+    ScrollObserver,
   },
   props: {
     size: {
