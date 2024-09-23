@@ -3,25 +3,33 @@
     v-if="text"
     class="chat-message-text"
     :class="{
-      'chat-message-text--agent': my || bot,
+      'chat-message-text--agent': agent,
      }"
     v-html="text"
-  ></p>
+  />
 </template>
 
 <script>
 import Autolinker from 'autolinker';
-import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
 
 export default {
   name: 'chat-message-text',
-  mixins: [chatMessageDetailMixin],
+  props: {
+    text: {
+      type: String,
+      required: true,
+    },
+    agent: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     text() {
-      if (!this.message.text) return '';
+      if (!this.text) return '';
       // ATTENTION: not all libs are suitable for this case, because we want to preserve "<" signs
       // https://my.webitel.com/browse/DEV-2848
-      return Autolinker.link(this.message.text, {
+      return Autolinker.link(this.text, {
         newWindow: true,
         sanitizeHtml: true, // DONT FORGET TO SANITIZE, OR USE DOM PURIFY
         className: 'chat-message-text__link',

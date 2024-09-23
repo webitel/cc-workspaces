@@ -1,34 +1,27 @@
 export default {
   props: {
-    message: {
+    file: {
       type: Object,
       required: true,
     },
-    my: {
-      type: Boolean,
-      default: false,
-    },
-    bot: {
+    agent: {
       type: Boolean,
       default: false,
     },
   },
   computed: {
     image() {
-      const isImage = this.message.file && this.message.file.mime.includes('image');
-      return isImage ? this.message.file : null;
+      const isImage = this.file && this.file.type.includes('image');
+      return isImage ? this.file : null;
     },
-    audio() {
-      const isAudio = this.message.file && (
-        this.message.file.mime.includes('audio') || this.message.file.mime.includes('video')
+    media() {
+      const isMedia = this.file && (
+        this.file.type.includes('audio') || this.file.type.includes('video')
       );
-      return isAudio ? this.message.file : null;
+      return isMedia ? this.file : null;
     },
     document() {
-      return this.message.file;
-    },
-    showDocument() {
-      return this.document && !this.audio && !this.image;
+      return this.file && !this.media && !this.image ? this.file : null;
     },
   },
 };

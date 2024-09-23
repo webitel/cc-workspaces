@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="showDocument"
+    v-if="document"
     class="chat-message-document"
-    :class="{ 'chat-message-document--my': my }"
+    :class="{ 'chat-message-document--agent': agent }"
     @click="downloadDocument"
   >
     <div class="chat-message-document__icon-wrapper">
@@ -12,8 +12,12 @@
       />
     </div>
     <div class="chat-message-document__info-wrapper">
-      <a class="chat-message-document__name" :title="document.name">{{ document.name }}</a>
-      <div class="chat-message-document__size">{{ documentSize }}</div>
+      <a class="chat-message-document__name" :title="document.name">
+        {{ document.name }}
+      </a>
+      <div class="chat-message-document__size">
+        {{ documentSize }}
+      </div>
     </div>
   </div>
 </template>
@@ -77,7 +81,7 @@ export default {
     color: var(--text-main-color);
   }
 
-  &--my {
+  &--agent {
     flex-direction: row-reverse;
     background: var(--secondary-light-color);
 

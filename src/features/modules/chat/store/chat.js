@@ -10,9 +10,44 @@ const state = {
   mediaView: null,
 };
 
+const getPeer = (message) => {
+  let type;
+  if (!message.channelId) type = 'bot';
+  else if (message.member?.self || message.member?.type === 'webitel') type = 'user';
+  else type = message.member?.type;
+
+  return {
+    ...message.member,
+    type,
+  }
+};
+
+const getFile = (message) => {
+  if (!message.file) return null;
+  return {
+    ...message.file,
+    type: message.file.mime,
+  };
+}
+
+const chatMessagesHandler = (messages) => { // added to chat message the same fields as in chat-history massage
+  return messages.map((item) => {
+    return {
+      ...item,
+      date: item.createdAt,
+      peer: getPeer(item),
+      file: getFile(item),
+    };
+  });
+};
+
 const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
+  ),
+  ALL_CONTACTS_MESSAGES: (state, getters, rootState) => ( // chat-history messages + current-chat messages
+    [...rootState.features.chat.chatHistory.chatHistoryMessages,
+      ...chatMessagesHandler(getters.CHAT_ON_WORKSPACE.messages)] // make current-chat messages more similar with chat-history messages
   ),
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,

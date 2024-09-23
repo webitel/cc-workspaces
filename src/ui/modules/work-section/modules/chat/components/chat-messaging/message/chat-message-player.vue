@@ -1,14 +1,14 @@
 <template>
   <div
-    v-if="audio"
-    class="chat-message-audio"
-    @click="$emit('open', audio)"
+    v-if="media"
+    class="chat-message-player"
+    @click="$emit('open', media)"
   >
     <wt-player
-      :src="audioUrl"
-      :mime="audio.mime"
+      :src="mediaUrl"
+      :mime="file.type"
       :autoplay="false"
-      :hide-duration="audio.mime.includes('video')"
+      :hide-duration="file.type.includes('video')"
       reset-on-end
       reset-volume
       @initialized="handlePlayerInitialize"
@@ -20,11 +20,11 @@
 import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
 
 export default {
-  name: 'chat-message-audio',
+  name: 'chat-message-player',
   mixins: [chatMessageDetailMixin],
   computed: {
-    audioUrl() {
-      return this.audio.streamUrl || this.audio.url;
+    mediaUrl() {
+      return this.media.streamUrl || this.media.url;
     },
   },
   methods: {
@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-message-audio {
+.chat-message-player {
   .wt-player ::v-deep {
     .wt-player__close-icon,
     //.plyr__menu,

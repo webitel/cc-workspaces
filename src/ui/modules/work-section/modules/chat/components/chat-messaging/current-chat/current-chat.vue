@@ -5,34 +5,45 @@
         :options="intersectionObserverOptions"
         @intersect="loadMessages"
       />
-      <div v-for="(message, key) of messages" :key="message.id">
-        <message
-          :size="size"
-          :message="message"
-          :show-avatar="showAvatar(key)"
-          :show-date="showDate(key)"
-          @open-image="openImage(message)"
-          @initialized-player="handlePlayerInitialize"
-        />
-      </div>
+      <chat-message
+        v-for="(message, key) of messages"
+        :key="message.id"
+        :message="message"
+        :size="size"
+        :show-avatar="showAvatar(key)"
+        @open-image="openImage(message)"
+        @initialized-player="handlePlayerInitialize"
+      >
+        <template v-slot:before-message>
+          <chat-date
+            v-if="showChatDate(key)"
+            :date="message.date || message.createdAt"
+          />
+        </template>
+      </chat-message>
     </div>
   </section>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import ChatMessage from '../message/chat-message.vue';
 import Message from '../message/chat-message.vue';
-import MessageDate from '../message/chat-message-date.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 import chatScroll from '../../../../../../../../app/directives/chatScroll';
+import chatDate from '../chat-history/components/chat-date.vue';
+import chatActivityInfo from '../chat-history/components/chat-activity-info.vue';
+import { useChatMessage } from '../message/composables/useChatMessage.js';
 
 export default {
   name: 'current-chat',
   directives: { chatScroll },
   components: {
+    ChatMessage,
     Message,
-    MessageDate,
     ScrollObserver,
+    chatActivityInfo,
+    chatDate,
   },
   props: {
     size: {
@@ -45,13 +56,25 @@ export default {
   data: () => ({
     isMounted: false,
   }),
+  setup() {
+    const {
+      messages,
+
+      chatInputFocus,
+      showChatDate,
+    } = useChatMessage();
+
+    return {
+      messages,
+
+      chatInputFocus,
+      showChatDate,
+    };
+  },
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
-    messages() {
-      return this.chat.messages;
-    },
     intersectionObserverOptions() {
       if (this.isMounted) {
         return {
@@ -68,19 +91,8 @@ export default {
       attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
     }),
-    chatInputFocus() {
-      this.$eventBus.$emit('chat-input-focus');
-    },
     loadMessages() {
       // console.info('intersection');
-    },
-    showDate(messageIndex) {
-      if (messageIndex === 0) return true;
-      const messageDate = new Date(this.messages[messageIndex].createdAt);
-      const prevMessageDate = new Date(this.messages[messageIndex - 1].createdAt);
-      return messageDate.getFullYear() !== prevMessageDate.getFullYear()
-        || messageDate.getMonth() !== prevMessageDate.getMonth()
-        || messageDate.getDate() !== prevMessageDate.getDate();
     },
     showAvatar(messageIndex) {
       if (messageIndex === 0) return true;

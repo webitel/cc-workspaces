@@ -1,128 +1,95 @@
 <template>
-  <div
+  <article
     :class="{
-     'chat-message--agent' : isAgentSide,
-     'chat-message--md': size === 'md'
+     'chat-message--agent' : isAgentSideMessage,
+     'chat-message--md': props.size === 'md'
     }"
     class="chat-message"
   >
-    <message-avatar
-      :bot="isBot"
-      :message="message"
-      :my="my"
-      :show-avatar="showAvatar"
-      :username="contactName"
-    />
-    <!--    click.stop prevents focus on textarea and allows to select the message text -->
-    <div class="chat-message__main-wrapper" @click.stop>
-      <message-audio
-        :message="message"
-        :my="my"
-        :size="size"
-        @initialized="handlePlayerInitialize"
-      />
-<!--      без обгортки-->
-<!--      переназвати, якщо там також і відел в цьому компоненті-->
-      <message-image
-        :message="message"
-        :my="my"
-        @open="openImage"
-      />
-<!--      без обгортки-->
-      <message-document
-        :message="message"
-        :my="my"
-      />
-      <message-text
+    <slot name="before-message" />
+
+    <div class="chat-message__content">
+      <message-avatar
         :bot="isBot"
-        :message="message"
-        :my="my"
+        :message="props.message"
+        :show-avatar="props.showAvatar"
       />
-<!--      потрібна обгортка для тексту-->
+      <!--    click.stop prevents focus on textarea and allows to select the message text -->
+      <div @click.stop>
+        <message-player
+          v-if="props.message.file"
+          :file="props.message.file"
+          :size="props.size"
+          @initialized="handlePlayerInitialize"
+        />
+        <message-image
+          :file="props.message.file"
+          @open="openImage"
+        />
+        <message-document
+          :file="props.message.file"
+          :agent="isAgentSideMessage"
+        />
+        <message-text
+          :text="props.message.text"
+          :agent="isAgentSideMessage"
+        />
+      </div>
+      <message-time
+        :date="props.message.date"
+      />
     </div>
-    <message-meta
-      :message="message"
-      :my="my"
-    />
-<!--    шо буде, якщо прибрати?-->
-<!--    переназвати?-->
-  </div>
+
+    <slot name="after-message" />
+  </article>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import MessageAvatar from './chat-message-avatar.vue';
-import MessageAudio from './chat-message-audio.vue';
+import MessagePlayer from './chat-message-player.vue';
 import MessageText from './chat-message-text.vue';
 import MessageImage from './chat-message-image.vue';
 import MessageDocument from './chat-message-document.vue';
-import MessageMeta from './chat-message-meta.vue';
-import MessageDate from './chat-message-date.vue';
+import MessageTime from './chat-message-time.vue';
 
-export default {
-  name: 'chat-message',
-  components: {
-    MessageAvatar,
-    MessageAudio,
-    MessageText,
-    MessageImage,
-    MessageDocument,
-    MessageMeta,
+const props = defineProps({
+  message: {
+    type: Object,
+    required: true,
   },
-  props: {
-    message: {
-      type: Object,
-      required: true,
-    },
-    showAvatar: {
-      type: Boolean,
-      default: true,
-    },
-    showDate: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'md',
-      options: ['sm', 'md'],
-    },
+  size: {
+    type: String,
+    default: 'md',
+    options: ['sm', 'md'],
   },
-  computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: (state) => state.contact,
-    }),
-    my() {
-      return !!this.message.member?.self;
-    },
-    isAgent() {
-      // after chat transfer we need to identify messages from another agent
-      return this.message.member?.type === 'webitel' // for currentChat
-        || this.message.peer?.type === 'user'; // for chat history
-    },
-    isBot() {
-      return !this.message.channelId && !this.contact?.id // for current chat
-        || this.message.peer?.type === 'bot'; // for chat history
-    },
-    isAgentSide() {
-      return this.my || this.isAgent || this.isBot;
-    },
-    contactName() {
-      // чи є якась ознака, що це контакт в message.peer ?
-      return !this.isAgentSideMessage && this.contact?.id
-        ? this.contact.name?.commonName
-        : '';
-    },
+  showAvatar: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    openImage() {
-      this.$emit('open-image');
-    },
-    handlePlayerInitialize(player) {
-      this.$emit('initialized-player', player);
-    },
-  },
+});
+
+const emit = defineEmits(['open-image', 'initialized-player']);
+
+const { t } = useI18n();
+
+const isAgent = computed(() => props.message.peer?.type === 'user');
+
+const isBot = computed(() => props.message.peer?.type === 'bot');
+
+const isAgentSideMessage = computed(() => isAgent.value || isBot.value);
+
+const openImage = () => {
+  emit('open-image');
 };
+
+const handlePlayerInitialize = (player) => {
+  emit('initialized-player', player);
+};
+
 </script>
 
 <style lang="scss" scoped>
@@ -131,30 +98,25 @@ $icon-width: 32px;
 .chat-message {
   position: relative;
   display: flex;
-  margin: var(--spacing-2xs) var(--spacing-sm) 0 var(--spacing-xs);
+  flex-direction: column;
   max-width: 100%;
   gap: var(--spacing-xs);
 
-  &.chat-message--md {
-    .chat-message__main-wrapper {
-      max-width: 80%;
-    }
+  &__content {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    line-height: 0; // prevents height difference from its content
+    gap: var(--spacing-xs);
+  }
+
+  &--agent .chat-message__content {
+    flex-direction: row-reverse;
+    margin: var(--spacing-2xs) var(--spacing-xs) 0 var(--spacing-sm);
   }
 
   .chat-message-avatar {
     flex: 0 0 $icon-width;
-  }
-
-  .chat-message__main-wrapper {
-    display: grid;
-    width: fit-content;
-    min-width: 0;
-    line-height: 0; // prevents height difference from its content
-  }
-
-  &--agent {
-    flex-direction: row-reverse;
-    margin: var(--spacing-2xs) var(--spacing-xs) 0 var(--spacing-sm);
   }
 }
 </style>
