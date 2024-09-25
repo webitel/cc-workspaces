@@ -45,7 +45,7 @@ const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
-  ALL_CONTACTS_MESSAGES: (state, getters, rootState) => ( // chat-history messages + current-chat messages
+  ALL_CHAT_MESSAGES: (state, getters, rootState) => ( // chat-history messages + current-chat messages
     [...rootState.features.chat.chatHistory.chatHistoryMessages,
       ...chatMessagesHandler(getters.CHAT_ON_WORKSPACE.messages)] // make current-chat messages more similar with chat-history messages
   ),

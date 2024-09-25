@@ -6,17 +6,17 @@
         @intersect="loadMessages"
       />
       <message
-        v-for="(message, key) of messages"
+        v-for="(message, index) of messages"
         :key="message.id"
         :message="message"
         :size="size"
-        :show-avatar="showAvatar(key)"
+        :show-avatar="showAvatar(index)"
         @open-image="openImage(message)"
         @initialized-player="handlePlayerInitialize"
       >
         <template v-slot:before-message>
           <chat-date
-            v-if="showChatDate(key)"
+            v-if="showChatDate(index)"
             :date="message.date || message.createdAt"
           />
         </template>
@@ -58,6 +58,7 @@ export default {
 
       chatInputFocus,
       showChatDate,
+      showAvatar,
     } = useChatMessage();
 
     return {
@@ -65,12 +66,10 @@ export default {
 
       chatInputFocus,
       showChatDate,
+      showAvatar,
     };
   },
   computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
     intersectionObserverOptions() {
       if (this.isMounted) {
         return {
@@ -89,13 +88,6 @@ export default {
     }),
     loadMessages() {
       // console.info('intersection');
-    },
-    showAvatar(messageIndex) {
-      if (messageIndex === 0) return true;
-      const message = this.messages[messageIndex];
-      const prevMessage = this.messages[messageIndex - 1];
-      return (message.member !== prevMessage.member)
-        && (message.member?.self && !prevMessage.member?.self);
     },
     openImage(message) {
       this.openMedia(message);

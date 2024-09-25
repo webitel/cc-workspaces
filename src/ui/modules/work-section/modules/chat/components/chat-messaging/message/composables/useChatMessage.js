@@ -7,10 +7,8 @@ export const useChatMessage = () => {
   const eventBus = inject('$eventBus');
   const namespace = 'features/chat';
 
-  const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
-  const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
-
-  console.log('messages:', messages.value);
+  const messages = computed(() => store.getters[`${namespace}/ALL_CHAT_MESSAGES`]);
+  const currentChat = computed(() => store.getters[`${namespace}/CHAT_ON_WORKSPACE`]);
 
   function chatInputFocus() {
     eventBus.$emit('chat-input-focus');
@@ -28,6 +26,12 @@ export const useChatMessage = () => {
     const { prevMessage, message } = getMessage(index);
     return prettifyDate(prevMessage?.date) !== prettifyDate(message?.date)
   }
+
+  const showAvatar = (index) => {
+    const { prevMessage, message } = getMessage(index);
+    return index === 0
+      || (message.peer?.type !== prevMessage.peer?.type);
+  };
 
   function isChatStarted(index) {
     const { prevMessage, message, nextMessage } = getMessage(index);
@@ -55,6 +59,7 @@ export const useChatMessage = () => {
 
     chatInputFocus,
     showChatDate,
+    showAvatar,
     isChatStarted,
     getChatProvider,
     isLastMessage,

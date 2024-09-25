@@ -9,6 +9,7 @@
         :key="message.id"
         :message="message"
         :size="size"
+        :show-avatar="showAvatar(index)"
       >
         <template v-slot:before-message>
           <chat-date
@@ -66,6 +67,7 @@ const {
 
   chatInputFocus,
   showChatDate,
+  showAvatar,
   isChatStarted,
   getChatProvider,
   isLastMessage,
