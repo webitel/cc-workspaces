@@ -68,9 +68,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
     intersectionObserverOptions() {
       if (this.isMounted) {
         return {

@@ -7,8 +7,8 @@ export const useChatMessage = () => {
   const eventBus = inject('$eventBus');
   const namespace = 'features/chat';
 
-  const messages = computed(() => store.getters[`${namespace}/ALL_CONTACTS_MESSAGES`]);
-  const currentChat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+  const messages = computed(() => store.getters[`${namespace}/ALL_CHAT_MESSAGES`]);
+  const currentChat = computed(() => store.getters[`${namespace}/CHAT_ON_WORKSPACE`]);
 
   console.log('messages:', messages.value);
 

@@ -9,6 +9,7 @@
         :key="message.id"
         :message="message"
         :size="size"
+        :show-avatar="showAvatar(index)"
       >
         <template v-slot:before-message>
           <chat-date
@@ -70,6 +71,13 @@ const {
   getChatProvider,
   isLastMessage,
 } = useChatMessage();
+
+function showAvatar(messageIndex) {
+  if (messageIndex === 0) return true;
+  const message = messages.value[messageIndex];
+  const prevMessage = messages.value[messageIndex - 1];
+  return (message.peer.id !== prevMessage.peer.id);
+}
 
 const loadMessages = async () => {
   await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
