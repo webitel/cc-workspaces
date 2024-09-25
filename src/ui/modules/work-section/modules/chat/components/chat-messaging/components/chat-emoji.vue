@@ -21,7 +21,7 @@
 
 <script>
 import { Picker } from 'emoji-picker-element';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import sizeMixin from '../../../../../../../../app/mixins/sizeMixin.js';
 
 export default {
   name: 'chat-emoji',
