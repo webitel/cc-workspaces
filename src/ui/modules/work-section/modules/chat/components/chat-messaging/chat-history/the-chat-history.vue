@@ -10,6 +10,7 @@
         :message="message"
         :size="size"
         :show-avatar="showAvatar(index)"
+        :username="props.contact?.name"
       >
         <template v-slot:before-message>
           <chat-date
@@ -36,7 +37,7 @@
 
 <script setup>
 
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessage } from '../message/composables/useChatMessage.js';
@@ -47,8 +48,8 @@ import ChatActivityInfo from './components/chat-activity-info.vue';
 
 
 const props = defineProps({
-  contactId: {
-    type: String,
+  contact: {
+    type: Object,
     require: true,
   },
   size: {
@@ -72,6 +73,7 @@ const {
   isLastMessage,
 } = useChatMessage();
 
+
 function showAvatar(messageIndex) {
   if (messageIndex === 0) return true;
   const message = messages.value[messageIndex];
@@ -80,10 +82,10 @@ function showAvatar(messageIndex) {
 }
 
 const loadMessages = async () => {
-  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
+  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 };
 
-watch(() => props.contactId, loadMessages, { immediate: true });
+watch(() => props.contact?.id, loadMessages, { immediate: true });
 
 </script>
 

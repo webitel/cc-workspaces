@@ -13,6 +13,7 @@
         :bot="isBot"
         :message="props.message"
         :show-avatar="props.showAvatar"
+        :username="getClientUsername"
       />
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <div @click.stop>
@@ -70,6 +71,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  username: {
+    type: String,
+  },
 });
 
 const emit = defineEmits(['open-image', 'initialized-player']);
@@ -81,6 +85,10 @@ const isAgent = computed(() => props.message.peer?.type === 'user');
 const isBot = computed(() => props.message.peer?.type === 'bot');
 
 const isAgentSideMessage = computed(() => isAgent.value || isBot.value);
+
+const getClientUsername = computed(() => {
+  return !isAgentSideMessage.value ? props.username : ''; //need to show username avatar only for client
+})
 
 const openImage = () => {
   emit('open-image');
