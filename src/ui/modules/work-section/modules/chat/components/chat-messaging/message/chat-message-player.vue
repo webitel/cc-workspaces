@@ -46,5 +46,10 @@ export default {
       display: none;
     }
   }
+
+  :deep video {
+    max-height: var(--chat-image-max-height);
+    max-width: var(--chat-image-min-width);
+  }
 }
 </style>

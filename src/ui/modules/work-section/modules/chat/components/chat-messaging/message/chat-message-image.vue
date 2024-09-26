@@ -19,14 +19,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$max-width: 240px;
-
 .chat-message-image {
-  max-width: $max-width;
   cursor: pointer;
 
   &__img {
     @extend %typo-body-1;
+    max-height: var(--chat-image-max-height);
+    max-width: var(--chat-image-min-width);
     width: 100%;
   }
 }
