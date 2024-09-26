@@ -93,14 +93,12 @@ const handlePlayerInitialize = (player) => {
 </script>
 
 <style lang="scss" scoped>
-$icon-width: 32px;
-
 .chat-message {
   position: relative;
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-2xs);
 
   &__content {
     display: flex;
@@ -108,15 +106,16 @@ $icon-width: 32px;
     min-width: 0;
     line-height: 0; // prevents height difference from its content
     gap: var(--spacing-xs);
+    margin: 0 var(--spacing-xs) 0 0;
   }
 
   &--agent .chat-message__content {
     flex-direction: row-reverse;
-    margin: var(--spacing-2xs) var(--spacing-xs) 0 var(--spacing-sm);
+    margin: 0 0 0 var(--spacing-xs);
   }
 
   .chat-message-avatar {
-    flex: 0 0 $icon-width;
+    flex: 0 0 var(--icon-lg-size);
   }
 }
 </style>

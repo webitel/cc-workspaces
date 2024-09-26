@@ -97,9 +97,12 @@ watch(() => props.contactId, loadMessages, { immediate: true });
 
   &__messages {
     @extend %wt-scrollbar;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-2xs);
     box-sizing: border-box;
-    flex: 1 1;
     height: 100%;
+    gap: var(--spacing-2xs);
     overflow-x: hidden;
     overflow-y: scroll;
   }
