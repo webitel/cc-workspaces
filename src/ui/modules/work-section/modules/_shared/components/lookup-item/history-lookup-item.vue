@@ -14,7 +14,7 @@
       </div>
     </template>
     <template v-slot:title>
-      {{ shownDestination }}
+        {{ shownDestination }}
     </template>
 
     <template v-slot:subtitle>
@@ -182,7 +182,7 @@ export default {
     &-wrapper{
       display: flex;
       align-items: center;
-      gap: var(--spacing-xs);
+      gap: var(--spacing-2xs);
     }
 
     &-after{
