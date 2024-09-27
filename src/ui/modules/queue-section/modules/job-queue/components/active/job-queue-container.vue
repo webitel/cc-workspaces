@@ -10,7 +10,9 @@
         @click="openTask(task)"
         @decline="task.decline()"
       />
-      <wt-divider v-if="taskList.length > index + 1"/>
+      <div class="job-queue-container__divider">
+        <wt-divider v-if="taskList.length > index + 1"/>
+      </div>
     </div>
   </task-queue-container>
 </template>
@@ -49,5 +51,9 @@ export default {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
+
+    &__divider{
+      padding: 0 var(--spacing-2xs);
+    }
   }
 </style>
