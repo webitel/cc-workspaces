@@ -14,7 +14,7 @@
       </div>
     </template>
     <template v-slot:title>
-        {{ shownDestination }}
+      {{ shownDestination }}
     </template>
 
     <template v-slot:subtitle>
