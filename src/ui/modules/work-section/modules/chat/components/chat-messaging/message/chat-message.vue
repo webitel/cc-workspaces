@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-     'chat-message--agent' : isAgentSide,
+     'chat-message--right' : isAgentSide,
      'chat-message--md': size === 'md'
     }"
     class="chat-message"
@@ -106,7 +106,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$icon-width: 32px;
 
 .chat-message {
   position: relative;
@@ -122,7 +121,7 @@ $icon-width: 32px;
   }
 
   .chat-message-avatar {
-    flex: 0 0 $icon-width;
+    flex: 0 0 var(--icon-lg-size);
   }
 
   .chat-message__main-wrapper {
@@ -132,9 +131,9 @@ $icon-width: 32px;
     line-height: 0; // prevents height difference from its content
   }
 
-  &--agent {
+  &--right {
     flex-direction: row-reverse;
-    margin: var(--spacing-2xs) var(--spacing-xs) 0 var(--spacing-sm);
+    margin: var(--spacing-2xs) var(--spacing-xs);
   }
 }
 </style>
