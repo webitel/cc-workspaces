@@ -24,15 +24,15 @@
         />
         <message-image
           :file="props.message.file"
-          @open="openImage"
+          @open="emit('open-image')"
         />
         <message-document
           :file="props.message.file"
-          :agent="isAgentSideMessage"
+          :agent-side="isAgentSide"
         />
         <message-text
           :text="props.message.text"
-          :agent="isAgentSideMessage"
+          :agent-side="isAgentSide"
         />
       </div>
       <message-time
@@ -46,7 +46,7 @@
 
 <script setup>
 
-import { computed } from 'vue';
+import { computed, defineProps, defineEmits } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import MessageAvatar from './chat-message-avatar.vue';
@@ -80,15 +80,11 @@ const isAgent = computed(() => props.message.peer?.type === 'user');
 
 const isBot = computed(() => props.message.peer?.type === 'bot');
 
-const isAgentSideMessage = computed(() => isAgent.value || isBot.value);
+const isAgentSide = computed(() => isAgent.value || isBot.value);
 
-const openImage = () => {
-  emit('open-image');
-};
-
-const handlePlayerInitialize = (player) => {
-  emit('initialized-player', player);
-};
+function handlePlayerInitialize(player) {
+  emit('initialized-player', { player });
+}
 
 </script>
 
@@ -98,7 +94,7 @@ const handlePlayerInitialize = (player) => {
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: var(--spacing-2xs) var(--spacing-xs);
+  margin: 0 var(--spacing-2xs) var(--spacing-2xs);
   max-width: 100%;
   gap: var(--spacing-2xs);
 
@@ -118,12 +114,12 @@ const handlePlayerInitialize = (player) => {
   }
 
   .chat-message-avatar {
-    flex: 0 0 var(--spacing-md);
+    flex: 0 0 var(--spacing-lg);
   }
 
   &--right .chat-message__content {
     flex-direction: row-reverse;
-    margin: var(--spacing-2xs) var(--spacing-xs);
+    margin: 0 0 0 var(--spacing-xs);
   }
 }
 </style>

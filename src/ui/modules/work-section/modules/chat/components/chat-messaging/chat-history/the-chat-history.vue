@@ -9,7 +9,8 @@
         :key="message.id"
         :message="message"
         :size="size"
-        :show-avatar="showAvatar(index)"
+        @open-image="openImage(message)"
+        @initialized-player="attachPlayer"
       >
         <template v-slot:before-message>
           <chat-date
@@ -45,7 +46,6 @@ import ChatDate from './components/chat-date.vue';
 import Message from '../message/chat-message.vue';
 import ChatActivityInfo from './components/chat-activity-info.vue';
 
-
 const props = defineProps({
   contactId: {
     type: String,
@@ -72,16 +72,10 @@ const {
   isLastMessage,
 } = useChatMessage();
 
-function showAvatar(messageIndex) {
-  if (messageIndex === 0) return true;
-  const message = messages.value[messageIndex];
-  const prevMessage = messages.value[messageIndex - 1];
-  return (message.peer.id !== prevMessage.peer.id);
-}
+const attachPlayer = (player) => store.dispatch(`features/chat/ATTACH_PLAYER_TO_CHAT`, player);
+const openImage = (message) => store.dispatch(`features/chat/OPEN_MEDIA`, message);
 
-const loadMessages = async () => {
-  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
-};
+const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 
 watch(() => props.contactId, loadMessages, { immediate: true });
 
@@ -100,8 +94,6 @@ watch(() => props.contactId, loadMessages, { immediate: true });
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    height: 100%;
-    padding: var(--spacing-2xs) 0;
     overflow-x: hidden;
     overflow-y: scroll;
   }

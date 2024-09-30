@@ -4,10 +4,6 @@ export default {
       type: Object,
       required: true,
     },
-    agent: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     image() {

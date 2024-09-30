@@ -112,10 +112,6 @@ export default {
   .chat-transfer-container {
     flex-grow: 1;
   }
-
-  :deep(.task-container .task-container__body-wrapper) {
-    padding: 0;
-  }
 }
 
 

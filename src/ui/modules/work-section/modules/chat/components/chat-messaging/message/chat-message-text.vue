@@ -3,7 +3,7 @@
     v-if="text"
     class="chat-message-text"
     :class="{
-      'chat-message-text--agent': agent,
+      'chat-message-text--right': agentSide,
      }"
     v-html="text"
   />
@@ -19,7 +19,7 @@ export default {
       type: String,
       required: true,
     },
-    agent: {
+    agentSide: {
       type: Boolean,
       default: false,
     },
@@ -40,13 +40,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .chat-message-text {
   @extend %typo-body-2;
   overflow-wrap: break-word;
   white-space: pre-line; // read \n as "new line"
-  background: var(--secondary-light-color);
   padding: var(--spacing-xs);
   border-radius: var(--border-radius);
+  background: var(--primary-light-color);
 
   // reset links inside text
   :deep(.chat-message-text__link) {
@@ -54,8 +55,9 @@ export default {
     text-decoration: revert;
   }
 
-  &:not(.chat-message-text--agent) {
-    background: var(--primary-light-color);
+  &--right {
+    background: var(--secondary-light-color);
   }
 }
+
 </style>
