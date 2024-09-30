@@ -1,5 +1,9 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
+    <scroll-observer
+      :options="intersectionObserverOptions"
+      @intersect="loadMessages"
+    />
     <div
       class="chat-history__messages"
       v-chat-scroll
