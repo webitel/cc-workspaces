@@ -42,9 +42,9 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessage } from '../message/composables/useChatMessage.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
-import ChatDate from './components/chat-date.vue';
+import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
-import ChatActivityInfo from './components/chat-activity-info.vue';
+import ChatActivityInfo from '../components/chat-activity-info.vue';
 
 const props = defineProps({
   contactId: {

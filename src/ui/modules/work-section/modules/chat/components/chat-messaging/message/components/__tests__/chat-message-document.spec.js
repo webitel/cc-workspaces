@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ChatMessageDocument
-  from '../components/chat-message-document.vue';
+  from '../chat-message-document.vue';
 
 let message = {};
 

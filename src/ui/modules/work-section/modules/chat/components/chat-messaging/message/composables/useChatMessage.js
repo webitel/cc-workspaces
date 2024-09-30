@@ -1,6 +1,6 @@
 import { computed, inject } from 'vue';
 import { useStore } from 'vuex';
-import prettifyDate from '../../chat-history/scripts/prettifyDate.js';
+import prettifyDate from '../../scripts/prettifyDate.js';
 export const useChatMessage = () => {
 
   const store = useStore();

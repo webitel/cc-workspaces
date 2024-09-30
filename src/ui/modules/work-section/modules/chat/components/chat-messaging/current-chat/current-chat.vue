@@ -33,10 +33,10 @@
 import { mapActions } from 'vuex';
 import { useChatMessage } from '../message/composables/useChatMessage.js';
 import Message from '../message/chat-message.vue';
-import chatDate from '../chat-history/components/chat-date.vue';
+import chatDate from '../components/chat-date.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 import chatScroll from '../../../../../../../../app/directives/chatScroll';
-import chatActivityInfo from '../chat-history/components/chat-activity-info.vue';
+import chatActivityInfo from '../components/chat-activity-info.vue';
 
 export default {
   name: 'current-chat',

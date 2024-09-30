@@ -49,12 +49,12 @@
 import { computed, defineProps, defineEmits } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import MessageAvatar from './chat-message-avatar.vue';
-import MessagePlayer from './chat-message-player.vue';
-import MessageText from './chat-message-text.vue';
-import MessageImage from './chat-message-image.vue';
-import MessageDocument from './chat-message-document.vue';
-import MessageTime from './chat-message-time.vue';
+import MessageAvatar from './components/chat-message-avatar.vue';
+import MessagePlayer from './components/chat-message-player.vue';
+import MessageText from './components/chat-message-text.vue';
+import MessageImage from './components/chat-message-image.vue';
+import MessageDocument from './components/chat-message-document.vue';
+import MessageTime from './components/chat-message-time.vue';
 
 const props = defineProps({
   message: {

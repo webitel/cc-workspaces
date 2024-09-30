@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ChatMessageMeta
-  from '../components/chat-message-time.vue';
+  from '../chat-message-time.vue';
 
 let message = {};
 
