@@ -1,7 +1,7 @@
 <template>
-  <article
+  <div
     :class="{
-     'chat-message--agent' : isAgentSideMessage,
+     'chat-message--right' : isAgentSide,
      'chat-message--md': props.size === 'md'
     }"
     class="chat-message"
@@ -41,7 +41,7 @@
     </div>
 
     <slot name="after-message" />
-  </article>
+  </div>
 </template>
 
 <script setup>
@@ -93,10 +93,12 @@ const handlePlayerInitialize = (player) => {
 </script>
 
 <style lang="scss" scoped>
+
 .chat-message {
   position: relative;
   display: flex;
   flex-direction: column;
+  margin: var(--spacing-2xs) var(--spacing-xs);
   max-width: 100%;
   gap: var(--spacing-2xs);
 
@@ -109,13 +111,19 @@ const handlePlayerInitialize = (player) => {
     margin: 0 var(--spacing-xs) 0 0;
   }
 
-  &--agent .chat-message__content {
-    flex-direction: row-reverse;
-    margin: 0 0 0 var(--spacing-xs);
+  &.chat-message--md {
+    .chat-message__main-wrapper {
+      max-width: 80%;
+    }
   }
 
   .chat-message-avatar {
-    flex: 0 0 var(--icon-lg-size);
+    flex: 0 0 var(--spacing-md);
+  }
+
+  &--right .chat-message__content {
+    flex-direction: row-reverse;
+    margin: var(--spacing-2xs) var(--spacing-xs);
   }
 }
 </style>

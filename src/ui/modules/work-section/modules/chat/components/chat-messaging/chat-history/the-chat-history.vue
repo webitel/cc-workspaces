@@ -99,10 +99,9 @@ watch(() => props.contactId, loadMessages, { immediate: true });
     @extend %wt-scrollbar;
     display: flex;
     flex-direction: column;
-    padding: var(--spacing-2xs);
     box-sizing: border-box;
     height: 100%;
-    gap: var(--spacing-2xs);
+    padding: var(--spacing-2xs) 0;
     overflow-x: hidden;
     overflow-y: scroll;
   }
