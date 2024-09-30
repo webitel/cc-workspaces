@@ -102,9 +102,12 @@ const actions = {
     const ringtoneName = localStorage.getItem('settings/ringtone');
     const customRingtone = ringtoneName ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}` : undefined;
 
+    const ringtoneVolume = parseFloat(localStorage.getItem('settings/ringtone-volume')) || 1.0;
+
     const playSound = () => context.dispatch('PLAY_SOUND', {
       action: CallActions.Ringing,
       sound: customRingtone,
+      volume: ringtoneVolume,
     });
 
     // sometimes we need to wait when call end sound is finished before playing ringtone
