@@ -18,11 +18,6 @@
             v-if="showChatDate(index)"
             :date="message.date || message.createdAt"
           />
-          <chat-activity-info
-            v-if="index === 0"
-            :provider="getChatProvider(message).type"
-            :gateway="getChatProvider(message).name"
-          />
         </template>
       </message>
     </div>
