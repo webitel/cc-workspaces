@@ -60,7 +60,8 @@ const props = defineProps({
 const store = useStore();
 const { t } = useI18n();
 
-const namespace = 'features/chat/chatHistory';
+const chatNamespace = 'features/chat';
+const namespace = `${chatNamespace}/chatHistory`;
 
 const {
   messages,
@@ -72,8 +73,8 @@ const {
   isLastMessage,
 } = useChatMessage();
 
-const attachPlayer = (player) => store.dispatch(`features/chat/ATTACH_PLAYER_TO_CHAT`, player);
-const openImage = (message) => store.dispatch(`features/chat/OPEN_MEDIA`, message);
+const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
+const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 
