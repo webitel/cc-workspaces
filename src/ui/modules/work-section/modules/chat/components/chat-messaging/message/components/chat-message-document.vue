@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="showDocument"
+    v-if="document"
     class="chat-message-document"
-    :class="{ 'chat-message-document--my': my }"
+    :class="{ 'chat-message-document--right': agentSide }"
     @click="downloadDocument"
   >
     <div class="chat-message-document__icon-wrapper">
@@ -12,19 +12,29 @@
       />
     </div>
     <div class="chat-message-document__info-wrapper">
-      <a class="chat-message-document__name" :title="document.name">{{ document.name }}</a>
-      <div class="chat-message-document__size">{{ documentSize }}</div>
+      <a class="chat-message-document__name" :title="document.name">
+        {{ document.name }}
+      </a>
+      <div class="chat-message-document__size">
+        {{ documentSize }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
-import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
+import chatMessageFileMixin from '../../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-document',
-  mixins: [chatMessageDetailMixin],
+  mixins: [chatMessageFileMixin],
+  props: {
+    agentSide: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     documentSize() {
       if (!this.document) return '';
@@ -77,7 +87,7 @@ export default {
     color: var(--text-main-color);
   }
 
-  &--my {
+  &--right {
     flex-direction: row-reverse;
     background: var(--secondary-light-color);
 

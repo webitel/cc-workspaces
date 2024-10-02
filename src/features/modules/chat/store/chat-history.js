@@ -5,16 +5,10 @@ const state = {
   next: false,
 };
 
-const getters = {
-  CURRENT_CHAT_MESSAGES: (state, getters, rootState, rootGetters) => rootGetters['features/chat/CHAT_ON_WORKSPACE']?.messages,
-  ALL_CONTACTS_MESSAGES: (state, getters) => (
-    [...state.chatHistoryMessages, ...getters.CURRENT_CHAT_MESSAGES]
-  ), // chat history messages + current chat messages
-};
-
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
     const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
+
     context.commit('SET_CHAT_HISTORY', items);
   },
   RESET_CHAT_HISTORY: (context) => {
@@ -35,7 +29,6 @@ const mutations = {
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations,
 };

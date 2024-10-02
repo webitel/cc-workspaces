@@ -4,6 +4,7 @@ import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
 import chatHistory from './chat-history.js';
+import chatMessagesHandler from '../scripts/chatMessagesHandler.js';
 
 const state = {
   chatList: [],
@@ -14,6 +15,13 @@ const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
+  ALL_CHAT_MESSAGES: (state, getters, rootState) => {
+    const list =  [...rootState.features.chat.chatHistory.chatHistoryMessages,
+      ...getters.CHAT_ON_WORKSPACE.messages]; // chat-history messages + current-chat messages
+
+    return chatMessagesHandler(list); // make current-chat messages more similar with chat-history messages
+  }
+   ,
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
   ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,

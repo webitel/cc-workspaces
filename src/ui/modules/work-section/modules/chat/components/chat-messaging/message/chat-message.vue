@@ -2,107 +2,90 @@
   <div
     :class="{
      'chat-message--right' : isAgentSide,
-     'chat-message--md': size === 'md'
+     'chat-message--md': props.size === 'md'
     }"
     class="chat-message"
   >
-    <message-avatar
-      :bot="isBot"
-      :message="message"
-      :my="my"
-      :show-avatar="showAvatar"
-    />
-    <!--    click.stop prevents focus on textarea and allows to select the message text -->
-    <div class="chat-message__main-wrapper" @click.stop>
-      <message-audio
-        :message="message"
-        :my="my"
-        :size="size"
-        @initialized="handlePlayerInitialize"
-      />
-      <message-image
-        :message="message"
-        :my="my"
-        @open="openImage"
-      />
-      <message-document
-        :message="message"
-        :my="my"
-      />
-      <message-text
+    <slot name="before-message" />
+
+    <div class="chat-message__content">
+      <message-avatar
         :bot="isBot"
-        :message="message"
-        :my="my"
+        :message="props.message"
+        :show-avatar="props.showAvatar"
+      />
+      <!--    click.stop prevents focus on textarea and allows to select the message text -->
+      <div @click.stop>
+        <message-player
+          v-if="props.message.file"
+          :file="props.message.file"
+          :size="props.size"
+          @initialized="handlePlayerInitialize"
+        />
+        <message-image
+          :file="props.message.file"
+          @open="emit('open-image')"
+        />
+        <message-document
+          :file="props.message.file"
+          :agent-side="isAgentSide"
+        />
+        <message-text
+          :text="props.message.text"
+          :agent-side="isAgentSide"
+        />
+      </div>
+      <message-time
+        :date="props.message.date"
       />
     </div>
-    <message-meta
-      :message="message"
-      :my="my"
-    />
+
+    <slot name="after-message" />
   </div>
 </template>
 
-<script>
-import MessageAvatar from './chat-message-avatar.vue';
-import MessageAudio from './chat-message-audio.vue';
-import MessageText from './chat-message-text.vue';
-import MessageImage from './chat-message-image.vue';
-import MessageDocument from './chat-message-document.vue';
-import MessageMeta from './chat-message-meta.vue';
+<script setup>
 
-export default {
-  name: 'chat-message',
-  components: {
-    MessageAvatar,
-    MessageAudio,
-    MessageText,
-    MessageImage,
-    MessageDocument,
-    MessageMeta,
+import { computed, defineProps, defineEmits } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import MessageAvatar from './components/chat-message-avatar.vue';
+import MessagePlayer from './components/chat-message-player.vue';
+import MessageText from './components/chat-message-text.vue';
+import MessageImage from './components/chat-message-image.vue';
+import MessageDocument from './components/chat-message-document.vue';
+import MessageTime from './components/chat-message-time.vue';
+
+const props = defineProps({
+  message: {
+    type: Object,
+    required: true,
   },
-  props: {
-    message: {
-      type: Object,
-      required: true,
-    },
-    showAvatar: {
-      type: Boolean,
-      default: true,
-    },
-    showDate: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'md',
-      options: ['sm', 'md'],
-    },
+  size: {
+    type: String,
+    default: 'md',
+    options: ['sm', 'md'],
   },
-  computed: {
-    my() {
-      return !!this.message.member?.self;
-    },
-    isAgent() {
-      // after chat transfer we need to identify messages from another agent
-      return this.message.member?.type === 'webitel';
-    },
-    isBot() {
-      return !this.message.channelId;
-    },
-    isAgentSide() {
-      return this.my || this.isAgent || this.isBot;
-    },
+  showAvatar: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    openImage() {
-      this.$emit('open-image');
-    },
-    handlePlayerInitialize(player) {
-      this.$emit('initialized-player', player);
-    },
-  },
-};
+});
+
+const emit = defineEmits(['open-image', 'initialized-player']);
+
+const { t } = useI18n();
+
+const isAgent = computed(() => props.message.peer?.type === 'user');
+
+const isBot = computed(() => props.message.peer?.type === 'bot');
+
+const isAgentSide = computed(() => isAgent.value || isBot.value);
+
+function handlePlayerInitialize(player) {
+  emit('initialized-player', { player });
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -110,9 +93,19 @@ export default {
 .chat-message {
   position: relative;
   display: flex;
-  margin: var(--spacing-2xs) var(--spacing-xs);
+  flex-direction: column;
+  margin: 0 var(--spacing-2xs) var(--spacing-2xs);
   max-width: 100%;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-2xs);
+
+  &__content {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    line-height: 0; // prevents height difference from its content
+    gap: var(--spacing-xs);
+    margin: 0 var(--spacing-xs) 0 0;
+  }
 
   &.chat-message--md {
     .chat-message__main-wrapper {
@@ -121,19 +114,12 @@ export default {
   }
 
   .chat-message-avatar {
-    flex: 0 0 var(--spacing-md);
+    flex: 0 0 var(--spacing-lg);
   }
 
-  .chat-message__main-wrapper {
-    display: grid;
-    width: fit-content;
-    min-width: 0;
-    line-height: 0; // prevents height difference from its content
-  }
-
-  &--right {
+  &--right .chat-message__content {
     flex-direction: row-reverse;
-    margin: var(--spacing-2xs) var(--spacing-xs);
+    margin: 0 0 0 var(--spacing-xs);
   }
 }
 </style>
