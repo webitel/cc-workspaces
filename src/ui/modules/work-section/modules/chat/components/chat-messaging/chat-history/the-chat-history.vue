@@ -1,11 +1,13 @@
 <template>
   <article class="chat-history" @click="chatInputFocus">
     <scroll-observer
-      :options="intersectionObserverOptions"
-      @intersect="loadMessages"
+      v-if="scrollTarget"
+      :root="scrollTarget"
+      @intersect="loadNextMessages"
     />
     <div
       class="chat-history__messages"
+      ref="scrollTarget"
       v-chat-scroll
     >
       <message
@@ -41,7 +43,7 @@
 
 <script setup>
 
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessage } from '../message/composables/useChatMessage.js';
@@ -49,6 +51,7 @@ import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
+import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 
 const props = defineProps({
   contactId: {
@@ -67,6 +70,9 @@ const { t } = useI18n();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
+const scrollTarget = ref(null);
+const nextLoading = ref(false);
+
 const {
   messages,
 
@@ -81,6 +87,13 @@ const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
+
+async function loadNextMessages() {
+  // nextLoading.value = true;
+  console.log('scrollObserver')
+  // await store.dispatch(`${namespace}/LOAD_NEXT`);
+  // nextLoading.value = false;
+}
 
 watch(() => props.contactId, loadMessages, { immediate: true });
 
