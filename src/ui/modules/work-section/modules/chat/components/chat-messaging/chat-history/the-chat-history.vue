@@ -127,6 +127,7 @@ watch(() => props.contactId, loadMessages, { immediate: true });
     box-sizing: border-box;
     flex: 1 1;
     height: 100%;
+    padding: var(--spacing-2xs) 0;
     overflow-x: hidden;
     overflow-y: scroll;
   }

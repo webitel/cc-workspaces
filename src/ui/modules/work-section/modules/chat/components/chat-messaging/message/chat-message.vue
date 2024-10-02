@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-     'chat-message--right' : isAgentSideMessage,
+     'chat-message--right' : isAgentSide,
      'chat-message--md': size === 'md'
     }"
     class="chat-message"
@@ -90,7 +90,7 @@ export default {
     isBot() {
       return !this.message.channelId;
     },
-    isAgentSideMessage() {
+    isAgentSide() {
       return this.my || this.isAgent || this.isBot;
     },
   },
@@ -106,9 +106,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .chat-message {
   position: relative;
   display: flex;
+  margin: var(--spacing-2xs) var(--spacing-xs);
   max-width: 100%;
   gap: var(--spacing-xs);
 
@@ -119,25 +121,19 @@ export default {
   }
 
   .chat-message-avatar {
-    flex: 0 0 32px;
+    flex: 0 0 var(--spacing-md);
   }
 
   .chat-message__main-wrapper {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     width: fit-content;
     min-width: 0;
     line-height: 0; // prevents height difference from its content
-    gap: var(--spacing-xs);
   }
 
   &--right {
     flex-direction: row-reverse;
-    margin-left: auto;
-
-    .chat-message__main-wrapper {
-      background: var(--secondary-light-color);
-    }
+    margin: var(--spacing-2xs) var(--spacing-xs);
   }
 }
 </style>
