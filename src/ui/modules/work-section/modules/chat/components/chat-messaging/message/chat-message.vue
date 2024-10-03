@@ -19,24 +19,27 @@
         <message-player
           v-if="props.message.file"
           :file="props.message.file"
+          :type="props.message.file?.mime"
           :size="props.size"
           @initialized="handlePlayerInitialize"
         />
         <message-image
           :file="props.message.file"
+          :type="props.message.file?.mime"
           @open="emit('open-image')"
         />
         <message-document
           :file="props.message.file"
-          :agent-side="isAgentSide"
+          :type="props.message.file?.mime"
+          :agent="isAgentSide"
         />
         <message-text
           :text="props.message.text"
-          :agent-side="isAgentSide"
+          :agent="isAgentSide"
         />
       </div>
       <message-time
-        :date="props.message.date"
+        :date="props.message.createdAt"
       />
     </div>
 
@@ -76,9 +79,15 @@ const emit = defineEmits(['open-image', 'initialized-player']);
 
 const { t } = useI18n();
 
-const isAgent = computed(() => props.message.peer?.type === 'user');
+const isAgent = computed(() =>
+  props.message.member?.self
+  || props.message.member?.type === 'webitel'
+);
 
-const isBot = computed(() => props.message.peer?.type === 'bot');
+const isBot = computed(() =>
+  props.message.member?.type === 'bot'
+  || (!props.message.member?.type && !props.message.channelId)
+);
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 

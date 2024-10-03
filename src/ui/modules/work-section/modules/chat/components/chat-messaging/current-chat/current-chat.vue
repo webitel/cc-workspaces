@@ -1,10 +1,11 @@
 <template>
-  <section class="current-chat chat-messages-container" @click="chatInputFocus">
+  <section class="current-chat chat-messages-container" @click="focusOnInput">
     <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
       <scroll-observer
         :options="intersectionObserverOptions"
         @intersect="loadMessages"
       />
+      <chat-activity-info />
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -16,7 +17,7 @@
         <template v-slot:before-message>
           <chat-date
             v-if="showChatDate(index)"
-            :date="message.date || message.createdAt"
+            :date="message.createdAt"
           />
         </template>
       </message>
@@ -25,22 +26,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { useChatMessage } from '../message/composables/useChatMessage.js';
+import { mapActions, mapGetters } from 'vuex';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 import Message from '../message/chat-message.vue';
-import chatDate from '../components/chat-date.vue';
+import ChatDate from '../components/chat-date.vue';
+import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 import chatScroll from '../../../../../../../../app/directives/chatScroll';
-import chatActivityInfo from '../components/chat-activity-info.vue';
 
 export default {
   name: 'current-chat',
   directives: { chatScroll },
   components: {
     Message,
-    chatDate,
+    ChatDate,
+    ChatActivityInfo,
     ScrollObserver,
-    chatActivityInfo,
   },
   props: {
     size: {
@@ -55,23 +56,22 @@ export default {
   setup() {
     const {
       messages,
-
-      chatInputFocus,
       showChatDate,
-      isChatStarted,
-      getChatProvider,
-    } = useChatMessage();
+
+      focusOnInput,
+    } = useChatMessages();
 
     return {
       messages,
-
-      chatInputFocus,
       showChatDate,
-      isChatStarted,
-      getChatProvider,
+
+      focusOnInput,
     };
   },
   computed: {
+    ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+    }),
     intersectionObserverOptions() {
       if (this.isMounted) {
         return {

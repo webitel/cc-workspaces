@@ -6,9 +6,9 @@
   >
     <wt-player
       :src="mediaUrl"
-      :mime="file.type"
+      :mime="type"
       :autoplay="false"
-      :hide-duration="file.type.includes('video')"
+      :hide-duration="type.includes('video')"
       reset-on-end
       reset-volume
       @initialized="handlePlayerInitialize"

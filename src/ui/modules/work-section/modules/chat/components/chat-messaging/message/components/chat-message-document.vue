@@ -2,7 +2,7 @@
   <div
     v-if="document"
     class="chat-message-document"
-    :class="{ 'chat-message-document--right': agentSide }"
+    :class="{ 'chat-message-document--right': agent }"
     @click="downloadDocument"
   >
     <div class="chat-message-document__icon-wrapper">
@@ -30,7 +30,7 @@ export default {
   name: 'chat-message-document',
   mixins: [chatMessageFileMixin],
   props: {
-    agentSide: {
+    agent: {
       type: Boolean,
       default: false,
     },
