@@ -3,7 +3,7 @@
     v-if="text"
     class="chat-message-text"
     :class="{
-      'chat-message-text--right': agentSide,
+      'chat-message-text--right': agent,
      }"
     v-html="text"
   />
@@ -19,7 +19,7 @@ export default {
       type: String,
       required: true,
     },
-    agentSide: {
+    agent: {
       type: Boolean,
       default: false,
     },

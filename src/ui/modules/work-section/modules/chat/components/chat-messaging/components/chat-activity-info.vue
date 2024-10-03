@@ -11,14 +11,12 @@
           {{ content.title }}
         </p>
         <wt-hint v-if="props.provider">
-          <template>
-            <div class="chat-activity-info-provider">
-              <wt-icon :icon="iconType[props.provider]" />
-              <p class="chat-activity-info-provider__title">
-                {{ props.gateway || props.provider }}
-              </p>
-            </div>
-          </template>
+          <div class="chat-activity-info-provider">
+            <wt-icon :icon="iconType[props.provider]" />
+            <p class="chat-activity-info-provider__title">
+              {{ props.gateway || props.provider }}
+            </p>
+          </div>
         </wt-hint>
       </div>
     <wt-divider />

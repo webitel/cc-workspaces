@@ -1,5 +1,5 @@
 <template>
-  <article class="chat-history" @click="chatInputFocus">
+  <article class="chat-history" @click="focusOnInput">
     <div
       class="chat-history__messages"
       v-chat-scroll
@@ -15,7 +15,7 @@
         <template v-slot:before-message>
           <chat-date
             v-if="showChatDate(index)"
-            :date="message.date || message.createdAt"
+            :date="message.createdAt"
           />
           <chat-activity-info
             v-if="isChatStarted(index)"
@@ -37,10 +37,10 @@
 
 <script setup>
 
-import { watch } from 'vue';
+import { watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import { useChatMessage } from '../message/composables/useChatMessage.js';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
@@ -65,18 +65,36 @@ const namespace = `${chatNamespace}/chatHistory`;
 
 const {
   messages,
-
-  chatInputFocus,
   showChatDate,
-  isChatStarted,
-  getChatProvider,
-  isLastMessage,
-} = useChatMessage();
 
+  getMessage,
+  focusOnInput,
+} = useChatMessages();
+
+const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
+const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
-const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
+function isChatStarted(index) {
+  const { prevMessage, message, nextMessage } = getMessage(index);
+  return prevMessage
+    && nextMessage
+    && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
+}
+
+function isLastMessage(index) {
+  const { nextMessage } = getMessage(index);
+  return !nextMessage && !currentChat.value.messages.length;
+}
+
+function getChatProvider(message) {
+  return  message?.chat?.via
+    ? { type: message.chat.via.type, // chats from history
+      name: message.chat.via.name }
+    : { type: currentChat.value.members[0].type, // from current chat
+      name: currentChat.value.members[0].name }
+}
 
 watch(() => props.contactId, loadMessages, { immediate: true });
 
