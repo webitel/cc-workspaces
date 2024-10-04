@@ -6,9 +6,9 @@
   >
     <wt-player
       :src="mediaUrl"
-      :mime="file.type"
+      :mime="type"
       :autoplay="false"
-      :hide-duration="file.type.includes('video')"
+      :hide-duration="type.includes('video')"
       reset-on-end
       reset-volume
       @initialized="handlePlayerInitialize"
@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
+import chatMessageFileMixin from '../../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-player',
-  mixins: [chatMessageDetailMixin],
+  mixins: [chatMessageFileMixin],
   computed: {
     mediaUrl() {
       return this.media.streamUrl || this.media.url;
