@@ -94,12 +94,6 @@ export default {
     loadMessages() {
       // console.info('intersection');
     },
-    openImage(message) {
-      this.openMedia(message);
-    },
-    handlePlayerInitialize(player) {
-      this.attachPlayer({ player });
-    },
   },
   mounted() {
     this.isMounted = true;
