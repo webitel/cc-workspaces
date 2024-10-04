@@ -49,7 +49,7 @@ export default {
 
   :deep video {
     max-height: var(--chat-image-max-height);
-    max-width: var(--chat-image-min-width);
+    max-width: var(--chat-image-max-width);
   }
 }
 </style>
