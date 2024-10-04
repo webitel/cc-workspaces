@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
+import chatMessageFileMixin from '../../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-image',
-  mixins: [chatMessageDetailMixin],
+  mixins: [chatMessageFileMixin],
 };
 </script>
 
