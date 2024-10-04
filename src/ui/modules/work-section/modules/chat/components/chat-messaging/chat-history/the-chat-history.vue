@@ -66,9 +66,10 @@ const namespace = `${chatNamespace}/chatHistory`;
 
 const {
   messages,
+
+  getMessage,
   showChatDate,
   showAvatar,
-  getMessage,
   focusOnInput,
 } = useChatMessages();
 
