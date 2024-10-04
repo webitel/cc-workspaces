@@ -94,6 +94,10 @@ export default {
       // editor breaks on Number data type :( [WTEL-4477]
       return `${this.value}`;
     },
+    language() {
+      const lang = this.$i18n.locale;
+      return lang === 'ua' ? 'uk' : lang;
+    },
     config() {
       return {
         toolbar_sticky: true,
@@ -103,6 +107,7 @@ export default {
         menubar: false,
         statusbar: this.isHtml,
         toolbar_mode: 'sliding',
+        language: this.language,
         // content_style: `${contentUiCss}\n${contentCss}`,
       };
     },

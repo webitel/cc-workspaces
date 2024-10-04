@@ -2,7 +2,7 @@
   <div
     v-if="document"
     class="chat-message-document"
-    :class="{ 'chat-message-document--agent': agent }"
+    :class="{ 'chat-message-document--right': agent }"
     @click="downloadDocument"
   >
     <div class="chat-message-document__icon-wrapper">
@@ -24,11 +24,17 @@
 
 <script>
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
-import chatMessageDetailMixin from '../../../mixins/chatMessageDetailMixin.js';
+import chatMessageFileMixin from '../../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-document',
-  mixins: [chatMessageDetailMixin],
+  mixins: [chatMessageFileMixin],
+  props: {
+    agent: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     documentSize() {
       if (!this.document) return '';
@@ -81,7 +87,7 @@ export default {
     color: var(--text-main-color);
   }
 
-  &--agent {
+  &--right {
     flex-direction: row-reverse;
     background: var(--secondary-light-color);
 
