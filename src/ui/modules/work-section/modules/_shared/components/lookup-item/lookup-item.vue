@@ -9,10 +9,10 @@
       <template v-slot:main v-if="!noMain">
         <div class="lookup-item__main">
           <div class="lookup-item__main-content">
-            <div class="lookup-item__title">
+            <div class="lookup-item__title" :class="size">
               <slot name="title"></slot>
             </div>
-            <div class="lookup-item__subtitle">
+            <div class="lookup-item__subtitle" :class="size">
               <slot name="subtitle"></slot>
             </div>
           </div>
@@ -20,10 +20,10 @@
             v-if="$slots['info-title'] || $slots['info-subtitle']"
             class="lookup-item__info-content"
           >
-            <div class="lookup-item__info-title">
+            <div class="lookup-item__info-title" :class="size">
               <slot name="info-title"></slot>
             </div>
-            <div class="lookup-item__info-subtitle">
+            <div class="lookup-item__info-subtitle" :class="size">
               <slot name="info-subtitle"></slot>
             </div>
           </div>
@@ -68,6 +68,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    size: {
+      type: String,
+      default: ''
+    }
   },
 };
 </script>
@@ -93,11 +97,19 @@ export default {
 
   .lookup-item__title {
     @extend %typo-subtitle-2;
+
+    &.md{
+      @extend %typo-subtitle-1;
+    }
     overflow-wrap: anywhere;
   }
 
   .lookup-item__subtitle {
     @extend %typo-body-2;
+
+    &.md{
+      @extend %typo-body-1;
+    }
     overflow-wrap: anywhere;
   }
 
@@ -105,6 +117,10 @@ export default {
   .lookup-item__info-subtitle {
     @extend %typo-body-2;
     overflow-wrap: anywhere;
+
+    &.md{
+      @extend %typo-body-1;
+    }
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <aside class="chat-message-time">
     <div class="chat-message-time__sent-at">
-      {{ prettifyTime(date) }}
+      {{ time }}
     </div>
   </aside>
 </template>
@@ -12,11 +12,16 @@ import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime.js';
 
 export default {
   name: 'chat-message-time',
-  methods: { prettifyTime },
   props: {
     date: {
       type: String,
+      default: '',
       required: true,
+    },
+  },
+  computed: {
+    time() {
+      return prettifyTime(this.date)
     },
   },
 };
