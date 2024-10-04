@@ -24,8 +24,8 @@ export default {
 
   &__img {
     @extend %typo-body-1;
-    max-height: var(--chat-image-max-height);
-    max-width: var(--chat-image-max-width);
+    max-height: var(--chat-file-max-height);
+    max-width: var(--chat-file-max-width);
     width: 100%;
   }
 }

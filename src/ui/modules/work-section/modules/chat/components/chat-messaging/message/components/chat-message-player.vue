@@ -45,11 +45,11 @@ export default {
     {
       display: none;
     }
-  }
 
-  :deep video {
-    max-height: var(--chat-image-max-height);
-    max-width: var(--chat-image-max-width);
+    video {
+      max-height: var(--chat-file-max-height);
+      max-width: var(--chat-file-max-width);
+    }
   }
 }
 </style>
