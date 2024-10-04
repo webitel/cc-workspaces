@@ -1,15 +1,15 @@
 <template>
   <article class="chat-history" @click="focusOnInput">
-    <scroll-observer
-      v-if="scrollTarget"
-      :root="scrollTarget"
-      @intersect="loadNextMessages"
-    />
     <div
-      class="chat-history__messages"
       ref="scrollTarget"
+      class="chat-history__messages"
       v-chat-scroll
     >
+      <scroll-observer
+        v-if="scrollTarget"
+        :root="scrollTarget"
+        @intersect="loadNextMessages"
+      />
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -71,7 +71,6 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const scrollTarget = ref(null);
-const nextLoading = ref(false);
 
 const {
   messages,
@@ -85,6 +84,7 @@ const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKS
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
+const loadNextMessages = async () => await store.dispatch(`${namespace}/LOAD_NEXT`, props.contactId);
 
 function isChatStarted(index) {
   const { prevMessage, message, nextMessage } = getMessage(index);
@@ -104,13 +104,6 @@ function getChatProvider(message) {
       name: message.chat.via.name }
     : { type: currentChat.value.members[0].type, // from current chat
       name: currentChat.value.members[0].name }
-}
-
-async function loadNextMessages() {
-  // nextLoading.value = true;
-  console.log('scrollObserver')
-  // await store.dispatch(`${namespace}/LOAD_NEXT`);
-  // nextLoading.value = false;
 }
 
 watch(() => props.contactId, loadMessages, { immediate: true });

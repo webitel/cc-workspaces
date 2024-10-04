@@ -7,23 +7,23 @@ const state = {
   next: false,
 };
 
-const getters = {
-  CONTACT_ID: (state, getters, rootState) => rootState['ui/infoSec/client/contact/contact'].id,
-}
-
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
-    const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
+    const { items, next } = await ChatHistoryAPI.getAllMessages({ id: contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
     context.commit('SET_CHAT_HISTORY', messages);
+    context.commit('SET_NEXT_STATE', next);
   },
-  LOAD_NEXT: async (context) => {
+  LOAD_NEXT: async (context, contactId) => {
     if (!context.state.next) return;
+
     context.commit('SET_PAGE_STATE', context.state.page + 1);
-    const { items, next } = await ChatHistoryAPI.getAllMessages({ id: context.getters.CONTACT_ID });
-    // тут ці items варто обробляти
-    context.commit('SET_CHAT_HISTORY', [...context.state.chatHistoryMessages, ...items]);
+
+    const { items, next } = await ChatHistoryAPI.getAllMessages({ id: contactId });
+    const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
+    console.log('LOAD_NEXT messages:', messages);
+    context.commit('SET_CHAT_HISTORY', [...messages, ...context.state.chatHistoryMessages]);
     context.commit('SET_NEXT_STATE', next);
   },
   RESET_CHAT_HISTORY: (context) => {
@@ -43,6 +43,7 @@ const mutations = {
   },
   RESET_CHAT_HISTORY_STATE: (state) => {
     state.chatHistoryMessages = [];
+    state.page = 1;
     state.next = false;
   },
 };
