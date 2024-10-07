@@ -13,6 +13,7 @@
         :bot="isBot"
         :message="props.message"
         :show-avatar="props.showAvatar"
+        :username="getClientUsername"
       />
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <div @click.stop>
@@ -73,6 +74,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  username: {
+    type: String,
+  },
 });
 
 const emit = defineEmits(['open-image', 'initialized-player']);
@@ -93,7 +97,11 @@ const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 function handlePlayerInitialize(player) {
   emit('initialized-player', { player });
-}
+};
+
+const getClientUsername = computed(() => {
+  return !isAgentSide.value ? props.username : ''; //need to show username avatar only for client
+});
 
 </script>
 
@@ -129,6 +137,10 @@ function handlePlayerInitialize(player) {
   &--right .chat-message__content {
     flex-direction: row-reverse;
     margin: 0 0 0 var(--spacing-xs);
+  }
+
+  .chat-message-avatar {
+    flex: 0 0 var(--icon-lg-size);
   }
 }
 </style>
