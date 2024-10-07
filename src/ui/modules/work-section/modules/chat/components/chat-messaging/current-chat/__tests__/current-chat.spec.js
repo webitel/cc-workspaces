@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+import { useChatMessages } from '../../message/composables/useChatMessages.js';
 import ChatMessaging from '../../chat-messaging.vue';
 import CurrentChat from '../current-chat.vue';
 
@@ -10,6 +11,8 @@ const chat = {
 const computed = {
   ...CurrentChat.computed,
 };
+
+const { showChatDate, showAvatar } = useChatMessages();
 
 const store = createStore({});
 describe('Chat Messages Container', () => {
@@ -28,14 +31,14 @@ describe('Chat Messages Container', () => {
       { createdAt: new Date('1.1.2020').getTime() },
       { createdAt: new Date('2.1.2020').getTime() },
     ];
-    chat.messages = messages;
+    // chat.messages = messages;
     const wrapper = shallowMount(CurrentChat, {
       global: {
         plugins: [store],
       },
       computed,
     });
-    expect(wrapper.vm.showChatDate(messages.length - 1)).toBe(true);
+    expect(showChatDate(messages.length - 1)).toBe(true);
   });
 
   it('showDate correctly computes Falsy value (same day)', () => {
@@ -43,14 +46,14 @@ describe('Chat Messages Container', () => {
       { createdAt: new Date('1.1.2020').getTime() },
       { createdAt: new Date('1.1.2020').getTime() },
     ];
-    chat.messages = messages;
+    // chat.messages = messages;
     const wrapper = shallowMount(CurrentChat, {
       global: {
         plugins: [store],
       },
       computed,
     });
-    expect(wrapper.vm.showChatDate(messages.length - 1)).toBe(false);
+    expect(showChatDate(messages.length - 1)).toBe(false);
   });
 
   it('showUserPic correctly computes Truthy value (different members)', () => {
@@ -64,7 +67,7 @@ describe('Chat Messages Container', () => {
       },
       computed,
     });
-    expect(wrapper.vm.showAvatar(messages.length - 1)).toBe(true);
+    expect(showAvatar(messages.length - 1)).toBe(true);
   });
 
   it('showUserPic correctly computes Falsy value (same member)', () => {
@@ -77,6 +80,6 @@ describe('Chat Messages Container', () => {
       },
       computed,
     });
-    expect(wrapper.vm.showAvatar(messages.length - 1)).toBe(false);
+    expect(showAvatar(messages.length - 1)).toBe(false);
   });
 });
