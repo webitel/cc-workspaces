@@ -9,6 +9,7 @@
         :key="message.id"
         :message="message"
         :size="size"
+        :show-avatar="showAvatar(index)"
         @open-image="openImage(message)"
         @initialized-player="attachPlayer"
       >
@@ -65,9 +66,10 @@ const namespace = `${chatNamespace}/chatHistory`;
 
 const {
   messages,
-  showChatDate,
 
   getMessage,
+  showChatDate,
+  showAvatar,
   focusOnInput,
 } = useChatMessages();
 
