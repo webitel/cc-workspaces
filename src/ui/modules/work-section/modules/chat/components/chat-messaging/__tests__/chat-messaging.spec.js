@@ -1,7 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ChatMessaging
   from '../chat-messaging.vue';
-
 let chatOnWorkspace = {
   closedAt: 0,
 };
@@ -11,15 +11,25 @@ const computed = {
   isChatActive: () => false,
   chat: () => chatOnWorkspace,
 };
+
+const store = createStore({});
 describe('ChatMessagingContainer', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessaging);
+    const wrapper = shallowMount(ChatMessaging, {
+      global: {
+        plugins: [store],
+      }
+    });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('calls store sendFile method at handleDrop method', () => {
     const sendFileMock = vi.spyOn(ChatMessaging.methods, 'sendFile').mockImplementation(() => {});
-    const wrapper = shallowMount(ChatMessaging);
+    const wrapper = shallowMount(ChatMessaging, {
+      global: {
+        plugins: [store],
+      }
+    });
     const files = [{ name: 'jest' }];
     const event = { dataTransfer: { files } };
     wrapper.vm.handleDrop(event);
@@ -32,6 +42,7 @@ describe('Chat Messaging Text Entry block: Active Chat', () => {
   it('renders active chat actions if isChatActive computed is truthy', () => {
     const wrapper = mount(ChatMessaging, {
       global: {
+        plugins: [store],
         stubs: {
           ChatEmoji: true,
         },
@@ -72,6 +83,9 @@ describe('Chat Messaging Text Entry block: Active Chat', () => {
       },
     };
     const wrapper = shallowMount(ChatMessaging, {
+      global: {
+        plugins: [store],
+      },
       computed: {
         ...computed,
         isChatActive: () => true,
@@ -87,6 +101,9 @@ describe('Chat Messaging Text Entry block: Active Chat', () => {
     });
     const files = [{ name: 'jest' }];
     const wrapper = shallowMount(ChatMessaging, {
+      global: {
+        plugins: [store],
+      },
       computed: {
         ...computed,
         isChatActive: () => true,

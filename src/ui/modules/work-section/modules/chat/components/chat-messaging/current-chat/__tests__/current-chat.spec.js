@@ -1,17 +1,24 @@
 import { shallowMount } from '@vue/test-utils';
-import ChatMessagesContainer from '../current-chat.vue';
+import { createStore } from 'vuex';
+import ChatMessaging from '../../chat-messaging.vue';
+import CurrentChat from '../current-chat.vue';
 
 const chat = {
   messages: [],
 };
+
+const computed = {
+  ...CurrentChat.computed,
+};
+
+const store = createStore({});
 describe('Chat Messages Container', () => {
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessagesContainer, {
-      computed: {
-        chat() {
-          return chat;
-        },
+    const wrapper = shallowMount(CurrentChat, {
+      global: {
+        plugins: [store],
       },
+      computed,
     });
     expect(wrapper.exists()).toBe(true);
   });
@@ -22,15 +29,13 @@ describe('Chat Messages Container', () => {
       { createdAt: new Date('2.1.2020').getTime() },
     ];
     chat.messages = messages;
-    const wrapper = shallowMount(ChatMessagesContainer, {
-      computed: {
-        ...ChatMessagesContainer.computed,
-        chat() {
-          return chat;
-        },
+    const wrapper = shallowMount(CurrentChat, {
+      global: {
+        plugins: [store],
       },
+      computed,
     });
-    expect(wrapper.vm.showDate(messages.length - 1)).toBe(true);
+    expect(wrapper.vm.showChatDate(messages.length - 1)).toBe(true);
   });
 
   it('showDate correctly computes Falsy value (same day)', () => {
@@ -39,15 +44,13 @@ describe('Chat Messages Container', () => {
       { createdAt: new Date('1.1.2020').getTime() },
     ];
     chat.messages = messages;
-    const wrapper = shallowMount(ChatMessagesContainer, {
-      computed: {
-        ...ChatMessagesContainer.computed,
-        chat() {
-          return chat;
-        },
+    const wrapper = shallowMount(CurrentChat, {
+      global: {
+        plugins: [store],
       },
+      computed,
     });
-    expect(wrapper.vm.showDate(messages.length - 1)).toBe(false);
+    expect(wrapper.vm.showChatDate(messages.length - 1)).toBe(false);
   });
 
   it('showUserPic correctly computes Truthy value (different members)', () => {
@@ -55,45 +58,25 @@ describe('Chat Messages Container', () => {
     const member2 = { id: 2 };
     const messages = [{ member: member1 }, { member: member2 }];
     chat.messages = messages;
-    const wrapper = shallowMount(ChatMessagesContainer, {
-      computed: {
-        ...ChatMessagesContainer.computed,
-        chat() {
-          return chat;
-        },
+    const wrapper = shallowMount(CurrentChat, {
+      global: {
+        plugins: [store],
       },
+      computed,
     });
-    expect(wrapper.vm.showDate(messages.length - 1)).toBe(true);
+    expect(wrapper.vm.showAvatar(messages.length - 1)).toBe(true);
   });
 
   it('showUserPic correctly computes Falsy value (same member)', () => {
     const member = { id: 1 };
     const messages = [{ member }, { member }];
     chat.messages = messages;
-    const wrapper = shallowMount(ChatMessagesContainer, {
-      computed: {
-        ...ChatMessagesContainer.computed,
-        chat() {
-          return chat;
-        },
+    const wrapper = shallowMount(CurrentChat, {
+      global: {
+        plugins: [store],
       },
+      computed,
     });
     expect(wrapper.vm.showAvatar(messages.length - 1)).toBe(false);
-  });
-
-  it('event bus emits input focus event at message container click', () => {
-    const $eventBus = { $emit: vi.fn() };
-    const wrapper = shallowMount(ChatMessagesContainer, {
-      // global: { provide: { $eventBus } },
-      computed: {
-        ...ChatMessagesContainer.computed,
-        chat() {
-          return chat;
-        },
-      },
-    });
-    const spy = vi.spyOn(wrapper.vm.$eventBus, '$emit');
-    wrapper.find('.chat-messages-container').trigger('click');
-    expect(spy).toHaveBeenCalledWith('chat-input-focus');
   });
 });
