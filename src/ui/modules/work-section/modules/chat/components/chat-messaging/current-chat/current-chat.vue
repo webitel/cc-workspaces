@@ -11,6 +11,7 @@
         :key="message.id"
         :message="message"
         :size="size"
+        :show-avatar="showAvatar(index)"
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
       >
@@ -56,15 +57,17 @@ export default {
   setup() {
     const {
       messages,
-      showChatDate,
 
+      showAvatar,
+      showChatDate,
       focusOnInput,
     } = useChatMessages();
 
     return {
       messages,
-      showChatDate,
 
+      showAvatar,
+      showChatDate,
       focusOnInput,
     };
   },

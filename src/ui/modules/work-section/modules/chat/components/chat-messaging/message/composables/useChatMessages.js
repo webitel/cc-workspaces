@@ -26,9 +26,16 @@ export const useChatMessages = () => {
     return prettifyDate(prevMessage?.createdAt) !== prettifyDate(message?.createdAt)
   }
 
+  const showAvatar = (index) => {
+    const { prevMessage, message } = getMessage(index);
+    return index === 0
+      || (message.member?.type !== prevMessage.member?.type);
+  };
+
   return {
     messages,
 
+    showAvatar,
     getMessage,
     focusOnInput,
     showChatDate,

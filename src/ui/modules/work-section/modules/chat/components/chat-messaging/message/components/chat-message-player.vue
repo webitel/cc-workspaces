@@ -45,6 +45,11 @@ export default {
     {
       display: none;
     }
+
+    video {
+      max-height: var(--chat-file-max-height);
+      max-width: var(--chat-file-max-width);
+    }
   }
 }
 </style>
