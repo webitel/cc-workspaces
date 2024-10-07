@@ -67,19 +67,12 @@ const namespace = `${chatNamespace}/chatHistory`;
 
 const {
   messages,
-  showChatDate,
 
   getMessage,
+  showChatDate,
+  showAvatar,
   focusOnInput,
 } = useChatMessages();
-
-
-function showAvatar(messageIndex) {
-  if (messageIndex === 0) return true;
-  const message = messages.value[messageIndex];
-  const prevMessage = messages.value[messageIndex - 1];
-  return (message.peer.id !== prevMessage.peer.id);
-}
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
