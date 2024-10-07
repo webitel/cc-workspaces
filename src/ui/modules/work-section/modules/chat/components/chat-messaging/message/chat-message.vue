@@ -97,18 +97,14 @@ const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 const getClientUsername = computed(() => {
   return !isAgentSide.value ? props.username : ''; //need to show username avatar only for client
-})
+});
 
 const openImage = () => {
   emit('open-image');
 };
-
 const handlePlayerInitialize = (player) => {
   emit('initialized-player', player);
 };
-function handlePlayerInitialize(player) {
-  emit('initialized-player', { player });
-}
 
 </script>
 
