@@ -15,6 +15,8 @@
         :key="message.id"
         :message="message"
         :size="size"
+        :show-avatar="showAvatar(index)"
+        :username="props.contact?.name"
         @open-image="openImage(message)"
         @initialized-player="attachPlayer"
       >
@@ -54,8 +56,8 @@ import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 
 const props = defineProps({
-  contactId: {
-    type: String,
+  contact: {
+    type: Object,
     require: true,
   },
   size: {
@@ -74,14 +76,15 @@ const scrollTarget = ref(null);
 
 const {
   messages,
-  showChatDate,
 
   getMessage,
+  showChatDate,
+  showAvatar,
   focusOnInput,
 } = useChatMessages();
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
-const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
+const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 const loadNextMessages = async () => await store.dispatch(`${namespace}/LOAD_NEXT`, props.contactId);
@@ -92,7 +95,6 @@ function isChatStarted(index) {
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
 }
-
 function isLastMessage(index) {
   const { nextMessage } = getMessage(index);
   return !nextMessage && !currentChat.value.messages.length;
@@ -106,7 +108,7 @@ function getChatProvider(message) {
       name: currentChat.value.members[0].name }
 }
 
-watch(() => props.contactId, loadMessages, { immediate: true });
+watch(() => props.contact?.id, loadMessages, { immediate: true });
 
 </script>
 
