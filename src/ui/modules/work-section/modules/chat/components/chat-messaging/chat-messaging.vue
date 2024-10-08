@@ -10,8 +10,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="contactId"
-      :contact-id="contactId"
+      v-if="contact?.id"
+      :contact="contact"
       :size="size"
     />
     <current-chat
@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     ...mapState('ui/infoSec/client/contact', {
-      contactId: (state) => state.contact?.id,
+      contact: (state) => state.contact,
     }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
