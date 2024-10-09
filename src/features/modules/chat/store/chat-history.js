@@ -9,21 +9,21 @@ const state = {
 
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
-    const { items, next } = await ChatHistoryAPI.getAllMessages({ id: contactId });
+    const { items, next } = await ChatHistoryAPI.getAllMessages({ contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
+
     context.commit('SET_CHAT_HISTORY', messages);
     context.commit('SET_NEXT_STATE', next);
   },
   LOAD_NEXT: async (context, contactId) => {
     if (!context.state.next) return;
 
-    context.commit('SET_PAGE_STATE', context.state.page + 1);
-
-    const { items, next } = await ChatHistoryAPI.getAllMessages({ id: contactId });
+    const { items, next } = await ChatHistoryAPI.getAllMessages({ contactId, page: context.state.page });
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
-    console.log('LOAD_NEXT messages:', messages);
+
     context.commit('SET_CHAT_HISTORY', [...messages, ...context.state.chatHistoryMessages]);
+    context.commit('SET_PAGE_STATE', context.state.page + 1);
     context.commit('SET_NEXT_STATE', next);
   },
   RESET_CHAT_HISTORY: (context) => {

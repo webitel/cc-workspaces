@@ -1,10 +1,6 @@
 <template>
   <section class="current-chat chat-messages-container" @click="focusOnInput">
-    <div class="chat-messages-items" ref="chat-messages-items" v-chat-scroll>
-      <scroll-observer
-        :options="intersectionObserverOptions"
-        @intersect="loadMessages"
-      />
+    <div ref="chat-messages-items" class="chat-messages-items" v-chat-scroll>
       <chat-activity-info />
       <message
         v-for="(message, index) of messages"
@@ -42,7 +38,6 @@ export default {
     Message,
     ChatDate,
     ChatActivityInfo,
-    ScrollObserver,
   },
   props: {
     size: {
@@ -75,15 +70,6 @@ export default {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
-    intersectionObserverOptions() {
-      if (this.isMounted) {
-        return {
-          root: this.$refs['chat-messages-items'],
-          rootMargin: '100px',
-        };
-      }
-      return null;
-    },
   },
   methods: {
     ...mapActions('features/chat', {
@@ -91,9 +77,6 @@ export default {
       attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
     }),
-    loadMessages() {
-      // console.info('intersection');
-    },
   },
   mounted() {
     this.isMounted = true;
