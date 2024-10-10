@@ -3,7 +3,7 @@
     v-if="loading"
     size="sm"
   />
-  <div ref="intersectionTarget" />
+  <div ref="intersectionTarget"  class="target"/>
 </template>
 
 <script setup>
@@ -52,5 +52,9 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .wt-loader {
   margin: var(--spacing-lg) auto;
+}
+
+.target {
+  min-height: 30px;
 }
 </style>

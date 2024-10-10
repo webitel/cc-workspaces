@@ -89,6 +89,7 @@ const next = computed(() => getNamespacedState(store.state, namespace).next);
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
+
 const loadNextMessages = async () => {
   nextLoading.value = true;
   await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
@@ -103,7 +104,8 @@ function isChatStarted(index) {
 }
 
 function isStartHistory(index) {
-  return (!next.value && index === 0);
+  console.log('isStartHistory');
+  return !next.value && index === 0;
 }
 
 function isLastMessage(index) {

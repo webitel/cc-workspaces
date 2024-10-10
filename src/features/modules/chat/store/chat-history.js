@@ -18,11 +18,14 @@ const actions = {
   },
   LOAD_NEXT: async (context, contactId) => {
     if (!context.state.next) return;
+    // зупиняти підвантаження, якщо щойно вже зроблено запит
 
     const { items, next } = await ChatHistoryAPI.getAllMessages({ contactId, page: context.state.page });
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
 
-    context.commit('SET_CHAT_HISTORY', [...messages, ...context.state.chatHistoryMessages]);
+    const all = [...messages, ...context.state.chatHistoryMessages];
+    console.log('new:', messages, 'old:', context.state.chatHistoryMessages);
+    context.commit('SET_CHAT_HISTORY', all);
     context.commit('SET_PAGE_STATE', context.state.page + 1);
     context.commit('SET_NEXT_STATE', next);
   },

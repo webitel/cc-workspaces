@@ -10,24 +10,6 @@ const scrollToBottom = (el) => {
   }
 };
 
-// const onImageLoaded = (src, callback) => {
-//   const image = new Image();
-//   image.src = src;
-//   if (image.complete) {
-//     callback();
-//   } else {
-//     image.onload = callback;
-//   }
-// };
-
-// const scrollAfterImageLoad = (root, node = root) => {
-//   if (!node.querySelectorAll) return;
-//   const imgs = node.querySelectorAll('img.chat-message-image__img');
-//   imgs.forEach((img) => {
-//     onImageLoaded(img.getAttribute('src'), () => scrollToBottom(root));
-//   });
-// };
-
 let isScrolled = false;
 let mutationObserver = null;
 
@@ -39,7 +21,6 @@ const scrollEventHandler = (event) => {
 const chatScroll = {
   bind: (el, binding) => {
     el.addEventListener('scroll', scrollEventHandler);
-    // scrollAfterImageLoad(el);
 
     mutationObserver = new MutationObserver((event) => {
       // eslint-disable-next-line no-unused-vars
@@ -48,11 +29,10 @@ const chatScroll = {
       event.forEach((mutation) => {
         if (!mutation.addedNodes.length) return;
         mutation.addedNodes.forEach((node) => {
-          // scrollAfterImageLoad(el, node);
         });
       });
       if (!isScrolled) scrollToBottom(el);
-      if (isScrolled && el.scrollTop < 200) el.scrollTop += 200; // prevent scroll to top when we add new items)
+      if (isScrolled && el.scrollTop <= 200) el.scrollTop += 200; // prevent scroll to top when we add new items
     });
     mutationObserver.observe(el, { childList: true, subtree: true });
   },

@@ -38,6 +38,12 @@
           :text="props.message.text"
           :agent="isAgentSide"
         />
+<!--        <message-text-->
+<!--          :text="`-->
+<!--                chat.id: ${ message.chat?.id } `"-->
+<!--          :agent="isAgentSide"-->
+<!--        />-->
+
       </div>
       <message-time
         :date="props.message.createdAt"
