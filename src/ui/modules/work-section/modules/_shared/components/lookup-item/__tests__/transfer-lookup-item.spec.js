@@ -3,7 +3,7 @@ import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import UserLookupItem from '../user-lookup-item.vue';
 import TransferLookupItem from '../transfer-lookup-item.vue';
-import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
+import ChatTransferDestination from '../../../enums/ChatTransferDestination.enum';
 
 const computed = {
   state() {

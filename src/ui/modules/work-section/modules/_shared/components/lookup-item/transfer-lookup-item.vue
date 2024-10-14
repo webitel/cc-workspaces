@@ -36,7 +36,7 @@ import { mapGetters } from 'vuex';
 import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
-import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
+import TransferDestination from '../../enums/ChatTransferDestination.enum';
 import lookupItemMixin from './mixins/lookupItemMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 

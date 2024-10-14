@@ -18,11 +18,9 @@
 </template>
 
 <script>
-import chatMessageDetailMixin from '../../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-avatar',
-  mixins: [chatMessageDetailMixin],
   props: {
     bot: {
       type: Boolean,

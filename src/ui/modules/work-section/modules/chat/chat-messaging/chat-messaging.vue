@@ -22,11 +22,11 @@
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
-      <wt-textarea
+      <textarea-new
         ref="message-draft"
         v-model="chat.draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
-        chat-mode
+        autoresize
         name="draft"
         @enter="sendMessage"
         @paste="handleFilePaste"
@@ -70,14 +70,15 @@
 <script>
 
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
+import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
 import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
-import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import TextareaNew from './textarea-new.vue';
 
 export default {
   name: 'chat-messaging-container',
@@ -85,6 +86,7 @@ export default {
     CurrentChat,
     ChatHistory,
     ChatEmoji,
+    TextareaNew,
   },
   mixins: [dropzoneMixin],
   inject: ['$eventBus'],

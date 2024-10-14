@@ -32,8 +32,8 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
-import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
-import chatScroll from '../../../../../../../../app/directives/chatScroll';
+import ScrollObserver from '../../../../../../../app/components/utils/scroll-observer.vue';
+import chatScroll from '../../../../../../../app/directives/chatScroll.js';
 
 export default {
   name: 'current-chat',

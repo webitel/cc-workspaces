@@ -11,7 +11,7 @@
       class="chat-footer__chat-closed">
       <img
         alt="chat closed pic"
-        src="../../../_shared/assets/chat-closed/chat-closed.svg"/>
+        src="../../_shared/assets/chat-closed/chat-closed.svg"/>
       <p class="chat-footer__chat-closed__text">{{$t('workspaceSec.chat.closedСhat')}}</p>
     </div>
   </task-footer>
@@ -20,8 +20,8 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
+import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 
 export default {
   name: 'chat-footer',

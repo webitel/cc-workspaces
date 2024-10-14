@@ -43,7 +43,7 @@ import { watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
-import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
+import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';

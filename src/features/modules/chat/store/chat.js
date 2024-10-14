@@ -1,5 +1,5 @@
 import { ConversationState } from 'webitel-sdk';
-import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
+import ChatTransferDestination from '../../../../ui/modules/work-section/modules/_shared/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';

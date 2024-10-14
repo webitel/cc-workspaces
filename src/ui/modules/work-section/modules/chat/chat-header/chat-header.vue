@@ -32,12 +32,12 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
+import displayInfoMixin from '../../../../../mixins/displayInfoMixin.js';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
+import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
-import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
-import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 
 export default {
   name: 'chat-header',
