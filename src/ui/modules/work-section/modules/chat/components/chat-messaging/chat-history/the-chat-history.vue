@@ -24,11 +24,13 @@
             :provider="getChatProvider(message).type"
             :gateway="getChatProvider(message).name"
           />
+          //визначати чи цей мембер - є агент (не бот, не котакт, не користувач)
+          <chat-agent :username="message.member?.name" />
         </template>
 
         <template v-slot:after-message>
           <chat-activity-info
-            v-if="isLastMessage(index) || isChatStarted(index + 1)"
+            v-if="isChatStarted(index + 1) || isLastMessage(index)"
             ended
           />
         </template>
@@ -42,6 +44,7 @@
 import { watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import ChatAgent from '../components/chat-agent.vue';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import ChatDate from '../components/chat-date.vue';
