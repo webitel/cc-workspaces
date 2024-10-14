@@ -24,8 +24,10 @@
             :provider="getChatProvider(message).type"
             :gateway="getChatProvider(message).name"
           />
-          //визначати чи цей мембер - є агент (не бот, не котакт, не користувач)
-          <chat-agent :username="message.member?.name" />
+          <chat-agent
+            v-if="isChatStarted(index)"
+            :agents="getChatAgents(message)"
+          />
         </template>
 
         <template v-slot:after-message>
@@ -41,15 +43,17 @@
 
 <script setup>
 
-import { watch, computed } from 'vue';
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
+import { watch, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import ChatAgent from '../components/chat-agent.vue';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
+import { getMessageMember } from '../../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
-import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
+import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
+import ChatAgent from '../components/chat-agent.vue';
 
 const props = defineProps({
   contact: {
@@ -78,9 +82,41 @@ const {
 } = useChatMessages();
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
+
+const currentAgent = computed(() => store.state.features.status.agent);
+
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
+
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
+
+const getChatMembers = async (chatId) => {
+  const { peers } = await contactChatMessagesHistory.getChat({
+    contactId: props.contact?.id,
+    chatId,
+  });
+  return peers.map((item) => (getMessageMember(item))); // formatting objects from API
+};
+
+const getAgentsFromMembers = (array) => {
+  return array.filter((item) => item.type === 'webitel');
+};
+
+const currentChatAgents = computed(() => {
+  return currentChat.value.members.length > 1
+    ? getAgentsFromMembers(currentChat.value.members)
+    : [];
+});
+
+const getChatAgents = async (message) => { // return 1 agent or array of agents
+  if (message.chat?.id) { // if message have chat it means this message from chat history
+    const members = await getChatMembers(message.chat.id);
+
+    return getAgentsFromMembers(members);
+
+  } else return currentChatAgents.value; // if message don`t have chat it means this message from current chat
+};
 
 function isChatStarted(index) {
   const { prevMessage, message, nextMessage } = getMessage(index);
@@ -88,6 +124,7 @@ function isChatStarted(index) {
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
 }
+
 function isLastMessage(index) {
   const { nextMessage } = getMessage(index);
   return !nextMessage && !currentChat.value.messages.length;

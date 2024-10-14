@@ -1,9 +1,5 @@
 import getFileUrl from './getFileUrl.js';
 
-const getMessageMember = (value) => {
-  const type = value?.type === 'user' ? 'webitel' : value?.type;
-  return { ...value, type };
-};
 const formatMessageFile = (file) => { // added field 'mime' and 'url' to message`s file object if message dosen't have
   if (!file) return null;
   return {
@@ -11,6 +7,11 @@ const formatMessageFile = (file) => { // added field 'mime' and 'url' to message
     mime: file.type,
     url: getFileUrl(file.id),
   };
+};
+
+export const getMessageMember = (value) => {
+  const type = value?.type === 'user' ? 'webitel' : value?.type;
+  return { ...value, type };
 };
 
 export const formatChatMessages = (messages) => { // make chat-history messages more similar to current-chat messages
@@ -23,7 +24,3 @@ export const formatChatMessages = (messages) => { // make chat-history messages 
     };
   });
 };
-
-export default {
-  formatChatMessages,
-}

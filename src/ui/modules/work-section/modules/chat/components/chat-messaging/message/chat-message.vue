@@ -11,7 +11,6 @@
     <div class="chat-message__content">
       <message-avatar
         :bot="isBot"
-        :message="props.message"
         :show-avatar="props.showAvatar"
         :username="getClientUsername"
       />
@@ -95,13 +94,13 @@ const isBot = computed(() =>
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
+const getClientUsername = computed(() => {
+  return !isAgentSide.value ? props.username : ''; // need to show username avatar only for client
+});
+
 function handlePlayerInitialize(player) {
   emit('initialized-player', { player });
 };
-
-const getClientUsername = computed(() => {
-  return !isAgentSide.value ? props.username : ''; //need to show username avatar only for client
-});
 
 </script>
 
