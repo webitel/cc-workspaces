@@ -1,7 +1,13 @@
 import { shallowMount, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ContactLookupItem from '../contact-lookup-item.vue';
-import ContactCommunicationItem from '../contact-communication-item.vue';
 
+const computed = {
+  ...ContactLookupItem.computed,
+  contactLink: () => () => 'link',
+};
+
+const store = createStore({});
 describe('ContactLookupItem', () => {
   it('renders a component', () => {
     const item = { name: {}, phones: [], id: 'vi' };
@@ -24,7 +30,9 @@ describe('ContactLookupItem', () => {
           LookupItemWrapper: false,
           WtRoundedAction: false,
         },
+        plugins: [store],
       },
+      computed,
     });
 
     wrapper.findComponent({ name: 'WtRoundedAction' }).vm.$emit('click');
@@ -48,7 +56,9 @@ describe('ContactLookupItem', () => {
           WtExpandTransition: false,
           TransitionExpand: false,
         },
+        plugins: [store],
       },
+      computed,
     });
 
     wrapper.findComponent({ name: 'WtRoundedAction' }).vm.$emit('click');
