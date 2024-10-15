@@ -2,25 +2,25 @@ import { shallowMount } from '@vue/test-utils';
 import ChatMessageImage
   from '../chat-message-image.vue';
 
-let message = {};
+let file = {};
+let type = '';
 
 describe('ChatMessageImage component', () => {
   beforeEach(() => {
-    message = {};
+    file = {};
+    type = '';
   });
 
   it('renders a component', () => {
-    const wrapper = shallowMount(ChatMessageImage, { props: { message } });
+    const wrapper = shallowMount(ChatMessageImage, { props: { file, type } });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('correctly computes message with image', () => {
-    message = {
-      file: {
-        mime: 'image/png',
-      },
-    };
-    const wrapper = shallowMount(ChatMessageImage, { props: { message } });
+    file = { url: '' };
+    type = 'image/png';
+
+    const wrapper = shallowMount(ChatMessageImage, { props: { file, type } });
     expect(wrapper.vm.image).toBeTruthy();
   });
 });

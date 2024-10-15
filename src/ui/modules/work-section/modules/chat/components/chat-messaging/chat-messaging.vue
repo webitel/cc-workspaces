@@ -71,7 +71,6 @@
 
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import dropzoneMixin from '../../../../../../../app/mixins/dropzoneMixin';
 import CurrentChat from './current-chat/current-chat.vue';
