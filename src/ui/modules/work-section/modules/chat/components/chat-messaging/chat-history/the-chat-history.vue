@@ -44,12 +44,10 @@
 
 <script setup>
 
-import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
-import { watch, computed, ref } from 'vue';
+import { watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
-import { getMessageMember } from '../../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
