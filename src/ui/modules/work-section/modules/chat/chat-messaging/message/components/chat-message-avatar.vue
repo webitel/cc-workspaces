@@ -4,8 +4,9 @@
   >
     <wt-avatar
       v-if="showAvatar && !bot"
+      :username="username"
       size="sm"
-    ></wt-avatar>
+    />
     <div
       v-else-if="showAvatar"
       class="chat-message-avatar__bot-avatar-wrapper"
@@ -30,6 +31,9 @@ export default {
       type: Boolean,
       default: true,
     },
+    username: {
+      type: String,
+    }
   },
 };
 </script>

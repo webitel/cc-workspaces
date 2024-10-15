@@ -1,6 +1,9 @@
 <template>
   <div
     class="chat-messaging"
+    :class="[
+      `chat-messaging--${size}`,
+    ]"
     @dragenter.prevent="handleDragEnter"
   >
     <dropzone
@@ -22,7 +25,8 @@
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
-      <textarea-new
+      <wt-textarea
+        class="chat-messaging__textarea"
         ref="message-draft"
         v-model="chat.draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
@@ -71,14 +75,12 @@
 
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
 import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
-import TextareaNew from './textarea-new.vue';
 
 export default {
   name: 'chat-messaging-container',
@@ -86,7 +88,6 @@ export default {
     CurrentChat,
     ChatHistory,
     ChatEmoji,
-    TextareaNew,
   },
   mixins: [dropzoneMixin],
   inject: ['$eventBus'],
@@ -111,6 +112,7 @@ export default {
   computed: {
     ...mapState('ui/infoSec/client/contact', {
       contact: (state) => state.contact,
+      isLoading: (state) => state.isLoading,
     }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
@@ -192,22 +194,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$chatGap: var(--spacing-2xs);
+$roundedAction: calc(var(--rounded-action-padding)*2 + var(--rounded-action-border-size)*2);
+
+$textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
+$textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
+
 .chat-messaging {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: var(--spacing-xs);
+  gap: $chatGap;
+
+  &--md {
+    .chat-messaging__textarea {
+      max-height: calc((100% - $textEntryActionsMd) - $chatGap);
+    }
+  }
+
+  &--sm {
+    .chat-messaging__textarea {
+      max-height: calc((100% - $textEntryActionsSm) - $chatGap);
+    }
+  }
 }
 
 .chat-messaging-text-entry {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: $chatGap;
+  max-height: 50%;
 
   &__actions {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: $chatGap;
   }
 }
 
