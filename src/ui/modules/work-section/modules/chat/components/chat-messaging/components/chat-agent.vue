@@ -1,35 +1,124 @@
 <template>
-  <article v-if="props.agents.length" class="chat-agent">
-    <div v-if="props.agents.length > 1" class="chat-agent__list">
-<!--      block to show multiple chat agents    -->
+  <article v-if="agents.length" class="chat-agent">
+      <div v-if="agents.length > 1" class="chat-agent-list">
+      <p>
+        {{ $t('workspaceSec.chat.chatsAgentsList', { agentName: firstAgentName }) }}
+      </p>
+      <wt-tooltip>
+        <template #activator>
+          <wt-chip class="chat-agent-list__activator">
+            +{{ agents.length - 1 }}
+          </wt-chip>
+        </template>
+          <p
+            v-for="(agent) of hiddenAgents"
+            class="chat-agent-list__item">
+            {{ agent.name }}
+          </p>
+      </wt-tooltip>
     </div>
+
     <div v-else>
-      <wt-avatar size="xs" :username="props.agents[0].name" />
-      <p> {{ $t('workspaceSec.chat.chatsAgent', { agentName: props.agents[0].name }) }} </p>
+      <p> {{ $t('workspaceSec.chat.chatsAgent', { agentName: firstAgentName }) }} </p>
     </div>
   </article>
 </template>
 
 <script setup>
 
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
+import { computed, ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { getMessageMember } from '../../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
+
 const props = defineProps({
-  agents: {
-    type: Array,
-    require: true,
+  chatId: {
+    type: String,
+    default: '',
+  },
+  contactId: {
+    type: String,
+    default: '',
   },
 });
+
+const store = useStore();
+const chatNamespace = 'features/chat';
+const agents = ref([]);
+
+const firstAgentName = computed(() => agents.value[0]?.name);
+const hiddenAgents = computed(() => agents.value.slice(1));
+
+const getAgentsArray = async () => {
+  if (props.chatId) {
+    const { chatHistoryAgents } = await getChatHistoryAgents(props.chatId);
+    agents.value = chatHistoryAgents.reverse();
+  } else {
+    agents.value = currentChatAgents.value;
+  }
+}
+
+const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
+
+const currentChatAgents = computed(() => {
+  return currentChat.value.members.length > 1
+    ? getAgentsFromMembers(currentChat.value.members)
+    : [];
+});
+
+const getAgentsFromMembers = (array) => {
+  return array.filter((item) => item.type === 'webitel');
+};
+
+const getPeersFromAPI = async (chatId) => {
+  try {
+    const { peers } = await contactChatMessagesHistory.getChat({
+      contactId: props.contactId,
+      chatId,
+    });
+    return peers;
+
+  } catch (error) {
+    console.log('Can`t get peers from chat. Error:', error);
+  }
+};
+
+const getChatHistoryAgents = async (chatId) => {
+  const peers = await getPeersFromAPI(chatId);
+  const members = peers.map((item) => getMessageMember(item)); // formatting objects from API
+  const agents = getAgentsFromMembers(members);
+
+  return { chatHistoryAgents: agents };
+}
+
+onMounted(() => {
+  getAgentsArray();
+})
 
 </script>
 
 <style lang="scss" scoped>
 .chat-agent {
+  @extend %typo-caption;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: var(--spacing-xs);
-  p {
-    @extend %typo-caption;
+}
+
+.chat-agent-list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+
+  &__activator {
+    background: var(--secondary-color);
+    cursor: pointer;
+  }
+
+  &__item {
+    @extend %typo-body-1;
   }
 }
 </style>

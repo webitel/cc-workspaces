@@ -5,7 +5,6 @@
         :options="intersectionObserverOptions"
         @intersect="loadMessages"
       />
-      <chat-activity-info />
       <message
         v-for="(message, index) of messages"
         :key="message.id"
