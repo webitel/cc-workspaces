@@ -24,11 +24,16 @@
             :provider="getChatProvider(message).type"
             :gateway="getChatProvider(message).name"
           />
+          <chat-agent
+            v-if="isChatStarted(index)"
+            :chat-id="message.chat?.id"
+            :contact-id="props.contact.id"
+          />
         </template>
 
         <template v-slot:after-message>
           <chat-activity-info
-            v-if="isLastMessage(index) || isChatStarted(index + 1)"
+            v-if="isChatStarted(index + 1) || isLastMessage(index)"
             ended
           />
         </template>
@@ -44,9 +49,10 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
-import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
+import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
+import ChatAgent from '../components/chat-agent.vue';
 
 const props = defineProps({
   contact: {
@@ -75,8 +81,11 @@ const {
 } = useChatMessages();
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
+
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
+
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
 function isChatStarted(index) {
@@ -84,11 +93,7 @@ function isChatStarted(index) {
   return prevMessage
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
-}
-function isLastMessage(index) {
-  const { nextMessage } = getMessage(index);
-  return !nextMessage && !currentChat.value.messages.length;
-}
+};
 
 function getChatProvider(message) {
   return  message?.chat?.via
@@ -96,6 +101,11 @@ function getChatProvider(message) {
       name: message.chat.via.name }
     : { type: currentChat.value.members[0].type, // from current chat
       name: currentChat.value.members[0].name }
+};
+
+function isLastMessage(index) {
+  const { nextMessage } = getMessage(index);
+  return !nextMessage && !currentChat.value.messages.length;
 }
 
 watch(() => props.contact?.id, loadMessages, { immediate: true });

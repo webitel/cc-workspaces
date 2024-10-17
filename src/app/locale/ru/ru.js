@@ -174,6 +174,7 @@ export default {
       chatEnded: 'Чат завершен',
       chatTransferred: 'Чат переведен',
       chatsAgent: '{ agentName } присоединился к чату',
+      chatsAgentsList: '{ agentName } принимали участие в чате',
     },
   },
   emptyWorkspace: {

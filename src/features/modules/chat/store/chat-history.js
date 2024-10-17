@@ -1,4 +1,4 @@
-import ChatHistoryAPI from '@webitel/ui-sdk/src/api/crm/contactChatMessagesHistory';
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
 import { formatChatMessages } from '../scripts/formatChatMessages.js';
 
 const state = {
@@ -8,7 +8,7 @@ const state = {
 
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
-    const { items } = await ChatHistoryAPI.getAllMessages({ id: contactId });
+    const { items } = await contactChatMessagesHistory.getAllMessages({ contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
     context.commit('SET_CHAT_HISTORY', messages);

@@ -24,7 +24,7 @@
         {{ contact?.name }}
       </a>
       <span v-else>
-        {{ displayChatName }}
+        {{ title }}
       </span>
     </template>
   </task-header>
@@ -63,6 +63,9 @@ export default {
     ...mapGetters('ui/infoSec/client/contact', {
       contactLink: 'CONTACT_LINK',
     }),
+    title() {
+      return this.task?.members[this.task?.members.length - 1]?.name;
+    }
   },
   methods: {
     ...mapActions('features/chat', {

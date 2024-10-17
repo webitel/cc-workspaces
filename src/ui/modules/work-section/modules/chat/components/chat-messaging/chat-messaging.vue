@@ -26,7 +26,7 @@
         ref="message-draft"
         v-model="chat.draft"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
-        chat-mode
+        autoresize
         name="draft"
         @enter="sendMessage"
         @paste="handleFilePaste"
