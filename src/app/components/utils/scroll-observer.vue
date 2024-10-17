@@ -1,60 +1,64 @@
 <template>
-  <wt-loader
-    v-if="loading"
-    size="sm"
-  />
-  <div ref="intersectionTarget"  class="target"/>
+  <div class="observer"></div>
 </template>
+<script>
+// https://vueschool.io/articles/vuejs-tutorials/build-an-infinite-scroll-component-using-intersection-observer-api/
 
-<script setup>
-import { useIntersectionObserver } from '@vueuse/core';
-import { onMounted, onUnmounted, ref } from 'vue';
-
-const props = defineProps({
-  next: {
-    type: Function,
-    required: true,
+export default {
+  props: {
+    options: Object,
+    root: HTMLElement,
+    rootMargin: {
+      type: String,
+      default: '200px',
+    },
   },
-  loading: {
-    type: Boolean,
-    default: false,
+  emits: ['intersect'],
+  data: () => ({
+    observer: null,
+  }),
+
+  watch: {
+    options: {
+      handler() {
+        this.setObserver();
+      },
+      immediate: true,
+    },
+    root: {
+      handler() {
+        this.setObserver();
+      },
+      immediate: true,
+    },
   },
-});
 
-const emit = defineEmits([
-  'next',
-]);
+  destroyed() {
+    if (this.observer) this.observer.disconnect();
+  },
 
-const intersectionTarget = ref(null);
+  methods: {
+    async setObserver() {
+      await this.$nextTick(); // wait for component to render, so that this.$el which is watched by Observer is available
 
-let stopObs;
-
-onMounted(() => {
-  /**
-   *
-   * Note, observer triggers at init, so it should be used also as init function
-   * however, current filters module version is initializing list by itself, so we need to refactor filters ASAP
-   */
-  const { stop } = useIntersectionObserver(intersectionTarget.value, ([{ isIntersecting }]) => {
-    if (isIntersecting && props.next) {
-      emit('next');
-    }
-  });
-
-  stopObs = stop;
-});
-
-onUnmounted(() => {
-  stopObs();
-});
+      if ((this.options || this.root) && !this.observer) { // if parent rendered and we can set root within options
+        this.observer = new IntersectionObserver(([entry]) => {
+          if (entry && entry.isIntersecting) {
+            this.$emit('intersect');
+          }
+        }, {
+          root: this.root,
+          rootMargin: this.rootMargin,
+        });
+        this.observer.observe(this.$el);
+      }
+    },
+  },
+};
 </script>
 
-<style scoped lang="scss">
-.wt-loader {
-  margin: var(--spacing-lg) auto;
-}
-
-.target {
-  min-height: 30px;
+<style lang="scss" scoped>
+.observer {
+  //display: contents;
 }
 </style>

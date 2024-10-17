@@ -48,6 +48,7 @@ export default {
   padding: var(--spacing-xs);
   border-radius: var(--border-radius);
   background: var(--primary-light-color);
+  color: var(--primary-on-color);
 
   // reset links inside text
   :deep(.chat-message-text__link) {
@@ -57,6 +58,7 @@ export default {
 
   &--right {
     background: var(--secondary-light-color);
+    color: var(--secondary-on-color);
   }
 }
 

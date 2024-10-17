@@ -4,7 +4,7 @@
       class="chat-history__messages"
       v-chat-scroll
     >
-      <scroll-observer
+      <wt-intersection-observer
         :next="next"
         :loading="nextLoading"
         @next="loadNextMessages"
@@ -59,7 +59,6 @@ import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
-import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 
 const props = defineProps({
   contact: {
@@ -110,10 +109,8 @@ function isChatStarted(index) {
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
 };
-}
 
-function isStartHistory(index) {
-  console.log('isStartHistory');
+function isStartHistory(index) { // first message of all chats
   return !next.value && index === 0;
 }
 

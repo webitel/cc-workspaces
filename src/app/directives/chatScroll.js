@@ -12,6 +12,7 @@ const scrollToBottom = (el) => {
 
 let isScrolled = false;
 let mutationObserver = null;
+const scrollObserverMargin = 200;
 
 const scrollEventHandler = (event) => {
   const el = event.target;
@@ -31,8 +32,8 @@ const chatScroll = {
         mutation.addedNodes.forEach((node) => {
         });
       });
+      if (isScrolled && el.scrollTop <= scrollObserverMargin) el.scrollTop += scrollObserverMargin; // prevent scroll to top when we add new items
       if (!isScrolled) scrollToBottom(el);
-      if (isScrolled && el.scrollTop <= 200) el.scrollTop += 200; // prevent scroll to top when we add new items
     });
     mutationObserver.observe(el, { childList: true, subtree: true });
   },
