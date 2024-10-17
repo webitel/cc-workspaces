@@ -10,11 +10,14 @@
             +{{ agents.length - 1 }}
           </wt-chip>
         </template>
-          <p
+        <ul>
+          <li
             v-for="(agent) of hiddenAgents"
-            class="chat-agent-list__item">
+            class="chat-agent-list__item"
+          >
             {{ agent.name }}
-          </p>
+          </li>
+        </ul>
       </wt-tooltip>
     </div>
 
@@ -49,15 +52,6 @@ const agents = ref([]);
 const firstAgentName = computed(() => agents.value[0]?.name);
 const hiddenAgents = computed(() => agents.value.slice(1));
 
-const getAgentsArray = async () => {
-  if (props.chatId) {
-    const { chatHistoryAgents } = await getChatHistoryAgents(props.chatId);
-    agents.value = chatHistoryAgents.reverse();
-  } else {
-    agents.value = currentChatAgents.value;
-  }
-}
-
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 
 const currentChatAgents = computed(() => {
@@ -70,7 +64,7 @@ const getAgentsFromMembers = (array) => {
   return array.filter((item) => item.type === 'webitel');
 };
 
-const getPeersFromAPI = async (chatId) => {
+const getPeersFromAPI = async (chatId) => { // get all chat participants
   try {
     const { peers } = await contactChatMessagesHistory.getChat({
       contactId: props.contactId,
@@ -86,13 +80,22 @@ const getPeersFromAPI = async (chatId) => {
 const getChatHistoryAgents = async (chatId) => {
   const peers = await getPeersFromAPI(chatId);
   const members = peers.map((item) => getMessageMember(item)); // formatting objects from API
-  const agents = getAgentsFromMembers(members);
+  const agents = getAgentsFromMembers(members); // get only agents
 
   return { chatHistoryAgents: agents };
 }
 
+const setAgentsArray = async () => {
+  if (props.chatId) {
+    const { chatHistoryAgents } = await getChatHistoryAgents(props.chatId);
+    agents.value = chatHistoryAgents.reverse();
+  } else {
+    agents.value = currentChatAgents.value;
+  }
+}
+
 onMounted(() => {
-  getAgentsArray();
+  setAgentsArray();
 })
 
 </script>
