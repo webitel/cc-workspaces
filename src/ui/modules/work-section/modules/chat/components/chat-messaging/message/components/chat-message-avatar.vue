@@ -6,14 +6,14 @@
       v-if="showAvatar && !bot"
       size="sm"
       :username="username"
-    ></wt-avatar>
+    />
     <div
       v-else-if="showAvatar"
       class="chat-message-avatar__bot-avatar-wrapper"
     >
       <wt-icon
         icon="ws-bot"
-      ></wt-icon>
+      />
     </div>
   </div>
 </template>

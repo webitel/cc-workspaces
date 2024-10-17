@@ -175,6 +175,7 @@ export default {
       chatEnded: 'Chat ended',
       chatTransferred: 'Chat transferred',
       chatsAgent: '{ agentName } has joined the chat',
+      chatsAgentsList: '{ agentName } participated in the chat',
     },
   },
   emptyWorkspace: {

@@ -1,94 +1,96 @@
 import { shallowMount } from '@vue/test-utils';
-import chatMessageDetailMixin from '../chatMessageFileMixin.js';
+import chatMessageFileMixin from '../chatMessageFileMixin.js';
 
 const Component = {
   render() {},
-  mixins: [chatMessageDetailMixin],
+  mixins: [chatMessageFileMixin],
 };
 
 describe('chatMessageDetailMixin', () => {
-  let message;
+  let file;
+  let type;
 
   beforeEach(() => {
-    message = {};
+    file = {};
+    type = '';
   });
 
   it('renders a component', () => {
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
     expect(wrapper.exists()).toBe(true);
   });
 
   it('correctly computes "image": True case', () => {
-    const file = { mime: 'image' };
-    message.file = file;
+    const file = { url: 'aa11' };
+    const type = 'image';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
     expect(wrapper.vm.image).toEqual(file);
   });
 
   it('correctly computes "image": False case', () => {
-    const file = { mime: 'video' };
-    message.file = file;
+    const file = { url: 'aa11' };
+    const type = 'video';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
     expect(wrapper.vm.image).toBeFalsy();
   });
 
   it('correctly computes "audio": Audio case', () => {
-    const file = { mime: 'audio' };
-    message.file = file;
+    const file = { url: 'aa11' };
+    const type = 'audio';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
-    expect(wrapper.vm.audio).toEqual(file);
+    expect(wrapper.vm.media).toEqual(file);
   });
 
   it('correctly computes "audio": Video case', () => {
-    const file = { mime: 'video' };
-    message.file = file;
+    const file = { url: 'aa11' };
+    const type = 'video';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
-    expect(wrapper.vm.audio).toEqual(file);
+    expect(wrapper.vm.media).toEqual(file);
   });
 
   it('correctly computes "audio": False case', () => {
-    const file = { mime: 'image' };
-    message.file = file;
+    const file = { url: 'aa11' };
+    const type = 'image';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
-    expect(wrapper.vm.audio).toBeFalsy();
+    expect(wrapper.vm.media).toBeFalsy();
   });
 
-  it('correctly computes "showDocument": image case', () => {
-    const file = { mime: 'image' };
-    message.file = file;
+  it('correctly computes "document": image case', () => {
+    const file = { url: 'aa11' };
+    const type = 'image';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
-    expect(wrapper.vm.showDocument).toBe(false);
+    expect(wrapper.vm.document).toBe(null);
   });
 
-  it('correctly computes "showDocument": audio case', () => {
-    const file = { mime: 'video' };
-    message.file = file;
+  it('correctly computes "document": audio case', () => {
+    const file = { url: 'aa11' };
+    const type = 'video';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
-    expect(wrapper.vm.showDocument).toBe(false);
+    expect(wrapper.vm.document).toBe(null);
   });
 
-  it('correctly computes "showDocument": True case', () => {
-    const file = { mime: 'pdf' };
-    message.file = file;
+  it('correctly computes "document": True case', () => {
+    const file = { url: 'aa11' };
+    const type = 'pdf';
     const wrapper = shallowMount(Component, {
-      props: { message },
+      props: { file, type },
     });
-    expect(wrapper.vm.showDocument).toBe(true);
+    expect(wrapper.vm.document).toEqual(file);
   });
 });

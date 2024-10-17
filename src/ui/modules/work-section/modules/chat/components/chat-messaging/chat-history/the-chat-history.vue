@@ -21,7 +21,6 @@
       >
         <template v-slot:before-message>
           <chat-date
-            якщо попереднього повідомлення немає
             v-if="showChatDate(index) || isStartHistory(index)"
             :date="message.createdAt"
           />
@@ -30,11 +29,16 @@
             :provider="getChatProvider(message).type"
             :gateway="getChatProvider(message).name"
           />
+          <chat-agent
+            v-if="isChatStarted(index)"
+            :chat-id="message.chat?.id"
+            :contact-id="props.contact.id"
+          />
         </template>
 
         <template v-slot:after-message>
           <chat-activity-info
-            v-if="isLastMessage(index) || isChatStarted(index + 1)"
+            v-if="isChatStarted(index + 1) || isLastMessage(index)"
             ended
           />
         </template>
@@ -51,9 +55,10 @@ import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
-import ChatDate from '../components/chat-date.vue';
 import Message from '../message/chat-message.vue';
+import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
+import ChatAgent from '../components/chat-agent.vue';
 import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
 
 const props = defineProps({
@@ -86,8 +91,11 @@ const {
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
+
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
+
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
 const loadNextMessages = async () => {
@@ -101,16 +109,12 @@ function isChatStarted(index) {
   return prevMessage
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
+};
 }
 
 function isStartHistory(index) {
   console.log('isStartHistory');
   return !next.value && index === 0;
-}
-
-function isLastMessage(index) {
-  const { nextMessage } = getMessage(index);
-  return !nextMessage && !currentChat.value.messages.length;
 }
 
 function getChatProvider(message) {
@@ -119,6 +123,11 @@ function getChatProvider(message) {
       name: message.chat.via.name }
     : { type: currentChat.value.members[0].type, // from current chat
       name: currentChat.value.members[0].name }
+};
+
+function isLastMessage(index) {
+  const { nextMessage } = getMessage(index);
+  return !nextMessage && !currentChat.value.messages.length;
 }
 
 watch(() => props.contact?.id, loadMessages, { immediate: true });

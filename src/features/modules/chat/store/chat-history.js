@@ -1,4 +1,4 @@
-import ChatHistoryAPI from '@webitel/ui-sdk/src/api/crm/contactChatMessagesHistory';
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
 import { formatChatMessages } from '../scripts/formatChatMessages.js';
 
 const state = {
@@ -9,7 +9,7 @@ const state = {
 
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
-    const { items, next } = await ChatHistoryAPI.getAllMessages({ contactId });
+    const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
 
@@ -20,7 +20,7 @@ const actions = {
     if (!context.state.next) return;
     // зупиняти підвантаження, якщо щойно вже зроблено запит
 
-    const { items, next } = await ChatHistoryAPI.getAllMessages({ contactId, page: context.state.page });
+    const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId, page: context.state.page });
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
 
     const all = [...messages, ...context.state.chatHistoryMessages];
