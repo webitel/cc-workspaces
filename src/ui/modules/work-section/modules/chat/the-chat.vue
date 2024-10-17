@@ -31,14 +31,14 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import EmptyWorkspace from '../../empty-workspace/components/empty-workspace.vue';
+import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
-import TaskContainer from '../../_shared/components/task-container/task-container.vue';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import TaskContainer from '../_shared/components/task-container/task-container.vue';
+import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
 
 const defaultTab = 'chat-messaging-container';
 

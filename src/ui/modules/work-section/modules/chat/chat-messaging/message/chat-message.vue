@@ -120,7 +120,6 @@ function handlePlayerInitialize(player) {
     min-width: 0;
     line-height: 0; // prevents height difference from its content
     gap: var(--spacing-xs);
-    margin: 0 var(--spacing-xs) 0 0;
   }
 
   &.chat-message--md {
@@ -135,7 +134,6 @@ function handlePlayerInitialize(player) {
 
   &--right .chat-message__content {
     flex-direction: row-reverse;
-    margin: 0 0 0 var(--spacing-xs);
   }
 
   .chat-message-avatar {

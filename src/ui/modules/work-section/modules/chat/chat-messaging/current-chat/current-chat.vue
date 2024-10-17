@@ -31,8 +31,8 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
-import ScrollObserver from '../../../../../../../../app/components/utils/scroll-observer.vue';
-import chatScroll from '../../../../../../../../app/directives/chatScroll';
+import ScrollObserver from '../../../../../../../app/components/utils/scroll-observer.vue';
+import chatScroll from '../../../../../../../app/directives/chatScroll.js';
 
 export default {
   name: 'current-chat',
@@ -104,17 +104,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-messages-container {
-  display: flex;
-  overflow: hidden;
-}
-
-.chat-messages-items {
-  @extend %wt-scrollbar;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
 </style>

@@ -4,3 +4,18 @@
   --chat-file-max-height: 280px;
   --chat-file-min-height: 256px;
 }
+
+.chat-messages-container {
+  display: flex;
+  overflow: hidden;
+
+  .chat-messages-items {
+    @extend %wt-scrollbar;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+}
+

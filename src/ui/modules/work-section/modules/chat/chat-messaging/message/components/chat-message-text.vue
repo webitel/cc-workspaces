@@ -43,7 +43,7 @@ export default {
 
 .chat-message-text {
   @extend %typo-body-2;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
   white-space: pre-line; // read \n as "new line"
   padding: var(--spacing-xs);
   border-radius: var(--border-radius);

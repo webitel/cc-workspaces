@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ChatTransferContainer from '../chat-transfer-container.vue';
-import ChatTransferDestination from '../../../enums/ChatTransferDestination.enum';
+import ChatTransferDestination from '../../enums/ChatTransferDestination.enum.js';
 
 describe('ChatTransferContainer', () => {
   it('renders a component', () => {

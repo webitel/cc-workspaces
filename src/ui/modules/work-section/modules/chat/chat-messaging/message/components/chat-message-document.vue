@@ -24,7 +24,7 @@
 
 <script>
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
-import chatMessageFileMixin from '../../../../mixins/chatMessageFileMixin.js';
+import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-document',

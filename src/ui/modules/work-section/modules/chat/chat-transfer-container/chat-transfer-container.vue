@@ -50,16 +50,16 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import APIRepository from '../../../../../../../app/api/APIRepository';
-import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
-import TransferDestination from '../../enums/ChatTransferDestination.enum';
-import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
-import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
-import botAvatar from '../../../_shared/assets/avatars/bot-avatar.svg';
-import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
-import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
+import APIRepository from '../../../../../../app/api/APIRepository.js';
+import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
+import TransferDestination from '../enums/ChatTransferDestination.enum.js';
+import infiniteScrollMixin from '../../../../../../app/mixins/infiniteScrollMixin.js';
+import EmptySearch from '../../_shared/components/workspace-empty-search/components/empty-search.vue';
+import TransferLookupItem from '../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import botAvatar from '../../_shared/assets/avatars/bot-avatar.svg';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;

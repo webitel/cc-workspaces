@@ -1,7 +1,7 @@
 <template>
-  <article class="chat-history" @click="focusOnInput">
+  <article class="chat-history chat-messages-container" @click="focusOnInput">
     <div
-      class="chat-history__messages"
+      class="chat-history__messages chat-messages-items"
       v-chat-scroll
     >
       <message
@@ -48,7 +48,7 @@ import { watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
-import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
+import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -113,21 +113,4 @@ watch(() => props.contact?.id, loadMessages, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-
-.chat-history {
-  height: 100%;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-
-  &__messages {
-    @extend %wt-scrollbar;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: scroll;
-  }
-}
-
 </style>
