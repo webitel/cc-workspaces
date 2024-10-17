@@ -1,27 +1,28 @@
 <template>
   <article v-if="agents.length" class="chat-agent">
-      <div v-if="agents.length > 1" class="chat-agent-list">
-      <p>
-        {{ $t('workspaceSec.chat.chatsAgentsList', { agentName: firstAgentName }) }}
-      </p>
-      <wt-tooltip>
-        <template #activator>
-          <wt-chip class="chat-agent-list__activator">
-            +{{ agents.length - 1 }}
-          </wt-chip>
-        </template>
-        <ul>
-          <li
-            v-for="(agent) of hiddenAgents"
-            class="chat-agent-list__item"
-          >
-            {{ agent.name }}
-          </li>
-        </ul>
-      </wt-tooltip>
-    </div>
+      <div v-if="agents.length > 1" class="chat-agent-content">
+        <p>
+          {{ $t('workspaceSec.chat.chatsAgentsList', { agentName: firstAgentName }) }}
+        </p>
+        <wt-tooltip>
+          <template #activator>
+            <wt-chip class="chat-agent-content__activator">
+              +{{ agents.length - 1 }}
+            </wt-chip>
+          </template>
+          <ul>
+            <li
+              v-for="(agent) of hiddenAgents"
+              class="chat-agent-content__item"
+            >
+              {{ agent.name }}
+            </li>
+          </ul>
+        </wt-tooltip>
+      </div>
 
-    <div v-else>
+    <div v-else class="chat-agent-content">
+      <wt-avatar size="xs" />
       <p> {{ $t('workspaceSec.chat.chatsAgent', { agentName: firstAgentName }) }} </p>
     </div>
   </article>
@@ -110,13 +111,14 @@ onMounted(() => {
   gap: var(--spacing-xs);
 }
 
-.chat-agent-list {
+.chat-agent-content {
   display: flex;
   align-items: center;
   gap: var(--spacing-2xs);
 
   &__activator {
-    background: var(--secondary-color);
+    background: var(--secondary-light-color);
+    color: var(--secondary-on-color);
     cursor: pointer;
   }
 

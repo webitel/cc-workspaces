@@ -20,6 +20,7 @@
       <a
         v-if="contact?.id"
         :href="contactLink(contact?.id)"
+        class="chat-header-title"
         target="_blank">
         {{ contact?.name }}
       </a>
@@ -100,6 +101,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chat-header-title {
+  color: var(--text-main-color);
+}
 a:hover {
   text-decoration: underline;
 }
