@@ -21,11 +21,11 @@
       >
         <template v-slot:before-message>
           <chat-date
-            v-if="showChatDate(index) || isStartHistory(index)"
+            v-if="showChatDate(index) || isHistoryStart(index)"
             :date="message.createdAt"
           />
           <chat-activity-info
-            v-if="isChatStarted(index) || isStartHistory(index)"
+            v-if="isChatStarted(index) || isHistoryStart(index)"
             :provider="getChatProvider(message).type"
             :gateway="getChatProvider(message).name"
           />
@@ -110,7 +110,7 @@ function isChatStarted(index) {
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
 };
 
-function isStartHistory(index) { // first message of all chats
+function isHistoryStart(index) { // first message of all chats
   return !next.value && index === 0;
 }
 
