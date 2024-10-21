@@ -23,6 +23,7 @@ export default {
     edit: 'Edit',
     select: 'Select',
     run: 'Run',
+    today: 'Today',
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -170,6 +171,11 @@ export default {
       },
       confirmClose: 'Are you sure you want to close active chat?',
       closedСhat: 'The chat was closed',
+      chatStarted: 'Chat started',
+      chatEnded: 'Chat ended',
+      chatTransferred: 'Chat transferred',
+      chatsAgent: '{ agentName } has joined the chat',
+      chatsAgentsList: '{ agentName } participated in the chat',
     },
   },
   emptyWorkspace: {

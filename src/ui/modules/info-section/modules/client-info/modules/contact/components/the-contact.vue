@@ -107,7 +107,10 @@ function openView(open, mode) {
   so there would be 2 calls of loadContact() and initializeContact() at one time
  */
 
-watch([() => taskId.value, () => props.task.contactId], ([taskId, contactId], [prevTaskId, prevContactId]) => {
+watch([
+  () => taskId.value,
+  () => props.task.contactId
+], ([taskId, contactId], [prevTaskId, prevContactId]) => {
 
   if (taskId !== prevTaskId || !taskId) {
     changeMode(ContactMode.VIEW);

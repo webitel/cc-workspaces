@@ -27,7 +27,7 @@ import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
-import Chat from '../modules/chat/components/the-chat.vue';
+import Chat from '../modules/chat/the-chat.vue';
 import Member from '../modules/member/components/the-member.vue';
 import Job from '../modules/job/components/the-job.vue';
 import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspace-empty.vue';

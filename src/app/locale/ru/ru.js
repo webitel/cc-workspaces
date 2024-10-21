@@ -21,6 +21,7 @@ export default {
     edit: 'Редактировать',
     select: 'Выбрать',
     run: 'Запустить',
+    today: 'Сегодня',
   },
   appNavigator: {
     title: 'Приложения Webitel',
@@ -169,6 +170,11 @@ export default {
       },
       confirmClose: 'Вы уверенны, что хотите закрыть активный чат?',
       closedСhat: 'Чат был закрыт',
+      chatStarted: 'Чат начат',
+      chatEnded: 'Чат завершен',
+      chatTransferred: 'Чат переведен',
+      chatsAgent: '{ agentName } присоединился к чату',
+      chatsAgentsList: '{ agentName } принимали участие в чате',
     },
   },
   emptyWorkspace: {
