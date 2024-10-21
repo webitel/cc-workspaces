@@ -28,7 +28,7 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
-import chatScroll from '../../../../../../../../app/directives/chatScroll';
+import chatScroll from '../../../../../../../app/directives/chatScroll';
 
 export default {
   name: 'current-chat',

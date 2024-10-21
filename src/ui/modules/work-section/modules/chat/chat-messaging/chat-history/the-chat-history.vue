@@ -54,7 +54,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import vChatScroll from '../../../../../../../../app/directives/chatScroll.js';
+import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
