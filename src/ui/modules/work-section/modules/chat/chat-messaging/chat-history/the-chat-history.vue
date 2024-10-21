@@ -4,6 +4,11 @@
       class="chat-history__messages chat-messages-items"
       v-chat-scroll
     >
+      <wt-intersection-observer
+        :next="next"
+        :loading="nextLoading"
+        @next="loadNextMessages"
+      />
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -16,11 +21,11 @@
       >
         <template v-slot:before-message>
           <chat-date
-            v-if="showChatDate(index)"
+            v-if="showChatDate(index) || isHistoryStart(index)"
             :date="message.createdAt"
           />
           <chat-activity-info
-            v-if="isChatStarted(index)"
+            v-if="isChatStarted(index) || isHistoryStart(index)"
             :provider="getChatProvider(message).type"
             :gateway="getChatProvider(message).name"
           />
@@ -44,10 +49,11 @@
 
 <script setup>
 
-import { watch, computed } from 'vue';
+import { watch, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
@@ -71,6 +77,8 @@ const { t } = useI18n();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
+const nextLoading = ref(false);
+
 const {
   messages,
 
@@ -81,6 +89,7 @@ const {
 } = useChatMessages();
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
+const next = computed(() => getNamespacedState(store.state, namespace).next);
 
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 
@@ -88,12 +97,22 @@ const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_
 
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
+const loadNextMessages = async () => {
+  nextLoading.value = true;
+  await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
+  nextLoading.value = false;
+}
+
 function isChatStarted(index) {
   const { prevMessage, message, nextMessage } = getMessage(index);
   return prevMessage
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
 };
+
+function isHistoryStart(index) { // first message of all chats
+  return !next.value && index === 0;
+}
 
 function getChatProvider(message) {
   return  message?.chat?.via
