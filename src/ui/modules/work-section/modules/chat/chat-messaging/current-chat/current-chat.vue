@@ -87,17 +87,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-messages-container {
-  display: flex;
-  overflow: hidden;
-}
-
-.chat-messages-items {
-  @extend %wt-scrollbar;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
 </style>

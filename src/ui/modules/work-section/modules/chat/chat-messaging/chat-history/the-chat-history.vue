@@ -1,7 +1,7 @@
 <template>
-  <article class="chat-history" @click="focusOnInput">
+  <article class="chat-history chat-messages-container" @click="focusOnInput">
     <div
-      class="chat-history__messages"
+      class="chat-history__messages chat-messages-items"
       v-chat-scroll
     >
       <wt-intersection-observer
@@ -132,21 +132,4 @@ watch(() => props.contact?.id, loadMessages, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-
-.chat-history {
-  height: 100%;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-
-  &__messages {
-    @extend %wt-scrollbar;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: scroll;
-  }
-}
-
 </style>
