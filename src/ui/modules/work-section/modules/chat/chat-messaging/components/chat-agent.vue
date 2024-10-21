@@ -52,13 +52,14 @@ const agents = ref([]);
 
 const firstAgentName = computed(() => agents.value[0]?.name);
 const hiddenAgents = computed(() => agents.value.slice(1));
+const currentAgent = computed(() => store.state.ui.infoSec.agentInfo.agent);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 
 const currentChatAgents = computed(() => {
   return currentChat.value.members.length > 1
     ? getAgentsFromMembers(currentChat.value.members)
-    : [];
+    : [currentAgent.value];
 });
 
 const getAgentsFromMembers = (array) => {
