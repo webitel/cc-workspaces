@@ -3,6 +3,7 @@ import ChatTransferDestination from '../../../../ui/modules/work-section/modules
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
+import closed from '../modules/closed/store/closed.js';
 import chatHistory from './chat-history.js';
 
 const state = {
@@ -182,6 +183,7 @@ export default {
   mutations,
   modules: {
     manual,
+    closed,
     chatHistory,
   },
 };
