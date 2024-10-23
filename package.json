@@ -15,7 +15,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.4.1",
-    "@webitel/ui-sdk": "^24.10.41",
+    "@webitel/ui-sdk": "24.10.48",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",
     "deep-copy": "^1.4.2",
@@ -39,7 +39,7 @@
     "vue-loader": "^15.11.1",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "=24.8.1"
+    "webitel-sdk": "=24.8.2"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^1.1.0",
