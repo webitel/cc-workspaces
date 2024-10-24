@@ -9,7 +9,7 @@
     <template v-slot:icon>
       <wt-icon
         :icon="displayIcon"
-      ></wt-icon>
+      />
     </template>
 
     <template v-slot:title>
@@ -23,7 +23,7 @@
     <template v-slot:timer>
       <queue-preview-timer
         :task="task"
-      ></queue-preview-timer>
+      />
     </template>
   </task-queue-preview-md>
 
@@ -68,16 +68,16 @@ import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 export default {
-  name: 'active-queue-preview',
+  name: 'closed-queue-preview',
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
-      const lastMessage = this.task.messages[this.task.messages.length - 1];
+      const lastMessage = this.task.lastMessage;
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
     },
     displayIcon() {
-      const member = this.task.members[0];
-      return messengerIcon(member.type);
+      const type = this.task.gateway.type;
+      return messengerIcon(type);
     },
   },
 };

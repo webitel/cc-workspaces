@@ -43,12 +43,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ChatActions, ConversationState } from 'webitel-sdk';
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
+import ClosedQueue from './closed-queue/closed-queue-container.vue';
 
 const props = defineProps({
   size: {
@@ -96,6 +97,10 @@ const expansions = computed(() => [
       },
     ].filter(({ count }) => count),
   },
+  {
+    value: 'closed',
+    initiallyCollapsed: restoreExpansionState({ expansion: 'closed' }),
+  },
 ]);
 
 const getComponent = (value) => {
@@ -104,10 +109,13 @@ const getComponent = (value) => {
       return ActiveQueue;
     case 'manual':
       return ManualQueue;
+    case 'closed':
+      return ClosedQueue;
     default:
       return null;
   }
 };
+
 </script>
 
 <style lang="scss" scoped>
