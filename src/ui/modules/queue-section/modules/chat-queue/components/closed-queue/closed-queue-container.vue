@@ -2,7 +2,10 @@
   <task-queue-container
     :empty="taskList.length === 0"
   >
-    <div class="closed-queue-container" v-for="(task, index) of taskList">
+    <div
+      class="closed-queue-container"
+      v-for="(task, index) of taskList"
+    >
       <closed-preview
         :task="task"
         :opened="task === taskOnWorkspace"

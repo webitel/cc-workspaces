@@ -13,7 +13,7 @@
     </template>
 
     <template v-slot:title>
-      {{ displayChatName }}
+      {{ displayTaskName }}
     </template>
 
     <template v-slot:subtitle>
@@ -21,9 +21,7 @@
     </template>
 
     <template v-slot:timer>
-      <queue-preview-timer
-        :task="task"
-      />
+      {{ duration }}
     </template>
   </task-queue-preview-md>
 
@@ -38,11 +36,11 @@
       <wt-icon
         :icon="displayIcon"
         size="sm"
-      ></wt-icon>
+      />
     </template>
 
     <template v-slot:tooltip-title>
-      {{ displayChatName }}
+      {{ displayTaskName }}
     </template>
 
     <template v-slot:tooltip-subtitle>
@@ -50,37 +48,54 @@
     </template>
 
     <template v-slot:title>
-      {{ displayChatName }}
+      {{ displayTaskName }}
     </template>
 
     <template v-slot:subtitle>
-      <queue-preview-timer
-        :task="task"
-      ></queue-preview-timer>
+      {{ duration }}
     </template>
   </task-queue-preview-sm>
 </template>
 
-<script>
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
-import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+<script setup>
+
+import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime.js';
+import { computed } from 'vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
-export default {
-  name: 'closed-queue-preview',
-  mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
-  computed: {
-    lastMessage() {
-      const lastMessage = this.task.lastMessage;
-      return lastMessage.file ? lastMessage.file.name : lastMessage.text;
-    },
-    displayIcon() {
-      const type = this.task.gateway.type;
-      return messengerIcon(type);
-    },
+const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
   },
-};
+  opened: {
+    type: Boolean,
+    default: false,
+  },
+  size: {
+    type: String,
+    default: 'md',
+  },
+});
+
+const lastMessage = computed(() => {
+  const lastMessage = props.task.lastMessage;
+  return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+})
+
+const displayIcon = computed(() => messengerIcon(props.task.gateway.type));
+
+const displayTaskName = computed(() => props.task.title);
+
+const displayQueueName = computed(() => props.task.queue.name);
+
+const duration = computed(() => {
+  const sec = props.task.closedAt - props.task.startedAt;
+  return prettifyTime(sec);
+})
+
 </script>
 
 <style lang="scss" scoped>
