@@ -6,13 +6,13 @@ const state = {
 };
 
 const getters = {
-  CHATS_FOR_MANUAL_CLOSING: (state) => ( // closed chats are left in active chats tab
+  ACTIVE_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab
     state.closedChatsList.filter((chat) =>
         chat.closeReason !== ChatCloseReason.AGENT_LEAVE
         && chat.closeReason !== ChatCloseReason.TRANSFER,
       )
   ),
-  IMMEDIATELY_CLOSED_CHATS: (state) => ( // closed chats for closed chats tab
+  CLOSED_CHATS: (state) => ( // closed chats for closed chats tab
     state.closedChatsList.filter((chat) =>
         chat.closeReason === ChatCloseReason.TRANSFER
         || chat.closeReason === ChatCloseReason.AGENT_LEAVE,
