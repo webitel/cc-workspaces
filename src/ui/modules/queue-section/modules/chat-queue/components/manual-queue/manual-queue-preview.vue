@@ -85,11 +85,11 @@
 
 <script setup>
 import { computed } from 'vue';
-import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 const props = defineProps({
   task: {
@@ -111,25 +111,9 @@ const emit = defineEmits(['click', 'accept']);
 const lastMessage = computed(() => {
   return props.task.message;
 });
-
 const displayIcon = computed(() => {
   const type = props.task.chat;
-  switch (type) {
-    case MessengerType.TELEGRAM:
-      return 'messenger-telegram';
-    case MessengerType.VIBER:
-      return 'messenger-viber';
-    case 'whatsapp':
-      return 'messenger-whatsapp';
-    case MessengerType.WEB_CHAT:
-      return 'messenger-web-chat';
-    case MessengerType.INSTAGRAM:
-      return 'instagram';
-    case 'facebook':
-      return 'messenger-facebook';
-    default:
-      return type;
-  }
+  return messengerIcon(type);
 });
 
 const wait = computed(() => {

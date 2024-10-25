@@ -1,13 +1,13 @@
 <template>
   <task-queue-container
-    class="active-queue-container"
+    class="closed-queue-container"
     :empty="!taskList.length"
   >
     <div
       v-for="(task, index) of taskList"
       class="closed-queue-container__wrapper"
     >
-      <active-preview
+      <closed-preview
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
@@ -23,7 +23,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
-import ActivePreview from './active-queue-preview.vue';
+import ClosedPreview from './closed-queue-preview.vue';
 
 
 const props = defineProps({
@@ -35,16 +35,21 @@ const props = defineProps({
 
 const store = useStore();
 
-const taskList = computed(() => store.state.features.chat.chatList);
+const loadClosedChatsList = async () => await store.dispatch('features/chat/closed/LOAD_CLOSED_CHATS');
+
+const taskList = computed(() => store.getters['features/chat/closed/CLOSED_CHATS']);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 
 function openTask(task) {
   return store.dispatch('features/chat/OPEN_CHAT', task);
 }
+
+loadClosedChatsList();
+
 </script>
 
 <style lang="scss" scoped>
-  .active-queue-container {
+  .closed-queue-container {
     &__wrapper {
       display: flex;
       flex-direction: column;
