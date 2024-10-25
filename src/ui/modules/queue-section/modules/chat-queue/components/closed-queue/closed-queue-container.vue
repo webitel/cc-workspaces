@@ -36,7 +36,7 @@ const store = useStore();
 
 const loadClosedChatsList = async () => await store.dispatch('features/chat/closed/LOAD_CLOSED_CHATS');
 
-const taskList = computed(() => store.getters['features/chat/closed/IMMEDIATELY_CLOSED_CHATS']);
+const taskList = computed(() => store.getters['features/chat/closed/CLOSED_CHATS']);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 
 function openTask(task) {
