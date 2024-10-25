@@ -17,7 +17,7 @@
     </template>
 
     <template v-slot:subtitle>
-      {{ lastMessage }}
+      {{ lastMessagePreview }}
     </template>
 
     <template v-slot:timer>
@@ -44,7 +44,7 @@
     </template>
 
     <template v-slot:tooltip-subtitle>
-      {{ lastMessage }}
+      {{ lastMessagePreview }}
     </template>
 
     <template v-slot:title>
@@ -80,7 +80,7 @@ const props = defineProps({
   },
 });
 
-const lastMessage = computed(() => {
+const lastMessagePreview = computed(() => {
   const lastMessage = props.task.lastMessage;
   return lastMessage.file ? lastMessage.file.name : lastMessage.text;
 })

@@ -1,14 +1,15 @@
 <template>
   <task-queue-container
-    :empty="taskList.length === 0"
+    class="closed-queue-container"
+    :empty="!taskList.length"
   >
     <div
-      class="closed-queue-container"
       v-for="(task, index) of taskList"
+      class="closed-queue-container__wrapper"
     >
       <closed-preview
         :task="task"
-        :opened="task === taskOnWorkspace"
+        :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
         :size="size"
         @click="openTask(task)"
@@ -48,9 +49,11 @@ loadClosedChatsList();
 </script>
 
 <style lang="scss" scoped>
-  .closed-queue-container{
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
+  .closed-queue-container {
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
   }
 </style>
