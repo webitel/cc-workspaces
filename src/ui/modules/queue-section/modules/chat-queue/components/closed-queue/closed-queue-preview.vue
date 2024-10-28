@@ -1,6 +1,7 @@
 <template>
   <task-queue-preview-md
     v-if="size === 'md'"
+    class="closed-queue-preview"
     :opened="opened"
     :queue-name="displayQueueName"
     @click="$emit('click', task)"
@@ -22,6 +23,13 @@
 
     <template v-slot:timer>
       {{ duration }}
+    </template>
+
+    <template v-slot:icon-status>
+      <wt-icon
+        :icon="closeReasonIcon"
+        color="error"
+      />
     </template>
   </task-queue-preview-md>
 
@@ -54,13 +62,26 @@
     <template v-slot:subtitle>
       {{ duration }}
     </template>
+
+    <template v-slot:footer>
+      <div class="closed-queue-preview__reason-icon-wrapper">
+        <wt-icon
+          :icon="closeReasonIcon"
+          color="error"
+        />
+      </div>
+    </template>
+
   </task-queue-preview-sm>
 </template>
 
 <script setup>
 
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime.js';
 import { computed } from 'vue';
+import ChatCloseReason
+  from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
@@ -80,11 +101,6 @@ const props = defineProps({
   },
 });
 
-const lastMessagePreview = computed(() => {
-  const lastMessage = props.task.lastMessage;
-  return lastMessage.file ? lastMessage.file.name : lastMessage.text;
-})
-
 const displayIcon = computed(() => messengerIcon(props.task.gateway.type));
 
 const displayTaskName = computed(() => props.task.title);
@@ -92,11 +108,36 @@ const displayTaskName = computed(() => props.task.title);
 const displayQueueName = computed(() => props.task.queue.name);
 
 const duration = computed(() => {
-  const sec = props.task.closedAt - props.task.startedAt;
-  return prettifyTime(sec);
-})
+  const sec = (props.task.closedAt - props.task.startedAt) / 10 ** 3;
+  return convertDuration(sec);
+});
+
+const lastMessagePreview = computed(() => {
+  const lastMessage = props.task.lastMessage;
+  return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+});
+
+const closeReasonIcon = computed(() => {
+  switch (props.task.closeReason) {
+
+    case ChatCloseReason.AGENT_LEAVE
+    || ChatCloseReason.TRANSFER:
+      return 'wt-agent-disconnection';
+
+    case ChatCloseReason.CLIENT_LEAVE:
+      return 'wt-client-disconnection';
+
+    default:
+      return 'wt-timeout-disconnection';
+  }
+});
 
 </script>
 
 <style lang="scss" scoped>
+.closed-queue-preview__reason-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 </style>
