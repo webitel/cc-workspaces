@@ -21,7 +21,6 @@ export default {
   },
   computed: {
     time() {
-      console.log('this.date:', this.date, 'prettifyTime(this.date):', prettifyTime(this.date))
       return prettifyTime(this.date)
     },
   },
