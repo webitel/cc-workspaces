@@ -83,10 +83,12 @@ export default {
         md: {
           active: 'Активные чаты',
           manual: 'Самостоятельно назначенные чаты',
+          closed: 'Закрытые чаты',
         },
         sm: {
           active: 'Активные',
           manual: 'Самостоятельно назначенные',
+          closed: 'Закрытые',
         },
 
       },
@@ -269,6 +271,7 @@ export default {
     closeConversation: '{name} покинул чат',
     [JobState.Distribute]: 'Новое задание: {name}',
     newCall: 'Новый звонок',
+    closedChatError: 'Не удалось загрузить закрытые чаты',
   },
   emojiPicker: {
     categoriesLabel: 'Категории',

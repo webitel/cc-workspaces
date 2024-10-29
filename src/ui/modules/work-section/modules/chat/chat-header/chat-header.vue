@@ -65,8 +65,10 @@ export default {
       contactLink: 'CONTACT_LINK',
     }),
     title() {
-      return this.task?.members[this.task?.members.length - 1]?.name;
-    }
+      return this.task?.members
+        ? this.task?.members[this.task?.members?.length - 1]?.name
+        : this.task?.title;
+    },
   },
   methods: {
     ...mapActions('features/chat', {
