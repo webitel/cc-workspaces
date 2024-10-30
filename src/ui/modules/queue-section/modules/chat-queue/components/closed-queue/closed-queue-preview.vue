@@ -64,7 +64,7 @@
     </template>
 
     <template v-slot:footer>
-      <div class="closed-queue-preview__reason">
+      <div class="closed-queue-preview__footer">
         <wt-icon
           :icon="closeReasonIcon"
           color="error"
@@ -133,7 +133,7 @@ const closeReasonIcon = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.closed-queue-preview__reason {
+.closed-queue-preview__footer {
   display: flex;
   justify-content: center;
   width: 100%;
