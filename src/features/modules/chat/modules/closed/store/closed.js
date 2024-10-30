@@ -1,6 +1,5 @@
 import CatalogAPI
   from '../../../../../../ui/modules/queue-section/modules/chat-queue/components/closed-queue/test-api.js';
-import ChatCloseReason from '../enums/ChatCloseReason.enum';
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js'
 import { formatChatMessages } from '../../../scripts/formatChatMessages.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
@@ -13,17 +12,11 @@ const state = {
 };
 
 const getters = {
-  ACTIVE_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab
-    state.closedChatsList.filter((chat) =>
-        chat.closeReason !== ChatCloseReason.AGENT_LEAVE
-        && chat.closeReason !== ChatCloseReason.TRANSFER,
-      )
+  UNPROCESSED_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab unprocessed
+    state.closedChatsList.filter((chat) => chat.unprocessedClose)
   ),
   CLOSED_CHATS: (state) => ( // closed chats for closed chats tab
-    state.closedChatsList.filter((chat) =>
-        chat.closeReason === ChatCloseReason.TRANSFER
-        || chat.closeReason === ChatCloseReason.AGENT_LEAVE,
-      )
+    state.closedChatsList.filter((chat) => !chat.unprocessedClose)
   ),
 };
 
@@ -31,6 +24,7 @@ const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
       const items = await AgentChatsAPI.getList({ onlyClosed: true });
+
       context.commit('SET_CLOSED_CHATS_LIST', items);
     } catch (err) {
       throw applyTransform(err, [
@@ -47,8 +41,9 @@ const actions = {
     const messages = formatChatMessages(items);
     const chat = { ...task, messages };
 
-    context.commit('features/chat/OPEN_CHAT', chat);
+    context.dispatch('OPEN_CHAT', chat);
   },
+  OPEN_CHAT: (context, chat) => context.dispatch('features/chat/OPEN_CHAT', chat, { root: true }),
 };
 
 const mutations = {
