@@ -15,7 +15,7 @@
         :message="message"
         :size="size"
         :show-avatar="showAvatar(index)"
-        :username="props.contact?.name"
+        :username="props.contactName"
         @open-image="openImage(message)"
         @initialized-player="attachPlayer"
       >
@@ -32,7 +32,7 @@
           <chat-agent
             v-if="isChatStarted(index)"
             :chat-id="message.chat?.id"
-            :contact-id="props.contact.id"
+            :contact-id="props.contactId"
           />
         </template>
 
@@ -61,8 +61,12 @@ import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 
 const props = defineProps({
-  contact: {
-    type: Object,
+  contactId: {
+    type: String,
+    require: true,
+  },
+  contactName: {
+    type: String,
     require: true,
   },
   size: {
@@ -91,7 +95,7 @@ const {
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 
-const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contactId);
 
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 
@@ -99,7 +103,7 @@ const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, mes
 
 const loadNextMessages = async () => {
   nextLoading.value = true;
-  await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
+  await store.dispatch(`${namespace}/LOAD_NEXT`, props.contactId);
   nextLoading.value = false;
 }
 
@@ -115,11 +119,12 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
+  console.log('message:', message);
   return  message?.chat?.via
     ? { type: message.chat.via.type, // chats from history
       name: message.chat.via.name }
-    : { type: currentChat.value.members[0].type, // from current chat
-      name: currentChat.value.members[0].name }
+    : { type: currentChat.value?.members[0]?.type, // from current chat
+      name: currentChat.value?.members[0]?.name }
 };
 
 function isLastMessage(index) {
@@ -127,7 +132,7 @@ function isLastMessage(index) {
   return !nextMessage && !currentChat.value.messages.length;
 }
 
-watch(() => props.contact?.id, loadMessages, { immediate: true });
+watch(() => props.contactId, loadMessages, { immediate: true });
 
 </script>
 

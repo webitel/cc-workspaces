@@ -16,7 +16,9 @@ const getters = {
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-    const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
+    const currentChatMessages = getters.CHAT_ON_WORKSPACE.closedAt
+      ? []
+      : getters.CHAT_ON_WORKSPACE; // if chat was closed or didn`t have messages
     return [...rootState.features.chat.chatHistory.chatHistoryMessages,
       ...currentChatMessages]; // chat-history messages + current-chat messages
   },

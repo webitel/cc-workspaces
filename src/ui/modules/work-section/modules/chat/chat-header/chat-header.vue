@@ -18,11 +18,11 @@
     </template>
     <template v-slot:title>
       <a
-        v-if="contact?.id"
-        :href="contactLink(contact?.id)"
+        v-if="chatContact?.id"
+        :href="contactLink(chatContact?.id)"
         class="chat-header-title"
         target="_blank">
-        {{ contact?.name }}
+        {{ chatContact?.name }}
       </a>
       <span v-else>
         {{ title }}
@@ -61,9 +61,15 @@ export default {
       isCloseAction: 'ALLOW_CHAT_CLOSE',
       isTransferAction: 'ALLOW_CHAT_TRANSFER',
     }),
+    ...mapGetters('features/chat/closed', {
+      closedChatContact: 'CLOSED_CHAT_CONTACT',
+    }),
     ...mapGetters('ui/infoSec/client/contact', {
       contactLink: 'CONTACT_LINK',
     }),
+    chatContact() {
+      return this.contact || this.closedChatContact;
+    },
     title() {
       return this.task?.members
         ? this.task?.members[this.task?.members?.length - 1]?.name

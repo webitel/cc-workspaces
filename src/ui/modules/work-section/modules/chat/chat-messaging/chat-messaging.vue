@@ -13,8 +13,9 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="contact?.id"
-      :contact="contact"
+      v-if="chatContact?.id"
+      :contactId="chatContact.id"
+      :contactName="chatContact.name"
       :size="size"
     />
     <current-chat
@@ -22,7 +23,7 @@
       :size="size"
     />
     <div
-      v-if="isChatActive && !chat.closedAt"
+      v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
       <wt-textarea
@@ -117,6 +118,14 @@ export default {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
+    ...mapGetters('features/chat/closed', {
+      closedChatContact: 'CLOSED_CHAT_CONTACT',
+    }),
+    chatContact() {
+      return this.contact?.id
+      ? this.contact
+      : this.closedChatContact;
+    },
   },
   methods: {
     ...mapActions('features/chat', {

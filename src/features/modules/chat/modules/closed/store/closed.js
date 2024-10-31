@@ -25,6 +25,14 @@ const getters = {
         || chat.closeReason === ChatCloseReason.AGENT_LEAVE,
       )
   ),
+  CURRENT_CLOSED_CHAT: (state, getters, rootState, rootGetters) =>
+    rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt
+      ? rootGetters['features/chat/CHAT_ON_WORKSPACE']
+      : {},
+  CLOSED_CHAT_CONTACT: (state, getters) =>
+    getters.CURRENT_CLOSED_CHAT.client?.type === 'contact'
+      ? getters.CURRENT_CLOSED_CHAT.client
+      : [],
 };
 
 const actions = {
