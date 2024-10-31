@@ -1,33 +1,29 @@
 <template>
   <task-queue-container
     class="active-queue-container"
-    :empty="!activeChats.length"
+    :empty="!taskList.length"
   >
     <div
-      v-for="(task, index) of activeChats"
-      class="closed-queue-container__wrapper"
+      v-for="(task, index) of taskList"
+      class="active-queue-container__wrapper"
     >
       <active-preview
+        v-if="!task.closedAt"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
         :size="size"
         @click="openTask(task)"
       />
-      <wt-divider v-if="activeChats.length > index + 1"/>
-    </div>
-    <div
-      v-for="(task, index) of closedChats"
-      class="closed-queue-container__wrapper"
-    >
       <closed-preview
+        v-else
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
         :size="size"
         @click="openTask(task)"
       />
-      <wt-divider v-if="closedChats.length > index + 1"/>
+      <wt-divider v-if="taskList.length > index + 1"/>
     </div>
   </task-queue-container>
 </template>
@@ -49,8 +45,11 @@ const props = defineProps({
 
 const store = useStore();
 
-const activeChats = computed(() => store.state.features.chat.chatList);
-const closedChats = computed(() => store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS']);
+const taskList = computed(() => {
+  return [...store.state.features.chat.chatList,
+    ...store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS']];
+})
+
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 
 function openTask(task) {

@@ -13,10 +13,10 @@ const state = {
 
 const getters = {
   UNPROCESSED_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab unprocessed
-    state.closedChatsList.filter((chat) => chat.unprocessedClose)
+    state.closedChatsList.filter((chat) => chat?.unprocessedClose)
   ),
   CLOSED_CHATS: (state) => ( // closed chats for closed chats tab
-    state.closedChatsList.filter((chat) => !chat.unprocessedClose)
+    state.closedChatsList.filter((chat) => !chat?.unprocessedClose)
   ),
 };
 
@@ -24,8 +24,9 @@ const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
       const items = await AgentChatsAPI.getList({ onlyClosed: true });
+      console.log('closed items:', items);
+      context.commit('SET_CLOSED_CHATS_LIST', items || []);
 
-      context.commit('SET_CLOSED_CHATS_LIST', items);
     } catch (err) {
       throw applyTransform(err, [
         notify(({ callback }) => callback({

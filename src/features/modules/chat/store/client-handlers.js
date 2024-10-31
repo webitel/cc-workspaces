@@ -59,11 +59,17 @@ const actions = {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
     context.dispatch('_RESET_UNREAD_COUNT');
+    context.dispatch('RESET_CHAT_HISTORY');
+    context.dispatch('LOAD_CLOSED_CHATS');
   },
 
   HANDLE_CLOSE_ACTION: (context, { action, chat }) => {
+    context.dispatch('LOAD_CLOSED_CHATS');
     context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
+    context.dispatch('RESET_CHAT_HISTORY');
   },
+  RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
+  LOAD_CLOSED_CHATS: (context) => context.dispatch('features/chat/closed/LOAD_CLOSED_CHATS', null, { root: true }),
 };
 
 export default {

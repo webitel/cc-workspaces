@@ -34,11 +34,11 @@ const props = defineProps({
 const store = useStore();
 const namespace = 'features/chat/closed';
 
-const loadClosedChatsList = async () => await store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
-const openTask = async (task) => await store.dispatch(`${namespace}/OPEN_CLOSED_CHAT`, task);
-
 const taskList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+
+const loadClosedChatsList = async () => await store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
+const openTask = async (task) => await store.dispatch(`${namespace}/OPEN_CLOSED_CHAT`, task);
 
 loadClosedChatsList();
 

@@ -90,7 +90,7 @@ const actions = {
     } catch (err) {
       throw err;
     }
-    await context.dispatch('RESET_CHAT_HISTORY');
+    await context.dispatch('HANDLE_DESTROY_ACTION', { chat: chatOnWorkspace });
   },
 
   OPEN_CHAT: (context, chat) => {
@@ -157,8 +157,6 @@ const actions = {
       if (chatPlayer !== player) chatPlayer.pause();
     });
   },
-
-  RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
 };
 
 const mutations = {

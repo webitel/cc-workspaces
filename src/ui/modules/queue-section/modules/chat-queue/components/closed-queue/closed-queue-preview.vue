@@ -78,7 +78,6 @@
 <script setup>
 
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime.js';
 import { computed } from 'vue';
 import ChatCloseReason
   from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
@@ -101,11 +100,11 @@ const props = defineProps({
   },
 });
 
-const displayIcon = computed(() => messengerIcon(props.task.gateway.type));
+const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
 
 const displayTaskName = computed(() => props.task.title);
 
-const displayQueueName = computed(() => props.task.queue.name);
+const displayQueueName = computed(() => props.task.queue?.name);
 
 const duration = computed(() => {
   const sec = (props.task.closedAt - props.task.startedAt) / 10 ** 3;
