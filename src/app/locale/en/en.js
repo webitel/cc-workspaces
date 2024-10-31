@@ -86,10 +86,12 @@ export default {
         md: {
           active: 'Active chats',
           manual: 'Self-assigned chats',
+          closed: 'Closed chats',
         },
         sm: {
           active: 'Active',
           manual: 'Self-assigned',
+          closed: 'Closed',
         },
       },
     },
@@ -270,6 +272,7 @@ export default {
     closeConversation: '{name} left the chat',
     [JobState.Distribute]: 'New task: {name}',
     newCall: 'New call',
+    closedChatError: 'Failed to load closed chats',
   },
   emojiPicker: {
     categoriesLabel: 'Categories',

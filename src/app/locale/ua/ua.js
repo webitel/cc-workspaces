@@ -84,10 +84,12 @@ export default {
         md: {
           active: 'Активні чати',
           manual: 'Самостійно призначені чати',
+          closed: 'Закриті чати',
         },
         sm: {
           active: 'Активні',
           manual: 'Самостійно призначені',
+          closed: 'Закриті',
         },
       },
     },
@@ -268,6 +270,7 @@ export default {
     closeConversation: '{name} вийшов з чату',
     [JobState.Distribute]: 'Нове завдання: {name}',
     newCall: 'Новий дзвінок',
+    closedChatError: 'Не вдалося завантажити закриті чати',
   },
   emojiPicker: {
     categoriesLabel: 'Категорії',

@@ -1,8 +1,7 @@
 <template>
   <task-queue-container
     class="closed-queue-container"
-    :empty="!taskList.length"
-  >
+    :empty="!taskList.length">
     <div
       v-for="(task, index) of taskList"
       class="closed-queue-container__wrapper"
@@ -25,7 +24,6 @@ import { useStore } from 'vuex';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from './closed-queue-preview.vue';
 
-
 const props = defineProps({
   size: {
     type: String,
@@ -34,15 +32,13 @@ const props = defineProps({
 });
 
 const store = useStore();
+const namespace = 'features/chat/closed';
 
-const loadClosedChatsList = async () => await store.dispatch('features/chat/closed/LOAD_CLOSED_CHATS');
+const loadClosedChatsList = async () => await store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
+const openTask = async (task) => await store.dispatch(`${namespace}/OPEN_CLOSED_CHAT`, task);
 
-const taskList = computed(() => store.getters['features/chat/closed/CLOSED_CHATS']);
+const taskList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
-
-function openTask(task) {
-  return store.dispatch('features/chat/OPEN_CHAT', task);
-}
 
 loadClosedChatsList();
 
