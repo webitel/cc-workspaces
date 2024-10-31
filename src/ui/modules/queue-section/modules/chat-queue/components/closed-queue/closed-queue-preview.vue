@@ -64,7 +64,7 @@
     </template>
 
     <template v-slot:footer>
-      <div class="closed-queue-preview__reason-icon-wrapper">
+      <div class="closed-queue-preview__footer">
         <wt-icon
           :icon="closeReasonIcon"
           color="error"
@@ -118,9 +118,8 @@ const lastMessagePreview = computed(() => {
 
 const closeReasonIcon = computed(() => {
   switch (props.task.closeReason) {
-
-    case ChatCloseReason.AGENT_LEAVE
-    || ChatCloseReason.TRANSFER:
+    case ChatCloseReason.AGENT_LEAVE:
+    case ChatCloseReason.TRANSFER:
       return 'wt-agent-disconnection';
 
     case ChatCloseReason.CLIENT_LEAVE:
@@ -134,7 +133,7 @@ const closeReasonIcon = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.closed-queue-preview__reason-icon-wrapper {
+.closed-queue-preview__footer {
   display: flex;
   justify-content: center;
   width: 100%;
