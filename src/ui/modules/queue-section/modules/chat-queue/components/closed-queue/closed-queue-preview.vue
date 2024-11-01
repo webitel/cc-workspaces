@@ -112,7 +112,7 @@ const duration = computed(() => {
 });
 
 const lastMessagePreview = computed(() => {
-  const lastMessage = props.task.lastMessage;
+  const lastMessage = props.task.lastMessage || {};
   return lastMessage.file ? lastMessage.file.name : lastMessage.text;
 });
 
