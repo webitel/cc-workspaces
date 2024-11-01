@@ -24,7 +24,6 @@ const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
       const items = await AgentChatsAPI.getList({ onlyClosed: true });
-      console.log('closed items:', items);
       context.commit('SET_CLOSED_CHATS_LIST', items || []);
 
     } catch (err) {
@@ -39,7 +38,7 @@ const actions = {
   OPEN_CLOSED_CHAT: async (context, task) => {
     if (task.contact?.id) { // if chat have contact, we put chat on TASK_ON_WORKSPACE and show chat history (all chats messages) in work-section
       context.dispatch('OPEN_CHAT', task);
-    } else {
+    } else { // if chat don`t have contact, we need to get messages for closed chat
       const { items } = await CatalogAPI.getChatMessagesList({ chatId: task.id });
 
       const messages = formatChatMessages(items);

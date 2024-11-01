@@ -1,7 +1,6 @@
 <template>
   <section class="current-chat chat-messages-container" @click="focusOnInput">
     <div ref="chat-messages-items" class="chat-messages-items" v-chat-scroll>
-      <chat-activity-info />
       <message
         v-for="(message, index) of messages"
         :key="message.id"

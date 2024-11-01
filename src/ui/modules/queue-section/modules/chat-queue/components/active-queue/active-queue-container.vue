@@ -45,12 +45,9 @@ const props = defineProps({
 
 const store = useStore();
 
-const taskList = computed(() => {
-  return [...store.state.features.chat.chatList,
-    ...store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS']];
-})
-
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+const taskList = computed(() => [...store.state.features.chat.chatList, // active chats
+    ...store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS']]); // closed chats
 
 function openTask(task) {
   return task.closedAt
