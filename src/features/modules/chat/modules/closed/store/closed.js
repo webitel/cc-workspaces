@@ -47,6 +47,10 @@ const actions = {
       context.dispatch('OPEN_CHAT', chat);
     }
   },
+  MARK_AS_PROCESSED: async (context, { chatId }) => {
+    await AgentChatsAPI.markChatProcessed(chatId);
+    await context.dispatch('LOAD_CLOSED_CHATS');
+  },
   OPEN_CHAT: (context, chat) => context.dispatch('features/chat/OPEN_CHAT', chat, { root: true }),
 };
 

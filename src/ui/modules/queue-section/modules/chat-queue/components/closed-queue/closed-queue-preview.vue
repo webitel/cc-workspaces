@@ -8,9 +8,23 @@
   >
 
     <template v-slot:icon>
-      <wt-icon
-        :icon="displayIcon"
-      />
+      <div
+        v-if="props.notProcessed && showRemoveIcon"
+        @mouseleave="mouseMove"
+        @click.stop="markChatAsProcessed"
+      >
+        <wt-icon
+          icon="close--filled"
+        />
+      </div>
+      <div
+        v-else
+        @mouseenter="mouseMove"
+      >
+        <wt-icon
+          :icon="displayIcon"
+        />
+      </div>
     </template>
 
     <template v-slot:title>
@@ -41,10 +55,25 @@
   >
 
     <template v-slot:icon>
-      <wt-icon
-        :icon="displayIcon"
-        size="sm"
-      />
+      <div
+        v-if="props.notProcessed && showRemoveIcon"
+        @mouseleave="mouseMove"
+        @click.stop="markChatAsProcessed"
+      >
+        <wt-icon
+          icon="close--filled"
+          :size="size"
+        />
+      </div>
+      <div
+        v-else
+        @mouseenter="mouseMove"
+      >
+        <wt-icon
+          :icon="displayIcon"
+          :size="size"
+        />
+      </div>
     </template>
 
     <template v-slot:tooltip-title>
@@ -77,13 +106,14 @@
 
 <script setup>
 
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
 import ChatCloseReason
   from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 const props = defineProps({
   task: {
@@ -98,12 +128,18 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
+  notProcessed: {
+    type: Boolean,
+    default: false
+  }
 });
 
+const store = useStore();
+
+const showRemoveIcon = ref(false);
+
 const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
-
 const displayTaskName = computed(() => props.task.title);
-
 const displayQueueName = computed(() => props.task.queue?.name);
 
 const duration = computed(() => {
@@ -118,6 +154,7 @@ const lastMessagePreview = computed(() => {
 
 const closeReasonIcon = computed(() => {
   switch (props.task.closeReason) {
+
     case ChatCloseReason.AGENT_LEAVE:
     case ChatCloseReason.TRANSFER:
       return 'wt-agent-disconnection';
@@ -129,6 +166,12 @@ const closeReasonIcon = computed(() => {
       return 'wt-timeout-disconnection';
   }
 });
+
+const mouseMove = () => {
+  if (props.notProcessed) showRemoveIcon.value = !showRemoveIcon.value;
+}
+
+const markChatAsProcessed = async () => await store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
 
 </script>
 

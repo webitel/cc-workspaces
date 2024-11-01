@@ -90,8 +90,6 @@ const actions = {
     } catch (err) {
       throw err;
     }
-    // console.log('CLOSE');
-    // await context.dispatch('HANDLE_DESTROY_ACTION', { chat: chatOnWorkspace });
   },
 
   OPEN_CHAT: (context, chat) => {
