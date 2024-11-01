@@ -2,6 +2,9 @@
   <task-queue-preview-md
     v-if="size === 'md'"
     class="closed-queue-preview"
+    :class="[
+      {'closed-queue-preview--processed': !props.notProcessed}
+    ]"
     :opened="opened"
     :queue-name="displayQueueName"
     @click="$emit('click', task)"
@@ -176,9 +179,15 @@ const markChatAsProcessed = async () => await store.dispatch('features/chat/clos
 </script>
 
 <style lang="scss" scoped>
-.closed-queue-preview__footer {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+.closed-queue-preview {
+  &__footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  &--processed {
+    mix-blend-mode: luminosity;
+  }
 }
 </style>
