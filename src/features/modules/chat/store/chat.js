@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { ConversationState } from 'webitel-sdk';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
@@ -25,6 +26,10 @@ const getters = {
     return [...rootState.features.chat.chatHistory.chatHistoryMessages,
       ...currentChatMessages]; // chat-history messages + current-chat messages
   },
+  ACTIVE_PREVIEW_CHATS: (state, getters, rootState, rootGetters) => [ // chats for active tab in queue section
+    ...state.chatList, // active chats
+    ...rootGetters['features/chat/closed/UNPROCESSED_CLOSED_CHATS'] // closed chats
+  ],
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
   ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,
@@ -95,11 +100,12 @@ const actions = {
     } catch (err) {
       throw err;
     }
-    await context.dispatch('RESET_CHAT_HISTORY');
   },
 
   OPEN_CHAT: (context, chat) => {
-    context.dispatch('SET_WORKSPACE', chat);
+    return chat.closedAt
+      ? context.dispatch(`features/chat/closed/OPEN_CLOSED_CHAT`, chat, { root: true })
+      : context.dispatch('SET_WORKSPACE', chat);
   },
 
   CHAT_INSERT_TO_START: (context, chat) => {
@@ -162,8 +168,6 @@ const actions = {
       if (chatPlayer !== player) chatPlayer.pause();
     });
   },
-
-  RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
 };
 
 const mutations = {
