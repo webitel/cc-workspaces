@@ -38,8 +38,7 @@ const props = defineProps({
 const store = useStore();
 
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
-const taskList = computed(() => [...store.state.features.chat.chatList, // active chats
-    ...store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS']]); // closed chats
+const taskList = computed(() => store.getters['features/chat/ACTIVE_PREVIEW_CHATS']);
 
 const getComponent = ((task) => task.closedAt ? ClosedPreview : ActivePreview);
 const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);

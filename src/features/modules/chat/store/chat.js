@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { ConversationState } from 'webitel-sdk';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
@@ -20,6 +21,10 @@ const getters = {
     return [...rootState.features.chat.chatHistory.chatHistoryMessages,
       ...currentChatMessages]; // chat-history messages + current-chat messages
   },
+  ACTIVE_PREVIEW_CHATS: (state, getters, rootState, rootGetters) => [ // chats for active tab in queue section
+    ...state.chatList, // active chats
+    ...rootGetters['features/chat/closed/UNPROCESSED_CLOSED_CHATS'] // closed chats
+  ],
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
   ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,
