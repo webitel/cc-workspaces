@@ -25,13 +25,20 @@
             <div class="agent-score-item__title">
               {{ $t('widgets.scoreAvg') }}
             </div>
-            <div class="agent-score-item__value">
-              <wt-icon
-                icon="widget-score-avg"
-                icon-prefix="ws"
-                :size="size"
-              ></wt-icon>
-              {{ (+scoreAvg || 0).toFixed(2) }}
+            <div class="agent-score-item__value-tooltip">
+              <wt-tooltip>
+                <template v-slot:activator>
+                  <div class="agent-score-item__value">
+                    <wt-icon
+                      icon="widget-score-avg"
+                      icon-prefix="ws"
+                      :size="size"
+                    ></wt-icon>
+                    {{ (+scoreAvg || 0).toFixed(2) }}
+                  </div>
+                </template>
+                {{ scoreAvg || 0 }}
+              </wt-tooltip>
             </div>
           </li>
         </ul>
@@ -68,10 +75,15 @@ export default {
       @extend %typo-body-1;
     }
 
+    .agent-score-item__value-tooltip {
+      width: fit-content;
+    }
+
     .agent-score-item__value {
       display: flex;
       align-items: center;
       gap: var(--spacing-xs);
+      width: fit-content;
     }
   }
 
