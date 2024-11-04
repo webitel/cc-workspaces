@@ -7,16 +7,8 @@
       v-for="(task, index) of taskList"
       class="active-queue-container__wrapper"
     >
-      <active-preview
-        v-if="!task.closedAt"
-        :task="task"
-        :opened="task.id === taskOnWorkspace.id"
-        :key="task.id"
-        :size="size"
-        @click="openTask(task)"
-      />
-      <closed-preview
-        v-else
+      <component
+        :is="getComponent(task)"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
@@ -47,14 +39,11 @@ const props = defineProps({
 const store = useStore();
 
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
-const taskList = computed(() => [...store.state.features.chat.chatList, // active chats
-    ...store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS']]); // closed chats
+const taskList = computed(() => store.getters['features/chat/ACTIVE_PREVIEW_CHATS']);
 
-function openTask(task) {
-  return task.closedAt
-    ? store.dispatch(`features/chat/closed/OPEN_CLOSED_CHAT`, task)
-    : store.dispatch('features/chat/OPEN_CHAT', task);
-}
+const getComponent = ((task) => task.closedAt ? ClosedPreview : ActivePreview);
+const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
+
 </script>
 
 <style lang="scss" scoped>

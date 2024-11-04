@@ -1,13 +1,13 @@
 <template>
   <article
-    class="markdown-body processing-form-text"
     :class="[`markdown-body processing-form-text--color-${color}`]"
+    class="markdown-body processing-form-text"
   >
     <div class="processing-form-text__icon-wrapper">
       <wt-icon
+        color="on-dark"
         icon="attention"
         size="sm"
-        color="on-dark"
       ></wt-icon>
     </div>
     <h4 class="processing-form-text__title">
@@ -15,36 +15,38 @@
 
       <wt-hint
         v-if="hint"
-      >{{ hint }}</wt-hint>
+      >{{ hint }}
+      </wt-hint>
       <div class="processing-form-text__actions-wrapper">
         <div class="processing-form-text__copy">
           <wt-copy-action
-            :value="valueToCopy"
-            v-show="!collapsed || !collapsible"
             v-if="enableCopying"
+            v-show="!collapsed || !collapsible"
+            :value="valueToCopy"
           ></wt-copy-action>
         </div>
         <wt-icon-btn
-          :icon="collapsed ? 'arrow-right' : 'arrow-down'"
           v-show="collapsible || !collapsed"
+          :icon="collapsed ? 'arrow-right' : 'arrow-down'"
           @click="handleCollapse"
         ></wt-icon-btn>
       </div>
     </h4>
     <p
+      v-show="!collapsed || !collapsible"
       class="processing-form-text__content"
       v-html="content"
-      v-show="!collapsed || !collapsible"
     ></p>
   </article>
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it';
 import dompurify from 'dompurify';
+import { minify } from 'html-minifier-terser';
+import MarkdownIt from 'markdown-it';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
-import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
+import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 const md = new MarkdownIt({ linkify: true, html: true });
 patchMDRender(md);
@@ -63,22 +65,36 @@ export default {
       default: false,
     },
   },
+  data: () => ({
+    content: '',
+  }),
   computed: {
-    content() {
-      let value = dompurify.sanitize(this.initialValue);
-      return md.render(value);
-    },
     valueToCopy() {
       return this.initialValue.replace(/<br\s*\/?>/gi, '\n');
     },
   },
   methods: {
-    // https://webitel.atlassian.net/browse/WTEL-5112
-    // https://webitel.atlassian.net/browse/WTEL-4472
-    replaceURLEncoding(text) {
-      const encodeValue = encodeURI(text)
-      .replaceAll(/\%0A/g, ' ');
-      return decodeURI(encodeValue);
+    async renderContent(content = this.initialValue) {
+      const sanitized = dompurify.sanitize(content);
+      // https://webitel.atlassian.net/browse/WTEL-5112
+      // https://webitel.atlassian.net/browse/WTEL-4472
+      /**
+       * NOTE: html minification is performed before markdown rendering, so that may affect resulting markdown
+       */
+      const minified = await minify(sanitized, {
+        collapseWhitespace: true, //  remove unnecessary spaces WTEL-4472
+        preserveLineBreaks: true, // preserve line breaks in markdown
+      });
+      const rendered = md.render(minified);
+      this.content = rendered;
+    },
+  },
+  watch: {
+    initialValue: {
+      immediate: true,
+      handler() {
+        this.renderContent(this.initialValue);
+      },
     },
   },
 };
@@ -96,8 +112,8 @@ export default {
     top: 0;
     right: var(--spacing-xs);
     padding: var(--spacing-3xs);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
     line-height: 0;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
     background: var(--info-color);
   }
 
@@ -110,6 +126,7 @@ export default {
         background: var(--info-color);
       }
     }
+
     &-secondary {
       border-color: var(--secondary-color);
 
@@ -117,6 +134,7 @@ export default {
         background: var(--secondary-color);
       }
     }
+
     &-accent, // deprecated, remove me in 2025
     &-primary { // new name
       border-color: var(--primary-color);
@@ -125,6 +143,7 @@ export default {
         background: var(--primary-color);
       }
     }
+
     &-success {
       border-color: var(--success-color);
 
@@ -132,6 +151,7 @@ export default {
         background: var(--success-color);
       }
     }
+
     &-danger, // deprecated, remove me in 2025
     &-error { // new name
       border-color: var(--error-color);
