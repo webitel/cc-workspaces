@@ -5,7 +5,7 @@ const formatMessageFile = (file) => { // added field 'mime' and 'url' to message
   return {
     ...file,
     mime: file.type,
-    url: getFileUrl(file.id),
+    url: file.url || getFileUrl(file.id),
   };
 };
 
@@ -19,7 +19,7 @@ export const formatChatMessages = (messages) => { // make chat-history messages 
     return {
       ...item,
       createdAt: item.date,
-      member: getMessageMember(item.peer),
+      member: item.member || getMessageMember(item.peer),
       file: formatMessageFile(item.file),
     };
   });
