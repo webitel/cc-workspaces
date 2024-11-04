@@ -98,7 +98,7 @@ const actions = {
   },
 
   OPEN_CHAT: (context, chat) => {
-    chat.closedAt
+    return chat.closedAt
       ? context.dispatch(`features/chat/closed/OPEN_CLOSED_CHAT`, chat, { root: true })
       : context.dispatch('SET_WORKSPACE', chat);
   },
@@ -163,7 +163,6 @@ const actions = {
       if (chatPlayer !== player) chatPlayer.pause();
     });
   },
-  OPEN_CLOSED_CHAT: (context) => context.dispatch()
 };
 
 const mutations = {
