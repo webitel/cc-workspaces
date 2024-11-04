@@ -26,6 +26,7 @@
     "event-emitter": "^0.3.5",
     "file-saver": "^2.0.5",
     "github-markdown-css": "^4.0.0",
+    "html-minifier-terser": "^7.2.0",
     "insert-text-at-cursor": "^0.3.0",
     "is-electron": "^2.2.2",
     "jszip": "^3.10.1",
