@@ -100,11 +100,11 @@ const props = defineProps({
   },
 });
 
-const displayIcon = computed(() => messengerIcon(props.task.gateway.type));
+const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
 
 const displayTaskName = computed(() => props.task.title);
 
-const displayQueueName = computed(() => props.task.queue.name);
+const displayQueueName = computed(() => props.task.queue?.name);
 
 const duration = computed(() => {
   const sec = (props.task.closedAt - props.task.startedAt) / 10 ** 3;
@@ -112,7 +112,7 @@ const duration = computed(() => {
 });
 
 const lastMessagePreview = computed(() => {
-  const lastMessage = props.task.lastMessage;
+  const lastMessage = props.task.lastMessage || {};
   return lastMessage.file ? lastMessage.file.name : lastMessage.text;
 });
 

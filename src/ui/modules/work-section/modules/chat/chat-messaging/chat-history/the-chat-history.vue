@@ -124,7 +124,7 @@ function getChatProvider(message) {
 
 function isLastMessage(index) {
   const { nextMessage } = getMessage(index);
-  return !nextMessage && !currentChat.value.messages.length;
+  return !nextMessage && !currentChat.value?.messages?.length;
 }
 
 watch(() => props.contact?.id, loadMessages, { immediate: true });

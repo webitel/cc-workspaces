@@ -5,9 +5,10 @@
   >
     <div
       v-for="(task, index) of taskList"
-      class="closed-queue-container__wrapper"
+      class="active-queue-container__wrapper"
     >
-      <active-preview
+      <component
+        :is="getComponent(task)"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
@@ -23,6 +24,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
 import ActivePreview from './active-queue-preview.vue';
 
 
@@ -35,12 +37,12 @@ const props = defineProps({
 
 const store = useStore();
 
-const taskList = computed(() => store.state.features.chat.chatList);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+const taskList = computed(() => store.getters['features/chat/ACTIVE_PREVIEW_CHATS']);
 
-function openTask(task) {
-  return store.dispatch('features/chat/OPEN_CHAT', task);
-}
+const getComponent = ((task) => task.closedAt ? ClosedPreview : ActivePreview);
+const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
+
 </script>
 
 <style lang="scss" scoped>
