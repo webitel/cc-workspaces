@@ -10,7 +10,7 @@ import { nav, sidebar } from './routes.js';
 export default defineConfig({
   title: 'Webitel Workspace',
   description: 'webitel workspace docs',
-  base: '/workspace/',
+  base: '/cc-workspaces/',
   head: [
     [
       'link',
