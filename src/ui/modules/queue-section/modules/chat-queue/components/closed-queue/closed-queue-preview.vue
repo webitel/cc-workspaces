@@ -9,7 +9,7 @@
 
     <template v-slot:icon>
       <div
-        v-if="props.notProcessed && showRemoveIcon"
+        v-if="!processed && showRemoveIcon"
         @mouseleave="mouseMove"
         @click.stop="markChatAsProcessed"
       >
@@ -56,7 +56,7 @@
 
     <template v-slot:icon>
       <div
-        v-if="props.notProcessed && showRemoveIcon"
+        v-if="!processed && showRemoveIcon"
         @mouseleave="mouseMove"
         @click.stop="markChatAsProcessed"
       >
@@ -128,7 +128,7 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
-  notProcessed: {
+  processed: {
     type: Boolean,
     default: false
   }
@@ -168,10 +168,10 @@ const closeReasonIcon = computed(() => {
 });
 
 const mouseMove = () => {
-  if (props.notProcessed) showRemoveIcon.value = !showRemoveIcon.value;
+  if (!props.processed) showRemoveIcon.value = !showRemoveIcon.value;
 }
 
-const markChatAsProcessed = async () => await store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
 
 </script>
 
