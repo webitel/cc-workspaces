@@ -1,7 +1,9 @@
-import { computed } from 'vue';
 import { ConversationState } from 'webitel-sdk';
+import CatalogAPI
+  from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
+import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
 import closed from '../modules/closed/store/closed.js';
@@ -102,10 +104,17 @@ const actions = {
     }
   },
 
-  OPEN_CHAT: (context, chat) => {
-    return chat.closedAt
-      ? context.dispatch(`features/chat/closed/OPEN_CLOSED_CHAT`, chat, { root: true })
-      : context.dispatch('SET_WORKSPACE', chat);
+  OPEN_CHAT: async (context, chat) => {
+    let closedChat;
+
+    if (!chat.contact.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
+      const { items } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+
+      const messages = formatChatMessages(items);
+      closedChat = { ...chat, messages };
+    }
+
+    await context.dispatch('SET_WORKSPACE', closedChat || chat);
   },
 
   CHAT_INSERT_TO_START: (context, chat) => {
@@ -153,6 +162,7 @@ const actions = {
     // eslint-disable-next-line no-param-reassign
     delete chat.players;
   },
+
   ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     if (chat.players) {
       chat.players.push(player);
@@ -163,6 +173,7 @@ const actions = {
       context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
     });
   },
+
   PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     chat.players.forEach((chatPlayer) => {
       if (chatPlayer !== player) chatPlayer.pause();
