@@ -2,6 +2,7 @@
   <task-queue-preview-md
     v-if="size === 'md'"
     class="closed-queue-preview"
+    :class="[{ 'closed-queue-preview--processed': processed }]"
     :opened="opened"
     :queue-name="displayQueueName"
     @click="$emit('click', task)"
@@ -9,20 +10,22 @@
 
     <template v-slot:icon>
       <div
-        v-if="!processed && showRemoveIcon"
-        @mouseleave="mouseMove"
-        @click.stop="markChatAsProcessed"
+        class="closed-queue-preview__icons-wrapper"
       >
+        <div
+          v-if="!processed"
+          class="closed-queue-preview__icon-processing"
+          @click.stop="markChatAsProcessed"
+        >
+          <wt-icon
+            icon="close--filled"
+            :size="size"
+          />
+        </div>
         <wt-icon
-          icon="close--filled"
-        />
-      </div>
-      <div
-        v-else
-        @mouseenter="mouseMove"
-      >
-        <wt-icon
+          class="closed-queue-preview__icon-display"
           :icon="displayIcon"
+          :size="size"
         />
       </div>
     </template>
@@ -56,20 +59,20 @@
 
     <template v-slot:icon>
       <div
-        v-if="!processed && showRemoveIcon"
-        @mouseleave="mouseMove"
-        @click.stop="markChatAsProcessed"
+        class="closed-queue-preview__icons-wrapper"
       >
+        <div
+          v-if="!processed"
+          class="closed-queue-preview__icon-processing"
+          @click.stop="markChatAsProcessed"
+        >
+          <wt-icon
+            icon="close--filled"
+            :size="size"
+          />
+        </div>
         <wt-icon
-          icon="close--filled"
-          :size="size"
-        />
-      </div>
-      <div
-        v-else
-        @mouseenter="mouseMove"
-      >
-        <wt-icon
+          class="closed-queue-preview__icon-display"
           :icon="displayIcon"
           :size="size"
         />
@@ -167,18 +170,38 @@ const closeReasonIcon = computed(() => {
   }
 });
 
-const mouseMove = () => {
-  if (!props.processed) showRemoveIcon.value = !showRemoveIcon.value;
-}
-
 const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
 
 </script>
 
 <style lang="scss" scoped>
-.closed-queue-preview__footer {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+.closed-queue-preview {
+  &__footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  &__icon-processing {
+    position: absolute;
+    opacity: 0;
+    transition: var(--transition);
+  }
+
+  &__icon-display {
+    opacity: 1;
+    transition: var(--transition);
+  }
+
+  &:not(.closed-queue-preview--processed) {
+    .closed-queue-preview__icons-wrapper:hover {
+      .closed-queue-preview__icon-processing {
+        opacity: 1;
+      }
+      .closed-queue-preview__icon-display {
+        opacity: 0;
+      }
+    }
+  }
 }
 </style>

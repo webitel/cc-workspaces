@@ -36,16 +36,12 @@ const actions = {
     }
   },
   OPEN_CLOSED_CHAT: async (context, task) => {
-    if (task.contact?.id) { // if chat have contact, we put chat on TASK_ON_WORKSPACE and show chat history (all chats messages) in work-section
-      context.dispatch('OPEN_CHAT', task);
-    } else { // if chat don`t have contact, we need to get messages for closed chat
-      const { items } = await CatalogAPI.getChatMessagesList({ chatId: task.id });
+    const { items } = await CatalogAPI.getChatMessagesList({ chatId: task.id });
 
-      const messages = formatChatMessages(items);
-      const chat = { ...task, messages };
+    const messages = formatChatMessages(items);
+    const chat = { ...task, messages };
 
-      context.dispatch('OPEN_CHAT', chat);
-    }
+    context.dispatch('OPEN_CHAT', chat);
   },
   MARK_AS_PROCESSED: async (context, { chatId }) => {
     await AgentChatsAPI.markChatProcessed(chatId);
