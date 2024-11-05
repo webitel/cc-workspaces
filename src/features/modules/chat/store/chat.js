@@ -1,6 +1,6 @@
 import { ConversationState } from 'webitel-sdk';
 import { formatChatMessages } from '../scripts/formatChatMessages.js';
-import getChatMessages from '../scripts/getChatMessages.js';
+import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
@@ -107,7 +107,9 @@ const actions = {
     let openChat = chat;
 
     if (!chat.contact.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
-      const messages = getChatMessages(chat.id);
+      const { items } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+
+      const messages = formatChatMessages(items);
       openChat = { ...chat, messages };
     }
 
