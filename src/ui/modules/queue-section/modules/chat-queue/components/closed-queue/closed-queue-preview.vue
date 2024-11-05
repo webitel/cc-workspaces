@@ -1,33 +1,26 @@
 <template>
   <task-queue-preview-md
     v-if="size === 'md'"
-    class="closed-queue-preview"
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :opened="opened"
     :queue-name="displayQueueName"
+    class="closed-queue-preview"
     @click="$emit('click', task)"
   >
 
     <template v-slot:icon>
-      <div
-        class="closed-queue-preview__icons-wrapper"
-      >
-        <div
-          v-if="!processed"
-          class="closed-queue-preview__icon-processing"
-          @click.stop="markChatAsProcessed"
-        >
-          <wt-icon
-            icon="close--filled"
-            :size="size"
-          />
-        </div>
-        <wt-icon
-          class="closed-queue-preview__icon-display"
-          :icon="displayIcon"
-          :size="size"
-        />
-      </div>
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click="markAsProcessed"
+      />
+      <wt-icon
+        :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
+      />
     </template>
 
     <template v-slot:title>
@@ -58,25 +51,18 @@
   >
 
     <template v-slot:icon>
-      <div
-        class="closed-queue-preview__icons-wrapper"
-      >
-        <div
-          v-if="!processed"
-          class="closed-queue-preview__icon-processing"
-          @click.stop="markChatAsProcessed"
-        >
-          <wt-icon
-            icon="close--filled"
-            :size="size"
-          />
-        </div>
-        <wt-icon
-          class="closed-queue-preview__icon-display"
-          :icon="displayIcon"
-          :size="size"
-        />
-      </div>
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click="markAsProcessed"
+      />
+      <wt-icon
+        :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
+      />
     </template>
 
     <template v-slot:tooltip-title>
@@ -109,14 +95,13 @@
 
 <script setup>
 
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import ChatCloseReason
-  from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 const props = defineProps({
   task: {
@@ -133,13 +118,11 @@ const props = defineProps({
   },
   processed: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const store = useStore();
-
-const showRemoveIcon = ref(false);
 
 const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
 const displayTaskName = computed(() => props.task.title);
@@ -170,7 +153,10 @@ const closeReasonIcon = computed(() => {
   }
 });
 
-const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+const markAsProcessed = () => {
+  console.info('marked');
+  // store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+}
 
 </script>
 
@@ -182,25 +168,27 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
     width: 100%;
   }
 
-  &__icon-processing {
+  .closed-queue-preview__close {
     position: absolute;
     opacity: 0;
+    pointer-events: none;
     transition: var(--transition);
   }
 
-  &__icon-display {
+  .closed-queue-preview__provider {
     opacity: 1;
     transition: var(--transition);
   }
 
-  &:not(.closed-queue-preview--processed) {
-    .closed-queue-preview__icons-wrapper:hover {
-      .closed-queue-preview__icon-processing {
-        opacity: 1;
-      }
-      .closed-queue-preview__icon-display {
-        opacity: 0;
-      }
+  &:not(&--processed):hover {
+    .closed-queue-preview__close {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .closed-queue-preview__provider {
+      opacity: 0;
+      pointer-events: none;
     }
   }
 }
