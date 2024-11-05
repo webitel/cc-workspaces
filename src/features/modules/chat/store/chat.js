@@ -1,9 +1,8 @@
 import { ConversationState } from 'webitel-sdk';
-import CatalogAPI
-  from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
+import { formatChatMessages } from '../scripts/formatChatMessages.js';
+import getChatMessages from '../scripts/getChatMessages.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
 import closed from '../modules/closed/store/closed.js';
@@ -105,16 +104,14 @@ const actions = {
   },
 
   OPEN_CHAT: async (context, chat) => {
-    let closedChat;
+    let openChat = chat;
 
     if (!chat.contact.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
-      const { items } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
-
-      const messages = formatChatMessages(items);
-      closedChat = { ...chat, messages };
+      const messages = getChatMessages(chat.id);
+      openChat = { ...chat, messages };
     }
 
-    await context.dispatch('SET_WORKSPACE', closedChat || chat);
+    await context.dispatch('SET_WORKSPACE', openChat);
   },
 
   CHAT_INSERT_TO_START: (context, chat) => {
