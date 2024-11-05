@@ -1,5 +1,4 @@
 import { ConversationState } from 'webitel-sdk';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import getChatMessages from '../scripts/getChatMessages.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
