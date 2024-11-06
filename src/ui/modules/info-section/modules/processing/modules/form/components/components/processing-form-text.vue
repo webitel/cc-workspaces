@@ -46,8 +46,6 @@ import patchMDRender from '../../../../../client-info/components/client-info-mar
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
-hljs.registerLanguage('html', html);
-
 const md = markdownit({
   linkify: true,
   html: true,
