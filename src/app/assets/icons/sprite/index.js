@@ -25,3 +25,6 @@ import './ws-doc.svg';
 import './ws-pause.svg';
 import './ws-breakout.svg';
 import './ws-user-description.svg';
+import './wt-client-disconnection.svg';
+import './wt-agent-disconnection.svg';
+import './wt-timeout-disconnection.svg';

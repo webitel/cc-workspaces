@@ -9,7 +9,7 @@
     <template v-slot:icon>
       <wt-icon
         :icon="displayIcon"
-      ></wt-icon>
+      />
     </template>
 
     <template v-slot:title>
@@ -23,7 +23,7 @@
     <template v-slot:timer>
       <queue-preview-timer
         :task="task"
-      ></queue-preview-timer>
+      />
     </template>
   </task-queue-preview-md>
 
@@ -38,7 +38,7 @@
       <wt-icon
         :icon="displayIcon"
         size="sm"
-      ></wt-icon>
+      />
     </template>
 
     <template v-slot:tooltip-title>
@@ -56,16 +56,16 @@
     <template v-slot:subtitle>
       <queue-preview-timer
         :task="task"
-      ></queue-preview-timer>
+      />
     </template>
   </task-queue-preview-sm>
 </template>
 
 <script>
-import MessengerType from 'webitel-sdk/esm2015/enums/messenger-type.enum';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 export default {
   name: 'active-queue-preview',
@@ -77,24 +77,7 @@ export default {
     },
     displayIcon() {
       const member = this.task.members[0];
-      switch (member.type) {
-        case MessengerType.TELEGRAM:
-          return 'messenger-telegram';
-        case MessengerType.VIBER:
-          return 'messenger-viber';
-        case 'whatsapp':
-          return 'messenger-whatsapp';
-        case MessengerType.WEB_CHAT:
-          return 'messenger-web-chat';
-        case MessengerType.INSTAGRAM:
-          return 'instagram';
-        case 'facebook':
-          return 'messenger-facebook';
-        case 'custom':
-          return 'messenger-custom';
-        default:
-          return member.type;
-      }
+      return messengerIcon(member.type);
     },
   },
 };

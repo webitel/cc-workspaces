@@ -80,9 +80,13 @@ const getPeersFromAPI = async (chatId) => { // get all chat participants
 };
 
 const getChatHistoryAgents = async (chatId) => {
+  let agents = [];
   const peers = await getPeersFromAPI(chatId);
-  const members = peers.map((item) => getMessageMember(item)); // formatting objects from API
-  const agents = getAgentsFromMembers(members); // get only agents
+
+  if (peers) {
+    const members = peers.map((item) => getMessageMember(item)); // formatting objects from API
+    agents = getAgentsFromMembers(members); // get only agents
+  }
 
   return { chatHistoryAgents: agents };
 }

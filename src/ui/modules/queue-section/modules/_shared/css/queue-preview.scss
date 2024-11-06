@@ -15,8 +15,7 @@
     background: var(--ws-preview-background-hover-color);
   }
 
-  &--opened,
-  &:focus {
+  &--opened {
     border-color: var(--primary-color);
   }
 }

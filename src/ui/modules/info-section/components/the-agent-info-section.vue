@@ -278,5 +278,6 @@ export default {
   @extend %wt-scrollbar;
   max-height: 100%;
   padding-right: var(--spacing-2xs); // scrollbar offset
+  scrollbar-gutter: stable both-edges;
 }
 </style>

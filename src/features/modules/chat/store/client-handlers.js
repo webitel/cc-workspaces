@@ -1,7 +1,7 @@
 import { ChatActions } from 'webitel-sdk';
 import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
-const callHandler = (context) => async (action, chat) => {
+const chatHandler = (context) => async (action, chat) => {
   switch (action) {
     case ChatActions.UserInvite:
       context.dispatch('HANDLE_INVITE_ACTION', { action, chat });
@@ -30,7 +30,7 @@ const callHandler = (context) => async (action, chat) => {
 const actions = {
   SUBSCRIBE_CHATS: async (context) => {
     const client = await context.rootState.client.getCliInstance();
-    await client.subscribeChat(callHandler(context), null);
+    await client.subscribeChat(chatHandler(context), null);
     const chatList = client.allConversations();
     if (chatList.length) context.dispatch('SET_CHAT_LIST', chatList);
   },
@@ -59,11 +59,16 @@ const actions = {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
     context.dispatch('_RESET_UNREAD_COUNT');
+    context.dispatch('RESET_CHAT_HISTORY');
+    context.dispatch('LOAD_CLOSED_CHATS');
   },
 
   HANDLE_CLOSE_ACTION: (context, { action, chat }) => {
     context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
+    context.dispatch('HANDLE_DESTROY_ACTION', { chat });
   },
+  RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
+  LOAD_CLOSED_CHATS: (context) => context.dispatch('features/chat/closed/LOAD_CLOSED_CHATS', null, { root: true }),
 };
 
 export default {
