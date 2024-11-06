@@ -1,3 +1,4 @@
+import { content } from 'happy-dom/lib/PropertySymbol.js';
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import i18n from '../../../../../../app/locale/i18n.js';
@@ -32,10 +33,12 @@ const actions = {
       ]);
     }
   },
-  MARK_AS_PROCESSED: async (context, { chatId }) => {
-    await AgentChatsAPI.markChatProcessed(chatId);
+  MARK_AS_PROCESSED: async (context, chat) => {
+    await AgentChatsAPI.markChatProcessed(chat.id);
+    context.dispatch('REMOVE_CHAT', chat);
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
+  REMOVE_CHAT: (context, chat) => context.dispatch('features/chat/REMOVE_CHAT', chat, { root: true }),
 };
 
 const mutations = {

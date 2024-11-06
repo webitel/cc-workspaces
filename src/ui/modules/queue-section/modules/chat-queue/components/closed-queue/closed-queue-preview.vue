@@ -45,8 +45,10 @@
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
+    :class="[{ 'closed-queue-preview--processed': processed }]"
     :opened="opened"
     :queue-name="displayQueueName"
+    class="closed-queue-preview"
     @click="$emit('click', task)"
   >
 
@@ -154,7 +156,7 @@ const closeReasonIcon = computed(() => {
   }
 });
 
-const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', props.task);
 
 </script>
 
@@ -174,6 +176,7 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   }
 
   .closed-queue-preview__provider {
+    position: absolute; // for exactly the same placing as close icon
     opacity: 1;
     transition: var(--transition);
   }

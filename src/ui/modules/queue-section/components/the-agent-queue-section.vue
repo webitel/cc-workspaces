@@ -175,6 +175,7 @@ export default {
   flex-direction: column;
   min-width: 0;
   transition: var(--transition);
+  scrollbar-gutter: stable both-edges;
 
   gap: var(--spacing-2xs);
   will-change: width;

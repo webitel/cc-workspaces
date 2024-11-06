@@ -106,7 +106,7 @@ const actions = {
   OPEN_CHAT: async (context, chat) => {
     let openChat = chat;
 
-    if (!chat.contact.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
+    if (!chat.contact?.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
       const { items } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
 
       const messages = formatChatMessages(items);
@@ -130,6 +130,10 @@ const actions = {
 
   RESET_WORKSPACE: (context) => {
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
+  },
+
+  REMOVE_CHAT: (context, chat) => {
+    context.commit('REMOVE_CHAT', chat);
   },
 
   OPEN_MEDIA: (context, message) => {
