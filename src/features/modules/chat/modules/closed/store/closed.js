@@ -1,7 +1,4 @@
-import CatalogAPI
-  from '../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
-import { formatChatMessages } from '../../../scripts/formatChatMessages.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import i18n from '../../../../../../app/locale/i18n.js';
 
@@ -35,23 +32,10 @@ const actions = {
       ]);
     }
   },
-  OPEN_CLOSED_CHAT: async (context, task) => {
-    if (task.contact?.id) { // if chat have contact, we put chat on TASK_ON_WORKSPACE and show chat history (all chats messages) in work-section
-      context.dispatch('OPEN_CHAT', task);
-    } else { // if chat don`t have contact, we need to get messages for closed chat
-      const { items } = await CatalogAPI.getChatMessagesList({ chatId: task.id });
-
-      const messages = formatChatMessages(items);
-      const chat = { ...task, messages };
-
-      context.dispatch('OPEN_CHAT', chat);
-    }
-  },
   MARK_AS_PROCESSED: async (context, { chatId }) => {
     await AgentChatsAPI.markChatProcessed(chatId);
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
-  OPEN_CHAT: (context, chat) => context.dispatch('features/chat/OPEN_CHAT', chat, { root: true }),
 };
 
 const mutations = {

@@ -1,33 +1,26 @@
 <template>
   <task-queue-preview-md
     v-if="size === 'md'"
-    class="closed-queue-preview"
-    :class="[
-      {'closed-queue-preview--processed': !props.notProcessed}
-    ]"
+    :class="[{ 'closed-queue-preview--processed': processed }]"
     :opened="opened"
     :queue-name="displayQueueName"
+    class="closed-queue-preview"
     @click="$emit('click', task)"
   >
 
     <template v-slot:icon>
-      <div
-        v-if="props.notProcessed && showRemoveIcon"
-        @mouseleave="mouseMove"
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
         @click.stop="markChatAsProcessed"
-      >
-        <wt-icon
-          icon="close--filled"
-        />
-      </div>
-      <div
-        v-else
-        @mouseenter="mouseMove"
-      >
-        <wt-icon
-          :icon="displayIcon"
-        />
-      </div>
+      />
+      <wt-icon
+        :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
+      />
     </template>
 
     <template v-slot:title>
@@ -58,25 +51,18 @@
   >
 
     <template v-slot:icon>
-      <div
-        v-if="props.notProcessed && showRemoveIcon"
-        @mouseleave="mouseMove"
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
         @click.stop="markChatAsProcessed"
-      >
-        <wt-icon
-          icon="close--filled"
-          :size="size"
-        />
-      </div>
-      <div
-        v-else
-        @mouseenter="mouseMove"
-      >
-        <wt-icon
-          :icon="displayIcon"
-          :size="size"
-        />
-      </div>
+      />
+      <wt-icon
+        :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
+      />
     </template>
 
     <template v-slot:tooltip-title>
@@ -109,7 +95,7 @@
 
 <script setup>
 
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import ChatCloseReason
   from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
@@ -131,15 +117,13 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
-  notProcessed: {
+  processed: { // if false - chat will be in active queue tab, if true - in closed queue tab
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const store = useStore();
-
-const showRemoveIcon = ref(false);
 
 const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
 const displayTaskName = computed(() => props.task.title);
@@ -170,11 +154,7 @@ const closeReasonIcon = computed(() => {
   }
 });
 
-const mouseMove = () => {
-  if (props.notProcessed) showRemoveIcon.value = !showRemoveIcon.value;
-}
-
-const markChatAsProcessed = async () => await store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
 
 </script>
 
@@ -186,8 +166,32 @@ const markChatAsProcessed = async () => await store.dispatch('features/chat/clos
     width: 100%;
   }
 
+  .closed-queue-preview__close {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+  }
+
+  .closed-queue-preview__provider {
+    opacity: 1;
+    transition: var(--transition);
+  }
+
   &--processed {
     mix-blend-mode: luminosity;
+  }
+
+  &:not(&--processed):hover {
+    .closed-queue-preview__close {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .closed-queue-preview__provider {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 }
 </style>
