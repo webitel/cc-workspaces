@@ -97,9 +97,10 @@
 
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import ChatCloseReason
+  from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
@@ -155,7 +156,6 @@ const closeReasonIcon = computed(() => {
 
 const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
 
-
 </script>
 
 <style lang="scss" scoped>
@@ -176,6 +176,10 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   .closed-queue-preview__provider {
     opacity: 1;
     transition: var(--transition);
+  }
+
+  &--processed {
+    mix-blend-mode: luminosity;
   }
 
   &:not(&--processed):hover {
