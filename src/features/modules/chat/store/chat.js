@@ -132,10 +132,6 @@ const actions = {
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
   },
 
-  REMOVE_CHAT: (context, chat) => {
-    context.commit('REMOVE_CHAT', chat);
-  },
-
   OPEN_MEDIA: (context, message) => {
     context.commit('SET_MEDIA_VIEW', message);
   },

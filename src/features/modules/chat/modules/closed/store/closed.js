@@ -35,10 +35,8 @@ const actions = {
   },
   MARK_AS_PROCESSED: async (context, chat) => {
     await AgentChatsAPI.markChatProcessed(chat.id);
-    context.dispatch('REMOVE_CHAT', chat);
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
-  REMOVE_CHAT: (context, chat) => context.dispatch('features/chat/REMOVE_CHAT', chat, { root: true }),
 };
 
 const mutations = {

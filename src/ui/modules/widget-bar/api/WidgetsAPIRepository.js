@@ -37,13 +37,15 @@ const getWidgets = async () => {
     avgTalkSec: convertDuration(stats.avgTalkSec),
     occupancy: `${stats.occupancy.toFixed(2)}%`,
     utilization: `${stats.utilization.toFixed(2)}%`,
-    scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed()}`,
     chatAht: convertDuration(stats.chatAht),
     sumTalkSec: convertDuration(stats.sumTalkSec),
     processing: convertDuration(stats.processing),
     voiceMail: convertDuration(stats.voiceMail),
     queueTalkSec: convertDuration(stats.queueTalkSec),
     available: convertDuration(stats.available),
+
+    // scoreRequiredAvg: `${stats.scoreRequiredAvg.toFixed(2)}`, // https://webitel.atlassian.net/browse/DEV-4691?focusedCommentId=637940
+    scoreRequiredAvg: stats.scoreRequiredAvg,
   });
 
   try {

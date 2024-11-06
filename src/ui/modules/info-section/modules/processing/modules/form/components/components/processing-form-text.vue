@@ -41,14 +41,16 @@
 </template>
 
 <script>
-import dompurify from 'dompurify';
-import { minify } from 'html-minifier-terser';
-import MarkdownIt from 'markdown-it';
+import markdownit from 'markdown-it';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
-const md = new MarkdownIt({ linkify: true, html: true });
+const md = markdownit({
+  linkify: true,
+  html: true,
+});
+
 patchMDRender(md);
 
 export default {
@@ -73,27 +75,13 @@ export default {
       return this.initialValue.replace(/<br\s*\/?>/gi, '\n');
     },
   },
-  methods: {
-    async renderContent(content = this.initialValue) {
-      const sanitized = dompurify.sanitize(content);
-      // https://webitel.atlassian.net/browse/WTEL-5112
-      // https://webitel.atlassian.net/browse/WTEL-4472
-      /**
-       * NOTE: html minification is performed before markdown rendering, so that may affect resulting markdown
-       */
-      const minified = await minify(sanitized, {
-        collapseWhitespace: true, //  remove unnecessary spaces WTEL-4472
-        preserveLineBreaks: true, // preserve line breaks in markdown
-      });
-      const rendered = md.render(minified);
-      this.content = rendered;
-    },
-  },
   watch: {
     initialValue: {
       immediate: true,
-      handler() {
-        this.renderContent(this.initialValue);
+      handler(value) {
+        if (value) {
+          this.content = md.render(value);
+        }
       },
     },
   },

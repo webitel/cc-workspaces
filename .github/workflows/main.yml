@@ -1,20 +1,93 @@
-name: Workspace CI
+# NOTES:
+# generating changelog for release is performed twice because first changelog generates for release notes,
+# so it runs before release step, and second changelog generates for updating CHANGELOG.md file, so it runs after release step.
+# if i'd try to generate changelog once, changes will be marked as "master" branch changes, cause there's no new tag yet.
+
+name: webitel workspace tests and docs
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
-  test:
+  install_deps:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
-    - run: npm ci
-    - run: npm run test:unit
+      - uses: actions/checkout@v4
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cache_node_modules
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        if: steps.cache_node_modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+  test:
+    needs: [install_deps]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm run test:unit
+
+  build_docs:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build docs
+        run: npm run docs:build
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: docs
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: [build_docs]
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup Github Pages
+        id: setup_pages
+        uses: actions/configure-pages@v4
+
+      - name: deploy to Github Pages
+        id: deploy_pages
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: docs
+
