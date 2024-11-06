@@ -95,13 +95,13 @@
 
 <script setup>
 
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 const props = defineProps({
   task: {
@@ -116,7 +116,7 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
-  processed: {
+  processed: { // if false - chat will be in active queue tab, if true - in closed queue tab
     type: Boolean,
     default: false,
   },
