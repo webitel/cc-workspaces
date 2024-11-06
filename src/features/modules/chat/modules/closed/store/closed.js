@@ -1,5 +1,4 @@
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
-import WorkspaceStates from '../../../../../../ui/enums/WorkspaceState.enum.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import i18n from '../../../../../../app/locale/i18n.js';
 
@@ -33,7 +32,10 @@ const actions = {
       ]);
     }
   },
-  SET_WORKSPACE: (context, chat) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true }),
+  MARK_AS_PROCESSED: async (context, { chatId }) => {
+    await AgentChatsAPI.markChatProcessed(chatId);
+    await context.dispatch('LOAD_CLOSED_CHATS');
+  },
 };
 
 const mutations = {

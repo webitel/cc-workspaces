@@ -11,6 +11,7 @@
         :opened="task.id === taskOnWorkspace.id"
         :key="task.id"
         :size="size"
+        processed
         @click="openTask(task)"
       />
       <wt-divider v-if="taskList.length > index + 1"/>

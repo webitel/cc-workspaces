@@ -1,15 +1,25 @@
 <template>
   <task-queue-preview-md
     v-if="size === 'md'"
-    class="closed-queue-preview"
+    :class="[{ 'closed-queue-preview--processed': processed }]"
     :opened="opened"
     :queue-name="displayQueueName"
+    class="closed-queue-preview"
     @click="$emit('click', task)"
   >
 
     <template v-slot:icon>
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click.stop="markChatAsProcessed"
+      />
       <wt-icon
         :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
       />
     </template>
 
@@ -41,9 +51,17 @@
   >
 
     <template v-slot:icon>
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click.stop="markChatAsProcessed"
+      />
       <wt-icon
         :icon="displayIcon"
-        size="sm"
+        :size="size"
+        class="closed-queue-preview__provider"
       />
     </template>
 
@@ -77,13 +95,13 @@
 
 <script setup>
 
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed } from 'vue';
-import ChatCloseReason
-  from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import { useStore } from 'vuex';
+import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 const props = defineProps({
   task: {
@@ -98,12 +116,16 @@ const props = defineProps({
     type: String,
     default: 'md',
   },
+  processed: { // if false - chat will be in active queue tab, if true - in closed queue tab
+    type: Boolean,
+    default: false,
+  },
 });
 
+const store = useStore();
+
 const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
-
 const displayTaskName = computed(() => props.task.title);
-
 const displayQueueName = computed(() => props.task.queue?.name);
 
 const duration = computed(() => {
@@ -118,6 +140,7 @@ const lastMessagePreview = computed(() => {
 
 const closeReasonIcon = computed(() => {
   switch (props.task.closeReason) {
+
     case ChatCloseReason.AGENT_LEAVE:
     case ChatCloseReason.TRANSFER:
       return 'wt-agent-disconnection';
@@ -130,12 +153,41 @@ const closeReasonIcon = computed(() => {
   }
 });
 
+const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+
+
 </script>
 
 <style lang="scss" scoped>
-.closed-queue-preview__footer {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+.closed-queue-preview {
+  &__footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .closed-queue-preview__close {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+  }
+
+  .closed-queue-preview__provider {
+    opacity: 1;
+    transition: var(--transition);
+  }
+
+  &:not(&--processed):hover {
+    .closed-queue-preview__close {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .closed-queue-preview__provider {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
 }
 </style>

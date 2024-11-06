@@ -9,7 +9,7 @@
     <template v-slot:icon>
       <wt-icon
         :icon="displayIcon"
-      ></wt-icon>
+      />
     </template>
 
     <template v-slot:title>
@@ -23,7 +23,7 @@
     <template v-slot:timer>
       <queue-preview-timer
         :task="task"
-      ></queue-preview-timer>
+      />
     </template>
   </task-queue-preview-md>
 
@@ -38,7 +38,7 @@
       <wt-icon
         :icon="displayIcon"
         size="sm"
-      ></wt-icon>
+      />
     </template>
 
     <template v-slot:tooltip-title>
@@ -56,7 +56,7 @@
     <template v-slot:subtitle>
       <queue-preview-timer
         :task="task"
-      ></queue-preview-timer>
+      />
     </template>
   </task-queue-preview-sm>
 </template>
