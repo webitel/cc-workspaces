@@ -14,7 +14,7 @@
         :size="size"
         class="closed-queue-preview__close"
         icon="close--filled"
-        @click="markAsProcessed"
+        @click.stop="markChatAsProcessed"
       />
       <wt-icon
         :icon="displayIcon"
@@ -56,7 +56,7 @@
         :size="size"
         class="closed-queue-preview__close"
         icon="close--filled"
-        @click="markAsProcessed"
+        @click.stop="markChatAsProcessed"
       />
       <wt-icon
         :icon="displayIcon"
@@ -96,7 +96,7 @@
 <script setup>
 
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
@@ -153,10 +153,8 @@ const closeReasonIcon = computed(() => {
   }
 });
 
-const markAsProcessed = () => {
-  console.info('marked');
-  // store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
-}
+const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', { chatId: props.task.id });
+
 
 </script>
 
