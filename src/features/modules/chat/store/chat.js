@@ -1,5 +1,6 @@
-import { computed } from 'vue';
 import { ConversationState } from 'webitel-sdk';
+import { formatChatMessages } from '../scripts/formatChatMessages.js';
+import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
@@ -15,6 +16,11 @@ const state = {
 const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
+  ),
+  CHAT_CONTACT: (state, getters, rootState) => (
+    getters.CHAT_ON_WORKSPACE.closedAt
+      ? getters.CHAT_ON_WORKSPACE.contact
+      : rootState.ui.infoSec.client.contact.contact
   ),
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
     const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
@@ -97,10 +103,17 @@ const actions = {
     }
   },
 
-  OPEN_CHAT: (context, chat) => {
-    return chat.closedAt
-      ? context.dispatch(`features/chat/closed/OPEN_CLOSED_CHAT`, chat, { root: true })
-      : context.dispatch('SET_WORKSPACE', chat);
+  OPEN_CHAT: async (context, chat) => {
+    let openChat = chat;
+
+    if (!chat.contact.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
+      const { items } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+
+      const messages = formatChatMessages(items);
+      openChat = { ...chat, messages };
+    }
+
+    await context.dispatch('SET_WORKSPACE', openChat);
   },
 
   CHAT_INSERT_TO_START: (context, chat) => {
@@ -148,6 +161,7 @@ const actions = {
     // eslint-disable-next-line no-param-reassign
     delete chat.players;
   },
+
   ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     if (chat.players) {
       chat.players.push(player);
@@ -158,6 +172,7 @@ const actions = {
       context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
     });
   },
+
   PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     chat.players.forEach((chatPlayer) => {
       if (chatPlayer !== player) chatPlayer.pause();
