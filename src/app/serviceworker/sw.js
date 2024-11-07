@@ -8,7 +8,7 @@ clientsClaim();
 cleanupOutdatedCaches();
 
 // https://webitel.atlassian.net/browse/WTEL-5434
-// precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);
 
 // https://webitel.atlassian.net/browse/WTEL-4240
 const showNotification = ({

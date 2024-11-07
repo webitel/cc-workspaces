@@ -61,13 +61,15 @@ export default ({ mode }) => {
         filename: 'sw.js',
         injectRegister: 'inline',
         injectManifest: {
-          injectionPoint: undefined, // https://webitel.atlassian.net/browse/WTEL-5434
-        },
-        workbox: {
-          disableDevLogs: true,
+          enableWorkboxModulesLogs: false,
           maximumFileSizeToCacheInBytes: 100 * 1024 * 1024, // 100mb instead of 2mb
-          // maximumFileSizeToCacheInBytes: 13, // 100mb instead of 2mb
+          // injectionPoint: undefined, // https://webitel.atlassian.net/browse/WTEL-5434
         },
+        // workbox: {
+        //   disableDevLogs: true,
+        //   maximumFileSizeToCacheInBytes: 100 * 1024 * 1024, // 100mb instead of 2mb
+        //   // maximumFileSizeToCacheInBytes: 13, // 100mb instead of 2mb
+        // },
         devOptions: {
           enabled: true,
           type: 'module',
