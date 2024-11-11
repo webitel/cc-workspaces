@@ -85,7 +85,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "v${{ steps.package-version.outputs.current-version}}"
-          name: "@webitel/client v${{ steps.package-version.outputs.current-version}}"
+          name: "@webitel/workspace v${{ steps.package-version.outputs.current-version}}"
           body: ${{ steps.changelog.outputs.changes }}
 
       # update tags list after prev step release, so that we fetch new tag, created by prev step
