@@ -8,6 +8,7 @@
 .chat-messages-container {
   display: flex;
   overflow: hidden;
+  height: inherit;
 
   .chat-messages-items {
     @extend %wt-scrollbar;
@@ -15,7 +16,7 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 100%;
     scrollbar-gutter: stable both-edges;
   }
