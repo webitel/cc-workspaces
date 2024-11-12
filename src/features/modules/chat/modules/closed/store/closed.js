@@ -1,4 +1,3 @@
-import { content } from 'happy-dom/lib/PropertySymbol.js';
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import i18n from '../../../../../../app/locale/i18n.js';
@@ -10,6 +9,9 @@ const state = {
 };
 
 const getters = {
+  IS_CHAT_CLOSED: (state, getters, rootState, rootGetters) => (
+    !!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt
+  ),
   UNPROCESSED_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab unprocessed
     state.closedChatsList.filter((chat) => chat?.unprocessedClose)
   ),
