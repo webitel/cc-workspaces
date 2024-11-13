@@ -36,12 +36,13 @@
       v-show="!collapsed || !collapsible"
       class="processing-form-text__content"
       v-html="content"
-    ></p>
+    />
   </article>
 </template>
 
 <script>
 import markdownit from 'markdown-it';
+import dompurify from 'dompurify';
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
@@ -68,21 +69,13 @@ export default {
     },
   },
   data: () => ({
-    content: '',
   }),
   computed: {
     valueToCopy() {
       return this.initialValue.replace(/<br\s*\/?>/gi, '\n');
     },
-  },
-  watch: {
-    initialValue: {
-      immediate: true,
-      handler(value) {
-        if (value) {
-          this.content = md.render(value);
-        }
-      },
+    content() {
+      return md.render(dompurify.sanitize(this.initialValue));
     },
   },
 };

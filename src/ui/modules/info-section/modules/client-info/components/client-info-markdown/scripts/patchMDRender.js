@@ -17,8 +17,6 @@ const patchHtmlBlockRule = (defaultRule) => {
   return (tokens, index, options, env, self) => {
     let processedTokens = tokens;
 
-    processedTokens = dompurify.sanitize(processedTokens);
-
     // Why we do not minify HTML?
     // https://webitel.atlassian.net/browse/WTEL-5112
     // https://webitel.atlassian.net/browse/WTEL-4472
