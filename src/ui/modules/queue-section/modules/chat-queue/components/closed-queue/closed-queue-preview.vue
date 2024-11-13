@@ -182,7 +182,12 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   }
 
   &--processed {
-    mix-blend-mode: luminosity;
+    .closed-queue-preview__footer, // because of https://webitel.atlassian.net/browse/WTEL-5477
+    .closed-queue-preview__provider,
+    :deep(.queue-preview-avatar),
+    :deep(.queue-preview-tooltip-activator){
+      mix-blend-mode: luminosity;
+    }
   }
 
   &:not(&--processed):hover {

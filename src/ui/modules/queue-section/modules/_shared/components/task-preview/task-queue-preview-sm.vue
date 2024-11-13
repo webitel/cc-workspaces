@@ -25,6 +25,7 @@
             color="info"
             icon="rounded-info"
             size="sm"
+            class="queue-preview-tooltip-activator"
           ></wt-icon-btn>
         </template>
         <div class="queue-preview-tooltip-content">
