@@ -17,9 +17,11 @@ const chatHandler = (context) => async (action, chat) => {
     case ChatActions.Leave:
       break;
     case ChatActions.Close:
+      console.log('ChatActions.Close');
       context.dispatch('HANDLE_CLOSE_ACTION', { action, chat });
       break;
     case ChatActions.Destroy:
+      console.log('ChatActions.Destroy');
       context.dispatch('HANDLE_DESTROY_ACTION', { action, chat });
       break;
     default:

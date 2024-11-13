@@ -70,11 +70,6 @@ export default {
       focusOnInput,
     };
   },
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
-  },
   methods: {
     ...mapActions('features/chat', {
       openMedia: 'OPEN_MEDIA',
@@ -82,7 +77,7 @@ export default {
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
     }),
     isLastMessage(index) {
-      return index === this.chat.messages.length - 1;
+      return index === this.messages.length - 1;
     },
   },
   mounted() {
