@@ -18,7 +18,7 @@ const getters = {
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
   CHAT_CONTACT: (state, getters, rootState, rootGetters) => (
-    rootGetters['features/chat/closed/IS_CHAT_CLOSED']
+    rootGetters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED']
       ? getters.CHAT_ON_WORKSPACE.contact
       : rootState.ui.infoSec.client.contact.contact
   ),

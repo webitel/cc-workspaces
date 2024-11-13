@@ -9,7 +9,7 @@ const state = {
 };
 
 const getters = {
-  IS_CHAT_CLOSED: (state, getters, rootState, rootGetters) => (
+  IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (
     !!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt
   ),
   UNPROCESSED_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab unprocessed

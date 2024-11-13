@@ -34,7 +34,6 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
@@ -44,6 +43,7 @@ import FormText from './components/processing-form-text.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
+import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
 import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 
 export default {

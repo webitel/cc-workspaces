@@ -66,7 +66,7 @@ export default {
       chat: 'CHAT_ON_WORKSPACE',
     }),
     ...mapGetters('features/chat/closed', {
-      isChatClosed: 'IS_CHAT_CLOSED',
+      isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
     }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
