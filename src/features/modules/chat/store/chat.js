@@ -14,18 +14,10 @@ const state = {
 };
 
 const getters = {
-  CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => {
-    console.log('CHAT_ON_WORKSPACE:', rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE'])
-    return rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
-  },
-// (
-//     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
-//   ),
-//   CHAT_CONTACT: (state, getters, rootState) => {
-//     console.log('rootState.ui.infoSec.client.contact.contact:', rootState.ui.infoSec.client.contact.contact);
-//     return rootState.ui.infoSec.client.contact.contact;
-//     // return getters.CHAT_ON_WORKSPACE.contact || rootState.ui.infoSec.client.contact.contact
-//   },
+  CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
+    rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
+  ),
+
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
     console.log('ALL_CHAT_MESSAGES')
     const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages

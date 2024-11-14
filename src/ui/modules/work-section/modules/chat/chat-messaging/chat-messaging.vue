@@ -22,7 +22,7 @@
       :size="size"
     />
     <div
-      v-if="isChatActive && !chat.closedAt"
+      v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
       <wt-textarea
