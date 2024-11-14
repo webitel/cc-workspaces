@@ -13,8 +13,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="chatContact?.id"
-      :contact="chatContact"
+      v-if="contact?.id"
+      :contact="contact"
       :size="size"
     />
     <current-chat
@@ -73,7 +73,7 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
@@ -110,9 +110,11 @@ export default {
     },
   },
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contact: (state) => state.contact,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
-      chatContact: 'CHAT_CONTACT',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
   },

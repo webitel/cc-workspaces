@@ -8,11 +8,12 @@ const state = {
 };
 
 const getters = {
-  CONTACT_LINK: (state) => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
+  CONTACT_LINK: () => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
 };
 
 const actions = {
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
+    console.log('LOAD_CONTACTS_BY_DESTINATION');
     const number = task.displayNumber; // for CALLS
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
     try {
@@ -38,6 +39,7 @@ const actions = {
     }
   },
   LOAD_CHAT_CONTACT: async (context, { id }) => {
+    console.log('LOAD_CHAT_CONTACT');
     try {
       context.commit('SET_IS_LOADING', true);
       // https://webitel.atlassian.net/browse/WTEL-4985
@@ -51,6 +53,7 @@ const actions = {
     context.commit('SET_CONTACTS_BY_SEARCH', []);
   },
   LOAD_CONTACT: async (context, contactId) => {
+    console.log('LOAD_CONTACT');
     try {
       context.commit('SET_IS_LOADING', true);
       const contact = await ContactsAPI.get({ itemId: contactId });
@@ -80,6 +83,7 @@ const actions = {
     const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
 
     if (isChatWorkspace) {
+      console.log('INITIALIZE_CONTACT');
       if(state.contactsByDestination) context.commit('SET_CONTACTS_BY_DESTINATION', []);
       return context.dispatch('LOAD_CHAT_CONTACT', { id: task.members[0].user_id });
     }

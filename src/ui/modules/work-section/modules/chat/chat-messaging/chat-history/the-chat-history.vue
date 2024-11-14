@@ -93,6 +93,11 @@ const next = computed(() => getNamespacedState(store.state, namespace).next);
 
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 
+// const loadContact = async () => {
+//   const contactId = props.contact.id
+//   await store.dispatch('ui/infoSec/client/contact/LOAD_CONTACT', contactId);
+// }
+
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
@@ -127,7 +132,7 @@ function isLastMessage(index) {
   return !nextMessage && !currentChat.value?.messages?.length;
 }
 
-watch(() => props.contact?.id, loadMessages, { immediate: true });
+watch(() => props.contact?.id, loadMessages,  { immediate: true });
 
 </script>
 
