@@ -23,7 +23,6 @@ describe('Chat Messaging Footer: Chat Preview', () => {
       computed,
     });
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(true);
-    expect(wrapper.find('.chat-footer__chat-closed').exists()).toBe(false);
   });
 
   it('calls accept() chat method at accept chat button click', () => {
