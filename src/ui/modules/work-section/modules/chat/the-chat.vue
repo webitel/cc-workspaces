@@ -65,12 +65,17 @@ export default {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
+    ...mapGetters('features/chat/closed', {
+      isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
+    }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
-    // hide footer in transfer and empty-workspace tab
+    // hide footer in transfer and empty-workspace tab or if closed chat was opened
     isChatFooter() {
-      return (this.currentTab.component !== 'chat-transfer-container') && (this.currentTab.component !== 'empty-workspace');
+      return (this.currentTab.component !== 'chat-transfer-container')
+        && (this.currentTab.component !== 'empty-workspace')
+        && !this.isChatClosed;
     },
   },
   methods: {

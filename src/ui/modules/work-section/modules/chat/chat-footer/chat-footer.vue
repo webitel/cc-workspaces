@@ -6,14 +6,6 @@
         <wt-button color="chat" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
-    <div
-      v-else-if="chat.closedAt"
-      class="chat-footer__chat-closed">
-      <img
-        alt="chat closed pic"
-        src="../../_shared/assets/chat-closed/chat-closed.svg"/>
-      <p class="chat-footer__chat-closed__text">{{$t('workspaceSec.chat.closedСhat')}}</p>
-    </div>
   </task-footer>
 </template>
 
