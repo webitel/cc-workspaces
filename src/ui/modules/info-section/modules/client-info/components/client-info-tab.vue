@@ -40,12 +40,15 @@ export default {
     ...mapGetters('workspace', {
       isJob: 'IS_JOB_WORKSPACE',
     }),
+    ...mapGetters('features/chat/closed', {
+      isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
+    }),
     hasLicenseOnCrm() {
       return this.scope?.some((item) => item.class === 'contacts');
     },
     isAllowedContacts() {
       if (this.isJob) return;
-      return this.hasLicenseOnCrm && !this.task?.hideContact && !this.task?.closedAt;
+      return this.hasLicenseOnCrm && !this.task?.hideContact && !this.isChatClosed;
     },
   },
 };

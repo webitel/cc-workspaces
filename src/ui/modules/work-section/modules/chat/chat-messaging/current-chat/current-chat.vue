@@ -16,6 +16,12 @@
             :date="message.createdAt"
           />
         </template>
+        <template v-slot:after-message>
+          <chat-activity-info
+            v-if="isLastMessage(index)"
+            ended
+          />
+        </template>
       </message>
     </div>
   </section>
@@ -64,17 +70,15 @@ export default {
       focusOnInput,
     };
   },
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
-  },
   methods: {
     ...mapActions('features/chat', {
       openMedia: 'OPEN_MEDIA',
       attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
     }),
+    isLastMessage(index) {
+      return index === this.messages.length - 1;
+    },
   },
   mounted() {
     this.isMounted = true;
