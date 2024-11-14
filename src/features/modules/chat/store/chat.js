@@ -19,7 +19,6 @@ const getters = {
   ),
 
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-    console.log('ALL_CHAT_MESSAGES')
     const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
     return [...rootState.features.chat.chatHistory.chatHistoryMessages,
       ...currentChatMessages]; // chat-history messages + current-chat messages
