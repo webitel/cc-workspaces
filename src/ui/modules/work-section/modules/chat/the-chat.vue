@@ -100,14 +100,14 @@ export default {
     },
   },
   watch: {
-    chat() {
-      this.resetTab();
-      if (this.chat.contact?.id) this.loadContact(this.chat.contact?.id);
+    chat: {
+      handler() {
+        this.resetTab();
+        if (this.chat.contact?.id) this.loadContact(this.chat.contact?.id);
+      },
+      immediate: true,
     },
   },
-  mounted() {
-    if (this.chat.contact?.id) this.loadContact(this.chat.contact?.id);
-  }
 };
 </script>
 
