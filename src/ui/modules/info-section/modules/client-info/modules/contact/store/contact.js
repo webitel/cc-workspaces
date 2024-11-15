@@ -8,7 +8,7 @@ const state = {
 };
 
 const getters = {
-  CONTACT_LINK: (state) => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
+  CONTACT_LINK: () => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
 };
 
 const actions = {
