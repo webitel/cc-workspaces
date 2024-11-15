@@ -182,6 +182,8 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   }
 
   &--processed {
+    position: relative;
+    z-index: 1;
     mix-blend-mode: luminosity;
   }
 
