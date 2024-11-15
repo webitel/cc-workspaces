@@ -182,6 +182,7 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   }
 
   &--processed {
+    // https://webitel.atlassian.net/browse/WTEL-5477?focusedCommentId=640209
     position: relative;
     z-index: 1;
     mix-blend-mode: luminosity;
