@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
@@ -79,6 +79,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions('ui/infoSec/client/contact', {
+      loadContact: 'LOAD_CONTACT',
+    }),
     openTab(tab) {
       switch (tab) {
         case 'transfer':
@@ -97,8 +100,12 @@ export default {
     },
   },
   watch: {
-    chat() {
-      this.resetTab();
+    chat: {
+      handler() {
+        this.resetTab();
+        if (this.chat.contact?.id) this.loadContact(this.chat.contact?.id);
+      },
+      immediate: true,
     },
   },
 };

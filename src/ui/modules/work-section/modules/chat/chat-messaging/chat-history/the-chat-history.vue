@@ -14,7 +14,7 @@
         :key="message.id"
         :message="message"
         :size="size"
-        :show-avatar="showAvatar(index)"
+        :show-avatar="showAvatar(index) || isChatStarted(index)"
         :username="props.contact?.name"
         @open-image="openImage(message)"
         @initialized-player="attachPlayer"

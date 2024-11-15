@@ -40,7 +40,7 @@ const store = useStore();
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 const taskList = computed(() => store.getters['features/chat/ACTIVE_PREVIEW_CHATS']);
 
-const getComponent = ((task) => task.closedAt ? ClosedPreview : ActivePreview);
+const getComponent = ((task) => task.closedAt && task.closeReason ? ClosedPreview : ActivePreview);
 const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
 
 </script>
