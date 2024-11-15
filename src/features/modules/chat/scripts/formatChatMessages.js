@@ -5,7 +5,7 @@ const formatMessageFile = (file) => { // added field 'mime' and 'url' to message
   return {
     ...file,
     mime: file.type,
-    url: file.url || getFileUrl(file.id),
+    url: file.url || getFileUrl(file),
   };
 };
 
