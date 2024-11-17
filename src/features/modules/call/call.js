@@ -1,7 +1,7 @@
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
-import missed from './modules/missed-calls/store/missed-calls';
 import manual from './modules/manual/store/manual';
+import missed from './modules/missed-calls/store/missed-calls';
 import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
@@ -11,12 +11,15 @@ const state = {
 
 const getters = {
   CALL_ON_WORKSPACE: (s, g, rS, rootGetters) => (
-    rootGetters['workspace/IS_CALL_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
+    rootGetters['workspace/IS_CALL_WORKSPACE'] &&
+    rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
 
-  GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id === callId),
+  GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id ===
+    callId),
 
-  IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE && getters.CALL_ON_WORKSPACE._isNew,
+  IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE &&
+    getters.CALL_ON_WORKSPACE._isNew,
 
   GET_CURRENT_CALL_DIGITS: (state, getters) => {
     if (getters.CALL_ON_WORKSPACE.digits
@@ -27,9 +30,13 @@ const getters = {
   },
 
   // every returns true on empty array, so we have to check for array length
-  IS_ANY_RINGING: (state) => state.callList.length && state.callList.every((call) => isIncomingRinging(call)),
+  IS_ANY_RINGING: (state) => state.callList.length &&
+    state.callList.every((call) => isIncomingRinging(call)),
 
-  IS_OFFLINE_CALL: (state, getters) => getters.CALL_ON_WORKSPACE.queue?.queue_type === 'offline',
+  IS_OFFLINE_CALL: (
+    state,
+    getters,
+  ) => getters.CALL_ON_WORKSPACE.queue?.queue_type === 'offline',
 };
 
 const actions = {
@@ -70,17 +77,17 @@ const actions = {
   },
 
   ANSWER: async (context, { callId } = {}) => {
-    const ANSWER_PARAMS = { useAudio: true, disableStun: !context.rootState.config.CLI.stun };
+    const ANSWER_PARAMS = {
+      useAudio: true,
+      disableStun: !context.rootState.config.CLI.stun,
+    };
     const call = callId
       ? context.getters.GET_CALL_BY_ID(callId)
       : context.getters.CALL_ON_WORKSPACE;
     if (call.allowAnswer) {
       const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
-      try {
-        await call.answer(params);
-        await context.dispatch('SET_WORKSPACE', call);
-      } catch {
-      }
+      await call.answer(params);
+      await context.dispatch('SET_WORKSPACE', call);
     }
   },
 
@@ -105,13 +112,17 @@ const actions = {
   },
 
   TOGGLE_MUTE: async (context, { callId } = {}) => {
-    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.getters.CALL_ON_WORKSPACE;
+    const call = callId
+      ? context.getters.GET_CALL_BY_ID(callId)
+      : context.getters.CALL_ON_WORKSPACE;
     const isMuted = call.muted;
     await call.mute(!isMuted);
   },
 
   TOGGLE_HOLD: async (context, { callId } = {}) => {
-    const call = callId ? context.getters.GET_CALL_BY_ID(callId) : context.getters.CALL_ON_WORKSPACE;
+    const call = callId
+      ? context.getters.GET_CALL_BY_ID(callId)
+      : context.getters.CALL_ON_WORKSPACE;
     if ((!call.isHold && call.allowHold)
       || (call.isHold && call.allowUnHold)) {
       try {
@@ -154,7 +165,13 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (context, { newNumber } = {}) => context.dispatch('SET_WORKSPACE', { _isNew: true, newNumber: newNumber || '' }),
+  OPEN_NEW_CALL: (
+    context,
+    { newNumber } = {},
+  ) => context.dispatch('SET_WORKSPACE', {
+    _isNew: true,
+    newNumber: newNumber || '',
+  }),
 
   CLOSE_NEW_CALL: (context) => context.dispatch('RESET_WORKSPACE'),
 
@@ -173,7 +190,10 @@ const actions = {
     }
   },
 
-  SET_NEW_NUMBER: (context, { call = context.getters.CALL_ON_WORKSPACE, value }) => {
+  SET_NEW_NUMBER: (
+    context,
+    { call = context.getters.CALL_ON_WORKSPACE, value },
+  ) => {
     // cannot mutate newCall because its instance only on 'workspace' state
     // eslint-disable-next-line no-param-reassign
     call.newNumber = value;
@@ -198,7 +218,13 @@ const actions = {
     if (value) context.commit('SET_VIDEO', JSON.parse(value));
   },
 
-  SET_WORKSPACE: (context, call) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CALL, task: call }, { root: true }),
+  SET_WORKSPACE: (
+    context,
+    call,
+  ) => context.dispatch('workspace/SET_WORKSPACE_STATE', {
+    type: WorkspaceStates.CALL,
+    task: call,
+  }, { root: true }),
 
   RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
 };

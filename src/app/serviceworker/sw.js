@@ -2,6 +2,8 @@
 import { clientsClaim } from 'workbox-core';
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 
+self.__WB_DISABLE_DEV_LOGS = true;
+
 self.skipWaiting();
 clientsClaim();
 
