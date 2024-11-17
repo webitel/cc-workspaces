@@ -62,15 +62,4 @@ export default {
     color: var(--text-main-color);
   }
 }
-
-.chat-footer__chat-closed {
-  width: 122px;
-  margin: 0 auto;
-  text-align: center;
-  white-space: nowrap;
-
-  &__text {
-    @extend %typo-subtitle-2;
-  }
-}
 </style>

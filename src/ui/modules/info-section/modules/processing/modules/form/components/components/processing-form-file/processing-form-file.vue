@@ -230,8 +230,7 @@ export default {
     },
 
     handleDeleteConfirm() {
-      const value = this.value.slice();
-      const array = value.splice(this.value.indexOf(this.deletedFile), 1);
+      const array = this.value.filter(({ id }) => id !== this.deletedFile.id);
       this.$emit('input', array);
     },
 

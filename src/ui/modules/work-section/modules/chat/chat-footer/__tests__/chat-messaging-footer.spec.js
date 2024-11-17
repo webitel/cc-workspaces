@@ -52,6 +52,5 @@ describe('Chat Messaging Footer: Chat Closed', () => {
       },
     });
     expect(wrapper.find('.chat-footer__chat-preview').exists()).toBe(false);
-    expect(wrapper.find('.chat-footer__chat-closed').exists()).toBe(true);
   });
 });

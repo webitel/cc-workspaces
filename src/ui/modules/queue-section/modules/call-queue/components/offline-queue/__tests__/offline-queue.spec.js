@@ -36,7 +36,6 @@ describe('Members list functionality', () => {
         },
       },
     });
-    console.info(wrapper.html());
     wrapper.findComponent({ name: 'offline-queue-preview' }).vm.$emit('click');
     expect(mock).toHaveBeenCalled();
   });
