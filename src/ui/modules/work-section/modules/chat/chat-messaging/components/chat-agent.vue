@@ -94,7 +94,7 @@ const getChatHistoryAgents = async (chatId) => {
 const setAgentsArray = async () => {
   if (props.chatId) {
     const { chatHistoryAgents } = await getChatHistoryAgents(props.chatId);
-    agents.value = chatHistoryAgents.reverse();
+    agents.value = chatHistoryAgents;
   } else {
     agents.value = currentChatAgents.value;
   }

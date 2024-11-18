@@ -21,7 +21,7 @@ const actions = {
       context.commit('SET_PAGE_STATE', context.state.page + 1);
 
       const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId, page: context.state.page });
-      const messages = await formatChatMessages(items);// make chat-history messages more similar with current-chat messages
+      const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
       const all = [...messages, ...context.state.chatHistoryMessages];
 
       context.commit('SET_CHAT_HISTORY', all);

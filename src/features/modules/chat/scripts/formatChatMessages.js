@@ -22,5 +22,5 @@ export const formatChatMessages = (messages) => { // make chat-history messages 
       member: item.member || getMessageMember(item.peer),
       file: formatMessageFile(item.file),
     };
-  });
+  }).reverse();
 };
