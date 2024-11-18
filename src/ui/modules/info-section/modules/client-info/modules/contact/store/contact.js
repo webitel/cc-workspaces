@@ -94,6 +94,9 @@ const actions = {
       }
     }
   },
+  RESET_CONTACT: (context) => {
+    context.commit('SET_CONTACT', null);
+  },
 };
 
 const mutations = {

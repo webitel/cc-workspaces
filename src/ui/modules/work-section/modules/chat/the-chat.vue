@@ -81,6 +81,7 @@ export default {
   methods: {
     ...mapActions('ui/infoSec/client/contact', {
       loadContact: 'LOAD_CONTACT',
+      resetContact: 'RESET_CONTACT',
     }),
     openTab(tab) {
       switch (tab) {
@@ -103,7 +104,11 @@ export default {
     chat: {
       handler() {
         this.resetTab();
-        if (this.chat.contact?.id) this.loadContact(this.chat.contact?.id);
+        if (this.chat.contact?.id) {
+          this.loadContact(this.chat.contact?.id);
+        } else {
+          this.resetContact();
+        }
       },
       immediate: true,
     },

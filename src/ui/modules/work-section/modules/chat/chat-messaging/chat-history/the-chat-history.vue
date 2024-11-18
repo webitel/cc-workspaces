@@ -48,12 +48,11 @@
 </template>
 
 <script setup>
-
-import { watch, computed, ref } from 'vue';
+import { watch, computed, ref, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
@@ -93,6 +92,8 @@ const next = computed(() => getNamespacedState(store.state, namespace).next);
 
 const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 
+const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
+
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
@@ -129,6 +130,7 @@ function isLastMessage(index) {
 
 watch(() => props.contact?.id, loadMessages, { immediate: true });
 
+onUnmounted(() => resetHistory());
 </script>
 
 <style lang="scss" scoped>
