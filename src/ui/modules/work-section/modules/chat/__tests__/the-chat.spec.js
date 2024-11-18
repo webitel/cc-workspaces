@@ -1,6 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
-import TheChat
-  from '../the-chat.vue';
+import { createStore } from 'vuex';
+import TheChat from '../the-chat.vue';
+
+const store = createStore();
 
 describe('The Chat', () => {
   it('renders a component', () => {
@@ -8,7 +10,10 @@ describe('The Chat', () => {
       computed: {
         chat() {
           return { id: '1', messages: [] };
-          },
+        },
+      },
+      global: {
+        plugins: [store],
       },
     });
     expect(wrapper.exists()).toBe(true);
