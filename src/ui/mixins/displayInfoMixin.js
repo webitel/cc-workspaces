@@ -1,7 +1,17 @@
 export default {
   computed: {
     displayChatName() {
-      return this.task && this.task?.members?.map((member) => member.name).join(', ');
+      const chat = this.chat || this.task;
+
+      if (this.contact?.name) {
+        return this.contact.name;
+      }
+
+      if (chat?.members?.length) {
+        return chat?.members?.map((member) => member.name).join(', ');
+      }
+
+      return chat.title;
     },
     displayName() {
       return (this.task || this.call)?.displayName;

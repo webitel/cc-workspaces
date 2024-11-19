@@ -1,5 +1,8 @@
 <template>
-  <task-header :size="size" :username="contact?.name">
+  <task-header
+    :size="size"
+    :username="displayChatName"
+  >
     <template v-slot:after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
@@ -21,11 +24,12 @@
         v-if="contact?.id"
         :href="contactLink(contact?.id)"
         class="chat-header-title"
-        target="_blank">
-        {{ contact?.name }}
+        target="_blank"
+      >
+        {{ displayChatName }}
       </a>
       <span v-else>
-        {{ title }}
+        {{ displayChatName }}
       </span>
     </template>
   </task-header>
@@ -33,12 +37,12 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import displayInfoMixin from '../../../../../mixins/displayInfoMixin.js';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
-import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-import ChatHeaderCloseAction from './chat-header-close-action.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import displayInfoMixin from '../../../../../mixins/displayInfoMixin.js';
+import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
   name: 'chat-header',
@@ -48,7 +52,7 @@ export default {
     ChatHeaderCloseAction,
   },
   data: () => ({
-    hotkeyUnsubscribers : [],
+    hotkeyUnsubscribers: [],
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {
@@ -62,18 +66,13 @@ export default {
     ...mapGetters('ui/infoSec/client/contact', {
       contactLink: 'CONTACT_LINK',
     }),
-    title() {
-      return this.chat?.members
-        ? this.chat?.members[this.chat?.members?.length - 1]?.name
-        : this.chat?.title;
-    },
   },
   methods: {
     ...mapActions('features/chat', {
       close: 'CLOSE',
     }),
     openTab() {
-      this.$emit('openTab', 'transfer')
+      this.$emit('openTab', 'transfer');
     },
     setupHotkeys() {
       const subscripers = [
@@ -85,17 +84,17 @@ export default {
           event: HotkeyAction.TRANSFER,
           callback: () => {
             if (this.isTransferAction) this.openTab();
-          }
-        }
+          },
+        },
       ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers = useHotkeys(subscripers);
     },
   },
   mounted() {
     this.setupHotkeys();
   },
   unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
@@ -104,6 +103,7 @@ export default {
 .chat-header-title {
   color: var(--text-main-color);
 }
+
 a:hover {
   text-decoration: underline;
 }
