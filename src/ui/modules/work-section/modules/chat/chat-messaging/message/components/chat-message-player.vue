@@ -37,16 +37,15 @@ export default {
 
 <style lang="scss" scoped>
 .chat-message-player {
-  .wt-player ::v-deep {
+  .wt-player :deep(.plyr) {
     .wt-player__close-icon,
     //.plyr__menu,
-    .plyr__volume,
     //.plyr__control[download]
-    {
+    .plyr__volume {
       display: none;
     }
 
-    video {
+    &.plyr--video {
       max-height: var(--chat-file-max-height);
       max-width: var(--chat-file-max-width);
     }
