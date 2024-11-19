@@ -11,7 +11,11 @@ export default {
         return chat?.members?.map((member) => member.name).join(', ');
       }
 
-      return chat.title;
+      if (chat?.title) {
+        return chat.title;
+      }
+
+      return 'unknown';
     },
     displayName() {
       return (this.task || this.call)?.displayName;
