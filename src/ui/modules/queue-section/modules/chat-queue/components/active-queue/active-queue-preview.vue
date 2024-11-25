@@ -72,7 +72,7 @@ export default {
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
-      const lastMessage = this.task.messages[this.task.messages.length - 1];
+      const lastMessage = this.task.messages[this.task.messages.length - 1] || {};
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
     },
     displayIcon() {
