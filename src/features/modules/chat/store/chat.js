@@ -103,10 +103,10 @@ const actions = {
     let openChat = chat;
 
     if (!chat.contact?.id && chat.closedAt) { // closed chat without contact didn`t have messages array, when we need to get it
-      const { items } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+      const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
 
-      const messages = formatChatMessages(items);
-      openChat = { ...chat, messages };
+      // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
+      openChat._messages = formatChatMessages(messages);
     }
 
     await context.dispatch('SET_WORKSPACE', openChat);
