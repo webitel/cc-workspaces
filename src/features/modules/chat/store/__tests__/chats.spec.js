@@ -15,14 +15,20 @@ const chatOnWorkspace = {
 
 describe('features/chat store: actions', () => {
   const context = {
-    state: {},
+    state: {
+
+    },
     getters: { CHAT_ON_WORKSPACE: chatOnWorkspace },
     dispatch: vi.fn(),
     commit: vi.fn(),
   };
 
   beforeEach(() => {
-    context.state = {};
+    context.state = {
+      closed: {
+        closedChatList: [],
+      },
+    };
     context.getters = { CHAT_ON_WORKSPACE: chatOnWorkspace };
     chatOnWorkspace.join.mockClear();
     chatOnWorkspace.leave.mockClear();
