@@ -100,7 +100,7 @@ const actions = {
   },
 
   OPEN_CHAT: async (context, chat) => {
-    if (context.state.closed.closedChatsList?.includes(chat)) {
+    if (context.state.closed.closedChatsList?.includes(chat) && !chat.contact) {
 
       if (!chat.messages) {
         const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
