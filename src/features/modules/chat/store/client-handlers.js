@@ -65,7 +65,6 @@ const actions = {
 
   HANDLE_CLOSE_ACTION: (context, { action, chat }) => {
     context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
-    context.dispatch('HANDLE_DESTROY_ACTION', { chat });
   },
   RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
   LOAD_CLOSED_CHATS: (context) => context.dispatch('features/chat/closed/LOAD_CLOSED_CHATS', null, { root: true }),
