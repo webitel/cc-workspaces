@@ -13,12 +13,7 @@
       />
       <wt-divider v-if="missedList.length > key + 1"/>
     </div>
-    <a
-      class="missed-queue-container__more"
-      v-show="next"
-      @click.prevent="loadMore"
-    >{{ $t('reusable.more') }}
-    </a>
+    <load-more-button v-show="next" namespace="features/call/missed" />
   </task-queue-container>
 </template>
 
@@ -59,15 +54,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .missed-queue-container{
+  .missed-queue-container {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
   }
   .missed-queue-container__more {
-    display: block;
-    text-align: center;
-    color: var(--info-color);
+    margin: 0 auto;
+    color: var(--text-link-color);
     cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 </style>

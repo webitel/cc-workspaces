@@ -6,9 +6,17 @@ const { t } = i18n.global;
 
 const state = {
   closedChatsList: [],
+  page: 1,
+  next: false,
 };
 
 const getters = {
+  REQUEST_PARAMS: (state) => {
+    return {
+      onlyClosed: true,
+      page: state.page,
+    };
+  },
   IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (
     !!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt
   ),
@@ -23,8 +31,10 @@ const getters = {
 const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
-      const items = await AgentChatsAPI.getList({ onlyClosed: true });
+      const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
+
       context.commit('SET_CLOSED_CHATS_LIST', items || []);
+      context.commit('SET_NEXT_STATE', next);
 
     } catch (err) {
       throw applyTransform(err, [
@@ -39,11 +49,27 @@ const actions = {
     await AgentChatsAPI.markChatProcessed(chat.id);
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
+  LOAD_NEXT: async (context) => {
+    if (!context.state.next) return;
+    context.commit('SET_PAGE_STATE', context.state.page + 1);
+
+    const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
+    const all = [...context.state.closedChatsList, ...items];
+
+    context.commit('SET_CLOSED_CHATS_LIST', all);
+    context.commit('SET_NEXT_STATE', next);
+  },
 };
 
 const mutations = {
   SET_CLOSED_CHATS_LIST: (state, chats) => {
     state.closedChatsList = chats;
+  },
+  SET_PAGE_STATE: (state, page) => {
+    state.page = page;
+  },
+  SET_NEXT_STATE: (state, next) => {
+    state.next = next;
   },
 };
 
