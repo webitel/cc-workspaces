@@ -59,12 +59,4 @@ export default {
     flex-direction: column;
     gap: var(--spacing-xs);
   }
-  .missed-queue-container__more {
-    margin: 0 auto;
-    color: var(--text-link-color);
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 </style>
