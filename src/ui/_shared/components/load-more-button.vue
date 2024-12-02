@@ -8,18 +8,13 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
 
 const props = defineProps({
-  namespace: {
-    type: String,
+  loadMore: {
+    type: Function,
     required: true,
-  },
+  }
 });
-
-const store = useStore();
-
-const loadMore = async () => await store.dispatch(`${props.namespace}/LOAD_NEXT`);
 
 </script>
 

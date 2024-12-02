@@ -16,7 +16,7 @@
       />
       <wt-divider v-if="taskList.length > index + 1"/>
     </div>
-    <load-more-button v-show="next" :namespace="namespace" />
+    <load-more-button v-show="next" :load-more="loadNextClosedChats" />
   </task-queue-container>
 </template>
 
@@ -41,7 +41,8 @@ const taskList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 const next = computed(() => store.state.features.chat.closed.next);
 
-const loadClosedChatsList = async () => await store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
+const loadClosedChatsList = () => store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
+const loadNextClosedChats = () => store.dispatch(`${namespace}/LOAD_NEXT_CHATS`)
 const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
 
 loadClosedChatsList();

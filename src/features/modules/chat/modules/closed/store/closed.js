@@ -49,14 +49,14 @@ const actions = {
     await AgentChatsAPI.markChatProcessed(chat.id);
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
-  LOAD_NEXT: async (context) => {
+  LOAD_NEXT_CHATS: async (context) => {
     if (!context.state.next) return;
     context.commit('SET_PAGE_STATE', context.state.page + 1);
 
     const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
-    const all = [...context.state.closedChatsList, ...items];
+    const chatsList = [...context.state.closedChatsList, ...items];
 
-    context.commit('SET_CLOSED_CHATS_LIST', all);
+    context.commit('SET_CLOSED_CHATS_LIST', chatsList);
     context.commit('SET_NEXT_STATE', next);
   },
 };

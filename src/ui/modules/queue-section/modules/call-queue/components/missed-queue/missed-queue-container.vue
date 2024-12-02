@@ -13,13 +13,14 @@
       />
       <wt-divider v-if="missedList.length > key + 1"/>
     </div>
-    <load-more-button v-show="next" namespace="features/call/missed" />
+    <load-more-button v-show="next" :load-more="loadMore" />
   </task-queue-container>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
@@ -27,6 +28,7 @@ export default {
   name: 'missed-queue-container',
   mixins: [sizeMixin],
   components: {
+    LoadMoreButton,
     TaskQueueContainer,
     MissedPreview,
   },
