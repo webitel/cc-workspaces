@@ -23,7 +23,7 @@ const getters = {
 const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
-      const items = await AgentChatsAPI.getList({ onlyClosed: true });
+      const { items } = await AgentChatsAPI.getList({ onlyClosed: true });
       context.commit('SET_CLOSED_CHATS_LIST', items || []);
 
     } catch (err) {
