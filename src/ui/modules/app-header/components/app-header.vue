@@ -10,7 +10,7 @@
     />
 
     <wt-chip
-      :color="this.isPhoneReg ? 'success' : 'secondary-50'"
+      :color="this.isPhoneReg ? 'success' : 'primary'"
     >SIP
     </wt-chip>
     <break-timer-popup
