@@ -55,7 +55,7 @@ const actions = {
     context.dispatch('CHAT_INSERT_TO_START', chat);
   },
 
-  HANDLE_DESTROY_ACTION: (context, { chat }) => {
+  RESET_CHAT: (context, chat) => {
     context.commit('REMOVE_CHAT', chat);
     context.dispatch('RESET_WORKSPACE');
     context.dispatch('_RESET_UNREAD_COUNT');
@@ -63,8 +63,16 @@ const actions = {
     context.dispatch('LOAD_CLOSED_CHATS');
   },
 
-  HANDLE_CLOSE_ACTION: (context, { action, chat }) => {
+  HANDLE_DESTROY_ACTION: (context, { chat }) => { // action after processing or when chat was closed by agent
+    context.dispatch('RESET_CHAT', chat);
+  },
+
+  HANDLE_CLOSE_ACTION: (context, { action, chat }) => { // when chat closed by client or timeout
     context.dispatch('HANDLE_CHAT_EVENT', { action, chat });
+
+    if (!chat.allowReporting) { // https://webitel.atlassian.net/browse/WTEL-5631
+      context.dispatch('RESET_CHAT', chat);
+    }
   },
   RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
   LOAD_CLOSED_CHATS: (context) => context.dispatch('features/chat/closed/LOAD_CLOSED_CHATS', null, { root: true }),
