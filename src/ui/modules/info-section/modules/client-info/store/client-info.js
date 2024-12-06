@@ -1,4 +1,4 @@
-import contact from '../modules/contact/store/contact';
+import contact from '../../../../../../features/modules/contact/contact.js';
 
 export default {
   namespaced: true,

@@ -1,6 +1,6 @@
-import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
+import AgentChatsAPI from '../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import i18n from '../../../../../../app/locale/i18n.js';
+import i18n from '../../../../../app/locale/i18n.js';
 
 const { t } = i18n.global;
 
@@ -23,7 +23,7 @@ const getters = {
 const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
-      const items = await AgentChatsAPI.getList({ onlyClosed: true });
+      const { items } = await AgentChatsAPI.getList({ onlyClosed: true });
       context.commit('SET_CLOSED_CHATS_LIST', items || []);
     } catch (err) {
       throw applyTransform(err, [

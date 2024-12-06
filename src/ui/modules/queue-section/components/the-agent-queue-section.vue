@@ -168,14 +168,11 @@ export default {
 
 <style lang="scss" scoped>
 .workspace-section.queue-section {
-  @extend %wt-scrollbar;
   position: relative;
   display: flex;
-  overflow: auto;
   flex-direction: column;
   min-width: 0;
   transition: var(--transition);
-  scrollbar-gutter: stable both-edges;
 
   gap: var(--spacing-2xs);
   will-change: width;
@@ -214,12 +211,5 @@ export default {
 
 .queue-section-wrapper {
   flex-grow: 1;
-}
-
-.task-queue {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  gap: var(--spacing-xs);
 }
 </style>

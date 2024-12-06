@@ -1,23 +1,22 @@
 import { ConversationState } from 'webitel-sdk';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
-import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
-import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
-import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
-import clientHandlers from './client-handlers';
-import manual from '../modules/manual/store/manual';
-import closed from '../modules/closed/store/closed.js';
+import { formatChatMessages } from './scripts/formatChatMessages.js';
+import CatalogAPI from '../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
+import ChatTransferDestination from '../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum.js';
+import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum.js';
+import clientHandlers from './client-handlers.js';
+import mediaHandlers from './media-handlers.js';
+import manual from './modules/manual/manual.js';
+import closed from './modules/closed/closed.js';
 import chatHistory from './chat-history.js';
 
 const state = {
   chatList: [],
-  mediaView: null,
 };
 
 const getters = {
   CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
-
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
     const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
     return [...rootState.features.chat.chatHistory.chatHistoryMessages,
@@ -37,6 +36,11 @@ const getters = {
 
 const actions = {
   ...clientHandlers.actions,
+  ...mediaHandlers.actions,
+
+  SET_WORKSPACE: (context, chat) => {
+    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true });
+  },
 
   SET_CHAT_LIST: (context, chatList) => {
     context.commit('SET_CHAT_LIST', chatList);
@@ -124,59 +128,16 @@ const actions = {
     context.commit('SET_CHAT_LIST', chatList);
   },
 
-  SET_WORKSPACE: (context, chat) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true });
+  HANDLE_CHAT_EVENT: (context, { action, chat }) => { //??
+    context.dispatch('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
   },
 
   RESET_WORKSPACE: (context) => {
     context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
   },
 
-  OPEN_MEDIA: (context, message) => {
-    context.commit('SET_MEDIA_VIEW', message);
-  },
-
-  CLOSE_MEDIA: (context) => {
-    context.commit('SET_MEDIA_VIEW', null);
-  },
-
-  HANDLE_CHAT_EVENT: (context, { action, chat }) => {
-    context.dispatch('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
-  },
-
   _RESET_UNREAD_COUNT: (context) => {
     context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true });
-  },
-
-  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    // eslint-disable-next-line no-param-reassign
-    chat.players = player ? [player] : [];
-  },
-
-  CLEAN_CHAT_PLAYERS: (context, { chat = context.getters.CHAT_ON_WORKSPACE } = {}) => {
-    /*
-    * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
-    * in memory when they are really destroyed
-    * */
-    // eslint-disable-next-line no-param-reassign
-    delete chat.players;
-  },
-
-  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    if (chat.players) {
-      chat.players.push(player);
-    } else {
-      context.dispatch('INITIALIZE_CHAT_PLAYERS', { player, chat });
-    }
-    player.on('play', () => {
-      context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
-    });
-  },
-
-  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    chat.players.forEach((chatPlayer) => {
-      if (chatPlayer !== player) chatPlayer.pause();
-    });
   },
 };
 
@@ -189,9 +150,6 @@ const mutations = {
   },
   REMOVE_CHAT: (state, removedChat) => {
     state.chatList = state.chatList.filter((chat) => chat !== removedChat);
-  },
-  SET_MEDIA_VIEW: (state, mediaView) => {
-    state.mediaView = mediaView;
   },
 };
 

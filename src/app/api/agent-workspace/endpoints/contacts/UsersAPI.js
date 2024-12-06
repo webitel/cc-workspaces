@@ -8,7 +8,7 @@ import applyTransform, {
   starToSearch, sanitize,
   generateUrl,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import instance from '../../../../../../../../app/api/instance';
+import instance from '../../../instance.js';
 
 const baseUrl = '/users';
 

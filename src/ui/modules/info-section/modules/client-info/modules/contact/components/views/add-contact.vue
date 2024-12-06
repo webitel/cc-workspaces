@@ -66,10 +66,10 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { EngineCommunicationChannels } from 'webitel-sdk';
-import TimezonesAPI from '../../api/TimezonesAPI';
-import UsersAPI from '../../api/UsersAPI';
-import LabelsAPI from '../../api/LabelsAPI';
-import CommunicationsAPI from '../../api/CommunicationsAPI';
+import TimezonesAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/contacts/TimezonesAPI.js';
+import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/contacts/UsersAPI.js';
+import LabelsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/contacts/LabelsAPI.js';
+import CommunicationsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/contacts/CommunicationsAPI.js';
 
 const props = defineProps({
   namespace: {

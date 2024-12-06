@@ -8,8 +8,8 @@ import applyTransform, {
   snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
-import instance from '../../../../../../../../app/api/instance';
-import configuration from '../../../../../../../../app/api/openAPIConfig';
+import instance from '../../../instance.js';
+import configuration from '../../../openAPIConfig.js';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
 

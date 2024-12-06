@@ -13,3 +13,14 @@
 .theme--dark .markdown-body table * {
   background: var(--content-wrapper-color);
 }
+
+.task-queue {
+  @extend %wt-scrollbar;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-right: var(--scrollbar-width);
+  gap: var(--spacing-xs);
+  overflow: auto;
+  scrollbar-gutter: stable both-edges;
+}

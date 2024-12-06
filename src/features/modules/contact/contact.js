@@ -1,4 +1,4 @@
-import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
+import ContactsAPI from '../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI.js';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
