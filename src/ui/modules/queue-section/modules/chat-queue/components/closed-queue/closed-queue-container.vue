@@ -38,6 +38,7 @@ const store = useStore();
 const namespace = 'features/chat/closed';
 
 const taskList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
+// const taskList = computed(() => store.state.features.chat.closed.closedChatsList);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 const next = computed(() => store.state.features.chat.closed.next);
 

@@ -8,6 +8,7 @@ const state = {
   closedChatsList: [],
   page: 1,
   next: false,
+  size: 4,
 };
 
 const getters = {
@@ -15,6 +16,7 @@ const getters = {
     return {
       onlyClosed: true,
       page: state.page,
+      size: state.size,
     };
   },
   IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (
@@ -31,8 +33,24 @@ const getters = {
 const actions = {
   LOAD_CLOSED_CHATS: async (context) => {
     try {
-      const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
+      let updateSize = context.getters.REQUEST_PARAMS.size;
+      let updatePage = context.getters.REQUEST_PARAMS.page;
+      // const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
 
+      if (context.state.page > 1) {
+        // мені треба завантажити рівно ту ж саму кількість останній айтемів, які вже були завантажені
+        updateSize = context.state.page * context.state.size;
+        updatePage = 1;
+      }
+
+      console.log('updateSize:', updateSize);
+
+      const { items, next } = await AgentChatsAPI.getList({
+        ...context.getters.REQUEST_PARAMS,
+        size: updateSize,
+        page: updatePage,
+      });
+      console.log('load items', items, 'page:', context.state.page);
       context.commit('SET_CLOSED_CHATS_LIST', items || []);
       context.commit('SET_NEXT_STATE', next);
 
@@ -51,10 +69,13 @@ const actions = {
   },
   LOAD_NEXT_CHATS: async (context) => {
     if (!context.state.next) return;
+    console.log('NEXT page', context.state.page + 1);
     context.commit('SET_PAGE_STATE', context.state.page + 1);
 
     const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
     const chatsList = [...context.state.closedChatsList, ...items];
+
+
 
     context.commit('SET_CLOSED_CHATS_LIST', chatsList);
     context.commit('SET_NEXT_STATE', next);
