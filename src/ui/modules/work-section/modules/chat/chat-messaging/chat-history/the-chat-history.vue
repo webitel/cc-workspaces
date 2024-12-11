@@ -128,7 +128,7 @@ function isLastMessage(index) {
   return !nextMessage && !currentChat.value?.messages?.length;
 }
 
-watch(() => props.contact?.id, loadMessages, { immediate: true });
+watch(() => props.contact?.id, loadMessages);
 
 onUnmounted(() => resetHistory());
 </script>

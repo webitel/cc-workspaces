@@ -74,8 +74,13 @@ const actions = {
       context.dispatch('RESET_CHAT', chat);
     }
   },
+
   RESET_CHAT_HISTORY: (context) => context.dispatch('features/chat/chatHistory/RESET_CHAT_HISTORY', null, { root: true }),
   LOAD_CLOSED_CHATS: (context) => context.dispatch('features/chat/closed/LOAD_CLOSED_CHATS', null, { root: true }),
+  HANDLE_CHAT_EVENT: (context, { action, chat }) => {
+    console.log('HANDLE_CHAT_EVENT');
+    context.dispatch('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
+  },
 };
 
 export default {

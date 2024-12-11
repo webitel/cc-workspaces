@@ -1,13 +1,11 @@
 import { ConversationState } from 'webitel-sdk';
-import { formatChatMessages } from './scripts/formatChatMessages.js';
-import CatalogAPI from '../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import ChatTransferDestination from '../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum.js';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum.js';
 import clientHandlers from './client-handlers.js';
 import mediaHandlers from './media-handlers.js';
+import chatHistory from './chat-history.js';
 import manual from './modules/manual/manual.js';
 import closed from './modules/closed/closed.js';
-import chatHistory from './chat-history.js';
 
 const state = {
   chatList: [],
@@ -18,14 +16,15 @@ const getters = {
     rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
   ),
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-    const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
+    const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages
+    // const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
     return [...rootState.features.chat.chatHistory.chatHistoryMessages,
       ...currentChatMessages]; // chat-history messages + current-chat messages
-  },
+  }, // теж винести в компонент?
   ACTIVE_PREVIEW_CHATS: (state, getters, rootState, rootGetters) => [ // chats for active tab in queue section
     ...state.chatList, // active chats
     ...rootGetters['features/chat/closed/UNPROCESSED_CLOSED_CHATS'] // closed chats
-  ],
+  ], // винести в компонент
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
   ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,
@@ -37,10 +36,6 @@ const getters = {
 const actions = {
   ...clientHandlers.actions,
   ...mediaHandlers.actions,
-
-  SET_WORKSPACE: (context, chat) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true });
-  },
 
   SET_CHAT_LIST: (context, chatList) => {
     context.commit('SET_CHAT_LIST', chatList);
@@ -104,20 +99,15 @@ const actions = {
   },
 
   OPEN_CHAT: async (context, chat) => {
-    if (context.state.closed.closedChatsList?.includes(chat) && !chat.contact) {
+    if (chat.contact) { // chat history for all types of chats
+      context.dispatch('LOAD_CHAT_HISTORY', { contactId: chat.contact.id });
 
-      if (!chat.messages) {
-        const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+    } else if (context.state.closed.closedChatsList?.includes(chat)) { // closed chat
+      context.dispatch('OPEN_CLOSED_CHAT', chat);
 
-        // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-        chat.messages = formatChatMessages(messages);
-      }
-
+    } else {
       await context.dispatch('SET_WORKSPACE', chat);
-      return;
     }
-
-    await context.dispatch('SET_WORKSPACE', chat);
   },
 
   CHAT_INSERT_TO_START: (context, chat) => {
@@ -128,17 +118,11 @@ const actions = {
     context.commit('SET_CHAT_LIST', chatList);
   },
 
-  HANDLE_CHAT_EVENT: (context, { action, chat }) => { //??
-    context.dispatch('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
-  },
-
-  RESET_WORKSPACE: (context) => {
-    context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
-  },
-
-  _RESET_UNREAD_COUNT: (context) => {
-    context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true });
-  },
+  SET_WORKSPACE: (context, chat) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true }),
+  RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
+  _RESET_UNREAD_COUNT: (context) => context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true }),
+  LOAD_CHAT_HISTORY: (context, contactId) => context.dispatch('features/chat/chatHistory/LOAD_CHAT_HISTORY', contactId, { root: true }),
+  OPEN_CLOSED_CHAT: (context, chat) => context.dispatch('features/chat/closed/OPEN_CLOSED_CHATS', chat, { root: true }),
 };
 
 const mutations = {

@@ -1,6 +1,9 @@
 import AgentChatsAPI from '../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import CatalogAPI
+  from '../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../../app/locale/i18n.js';
+import { formatChatMessages } from '../../scripts/formatChatMessages.js';
 
 const { t } = i18n.global;
 
@@ -38,6 +41,15 @@ const actions = {
     await AgentChatsAPI.markChatProcessed(chat.id);
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
+  OPEN_CLOSED_CHAT: async (context, chat) => {
+    if (!chat.messages) {
+      const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+
+      // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
+      chat.messages = formatChatMessages(messages);
+    }
+  await context.dispatch('SET_WORKSPACE', chat);
+},
 };
 
 const mutations = {
