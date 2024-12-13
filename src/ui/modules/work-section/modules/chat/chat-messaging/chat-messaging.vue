@@ -188,7 +188,7 @@ export default {
   },
   unmounted() {
     this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

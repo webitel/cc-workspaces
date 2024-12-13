@@ -1,7 +1,7 @@
 <template>
   <article class="chat">
-    <wt-loader v-if="isContactLoading" />
-    <task-container v-else class="chat__wrapper">
+<!--    <wt-loader v-if="isContactLoading" />-->
+    <task-container class="chat__wrapper">
       <template v-slot:header>
         <chat-header
           v-show="isChatHeader"
@@ -58,10 +58,10 @@ export default {
     currentTab: { component: defaultTab },
   }),
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      isContactLoading: (state) => state.isLoading,
-      contact: (state) => state.contact,
-    }),
+    // ...mapState('ui/infoSec/client/contact', {
+    //   isContactLoading: (state) => state.isLoading,
+    //   contact: (state) => state.contact,
+    // }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
@@ -79,10 +79,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions('ui/infoSec/client/contact', {
-      // loadContact: 'LOAD_CONTACT',
-      // resetContact: 'RESET_CONTACT',
-    }),
+    // ...mapActions('ui/infoSec/client/contact', {
+    //   // loadContact: 'LOAD_CONTACT',
+    //   // resetContact: 'RESET_CONTACT',
+    // }),
     openTab(tab) {
       switch (tab) {
         case 'transfer':
