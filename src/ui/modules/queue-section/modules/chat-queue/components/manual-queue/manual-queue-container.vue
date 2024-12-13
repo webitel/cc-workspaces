@@ -1,9 +1,9 @@
 <template>
   <task-queue-container>
-    <div class="manual-queue-container" v-for="(task, key) of manualList">
+    <div class="manual-queue-container" v-for="(chat, key) of manualList">
       <manual-preview
-        :key="task.id"
-        :task="task"
+        :key="chat.id"
+        :task="chat"
         :index="key"
         :size="size"
         @click="openTask"

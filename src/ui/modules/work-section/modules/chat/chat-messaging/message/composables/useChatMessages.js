@@ -10,6 +10,7 @@ export const useChatMessages = () => {
   const messages = computed(() => store.getters[`${namespace}/ALL_CHAT_MESSAGES`]);
 
   function focusOnInput() {
+    console.log('messages:', messages.value);
     eventBus.$emit('chat-input-focus');
   }
 

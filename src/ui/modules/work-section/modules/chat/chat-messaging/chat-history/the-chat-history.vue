@@ -4,11 +4,11 @@
       class="chat-history__messages chat-messages-items"
       v-chat-scroll
     >
-      <wt-intersection-observer
-        :next="next"
-        :loading="nextLoading"
-        @next="loadNextMessages"
-      />
+<!--      <wt-intersection-observer-->
+<!--        :next="next"-->
+<!--        :loading="nextLoading"-->
+<!--        @next="loadNextMessages"-->
+<!--      />-->
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -53,6 +53,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
+import WtIntersectionObserver from '@webitel/ui-sdk/src/components/wt-intersection-observer/wt-intersection-observer.vue';
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
@@ -90,7 +91,10 @@ const {
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 
-const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+const loadMessages = async () => {
+  console.log('loadMessages', props.contact);
+  await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+}
 
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
@@ -99,9 +103,10 @@ const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_
 const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
 
 const loadNextMessages = async () => {
-  nextLoading.value = true;
-  await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
-  nextLoading.value = false;
+  console.log('loadNextMessages')
+  // nextLoading.value = true;
+  // await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
+  // nextLoading.value = false;
 }
 
 function isChatStarted(index) {
@@ -116,11 +121,8 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
-  return  message?.chat?.via
-    ? { type: message.chat.via.type, // chats from history
-      name: message.chat.via.name }
-    : { type: currentChat.value.members[0].type, // from current chat
-      name: currentChat.value.members[0].name }
+  return { type: message.chat?.via?.type || '',
+      name: message.chat?.via?.name || '' };
 };
 
 function isLastMessage(index) {

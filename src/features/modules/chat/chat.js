@@ -12,19 +12,17 @@ const state = {
 };
 
 const getters = {
-  CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => (
-    rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
-  ),
+  CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) => {
+    console.log('in ws:', rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE'])
+    return rootGetters['workspace/IS_CHAT_WORKSPACE'] && rootGetters['workspace/TASK_ON_WORKSPACE']
+  }
+  ,
   ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-    const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages
-    // const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
-    return [...rootState.features.chat.chatHistory.chatHistoryMessages,
-      ...currentChatMessages]; // chat-history messages + current-chat messages
-  }, // теж винести в компонент?
-  ACTIVE_PREVIEW_CHATS: (state, getters, rootState, rootGetters) => [ // chats for active tab in queue section
-    ...state.chatList, // active chats
-    ...rootGetters['features/chat/closed/UNPROCESSED_CLOSED_CHATS'] // closed chats
-  ], // винести в компонент
+    const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat on workspace didn`t have messages
+    console.log('ALL_CHAT_MESSAGES: history:', rootState.features.chat.chatHistory.chatHistoryMessages,
+      'current:', currentChatMessages);
+    return [...rootState.features.chat.chatHistory.chatHistoryMessages, ...currentChatMessages];
+  },
   ALLOW_CHAT_TRANSFER: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
   ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
   ALLOW_CHAT_CLOSE: (state, getters) => getters.CHAT_ON_WORKSPACE.allowLeave || getters.CHAT_ON_WORKSPACE.allowDecline,
@@ -99,14 +97,13 @@ const actions = {
   },
 
   OPEN_CHAT: async (context, chat) => {
-    if (chat.contact) { // chat history for all types of chats
-      context.dispatch('LOAD_CHAT_HISTORY', { contactId: chat.contact.id });
-
-    } else if (context.state.closed.closedChatsList?.includes(chat)) { // closed chat
-      context.dispatch('OPEN_CLOSED_CHAT', chat);
-
+    const isChatClosed = context.state.closed.closedChatsList?.includes(chat);
+    if (isChatClosed && !chat.contact) {
+      // because default closed chats don't have messages
+      await context.dispatch('OPEN_CLOSED_CHAT', chat);
     } else {
       await context.dispatch('SET_WORKSPACE', chat);
+      if (chat.contact) await context.dispatch('LOAD_CHAT_HISTORY', chat.contact.id);
     }
   },
 
@@ -118,10 +115,10 @@ const actions = {
     context.commit('SET_CHAT_LIST', chatList);
   },
 
+  LOAD_CHAT_HISTORY: (context, contactId) => context.dispatch('features/chat/chatHistory/LOAD_CHAT_HISTORY', contactId, { root: true }),
   SET_WORKSPACE: (context, chat) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true }),
   RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
   _RESET_UNREAD_COUNT: (context) => context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true }),
-  LOAD_CHAT_HISTORY: (context, contactId) => context.dispatch('features/chat/chatHistory/LOAD_CHAT_HISTORY', contactId, { root: true }),
   OPEN_CLOSED_CHAT: (context, chat) => context.dispatch('features/chat/closed/OPEN_CLOSED_CHATS', chat, { root: true }),
 };
 

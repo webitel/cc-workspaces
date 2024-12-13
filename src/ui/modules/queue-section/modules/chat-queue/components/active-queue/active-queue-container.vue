@@ -1,21 +1,21 @@
 <template>
   <task-queue-container
     class="active-queue-container"
-    :empty="!taskList.length"
+    :empty="!chatList.length"
   >
     <div
-      v-for="(task, index) of taskList"
+      v-for="(chat, index) of chatList"
       class="active-queue-container__wrapper"
     >
       <component
-        :is="getComponent(task)"
-        :task="task"
-        :opened="task.id === taskOnWorkspace.id"
-        :key="task.id"
+        :is="getComponent(chat)"
+        :task="chat"
+        :opened="chat.id === chatOnWorkspace.id"
+        :key="chat.id"
         :size="size"
-        @click="openTask(task)"
+        @click="openChat(chat)"
       />
-      <wt-divider v-if="taskList.length > index + 1"/>
+      <wt-divider v-if="chatList.length > index + 1"/>
     </div>
   </task-queue-container>
 </template>
@@ -37,11 +37,14 @@ const props = defineProps({
 
 const store = useStore();
 
-const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
-const taskList = computed(() => store.getters['features/chat/ACTIVE_PREVIEW_CHATS']);
+const chatOnWorkspace = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
-const getComponent = ((task) => task.closedAt && task.closeReason ? ClosedPreview : ActivePreview);
-const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
+const activeChatList = computed(() => store.state.features.chat.chatList);
+const unprocessedClosedChats = computed(() => store.getters['features/chat/closed/UNPROCESSED_CLOSED_CHATS'] );
+const chatList = computed(() => [...activeChatList.value, ...unprocessedClosedChats.value]);
+
+const getComponent = ((chat) => chat.closedAt && chat.closeReason ? ClosedPreview : ActivePreview);
+const openChat = async (chat) => await store.dispatch('features/chat/OPEN_CHAT', chat);
 
 </script>
 

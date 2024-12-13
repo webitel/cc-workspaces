@@ -13,8 +13,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="contact?.id"
-      :contact="contact"
+      v-if="chat?.contact?.id"
+      :contact="chat?.contact"
       :size="size"
     />
     <current-chat
@@ -54,10 +54,10 @@
             @change="handleAttachments"
           >
         </div>
-        <chat-emoji
-          :size="size"
-          @insert-emoji="insertEmoji"
-        />
+<!--        <chat-emoji-->
+<!--          :size="size"-->
+<!--          @insert-emoji="insertEmoji"-->
+<!--        />-->
         <wt-rounded-action
           icon="chat-send"
           color="accent"
@@ -110,9 +110,9 @@ export default {
     },
   },
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: (state) => state.contact,
-    }),
+    // ...mapState('ui/infoSec/client/contact', {
+    //   contact: (state) => state.contact,
+    // }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',

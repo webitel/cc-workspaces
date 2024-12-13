@@ -1,20 +1,20 @@
 <template>
   <task-queue-container
     class="closed-queue-container"
-    :empty="!taskList.length">
+    :empty="!chatList.length">
     <div
-      v-for="(task, index) of taskList"
+      v-for="(chat, index) of chatList"
       class="closed-queue-container__wrapper"
     >
       <closed-preview
-        :task="task"
-        :opened="task.id === taskOnWorkspace.id"
-        :key="task.id"
+        :task="chat"
+        :opened="chat.id === chatOnWorkspace.id"
+        :key="chat.id"
         :size="size"
         processed
-        @click="openTask(task)"
+        @click="openChat(chat)"
       />
-      <wt-divider v-if="taskList.length > index + 1"/>
+      <wt-divider v-if="chatList.length > index + 1"/>
     </div>
   </task-queue-container>
 </template>
@@ -35,11 +35,11 @@ const props = defineProps({
 const store = useStore();
 const namespace = 'features/chat/closed';
 
-const taskList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
-const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+const chatOnWorkspace = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+const chatList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
 
 const loadClosedChatsList = async () => await store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
-const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
+const openChat = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
 
 loadClosedChatsList();
 

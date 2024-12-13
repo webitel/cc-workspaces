@@ -48,7 +48,7 @@ export default {
     },
     isAllowedContacts() {
       if (this.isJob) return;
-      return this.hasLicenseOnCrm && !this.task?.hideContact && !this.isChatClosed;
+      return this.task?.contact && this.hasLicenseOnCrm && !this.task?.hideContact && !this.isChatClosed;
     },
   },
 };

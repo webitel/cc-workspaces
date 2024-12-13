@@ -21,8 +21,8 @@
     </template>
     <template v-slot:title>
       <a
-        v-if="contact?.id"
-        :href="contactLink(contact?.id)"
+        v-if="chat?.contact?.id"
+        :href="contactLink(chat?.contact?.id)"
         class="chat-header-title"
         target="_blank"
       >
@@ -55,9 +55,9 @@ export default {
     hotkeyUnsubscribers: [],
   }),
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: (state) => state.contact,
-    }),
+    // ...mapState('ui/infoSec/client/contact', {
+    //   contact: (state) => state.contact,
+    // }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isCloseAction: 'ALLOW_CHAT_CLOSE',
