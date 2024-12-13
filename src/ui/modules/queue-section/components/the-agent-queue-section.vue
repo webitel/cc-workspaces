@@ -194,6 +194,7 @@ export default {
     left: var(--spacing-md);
     border-color: var(--success-color);
     background: var(--success-color);
+    z-index: 2;
 
     :deep .wt-icon__icon {
       fill: var(--icon-on-dark-color);
