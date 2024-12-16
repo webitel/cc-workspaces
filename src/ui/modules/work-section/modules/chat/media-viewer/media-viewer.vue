@@ -39,7 +39,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 2;
+  z-index: var(--ws-media-viewer-z-index);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,7 +52,6 @@ export default {
   bottom: 0;
   left: 0;
   background: var(--wt-popup-shadow-color);
-  z-index: 0;
 }
 
 .media-viewer__content-wrapper {

@@ -133,7 +133,7 @@
     right: (30px);
     bottom: (70px);
     border-radius: var(--border-radius);
-    z-index: 900;
+    z-index: var(--ws-video-container-z-index);
     overflow: hidden;
 
     &.large {
@@ -144,7 +144,7 @@
 
     .video-action {
       position: absolute;
-      z-index: 10;
+      z-index: var(--ws-video-action-z-index);
 
       .icon {
         fill: $video-action-color;
@@ -187,7 +187,6 @@
       width: -moz-fit-content;
       height: fit-content;
       border: 2px solid var(--primary-color);
-      z-index: 2;
     }
 
     .peer-video {
