@@ -1,103 +1,36 @@
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
-import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import i18n from '../../../../../../app/locale/i18n.js';
-
-const { t } = i18n.global;
-
-const state = {
-  closedChatsList: [],
-  page: 1,
-  next: false,
-  size: 4,
-};
+import unprocessed from '../modules/unprocessed/store/unprocessed.js';
+import processed from '../modules/processed/store/processed.js';
 
 const getters = {
-  REQUEST_PARAMS: (state) => {
-    return {
-      onlyClosed: true,
-      page: state.page,
-      size: state.size,
-    };
-  },
   IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (
     !!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt
   ),
-  UNPROCESSED_CLOSED_CHATS: (state) => ( // closed chats are left in active chats tab unprocessed
-    state.closedChatsList.filter((chat) => chat?.unprocessedClose)
-  ),
-  CLOSED_CHATS: (state) => ( // closed chats for closed chats tab
-    state.closedChatsList.filter((chat) => !chat?.unprocessedClose)
-  ),
+  ALL_CLOSED_CHATS: (state) => ([...state.unprocessed.chatsList, ...state.processed.chatsList]),
 };
 
 const actions = {
-  LOAD_CLOSED_CHATS: async (context) => {
-    try {
-      let updateSize = context.getters.REQUEST_PARAMS.size;
-      let updatePage = context.getters.REQUEST_PARAMS.page;
-      // const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
-
-      if (context.state.page > 1) {
-        // мені треба завантажити рівно ту ж саму кількість останній айтемів, які вже були завантажені
-        updateSize = context.state.page * context.state.size;
-        updatePage = 1;
-      }
-
-      console.log('updateSize:', updateSize);
-
-      const { items, next } = await AgentChatsAPI.getList({
-        ...context.getters.REQUEST_PARAMS,
-        size: updateSize,
-        page: updatePage,
-      });
-      console.log('load items', items, 'page:', context.state.page);
-      context.commit('SET_CLOSED_CHATS_LIST', items || []);
-      context.commit('SET_NEXT_STATE', next);
-
-    } catch (err) {
-      throw applyTransform(err, [
-        notify(({ callback }) => callback({
-          type: 'error',
-          text: t('notifications.closedChatError'),
-        })),
-      ]);
-    }
-  },
   MARK_AS_PROCESSED: async (context, chat) => {
     await AgentChatsAPI.markChatProcessed(chat.id);
+    // (може робити якийсь лоадінг для кнопок-хрестиків, щоб користувач не міг закривати їх пачками і гальмувати все?)
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
-  LOAD_NEXT_CHATS: async (context) => {
-    if (!context.state.next) return;
-    console.log('NEXT page', context.state.page + 1);
-    context.commit('SET_PAGE_STATE', context.state.page + 1);
-
-    const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
-    const chatsList = [...context.state.closedChatsList, ...items];
-
-
-
-    context.commit('SET_CLOSED_CHATS_LIST', chatsList);
-    context.commit('SET_NEXT_STATE', next);
+  LOAD_CLOSED_CHATS: async (context) => {
+    console.log('LOAD_CLOSED_CHATS');
+    await context.dispatch('LOAD_UNPROCESSED');
+    await context.dispatch('LOAD_PROCESSED');
   },
-};
 
-const mutations = {
-  SET_CLOSED_CHATS_LIST: (state, chats) => {
-    state.closedChatsList = chats;
-  },
-  SET_PAGE_STATE: (state, page) => {
-    state.page = page;
-  },
-  SET_NEXT_STATE: (state, next) => {
-    state.next = next;
-  },
+  LOAD_UNPROCESSED: (context) => context.dispatch('features/chat/closed/unprocessed/LOAD_UNPROCESSED_CHATS', null, { root: true }),
+  LOAD_PROCESSED: (context) => context.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS', null, { root: true }),
 };
 
 export default {
   namespaced: true,
-  state,
   getters,
   actions,
-  mutations,
+  modules: {
+    unprocessed,
+    processed
+  },
 }
