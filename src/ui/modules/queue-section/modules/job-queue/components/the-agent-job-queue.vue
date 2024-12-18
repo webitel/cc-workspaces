@@ -6,6 +6,7 @@
     class="task-queue job-queue"
   >
     <wt-expansion-panel
+      class="task-queue-item"
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
       :key="value"
       :collapsed="initiallyCollapsed"
