@@ -194,7 +194,7 @@ export default {
         padding: 0;
       }
       :deep(.wt-tooltip .wt-tooltip-floating){
-        z-index: 10;
+        z-index: var(--ws-tooltip-z-index);
       }
     }
 
