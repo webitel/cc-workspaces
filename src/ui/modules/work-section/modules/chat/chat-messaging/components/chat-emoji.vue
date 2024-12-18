@@ -69,7 +69,7 @@ export default {
     --border-color: var(--secondary-color);
 
     position: absolute;
-    z-index: 1;
+    z-index: var(--ws-dropdown-z-index);
     bottom: calc(100% + var(--spacing-sm));
     left: 50%;
     transform: translateX(-50%);
