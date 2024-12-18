@@ -16,7 +16,6 @@ const actions = {
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
   LOAD_CLOSED_CHATS: async (context) => {
-    console.log('LOAD_CLOSED_CHATS');
     await context.dispatch('LOAD_UNPROCESSED');
     await context.dispatch('LOAD_PROCESSED');
   },

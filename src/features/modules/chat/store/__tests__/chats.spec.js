@@ -4,6 +4,7 @@ import chatModule from '../chat';
 
 const chatOnWorkspace = {
   id: '1',
+  messages: [{ text: 'Hello' }],
   join: vi.fn(),
   decline: vi.fn(),
   leave: vi.fn(),
@@ -16,20 +17,25 @@ const chatOnWorkspace = {
 describe('features/chat store: actions', () => {
   const context = {
     state: {
-
+      chatsList: [],
     },
-    getters: { CHAT_ON_WORKSPACE: chatOnWorkspace },
+    getters: {
+      CHAT_ON_WORKSPACE: chatOnWorkspace,
+      closed: {
+        ALL_CLOSED_CHATS: [],
+      },
+    },
     dispatch: vi.fn(),
     commit: vi.fn(),
   };
 
   beforeEach(() => {
-    context.state = {
+    context.getters = {
+      CHAT_ON_WORKSPACE: chatOnWorkspace,
       closed: {
-        closedChatList: [],
+        ALL_CLOSED_CHATS: [],
       },
     };
-    context.getters = { CHAT_ON_WORKSPACE: chatOnWorkspace };
     chatOnWorkspace.join.mockClear();
     chatOnWorkspace.leave.mockClear();
     chatOnWorkspace.decline.mockClear();

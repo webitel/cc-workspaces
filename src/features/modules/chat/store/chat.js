@@ -95,15 +95,13 @@ const actions = {
   },
 
   OPEN_CHAT: async (context, chat) => {
-    if (context.getters['closed/ALL_CLOSED_CHATS'].includes(chat) && !chat.contact) {
-
+    if (context.getters['closed/ALL_CLOSED_CHATS']?.includes(chat) && !chat.contact) {
       if (!chat.messages) {
         const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
 
         // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
         chat.messages = formatChatMessages(messages);
       }
-
       await context.dispatch('SET_WORKSPACE', chat);
       return;
     }

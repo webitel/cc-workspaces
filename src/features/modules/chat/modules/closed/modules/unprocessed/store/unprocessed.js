@@ -35,10 +35,8 @@ const actions = {
           page: 1 }
         : context.getters.REQUEST_PARAMS;
 
-      console.log('load UNPROCESSED page:', context.state.page, 'params:', params);
       const { items, next } = await AgentChatsAPI.getList(params);
 
-      console.log('load UNPROCESSED items', items);
       context.commit('SET_UNPROCESSED_CHATS_LIST', items || []);
       context.commit('SET_NEXT_STATE', next);
 
@@ -60,7 +58,6 @@ const actions = {
   },
   LOAD_NEXT_UNPROCESSED_CHATS: async (context) => {
     if (!context.state.next) return;
-    console.log('NEXT page', context.state.page + 1);
     context.commit('SET_PAGE_STATE', context.state.page + 1);
 
     const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);

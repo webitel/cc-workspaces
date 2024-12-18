@@ -34,11 +34,8 @@ const actions = {
           page: 1 }
         : context.getters.REQUEST_PARAMS;
 
-      console.log('load PROCESSED items page:', context.state.page);
-
       const { items, next } = await AgentChatsAPI.getList(params);
 
-      console.log('load PROCESSED items', items);
       context.commit('SET_PROCESSED_CHATS_LIST', items || []);
       context.commit('SET_NEXT_STATE', next);
 
@@ -53,7 +50,7 @@ const actions = {
   },
   LOAD_NEXT_PROCESSED_CHATS: async (context) => {
     if (!context.state.next) return;
-    console.log('NEXT page', context.state.page + 1);
+
     context.commit('SET_PAGE_STATE', context.state.page + 1);
 
     const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
