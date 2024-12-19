@@ -10,7 +10,7 @@ const { t } = i18n.global;
 const state = {
   chatsList: [],
   page: 1,
-  size: 6,
+  size: 10,
   next: false,
 };
 
@@ -49,21 +49,13 @@ const actions = {
       ]);
     }
   },
-  UPDATE_UNPROCESSED_CHATS: async (context) => {
-    const { items, next } = await AgentChatsAPI.getList({
-          ...context.getters.REQUEST_PARAMS,
-          size: context.state.page * context.state.size,
-          page: 1,
-        });
-  },
   LOAD_NEXT_UNPROCESSED_CHATS: async (context) => {
     if (!context.state.next) return;
+
     context.commit('SET_PAGE_STATE', context.state.page + 1);
 
     const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
     const chatsList = [...context.state.chatsList, ...items];
-
-
 
     context.commit('SET_UNPROCESSED_CHATS_LIST', chatsList);
     context.commit('SET_NEXT_STATE', next);

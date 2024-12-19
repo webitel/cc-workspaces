@@ -10,7 +10,7 @@ const { t } = i18n.global;
 const state = {
   chatsList: [],
   page: 1,
-  size: 4,
+  size: 10,
   next: false,
 };
 
