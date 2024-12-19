@@ -84,11 +84,11 @@ describe('features/chat store client handlers: actions', () => {
 
   it('HANDLE_DESTROY_ACTION commits REMOVE_CHAT mutation with removed chat', () => {
     chatModule.actions.HANDLE_DESTROY_ACTION(context, { chat });
-    expect(context.commit).toHaveBeenCalledWith('REMOVE_CHAT', chat);
+    expect(context.dispatch).toHaveBeenCalledWith('RESET_CHAT', chat);
   });
 
   it('HANDLE_DESTROY_ACTION dispatches _RESET_UNREAD_COUNT', async () => {
-    await chatModule.actions.HANDLE_DESTROY_ACTION(context, { chat });
+    await chatModule.actions.RESET_CHAT(context, chat);
     expect(context.dispatch).toHaveBeenCalledWith('_RESET_UNREAD_COUNT');
   });
 
