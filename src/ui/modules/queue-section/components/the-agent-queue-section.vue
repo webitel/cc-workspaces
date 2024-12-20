@@ -216,11 +216,4 @@ export default {
 .queue-section-wrapper {
   flex-grow: 1;
 }
-
-.task-queue {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  gap: var(--spacing-xs);
-}
 </style>

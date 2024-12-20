@@ -16,12 +16,14 @@
       />
       <wt-divider v-if="taskList.length > index + 1"/>
     </div>
+    <load-more-button v-show="next" :load-more="loadNextClosedChats" />
   </task-queue-container>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from './closed-queue-preview.vue';
 
@@ -33,12 +35,14 @@ const props = defineProps({
 });
 
 const store = useStore();
-const namespace = 'features/chat/closed';
+const namespace = 'features/chat/closed/processed';
 
-const taskList = computed(() => store.getters[`${namespace}/CLOSED_CHATS`]);
+const taskList = computed(() => store.state.features.chat.closed.processed.chatsList);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+const next = computed(() => store.state.features.chat.closed.processed.next);
 
-const loadClosedChatsList = async () => await store.dispatch(`${namespace}/LOAD_CLOSED_CHATS`);
+const loadClosedChatsList = () => store.dispatch(`${namespace}/LOAD_PROCESSED_CHATS`);
+const loadNextClosedChats = () => store.dispatch(`${namespace}/LOAD_NEXT_PROCESSED_CHATS`)
 const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
 
 loadClosedChatsList();

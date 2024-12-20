@@ -13,18 +13,14 @@
       />
       <wt-divider v-if="missedList.length > key + 1"/>
     </div>
-    <a
-      class="missed-queue-container__more"
-      v-show="next"
-      @click.prevent="loadMore"
-    >{{ $t('reusable.more') }}
-    </a>
+    <load-more-button v-show="next" :load-more="loadMore" />
   </task-queue-container>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
@@ -32,6 +28,7 @@ export default {
   name: 'missed-queue-container',
   mixins: [sizeMixin],
   components: {
+    LoadMoreButton,
     TaskQueueContainer,
     MissedPreview,
   },
@@ -59,15 +56,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .missed-queue-container{
+  .missed-queue-container {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
-  }
-  .missed-queue-container__more {
-    display: block;
-    text-align: center;
-    color: var(--info-color);
-    cursor: pointer;
   }
 </style>
