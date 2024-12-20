@@ -10,7 +10,7 @@ const { t } = i18n.global;
 const state = {
   chatsList: [],
   page: 1,
-  size: 6,
+  size: 10,
   next: false,
 };
 
@@ -27,13 +27,12 @@ const getters = {
 
 const actions = {
   LOAD_UNPROCESSED_CHATS: async (context) => {
-
     try {
-      const params = context.state.page > 1
-        ? { ...context.getters.REQUEST_PARAMS,
-          size: context.state.page * context.state.size, // if page > 1 we need to load all items from all pages https://webitel.atlassian.net/browse/WTEL-5503
-          page: 1 }
-        : context.getters.REQUEST_PARAMS;
+      const params = {
+        ...context.getters.REQUEST_PARAMS,
+        size: context.state.page * context.state.size, // we need to load all items from all opened pages https://webitel.atlassian.net/browse/WTEL-5503
+        page: 1,
+      };
 
       const { items, next } = await AgentChatsAPI.getList(params);
 
@@ -49,21 +48,13 @@ const actions = {
       ]);
     }
   },
-  UPDATE_UNPROCESSED_CHATS: async (context) => {
-    const { items, next } = await AgentChatsAPI.getList({
-          ...context.getters.REQUEST_PARAMS,
-          size: context.state.page * context.state.size,
-          page: 1,
-        });
-  },
   LOAD_NEXT_UNPROCESSED_CHATS: async (context) => {
     if (!context.state.next) return;
+
     context.commit('SET_PAGE_STATE', context.state.page + 1);
 
     const { items, next } = await AgentChatsAPI.getList(context.getters.REQUEST_PARAMS);
     const chatsList = [...context.state.chatsList, ...items];
-
-
 
     context.commit('SET_UNPROCESSED_CHATS_LIST', chatsList);
     context.commit('SET_NEXT_STATE', next);

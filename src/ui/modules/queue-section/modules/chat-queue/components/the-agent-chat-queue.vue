@@ -6,8 +6,8 @@
     class="task-queue chat-queue"
   >
     <wt-expansion-panel
-      class="task-queue-item"
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
+      class="task-queue-item"
       :key="value"
       :collapsed="initiallyCollapsed"
       :size="size"

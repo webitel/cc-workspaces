@@ -12,7 +12,6 @@ const getters = {
 const actions = {
   MARK_AS_PROCESSED: async (context, chat) => {
     await AgentChatsAPI.markChatProcessed(chat.id);
-    // (може робити якийсь лоадінг для кнопок-хрестиків, щоб користувач не міг закривати їх пачками і гальмувати все?)
     await context.dispatch('LOAD_CLOSED_CHATS');
   },
   LOAD_CLOSED_CHATS: async (context) => {
