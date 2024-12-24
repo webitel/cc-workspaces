@@ -44,7 +44,6 @@ const getUsers = async (params) => {
       size,
       search,
     );
-    console.log('Users1 resp:', response);
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),

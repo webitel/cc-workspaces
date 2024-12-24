@@ -1,9 +1,8 @@
 import { ConversationState } from 'webitel-sdk';
-import CatalogAPI
-  from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
+import { formatChatMessages } from '../scripts/formatChatMessages.js';
+import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
 import closed from '../modules/closed/store/closed.js';
@@ -33,7 +32,6 @@ const getters = {
 
 const actions = {
   ...clientHandlers.actions,
-  // ...mediaHandlers.actions,
 
   SET_CHAT_LIST: (context, chatList) => {
     context.commit('SET_CHAT_LIST', chatList);

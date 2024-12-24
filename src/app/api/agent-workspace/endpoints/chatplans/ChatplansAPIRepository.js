@@ -43,7 +43,6 @@ const getChatplans= async (params) => {
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
-    console.log('Chatplans resp:', response);
     return {
       items,
       next,
