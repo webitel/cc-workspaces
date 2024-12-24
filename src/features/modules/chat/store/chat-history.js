@@ -9,6 +9,7 @@ const state = {
 
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
+    console.log('LOAD_CHAT_HISTORY contactId:', contactId);
     const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages

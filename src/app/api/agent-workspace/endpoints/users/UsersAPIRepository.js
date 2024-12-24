@@ -44,6 +44,7 @@ const getUsers = async (params) => {
       size,
       search,
     );
+    console.log('Users1 resp:', response);
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
@@ -87,10 +88,16 @@ const getUserStatus = async () => {
   }
 };
 
+const getLookup = (params) => getUsers({
+  ...params,
+  fields: params.fields || ['id', 'name'],
+});
+
 const usersAPIRepository = {
   getUsers,
   setUserStatus,
   getUserStatus,
+  getLookup,
 };
 
 export default usersAPIRepository;

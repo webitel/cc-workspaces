@@ -2,7 +2,7 @@
   <article
     class="contact"
   >
-    <wt-expansion-panel>
+    <wt-expansion-panel collapsed :size="props.size">
       <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
       <template v-slot:actions="{ open }">
         <div

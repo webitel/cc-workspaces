@@ -16,7 +16,7 @@
         :size="size"
         :show-avatar="showAvatar(index) || isChatStarted(index)"
         :username="props.contact?.name"
-        @open-image="openImage(message)"
+        @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
       >
         <template v-slot:before-message>
@@ -82,6 +82,7 @@ const {
   messages,
 
   getMessage,
+  isLastMessage,
   showChatDate,
   showAvatar,
   focusOnInput,
@@ -90,13 +91,11 @@ const {
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 
-const loadMessages = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
-
+const loadHistory = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
-const attachPlayer = (player) => store.dispatch(`${chatNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
-
-const openImage = (message) => store.dispatch(`${chatNamespace}/OPEN_MEDIA`, message);
+const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
+const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 const loadNextMessages = async () => {
   nextLoading.value = true;
@@ -123,14 +122,12 @@ function getChatProvider(message) {
       name: currentChat.value.members[0].name }
 };
 
-function isLastMessage(index) {
-  const { nextMessage } = getMessage(index);
-  return !nextMessage && !currentChat.value?.messages?.length;
-}
+watch(() => props.contact?.id, loadHistory, { immediate: true });
 
-watch(() => props.contact?.id, loadMessages, { immediate: true });
+onUnmounted(() => {
+  resetHistory();
 
-onUnmounted(() => resetHistory());
+});
 </script>
 
 <style lang="scss" scoped>

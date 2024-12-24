@@ -1,16 +1,17 @@
 import { ConversationState } from 'webitel-sdk';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
-import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
+import CatalogAPI
+  from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
+import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import clientHandlers from './client-handlers';
 import manual from '../modules/manual/store/manual';
 import closed from '../modules/closed/store/closed.js';
 import chatHistory from './chat-history.js';
+import chatMedia from './chat-media.js';
 
 const state = {
   chatList: [],
-  mediaView: null,
 };
 
 const getters = {
@@ -32,6 +33,7 @@ const getters = {
 
 const actions = {
   ...clientHandlers.actions,
+  // ...mediaHandlers.actions,
 
   SET_CHAT_LIST: (context, chatList) => {
     context.commit('SET_CHAT_LIST', chatList);
@@ -95,15 +97,12 @@ const actions = {
   },
 
   OPEN_CHAT: async (context, chat) => {
-    if (context.getters['closed/ALL_CLOSED_CHATS']?.includes(chat) && !chat.contact) {
-      if (!chat.messages) {
-        const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+    const isChatClosed = context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(chat);
 
-        // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-        chat.messages = formatChatMessages(messages);
-      }
-      await context.dispatch('SET_WORKSPACE', chat);
-      return;
+    if (isChatClosed && !chat.contact?.id) { // because closed chats don't have messages
+      const { items: messages } = await CatalogAPI.getChatMessagesList({ chatId: chat.id });
+      // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
+      chat.messages = formatChatMessages(messages);
     }
 
     await context.dispatch('SET_WORKSPACE', chat);
@@ -117,60 +116,9 @@ const actions = {
     context.commit('SET_CHAT_LIST', chatList);
   },
 
-  SET_WORKSPACE: (context, chat) => {
-    context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true });
-  },
-
-  RESET_WORKSPACE: (context) => {
-    context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true });
-  },
-
-  OPEN_MEDIA: (context, message) => {
-    context.commit('SET_MEDIA_VIEW', message);
-  },
-
-  CLOSE_MEDIA: (context) => {
-    context.commit('SET_MEDIA_VIEW', null);
-  },
-
-  HANDLE_CHAT_EVENT: (context, { action, chat }) => {
-    context.dispatch('features/notifications/HANDLE_CHAT_EVENT', { action, chat }, { root: true });
-  },
-
-  _RESET_UNREAD_COUNT: (context) => {
-    context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true });
-  },
-
-  INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    // eslint-disable-next-line no-param-reassign
-    chat.players = player ? [player] : [];
-  },
-
-  CLEAN_CHAT_PLAYERS: (context, { chat = context.getters.CHAT_ON_WORKSPACE } = {}) => {
-    /*
-    * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
-    * in memory when they are really destroyed
-    * */
-    // eslint-disable-next-line no-param-reassign
-    delete chat.players;
-  },
-
-  ATTACH_PLAYER_TO_CHAT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    if (chat.players) {
-      chat.players.push(player);
-    } else {
-      context.dispatch('INITIALIZE_CHAT_PLAYERS', { player, chat });
-    }
-    player.on('play', () => {
-      context.dispatch('PAUSE_ALL_CHAT_PLAYERS_EXCEPT', { player });
-    });
-  },
-
-  PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    chat.players.forEach((chatPlayer) => {
-      if (chatPlayer !== player) chatPlayer.pause();
-    });
-  },
+  SET_WORKSPACE: (context, chat) => context.dispatch('workspace/SET_WORKSPACE_STATE', { type: WorkspaceStates.CHAT, task: chat }, { root: true }),
+  RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
+  _RESET_UNREAD_COUNT: (context) => context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, { root: true }),
 };
 
 const mutations = {
@@ -198,5 +146,6 @@ export default {
     manual,
     closed,
     chatHistory,
+    chatMedia,
   },
 };
