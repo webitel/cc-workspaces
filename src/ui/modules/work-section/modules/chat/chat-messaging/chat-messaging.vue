@@ -13,8 +13,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="chat.contact?.id"
-      :contact="chat.contact"
+      v-if="chat?.contact?.id"
+      :contact="chat?.contact"
       :size="size"
     />
     <current-chat
