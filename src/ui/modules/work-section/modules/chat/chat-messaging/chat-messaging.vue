@@ -14,7 +14,7 @@
     />
     <chat-history
       v-if="chat?.contact?.id"
-      :contact="chat?.contact"
+      :contact="chat.contact"
       :size="size"
     />
     <current-chat

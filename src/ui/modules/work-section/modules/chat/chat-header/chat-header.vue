@@ -22,7 +22,7 @@
     <template v-slot:title>
       <a
         v-if="chat?.contact?.id"
-        :href="contactLink(chat?.contact?.id)"
+        :href="contactLink(chat.contact.id)"
         class="chat-header-title"
         target="_blank"
       >

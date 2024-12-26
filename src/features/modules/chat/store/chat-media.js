@@ -42,7 +42,7 @@ const actions = {
 
   PAUSE_ALL_CHAT_PLAYERS_EXCEPT: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
     chat.players.forEach((chatPlayer) => {
-      if (chatPlayer !== player) chatPlayer.pause();
+      if (chatPlayer.id !== player.id) chatPlayer.pause();
     });
   },
 };
