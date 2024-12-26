@@ -191,7 +191,7 @@ export default {
     left: var(--spacing-md);
     border-color: var(--success-color);
     background: var(--success-color);
-    z-index: 5;
+    z-index: var(--ws-main-call-button-z-index);
 
     :deep .wt-icon__icon {
       fill: var(--icon-on-dark-color);
