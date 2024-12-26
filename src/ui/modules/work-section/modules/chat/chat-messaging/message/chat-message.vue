@@ -133,7 +133,6 @@ function handlePlayerInitialize(player) {
   }
 
   &--right {
-
     .chat-message__content {
       flex-direction: row-reverse;
       margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
