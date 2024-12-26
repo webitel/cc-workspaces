@@ -132,15 +132,13 @@ function handlePlayerInitialize(player) {
     flex: 0 0 var(--spacing-lg);
   }
 
-  &--right {
-    .chat-message__content {
-      flex-direction: row-reverse;
-      margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
-    }
+  &--right .chat-message__content {
+    flex-direction: row-reverse;
+    margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
+  }
 
-    .chat-message-avatar {
-      flex: 0 0 var(--icon-lg-size);
-    }
+  .chat-message-avatar {
+    flex: 0 0 var(--icon-lg-size);
   }
 }
 </style>
