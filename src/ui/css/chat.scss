@@ -19,6 +19,7 @@
     overflow-y: auto;
     width: 100%;
     scrollbar-gutter: stable both-edges;
+    gap: var(--spacing-xs);
   }
 }
 
