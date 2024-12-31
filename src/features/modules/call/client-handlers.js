@@ -32,17 +32,17 @@ const actions = {
   },
 
   HANDLE_RINGING_ACTION: async (context, call) => {
-    await context.dispatch('ADD_CALL', call);
 
     if (call.direction === CallDirection.Outbound
       || context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
       await context.dispatch('SET_WORKSPACE', call);
     }
 
-    // have to check is call not manual or not from offline queue before send notification https://webitel.atlassian.net/browse/WTEL-4502
+    // have to check is call not manual or not from offline queue before send notification and play sound https://webitel.atlassian.net/browse/WTEL-4502 + https://webitel.atlassian.net/browse/WTEL-5030
     if (call.allowAnswer && !context.getters.IS_OFFLINE_CALL && !call.queue?.manual_distribution) {
       const callId = call.id;
 
+      await context.dispatch('ADD_CALL', call);
       await context.dispatch('features/notifications/HANDLE_INBOUND_CALL_RINGING', {
         displayName: call.displayName,
         displayNumber: call.displayNumber,
@@ -89,7 +89,6 @@ const actions = {
   },
 
   HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),
-
   HANDLE_CALL_END: (context,  call) => context.dispatch('features/notifications/HANDLE_CALL_END', call, { root: true }),
 };
 
