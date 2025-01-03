@@ -277,7 +277,7 @@ export default {
   min-height: 0;
   @extend %wt-scrollbar;
   max-height: 100%;
-  padding-right: var(--spacing-2xs); // scrollbar offset
+  padding-right: var(--scrollbar-width); // scrollbar offset
   scrollbar-gutter: stable both-edges;
 }
 </style>

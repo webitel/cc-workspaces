@@ -3,10 +3,6 @@ export default {
     displayChatName() {
       const chat = this.chat || this.task;
 
-      if (this.contact?.name) {
-        return this.contact.name;
-      }
-
       if (chat?.members?.length) {
         return chat?.members?.map((member) => member.name).join(', ');
       }
