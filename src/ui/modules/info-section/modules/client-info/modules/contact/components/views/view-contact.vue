@@ -1,16 +1,18 @@
 <template>
   <div>
-    <wt-loader v-if="isLoading"/>
-    <contacts-list-wrapper
-      v-else
-      :mode="props.mode"
-      :size="props.size"
-      :list="listedContacts"
-      :linked-contact="contact"
-      :namespace="props.namespace"
-      @link="linkContact"
-      @add="add"
-    />
+    <transition mode="out-in">
+      <wt-loader v-if="isLoading"/>
+      <contacts-list-wrapper
+        v-else
+        :mode="props.mode"
+        :size="props.size"
+        :list="listedContacts"
+        :linked-contact="contact"
+        :namespace="props.namespace"
+        @link="linkContact"
+        @add="add"
+      />
+    </transition>
   </div>
 </template>
 
@@ -55,5 +57,13 @@ function linkContact(contact) {
 </script>
 
 <style scoped lang="scss">
+// тут контакт має виїзжати після того, як підвантажився
+.v-enter-active {
+  transition: opacity 0.6s
+}
 
+.v-enter,
+.v-leave-active {
+  opacity: 0
+}
 </style>

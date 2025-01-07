@@ -5,6 +5,7 @@ const state = {
   chatHistoryMessages: [], // messages from ChatHistoryApi
   page: 1,
   next: false,
+  isLoaded: false,
 };
 
 const actions = {
@@ -12,9 +13,9 @@ const actions = {
     const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
-
     context.commit('SET_CHAT_HISTORY', messages);
     context.commit('SET_NEXT_STATE', next);
+    context.commit('SET_IS_LOADED', true);
   },
   LOAD_NEXT: async (context, contactId) => {
     if (!context.state.next) return;
@@ -42,10 +43,14 @@ const mutations = {
   SET_PAGE_STATE: (state, value) => {
     state.page = value;
   },
+  SET_IS_LOADED: (state, value) => {
+    state.isLoaded = value;
+  },
   RESET_CHAT_HISTORY_STATE: (state) => {
     state.chatHistoryMessages = [];
     state.page = 1;
     state.next = false;
+    state.isLoaded = false;
   },
 };
 

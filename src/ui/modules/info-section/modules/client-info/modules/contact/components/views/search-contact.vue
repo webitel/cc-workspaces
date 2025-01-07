@@ -48,18 +48,20 @@
     </div>
 
     <div class="search-contact__content">
-      <wt-loader v-show="isLoading"></wt-loader>
-      <wt-dummy
-        v-if="!isLoading && !contactsBySearch.length"
-        :src="dummy.src"
-        :text="dummy.text"
-      ></wt-dummy>
-      <contacts-list-wrapper
-        v-if="!isLoading && contactsBySearch.length"
-        :size="props.size"
-        :list="contactsBySearch"
-        @link="linkContact"
-      ></contacts-list-wrapper>
+<!--      <replace-transition>-->
+        <wt-loader v-if="isLoading"/>
+        <wt-dummy
+          v-else-if="!isLoading && !contactsBySearch.length"
+          :src="dummy.src"
+          :text="dummy.text"
+        />
+        <contacts-list-wrapper
+          v-else-if="!isLoading && contactsBySearch.length"
+          :size="props.size"
+          :list="contactsBySearch"
+          @link="linkContact"
+        />
+<!--      </replace-transition>-->
     </div>
     <div class="search-contact__actions">
       <wt-button
@@ -88,6 +90,7 @@ import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyP
 import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
 import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
 import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchDark.svg';
+import ReplaceTransition from '../../../../../../../../components/replace-transition.vue';
 
 const props = defineProps({
   namespace: {

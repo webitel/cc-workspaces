@@ -20,26 +20,28 @@
         </div>
       </template>
       <template v-slot:default>
-        <add-contact
-          v-if="mode === ContactMode.ADD"
-          :size="props.size"
-          :namespace="namespace"
-          @close="changeMode(ContactMode.VIEW)"
-        />
-        <search-contact
-          v-if="mode === ContactMode.SEARCH"
-          :size="props.size"
-          :namespace="namespace"
-          @add="changeMode(ContactMode.ADD)"
-          @close="changeMode(ContactMode.VIEW)"
-        />
-        <view-contact
-          v-if="mode === ContactMode.VIEW"
-          :mode="mode"
-          :size="props.size"
-          :namespace="namespace"
-          @add="changeMode(ContactMode.ADD)"
-        />
+        <replace-transition>
+          <add-contact
+            v-if="mode === ContactMode.ADD"
+            :size="props.size"
+            :namespace="namespace"
+            @close="changeMode(ContactMode.VIEW)"
+          />
+          <search-contact
+            v-if="mode === ContactMode.SEARCH"
+            :size="props.size"
+            :namespace="namespace"
+            @add="changeMode(ContactMode.ADD)"
+            @close="changeMode(ContactMode.VIEW)"
+          />
+          <view-contact
+            v-if="mode === ContactMode.VIEW"
+            :mode="mode"
+            :size="props.size"
+            :namespace="namespace"
+            @add="changeMode(ContactMode.ADD)"
+          />
+        </replace-transition>
       </template>
     </wt-expansion-panel>
   </article>
@@ -54,6 +56,7 @@ import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
 import ViewContact from './views/view-contact.vue';
+import ReplaceTransition from '../../../../../../../components/replace-transition.vue';
 
 const props = defineProps({
   task: {
@@ -139,11 +142,6 @@ watch([
     flex: 1;
     justify-content: end;
     gap: var(--spacing-xs);
-  }
-
-  :deep(.wt-expansion-panel), :deep(.wt-expansion-panel .wt-expansion-panel-body) {
-    flex: 1;
-    min-height: 0;
   }
 }
 </style>

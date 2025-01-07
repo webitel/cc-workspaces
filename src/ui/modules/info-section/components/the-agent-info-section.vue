@@ -24,14 +24,16 @@
         :tabs="tabs"
         :size="infoSecSize"
       ></the-agent-info-nav-panel>
-      <keep-alive>
-        <component
-          class="info-tab"
-          :is="currentTab.value"
-          :task="taskOnWorkspace"
-          :size="infoSecSize"
-        ></component>
-      </keep-alive>
+      <replace-transition>
+        <keep-alive>
+          <component
+            class="info-tab"
+            :is="currentTab.value"
+            :task="taskOnWorkspace"
+            :size="infoSecSize"
+          />
+        </keep-alive>
+      </replace-transition>
     </div>
   </section>
 </template>
@@ -51,6 +53,7 @@ import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
 import Flows from '../modules/flows/components/flows-tab.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import ReplaceTransition from '../../../components/replace-transition.vue';
 
 export default {
   name: 'the-agent-info-section',
@@ -63,6 +66,7 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
+    ReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {

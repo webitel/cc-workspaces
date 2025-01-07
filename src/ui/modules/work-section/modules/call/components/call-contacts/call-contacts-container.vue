@@ -6,12 +6,12 @@
       :tabs="tabs"
       wide
       @change="changeTab"
-    ></wt-tabs>
-    <component
-      class="call-contacts-container-content"
-      :is="currentTab.component"
-      :size="size"
-    ></component>
+    />
+      <component
+        class="call-contacts-container-content"
+        :is="currentTab.component"
+        :size="size"
+      />
   </div>
 </template>
 
@@ -22,6 +22,7 @@ import { useStore } from 'vuex';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
+import ReplaceTransition from '../../../../../../components/replace-transition.vue';
 
 const { t } = useI18n();
 const store = useStore();

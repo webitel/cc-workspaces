@@ -1,74 +1,79 @@
 <template>
-  <div
-    class="chat-messaging"
-    :class="[
-      `chat-messaging--${size}`,
-    ]"
-    @dragenter.prevent="handleDragEnter"
-  >
-    <dropzone
-      v-show="isDropzoneVisible"
-      @dragenter.prevent
-      @dragleave.prevent="handleDragLeave"
-      @drop="handleDrop"
-    />
-    <chat-history
-      v-if="chat?.contact?.id"
-      :contact="chat.contact"
-      :size="size"
-    />
-    <current-chat
-      v-else
-      :size="size"
-    />
+<!--  <replace-transition appear>-->
     <div
-      v-if="isChatActive"
-      class="chat-messaging-text-entry"
+      :key="chat.id"
+      class="chat-messaging"
+      :class="[
+        `chat-messaging--${size}`,
+      ]"
+      @dragenter.prevent="handleDragEnter"
     >
-      <wt-textarea
-        ref="message-draft"
-        v-model="chat.draft"
-        class="chat-messaging__textarea"
-        :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
-        autoresize
-        name="draft"
-        @enter="sendMessage"
-        @paste="handleFilePaste"
+      <dropzone
+        v-show="isDropzoneVisible"
+        @dragenter.prevent
+        @dragleave.prevent="handleDragLeave"
+        @drop="handleDrop"
       />
-      <div class="chat-messaging-text-entry__actions">
-        <div class="file-input-wrapper">
+      <replace-transition appear>
+        <chat-history
+          v-if="chat?.contact?.id"
+          :contact="chat.contact"
+          :size="size"
+        />
+        <current-chat
+          v-else
+          :size="size"
+        />
+      </replace-transition>
+      <div
+        v-if="isChatActive"
+        class="chat-messaging-text-entry"
+      >
+        <wt-textarea
+          ref="message-draft"
+          v-model="chat.draft"
+          class="chat-messaging__textarea"
+          :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
+          autoresize
+          name="draft"
+          @enter="sendMessage"
+          @paste="handleFilePaste"
+        />
+        <div class="chat-messaging-text-entry__actions">
+          <div class="file-input-wrapper">
+            <wt-rounded-action
+              class="rounded-action-file-input"
+              color="secondary"
+              icon="attach"
+              :size="size"
+              rounded
+              wide
+              @click="triggerAttachmentInput"
+            />
+            <input
+              ref="attachment-input"
+              class="rounded-action-file-input__input"
+              type="file"
+              multiple
+              @change="handleAttachments"
+            >
+          </div>
+          <chat-emoji
+            :size="size"
+            @insert-emoji="insertEmoji"
+          />
           <wt-rounded-action
-            class="rounded-action-file-input"
-            color="secondary"
-            icon="attach"
+            icon="chat-send"
+            color="accent"
             :size="size"
             rounded
             wide
-            @click="triggerAttachmentInput"
+            @click="sendMessage"
           />
-          <input
-            ref="attachment-input"
-            class="rounded-action-file-input__input"
-            type="file"
-            multiple
-            @change="handleAttachments"
-          >
         </div>
-        <chat-emoji
-          :size="size"
-          @insert-emoji="insertEmoji"
-        />
-        <wt-rounded-action
-          icon="chat-send"
-          color="accent"
-          :size="size"
-          rounded
-          wide
-          @click="sendMessage"
-        />
       </div>
     </div>
-  </div>
+<!--  </replace-transition>-->
 </template>
 
 <script>
@@ -81,6 +86,7 @@ import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import ReplaceTransition from '../../../../../components/replace-transition.vue';
 
 export default {
   name: 'chat-messaging-container',
@@ -88,6 +94,7 @@ export default {
     CurrentChat,
     ChatHistory,
     ChatEmoji,
+    ReplaceTransition,
   },
   mixins: [dropzoneMixin],
   inject: ['$eventBus'],

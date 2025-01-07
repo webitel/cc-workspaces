@@ -34,11 +34,13 @@
         </div>
       </template>
     </wt-tabs>
-    <component
-      :is="`${currentTab.value}-queue`"
-      :size="size"
-      class="queue-section-wrapper"
-    ></component>
+    <replace-transition>
+      <component
+        :is="`${currentTab.value}-queue`"
+        :size="size"
+        class="queue-section-wrapper"
+      />
+    </replace-transition>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
@@ -60,6 +62,7 @@ import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
+import ReplaceTransition from '../../../components/replace-transition.vue';
 
 export default {
   name: 'the-agent-queue-section',
@@ -69,6 +72,7 @@ export default {
     ChatQueue,
     JobQueue,
     CollapseAction,
+    ReplaceTransition,
   },
   props: {
     collapsed: {

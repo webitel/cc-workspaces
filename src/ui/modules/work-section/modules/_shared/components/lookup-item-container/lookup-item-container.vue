@@ -27,6 +27,7 @@
       ref="scrollWrap"
       class="lookup-item-container-body"
     >
+      <replace-transition>
       <div
         class="lookup-item-container-loader"
         v-if="loading"
@@ -35,20 +36,23 @@
           <wt-loader />
         </slot>
       </div>
-
+      </replace-transition>
+      <replace-transition>
       <div
         v-show="showEmpty"
         class="lookup-item-container-empty"
       >
         <slot name="empty" v-bind:show="showEmpty"></slot>
       </div>
-
+      </replace-transition>
+      <replace-transition>
       <div
         v-show="!loading && !showEmpty"
         class="lookup-item-container-content"
       >
         <slot name="content"></slot>
       </div>
+      </replace-transition>
 
       <observer
         v-if="scrollWrap"
@@ -65,6 +69,7 @@
 
 <script setup>
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
+import ReplaceTransition from '../../../../../../components/replace-transition.vue';
 import { ref, computed  } from 'vue';
 
 const props = defineProps({

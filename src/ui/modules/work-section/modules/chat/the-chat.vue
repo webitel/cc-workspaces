@@ -1,30 +1,34 @@
 <template>
   <article class="chat">
-    <task-container class="chat__wrapper">
-      <template v-slot:header>
-        <chat-header
-          v-show="isChatHeader"
-          :size="size"
-          @openTab="openTab"
-        />
-        <media-viewer />
-      </template>
-      <template v-slot:body>
-        <component
-          :is="currentTab.component"
-          :size="size"
-          v-bind="currentTab.props"
-          @closeTab="resetTab"
-          @openTab="openTab"
-        />
-      </template>
-      <template v-slot:footer>
-        <chat-footer
-          v-if="isChatFooter"
-          :size="size"
-        />
-      </template>
-    </task-container>
+    <replace-transition appear>
+      <task-container :key="chat.id" class="chat__wrapper">
+          <template v-slot:header>
+              <chat-header
+                v-show="isChatHeader"
+                :key="chat?.id"
+                :size="size"
+                @openTab="openTab"
+              />
+            <media-viewer />
+          </template>
+          <template v-slot:body>
+              <component
+                :is="currentTab.component"
+                :key="chat?.id"
+                :size="size"
+                v-bind="currentTab.props"
+                @closeTab="resetTab"
+                @openTab="openTab"
+              />
+          </template>
+          <template v-slot:footer>
+            <chat-footer
+              v-if="isChatFooter"
+              :size="size"
+            />
+          </template>
+        </task-container>
+    </replace-transition>
   </article>
 </template>
 
@@ -38,6 +42,7 @@ import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
+import ReplaceTransition from '../../../../components/replace-transition.vue';
 
 const defaultTab = 'chat-messaging-container';
 
@@ -52,9 +57,13 @@ export default {
     ChatTransferContainer,
     EmptyWorkspace,
     ChatFooter,
+    ReplaceTransition,
   },
   data: () => ({
-    currentTab: { component: defaultTab },
+    currentTab: {
+      component: defaultTab
+    },
+    currentChatId: null,
   }),
   computed: {
     ...mapGetters('features/chat', {
