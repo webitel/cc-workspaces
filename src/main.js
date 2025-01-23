@@ -9,6 +9,7 @@ import WebitelUi from './app/plugins/webitel-ui';
 import BreakpointPlugin from './app/plugins/breakpoint.plugin';
 
 import './app/assets/icons/sprite';
+import './app/css/main.scss'
 
 const setTokenFromUrl = () => {
   try {

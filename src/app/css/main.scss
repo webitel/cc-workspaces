@@ -1,13 +1,5 @@
-@import '@webitel/ui-sdk/src/css/main';
-@import 'github-markdown-css/github-markdown.css';
-//@import 'github-markdown-css';
-@import 'utils/helper-classes';
-@import 'styleguide/colors';
-@import 'styleguide/_variables.scss';
-
-@import '../../ui/css/agent-workspace';
-@import '../../ui/css/chat';
-
+@forward 'reusable';
+@use 'reusable' as *;
 
 html {
   height: 100%;
@@ -27,30 +19,9 @@ body {
   }
 }
 
-* {
-  box-sizing: border-box;
-}
-
 main {
   min-height: 100%;
   height: 100%;
-}
-
-h1, h2, h3, h4, h5, h6, p {
-  margin: 0;
-  font-weight: normal;
-}
-
-//reset ul styles
-ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-iframe {
-  border: none;
-  outline: none;
 }
 
 a {
