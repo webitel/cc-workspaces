@@ -110,7 +110,6 @@ function handlePlayerInitialize(player) {
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: 0 var(--spacing-2xs) var(--spacing-2xs);
   max-width: 100%;
   gap: var(--spacing-2xs);
 
@@ -120,6 +119,7 @@ function handlePlayerInitialize(player) {
     min-width: 0;
     line-height: 0; // prevents height difference from its content
     gap: var(--spacing-xs);
+    margin: 0 var(--spacing-md) 0 var(--spacing-2xs);
   }
 
   &.chat-message--md {
@@ -134,6 +134,7 @@ function handlePlayerInitialize(player) {
 
   &--right .chat-message__content {
     flex-direction: row-reverse;
+    margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
   }
 
   .chat-message-avatar {

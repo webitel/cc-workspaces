@@ -1,3 +1,5 @@
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 :root {
   --chat-file-max-width: 280px;
   --chat-file-min-width: 256px;
@@ -20,6 +22,7 @@
     width: 100%;
     padding-right: var(--scrollbar-width); // scrollbar offset
     scrollbar-gutter: stable both-edges;
+    gap: var(--spacing-xs);
   }
 }
 

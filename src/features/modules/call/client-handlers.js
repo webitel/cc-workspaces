@@ -89,7 +89,6 @@ const actions = {
   },
 
   HANDLE_START_TALKING: (context) => context.dispatch('features/notifications/HANDLE_CALL_START', null, { root: true }),
-
   HANDLE_CALL_END: (context,  call) => context.dispatch('features/notifications/HANDLE_CALL_END', call, { root: true }),
 };
 
