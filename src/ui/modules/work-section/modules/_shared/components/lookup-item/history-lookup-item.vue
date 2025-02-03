@@ -5,12 +5,12 @@
     @click="handleInput">
     <template v-slot:before>
       <div class="history-lookup-item-wrapper">
-        <wt-avatar :size="size"></wt-avatar>
+        <wt-avatar :size="size"/>
         <wt-icon
           :icon="statusIcon"
           :color="statusIconColor"
           :size="size"
-        ></wt-icon>
+        />
       </div>
     </template>
     <template v-slot:title>
