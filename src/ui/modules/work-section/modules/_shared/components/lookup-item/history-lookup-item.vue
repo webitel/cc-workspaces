@@ -102,12 +102,15 @@ export default {
     },
 
     destination() {
+      if (this.item.contact?.id) return this.item.contact.name;
+
       if (this.item.direction === CallDirection.Outbound) {
         if (this.item.to.number) {
           return this.item.to.name;
         }
         return this.item.destination;
       }
+
       return this.item.from.name;
     },
 
