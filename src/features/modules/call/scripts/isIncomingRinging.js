@@ -21,9 +21,20 @@ const isInboundRinging = (call) => (
   call.direction === CallDirection.Inbound
 );
 
+const isNotManualCall = (call) => (
+  !call.queue?.manual_distribution
+);
+
+const isNotOfflineCall = (call) => (
+  call.queue?.queue_type !== 'offline'
+);
+
 const isIncomingRinging = (call) => {
-  return isRinging(call) && [
-    isInboundRinging(call),
+  return isRinging(call)
+    && isNotManualCall(call)
+    && isNotOfflineCall(call)
+    && [
+      isInboundRinging(call),
     isOutboundPreviewDialer(call),
     isOutboundCallWithDisableAutoAnswer(call),
   ].some((condition) => !!condition);

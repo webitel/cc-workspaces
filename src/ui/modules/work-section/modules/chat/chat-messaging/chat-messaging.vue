@@ -1,92 +1,90 @@
 <template>
-<!--  <replace-transition appear>-->
-    <div
-      :key="chat.id"
-      class="chat-messaging"
-      :class="[
-        `chat-messaging--${size}`,
-      ]"
-      @dragenter.prevent="handleDragEnter"
-    >
-      <dropzone
-        v-show="isDropzoneVisible"
-        @dragenter.prevent
-        @dragleave.prevent="handleDragLeave"
-        @drop="handleDrop"
+  <div
+    class="chat-messaging"
+    :class="[
+      `chat-messaging--${size}`,
+    ]"
+    @dragenter.prevent="handleDragEnter"
+  >
+    <dropzone
+      v-show="isDropzoneVisible"
+      @dragenter.prevent
+      @dragleave.prevent="handleDragLeave"
+      @drop="handleDrop"
+    />
+    <replace-transition appear>
+      <chat-history
+        v-if="chatContact?.id"
+        :contact="chatContact"
+        :size="size"
       />
-      <replace-transition appear>
-        <chat-history
-          v-if="chat?.contact?.id"
-          :contact="chat.contact"
-          :size="size"
-        />
-        <current-chat
-          v-else
-          :size="size"
-        />
-      </replace-transition>
-      <div
-        v-if="isChatActive"
-        class="chat-messaging-text-entry"
-      >
-        <wt-textarea
-          ref="message-draft"
-          v-model="chat.draft"
-          class="chat-messaging__textarea"
-          :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
-          autoresize
-          name="draft"
-          @enter="sendMessage"
-          @paste="handleFilePaste"
-        />
-        <div class="chat-messaging-text-entry__actions">
-          <div class="file-input-wrapper">
-            <wt-rounded-action
-              class="rounded-action-file-input"
-              color="secondary"
-              icon="attach"
-              :size="size"
-              rounded
-              wide
-              @click="triggerAttachmentInput"
-            />
-            <input
-              ref="attachment-input"
-              class="rounded-action-file-input__input"
-              type="file"
-              multiple
-              @change="handleAttachments"
-            >
-          </div>
-          <chat-emoji
-            :size="size"
-            @insert-emoji="insertEmoji"
-          />
+      <current-chat
+        v-else
+        :size="size"
+      />
+    </replace-transition>
+    <div
+      v-if="isChatActive"
+      class="chat-messaging-text-entry"
+    >
+      <wt-textarea
+        ref="message-draft"
+        v-model="chat.draft"
+        class="chat-messaging__textarea"
+        :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
+        autoresize
+        name="draft"
+        @enter="sendMessage"
+        @paste="handleFilePaste"
+      />
+      <div class="chat-messaging-text-entry__actions">
+        <div class="file-input-wrapper">
           <wt-rounded-action
-            icon="chat-send"
-            color="accent"
+            class="rounded-action-file-input"
+            color="secondary"
+            icon="attach"
             :size="size"
             rounded
             wide
-            @click="sendMessage"
+            @click="triggerAttachmentInput"
           />
+          <input
+            ref="attachment-input"
+            class="rounded-action-file-input__input"
+            type="file"
+            multiple
+            @change="handleAttachments"
+          >
         </div>
+        <chat-emoji
+          :size="size"
+          @insert-emoji="insertEmoji"
+        />
+        <wt-rounded-action
+          icon="chat-send"
+          color="accent"
+          :size="size"
+          rounded
+          wide
+          @click="sendMessage"
+        />
       </div>
     </div>
-<!--  </replace-transition>-->
+  </div>
 </template>
 
 <script>
 
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
 import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import ReplaceTransition from '../../../../../components/replace-transition.vue';
+import { getLinkedContact } from '../scripts/getLinkedContact.js';
 
 export default {
   name: 'chat-messaging-container',
@@ -100,11 +98,15 @@ export default {
   inject: ['$eventBus'],
   data: () => ({
     hotkeyUnsubscribers : [],
+    chatContact: null,
   }),
   watch: {
     chat: {
-      handler() {
-        this.$nextTick(() => this.setDraftFocus());
+      async handler() {
+        await this.getChatContact();
+        await this.$nextTick(() => {
+          this.setDraftFocus()
+        });
       },
       immediate: true,
     },
@@ -122,12 +124,18 @@ export default {
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
   },
-
   methods: {
     ...mapActions('features/chat', {
       send: 'SEND',
       sendFile: 'SEND_FILE',
     }),
+    async getChatContact() { // We must use this.chat.contact only! This computed must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+      if (this.chat?.contact?.id && this.chat?.contact?.name) { // for chat-history we need contact object with id and name
+        this.chatContact = this.chat.contact
+      } else {
+        this.chatContact = await getLinkedContact(this.chat);
+      }
+    },
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
       if (!messageDraft) return;

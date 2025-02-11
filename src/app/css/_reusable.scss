@@ -1,0 +1,8 @@
+@use 'github-markdown-css/github-markdown.css';
+@use 'utils/helper-classes';
+@use 'styleguide/colors';
+@use 'styleguide/_variables.scss';
+
+@use '../../ui/css/agent-workspace';
+@use '../../ui/css/chat';
+@use '../../ui/css/queue-section';

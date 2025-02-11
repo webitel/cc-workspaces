@@ -29,8 +29,8 @@
             />
             <chat-activity-info
               v-if="isChatStarted(index) || isHistoryStart(index)"
-              :provider="getChatProvider(message).type"
-              :gateway="getChatProvider(message).name"
+              :provider="getChatProvider(message)?.type"
+              :gateway="getChatProvider(message)?.name"
             />
             <chat-agent
               v-if="isChatStarted(index)"
@@ -122,11 +122,14 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
-  return  message?.chat?.via
-    ? { type: message.chat.via.type, // chats from history
+  if (message?.chat?.via) {
+    return { type: message.chat.via.type, // chats from history
       name: message.chat.via.name }
-    : { type: currentChat.value.members[0].type, // from current chat
-      name: currentChat.value.members[0].name }
+  }
+  if (currentChat.value?.members) {
+    return { type: currentChat.value?.members[0]?.type, // from current chat
+      name: currentChat.value?.members[0]?.name }
+  }
 };
 
 watch(() => props.contact?.id, loadHistory, { immediate: true });
@@ -138,5 +141,4 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
