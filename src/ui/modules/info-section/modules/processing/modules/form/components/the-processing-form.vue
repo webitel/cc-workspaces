@@ -8,6 +8,8 @@
     </template>
     <template v-slot:form>
 <!--      pass size prop only to form file component -->
+
+<!--      тут пробував робити 2 окремих <component> для wt-select і для інших компонентів, але до толку я це не довів, та і таке рішення мені не подобається -->
       <component
         :is="processingComponent[el.view.component] || el.view.component"
         v-for="(el, key) of formBody"
@@ -87,13 +89,22 @@ export default {
   },
   methods: {
     ...mapActions({
-                    sendForm(dispatch, payload) {
-                      return dispatch(`${this.namespace}/SEND_FORM`, payload);
-                    },
-                    sendReporting(dispatch, payload) {
-                      return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
-                    },
-                  }),
+      sendForm(dispatch, payload) {
+        console.log(JSON.stringify(this.formBody));
+        return dispatch(`${this.namespace}/SEND_FORM`, payload).then(() => {
+          this.formBody.forEach((component) => {
+            if (component.view.component === 'wt-select') {
+              // при тому що я чищу значення і if відпрацьовує, але баг такий самий
+              component.value = '';
+              console.log(component.value); // виводить пустий рядок, але в селекті баг такий самий
+            }
+          });
+        });
+      },
+      sendReporting(dispatch, payload) {
+        return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
+      },
+    }),
     initializeValues() {
       this.formBody.forEach((component) => {
         if (isEmpty(component.value) && component.view.initialValue) {
@@ -125,6 +136,7 @@ export default {
       this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
   },
+  // видаляв вотчер, баг відтворюється
   watch: {
     formBody: {
       handler() {
@@ -133,6 +145,7 @@ export default {
       immediate: true,
     },
   },
+  // видаляв маунтед, баг відтворюється
   mounted() {
     this.setupAutofocus();
     this.setupHotkeys();
