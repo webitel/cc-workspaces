@@ -105,7 +105,6 @@ export default {
     },
     async getChatContact() { // We must use this.chat.contact only! This computed must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
       if (this.chat?.contact?.id && this.chat?.contact?.name) { // for chat-header we need contact object with id and name
-        console.log('this.chat.contact:', this.chat.contact);
         this.chatContact = this.chat.contact
       } else {
         this.chatContact = await getLinkedContact(this.chat);
