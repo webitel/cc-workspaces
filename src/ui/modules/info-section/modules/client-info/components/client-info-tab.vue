@@ -41,7 +41,7 @@ export default {
       isJob: 'IS_JOB_WORKSPACE',
     }),
     ...mapGetters('features/chat/closed', {
-      isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
+      isChatClosed: 'IS_CHAT_ON_WORKSPACE_WAS_CLOSED',
     }),
     hasLicenseOnCrm() {
       return this.scope?.some((item) => item.class === 'contacts');

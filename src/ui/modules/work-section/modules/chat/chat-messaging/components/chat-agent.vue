@@ -57,8 +57,8 @@ const currentAgent = computed(() => store.state.ui.infoSec.agentInfo.agent);
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 
 const currentChatAgents = computed(() => {
-  return currentChat.value.members.length > 1
-    ? getAgentsFromMembers(currentChat.value.members)
+  return currentChat.value?.members?.length > 1
+    ? getAgentsFromMembers(currentChat.value?.members)
     : [currentAgent.value];
 });
 

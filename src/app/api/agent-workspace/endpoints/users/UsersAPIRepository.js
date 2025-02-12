@@ -87,10 +87,16 @@ const getUserStatus = async () => {
   }
 };
 
+const getLookup = (params) => getUsers({
+  ...params,
+  fields: params.fields || ['id', 'name'],
+});
+
 const usersAPIRepository = {
   getUsers,
   setUserStatus,
   getUserStatus,
+  getLookup,
 };
 
 export default usersAPIRepository;

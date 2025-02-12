@@ -8,6 +8,7 @@ export const useChatMessages = () => {
   const namespace = 'features/chat';
 
   const messages = computed(() => store.getters[`${namespace}/ALL_CHAT_MESSAGES`]);
+  const isChatClosed = computed(() => store.getters[`${namespace}/closed/IS_CHAT_ON_WORKSPACE_WAS_CLOSED`]);
 
   function focusOnInput() {
     eventBus.$emit('chat-input-focus');
@@ -19,6 +20,10 @@ export const useChatMessages = () => {
       message: messages.value[index],
       nextMessage: messages.value[index + 1],
     }
+  }
+
+  function isLastMessage(index) {
+    return index === messages.value.length - 1 && isChatClosed.value;
   }
 
   function showChatDate(index) {
@@ -38,6 +43,7 @@ export const useChatMessages = () => {
 
     showAvatar,
     getMessage,
+    isLastMessage,
     focusOnInput,
     showChatDate,
   };

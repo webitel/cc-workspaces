@@ -13,7 +13,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'media-viewer',
   computed: {
-    ...mapState('features/chat', {
+    ...mapState('features/chat/chatMedia', {
       mediaView: (state) => state.mediaView,
     }),
     photo() {
@@ -25,7 +25,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('features/chat', {
+    ...mapActions('features/chat/chatMedia', {
       close: 'CLOSE_MEDIA',
     }),
   },

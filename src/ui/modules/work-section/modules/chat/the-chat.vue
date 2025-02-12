@@ -1,7 +1,6 @@
 <template>
   <article class="chat">
-    <wt-loader v-if="isContactLoading" />
-    <task-container v-else class="chat__wrapper">
+    <task-container class="chat__wrapper">
       <template v-slot:header>
         <chat-header
           v-show="isChatHeader"
@@ -30,14 +29,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
-import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
+import { mapGetters } from 'vuex';
+import TaskContainer from '../_shared/components/task-container/task-container.vue';
 import ChatHeader from './chat-header/chat-header.vue';
-import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
+import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
+import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
-import TaskContainer from '../_shared/components/task-container/task-container.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
 
 const defaultTab = 'chat-messaging-container';
@@ -58,31 +57,18 @@ export default {
     currentTab: { component: defaultTab },
   }),
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      isContactLoading: (state) => state.isLoading,
-      contact: (state) => state.contact,
-    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
-    }),
-    ...mapGetters('features/chat/closed', {
-      isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
     }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
     // hide footer in transfer and empty-workspace tab or if closed chat was opened
     isChatFooter() {
-      return (this.currentTab.component !== 'chat-transfer-container')
-        && (this.currentTab.component !== 'empty-workspace')
-        && !this.isChatClosed;
+      return this.currentTab.component === defaultTab;
     },
   },
   methods: {
-    ...mapActions('ui/infoSec/client/contact', {
-      loadContact: 'LOAD_CONTACT',
-      resetContact: 'RESET_CONTACT',
-    }),
     openTab(tab) {
       switch (tab) {
         case 'transfer':
@@ -104,11 +90,6 @@ export default {
     chat: {
       handler() {
         this.resetTab();
-        if (this.chat.contact?.id) {
-          this.loadContact(this.chat.contact?.id);
-        } else {
-          this.resetContact();
-        }
       },
       immediate: true,
     },
@@ -134,6 +115,5 @@ export default {
     padding: 0;
   }
 }
-
 
 </style>

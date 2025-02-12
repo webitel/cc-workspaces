@@ -60,13 +60,3 @@
   flex-wrap: nowrap;
   gap: var(--spacing-2xs);
 }
-
-.task-queue {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.task-queue-item {
-  padding-bottom: var(--spacing-xs);
-}
