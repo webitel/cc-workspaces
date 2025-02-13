@@ -62,12 +62,15 @@ export default {
   watch: {
     chat: {
       async handler() {
-        await this.getChatContact();
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This computed must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
       },
       immediate: true,
     },
   },
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contact: state => state.contact,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isCloseAction: 'ALLOW_CHAT_CLOSE',
@@ -102,13 +105,6 @@ export default {
     }),
     openTab() {
       this.$emit('openTab', 'transfer');
-    },
-    async getChatContact() { // We must use this.chat.contact only! This computed must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-      if (this.chat?.contact?.id && this.chat?.contact?.name) { // for chat-header we need contact object with id and name
-        this.chatContact = this.chat.contact
-      } else {
-        this.chatContact = await getLinkedContact(this.chat);
-      }
     },
     setupHotkeys() {
       const subscripers = [

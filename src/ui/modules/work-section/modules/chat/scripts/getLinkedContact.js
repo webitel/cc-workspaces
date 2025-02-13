@@ -14,17 +14,17 @@ async function getContactByUserId(task) {
     return contacts[0];
 
   } catch (error) {
-    console.info('SCRIPT getLinkedContact: Can`t get contact by User Id. Error:', error);
+    console.error('Can`t get contact by User Id. Error:', error);
   }
 }
 
 export const getLinkedContact = async (task, openContact) => {
 
+  if (task?.contact?.id && task?.contact?.name) return task.contact
+
   if (openContact?.contact) return openContact?.contact;
 
-  else {
-    const linkedContact = await getContactByUserId(task);
-    return linkedContact;
-  };
+  const linkedContact = await getContactByUserId(task);
+  return linkedContact;
 
 }
