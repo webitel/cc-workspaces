@@ -14,7 +14,7 @@ async function getContactByUserId(task) {
     return contacts[0];
 
   } catch (error) {
-    console.error('Can`t get contact by User Id. Error:', error);
+    throw Error(`Can't get contact by User Id. ${error}`);
   }
 }
 
