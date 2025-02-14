@@ -3,7 +3,7 @@ import unprocessed from '../modules/unprocessed/store/unprocessed.js';
 import processed from '../modules/processed/store/processed.js';
 
 const getters = {
-  IS_CHAT_ON_WORKSPACE_WAS_CLOSED: (state, getters, rootState, rootGetters) => (!!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt),
+  IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (!!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt),
   ALL_CLOSED_CHATS: (state) => ([...state.unprocessed.chatsList, ...state.processed.chatsList]),
 };
 
