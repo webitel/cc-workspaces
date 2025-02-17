@@ -1,24 +1,29 @@
 import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
-import { SdkListGetterApiConsumer } from 'webitel-sdk/esm2015/api-consumers';
 import configuration from '../../../openAPIConfig';
 import instance from '../../../instance';
 import applyTransform, {
-  merge, notify,
+  merge, mergeEach, notify,
   snakeToCamel,
-  starToSearch
+  starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
 
 const getCommunicationsList = async (params) => {
+  const defaultObject = {
+    default: false,
+  };
+
   const {
-      page,
-      size,
-      search,
-      sort,
-      fields,
-      id,
+    page,
+    size,
+    search,
+    sort,
+    fields,
+    id,
+    channel,
+    defaultValue,
   } = applyTransform(params, [
     merge(getDefaultGetParams()),
     starToSearch('search'),
@@ -32,13 +37,17 @@ const getCommunicationsList = async (params) => {
       sort,
       fields,
       id,
+      channel,
+      defaultValue,
     );
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
       merge(getDefaultGetListResponse()),
     ]);
     return {
-      items,
+      items: applyTransform(items, [
+        mergeEach(defaultObject),
+      ]),
       next,
     };
   } catch (err) {

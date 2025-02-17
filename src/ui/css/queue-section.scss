@@ -1,0 +1,10 @@
+.task-queue {
+  @extend %wt-scrollbar !optional;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-right: var(--scrollbar-width); // scrollbar offset
+  gap: var(--spacing-xs);
+  overflow: auto;
+  scrollbar-gutter: stable both-edges;
+}
