@@ -97,10 +97,14 @@ export default {
     },
 
     destinationForNumber() {
-      if (this.item.contact?.id) return this.item.to.number;
+      if (this.item.direction === CallDirection.Outbound) {
+        if (this.item.to.number) {
+          return this.item.to.number;
+        }
+        return this.item.destination;
+      }
 
-      if (this.item.from.number !== this.forNumber) return this.item.from.number;
-      return this.item.to.number || this.item.destination;
+      return this.item.from.number;
     },
 
     destination() {
