@@ -4,11 +4,11 @@
       v-if="task.attempt?.hasForm"
       :task="task"
       :size="size"
-    ></the-processing-form>
+    />
     <the-reporting
       v-else
       :task="task"
-    ></the-reporting>
+    />
   </section>
 </template>
 
@@ -36,6 +36,22 @@ export default {
   data: () => ({
     namespace: 'ui/infoSec/processing',
   }),
+  // computed: {
+  //   taskId() {
+  //     console.log('this.task.attempt.form:', this.task.attempt.form);
+  //     return this.task?.id|| [];
+  //   },
+  // },
+  // mounted() {
+  //   console.log('ProcessingTab mounted task:', this.task)
+  // },
+  // watch: {
+  //   taskId: {
+  //     handler() {
+  //       console.log('ProcessingTab watch task:', this.task)
+  //     },
+  //   },
+  // },
 };
 </script>
 

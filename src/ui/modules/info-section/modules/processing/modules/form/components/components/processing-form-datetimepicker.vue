@@ -3,8 +3,8 @@
     v-bind="$attrs"
     :value="value"
     mode="datetime"
-    @input="$emit('change', $event)"
-  ></wt-datepicker>
+    @input="$emit('input', $event)"
+  />
 </template>
 
 <script>
@@ -17,11 +17,11 @@ export default {
     },
   },
   model: {
-    event: 'change',
+    event: 'input',
   },
   created() {
     if (this.value === 'now') {
-      this.$emit('change', Date.now());
+      this.$emit('input', Date.now());
     }
   },
 };

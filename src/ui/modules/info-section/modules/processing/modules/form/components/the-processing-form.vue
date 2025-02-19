@@ -17,7 +17,8 @@
         :attempt-id="task.attempt.id"
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
-      ></component>
+        @input="change"
+      />
     </template>
     <template v-slot:actions>
       <wt-button
@@ -79,11 +80,32 @@ export default {
       return this.task.attempt.form?.title || '';
     },
     formBody() {
+      // console.log('this.task.attempt.form:', this.task.attempt.form);
       return this.task.attempt.form?.body || [];
     },
     formActions() {
       return this.task.attempt.form?.actions || [];
     },
+    formData() { // object we have to save in task.attempt.form.fields for saving before transfer https://webitel.atlassian.net/browse/WTEL-6153
+      return this.formBody.reduce((form, { id, value, view }) => {
+        let _value = value;
+        if (view.component === 'form-text') return form;
+        if (view.component === 'wt-select') {
+          if (Array.isArray(value)) {
+            _value = value.map((val) => (
+              typeof value === 'object' ? val.value : val
+            ));
+            console.log('view.component = \'wt-select\' _value:', _value)
+          } else if (typeof value === 'object') {
+            _value = value.value;
+          }
+        }
+        return {
+          ...form,
+          [id]: _value,
+        };
+      }, {});
+    }
   },
   methods: {
     ...mapActions({
@@ -123,6 +145,10 @@ export default {
         },
       ];
       this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    },
+    change() {
+      console.log('change', this.task.attempt.form);
+      this.task.attempt.form.fields = this.formData;
     },
   },
   watch: {
