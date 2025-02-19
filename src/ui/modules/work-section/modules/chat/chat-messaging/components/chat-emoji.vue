@@ -60,6 +60,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
+
 .chat-emoji {
   width: 100%;
   position: relative;
@@ -70,9 +72,8 @@ export default {
 
     position: absolute;
     z-index: var(--ws-dropdown-z-index);
-    bottom: calc(100% + var(--spacing-sm));
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: calc(100% + $input-height);
+    left: calc(-50% - var(--scrollbar-width) - var(--spacing-sm)); // - scrollbar width and padding
   }
 }
 </style>
