@@ -1,5 +1,5 @@
 .task-queue {
-  @extend %wt-scrollbar;
+  @extend %wt-scrollbar !optional;
   display: flex;
   flex-direction: column;
   min-height: 0;
