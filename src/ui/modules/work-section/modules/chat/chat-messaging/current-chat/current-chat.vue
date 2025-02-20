@@ -60,6 +60,7 @@ export default {
       showAvatar,
       showChatDate,
       focusOnInput,
+      isLastMessage,
     } = useChatMessages();
 
     return {
@@ -68,22 +69,15 @@ export default {
       showAvatar,
       showChatDate,
       focusOnInput,
+      isLastMessage,
     };
   },
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
-  },
   methods: {
-    ...mapActions('features/chat', {
+    ...mapActions('features/chat/chatMedia', {
       openMedia: 'OPEN_MEDIA',
       attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
     }),
-    isLastMessage(index) {
-      return index === this.messages.length - 1 && this.chat.closedAt;
-    },
   },
   mounted() {
     this.isMounted = true;

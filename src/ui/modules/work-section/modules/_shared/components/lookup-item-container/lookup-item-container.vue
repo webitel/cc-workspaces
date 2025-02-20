@@ -136,7 +136,7 @@ const showEmpty = computed(() => !props.loading && props.empty);
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  padding-right: var(--spacing-2xs);
+  padding-right: var(--scrollbar-width); // scrollbar offset
 }
 
 .lookup-item-container-loader,

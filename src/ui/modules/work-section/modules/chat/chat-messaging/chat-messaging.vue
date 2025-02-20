@@ -13,8 +13,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="contact?.id"
-      :contact="contact"
+      v-if="chatContact?.id"
+      :contact="chatContact"
       :size="size"
     />
     <current-chat
@@ -74,13 +74,14 @@
 <script>
 
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
 import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { getLinkedContact } from '../scripts/getLinkedContact.js';
 
 export default {
   name: 'chat-messaging-container',
@@ -93,11 +94,15 @@ export default {
   inject: ['$eventBus'],
   data: () => ({
     hotkeyUnsubscribers : [],
+    chatContact: null,
   }),
   watch: {
     chat: {
-      handler() {
-        this.$nextTick(() => this.setDraftFocus());
+      async handler() {
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        await this.$nextTick(() => {
+          this.setDraftFocus()
+        });
       },
       immediate: true,
     },
@@ -111,14 +116,13 @@ export default {
   },
   computed: {
     ...mapState('ui/infoSec/client/contact', {
-      contact: (state) => state.contact,
+      contact: state => state.contact,
     }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
   },
-
   methods: {
     ...mapActions('features/chat', {
       send: 'SEND',
