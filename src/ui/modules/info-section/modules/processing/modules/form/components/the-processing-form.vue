@@ -34,10 +34,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { nextTick } from 'vue';
+import { mapActions, mapGetters } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
+import changeFormBeforeSend from '../../../script/changeFormBeforeSend.js';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
@@ -76,36 +78,18 @@ export default {
     hotkeyUnsubscribers: [],
   }),
   computed: {
+    ...mapGetters('workspace', {
+      isCall: 'IS_CALL_WORKSPACE',
+    }),
     formTitle() {
       return this.task.attempt.form?.title || '';
     },
     formBody() {
-      // console.log('this.task.attempt.form:', this.task.attempt.form);
       return this.task.attempt.form?.body || [];
     },
     formActions() {
       return this.task.attempt.form?.actions || [];
     },
-    formData() { // object we have to save in task.attempt.form.fields for saving before transfer https://webitel.atlassian.net/browse/WTEL-6153
-      return this.formBody.reduce((form, { id, value, view }) => {
-        let _value = value;
-        if (view.component === 'form-text') return form;
-        if (view.component === 'wt-select') {
-          if (Array.isArray(value)) {
-            _value = value.map((val) => (
-              typeof value === 'object' ? val.value : val
-            ));
-            console.log('view.component = \'wt-select\' _value:', _value)
-          } else if (typeof value === 'object') {
-            _value = value.value;
-          }
-        }
-        return {
-          ...form,
-          [id]: _value,
-        };
-      }, {});
-    }
   },
   methods: {
     ...mapActions({
@@ -147,8 +131,9 @@ export default {
       this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
     change() {
-      console.log('change', this.task.attempt.form);
-      this.task.attempt.form.fields = this.formData;
+      nextTick(() => { // we have to save any changes from formBody in task.attempt.form.fields https://webitel.atlassian.net/browse/WTEL-6153
+        if (this.isCall) this.task.attempt.form.fields = changeFormBeforeSend(this.formBody);
+      });
     },
   },
   watch: {
