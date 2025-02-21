@@ -1,4 +1,4 @@
-export default function(formBody) {
+export function formattingFormBeforeSend (formBody) { // backend need to get form values in an object, not array
   return formBody.reduce((form, { id, value, view }) => {
     let _value = value;
     if (view.component === 'form-text') return form;

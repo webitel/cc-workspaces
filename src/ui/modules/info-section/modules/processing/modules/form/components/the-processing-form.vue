@@ -39,7 +39,7 @@ import { mapActions, mapGetters } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
-import changeFormBeforeSend from '../../../script/changeFormBeforeSend.js';
+import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
@@ -131,8 +131,8 @@ export default {
       this.hotkeyUnsubscribers  = useHotkeys(subscripers);
     },
     change() {
-      nextTick(() => { // we have to save any changes from formBody in task.attempt.form.fields https://webitel.atlassian.net/browse/WTEL-6153
-        if (this.isCall) this.task.attempt.form.fields = changeFormBeforeSend(this.formBody);
+      nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
+        if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
       });
     },
   },
