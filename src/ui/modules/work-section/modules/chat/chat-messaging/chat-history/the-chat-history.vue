@@ -1,6 +1,6 @@
 <template>
   <article class="chat-history chat-messages-container" @click="focusOnInput">
-    <replace-transition>
+    <wt-replace-transition>
       <wt-loader v-if="!isHistoryLoaded"/>
       <div
         v-else
@@ -47,22 +47,21 @@
           </template>
         </message>
       </div>
-    </replace-transition>
+    </wt-replace-transition>
   </article>
 </template>
 
 <script setup>
 import { watch, computed, ref, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
-import ReplaceTransition from '../../../../../../components/replace-transition.vue';
 
 const props = defineProps({
   contact: {
@@ -76,7 +75,6 @@ const props = defineProps({
 });
 
 const store = useStore();
-const { t } = useI18n();
 
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;

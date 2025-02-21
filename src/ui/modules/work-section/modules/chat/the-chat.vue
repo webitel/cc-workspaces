@@ -1,7 +1,7 @@
 <template>
   <article class="chat">
-    <replace-transition appear>
-      <task-container :key="chat.id" class="chat__wrapper">
+    <wt-replace-transition appear>
+      <task-container :key="chat.id" class="chat__wrapper"> //
           <template v-slot:header>
               <chat-header
                 v-show="isChatHeader"
@@ -28,12 +28,12 @@
             />
           </template>
         </task-container>
-    </replace-transition>
+    </wt-replace-transition>
   </article>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import TaskContainer from '../_shared/components/task-container/task-container.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
@@ -42,7 +42,7 @@ import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
-import ReplaceTransition from '../../../../components/replace-transition.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const defaultTab = 'chat-messaging-container';
 
@@ -57,7 +57,7 @@ export default {
     ChatTransferContainer,
     EmptyWorkspace,
     ChatFooter,
-    ReplaceTransition,
+    WtReplaceTransition,
   },
   data: () => ({
     currentTab: {
@@ -68,6 +68,9 @@ export default {
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
+    }),
+    ...mapState('features/chat/chatHistory', {
+      isHistoryLoaded: state => state.isLoaded,
     }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';

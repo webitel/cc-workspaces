@@ -20,7 +20,7 @@
         </div>
       </template>
       <template v-slot:default>
-        <replace-transition>
+        <wt-replace-transition>
           <add-contact
             v-if="mode === ContactMode.ADD"
             :size="props.size"
@@ -41,7 +41,7 @@
             :namespace="namespace"
             @add="changeMode(ContactMode.ADD)"
           />
-        </replace-transition>
+        </wt-replace-transition>
       </template>
     </wt-expansion-panel>
   </article>
@@ -51,12 +51,12 @@
 import { ref, watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
 import ViewContact from './views/view-contact.vue';
-import ReplaceTransition from '../../../../../../../components/replace-transition.vue';
 
 const props = defineProps({
   task: {

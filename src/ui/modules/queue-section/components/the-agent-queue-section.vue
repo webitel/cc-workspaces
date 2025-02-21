@@ -9,7 +9,7 @@
       v-if="collapsible"
       :collapsed="collapsed"
       @click="$emit('resize')"
-    ></collapse-action>
+    />
     <wt-tabs
       :current="currentTab"
       :tabs="tabs"
@@ -25,29 +25,29 @@
           <wt-badge
             v-show="tab.value !== currentTab.value && tab.showIndicator"
             :color-variable="`${tab.iconColor}-color`"
-          ></wt-badge>
+          />
           <wt-icon
             :color="tab.iconColor"
             :icon="tab.icon"
             :size="size"
-          ></wt-icon>
+          />
         </div>
       </template>
     </wt-tabs>
-    <replace-transition>
+    <wt-replace-transition>
       <component
         :is="`${currentTab.value}-queue`"
         :size="size"
         class="queue-section-wrapper"
       />
-    </replace-transition>
+    </wt-replace-transition>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
       rounded
       size="lg"
       @click="toggleNewCall"
-    ></wt-rounded-action>
+    />
   </section>
 </template>
 
@@ -56,13 +56,12 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
-import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
-import ReplaceTransition from '../../../components/replace-transition.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 export default {
   name: 'the-agent-queue-section',
@@ -72,7 +71,7 @@ export default {
     ChatQueue,
     JobQueue,
     CollapseAction,
-    ReplaceTransition,
+    WtReplaceTransition,
   },
   props: {
     collapsed: {

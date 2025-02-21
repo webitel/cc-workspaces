@@ -48,7 +48,7 @@
     </div>
 
     <div class="search-contact__content">
-<!--      <replace-transition>-->
+      <wt-replace-transition duration="md">
         <wt-loader v-if="isLoading"/>
         <wt-dummy
           v-else-if="!isLoading && !contactsBySearch.length"
@@ -61,7 +61,7 @@
           :list="contactsBySearch"
           @link="linkContact"
         />
-<!--      </replace-transition>-->
+      </wt-replace-transition>
     </div>
     <div class="search-contact__actions">
       <wt-button
@@ -82,7 +82,7 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
-import { required, requiredIf } from '@vuelidate/validators';
+import { requiredIf } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import SearchOptions from '../../enums/SearchOptions.enum';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
@@ -90,7 +90,7 @@ import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyP
 import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
 import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
 import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchDark.svg';
-import ReplaceTransition from '../../../../../../../../components/replace-transition.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   namespace: {

@@ -12,7 +12,7 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <replace-transition appear>
+    <wt-replace-transition appear>
       <chat-history
         v-if="chatContact?.id"
         :contact="chatContact"
@@ -22,7 +22,7 @@
         v-else
         :size="size"
       />
-    </replace-transition>
+    </wt-replace-transition>
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
@@ -75,7 +75,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
@@ -83,7 +83,7 @@ import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
-import ReplaceTransition from '../../../../../components/replace-transition.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { getLinkedContact } from '../scripts/getLinkedContact.js';
 
 export default {
@@ -92,7 +92,7 @@ export default {
     CurrentChat,
     ChatHistory,
     ChatEmoji,
-    ReplaceTransition,
+    WtReplaceTransition,
   },
   mixins: [dropzoneMixin],
   inject: ['$eventBus'],

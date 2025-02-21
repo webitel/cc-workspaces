@@ -1,100 +1,98 @@
 <template>
-<!--  <replace-transition>-->
-    <task-queue-preview-md
-      v-if="size === 'md'"
-      :class="[{ 'closed-queue-preview--processed': processed }]"
-      :opened="opened"
-      :queue-name="displayQueueName"
-      class="closed-queue-preview"
-      @click="$emit('click', task)"
-    >
+  <task-queue-preview-md
+    v-if="size === 'md'"
+    :class="[{ 'closed-queue-preview--processed': processed }]"
+    :opened="opened"
+    :queue-name="displayQueueName"
+    class="closed-queue-preview"
+    @click="$emit('click', task)"
+  >
 
-      <template v-slot:icon>
-        <wt-icon-btn
-          v-if="!processed"
-          :size="size"
-          class="closed-queue-preview__close"
-          icon="close--filled"
-          @click.stop="markChatAsProcessed"
-        />
-        <wt-icon
-          :icon="displayIcon"
-          :size="size"
-          class="closed-queue-preview__provider"
-        />
-      </template>
+    <template v-slot:icon>
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click.stop="markChatAsProcessed"
+      />
+      <wt-icon
+        :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
+      />
+    </template>
 
-      <template v-slot:title>
-        {{ displayTaskName }}
-      </template>
+    <template v-slot:title>
+      {{ displayTaskName }}
+    </template>
 
-      <template v-slot:subtitle>
-        {{ lastMessagePreview }}
-      </template>
+    <template v-slot:subtitle>
+      {{ lastMessagePreview }}
+    </template>
 
-      <template v-slot:timer>
-        {{ duration }}
-      </template>
+    <template v-slot:timer>
+      {{ duration }}
+    </template>
 
-      <template v-slot:icon-status>
+    <template v-slot:icon-status>
+      <wt-icon
+        :icon="closeReasonIcon"
+        color="error"
+      />
+    </template>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+    :class="[{ 'closed-queue-preview--processed': processed }]"
+    :opened="opened"
+    :queue-name="displayQueueName"
+    class="closed-queue-preview"
+    @click="$emit('click', task)"
+  >
+
+    <template v-slot:icon>
+      <wt-icon-btn
+        v-if="!processed"
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click.stop="markChatAsProcessed"
+      />
+      <wt-icon
+        :icon="displayIcon"
+        :size="size"
+        class="closed-queue-preview__provider"
+      />
+    </template>
+
+    <template v-slot:tooltip-title>
+      {{ displayTaskName }}
+    </template>
+
+    <template v-slot:tooltip-subtitle>
+      {{ lastMessagePreview }}
+    </template>
+
+    <template v-slot:title>
+      {{ displayTaskName }}
+    </template>
+
+    <template v-slot:subtitle>
+      {{ duration }}
+    </template>
+
+    <template v-slot:footer>
+      <div class="closed-queue-preview__footer">
         <wt-icon
           :icon="closeReasonIcon"
           color="error"
         />
-      </template>
-    </task-queue-preview-md>
+      </div>
+    </template>
 
-    <task-queue-preview-sm
-      v-else-if="size === 'sm'"
-      :class="[{ 'closed-queue-preview--processed': processed }]"
-      :opened="opened"
-      :queue-name="displayQueueName"
-      class="closed-queue-preview"
-      @click="$emit('click', task)"
-    >
-
-      <template v-slot:icon>
-        <wt-icon-btn
-          v-if="!processed"
-          :size="size"
-          class="closed-queue-preview__close"
-          icon="close--filled"
-          @click.stop="markChatAsProcessed"
-        />
-        <wt-icon
-          :icon="displayIcon"
-          :size="size"
-          class="closed-queue-preview__provider"
-        />
-      </template>
-
-      <template v-slot:tooltip-title>
-        {{ displayTaskName }}
-      </template>
-
-      <template v-slot:tooltip-subtitle>
-        {{ lastMessagePreview }}
-      </template>
-
-      <template v-slot:title>
-        {{ displayTaskName }}
-      </template>
-
-      <template v-slot:subtitle>
-        {{ duration }}
-      </template>
-
-      <template v-slot:footer>
-        <div class="closed-queue-preview__footer">
-          <wt-icon
-            :icon="closeReasonIcon"
-            color="error"
-          />
-        </div>
-      </template>
-
-    </task-queue-preview-sm>
-<!--  </replace-transition>-->
+  </task-queue-preview-sm>
 </template>
 
 <script setup>
@@ -107,7 +105,6 @@ import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-qu
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import ReplaceTransition from '../../../../../../components/replace-transition.vue';
 
 const props = defineProps({
   task: {

@@ -23,8 +23,8 @@
         v-model="currentTab"
         :tabs="tabs"
         :size="infoSecSize"
-      ></the-agent-info-nav-panel>
-      <replace-transition>
+      />
+      <wt-replace-transition>
         <keep-alive>
           <component
             class="info-tab"
@@ -33,7 +33,7 @@
             :size="infoSecSize"
           />
         </keep-alive>
-      </replace-transition>
+      </wt-replace-transition>
     </div>
   </section>
 </template>
@@ -45,7 +45,6 @@ import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import PinAction from '../../../../app/components/utils/pin-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
-import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
@@ -53,7 +52,7 @@ import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
 import Flows from '../modules/flows/components/flows-tab.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import ReplaceTransition from '../../../components/replace-transition.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 export default {
   name: 'the-agent-info-section',
@@ -66,7 +65,7 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
-    ReplaceTransition,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {

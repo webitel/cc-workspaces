@@ -22,7 +22,6 @@ import { useStore } from 'vuex';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
-import ReplaceTransition from '../../../../../../components/replace-transition.vue';
 
 const { t } = useI18n();
 const store = useStore();

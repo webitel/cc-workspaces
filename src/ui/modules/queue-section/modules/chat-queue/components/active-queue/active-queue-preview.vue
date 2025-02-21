@@ -1,5 +1,4 @@
 <template>
-<!--  <replace-transition>-->
     <task-queue-preview-md
       v-if="size === 'md'"
       :opened="opened"
@@ -60,7 +59,6 @@
         />
       </template>
     </task-queue-preview-sm>
-<!--  </replace-transition>-->
 </template>
 
 <script>
@@ -68,7 +66,6 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import ReplaceTransition from '../../../../../../components/replace-transition.vue';
 
 export default {
   name: 'active-queue-preview',
