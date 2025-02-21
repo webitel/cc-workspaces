@@ -106,6 +106,11 @@ export default {
       },
       immediate: true,
     },
+    contact: { // TODO: need to be removed after chat backend refactoring
+      async handler() {
+        this.chatContact = await getLinkedContact(this.chat, this.contact);
+      },
+    },
   },
   props: {
     size: {

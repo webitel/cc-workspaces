@@ -66,6 +66,11 @@ export default {
       },
       immediate: true,
     },
+    contact: { // TODO: need to be removed after chat backend refactoring
+      async handler() {
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+      },
+    },
   },
   computed: {
     ...mapState('ui/infoSec/client/contact', {
