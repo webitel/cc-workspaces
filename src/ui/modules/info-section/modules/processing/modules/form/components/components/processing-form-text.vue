@@ -23,7 +23,7 @@
             v-if="enableCopying"
             v-show="!collapsed || !collapsible"
             :value="valueToCopy"
-          ></wt-copy-action>
+          />
         </div>
         <wt-icon-btn
           v-show="collapsible || !collapsed"

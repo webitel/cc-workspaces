@@ -17,7 +17,8 @@
         :attempt-id="task.attempt.id"
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
-      ></component>
+        @input="change"
+      />
     </template>
     <template v-slot:actions>
       <wt-button
@@ -33,10 +34,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { nextTick } from 'vue';
+import { mapActions, mapGetters } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
+import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
@@ -75,6 +78,9 @@ export default {
     hotkeyUnsubscribers: [],
   }),
   computed: {
+    ...mapGetters('workspace', {
+      isCall: 'IS_CALL_WORKSPACE',
+    }),
     formTitle() {
       return this.task.attempt.form?.title || '';
     },
@@ -123,6 +129,11 @@ export default {
         },
       ];
       this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    },
+    change() {
+      nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
+        if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
+      });
     },
   },
   watch: {
