@@ -33,7 +33,7 @@ const chatScroll = {
         });
       });
       if (isScrolled && el.scrollTop <= scrollObserverMargin) el.scrollTop += scrollObserverMargin; // prevent scroll to top when we add new items
-      if (!isScrolled) scrollToBottom(el);
+      // if (!isScrolled) scrollToBottom(el);
     });
     mutationObserver.observe(el, { childList: true, subtree: true });
   },
@@ -42,7 +42,7 @@ const chatScroll = {
     // eslint-disable-next-line no-unused-vars
     const config = binding.value || {};
     console.log('inserted element', el);
-    scrollToBottom(el);
+    // scrollToBottom(el);
   },
 
   unbind: (el) => {

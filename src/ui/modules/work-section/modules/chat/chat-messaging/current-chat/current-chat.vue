@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';

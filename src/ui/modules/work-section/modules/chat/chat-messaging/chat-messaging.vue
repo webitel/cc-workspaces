@@ -1,5 +1,6 @@
 <template>
   <div
+    :key="chat.id"
     class="chat-messaging"
     :class="[
       `chat-messaging--${size}`,
@@ -13,7 +14,7 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="contact?.id"
+      v-if="chat?.contact.id"
       :contact="contact"
       :size="size"
     />
@@ -82,6 +83,7 @@ import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { getLinkedContact } from '../scripts/getLinkedContact.js';
+import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'chat-messaging-container',
@@ -121,9 +123,9 @@ export default {
     },
   },
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: state => state.contact,
-    }),
+    // ...mapState('ui/infoSec/client/contact', {
+    //   contact: state => state.contact,
+    // }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',

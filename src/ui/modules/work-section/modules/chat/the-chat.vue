@@ -26,7 +26,6 @@
         />
       </template>
     </task-container>
-    chatContactIsLoaded {{ chatContactIsLoaded }}
   </article>
 </template>
 

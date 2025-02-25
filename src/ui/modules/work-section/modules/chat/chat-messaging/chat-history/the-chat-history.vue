@@ -1,6 +1,7 @@
 <template>
   <article class="chat-history chat-messages-container" @click="focusOnInput">
     <div
+      ref="chat-messages-items"
       class="chat-history__messages chat-messages-items"
       v-chat-scroll
     >
@@ -18,6 +19,7 @@
         :username="props.contact?.name"
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
+        @click="y = el.el.value.scrollHeight"
       >
         <template v-slot:before-message>
           <chat-date
@@ -48,10 +50,10 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, onUnmounted } from 'vue';
+import { watch, computed, ref, onUnmounted, onMounted, useTemplateRef, nextTick, onUpdated } from 'vue';
 import { useStore } from 'vuex';
-import { useI18n } from 'vue-i18n';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
+import { useScroll } from '@vueuse/core';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
@@ -76,6 +78,7 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const nextLoading = ref(false);
+const el = useTemplateRef('chat-messages-items');
 
 const {
   messages,
@@ -86,6 +89,8 @@ const {
   showAvatar,
   focusOnInput,
 } = useChatMessages();
+
+let { x, y, isScrolling, arrivedState } = useScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
@@ -124,11 +129,34 @@ function getChatProvider(message) {
   }
 };
 
-watch(() => props.contact?.id, loadHistory, { immediate: true });
+// messages(зі стору), currentChat(зі стору), props.contact, el.value
+watch([
+  () => currentChat.value?.id,
+  () => props.contact?.id
+],  async () => {
+
+    await loadHistory();
+
+    await nextTick(() => {
+      el.value.scrollTop = el.value?.scrollHeight;
+    });
+
+  },{ immediate: true });
+
+
+watch(() => messages.value?.length,
+  async (messagesLength, oldMessagesLength) => {
+
+  const newMessages = messagesLength - oldMessagesLength;
+
+    if (!messagesLength || !oldMessagesLength) el.value.scrollTop = el.value.scrollHeight;
+    if (newMessages === 1 && messages.value[messagesLength - 1]?.member?.self) el.value.scrollTop = el.value.scrollHeight;
+  },
+  { flush: 'post' }
+);
 
 onUnmounted(() => {
   resetHistory();
-
 });
 </script>
 
