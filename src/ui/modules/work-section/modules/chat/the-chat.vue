@@ -1,6 +1,6 @@
 <template>
   <article class="chat">
-    <task-container class="chat__wrapper">
+    <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
       <template v-slot:header>
         <chat-header
           v-show="isChatHeader"
@@ -14,6 +14,7 @@
           :is="currentTab.component"
           :size="size"
           v-bind="currentTab.props"
+          :contact="chatContact"
           @closeTab="resetTab"
           @openTab="openTab"
         />
@@ -25,11 +26,12 @@
         />
       </template>
     </task-container>
+    chatContactIsLoaded {{ chatContactIsLoaded }}
   </article>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import TaskContainer from '../_shared/components/task-container/task-container.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
@@ -38,6 +40,7 @@ import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
+import { getLinkedContact } from './scripts/getLinkedContact.js';
 
 const defaultTab = 'chat-messaging-container';
 
@@ -54,12 +57,21 @@ export default {
     ChatFooter,
   },
   data: () => ({
+    hotkeyUnsubscribers : [],
+    chatContact: null,
     currentTab: { component: defaultTab },
+    chatContactIsLoaded: false,
   }),
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contact: state => state.contact,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
+    // ...mapState('features/chat/chatHistory', {
+    //   isHistoryLoaded: (state) => state.isLoaded,
+    // }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
@@ -88,10 +100,17 @@ export default {
   },
   watch: {
     chat: {
-      handler() {
+      async handler() {
         this.resetTab();
+        // console.log('chat changed', this.chat.id);
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContactIsLoaded = true;
       },
       immediate: true,
+    },
+    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+      this.chatContactIsLoaded = true;
     },
   },
 };

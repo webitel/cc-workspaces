@@ -71,7 +71,6 @@ const props = defineProps({
 });
 
 const store = useStore();
-const { t } = useI18n();
 
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;

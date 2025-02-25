@@ -13,8 +13,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="chatContact?.id"
-      :contact="chatContact"
+      v-if="contact?.id"
+      :contact="contact"
       :size="size"
     />
     <current-chat
@@ -94,27 +94,30 @@ export default {
   inject: ['$eventBus'],
   data: () => ({
     hotkeyUnsubscribers : [],
-    chatContact: null,
+    // chatContact: null,
   }),
   watch: {
     chat: {
       async handler() {
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        // this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
         await this.$nextTick(() => {
           this.setDraftFocus()
         });
       },
       immediate: true,
     },
-    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-    },
+    // async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+    //   this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+    // },
   },
   props: {
     size: {
       type: String,
       default: 'md',
       options: ['sm', 'md'],
+    },
+    contact: {
+      type: Object,
     },
   },
   computed: {

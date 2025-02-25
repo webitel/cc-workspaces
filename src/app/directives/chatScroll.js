@@ -41,6 +41,7 @@ const chatScroll = {
   inserted: (el, binding) => {
     // eslint-disable-next-line no-unused-vars
     const config = binding.value || {};
+    console.log('inserted element', el);
     scrollToBottom(el);
   },
 
