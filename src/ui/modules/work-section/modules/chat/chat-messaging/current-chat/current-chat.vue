@@ -1,6 +1,6 @@
 <template>
   <section class="current-chat chat-messages-container" @click="focusOnInput">
-    <div ref="chat-messages-items" class="chat-messages-items" v-chat-scroll>
+    <div ref="chat-messages-items" class="chat-messages-items">
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { nextTick } from 'vue';
+import { mapActions, mapGetters } from 'vuex';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
@@ -72,18 +73,55 @@ export default {
       isLastMessage,
     };
   },
+  computed: {
+    ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+    }),
+    chatId() {
+      return this.chat.id;
+    },
+    messagesLength() {
+      return this.messages?.length;
+    },
+    isLastMessageMy() {
+      return this.messages[this.messages?.length - 1]?.member?.self;
+    }
+  },
   methods: {
     ...mapActions('features/chat/chatMedia', {
       openMedia: 'OPEN_MEDIA',
       attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
       cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
     }),
+    scrollToBottom() {
+      const el = this.$refs['chat-messages-items'];
+      el.scrollTop = el?.scrollHeight;
+    }
   },
   mounted() {
     this.isMounted = true;
   },
   destroyed() {
     this.cleanChatPlayers();
+  },
+  watch: {
+    chatId: {
+      async handler() {
+        await nextTick(() =>
+          this.scrollToBottom()
+        );
+      },
+      immediate: true,
+    },
+    messagesLength: {
+      async handler(messagesLength, oldMessagesLength) {
+        const newMessages = messagesLength - oldMessagesLength;
+
+        if (!messagesLength || !oldMessagesLength) this.scrollToBottom();
+        if (newMessages === 1 && this.isLastMessageMy) this.scrollToBottom();
+      },
+      flush: 'post',
+    },
   },
 };
 </script>

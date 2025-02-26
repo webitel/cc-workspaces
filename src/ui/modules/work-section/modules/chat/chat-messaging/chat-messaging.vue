@@ -74,7 +74,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
@@ -82,8 +82,6 @@ import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
-import { getLinkedContact } from '../scripts/getLinkedContact.js';
-import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'chat-messaging-container',
@@ -96,21 +94,16 @@ export default {
   inject: ['$eventBus'],
   data: () => ({
     hotkeyUnsubscribers : [],
-    // chatContact: null,
   }),
   watch: {
     chat: {
       async handler() {
-        // this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
         await this.$nextTick(() => {
           this.setDraftFocus()
         });
       },
       immediate: true,
     },
-    // async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-    //   this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-    // },
   },
   props: {
     size: {
@@ -123,9 +116,6 @@ export default {
     },
   },
   computed: {
-    // ...mapState('ui/infoSec/client/contact', {
-    //   contact: state => state.contact,
-    // }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',

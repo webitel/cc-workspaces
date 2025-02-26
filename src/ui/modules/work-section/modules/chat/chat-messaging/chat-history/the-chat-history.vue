@@ -19,7 +19,6 @@
         :username="props.contact?.name"
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
-        @click="y = el.el.value.scrollHeight"
       >
         <template v-slot:before-message>
           <chat-date
@@ -50,10 +49,9 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, onUnmounted, onMounted, useTemplateRef, nextTick, onUpdated } from 'vue';
+import { watch, computed, ref, onUnmounted, useTemplateRef, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
-import { useScroll } from '@vueuse/core';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
 import Message from '../message/chat-message.vue';
@@ -89,8 +87,6 @@ const {
   showAvatar,
   focusOnInput,
 } = useChatMessages();
-
-let { x, y, isScrolling, arrivedState } = useScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
@@ -129,17 +125,17 @@ function getChatProvider(message) {
   }
 };
 
-// messages(зі стору), currentChat(зі стору), props.contact, el.value
+const scrollToBottom = () => {
+  el.value.scrollTop = el.value?.scrollHeight;
+}
+
 watch([
   () => currentChat.value?.id,
   () => props.contact?.id
 ],  async () => {
 
     await loadHistory();
-
-    await nextTick(() => {
-      el.value.scrollTop = el.value?.scrollHeight;
-    });
+    await nextTick(() => scrollToBottom());
 
   },{ immediate: true });
 
@@ -149,8 +145,8 @@ watch(() => messages.value?.length,
 
   const newMessages = messagesLength - oldMessagesLength;
 
-    if (!messagesLength || !oldMessagesLength) el.value.scrollTop = el.value.scrollHeight;
-    if (newMessages === 1 && messages.value[messagesLength - 1]?.member?.self) el.value.scrollTop = el.value.scrollHeight;
+    if (!messagesLength || !oldMessagesLength) scrollToBottom();
+    if (newMessages === 1 && messages.value[messagesLength - 1]?.member?.self) scrollToBottom();
   },
   { flush: 'post' }
 );
