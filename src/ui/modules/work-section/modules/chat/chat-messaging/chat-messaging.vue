@@ -13,8 +13,8 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="chatContact?.id"
-      :contact="chatContact"
+      v-if="contact?.id"
+      :contact="contact"
       :size="size"
     />
     <current-chat
@@ -82,6 +82,7 @@ import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { getLinkedContact } from '../scripts/getLinkedContact.js';
+import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'chat-messaging-container',
@@ -94,20 +95,15 @@ export default {
   inject: ['$eventBus'],
   data: () => ({
     hotkeyUnsubscribers : [],
-    chatContact: null,
   }),
   watch: {
     chat: {
       async handler() {
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
         await this.$nextTick(() => {
           this.setDraftFocus()
         });
       },
       immediate: true,
-    },
-    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
     },
   },
   props: {
@@ -116,11 +112,11 @@ export default {
       default: 'md',
       options: ['sm', 'md'],
     },
+    contact: {
+      type: Object,
+    },
   },
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: state => state.contact,
-    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',
