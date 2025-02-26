@@ -1,6 +1,5 @@
 <template>
   <div
-    :key="chat.id"
     class="chat-messaging"
     :class="[
       `chat-messaging--${size}`,
