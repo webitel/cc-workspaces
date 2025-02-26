@@ -68,9 +68,6 @@ export default {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
     }),
-    // ...mapState('features/chat/chatHistory', {
-    //   isHistoryLoaded: (state) => state.isLoaded,
-    // }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
@@ -101,7 +98,6 @@ export default {
     chat: {
       async handler() {
         this.resetTab();
-        // console.log('chat changed', this.chat.id);
         this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
         this.chatContactIsLoaded = true;
       },

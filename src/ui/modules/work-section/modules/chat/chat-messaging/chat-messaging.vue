@@ -14,7 +14,7 @@
       @drop="handleDrop"
     />
     <chat-history
-      v-if="chat?.contact.id"
+      v-if="contact?.id"
       :contact="contact"
       :size="size"
     />
@@ -74,7 +74,7 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
@@ -82,6 +82,8 @@ import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { getLinkedContact } from '../scripts/getLinkedContact.js';
+import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'chat-messaging-container',
