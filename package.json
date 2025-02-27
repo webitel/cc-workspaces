@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "24.10.0",
+  "version": "25.02.0",
   "private": true,
   "scripts": {
     "dev": "vite",
