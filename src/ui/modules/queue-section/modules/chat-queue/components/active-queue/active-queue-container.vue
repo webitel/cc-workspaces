@@ -24,7 +24,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import TaskQueueContainer from '../../../../components/task-queue-container.vue';
 import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
 import ActivePreview from './active-queue-preview.vue';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';

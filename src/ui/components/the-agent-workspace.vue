@@ -51,13 +51,13 @@ import { mapActions, mapGetters } from 'vuex';
 import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
 import panelSizeControllerMixin from '../mixins/panelSizeControllerMixin';
 import CcHeader from '../modules/app-header/components/app-header.vue';
-import InfoSection from '../modules/info-section/components/the-agent-info-section.vue';
+import InfoSection from '../modules/info-section/the-agent-info-section.vue';
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
 import WelcomePopup from '../modules/popups/welcome-popup/welcome-popup.vue';
-import QueueSection from '../modules/queue-section/components/the-agent-queue-section.vue';
-import VideoContainer from '../modules/video-container/components/video-container.vue';
+import QueueSection from '../modules/queue-section/the-agent-queue-section.vue';
+import VideoContainer from '../modules/video-container/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
-import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
+import WorkspaceSection from '../modules/work-section/the-agent-workspace-section.vue';
 
 export default {
   name: 'the-agent-workspace',

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ProcessingTimer from './timer/processing-timer.vue';
+import ProcessingTimer from './processing-timer.vue';
 
 export default {
   name: 'processing-wrapper',

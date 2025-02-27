@@ -3,7 +3,7 @@ import deepmerge from 'deepmerge';
 import FailureForm
   from '../reporting-failure-form.vue';
 import TheReporting
-  from '../the-reporting.vue';
+  from '../../the-reporting.vue';
 import ReportingForm
   from '../../store/ReportingForm';
 

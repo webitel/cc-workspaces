@@ -80,8 +80,6 @@ const props = defineProps({
 
 const emit = defineEmits(['open-image', 'initialized-player']);
 
-const { t } = useI18n();
-
 const isAgent = computed(() =>
   props.message.member?.self
   || props.message.member?.type === 'webitel'

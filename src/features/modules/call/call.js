@@ -1,4 +1,4 @@
-import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
+import WorkspaceStates from '../../enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
 import missed from './modules/missed-calls/store/missed-calls';

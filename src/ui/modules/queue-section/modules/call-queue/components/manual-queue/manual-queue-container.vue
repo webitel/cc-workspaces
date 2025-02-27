@@ -19,7 +19,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import TaskQueueContainer from '../../../../components/task-queue-container.vue';
 import ManualPreview from './manual-queue-preview.vue';
 
 const props = defineProps({

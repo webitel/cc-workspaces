@@ -47,7 +47,7 @@
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ChatActions, ConversationState } from 'webitel-sdk';
-import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import { useCachedExpansionState } from '../../../composables/useCachedExpansionState';
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
 import ClosedQueue from './closed-queue/closed-queue-container.vue';

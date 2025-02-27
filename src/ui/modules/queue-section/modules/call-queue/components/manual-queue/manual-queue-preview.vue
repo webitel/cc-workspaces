@@ -94,8 +94,8 @@
 import { computed } from 'vue';
 import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
-import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import TaskQueuePreviewMd from '../../../../components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../../components/task-preview/task-queue-preview-sm.vue';
 
 const props = defineProps({
   task: {

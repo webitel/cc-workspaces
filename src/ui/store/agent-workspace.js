@@ -1,5 +1,5 @@
 import instance from '../../app/api/instance';
-import WorkspaceStates from '../enums/WorkspaceState.enum.js';
+import WorkspaceStates from '../../features/enums/WorkspaceState.enum.js';
 import { CallActions, ConversationState } from 'webitel-sdk'
 
 const state = {
