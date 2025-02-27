@@ -93,8 +93,6 @@ import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
-import { getLinkedContact } from '../scripts/getLinkedContact.js';
-import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'chat-messaging-container',
