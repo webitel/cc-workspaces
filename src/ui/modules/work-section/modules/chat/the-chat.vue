@@ -1,33 +1,32 @@
 <template>
   <article class="chat">
     <wt-replace-transition appear>
-      <task-container :key="chat.id" class="chat__wrapper"> //
-          <template v-slot:header>
-              <chat-header
-                v-show="isChatHeader"
-                :key="chat?.id"
-                :size="size"
-                @openTab="openTab"
-              />
-            <media-viewer />
-          </template>
-          <template v-slot:body>
-              <component
-                :is="currentTab.component"
-                :key="chat?.id"
-                :size="size"
-                v-bind="currentTab.props"
-                @closeTab="resetTab"
-                @openTab="openTab"
-              />
-          </template>
-          <template v-slot:footer>
-            <chat-footer
-              v-if="isChatFooter"
-              :size="size"
-            />
-          </template>
-        </task-container>
+      <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
+        <template v-slot:header>
+          <chat-header
+            v-show="isChatHeader"
+            :size="size"
+            @openTab="openTab"
+          />
+          <media-viewer />
+        </template>
+        <template v-slot:body>
+          <component
+            :is="currentTab.component"
+            :size="size"
+            v-bind="currentTab.props"
+            :contact="chatContact"
+            @closeTab="resetTab"
+            @openTab="openTab"
+          />
+        </template>
+        <template v-slot:footer>
+          <chat-footer
+            v-if="isChatFooter"
+            :size="size"
+          />
+        </template>
+      </task-container>
     </wt-replace-transition>
   </article>
 </template>
@@ -42,6 +41,7 @@ import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
+import { getLinkedContact } from './scripts/getLinkedContact.js';
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const defaultTab = 'chat-messaging-container';
@@ -60,17 +60,20 @@ export default {
     WtReplaceTransition,
   },
   data: () => ({
+    hotkeyUnsubscribers : [],
+    chatContact: null,
+    chatContactIsLoaded: false,
     currentTab: {
       component: defaultTab
     },
     currentChatId: null,
   }),
   computed: {
+    ...mapState('ui/infoSec/client/contact', {
+      contact: state => state.contact,
+    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
-    }),
-    ...mapState('features/chat/chatHistory', {
-      isHistoryLoaded: state => state.isLoaded,
     }),
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
@@ -100,10 +103,16 @@ export default {
   },
   watch: {
     chat: {
-      handler() {
+      async handler() {
         this.resetTab();
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContactIsLoaded = true;
       },
       immediate: true,
+    },
+    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+      this.chatContactIsLoaded = true;
     },
   },
 };

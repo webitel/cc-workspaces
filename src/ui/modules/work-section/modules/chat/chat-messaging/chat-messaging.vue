@@ -23,6 +23,15 @@
         :size="size"
       />
     </wt-replace-transition>
+    <chat-history
+      v-if="contact?.id"
+      :contact="contact"
+      :size="size"
+    />
+    <current-chat
+      v-else
+      :size="size"
+    />
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
@@ -85,6 +94,7 @@ import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { getLinkedContact } from '../scripts/getLinkedContact.js';
+import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'chat-messaging-container',
@@ -98,12 +108,10 @@ export default {
   inject: ['$eventBus'],
   data: () => ({
     hotkeyUnsubscribers : [],
-    chatContact: null,
   }),
   watch: {
     chat: {
       async handler() {
-        await this.getChatContact();
         await this.$nextTick(() => {
           this.setDraftFocus()
         });
@@ -117,6 +125,9 @@ export default {
       default: 'md',
       options: ['sm', 'md'],
     },
+    contact: {
+      type: Object,
+    },
   },
   computed: {
     ...mapGetters('features/chat', {
@@ -129,13 +140,6 @@ export default {
       send: 'SEND',
       sendFile: 'SEND_FILE',
     }),
-    async getChatContact() { // We must use this.chat.contact only! This computed must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-      if (this.chat?.contact?.id && this.chat?.contact?.name) { // for chat-history we need contact object with id and name
-        this.chatContact = this.chat.contact
-      } else {
-        this.chatContact = await getLinkedContact(this.chat);
-      }
-    },
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
       if (!messageDraft) return;

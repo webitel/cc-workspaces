@@ -4,6 +4,7 @@
       <wt-loader v-if="!isHistoryLoaded"/>
       <div
         v-else
+        ref="chat-messages-items"
         class="chat-history__messages chat-messages-items"
         v-chat-scroll
       >
@@ -52,7 +53,7 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, onUnmounted } from 'vue';
+import { watch, computed, ref, onUnmounted, useTemplateRef, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
@@ -80,6 +81,7 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const nextLoading = ref(false);
+const el = useTemplateRef('chat-messages-items');
 
 const {
   messages,
@@ -130,11 +132,34 @@ function getChatProvider(message) {
   }
 };
 
-watch(() => props.contact?.id, loadHistory, { immediate: true });
+const scrollToBottom = () => {
+  el.value.scrollTop = el.value?.scrollHeight;
+}
+
+watch([
+  () => currentChat.value?.id,
+  () => props.contact?.id
+],  async () => {
+
+    await loadHistory();
+    await nextTick(() => scrollToBottom());
+
+  },{ immediate: true });
+
+
+watch(() => messages.value?.length,
+  async (messagesLength, oldMessagesLength) => {
+
+  const newMessages = messagesLength - oldMessagesLength;
+
+    if (!messagesLength || !oldMessagesLength) scrollToBottom();
+    if (newMessages === 1 && messages.value[messagesLength - 1]?.member?.self) scrollToBottom();
+  },
+  { flush: 'post' }
+);
 
 onUnmounted(() => {
   resetHistory();
-
 });
 </script>
 

@@ -6,7 +6,7 @@ import websocketErrorEventHandler from './websocketErrorEventHandler';
 const { hostname, protocol } = window.location;
 const origin = (`${protocol}//${hostname}`).replace(/^http/, 'ws');
 const endpoint = import.meta.env.MODE === 'production'
-  ? `${origin}/ws` : 'wss://dev.webitel.com/ws';
+  ? `${origin}/ws` : import.meta.env.VITE_WEB_SOCKET_URL;
 const getConfig = () => {
   let cliConfig = {};
   try {

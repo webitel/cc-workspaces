@@ -4,11 +4,11 @@
       v-if="task.attempt?.hasForm"
       :task="task"
       :size="size"
-    ></the-processing-form>
+    />
     <the-reporting
       v-else
       :task="task"
-    ></the-reporting>
+    />
   </section>
 </template>
 
