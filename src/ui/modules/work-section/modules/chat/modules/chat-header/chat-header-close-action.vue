@@ -22,8 +22,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
-import ConfirmationPopup from '../../../../../../app/components/utils/confirmation-popup.vue';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin.js';
+import ConfirmationPopup from '../../../../../../../app/components/utils/confirmation-popup.vue';
 
 export default {
   name: 'chat-header-close-action',

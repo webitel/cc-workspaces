@@ -50,7 +50,6 @@
 <script setup>
 
 import { computed, defineProps, defineEmits } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import MessageAvatar from './components/chat-message-avatar.vue';
 import MessagePlayer from './components/chat-message-player.vue';
@@ -80,7 +79,6 @@ const props = defineProps({
 
 const emit = defineEmits(['open-image', 'initialized-player']);
 
-const { t } = useI18n();
 
 const isAgent = computed(() =>
   props.message.member?.self

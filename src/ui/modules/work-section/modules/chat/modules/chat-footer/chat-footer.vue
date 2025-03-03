@@ -12,8 +12,8 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
-import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin.js';
+import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 
 export default {
   name: 'chat-footer',

@@ -44,6 +44,7 @@ export default {
       isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
     }),
     hasLicenseOnCrm() {
+      console.log('hasLicenseOnCrm:');
       return this.scope?.some((item) => item.class === 'contacts');
     },
     isAllowedContacts() {
