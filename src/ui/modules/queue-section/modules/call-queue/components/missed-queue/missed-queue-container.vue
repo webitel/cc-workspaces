@@ -21,7 +21,7 @@
 import { mapActions, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
-import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import TaskQueueContainer from '../../../../components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
 export default {

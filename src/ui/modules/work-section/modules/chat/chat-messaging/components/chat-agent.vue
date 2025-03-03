@@ -75,7 +75,7 @@ const getPeersFromAPI = async (chatId) => { // get all chat participants
     return peers;
 
   } catch (error) {
-    console.log('Can`t get peers from chat. Error:', error);
+    throw Error(`Cat\`t get peers from chat. ${error}`);
   }
 };
 

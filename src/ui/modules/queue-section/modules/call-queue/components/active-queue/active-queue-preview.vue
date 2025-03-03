@@ -145,7 +145,7 @@ import inboundSonar from '../../../../../../../app/assets/call-sonars/inbound-so
 import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-sonar.svg';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
-import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import taskPreviewMixin from '../../../../mixins/task-preview-mixin';
 
 export default {
   name: 'active-queue-preview',

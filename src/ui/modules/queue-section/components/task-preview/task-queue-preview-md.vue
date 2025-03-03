@@ -1,0 +1,125 @@
+<template>
+  <article
+    :class="[
+      { 'queue-preview--opened': opened },
+    ]"
+    class="queue-preview queue-preview-md"
+    tabindex="0"
+    @click="$emit('click')"
+    @keydown.enter="$emit('click')"
+  >
+    <header class="queue-preview-header">
+      <div class="queue-preview-icon">
+        <slot name="icon"></slot>
+      </div>
+
+      <div class="queue-preview-header-text-content">
+      <span class="queue-preview-title">
+        <slot name="title"></slot>
+      </span>
+        <p class="queue-preview-subtitle">
+          <slot name="subtitle"></slot>
+        </p>
+      </div>
+
+      <div
+        v-if="$slots['timer']"
+        class="queue-preview-timer"
+      >
+        <slot name="timer"></slot>
+      </div>
+
+      <div
+        v-if="$slots['quick-action']"
+        class="queue-preview-quick-action"
+      >
+        <slot name="quick-action"></slot>
+      </div>
+    </header>
+
+    <section
+      class="queue-preview-main-section"
+    >
+      <article class="queue-preview-chips">
+        <wt-chip
+          v-if="queueName"
+          color="secondary"
+        >
+          {{ queueName }}
+        </wt-chip>
+      </article>
+      <div
+        v-if="$slots['icon-status']"
+        class="queue-preview-icon-status"
+      >
+        <slot name="icon-status"></slot>
+      </div>
+    </section>
+
+    <div
+      class="queue-preview-actions"
+      v-if="$slots.actions"
+    >
+      <slot name="actions"></slot>
+    </div>
+
+    <footer
+      v-if="$slots.footer"
+      class="queue-preview-footer"
+    >
+      <slot name="footer"></slot>
+    </footer>
+  </article>
+</template>
+
+<script>
+import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
+
+export default {
+  name: 'task-queue-preview',
+  mixins: [sizeMixin],
+  props: {
+    opened: {
+      type: Boolean,
+      default: false,
+    },
+    queueName: {
+      type: String,
+      default: '',
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import '../../css/queue-preview';
+
+
+
+.queue-preview-md {
+  position: relative;
+
+  .queue-preview-icon {
+    flex: 0 0 var(--icon-md-size);
+  }
+
+  .queue-preview-header-text-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0; // prevents content overflowing
+    gap: var(--spacing-2xs);
+  }
+
+  .queue-preview-main-section {
+    display: grid;
+    grid-template-columns: 1fr var(--icon-md-size);
+    gap: var(--spacing-xs);
+  }
+
+  .queue-preview-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+  }
+}
+</style>

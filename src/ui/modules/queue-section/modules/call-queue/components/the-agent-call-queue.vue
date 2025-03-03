@@ -53,7 +53,7 @@ import ActiveQueue from './active-queue/active-queue-container.vue';
 import OfflineQueue from './offline-queue/offline-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
-import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import { useCachedExpansionState } from '../../../composables/useCachedExpansionState';
 
 const props = defineProps({
   size: {

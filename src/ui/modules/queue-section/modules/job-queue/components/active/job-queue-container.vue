@@ -20,7 +20,7 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
+import TaskQueueContainer from '../../../../components/task-queue-container.vue';
 import JobQueuePreview from './job-queue-preview.vue';
 
 export default {

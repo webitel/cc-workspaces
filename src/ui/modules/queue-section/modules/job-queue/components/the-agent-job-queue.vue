@@ -48,7 +48,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
-import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import { useCachedExpansionState } from '../../../composables/useCachedExpansionState';
 import ActiveQueue from './active/job-queue-container.vue';
 
 const props = defineProps({

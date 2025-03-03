@@ -64,8 +64,8 @@
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
-import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
-import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import taskPreviewMixin from '../../../../mixins/task-preview-mixin';
+import messengerIcon from '../../../../scripts/messengerIcon.js';
 
 export default {
   name: 'active-queue-preview',
