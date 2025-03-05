@@ -73,7 +73,7 @@
 
 <script setup>
 
-import { computed, inject, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, inject, onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import insertTextAtCursor from 'insert-text-at-cursor';
@@ -83,6 +83,7 @@ import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum.js';
+import Dropzone from '../../../../../../../app/components/utils/dropzone.vue';
 
 const store = useStore();
 const { t } = useI18n();

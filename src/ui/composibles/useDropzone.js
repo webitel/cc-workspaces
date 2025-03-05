@@ -5,11 +5,11 @@ export const useDropzone = () => {
   const isDropzoneVisible = ref(false);
 
   function handleDragEnter() {
-    this.isDropzoneVisible = true;
+    isDropzoneVisible.value = true;
   }
 
   function handleDragLeave() {
-    this.isDropzoneVisible = false;
+    isDropzoneVisible.value = false;
   }
 
   return {

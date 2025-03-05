@@ -51,8 +51,8 @@
 import { watch, computed, ref, onUnmounted, useTemplateRef, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useChatMessages } from '../composables/useChatMessages.js';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import { useChatScroll } from '../composables/useChatScroll.js';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -92,21 +92,6 @@ const { scrollToBottom } = useChatScroll(el);
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 
-watch([
-  () => currentChat.value?.id,
-  () => props.contact?.id
-],  async () => {
-
-  await loadHistory();
-  await nextTick(() => scrollToBottom());
-
-},{ immediate: true });
-
-
-onUnmounted(() => {
-  resetHistory();
-});
-
 const loadHistory = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
@@ -140,6 +125,21 @@ function getChatProvider(message) {
       name: currentChat.value?.members[0]?.name }
   }
 }
+
+watch([
+  () => currentChat.value?.id,
+  () => props.contact?.id
+],  async () => {
+
+  await loadHistory();
+  await nextTick(() => scrollToBottom());
+
+},{ immediate: true });
+
+
+onUnmounted(() => {
+  resetHistory();
+});
 
 </script>
 

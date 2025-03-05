@@ -20,7 +20,8 @@ export const useChatScroll = (element) => {
   const { arrivedState} = useScroll(element);
 
   const chat = computed(() => store.getters[`${namespace}/CHAT_ON_WORKSPACE`]);
-  const isLastMessageIsMy = computed(() => messages.value[messages.value?.length - 1]?.member?.self);
+  const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
+  const isLastMessageIsMy = computed(() => lastMessage.value?.member?.self);
 
 
   watch(() => chat.value?.id,  async () => { // every time a chat changes
@@ -37,7 +38,7 @@ export const useChatScroll = (element) => {
 
       if (!messagesLength || !oldMessagesLength) scrollToBottom(); // when messages loaded first time
 
-      if (newMessagesNumber === 1) scrollToBottomAfterNewMessage();
+      if (newMessagesNumber === 1) scrollAfterNewMessage();
 
     },
     { flush: 'post' }
@@ -51,9 +52,29 @@ export const useChatScroll = (element) => {
     })
   }
 
-  const scrollToBottomAfterNewMessage = () => {
+  const scrollAfterNewMessage = () => {
+    console.log('scrollAfterNewMessage', messages.value[messages.value?.length - 1])
     if (arrivedState.bottom || isLastMessageIsMy) scrollToBottom('smooth');
+    if (arrivedState.bottom && lastMessage.value.file) scrollAfterImageLoad();
   }
+
+  const onImageLoaded = (src) => {
+    const image = new Image();
+    image.src = src;
+    if (image.complete) {
+      scrollToBottom('auto');
+    } else {
+      image.onload = scrollToBottom;
+    }
+  };
+
+  const scrollAfterImageLoad = () => {
+    const newChatImgs = element.value?.querySelectorAll('img.chat-message__image__img');
+    console.log('scrollAfterImageLoad', newChatImgs, element.value);
+    newChatImgs.forEach((img) => {
+      onImageLoaded(img.getAttribute('src'));
+    });
+  };
 
   return {
     scrollToBottom,
