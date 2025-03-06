@@ -1,6 +1,6 @@
 <template>
   <div>
-    <transition mode="out-in">
+    <wt-replace-transition duration="normal" >
       <wt-loader v-if="isLoading"/>
       <contacts-list-wrapper
         v-else
@@ -12,11 +12,12 @@
         @link="linkContact"
         @add="add"
       />
-    </transition>
+    </wt-replace-transition>
   </div>
 </template>
 
 <script setup>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';

@@ -23,15 +23,6 @@
         :size="size"
       />
     </wt-replace-transition>
-    <chat-history
-      v-if="contact?.id"
-      :contact="contact"
-      :size="size"
-    />
-    <current-chat
-      v-else
-      :size="size"
-    />
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
