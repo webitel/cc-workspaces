@@ -33,7 +33,7 @@
 import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
 import { computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { getMessageMember } from '../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
+import { getMessageMember } from '../../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
 
 const props = defineProps({
   chatId: {

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import chatMessageDetailMixin from '../../../mixins/chatMessageFileMixin.js';
+import chatMessageDetailMixin from '../../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-avatar',
