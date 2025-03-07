@@ -1,11 +1,7 @@
 import { useScroll } from '@vueuse/core';
 import {
   computed,
-  inject,
   nextTick,
-  ref,
-  toRefs,
-  useTemplateRef,
   watch,
 } from 'vue';
 import { useStore } from 'vuex';
@@ -53,28 +49,8 @@ export const useChatScroll = (element) => {
   }
 
   const scrollAfterNewMessage = () => {
-    console.log('scrollAfterNewMessage', messages.value[messages.value?.length - 1])
     if (arrivedState.bottom || isLastMessageIsMy) scrollToBottom('smooth');
-    if (arrivedState.bottom && lastMessage.value.file) scrollAfterImageLoad();
   }
-
-  const onImageLoaded = (src) => {
-    const image = new Image();
-    image.src = src;
-    if (image.complete) {
-      scrollToBottom('auto');
-    } else {
-      image.onload = scrollToBottom;
-    }
-  };
-
-  const scrollAfterImageLoad = () => {
-    const newChatImgs = element.value?.querySelectorAll('img.chat-message__image__img');
-    console.log('scrollAfterImageLoad', newChatImgs, element.value);
-    newChatImgs.forEach((img) => {
-      onImageLoaded(img.getAttribute('src'));
-    });
-  };
 
   return {
     scrollToBottom,
