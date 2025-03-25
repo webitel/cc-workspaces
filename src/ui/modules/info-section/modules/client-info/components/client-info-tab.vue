@@ -7,8 +7,8 @@
       :task="props.task"
     />
     <client-info-member
-      :collapsed="isAllowedContacts"
       :size="props.size"
+      :collapsed="false"
     />
   </section>
 </template>
