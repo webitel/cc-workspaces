@@ -61,11 +61,6 @@ const {
 
 useChatScroll(el);
 
-const isMounted = ref(false);
-
-onMounted(() => {
-  isMounted.value = true;
-})
 
 onUnmounted(() => {
   cleanChatPlayers();

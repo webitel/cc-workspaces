@@ -36,9 +36,9 @@
         @paste="handleFilePaste"
       />
       <div class="chat-messaging-text-entry__actions">
-        <div class="file-input-wrapper">
+        <div class="chat-messaging-file-input-wrapper">
           <wt-rounded-action
-            class="rounded-action-file-input"
+            class="chat-messaging-file-input"
             color="secondary"
             icon="attach"
             :size="props.size"
@@ -48,7 +48,7 @@
           />
           <input
             ref="attachment-input"
-            class="rounded-action-file-input__input"
+            class="chat-messaging-file-input__input"
             type="file"
             multiple
             @change="handleAttachments"
@@ -224,15 +224,15 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   }
 }
 
-.file-input-wrapper {
+.chat-messaging-file-input-wrapper {
   position: relative;
   width: 100%;
+}
 
-  .rounded-action-file-input__input {
-    position: absolute;
-    width: 0;
-    height: 0;
-    visibility: hidden;
-  }
+.chat-messaging-rounded-action-file-input__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }
 </style>
