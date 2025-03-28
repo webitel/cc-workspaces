@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
+import AgentWorkspace from '../../ui/the-agent-workspace.vue';
 
 const routes = [
   {

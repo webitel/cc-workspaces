@@ -1,4 +1,4 @@
-import callModule from '../call';
+import callModule from '../store/call.js';
 
 const call = {
   id: '1',

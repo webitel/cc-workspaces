@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 import instance from '../api/instance';
 import OpenAPIConfig from '../api/openAPIConfig';
 import webSocketClientController from '../api/agent-workspace/websocket/WebSocketClientController';
-import features from '../../features/features.js';
+import features from '../../features/store/features.js';
 import workspace from '../../ui/store/agent-workspace';
 import ui from '../../ui/store/ui';
 

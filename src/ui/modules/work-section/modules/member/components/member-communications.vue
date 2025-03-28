@@ -22,7 +22,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
-import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
+import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 
 export default {
   name: 'member-communications',

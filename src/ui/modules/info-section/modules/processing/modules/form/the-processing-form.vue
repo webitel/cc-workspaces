@@ -39,7 +39,7 @@ import { mapActions, mapGetters } from 'vuex';
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin.js';
 import processingModuleMixin from '../../mixins/processingModuleMixin.js';
-import { formattingFormBeforeSend } from '../../script/formattingFormBeforeSend.js';
+import { formattingFormBeforeSend } from '../../scripts/formattingFormBeforeSend.js';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';

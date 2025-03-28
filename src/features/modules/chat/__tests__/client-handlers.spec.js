@@ -1,6 +1,6 @@
 import { ChatActions } from 'webitel-sdk';
 import webSocketClientController from '../../../../app/api/agent-workspace/websocket/WebSocketClientController.js';
-import chatModule from '../chat.js';
+import chatModule from '../store/chat.js';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket.js';
 
 let mockSocket = new MockSocket();

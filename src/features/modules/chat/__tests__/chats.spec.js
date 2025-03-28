@@ -1,6 +1,6 @@
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum.js';
-import WorkspaceStates from '../../../enums/WorkspaceState.enum.js';
-import chatModule from '../chat.js';
+import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum.js';
+import chatModule from '../store/chat.js';
 
 const chatOnWorkspace = {
   id: '1',

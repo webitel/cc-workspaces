@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
-import WorkspaceStates from '../../../../features/enums/WorkspaceState.enum.js';
+import WorkspaceStates from '../../../enums/WorkspaceState.enum.js';
 import InfoSectionModule from '../store/infoSec.js';
 import InfoSection
   from '../the-agent-info-section.vue';

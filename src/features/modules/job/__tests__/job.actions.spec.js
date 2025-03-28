@@ -1,5 +1,5 @@
-import WorkspaceStates from '../../../enums/WorkspaceState.enum.js';
-import jobModule from '../job.js';
+import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum.js';
+import jobModule from '../store/job.js';
 
 const job = {
   id: '1',

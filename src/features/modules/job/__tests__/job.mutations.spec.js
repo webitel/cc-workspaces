@@ -1,4 +1,4 @@
-import jobModule from '../job.js';
+import jobModule from '../store/job.js';
 
 const job = {
   id: '1',

@@ -1,4 +1,4 @@
-import globalsModule from '../global-handlers.js';
+import globalsModule from '../store/global-handlers.js';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket.js';
 import webSocketClientController
   from '../../../../app/api/agent-workspace/websocket/WebSocketClientController.js';

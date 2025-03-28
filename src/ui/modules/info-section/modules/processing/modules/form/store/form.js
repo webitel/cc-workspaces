@@ -1,6 +1,6 @@
 import {
   formattingFormBeforeSend,
-} from '../../../script/formattingFormBeforeSend.js';
+} from '../../../scripts/formattingFormBeforeSend.js';
 
 const actions = {
   SEND_FORM: (

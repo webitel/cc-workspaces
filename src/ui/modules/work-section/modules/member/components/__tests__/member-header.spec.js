@@ -1,6 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils';
 import MemberHeader
-  from '../member-header.vue';
+  from '../../modules/member-header/member-header.vue';
 
 const member = {};
 

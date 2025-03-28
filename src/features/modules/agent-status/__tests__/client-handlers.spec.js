@@ -1,4 +1,4 @@
-import clientHandlers from '../client-handlers';
+import clientHandlers from '../store/client-handlers.js';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import webSocketClientController

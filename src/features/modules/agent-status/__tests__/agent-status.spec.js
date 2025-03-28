@@ -1,4 +1,4 @@
-import statusModule from '../agent-status';
+import statusModule from '../store/agent-status.js';
 import UserStatus from '../statusUtils/UserStatus';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
