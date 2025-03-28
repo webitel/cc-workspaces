@@ -3,10 +3,10 @@
     ref="processing-form"
     :task="task"
   >
-    <template v-if="formTitle" v-slot:title>
+    <template v-if="formTitle" #title>
       {{ formTitle }}
     </template>
-    <template v-slot:form>
+    <template #form>
 <!--      pass size prop only to form file component -->
       <component
         :is="processingComponent[el.view.component] || el.view.component"
@@ -20,13 +20,13 @@
         @input="change"
       />
     </template>
-    <template v-slot:actions>
+    <template #actions>
       <wt-button
         v-for="(action) of formActions"
         :key="action.id"
+        ref="form-action-buttons"
         :color="action.view.color"
         @click="sendForm({ action, task })"
-        ref="form-action-buttons"
       >{{ action.view.text || action.view.id }}
       </wt-button>
     </template>
@@ -34,27 +34,24 @@
 </template>
 
 <script>
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
 import { nextTick } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
+import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
+import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
+import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
-import FormFile from './components/processing-form-file/processing-form-file.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
-import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
-import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
-import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 
 export default {
-  name: 'the-processing-form',
-  mixins: [
-    processingModuleMixin,
-    sizeMixin,
-  ],
+  name: 'TheProcessingForm',
   components: {
     FormIFrame,
     FormText,
@@ -68,6 +65,10 @@ export default {
       loading: RichTextEditorSkeleton,
     }),
   },
+  mixins: [
+    processingModuleMixin,
+    sizeMixin,
+  ],
   data: () => ({
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {

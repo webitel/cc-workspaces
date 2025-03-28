@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'processing-form-select',
+  name: 'ProcessingFormSelect',
   props: {
     options: {
       type: Array,

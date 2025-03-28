@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import findRoundedActionByIcon from '../../../../../../../../tests/utils/findRoundedActionByIcon';
 import callModule from '../../../../../../../features/modules/call/call';
 import CallFooter

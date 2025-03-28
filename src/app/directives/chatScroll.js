@@ -5,7 +5,7 @@ const scrollToBottom = (el) => {
   if (typeof el.scroll === 'function') {
     el.scroll({ top: el.scrollHeight });
   } else {
-    // eslint-disable-next-line no-param-reassign
+     
     el.scrollTop = el.scrollHeight;
   }
 };
@@ -24,7 +24,7 @@ const chatScroll = {
     el.addEventListener('scroll', scrollEventHandler);
 
     mutationObserver = new MutationObserver((event) => {
-      // eslint-disable-next-line no-unused-vars
+       
       const config = binding.value || {};
 
       event.forEach((mutation) => {
@@ -38,7 +38,7 @@ const chatScroll = {
   },
 
   inserted: (el, binding) => {
-    // eslint-disable-next-line no-unused-vars
+     
     const config = binding.value || {};
   },
 

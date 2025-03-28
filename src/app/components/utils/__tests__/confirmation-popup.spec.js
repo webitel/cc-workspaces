@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ConfirmationPopup from '../confirmation-popup.vue';
 
 describe('ConfirmationPopup', () => {

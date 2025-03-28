@@ -1,10 +1,11 @@
 import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
-import ClientInfoMember
-  from '../client-info-member.vue';
+
 import WorkspaceStates
   from '../../../../../../../enums/WorkspaceState.enum';
 import workspaceModule from '../../../../../../../store/agent-workspace';
+import ClientInfoMember
+  from '../client-info-member.vue';
 
 describe('Client Info Member from Call', () => {
   let state;

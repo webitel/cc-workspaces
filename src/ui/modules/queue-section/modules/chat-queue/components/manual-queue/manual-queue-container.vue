@@ -1,6 +1,6 @@
 <template>
   <task-queue-container>
-    <div class="manual-queue-container" v-for="(task, key) of manualList">
+    <div v-for="(task, key) of manualList" class="manual-queue-container">
       <manual-preview
         :key="task.id"
         :task="task"
@@ -17,6 +17,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ManualPreview from './manual-queue-preview.vue';
 

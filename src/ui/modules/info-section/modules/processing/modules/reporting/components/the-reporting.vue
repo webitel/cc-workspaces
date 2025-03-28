@@ -4,10 +4,10 @@
     class="reporting"
     :task="task"
   >
-    <template v-slot:title>
+    <template #title>
       {{ $t('infoSec.processing.reporting.isSuccess') }}
     </template>
-    <template v-slot:form>
+    <template #form>
       <div class="reporting__status-wrapper">
         <wt-button
           :outline="!taskReporting.success"
@@ -26,8 +26,8 @@
       </div>
       <form class="reportingg-form">
         <failure-form
-          class="reporting-form"
           v-show="!taskReporting.success"
+          class="reporting-form"
           :member="task.isMember"
           :reporting="taskReporting"
         ></failure-form>
@@ -38,7 +38,7 @@
         ></wt-textarea>
       </form>
     </template>
-    <template v-slot:actions>
+    <template #actions>
       <wt-button
         :color="reportButtonColor"
         class="post-processing__submit-btn"
@@ -51,13 +51,14 @@
 
 <script>
 import { mapActions } from 'vuex';
+
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FailureForm from './reporting-failure-form.vue';
 
 export default {
-  name: 'the-reporting',
-  mixins: [processingModuleMixin],
+  name: 'TheReporting',
   components: { FailureForm },
+  mixins: [processingModuleMixin],
   computed: {
     // is needed for watcher
     isTaskReporting() {

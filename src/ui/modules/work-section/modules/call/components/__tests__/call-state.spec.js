@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
+
 import CallState
   from '../call-state.vue';
 

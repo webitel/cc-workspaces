@@ -52,11 +52,12 @@
 <script>
 import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import { mapState } from 'vuex';
-import FileStatus from '../../../enums/FormFileStatus.enum';
+
 import sizeMixin from '../../../../../../../../../../app/mixins/sizeMixin';
+import FileStatus from '../../../enums/FormFileStatus.enum';
 
 export default {
-  name: 'processing-form-file-line',
+  name: 'ProcessingFormFileLine',
   mixins: [sizeMixin],
   props: {
     file: {
@@ -106,14 +107,14 @@ export default {
       return '';
     },
   },
+  created() {
+    this.initHref();
+  },
   methods: {
     async initHref() {
       const cli = await this.client.getCliInstance();
       this.href = cli.fileUrlDownload(this.file.id);
     },
-  },
-  created() {
-    this.initHref();
   },
 };
 </script>

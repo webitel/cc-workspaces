@@ -19,7 +19,7 @@
       <template
         v-for="(tab, key) of tabs"
         :key="key"
-        v-slot:[tab.value]
+        #[tab.value]
       >
         <div class="queue-section-tab-wrapper">
           <wt-badge
@@ -52,24 +52,25 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates from '../../../enums/WorkspaceState.enum';
+import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
-import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
-import { useHotkeys } from '../../../hotkeys/useHotkeys';
 
 export default {
-  name: 'the-agent-queue-section',
-  mixins: [sizeMixin],
+  name: 'TheAgentQueueSection',
   components: {
     CallQueue,
     ChatQueue,
     JobQueue,
     CollapseAction,
   },
+  mixins: [sizeMixin],
   props: {
     collapsed: {
       type: Boolean,

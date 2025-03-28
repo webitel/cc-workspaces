@@ -1,6 +1,6 @@
 import AgentPauseCausesAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-pause-causes';
-import AgentStatusAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-status';
 import AgentQueuesAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-queues';
+import AgentStatusAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-status';
 
 const state = {
   agent: {},

@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import WelcomePopup
   from '../welcome-popup.vue';
 

@@ -18,14 +18,14 @@
 import ProcessingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 export default {
-  name: 'processing-form-i-frame',
+  name: 'ProcessingFormIFrame',
+  mixins: [ProcessingFormComponentMixin],
   props: {
     height: {
       type: String,
       default: '100px',
     },
   },
-  mixins: [ProcessingFormComponentMixin],
 };
 </script>
 

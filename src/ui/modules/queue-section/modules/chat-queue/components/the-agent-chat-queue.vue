@@ -7,14 +7,14 @@
   >
     <wt-expansion-panel
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
-      class="task-queue-item"
       :key="value"
+      class="task-queue-item"
       :collapsed="initiallyCollapsed"
       :size="size"
       @closed="cacheExpansionState({expansion: value, state: false })"
       @opened="cacheExpansionState({expansion: value, state: true })"
     >
-      <template v-slot:title>
+      <template #title>
         <span
           :title="$t(`queueSec.chat.preview.${size}.${value}`)"
           class="task-queue-name"
@@ -22,7 +22,7 @@
       </template>
       <template
         v-if="size === 'md'"
-        v-slot:actions
+        #actions
       >
         <wt-chip
           v-for="({ color, count }, key) in counters"
@@ -33,7 +33,7 @@
         </wt-chip>
       </template>
 
-      <template v-slot:default>
+      <template #default>
         <component
           :is="getComponent(value)"
           :size="size"
@@ -47,10 +47,11 @@
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ChatActions, ConversationState } from 'webitel-sdk';
+
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 import ActiveQueue from './active-queue/active-queue-container.vue';
-import ManualQueue from './manual-queue/manual-queue-container.vue';
 import ClosedQueue from './closed-queue/closed-queue-container.vue';
+import ManualQueue from './manual-queue/manual-queue-container.vue';
 
 const props = defineProps({
   size: {

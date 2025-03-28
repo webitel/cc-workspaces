@@ -1,25 +1,25 @@
 <template>
   <article class="chat">
     <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
-      <template v-slot:header>
+      <template #header>
         <chat-header
           v-show="isChatHeader"
           :size="size"
-          @openTab="openTab"
+          @open-tab="openTab"
         />
         <media-viewer />
       </template>
-      <template v-slot:body>
+      <template #body>
         <component
           :is="currentTab.component"
           :size="size"
           v-bind="currentTab.props"
           :contact="chatContact"
-          @closeTab="resetTab"
-          @openTab="openTab"
+          @close-tab="resetTab"
+          @open-tab="openTab"
         />
       </template>
-      <template v-slot:footer>
+      <template #footer>
         <chat-footer
           v-if="isChatFooter"
           :size="size"
@@ -31,21 +31,21 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+
+import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
 import TaskContainer from '../_shared/components/task-container/task-container.vue';
-import ChatHeader from './chat-header/chat-header.vue';
-import ChatFooter from './chat-footer/chat-footer.vue';
 import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
+import ChatFooter from './chat-footer/chat-footer.vue';
+import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
-import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
 import { getLinkedContact } from './scripts/getLinkedContact.js';
 
 const defaultTab = 'chat-messaging-container';
 
 export default {
-  name: 'the-chat',
-  mixins: [sizeMixin],
+  name: 'TheChat',
   components: {
     TaskContainer,
     MediaViewer,
@@ -55,6 +55,7 @@ export default {
     EmptyWorkspace,
     ChatFooter,
   },
+  mixins: [sizeMixin],
   data: () => ({
     hotkeyUnsubscribers : [],
     chatContact: null,
@@ -76,6 +77,20 @@ export default {
       return this.currentTab.component === defaultTab;
     },
   },
+  watch: {
+    chat: {
+      async handler() {
+        this.resetTab();
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContactIsLoaded = true;
+      },
+      immediate: true,
+    },
+    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+      this.chatContactIsLoaded = true;
+    },
+  },
   methods: {
     openTab(tab) {
       switch (tab) {
@@ -92,20 +107,6 @@ export default {
     },
     resetTab() {
       this.currentTab = { component: defaultTab };
-    },
-  },
-  watch: {
-    chat: {
-      async handler() {
-        this.resetTab();
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-        this.chatContactIsLoaded = true;
-      },
-      immediate: true,
-    },
-    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-      this.chatContactIsLoaded = true;
     },
   },
 };

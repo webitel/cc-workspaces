@@ -1,7 +1,8 @@
 import { mount, shallowMount } from '@vue/test-utils';
+
+import store from '../../../../../app/store';
 import QueueSection
   from '../the-agent-queue-section.vue';
-import store from '../../../../../app/store';
 
 describe('Queue Section', () => {
   it('renders a component', () => {

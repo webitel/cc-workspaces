@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ProcessingTab from '../processing-tab.vue';
 
 describe('ProcessingTab', () => {

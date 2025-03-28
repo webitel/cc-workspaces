@@ -9,9 +9,9 @@
     >
       <component
         :is="getComponent(task)"
+        :key="task.id"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
-        :key="task.id"
         :size="size"
         @click="openTask(task)"
       />
@@ -24,10 +24,11 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
+import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
 import ActivePreview from './active-queue-preview.vue';
-import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 
 
 const props = defineProps({

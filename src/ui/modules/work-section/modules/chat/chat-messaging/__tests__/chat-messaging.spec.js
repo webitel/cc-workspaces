@@ -1,8 +1,9 @@
 import { mount, shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import ChatMessaging
   from '../chat-messaging.vue';
-let chatOnWorkspace = {
+const chatOnWorkspace = {
   closedAt: 0,
 };
 

@@ -39,17 +39,18 @@
 
 <script>
   import { mapActions } from 'vuex';
+
   import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-  import PreviewProfile from './call-preview-profile.vue';
   import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
   import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+  import PreviewProfile from './call-preview-profile.vue';
 
   export default {
-    name: 'call-preview',
-    mixins: [sizeMixin],
+    name: 'CallPreview',
     components: {
       PreviewProfile,
     },
+    mixins: [sizeMixin],
 
     data: () => ({
       hotkeyUnsubscribers : [],

@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ManualDeadlineProgressBar from '../manual-deadline-progress-bar.vue';
 
 describe('ManualDeadlineProgressBar', () => {

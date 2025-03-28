@@ -1,9 +1,9 @@
 import {
-  DeviceNotFoundError,
-  DeviceNotAllowPermissionError,
-  LicencePermissionError,
-  JobState,
   AgentStatus,
+  DeviceNotAllowPermissionError,
+  DeviceNotFoundError,
+  JobState,
+  LicencePermissionError,
 } from 'webitel-sdk';
 
 export default {

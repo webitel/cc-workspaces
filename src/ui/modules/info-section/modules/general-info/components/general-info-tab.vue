@@ -32,17 +32,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { watchOnce } from '@vueuse/core';
 import WtCcAgentStatusTimers
   from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { computed,ref } from 'vue';
 import { useStore } from 'vuex';
-import { watchOnce } from '@vueuse/core';
-import AgentScore from './agent-score.vue';
+
 import AgentOrgStructure from './agent-org-structure.vue';
 import AgentPauseCauses from './agent-pause-causes.vue';
 import AgentQueues from './agent-queues.vue';
+import AgentScore from './agent-score.vue';
 
 const props = defineProps({
   size: {

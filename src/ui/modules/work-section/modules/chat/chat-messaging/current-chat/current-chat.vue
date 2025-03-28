@@ -10,13 +10,13 @@
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
       >
-        <template v-slot:before-message>
+        <template #before-message>
           <chat-date
             v-if="showChatDate(index)"
             :date="message.createdAt"
           />
         </template>
-        <template v-slot:after-message>
+        <template #after-message>
           <chat-activity-info
             v-if="isLastMessage(index)"
             ended
@@ -30,14 +30,15 @@
 <script>
 import { nextTick } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { useChatMessages } from '../message/composables/useChatMessages.js';
-import Message from '../message/chat-message.vue';
-import ChatDate from '../components/chat-date.vue';
-import ChatActivityInfo from '../components/chat-activity-info.vue';
+
 import chatScroll from '../../../../../../../app/directives/chatScroll';
+import ChatActivityInfo from '../components/chat-activity-info.vue';
+import ChatDate from '../components/chat-date.vue';
+import Message from '../message/chat-message.vue';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 export default {
-  name: 'current-chat',
+  name: 'CurrentChat',
   directives: { chatScroll },
   components: {
     Message,
@@ -51,9 +52,6 @@ export default {
       options: ['sm', 'md'],
     },
   },
-  data: () => ({
-    isMounted: false,
-  }),
   setup() {
     const {
       messages,
@@ -73,6 +71,9 @@ export default {
       isLastMessage,
     };
   },
+  data: () => ({
+    isMounted: false,
+  }),
   computed: {
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
@@ -98,12 +99,6 @@ export default {
       el.scrollTop = el?.scrollHeight;
     }
   },
-  mounted() {
-    this.isMounted = true;
-  },
-  destroyed() {
-    this.cleanChatPlayers();
-  },
   watch: {
     chatId: {
       async handler() {
@@ -122,6 +117,12 @@ export default {
       },
       flush: 'post',
     },
+  },
+  mounted() {
+    this.isMounted = true;
+  },
+  unmounted() {
+    this.cleanChatPlayers();
   },
 };
 </script>

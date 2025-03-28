@@ -1,17 +1,18 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
-import TheCall
-  from '../the-call.vue';
-import CallPreview
-  from '../call-preview.vue';
+
 import CallHeader
   from '../call-header.vue';
-import Numpad
-  from '../call-numpad/numpad.vue';
-import Transfer
-  from '../call-transfer/call-transfer-container.vue';
 import Bridge
   from '../call-merge/call-bridge-container.vue';
+import Numpad
+  from '../call-numpad/numpad.vue';
+import CallPreview
+  from '../call-preview.vue';
+import Transfer
+  from '../call-transfer/call-transfer-container.vue';
+import TheCall
+  from '../the-call.vue';
 
 describe('call on call component', () => {
   it('Draws Active component when ringing event fires', async () => {

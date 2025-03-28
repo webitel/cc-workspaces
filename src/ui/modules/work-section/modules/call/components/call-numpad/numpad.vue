@@ -4,7 +4,7 @@
       v-show="isNewCall"
       ref="number-input"
       :model-value="call.newNumber"
-      @update:modelValue="call.newNumber = $event"
+      @update:model-value="call.newNumber = $event"
       @keyup.enter="makeCall"
     ></wt-input>
     <call-state/>
@@ -26,19 +26,20 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-  import CallState from '../call-state.vue';
-  import NumpadNumbers from './numpad-numbers.vue';
-  import NumpadExpansionBtn from './numpad-expansion-btn.vue';
+
   import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+  import CallState from '../call-state.vue';
+  import NumpadExpansionBtn from './numpad-expansion-btn.vue';
+  import NumpadNumbers from './numpad-numbers.vue';
 
   export default {
-    name: 'the-numpad',
-    mixins: [sizeMixin],
+    name: 'TheNumpad',
     components: {
       CallState,
       NumpadNumbers,
       NumpadExpansionBtn,
     },
+    mixins: [sizeMixin],
 
     data: () => ({
       isNumpadOpened: false,

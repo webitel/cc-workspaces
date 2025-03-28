@@ -21,10 +21,11 @@
 
 <script>
 import { Picker } from 'emoji-picker-element';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin.js';
 
 export default {
-  name: 'chat-emoji',
+  name: 'ChatEmoji',
   mixins: [sizeMixin],
   data: () => ({
     picker: {},
@@ -34,7 +35,7 @@ export default {
     this.initPicker();
     this.picker.addEventListener('emoji-click', this.emitEmojiClickEvent);
   },
-  destroyed() {
+  unmounted() {
     this.picker.removeEventListener('emoji-click', this.emitEmojiClickEvent);
   },
   methods: {

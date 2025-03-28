@@ -1,4 +1,5 @@
 import { ChatActions } from 'webitel-sdk';
+
 import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
 const chatHandler = (context) => async (action, chat) => {

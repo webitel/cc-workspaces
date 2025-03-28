@@ -17,7 +17,7 @@
       @close="deletedFile = null"
       @confirm="handleDeleteConfirm"
     >
-      <template v-slot:text>
+      <template #text>
         {{ $t('infoSec.processing.form.formFile.deleteConfirmation') }}
       </template>
     </confirmation-popup>
@@ -38,7 +38,7 @@
       </aside>
       <div class="processing-form-file__actions-wrapper">
         <wt-tooltip v-if="readonly">
-          <template v-slot:activator>
+          <template #activator>
             <wt-icon-btn
               icon="download"
               @click="downloadAll"
@@ -50,7 +50,7 @@
           v-if="!readonly"
           class="processing-form-file-attach"
         >
-          <template v-slot:activator>
+          <template #activator>
             <wt-icon-btn
               icon="attach"
               @click="$refs['file-input'].click()"
@@ -87,20 +87,21 @@
         @delete="askDeleteFile(file)"
       ></form-file-line>
       <p
-        class="processing-form-file__empty-wrapper"
         v-show="!value.concat(uploadingSnapshots).length"
+        class="processing-form-file__empty-wrapper"
       >{{ $t('infoSec.processing.form.formFile.empty') }}</p>
     </section>
   </article>
 </template>
 
 <script>
-import { reactive } from 'vue';
-import { mapState } from 'vuex';
+import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+import saveAs from 'file-saver';
 import JSZip from 'jszip';
 import jszipUtils from 'jszip-utils';
-import saveAs from 'file-saver';
-import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+import { reactive } from 'vue';
+import { mapState } from 'vuex';
+
 import ConfirmationPopup from '../../../../../../../../../../app/components/utils/confirmation-popup.vue';
 import dropzoneMixin from '../../../../../../../../../../app/mixins/dropzoneMixin';
 import sizeMixin from '../../../../../../../../../../app/mixins/sizeMixin';
@@ -124,7 +125,7 @@ const makeFileSnapshot = (file) => reactive({
 });
 
 export default {
-  name: 'processing-form-file',
+  name: 'ProcessingFormFile',
   components: { FormFileLine, ConfirmationPopup },
   mixins: [
     processingFormComponentMixin,
@@ -161,10 +162,10 @@ export default {
     async downloadAll() {
       const zip = new JSZip();
       const cli = await this.client.getCliInstance();
-      // eslint-disable-next-line no-restricted-syntax
+       
       for (const { name, id } of this.value) {
         const url = cli.fileUrlDownload(id);
-        // eslint-disable-next-line no-await-in-loop
+         
         await new Promise((resolve, reject) => {
           jszipUtils.getBinaryContent(url, (err, file) => {
             if (err) reject(err);
@@ -204,7 +205,7 @@ export default {
     },
 
     handleFileSuccessUpload({ snapshot, file }) {
-      // eslint-disable-next-line no-param-reassign
+       
       snapshot.metadata.done = true;
 
       setTimeout(() => {
@@ -214,11 +215,11 @@ export default {
     },
 
     handleFileErrorUpload({ snapshot }) {
-      // eslint-disable-next-line no-param-reassign
+       
       snapshot.metadata.error = true;
 
       setTimeout(() => {
-        // eslint-disable-next-line no-param-reassign
+         
         snapshot.metadata.close = () => (
           this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1)
         );

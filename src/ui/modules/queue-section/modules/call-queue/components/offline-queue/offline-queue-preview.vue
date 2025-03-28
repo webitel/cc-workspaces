@@ -5,7 +5,7 @@
     @click="$emit('click')"
 
   >
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         icon="call"
         size="md"
@@ -13,11 +13,11 @@
       ></wt-icon>
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayName }}
     </template>
 
-    <template v-slot:quick-action>
+    <template #quick-action>
       <offline-queue-preview-callback
         :task="task"
         size="md"
@@ -30,7 +30,7 @@
     :queue-name="displayQueueName"
     @click="$emit('click')"
   >
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         icon="call"
         size="sm"
@@ -38,15 +38,15 @@
       ></wt-icon>
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ displayName }}
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayName }}
     </template>
 
-    <template v-slot:actions>
+    <template #actions>
       <offline-queue-preview-callback
         :task="task"
         size="sm"
@@ -68,9 +68,9 @@ import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import OfflineQueuePreviewCallback from './offline-queue-preview-callback.vue';
 
 export default {
-  name: 'offline-queue-preview',
-  mixins: [taskPreviewMixin, sizeMixin],
+  name: 'OfflineQueuePreview',
   components: { OfflineQueuePreviewCallback },
+  mixins: [taskPreviewMixin, sizeMixin],
   emits: ['click'],
   computed: {
     displayName() {

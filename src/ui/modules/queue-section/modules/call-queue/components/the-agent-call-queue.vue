@@ -7,14 +7,14 @@
   >
     <wt-expansion-panel
       v-for="({ value, initiallyCollapsed, counters }) in expansions"
+      :key="value"
       class="task-queue-item"
       :size="size"
-      :key="value"
       :collapsed="initiallyCollapsed"
       @opened="cacheExpansionState({expansion: value, state: true })"
       @closed="cacheExpansionState({expansion: value, state: false })"
     >
-      <template v-slot:title>
+      <template #title>
 <!--         title is for tooltip -->
         <span
           class="task-queue-name"
@@ -25,13 +25,13 @@
       </template>
       <template
         v-if="size === 'md'"
-        v-slot:actions
+        #actions
       >
         <wt-chip
           v-for="({ color, count }, key) in counters"
+          :key="key"
           :size="size"
           :color="color"
-          :key="key"
         >{{ count }}
         </wt-chip>
       </template>
@@ -46,14 +46,15 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
 import { computed, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
-import ActiveQueue from './active-queue/active-queue-container.vue';
-import OfflineQueue from './offline-queue/offline-queue-container.vue';
-import MissedQueue from './missed-queue/missed-queue-container.vue';
-import ManualQueue from './manual-queue/manual-queue-container.vue';
+
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import ActiveQueue from './active-queue/active-queue-container.vue';
+import ManualQueue from './manual-queue/manual-queue-container.vue';
+import MissedQueue from './missed-queue/missed-queue-container.vue';
+import OfflineQueue from './offline-queue/offline-queue-container.vue';
 
 const props = defineProps({
   size: {

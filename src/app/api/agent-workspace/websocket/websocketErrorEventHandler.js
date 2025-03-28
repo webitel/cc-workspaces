@@ -1,4 +1,5 @@
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
+
 import i18n from '../../../locale/i18n';
 
 const websocketErrorEventHandler = (error) => {

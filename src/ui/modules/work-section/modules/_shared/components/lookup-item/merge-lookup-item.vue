@@ -1,18 +1,18 @@
 <template>
   <lookup-item no-before>
-    <template v-slot:title>
+    <template #title>
       {{ displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ displayNumber }}
     </template>
 
-    <template v-slot:info-title>
+    <template #info-title>
       {{ startTime }}
     </template>
 
-    <template v-slot:after>
+    <template #after>
       <wt-rounded-action
         icon="call-add-to"
         color="secondary"
@@ -29,7 +29,7 @@ import displayInfo from '../../../../../../mixins/displayInfoMixin';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
-  name: 'merge-lookup-item',
+  name: 'MergeLookupItem',
   mixins: [callTimer, displayInfo, lookupItemMixin],
   computed: {
     // for mixins

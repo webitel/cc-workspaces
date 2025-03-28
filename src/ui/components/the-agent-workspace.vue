@@ -48,6 +48,7 @@
 <script>
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { mapActions, mapGetters } from 'vuex';
+
 import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
 import panelSizeControllerMixin from '../mixins/panelSizeControllerMixin';
 import CcHeader from '../modules/app-header/components/app-header.vue';
@@ -60,11 +61,7 @@ import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
 
 export default {
-  name: 'the-agent-workspace',
-  mixins: [
-    appNotificationMixin,
-    panelSizeControllerMixin,
-  ],
+  name: 'TheAgentWorkspace',
   components: {
     CcHeader,
     WidgetBar,
@@ -75,6 +72,10 @@ export default {
     DisconnectPopup,
     WelcomePopup,
   },
+  mixins: [
+    appNotificationMixin,
+    panelSizeControllerMixin,
+  ],
   data: () => ({
     isInitLoading: false,
     isWelcomePopup: true,
@@ -124,7 +125,7 @@ export default {
     },
   },
 
-  destroyed() {
+  unmounted() {
     this.closeSession();
   },
 };

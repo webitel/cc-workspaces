@@ -13,7 +13,7 @@
 import Autolinker from 'autolinker';
 
 export default {
-  name: 'chat-message-text',
+  name: 'ChatMessageText',
   props: {
     text: {
       type: String,

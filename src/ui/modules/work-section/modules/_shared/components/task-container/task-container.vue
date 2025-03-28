@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'task-container',
+  name: 'TaskContainer',
 };
 </script>
 

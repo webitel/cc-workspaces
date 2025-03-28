@@ -6,7 +6,7 @@
 import isOnPWA from './scripts/isOnPWA';
 
 export default {
-  name: 'the-app',
+  name: 'TheApp',
 
   created() {
     this.setLanguage();

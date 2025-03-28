@@ -16,7 +16,7 @@
     from '../../../assets/empty-search/empty-search-history.svg';
 
   export default {
-    name: 'empty-search',
+    name: 'EmptySearch',
     props: {
       type: {
         type: String,

@@ -7,9 +7,9 @@
       class="closed-queue-container__wrapper"
     >
       <closed-preview
+        :key="task.id"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
-        :key="task.id"
         :size="size"
         processed
         @click="openTask(task)"
@@ -23,6 +23,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from './closed-queue-preview.vue';

@@ -1,8 +1,8 @@
-import AgentStatusAPI from '../../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-status';
+import getContextMock from '../../../../../../../../tests/unit/mocks/store/contextMock';
 import AgentPauseCauseAPI from '../../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-pause-causes';
 import AgentQueuesAPI from '../../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-queues';
+import AgentStatusAPI from '../../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-status';
 import agentInfo from '../agent-info';
-import getContextMock from '../../../../../../../../tests/unit/mocks/store/contextMock';
 
 describe('Agent Info Module: Actions', () => {
   let context;

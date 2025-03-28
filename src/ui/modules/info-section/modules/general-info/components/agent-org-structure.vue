@@ -4,8 +4,8 @@
     :class="[`agent-org-structure--${size}`]"
   >
     <wt-expansion-panel :size="size">
-      <template v-slot:title>{{ $tc('objects.team', 1) }}</template>
-      <template v-slot:default>
+      <template #title>{{ $tc('objects.team', 1) }}</template>
+      <template #default>
         <ul>
           <li class="agent-org-structure-item">
             <div class="agent-org-structure-item__title">{{ $t('reusable.name') }}</div>
@@ -16,9 +16,9 @@
             <div class="agent-org-structure-item__title">{{ $tc('objects.supervisor', 1) }}</div>
             <div>
               <div
-                class="agent-org-structure-item__value"
                 v-for="(sup, key) of supervisors"
                 :key="key"
+                class="agent-org-structure-item__value"
               >{{ sup }}
               </div>
             </div>
@@ -28,9 +28,9 @@
             <div class="agent-org-structure-item__title">{{ $tc('objects.auditor', 1) }}</div>
             <div>
               <div
-                class="agent-org-structure-item__value"
                 v-for="(auditor, key) of auditors"
                 :key="key"
+                class="agent-org-structure-item__value"
               >{{ auditor }}
               </div>
             </div>
@@ -44,14 +44,14 @@
 <script>
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 export default {
-  name: 'agent-org-structure',
+  name: 'AgentOrgStructure',
+  mixins: [sizeMixin],
   props: {
     agent: {
       type: Object,
       required: true,
     },
   },
-  mixins: [sizeMixin],
   computed: {
     team() {
       return this.agent.team?.name || '';

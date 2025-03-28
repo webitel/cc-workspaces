@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ChatMessageTime
   from '../chat-message-time.vue';
 

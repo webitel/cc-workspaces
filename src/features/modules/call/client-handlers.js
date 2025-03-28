@@ -1,4 +1,5 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
+
 import openLinkFromVariable from '../../../app/scripts/openLinkFromVariable';
 
 const callHandler = (context) => (action, call) => {

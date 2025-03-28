@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 
 const routes = [
@@ -16,7 +17,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  // eslint-disable-next-line no-unused-vars
+   
   scrollBehavior(to, from, savedPosition) {
     return { left: 0, top: 0 };
   },

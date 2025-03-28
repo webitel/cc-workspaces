@@ -1,7 +1,7 @@
-import missed from '../missed-calls';
-import missedAPI from '../../api/missed';
 import contextMock
   from '../../../../../../../../tests/unit/mocks/store/contextMock';
+import missedAPI from '../../api/missed';
+import missed from '../missed-calls';
 
 describe('missed call store', () => {
   let context = null;

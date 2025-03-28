@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
+
 import BreakTimerPopup from '../../../popups/break-popup/break-timer-popup.vue';
 import AgentStatusSelect from '../agent-status-select.vue';
 import Header from '../app-header.vue';

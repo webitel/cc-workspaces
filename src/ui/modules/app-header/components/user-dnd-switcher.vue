@@ -1,6 +1,6 @@
 <template>
   <wt-tooltip>
-    <template v-slot:activator>
+    <template #activator>
       <wt-switcher
         :label="$t('header.dnd.label')"
         :value="isDnd"
@@ -13,10 +13,11 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+
 import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 
 export default {
-  name: 'user-dnd-switcher',
+  name: 'UserDndSwitcher',
   computed: {
     ...mapState('features/status', {
       user: (state) => state.user,

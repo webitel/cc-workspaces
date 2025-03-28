@@ -6,21 +6,21 @@
     @click="$emit('click', task)"
   >
 
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
       />
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayChatName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ lastMessage }}
     </template>
 
-    <template v-slot:timer>
+    <template #timer>
       <queue-preview-timer
         :task="task"
       />
@@ -34,26 +34,26 @@
     @click="$emit('click', task)"
   >
 
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
         size="sm"
       />
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ displayChatName }}
     </template>
 
-    <template v-slot:tooltip-subtitle>
+    <template #tooltip-subtitle>
       {{ lastMessage }}
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayChatName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       <queue-preview-timer
         :task="task"
       />
@@ -68,7 +68,7 @@ import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 export default {
-  name: 'active-queue-preview',
+  name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {

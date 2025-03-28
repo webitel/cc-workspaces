@@ -7,10 +7,10 @@
     @search:change="resetData"
     @more="handleIntersect"
   >
-    <template v-slot:empty>
+    <template #empty>
       <empty-search type="contacts" />
     </template>
-    <template v-slot:content>
+    <template #content>
       <user-lookup-item
         v-for="(item) of dataList"
         :key="item.id"
@@ -24,23 +24,24 @@
 
 <script>
 import { mapActions } from 'vuex';
+
+import APIRepository from '../../../../../../../../app/api/APIRepository';
 import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
-import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import APIRepository from '../../../../../../../../app/api/APIRepository';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
+import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 
 const usersAPI = APIRepository.users;
 
 export default {
-  name: 'users-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  name: 'UsersContainer',
   components: {
     UserLookupItem,
     EmptySearch,
     LookupItemContainer,
   },
+  mixins: [infiniteScrollMixin, sizeMixin],
 
   data: () => ({
     dataList: [],

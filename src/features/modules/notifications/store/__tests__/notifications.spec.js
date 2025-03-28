@@ -1,6 +1,8 @@
-import { ChatActions } from 'webitel-sdk';
-import notificationsModule from '../notifications';
 import '../../../../../../tests/unit/mocks/broadcastChannelMock';
+
+import { ChatActions } from 'webitel-sdk';
+
+import notificationsModule from '../notifications';
 
 const state = {
   thisTabId: null,

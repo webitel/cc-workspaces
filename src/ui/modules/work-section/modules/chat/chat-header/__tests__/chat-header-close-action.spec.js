@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ChatHeaderCloseAction from '../chat-header-close-action.vue';
 
 describe('ChatHeaderCloseAction', () => {

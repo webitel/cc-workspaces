@@ -76,18 +76,19 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { required, requiredIf } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { computed, onUnmounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+
+import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchDark.svg';
+import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
+import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
+import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
 import SearchOptions from '../../enums/SearchOptions.enum';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
-import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
-import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
-import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
-import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchDark.svg';
 
 const props = defineProps({
   namespace: {

@@ -1,4 +1,5 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
+
 import ContactCommunicationItem from '../contact-communication-item.vue';
 
 describe('ContactCommunicationItem', () => {

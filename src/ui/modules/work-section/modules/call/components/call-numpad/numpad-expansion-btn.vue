@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: 'numpad-expansion-btn',
+    name: 'NumpadExpansionBtn',
     props: {
       isOpened: {
         type: Boolean,

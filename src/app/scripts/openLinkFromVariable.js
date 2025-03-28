@@ -1,5 +1,5 @@
-import prependHttp from 'prepend-http';
 import isElectron from 'is-electron';
+import prependHttp from 'prepend-http';
 
 const openLinkFromVariable = (task) => {
   if (!task.variables?.link) return false;

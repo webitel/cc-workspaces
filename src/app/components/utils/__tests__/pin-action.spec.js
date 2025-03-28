@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import PinAction from '../pin-action.vue';
 
 describe('PinAction', () => {

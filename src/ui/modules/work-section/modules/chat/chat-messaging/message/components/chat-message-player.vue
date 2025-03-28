@@ -20,7 +20,7 @@
 import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
-  name: 'chat-message-player',
+  name: 'ChatMessagePlayer',
   mixins: [chatMessageFileMixin],
   computed: {
     mediaUrl() {

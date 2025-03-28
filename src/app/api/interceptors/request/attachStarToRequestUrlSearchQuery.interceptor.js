@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+ 
 // FIXME move to webitel-ui, copied from admin
 
 const defaultSearchRegex = /(\?|\&)(q|name)\=([^&]+)/gs;

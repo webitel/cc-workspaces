@@ -4,8 +4,8 @@
     class="agent-queues"
   >
     <wt-expansion-panel :size="size">
-      <template v-slot:title>{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
-      <template v-slot:default>
+      <template #title>{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
+      <template #default>
         <ul>
           <li
             v-for="queue in queues"
@@ -32,7 +32,7 @@ import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import agentIndicators from './agent-indicators.vue';
 
 export default {
-  name: 'agent-queues',
+  name: 'AgentQueues',
   components: {
     agentIndicators,
   },

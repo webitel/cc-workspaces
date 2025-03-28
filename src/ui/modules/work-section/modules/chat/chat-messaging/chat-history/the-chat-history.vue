@@ -2,8 +2,8 @@
   <article class="chat-history chat-messages-container" @click="focusOnInput">
     <div
       ref="chat-messages-items"
-      class="chat-history__messages chat-messages-items"
       v-chat-scroll
+      class="chat-history__messages chat-messages-items"
     >
       <wt-intersection-observer
         :next="next"
@@ -20,7 +20,7 @@
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
       >
-        <template v-slot:before-message>
+        <template #before-message>
           <chat-date
             v-if="showChatDate(index) || isHistoryStart(index)"
             :date="message.createdAt"
@@ -37,7 +37,7 @@
           />
         </template>
 
-        <template v-slot:after-message>
+        <template #after-message>
           <chat-activity-info
             v-if="isChatStarted(index + 1) || isLastMessage(index)"
             ended
@@ -49,15 +49,16 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, onUnmounted, useTemplateRef, nextTick } from 'vue';
-import { useStore } from 'vuex';
-import { useChatMessages } from '../message/composables/useChatMessages.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
+import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { useStore } from 'vuex';
+
 import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
-import Message from '../message/chat-message.vue';
-import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
+import ChatDate from '../components/chat-date.vue';
+import Message from '../message/chat-message.vue';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 const props = defineProps({
   contact: {

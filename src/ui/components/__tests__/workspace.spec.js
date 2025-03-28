@@ -3,16 +3,17 @@ import ReactiveNowStoreModule
   from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-import workspaceModule from '../../store/agent-workspace';
-import callModule from '../../../features/modules/call/call';
-import statusModule from '../../../features/modules/agent-status/agent-status';
-import userinfoModule from '../../modules/userinfo/userinfo';
-import Workspace from '../the-agent-workspace.vue';
-import Call
-  from '../../modules/work-section/modules/call/components/the-call.vue';
+
 import MockSocket from '../../../../tests/unit/mocks/MockSocket';
 import webSocketClientController
   from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import statusModule from '../../../features/modules/agent-status/agent-status';
+import callModule from '../../../features/modules/call/call';
+import userinfoModule from '../../modules/userinfo/userinfo';
+import Call
+  from '../../modules/work-section/modules/call/components/the-call.vue';
+import workspaceModule from '../../store/agent-workspace';
+import Workspace from '../the-agent-workspace.vue';
 
 let call = {};
 const mockSocket = new MockSocket();

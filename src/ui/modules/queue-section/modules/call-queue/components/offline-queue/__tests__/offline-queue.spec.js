@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+
 import OfflineQueue from '../offline-queue-container.vue';
 
 describe('Members list functionality', () => {

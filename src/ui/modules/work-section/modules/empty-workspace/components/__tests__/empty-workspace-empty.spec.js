@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import EmptyWorkspaceEmpty from '../empty-workspace-empty.vue';
 
 describe('EmptyWorkspaceEmpty', () => {

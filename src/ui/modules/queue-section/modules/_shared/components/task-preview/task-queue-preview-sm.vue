@@ -20,7 +20,7 @@
       </div>
 
       <wt-tooltip>
-        <template v-slot:activator>
+        <template #activator>
           <wt-icon-btn
             color="info"
             icon="rounded-info"
@@ -94,7 +94,7 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'task-queue-preview-sm',
+  name: 'TaskQueuePreviewSm',
   mixins: [sizeMixin],
   props: {
     opened: {

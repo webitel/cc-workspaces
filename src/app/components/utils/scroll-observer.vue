@@ -33,7 +33,7 @@
       },
     },
 
-    destroyed() {
+    unmounted() {
       if (this.observer) this.observer.disconnect();
     },
 

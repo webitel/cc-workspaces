@@ -1,15 +1,15 @@
-import { createApp } from 'vue';
-import deepmerge from 'deepmerge';
-import App from './app/the-app.vue';
-import router from './app/router';
-import store from './app/store';
-import i18n from './app/locale/i18n';
-
-import WebitelUi from './app/plugins/webitel-ui';
-import BreakpointPlugin from './app/plugins/breakpoint.plugin';
-
 import './app/assets/icons/sprite';
 import './app/css/main.scss'
+
+import deepmerge from 'deepmerge';
+import { createApp } from 'vue';
+
+import i18n from './app/locale/i18n';
+import BreakpointPlugin from './app/plugins/breakpoint.plugin';
+import WebitelUi from './app/plugins/webitel-ui';
+import router from './app/router';
+import store from './app/store';
+import App from './app/the-app.vue';
 
 const setTokenFromUrl = () => {
   try {

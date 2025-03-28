@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import AgentQueues from '../agent-queues.vue';
 
 describe('General Info: Agent Queues', () => {

@@ -2,9 +2,9 @@
   <div class="queue-preview-timer">
     <!--v-for for timer not to resize on digit width change-->
     <span
-      class="queue-preview-timer__digit"
       v-for="(digit, key) of startTime.split('')"
       :key="key"
+      class="queue-preview-timer__digit"
     >{{ digit }}</span>
   </div>
 </template>
@@ -13,7 +13,7 @@
 import callTimer from '../../../../../mixins/callTimerMixin';
 
 export default {
-  name: 'queue-preview-timer',
+  name: 'QueuePreviewTimer',
   mixins: [callTimer],
   props: {
     task: {

@@ -1,7 +1,8 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import ReactiveNowStoreModule
   from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
+
 import ProcessingTimer from '../processing-timer.vue';
 
 const store = createStore({

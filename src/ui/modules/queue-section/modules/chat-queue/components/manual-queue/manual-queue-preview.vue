@@ -5,25 +5,25 @@
     :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
       ></wt-icon>
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ lastMessage }}
     </template>
 
-    <template v-slot:timer>
+    <template #timer>
       {{ wait }}
     </template>
 
-    <template v-slot:quick-action>
+    <template #quick-action>
       <wt-rounded-action
         size="md"
         color="transfer"
@@ -33,7 +33,7 @@
       ></wt-rounded-action>
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
       ></manual-deadline-progress-bar>
@@ -46,26 +46,26 @@
     :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
         size="sm"
       ></wt-icon>
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ wait }}
     </template>
 
-    <template v-slot:actions>
+    <template #actions>
       <wt-rounded-action
         size="md"
         color="transfer"
@@ -75,7 +75,7 @@
       ></wt-rounded-action>
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
       ></manual-deadline-progress-bar>
@@ -85,6 +85,7 @@
 
 <script setup>
 import { computed } from 'vue';
+
 import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';

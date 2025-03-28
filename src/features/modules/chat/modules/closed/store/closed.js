@@ -1,6 +1,6 @@
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
-import unprocessed from '../modules/unprocessed/store/unprocessed.js';
 import processed from '../modules/processed/store/processed.js';
+import unprocessed from '../modules/unprocessed/store/unprocessed.js';
 
 const getters = {
   IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (!!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt),

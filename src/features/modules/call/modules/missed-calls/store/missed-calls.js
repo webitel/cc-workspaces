@@ -1,4 +1,5 @@
 import { CallDirection } from 'webitel-sdk';
+
 import missedAPI from '../api/missed';
 
 let subscribedToRefresh = false;

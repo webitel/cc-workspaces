@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    name: 'empty-workspace-empty',
+    name: 'EmptyWorkspaceEmpty',
   };
 </script>
 

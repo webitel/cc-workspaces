@@ -73,19 +73,20 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { useScroll } from '@vueuse/core';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import { mapActions, mapGetters, mapState } from 'vuex';
+
 import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
-import CurrentChat from './current-chat/current-chat.vue';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import { getLinkedContact } from '../scripts/getLinkedContact.js';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
-import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
-import { getLinkedContact } from '../scripts/getLinkedContact.js';
-import { useScroll } from '@vueuse/core';
+import CurrentChat from './current-chat/current-chat.vue';
 
 export default {
-  name: 'chat-messaging-container',
+  name: 'ChatMessagingContainer',
   components: {
     CurrentChat,
     ChatHistory,
@@ -93,6 +94,16 @@ export default {
   },
   mixins: [dropzoneMixin],
   inject: ['$eventBus'],
+  props: {
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
+    },
+    contact: {
+      type: Object,
+    },
+  },
   data: () => ({
     hotkeyUnsubscribers : [],
   }),
@@ -104,16 +115,6 @@ export default {
         });
       },
       immediate: true,
-    },
-  },
-  props: {
-    size: {
-      type: String,
-      default: 'md',
-      options: ['sm', 'md'],
-    },
-    contact: {
-      type: Object,
     },
   },
   computed: {

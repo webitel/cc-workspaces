@@ -4,8 +4,8 @@
     class="agent-score"
   >
     <wt-expansion-panel :size="size">
-      <template v-slot:title>{{ $tc('infoSec.generalInfo.score') }}</template>
-      <template v-slot:default>
+      <template #title>{{ $tc('infoSec.generalInfo.score') }}</template>
+      <template #default>
         <ul>
           <li class="agent-score-item">
             <div class="agent-score-item__title">
@@ -27,7 +27,7 @@
             </div>
             <div class="agent-score-item__value-tooltip">
               <wt-tooltip>
-                <template v-slot:activator>
+                <template #activator>
                   <div class="agent-score-item__value">
                     <wt-icon
                       icon="widget-score-avg"
@@ -49,10 +49,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'agent-score',
+  name: 'AgentScore',
   mixins: [sizeMixin],
   computed: {
     ...mapGetters('ui/widget', {

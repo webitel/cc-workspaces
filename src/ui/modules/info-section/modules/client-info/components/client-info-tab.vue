@@ -16,9 +16,10 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
+import Contact from '../modules/contact/components/the-contact.vue';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
-import Contact from '../modules/contact/components/the-contact.vue';
 
 const props = defineProps({
   task: {

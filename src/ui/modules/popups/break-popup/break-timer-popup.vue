@@ -1,14 +1,14 @@
 <template>
   <wt-popup
-    class="break-timer-popup"
     v-show="isBreakPopup"
+    class="break-timer-popup"
     size="sm"
     @close="close"
   >
-    <template v-slot:title>
+    <template #title>
       {{ $t('agentStatus.breakTimer.heading', { mode: $t(`agentStatus.breakTimer.mode.${agentStatus}`) }) }}
     </template>
-    <template v-slot:main>
+    <template #main>
       <div class="break-timer-popup__main-wrapper">
         <div class="break-timer-popup__icon-wrapper">
           <wt-icon
@@ -20,9 +20,9 @@
         <div class="break-timer-popup__timer-wrap">
           <div class="break-timer-popup-timer">
             <span
-              class="break-timer-popup-timer__digit"
               v-for="(digit, key) of duration.split('')"
               :key="key"
+              class="break-timer-popup-timer__digit"
             >
               {{ digit }}
             </span>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </template>
-    <template v-slot:actions>
+    <template #actions>
       <wt-button
         color="success"
         wide
@@ -51,12 +51,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import { mapActions,mapState } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 
 export default {
-  name: 'break-timer-popup',
+  name: 'BreakTimerPopup',
   data: () => ({
     AgentStatus,
     duration: '00:00:00',

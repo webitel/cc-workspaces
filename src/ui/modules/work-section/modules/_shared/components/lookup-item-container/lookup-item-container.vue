@@ -28,8 +28,8 @@
       class="lookup-item-container-body"
     >
       <div
-        class="lookup-item-container-loader"
         v-if="loading"
+        class="lookup-item-container-loader"
       >
         <slot name="loader">
           <wt-loader />
@@ -40,7 +40,7 @@
         v-show="showEmpty"
         class="lookup-item-container-empty"
       >
-        <slot name="empty" v-bind:show="showEmpty"></slot>
+        <slot name="empty" :show="showEmpty"></slot>
       </div>
 
       <div
@@ -64,8 +64,9 @@
 </template>
 
 <script setup>
+import { computed,ref  } from 'vue';
+
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
-import { ref, computed  } from 'vue';
 
 const props = defineProps({
   size: {

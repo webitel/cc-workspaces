@@ -1,6 +1,6 @@
 <template>
   <task-queue-container>
-    <div class="job-queue-container" v-for="(task, index) of taskList">
+    <div v-for="(task, index) of taskList" class="job-queue-container">
       <job-queue-preview
         :key="task.id"
         :opened="task === taskOnWorkspace"
@@ -19,12 +19,13 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import JobQueuePreview from './job-queue-preview.vue';
 
 export default {
-  name: 'job-queue-container',
+  name: 'JobQueueContainer',
   components: {
     TaskQueueContainer,
     JobQueuePreview,

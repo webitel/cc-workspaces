@@ -2,7 +2,7 @@
   <task-queue-container
     :empty="!callList.length"
   >
-    <div class="active-queue-container" v-for="(task, key) of callList">
+    <div v-for="(task, key) of callList" class="active-queue-container">
       <active-preview
         :key="task.id"
         :index="key"
@@ -20,17 +20,18 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ActivePreview from './active-queue-preview.vue';
 
 export default {
-  name: 'active-queue-container',
-  mixins: [sizeMixin],
+  name: 'ActiveQueueContainer',
   components: {
     TaskQueueContainer,
     ActivePreview,
   },
+  mixins: [sizeMixin],
 
   computed: {
     ...mapState('features/call', {

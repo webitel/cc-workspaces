@@ -11,7 +11,7 @@
       :output-format="output"
       :plugins="plugins"
       :toolbar="toolbar"
-      @update:modelValue="$emit('input', $event)"
+      @update:model-value="$emit('input', $event)"
     ></editor>
   </article>
 </template>
@@ -39,11 +39,9 @@ Editor.setup = (props, ctx) => {
 
 /* Import TinyMCE */
 import 'tinymce/tinymce.min';
-
 /* Default icons are required for TinyMCE 5.3 or above */
 import 'tinymce/icons/default';
 import 'tinymce/models/dom';
-
 /* Import plugins */
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/emoticons';
@@ -53,25 +51,22 @@ import 'tinymce/plugins/image';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
-
 /* Import content css */
 // import contentCss from 'tinymce/skins/content/default/content.min.css';
 // import contentUiCss from 'tinymce/skins/ui/oxide/content.min.css';
-
 /* Import the skin */
 import 'tinymce/skins/ui/oxide/skin.css';
-
 /* A theme is also required */
 import 'tinymce/themes/silver';
 
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 export default {
-  name: 'rich-text-editor',
-  mixins: [processingFormComponentMixin],
+  name: 'RichTextEditor',
   components: {
     Editor,
   },
+  mixins: [processingFormComponentMixin],
   props: {
     value: {
       type: String,

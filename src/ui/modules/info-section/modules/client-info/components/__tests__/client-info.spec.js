@@ -1,10 +1,11 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
-import ClientInfo
-  from '../client-info-tab.vue';
+
 import WorkspaceStates
   from '../../../../../../enums/WorkspaceState.enum';
 import workspaceModule from '../../../../../../store/agent-workspace';
+import ClientInfo
+  from '../client-info-tab.vue';
 
 describe('Client Info Tab', () => {
   let state;

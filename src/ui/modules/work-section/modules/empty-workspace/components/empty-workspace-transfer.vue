@@ -12,7 +12,7 @@
 
 <script>
   export default {
-    name: 'empty-workspace-transfer',
+    name: 'EmptyWorkspaceTransfer',
   };
 </script>
 

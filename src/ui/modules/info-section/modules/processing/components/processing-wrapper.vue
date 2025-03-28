@@ -24,7 +24,7 @@
 import ProcessingTimer from './timer/processing-timer.vue';
 
 export default {
-  name: 'processing-wrapper',
+  name: 'ProcessingWrapper',
   components: { ProcessingTimer },
   props: {
     task: {
