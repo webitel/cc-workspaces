@@ -7,7 +7,9 @@
       {{ formTitle }}
     </template>
     <template #form>
-<!--      pass size prop only to form file component -->
+      formBody
+      <pre>{{ formBody }}</pre>
+      <!--      pass size prop only to form file component -->
       <component
         :is="processingComponent[el.view.component] || el.view.component"
         v-for="(el, key) of formBody"
@@ -47,6 +49,8 @@ import FormDatetimepicker from './components/processing-form-datetimepicker.vue'
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
+import FormSelectFromObject
+  from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
@@ -58,6 +62,7 @@ export default {
     FormSelect,
     FormFile,
     FormDatetimepicker,
+    FormSelectFromObject,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -75,6 +80,7 @@ export default {
       'wt-select': 'form-select',
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
+      'form-select-from-object': 'form-select-from-object',
     },
     hotkeyUnsubscribers: [],
   }),
@@ -94,13 +100,13 @@ export default {
   },
   methods: {
     ...mapActions({
-                    sendForm(dispatch, payload) {
-                      return dispatch(`${this.namespace}/SEND_FORM`, payload);
-                    },
-                    sendReporting(dispatch, payload) {
-                      return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
-                    },
-                  }),
+      sendForm(dispatch, payload) {
+        return dispatch(`${this.namespace}/SEND_FORM`, payload);
+      },
+      sendReporting(dispatch, payload) {
+        return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
+      },
+    }),
     initializeValues() {
       this.formBody.forEach((component) => {
         if (isEmpty(component.value) && component.view.initialValue) {
@@ -129,7 +135,7 @@ export default {
           },
         },
       ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers = useHotkeys(subscripers);
     },
     change() {
       nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
@@ -148,17 +154,21 @@ export default {
   mounted() {
     this.setupAutofocus();
     this.setupHotkeys();
+
+    setTimeout(() => {
+      console.log('formBody', this.formBody);
+    }, 1000);
   },
 
   unmounted() {
     this.hotkeyUnsubscribers((unsubscribe) => unsubscribe());
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
- footer.processing-actions .wt-button:focus {
-    // https://stackoverflow.com/questions/73658895/document-getelementbyid-focus-not-working-on-button
-    outline: -webkit-focus-ring-color auto 1px;
-  }
+footer.processing-actions .wt-button:focus {
+  // https://stackoverflow.com/questions/73658895/document-getelementbyid-focus-not-working-on-button
+  outline: -webkit-focus-ring-color auto 1px;
+}
 </style>
