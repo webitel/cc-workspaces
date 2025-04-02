@@ -7,8 +7,6 @@
       {{ formTitle }}
     </template>
     <template #form>
-      formBody
-      <pre>{{ formBody }}</pre>
       <!--      pass size prop only to form file component -->
       <component
         :is="processingComponent[el.view.component] || el.view.component"

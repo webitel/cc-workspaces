@@ -1,81 +1,64 @@
 <template>
-  Select from object
-  $attrs {{ $attrs }}
-  <br />
-  object {{ object }}
   <wt-select
+    v-if="multiselect"
     :label="object.source?.name"
     :search-method="loadObjectList({
       path: object.source?.path,
-      display,
+      primary: 'id',
+      display: object.displayColumn,
     })"
-    track-by="name"
+    :value="value"
+    track-by="id"
+    use-value-from-options-by-prop="id"
     clearable
-    @input="selectElement"
-  />
-
-  <!--  <wt-select-->
-  <!--    v-if="false"-->
-  <!--    v-bind="$attrs"-->
-  <!--    :label="label"-->
-  <!--    :value="value"-->
-  <!--    :v="validation"-->
-  <!--    :search-method="loadObjectList(lookup)"-->
-  <!--    track-by="name"-->
-  <!--    clearable-->
-  <!--    :required="isRequired"-->
-  <!--    v-on="$listeners"-->
-  <!--    @input="selectElement"-->
-  <!--  />-->
-  <!--  <wt-select-->
-  <!--    v-else-->
-  <!--    v-bind="$attrs"-->
-  <!--    :label="label"-->
-  <!--    :value="value"-->
-  <!--    :v="validation"-->
-  <!--    :search-method="loadObjectList(lookup)"-->
-  <!--    track-by="name"-->
-  <!--    clearable-->
-  <!--    multiple-->
-  <!--    :required="isRequired"-->
-  <!--    v-on="$listeners"-->
-  <!--    @input="selectElements"-->
-  <!--  />-->
+    multiple
+    @input="emit('input', $event)"
+  >
+  </wt-select>
+  <wt-select
+    v-else
+    :label="object.source?.name"
+    :search-method="loadObjectList({
+      path: object.source?.path,
+      primary: 'id',
+      display: object.displayColumn,
+    })"
+    :value="value"
+    track-by="id"
+    use-value-from-options-by-prop="id"
+    clearable
+    @input="emit('input', $event)"
+  >
+  </wt-select>
 </template>
 
 <script setup>
-import { computed, defineProps, onMounted, useAttrs } from 'vue';
+import { defineProps } from 'vue';
 
 import ObjectApi from './api/objects.js';
 
-const props = defineProps({
+defineProps({
+  value: {
+    type: String,
+    required: true,
+  },
   object: {
     type: Object,
     required: true,
   },
+  multiselect: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const attrs = useAttrs();
-
-const display = computed(() => {
-  return 'name';
-});
+const emit = defineEmits(['input']);
 
 const loadObjectList = ({ path, display, primary }) => {
   return () => {
     return ObjectApi.getLookup({ path, display, primary });
   };
 };
-
-const selectElement = (value) => {
-  console.log('selectElement', value);
-};
-
-onMounted(() => {
-  console.log('object', props.object);
-
-  console.log('attrs', attrs);
-});
 </script>
 
 <style lang="scss" scoped>

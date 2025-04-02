@@ -11,15 +11,34 @@ import applyTransform, {
   sanitize,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import get from 'lodash/get';
+import { computed } from 'vue';
 
 const instance = getDefaultInstance();
+
+const regExpCustomDisplay = /\{([^}]+)\}/g;
+
+const checkSimpleTemplate = (display) => {
+  const match = display?.match(regExpCustomDisplay);
+
+  return match ? false : display;
+};
+
+const transformDisplayName = (display, item) => {
+  return display.replace(
+    regExpCustomDisplay,
+    (_, key) =>
+      key.split('.').reduce((obj, prop) => obj?.[prop], item) ?? `{${key}}`,
+  );
+};
 
 const transformItemsForSelect =
   ({ primary, display }) =>
   (items) => {
     return items.map((item) => ({
       id: item[primary],
-      name: get(item, display.split('.')),
+      name: checkSimpleTemplate(display)
+        ? get(item, display.split('.'))
+        : transformDisplayName(display, item),
     }));
   };
 
