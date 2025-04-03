@@ -8,8 +8,6 @@
       display: object.displayColumn,
     })"
     :value="value"
-    track-by="id"
-    use-value-from-options-by-prop="id"
     clearable
     multiple
     @input="emit('input', $event)"
@@ -24,8 +22,6 @@
       display: object.displayColumn,
     })"
     :value="value"
-    track-by="id"
-    use-value-from-options-by-prop="id"
     clearable
     @input="emit('input', $event)"
   >
@@ -60,7 +56,3 @@ const loadObjectList = ({ path, display, primary }) => {
   };
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
