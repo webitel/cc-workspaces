@@ -42,10 +42,10 @@ const transformItemsForSelect =
     }));
   };
 
-// In this method we are using the same API as in getCustomLookupRecords,
+// In this method we are using the same API as in getObjectRecordsLookup,
 // but we are using different parameters, so we need to create a new method where we can pass the type of the lookup where type is path to api
 // for example: 'cities' has type 'dictionary/cities'
-const getCustomLookupRecordsLookup = async ({
+const getObjectRecordsLookup = async ({
   path,
   display,
   primary,
@@ -80,7 +80,7 @@ const getCustomLookupRecordsLookup = async ({
 };
 
 const ObjectApi = {
-  getLookup: getCustomLookupRecordsLookup,
+  getLookup: getObjectRecordsLookup,
 };
 
 export default ObjectApi;

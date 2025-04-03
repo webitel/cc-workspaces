@@ -152,10 +152,6 @@ export default {
   mounted() {
     this.setupAutofocus();
     this.setupHotkeys();
-
-    setTimeout(() => {
-      console.log('formBody', this.formBody);
-    }, 1000);
   },
 
   unmounted() {
