@@ -94,7 +94,6 @@ const loadCatalogs = async () => {
 };
 
 const updateForm = (event) => {
-  console.log('updateForm', event);
   selectedElement.value = event;
   emit('input', event);
 }

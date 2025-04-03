@@ -15,7 +15,7 @@
         v-model="el.value"
         :label-props="{ hint: el.view.hint }"
         :attempt-id="task.attempt.id"
-        :size="size"
+        :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
         @input="change"
       />
@@ -88,7 +88,6 @@ export default {
       return this.task.attempt.form?.title || '';
     },
     formBody() {
-      console.log(this.task.attempt.form?.body);
       return this.task.attempt.form?.body || [];
     },
     formActions() {
