@@ -15,7 +15,7 @@
         v-model="el.value"
         :label-props="{ hint: el.view.hint }"
         :attempt-id="task.attempt.id"
-        :size="el.view.component === 'form-file' ? size : null"
+        :size="size"
         v-bind="el.view"
         @input="change"
       />
@@ -48,6 +48,7 @@ import FormFile from './components/processing-form-file/processing-form-file.vue
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormText from './components/processing-form-text.vue';
+import FormSelectService from './components/processing-form-select-service.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
@@ -56,6 +57,7 @@ export default {
     FormIFrame,
     FormText,
     FormSelect,
+    FormSelectService,
     FormFile,
     FormDatetimepicker,
     RichTextEditor: () => ({
@@ -86,6 +88,7 @@ export default {
       return this.task.attempt.form?.title || '';
     },
     formBody() {
+      console.log(this.task.attempt.form?.body);
       return this.task.attempt.form?.body || [];
     },
     formActions() {
@@ -94,13 +97,13 @@ export default {
   },
   methods: {
     ...mapActions({
-                    sendForm(dispatch, payload) {
-                      return dispatch(`${this.namespace}/SEND_FORM`, payload);
-                    },
-                    sendReporting(dispatch, payload) {
-                      return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
-                    },
-                  }),
+      sendForm(dispatch, payload) {
+        return dispatch(`${this.namespace}/SEND_FORM`, payload);
+      },
+      sendReporting(dispatch, payload) {
+        return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
+      },
+    }),
     initializeValues() {
       this.formBody.forEach((component) => {
         if (isEmpty(component.value) && component.view.initialValue) {
