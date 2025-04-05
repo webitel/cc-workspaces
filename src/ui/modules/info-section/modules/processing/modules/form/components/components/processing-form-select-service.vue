@@ -31,8 +31,8 @@
           />
           <wt-tree
             v-else
+            class="form-select-service__tree"
             :model-value="selectedElement"
-            style="height: 350px"
             :data="catalogData"
             item-label="name"
             item-data="id"
@@ -110,8 +110,9 @@ onMounted(() => {
     padding: var(--spacing-sm);
   }
 
-  &__loader {
-    height: 350px; // wt-tree height
+  &__loader,
+  &__tree {
+    height: 350px;
   }
 
   &__title {
