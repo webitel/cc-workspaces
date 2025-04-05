@@ -40,7 +40,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import MarkdownIt from 'markdown-it';
-import patchMDRender from './client-info-markdown/scripts/patchMDRender.js';
+import patchMDRender from '../client-info-markdown/scripts/patchMDRender.js';
 
 const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);

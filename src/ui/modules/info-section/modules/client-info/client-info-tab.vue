@@ -15,8 +15,8 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import ClientInfoMember from './components/client-info-member.vue';
-import ClientInfoChips from './components/client-info-chips.vue';
+import ClientInfoMember from './components/client-info-member/client-info-member.vue';
+import ClientInfoChips from './components/client-info-chips/client-info-chips.vue';
 import Contact from './modules/contact/components/the-contact.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
 
