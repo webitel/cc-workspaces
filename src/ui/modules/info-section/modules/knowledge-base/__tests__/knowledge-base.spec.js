@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { shallowMount } from '@vue/test-utils';
 import workspace from '../../../../../store/agent-workspace';
-import call from '../../../../../../features/modules/call/call';
+import call from '../../../../../../features/modules/call/store/call.js';
 import KnowledgeBaseTab
   from '../knowledge-base-tab.vue';
 

@@ -3,7 +3,7 @@ import { createStore } from 'vuex';
 import ClientInfoMember
   from '../client-info-member.vue';
 import WorkspaceStates
-  from '../../../../../../../features/enums/WorkspaceState.enum.js';
+  from '../../../../../../enums/WorkspaceState.enum.js';
 import workspaceModule from '../../../../../../store/agent-workspace.js';
 
 describe('Client Info Member from Call', () => {

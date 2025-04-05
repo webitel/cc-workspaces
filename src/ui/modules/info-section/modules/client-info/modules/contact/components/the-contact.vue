@@ -49,7 +49,7 @@
 import { ref, watch, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import WorkspaceStates from '../../../../../../../../features/enums/WorkspaceState.enum.js';
+import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';

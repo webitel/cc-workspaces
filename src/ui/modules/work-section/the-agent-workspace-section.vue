@@ -25,11 +25,11 @@ import { mapGetters } from 'vuex';
 import CollapseAction from '../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../app/mixins/sizeMixin.js';
 import WorkspaceStates
-  from '../../../features/enums/WorkspaceState.enum.js';
-import Call from './modules/call/components/the-call.vue';
+  from '../../enums/WorkspaceState.enum.js';
+import Call from './modules/call/the-call.vue';
 import Chat from './modules/chat/the-chat.vue';
-import Member from './modules/member/components/the-member.vue';
-import Job from './modules/job/components/the-job.vue';
+import Member from './modules/member/the-member.vue';
+import Job from './modules/job/the-job.vue';
 import EmptyWorkspace from './modules/empty-workspace/components/empty-workspace-empty.vue';
 
 export default {

@@ -44,7 +44,7 @@ import EmptySearch from '../../workspace-empty-search/components/empty-search.vu
 import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import WorkspaceStates
-  from '../../../../../../../../features/enums/WorkspaceState.enum';
+  from '../../../../../../../enums/WorkspaceState.enum';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 
 const historyAPI = APIRepository.history;

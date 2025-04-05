@@ -1,7 +1,7 @@
 import { shallowMount, mount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
 import TheCall
-  from '../the-call.vue';
+  from '../../the-call.vue';
 import CallPreview
   from '../call-preview.vue';
 import CallHeader

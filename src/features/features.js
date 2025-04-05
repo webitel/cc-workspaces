@@ -1,10 +1,10 @@
-import status from './modules/agent-status/agent-status.js';
-import call from './modules/call/call.js';
-import chat from './modules/chat/chat.js';
-import globals from './modules/global-handlers/global-handlers.js';
-import member from './modules/member/member.js';
-import notifications from './modules/notifications/notifications.js';
-import job from './modules/job/job.js';
+import status from './modules/agent-status/store/agent-status.js';
+import call from './modules/call/store/call.js';
+import chat from './modules/chat/store/chat.js';
+import globals from './modules/global-handlers/store/global-handlers.js';
+import member from './modules/member/store/member.js';
+import notifications from './modules/notifications/store/notifications.js';
+import job from './modules/job/store/job.js';
 import swController from './modules/sw-controller/sw-controller.js';
 
 const modules = {

@@ -1,7 +1,7 @@
 <template>
   <article class="client-info-chips" v-if="queueName">
     <wt-chip color="secondary">
-     111 {{ queueName }}
+      {{ queueName }}
     </wt-chip>
   </article>
 </template>

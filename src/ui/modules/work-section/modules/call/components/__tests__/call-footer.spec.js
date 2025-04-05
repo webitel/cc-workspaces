@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import findRoundedActionByIcon from '../../../../../../../../tests/utils/findRoundedActionByIcon';
-import callModule from '../../../../../../../features/modules/call/call';
+import callModule from '../../../../../../../features/modules/call/store/call.js';
 import CallFooter
   from '../call-footer.vue';
 

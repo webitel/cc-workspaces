@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { shallowMount, mount } from '@vue/test-utils';
-import globals from '../../../../../features/modules/global-handlers/global-handlers.js';
-import DisconnectPopup from '../components/disconnect-popup.vue';
+import globals from '../../../../../features/modules/global-handlers/store/global-handlers.js';
+import DisconnectPopup from '../disconnect-popup.vue';
 
 describe('disconnect popup', () => {
   let store;

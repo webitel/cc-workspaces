@@ -3,7 +3,7 @@ import { createStore } from 'vuex';
 import ClientInfo
   from '../client-info-tab.vue';
 import WorkspaceStates
-  from '../../../../../../features/enums/WorkspaceState.enum.js';
+  from '../../../../../enums/WorkspaceState.enum.js';
 import workspaceModule from '../../../../../store/agent-workspace.js';
 
 describe('Client Info Tab', () => {

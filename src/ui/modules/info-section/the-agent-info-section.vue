@@ -43,7 +43,6 @@ import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../app/components/utils/collapse-action.vue';
 import PinAction from '../../../app/components/utils/pin-action.vue';
 import sizeMixin from '../../../app/mixins/sizeMixin.js';
-import WorkspaceState from '../../../features/enums/WorkspaceState.enum.js';
 import ClientInfo from './modules/client-info/client-info-tab.vue';
 import GeneralInfo from './modules/general-info/general-info-tab.vue';
 import KnowledgeBase from './modules/knowledge-base/knowledge-base-tab.vue';
