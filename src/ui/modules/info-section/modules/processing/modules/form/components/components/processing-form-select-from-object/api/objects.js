@@ -2,27 +2,29 @@ import {
   getDefaultGetListResponse,
   getDefaultGetParams,
   getDefaultInstance,
-} from '@webitel/ui-sdk/src/api/defaults/index.js';
+} from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
   camelToSnake,
   generateUrl,
   merge,
   notify,
   sanitize,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
+} from '@webitel/ui-sdk/src/api/transformers/index';
 import get from 'lodash/get';
-import { computed } from 'vue';
 
 const instance = getDefaultInstance();
 
 const regExpCustomDisplay = /\{([^}]+)\}/g;
 
-const checkSimpleTemplate = (display) => {
+const checkTemplate = (display) => {
   const match = display?.match(regExpCustomDisplay);
 
   return match ? false : display;
 };
 
+// In this method we are replacing the display name with the value of the object
+// for example: {name} will be replaced with the value of the name property of the object
+// if the property is not found, it will be replaced with {name}
 const transformDisplayName = (display, item) => {
   return display.replace(
     regExpCustomDisplay,
@@ -36,7 +38,7 @@ const transformItemsForSelect =
   (items) => {
     return items.map((item) => ({
       id: item[primary],
-      name: checkSimpleTemplate(display)
+      name: checkTemplate(display)
         ? get(item, display.split('.'))
         : transformDisplayName(display, item),
     }));

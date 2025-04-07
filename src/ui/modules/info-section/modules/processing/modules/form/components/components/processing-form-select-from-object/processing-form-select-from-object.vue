@@ -1,6 +1,5 @@
 <template>
   <wt-select
-    v-if="multiselect"
     :label="object.source?.name"
     :search-method="loadObjectList({
       path: object.source?.path,
@@ -9,20 +8,7 @@
     })"
     :value="value"
     clearable
-    multiple
-    @input="emit('input', $event)"
-  >
-  </wt-select>
-  <wt-select
-    v-else
-    :label="object.source?.name"
-    :search-method="loadObjectList({
-      path: object.source?.path,
-      primary: 'id',
-      display: object.displayColumn,
-    })"
-    :value="value"
-    clearable
+    :multiple="multiple"
     @input="emit('input', $event)"
   >
   </wt-select>
@@ -42,7 +28,7 @@ defineProps({
     type: Object,
     required: true,
   },
-  multiselect: {
+  multiple: {
     type: Boolean,
     default: false,
   },
@@ -51,8 +37,8 @@ defineProps({
 const emit = defineEmits(['input']);
 
 const loadObjectList = ({ path, display, primary }) => {
-  return () => {
-    return ObjectApi.getLookup({ path, display, primary });
+  return (params) => {
+    return ObjectApi.getLookup({ path, display, primary, ...params });
   };
 };
 </script>
