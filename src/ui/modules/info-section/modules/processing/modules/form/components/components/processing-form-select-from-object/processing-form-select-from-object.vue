@@ -1,11 +1,7 @@
 <template>
   <wt-select
     :label="object.source?.name"
-    :search-method="loadObjectList({
-      path: object.source?.path,
-      primary: 'id',
-      display: object.displayColumn,
-    })"
+    :search-method="loadObjectList"
     :value="value"
     clearable
     :multiple="multiple"
@@ -19,7 +15,7 @@ import { defineProps } from 'vue';
 
 import ObjectApi from './api/objects.js';
 
-defineProps({
+const props = defineProps({
   value: {
     type: String,
     required: true,
@@ -36,9 +32,11 @@ defineProps({
 
 const emit = defineEmits(['input']);
 
-const loadObjectList = ({ path, display, primary }) => {
-  return (params) => {
-    return ObjectApi.getLookup({ path, display, primary, ...params });
-  };
+const loadObjectList = (params) => {
+  return ObjectApi.getLookup({
+    path: props.object?.source?.path,
+    primary: 'id',
+    display: props.object?.displayColumn, ...params,
+  });
 };
 </script>
