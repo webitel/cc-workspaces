@@ -116,15 +116,10 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
-  if (message?.chat?.via) {
-    return { type: message.chat.via.type, // chats from history
-      name: message.chat.via.name }
-  }
-  if (currentChat.value?.members) {
-    return { type: currentChat.value?.members[0]?.type, // from current chat
-      name: currentChat.value?.members[0]?.name }
-  }
-};
+  const via = message.chat || message.member; // chat history or current chat gateway
+
+  return { type: via.type, name: via.name };
+}
 
 const scrollToBottom = () => {
   el.value.scrollTop = el.value?.scrollHeight;
