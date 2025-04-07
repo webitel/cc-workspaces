@@ -34,9 +34,10 @@ const emit = defineEmits(['input']);
 
 const loadObjectList = (params) => {
   return ObjectApi.getLookup({
+    ...params,
     path: props.object?.source?.path,
     primary: 'id',
-    display: props.object?.displayColumn, ...params,
+    display: props.object?.displayColumn,
   });
 };
 </script>
