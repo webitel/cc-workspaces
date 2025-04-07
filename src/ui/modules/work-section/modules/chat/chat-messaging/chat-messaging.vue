@@ -77,13 +77,13 @@ import { computed, inject, onMounted, onUnmounted, ref, useTemplateRef } from 'v
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import { useHotkeys } from '../../../../../../hotkeys/useHotkeys.js';
-import { useDropzone } from '../../../../../../composibles/useDropzone.js';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import { useDropzone } from '../../../../../composibles/useDropzone.js';
 import CurrentChat from './current-chat/current-chat.vue';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
-import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum.js';
-import Dropzone from '../../../../../../../app/components/utils/dropzone.vue';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 
 const store = useStore();
 const { t } = useI18n();

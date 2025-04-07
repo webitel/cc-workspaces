@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import chatMessageFileMixin from '../../../../mixins/chatMessageFileMixin.js';
+import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
   name: 'chat-message-player',

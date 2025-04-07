@@ -32,12 +32,12 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import TaskContainer from '../_shared/components/task-container/task-container.vue';
-import ChatHeader from './modules/chat-header/chat-header.vue';
-import ChatFooter from './modules/chat-footer/chat-footer.vue';
+import ChatHeader from './chat-header/chat-header.vue';
+import ChatFooter from './chat-footer/chat-footer.vue';
 import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
-import ChatMessagingContainer from './modules/chat-messaging/chat-messaging.vue';
-import ChatTransferContainer from './components/chat-transfer-container.vue';
-import MediaViewer from './components/media-viewer.vue';
+import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
+import ChatTransferContainer from './chat-transfer-continer/chat-transfer-container.vue';
+import MediaViewer from './media-viewer/media-viewer.vue';
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
 import { getLinkedContact } from './scripts/getLinkedContact.js';
 

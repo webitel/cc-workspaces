@@ -37,10 +37,10 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { useHotkeys } from '../../../../../../hotkeys/useHotkeys.js';
-import { getLinkedContact } from '../../scripts/getLinkedContact.js';
-import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum.js';
-import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import { getLinkedContact } from '../scripts/getLinkedContact.js';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
