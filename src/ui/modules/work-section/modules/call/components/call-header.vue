@@ -1,6 +1,6 @@
 <template>
   <task-header :size="size">
-    <template v-slot:before-avatar>
+    <template #before-avatar>
       <wt-rounded-action
         class="call-action"
         :active="isOnHistory"
@@ -22,7 +22,7 @@
         @click="$emit('openTab', 'contacts')"
       ></wt-rounded-action>
     </template>
-    <template v-slot:after-avatar>
+    <template #after-avatar>
       <wt-rounded-action
         v-if="isBridge"
         class="call-action"
@@ -65,28 +65,29 @@
         @click="makeCall"
       ></wt-rounded-action>
     </template>
-    <template v-slot:title>
+    <template #title>
       {{ displayName }}
     </template>
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ displayNumber }}
     </template>
   </task-header>
 </template>
 
 <script>
-  import { mapState, mapActions, mapGetters } from 'vuex';
+  import { mapActions, mapGetters,mapState } from 'vuex';
   import { CallActions } from 'webitel-sdk';
-  import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
+
   import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-  import TaskHeader from '../../_shared/components/task-header/task-header.vue';
   import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
   import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+  import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
+  import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
   export default {
-    name: 'call-header',
-    mixins: [displayInfoMixin, sizeMixin],
+    name: 'CallHeader',
     components: { TaskHeader },
+    mixins: [displayInfoMixin, sizeMixin],
     props: {
       currentTab: {
         type: String,

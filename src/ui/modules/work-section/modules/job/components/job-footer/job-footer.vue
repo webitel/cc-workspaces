@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 import HotkeyAction from '../../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../../hotkeys/useHotkeys';
+import TaskFooter from '../../../_shared/components/task-footer/task-footer.vue';
 
 export default {
-  name: 'job-footer',
+  name: 'JobFooter',
   components: { TaskFooter },
   props: {
     task: {
@@ -41,6 +41,12 @@ export default {
   data: () => ({
     hotkeyUnsubscribers : [],
   }),
+  mounted() {
+    this.setupHotkeys();
+  },
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+  },
   methods: {
     setupHotkeys() {
       const subscribers = [
@@ -60,12 +66,6 @@ export default {
       ];
       this.hotkeyUnsubscribers  = useHotkeys(subscribers);
     }
-  },
-  mounted() {
-    this.setupHotkeys();
-  },
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>

@@ -1,16 +1,17 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
-import workspaceModule from '../../../../../../../store/agent-workspace';
+
+import MockSocket from '../../../../../../../../../tests/unit/mocks/MockSocket';
+import webSocketClientController
+  from '../../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
 import callModule from '../../../../../../../../features/modules/call/call';
 import missed
   from '../../../../../../../../features/modules/call/modules/missed-calls/store/missed-calls';
+import workspaceModule from '../../../../../../../store/agent-workspace';
 import ActiveQueue
   from '../active-queue-container.vue';
 import ActivePreview
   from '../active-queue-preview.vue';
-import MockSocket from '../../../../../../../../../tests/unit/mocks/MockSocket';
-import webSocketClientController
-  from '../../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
 
 const initialCall = {};
 

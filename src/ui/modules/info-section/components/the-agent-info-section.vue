@@ -26,8 +26,8 @@
       ></the-agent-info-nav-panel>
       <keep-alive>
         <component
-          class="info-tab"
           :is="currentTab.value"
+          class="info-tab"
           :task="taskOnWorkspace"
           :size="infoSecSize"
         ></component>
@@ -38,22 +38,23 @@
 
 <script>
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import PinAction from '../../../../app/components/utils/pin-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
+import Flows from '../modules/flows/components/flows-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
-import Flows from '../modules/flows/components/flows-tab.vue';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 
 export default {
-  name: 'the-agent-info-section',
+  name: 'TheAgentInfoSection',
   components: {
     TheAgentInfoNavPanel,
     GeneralInfo,
@@ -74,6 +75,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+
+  setup() {
+    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
+    return { subscribe };
   },
   data: () => ({
     currentTab: '',
@@ -107,11 +113,6 @@ export default {
         else this.currentTab = this.tabsObject.generalInfo;
       }
     },
-  },
-
-  setup() {
-    const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
-    return { subscribe };
   },
 
   computed: {
@@ -195,6 +196,12 @@ export default {
       };
     },
   },
+  created() {
+    this.currentTab = this.tabsObject.generalInfo;
+  },
+  mounted() {
+    this.subscribe(this.loadFlowsList);
+  },
   methods: {
     async loadFlowsList() {
       try {
@@ -203,12 +210,6 @@ export default {
         throw err;
       }
     }
-  },
-  created() {
-    this.currentTab = this.tabsObject.generalInfo;
-  },
-  mounted() {
-    this.subscribe(this.loadFlowsList);
   }
 };
 </script>

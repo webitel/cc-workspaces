@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import VideoContainer from '../video-container.vue';
 
 describe('VideoContainer', () => {

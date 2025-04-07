@@ -1,5 +1,6 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import { CallDirection } from 'webitel-sdk';
+
 import HistoryLookupItem from '../history-lookup-item.vue';
 
 describe('HistoryLookupItem', () => {

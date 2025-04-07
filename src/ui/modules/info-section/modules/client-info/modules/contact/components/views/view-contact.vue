@@ -15,9 +15,10 @@
 </template>
 
 <script setup>
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
 
 const props = defineProps({

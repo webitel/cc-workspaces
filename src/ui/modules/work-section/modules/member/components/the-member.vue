@@ -1,13 +1,13 @@
 <template>
   <task-container>
-    <template v-slot:header>
+    <template #header>
       <member-header
         :current-tab="currentTab"
         :size="size"
-        @openTab="openHistory"
+        @open-tab="openHistory"
       ></member-header>
     </template>
-    <template v-slot:body>
+    <template #body>
       <history
         v-show="isHistoryOpened"
         :size="size" />
@@ -24,7 +24,7 @@ import MemberCommunications from './member-communications.vue';
 import MemberHeader from './member-header.vue';
 
 export default {
-  name: 'the-member',
+  name: 'TheMember',
   components: {
     TaskContainer,
     MemberHeader,

@@ -1,4 +1,5 @@
 import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/index.js';
+
 import { formatChatMessages } from '../scripts/formatChatMessages.js';
 
 const state = {

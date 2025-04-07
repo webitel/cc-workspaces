@@ -1,7 +1,7 @@
-import reportingModule from '../reporting';
-import ReportingForm from '../ReportingForm';
 import contextMock
   from '../../../../../../../../../../tests/unit/mocks/store/contextMock';
+import reportingModule from '../reporting';
+import ReportingForm from '../ReportingForm';
 
 describe('reporting module: actions', () => {
   let context;

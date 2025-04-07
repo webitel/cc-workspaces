@@ -1,5 +1,5 @@
 <template>
-  <article class="client-info-chips" v-if="queueName">
+  <article v-if="queueName" class="client-info-chips">
     <wt-chip color="secondary">
       {{ queueName }}
     </wt-chip>
@@ -10,7 +10,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'client-info-chips',
+  name: 'ClientInfoChips',
   computed: {
     ...mapGetters('workspace', {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',

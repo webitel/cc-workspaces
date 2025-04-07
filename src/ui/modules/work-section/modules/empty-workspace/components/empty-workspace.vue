@@ -9,7 +9,7 @@
   import TransferWs from './empty-workspace-transfer.vue';
 
   export default {
-    name: 'empty-workspace',
+    name: 'EmptyWorkspace',
     components: {
       EmptyWs,
       TransferWs,

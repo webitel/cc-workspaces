@@ -1,5 +1,6 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import { CallActions, CallDirection } from 'webitel-sdk';
+
 import ActivePreview from '../active-queue-preview.vue';
 
 describe('Other UIs', () => {

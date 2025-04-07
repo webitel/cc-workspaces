@@ -10,7 +10,7 @@
     />
 
     <wt-chip
-      :color="this.isPhoneReg ? 'success' : 'primary'"
+      :color="isPhoneReg ? 'success' : 'primary'"
     >SIP
     </wt-chip>
     <break-timer-popup
@@ -48,16 +48,17 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
 import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
+import { mapActions,mapGetters, mapState } from 'vuex';
+
+import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
+import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
 import AgentStatusSelect from './agent-status-select.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
-import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
-import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 
 export default {
-  name: 'app-header',
+  name: 'AppHeader',
   components: {
     WtDarkModeSwitcher,
     AgentStatusSelect,

@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import TaskFooter from '../task-footer.vue';
 
 describe('TaskFooter', () => {

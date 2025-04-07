@@ -2,8 +2,8 @@
   <wt-expansion-panel
     :size="props.size"
     collapsed>
-    <template v-slot:title>{{ t('infoSec.contacts.attributes', 2) }}</template>
-    <template v-slot:default>
+    <template #title>{{ t('infoSec.contacts.attributes', 2) }}</template>
+    <template #default>
       <div
         class="contact-card-variables"
         :class="[`contact-card-variables--${props.size}`]"

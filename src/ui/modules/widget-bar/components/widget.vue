@@ -5,8 +5,8 @@
     @click.prevent="select"
   >
     <wt-checkbox
-      class="widget-checkbox"
       v-show="selectionMode"
+      class="widget-checkbox"
       :selected="show">
     </wt-checkbox>
 
@@ -26,7 +26,7 @@
 <script>
 
 export default {
-  name: 'widget',
+  name: 'Widget',
   props: {
     widget: {
       type: Object,

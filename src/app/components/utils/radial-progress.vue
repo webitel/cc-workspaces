@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: 'radial-progress',
+  name: 'RadialProgress',
   props: {
     diameter: {
       type: Number,
@@ -194,6 +194,23 @@ export default {
       };
     },
   },
+  watch: {
+    max() {
+      this.changeProgress({ isAnimate: true });
+    },
+    value() {
+      this.changeProgress({ isAnimate: true });
+    },
+    diameter() {
+      this.changeProgress({ isAnimate: true });
+    },
+    strokeWidth() {
+      this.changeProgress({ isAnimate: true });
+    },
+  },
+  created() {
+    this.changeProgress({ isAnimate: false });
+  },
   methods: {
     getStopPointsOfCircle(steps) {
       const points = [];
@@ -250,23 +267,6 @@ export default {
       this.currentAngle = this.value * this.circleSlice;
       this.gotoPoint();
     },
-  },
-  watch: {
-    max() {
-      this.changeProgress({ isAnimate: true });
-    },
-    value() {
-      this.changeProgress({ isAnimate: true });
-    },
-    diameter() {
-      this.changeProgress({ isAnimate: true });
-    },
-    strokeWidth() {
-      this.changeProgress({ isAnimate: true });
-    },
-  },
-  created() {
-    this.changeProgress({ isAnimate: false });
   },
 };
 </script>

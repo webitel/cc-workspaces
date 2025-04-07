@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import agentInfo from '../../store/agent-info';
 import GeneralInfoTab from '../general-info-tab.vue';
 

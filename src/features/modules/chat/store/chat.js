@@ -1,13 +1,14 @@
 import { ConversationState } from 'webitel-sdk';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
+
 import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
-import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
-import clientHandlers from './client-handlers';
-import manual from '../modules/manual/store/manual';
+import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import closed from '../modules/closed/store/closed.js';
+import manual from '../modules/manual/store/manual';
+import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import chatHistory from './chat-history.js';
 import chatMedia from './chat-media.js';
+import clientHandlers from './client-handlers';
 
 const state = {
   chatList: [],
@@ -59,7 +60,7 @@ const actions = {
 
   SEND_FILE: async (context, files) => {
     try {
-      // eslint-disable-next-line no-unused-expressions
+       
       Array.isArray(files)
         ? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
         : await context.dispatch('SEND', files);

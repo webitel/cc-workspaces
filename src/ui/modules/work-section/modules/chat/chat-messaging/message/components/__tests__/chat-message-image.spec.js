@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ChatMessageImage
   from '../chat-message-image.vue';
 

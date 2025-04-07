@@ -2,8 +2,8 @@
   <wt-expansion-panel
     :size="props.size"
     collapsed>
-    <template v-slot:title>{{ t('infoSec.contacts.communications') }}</template>
-    <template v-slot:default>
+    <template #title>{{ t('infoSec.contacts.communications') }}</template>
+    <template #default>
       <div class="contact-card-communications">
         <wt-tabs
           :current="currentTab"
@@ -21,11 +21,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed,ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import ContactCardPhones from './contact-card-phones.vue';
+
 import ContactCardEmails from './contact-card-emails.vue';
 import ContactCardMessaging from './contact-card-messaging.vue';
+import ContactCardPhones from './contact-card-phones.vue';
 
 const props = defineProps({
   size: {

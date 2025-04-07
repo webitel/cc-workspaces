@@ -1,15 +1,15 @@
 <template>
   <lookup-item-container>
-    <template v-slot:search>
+    <template #search>
       <div></div>
     </template>
-    <template v-slot:content>
+    <template #content>
       <ul>
         <li
-          class="member-communications__item"
-          :class="{'selected': communication.id === selectedCommId}"
           v-for="(communication) of communications"
           :key="communication.id"
+          class="member-communications__item"
+          :class="{'selected': communication.id === selectedCommId}"
           @click="selectCommunication(communication)"
         >
           <div class="member-communications__type">{{ communication.type.name }}</div>
@@ -21,11 +21,12 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters,mapState } from 'vuex';
+
 import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
 
 export default {
-  name: 'member-communications',
+  name: 'MemberCommunications',
   components: { LookupItemContainer },
 
   computed: {

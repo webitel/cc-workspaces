@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import UserStatus from '../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import UserDndSwitcher from '../user-dnd-switcher.vue';
 

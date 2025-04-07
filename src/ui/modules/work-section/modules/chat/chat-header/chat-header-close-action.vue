@@ -13,7 +13,7 @@
       @confirm="close"
       @close="isConfirmationPopup = false"
     >
-      <template v-slot:text>
+      <template #text>
         {{ $t('workspaceSec.chat.confirmClose') }}
       </template>
     </confirmation-popup>
@@ -22,15 +22,16 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
+
 import ConfirmationPopup from '../../../../../../app/components/utils/confirmation-popup.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
 
 export default {
-  name: 'chat-header-close-action',
-  mixins: [sizeMixin],
+  name: 'ChatHeaderCloseAction',
   components: {
     ConfirmationPopup,
   },
+  mixins: [sizeMixin],
   data: () => ({
     isConfirmationPopup: false,
   }),

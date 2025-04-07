@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ManualQueuePreview from '../manual-queue-preview.vue';
 
 describe('Chats: ManualQueuePreview', () => {

@@ -4,7 +4,7 @@
     class="missed-queue-preview"
     @click="$emit('click')"
   >
-    <template v-slot:icon>
+    <template #icon>
       <div class="missed-preview-icon-wrapper">
         <wt-icon
           class="missed-queue-preview-icon"
@@ -19,19 +19,19 @@
       </div>
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ displayNumber }}
     </template>
 
-    <template v-slot:timer>
+    <template #timer>
       {{ displayTime }}
     </template>
 
-    <template v-slot:quick-action>
+    <template #quick-action>
       <wt-rounded-action
         color="success"
         icon="call--filled"
@@ -46,7 +46,7 @@
     v-else-if="size === 'sm'"
     class="missed-queue-preview"
   >
-    <template v-slot:icon>
+    <template #icon>
       <div class="missed-preview-icon-wrapper">
         <wt-icon
           class="missed-queue-preview-icon"
@@ -63,23 +63,23 @@
       </div>
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ displayName }}
     </template>
 
-    <template v-slot:tooltip-subtitle>
+    <template #tooltip-subtitle>
       {{ displayNumber }}
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ displayTime }}
     </template>
 
-    <template v-slot:actions>
+    <template #actions>
       <wt-rounded-action
         color="success"
         icon="call--filled"
@@ -100,11 +100,12 @@
 
 <script>
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'missed-queue-preview',
+  name: 'MissedQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   emits: [
     'click',

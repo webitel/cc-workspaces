@@ -18,7 +18,7 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'numpad-numbers',
+  name: 'NumpadNumbers',
   mixins: [sizeMixin],
   methods: {
     input(value) {

@@ -12,7 +12,8 @@ export default {
   computed: {
     image() {
       const isImage = this.file && this.type?.includes('image');
-      return isImage ? this.file : null;
+      const isHEIC = this.type?.includes('heic');
+      return isImage && !isHEIC ? this.file : null; //https://webitel.atlassian.net/browse/WTEL-6268
     },
     media() {
       const isMedia = this.file && (

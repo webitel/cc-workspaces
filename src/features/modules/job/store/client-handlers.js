@@ -1,4 +1,5 @@
 import { JobState } from 'webitel-sdk';
+
 import OpenLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
 const handler = (context) => (action, job) => {

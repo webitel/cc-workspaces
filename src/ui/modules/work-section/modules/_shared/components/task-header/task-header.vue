@@ -27,7 +27,7 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'task-header',
+  name: 'TaskHeader',
   mixins: [sizeMixin],
   props: {
     username: {

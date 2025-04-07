@@ -5,6 +5,7 @@ import applyTransform, {
   sanitize, snakeToCamel, starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { LabelsApiFactory } from 'webitel-sdk';
+
 import instance from '../../../../../../../../app/api/instance';
 import configuration from '../../../../../../../../app/api/openAPIConfig';
 

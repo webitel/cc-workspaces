@@ -1,5 +1,5 @@
-import HotkeyAction from "./HotkeysActiom.enum";
 import digitCodes from "./digitCodes";
+import HotkeyAction from "./HotkeysActiom.enum";
 
 /*
 NOTE:

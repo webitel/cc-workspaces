@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
-import FailureForm from '../reporting-failure-form.vue';
+
 import ReportingForm from '../../store/ReportingForm';
+import FailureForm from '../reporting-failure-form.vue';
 
 const mockReportingForm = vi.fn();
 const callOnWorkspace = {

@@ -1,6 +1,6 @@
 <template>
   <lookup-item>
-    <template v-slot:before>
+    <template #before>
       <slot name="before">
         <wt-avatar
           :src="src"
@@ -11,15 +11,15 @@
       </slot>
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ item.name || item.username }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ item.extension }}
     </template>
 
-    <template v-slot:after>
+    <template #after>
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
@@ -32,16 +32,17 @@
 
 <script>
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import { mapGetters } from 'vuex';
 import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
+import { mapGetters } from 'vuex';
+
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import lookupItemMixin from './mixins/lookupItemMixin';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'transfer-lookup-item',
+  name: 'TransferLookupItem',
   mixins: [lookupItemMixin, sizeMixin],
   props: {
     type: {

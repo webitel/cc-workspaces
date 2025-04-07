@@ -10,13 +10,13 @@
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
       >
-        <template v-slot:before-message>
+        <template #before-message>
           <chat-date
             v-if="showChatDate(index)"
             :date="message.createdAt"
           />
         </template>
-        <template v-slot:after-message>
+        <template #after-message>
           <chat-activity-info
             v-if="isLastMessage(index)"
             ended

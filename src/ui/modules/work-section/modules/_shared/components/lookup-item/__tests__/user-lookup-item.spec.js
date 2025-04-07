@@ -1,6 +1,7 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
+
 import UserLookupItem from '../user-lookup-item.vue';
 
 describe('UserLookupItem', () => {

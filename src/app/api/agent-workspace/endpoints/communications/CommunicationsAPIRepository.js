@@ -1,12 +1,13 @@
-import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
-import configuration from '../../../openAPIConfig';
-import instance from '../../../instance';
+import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
 import applyTransform, {
   merge, mergeEach, notify,
   snakeToCamel,
   starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
+import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
+
+import instance from '../../../instance';
+import configuration from '../../../openAPIConfig';
 
 const communicationService = new CommunicationTypeServiceApiFactory(configuration, '', instance);
 

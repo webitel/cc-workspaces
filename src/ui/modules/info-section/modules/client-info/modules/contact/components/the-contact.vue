@@ -3,8 +3,8 @@
     class="contact"
   >
     <wt-expansion-panel>
-      <template v-slot:title>{{ t('infoSec.contacts.client') }}</template>
-      <template v-slot:actions="{ open }">
+      <template #title>{{ t('infoSec.contacts.client') }}</template>
+      <template #actions="{ open }">
         <div
           v-if="isTaskActive"
           class="contact-actions"
@@ -19,7 +19,7 @@
           />
         </div>
       </template>
-      <template v-slot:default>
+      <template #default>
         <add-contact
           v-if="mode === ContactMode.ADD"
           :size="props.size"
@@ -46,9 +46,10 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
-import { useStore } from 'vuex';
+import { computed,ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
@@ -74,7 +75,7 @@ const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
 const taskId = computed(() => {
-  switch (workspaceState) {
+  switch (workspaceState.value) {
     case WorkspaceStates.CHAT: return props.task.conversationId;
     case WorkspaceStates.CALL: return props.task.id;
     default: return null;

@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import job from '../../../../../../../../features/modules/job/store/job';
 import JobQueueContainer from '../job-queue-container.vue';
 

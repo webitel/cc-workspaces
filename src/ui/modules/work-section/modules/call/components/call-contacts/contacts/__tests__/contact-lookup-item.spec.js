@@ -1,5 +1,6 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import ContactLookupItem from '../contact-lookup-item.vue';
 
 const computed = {

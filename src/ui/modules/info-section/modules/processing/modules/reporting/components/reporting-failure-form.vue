@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
   <section>
-    <div class="processing-form__input" v-if="member">
+    <div v-if="member" class="processing-form__input">
       <h2 class="processing-form__schedule-call-select__title">
         {{ $t('infoSec.processing.reporting.nextDistributeAtTitle') }}
       </h2>
@@ -20,9 +20,9 @@
     </div>
 
     <div
-      class="processing-form__input"
       v-if="member"
       v-show="reporting.isScheduleCall"
+      class="processing-form__input"
     >
       <wt-datepicker
         v-model="reporting.nextDistributeAt"
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: 'reporting-failure-form',
+  name: 'ReportingFailureForm',
   props: {
     reporting: {
       type: Object,

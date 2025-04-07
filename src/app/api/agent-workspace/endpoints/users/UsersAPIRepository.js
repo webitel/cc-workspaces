@@ -1,14 +1,15 @@
-import { AgentServiceApiFactory } from 'webitel-sdk';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
 } from '@webitel/ui-sdk/src/api/defaults/index.js';
 import applyTransform, {
-  mergeEach,
   merge,
+  mergeEach,
   notify,
   snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { AgentServiceApiFactory } from 'webitel-sdk';
+
 import instance from '../../../instance';
 import configuration from '../../../openAPIConfig';
 

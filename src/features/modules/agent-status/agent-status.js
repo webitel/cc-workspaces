@@ -1,6 +1,7 @@
 import { AgentStatus } from 'webitel-sdk';
-import clientHandlers from './client-handlers';
+
 import APIRepository from '../../../app/api/APIRepository';
+import clientHandlers from './client-handlers';
 import UserStatus from './statusUtils/UserStatus';
 
 const usersAPI = APIRepository.users;

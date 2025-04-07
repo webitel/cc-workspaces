@@ -1,5 +1,6 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
+
 import findRoundedActionByIcon
   from '../../../../../../../../tests/utils/findRoundedActionByIcon';
 import CallHeader from '../call-header.vue';

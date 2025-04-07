@@ -1,5 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import job from '../../../../../../../features/modules/job/store/job';
 import JobQueue from '../the-agent-job-queue.vue';
 

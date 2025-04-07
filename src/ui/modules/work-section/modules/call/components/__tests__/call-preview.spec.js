@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import CallPreview from '../call-preview.vue';
 
 describe('Transfer functionality', () => {

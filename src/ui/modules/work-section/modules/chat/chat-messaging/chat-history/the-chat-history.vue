@@ -48,7 +48,8 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, onUnmounted, useTemplateRef, nextTick } from 'vue';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
+import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useChatMessages } from '../composables/useChatMessages.js';
 import { useChatScroll } from '../composables/useChatScroll.js';
@@ -116,14 +117,13 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
-  if (message?.chat?.via) {
-    return { type: message.chat.via.type, // chats from history
-      name: message.chat.via.name }
-  }
-  if (currentChat.value?.members) {
-    return { type: currentChat.value?.members[0]?.type, // from current chat
-      name: currentChat.value?.members[0]?.name }
-  }
+  const { via } = message.chat || message.member; // chat history or current chat gateway
+
+  return { type: via.type, name: via.name };
+}
+
+const scrollToBottom = () => {
+  el.value.scrollTop = el.value?.scrollHeight;
 }
 
 watch([

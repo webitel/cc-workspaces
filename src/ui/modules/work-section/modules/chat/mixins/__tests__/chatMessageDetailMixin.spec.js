@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import chatMessageFileMixin from '../chatMessageFileMixin.js';
 
 const Component = {

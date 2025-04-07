@@ -52,10 +52,10 @@
 import { computed, defineProps, defineEmits } from 'vue';
 
 import MessageAvatar from './components/chat-message-avatar.vue';
+import MessageDocument from './components/chat-message-document.vue';
+import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageText from './components/chat-message-text.vue';
-import MessageImage from './components/chat-message-image.vue';
-import MessageDocument from './components/chat-message-document.vue';
 import MessageTime from './components/chat-message-time.vue';
 
 const props = defineProps({

@@ -1,6 +1,7 @@
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import { reactive } from 'vue';
 import { RolePermissionError } from 'webitel-sdk';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
+
 import APIRepository from '../../../app/api/APIRepository';
 import i18n from '../../../app/locale/i18n';
 import parseUserStatus from './statusUtils/parseUserStatus';

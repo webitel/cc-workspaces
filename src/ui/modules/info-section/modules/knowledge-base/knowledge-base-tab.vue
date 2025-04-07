@@ -1,8 +1,8 @@
 <template>
   <article class="knowledge-base">
     <iframe
-      class="knowledge-base__iframe"
       v-if="knowledgeSource"
+      class="knowledge-base__iframe"
       :src="knowledgeSource"
       width="1440"
       height="900"
@@ -16,7 +16,7 @@
 import { mapGetters } from 'vuex';
 
   export default {
-    name: 'knowledge-base-tab',
+    name: 'KnowledgeBaseTab',
 
     computed: {
       ...mapGetters('workspace', {

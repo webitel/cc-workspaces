@@ -1,5 +1,5 @@
-import { mapState } from 'vuex';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import { mapState } from 'vuex';
 
 export default {
   computed: {

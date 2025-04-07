@@ -6,7 +6,7 @@
       :value="processingProgressSec"
     >
       <wt-tooltip v-show="showRenewalButton">
-        <template v-slot:activator>
+        <template #activator>
           <wt-icon-btn
             icon="plus"
             @click="handleClick"
@@ -23,12 +23,13 @@
 
 <script>
 import { mapState } from 'vuex';
+
 import RadialProgress from '../../../../../../../app/components/utils/radial-progress.vue';
 
 const ms = 1000;
 
 export default {
-  name: 'processing-timer',
+  name: 'ProcessingTimer',
   components: {
     RadialProgress,
   },

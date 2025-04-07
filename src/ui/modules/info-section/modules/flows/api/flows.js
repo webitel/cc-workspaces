@@ -1,4 +1,3 @@
-import { TeamTriggerServiceApiFactory } from 'webitel-sdk';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
@@ -10,6 +9,8 @@ import applyTransform, {
   snakeToCamel,
   starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { TeamTriggerServiceApiFactory } from 'webitel-sdk';
+
 import instance from '../../../../../../app/api/instance';
 import configuration from '../../../../../../app/api/openAPIConfig';
 import i18n from '../../../../../../app/locale/i18n.js';

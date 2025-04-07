@@ -1,7 +1,8 @@
 import ReactiveNowStoreModule from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
-import userinfo from '../modules/userinfo/userinfo';
-import infoSec from '../modules/info-section/store/infoSec';
+
 import appearance from '../modules/appearance/store/appearance';
+import infoSec from '../modules/info-section/store/infoSec';
+import userinfo from '../modules/userinfo/userinfo';
 import widget from '../modules/widget-bar/store/widget';
 
 const modules = {

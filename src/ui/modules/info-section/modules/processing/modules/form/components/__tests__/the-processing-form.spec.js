@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import TheProcessingForm from '../the-processing-form.vue';
 
 describe('TheProcessingForm', () => {

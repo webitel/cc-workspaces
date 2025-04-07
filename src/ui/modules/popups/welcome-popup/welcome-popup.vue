@@ -1,9 +1,9 @@
 <template>
-  <wt-popup @close="close" size="sm">
-    <template v-slot:title>
+  <wt-popup size="sm" @close="close">
+    <template #title>
       {{ $t('welcomePopup.title') }}
     </template>
-    <template v-slot:main>
+    <template #main>
       <p>{{ $t('welcomePopup.subtitle') }}</p>
       <div class="welcome-popup-permission">
         <div class="welcome-popup-permission__status">
@@ -38,7 +38,7 @@
         </p>
       </div>
     </template>
-    <template v-slot:actions>
+    <template #actions>
       <wt-button
         wide
         :loading="loading"
@@ -54,7 +54,7 @@
 import silenceSound from './assets/audio/silence.mp3';
 
 export default {
-  name: 'welcome-popup',
+  name: 'WelcomePopup',
   props: {
     loading: {
       type: Boolean,
@@ -71,6 +71,13 @@ export default {
       message: '',
     },
   }),
+  created() {
+    this.initWindowKeyPressListener();
+    this.checkPermissions();
+  },
+  unmounted() {
+    this.removeWindowKeyPressListener();
+  },
   methods: {
     playSilence() {
       // https://webitel.atlassian.net/browse/WTEL-4389
@@ -126,13 +133,6 @@ export default {
     removeWindowKeyPressListener() {
       window.removeEventListener('keypress', this.handleKeyPress);
     },
-  },
-  created() {
-    this.initWindowKeyPressListener();
-    this.checkPermissions();
-  },
-  destroyed() {
-    this.removeWindowKeyPressListener();
   },
 };
 </script>

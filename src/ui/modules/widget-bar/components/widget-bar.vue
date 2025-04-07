@@ -26,15 +26,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
 import preventHiddenPageCallsDecorator from '@webitel/ui-sdk/src/scripts/preventHiddenPageCallsDecorator';
-import Widget from './widget.vue';
+import { mapActions,mapState } from 'vuex';
+
 import Widgets from '../utils/Widgets';
+import Widget from './widget.vue';
 
 const REFRESH_INTERVAL_DURATION = 20 * 1000; // 20 sec
 
 export default {
-  name: 'widget-bar',
+  name: 'WidgetBar',
   components: {
     Widget,
   },
@@ -56,7 +57,7 @@ export default {
     this.getWidgetsFromLocalStorage();
   },
 
-  destroyed() {
+  unmounted() {
     this.resetRefreshInterval();
   },
 
@@ -94,7 +95,7 @@ export default {
         widgets = widgets.split(',');
         Object.values(this.widgets)
           .forEach((widget) => {
-            // eslint-disable-next-line no-param-reassign
+             
             widget.show = widgets.indexOf(widget.type) !== -1;
           });
       }

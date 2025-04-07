@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import PreviewProfile from '../call-preview-profile.vue';
 
 describe('PreviewProfile', () => {

@@ -8,7 +8,7 @@
     @search:change="resetData"
   >
 
-    <template v-slot:after-search>
+    <template #after-search>
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
         icon="ws-bot"
@@ -22,11 +22,11 @@
       ></wt-icon-btn>
     </template>
 
-    <template v-slot:empty>
+    <template #empty>
       <empty-search type="contacts" />
     </template>
 
-    <template v-slot:content>
+    <template #content>
       <transfer-lookup-item
         v-for="(item, key) of dataList"
         :id="`scroll-item-${key}`"
@@ -37,7 +37,7 @@
         :type="transferDestination"
         @input="handleTransfer"
       >
-        <template v-slot:before>
+        <template #before>
           <wt-icon
             icon="bot"
             icon-prefix="ws"
@@ -50,28 +50,29 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
+
 import APIRepository from '../../../../../../app/api/APIRepository.js';
-import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
-import TransferDestination from '../enums/ChatTransferDestination.enum.js';
 import infiniteScrollMixin from '../../../../../../app/mixins/infiniteScrollMixin.js';
-import EmptySearch from '../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import TransferLookupItem from '../../_shared/components/lookup-item/transfer-lookup-item.vue';
-import botAvatar from '../../_shared/assets/avatars/bot-avatar.svg';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import botAvatar from '../../_shared/assets/avatars/bot-avatar.svg';
+import TransferLookupItem from '../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
+import EmptySearch from '../../_shared/components/workspace-empty-search/components/empty-search.vue';
+import TransferDestination from '../enums/ChatTransferDestination.enum.js';
 
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
 
 export default {
-  name: 'chat-transfer-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  name: 'ChatTransferContainer',
   components: {
     LookupItemContainer,
     TransferLookupItem,
     EmptySearch,
   },
+  mixins: [infiniteScrollMixin, sizeMixin],
 
   data: () => ({
     dataList: [],

@@ -5,28 +5,28 @@
     :queue-name="task.distribute.queue_name"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         color="job"
         icon="job"
       ></wt-icon>
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ task.displayNumber }}
     </template>
 
-    <template v-slot:timer>
+    <template #timer>
       <queue-preview-timer :task="task" />
     </template>
 
     <template
       v-if="task.allowAccept"
-      v-slot:actions
+      #actions
     >
       <wt-button
         color="job"
@@ -54,7 +54,7 @@
     :queue-name="task.distribute.queue_name"
     @click="$emit('click', task)"
     >
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon
         color="job"
         icon="job"
@@ -62,21 +62,21 @@
       ></wt-icon>
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:tooltip-subtitle>
+    <template #tooltip-subtitle>
       {{ task.displayNumber }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       <queue-preview-timer :task="task" />
     </template>
 
     <template
       v-if="task.allowAccept"
-      v-slot:actions
+      #actions
     >
       <wt-rounded-action
         color="job"
@@ -107,7 +107,7 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'job-queue-preview',
+  name: 'JobQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
 };
 </script>

@@ -1,6 +1,6 @@
-import eventEmitter from 'event-emitter';
 import BaseStoreModule
   from '@webitel/ui-sdk/src/store/BaseStoreModules/BaseStoreModule';
+import eventEmitter from 'event-emitter';
 
 const emitter = eventEmitter();
 
