@@ -50,6 +50,7 @@ import FormSelect from './components/processing-form-select.vue';
 import FormSelectFromObject
   from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormText from './components/processing-form-text.vue';
+import FormSelectService from './components/processing-form-select-service.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
@@ -58,6 +59,7 @@ export default {
     FormIFrame,
     FormText,
     FormSelect,
+    FormSelectService,
     FormFile,
     FormDatetimepicker,
     FormSelectFromObject,
