@@ -38,7 +38,7 @@ import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
-import ChatTransferContainer from './chat-transfer-continer/chat-transfer-container.vue';
+import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import { getLinkedContact } from './scripts/getLinkedContact.js';
 
