@@ -116,7 +116,7 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
-  const via = message.chat || message.member; // chat history or current chat gateway
+  const { via } = message.chat || message.member; // chat history or current chat gateway
 
   return { type: via.type, name: via.name };
 }
