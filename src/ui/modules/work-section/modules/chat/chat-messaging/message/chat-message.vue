@@ -49,6 +49,7 @@
 
 <script setup>
 
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import { computed, defineEmits, defineProps } from 'vue';
 
 import MessageAvatar from './components/chat-message-avatar.vue';
@@ -65,8 +66,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
-    options: ['sm', 'md'],
+    default: ComponentSize.MD,
   },
   showAvatar: {
     type: Boolean,

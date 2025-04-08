@@ -16,10 +16,12 @@
 </template>
 
 <script setup>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+
 const props = defineProps({
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
     options: ['sm', 'md'],
   },
   allowAddition: {

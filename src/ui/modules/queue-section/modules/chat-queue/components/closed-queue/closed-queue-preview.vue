@@ -97,6 +97,7 @@
 
 <script setup>
 
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
@@ -118,7 +119,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
   },
   processed: { // if false - chat will be in active queue tab, if true - in closed queue tab
     type: Boolean,

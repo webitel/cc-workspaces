@@ -28,6 +28,7 @@
 </template>
 
 <script setup>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import { onUnmounted, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
 
@@ -44,8 +45,7 @@ const chatMediaNamespace = 'features/chat/chatMedia';
 const props = defineProps({
   size: {
     type: String,
-    default: 'md',
-    options: ['sm', 'md'],
+    default: ComponentSize.MD,
   },
 })
 

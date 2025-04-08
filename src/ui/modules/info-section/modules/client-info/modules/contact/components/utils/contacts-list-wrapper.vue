@@ -26,6 +26,7 @@
 </template>
 
 <script setup>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
@@ -46,7 +47,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
   },
   mode: {
     type: String,

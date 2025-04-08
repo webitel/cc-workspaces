@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-export const useDropzone = () => {
+export const useDropzoneHandlers = () => {
 
   const isDropzoneVisible = ref(false);
 
