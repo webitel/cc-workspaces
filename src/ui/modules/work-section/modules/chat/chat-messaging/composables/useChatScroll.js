@@ -5,6 +5,7 @@ import {
   watch,
 } from 'vue';
 import { useStore } from 'vuex';
+
 import { useChatMessages } from './useChatMessages.js';
 
 export const useChatScroll = (element) => {

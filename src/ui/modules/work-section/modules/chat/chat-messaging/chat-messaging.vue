@@ -2,7 +2,7 @@
   <div
     class="chat-messaging"
     :class="[
-      `chat-messaging--${props.size}`,
+      `chat-messaging--${size}`,
     ]"
     @dragenter.prevent="handleDragEnter"
   >
@@ -19,7 +19,7 @@
     />
     <current-chat
       v-else
-      :size="props.size"
+      :size="size"
     />
     <div
       v-if="isChatActive"
@@ -29,7 +29,7 @@
         ref="message-draft"
         v-model="chat.draft"
         class="chat-messaging__textarea"
-        :placeholder="t('workspaceSec.chat.draftPlaceholder')"
+        :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         autoresize
         name="draft"
         @enter="sendMessage"
@@ -41,7 +41,7 @@
             class="chat-messaging-file-input"
             color="secondary"
             icon="attach"
-            :size="props.size"
+            :size="size"
             rounded
             wide
             @click="triggerAttachmentInput"
@@ -55,13 +55,13 @@
           >
         </div>
         <chat-emoji
-          :size="props.size"
+          :size="size"
           @insert-emoji="insertEmoji"
         />
         <wt-rounded-action
           icon="chat-send"
           color="accent"
-          :size="props.size"
+          :size="size"
           rounded
           wide
           @click="sendMessage"
@@ -71,120 +71,144 @@
   </div>
 </template>
 
-<script setup>
+<script>
 
-import { computed, inject, onMounted, onUnmounted, ref, useTemplateRef } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import { mapActions, mapGetters } from 'vuex';
+
+// import { useI18n } from 'vue-i18n';
+import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import { useDropzone } from '../../../../../composibles/useDropzone.js';
-import CurrentChat from './current-chat/current-chat.vue';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
-import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
-import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
+import CurrentChat from './current-chat/current-chat.vue';
 
-const store = useStore();
-const { t } = useI18n();
-const eventBus = inject('$eventBus');
 
-const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
+export default {
+  name: 'ChatMessagingContainer',
+  components: {
+    Dropzone,
+    CurrentChat,
+    ChatHistory,
+    ChatEmoji,
   },
-  contact: {
-    type: Object,
-    default: {}
-  },
-});
-
-const chatNamespace = 'features/chat';
-
-const hotkeyUnsubscribers = ref([])
-
-const attachmentInput = useTemplateRef('attachment-input')
-
-const {
-  isDropzoneVisible,
-  handleDragEnter,
-  handleDragLeave
-} = useDropzone();
-
-const chat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`])
-const isChatActive = computed(() => store.getters[`${chatNamespace}/IS_CHAT_ACTIVE`])
-
-const send = (message) => store.dispatch(`${chatNamespace}/SEND`, message);
-const sendFile = (files) => store.dispatch(`${chatNamespace}/SEND_FILE`, files);
-const accept = () => store.dispatch(`${chatNamespace}/ACCEPT`);
-
-const triggerAttachmentInput = () => {
-  attachmentInput.value.click();
-}
-
-const insertEmoji = (unicode) => { ///gthtdbhsns
-  const messageDraft = ref('message-draft')
-  // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
-  const textarea = messageDraft.value.querySelector('textarea');
-  insertTextAtCursor(textarea, unicode);
-}
-
-const sendMessage = async () => {
-  const { draft } = chat.value;
-  try {
-    chat.value.draft = '';
-    await send(draft);
-  } catch {
-    chat.value.draft = draft;
-    eventBus.$emit('notification', {
-      type: 'error',
-      text: t('error.general'),
-    });
-  }
-}
-
-const setupHotkeys = () => {
-  const subscribers = [
-    {
-      event: HotkeyAction.ACCEPT,
-      callback: accept,
+  inject: ['$eventBus'],
+  props: {
+    size: {
+      type: String,
+      default: 'md',
+      options: ['sm', 'md'],
     },
-  ];
-  hotkeyUnsubscribers.value = useHotkeys(subscribers);
-}
+    contact: {
+      type: Object,
+    },
+  },
+  setup() {
+    const {
+      isDropzoneVisible,
+      handleDragEnter,
+      handleDragLeave
+    } = useDropzone();
 
-const handleDrop = (event) => {
-  const files = Array.from(event.dataTransfer.files);
-  sendFile(files);
-  handleDragLeave();
-}
-
-const handleFilePaste = (event) => {
-  const files = Array
-  .from(event.clipboardData.items)
-  .map((item) => item.getAsFile())
-  .filter((item) => !!item);
-  if (files.length) {
-    sendFile(files);
-    event.preventDefault();
-  }
-}
-
-const handleAttachments = async (event) => {
-  const files = Array.from(event.target.files);
-  await sendFile(files);
-}
-
-onMounted(() => {
-  setupHotkeys();
-})
-
-onUnmounted(() => {
-  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
-})
-
+    return {
+      isDropzoneVisible,
+      handleDragEnter,
+      handleDragLeave
+    }
+  },
+  data: () => ({
+    hotkeyUnsubscribers : [],
+  }),
+  computed: {
+  ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+      isChatActive: 'IS_CHAT_ACTIVE',
+    }),
+  },
+  watch: {
+    chat: {
+      async handler() {
+        await this.$nextTick(() => {
+          this.setDraftFocus()
+        });
+      },
+      immediate: true,
+    },
+  },
+  mounted() {
+    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
+    this.setupHotkeys();
+  },
+  unmounted() {
+    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+  },
+  methods: {
+    ...mapActions('features/chat', {
+        send: 'SEND',
+        sendFile: 'SEND_FILE',
+    }),
+    setDraftFocus() {
+      const messageDraft = this.$refs['message-draft'];
+      if (!messageDraft) return;
+      const textarea = messageDraft.$el.querySelector('textarea');
+      if (!textarea) return;
+      textarea.focus();
+    },
+    triggerAttachmentInput() {
+      this.$refs['attachment-input'].click();
+    },
+    insertEmoji(unicode) {
+      // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
+      const messageDraft = this.$refs['message-draft'];
+      const textarea = messageDraft.$el.querySelector('textarea');
+      insertTextAtCursor(textarea, unicode);
+    },
+    async sendMessage() {
+      const { draft } = this.chat;
+      try {
+        this.chat.draft = '';
+        await this.send(draft);
+      } catch {
+        this.chat.draft = draft;
+        this.$eventBus.$emit('notification', {
+          type: 'error',
+          text: this.$t('error.general'),
+        });
+      }
+    },
+    setupHotkeys() {
+      const subscribers = [
+        {
+          event: HotkeyAction.ACCEPT,
+          callback: this.accept,
+        },
+      ];
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+    },
+    handleDrop(event) {
+      const files = Array.from(event.dataTransfer.files);
+      this.sendFile(files);
+      this.handleDragLeave();
+    },
+    handleFilePaste(event) {
+      const files = Array
+      .from(event.clipboardData.items)
+      .map((item) => item.getAsFile())
+      .filter((item) => !!item);
+      if (files.length) {
+        this.sendFile(files);
+        event.preventDefault();
+      }
+    },
+    async handleAttachments(event) {
+      const files = Array.from(event.target.files);
+      await this.sendFile(files);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -229,7 +253,7 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   width: 100%;
 }
 
-.chat-messaging-rounded-action-file-input__input {
+.chat-messaging-file-input__input {
   position: absolute;
   width: 0;
   height: 0;

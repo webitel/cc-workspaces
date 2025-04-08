@@ -51,13 +51,13 @@
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
-import { useChatMessages } from '../composables/useChatMessages.js';
-import { useChatScroll } from '../composables/useChatScroll.js';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import Message from '../message/chat-message.vue';
-import ChatDate from '../components/chat-date.vue';
+
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
+import ChatDate from '../components/chat-date.vue';
+import { useChatMessages } from '../composables/useChatMessages.js';
+import { useChatScroll } from '../composables/useChatScroll.js';
+import Message from '../message/chat-message.vue';
 
 const props = defineProps({
   contact: {
@@ -120,10 +120,6 @@ function getChatProvider(message) {
   const { via } = message.chat || message.member; // chat history or current chat gateway
 
   return { type: via.type, name: via.name };
-}
-
-const scrollToBottom = () => {
-  el.value.scrollTop = el.value?.scrollHeight;
 }
 
 watch([
