@@ -36,9 +36,9 @@
         @paste="handleFilePaste"
       />
       <div class="chat-messaging-text-entry__actions">
-        <div class="file-input-wrapper">
+        <div class="chat-messaging-file-input-wrapper">
           <wt-rounded-action
-            class="rounded-action-file-input"
+            class="chat-messaging-file-input"
             color="secondary"
             icon="attach"
             :size="size"
@@ -48,7 +48,7 @@
           />
           <input
             ref="attachment-input"
-            class="rounded-action-file-input__input"
+            class="chat-messaging-file-input__input"
             type="file"
             multiple
             @change="handleAttachments"
@@ -73,43 +73,63 @@
 
 <script>
 
-import { useScroll } from '@vueuse/core';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
-import dropzoneMixin from '../../../../../../app/mixins/dropzoneMixin.js';
+import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
+import { useDropzoneHandlers } from '../../../../../composibles/useDropzoneHandlers.js';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
-import { getLinkedContact } from '../scripts/getLinkedContact.js';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
+import { ComponentSize } from '@webitel/ui-sdk/enums/index.js';
+
 
 export default {
   name: 'ChatMessagingContainer',
   components: {
+    Dropzone,
     CurrentChat,
     ChatHistory,
     ChatEmoji,
   },
-  mixins: [dropzoneMixin],
   inject: ['$eventBus'],
   props: {
     size: {
       type: String,
-      default: 'md',
-      options: ['sm', 'md'],
+      default: ComponentSize.MD,
     },
     contact: {
       type: Object,
     },
   },
+  setup() {
+    const {
+      isDropzoneVisible,
+      handleDragEnter,
+      handleDragLeave
+    } = useDropzoneHandlers();
+
+    return {
+      isDropzoneVisible,
+      handleDragEnter,
+      handleDragLeave
+    }
+  },
   data: () => ({
     hotkeyUnsubscribers : [],
   }),
+  computed: {
+  ...mapGetters('features/chat', {
+      chat: 'CHAT_ON_WORKSPACE',
+      isChatActive: 'IS_CHAT_ACTIVE',
+    }),
+  },
   watch: {
     chat: {
       async handler() {
+        // eslint-disable-next-line vue/valid-next-tick
         await this.$nextTick(() => {
           this.setDraftFocus()
         });
@@ -117,16 +137,18 @@ export default {
       immediate: true,
     },
   },
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-      isChatActive: 'IS_CHAT_ACTIVE',
-    }),
+  mounted() {
+    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
+    this.setupHotkeys();
+  },
+  unmounted() {
+    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
   methods: {
     ...mapActions('features/chat', {
-      send: 'SEND',
-      sendFile: 'SEND_FILE',
+        send: 'SEND',
+        sendFile: 'SEND_FILE',
     }),
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
@@ -158,13 +180,13 @@ export default {
       }
     },
     setupHotkeys() {
-      const subscripers = [
+      const subscribers = [
         {
           event: HotkeyAction.ACCEPT,
           callback: this.accept,
         },
       ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
     },
     handleDrop(event) {
       const files = Array.from(event.dataTransfer.files);
@@ -185,14 +207,6 @@ export default {
       const files = Array.from(event.target.files);
       await this.sendFile(files);
     },
-  },
-  mounted() {
-    this.$eventBus.$on('chat-input-focus', this.setDraftFocus);
-    this.setupHotkeys();
-  },
-  unmounted() {
-    this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
@@ -234,15 +248,15 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   }
 }
 
-.file-input-wrapper {
+.chat-messaging-file-input-wrapper {
   position: relative;
   width: 100%;
+}
 
-  .rounded-action-file-input__input {
-    position: absolute;
-    width: 0;
-    height: 0;
-    visibility: hidden;
-  }
+.chat-messaging-file-input__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }
 </style>

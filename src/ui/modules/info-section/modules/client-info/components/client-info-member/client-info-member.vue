@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import MarkdownIt from 'markdown-it';
 import { mapGetters } from 'vuex';
 
@@ -51,8 +52,7 @@ export default {
   props: {
     size: {
       type: String,
-      default: 'md',
-      options: ['sm', 'md'],
+      default: ComponentSize.MD,
     },
     collapsed: {
       type: Boolean,

@@ -49,8 +49,8 @@
 
 <script setup>
 
-import { computed, defineEmits,defineProps } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { computed, defineEmits, defineProps } from 'vue';
 
 import MessageAvatar from './components/chat-message-avatar.vue';
 import MessageDocument from './components/chat-message-document.vue';
@@ -66,8 +66,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
-    options: ['sm', 'md'],
+    default: ComponentSize.MD,
   },
   showAvatar: {
     type: Boolean,
@@ -80,7 +79,6 @@ const props = defineProps({
 
 const emit = defineEmits(['open-image', 'initialized-player']);
 
-const { t } = useI18n();
 
 const isAgent = computed(() =>
   props.message.member?.self

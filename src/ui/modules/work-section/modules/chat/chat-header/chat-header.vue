@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import { mapActions, mapGetters, mapState } from 'vuex';
 
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
@@ -53,7 +54,7 @@ export default {
   props: {
     size: {
       type: String,
-      default: '',
+      default: ComponentSize.MD,
     },
   },
   data: () => ({

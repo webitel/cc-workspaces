@@ -48,6 +48,7 @@
 <script setup>
 
 import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import deepCopy from 'deep-copy';
 import { defineEmits, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -59,8 +60,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
-    options: ['sm', 'md'],
+    default: ComponentSize.MD,
   },
 });
 

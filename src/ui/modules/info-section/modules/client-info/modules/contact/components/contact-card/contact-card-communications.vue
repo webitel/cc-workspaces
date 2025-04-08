@@ -21,6 +21,7 @@
 </template>
 
 <script setup>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import { computed,ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -31,8 +32,7 @@ import ContactCardPhones from './contact-card-phones.vue';
 const props = defineProps({
   size: {
     type: String,
-    default: 'md',
-    options: ['sm', 'md'],
+    default: ComponentSize.MD,
   },
   contact: {
     type: Object,

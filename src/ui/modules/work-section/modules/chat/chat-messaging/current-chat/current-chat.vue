@@ -5,7 +5,7 @@
         v-for="(message, index) of messages"
         :key="message.id"
         :message="message"
-        :size="size"
+        :size="props.size"
         :show-avatar="showAvatar(index)"
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
@@ -27,104 +27,51 @@
   </section>
 </template>
 
-<script>
-import { nextTick } from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { onUnmounted, useTemplateRef } from 'vue';
+import { useStore } from 'vuex';
 
-import chatScroll from '../../../../../../../app/directives/chatScroll';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatDate from '../components/chat-date.vue';
+import { useChatScroll } from '../composables/useChatScroll.js';
 import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 
-export default {
-  name: 'CurrentChat',
-  directives: { chatScroll },
-  components: {
-    Message,
-    ChatDate,
-    ChatActivityInfo,
-  },
-  props: {
-    size: {
-      type: String,
-      default: 'md',
-      options: ['sm', 'md'],
-    },
-  },
-  setup() {
-    const {
-      messages,
+const store = useStore();
 
-      showAvatar,
-      showChatDate,
-      focusOnInput,
-      isLastMessage,
-    } = useChatMessages();
+const chatMediaNamespace = 'features/chat/chatMedia';
 
-    return {
-      messages,
+const props = defineProps({
+  size: {
+    type: String,
+    default: ComponentSize.MD,
+  },
+})
 
-      showAvatar,
-      showChatDate,
-      focusOnInput,
-      isLastMessage,
-    };
-  },
-  data: () => ({
-    isMounted: false,
-  }),
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
-    chatId() {
-      return this.chat.id;
-    },
-    messagesLength() {
-      return this.messages?.length;
-    },
-    isLastMessageMy() {
-      return this.messages[this.messages?.length - 1]?.member?.self;
-    }
-  },
-  methods: {
-    ...mapActions('features/chat/chatMedia', {
-      openMedia: 'OPEN_MEDIA',
-      attachPlayer: 'ATTACH_PLAYER_TO_CHAT',
-      cleanChatPlayers: 'CLEAN_CHAT_PLAYERS',
-    }),
-    scrollToBottom() {
-      const el = this.$refs['chat-messages-items'];
-      el.scrollTop = el?.scrollHeight;
-    }
-  },
-  watch: {
-    chatId: {
-      async handler() {
-        await nextTick(() =>
-          this.scrollToBottom()
-        );
-      },
-      immediate: true,
-    },
-    messagesLength: {
-      async handler(messagesLength, oldMessagesLength) {
-        const newMessages = messagesLength - oldMessagesLength;
+const el = useTemplateRef('chat-messages-items');
 
-        if (!messagesLength || !oldMessagesLength) this.scrollToBottom();
-        if (newMessages === 1 && this.isLastMessageMy) this.scrollToBottom();
-      },
-      flush: 'post',
-    },
-  },
-  mounted() {
-    this.isMounted = true;
-  },
-  unmounted() {
-    this.cleanChatPlayers();
-  },
-};
+const {
+  messages,
+
+  showAvatar,
+  showChatDate,
+  focusOnInput,
+  isLastMessage,
+} = useChatMessages();
+
+useChatScroll(el);
+
+
+onUnmounted(() => {
+  cleanChatPlayers();
+})
+
+
+const openMedia = () => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`);
+const attachPlayer = (player) => store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
+const cleanChatPlayers = (message) => store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
+
 </script>
 
 <style lang="scss" scoped>
