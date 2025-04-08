@@ -76,7 +76,6 @@
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
 
-// import { useI18n } from 'vue-i18n';
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import { useDropzone } from '../../../../../composibles/useDropzone.js';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
@@ -130,6 +129,7 @@ export default {
   watch: {
     chat: {
       async handler() {
+        // eslint-disable-next-line vue/valid-next-tick
         await this.$nextTick(() => {
           this.setDraftFocus()
         });

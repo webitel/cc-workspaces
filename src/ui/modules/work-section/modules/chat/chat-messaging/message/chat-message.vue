@@ -49,7 +49,7 @@
 
 <script setup>
 
-import { computed, defineProps, defineEmits } from 'vue';
+import { computed, defineEmits, defineProps } from 'vue';
 
 import MessageAvatar from './components/chat-message-avatar.vue';
 import MessageDocument from './components/chat-message-document.vue';

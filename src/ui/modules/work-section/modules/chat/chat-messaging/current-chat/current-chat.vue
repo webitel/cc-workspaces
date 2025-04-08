@@ -28,13 +28,14 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { onUnmounted, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
-import { useChatMessages } from '../message/composables/useChatMessages.js';
+
+import ChatActivityInfo from '../components/chat-activity-info.vue';
+import ChatDate from '../components/chat-date.vue';
 import { useChatScroll } from '../composables/useChatScroll.js';
 import Message from '../message/chat-message.vue';
-import ChatDate from '../components/chat-date.vue';
-import ChatActivityInfo from '../components/chat-activity-info.vue';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 const store = useStore();
 
