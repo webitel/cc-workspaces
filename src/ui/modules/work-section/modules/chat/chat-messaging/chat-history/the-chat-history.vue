@@ -13,7 +13,7 @@
         v-for="(message, index) of messages"
         :key="message.id"
         :message="message"
-        :size="size"
+        :size="props.size"
         :show-avatar="showAvatar(index) || isChatStarted(index)"
         :username="props.contact?.name"
         @open-image="openMedia(message)"

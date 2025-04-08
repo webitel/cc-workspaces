@@ -17,7 +17,7 @@ export const useChatScroll = (element) => {
 
   const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
   const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
-  const isLastMessageIsMy = computed(() => lastMessage.value?.member?.self);
+  const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
 
   const scrollToBottom = (behavior = 'instant') => {
     element.value?.scrollTo({
@@ -27,7 +27,8 @@ export const useChatScroll = (element) => {
   }
 
   const scrollAfterNewMessage = () => {
-    if (arrivedState.bottom || isLastMessageIsMy) scrollToBottom('smooth');
+    console.log('isLastMessageIsMy:', isLastMessageIsMy.value);
+    if (arrivedState.bottom || isLastMessageIsMy.value) scrollToBottom('smooth');
   }
 
   watch(() => chat.value?.id,  async () => { // every time a chat changes
