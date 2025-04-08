@@ -79,7 +79,8 @@
 
 <script setup>
 import { useVuelidate } from '@vuelidate/core';
-import { required, requiredIf } from '@vuelidate/validators';
+import { requiredIf } from '@vuelidate/validators';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -91,7 +92,6 @@ import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPi
 import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
 import SearchOptions from '../../enums/SearchOptions.enum';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   namespace: {

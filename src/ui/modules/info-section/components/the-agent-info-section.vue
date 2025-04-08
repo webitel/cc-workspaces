@@ -207,11 +207,7 @@ export default {
   },
   methods: {
     async loadFlowsList() {
-      try {
-        await this.$store.dispatch(`${this.flowsNamespace}/LOAD_FLOWS_LIST`);
-      } catch (err) {
-        throw err;
-      }
+      await this.$store.dispatch(`${this.flowsNamespace}/LOAD_FLOWS_LIST`);
     }
   }
 };
