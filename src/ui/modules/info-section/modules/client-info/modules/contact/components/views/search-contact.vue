@@ -48,7 +48,7 @@
     </div>
 
     <div class="search-contact__content">
-      <wt-replace-transition duration="md">
+      <wt-replace-transition duration="normal">
         <wt-loader v-if="isLoading"/>
         <wt-dummy
           v-else-if="!isLoading && !contactsBySearch.length"

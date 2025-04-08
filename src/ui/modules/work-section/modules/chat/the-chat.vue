@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters, mapState } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
@@ -43,7 +44,6 @@ import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
 import MediaViewer from './media-viewer/media-viewer.vue';
 import { getLinkedContact } from './scripts/getLinkedContact.js';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const defaultTab = 'chat-messaging-container';
 
@@ -67,7 +67,6 @@ export default {
     currentTab: {
       component: defaultTab
     },
-    currentChatId: null,
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {
