@@ -27,7 +27,6 @@ export const useChatScroll = (element) => {
   }
 
   const scrollAfterNewMessage = () => {
-    console.log('isLastMessageIsMy:', isLastMessageIsMy.value);
     if (arrivedState.bottom || isLastMessageIsMy.value) scrollToBottom('smooth');
   }
 
