@@ -19,7 +19,7 @@
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
       >
-        <template v-slot:before-message>
+        <template #before-message>
           <chat-date
             v-if="showChatDate(index) || isHistoryStart(index)"
             :date="message.createdAt"
@@ -36,7 +36,7 @@
           />
         </template>
 
-        <template v-slot:after-message>
+        <template #after-message>
           <chat-activity-info
             v-if="isChatStarted(index + 1) || isLastMessage(index)"
             ended
@@ -55,9 +55,9 @@ import { useStore } from 'vuex';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
-import { useChatMessages } from '../composables/useChatMessages.js';
 import { useChatScroll } from '../composables/useChatScroll.js';
 import Message from '../message/chat-message.vue';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 const props = defineProps({
   contact: {

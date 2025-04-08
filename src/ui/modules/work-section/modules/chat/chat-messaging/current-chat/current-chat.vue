@@ -30,7 +30,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
-import { useChatMessages } from '../composables/useChatMessages.js';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 import { useChatScroll } from '../composables/useChatScroll.js';
 import Message from '../message/chat-message.vue';
 import ChatDate from '../components/chat-date.vue';

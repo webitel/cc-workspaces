@@ -6,7 +6,7 @@ import {
 } from 'vue';
 import { useStore } from 'vuex';
 
-import { useChatMessages } from './useChatMessages.js';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 export const useChatScroll = (element) => {
 
