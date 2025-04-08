@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+
 import TheChat from '../the-chat.vue';
 
 const store = createStore();

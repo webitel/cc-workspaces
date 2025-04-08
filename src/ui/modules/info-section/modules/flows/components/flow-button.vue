@@ -2,8 +2,8 @@
     <wt-button
       color="success"
       :loading="isLoading"
-      @click="runFlow"
       :size="size ? size : 'md'"
+      @click="runFlow"
     >
       {{ $t('reusable.run') }}
     </wt-button>
@@ -14,6 +14,7 @@
  task: https://webitel.atlassian.net/browse/WTEL-4355 */
 
 import { ref } from 'vue';
+
 import FlowsAPI from '../api/flows.js';
 
 const props = defineProps({

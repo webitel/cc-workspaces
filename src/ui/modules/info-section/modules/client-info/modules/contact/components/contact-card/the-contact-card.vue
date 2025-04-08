@@ -26,6 +26,7 @@
 </template>
 <script setup>
 import { computed } from 'vue';
+
 import Communications from './contact-card-communications.vue';
 import Description from './contact-card-description.vue';
 import General from './contact-card-general.vue';

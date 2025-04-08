@@ -41,8 +41,9 @@
 </template>
 
 <script>
-import markdownit from 'markdown-it';
 import dompurify from 'dompurify';
+import markdownit from 'markdown-it';
+
 import patchMDRender from '../../../../../client-info/components/client-info-markdown/scripts/patchMDRender';
 import collapsibleProcessingFormComponentMixin from '../../mixins/collapsibleProcessingFormComponentMixin';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
@@ -55,7 +56,7 @@ const md = markdownit({
 patchMDRender(md);
 
 export default {
-  name: 'form-text',
+  name: 'FormText',
   mixins: [processingFormComponentMixin, collapsibleProcessingFormComponentMixin],
   props: {
     color: {

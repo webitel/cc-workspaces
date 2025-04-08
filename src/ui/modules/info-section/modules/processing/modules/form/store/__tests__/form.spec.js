@@ -1,5 +1,5 @@
-import form from '../form';
 import contextMock from '../../../../../../../../../../tests/unit/mocks/store/contextMock';
+import form from '../form';
 
 describe('form: actions', () => {
   let context;

@@ -1,5 +1,6 @@
 <template>
-  <div class="contact-card-messaging"
+  <div
+class="contact-card-messaging"
        :class="[`contact-card-messaging--${props.size}`]">
     <ul>
       <li
@@ -24,8 +25,8 @@
 
 <script setup>
 
-import { computed } from 'vue';
 import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
+import { computed } from 'vue';
 
 const props = defineProps({
   size: {

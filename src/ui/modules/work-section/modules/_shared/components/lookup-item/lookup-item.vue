@@ -1,12 +1,12 @@
 <template>
   <article class="lookup-item">
     <lookup-item-wrapper>
-      <template v-slot:before v-if="!noBefore">
+      <template v-if="!noBefore" #before>
         <slot name="before">
           <wt-avatar></wt-avatar>
         </slot>
       </template>
-      <template v-slot:main v-if="!noMain">
+      <template v-if="!noMain" #main>
         <div class="lookup-item__main">
           <div class="lookup-item__main-content">
             <div class="lookup-item__title" :class="size">
@@ -30,8 +30,8 @@
         </div>
       </template>
       <template
-        v-slot:after="scope"
         v-if="!noAfter"
+        #after="scope"
       >
         <slot
           name="after"
@@ -40,8 +40,8 @@
       </template>
 
       <template
-        v-slot:expansion
         v-if="$slots.expansion"
+        #expansion
       >
         <slot name="expansion"></slot>
       </template>
@@ -53,7 +53,7 @@
 import LookupItemWrapper from './lookup-item-wrapper.vue';
 
 export default {
-  name: 'lookup-item',
+  name: 'LookupItem',
   components: { LookupItemWrapper },
   props: {
     noBefore: {

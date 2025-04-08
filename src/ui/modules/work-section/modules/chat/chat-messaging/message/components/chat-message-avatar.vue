@@ -22,7 +22,7 @@
 import chatMessageDetailMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
-  name: 'chat-message-avatar',
+  name: 'ChatMessageAvatar',
   mixins: [chatMessageDetailMixin],
   props: {
     bot: {

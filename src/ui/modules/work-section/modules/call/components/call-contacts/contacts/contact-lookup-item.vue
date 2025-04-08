@@ -1,6 +1,6 @@
 <template>
   <lookup-item>
-    <template v-slot:before>
+    <template #before>
       <a :href="contactLink(item.id)" target="_blank">
         <wt-avatar
           :size="size"
@@ -9,7 +9,7 @@
       </a>
     </template>
 
-    <template v-slot:title>
+    <template #title>
       <a
         class="contact-lookup-item__title"
         :href="contactLink(item.id)"
@@ -18,11 +18,11 @@
       </a>
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ primaryPhoneNumber }}
     </template>
 
-    <template v-slot:after="{ toggle }">
+    <template #after="{ toggle }">
       <wt-rounded-action
         :disabled="!item.phones.length"
         :size="size"
@@ -35,7 +35,7 @@
 
     <template
       v-if="item.phones.length > 1"
-      v-slot:expansion
+      #expansion
     >
       <contact-communication-item
         v-for="phone in item.phones"
@@ -50,12 +50,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/lookupItemMixin';
 import ContactCommunicationItem from './contact-communication-item.vue';
 
 export default {
-  name: 'contact-lookup-item',
+  name: 'ContactLookupItem',
   components: { ContactCommunicationItem },
   mixins: [lookupItemMixin, sizeMixin],
   emits: [

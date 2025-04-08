@@ -2,7 +2,7 @@
   <task-queue-container
     :empty="!missedList.length"
   >
-    <div class="missed-queue-container" v-for="(task, key) of missedList">
+    <div v-for="(task, key) of missedList" class="missed-queue-container">
       <missed-preview
         :key="task.id"
         :task="task"
@@ -19,19 +19,20 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
 export default {
-  name: 'missed-queue-container',
-  mixins: [sizeMixin],
+  name: 'MissedQueueContainer',
   components: {
     LoadMoreButton,
     TaskQueueContainer,
     MissedPreview,
   },
+  mixins: [sizeMixin],
 
   computed: {
     ...mapState('features/call/missed', {

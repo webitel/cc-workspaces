@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import TaskQueuePreviewSm from '../task-queue-preview-sm.vue';
 
 const task = {

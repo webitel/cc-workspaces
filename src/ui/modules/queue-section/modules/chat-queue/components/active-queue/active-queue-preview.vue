@@ -1,64 +1,64 @@
 <template>
-    <task-queue-preview-md
-      v-if="size === 'md'"
-      :opened="opened"
-      :queue-name="displayQueueName"
-      @click="$emit('click', task)"
-    >
+  <task-queue-preview-md
+    v-if="size === 'md'"
+    :opened="opened"
+    :queue-name="displayQueueName"
+    @click="$emit('click', task)"
+  >
 
-      <template v-slot:icon>
-        <wt-icon
-          :icon="displayIcon"
-        />
-      </template>
+    <template #icon>
+      <wt-icon
+        :icon="displayIcon"
+      />
+    </template>
 
-      <template v-slot:title>
-        {{ displayChatName }}
-      </template>
+    <template #title>
+      {{ displayChatName }}
+    </template>
 
-      <template v-slot:subtitle>
-        {{ lastMessage }}
-      </template>
+    <template #subtitle>
+      {{ lastMessage }}
+    </template>
 
-      <template v-slot:timer>
-        <queue-preview-timer
-          :task="task"
-        />
-      </template>
-    </task-queue-preview-md>
+    <template #timer>
+      <queue-preview-timer
+        :task="task"
+      />
+    </template>
+  </task-queue-preview-md>
 
-    <task-queue-preview-sm
-      v-else-if="size === 'sm'"
-      :opened="opened"
-      :queue-name="displayQueueName"
-      @click="$emit('click', task)"
-    >
+  <task-queue-preview-sm
+    v-else-if="size === 'sm'"
+    :opened="opened"
+    :queue-name="displayQueueName"
+    @click="$emit('click', task)"
+  >
 
-      <template v-slot:icon>
-        <wt-icon
-          :icon="displayIcon"
-          size="sm"
-        />
-      </template>
+    <template #icon>
+      <wt-icon
+        :icon="displayIcon"
+        size="sm"
+      />
+    </template>
 
-      <template v-slot:tooltip-title>
-        {{ displayChatName }}
-      </template>
+    <template #tooltip-title>
+      {{ displayChatName }}
+    </template>
 
-      <template v-slot:tooltip-subtitle>
-        {{ lastMessage }}
-      </template>
+    <template #tooltip-subtitle>
+      {{ lastMessage }}
+    </template>
 
-      <template v-slot:title>
-        {{ displayChatName }}
-      </template>
+    <template #title>
+      {{ displayChatName }}
+    </template>
 
-      <template v-slot:subtitle>
-        <queue-preview-timer
-          :task="task"
-        />
-      </template>
-    </task-queue-preview-sm>
+    <template #subtitle>
+      <queue-preview-timer
+        :task="task"
+      />
+    </template>
+  </task-queue-preview-sm>
 </template>
 
 <script>
@@ -68,7 +68,7 @@ import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 export default {
-  name: 'active-queue-preview',
+  name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {

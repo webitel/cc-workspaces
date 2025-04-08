@@ -1,5 +1,6 @@
 <template>
-  <div class="contact-card-phones"
+  <div
+class="contact-card-phones"
        :class="[`contact-card-phones--${props.size}`]">
     <ul>
       <li

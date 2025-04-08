@@ -4,8 +4,8 @@
     collapsed
     class="contact-card-description"
   >
-    <template v-slot:title>{{ $t('vocabulary.description') }}</template>
-    <template v-slot:default>
+    <template #title>{{ $t('vocabulary.description') }}</template>
+    <template #default>
       <div class="contact-card-description__text">
         <p v-if="props.description">
           {{ props.description }}
@@ -18,10 +18,12 @@
 </template>
 
 <script setup>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+
 const props = defineProps({
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
     options: ['sm', 'md'],
   },
   description: {

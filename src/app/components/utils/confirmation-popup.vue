@@ -4,10 +4,10 @@
     size="sm"
     @close="close"
   >
-    <template v-slot:title>
+    <template #title>
       {{ $t('confirmationPopup.title') }}
     </template>
-    <template v-slot:main>
+    <template #main>
       <div class="confirmation-popup__attention-icon">
         <wt-icon
           icon="attention"
@@ -18,7 +18,7 @@
         <slot name="text"></slot>
       </p>
     </template>
-    <template v-slot:actions>
+    <template #actions>
       <wt-button
         @click="confirm"
       >{{ $t('vocabulary.yes') }}
@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  name: 'confirmation-popup',
+  name: 'ConfirmationPopup',
   methods: {
     confirm() {
       this.$emit('confirm');

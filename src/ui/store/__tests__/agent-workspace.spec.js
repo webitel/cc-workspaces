@@ -1,7 +1,7 @@
-import instance from '../../../app/api/instance';
-import workspaceModule from '../agent-workspace';
-import WorkspaceStates from '../../enums/WorkspaceState.enum';
 import webSocketClientController from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import instance from '../../../app/api/instance';
+import WorkspaceStates from '../../enums/WorkspaceState.enum';
+import workspaceModule from '../agent-workspace';
 
 const destroyCliInstanceMock = vi.fn();
 

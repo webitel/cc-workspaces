@@ -1,4 +1,5 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
+
 import MissedQueueContainer
   from '../missed-queue-container.vue';
 

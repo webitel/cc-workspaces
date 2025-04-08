@@ -9,6 +9,7 @@
 
 import deepCopy from 'deep-copy';
 import MarkdownIt from 'markdown-it';
+
 import patchMDRender
   from '../../../../../info-section/modules/client-info/components/client-info-markdown/scripts/patchMDRender';
 
@@ -16,7 +17,7 @@ const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);
 
 export default {
-  name: 'job-variables-container',
+  name: 'JobVariablesContainer',
   props: {
     task: {
       type: Object,

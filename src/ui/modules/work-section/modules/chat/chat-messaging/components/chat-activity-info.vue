@@ -25,9 +25,9 @@
 
 <script setup>
 // component show is chat started or ended
+import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
 
 const props = defineProps({
   ended: {

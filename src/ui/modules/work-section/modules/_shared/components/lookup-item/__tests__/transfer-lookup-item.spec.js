@@ -1,9 +1,10 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import AbstractUserStatus
   from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import UserLookupItem from '../user-lookup-item.vue';
-import TransferLookupItem from '../transfer-lookup-item.vue';
+
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
+import TransferLookupItem from '../transfer-lookup-item.vue';
+import UserLookupItem from '../user-lookup-item.vue';
 
 const computed = {
   state() {

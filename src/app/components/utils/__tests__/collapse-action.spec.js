@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import CollapseAction from '../collapse-action.vue';
 
 describe('CollapseAction', () => {

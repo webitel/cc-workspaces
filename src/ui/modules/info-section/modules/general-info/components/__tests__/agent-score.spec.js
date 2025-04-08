@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import AgentScore from '../agent-score.vue';
 
 describe('General Info: Agent Score', () => {

@@ -16,7 +16,7 @@ const actions = {
   },
 
   INITIALIZE_CHAT_PLAYERS: (context, { player, chat = context.getters.CHAT_ON_WORKSPACE }) => {
-    // eslint-disable-next-line no-param-reassign
+     
     chat.players = player ? [player] : [];
   },
 
@@ -36,7 +36,7 @@ const actions = {
     * Players cleanup is necessary in order to avoid memory leaks storing player instances + DOM elements
     * in memory when they are really destroyed
     * */
-    // eslint-disable-next-line no-param-reassign
+     
     delete chat.players;
   },
 

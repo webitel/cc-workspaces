@@ -1,7 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
-import WidgetBar from '../widget-bar.vue';
+
 import widget from '../../store/widget';
+import WidgetBar from '../widget-bar.vue';
 
 const store = createStore({
   modules: {

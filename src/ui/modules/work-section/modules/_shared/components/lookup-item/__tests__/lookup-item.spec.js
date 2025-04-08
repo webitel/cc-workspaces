@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import LookupItem from '../lookup-item.vue';
 
 describe('LookupItem', () => {

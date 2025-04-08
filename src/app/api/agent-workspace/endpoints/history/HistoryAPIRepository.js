@@ -1,12 +1,13 @@
-import { CallServiceApiFactory } from 'webitel-sdk';
+import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
 import applyTransform, {
   merge, notify,
   snakeToCamel,
   starToSearch
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/src/api/defaults/index.js';
-import configuration from '../../../openAPIConfig';
+import { CallServiceApiFactory } from 'webitel-sdk';
+
 import instance from '../../../instance';
+import configuration from '../../../openAPIConfig';
 
 const callService = new CallServiceApiFactory(configuration, '', instance);
 

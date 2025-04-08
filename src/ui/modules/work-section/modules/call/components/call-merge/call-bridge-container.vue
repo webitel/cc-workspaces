@@ -1,14 +1,14 @@
 <template>
   <lookup-item-container>
-    <template v-slot:search>
+    <template #search>
       <div></div>
     </template>
-    <template v-slot:subtitle>{{ $t('bridge.activeCalls') }}</template>
-    <template v-slot:content>
+    <template #subtitle>{{ $t('bridge.activeCalls') }}</template>
+    <template #content>
       <merge-lookup-item
         v-for="(item) of bridgeList"
-        :item="item"
         :key="item.id"
+        :item="item"
         @input="bridge"
       ></merge-lookup-item>
     </template>
@@ -16,12 +16,13 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
-import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
+import { mapActions, mapGetters,mapState } from 'vuex';
+
 import MergeLookupItem from '../../../_shared/components/lookup-item/merge-lookup-item.vue';
+import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 
 export default {
-  name: 'call-transfer-container',
+  name: 'CallTransferContainer',
   components: { LookupItemContainer, MergeLookupItem },
 
   computed: {

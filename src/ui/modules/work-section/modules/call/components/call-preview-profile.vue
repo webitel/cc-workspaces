@@ -20,11 +20,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
+
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
 
 export default {
-  name: 'call-preview-profile',
+  name: 'CallPreviewProfile',
   mixins: [displayInfoMixin, sizeMixin],
   computed: {
     ...mapGetters('workspace', {

@@ -7,19 +7,20 @@
       wide
       @change="changeTab"
     />
-      <component
-        class="call-contacts-container-content"
-        :is="currentTab.component"
-        :size="size"
-      />
+    <component
+      :is="currentTab.component"
+      class="call-contacts-container-content"
+      :size="size"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { computed,ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
 

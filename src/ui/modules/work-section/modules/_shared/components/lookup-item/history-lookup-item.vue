@@ -1,9 +1,9 @@
 <template>
   <lookup-item
-    :size="size"
     :key="item.id"
+    :size="size"
     @click="handleInput">
-    <template v-slot:before>
+    <template #before>
       <div class="history-lookup-item-wrapper">
         <wt-avatar :size="size"/>
         <wt-icon
@@ -13,23 +13,23 @@
         />
       </div>
     </template>
-    <template v-slot:title>
+    <template #title>
       {{ shownDestination }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ destinationForNumber }}
     </template>
 
-    <template v-slot:info-title>
+    <template #info-title>
       {{ date }}
     </template>
 
-    <template v-slot:info-subtitle>
+    <template #info-subtitle>
       ({{ duration }})
     </template>
 
-    <template v-slot:after>
+    <template #after>
       <div class="history-lookup-item-after">
         <wt-rounded-action
           icon="call--filled"
@@ -40,10 +40,10 @@
           @click="call"
         />
         <wt-context-menu
+            :key="item.id"
             class="history-lookup-item-options"
             :options="contextMenuOptions"
             :visible="isContextMenuVisible"
-            :key="item.id"
             @click="$event.option.handler()"
           >
             <template #activator>
@@ -70,14 +70,15 @@
 </template>
 
 <script>
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import lookupItemMixin from './mixins/lookupItemMixin';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
-  name: 'history-lookup-item',
+  name: 'HistoryLookupItem',
   mixins: [lookupItemMixin, sizeMixin],
   props: {
     forNumber: {

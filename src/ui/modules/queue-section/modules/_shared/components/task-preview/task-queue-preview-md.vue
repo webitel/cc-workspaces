@@ -57,8 +57,8 @@
     </section>
 
     <div
-      class="queue-preview-actions"
       v-if="$slots.actions"
+      class="queue-preview-actions"
     >
       <slot name="actions"></slot>
     </div>
@@ -76,7 +76,7 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'task-queue-preview',
+  name: 'TaskQueuePreview',
   mixins: [sizeMixin],
   props: {
     opened: {

@@ -5,22 +5,22 @@
     :queue-name="queueName"
     @click="$emit('click', task)"
   >
-    <template v-slot:icon>
+    <template #icon>
       <img
         :alt="task.state"
         :src="sonarIcon"
       >
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ task.displayNumber }}
     </template>
 
-    <template v-slot:timer>
+    <template #timer>
       <span v-if="isRinging">
         {{ $t('workspaceSec.callState.ringing') }}
       </span>
@@ -32,7 +32,7 @@
 
     <template
       v-if="eavesdropStatusIcon"
-      v-slot:icon-status
+      #icon-status
     >
       <wt-icon
         :icon="eavesdropStatusIcon"
@@ -43,7 +43,7 @@
 
     <template
       v-if="isRinging"
-      v-slot:actions
+      #actions
     >
       <wt-button
         color="success"
@@ -73,7 +73,7 @@
     @click="$emit('click', task)"
   >
 
-    <template v-slot:icon>
+    <template #icon>
       <img
         :alt="task.state"
         :src="sonarIcon"
@@ -82,7 +82,7 @@
 
     <template
       v-if="eavesdropStatusIcon"
-      v-slot:icon-status
+      #icon-status
     >
       <wt-icon
         :icon="eavesdropStatusIcon"
@@ -91,24 +91,24 @@
       ></wt-icon>
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ task.displayName }}
     </template>
 
-    <template v-slot:tooltip-subtitle>
+    <template #tooltip-subtitle>
       {{ task.displayNumber }}
     </template>
 
     <template
       v-if="!isRinging"
-      v-slot:subtitle
+      #subtitle
     >
       <queue-preview-timer :task="task" />
     </template>
 
     <template
       v-if="isRinging"
-      v-slot:actions
+      #actions
     >
       <wt-rounded-action
         rounded
@@ -139,6 +139,7 @@
 
 <script>
 import { CallActions, CallDirection } from 'webitel-sdk';
+
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
@@ -148,7 +149,7 @@ import isIncomingRinging from '../../../../../../../features/modules/call/script
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'active-queue-preview',
+  name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   computed: {
     isHold() {

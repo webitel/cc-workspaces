@@ -7,7 +7,7 @@
     @search:input="dataSearch = $event"
     @search:change="resetData"
   >
-    <template v-slot:after-search>
+    <template #after-search>
       <wt-button
         color="transfer"
         :disabled="isTransferToNumberDisabled"
@@ -16,11 +16,11 @@
       </wt-button>
     </template>
 
-    <template v-slot:empty>
+    <template #empty>
       <empty-search type="contacts" />
     </template>
 
-    <template v-slot:content>
+    <template #content>
       <transfer-lookup-item
         v-for="(item, key) of dataList"
         :id="`scroll-item-${key}`"
@@ -35,23 +35,24 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+
+import APIRepository from '../../../../../../../app/api/APIRepository';
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import APIRepository from '../../../../../../../app/api/APIRepository';
 
 const usersAPI = APIRepository.users;
 
 export default {
-  name: 'call-transfer-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  name: 'CallTransferContainer',
   components: {
     LookupItemContainer,
     TransferLookupItem,
     EmptySearch,
   },
+  mixins: [infiniteScrollMixin, sizeMixin],
 
   data: () => ({
     dataList: [],

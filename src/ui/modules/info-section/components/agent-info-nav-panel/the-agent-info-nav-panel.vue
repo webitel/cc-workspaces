@@ -4,7 +4,7 @@
       v-for="(tab) of tabs"
       :key="tab.value"
     >
-      <template v-slot:activator>
+      <template #activator>
         <wt-rounded-action
           :icon="tab.icon || tab.value"
           :active="tab.value === currentTab?.value"
@@ -23,8 +23,11 @@
 <script>
 import sizeMixin from '../../../../../app/mixins/sizeMixin';
 export default {
-  name: 'the-agent-info-section-nav-panel',
+  name: 'TheAgentInfoSectionNavPanel',
   mixins: [sizeMixin],
+  model: {
+    prop: 'currentTab',
+  },
   props: {
     currentTab: {
       type: Object,
@@ -33,9 +36,6 @@ export default {
       type: Array,
       default: () => [],
     },
-  },
-  model: {
-    prop: 'currentTab',
   },
 };
 </script>

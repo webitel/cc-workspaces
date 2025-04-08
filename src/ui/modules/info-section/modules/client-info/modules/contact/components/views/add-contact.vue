@@ -59,17 +59,18 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useStore } from 'vuex';
-import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 import { EngineCommunicationChannels } from 'webitel-sdk';
-import TimezonesAPI from '../../api/TimezonesAPI';
+
+import CommunicationsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/communications/CommunicationsAPIRepository';
 import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import LabelsAPI from '../../api/LabelsAPI';
-import CommunicationsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/communications/CommunicationsAPIRepository';
+import TimezonesAPI from '../../api/TimezonesAPI';
 
 const props = defineProps({
   namespace: {

@@ -29,8 +29,8 @@
     >
       <wt-replace-transition>
         <div
-          class="lookup-item-container-loader"
           v-if="loading"
+          class="lookup-item-container-loader"
         >
           <slot name="loader">
             <wt-loader />
@@ -42,7 +42,7 @@
           v-show="showEmpty"
           class="lookup-item-container-empty"
         >
-          <slot name="empty" v-bind:show="showEmpty"></slot>
+          <slot name="empty" :show="showEmpty"></slot>
         </div>
       </wt-replace-transition>
       <wt-replace-transition>
@@ -68,7 +68,8 @@
 </template>
 
 <script setup>
-import { ref, computed  } from 'vue';
+import { computed, ref } from 'vue';
+
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 

@@ -1,7 +1,8 @@
 import { config, shallowMount } from '@vue/test-utils';
+
+import FlowsAPI from '../../api/flows';
 import FlowButton
   from '../flow-button.vue';
-import FlowsAPI from '../../api/flows';
 
 const id = 12;
 

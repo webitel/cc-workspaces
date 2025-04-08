@@ -9,15 +9,15 @@
 
 <script>
 export default {
-  name: 'processing-form-datetimepicker',
+  name: 'ProcessingFormDatetimepicker',
+  model: {
+    event: 'input',
+  },
   props: {
     value: {
       type: [String, Number],
       default: '',
     },
-  },
-  model: {
-    event: 'input',
   },
   created() {
     if (this.value === 'now') {

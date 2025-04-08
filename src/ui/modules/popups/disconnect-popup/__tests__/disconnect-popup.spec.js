@@ -1,5 +1,6 @@
+import { mount,shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
-import { shallowMount, mount } from '@vue/test-utils';
+
 import globals from '../../../../../features/modules/global-handlers/store/global-handlers';
 import DisconnectPopup from '../components/disconnect-popup.vue';
 

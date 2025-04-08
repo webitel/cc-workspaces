@@ -185,7 +185,7 @@ const actions = {
       const newNumber = call.newNumber + value;
 
       // cannot mutate newCall because its instance only on 'workspace' state
-      // eslint-disable-next-line no-param-reassign
+       
       context.getters.CALL_ON_WORKSPACE.newNumber = newNumber;
     }
   },
@@ -195,7 +195,7 @@ const actions = {
     { call = context.getters.CALL_ON_WORKSPACE, value },
   ) => {
     // cannot mutate newCall because its instance only on 'workspace' state
-    // eslint-disable-next-line no-param-reassign
+     
     call.newNumber = value;
   },
 

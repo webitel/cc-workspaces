@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import Dropzone
   from '../dropzone.vue';
 

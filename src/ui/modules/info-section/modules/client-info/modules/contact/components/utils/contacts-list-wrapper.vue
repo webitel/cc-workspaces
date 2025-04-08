@@ -2,8 +2,8 @@
   <div class="contact-list-wrapper">
     <div v-if="props.list.length">
       <contact-header
-        :isNext="isNext"
-        :isPrev="isPrev"
+        :is-next="isNext"
+        :is-prev="isPrev"
         :length="props.list?.length"
         :index="index"
         @next="next"
@@ -26,9 +26,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { useStore } from 'vuex';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { computed, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
 import ContactMode from '../../enums/ContactMode.enum';
 import ContactCard from '../contact-card/the-contact-card.vue';
 import ContactHeader from './contact-header.vue';
@@ -45,7 +47,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
   },
   mode: {
     type: String,

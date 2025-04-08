@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import Widget from '../widget.vue';
 
 describe('Widget', () => {

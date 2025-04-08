@@ -1,11 +1,12 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
 import deepmerge from 'deepmerge';
+
+import ReportingForm
+  from '../../store/ReportingForm';
 import FailureForm
   from '../reporting-failure-form.vue';
 import TheReporting
   from '../the-reporting.vue';
-import ReportingForm
-  from '../../store/ReportingForm';
 
 const mockReporingForm = vi.fn();
 const taskOnWorkspace = {

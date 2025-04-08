@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import StatusSelect from '../agent-status-select.vue';
 
 const lastStatusChange = Date.now() - 12 * 60 * 60 * 10 ** 3; // '12:00:00'

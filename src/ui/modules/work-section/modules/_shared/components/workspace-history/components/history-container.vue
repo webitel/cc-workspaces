@@ -8,13 +8,14 @@
     @search:change="resetData"
   >
 
-    <template v-slot:empty>
+    <template #empty>
       <empty-search type="history" />
     </template>
 
-    <template v-slot:content>
-      <div class="history-container-contact"
-        v-for="dataItem in dataList">
+    <template #content>
+      <div
+v-for="dataItem in dataList"
+        class="history-container-contact">
         <p class="history-container-contact__caption">
           {{dataItem.groupName}}
         </p>
@@ -24,8 +25,8 @@
           :item="item"
           :size="size"
           :for-number="historyNumber"
-          @input="select(item)"
           class="history-container-contact__item"
+          @input="select(item)"
         />
         <wt-divider/>
       </div>
@@ -38,25 +39,26 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-import LookupItemContainer from '../../lookup-item-container/lookup-item-container.vue';
-import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
-import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
+
+import APIRepository from '../../../../../../../../app/api/APIRepository';
 import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../../../../../enums/WorkspaceState.enum';
-import APIRepository from '../../../../../../../../app/api/APIRepository';
+import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
+import LookupItemContainer from '../../lookup-item-container/lookup-item-container.vue';
+import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
 
 const historyAPI = APIRepository.history;
 
 export default {
-  name: 'history-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  name: 'HistoryContainer',
   components: {
     LookupItemContainer,
     HistoryLookupItem,
     EmptySearch,
   },
+  mixins: [infiniteScrollMixin, sizeMixin],
 
   data: () => ({
     dataList: '',

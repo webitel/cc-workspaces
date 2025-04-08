@@ -1,5 +1,5 @@
 <template>
-  <aside class="media-viewer" v-show="isMediaView" @click="close">
+  <aside v-show="isMediaView" class="media-viewer" @click="close">
     <div class="media-viewer__shadow"></div>
     <div class="media-viewer__content-wrapper">
       <img class="media-viewer__content__img" :src="photo.url" :alt="photo.name">
@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions,mapState } from 'vuex';
 
 export default {
-  name: 'media-viewer',
+  name: 'MediaViewer',
   computed: {
     ...mapState('features/chat/chatMedia', {
       mediaView: (state) => state.mediaView,

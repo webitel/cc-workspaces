@@ -1,4 +1,5 @@
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
+
 import ReportingForm from './ReportingForm';
 
 const state = {

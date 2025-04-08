@@ -1,5 +1,5 @@
 <template>
-  <aside class="video-container" :class="{'large': isExpanded}" v-if="isVideo">
+  <aside v-if="isVideo" class="video-container" :class="{'large': isExpanded}">
     <div class="video-wrap peer">
       <video
         class="peer-video"
@@ -10,8 +10,8 @@
     </div>
 
     <div
+      v-if="isLocalVideo && isPeerVideo"
       class="video-wrap local"
-      v-if="this.isLocalVideo && this.isPeerVideo"
     >
       <video
         class="local-video"
@@ -64,11 +64,11 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapActions,mapGetters } from 'vuex';
   // import RoundedAction from '../../utils/rounded-action.vue';
 
   export default {
-    name: 'video-container',
+    name: 'VideoContainer',
     components: {
       // RoundedAction,
     },

@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { CallActions } from 'webitel-sdk';
+
 import Bridge
   from '../call-bridge-container.vue';
 

@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import ReactiveNowStoreModule
   from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
+
 import QueuePreviewTimer from '../queue-preview-timer.vue';
 
 const store = createStore({ modules: { now: new ReactiveNowStoreModule().getModule() } });

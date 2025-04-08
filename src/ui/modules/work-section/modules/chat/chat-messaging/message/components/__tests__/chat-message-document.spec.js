@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import ChatMessageDocument
   from '../chat-message-document.vue';
 

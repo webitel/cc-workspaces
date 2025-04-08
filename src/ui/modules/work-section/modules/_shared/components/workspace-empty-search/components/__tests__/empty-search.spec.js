@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+
 import EmptySearch from '../empty-search.vue';
 
 describe('EmptySearch', () => {

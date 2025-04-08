@@ -6,7 +6,6 @@
         v-else
         ref="chat-messages-items"
         class="chat-history__messages chat-messages-items"
-        v-chat-scroll
       >
         <wt-intersection-observer
           :next="next"
@@ -17,13 +16,13 @@
           v-for="(message, index) of messages"
           :key="message.id"
           :message="message"
-          :size="size"
+          :size="props.size"
           :show-avatar="showAvatar(index) || isChatStarted(index)"
           :username="props.contact?.name"
           @open-image="openMedia(message)"
           @initialized-player="attachPlayer"
         >
-          <template v-slot:before-message>
+          <template #before-message>
             <chat-date
               v-if="showChatDate(index) || isHistoryStart(index)"
               :date="message.createdAt"
@@ -40,7 +39,7 @@
             />
           </template>
 
-          <template v-slot:after-message>
+          <template #after-message>
             <chat-activity-info
               v-if="isChatStarted(index + 1) || isLastMessage(index)"
               ended
@@ -53,16 +52,18 @@
 </template>
 
 <script setup>
-import { watch, computed, ref, onUnmounted, useTemplateRef, nextTick } from 'vue';
-import { useStore } from 'vuex';
-import { useChatMessages } from '../message/composables/useChatMessages.js';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
+import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { useStore } from 'vuex';
+
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
-import vChatScroll from '../../../../../../../app/directives/chatScroll.js';
-import Message from '../message/chat-message.vue';
-import ChatDate from '../components/chat-date.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
+import ChatDate from '../components/chat-date.vue';
+import { useChatScroll } from '../composables/useChatScroll.js';
+import Message from '../message/chat-message.vue';
+import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 const props = defineProps({
   contact: {
@@ -71,7 +72,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
   },
 });
 
@@ -92,6 +93,8 @@ const {
   showAvatar,
   focusOnInput,
 } = useChatMessages();
+
+const { scrollToBottom } = useChatScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
@@ -115,25 +118,16 @@ function isChatStarted(index) {
   return prevMessage
     && nextMessage
     && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
-};
+}
 
 function isHistoryStart(index) { // first message of all chats
   return !next.value && index === 0;
 }
 
 function getChatProvider(message) {
-  if (message?.chat?.via) {
-    return { type: message.chat.via.type, // chats from history
-      name: message.chat.via.name }
-  }
-  if (currentChat.value?.members) {
-    return { type: currentChat.value?.members[0]?.type, // from current chat
-      name: currentChat.value?.members[0]?.name }
-  }
-};
+  const { via } = message.chat || message.member; // chat history or current chat gateway
 
-const scrollToBottom = () => {
-  el.value.scrollTop = el.value?.scrollHeight;
+  return { type: via.type, name: via.name };
 }
 
 watch([
@@ -141,26 +135,16 @@ watch([
   () => props.contact?.id
 ],  async () => {
 
-    await loadHistory();
-    await nextTick(() => scrollToBottom());
+  await loadHistory();
+  await nextTick(() => scrollToBottom());
 
-  },{ immediate: true });
+},{ immediate: true });
 
-
-watch(() => messages.value?.length,
-  async (messagesLength, oldMessagesLength) => {
-
-  const newMessages = messagesLength - oldMessagesLength;
-
-    if (!messagesLength || !oldMessagesLength) scrollToBottom();
-    if (newMessages === 1 && messages.value[messagesLength - 1]?.member?.self) scrollToBottom();
-  },
-  { flush: 'post' }
-);
 
 onUnmounted(() => {
   resetHistory();
 });
+
 </script>
 
 <style lang="scss" scoped>

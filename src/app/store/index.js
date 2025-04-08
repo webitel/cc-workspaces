@@ -1,10 +1,11 @@
 import { createStore } from 'vuex';
-import instance from '../api/instance';
-import OpenAPIConfig from '../api/openAPIConfig';
-import webSocketClientController from '../api/agent-workspace/websocket/WebSocketClientController';
+
 import features from '../../features/store/features';
 import workspace from '../../ui/store/agent-workspace';
 import ui from '../../ui/store/ui';
+import webSocketClientController from '../api/agent-workspace/websocket/WebSocketClientController';
+import instance from '../api/instance';
+import OpenAPIConfig from '../api/openAPIConfig';
 
 const store = createStore({
   state: {

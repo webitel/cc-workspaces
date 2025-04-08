@@ -2,10 +2,11 @@
   <task-queue-container
     :empty="!dataList.length"
   >
-    <div class="offline-queue-container__scroll-wrap" ref="scroll-wrap">
-      <div class="offline-queue-container__items"
-           v-for="(task, index) of dataList"
-           :key="task.id">
+    <div ref="scroll-wrap" class="offline-queue-container__scroll-wrap">
+      <div
+v-for="(task, index) of dataList"
+           :key="task.id"
+           class="offline-queue-container__items">
         <offline-preview
           :opened="task === taskOnWorkspace"
           :task="task"
@@ -25,18 +26,19 @@
 <script>
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import { mapActions, mapGetters, mapState } from 'vuex';
+
 import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import OfflinePreview from './offline-queue-preview.vue';
 
 export default {
-  name: 'offline-queue-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  name: 'OfflineQueueContainer',
   components: {
     TaskQueueContainer,
     OfflinePreview,
   },
+  mixins: [infiniteScrollMixin, sizeMixin],
   setup() {
     const { subscribe } = useCachedInterval({ timeout: 15 * 1000 });
     return { subscribe };
@@ -67,7 +69,7 @@ export default {
   mounted() {
     this.subscribe(this.loadDataList);
   },
-  destroyed() {
+  unmounted() {
     /*
     [WTEL-3064]
     When unmounting a offline-queue-container component (for example, when clicking on missed calls),

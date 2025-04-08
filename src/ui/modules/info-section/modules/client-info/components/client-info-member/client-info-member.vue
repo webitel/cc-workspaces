@@ -7,8 +7,8 @@
       v-if="memberDescription"
       :collapsed="collapsed"
     >
-      <template v-slot:title>{{ $t('infoSec.memberDescription') }}</template>
-      <template v-slot:default>
+      <template #title>{{ $t('infoSec.memberDescription') }}</template>
+      <template #default>
         <p class="client-info-member-description">{{ memberDescription }}</p>
       </template>
     </wt-expansion-panel>
@@ -17,8 +17,8 @@
       v-if="variables.length"
       :collapsed="collapsed"
     >
-      <template v-slot:title>{{ $t('infoSec.variables') }}</template>
-      <template v-slot:default>
+      <template #title>{{ $t('infoSec.variables') }}</template>
+      <template #default>
         <ul class="client-info-member-list">
           <li
             v-for="({ key, value }, idx) of variables"
@@ -38,20 +38,21 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import MarkdownIt from 'markdown-it';
+import { mapGetters } from 'vuex';
+
 import patchMDRender from '../client-info-markdown/scripts/patchMDRender';
 
 const md = new MarkdownIt({ linkify: true });
 patchMDRender(md);
 
 export default {
-  name: 'client-info-member',
+  name: 'ClientInfoMember',
   props: {
     size: {
       type: String,
-      default: 'md',
-      options: ['sm', 'md'],
+      default: ComponentSize.MD,
     },
     collapsed: {
       type: Boolean,

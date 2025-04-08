@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'pin-action',
+  name: 'PinAction',
   props: {
     pinned: {
       type: Boolean,

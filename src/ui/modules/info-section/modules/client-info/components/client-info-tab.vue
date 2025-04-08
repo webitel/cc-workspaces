@@ -7,18 +7,22 @@
       :task="props.task"
     />
     <client-info-member
-      :collapsed="isAllowedContacts"
       :size="props.size"
+      :collapsed="false"
     />
   </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+
+import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import { EngineSystemSettingName } from 'webitel-sdk';
+
+import Contact from '../modules/contact/components/the-contact.vue';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
 import ClientInfoChips from './queue-name/client-info-chips.vue';
-import Contact from '../modules/contact/components/the-contact.vue';
 
 const props = defineProps({
   task: {
@@ -32,19 +36,27 @@ const props = defineProps({
 
 const store = useStore();
 
+const isHideContact = ref(false);
+
 const isJob = computed(() => store.getters['workspace/IS_JOB_WORKSPACE']);
 const isChatClosed = computed(() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED']);
-const isCallCenterLicense = computed(() => store.getters[`ui/userinfo/IS_CALL_CENTER_LICENSE`]);
-const isCallManagerLicense = computed(() => store.getters['ui/userinfo/IS_CALL_MANAGER_LICENSE']);
 
-const hasLicenses = computed(() => isCallCenterLicense.value || isCallManagerLicense.value);
+const getValueWbtHideContactVariable = async () => {
+  const { items } = await ConfigurationAPI.getList({
+    name: [EngineSystemSettingName.WbtHideContact],
+  });
+  return items?.[0]?.value;
+};
 
 const isAllowedContacts = computed(() => {
     if (isJob.value) return;
-    return hasLicenses.value && !props.task?.hideContact && !isChatClosed.value;
+    return isHideContact.value && !props.task?.hideContact && !isChatClosed.value;
   }
 );
 
+onMounted(async () => {
+  isHideContact.value = await getValueWbtHideContactVariable();
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+
 import MemberCommunications
   from '../member-communications.vue';
 

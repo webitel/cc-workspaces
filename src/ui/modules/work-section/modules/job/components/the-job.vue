@@ -1,17 +1,17 @@
 <template>
   <task-container class="the-job">
-    <template v-slot:header>
+    <template #header>
       <job-header
         :size="size"
         :task="task"
       ></job-header>
     </template>
-    <template v-slot:body>
+    <template #body>
       <job-variables-container
         :task="task"
       ></job-variables-container>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <job-footer
         :task="task"
       ></job-footer>
@@ -21,14 +21,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import TaskContainer from '../../_shared/components/task-container/task-container.vue';
-import JobHeader from './job-header/job-header.vue';
-import JobFooter from './job-footer/job-footer.vue';
-import JobVariablesContainer from './job-variables-container/job-variables-container.vue';
+
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import TaskContainer from '../../_shared/components/task-container/task-container.vue';
+import JobFooter from './job-footer/job-footer.vue';
+import JobHeader from './job-header/job-header.vue';
+import JobVariablesContainer from './job-variables-container/job-variables-container.vue';
 
 export default {
-  name: 'the-job',
+  name: 'TheJob',
   components: {
     TaskContainer,
     JobHeader,

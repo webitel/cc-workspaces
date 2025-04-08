@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'collapse-action',
+  name: 'CollapseAction',
   props: {
     collapsed: {
       type: Boolean,

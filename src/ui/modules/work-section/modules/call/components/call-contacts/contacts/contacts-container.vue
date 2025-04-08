@@ -8,7 +8,7 @@
     @search:change="resetData"
   >
 
-    <template v-slot:search="{ search, inputHandler, searchHandler }">
+    <template #search="{ search, inputHandler, searchHandler }">
       <wt-search-bar
         :size="size"
         :value="search"
@@ -21,11 +21,11 @@
       ></wt-search-bar>
     </template>
 
-    <template v-slot:empty>
+    <template #empty>
       <empty-search type="contacts" />
     </template>
 
-    <template v-slot:content>
+    <template #content>
       <contact-lookup-item
         v-for="(item) in dataList"
         :key="item.id"
@@ -39,22 +39,23 @@
 
 <script>
 import { mapActions } from 'vuex';
+
 import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
-import ContactLookupItem from './contact-lookup-item.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
+import ContactLookupItem from './contact-lookup-item.vue';
 
 export default {
-  name: 'contacts-container',
-  mixins: [infiniteScrollMixin, sizeMixin],
+  name: 'ContactsContainer',
   components: {
     ContactLookupItem,
     EmptySearch,
     LookupItemContainer,
   },
+  mixins: [infiniteScrollMixin, sizeMixin],
 
   data: () => ({
     dataList: [],

@@ -1,4 +1,5 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount,shallowMount } from '@vue/test-utils';
+
 import AgentOrgStructure from '../agent-org-structure.vue';
 
 describe('General Info: Agent Org Structure', () => {

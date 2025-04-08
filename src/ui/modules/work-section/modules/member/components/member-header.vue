@@ -1,6 +1,6 @@
 <template>
   <task-header :size="size">
-    <template v-slot:before-avatar>
+    <template #before-avatar>
       <wt-rounded-action
         :active="isOnHistory"
         :size="size"
@@ -12,7 +12,7 @@
         @click="$emit('openTab', 'history')"
       ></wt-rounded-action>
     </template>
-    <template v-slot:after-avatar>
+    <template #after-avatar>
       <wt-rounded-action
         v-show="isCall"
         :size="size"
@@ -23,17 +23,18 @@
         @click="makeCall"
       ></wt-rounded-action>
     </template>
-    <template v-slot:title>{{ member.name }}</template>
+    <template #title>{{ member.name }}</template>
   </task-header>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
 export default {
-  name: 'workspace-member-header',
+  name: 'WorkspaceMemberHeader',
   components: { TaskHeader },
   mixins: [sizeMixin],
   props: {

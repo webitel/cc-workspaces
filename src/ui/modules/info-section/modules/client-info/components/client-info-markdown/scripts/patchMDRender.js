@@ -6,7 +6,7 @@ const patchLinkOpenRule = (defaultRule) => {
     if (attrIndex < 0) {
       tokens[index].attrPush(['target', '_blank']); // add new attribute
     } else {
-      // eslint-disable-next-line no-param-reassign
+       
       tokens[index].attrs[attrIndex][1] = '_blank'; // replace value of existing attr
     }
     return defaultRule(tokens, index, options, env, self); // pass token to default renderer.
@@ -15,7 +15,7 @@ const patchLinkOpenRule = (defaultRule) => {
 
 const patchHtmlBlockRule = (defaultRule) => {
   return (tokens, index, options, env, self) => {
-    let processedTokens = tokens;
+    const processedTokens = tokens;
 
     // Why we do not minify HTML?
     // https://webitel.atlassian.net/browse/WTEL-5112

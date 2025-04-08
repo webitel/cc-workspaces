@@ -1,5 +1,6 @@
-import { createStore } from 'vuex';
 import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+
 import FlowsTab from '../flows-tab.vue';
 
 const flowsData = [{

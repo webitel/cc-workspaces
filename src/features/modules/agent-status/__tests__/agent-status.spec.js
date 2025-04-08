@@ -1,9 +1,9 @@
-import statusModule from '../agent-status';
-import UserStatus from '../statusUtils/UserStatus';
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import webSocketClientController
   from '../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import statusModule from '../agent-status';
+import UserStatus from '../statusUtils/UserStatus';
 
 let mockSocket = new MockSocket();
 vi.spyOn(webSocketClientController, 'getCliInstance')

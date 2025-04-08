@@ -3,7 +3,7 @@
     :size="size"
     :username="displayChatName"
   >
-    <template v-slot:after-avatar>
+    <template #after-avatar>
       <wt-rounded-action
         v-show="isTransferAction"
         :size="size"
@@ -19,7 +19,7 @@
         @click="close"
       />
     </template>
-    <template v-slot:title>
+    <template #title>
       <a
         v-if="chatContact?.id"
         :href="contactLink(chatContact.id)"
@@ -36,15 +36,17 @@
 </template>
 
 <script>
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
-import { getLinkedContact } from '../scripts/getLinkedContact.js';
+
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+import { getLinkedContact } from '../scripts/getLinkedContact.js';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
-  name: 'chat-header',
+  name: 'ChatHeader',
   components: {
     TaskHeader,
     ChatHeaderCloseAction,
@@ -52,7 +54,7 @@ export default {
   props: {
     size: {
       type: String,
-      default: '',
+      default: ComponentSize.MD,
     },
   },
   data: () => ({

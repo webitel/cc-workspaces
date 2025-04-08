@@ -8,7 +8,7 @@
     @click="$emit('click', task)"
   >
 
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon-btn
         v-if="!processed"
         :size="size"
@@ -23,19 +23,19 @@
       />
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayTaskName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ lastMessagePreview }}
     </template>
 
-    <template v-slot:timer>
+    <template #timer>
       {{ duration }}
     </template>
 
-    <template v-slot:icon-status>
+    <template #icon-status>
       <wt-icon
         :icon="closeReasonIcon"
         color="error"
@@ -52,7 +52,7 @@
     @click="$emit('click', task)"
   >
 
-    <template v-slot:icon>
+    <template #icon>
       <wt-icon-btn
         v-if="!processed"
         :size="size"
@@ -67,23 +67,23 @@
       />
     </template>
 
-    <template v-slot:tooltip-title>
+    <template #tooltip-title>
       {{ displayTaskName }}
     </template>
 
-    <template v-slot:tooltip-subtitle>
+    <template #tooltip-subtitle>
       {{ lastMessagePreview }}
     </template>
 
-    <template v-slot:title>
+    <template #title>
       {{ displayTaskName }}
     </template>
 
-    <template v-slot:subtitle>
+    <template #subtitle>
       {{ duration }}
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <div class="closed-queue-preview__footer">
         <wt-icon
           :icon="closeReasonIcon"
@@ -97,14 +97,16 @@
 
 <script setup>
 
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
 import ChatCloseReason
   from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 
 const props = defineProps({
   task: {
@@ -117,7 +119,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
   },
   processed: { // if false - chat will be in active queue tab, if true - in closed queue tab
     type: Boolean,

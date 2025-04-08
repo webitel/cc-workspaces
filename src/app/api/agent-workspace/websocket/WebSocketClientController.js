@@ -1,6 +1,7 @@
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { markRaw, reactive, shallowReactive } from 'vue';
 import { Client } from 'webitel-sdk';
+
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 const { hostname, protocol } = window.location;

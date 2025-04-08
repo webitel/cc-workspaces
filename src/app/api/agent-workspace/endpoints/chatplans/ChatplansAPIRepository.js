@@ -1,4 +1,3 @@
-import { RoutingChatPlanServiceApiFactory } from 'webitel-sdk';
 import {
   getDefaultGetListResponse,
   getDefaultGetParams,
@@ -9,6 +8,8 @@ import applyTransform, {
   snakeToCamel,
   starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { RoutingChatPlanServiceApiFactory } from 'webitel-sdk';
+
 import instance from '../../../instance';
 import configuration from '../../../openAPIConfig';
 

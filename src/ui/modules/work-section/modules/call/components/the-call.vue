@@ -6,25 +6,25 @@
   ></call-preview>
 
   <task-container v-else>
-    <template v-slot:header>
+    <template #header>
       <call-header
         :current-tab="currentTab"
         :size="size"
-        @openTab="currentTab = $event"
+        @open-tab="currentTab = $event"
       ></call-header>
     </template>
 
-    <template v-slot:body>
+    <template #body>
       <component
         :is="currentTab"
         :size="size"/>
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <call-footer
         :current-tab="currentTab"
         :size="size"
-        @openTab="currentTab = $event"
+        @open-tab="currentTab = $event"
       ></call-footer>
     </template>
   </task-container>
@@ -32,23 +32,23 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
+import Contacts from './call-contacts/call-contacts-container.vue';
 import CallFooter from './call-footer.vue';
 import CallHeader from './call-header.vue';
 import Bridge from './call-merge/call-bridge-container.vue';
 import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/call-transfer-container.vue';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-import Contacts from './call-contacts/call-contacts-container.vue';
-import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 
 export default {
-  name: 'the-call',
-  mixins: [sizeMixin],
+  name: 'TheCall',
   components: {
     TaskContainer,
     CallPreview,
@@ -60,6 +60,7 @@ export default {
     Transfer,
     Bridge,
   },
+  mixins: [sizeMixin],
 
   data: () => ({
     currentTab: 'numpad',
@@ -84,6 +85,14 @@ export default {
     },
   },
 
+  mounted() {
+    this.setupHotkeys();
+  },
+
+  unmounted() {
+    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+  },
+
   methods: {
     openTransfer() {
       this.isPreviewTransfer = true;
@@ -104,14 +113,6 @@ export default {
       ];
       this.hotkeyUnsubscribers  = useHotkeys(subscribers);
     }
-  },
-
-  mounted() {
-    this.setupHotkeys();
-  },
-
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
   },
 
 };

@@ -18,12 +18,12 @@ import TheProcessingForm from '../modules/form/components/the-processing-form.vu
 import TheReporting from '../modules/reporting/components/the-reporting.vue';
 
 export default {
-  name: 'processing-tab',
-  mixins: [sizeMixin],
+  name: 'ProcessingTab',
   components: {
     TheProcessingForm,
     TheReporting,
   },
+  mixins: [sizeMixin],
   props: {
     task: {
       type: Object,

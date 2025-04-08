@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import WtCcAgentStatusSelect from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/wt-cc-agent-status-select.vue';
+import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import { mapState } from 'vuex';
 
 export default {
-  name: 'agent-status-select',
+  name: 'AgentStatusSelect',
   components: {
     WtCcAgentStatusSelect,
   },

@@ -45,13 +45,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
+
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 
 export default {
-  name: 'call-footer',
+  name: 'CallFooter',
   components: { TaskFooter },
   mixins: [sizeMixin],
   props: {

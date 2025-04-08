@@ -11,7 +11,7 @@
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime.js';
 
 export default {
-  name: 'chat-message-time',
+  name: 'ChatMessageTime',
   props: {
     date: {
       type: String,

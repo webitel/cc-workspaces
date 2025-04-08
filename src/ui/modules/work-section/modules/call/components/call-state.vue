@@ -31,6 +31,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { CallActions, CallDirection } from 'webitel-sdk';
+
 import activeSonar from '../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../app/assets/call-sonars/inbound-sonar.svg';
@@ -38,7 +39,7 @@ import ringingSonar from '../../../../../../app/assets/call-sonars/ringing-sonar
 import callTimer from '../../../../../mixins/callTimerMixin';
 
 export default {
-  name: 'call-state',
+  name: 'CallState',
   mixins: [callTimer],
 
   data: () => ({

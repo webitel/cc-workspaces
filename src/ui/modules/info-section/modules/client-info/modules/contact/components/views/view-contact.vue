@@ -17,11 +17,13 @@
 </template>
 
 <script setup>
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   namespace: {
@@ -30,7 +32,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
+    default: ComponentSize.MD,
   },
   mode: {
     type: String,
@@ -58,13 +60,4 @@ function linkContact(contact) {
 </script>
 
 <style scoped lang="scss">
-// тут контакт має виїзжати після того, як підвантажився
-.v-enter-active {
-  transition: opacity 0.6s
-}
-
-.v-enter,
-.v-leave-active {
-  opacity: 0
-}
 </style>

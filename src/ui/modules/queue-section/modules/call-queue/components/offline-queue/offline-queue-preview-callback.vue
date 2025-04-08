@@ -20,7 +20,7 @@
         :options="options"
         max-width="300px"
       >
-        <template v-slot:activator>
+        <template #activator>
           <wt-rounded-action
             :size="size"
             color="success"
@@ -28,7 +28,7 @@
             rounded
           ></wt-rounded-action>
         </template>
-        <template v-slot:option="{ text, communicationId }">
+        <template #option="{ text, communicationId }">
           <div
             class="queue-preview--offline-queue__callback-button"
             @click="call(task.id, communicationId)"
@@ -43,7 +43,7 @@
 import { mapActions } from 'vuex';
 
 export default {
-  name: 'offline-queue-preview-callback',
+  name: 'OfflineQueuePreviewCallback',
   props: {
     task: {
       required: true,

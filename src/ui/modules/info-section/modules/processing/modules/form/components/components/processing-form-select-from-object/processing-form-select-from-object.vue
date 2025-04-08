@@ -1,0 +1,43 @@
+<template>
+  <wt-select
+    :label="object.source?.name"
+    :search-method="loadObjectList"
+    :value="value"
+    clearable
+    :multiple="multiple"
+    @input="emit('input', $event)"
+  >
+  </wt-select>
+</template>
+
+<script setup>
+import { defineProps } from 'vue';
+
+import ObjectApi from './api/objects.js';
+
+const props = defineProps({
+  value: {
+    type: String,
+    required: true,
+  },
+  object: {
+    type: Object,
+    required: true,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['input']);
+
+const loadObjectList = (params) => {
+  return ObjectApi.getLookup({
+    ...params,
+    path: props.object?.source?.path,
+    primary: 'id',
+    display: props.object?.displayColumn,
+  });
+};
+</script>
