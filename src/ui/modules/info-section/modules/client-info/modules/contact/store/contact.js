@@ -13,11 +13,8 @@ const state = {
 
 const getters = {
   CONTACT_LINK: (state) => (id) => {
-    const getPath = (secondaryPath) => `${import.meta.env.VITE_CRM_URL}/${secondaryPath}/${id}`
-    if (state.isReadOnly) {
-      return getPath('contact_view')
-    }
-    return getPath('contacts')
+    const secondaryPath = state.isReadOnly ? 'contact_view' : 'contacts';
+    return `${import.meta.env.VITE_CRM_URL}/${secondaryPath}/${id}`
   }, // pass arguments to getter for different contents of usage
 };
 
@@ -28,8 +25,7 @@ const actions = {
       const { items } = await ConfigurationAPI.getList({
         name: [EngineSystemSettingName.WbtHideContact],
       });
-      const value = items?.[0]?.value || false;
-      context.commit('SET_IS_READ_ONLY', value);
+      context.commit('SET_IS_READ_ONLY', !!items?.[0]?.value);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
