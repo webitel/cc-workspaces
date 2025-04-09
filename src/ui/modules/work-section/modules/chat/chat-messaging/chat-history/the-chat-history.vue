@@ -44,6 +44,10 @@
         </template>
       </message>
     </div>
+    <scroll-to-bottom-btn
+      :new-messages="newUnseenMessages"
+      @scroll="scrollToBottom('smooth')"
+    />
   </article>
 </template>
 
@@ -56,6 +60,7 @@ import { useStore } from 'vuex';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
+import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
 import { useChatScroll } from '../composables/useChatScroll.js';
 import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
@@ -89,7 +94,7 @@ const {
   focusOnInput,
 } = useChatMessages();
 
-const { scrollToBottom } = useChatScroll(el);
+const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);

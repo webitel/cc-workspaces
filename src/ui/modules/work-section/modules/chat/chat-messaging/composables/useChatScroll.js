@@ -2,6 +2,7 @@ import { useScroll } from '@vueuse/core';
 import {
   computed,
   nextTick,
+  ref,
   watch,
 } from 'vue';
 import { useStore } from 'vuex';
@@ -15,6 +16,8 @@ export const useChatScroll = (element) => {
   const { messages } = useChatMessages();
   const { arrivedState} = useScroll(element);
 
+  const newUnseenMessages = ref(0);
+
   const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
   const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
   const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
@@ -27,7 +30,12 @@ export const useChatScroll = (element) => {
   }
 
   const scrollAfterNewMessage = () => {
-    if (arrivedState.bottom || isLastMessageIsMy.value) scrollToBottom('smooth');
+    if (arrivedState.bottom || isLastMessageIsMy.value) {
+      scrollToBottom('smooth');
+    }
+    else if (!arrivedState.bottom && !isLastMessageIsMy.value) {
+      newUnseenMessages.value += 1;
+    }
   }
 
   watch(() => chat.value?.id,  async () => { // every time a chat changes
@@ -42,14 +50,19 @@ export const useChatScroll = (element) => {
     async (messagesLength, oldMessagesLength) => {
       if (!messagesLength || !oldMessagesLength) scrollToBottom(); // when messages loaded first time
 
-      const newMessagesNumber = messagesLength - oldMessagesLength;
+      const newMessageReceived = (messagesLength - oldMessagesLength) === 1; // when chat have just 1 new message
 
-     if (newMessagesNumber === 1) scrollAfterNewMessage();
+     if (newMessageReceived) scrollAfterNewMessage();
     },
     { flush: 'post' }
   )
 
+  watch(() => arrivedState.bottom, () => {
+    if (arrivedState.bottom && newUnseenMessages) newUnseenMessages.value = 0;
+  })
+
   return {
+    newUnseenMessages,
     scrollToBottom,
   };
 };
