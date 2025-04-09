@@ -88,9 +88,7 @@ const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONT
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 
-const initReadOnlyState = () => {
-  store.dispatch('ui/infoSec/client/contact/INIT_READ_ONLY_STATE')
-}
+const initReadOnlyState = () => store.dispatch('ui/infoSec/client/contact/INIT_READ_ONLY_STATE')
 initReadOnlyState()
 </script>
 
