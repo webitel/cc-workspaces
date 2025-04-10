@@ -63,7 +63,7 @@ export default {
   data: () => ({
     dataList: '',
     historyNumber: '',
-    dataFields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact'],
+    dataFields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact', 'queue'],
   }),
 
   watch: {
