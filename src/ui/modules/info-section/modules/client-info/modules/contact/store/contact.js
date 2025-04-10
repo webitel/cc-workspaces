@@ -1,5 +1,5 @@
 import ConfigurationAPI
-  from '@webitel/ui-sdk/src/api/clients/configurations/configurations.js';
+  from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import { EngineSystemSettingName } from 'webitel-sdk';
 
@@ -13,8 +13,8 @@ const state = {
 
 const getters = {
   CONTACT_LINK: (state) => (id) => {
-    const secondaryPath = state.isReadOnly ? 'contact_view' : 'contacts';
-    return `${import.meta.env.VITE_CRM_URL}/${secondaryPath}/${id}`
+    const contactPath = state.isReadOnly ? 'contact_view' : 'contacts';
+    return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
   }, // pass arguments to getter for different contents of usage
 };
 
@@ -25,7 +25,7 @@ const actions = {
       const { items } = await ConfigurationAPI.getList({
         name: [EngineSystemSettingName.WbtHideContact],
       });
-      context.commit('SET_IS_READ_ONLY', !!items?.[0]?.value);
+      context.commit('SET_IS_READ_ONLY', items?.[0]?.value);
     } finally {
       context.commit('SET_IS_LOADING', false);
     }
