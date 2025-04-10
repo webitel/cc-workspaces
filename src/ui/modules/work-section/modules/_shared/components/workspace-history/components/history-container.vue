@@ -14,7 +14,8 @@
 
     <template #content>
       <div
-v-for="dataItem in dataList"
+        v-for="dataItem in dataList"
+        :key="dataItem.id"
         class="history-container-contact">
         <p class="history-container-contact__caption">
           {{dataItem.groupName}}
@@ -158,6 +159,7 @@ export default {
         const date = new Date(parseInt(item.createdAt));
         let dateKey;
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         this.isToday(date) ? dateKey = this.$t('history.today'):
           dateKey = this.formatDate(item.createdAt);
 
