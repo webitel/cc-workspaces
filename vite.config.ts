@@ -1,10 +1,10 @@
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 import vueDevtools from 'vite-plugin-vue-devtools';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -12,8 +12,9 @@ export default ({ mode }) => {
   return defineConfig({
     base: '/workspace',
     define: {
-      'process.env': JSON.parse(JSON.stringify(env)
-      .replaceAll('VITE_', 'VUE_APP_')),
+      'process.env': JSON.parse(
+        JSON.stringify(env).replaceAll('VITE_', 'VUE_APP_'),
+      ),
     },
     server: {
       port: 8080,
@@ -82,34 +83,34 @@ export default ({ mode }) => {
         manifest: {
           icons: [
             {
-              'src': '/workspace/pwa-192x192.png',
-              'sizes': '144x144',
-              'type': 'image/png',
-              'purpose': 'any',
+              src: '/workspace/pwa-192x192.png',
+              sizes: '144x144',
+              type: 'image/png',
+              purpose: 'any',
             },
             {
-              'src': '/workspace/pwa-192x192.png',
-              'sizes': '192x192',
-              'type': 'image/png',
-              'purpose': 'any',
+              src: '/workspace/pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any',
             },
             {
-              'src': '/workspace/pwa-512x512.png',
-              'sizes': '512x512',
-              'type': 'image/png',
-              'purpose': 'any',
+              src: '/workspace/pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any',
             },
             {
-              'src': '/workspace/pwa-maskable-192x192.png',
-              'sizes': '192x192',
-              'type': 'image/png',
-              'purpose': 'maskable',
+              src: '/workspace/pwa-maskable-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'maskable',
             },
             {
-              'src': '/workspace/pwa-maskable-512x512.png',
-              'sizes': '512x512',
-              'type': 'image/png',
-              'purpose': 'maskable',
+              src: '/workspace/pwa-maskable-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable',
             },
           ],
         },
@@ -126,7 +127,8 @@ export default ({ mode }) => {
          * override the default alias vue -> vue/compat for dev and prod,
          * which is creating 2 vue instances while running tests :(
          */
-        'vue': 'vue',
+        vue: 'vue',
+        lodash: 'lodash-es',
       },
       server: {
         deps: {
@@ -137,4 +139,4 @@ export default ({ mode }) => {
       setupFiles: ['./tests/config/config.js'],
     },
   });
-}
+};
