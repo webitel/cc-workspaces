@@ -1,49 +1,53 @@
 <template>
   <article class="chat-history chat-messages-container" @click="focusOnInput">
-    <div
-      ref="chat-messages-items"
-      class="chat-history__messages chat-messages-items"
-    >
-      <wt-intersection-observer
-        :next="next"
-        :loading="nextLoading"
-        @next="loadNextMessages"
-      />
-      <message
-        v-for="(message, index) of messages"
-        :key="message.id"
-        :message="message"
-        :size="props.size"
-        :show-avatar="showAvatar(index) || isChatStarted(index)"
-        :username="props.contact?.name"
-        @open-image="openMedia(message)"
-        @initialized-player="attachPlayer"
+    <wt-replace-transition>
+      <wt-loader v-if="!isHistoryLoaded"/>
+      <div
+        v-else
+        ref="chat-messages-items"
+        class="chat-history__messages chat-messages-items"
       >
-        <template #before-message>
-          <chat-date
-            v-if="showChatDate(index) || isHistoryStart(index)"
-            :date="message.createdAt"
-          />
-          <chat-activity-info
-            v-if="isChatStarted(index) || isHistoryStart(index)"
-            :provider="getChatProvider(message)?.type"
-            :gateway="getChatProvider(message)?.name"
-          />
-          <chat-agent
-            v-if="isChatStarted(index)"
-            :chat-id="message.chat?.id"
-            :contact-id="props.contact.id"
-          />
-        </template>
+        <wt-intersection-observer
+          :next="next"
+          :loading="nextLoading"
+          @next="loadNextMessages"
+        />
+        <message
+          v-for="(message, index) of messages"
+          :key="message.id"
+          :message="message"
+          :size="props.size"
+          :show-avatar="showAvatar(index) || isChatStarted(index)"
+          :username="props.contact?.name"
+          @open-image="openMedia(message)"
+          @initialized-player="attachPlayer"
+        >
+          <template #before-message>
+            <chat-date
+              v-if="showChatDate(index) || isHistoryStart(index)"
+              :date="message.createdAt"
+            />
+            <chat-activity-info
+              v-if="isChatStarted(index) || isHistoryStart(index)"
+              :provider="getChatProvider(message)?.type"
+              :gateway="getChatProvider(message)?.name"
+            />
+            <chat-agent
+              v-if="isChatStarted(index)"
+              :chat-id="message.chat?.id"
+              :contact-id="props.contact.id"
+            />
+          </template>
 
-        <template #after-message>
-          <chat-activity-info
-            v-if="isChatStarted(index + 1) || isLastMessage(index)"
-            ended
-          />
-        </template>
-      </message>
-    </div>
+          <template #after-message>
+            <chat-activity-info
+              v-if="isChatStarted(index + 1) || isLastMessage(index)"
+              ended
+            />
+          </template>
+        </message>
+      </div>
+    </wt-replace-transition>
   </article>
 </template>
 
@@ -53,6 +57,7 @@ import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedS
 import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
@@ -93,6 +98,8 @@ const { scrollToBottom } = useChatScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
+
+const isHistoryLoaded = computed(() => getNamespacedState(store.state, namespace).isLoaded);
 
 const loadHistory = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);

@@ -1,35 +1,38 @@
 <template>
   <article class="chat">
-    <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
-      <template #header>
-        <chat-header
-          v-show="isChatHeader"
-          :size="size"
-          @open-tab="openTab"
-        />
-        <media-viewer />
-      </template>
-      <template #body>
-        <component
-          :is="currentTab.component"
-          :size="size"
-          v-bind="currentTab.props"
-          :contact="chatContact"
-          @close-tab="resetTab"
-          @open-tab="openTab"
-        />
-      </template>
-      <template #footer>
-        <chat-footer
-          v-if="isChatFooter"
-          :size="size"
-        />
-      </template>
-    </task-container>
+    <wt-replace-transition appear>
+      <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
+        <template #header>
+          <chat-header
+            v-show="isChatHeader"
+            :size="size"
+            @open-tab="openTab"
+          />
+          <media-viewer />
+        </template>
+        <template #body>
+          <component
+            :is="currentTab.component"
+            :size="size"
+            v-bind="currentTab.props"
+            :contact="chatContact"
+            @close-tab="resetTab"
+            @open-tab="openTab"
+          />
+        </template>
+        <template #footer>
+          <chat-footer
+            v-if="isChatFooter"
+            :size="size"
+          />
+        </template>
+      </task-container>
+    </wt-replace-transition>
   </article>
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters, mapState } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
@@ -54,13 +57,16 @@ export default {
     ChatTransferContainer,
     EmptyWorkspace,
     ChatFooter,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   data: () => ({
     hotkeyUnsubscribers : [],
     chatContact: null,
-    currentTab: { component: defaultTab },
     chatContactIsLoaded: false,
+    currentTab: {
+      component: defaultTab
+    },
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {
