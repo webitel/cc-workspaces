@@ -1,5 +1,8 @@
 <template>
-  <div v-if="props.newMessages" class="scroll-to-bottom-btn">
+  <div
+    v-if="props.newMessages"
+    class="scroll-to-bottom-btn"
+  >
 
     <div class="scroll-to-bottom-btn__messages-counter">
       {{ props.newMessages }}
@@ -31,23 +34,22 @@ const emit = defineEmits(['scroll']);
 .scroll-to-bottom-btn {
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: calc(var(--scrollbar-width) + var(--spacing-2xs));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-3xs);
+  gap: var(--spacing-2xs);
 
   &__messages-counter {
-    @extend %typo-subtitle-2;///
-    width: 20px;
-    height: 20px;
+    @extend %typo-body-2;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-3xs) var(--spacing-xs);///
     background: var(--btn-success-color);
     border-radius: 50%;
-    color: white; //!
+    color: var(--text-on-brand-color);
   }
 }
 
