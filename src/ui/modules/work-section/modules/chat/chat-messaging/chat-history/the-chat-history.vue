@@ -45,7 +45,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
-      :new-messages="newUnseenMessages"
+      :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />
   </article>
