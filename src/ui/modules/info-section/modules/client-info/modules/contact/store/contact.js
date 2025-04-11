@@ -1,17 +1,35 @@
+import ConfigurationAPI
+  from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
+import { EngineSystemSettingName } from 'webitel-sdk';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
   isLoading: false,
   contactsByDestination: [], // contacts, loaded by initial search by destination (number, email, etc.)
   contactsBySearch: [], // contacts, loaded by user manual search
+  isReadOnly: false,
 };
 
 const getters = {
-  CONTACT_LINK: () => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
+  CONTACT_LINK: (state) => (id) => {
+    const contactPath = state.isReadOnly ? 'contact_view' : 'contacts';
+    return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
+  }, // pass arguments to getter for different contents of usage
 };
 
 const actions = {
+  INIT_READ_ONLY_STATE: async (context) => {
+    try {
+      context.commit('SET_IS_LOADING', true);
+      const { items } = await ConfigurationAPI.getList({
+        name: [EngineSystemSettingName.WbtHideContact],
+      });
+      context.commit('SET_IS_READ_ONLY', items?.[0]?.value);
+    } finally {
+      context.commit('SET_IS_LOADING', false);
+    }
+  },
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
     const number = task.displayNumber; // for CALLS
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
@@ -100,6 +118,9 @@ const actions = {
 };
 
 const mutations = {
+  SET_IS_READ_ONLY: (state, value) => {
+    state.isReadOnly = value;
+  },
   SET_IS_LOADING: (state, value) => {
     state.isLoading = value;
   },
