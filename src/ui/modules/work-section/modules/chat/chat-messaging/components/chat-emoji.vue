@@ -74,7 +74,8 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     position: absolute;
     z-index: var(--ws-dropdown-z-index);
     bottom: calc(100% + $input-height);
-    left: calc(-50% - var(--scrollbar-width) - var(--spacing-sm)); // - scrollbar width and padding
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 </style>
