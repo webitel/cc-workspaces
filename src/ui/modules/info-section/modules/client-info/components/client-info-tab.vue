@@ -50,7 +50,7 @@ const getValueWbtHideContactVariable = async () => {
 
 const isAllowedContacts = computed(() => {
     if (isJob.value) return;
-    return isHideContact.value && !props.task?.hideContact && !isChatClosed.value;
+    return !isHideContact.value && !props.task?.hideContact && !isChatClosed.value;
   }
 );
 
