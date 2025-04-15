@@ -56,9 +56,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import ConfigurationAPI from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { EngineSystemSettingName } from 'webitel-sdk';
 
 const props = defineProps({
   size: {
@@ -88,8 +90,14 @@ const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONT
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 
-const initReadOnlyState = () => store.dispatch('ui/infoSec/client/contact/INIT_READ_ONLY_STATE')
-initReadOnlyState()
+async function initReadOnlyState() {
+  const { items } = await ConfigurationAPI.getList({
+    name: [EngineSystemSettingName.WbtHideContact],
+  });
+  store.dispatch('ui/infoSec/client/contact/INIT_READ_ONLY_STATE', items?.[0]?.value);
+}
+
+onMounted(initReadOnlyState)
 </script>
 
 <style lang="scss" scoped>
