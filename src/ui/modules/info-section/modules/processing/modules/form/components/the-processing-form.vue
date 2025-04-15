@@ -9,7 +9,7 @@
     <template #form>
       <!--      pass size prop only to form file component -->
       <component
-        :is="processingComponent[el.view.component] || el.view.component"
+        :is="'form-table'"
         v-for="(el, key) of formBody"
         :key="el.id+key.toString()"
         v-model="el.value"
@@ -52,6 +52,7 @@ import FormSelectFromObject
 import FormText from './components/processing-form-text.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
+import FormTable from './components/processing-form-table.vue';
 
 export default {
   name: 'TheProcessingForm',
@@ -63,6 +64,7 @@ export default {
     FormFile,
     FormDatetimepicker,
     FormSelectFromObject,
+    FormTable,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -80,7 +82,6 @@ export default {
       'wt-select': 'form-select',
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
-      'form-select-from-object': 'form-select-from-object',
     },
     hotkeyUnsubscribers: [],
   }),
