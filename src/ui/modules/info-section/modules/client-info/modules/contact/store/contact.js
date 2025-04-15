@@ -1,7 +1,4 @@
-import ConfigurationAPI
-  from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
-import { EngineSystemSettingName } from 'webitel-sdk';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
@@ -19,16 +16,8 @@ const getters = {
 };
 
 const actions = {
-  INIT_READ_ONLY_STATE: async (context) => {
-    try {
-      context.commit('SET_IS_LOADING', true);
-      const { items } = await ConfigurationAPI.getList({
-        name: [EngineSystemSettingName.WbtHideContact],
-      });
-      context.commit('SET_IS_READ_ONLY', items?.[0]?.value);
-    } finally {
-      context.commit('SET_IS_LOADING', false);
-    }
+  INIT_READ_ONLY_STATE: async (context, value) => {
+    context.commit('SET_IS_READ_ONLY', value);
   },
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
     const number = task.displayNumber; // for CALLS
