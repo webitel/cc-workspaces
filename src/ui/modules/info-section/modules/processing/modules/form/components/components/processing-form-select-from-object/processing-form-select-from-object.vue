@@ -1,9 +1,10 @@
 <template>
   <wt-select
-    :label="object.source?.name"
+    :label="label || object.source?.name"
     :search-method="loadObjectList"
     :value="value"
     clearable
+    :placeholder="hint"
     :multiple="multiple"
     @input="emit('input', $event)"
   >
@@ -27,6 +28,14 @@ const props = defineProps({
   multiple: {
     type: Boolean,
     default: false,
+  },
+  hint: {
+    type: String,
+    default: '',
+  },
+  label: {
+    type: String,
+    default: '',
   },
 });
 
