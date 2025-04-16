@@ -4,7 +4,7 @@
     :search-method="loadObjectList"
     :value="value"
     clearable
-    :placeholder="hint"
+    :hint="hint"
     :multiple="multiple"
     @input="emit('input', $event)"
   >
