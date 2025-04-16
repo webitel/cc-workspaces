@@ -1,10 +1,10 @@
 <template>
   <wt-select
+    v-bind="$attrs"
     :label="label || object.source?.name"
     :search-method="loadObjectList"
     :value="value"
     clearable
-    :hint="hint"
     :multiple="multiple"
     @input="emit('input', $event)"
   >
@@ -28,10 +28,6 @@ const props = defineProps({
   multiple: {
     type: Boolean,
     default: false,
-  },
-  hint: {
-    type: String,
-    default: '',
   },
   label: {
     type: String,
