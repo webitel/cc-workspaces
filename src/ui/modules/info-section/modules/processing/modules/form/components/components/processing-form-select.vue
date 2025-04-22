@@ -30,13 +30,7 @@ const trackBy = computed(() => {
 });
 
 onMounted(() => {
-  initialValue.value = props.options.find((option) => option.value === props.value);
-
-  if (initialValue.value) {
-    emit('input', initialValue.value);
-  } else {
-    initialValue.value = props.value;
-  }
+  initialValue.value = props.options.find((option) => option.value === props.value) || props.value;
 });
 
 const resetValue = () => {
