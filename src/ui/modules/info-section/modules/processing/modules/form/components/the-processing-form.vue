@@ -49,8 +49,8 @@ import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormSelectFromObject
   from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
-import FormText from './components/processing-form-text.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
+import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
@@ -110,6 +110,12 @@ export default {
     initializeValues() {
       this.formBody.forEach((component) => {
         if (isEmpty(component.value) && component.view.initialValue) {
+
+          // For component wt-select we need get by initialValue value from options
+          if (component.view.component === 'wt-select') {
+            return component.value = component.view.options.find((option) => option.value === component.view.initialValue) || component.view.initialValue;
+          }
+
           try {
             component.value = JSON.parse(component.view.initialValue);
           } catch {
