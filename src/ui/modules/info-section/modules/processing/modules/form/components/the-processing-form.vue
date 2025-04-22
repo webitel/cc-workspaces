@@ -112,6 +112,7 @@ export default {
         if (isEmpty(component.value) && component.view.initialValue) {
 
           // For component wt-select we need get by initialValue value from options
+          // https://webitel.atlassian.net/browse/WTEL-6742
           if (component.view.component === 'wt-select') {
             return component.value = component.view.options.find((option) => option.value === component.view.initialValue) || component.view.initialValue;
           }
