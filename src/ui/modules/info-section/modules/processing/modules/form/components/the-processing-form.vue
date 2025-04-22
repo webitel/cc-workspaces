@@ -9,7 +9,7 @@
     <template #form>
       <!--      pass size prop only to form file component -->
       <component
-        :is="'form-table'"
+        :is="processingComponent[el.view.component] || el.view.component"
         v-for="(el, key) of formBody"
         :key="el.id+key.toString()"
         v-model="el.value"
@@ -49,10 +49,10 @@ import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
 import FormSelectFromObject
   from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
-import FormText from './components/processing-form-text.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
+import FormTable from './components/processing-form-table/processing-form-table.vue';
+import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
-import FormTable from './components/processing-form-table.vue';
 
 export default {
   name: 'TheProcessingForm',
@@ -90,6 +90,7 @@ export default {
       isCall: 'IS_CALL_WORKSPACE',
     }),
     formTitle() {
+      console.log('this.task.attempt.form:', this.task.attempt.form);
       return this.task.attempt.form?.title || '';
     },
     formBody() {

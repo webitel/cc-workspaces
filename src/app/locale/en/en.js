@@ -150,6 +150,9 @@ export default {
           deleteConfirmation: 'Are you sure you want to delete this file?',
           empty: 'There are no files yet',
         },
+        formTable: {
+          title: 'Form Table',
+        },
       },
     },
     flows: {

@@ -149,6 +149,9 @@ export default {
           deleteConfirmation: 'Вы уверенны, что хотите удалить этот файл?',
           empty: 'Пока здесь нет файлов',
         },
+        formTable: {
+          title: 'Form Table',
+        },
       },
     },
     flows: {
