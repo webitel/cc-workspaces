@@ -92,7 +92,7 @@ const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 
 async function initReadOnlyState() {
   const { items } = await ConfigurationAPI.getList({
-    name: [EngineSystemSettingName.WbtHideContact],
+    name: [EngineSystemSettingName.ShowFullContact],
   });
   store.dispatch('ui/infoSec/client/contact/INIT_READ_ONLY_STATE', items?.[0]?.value);
 }

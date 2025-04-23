@@ -5,19 +5,19 @@ const state = {
   isLoading: false,
   contactsByDestination: [], // contacts, loaded by initial search by destination (number, email, etc.)
   contactsBySearch: [], // contacts, loaded by user manual search
-  isReadOnly: false,
+  showFullContact: false,
 };
 
 const getters = {
   CONTACT_LINK: (state) => (id) => {
-    const contactPath = state.isReadOnly ? 'contact_view' : 'contacts';
+    const contactPath = !state.showFullContact ? 'contact_view' : 'contacts';
     return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
-  }, // pass arguments to getter for different contents of usage
+  },
 };
 
 const actions = {
   INIT_READ_ONLY_STATE: async (context, value) => {
-    context.commit('SET_IS_READ_ONLY', value);
+    context.commit('SET_SHOW_FULL_CONTACT', value);
   },
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
     const number = task.displayNumber; // for CALLS
@@ -107,8 +107,8 @@ const actions = {
 };
 
 const mutations = {
-  SET_IS_READ_ONLY: (state, value) => {
-    state.isReadOnly = value;
+  SET_SHOW_FULL_CONTACT: (state, value) => {
+    state.showFullContact = value;
   },
   SET_IS_LOADING: (state, value) => {
     state.isLoading = value;
