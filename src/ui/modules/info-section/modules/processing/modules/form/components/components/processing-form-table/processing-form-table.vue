@@ -93,33 +93,6 @@ const headers = computed(() => {
     text: header.name,
     value: header.field,
   }));
-  // return [
-  //   {
-  //     value: 'name',
-  //     locale: 'objects.name',
-  //     field: 'name',
-  //   },
-  //   {
-  //     value: 'type',
-  //     locale: 'objects.ccenter.queues.type',
-  //     field: 'type',
-  //   },
-  //   {
-  //     value: 'activeCalls',
-  //     locale: 'objects.ccenter.queues.activeCalls',
-  //     field: 'active',
-  //   },
-  //   {
-  //     value: 'waiting',
-  //     locale: 'objects.ccenter.queues.waiting',
-  //     field: 'waiting',
-  //   },
-  //   {
-  //     value: 'priority',
-  //     locale: 'objects.ccenter.queues.priority',
-  //     field: 'priority',
-  //   },
-  // ];
 });
 const footerColumnName = computed(() => `${headers.value[0].value}-footer` )
 
