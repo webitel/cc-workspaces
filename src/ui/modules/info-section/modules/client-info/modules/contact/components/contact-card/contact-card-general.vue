@@ -90,7 +90,7 @@ const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONT
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 
-// to get access variable for contact and case card pages in read only mode
+// to get access variable for contact card page in read only mode
 async function initShowFullContactState() {
   const { items } = await ConfigurationAPI.getList({
     name: [EngineSystemSettingName.ShowFullContact],

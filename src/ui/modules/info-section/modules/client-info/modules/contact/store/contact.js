@@ -5,7 +5,7 @@ const state = {
   isLoading: false,
   contactsByDestination: [], // contacts, loaded by initial search by destination (number, email, etc.)
   contactsBySearch: [], // contacts, loaded by user manual search
-  showFullContact: false, // access variable for contact and case card pages in read only mode
+  showFullContact: false, // access variable for contact card page in read only mode
 };
 
 const getters = {
