@@ -90,14 +90,15 @@ const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONT
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 
-async function initReadOnlyState() {
+// to get access variable for contact card page in read only mode
+async function initShowFullContactState() {
   const { items } = await ConfigurationAPI.getList({
-    name: [EngineSystemSettingName.WbtHideContact],
+    name: [EngineSystemSettingName.ShowFullContact],
   });
-  store.dispatch('ui/infoSec/client/contact/INIT_READ_ONLY_STATE', items?.[0]?.value);
+  store.dispatch('ui/infoSec/client/contact/INIT_SHOW_FULL_CONTACT_STATE', items?.[0]?.value);
 }
 
-onMounted(initReadOnlyState)
+onMounted(initShowFullContactState)
 </script>
 
 <style lang="scss" scoped>
