@@ -15,9 +15,11 @@
         v-model="el.value"
         :label-props="{ hint: el.view.hint }"
         :attempt-id="task.attempt.id"
+        :component-id="el.id"
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
         @input="change"
+        @table-action="sendTableAction"
       />
     </template>
     <template #actions>
@@ -90,7 +92,6 @@ export default {
       isCall: 'IS_CALL_WORKSPACE',
     }),
     formTitle() {
-      console.log('this.task.attempt.form:', this.task.attempt.form);
       return this.task.attempt.form?.title || '';
     },
     formBody() {
@@ -150,6 +151,11 @@ export default {
       nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
         if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
       });
+    },
+    sendTableAction(componentId, tableAction) {
+      const { action, vars, sync } = tableAction
+      this.task.componentAction(componentId, action, vars, sync)
+      // https://webitel.atlassian.net/browse/WTEL-6707
     },
   },
   watch: {

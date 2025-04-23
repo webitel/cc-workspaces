@@ -14,26 +14,48 @@
         </div>
       </template>
       <template #default>
-        {{ headers }}
         <wt-table
           class="processing-form-table__table"
           :data="dataList"
           :headers="headers"
           :selectable="false"
           :grid-actions="false"
-        />
-        <wt-intersection-observer
-          :next="nextPage"
-          :loading="nextLoading"
-          @next="loadNext"
-        />
+        >
+          <template
+            v-for="action in props.actions"
+            #[action.field]="{ item }"
+            :key="action.field"
+          >
+            <div class="processing-form-table__action">
+              <p>
+                {{ item[action.field] }}
+              </p>
+              <wt-button
+                :color="action.color"
+                @click="emit('table-action', props.componentId, action)"
+              >
+                {{ action.buttonName }}
+              </wt-button>
+            </div>
+
+          </template>
+
+          <template #[footerColumnName]>
+            <wt-intersection-observer
+              :next="nextAllowed"
+              :loading="nextLoading"
+              @next="loadNext"
+            />
+          </template>
+        </wt-table>
       </template>
     </wt-expansion-panel>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 
+import deepCopy from 'deep-copy';
 import { computed, defineProps, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -42,52 +64,95 @@ import TableApi from './api/table';
 const { t } = useI18n();
 
 const props = defineProps({
+  componentId: {
+    type: String,
+    required: true,
+  },
   table: {
     type: Object,
     required: true,
   },
+  actions: {
+    type: Array,
+    default: () => [],
+  }
 });
 
-const nextPage = ref(false);
+const emit = defineEmits([
+  'table-action',
+]);
+
+const nextAllowed = ref(false);
 const nextLoading = ref(false);
-const tablePage = ref(1);
+const currentTablePage = ref(1);
 const dataList = ref([]);
 
-const headers = computed<object>(() => {
+const headers = computed(() => {
   return props.table?.displayColumns.map((header) => ({
     ...header,
     text: header.name,
+    value: header.field,
   }));
-})
+  // return [
+  //   {
+  //     value: 'name',
+  //     locale: 'objects.name',
+  //     field: 'name',
+  //   },
+  //   {
+  //     value: 'type',
+  //     locale: 'objects.ccenter.queues.type',
+  //     field: 'type',
+  //   },
+  //   {
+  //     value: 'activeCalls',
+  //     locale: 'objects.ccenter.queues.activeCalls',
+  //     field: 'active',
+  //   },
+  //   {
+  //     value: 'waiting',
+  //     locale: 'objects.ccenter.queues.waiting',
+  //     field: 'waiting',
+  //   },
+  //   {
+  //     value: 'priority',
+  //     locale: 'objects.ccenter.queues.priority',
+  //     field: 'priority',
+  //   },
+  // ];
+});
+const footerColumnName = computed(() => `${headers.value[0].value}-footer` )
 
-
-async function getDataList(pageNumber = 1) {
+async function getDataList() {
 
   const { items, next } = await TableApi.getList({
-    path: props.table.systemSource.path,
-    page: pageNumber,
+    path: props.table.systemSource?.path,
+    page: currentTablePage.value,
   });
 
-  dataList.value = [...dataList.value, items];
-  nextPage.value = next;
-
-  console.log('dataList', dataList.value, 'items:', items, 'next:', next);
+  return { items, next };
 }
 
-async function initList(): Promise<void> {
-  if (props.table?.systemSource?.path) await getDataList();
-  else dataList.value = props.table?.source || [];
+async function initList() {
+  if (props.table?.systemSource?.path) {
+
+    const { items, next } = await getDataList();
+    dataList.value = items;
+    nextAllowed.value = next;
+
+  } else dataList.value = props.table?.source || [];
 }
 
 async function loadNext() {
   nextLoading.value = true;
 
-  await getDataList(tablePage.value);
+  currentTablePage.value +=1;
+  const { items, next } = await getDataList();
+  dataList.value = [...dataList.value, ...deepCopy(items)];
+  nextAllowed.value = next;
 
   nextLoading.value = false;
 }
-
-
 
 initList();
 
@@ -97,7 +162,7 @@ initList();
 .processing-form-table {
   &__table {
     height: 600px;
-    max-height: 600px;
+    padding: var(--spacing-xs);
   }
 
   &__title {
@@ -111,6 +176,13 @@ initList();
     width: var(--icon-md-size);
     height: var(--icon-md-size);
     border-radius: var(--border-radius);
+  }
+
+  &__action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
   }
 }
 </style>

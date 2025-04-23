@@ -12,7 +12,7 @@ import applyTransform, {
 
 const instance = getDefaultInstance();
 
-const getList = async ({ path, ...params }):Promise<{ items: object[]; next: boolean }> => {
+const getList = async ({ path, ...params }) => {
 
   const url = applyTransform(params, [
     merge(getDefaultGetParams()),
