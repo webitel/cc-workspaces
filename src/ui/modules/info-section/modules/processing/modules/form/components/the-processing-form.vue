@@ -118,7 +118,15 @@ export default {
           }
 
           try {
-            component.value = JSON.parse(component.view.initialValue);
+            const parseValue = JSON.parse(component.view.initialValue);
+
+            // For component form-text if pass object without keys we need set null
+            // https://webitel.atlassian.net/browse/WTEL-6568
+            if (typeof parseValue === 'object') {
+              component.value = Object.keys(parseValue).length ? parseValue : null;
+            } else {
+              component.value = parseValue;
+            }
           } catch {
             component.value = component.view.initialValue;
           }
