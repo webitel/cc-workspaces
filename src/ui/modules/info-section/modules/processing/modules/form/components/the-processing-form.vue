@@ -15,9 +15,11 @@
         v-model="el.value"
         :label-props="{ hint: el.view.hint }"
         :attempt-id="task.attempt.id"
+        :component-id="el.id"
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
         @input="change"
+        @call-table-action="sendTableAction"
       />
     </template>
     <template #actions>
@@ -50,6 +52,7 @@ import FormSelect from './components/processing-form-select.vue';
 import FormSelectFromObject
   from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
+import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
@@ -63,6 +66,7 @@ export default {
     FormFile,
     FormDatetimepicker,
     FormSelectFromObject,
+    FormTable,
     RichTextEditor: () => ({
       component: import(
         './components/rich-text-editor.vue'
@@ -80,7 +84,6 @@ export default {
       'wt-select': 'form-select',
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
-      'form-select-from-object': 'form-select-from-object',
     },
     hotkeyUnsubscribers: [],
   }),
@@ -156,6 +159,11 @@ export default {
       nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
         if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
       });
+    },
+    sendTableAction(componentId, tableAction) {
+      const { action, vars, sync } = tableAction
+      this.task.componentAction(componentId, action, vars, sync)
+      // https://webitel.atlassian.net/browse/WTEL-6707
     },
   },
   watch: {
