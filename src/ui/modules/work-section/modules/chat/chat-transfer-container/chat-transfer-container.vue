@@ -11,7 +11,7 @@
     <template #after-search>
       <wt-rounded-action
         :class="{ 'active': transferDestination === TransferDestination.CHATPLAN }"
-        icon="ws-bot"
+        icon="bot"
         rounded
         :size="size"
         @click="transferDestination = TransferDestination.CHATPLAN"
@@ -40,8 +40,7 @@
         <template #before>
           <wt-icon
             icon="bot"
-            icon-prefix="ws"
-          ></wt-icon>
+          />
         </template>
       </transfer-lookup-item>
     </template>

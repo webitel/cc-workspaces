@@ -12,7 +12,7 @@
       class="chat-message-avatar__bot-avatar-wrapper"
     >
       <wt-icon
-        icon="ws-bot"
+        icon="bot"
       />
     </div>
   </div>

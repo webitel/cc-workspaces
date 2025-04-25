@@ -38,6 +38,7 @@
     <template #icon-status>
       <wt-icon
         :icon="closeReasonIcon"
+        icon-prefix="ws"
         color="error"
       />
     </template>
@@ -87,6 +88,7 @@
       <div class="closed-queue-preview__footer">
         <wt-icon
           :icon="closeReasonIcon"
+          icon-prefix="ws"
           color="error"
         />
       </div>
@@ -148,13 +150,13 @@ const closeReasonIcon = computed(() => {
 
     case ChatCloseReason.AGENT_LEAVE:
     case ChatCloseReason.TRANSFER:
-      return 'wt-agent-disconnection';
+      return 'agent-disconnection';
 
     case ChatCloseReason.CLIENT_LEAVE:
-      return 'wt-client-disconnection';
+      return 'client-disconnection';
 
     default:
-      return 'wt-timeout-disconnection';
+      return 'timeout-disconnection';
   }
 });
 
