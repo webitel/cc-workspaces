@@ -14,7 +14,7 @@
 
         <a
           target="_blank"
-          :href="contactLink(props.contact.id)"
+          :href="contactLink(contactId)"
           class="contact-card-general__link"
         >{{ name }}
           <wt-icon
@@ -28,7 +28,8 @@
       <ul class="contact-card-general__list">
         <li
           v-if="manager"
-          class="contact-card-general__item">
+          class="contact-card-general__item"
+        >
           <p class="contact-card-general__title">
             {{ t('infoSec.contacts.manager') }}
           </p>
@@ -37,7 +38,8 @@
 
         <li
           v-if="timezone"
-          class="contact-card-general__item" >
+          class="contact-card-general__item"
+        >
           <p class="contact-card-general__title">
             {{ t('date.timezone', 1) }}
           </p>
@@ -89,6 +91,9 @@ const name = computed(() => props.contact.name);
 const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONTACT_LINK']);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
+const contactId = computed(() => store.getters['ui/infoSec/client/contact/SHOW_FULL_CONTACT']
+  ? props.contact?.id
+  : props.contact?.etag);
 
 // to get access variable for contact card page in read only mode
 async function initShowFullContactState() {
@@ -98,7 +103,7 @@ async function initShowFullContactState() {
   store.dispatch('ui/infoSec/client/contact/INIT_SHOW_FULL_CONTACT_STATE', items?.[0]?.value);
 }
 
-onMounted(initShowFullContactState)
+onMounted(initShowFullContactState);
 </script>
 
 <style lang="scss" scoped>
