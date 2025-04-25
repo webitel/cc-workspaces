@@ -151,7 +151,7 @@ export default {
           empty: 'There are no files yet',
         },
         formTable: {
-          title: 'Form Table',
+          title: 'Table',
         },
       },
     },

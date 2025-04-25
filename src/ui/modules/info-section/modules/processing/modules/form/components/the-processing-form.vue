@@ -19,7 +19,7 @@
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
         @input="change"
-        @table-action="sendTableAction"
+        @call-table-action="sendTableAction"
       />
     </template>
     <template #actions>

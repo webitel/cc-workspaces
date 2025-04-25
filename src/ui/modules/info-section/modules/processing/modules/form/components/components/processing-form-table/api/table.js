@@ -2,13 +2,13 @@ import {
   getDefaultGetListResponse,
   getDefaultGetParams,
   getDefaultInstance,
-} from '@webitel/ui-sdk/src/api/defaults/index.js';
+} from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
   camelToSnake,
   generateUrl,
   merge,
   notify,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
+} from '@webitel/ui-sdk/src/api/transformers/index';
 
 const instance = getDefaultInstance();
 
