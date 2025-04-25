@@ -12,7 +12,6 @@
               {{ $t('widgets.scoreCount') }}
             </div>
             <div class="agent-score-item__value">
-              widget-score-count
               <wt-icon
                 icon="widget-score-count"
                 icon-prefix="ws"
