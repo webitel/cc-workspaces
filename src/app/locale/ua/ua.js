@@ -149,7 +149,7 @@ export default {
           empty: 'Поки тут немає файлів',
         },
         formTable: {
-          title: 'Form Table',
+          title: 'Таблиця',
         },
       },
     },

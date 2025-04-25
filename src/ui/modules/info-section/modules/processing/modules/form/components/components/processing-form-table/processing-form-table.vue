@@ -32,7 +32,7 @@
               </p>
               <wt-button
                 :color="action.color"
-                @click="emit('table-action', props.componentId, action)"
+                @click="emit('call-table-action', props.componentId, action)"
               >
                 {{ action.buttonName }}
               </wt-button>
@@ -68,7 +68,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  table: {
+  table: { // get from v-bind in parent component
     type: Object,
     required: true,
   },
@@ -79,7 +79,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-  'table-action',
+  'call-table-action',
 ]);
 
 const nextAllowed = ref(false);
@@ -94,12 +94,14 @@ const headers = computed(() => {
     value: header.field,
   }));
 });
-const footerColumnName = computed(() => `${headers.value[0].value}-footer` )
+
+const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
+const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 async function getDataList() {
 
   const { items, next } = await TableApi.getList({
-    path: props.table.systemSource?.path,
+    path: systemSourcePath.value,
     page: currentTablePage.value,
   });
 
@@ -107,7 +109,7 @@ async function getDataList() {
 }
 
 async function initList() {
-  if (props.table?.systemSource?.path) {
+  if (systemSourcePath.value) {
 
     const { items, next } = await getDataList();
     dataList.value = items;
