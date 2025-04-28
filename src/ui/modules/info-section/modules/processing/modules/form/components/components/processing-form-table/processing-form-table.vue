@@ -92,6 +92,7 @@ const headers = computed(() => {
     ...header,
     text: header.name,
     value: header.field,
+    width: header.width + 'px',
   }));
 });
 
