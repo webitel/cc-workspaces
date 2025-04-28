@@ -87,7 +87,7 @@ const initApp = async () => {
   let config;
   try {
     setTokenFromUrl();
-    const config = await fetchConfig();
+    config = await fetchConfig();
     await store.dispatch('SET_CONFIG', config);
     localStorage.setItem('CONFIG', JSON.stringify(config));
   } finally {
