@@ -137,6 +137,7 @@ initList();
 .processing-form-table {
   &__table {
     height: 600px;
+    max-height: 600px;
     padding: var(--spacing-xs);
   }
 
