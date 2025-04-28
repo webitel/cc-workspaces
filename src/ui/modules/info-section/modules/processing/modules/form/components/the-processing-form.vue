@@ -161,8 +161,8 @@ export default {
       });
     },
     sendTableAction(componentId, tableAction) {
-      const { action, vars, sync } = tableAction
-      this.task.componentAction(componentId, action, vars, sync)
+      const { action, vars, sync } = tableAction;
+      this.task.attempt.componentAction(componentId, action, vars, sync)
       // https://webitel.atlassian.net/browse/WTEL-6707
     },
   },
