@@ -13,7 +13,6 @@ const getters = {
     const contactPath = !state.showFullContact ? 'contact_view' : 'contacts';
     return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
   }, // pass arguments to getter for different contents of usage
-  SHOW_FULL_CONTACT: (state) => state.showFullContact
 };
 
 const actions = {

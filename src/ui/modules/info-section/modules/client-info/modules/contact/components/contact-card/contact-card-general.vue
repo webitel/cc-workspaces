@@ -91,7 +91,7 @@ const name = computed(() => props.contact.name);
 const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONTACT_LINK']);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
-const contactId = computed(() => store.getters['ui/infoSec/client/contact/SHOW_FULL_CONTACT']
+const contactId = computed(() => store.state.ui.infoSec.client.contact.showFullContact
   ? props.contact?.id
   : props.contact?.etag);
 
