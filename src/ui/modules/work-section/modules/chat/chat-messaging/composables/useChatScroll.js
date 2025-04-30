@@ -14,8 +14,9 @@ export const useChatScroll = (element) => {
   const store = useStore();
 
   const { messages } = useChatMessages();
-  const { arrivedState} = useScroll(element);
+  const { isScrolling, arrivedState, y} = useScroll(element);
 
+  const showScrollToBottomBtn = ref(false);
   const newUnseenMessages = ref(0);
 
   const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
@@ -26,7 +27,9 @@ export const useChatScroll = (element) => {
     element.value?.scrollTo({
       top: element.value?.scrollHeight,
       behavior,
-    })
+    });
+    newUnseenMessages.value = 0;
+    showScrollToBottomBtn.value = false;
   }
 
   const scrollAfterNewMessage = () => {
@@ -39,11 +42,9 @@ export const useChatScroll = (element) => {
   }
 
   watch(() => chat.value?.id,  async () => { // every time a chat changes
-
     await nextTick(() =>
       scrollToBottom()
     );
-
   },{ immediate: true })
 
   watch(() => messages.value?.length,
@@ -57,11 +58,15 @@ export const useChatScroll = (element) => {
     { flush: 'post' }
   )
 
-  watch(() => arrivedState.bottom, () => {
+  watch(() => isScrolling.value, () => {
     if (arrivedState.bottom && newUnseenMessages) newUnseenMessages.value = 0;
-  })
+
+    const indentFromBottom = element.value?.scrollHeight - 500; // indent from bottom of the chat when scrollToBottomBtn will be visible
+    showScrollToBottomBtn.value = !arrivedState.bottom && (y.value < indentFromBottom);
+  });
 
   return {
+    showScrollToBottomBtn,
     newUnseenMessages,
     scrollToBottom,
   };
