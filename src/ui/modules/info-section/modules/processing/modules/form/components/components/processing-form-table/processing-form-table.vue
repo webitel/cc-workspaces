@@ -14,7 +14,6 @@
         </div>
       </template>
       <template #default>
-        headers: {{ headers }}
         <wt-table
           class="processing-form-table__table"
           :data="dataList"
