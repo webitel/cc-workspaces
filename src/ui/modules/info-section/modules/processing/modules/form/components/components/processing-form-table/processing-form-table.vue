@@ -14,6 +14,7 @@
         </div>
       </template>
       <template #default>
+        headers: {{ headers }}
         <wt-table
           class="processing-form-table__table"
           :data="dataList"
@@ -92,7 +93,7 @@ const headers = computed(() => {
     ...header,
     text: header.name,
     value: header.field,
-    width: header.width + 'px',
+    width: header.width ? header.width + 'px' : '',
   }));
 });
 
