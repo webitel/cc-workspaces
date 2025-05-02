@@ -26,6 +26,7 @@
     </template>
 
     <template #content>
+<!--      isCallLoading: {{ isCallLoading }}-->
       <contact-lookup-item
         v-for="(item) in dataList"
         :key="item.id"
@@ -86,8 +87,10 @@ export default {
     ...mapActions('features/call', {
       makeCall: 'CALL',
     }),
-    call({ number }) {
-      this.makeCall({ number });
+    async call({ number }) {
+      // this.isCallLoading = true;
+      await this.makeCall({ number });
+      // this.isCallLoading = false;
     },
     changeMode({ value }) {
       this.filterQuery = value;

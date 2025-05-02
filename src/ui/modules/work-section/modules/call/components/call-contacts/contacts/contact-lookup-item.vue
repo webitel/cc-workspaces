@@ -23,20 +23,21 @@
     </template>
 
     <template #after="{ toggle }">
-      <wt-rounded-action
+      <raunded-action
         :disabled="!item.phones.length"
         :size="size"
+        :loading="isCallLoading"
         color="success"
         icon="call--filled"
         rounded
         @click="item.phones.length > 1 ? toggle() : call(item.phones[0])"
-      ></wt-rounded-action>
+      />
     </template>
 
     <template
-      v-if="item.phones.length > 1"
       #expansion
     >
+
       <contact-communication-item
         v-for="phone in item.phones"
         :key="phone.id"
@@ -54,14 +55,26 @@ import { mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/lookupItemMixin';
 import ContactCommunicationItem from './contact-communication-item.vue';
+import RaundedAction from '../../../../../../../components/raunded-action.vue';
 
 export default {
   name: 'ContactLookupItem',
-  components: { ContactCommunicationItem },
+  components: { ContactCommunicationItem, RaundedAction },
   mixins: [lookupItemMixin, sizeMixin],
+  // props: {
+  //   isCallLoading: {
+  //     type: Boolean,
+  //     default: false,
+  //   },
+  // },
   emits: [
     'call',
   ],
+  data: () => {
+    return {
+      isCallLoading: false,
+    }
+  },
   computed: {
     ...mapGetters('ui/infoSec/client/contact', {
       contactLink: 'CONTACT_LINK',
@@ -72,7 +85,9 @@ export default {
   },
   methods: {
     call({ number } = {}) {
+      this.isCallLoading = true;
       this.$emit('call', { number: number || this.primaryPhoneNumber });
+      this.isCallLoading = false;
     },
   },
 };
