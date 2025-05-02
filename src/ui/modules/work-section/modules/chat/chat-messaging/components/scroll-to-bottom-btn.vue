@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="props.showButton"
-    class="scroll-to-bottom-btn"
-  >
+  <div class="scroll-to-bottom-btn">
 
     <div
       v-show="props.newMessageCount"
@@ -22,10 +19,6 @@
 <script setup>
 
 const props = defineProps({
-  showButton: {
-    type: Boolean,
-    default: false,
-  },
   newMessageCount: {
     type: Number,
     default: 0,

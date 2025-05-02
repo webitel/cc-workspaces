@@ -45,7 +45,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
-      :show-button="showScrollToBottomBtn"
+      v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />

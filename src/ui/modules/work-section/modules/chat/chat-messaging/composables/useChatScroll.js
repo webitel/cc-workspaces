@@ -1,7 +1,7 @@
 import { useScroll } from '@vueuse/core';
 import {
   computed,
-  nextTick,
+  nextTick, onMounted,
   ref,
   watch,
 } from 'vue';
@@ -14,9 +14,10 @@ export const useChatScroll = (element) => {
   const store = useStore();
 
   const { messages } = useChatMessages();
-  const { isScrolling, arrivedState, y} = useScroll(element);
+  const { arrivedState, y} = useScroll(element);
 
   const showScrollToBottomBtn = ref(false);
+  const indentFromBottom = ref(0);
   const newUnseenMessages = ref(0);
 
   const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
@@ -41,6 +42,10 @@ export const useChatScroll = (element) => {
     }
   }
 
+  onMounted(() => {
+    indentFromBottom.value = element.value?.scrollHeight - 500; // indent from bottom of the chat when scrollToBottomBtn will be visible
+  })
+
   watch(() => chat.value?.id,  async () => { // every time a chat changes
     await nextTick(() =>
       scrollToBottom()
@@ -58,11 +63,13 @@ export const useChatScroll = (element) => {
     { flush: 'post' }
   )
 
-  watch(() => isScrolling.value, () => {
+  watch(() => y.value, () => {
     if (arrivedState.bottom && newUnseenMessages) newUnseenMessages.value = 0;
 
-    const indentFromBottom = element.value?.scrollHeight - 500; // indent from bottom of the chat when scrollToBottomBtn will be visible
-    showScrollToBottomBtn.value = !arrivedState.bottom && (y.value < indentFromBottom);
+    showScrollToBottomBtn.value = !arrivedState.bottom
+      && (y.value < indentFromBottom.value);
+
+
   });
 
   return {
