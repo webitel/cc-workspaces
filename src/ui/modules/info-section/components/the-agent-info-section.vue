@@ -168,22 +168,26 @@ export default {
       const generalInfo = {
         text: this.$t('infoSec.generalInfo.generalInfo'),
         value: 'general-info',
-        icon: 'ws-general-info',
+        icon: 'general-info',
+        iconPrefix: 'ws',
       };
       const clientInfo = {
         text: this.$t('infoSec.clientInfo'),
         value: 'client-info',
-        icon: 'ws-client-info',
+        icon: 'client-info',
+        iconPrefix: 'ws',
       };
       const knowledgeBase = {
         text: this.$t('infoSec.knowledgeBase'),
         value: 'knowledge-base',
-        icon: 'ws-knowledge-base',
+        icon: 'knowledge-base',
+        iconPrefix: 'ws',
       };
       const processing = {
         text: this.$t('infoSec.processing.title'),
         value: 'processing',
-        icon: 'ws-processing',
+        icon: 'processing',
+        iconPrefix: 'ws',
       };
       const flows = {
         text: this.$tc('objects.flow.name', 2),

@@ -7,6 +7,7 @@
       <template #activator>
         <wt-rounded-action
           :icon="tab.icon || tab.value"
+          :icon-prefix="tab.iconPrefix"
           :active="tab.value === currentTab?.value"
           :size="size"
           rounded

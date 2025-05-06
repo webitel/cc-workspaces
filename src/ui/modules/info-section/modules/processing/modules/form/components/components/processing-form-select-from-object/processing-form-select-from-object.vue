@@ -1,6 +1,7 @@
 <template>
   <wt-select
-    :label="object.source?.name"
+    v-bind="$attrs"
+    :label="label || object.source?.name"
     :search-method="loadObjectList"
     :value="value"
     clearable
@@ -27,6 +28,10 @@ const props = defineProps({
   multiple: {
     type: Boolean,
     default: false,
+  },
+  label: {
+    type: String,
+    default: '',
   },
 });
 

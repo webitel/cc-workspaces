@@ -4,49 +4,53 @@
       <wt-loader v-if="!isHistoryLoaded"/>
       <div
         v-else
-        ref="chat-messages-items"
-        class="chat-history__messages chat-messages-items"
+      ref="chat-messages-items"
+      class="chat-history__messages chat-messages-items"
+    >
+      <wt-intersection-observer
+        :next="next"
+        :loading="nextLoading"
+        @next="loadNextMessages"
+      />
+      <message
+        v-for="(message, index) of messages"
+        :key="message.id"
+        :message="message"
+        :size="props.size"
+        :show-avatar="showAvatar(index) || isChatStarted(index)"
+        :username="props.contact?.name"
+        @open-image="openMedia(message)"
+        @initialized-player="attachPlayer"
       >
-        <wt-intersection-observer
-          :next="next"
-          :loading="nextLoading"
-          @next="loadNextMessages"
-        />
-        <message
-          v-for="(message, index) of messages"
-          :key="message.id"
-          :message="message"
-          :size="props.size"
-          :show-avatar="showAvatar(index) || isChatStarted(index)"
-          :username="props.contact?.name"
-          @open-image="openMedia(message)"
-          @initialized-player="attachPlayer"
-        >
-          <template #before-message>
-            <chat-date
-              v-if="showChatDate(index) || isHistoryStart(index)"
-              :date="message.createdAt"
-            />
-            <chat-activity-info
-              v-if="isChatStarted(index) || isHistoryStart(index)"
-              :provider="getChatProvider(message)?.type"
-              :gateway="getChatProvider(message)?.name"
-            />
-            <chat-agent
-              v-if="isChatStarted(index)"
-              :chat-id="message.chat?.id"
-              :contact-id="props.contact.id"
-            />
-          </template>
+        <template #before-message>
+          <chat-date
+            v-if="showChatDate(index) || isHistoryStart(index)"
+            :date="message.createdAt"
+          />
+          <chat-activity-info
+            v-if="isChatStarted(index) || isHistoryStart(index)"
+            :provider="getChatProvider(message)?.type"
+            :gateway="getChatProvider(message)?.name"
+          />
+          <chat-agent
+            v-if="isChatStarted(index)"
+            :chat-id="message.chat?.id"
+            :contact-id="props.contact.id"
+          />
+        </template>
 
-          <template #after-message>
-            <chat-activity-info
-              v-if="isChatStarted(index + 1) || isLastMessage(index)"
-              ended
-            />
-          </template>
-        </message>
-      </div>
+        <template #after-message>
+          <chat-activity-info
+            v-if="isChatStarted(index + 1) || isLastMessage(index)"
+            ended
+          />
+        </template>
+      </message>
+    </div>
+    <scroll-to-bottom-btn
+      :new-message-count="newUnseenMessages"
+      @scroll="scrollToBottom('smooth')"
+    />
     </wt-replace-transition>
   </article>
 </template>
@@ -61,6 +65,7 @@ import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/case
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
+import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
 import { useChatScroll } from '../composables/useChatScroll.js';
 import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
@@ -94,7 +99,7 @@ const {
   focusOnInput,
 } = useChatMessages();
 
-const { scrollToBottom } = useChatScroll(el);
+const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);

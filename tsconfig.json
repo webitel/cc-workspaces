@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext", "DOM"],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "allowJs": false,
+    "skipLibCheck": true,
+
+    "moduleResolution": "Bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "noEmitOnError": false,
+
+    "strict": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": [
+    "src",
+  ]
+}

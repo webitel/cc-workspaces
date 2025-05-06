@@ -5,13 +5,20 @@ const state = {
   isLoading: false,
   contactsByDestination: [], // contacts, loaded by initial search by destination (number, email, etc.)
   contactsBySearch: [], // contacts, loaded by user manual search
+  showFullContact: false, // access variable for contact card page in read only mode
 };
 
 const getters = {
-  CONTACT_LINK: () => (id) => `${import.meta.env.VITE_CRM_URL}/contacts/${id}`, // pass arguments to getter for different contents of usage
+  CONTACT_LINK: (state) => (id) => {
+    const contactPath = !state.showFullContact ? 'contact_view' : 'contacts';
+    return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
+  }, // pass arguments to getter for different contents of usage
 };
 
 const actions = {
+  INIT_SHOW_FULL_CONTACT_STATE: async (context, value) => {
+    context.commit('SET_SHOW_FULL_CONTACT', value);
+  },
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
     const number = task.displayNumber; // for CALLS
     const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
@@ -100,6 +107,9 @@ const actions = {
 };
 
 const mutations = {
+  SET_SHOW_FULL_CONTACT: (state, value) => {
+    state.showFullContact = value;
+  },
   SET_IS_LOADING: (state, value) => {
     state.isLoading = value;
   },

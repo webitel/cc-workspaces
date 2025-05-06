@@ -148,6 +148,9 @@ export default {
           deleteConfirmation: 'Ви впевнені, що хочете видалити цей файл?',
           empty: 'Поки тут немає файлів',
         },
+        formTable: {
+          title: 'Таблиця',
+        },
       },
     },
     flows: {

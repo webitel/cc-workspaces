@@ -1,6 +1,6 @@
 {
   "name": "cc-workspaces",
-  "version": "25.02.0",
+  "version": "25.04.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -19,7 +19,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.4.1",
-    "@webitel/ui-sdk": "^25.4.52",
+    "@webitel/ui-sdk": "^25.4.73",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",
     "deep-copy": "^1.4.2",
@@ -34,7 +34,7 @@
     "is-electron": "^2.2.2",
     "jszip": "^3.10.1",
     "jszip-utils": "^0.1.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "markdown-it": "^14.1.0",
     "prepend-http": "^4.0.0",
     "tinymce": "^6.8.3",
@@ -42,7 +42,8 @@
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^25.2.19"
+    "webitel-sdk": "^25.2.21",
+    "pinia": "^3.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -50,8 +51,15 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/coverage-v8": "^2.0.5",
     "@vue/compiler-sfc": "^3.5.13",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.26.1",
     "@vue/test-utils": "^2.4.6",
+    "@types/node": "^22.10.10",
+    "vue-tsc": "^2.1.10",
+    "tslib": "^2.7.0",
+    "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.22.0",
+    "@tsconfig/node22": "^22.0.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-vue": "^10.0.0",
@@ -63,16 +71,18 @@
     "prettier-plugin-css-order": "^2.1.2",
     "prismjs": "^1.29.0",
     "sass": "^1.57.1",
-    "typescript-eslint": "^8.26.1",
-    "vite": "^5.4.10",
-    "vite-plugin-node-polyfills": "^0.22.0",
-    "vite-plugin-pwa": "^0.20.0",
-    "vite-plugin-svg-sprite": "^0.5.2",
+    "vite": "^6.2.6",
+    "vite-plugin-node-polyfills": "^0.23.0",
+    "vite-plugin-pwa": "^0.21.2",
+    "vite-plugin-svg-sprite": "=0.5.2",
     "vite-plugin-vue-devtools": "^7.6.4",
     "vite-plugin-vue-docgen": "^0.3.4",
     "vitepress": "^1.5.0",
     "vitest": "^2.0.5",
     "workbox-core": "^7.0.0",
     "workbox-precaching": "^7.0.0"
+  },
+  "overrides": {
+    "vite": "^6.2.6"
   }
 }
