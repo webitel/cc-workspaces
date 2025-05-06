@@ -6,7 +6,7 @@
         v-else
       ref="chat-messages-items"
       class="chat-history__messages chat-messages-items"
-    >
+      >
       <wt-intersection-observer
         :next="next"
         :loading="nextLoading"
