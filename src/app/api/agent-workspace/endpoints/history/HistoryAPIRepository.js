@@ -2,7 +2,6 @@ import { getDefaultGetListResponse, getDefaultGetParams } from '@webitel/ui-sdk/
 import applyTransform, {
   merge, notify,
   snakeToCamel,
-  starToSearch
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { CallServiceApiFactory } from 'webitel-sdk';
 
@@ -33,7 +32,6 @@ const getHistory = async (params) => {
   } = applyTransform(params, [
     merge(getDefaultGetParams()),
     merge(defaultParams),
-    starToSearch('search'),
   ]);
 
   try {
