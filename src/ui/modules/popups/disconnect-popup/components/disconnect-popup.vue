@@ -26,13 +26,33 @@
 <script>
 import { mapActions,mapState } from 'vuex';
 
+import disconnectSound from '../../../../../features/modules/global-handlers/assets/disconnect-sound.mp3';
+
 // HOW TO TEST DISCONNECT: await cli.socket.close(3001)
 export default {
   name: 'DisconnectPopup',
+  data: () => ({
+    audio: null,
+  }),
   computed: {
     ...mapState('features/globals', {
       isDisconnectPopup: (state) => state.isDisconnectPopup,
     }),
+  },
+  watch: {
+    isDisconnectPopup: {
+      handler(newVal) {
+        if (newVal) {
+          this.audio.play();
+        } else {
+          this.audio.pause();
+        }
+      },
+    },
+  },
+  created() {
+    this.audio = new Audio(disconnectSound);
+    this.audio.loop = true;
   },
   methods: {
     ...mapActions('features/globals', {
