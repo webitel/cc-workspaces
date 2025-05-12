@@ -52,8 +52,8 @@ export default {
       },
     },
   },
-  created() {
-    this.isDisconnectSoundAllow = !!localStorage.getItem('settings/socketCloseSound');
+  created() { // TODO: add after changes in client app https://webitel.atlassian.net/browse/WTEL-6860?focusedCommentId=671316
+    // this.isDisconnectSoundAllow = !!localStorage.getItem('settings/socketCloseSound');
     this.audio = new Audio(disconnectSound);
     this.audio.loop = true;
   },
