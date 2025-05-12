@@ -53,7 +53,7 @@ export default {
     },
   },
   created() {
-    // this.isDisconnectSoundAllow = !!localStorage.getItem('settings/socketCloseSound');
+    this.isDisconnectSoundAllow = !!localStorage.getItem('settings/socketCloseSound');
     this.audio = new Audio(disconnectSound);
     this.audio.loop = true;
   },
