@@ -110,13 +110,11 @@ async function getDataList() {
 }
 
 async function initList() {
-  if (systemSourcePath.value) {
+  const data = systemSourcePath.value ? await getDataList() : props.table?.source;
 
-    const { items, next } = await getDataList();
-    dataList.value = items;
-    nextAllowed.value = next;
-
-  } else dataList.value = props.table?.source || [];
+  const { items, next } = data;
+  dataList.value = items;
+  nextAllowed.value = next;
 }
 
 async function loadNext() {
