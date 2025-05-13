@@ -97,6 +97,7 @@ const headers = computed(() => {
 });
 
 const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
+const isSystemSource = computed(() => props.table?.isSystemSource);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 async function getDataList() {
@@ -110,7 +111,7 @@ async function getDataList() {
 }
 
 async function initList() {
-  if (systemSourcePath.value) {
+  if (isSystemSource.value) {
 
     const { items, next } = await getDataList();
     dataList.value = items;
