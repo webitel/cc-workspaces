@@ -32,7 +32,7 @@
               </p>
               <wt-button
                 :color="action.color"
-                @click="emit('call-table-action', props.componentId, action)"
+                @click="sendAction(action, item)"
               >
                 {{ action.buttonName }}
               </wt-button>
@@ -128,6 +128,15 @@ async function loadNext() {
   nextAllowed.value = next;
 
   nextLoading.value = false;
+}
+
+function sendAction(action, item) {
+  const payload = {
+    componentId: props.componentId,
+    action,
+    item,
+  }
+  emit('call-table-action', payload)
 }
 
 initList();

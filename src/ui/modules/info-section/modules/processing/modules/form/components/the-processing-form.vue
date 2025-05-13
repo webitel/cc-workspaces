@@ -161,6 +161,7 @@ export default {
       });
     },
     sendTableAction(componentId, tableAction) {
+      console.log('tableAction:',  tableAction);
       const { action, vars, sync } = tableAction;
       this.task.attempt.componentAction(componentId, action, vars, sync)
       // https://webitel.atlassian.net/browse/WTEL-6707
