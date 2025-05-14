@@ -25,6 +25,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
+      v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />
@@ -65,7 +66,11 @@ const {
   isLastMessage,
 } = useChatMessages();
 
-const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
+const {
+  showScrollToBottomBtn,
+  newUnseenMessages,
+  scrollToBottom
+} = useChatScroll(el);
 
 
 onUnmounted(() => {

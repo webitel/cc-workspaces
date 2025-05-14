@@ -45,6 +45,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
+      v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />
@@ -94,7 +95,11 @@ const {
   focusOnInput,
 } = useChatMessages();
 
-const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
+const {
+  showScrollToBottomBtn,
+  newUnseenMessages,
+  scrollToBottom
+} = useChatScroll(el);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
