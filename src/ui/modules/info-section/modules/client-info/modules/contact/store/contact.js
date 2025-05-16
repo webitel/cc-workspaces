@@ -10,7 +10,7 @@ const state = {
 
 const getters = {
   CONTACT_LINK: (state) => (id) => {
-    const contactPath = !state.showFullContact ? 'contact_view' : 'contacts';
+    const contactPath = !state.showFullContact ? 'view/contact_view' : 'contacts';
     return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
   }, // pass arguments to getter for different contents of usage
 };
