@@ -160,9 +160,9 @@ export default {
         if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
       });
     },
-    sendTableAction(componentId, tableAction) {
-      const { action, vars, sync } = tableAction;
-      this.task.attempt.componentAction(componentId, action, vars, sync)
+    sendTableAction({ action, componentId, row }) {
+     const vars = { [action]: row };
+      this.task.attempt.componentAction(componentId, action, vars);
       // https://webitel.atlassian.net/browse/WTEL-6707
     },
   },
