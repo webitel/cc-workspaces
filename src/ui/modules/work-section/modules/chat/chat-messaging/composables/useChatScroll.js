@@ -13,14 +13,15 @@ export const useChatScroll = (element) => {
   const store = useStore();
 
   const { messages } = useChatMessages();
-  const { arrivedState} = useScroll(element);
+  const { arrivedState, y} = useScroll(element);
 
   const newUnseenMessages = ref(0);
+  const indentFromBottom = ref(0);
+  const showScrollToBottomBtn = ref(false);
 
   const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
   const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
   const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
-  const showScrollToBottomBtn = computed(() => !arrivedState.bottom);
 
   const scrollToBottom = (behavior = 'instant') => {
     element.value?.scrollTo({
@@ -55,9 +56,25 @@ export const useChatScroll = (element) => {
 
   },{ immediate: true });
 
+  watch(() => element.value?.scrollHeight,
+    async (newScrollHeight, oldScrollHeight) => {
+    if (newScrollHeight !== oldScrollHeight) {
+     indentFromBottom.value = element.value?.scrollHeight - ((element.value?.clientHeight/100) * 15); // 20% of scroll height
+    }
+  }, { immediate: true });
+
 
   watch(() => arrivedState.bottom, () => {
     if (arrivedState.bottom && newUnseenMessages) newUnseenMessages.value = 0;
+  });
+
+  watch(() => y.value, () => {
+   const yPosition = y.value + element.value?.clientHeight;
+    if (!arrivedState.bottom && (yPosition < indentFromBottom.value)) showScrollToBottomBtn.value = true;
+    if (arrivedState.bottom && newUnseenMessages) {
+      newUnseenMessages.value = 0;
+      showScrollToBottomBtn.value = false;
+    }
   });
 
   return {
