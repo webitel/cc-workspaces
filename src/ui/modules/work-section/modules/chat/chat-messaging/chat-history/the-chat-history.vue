@@ -48,6 +48,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
+      v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />
@@ -58,7 +59,7 @@
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
@@ -99,9 +100,12 @@ const {
   focusOnInput,
 } = useChatMessages();
 
-const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
+const {
+  showScrollToBottomBtn,
+  newUnseenMessages,
+  scrollToBottom
+} = useChatScroll(el);
 
-const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 
 const isHistoryLoaded = computed(() => getNamespacedState(store.state, namespace).isLoaded);
@@ -132,18 +136,14 @@ function isHistoryStart(index) { // first message of all chats
 function getChatProvider(message) {
   const { via } = message.chat || message.member; // chat history or current chat gateway
 
-  return { type: via.type, name: via.name };
+  return { type: via?.type, name: via?.name };
 }
 
-watch([
-  () => currentChat.value?.id,
-  () => props.contact?.id
-],  async () => {
-
-  await loadHistory();
-  await nextTick(() => scrollToBottom());
-
-},{ immediate: true });
+watch(
+  () => props.contact?.id,
+  async () => await loadHistory(),
+  { immediate: true }
+);
 
 
 onUnmounted(() => {

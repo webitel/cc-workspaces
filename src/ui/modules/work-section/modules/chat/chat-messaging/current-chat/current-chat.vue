@@ -2,7 +2,7 @@
   <section class="current-chat chat-messages-container" @click="focusOnInput">
     <div ref="chat-messages-items" class="chat-messages-items">
       <message
-        v-for="(message, index) of messages"
+        v-for="(message, index) of currentChat.messages"
         :key="message.id"
         :message="message"
         :size="props.size"
@@ -25,6 +25,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
+      v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />
@@ -33,7 +34,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { onUnmounted, useTemplateRef } from 'vue';
+import { computed, onUnmounted, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -55,18 +56,20 @@ const props = defineProps({
 })
 
 const el = useTemplateRef('chat-messages-items');
+const currentChat = computed(() => store.getters[`features/chat/CHAT_ON_WORKSPACE`]);
 
 const {
-  messages,
-
   showAvatar,
   showChatDate,
   focusOnInput,
   isLastMessage,
 } = useChatMessages();
 
-const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
-
+const {
+  showScrollToBottomBtn,
+  newUnseenMessages,
+  scrollToBottom
+} = useChatScroll(el);
 
 onUnmounted(() => {
   cleanChatPlayers();

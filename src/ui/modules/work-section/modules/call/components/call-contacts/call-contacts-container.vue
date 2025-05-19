@@ -16,11 +16,13 @@
 </template>
 
 <script setup>
+import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import { computed,ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore.js';
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
 
@@ -34,6 +36,9 @@ const props = defineProps({
     options: ['sm', 'md'],
   },
 });
+
+const { hasSpecialGlobalActionAccess } = useUserinfoStore();
+const isLimitContactsPermissionGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
 
 const currentTab = ref({});
 
@@ -56,7 +61,9 @@ const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === '
 
 const tabs = computed(() => {
   const tabs = [tabsObject.value.CallUsersTab];
-  if (hasLicenseOnCrm.value) tabs.unshift(tabsObject.value.CallContactsTab);
+  if (hasLicenseOnCrm.value && isLimitContactsPermissionGranted) {
+    tabs.unshift(tabsObject.value.CallContactsTab);
+  }
   return tabs;
 });
 

@@ -1,10 +1,10 @@
 <template>
-  <div
-    v-if="props.newMessageCount"
-    class="scroll-to-bottom-btn"
-  >
+  <div class="scroll-to-bottom-btn">
 
-    <div class="scroll-to-bottom-btn__messages-counter">
+    <div
+      v-show="props.newMessageCount"
+      class="scroll-to-bottom-btn__messages-counter"
+    >
       {{ props.newMessageCount }}
     </div>
     <wt-rounded-action
@@ -21,7 +21,7 @@
 const props = defineProps({
   newMessageCount: {
     type: Number,
-    required: true,
+    default: 0,
   },
 })
 
