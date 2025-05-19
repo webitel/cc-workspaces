@@ -13,7 +13,6 @@ import router from './app/router';
 import store from './app/store';
 import App from './app/the-app.vue';
 import { useUserinfoStore } from './ui/modules/userinfo/userinfoStore';
-import {createUserAccessStore} from '@webitel/ui-sdk/src/modules/Userinfo/v2/stores/accessStore';
 
 const setTokenFromUrl = () => {
   try {
@@ -68,13 +67,6 @@ const initApp = async () => {
     .use(store)
     .use(...WebitelUi)
     .use(BreakpointPlugin);
-
-  const userinfo = useUserinfoStore();
-  await userinfo.initialize();
-
-  const useAccessStore = createUserAccessStore();
-  const accessStore = useAccessStore();
-  accessStore.initialize(userinfo);
 
   const { initialize, routeAccessGuard } = useUserinfoStore();
   try {
