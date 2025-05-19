@@ -14,7 +14,7 @@
       </div>
     </template>
     <template #title>
-      {{ shownDestination }}
+      {{ destination }}
     </template>
 
     <template #subtitle>
@@ -37,7 +37,7 @@
           rounded
           :size="size"
           wide
-          @click="call"
+          @click="makeCall( { numberToCall })"
         />
         <wt-context-menu
             :key="item.id"
@@ -71,7 +71,7 @@
 
 <script>
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
@@ -86,42 +86,50 @@ export default {
       required: false,
     },
   },
-  data(){
+  data() {
     return{
       isContextMenuVisible: false
     }
   },
 
   computed: {
-    shownDestination() {
-      return this.destination;
+    ...mapGetters('features/member', {
+      member: 'MEMBER_ON_WORKSPACE',
+    }),
+
+    destination() {
+     return this.member?.id
+       ? this.item.from.name
+       : this.callDestination;
     },
 
     destinationForNumber() {
-      if (this.item.direction === CallDirection.Outbound) {
-        if (this.item.to.number) {
-          return this.item.to.number;
-        }
-        return this.item.destination;
-      }
-
-      return this.item.from.number;
+      return this.numberToCall
     },
 
-    destination() {
-      if (this.item.contact?.id) return this.item.contact.name;
-
-      if (this.item.direction === CallDirection.Outbound) {
-        if (this.item.to.number) {
-          return this.item.to.name;
-        }
-        return this.item.destination;
-      }
-
-      return this.item.from.name;
+    callerInfo() {
+      return  this.item.direction === CallDirection.Inbound
+        ? this.item.from
+        : this.item.to;
     },
 
-    historyIdLink(){
+    callDestination() {
+      if (this.item.queue?.id) { // if call from queue
+        return  this.callerInfo.name || this.item.contact?.name || this.numberToCall;
+      } else {
+        return this.item.contact?.name || this.callerInfo.name || this.numberToCall;
+      }
+    },
+
+    numberToCall() {
+      if (this.item.direction === CallDirection.Inbound) {
+        return this.item.from.number;
+      } else {
+        return  this.item.to.number || this.item.destination;
+      }
+    },
+
+    historyIdLink() {
       return `${import.meta.env.VITE_HISTORY_URL}/${this.item.id}`
     },
 
@@ -150,7 +158,7 @@ export default {
       return 'success';
     },
 
-    contextMenuOptions(){
+    contextMenuOptions() {
       return [
         {
           text: this.$t('history.openInHistory'),
@@ -165,17 +173,6 @@ export default {
     ...mapActions('features/call', {
       makeCall: 'CALL',
     }),
-    call() {
-      let number;
-
-      if (this.item.direction === CallDirection.Inbound) {
-        number = this.item.from.number;
-      } else {
-        number = this.item.to.number || this.item.destination;
-      }
-
-      return this.makeCall({ number });
-    },
     goToHistoryItem() {
       window.open(this.historyIdLink, '_blank')
     },
@@ -189,27 +186,27 @@ export default {
   }
 
   .history-lookup-item{
-    &-wrapper{
+    &-wrapper {
       display: flex;
       align-items: center;
       gap: var(--spacing-2xs);
     }
 
-    &-after{
+    &-after {
       display: flex;
       align-items: center;
       gap: var(--spacing-xs);
 
-      :deep(.wt-context-menu__option){
+      :deep(.wt-context-menu__option) {
         padding: 0;
       }
-      :deep(.wt-tooltip .wt-tooltip-floating){
+      :deep(.wt-tooltip .wt-tooltip-floating) {
         z-index: var(--ws-tooltip-z-index);
       }
     }
 
-    &-options{
-      &__card a{
+    &-options {
+      &__card a {
         display: flex;
         align-items: center;
         gap: var(--spacing-xs);
