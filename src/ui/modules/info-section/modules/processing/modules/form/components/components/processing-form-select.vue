@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+import deepEqual from 'deep-equal';
 import { computed, onMounted, ref, watch, withDefaults } from 'vue';
 
 const props = withDefaults(defineProps<{
@@ -38,25 +39,47 @@ onMounted(() => {
   initialValue.value = props.options.find((option) => option.value === props.value) || props.value;
 });
 
+// @author @stanislav-kozak
+// This function checks if the value is an array of primitive types (string, number, boolean)
+const isPrimitiveArray = (value: unknown): value is (string | number | boolean)[] =>
+  Array.isArray(value) && value.some(item => typeof item !== 'object');
+
+// @author @stanislav-kozak
+// This function maps an array of primitive values to their corresponding options
+const mapToOptions = (
+  value: (string | number | boolean)[],
+  options: any[],
+) => value.map(item => options.find(option => option.value === item) || item);
+
+// @author @stanislav-kozak
+// This function finds the first option that matches the value
+const findMatchingOption = (
+  value: unknown,
+  options: any[],
+) => options.find(option => option.value === value);
+
 watch(() => props.value, (newValue) => {
-  if (Array.isArray(newValue) && (newValue as never[]).some(item => typeof item !== 'object')) {
-    const values = (newValue as never[]).map(item => {
-      return props.options.find((option) => option.value === item) || item;
-    });
-    emit('input', values);
+
+  // @author @stanislav-kozak
+  // If the new value is an array of primitive types, map it to options
+  if (isPrimitiveArray(newValue)) {
+    const mappedValues = mapToOptions(newValue, props.options);
+
+    // @author @stanislav-kozak
+    // If the mapped values are the same as the initial value, do not emit
+    if (!deepEqual(mappedValues, newValue)) {
+      emit('input', mappedValues);
+    }
     return;
   }
 
+  // @author @stanislav-kozak
+  // If the value is not an array or is not primitive, find the matching option
+  if (typeof newValue !== 'object') {
+    const matchedOption = findMatchingOption(newValue, props.options);
 
-  if (typeof newValue === 'object') {
-    return;
-  } else {
-    const existsOption = props.options.find((option) => {
-      return option.value === newValue;
-    });
-
-    if (existsOption) {
-      emit('input', existsOption);
+    if (matchedOption) {
+      emit('input', matchedOption);
     }
   }
 }, { immediate: true });
