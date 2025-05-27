@@ -93,7 +93,7 @@ export default {
     },
     async checkLabelsToLimitContacts() {
       const { items } = await configurations.getList({
-        //TODO: remove after migration to new EngineSystemSettingName enum
+        //TODO: remove after migration to new EngineSystemSettingName enum https://webitel.atlassian.net/browse/WTEL-6827
         name: 'labels_to_limit_contacts',
       });
 
