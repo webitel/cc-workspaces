@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
 import { mapActions } from 'vuex';
 
 import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
@@ -61,6 +62,7 @@ export default {
     dataList: [],
     SearchMode,
     filterQuery: SearchMode.NAME,
+    contactsLabelsConfiguration: [],
   }),
 
   computed: {
@@ -89,14 +91,25 @@ export default {
     call({ number }) {
       this.makeCall({ number });
     },
+    async checkLabelsToLimitContacts() {
+      const { items } = await configurations.getList({
+        //TODO: remove after migration to new EngineSystemSettingName enum https://webitel.atlassian.net/browse/WTEL-6827
+        name: 'labels_to_limit_contacts',
+      });
+
+      if (items.length) {
+        this.contactsLabelsConfiguration = items[0].value;
+      }
+    },
     changeMode({ value }) {
       this.filterQuery = value;
       this.resetData();
     },
-    fetch(params) {
-      return contactsAPI.getList({ ...params, qin: this.filterQuery });
+    async fetch(params) {
+      await this.checkLabelsToLimitContacts();
+      return await contactsAPI.getList({ ...params, qin: this.filterQuery, label: this.contactsLabelsConfiguration });
     },
-  },
+  }
 };
 </script>
 
