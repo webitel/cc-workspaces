@@ -38,7 +38,7 @@ const props = defineProps({
 });
 
 const { hasSpecialGlobalActionAccess } = useUserinfoStore();
-const isLimitContactsPermissionGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
+const isLimitContactsGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
 
 const currentTab = ref({});
 
@@ -61,7 +61,7 @@ const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === '
 
 const tabs = computed(() => {
   const tabs = [tabsObject.value.CallUsersTab];
-  if (hasLicenseOnCrm.value && isLimitContactsPermissionGranted) {
+  if (hasLicenseOnCrm.value && !isLimitContactsGranted) {
     tabs.unshift(tabsObject.value.CallContactsTab);
   }
   return tabs;
