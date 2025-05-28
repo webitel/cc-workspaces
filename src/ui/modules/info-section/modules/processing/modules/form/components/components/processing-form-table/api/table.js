@@ -5,10 +5,10 @@ import {
 } from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
   camelToSnake,
-  snakeToCamel,
   generateUrl,
   merge,
   notify,
+  snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers/index';
 
 const instance = getDefaultInstance();
