@@ -1,7 +1,6 @@
 import { useScroll } from '@vueuse/core';
 import {
   computed,
-  nextTick, onMounted,
   ref,
   watch,
 } from 'vue';
@@ -14,15 +13,14 @@ export const useChatScroll = (element) => {
   const store = useStore();
 
   const { messages } = useChatMessages();
-  const { arrivedState, y} = useScroll(element);
+  const { arrivedState} = useScroll(element);
 
-  const showScrollToBottomBtn = ref(false);
-  const indentFromBottom = ref(0);
   const newUnseenMessages = ref(0);
 
   const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
   const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
   const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
+  const showScrollToBottomBtn = computed(() => !arrivedState.bottom);
 
   const scrollToBottom = (behavior = 'instant') => {
     element.value?.scrollTo({
@@ -42,34 +40,24 @@ export const useChatScroll = (element) => {
     }
   }
 
-  onMounted(() => {
-    indentFromBottom.value = element.value?.scrollHeight - 500; // indent from bottom of the chat when scrollToBottomBtn will be visible
-  })
-
-  watch(() => chat.value?.id,  async () => { // every time a chat changes
-    await nextTick(() =>
-      scrollToBottom()
-    );
-  },{ immediate: true })
-
   watch(() => messages.value?.length,
     async (messagesLength, oldMessagesLength) => {
-      if (!messagesLength || !oldMessagesLength) scrollToBottom(); // when messages loaded first time
-
       const newMessageReceived = (messagesLength - oldMessagesLength) === 1; // when chat have just 1 new message
-
-     if (newMessageReceived) scrollAfterNewMessage();
+      if (newMessageReceived) scrollAfterNewMessage();
     },
-    { flush: 'post' }
+    { flush: 'post' },
   )
 
-  watch(() => y.value, () => {
+  watch(() => chat.value?.id,
+    async () => {
+
+    setTimeout(() => scrollToBottom(), 500);
+
+  },{ immediate: true });
+
+
+  watch(() => arrivedState.bottom, () => {
     if (arrivedState.bottom && newUnseenMessages) newUnseenMessages.value = 0;
-
-    showScrollToBottomBtn.value = !arrivedState.bottom
-      && (y.value < indentFromBottom.value);
-
-
   });
 
   return {

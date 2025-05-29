@@ -1,35 +1,38 @@
 <template>
   <article class="chat">
-    <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
-      <template #header>
-        <chat-header
-          v-show="isChatHeader"
-          :size="size"
-          @open-tab="openTab"
-        />
-        <media-viewer />
-      </template>
-      <template #body>
-        <component
-          :is="currentTab.component"
-          :size="size"
-          v-bind="currentTab.props"
-          :contact="chatContact"
-          @close-tab="resetTab"
-          @open-tab="openTab"
-        />
-      </template>
-      <template #footer>
-        <chat-footer
-          v-if="isChatFooter"
-          :size="size"
-        />
-      </template>
-    </task-container>
+    <wt-replace-transition appear>
+      <task-container v-if="chatContactIsLoaded" :key="chat.id" class="chat__wrapper">
+        <template #header>
+          <chat-header
+            v-show="isChatHeader"
+            :size="size"
+            @open-tab="openTab"
+          />
+          <media-viewer />
+        </template>
+        <template #body>
+          <component
+            :is="currentTab.component"
+            :size="size"
+            v-bind="currentTab.props"
+            :contact="chatContact"
+            @close-tab="resetTab"
+            @open-tab="openTab"
+          />
+        </template>
+        <template #footer>
+          <chat-footer
+            v-if="isChatFooter"
+            :size="size"
+          />
+        </template>
+      </task-container>
+    </wt-replace-transition>
   </article>
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters, mapState } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
@@ -54,13 +57,16 @@ export default {
     ChatTransferContainer,
     EmptyWorkspace,
     ChatFooter,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   data: () => ({
     hotkeyUnsubscribers : [],
     chatContact: null,
-    currentTab: { component: defaultTab },
     chatContactIsLoaded: false,
+    currentTab: {
+      component: defaultTab
+    },
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {
@@ -72,22 +78,24 @@ export default {
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
-    // hide footer in transfer and empty-workspace tab or if closed chat was opened
+    // hide footer in transfer, empty-workspace tab and if closed chat opened
     isChatFooter() {
       return this.currentTab.component === defaultTab;
     },
   },
   watch: {
-    chat: {
+    chat: { // if chat changed
       async handler() {
+        this.chatContactIsLoaded = false;
         this.resetTab();
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
         this.chatContactIsLoaded = true;
       },
       immediate: true,
     },
     async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+      this.chatContactIsLoaded = false;
+      this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
       this.chatContactIsLoaded = true;
     },
   },
