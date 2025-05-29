@@ -82,13 +82,35 @@ const emit = defineEmits([
   'call-table-action',
 ]);
 
+const columnsFieldSeparator = '.'; // from postprocessing flow we can get column value like path to nested object value. For example: contact.name https://webitel.atlassian.net/browse/WTEL-6890
+
 const nextAllowed = ref(false);
 const nextLoading = ref(false);
 const currentTablePage = ref(1);
 const dataList = ref([]);
 
+const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
+const isSystemSource = computed(() => props.table?.isSystemSource);
+const systemSourcePath = computed(() => props.table?.systemSource?.path);
+
+const tableColumns = computed(() => {
+
+  return props.table?.displayColumns.map((column) => {
+    const fieldArray = column.field.includes(columnsFieldSeparator)
+      ? column.field.split(columnsFieldSeparator)
+      : [column.field];
+
+    return {
+      ...column,
+      field: fieldArray[0],
+      fieldArray,
+    }
+  })
+});
+
 const headers = computed(() => {
-  return props.table?.displayColumns.map((header) => ({
+
+  return tableColumns.value.map((header) => ({
     ...header,
     text: header.name,
     value: header.field,
@@ -96,15 +118,15 @@ const headers = computed(() => {
   }));
 });
 
-const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
-const isSystemSource = computed(() => props.table?.isSystemSource);
-const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 async function getDataList() {
+
+const fields = headers.value.map((item) => ( item.value ));
 
   const { items, next } = await TableApi.getList({
     path: systemSourcePath.value,
     page: currentTablePage.value,
+    fields,
   });
 
   return { items, next };
