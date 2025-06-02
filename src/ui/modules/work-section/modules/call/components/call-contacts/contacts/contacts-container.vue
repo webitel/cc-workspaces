@@ -39,6 +39,7 @@
 
 <script>
 import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
+import { computed } from 'vue';
 import { mapActions } from 'vuex';
 
 import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
@@ -49,6 +50,10 @@ import LookupItemContainer from '../../../../_shared/components/lookup-item-cont
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import ContactLookupItem from './contact-lookup-item.vue';
 
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore.js';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
+import { EngineSystemSettingName } from '@webitel/api-services/gen';
+
 export default {
   name: 'ContactsContainer',
   components: {
@@ -57,6 +62,19 @@ export default {
     LookupItemContainer,
   },
   mixins: [infiniteScrollMixin, sizeMixin],
+
+  setup() {
+    const userinfoStore = useUserinfoStore();
+    const isLimitContactsGranted = computed(() =>
+      userinfoStore.hasSpecialGlobalActionAccess(
+        SpecialGlobalAction.LimitWorkspaceContacts,
+      ),
+    );
+
+    return {
+      isLimitContactsGranted,
+    };
+  },
 
   data: () => ({
     dataList: [],
@@ -93,23 +111,34 @@ export default {
     },
     async checkLabelsToLimitContacts() {
       const { items } = await configurations.getList({
-        //TODO: remove after migration to new EngineSystemSettingName enum https://webitel.atlassian.net/browse/WTEL-6827
-        name: 'labels_to_limit_contacts',
+        name: EngineSystemSettingName.labels_to_limit_contacts,
       });
 
       if (items.length) {
         this.contactsLabelsConfiguration = items[0].value;
       }
     },
+
+    async fetch(params) {
+      if (this.isLimitContactsGranted) {
+        await this.checkLabelsToLimitContacts();
+        return await contactsAPI.getList({
+          ...params,
+          qin: this.filterQuery,
+          label: this.contactsLabelsConfiguration,
+        });
+      }
+      return await contactsAPI.getList({
+        ...params,
+        qin: this.filterQuery,
+      });
+    },
+
     changeMode({ value }) {
       this.filterQuery = value;
       this.resetData();
     },
-    async fetch(params) {
-      await this.checkLabelsToLimitContacts();
-      return await contactsAPI.getList({ ...params, qin: this.filterQuery, label: this.contactsLabelsConfiguration });
-    },
-  }
+  },
 };
 </script>
 
