@@ -16,9 +16,11 @@
 </template>
 
 <script setup>
+import { EngineSystemSettingName } from '@webitel/api-services/gen';
+import { configurations } from '@webitel/ui-sdk/src/api/clients/index.js';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
@@ -39,6 +41,18 @@ const props = defineProps({
 
 const { hasSpecialGlobalActionAccess } = useUserinfoStore();
 const isLimitContactsGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
+
+const isLabelToLimitContactsGranted = ref(false);
+
+onMounted(async () => {
+  await configurations.getList({ name: EngineSystemSettingName.labels_to_limit_contacts });
+
+  const { items } = await configurations.getList({
+    name: EngineSystemSettingName.labels_to_limit_contacts,
+  });
+
+  isLabelToLimitContactsGranted.value = !!items.length;
+});
 
 const currentTab = ref({});
 
@@ -61,9 +75,14 @@ const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === '
 
 const tabs = computed(() => {
   const tabs = [tabsObject.value.CallUsersTab];
-  if (hasLicenseOnCrm.value && !isLimitContactsGranted) {
+
+  if (
+    hasLicenseOnCrm.value &&
+    (!isLimitContactsGranted || isLabelToLimitContactsGranted.value)
+  ) {
     tabs.unshift(tabsObject.value.CallContactsTab);
   }
+
   return tabs;
 });
 
