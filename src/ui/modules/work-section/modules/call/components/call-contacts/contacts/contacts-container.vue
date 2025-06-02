@@ -120,17 +120,20 @@ export default {
     },
 
     async fetch(params) {
+      const defaultParams = {
+        ...params,
+        qin: this.filterQuery,
+      };
+
       if (this.isLimitContactsGranted) {
         await this.checkLabelsToLimitContacts();
         return await contactsAPI.getList({
-          ...params,
-          qin: this.filterQuery,
+          ...defaultParams,
           label: this.contactsLabelsConfiguration,
         });
       }
       return await contactsAPI.getList({
-        ...params,
-        qin: this.filterQuery,
+        ...defaultParams
       });
     },
 
