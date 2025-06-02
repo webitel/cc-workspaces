@@ -44,14 +44,16 @@ const isLimitContactsGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.
 
 const isLabelToLimitContactsGranted = ref(false);
 
-onMounted(async () => {
-  await configurations.getList({ name: EngineSystemSettingName.labels_to_limit_contacts });
-
+async function checkLabelToLimitContacts() {
   const { items } = await configurations.getList({
     name: EngineSystemSettingName.labels_to_limit_contacts,
   });
 
   isLabelToLimitContactsGranted.value = !!items.length;
+}
+
+onMounted(() => {
+  checkLabelToLimitContacts();
 });
 
 const currentTab = ref({});
