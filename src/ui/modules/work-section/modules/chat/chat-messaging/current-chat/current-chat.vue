@@ -25,6 +25,7 @@
       </message>
     </div>
     <scroll-to-bottom-btn
+      v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
       @scroll="scrollToBottom('smooth')"
     />
@@ -65,7 +66,11 @@ const {
   isLastMessage,
 } = useChatMessages();
 
-const { newUnseenMessages, scrollToBottom } = useChatScroll(el);
+const {
+  showScrollToBottomBtn,
+  newUnseenMessages,
+  scrollToBottom
+} = useChatScroll(el);
 
 
 onUnmounted(() => {
@@ -73,7 +78,7 @@ onUnmounted(() => {
 })
 
 
-const openMedia = () => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`);
+const openMedia = (message) => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
 const attachPlayer = (player) => store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const cleanChatPlayers = (message) => store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
 

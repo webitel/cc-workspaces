@@ -37,6 +37,7 @@ const transformItemsForSelect =
   ({ primary, display }) =>
   (items) => {
     return items.map((item) => ({
+      ...item,
       id: item[primary],
       name: checkTemplate(display)
         ? get(item, display.split('.'))

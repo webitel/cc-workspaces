@@ -160,16 +160,21 @@ export default {
         if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
       });
     },
-    sendTableAction(componentId, tableAction) {
-      const { action, vars, sync } = tableAction;
-      this.task.attempt.componentAction(componentId, action, vars, sync)
+    sendTableAction({ action, componentId, row }) {
+     const vars = { [action]: row };
+      this.task.attempt.componentAction(componentId, action, vars);
       // https://webitel.atlassian.net/browse/WTEL-6707
     },
   },
   watch: {
     formBody: {
-      handler() {
-        this.initializeValues();
+      handler(newValue, oldValue) {
+        // @author @liza-pohranichna
+        // If old value was empty array and new value is array with elements in === formBody loaded first time
+        // https://webitel.atlassian.net/browse/WTEL-6971
+        if (!oldValue?.length && newValue?.length) {
+          this.initializeValues();
+        }
       },
       immediate: true,
     },

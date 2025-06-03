@@ -12,15 +12,6 @@ export function formattingFormBeforeSend(formBody) {
         _value = value.value;
       }
     }
-    if (view.component === 'form-select-from-object') {
-      if (Array.isArray(value)) {
-        _value = value.map((val) =>
-          typeof value === 'object' ? val.name : val,
-        );
-      } else if (typeof value === 'object') {
-        _value = value.name;
-      }
-    }
     return {
       ...form,
       [id]: _value,

@@ -17,13 +17,13 @@ import { useUserinfoStore } from './ui/modules/userinfo/userinfoStore';
 const setTokenFromUrl = () => {
   try {
     const queryMap = window.location.search
-      .slice(1)
-      .split('&')
-      .reduce((obj, query) => {
-        const [key, value] = query.split('=');
-        obj[key] = value;
-        return obj;
-      }, {});
+        .slice(1)
+        .split('&')
+        .reduce((obj, query) => {
+          const [key, value] = query.split('=');
+          obj[key] = value;
+          return obj;
+        }, {});
 
     if (queryMap.accessToken) {
       localStorage.setItem('access-token', queryMap.accessToken);

@@ -16,11 +16,15 @@
 </template>
 
 <script setup>
+import { EngineSystemSettingName } from '@webitel/api-services/gen';
+import { configurations } from '@webitel/ui-sdk/src/api/clients/index.js';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import { computed,ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore.js';
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
 
@@ -33,6 +37,23 @@ const props = defineProps({
     default: 'md',
     options: ['sm', 'md'],
   },
+});
+
+const { hasSpecialGlobalActionAccess } = useUserinfoStore();
+const isLimitContactsGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
+
+const isLabelToLimitContactsGranted = ref(false);
+
+async function checkLabelToLimitContacts() {
+  const { items } = await configurations.getList({
+    name: EngineSystemSettingName.labels_to_limit_contacts,
+  });
+
+  isLabelToLimitContactsGranted.value = !!items.length;
+}
+
+onMounted(() => {
+  checkLabelToLimitContacts();
 });
 
 const currentTab = ref({});
@@ -56,7 +77,14 @@ const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === '
 
 const tabs = computed(() => {
   const tabs = [tabsObject.value.CallUsersTab];
-  if (hasLicenseOnCrm.value) tabs.unshift(tabsObject.value.CallContactsTab);
+
+  if (
+    hasLicenseOnCrm.value &&
+    (!isLimitContactsGranted || isLabelToLimitContactsGranted.value)
+  ) {
+    tabs.unshift(tabsObject.value.CallContactsTab);
+  }
+
   return tabs;
 });
 
