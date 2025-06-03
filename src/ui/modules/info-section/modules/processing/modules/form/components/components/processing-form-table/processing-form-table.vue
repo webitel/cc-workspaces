@@ -55,6 +55,7 @@
 
 <script setup>
 
+import  { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import deepCopy from 'deep-copy';
 import { computed, defineProps, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -95,9 +96,11 @@ const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 const tableColumns = computed(() => {
   return props.table?.displayColumns.map((column) => {
-    const fieldPath = column.field.includes(columnsFieldSeparator) // path to nested value from object (displayed as an array). Example: 'contact.emails.name' will look like ['contact', 'emails', 'name']
-      ? column.field.split(columnsFieldSeparator)
-      : [column.field];
+
+    // reformatting path to nested object from string to array. Example: 'contact.emails.name' to ['contact', 'emails', 'name']
+    const fieldPath = column.field.includes(columnsFieldSeparator)
+        ? column.field.split(columnsFieldSeparator).map((item) => snakeToCamel(item))
+        : [column.field];
 
     return {
       ...column,
@@ -116,59 +119,49 @@ const headers = computed(() => {
   }));
 });
 
-function getNestedValue(parentValue, path) { // якщо updatedBy:{id: '4', name: 'Софія111111'} і шлях updatedBy.name, то має повернутись updatedBy: 'Софія111111'
-  // метод для заглиблення в об'єкт TODO схоже на скріпт, шоб перевикористовувати десь
-  // TODO сюди трапляє об'єкт/масив поля, в який треба заглибитись та шлях, куди(!) треба заглибитись
-  if (path.length <= 1) return parentValue;
+function getNestedValue(parentValue, path) {
+  let nestedValue;
 
-  path = path.slice(1); // first of all delete previous path step
+  if (path.length <= 1) return parentValue || '';
 
-  const key = path[0]; // take key of object for next path step
+  const newPath = path.slice(1); // delete current path step before next step
+  const key = newPath[0]; // take key of object for current path step
 
-  if (Array.isArray(parentValue)) {
-    return parentValue.map((object) => (getNestedValue(object[key], path))); // get needed value from every object in array
-  }
-  else if (typeof parentValue === 'object') return getNestedValue(parentValue[key], path);
-
-  else return parentValue;
-
-
-  // ! Корисно: collection[id][prop] = collection[id][prop] || []; https://forum.freecodecamp.org/t/sorting-attributes-inside-js-objects/423653
-
-
-  // трансформувати атемс таким чином, щоб кожен об'єкт в масиві став "плоским"?
-  // і кожен хедер мав тільки те значення, яке вказано в шляху. тобто якщо contact.name.common_name, то тоді це буде { contact: contact.name.common_name }
-  // contact = в залежності від значення того, що лежить в contact.name.common_name
-  // використовувати tableColumns.fieldPath як орієнтир в тому, куди мені треба лізти в об'єкті
+  if (Array.isArray(parentValue) && typeof parentValue[0] === 'object') {
+      nestedValue = parentValue.map((object) => getNestedValue(object[key], newPath)) // get needed value from every object in array
+  } else if (typeof parentValue === 'object') {
+    nestedValue = getNestedValue(parentValue[key], newPath);
+    // console.log('OBJECT: parentValue[key]:', parentValue[key], 'newPath:', newPath, 'nestedValue:', nestedValue);
+  } else nestedValue = parentValue || '';
+  // console.log('nestedValue:', nestedValue, 'parentValue, path:', parentValue, path);
+  return nestedValue;
 
 }
 
-function handleDataList(dataList) {
 
-  return dataList.map((item) => { // беремо основний масив items
+async function handleDataList(dataList) {
+
+  const tableList = dataList.map((item) => {
+    let newItem;
 
     tableColumns.value.forEach((column) => {
       const valueOfItem = item[column.field];
-      const path = column.fieldPath.slice(1) // delete from path first step
 
-      if (typeof valueOfItem === 'object' || path.length) return getNestedValue(valueOfItem, path); // Example of path ['contact', 'name']
-      else return item;
+      if (typeof valueOfItem === 'object' && column.fieldPath.length) { // Example of fieldPath ['contact', 'name']
+        const nestedValue = valueOfItem && column.fieldPath ? getNestedValue(valueOfItem, column.fieldPath) : '';
+        console.log('column:', column.field, 'nestedValue:', nestedValue, 'valueOfItem:', valueOfItem);
+        newItem = {
+          ...item,
+          [column.field]: nestedValue,
+        }
+        console.log('newItem:', newItem);
+      }
+
     });
-
-
-  })
+    return newItem;
+  });
+  return tableList;
 }
-
-// let arrayOfItemProperties = Object.entries(item); // item object to array
-// arrayOfItemProperties = arrayOfItemProperties.map((property) => { // перебір по значенням об'єкту item
-//
-//   const columnOfProperty = tableColumns.value.find((column) => column.field === property); // шукаємо колонку(хедер), який співпадає зі значенням
-//
-//   if (columnOfProperty.fieldPath.length > 1) {
-//     return getNestedValues({ array: property, path: columnOfProperty.fieldPath });
-//   } else return property;
-// });
-// const newItem = Object.fromEntries(arrayOfItemProperties); // return from array to object
 
 async function getDataList() {
 
@@ -194,9 +187,11 @@ async function initList() {
 
   } else data = props.table?.source || [];
 
-  handleDataList(data); // !! не використовується, лише запускається
+  const tableList = await handleDataList(data);
 
-  dataList.value = data;
+  console.log('tableList:', tableList);
+
+  dataList.value = tableList;
 }
 
 async function loadNext() {
