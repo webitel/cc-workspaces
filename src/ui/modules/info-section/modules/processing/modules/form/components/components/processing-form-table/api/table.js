@@ -4,6 +4,7 @@ import {
   getDefaultInstance,
 } from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
+  addQueryParamsToUrl,
   camelToSnake,
   generateUrl,
   merge,
@@ -26,16 +27,13 @@ const getList = async ({ path, filters, ...params }) => {
     });
   };
 
-  let url = applyTransform(params, [
+  const url = applyTransform(params, [
     merge(getDefaultGetParams()),
     (params) => ({ ...params, q: params.search }),
     camelToSnake(),
     generateUrl(path),
+    addQueryParamsToUrl(filters),
   ]);
-
-  if (filters && filters.length > 0) {
-    url += '&' + filters.join('&');
-  }
 
   try {
     const response = await instance.get(url);
