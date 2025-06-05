@@ -72,10 +72,14 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  filters: {
+    type: Object,
+    required: true,
+  },
   actions: {
     type: Array,
     default: () => [],
-  }
+  },
 });
 
 const emit = defineEmits([
@@ -98,12 +102,14 @@ const headers = computed(() => {
 
 const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
 const isSystemSource = computed(() => props.table?.isSystemSource);
+const filters = computed(() => props?.filters || []);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 async function getDataList() {
 
   const { items, next } = await TableApi.getList({
     path: systemSourcePath.value,
+    filters: filters.value,
     page: currentTablePage.value,
   });
 
@@ -123,7 +129,7 @@ async function initList() {
 async function loadNext() {
   nextLoading.value = true;
 
-  currentTablePage.value +=1;
+  currentTablePage.value += 1;
   const { items, next } = await getDataList();
   dataList.value = [...dataList.value, ...deepCopy(items)];
   nextAllowed.value = next;
@@ -136,8 +142,8 @@ function sendAction(action, row) {
     componentId: props.componentId,
     action,
     row,
-  }
-  emit('call-table-action', payload)
+  };
+  emit('call-table-action', payload);
 }
 
 initList();
