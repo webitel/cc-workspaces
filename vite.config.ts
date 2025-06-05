@@ -5,6 +5,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 import vueDevtools from 'vite-plugin-vue-devtools';
+import { resolve } from 'path';
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -31,6 +32,8 @@ export default ({ mode }) => {
     resolve: {
       alias: {
         vue: '@vue/compat',
+        '@': resolve(__dirname, 'src'),
+        '@aliasedDeps/api-services/axios': resolve(__dirname, 'src/app/api/instance'),
       },
     },
     plugins: [
