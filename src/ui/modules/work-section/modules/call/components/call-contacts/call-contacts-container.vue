@@ -6,12 +6,12 @@
       :tabs="tabs"
       wide
       @change="changeTab"
-    ></wt-tabs>
+    />
     <component
       :is="currentTab.component"
       class="call-contacts-container-content"
       :size="size"
-    ></component>
+    />
   </div>
 </template>
 

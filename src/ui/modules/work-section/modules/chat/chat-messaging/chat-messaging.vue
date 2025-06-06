@@ -12,15 +12,17 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <chat-history
-      v-if="contact?.id"
-      :contact="contact"
-      :size="size"
-    />
-    <current-chat
-      v-else
-      :size="size"
-    />
+    <wt-replace-transition appear>
+      <chat-history
+        v-if="contact?.id"
+        :contact="contact"
+        :size="size"
+      />
+      <current-chat
+        v-else
+        :size="size"
+      />
+    </wt-replace-transition>
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
@@ -73,6 +75,8 @@
 
 <script>
 
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -83,7 +87,6 @@ import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
-import { ComponentSize } from '@webitel/ui-sdk/enums/index.js';
 
 
 export default {
@@ -93,6 +96,7 @@ export default {
     CurrentChat,
     ChatHistory,
     ChatEmoji,
+    WtReplaceTransition,
   },
   inject: ['$eventBus'],
   props: {
