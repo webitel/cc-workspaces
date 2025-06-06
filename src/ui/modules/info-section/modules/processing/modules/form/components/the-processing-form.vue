@@ -33,6 +33,7 @@
       </wt-button>
     </template>
   </processing-wrapper>
+
 </template>
 
 <script>
@@ -86,6 +87,7 @@ export default {
       'form-i-frame': 'form-i-frame',
     },
     hotkeyUnsubscribers: [],
+    isValuesІnitialize: false,
   }),
   computed: {
     ...mapGetters('workspace', {
@@ -96,6 +98,9 @@ export default {
     },
     formBody() {
       return this.task.attempt.form?.body || [];
+    },
+    formBodyLength() {
+      return this.formBody.length;
     },
     formActions() {
       return this.task.attempt.form?.actions || [];
@@ -132,6 +137,8 @@ export default {
             }
           } catch {
             component.value = component.view.initialValue;
+          } finally {
+            this.isValuesІnitialize = true;
           }
         }
       });
@@ -167,12 +174,11 @@ export default {
     },
   },
   watch: {
-    formBody: {
-      handler(newValue, oldValue) {
+    formBodyLength: {
+      handler(value) {
         // @author @liza-pohranichna
-        // If old value was empty array and new value is array with elements in === formBody loaded first time
-        // https://webitel.atlassian.net/browse/WTEL-6971
-        if (!oldValue?.length && newValue?.length) {
+        // need watcher for this, because in mounted() hook formBody = empty array
+        if (value && !this.isValuesІnitialize) {
           this.initializeValues();
         }
       },
