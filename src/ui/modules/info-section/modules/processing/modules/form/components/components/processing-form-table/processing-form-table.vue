@@ -55,12 +55,12 @@
 
 <script setup>
 
-import  { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
-import deepCopy from 'deep-copy';
+import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { computed, defineProps, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
+import getNestedValue from './scripts/getNestedValue';
 
 const { t } = useI18n();
 
@@ -87,7 +87,9 @@ const emit = defineEmits([
   'call-table-action',
 ]);
 
-const columnsFieldSeparator = '.'; // from postprocessing flow we can get column value like path to nested object value. For example: contact.name https://webitel.atlassian.net/browse/WTEL-6890
+// @author @liza-pohranichna
+// https://webitel.atlassian.net/browse/WTEL-6890
+const columnsFieldSeparator = '.';
 
 const nextAllowed = ref(false);
 const nextLoading = ref(false);
@@ -98,10 +100,12 @@ const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
 const isSystemSource = computed(() => props.table?.isSystemSource);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
+const filters = computed(() => props?.filters || []);
 const tableColumns = computed(() => {
   return props.table?.displayColumns.map((column) => {
 
-    // reformatting path to nested object from string to array. Example: 'contact.emails.name' to ['contact', 'emails', 'name']
+    // @author @liza-pohranichna
+    // reformatting path to nested object from string to array. Example: 'contact.emails.name' ====> ['contact', 'emails', 'name']
     const fieldPath = column.field.includes(columnsFieldSeparator)
         ? column.field.split(columnsFieldSeparator).map((item) => snakeToCamel(item))
         : [column.field];
@@ -113,7 +117,6 @@ const tableColumns = computed(() => {
     }
   })
 });
-
 const headers = computed(() => {
   return tableColumns.value.map((header) => ({
     ...header,
@@ -123,57 +126,26 @@ const headers = computed(() => {
   }));
 });
 
-const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
-const isSystemSource = computed(() => props.table?.isSystemSource);
-const filters = computed(() => props?.filters || []);
-const systemSourcePath = computed(() => props.table?.systemSource?.path);
-function getNestedValue(parentValue, path) {
-  let nestedValue;
+async function handleTableList(dataList) {
+  return dataList.map((item) => {
+    let newItem = item;
 
-  if (path.length <= 1) return parentValue || '';
+    for (const key in newItem) { // look inside every field in item @author @liza-pohranichna
+      let value = newItem[key];
+      const pathToNestedValue = tableColumns.value.find((column) => column.field === key)?.fieldPath; // Example of pathToNestedValue ['contact', 'name'] @author @liza-pohranichna
+      const isNeedNestedValue = value && typeof value === 'object' && pathToNestedValue.length;
 
-  const newPath = path.slice(1); // delete current path step before next step
-  const key = newPath[0]; // take key of object for current path step
+      value = isNeedNestedValue ? getNestedValue(value, pathToNestedValue) : value;
+      newItem = { ...newItem, [key]: value };
+    }
 
-  if (Array.isArray(parentValue) && typeof parentValue[0] === 'object') {
-      nestedValue = parentValue.map((object) => getNestedValue(object[key], newPath)) // get needed value from every object in array
-  } else if (typeof parentValue === 'object') {
-    nestedValue = getNestedValue(parentValue[key], newPath);
-    // console.log('OBJECT: parentValue[key]:', parentValue[key], 'newPath:', newPath, 'nestedValue:', nestedValue);
-  } else nestedValue = parentValue || '';
-  // console.log('nestedValue:', nestedValue, 'parentValue, path:', parentValue, path);
-  return nestedValue;
-
-}
-
-
-async function handleDataList(dataList) {
-
-  const tableList = dataList.map((item) => {
-    let newItem;
-
-    tableColumns.value.forEach((column) => {
-      const valueOfItem = item[column.field];
-
-      if (typeof valueOfItem === 'object' && column.fieldPath.length) { // Example of fieldPath ['contact', 'name']
-        const nestedValue = valueOfItem && column.fieldPath ? getNestedValue(valueOfItem, column.fieldPath) : '';
-        console.log('column:', column.field, 'nestedValue:', nestedValue, 'valueOfItem:', valueOfItem);
-        newItem = {
-          ...item,
-          [column.field]: nestedValue,
-        }
-        console.log('newItem:', newItem);
-      }
-
-    });
     return newItem;
   });
-  return tableList;
 }
 
 async function getDataList() {
 
-  const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API
+  const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API @author @liza-pohranichna
 
   const { items, next } = await TableApi.getList({
     path: systemSourcePath.value,
@@ -185,7 +157,7 @@ async function getDataList() {
   return { items, next };
 }
 
-async function initList() {
+async function initDataList() {
   let data;
 
   if (isSystemSource.value) {
@@ -196,11 +168,7 @@ async function initList() {
 
   } else data = props.table?.source || [];
 
-  const tableList = await handleDataList(data);
-
-  console.log('tableList:', tableList);
-
-  dataList.value = tableList;
+  dataList.value = await handleTableList(data);
 }
 
 async function loadNext() {
@@ -208,7 +176,9 @@ async function loadNext() {
 
   currentTablePage.value += 1;
   const { items, next } = await getDataList();
-  dataList.value = [...dataList.value, ...deepCopy(items)];
+  const newItems = await handleTableList(items);
+
+  dataList.value = [...dataList.value, ...newItems];
   nextAllowed.value = next;
 
   nextLoading.value = false;
@@ -223,7 +193,7 @@ function sendAction(action, row) {
   emit('call-table-action', payload);
 }
 
-initList();
+initDataList();
 
 </script>
 
