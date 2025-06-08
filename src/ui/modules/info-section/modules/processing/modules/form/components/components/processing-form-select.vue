@@ -85,6 +85,6 @@ watch(() => props.value, (newValue) => {
 }, { immediate: true });
 
 const resetValue = () => {
-  emit('input', initialValue.value);
+  emit('input', '');
 };
 </script>
