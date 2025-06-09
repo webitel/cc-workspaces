@@ -55,11 +55,12 @@
 
 <script setup>
 
-import deepCopy from 'deep-copy';
+import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { computed, defineProps, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
+import getNestedValue from './scripts/getNestedValue';
 
 const { t } = useI18n();
 
@@ -86,7 +87,9 @@ const emit = defineEmits([
   'call-table-action',
 ]);
 
-const columnsFieldSeparator = '.'; // from postprocessing flow we can get column value like path to nested object value. For example: contact.name https://webitel.atlassian.net/browse/WTEL-6890
+// @author @liza-pohranichna
+// https://webitel.atlassian.net/browse/WTEL-6890
+const columnsFieldSeparator = '.';
 
 const nextAllowed = ref(false);
 const nextLoading = ref(false);
@@ -95,26 +98,26 @@ const dataList = ref([]);
 
 const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
 const isSystemSource = computed(() => props.table?.isSystemSource);
-const filters = computed(() => props?.filters || []);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
+const filters = computed(() => props?.filters || []);
 const tableColumns = computed(() => {
-
   return props.table?.displayColumns.map((column) => {
-    const fieldArray = column.field.includes(columnsFieldSeparator)
-      ? column.field.split(columnsFieldSeparator)
-      : [column.field];
+
+    // @author @liza-pohranichna
+    // reformatting path to nested object from string to array. Example: 'contact.emails.name' ====> ['contact', 'emails', 'name']
+    const fieldPath = column.field.includes(columnsFieldSeparator)
+        ? column.field.split(columnsFieldSeparator).map((item) => snakeToCamel(item))
+        : [column.field];
 
     return {
       ...column,
-      field: fieldArray[0],
-      fieldArray,
+      field: fieldPath[0],
+      fieldPath,
     }
   })
 });
-
 const headers = computed(() => {
-
   return tableColumns.value.map((header) => ({
     ...header,
     text: header.name,
@@ -123,10 +126,26 @@ const headers = computed(() => {
   }));
 });
 
+async function handleTableList(dataList) {
+  return dataList.map((item) => {
+    let newItem = item;
+
+    for (const key in newItem) { // look inside every field in item @author @liza-pohranichna
+      let value = newItem[key];
+      const pathToNestedValue = tableColumns.value.find((column) => column.field === key)?.fieldPath; // Example of pathToNestedValue ['contact', 'name'] @author @liza-pohranichna
+      const isNeedNestedValue = value && typeof value === 'object' && pathToNestedValue.length;
+
+      value = isNeedNestedValue ? getNestedValue(value, pathToNestedValue) : value;
+      newItem = { ...newItem, [key]: value };
+    }
+
+    return newItem;
+  });
+}
 
 async function getDataList() {
 
-const fields = headers.value.map((item) => ( item.value ));
+  const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API @author @liza-pohranichna
 
   const { items, next } = await TableApi.getList({
     path: systemSourcePath.value,
@@ -138,14 +157,18 @@ const fields = headers.value.map((item) => ( item.value ));
   return { items, next };
 }
 
-async function initList() {
+async function initDataList() {
+  let data;
+
   if (isSystemSource.value) {
 
     const { items, next } = await getDataList();
-    dataList.value = items;
+    data = items;
     nextAllowed.value = next;
 
-  } else dataList.value = props.table?.source || [];
+  } else data = props.table?.source || [];
+
+  dataList.value = await handleTableList(data);
 }
 
 async function loadNext() {
@@ -153,7 +176,9 @@ async function loadNext() {
 
   currentTablePage.value += 1;
   const { items, next } = await getDataList();
-  dataList.value = [...dataList.value, ...deepCopy(items)];
+  const newItems = await handleTableList(items);
+
+  dataList.value = [...dataList.value, ...newItems];
   nextAllowed.value = next;
 
   nextLoading.value = false;
@@ -168,7 +193,7 @@ function sendAction(action, row) {
   emit('call-table-action', payload);
 }
 
-initList();
+initDataList();
 
 </script>
 
