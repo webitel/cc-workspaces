@@ -105,6 +105,8 @@ onMounted(() => {
 const catalogDataNames = ref([]);
 const catalogDataPatch = computed(() => selectedElement.value ? catalogDataNames.value.join(' / ') : t('cases.selectAService'));
 
+// Author @Lera24
+// [https://webitel.atlassian.net/browse/WTEL-6955]
 // Builds the hierarchical path for the service within the catalog.
 function findPath(services, targetId, path = []) {
   for (const service of services) {
