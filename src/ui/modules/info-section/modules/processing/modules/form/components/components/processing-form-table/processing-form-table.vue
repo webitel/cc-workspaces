@@ -56,7 +56,7 @@
 <script setup>
 
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
-import { computed, defineProps, ref } from 'vue';
+import { computed, defineProps, inject, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
@@ -86,6 +86,8 @@ const props = defineProps({
 const emit = defineEmits([
   'call-table-action',
 ]);
+
+const eventBus = inject('$eventBus');
 
 // @author @liza-pohranichna
 // https://webitel.atlassian.net/browse/WTEL-6890
@@ -146,15 +148,23 @@ async function handleTableList(dataList) {
 async function getDataList() {
 
   const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API @author @liza-pohranichna
+  try {
+    const { items, next } = await TableApi.getList({
+      path: systemSourcePath.value,
+      filters: filters.value,
+      page: currentTablePage.value,
+      fields,
+    });
 
-  const { items, next } = await TableApi.getList({
-    path: systemSourcePath.value,
-    filters: filters.value,
-    page: currentTablePage.value,
-    fields,
-  });
+    return { items, next };
+  } catch (error) {
+    eventBus.$emit('notification', {
+      type: 'error',
+      text: t('infoSec.processing.form.formTable.error'),
+    });
 
-  return { items, next };
+    throw error;
+  }
 }
 
 async function initDataList() {

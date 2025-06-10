@@ -152,6 +152,7 @@ export default {
         },
         formTable: {
           title: 'Table',
+          error: 'Your table data has invalid format. Please, check your flow.',
         },
       },
     },
