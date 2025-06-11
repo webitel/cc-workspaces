@@ -110,8 +110,7 @@ const tableColumns = computed(() => {
     // reformatting path to nested object from string to array. Example: 'contact.emails.name' ====> ['contact', 'emails', 'name']
     const fieldPath = column.field.includes(columnsFieldSeparator)
         ? column.field.split(columnsFieldSeparator).map((item) => snakeToCamel(item))
-        : [column.field];
-
+        : [snakeToCamel(column.field)];
     return {
       ...column,
       field: fieldPath[0],
@@ -134,7 +133,7 @@ async function handleTableList(dataList) {
 
     for (const key in newItem) { // look inside every field in item @author @liza-pohranichna
       let value = newItem[key];
-      const pathToNestedValue = tableColumns.value.find((column) => column.field === key)?.fieldPath; // Example of pathToNestedValue ['contact', 'name'] @author @liza-pohranichna
+      const pathToNestedValue = tableColumns.value.find((column) => column.field === key)?.fieldPath || []; // Example of pathToNestedValue ['contact', 'name'] @author @liza-pohranichna
       const isNeedNestedValue = value && typeof value === 'object' && pathToNestedValue.length;
 
       value = isNeedNestedValue ? getNestedValue(value, pathToNestedValue) : value;
