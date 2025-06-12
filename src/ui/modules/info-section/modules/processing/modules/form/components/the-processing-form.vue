@@ -87,7 +87,6 @@ export default {
       'form-i-frame': 'form-i-frame',
     },
     hotkeyUnsubscribers: [],
-    isValuesІnitialize: false,
   }),
   computed: {
     ...mapGetters('workspace', {
@@ -99,8 +98,8 @@ export default {
     formBody() {
       return this.task.attempt.form?.body || [];
     },
-    formBodyLength() {
-      return this.formBody.length;
+    formMetadata() {
+      return this.task.attempt.form?.metadata || {};
     },
     formActions() {
       return this.task.attempt.form?.actions || [];
@@ -137,11 +136,10 @@ export default {
             }
           } catch {
             component.value = component.view.initialValue;
-          } finally {
-            this.isValuesІnitialize = true;
           }
         }
       });
+      this.task.attempt.form.metadata.isInited = true;
     },
     setupAutofocus() {
       const input = this.$refs['processing-form'].$el.querySelector('input, textarea');
@@ -174,11 +172,10 @@ export default {
     },
   },
   watch: {
-    formBodyLength: {
+    formBody: {
       handler(value) {
-        // @author @liza-pohranichna
-        // need watcher for this, because in mounted() hook formBody = empty array
-        if (value && !this.isValuesІnitialize) {
+        if (value.length && !this.formMetadata.isInited) {
+          this.task.attempt.form.metadata = {}; // init form metadata
           this.initializeValues();
         }
       },
