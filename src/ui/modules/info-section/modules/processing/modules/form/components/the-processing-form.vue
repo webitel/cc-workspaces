@@ -96,7 +96,6 @@ export default {
       return this.task.attempt.form?.title || '';
     },
     formBody() {
-      console.log('formBody:', this.task.attempt.form)
       return this.task.attempt.form?.body || [];
     },
     formMetadata() {
