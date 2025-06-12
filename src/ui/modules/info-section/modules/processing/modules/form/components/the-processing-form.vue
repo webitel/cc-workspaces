@@ -139,7 +139,7 @@ export default {
           }
         }
       });
-      this.task.attempt.form.metadata = { isInited: true };
+      this.task.attempt.form.metadata.isInited = true;
     },
     setupAutofocus() {
       const input = this.$refs['processing-form'].$el.querySelector('input, textarea');
@@ -174,7 +174,8 @@ export default {
   watch: {
     formBody: {
       handler(value) {
-        if (value.length && !this.formMetadata?.isInited) {
+        if (value.length && !this.formMetadata.isInited) {
+          this.task.attempt.form.metadata = {}; // init form metadata
           this.initializeValues();
         }
       },
