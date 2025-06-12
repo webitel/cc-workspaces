@@ -14,7 +14,11 @@
         </div>
       </template>
       <template #default>
-        <wt-table
+        <div
+          ref="infiniteScrollWrap"
+          class="processing-form-table__scroll-wrapper"
+        >
+          <wt-table
           class="processing-form-table__table"
           :data="dataList"
           :headers="headers"
@@ -40,14 +44,15 @@
 
           </template>
 
-          <template #[footerColumnName]>
-            <wt-intersection-observer
-              :next="nextAllowed"
-              :loading="nextLoading"
-              @next="loadNext"
-            />
-          </template>
+<!--          <template #[footerColumnName]>-->
+<!--            <wt-intersection-observer-->
+<!--              :next="nextAllowed"-->
+<!--              :loading="nextLoading"-->
+<!--              @next="loadNext"-->
+<!--            />-->
+<!--          </template>-->
         </wt-table>
+        </div>
       </template>
     </wt-expansion-panel>
   </div>
@@ -55,6 +60,7 @@
 
 <script setup>
 
+import { useInfiniteScroll } from '@vueuse/core';
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import { computed, defineProps, inject, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -97,6 +103,7 @@ const nextAllowed = ref(false);
 const nextLoading = ref(false);
 const currentTablePage = ref(1);
 const dataList = ref([]);
+const infiniteScrollWrap = ref(null);
 
 const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
 const isSystemSource = computed(() => props.table?.isSystemSource);
@@ -118,6 +125,7 @@ const tableColumns = computed(() => {
     }
   })
 });
+
 const headers = computed(() => {
   return tableColumns.value.map((header) => ({
     ...header,
@@ -145,7 +153,6 @@ async function handleTableList(dataList) {
 }
 
 async function getDataList() {
-
   const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API @author @liza-pohranichna
   try {
     const { items, next } = await TableApi.getList({
@@ -181,6 +188,7 @@ async function initDataList() {
 }
 
 async function loadNext() {
+  console.log('loadNext');
   nextLoading.value = true;
 
   currentTablePage.value += 1;
@@ -202,6 +210,14 @@ function sendAction(action, row) {
   emit('call-table-action', payload);
 }
 
+useInfiniteScroll(infiniteScrollWrap,
+  async () => {
+    if (nextLoading.value || !nextAllowed.value) return;
+    await loadNext();
+  },
+  { distance: 10 },
+);
+
 initDataList();
 
 </script>
@@ -209,9 +225,15 @@ initDataList();
 <style lang="scss" scoped>
 .processing-form-table {
   &__table {
-    height: 600px;
-    max-height: 600px;
+    height: 300px;
+    max-height: 300px;
     padding: var(--spacing-xs);
+  }
+
+  &__scroll-wrapper {
+    @extend %wt-scrollbar;
+    height: 300px;
+    overflow: auto;
   }
 
   &__title {
