@@ -19,39 +19,30 @@
           class="processing-form-table__scroll-wrapper"
         >
           <wt-table
-          class="processing-form-table__table"
-          :data="dataList"
-          :headers="headers"
-          :selectable="false"
-          :grid-actions="false"
-        >
-          <template
-            v-for="action in props.actions"
-            #[action.field]="{ item }"
-            :key="action.field"
+            class="processing-form-table__table"
+            :data="dataList"
+            :headers="headers"
+            :selectable="false"
+            :grid-actions="false"
           >
-            <div class="processing-form-table__action">
-              <p>
-                {{ item[action.field] }}
-              </p>
-              <wt-button
-                :color="action.color"
-                @click="sendAction(action.action, item)"
-              >
-                {{ action.buttonName }}
-              </wt-button>
-            </div>
-
-          </template>
-
-<!--          <template #[footerColumnName]>-->
-<!--            <wt-intersection-observer-->
-<!--              :next="nextAllowed"-->
-<!--              :loading="nextLoading"-->
-<!--              @next="loadNext"-->
-<!--            />-->
-<!--          </template>-->
-        </wt-table>
+            <template
+              v-for="action in props.actions"
+              #[action.field]="{ item }"
+              :key="action.field"
+            >
+              <div class="processing-form-table__action">
+                <p>
+                  {{ item[action.field] }}
+                </p>
+                <wt-button
+                  :color="action.color"
+                  @click="sendAction(action.action, item)"
+                >
+                  {{ action.buttonName }}
+                </wt-button>
+              </div>
+            </template>
+          </wt-table>
         </div>
       </template>
     </wt-expansion-panel>
@@ -62,7 +53,7 @@
 
 import { useInfiniteScroll } from '@vueuse/core';
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
-import { computed, defineProps, inject, ref } from 'vue';
+import { computed, defineProps, inject, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
@@ -103,9 +94,8 @@ const nextAllowed = ref(false);
 const nextLoading = ref(false);
 const currentTablePage = ref(1);
 const dataList = ref([]);
-const infiniteScrollWrap = ref(null);
+const infiniteScrollWrap = useTemplateRef('infiniteScrollWrap');
 
-const footerColumnName = computed(() => `${headers.value[0].value}-footer`);
 const isSystemSource = computed(() => props.table?.isSystemSource);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
@@ -188,7 +178,6 @@ async function initDataList() {
 }
 
 async function loadNext() {
-  console.log('loadNext');
   nextLoading.value = true;
 
   currentTablePage.value += 1;
@@ -210,29 +199,31 @@ function sendAction(action, row) {
   emit('call-table-action', payload);
 }
 
-useInfiniteScroll(infiniteScrollWrap,
-  async () => {
-    if (nextLoading.value || !nextAllowed.value) return;
-    await loadNext();
-  },
-  { distance: 10 },
-);
+onMounted(() => {
+  initDataList();
+});
 
-initDataList();
+useInfiniteScroll(infiniteScrollWrap,
+  () => {
+    loadNext();
+  },
+  {
+    distance: 100,
+    canLoadMore: () => (!nextLoading.value && nextAllowed.value)
+  }
+)
 
 </script>
 
 <style lang="scss" scoped>
 .processing-form-table {
   &__table {
-    height: 300px;
-    max-height: 300px;
     padding: var(--spacing-xs);
   }
 
   &__scroll-wrapper {
     @extend %wt-scrollbar;
-    height: 300px;
+    height: 600px;
     overflow: auto;
   }
 
