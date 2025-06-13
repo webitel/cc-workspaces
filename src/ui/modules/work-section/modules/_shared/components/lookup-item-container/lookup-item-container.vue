@@ -27,34 +27,38 @@
       ref="scrollWrap"
       class="lookup-item-container-body"
     >
-      <div
-        v-if="loading"
-        class="lookup-item-container-loader"
-      >
-        <slot name="loader">
-          <wt-loader />
-        </slot>
-      </div>
-
-      <div
-        v-show="showEmpty"
-        class="lookup-item-container-empty"
-      >
-        <slot name="empty" :show="showEmpty"></slot>
-      </div>
-
-      <div
-        v-show="!loading && !showEmpty"
-        class="lookup-item-container-content"
-      >
-        <slot name="content"></slot>
-      </div>
+      <wt-replace-transition>
+        <div
+          v-if="loading"
+          class="lookup-item-container-loader"
+        >
+          <slot name="loader">
+            <wt-loader />
+          </slot>
+        </div>
+      </wt-replace-transition>
+      <wt-replace-transition>
+        <div
+          v-show="showEmpty"
+          class="lookup-item-container-empty"
+        >
+          <slot name="empty" :show="showEmpty"></slot>
+        </div>
+      </wt-replace-transition>
+      <wt-replace-transition>
+        <div
+          v-show="!loading && !showEmpty"
+          class="lookup-item-container-content"
+        >
+          <slot name="content"></slot>
+        </div>
+      </wt-replace-transition>
 
       <observer
         v-if="scrollWrap"
         :root="scrollWrap"
         @intersect="emit('more')"
-      ></observer>
+      />
     </section>
 
     <footer class="lookup-item-container-footer">
@@ -64,9 +68,10 @@
 </template>
 
 <script setup>
-import { computed,ref  } from 'vue';
+import { computed, ref } from 'vue';
 
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   size: {
