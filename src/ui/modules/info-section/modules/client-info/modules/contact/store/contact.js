@@ -20,8 +20,10 @@ const actions = {
     context.commit('SET_SHOW_FULL_CONTACT', value);
   },
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
+    const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
     const number = task.displayNumber; // for CALLS
-    const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
+    const qin = isCallWorkspace ? 'phones' : 'emails,phones'; // for calls search contacts just by phones https://webitel.atlassian.net/browse/WTEL-7041
+    const searchParams = { q: number, qin, size: 5000 }; // load all
     try {
       context.commit('SET_IS_LOADING', true);
       const { items: contacts } = await ContactsAPI.getList(searchParams);
@@ -37,6 +39,7 @@ const actions = {
   },
   SEARCH_CONTACTS: async (context, searchParams) => {
     try {
+      console.log('SEARCH_CONTACTS searchParams:', searchParams);
       context.commit('SET_IS_LOADING', true);
       const { items: contacts} = await ContactsAPI.getList(searchParams);
       context.commit('SET_CONTACTS_BY_SEARCH', contacts);
@@ -58,6 +61,7 @@ const actions = {
     context.commit('SET_CONTACTS_BY_SEARCH', []);
   },
   LOAD_CONTACT: async (context, contactId) => {
+    console.log('LOAD_CONTACT');
     try {
       context.commit('SET_IS_LOADING', true);
       const contact = await ContactsAPI.get({ itemId: contactId });
@@ -91,7 +95,7 @@ const actions = {
       return context.dispatch('LOAD_CHAT_CONTACT', { id: task.members[0].user_id });
     }
 
-    if(isCallWorkspace) {
+    if(isCallWorkspace) { // тут прибирати філд емейлу ?
       if (task.contact.id) {
         return context.dispatch('LOAD_CONTACT', task.contact.id);
       } else {
