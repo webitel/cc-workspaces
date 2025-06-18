@@ -36,12 +36,10 @@ const getHistory = async (params) => {
 
   try {
     const response = await callService.searchHistoryCall(
-      page, size, undefined, sort, fields, createdAtFrom, createdAtTo, undefined, undefined,
+      page, size, undefined, sort, fields, createdAtFrom, createdAtTo, userId, undefined,
       undefined, undefined, memberId, undefined, undefined, undefined,
       undefined, undefined, cause, undefined, undefined, search, direction,
-      undefined, undefined, isMissed, undefined, undefined,
-      undefined, undefined, undefined, undefined, undefined,
-      undefined, undefined, undefined, undefined, undefined, userId,
+      undefined, undefined, isMissed
     );
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
