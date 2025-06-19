@@ -4,6 +4,7 @@ import {
   getDefaultInstance,
 } from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
+  addQueryParamsToUrl,
   camelToSnake,
   generateUrl,
   merge,
@@ -37,6 +38,7 @@ const transformItemsForSelect =
   ({ primary, display }) =>
   (items) => {
     return items.map((item) => ({
+      ...item,
       id: item[primary],
       name: checkTemplate(display)
         ? get(item, display.split('.'))
@@ -51,6 +53,7 @@ const getObjectRecordsLookup = async ({
   path,
   display,
   primary,
+  filters,
   ...params
 }) => {
   const fieldsToSend = ['page', 'size', 'q', 'sort', 'fields', 'id'];
@@ -61,6 +64,7 @@ const getObjectRecordsLookup = async ({
     sanitize(fieldsToSend),
     camelToSnake(),
     generateUrl(path),
+    addQueryParamsToUrl(filters),
   ]);
   try {
     const response = await instance.get(url);

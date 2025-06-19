@@ -4,33 +4,23 @@ import {
   getDefaultInstance,
 } from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
+  addQueryParamsToUrl,
   camelToSnake,
-  snakeToCamel,
   generateUrl,
   merge,
   notify,
+  snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers/index';
 
 const instance = getDefaultInstance();
 
-const getList = async ({ path, ...params }) => {
-
-  const listResponseHandler = (items) => {
-    return items.map((item) => { // @liza because of name:{common_name: 'Contact'} in contact object https://webitel.atlassian.net/browse/WTEL-6797
-      if (item.name?.commonName) {
-        return {
-          ...item,
-          name: item.name.commonName
-        };
-      } else return item;
-    });
-  };
-
+const getList = async ({ path, filters, ...params }) => {
   const url = applyTransform(params, [
     merge(getDefaultGetParams()),
     (params) => ({ ...params, q: params.search }),
     camelToSnake(),
     generateUrl(path),
+    addQueryParamsToUrl(filters),
   ]);
 
   try {
@@ -42,9 +32,7 @@ const getList = async ({ path, ...params }) => {
 
     return {
       // Some endpoints return data, some return items so we need to check for both of them
-      items: applyTransform(data || items, [
-        listResponseHandler,
-        ]),
+      items: data || items,
       next,
     };
   } catch (err) {
