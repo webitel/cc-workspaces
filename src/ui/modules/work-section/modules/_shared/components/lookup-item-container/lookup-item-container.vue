@@ -27,7 +27,7 @@
       ref="scrollWrap"
       class="lookup-item-container-body"
     >
-      <wt-replace-transition>
+      <wt-replace-transition appear>
         <div
           v-if="loading"
           class="lookup-item-container-loader"
@@ -36,18 +36,14 @@
             <wt-loader />
           </slot>
         </div>
-      </wt-replace-transition>
-      <wt-replace-transition>
         <div
-          v-show="showEmpty"
+          v-else-if="showEmpty"
           class="lookup-item-container-empty"
         >
           <slot name="empty" :show="showEmpty"></slot>
         </div>
-      </wt-replace-transition>
-      <wt-replace-transition>
         <div
-          v-show="!loading && !showEmpty"
+          v-else-if="!loading && !showEmpty"
           class="lookup-item-container-content"
         >
           <slot name="content"></slot>

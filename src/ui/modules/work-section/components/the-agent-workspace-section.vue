@@ -12,7 +12,7 @@
         @click="$emit('resize')"
       />
     </div>
-    <wt-replace-transition>
+    <wt-replace-transition appear>
       <component
         :is="workspaceComponent"
         class="work-section__main-content"
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters } from 'vuex';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
@@ -34,7 +35,6 @@ import Chat from '../modules/chat/the-chat.vue';
 import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspace-empty.vue';
 import Job from '../modules/job/components/the-job.vue';
 import Member from '../modules/member/components/the-member.vue';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 
 export default {

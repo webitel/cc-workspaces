@@ -34,7 +34,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { computed, onUnmounted, useTemplateRef } from 'vue';
+import { computed, nextTick, onUnmounted, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -71,15 +71,19 @@ const {
   scrollToBottom
 } = useChatScroll(el);
 
-onUnmounted(() => {
-  cleanChatPlayers();
-})
-
-
 const openMedia = (message) => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
 const attachPlayer = (player) => store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const cleanChatPlayers = (message) => store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
 
+watch(() => currentChat.value?.id,
+  async () => {
+    await nextTick(() => scrollToBottom());
+  },{ immediate: true }
+);
+
+onUnmounted(() => {
+  cleanChatPlayers();
+})
 </script>
 
 <style lang="scss" scoped>

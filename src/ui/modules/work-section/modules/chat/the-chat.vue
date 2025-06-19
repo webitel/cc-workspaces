@@ -1,11 +1,12 @@
 <template>
   <article class="chat">
     <wt-replace-transition appear>
-      <task-container v-if="chatContactIsLoaded" :key="chat.id" class="chat__wrapper">
+      <task-container v-show="chatContactIsLoaded" :key="chatId" class="chat__wrapper">
         <template #header>
           <chat-header
             v-show="isChatHeader"
             :size="size"
+            :chat-contact="chatContact"
             @open-tab="openTab"
           />
           <media-viewer />
@@ -82,9 +83,12 @@ export default {
     isChatFooter() {
       return this.currentTab.component === defaultTab;
     },
+    chatId() {
+      return this.chat.id;
+    },
   },
   watch: {
-    chat: { // if chat changed
+    chatId: { // if chat changed
       async handler() {
         this.chatContactIsLoaded = false;
         this.resetTab();
@@ -93,11 +97,13 @@ export default {
       },
       immediate: true,
     },
-    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContactIsLoaded = false;
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-      this.chatContactIsLoaded = true;
+    contact: { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+      async handler() {
+        this.chatContactIsLoaded = false;
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContactIsLoaded = true;
     },
+  },
   },
   methods: {
     openTab(tab) {

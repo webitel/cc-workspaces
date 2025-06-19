@@ -1,6 +1,6 @@
 import { useScroll } from '@vueuse/core';
 import {
-  computed,
+  computed, nextTick,
   ref,
   watch,
 } from 'vue';
@@ -17,7 +17,6 @@ export const useChatScroll = (element) => {
 
   const newUnseenMessages = ref(0);
 
-  const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
   const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
   const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
   const showScrollToBottomBtn = computed(() => !arrivedState.bottom);
@@ -47,14 +46,6 @@ export const useChatScroll = (element) => {
     },
     { flush: 'post' },
   )
-
-  watch(() => chat.value?.id,
-    async () => {
-
-    setTimeout(() => scrollToBottom(), 500);
-
-  },{ immediate: true });
-
 
   watch(() => arrivedState.bottom, () => {
     if (arrivedState.bottom && newUnseenMessages) newUnseenMessages.value = 0;

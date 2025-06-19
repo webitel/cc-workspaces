@@ -106,6 +106,7 @@ export default {
     },
     contact: {
       type: Object,
+      default: () => ({}),
     },
   },
   setup() {
