@@ -10,17 +10,20 @@
         v-if="collapsible"
         :collapsed="collapsed"
         @click="$emit('resize')"
-      ></collapse-action>
+      />
     </div>
-    <component
-      :is="workspaceComponent"
-      class="work-section__main-content"
-      :size="size"
-    />
+    <wt-replace-transition appear>
+      <component
+        :is="workspaceComponent"
+        class="work-section__main-content"
+        :size="size"
+      />
+    </wt-replace-transition>
   </section>
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters } from 'vuex';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
@@ -33,6 +36,7 @@ import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspac
 import Job from '../modules/job/components/the-job.vue';
 import Member from '../modules/member/components/the-member.vue';
 
+
 export default {
   name: 'TheAgentWorkspaceSection',
   components: {
@@ -42,6 +46,7 @@ export default {
     Job,
     EmptyWorkspace,
     CollapseAction,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {

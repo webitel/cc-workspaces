@@ -2,7 +2,7 @@
   <section class="current-chat chat-messages-container" @click="focusOnInput">
     <div ref="chat-messages-items" class="chat-messages-items">
       <message
-        v-for="(message, index) of messages"
+        v-for="(message, index) of currentChat.messages"
         :key="message.id"
         :message="message"
         :size="props.size"
@@ -34,7 +34,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { onUnmounted, useTemplateRef } from 'vue';
+import { computed, nextTick, onUnmounted, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -56,10 +56,9 @@ const props = defineProps({
 })
 
 const el = useTemplateRef('chat-messages-items');
+const currentChat = computed(() => store.getters[`features/chat/CHAT_ON_WORKSPACE`]);
 
 const {
-  messages,
-
   showAvatar,
   showChatDate,
   focusOnInput,
@@ -72,16 +71,19 @@ const {
   scrollToBottom
 } = useChatScroll(el);
 
-
-onUnmounted(() => {
-  cleanChatPlayers();
-})
-
-
 const openMedia = (message) => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
 const attachPlayer = (player) => store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const cleanChatPlayers = (message) => store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
 
+watch(() => currentChat.value?.id,
+  async () => {
+    await nextTick(() => scrollToBottom());
+  },{ immediate: true }
+);
+
+onUnmounted(() => {
+  cleanChatPlayers();
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,8 +1,12 @@
 <template>
   <article class="chat-history chat-messages-container" @click="focusOnInput">
+    <wt-replace-transition>
+      <wt-loader v-show="!showAllMessages" class="chat-history__loader"/>
+    </wt-replace-transition>
     <div
       ref="chat-messages-items"
       class="chat-history__messages chat-messages-items"
+      :class="{'chat-history__messages--processing': !showAllMessages}"
     >
       <wt-intersection-observer
         :next="next"
@@ -43,19 +47,20 @@
           />
         </template>
       </message>
-    </div>
-    <scroll-to-bottom-btn
-      v-if="showScrollToBottomBtn"
-      :new-message-count="newUnseenMessages"
-      @scroll="scrollToBottom('smooth')"
-    />
+      <scroll-to-bottom-btn
+        v-if="showScrollToBottomBtn"
+        :new-message-count="newUnseenMessages"
+        @scroll="scrollToBottom('smooth')"
+      />
+  </div>
   </article>
 </template>
 
 <script setup>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -83,6 +88,7 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const nextLoading = ref(false);
+const showAllMessages = ref(false);
 const el = useTemplateRef('chat-messages-items');
 
 const {
@@ -101,8 +107,8 @@ const {
   scrollToBottom
 } = useChatScroll(el);
 
-const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
+const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
 const loadHistory = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
@@ -130,18 +136,31 @@ function isHistoryStart(index) { // first message of all chats
 function getChatProvider(message) {
   const { via } = message.chat || message.member; // chat history or current chat gateway
 
-  return { type: via.type, name: via.name };
+  return { type: via?.type, name: via?.name };
 }
 
-watch([
-  () => currentChat.value?.id,
-  () => props.contact?.id
-],  async () => {
-
+async function loadMessagesList() {
   await loadHistory();
-  await nextTick(() => scrollToBottom());
+  await nextTick(() => {
+    scrollToBottom();
+  });
+  setTimeout(() => showAllMessages.value = true, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+}
 
-},{ immediate: true });
+watch(
+  () => props.contact?.id,
+  async () => {
+    await loadMessagesList()
+  },
+  { immediate: true }
+);
+
+watch(() => chat.value?.id,
+  async () => {
+    await loadMessagesList()
+    },
+  { immediate: true }
+);
 
 
 onUnmounted(() => {
@@ -151,4 +170,26 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.chat-history__messages {
+  opacity: 100%;
+  transition: all var(--transition-fast);
+
+  &--processing {
+    opacity: 0;
+  }
+}
+
+.chat-history {
+  position: relative;
+
+  &__loader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: fit-content;
+  }
+}
 </style>

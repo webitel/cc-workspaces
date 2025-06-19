@@ -14,7 +14,6 @@ const actions = {
     const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId });
 
     const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
-
     context.commit('SET_CHAT_HISTORY', messages);
     context.commit('SET_NEXT_STATE', next);
     context.commit('SET_IS_LOADED', true);
