@@ -5,7 +5,7 @@
         <wt-avatar
           :size="size"
           :username="item.name"
-        ></wt-avatar>
+        />
       </a>
     </template>
 
@@ -23,10 +23,10 @@
     </template>
 
     <template #after="{ toggle }">
-      <raunded-action
+      <wt-raunded-action
         :disabled="!item.phones.length"
         :size="size"
-        :loading="isCallLoading"
+        :loading="showLoader"
         color="success"
         icon="call--filled"
         rounded
@@ -44,7 +44,7 @@
         :phone="phone"
         :size="size"
         @call="call(phone)"
-      ></contact-communication-item>
+      />
     </template>
   </lookup-item>
 </template>
@@ -55,24 +55,17 @@ import { mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/lookupItemMixin';
 import ContactCommunicationItem from './contact-communication-item.vue';
-import RaundedAction from '../../../../../../../components/raunded-action.vue';
 
 export default {
   name: 'ContactLookupItem',
-  components: { ContactCommunicationItem, RaundedAction },
+  components: { ContactCommunicationItem},
   mixins: [lookupItemMixin, sizeMixin],
-  // props: {
-  //   isCallLoading: {
-  //     type: Boolean,
-  //     default: false,
-  //   },
-  // },
   emits: [
     'call',
   ],
   data: () => {
     return {
-      isCallLoading: false,
+      showLoader: false,
     }
   },
   computed: {
@@ -85,9 +78,11 @@ export default {
   },
   methods: {
     call({ number } = {}) {
-      this.isCallLoading = true;
+      if (this.showLoader) return;
+
+      this.showLoader = true;
       this.$emit('call', { number: number || this.primaryPhoneNumber });
-      this.isCallLoading = false;
+      this.showLoader = false;
     },
   },
 };

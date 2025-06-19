@@ -6,7 +6,7 @@
     <template #icon>
       <wt-icon
         icon="call-ringing"
-      ></wt-icon>
+      />
     </template>
 
     <template #title>
@@ -23,18 +23,19 @@
 
     <template #quick-action>
       <wt-rounded-action
+        :loading="showLoader"
         color="success"
         icon="call--filled"
         rounded
         size="md"
-        @click="emit('accept', task)"
-      ></wt-rounded-action>
+        @click="accept"
+      />
     </template>
 
     <template #footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
-      ></manual-deadline-progress-bar>
+      />
     </template>
   </task-queue-preview-md>
 
@@ -46,7 +47,7 @@
       <wt-icon
         icon="call-ringing"
         size="sm"
-      ></wt-icon>
+      />
     </template>
 
     <template #tooltip-title>
@@ -67,18 +68,19 @@
 
     <template #actions>
       <wt-rounded-action
+        :loading="showLoader"
         color="success"
         icon="call--filled"
         rounded
         size="sm"
-        @click="emit('accept', task)"
-      ></wt-rounded-action>
+        @click="accept"
+      />
     </template>
 
     <template #footer>
       <manual-deadline-progress-bar
         :deadline="task.deadline"
-      ></manual-deadline-progress-bar>
+      />
     </template>
   </task-queue-preview-sm>
 
@@ -91,7 +93,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
@@ -114,6 +116,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['click', 'accept']);
+const showLoader = ref(false);
 
 const wait = computed(() => {
   const waitTime = props.task.wait;
@@ -124,6 +127,14 @@ const wait = computed(() => {
   }
   return `${minutes}:${seconds}`;
 });
+
+function accept(task) {
+  if (showLoader.value) return;
+
+  showLoader.value = true;
+  emit('accept', task);
+  showLoader.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

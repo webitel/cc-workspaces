@@ -10,9 +10,10 @@
         :size="size"
         color="success"
         icon="call--filled"
+        :loading="showLoader"
         rounded
         @click.stop="call(task.id, task.communications[0].id)"
-      ></wt-rounded-action>
+      />
     </template>
     <!-- If there are multiple communications, show a context menu with call options -->
     <template v-else>
@@ -25,14 +26,16 @@
             :size="size"
             color="success"
             icon="call--filled"
+            :loading="loader"
             rounded
-          ></wt-rounded-action>
+          />
         </template>
         <template #option="{ text, communicationId }">
           <div
             class="queue-preview--offline-queue__callback-button"
             @click="call(task.id, communicationId)"
-          ><span>{{ text }}</span>
+          >
+            <span>{{ text }}</span>
           </div>
         </template>
       </wt-context-menu>
@@ -53,6 +56,15 @@ export default {
       type: String,
       required: true,
     },
+    loader: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  data() {
+    return {
+      showLoader: false,
+    }
   },
   computed: {
     options() {
@@ -67,7 +79,11 @@ export default {
       makeCall: 'CALL',
     }),
     call(id, communicationId) {
-      return this.makeCall({ id, communicationId });
+      if(this.showLoader) return;
+
+      this.showLoader = true;
+      // return this.makeCall({ id, communicationId });
+      // this.showLoader = false;
     },
   },
 };

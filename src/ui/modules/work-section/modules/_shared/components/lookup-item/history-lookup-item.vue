@@ -31,12 +31,12 @@
 
     <template #after>
       <div class="history-lookup-item-after">
-        <raunded-action
+        <wt-raunded-action
           icon="call--filled"
           color="success"
           rounded
           :size="size"
-          :loading="isCallLoading"
+          :loading="showLoader"
           wide
           @click="call"
         />
@@ -77,14 +77,10 @@ import { CallDirection } from 'webitel-sdk';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from './mixins/lookupItemMixin';
-import RaundedAction from '../../../../../../components/raunded-action.vue';
 
 export default {
   name: 'HistoryLookupItem',
   mixins: [lookupItemMixin, sizeMixin],
-  components: {
-    RaundedAction,
-  },
   props: {
     forNumber: {
       type: String,
@@ -94,7 +90,7 @@ export default {
   data() {
     return {
       isContextMenuVisible: false,
-      isCallLoading: false,
+      showLoader: false,
     }
   },
 
@@ -172,7 +168,9 @@ export default {
       makeCall: 'CALL',
     }),
     async call() {
-      this.isCallLoading = true;
+      if(this.showLoader) return;
+
+      this.showLoader = true;
 
       let number;
 
@@ -184,7 +182,7 @@ export default {
 
       await this.makeCall({ number });
 
-      this.isCallLoading = true;
+      this.showLoader = false;
     },
     goToHistoryItem() {
       window.open(this.historyIdLink, '_blank')
