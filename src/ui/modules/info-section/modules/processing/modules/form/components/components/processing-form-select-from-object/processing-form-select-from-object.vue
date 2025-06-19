@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 
 import ObjectApi from './api/objects.js';
 
@@ -37,10 +37,13 @@ const props = defineProps({
 
 const emit = defineEmits(['input']);
 
+const filters = computed(() => props?.object.filters || []);
+
 const loadObjectList = (params) => {
   return ObjectApi.getLookup({
     ...params,
     path: props.object?.source?.path,
+    filters: filters.value,
     primary: 'id',
     display: props.object?.displayColumn,
   });
