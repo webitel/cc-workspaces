@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
