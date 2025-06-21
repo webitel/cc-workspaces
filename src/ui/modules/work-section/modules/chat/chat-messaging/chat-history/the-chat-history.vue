@@ -1,17 +1,23 @@
 <template>
   <article class="chat-history chat-messages-container" @click="focusOnInput">
     <div
-      ref="chat-messages-items"
+      ref="chatContainer"
       class="chat-history__messages chat-messages-items"
     >
+      <div class="topSpacer" :style="topSpacerStyle"/>
+
       <wt-intersection-observer
         :next="next"
-        :loading="nextLoading"
+        :loading="isLoading"
         @next="loadNextMessages"
       />
-      <message
+      <div
         v-for="(message, index) of messages"
         :key="message.id"
+        :ref="onMessageRef(message.id, index)"
+        class="chat-message"
+      >
+      <message
         :message="message"
         :size="props.size"
         :show-avatar="showAvatar(index) || isChatStarted(index)"
@@ -43,6 +49,7 @@
           />
         </template>
       </message>
+      </div>
     </div>
     <scroll-to-bottom-btn
       v-if="showScrollToBottomBtn"
@@ -55,7 +62,7 @@
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick,onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -82,8 +89,22 @@ const store = useStore();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
-const nextLoading = ref(false);
-const el = useTemplateRef('chat-messages-items');
+const chatContainer = ref(null);
+const isLoading = ref(false);
+const lastVisibleMessageId = ref(null);
+const lastMessageEl = ref(null);
+
+const messageRefs = ref({});
+
+const topSpacerHeight = ref(0);
+
+// Computes inline style for top spacer based on accumulated scroll delta
+const topSpacerStyle = computed(() =>
+  `height: ${topSpacerHeight.value}px;
+   display: block;
+   width: 100%;
+   flex-shrink: 0;`
+);
 
 const {
   messages,
@@ -99,7 +120,7 @@ const {
   showScrollToBottomBtn,
   newUnseenMessages,
   scrollToBottom
-} = useChatScroll(el);
+} = useChatScroll(chatContainer);
 
 const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
@@ -111,9 +132,45 @@ const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTA
 const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 const loadNextMessages = async () => {
-  nextLoading.value = true;
+  if (!next.value && topSpacerHeight.value) topSpacerHeight.value = 0;
+  if (isLoading.value || !next.value) return;
+  isLoading.value = true;
+
+  lastVisibleMessageId.value = messages.value[0]?.id;
+
   await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
-  nextLoading.value = false;
+
+  await nextTick()
+
+  const targetEl = messageRefs.value[lastVisibleMessageId.value];
+
+  if (targetEl?.scrollIntoView) {
+    targetEl.scrollIntoView({ block: 'start', behavior: 'auto' })
+  }
+
+  isLoading.value = false;
+}
+
+const onMessageRef = (id, index) => el => {
+  if (!el) return
+  if (el) messageRefs.value[id] = el
+
+  // якщо це останній елемент списку — оновити lastMessageEl
+  if (index === messages.value.length - 1) {
+    lastMessageEl.value = el
+  }
+}
+
+const preventOverScroll = () => {
+  const container = chatContainer.value
+  const firstMessageEl = messages.value.length ? messageRefs.value[messages.value[0].id] : null
+
+  if (!container || !firstMessageEl) return
+
+  const minScrollTop = firstMessageEl.offsetTop - 10 // невеликий буфер
+  if (container.scrollTop < minScrollTop || isLoading.value) {
+    container.scrollTop = minScrollTop
+  }
 }
 
 function isChatStarted(index) {
@@ -133,22 +190,43 @@ function getChatProvider(message) {
   return { type: via.type, name: via.name };
 }
 
+
 watch([
   () => currentChat.value?.id,
   () => props.contact?.id
 ],  async () => {
 
   await loadHistory();
-  await nextTick(() => scrollToBottom());
+  await nextTick()
+  if (next.value) topSpacerHeight.value = 150;
+  if (lastMessageEl.value?.scrollIntoView) {
+    lastMessageEl.value.scrollIntoView({ block: 'end', behavior: 'auto' })
+  }
 
 },{ immediate: true });
 
+onMounted(() => {
+  chatContainer.value?.addEventListener('scroll', preventOverScroll);
+})
 
 onUnmounted(() => {
   resetHistory();
+  chatContainer.value?.removeEventListener('scroll', preventOverScroll);
 });
 
 </script>
 
 <style lang="scss" scoped>
+.chat-history__messages {
+  display: flex;
+  flex-direction: column;
+}
+.sentinel {
+  height: 1px;
+}
+.top-spacer {
+  display: block;
+  width: 100%;
+  flex-shrink: 0;
+}
 </style>
