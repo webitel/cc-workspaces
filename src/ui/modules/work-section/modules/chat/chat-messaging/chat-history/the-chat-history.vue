@@ -133,7 +133,7 @@ const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTA
 const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 const loadNextMessages = async () => {
-  if (!next.value && topSpacerHeight.value) topSpacerHeight.value = 0;
+  // if (!next.value && topSpacerHeight.value) topSpacerHeight.value = 0;
   if (isLoading.value || !next.value) return;
   isLoading.value = true;
 
@@ -143,8 +143,8 @@ const loadNextMessages = async () => {
 
   await nextTick()
 
-  const targetEl = messageRefs.value[lastVisibleMessageId.value];
-
+  const targetEl = messageRefs.value[lastVisibleMessageId.value]; //ось це все об'єднати в функцію.
+  // якій, скоріш за все, місце в інфініт скролл композіблє (?)
   if (targetEl?.scrollIntoView) {
     targetEl.scrollIntoView({ block: 'start', behavior: 'auto' })
   }
@@ -162,7 +162,7 @@ const onMessageRef = (id, index) => el => {
   }
 }
 
-const preventOverScroll = () => {
+const preventOverScroll = () => { //винести окремо? можливо, він взагалі не потрібен - залежить від розмови з Женєй
   const container = chatContainer.value
   const firstMessageEl = messages.value.length ? messageRefs.value[messages.value[0].id] : null
 
@@ -192,16 +192,16 @@ function getChatProvider(message) {
     : {};
 }
 
-onMounted(() => {
-  chatContainer.value?.addEventListener('scroll', preventOverScroll);
-})
+// onMounted(() => {
+//   chatContainer.value?.addEventListener('scroll', preventOverScroll);
+// })
 
 watch(
   () => props.contact?.id,
   async () => {
     await loadHistory();
     await nextTick()
-    if (next.value) topSpacerHeight.value = 150;
+    // if (next.value) topSpacerHeight.value = 150;
     if (lastMessageEl.value?.scrollIntoView) {
       lastMessageEl.value.scrollIntoView({ block: 'end', behavior: 'auto' })
     }
@@ -211,7 +211,7 @@ watch(
 
 onUnmounted(() => {
   resetHistory();
-  chatContainer.value?.removeEventListener('scroll', preventOverScroll);
+  // chatContainer.value?.removeEventListener('scroll', preventOverScroll);
 });
 
 </script>
