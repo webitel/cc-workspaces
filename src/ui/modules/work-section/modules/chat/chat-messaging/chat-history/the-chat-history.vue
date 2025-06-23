@@ -3,6 +3,7 @@
     <div
       ref="chat-messages-items"
       class="chat-history__messages chat-messages-items"
+      @scroll="handleChatScroll"
     >
       <wt-intersection-observer
         :next="next"
@@ -98,7 +99,8 @@ const {
 const {
   showScrollToBottomBtn,
   newUnseenMessages,
-  scrollToBottom
+  scrollToBottom,
+  handleChatScroll,
 } = useChatScroll(el);
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
