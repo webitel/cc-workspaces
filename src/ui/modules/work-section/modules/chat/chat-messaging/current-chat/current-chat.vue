@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums';
 import { onUnmounted, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
 
