@@ -13,7 +13,7 @@
             />
           </div>
 
-          <span> {{ t('cases.selectAService') }} </span>
+          <span> {{ catalogDataPatch }} </span>
         </div>
       </template>
 
@@ -48,9 +48,9 @@
 <script setup>
 
 import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import deepCopy from 'deep-copy';
-import { defineEmits, onMounted, ref } from 'vue';
+import { computed, defineEmits, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -101,6 +101,49 @@ const updateForm = (event) => {
 onMounted(() => {
   loadCatalogs();
 });
+
+const catalogDataNames = ref([]);
+const catalogDataPatch = computed(() => selectedElement.value ? catalogDataNames.value.join(' / ') : t('cases.selectAService'));
+
+// Author @Lera24
+// [https://webitel.atlassian.net/browse/WTEL-6955]
+// Builds the hierarchical path for the service within the catalog.
+function findPath(services, targetId, path = []) {
+  for (const service of services) {
+    const newPath = [...path, service.name];
+
+    if (service.id === targetId) {
+      return newPath;
+    }
+
+    if (service.service && Array.isArray(service.service)) {
+      const result = findPath(service.service, targetId, newPath);
+      if (result) return result;
+    }
+  }
+  return null;
+}
+
+const findCatalogDataNames = () => {
+  if (!selectedElement.value) {
+    catalogDataNames.value = null;
+    return;
+  }
+
+  for (const catalog of catalogData.value) {
+    if (catalog.service && Array.isArray(catalog.service)) {
+      const path = findPath(catalog.service, selectedElement.value);
+      if (path) {
+        catalogDataNames.value = [catalog.name, ...path];
+        return;
+      }
+    }
+  }
+
+  catalogDataNames.value = null;
+}
+
+watch(() => selectedElement.value, () => findCatalogDataNames());
 
 </script>
 

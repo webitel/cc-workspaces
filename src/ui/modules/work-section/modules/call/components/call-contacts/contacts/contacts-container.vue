@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
+import { computed } from 'vue';
 import { mapActions } from 'vuex';
 
 import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
@@ -48,6 +50,10 @@ import LookupItemContainer from '../../../../_shared/components/lookup-item-cont
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import ContactLookupItem from './contact-lookup-item.vue';
 
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore.js';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
+import { EngineSystemSettingName } from '@webitel/api-services/gen';
+
 export default {
   name: 'ContactsContainer',
   components: {
@@ -57,10 +63,24 @@ export default {
   },
   mixins: [infiniteScrollMixin, sizeMixin],
 
+  setup() {
+    const userinfoStore = useUserinfoStore();
+    const isLimitContactsGranted = computed(() =>
+      userinfoStore.hasSpecialGlobalActionAccess(
+        SpecialGlobalAction.LimitWorkspaceContacts,
+      ),
+    );
+
+    return {
+      isLimitContactsGranted,
+    };
+  },
+
   data: () => ({
     dataList: [],
     SearchMode,
     filterQuery: SearchMode.NAME,
+    contactsLabelsConfiguration: [],
   }),
 
   computed: {
@@ -89,12 +109,37 @@ export default {
     call({ number }) {
       this.makeCall({ number });
     },
+    async checkLabelsToLimitContacts() {
+      const { items } = await configurations.getList({
+        name: EngineSystemSettingName.labels_to_limit_contacts,
+      });
+
+      if (items.length) {
+        this.contactsLabelsConfiguration = items[0].value;
+      }
+    },
+
+    async fetch(params) {
+      const defaultParams = {
+        ...params,
+        qin: this.filterQuery,
+      };
+
+      if (this.isLimitContactsGranted) {
+        await this.checkLabelsToLimitContacts();
+        return await contactsAPI.getList({
+          ...defaultParams,
+          label: this.contactsLabelsConfiguration,
+        });
+      }
+      return await contactsAPI.getList({
+        ...defaultParams
+      });
+    },
+
     changeMode({ value }) {
       this.filterQuery = value;
       this.resetData();
-    },
-    fetch(params) {
-      return contactsAPI.getList({ ...params, qin: this.filterQuery });
     },
   },
 };

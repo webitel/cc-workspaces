@@ -20,8 +20,10 @@ const actions = {
     context.commit('SET_SHOW_FULL_CONTACT', value);
   },
   LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
+    const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
     const number = task.displayNumber; // for CALLS
-    const searchParams = { q: number, qin: 'emails,phones', size: 5000 }; // load all
+    const qin = isCallWorkspace ? 'phones' : 'emails,phones'; // for calls search contacts just by phones https://webitel.atlassian.net/browse/WTEL-7041
+    const searchParams = { q: number, qin, size: 5000 }; // load all
     try {
       context.commit('SET_IS_LOADING', true);
       const { items: contacts } = await ContactsAPI.getList(searchParams);

@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import MarkdownIt from 'markdown-it';
 import { mapGetters } from 'vuex';
 

@@ -33,6 +33,7 @@
       </wt-button>
     </template>
   </processing-wrapper>
+
 </template>
 
 <script>
@@ -97,6 +98,9 @@ export default {
     formBody() {
       return this.task.attempt.form?.body || [];
     },
+    formMetadata() {
+      return this.task.attempt.form?.metadata || {};
+    },
     formActions() {
       return this.task.attempt.form?.actions || [];
     },
@@ -135,6 +139,7 @@ export default {
           }
         }
       });
+      this.task.attempt.form.metadata.isInited = true;
     },
     setupAutofocus() {
       const input = this.$refs['processing-form'].$el.querySelector('input, textarea');
@@ -161,15 +166,18 @@ export default {
       });
     },
     sendTableAction({ action, componentId, row }) {
-     const vars = { [action]: row };
+      const vars = { [action]: row };
       this.task.attempt.componentAction(componentId, action, vars);
       // https://webitel.atlassian.net/browse/WTEL-6707
     },
   },
   watch: {
     formBody: {
-      handler() {
-        this.initializeValues();
+      handler(value) {
+        if (value.length && !this.formMetadata.isInited) {
+          this.task.attempt.form.metadata = {}; // init form metadata
+          this.initializeValues();
+        }
       },
       immediate: true,
     },

@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = defineProps({
   size: {
