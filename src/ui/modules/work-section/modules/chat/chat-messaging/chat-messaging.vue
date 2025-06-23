@@ -73,6 +73,7 @@
 
 <script>
 
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -83,7 +84,6 @@ import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 
 export default {
