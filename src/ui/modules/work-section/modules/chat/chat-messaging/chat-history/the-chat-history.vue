@@ -3,6 +3,7 @@
     <div
       ref="chatContainer"
       class="chat-history__messages chat-messages-items"
+      @scroll="handleChatScroll"
     >
       <div class="topSpacer" :style="topSpacerStyle"/>
 
@@ -119,10 +120,10 @@ const {
 const {
   showScrollToBottomBtn,
   newUnseenMessages,
-  scrollToBottom
+  scrollToBottom,
+  handleChatScroll,
 } = useChatScroll(chatContainer);
 
-const currentChat = computed(() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`]);
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 
 const loadHistory = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
@@ -186,28 +187,27 @@ function isHistoryStart(index) { // first message of all chats
 
 function getChatProvider(message) {
   const { via } = message.chat || message.member; // chat history or current chat gateway
-
-  return { type: via.type, name: via.name };
+  return via
+    ? { type: via.type, name: via.name }
+    : {};
 }
-
-
-watch([
-  () => currentChat.value?.id,
-  () => props.contact?.id
-],  async () => {
-
-  await loadHistory();
-  await nextTick()
-  if (next.value) topSpacerHeight.value = 150;
-  if (lastMessageEl.value?.scrollIntoView) {
-    lastMessageEl.value.scrollIntoView({ block: 'end', behavior: 'auto' })
-  }
-
-},{ immediate: true });
 
 onMounted(() => {
   chatContainer.value?.addEventListener('scroll', preventOverScroll);
 })
+
+watch(
+  () => props.contact?.id,
+  async () => {
+    await loadHistory();
+    await nextTick()
+    if (next.value) topSpacerHeight.value = 150;
+    if (lastMessageEl.value?.scrollIntoView) {
+      lastMessageEl.value.scrollIntoView({ block: 'end', behavior: 'auto' })
+    }
+  },
+  { immediate: true }
+);
 
 onUnmounted(() => {
   resetHistory();
