@@ -15,7 +15,7 @@
       <div
         v-for="(message, index) of messages"
         :key="message.id"
-        :ref="onMessageRef(message.id, index)"
+        :ref="getMessageRef(message.id, index)"
         class="chat-message"
       >
       <message
@@ -137,42 +137,39 @@ const loadNextMessages = async () => {
   if (isLoading.value || !next.value) return;
   isLoading.value = true;
 
-  lastVisibleMessageId.value = messages.value[0]?.id;
+  lastVisibleMessageId.value = messages.value[0]?.id; // to remember id of last message before load more
 
   await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
 
   await nextTick()
-
-  const targetEl = messageRefs.value[lastVisibleMessageId.value]; //ось це все об'єднати в функцію.
-  // якій, скоріш за все, місце в інфініт скролл композіблє (?)
-  if (targetEl?.scrollIntoView) {
+  const targetEl = messageRefs.value[lastVisibleMessageId.value]; // find needed message after loading and DOM update
+  if (targetEl?.scrollIntoView) { // fast return the scroll view on this message
     targetEl.scrollIntoView({ block: 'start', behavior: 'auto' })
   }
 
   isLoading.value = false;
 }
 
-const onMessageRef = (id, index) => el => {
-  if (!el) return
-  if (el) messageRefs.value[id] = el
+const getMessageRef = (id, index) => el => {
+  if (!el) return;
+  messageRefs.value[id] = el;
 
-  // якщо це останній елемент списку — оновити lastMessageEl
   if (index === messages.value.length - 1) {
     lastMessageEl.value = el
   }
 }
 
-const preventOverScroll = () => { //винести окремо? можливо, він взагалі не потрібен - залежить від розмови з Женєй
-  const container = chatContainer.value
-  const firstMessageEl = messages.value.length ? messageRefs.value[messages.value[0].id] : null
-
-  if (!container || !firstMessageEl) return
-
-  const minScrollTop = firstMessageEl.offsetTop - 10 // невеликий буфер
-  if (container.scrollTop < minScrollTop || isLoading.value) {
-    container.scrollTop = minScrollTop
-  }
-}
+// const preventOverScroll = () => { //винести окремо? можливо, він взагалі не потрібен - залежить від розмови з Женєй
+//   const container = chatContainer.value
+//   const firstMessageEl = messages.value.length ? messageRefs.value[messages.value[0].id] : null
+//
+//   if (!container || !firstMessageEl) return
+//
+//   const minScrollTop = firstMessageEl.offsetTop - 10 // невеликий буфер
+//   if (container.scrollTop < minScrollTop || isLoading.value) {
+//     container.scrollTop = minScrollTop
+//   }
+// }
 
 function isChatStarted(index) {
   const { prevMessage, message, nextMessage } = getMessage(index);
