@@ -38,7 +38,7 @@ export const useChatScroll = (element) => {
   }
 
   const handleScrollToBottomBtn = (el) => {
-    if (arrivedState.bottom && newUnseenMessages.value > 0) { // hide the btn and reset new messages count, when we arrived the bottom
+    if (arrivedState.bottom && newUnseenMessages.value) { // hide the btn and reset new messages count, when we arrived the bottom
       newUnseenMessages.value = 0;
       showScrollToBottomBtn.value = false;
       return; // quit the function because we are already at the bottom
@@ -46,7 +46,7 @@ export const useChatScroll = (element) => {
 
     const { scrollTop, scrollHeight, clientHeight } = el;
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight); // how far from bottom the chat was scrolled
-    const threshold = clientHeight * 0.2; // the distance where the button must be shown/hide
+    const threshold = clientHeight * 1.2; // the distance where the button must be shown/hide
     const shouldShowBtn = distanceFromBottom > threshold; // show the btn if we scroll above the threshold
 
     if (showScrollToBottomBtn.value !== shouldShowBtn) { // show or hide the button, if it is needed
