@@ -46,7 +46,7 @@ export const useChatScroll = (element) => {
 
     const { scrollTop, scrollHeight, clientHeight } = el;
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight); // how far from bottom the chat was scrolled
-    const threshold = clientHeight * 0.2; // the distance where the button must be shown/hide
+    const threshold = clientHeight * 1.2; // the distance where the button must be shown/hide
     const shouldShowBtn = distanceFromBottom > threshold; // show the btn if we scroll above the threshold
 
     if (showScrollToBottomBtn.value !== shouldShowBtn) { // show or hide the button, if it is needed
