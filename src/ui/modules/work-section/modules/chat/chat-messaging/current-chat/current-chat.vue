@@ -72,16 +72,13 @@ const {
   scrollToBottom
 } = useChatScroll(el);
 
-
 onUnmounted(() => {
   cleanChatPlayers();
 })
 
-
 const openMedia = (message) => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
 const attachPlayer = (player) => store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
 const cleanChatPlayers = (message) => store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
-
 </script>
 
 <style lang="scss" scoped>
