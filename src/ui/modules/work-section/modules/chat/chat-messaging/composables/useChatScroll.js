@@ -38,7 +38,7 @@ export const useChatScroll = (element) => {
   }
 
   const handleScrollToBottomBtn = (el) => {
-    if (arrivedState.bottom && newUnseenMessages.value > 0) { // hide the btn and reset new messages count, when we arrived the bottom
+    if (arrivedState.bottom && newUnseenMessages.value) { // hide the btn and reset new messages count, when we arrived the bottom
       newUnseenMessages.value = 0;
       showScrollToBottomBtn.value = false;
       return; // quit the function because we are already at the bottom
