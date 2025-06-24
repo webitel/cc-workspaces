@@ -1,6 +1,11 @@
 <template>
   <section class="current-chat chat-messages-container" @click="focusOnInput">
-    <div ref="chat-messages-items" class="chat-messages-items">
+    <div
+      ref="chat-messages-items"
+      class="chat-messages-items"
+      @scroll="handleChatScroll"
+      @resize="updateThreshold"
+    >
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -34,7 +39,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { onUnmounted, useTemplateRef } from 'vue';
+import { onMounted, onUnmounted, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -69,8 +74,14 @@ const {
 const {
   showScrollToBottomBtn,
   newUnseenMessages,
-  scrollToBottom
+  scrollToBottom,
+  handleChatScroll,
+  updateThreshold,
 } = useChatScroll(el);
+
+onMounted(() => {
+  updateThreshold(el.value);
+})
 
 onUnmounted(() => {
   cleanChatPlayers();

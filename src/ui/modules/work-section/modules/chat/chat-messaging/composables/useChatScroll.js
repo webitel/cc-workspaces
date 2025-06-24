@@ -1,6 +1,6 @@
 import { useScroll } from '@vueuse/core';
 import {
-  computed, onMounted, onUnmounted,
+  computed, nextTick,
   ref,
   watch,
 } from 'vue';
@@ -22,6 +22,7 @@ export const useChatScroll = (element) => {
   const lastMessage = computed(() => messages.value[messages.value?.length - 1]);
   const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
 
+
   const scrollToBottom = (behavior = 'instant') => {
     element.value?.scrollTo({
       top: element.value?.scrollHeight,
@@ -38,27 +39,25 @@ export const useChatScroll = (element) => {
     } else newUnseenMessages.value += 1;
   }
 
-  const updateThreshold = (el) => {
-    if (el) {
-      threshold.value = Math.max(150, el.clientHeight * 1.2)
-    }
+  const updateThreshold = (el) => { // when el size was changed
+    if (!el) return;
+    threshold.value = Math.max(150, el.clientHeight * 1.2)
   }
 
-  const shouldShowScrollButton = (el) => {
+  const isShowScrollButton = (el) => {
     const { scrollTop, scrollHeight, clientHeight } = el
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight) // how far from bottom the chat was scrolled
     return distanceFromBottom > threshold.value // show the btn if we scroll above the threshold
   }
 
-  const handleScrollToBottomBtn = (el) => {
+  const handleShowScrollToBottom = (el) => {
     if (arrivedState.bottom && newUnseenMessages.value) { // hide the btn and reset new messages count, when we arrived the bottom
       newUnseenMessages.value = 0;
       showScrollToBottomBtn.value = false;
       return; // quit the function because we are already at the bottom
     }
 
-    const shouldShowBtn = shouldShowScrollButton(el)
-
+    const shouldShowBtn = isShowScrollButton(el)
     if (showScrollToBottomBtn.value !== shouldShowBtn) { // show or hide the button, if it is needed
       showScrollToBottomBtn.value = shouldShowBtn;
     }
@@ -68,14 +67,8 @@ export const useChatScroll = (element) => {
     const chatMessagingWrap = element.value;
     if (!chatMessagingWrap) return;
 
-    handleScrollToBottomBtn(chatMessagingWrap);
+    handleShowScrollToBottom(chatMessagingWrap);
   };
-
-  onMounted(() => {
-    const el = element.value
-    updateThreshold(el)
-    window.addEventListener('resize', () => updateThreshold(el))
-  })
 
   watch(() => messages.value?.length,
     async (newValue, oldValue) => {
@@ -87,19 +80,15 @@ export const useChatScroll = (element) => {
 
   watch(() => chat.value?.id,
     async () => {
-
+    await nextTick()
     setTimeout(() => scrollToBottom(), 500);
-
   },{ immediate: true });
-
-  onUnmounted(() => {
-    window.removeEventListener('resize', updateThreshold)
-  })
 
   return {
     showScrollToBottomBtn,
     newUnseenMessages,
     scrollToBottom,
     handleChatScroll,
+    updateThreshold,
   };
 };
