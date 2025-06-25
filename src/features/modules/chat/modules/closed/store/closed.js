@@ -1,6 +1,13 @@
+import applyTransform, {
+  notify,
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
+
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
+import i18n from '../../../../../../app/locale/i18n.js';
 import processed from '../modules/processed/store/processed.js';
 import unprocessed from '../modules/unprocessed/store/unprocessed.js';
+
+const { t } = i18n.global;
 
 const getters = {
   IS_CHAT_ON_WORKSPACE_CLOSED: (state, getters, rootState, rootGetters) => (!!rootGetters['features/chat/CHAT_ON_WORKSPACE'].closedAt),
@@ -13,8 +20,21 @@ const actions = {
     await context.dispatch('LOAD_PROCESSED');
   },
   MARK_AS_PROCESSED: async (context, chat) => {
+    try {
+
     await AgentChatsAPI.markChatProcessed(chat.id);
     await context.dispatch('LOAD_CLOSED_CHATS');
+
+  } catch (err) {
+      throw applyTransform(err, [
+        notify(({ callback }) =>
+          callback({
+            type: 'error',
+            text: t('errorNotifications.markChatProcessed'),
+          }),
+        ),
+      ]);
+    }
   },
   LOAD_UNPROCESSED: (context) => context.dispatch('features/chat/closed/unprocessed/LOAD_UNPROCESSED_CHATS', null, { root: true }),
   LOAD_PROCESSED: (context) => context.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS', null, { root: true }),
