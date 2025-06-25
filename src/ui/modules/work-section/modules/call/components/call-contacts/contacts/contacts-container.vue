@@ -106,9 +106,7 @@ export default {
       makeCall: 'CALL',
     }),
     async call({ number }) {
-      // this.isCallLoading = true;
       await this.makeCall({ number });
-      // this.isCallLoading = false;
     },
     async checkLabelsToLimitContacts() {
       const { items } = await configurations.getList({

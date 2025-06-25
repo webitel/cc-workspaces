@@ -19,6 +19,7 @@
     <template #after>
       <wt-rounded-action
         :size="size"
+        :loading="showLoader"
         icon="call--filled"
         color="success"
         rounded
@@ -40,6 +41,10 @@ import lookupItemMixin from './mixins/lookupItemMixin';
 export default {
   name: 'UserLookupItem',
   mixins: [lookupItemMixin, sizeMixin],
+  emits: ['input'],
+  data: () => ({
+    showLoader: false,
+  }),
   computed: {
     // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
     userStatus() {
@@ -52,6 +57,15 @@ export default {
       if (this.item.status === AgentStatus.ONLINE) return AbstractUserStatus.ONLINE;
       if (this.item.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
       return AbstractUserStatus.OFFLINE;
+    },
+  },
+  methods: {
+    handleInput() {
+      if (this.showLoader) return;
+
+      this.showLoader = true;
+      this.$emit('input', this.item);
+      this.showLoader = false;
     },
   },
 };

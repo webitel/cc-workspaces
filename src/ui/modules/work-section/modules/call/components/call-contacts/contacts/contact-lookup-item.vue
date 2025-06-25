@@ -5,7 +5,7 @@
         <wt-avatar
           :size="size"
           :username="item.name"
-        />
+        ></wt-avatar>
       </a>
     </template>
 
@@ -23,28 +23,27 @@
     </template>
 
     <template #after="{ toggle }">
-      <wt-raunded-action
+      <wt-rounded-action
         :disabled="!item.phones.length"
         :size="size"
-        :loading="showLoader"
         color="success"
         icon="call--filled"
         rounded
         @click="item.phones.length > 1 ? toggle() : call(item.phones[0])"
-      />
+      ></wt-rounded-action>
     </template>
 
     <template
+      v-if="item.phones.length > 1"
       #expansion
     >
-
       <contact-communication-item
         v-for="phone in item.phones"
         :key="phone.id"
         :phone="phone"
         :size="size"
         @call="call(phone)"
-      />
+      ></contact-communication-item>
     </template>
   </lookup-item>
 </template>
@@ -58,12 +57,12 @@ import ContactCommunicationItem from './contact-communication-item.vue';
 
 export default {
   name: 'ContactLookupItem',
-  components: { ContactCommunicationItem},
+  components: { ContactCommunicationItem },
   mixins: [lookupItemMixin, sizeMixin],
   emits: [
     'call',
   ],
-  data: () => {
+  data() {
     return {
       showLoader: false,
     }

@@ -26,7 +26,7 @@
             :size="size"
             color="success"
             icon="call--filled"
-            :loading="loader"
+            :loading="showLoader"
             rounded
           />
         </template>
@@ -82,8 +82,8 @@ export default {
       if(this.showLoader) return;
 
       this.showLoader = true;
-      // return this.makeCall({ id, communicationId });
-      // this.showLoader = false;
+      this.makeCall({ id, communicationId });
+      this.showLoader = false;
     },
   },
 };
