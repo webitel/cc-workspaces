@@ -38,12 +38,14 @@ const props = defineProps({
 const emit = defineEmits(['input']);
 
 const filters = computed(() => props?.object.filters || []);
+const fields = computed(() => props?.object.fields || []);
 
 const loadObjectList = (params) => {
   return ObjectApi.getLookup({
     ...params,
     path: props.object?.source?.path,
     filters: filters.value,
+    fields: fields.value,
     primary: 'id',
     display: props.object?.displayColumn,
   });
