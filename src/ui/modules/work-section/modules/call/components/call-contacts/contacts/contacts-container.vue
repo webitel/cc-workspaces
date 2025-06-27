@@ -18,7 +18,7 @@
         @input="inputHandler"
         @search="searchHandler"
         @change:search-mode="changeMode"
-      ></wt-search-bar>
+      />
     </template>
 
     <template #empty>
@@ -31,14 +31,16 @@
         :key="item.id"
         :item="item"
         :size="size"
-        @call="call"
-      ></contact-lookup-item>
+        @call="makeCall"
+      />
     </template>
   </lookup-item-container>
 </template>
 
 <script>
+import { EngineSystemSettingName } from '@webitel/api-services/gen';
 import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
 import { computed } from 'vue';
 import { mapActions } from 'vuex';
 
@@ -46,13 +48,10 @@ import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoin
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore.js';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import ContactLookupItem from './contact-lookup-item.vue';
-
-import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore.js';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
-import { EngineSystemSettingName } from '@webitel/api-services/gen';
 
 export default {
   name: 'ContactsContainer',
@@ -106,9 +105,6 @@ export default {
     ...mapActions('features/call', {
       makeCall: 'CALL',
     }),
-    call({ number }) {
-      this.makeCall({ number });
-    },
     async checkLabelsToLimitContacts() {
       const { items } = await configurations.getList({
         name: EngineSystemSettingName.labels_to_limit_contacts,
