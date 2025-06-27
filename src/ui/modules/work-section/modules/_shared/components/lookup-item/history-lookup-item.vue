@@ -180,7 +180,7 @@ export default {
 
       this.makeCall({ number });
 
-      this.showLoader = true;
+      this.showLoader = false;
     },
     goToHistoryItem() {
       window.open(this.historyIdLink, '_blank')

@@ -31,7 +31,7 @@
         :key="item.id"
         :item="item"
         :size="size"
-        @call="call"
+        @call="makeCall"
       />
     </template>
   </lookup-item-container>
@@ -105,9 +105,6 @@ export default {
     ...mapActions('features/call', {
       makeCall: 'CALL',
     }),
-    async call({ number }) {
-      await this.makeCall({ number });
-    },
     async checkLabelsToLimitContacts() {
       const { items } = await configurations.getList({
         name: EngineSystemSettingName.labels_to_limit_contacts,
