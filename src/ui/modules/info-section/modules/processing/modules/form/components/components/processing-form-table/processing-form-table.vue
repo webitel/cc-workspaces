@@ -52,7 +52,8 @@
 <script setup>
 
 import { useInfiniteScroll } from '@vueuse/core';
-import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
+import { getDefaultGetListResponse } from '@webitel/ui-sdk/src/api/defaults/index.js';
+import applyTransform, { merge, snakeToCamel } from '@webitel/ui-sdk/src/api/transformers/index';
 import { computed, defineProps, inject, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -105,9 +106,12 @@ const tableColumns = computed(() => {
 
     // @author @liza-pohranichna
     // reformatting path to nested object from string to array. Example: 'contact.emails.name' ====> ['contact', 'emails', 'name']
-    const fieldPath = column.field.includes(columnsFieldSeparator)
-        ? column.field.split(columnsFieldSeparator).map((item) => snakeToCamel(item))
-        : [snakeToCamel(column.field)];
+    let fieldPath = column.field.includes(columnsFieldSeparator)
+        ? column.field.split(columnsFieldSeparator)
+        : [column.field];
+
+    fieldPath = applyTransform(fieldPath, [snakeToCamel()]);
+
     return {
       ...column,
       field: fieldPath[0],
@@ -172,7 +176,10 @@ async function initDataList() {
     data = items;
     nextAllowed.value = next;
 
-  } else data = props.table?.source || [];
+  } else data = applyTransform(props.table?.source, [
+    merge(getDefaultGetListResponse()),
+    snakeToCamel(),
+  ]);
 
   dataList.value = await handleTableList(data);
 }
