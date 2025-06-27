@@ -1,10 +1,10 @@
-import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/index.js';
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/index';
 import applyTransform, {
   notify,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
+} from '@webitel/ui-sdk/src/api/transformers/index';
 
-import i18n from '../../../../app/locale/i18n.js';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
+import i18n from '../../../../app/locale/i18n';
+import { formatChatMessages } from '../scripts/formatChatMessages';
 
 const { t } = i18n.global;
 

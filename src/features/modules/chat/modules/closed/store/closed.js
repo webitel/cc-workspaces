@@ -2,10 +2,10 @@ import applyTransform, {
   notify,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 
-import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats.js';
-import i18n from '../../../../../../app/locale/i18n.js';
-import processed from '../modules/processed/store/processed.js';
-import unprocessed from '../modules/unprocessed/store/unprocessed.js';
+import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats';
+import i18n from '../../../../../../app/locale/i18n';
+import processed from '../modules/processed/store/processed';
+import unprocessed from '../modules/unprocessed/store/unprocessed';
 
 const { t } = i18n.global;
 
