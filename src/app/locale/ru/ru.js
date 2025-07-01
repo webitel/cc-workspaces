@@ -181,6 +181,10 @@ export default {
       chatTransferred: 'Чат переведен',
       chatsAgent: '{ agentName } присоединился к чату',
       chatsAgentsList: '{ agentName } принимали участие в чате',
+      quickReplies: {
+        quickReplies: 'Быстрый ответ | Быстрые ответы',
+        quickRepliesEmpty: 'Еще нет быстрых ответов',
+      },
     },
   },
   emptyWorkspace: {

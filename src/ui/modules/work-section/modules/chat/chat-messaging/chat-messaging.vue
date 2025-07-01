@@ -6,21 +6,29 @@
     ]"
     @dragenter.prevent="handleDragEnter"
   >
-    <dropzone
-      v-show="isDropzoneVisible"
-      @dragenter.prevent
-      @dragleave.prevent="handleDragLeave"
-      @drop="handleDrop"
+      <dropzone
+        v-if="isDropzoneVisible && !showQuickReplies"
+        @dragenter.prevent
+        @dragleave.prevent="handleDragLeave"
+        @drop="handleDrop"
+      />
+      <chat-history
+        v-if="contact?.id && !showQuickReplies"
+        :contact="contact"
+        :size="size"
+      />
+      <current-chat
+        v-else-if="!showQuickReplies"
+        :size="size"
+      />
+
+    <quick-replies
+      v-show="showQuickReplies"
+      :search="chat.draft"
+      @close="updateQuickReplies"
+      @select="updateQuickReplies"
     />
-    <chat-history
-      v-if="contact?.id"
-      :contact="contact"
-      :size="size"
-    />
-    <current-chat
-      v-else
-      :size="size"
-    />
+
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
@@ -59,6 +67,15 @@
           @insert-emoji="insertEmoji"
         />
         <wt-rounded-action
+          icon="quick-replies"
+          color="accent"
+          :size="size"
+          rounded
+          wide
+          @click="handleQuickRepliesPanel(true)"
+        />
+        <wt-rounded-action
+          :disabled="showQuickReplies"
           icon="chat-send"
           color="accent"
           :size="size"
@@ -84,7 +101,7 @@ import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-
+import QuickReplies from './quick-replies/quick-replies.vue';
 
 export default {
   name: 'ChatMessagingContainer',
@@ -93,6 +110,7 @@ export default {
     CurrentChat,
     ChatHistory,
     ChatEmoji,
+    QuickReplies,
   },
   inject: ['$eventBus'],
   props: {
@@ -103,7 +121,12 @@ export default {
     contact: {
       type: Object,
     },
+    showQuickReplies: {
+      type: Boolean,
+      default: false,
+    },
   },
+  emits: ['handleQuickReplies'],
   setup() {
     const {
       isDropzoneVisible,
@@ -206,6 +229,24 @@ export default {
     async handleAttachments(event) {
       const files = Array.from(event.target.files);
       await this.sendFile(files);
+    },
+    handleQuickRepliesPanel(bool) {
+      // author @Lera24
+      // https://webitel.atlassian.net/browse/WTEL-4923
+      // Because quick replies open and close with animation. And need slow change of content
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.$emit('handleQuickReplies', bool);
+        }, 300);
+      });
+    },
+    updateQuickReplies(reply) {
+      if(reply) {
+        this.chat.draft = this.chat.draft ? `${this.chat.draft} ${reply}` : reply
+      } else {
+        this.chat.draft = '';
+      }
+      this.handleQuickRepliesPanel(false);
     },
   },
 };
