@@ -17,7 +17,6 @@
       <div
         v-for="(message, index) of messages"
         :key="message.id"
-        :ref="getTopMessageRef(message.id, index)"
         class="chat-message"
       >
         <message
@@ -122,12 +121,11 @@ const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
 const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
-const getTopMessageRef = (id, index) => el => {
-  if (!el) return;
 
-  if (index === 0) {
-    lastVisibleMessageEl.value = el
-  }
+const getTopMessageEl = () => {
+  if (!chatContainer.value.children) return;
+
+  lastVisibleMessageEl.value = chatContainer.value.getElementsByClassName('chat-message')[0];
 }
 
 function isChatStarted(index) {
@@ -162,11 +160,15 @@ const loadNextMessages = async () => {
     }
 
     isLoading.value = false;
+
   }, 200);
+
+  getTopMessageEl();
 }
 
 onMounted(() => {
   updateThreshold(chatContainer.value);
+  getTopMessageEl();
 })
 
 watch(
