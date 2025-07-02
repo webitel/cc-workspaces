@@ -75,7 +75,6 @@
           @click="handleQuickRepliesPanel(true)"
         />
         <wt-rounded-action
-          :disabled="showQuickReplies"
           icon="chat-send"
           color="accent"
           :size="size"

@@ -63,7 +63,7 @@ export default {
     chatContact: null,
     currentTab: { component: defaultTab },
     chatContactIsLoaded: false,
-    showQuickReplies: false,
+    showQuickReplies: false, // used to show/hide header when opened quick replies panel. Need only for ui components
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {

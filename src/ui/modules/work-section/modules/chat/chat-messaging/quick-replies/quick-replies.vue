@@ -1,7 +1,6 @@
 <template>
   <wt-replace-transition
     pattern="slide-up"
-    appear
   >
     <div class="quick-replies">
       <div class="quick-replies__header">
