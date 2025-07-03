@@ -25,8 +25,8 @@
     <quick-replies
       v-show="showQuickReplies"
       :search="chat.draft"
-      @close="updateQuickReplies"
-      @select="updateQuickReplies"
+      @close="closeQuickReplies"
+      @select="selectQuickReply"
     />
 
     <div
@@ -72,7 +72,7 @@
           :size="size"
           rounded
           wide
-          @click="handleQuickRepliesPanel(true)"
+          @click="$emit('handle-quick-replies', true)"
         />
         <wt-rounded-action
           icon="chat-send"
@@ -125,7 +125,7 @@ export default {
       default: false,
     },
   },
-  emits: ['handleQuickReplies'],
+  emits: ['handle-quick-replies'],
   setup() {
     const {
       isDropzoneVisible,
@@ -229,23 +229,23 @@ export default {
       const files = Array.from(event.target.files);
       await this.sendFile(files);
     },
-    handleQuickRepliesPanel(bool) {
+    hideQuickRepliesPanel() {
       // author @Lera24
       // https://webitel.atlassian.net/browse/WTEL-4923
       // Because quick replies open and close with animation. And need slow change of content
       this.$nextTick(() => {
         setTimeout(() => {
-          this.$emit('handleQuickReplies', bool);
+          this.$emit('handle-quick-replies', false);
         }, 300);
       });
     },
-    updateQuickReplies(reply) {
-      if(reply) {
-        this.chat.draft = this.chat.draft ? `${this.chat.draft} ${reply}` : reply
-      } else {
-        this.chat.draft = '';
-      }
-      this.handleQuickRepliesPanel(false);
+    selectQuickReply(reply) {
+      this.chat.draft = this.chat.draft ? `${this.chat.draft} ${reply}` : reply;
+      this.hideQuickRepliesPanel();
+    },
+    closeQuickReplies() {
+      this.chat.draft = '';
+      this.hideQuickRepliesPanel();
     },
   },
 };

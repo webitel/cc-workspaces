@@ -182,10 +182,6 @@ export default {
       chatTransferred: 'Chat transferred',
       chatsAgent: '{ agentName } has joined the chat',
       chatsAgentsList: '{ agentName } participated in the chat',
-      quickReplies: {
-        quickReplies: 'Quick reply | Quick replies',
-        quickRepliesEmpty: 'There are no quick replies yet',
-      },
     },
   },
   emptyWorkspace: {

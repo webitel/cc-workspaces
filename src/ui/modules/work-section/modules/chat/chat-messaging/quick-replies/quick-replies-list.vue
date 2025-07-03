@@ -10,9 +10,9 @@
         v-if="idx"
       />
 
-      <div class="quick-replies-list__wrapper">
-        <p class="quick-replies-list__name">{{ reply.name }}</p>
-        <p class="quick-replies-list__text">{{ reply.text }}</p>
+      <div class="quick-replies">
+        <p class="quick-replies__name">{{ reply.name }}</p>
+        <p class="quick-replies__text">{{ reply.text }}</p>
       </div>
     </li>
 
@@ -50,11 +50,11 @@ const select = (text) => {
       cursor: pointer;
     }
   }
+}
 
-  &__wrapper {
-    margin-top: var(--spacing-xs);
-    padding: var(--spacing-xs);
-  }
+.quick-replies {
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-xs);
 
   &__name {
     @extend %typo-body-1-bold;

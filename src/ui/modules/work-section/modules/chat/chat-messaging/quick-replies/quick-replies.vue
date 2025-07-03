@@ -10,7 +10,7 @@
             color="info"
           ></wt-icon>
           <p class="quick-replies__title">
-            {{ $tc('workspaceSec.chat.quickReplies.quickReplies') }}</p>
+            {{ $tc('objects.quickReplies.quickReplies', 1) }}</p>
         </div>
         <wt-icon-btn
           icon="close--filled"
@@ -26,7 +26,7 @@
         v-if="!isLoading && !replies.length"
         :image="emptyPic"
         class="quick-replies__empty"
-        :text="$t('workspaceSec.chat.quickReplies.quickRepliesEmpty')"
+        :text="$t('objects.quickReplies.quickRepliesEmpty')"
       >
       </wt-empty>
 
