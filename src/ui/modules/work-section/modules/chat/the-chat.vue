@@ -3,7 +3,7 @@
     <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
       <template #header>
         <chat-header
-          v-show="isChatHeader"
+          v-show="isChatHeader && !showQuickReplies"
           :size="size"
           @open-tab="openTab"
         />
@@ -11,12 +11,14 @@
       </template>
       <template #body>
         <component
+          v-bind="currentTab.props"
           :is="currentTab.component"
           :size="size"
-          v-bind="currentTab.props"
           :contact="chatContact"
+          :show-quick-replies="showQuickReplies"
           @close-tab="resetTab"
           @open-tab="openTab"
+          @handle-quick-replies="handleQuickReplies"
         />
       </template>
       <template #footer>
@@ -61,6 +63,7 @@ export default {
     chatContact: null,
     currentTab: { component: defaultTab },
     chatContactIsLoaded: false,
+    showQuickReplies: false, // used to show/hide header when opened quick replies panel. Need only for ui components
   }),
   computed: {
     ...mapState('ui/infoSec/client/contact', {
@@ -108,6 +111,9 @@ export default {
     resetTab() {
       this.currentTab = { component: defaultTab };
     },
+    handleQuickReplies(value) {
+      this.showQuickReplies = value;
+    }
   },
 };
 </script>
