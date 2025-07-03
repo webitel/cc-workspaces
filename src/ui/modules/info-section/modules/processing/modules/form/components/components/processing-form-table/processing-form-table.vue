@@ -52,8 +52,12 @@
 <script setup>
 
 import { useInfiniteScroll } from '@vueuse/core';
-import { getDefaultGetListResponse } from '@webitel/ui-sdk/src/api/defaults/index.js';
-import applyTransform, { merge, snakeToCamel } from '@webitel/ui-sdk/src/api/transformers/index';
+import { getDefaultGetListResponse } from '@webitel/api-services/api/defaults';
+import {
+  applyTransform,
+  merge,
+  snakeToCamel,
+} from '@webitel/api-services/api/transformers';
 import { computed, defineProps, inject, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
