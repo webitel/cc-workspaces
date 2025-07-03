@@ -13,46 +13,42 @@
           @next="loadNextMessages"
         />
       </div>
-
-      <div
+      <message
         v-for="(message, index) of messages"
         :key="message.id"
         class="chat-message"
+        :message="message"
+        :size="props.size"
+        :show-avatar="showAvatar(index) || isChatStarted(index)"
+        :username="props.contact?.name"
+        @open-image="openMedia(message)"
+        @initialized-player="attachPlayer"
       >
-        <message
-          :message="message"
-          :size="props.size"
-          :show-avatar="showAvatar(index) || isChatStarted(index)"
-          :username="props.contact?.name"
-          @open-image="openMedia(message)"
-          @initialized-player="attachPlayer"
-        >
-          <template #before-message>
-            <chat-date
-              v-if="showChatDate(index) || isHistoryStart(index)"
-              :date="message.createdAt"
-            />
-            <chat-activity-info
-              v-if="isChatStarted(index) || isHistoryStart(index)"
-              :provider="getChatProvider(message)?.type"
-              :gateway="getChatProvider(message)?.name"
-            />
-            <chat-agent
-              v-if="isChatStarted(index)"
-              :chat-id="message.chat?.id"
-              :contact-id="props.contact.id"
-            />
-          </template>
+        <template #before-message>
+          <chat-date
+            v-if="showChatDate(index) || isHistoryStart(index)"
+            :date="message.createdAt"
+          />
+          <chat-activity-info
+            v-if="isChatStarted(index) || isHistoryStart(index)"
+            :provider="getChatProvider(message)?.type"
+            :gateway="getChatProvider(message)?.name"
+          />
+          <chat-agent
+            v-if="isChatStarted(index)"
+            :chat-id="message.chat?.id"
+            :contact-id="props.contact.id"
+          />
+        </template>
 
-          <template #after-message>
-            <chat-activity-info
-              v-if="isChatStarted(index + 1) || isLastMessage(index)"
-              ended
-            />
-          </template>
-        </message>
+        <template #after-message>
+          <chat-activity-info
+            v-if="isChatStarted(index + 1) || isLastMessage(index)"
+            ended
+          />
+        </template>
+      </message>
       </div>
-    </div>
     <scroll-to-bottom-btn
       v-if="showScrollToBottomBtn"
       :new-message-count="newUnseenMessages"
