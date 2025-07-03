@@ -1,6 +1,6 @@
 import { useScroll } from '@vueuse/core';
 import {
-  computed, nextTick,
+  computed, nextTick, onMounted,
   ref,
   watch,
 } from 'vue';
@@ -67,6 +67,10 @@ export const useChatScroll = (element) => {
 
     handleShowScrollToBottom(chatMessagingWrap);
   };
+
+  onMounted(() => {
+    updateThreshold(element.value);
+  })
 
   watch(() => messages.value?.length,
     async (newValue, oldValue) => {

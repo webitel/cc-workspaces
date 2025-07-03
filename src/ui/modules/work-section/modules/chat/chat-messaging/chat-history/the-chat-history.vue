@@ -118,12 +118,6 @@ const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTA
 const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 
-const getTopMessageEl = () => {
-  if (!chatContainer.value.children) return;
-
-  lastVisibleMessageEl.value = chatContainer.value.getElementsByClassName('chat-message')[0];
-}
-
 function isChatStarted(index) {
   const { prevMessage, message, nextMessage } = getMessage(index);
   return prevMessage
@@ -142,28 +136,31 @@ function getChatProvider(message) {
     : {};
 }
 
+const getTopMessageEl = () => { // help to fix chat viewing position when new messages was loaded
+  if (!chatContainer.value.children) return;
+
+  lastVisibleMessageEl.value = chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
+}
+
 const loadNextMessages = async () => {
   if (isLoading.value || !next.value) return;
   isLoading.value = true;
 
   setTimeout(async () => { // timeout to avoid loader blinking
-    const lastVisibleElement = lastVisibleMessageEl.value; // to remember last visible message before load more
     await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
     await nextTick();
 
-    if (lastVisibleElement?.scrollIntoView) { // fast return the scroll view on prev position
-      lastVisibleElement.scrollIntoView({ block: 'end', behavior: 'auto' })
+    if (lastVisibleMessageEl.value?.scrollIntoView) { // fast return the scroll view on prev position
+      lastVisibleMessageEl.value.scrollIntoView({ block: 'start', behavior: 'auto' })
     }
 
     isLoading.value = false;
-
   }, 200);
 
   getTopMessageEl();
 }
 
 onMounted(() => {
-  updateThreshold(chatContainer.value);
   getTopMessageEl();
 })
 

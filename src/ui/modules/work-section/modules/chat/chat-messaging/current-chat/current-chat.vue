@@ -79,10 +79,6 @@ const {
   updateThreshold,
 } = useChatScroll(el);
 
-onMounted(() => {
-  updateThreshold(el.value);
-})
-
 onUnmounted(() => {
   cleanChatPlayers();
 })
