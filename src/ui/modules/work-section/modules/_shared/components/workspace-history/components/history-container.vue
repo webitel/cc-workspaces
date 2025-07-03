@@ -13,8 +13,7 @@
     </template>
 
     <template #content>
-      <div
-v-for="dataItem in dataList"
+      <div v-for="dataItem in dataList"
         class="history-container-contact">
         <p class="history-container-contact__caption">
           {{dataItem.groupName}}

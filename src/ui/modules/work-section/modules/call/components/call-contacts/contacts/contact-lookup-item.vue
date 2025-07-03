@@ -62,6 +62,11 @@ export default {
   emits: [
     'call',
   ],
+  data() {
+    return {
+      showLoader: false,
+    }
+  },
   computed: {
     ...mapGetters('ui/infoSec/client/contact', {
       contactLink: 'CONTACT_LINK',
@@ -72,7 +77,11 @@ export default {
   },
   methods: {
     call({ number } = {}) {
+      if (this.showLoader) return;
+
+      this.showLoader = true;
       this.$emit('call', { number: number || this.primaryPhoneNumber });
+      this.showLoader = false;
     },
   },
 };

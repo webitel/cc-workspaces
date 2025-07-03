@@ -1,6 +1,6 @@
 <template>
   <wt-popup
-    v-show="isBreakPopup"
+    v-if="isBreakPopup"
     class="break-timer-popup"
     size="sm"
     @close="close"

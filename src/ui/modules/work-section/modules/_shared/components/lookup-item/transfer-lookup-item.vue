@@ -23,6 +23,7 @@
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
+        :loading="showLoader"
         rounded
         @click="handleInput"
       ></wt-rounded-action>
@@ -53,8 +54,10 @@ export default {
       type: String,
     },
   },
+  emits: ['input'],
   data: () => ({
     TransferDestination,
+    showLoader: false,
   }),
   computed: {
     ...mapGetters('workspace', {
@@ -71,6 +74,15 @@ export default {
       if (this.item.status === AgentStatus.ONLINE) return AbstractUserStatus.ONLINE;
       if (this.item.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
       return AbstractUserStatus.OFFLINE;
+    },
+  },
+  methods: {
+    handleInput() {
+      if (this.showLoader) return;
+
+      this.showLoader = true;
+      this.$emit('input', this.item);
+      this.showLoader = false;
     },
   },
 };
