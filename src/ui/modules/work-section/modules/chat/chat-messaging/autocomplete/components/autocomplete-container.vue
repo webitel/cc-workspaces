@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import QuickList from '../../../components/quick-list.vue';
+import QuickList from '../../quick-replies/components/quick-list.vue';
 
 const props = defineProps({
   list: {

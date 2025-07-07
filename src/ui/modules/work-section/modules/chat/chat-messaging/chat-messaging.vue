@@ -110,9 +110,9 @@ import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import QuickReplies from './quick-replies/components/quick-replies.vue';
-import AutocompleteContainer from './quick-replies/modules/autocomplete/components/autocomplete-container.vue';
-import { useAutocomplete } from './quick-replies/modules/autocomplete/composables/useAutocomplete';
-import { AutocompleteOptions } from './quick-replies/modules/autocomplete/enums/AutocompleteOptions';
+import AutocompleteContainer from './autocomplete/components/autocomplete-container.vue';
+import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
+import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 
 export default {
   name: 'ChatMessagingContainer',
