@@ -315,4 +315,8 @@ export default {
   confirmationPopup: {
     title: 'Confirm action',
   },
+  autocompleteList: {
+    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Opens a menu of pre-set quick replies for chat responses'
+  }
 };

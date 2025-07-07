@@ -33,15 +33,23 @@
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
+      <autocomplete-container
+        v-if="isOpenAutocomplete"
+        :list="autocompleteList"
+        @select="selectAutocompleteOption"
+      />
+
       <wt-textarea
         ref="message-draft"
-        v-model="chat.draft"
+        :value="chat.draft"
         class="chat-messaging__textarea"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         autoresize
         name="draft"
         @enter="sendMessage"
         @paste="handleFilePaste"
+        @keydown="onKeyDown"
+        @input="inputMessage"
       />
       <div class="chat-messaging-text-entry__actions">
         <div class="chat-messaging-file-input-wrapper">
@@ -88,9 +96,10 @@
 </template>
 
 <script>
-
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { mapActions, mapGetters } from 'vuex';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import { useDropzoneHandlers } from '../../../../../composibles/useDropzoneHandlers.js';
@@ -100,7 +109,10 @@ import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import QuickReplies from './quick-replies/quick-replies.vue';
+import QuickReplies from './quick-replies/components/quick-replies.vue';
+import AutocompleteContainer from './quick-replies/modules/autocomplete/components/autocomplete-container.vue';
+import { useAutocomplete } from './quick-replies/modules/autocomplete/composables/useAutocomplete';
+import { AutocompleteOptions } from './quick-replies/modules/autocomplete/enums/AutocompleteOptions';
 
 export default {
   name: 'ChatMessagingContainer',
@@ -110,6 +122,7 @@ export default {
     ChatHistory,
     ChatEmoji,
     QuickReplies,
+    AutocompleteContainer,
   },
   inject: ['$eventBus'],
   props: {
@@ -127,16 +140,40 @@ export default {
   },
   emits: ['handle-quick-replies'],
   setup() {
+    const { t } = useI18n();
+
+    const autocompleteOptions = computed(() => [
+      {
+        name: t('autocompleteList.quickReplies'),
+        text: t('autocompleteList.quickRepliesDescription'),
+        id: AutocompleteOptions.QUICK_REPLIES
+      },
+    ]);
+
     const {
       isDropzoneVisible,
       handleDragEnter,
       handleDragLeave
     } = useDropzoneHandlers();
 
+    const {
+      isOpenAutocomplete,
+      autocompleteList,
+      onInput: inputAutocomplete,
+      onKeyDown,
+      close: closeAutocomplete,
+    } = useAutocomplete(autocompleteOptions);
+
     return {
       isDropzoneVisible,
       handleDragEnter,
-      handleDragLeave
+      handleDragLeave,
+
+      isOpenAutocomplete,
+      autocompleteList,
+      inputAutocomplete,
+      onKeyDown,
+      closeAutocomplete,
     }
   },
   data: () => ({
@@ -239,13 +276,31 @@ export default {
         }, 300);
       });
     },
-    selectQuickReply(reply) {
-      this.chat.draft = this.chat.draft ? `${this.chat.draft} ${reply}` : reply;
+    selectQuickReply({text}) {
+      this.chat.draft = this.chat.draft ? `${this.chat.draft} ${text}` : text;
       this.hideQuickRepliesPanel();
     },
     closeQuickReplies() {
       this.chat.draft = '';
       this.hideQuickRepliesPanel();
+    },
+    selectAutocompleteOption({id}) {
+      switch(id) {
+        case AutocompleteOptions.QUICK_REPLIES:
+          this.openQuickReplies();
+          break;
+        default:
+          console.warn(`Unknown autocomplete option selected: ${id}`);
+      }
+    },
+    openQuickReplies() {
+      this.closeAutocomplete();
+      this.chat.draft = this.chat.draft.slice(0, -1);
+      this.$emit('handle-quick-replies', true);
+    },
+    inputMessage(event) {
+      this.chat.draft = event;
+      this.inputAutocomplete(event);
     },
   },
 };
@@ -281,6 +336,7 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   flex-direction: column;
   gap: $chatGap;
   max-height: 50%;
+  position: relative;
 
   &__actions {
     display: flex;

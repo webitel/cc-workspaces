@@ -30,9 +30,9 @@
       >
       </wt-empty>
 
-      <quick-replies-list
+      <quick-list
         v-if="!isLoading && replies.length"
-        :replies="replies"
+        :list="replies"
         @select="select"
       />
     </div>
@@ -40,12 +40,12 @@
 </template>
 
 <script setup>
-import { QuickRepliesAPI } from '@webitel/api-services/api';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import QuickRepliesList from './quick-replies-list.vue';
-import EmptyPicLight from './assets/emptyLight.svg';
-import EmptyPicDark from './assets/emptyDark.svg';
+import { QuickRepliesAPI } from '@webitel/api-services/api';
+import QuickList from './quick-list.vue';
+import EmptyPicLight from '../assets/emptyLight.svg';
+import EmptyPicDark from '../assets/emptyDark.svg';
 
 const props = defineProps({
   replies: {
@@ -84,8 +84,8 @@ const close = () => {
   emit('close');
 };
 
-const select = (text) => {
-  emit('select', text);
+const select = (item) => {
+  emit('select', item);
 };
 
 onMounted(() => callQuickReply());

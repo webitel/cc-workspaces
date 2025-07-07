@@ -1,49 +1,54 @@
 <template>
-  <ul class="quick-replies-list">
+  <ul
+    class="quick-list"
+    @close="close">
     <li
-      v-for="(reply, idx) in props.replies"
-      :key="reply.id"
-      class="quick-replies-list__item"
-      @click="select(reply.text)"
+      v-for="(item, idx) in props.list"
+      :key="item.id || idx"
+      class="quick-list__item"
+      @click="select(item)"
     >
       <wt-divider
         v-if="idx"
       />
 
-      <div class="quick-replies">
-        <p class="quick-replies__name">{{ reply.name }}</p>
-        <p class="quick-replies__text">{{ reply.text }}</p>
+      <div class="quick-list-wrapper">
+        <p class="quick-list-wrapper__name">{{ item.name }}</p>
+        <p class="quick-list-wrapper__text">{{ item.text }}</p>
       </div>
     </li>
-
   </ul>
 </template>
 <script setup>
 const props = defineProps({
-  replies: {
+  list: {
     type: Array,
     default: () => [],
   },
 });
 
-const emit = defineEmits(['select']);
+const emit = defineEmits(['select', 'close']);
 
-const select = (text) => {
-  emit('select', text);
+const select = (item) => {
+  emit('select', item);
+};
+
+const close = () => {
+  emit('close');
 };
 </script>
 
 <style lang="scss" scoped>
-.quick-replies-list {
+.quick-list {
   @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs);
 
 
-  &__item {
+  &_item {
     :hover {
       background-color: var(--content-wrapper-hover-color);
       border-radius: var(--border-radius);
@@ -52,7 +57,7 @@ const select = (text) => {
   }
 }
 
-.quick-replies {
+.quick-list-wrapper {
   margin-top: var(--spacing-xs);
   padding: var(--spacing-xs);
 
