@@ -48,7 +48,7 @@ const close = () => {
   padding: var(--spacing-xs);
 
 
-  &_item {
+  &__item {
     :hover {
       background-color: var(--content-wrapper-hover-color);
       border-radius: var(--border-radius);

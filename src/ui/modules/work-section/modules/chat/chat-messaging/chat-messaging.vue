@@ -6,21 +6,21 @@
     ]"
     @dragenter.prevent="handleDragEnter"
   >
-      <dropzone
-        v-if="isDropzoneVisible && !showQuickReplies"
-        @dragenter.prevent
-        @dragleave.prevent="handleDragLeave"
-        @drop="handleDrop"
-      />
-      <chat-history
-        v-if="contact?.id && !showQuickReplies"
-        :contact="contact"
-        :size="size"
-      />
-      <current-chat
-        v-else-if="!showQuickReplies"
-        :size="size"
-      />
+    <dropzone
+      v-if="isDropzoneVisible && !showQuickReplies"
+      @dragenter.prevent
+      @dragleave.prevent="handleDragLeave"
+      @drop="handleDrop"
+    />
+    <chat-history
+      v-if="contact?.id && !showQuickReplies"
+      :contact="contact"
+      :size="size"
+    />
+    <current-chat
+      v-else-if="!showQuickReplies"
+      :size="size"
+    />
 
     <quick-replies
       v-show="showQuickReplies"
@@ -148,14 +148,14 @@ export default {
       {
         name: t('autocompleteList.quickReplies'),
         text: t('autocompleteList.quickRepliesDescription'),
-        id: AutocompleteOptions.QUICK_REPLIES
+        id: AutocompleteOptions.QUICK_REPLIES,
       },
     ]);
 
     const {
       isDropzoneVisible,
       handleDragEnter,
-      handleDragLeave
+      handleDragLeave,
     } = useDropzoneHandlers();
 
     const {
@@ -176,13 +176,14 @@ export default {
       onAutocompleteInput,
       onKeyDown,
       closeAutocomplete,
-    }
+    };
   },
   data: () => ({
-    hotkeyUnsubscribers : [],
+    hotkeyUnsubscribers: [],
+    variablesRegex: /\$\{([\w.]+)\}/g, //search variables in ${value} format
   }),
   computed: {
-  ...mapGetters('features/chat', {
+    ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isChatActive: 'IS_CHAT_ACTIVE',
     }),
@@ -192,7 +193,7 @@ export default {
       async handler() {
         // eslint-disable-next-line vue/valid-next-tick
         await this.$nextTick(() => {
-          this.setDraftFocus()
+          this.setDraftFocus();
         });
       },
       immediate: true,
@@ -204,12 +205,12 @@ export default {
   },
   unmounted() {
     this.$eventBus.$off('chat-input-focus', this.setDraftFocus);
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
   },
   methods: {
     ...mapActions('features/chat', {
-        send: 'SEND',
-        sendFile: 'SEND_FILE',
+      send: 'SEND',
+      sendFile: 'SEND_FILE',
     }),
     setDraftFocus() {
       const messageDraft = this.$refs['message-draft'];
@@ -247,7 +248,7 @@ export default {
           callback: this.accept,
         },
       ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
+      this.hotkeyUnsubscribers = useHotkeys(subscribers);
     },
     handleDrop(event) {
       const files = Array.from(event.dataTransfer.files);
@@ -278,16 +279,22 @@ export default {
         }, 300);
       });
     },
-    selectQuickReply({text}) {
-      this.chat.draft = this.chat.draft ? `${this.chat.draft} ${text}` : text;
+    replaceQuickReplyVariables(text) {
+      return text.replace(this.variablesRegex, (match, varName) => {
+        return this.chat.variables[varName] ?? match;
+      });
+    },
+    selectQuickReply({ text }) {
+      const replacedText = this.variablesRegex.test(text) ? this.replaceQuickReplyVariables(text) : text;
+      this.chat.draft = this.chat.draft ? `${this.chat.draft} ${replacedText}` : replacedText;
       this.hideQuickRepliesPanel();
     },
     closeQuickReplies() {
       this.chat.draft = '';
       this.hideQuickRepliesPanel();
     },
-    selectAutocompleteOption({id}) {
-      switch(id) {
+    selectAutocompleteOption({ id }) {
+      switch (id) {
         case AutocompleteOptions.QUICK_REPLIES:
           this.openQuickReplies();
           break;
@@ -310,7 +317,7 @@ export default {
 
 <style lang="scss" scoped>
 $chatGap: var(--spacing-2xs);
-$roundedAction: calc(var(--rounded-action-padding)*2 + var(--rounded-action-border-size)*2);
+$roundedAction: calc(var(--rounded-action-padding) * 2 + var(--rounded-action-border-size) * 2);
 $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
 
@@ -326,6 +333,7 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
       max-height: calc((100% - $textEntryActionsMd) - $chatGap);
     }
   }
+
   &--sm {
     .chat-messaging__textarea {
       max-height: calc((100% - $textEntryActionsSm) - $chatGap);
