@@ -33,9 +33,11 @@
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
-      <autocomplete-container
+
+      <chat-helper-list
         v-if="isOpenAutocomplete"
         :list="autocompleteList"
+        class="chat-messaging-helper-list"
         @select="selectAutocompleteOption"
       />
 
@@ -109,20 +111,20 @@ import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatEmoji from './components/chat-emoji.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import QuickReplies from './quick-replies/components/quick-replies.vue';
-import AutocompleteContainer from './autocomplete/components/autocomplete-container.vue';
+import QuickReplies from './quick-replies/quick-replies.vue';
+import ChatHelperList from './components/chat-helper-list.vue';
 import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
 import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 
 export default {
   name: 'ChatMessagingContainer',
   components: {
+    ChatHelperList,
     Dropzone,
     CurrentChat,
     ChatHistory,
     ChatEmoji,
     QuickReplies,
-    AutocompleteContainer,
   },
   inject: ['$eventBus'],
   props: {
@@ -159,7 +161,7 @@ export default {
     const {
       isOpenAutocomplete,
       autocompleteList,
-      onInput: inputAutocomplete,
+      onInput: onAutocompleteInput,
       onKeyDown,
       close: closeAutocomplete,
     } = useAutocomplete(autocompleteOptions);
@@ -171,7 +173,7 @@ export default {
 
       isOpenAutocomplete,
       autocompleteList,
-      inputAutocomplete,
+      onAutocompleteInput,
       onKeyDown,
       closeAutocomplete,
     }
@@ -300,7 +302,7 @@ export default {
     },
     inputMessage(event) {
       this.chat.draft = event;
-      this.inputAutocomplete(event);
+      this.onAutocompleteInput(event);
     },
   },
 };
@@ -354,5 +356,12 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   width: 0;
   height: 0;
   visibility: hidden;
+}
+
+.chat-messaging-helper-list {
+  position: absolute;
+  bottom: 100%;
+  width: 100%;
+  background-color: var(--content-wrapper-color);
 }
 </style>

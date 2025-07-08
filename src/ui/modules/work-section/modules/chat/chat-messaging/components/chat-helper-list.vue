@@ -1,20 +1,20 @@
 <template>
   <ul
-    class="quick-list"
+    class="chat-helper-list"
     @close="close">
     <li
       v-for="(item, idx) in props.list"
       :key="item.id || idx"
-      class="quick-list__item"
+      class="chat-helper-list__item"
       @click="select(item)"
     >
       <wt-divider
         v-if="idx"
       />
 
-      <div class="quick-list-wrapper">
-        <p class="quick-list-wrapper__name">{{ item.name }}</p>
-        <p class="quick-list-wrapper__text">{{ item.text }}</p>
+      <div class="chat-helper-wrapper">
+        <p class="chat-helper-wrapper__name">{{ item.name }}</p>
+        <p class="chat-helper-wrapper__text">{{ item.text }}</p>
       </div>
     </li>
   </ul>
@@ -39,7 +39,7 @@ const close = () => {
 </script>
 
 <style lang="scss" scoped>
-.quick-list {
+.chat-helper-list {
   @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
@@ -57,7 +57,7 @@ const close = () => {
   }
 }
 
-.quick-list-wrapper {
+.chat-helper-wrapper {
   margin-top: var(--spacing-xs);
   padding: var(--spacing-xs);
 
