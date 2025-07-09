@@ -362,6 +362,5 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   position: absolute;
   bottom: 100%;
   width: 100%;
-  background-color: var(--content-wrapper-color);
 }
 </style>
