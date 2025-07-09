@@ -27,14 +27,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['select', 'close']);
+const emit = defineEmits(['select']);
 
 const select = (item) => {
   emit('select', item);
-};
-
-const close = () => {
-  emit('close');
 };
 </script>
 
@@ -46,7 +42,7 @@ const close = () => {
   overflow-y: auto;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs);
-
+  background-color: var(--content-wrapper-color);
 
   &__item {
     :hover {
