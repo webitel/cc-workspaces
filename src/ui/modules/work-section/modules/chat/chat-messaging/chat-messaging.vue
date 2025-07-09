@@ -116,6 +116,8 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
 import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 
+const VARIABLES_REGEX = /\$\{([\w.]+)\}/ //search variables in ${value} format
+
 export default {
   name: 'ChatMessagingContainer',
   components: {
@@ -180,7 +182,6 @@ export default {
   },
   data: () => ({
     hotkeyUnsubscribers: [],
-    variablesRegex: /\$\{([\w.]+)\}/g, //search variables in ${value} format
   }),
   computed: {
     ...mapGetters('features/chat', {
@@ -280,12 +281,12 @@ export default {
       });
     },
     replaceQuickReplyVariables(text) {
-      return text.replace(this.variablesRegex, (match, varName) => {
+      return text.replace(VARIABLES_REGEX, (match, varName) => {
         return this.chat.variables[varName] ?? match;
       });
     },
     selectQuickReply({ text }) {
-      const replacedText = this.variablesRegex.test(text) ? this.replaceQuickReplyVariables(text) : text;
+      const replacedText = VARIABLES_REGEX.test(text) ? this.replaceQuickReplyVariables(text) : text;
       this.chat.draft = this.chat.draft ? `${this.chat.draft} ${replacedText}` : replacedText;
       this.hideQuickRepliesPanel();
     },
