@@ -30,9 +30,9 @@
       >
       </wt-empty>
 
-      <quick-replies-list
+      <chat-helper-list
         v-if="!isLoading && replies.length"
-        :replies="replies"
+        :list="replies"
         @select="select"
       />
     </div>
@@ -40,18 +40,14 @@
 </template>
 
 <script setup>
-import { QuickRepliesAPI } from '@webitel/api-services/api';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import QuickRepliesList from './quick-replies-list.vue';
+import { QuickRepliesAPI } from '@webitel/api-services/api';
+import ChatHelperList from '../components/chat-helper-list.vue';
 import EmptyPicLight from './assets/emptyLight.svg';
 import EmptyPicDark from './assets/emptyDark.svg';
 
 const props = defineProps({
-  replies: {
-    type: Object,
-    required: true,
-  },
   search: {
     type: String,
     default: '',
@@ -84,8 +80,8 @@ const close = () => {
   emit('close');
 };
 
-const select = (text) => {
-  emit('select', text);
+const select = (item) => {
+  emit('select', item);
 };
 
 onMounted(() => callQuickReply());

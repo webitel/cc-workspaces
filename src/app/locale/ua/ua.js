@@ -313,4 +313,8 @@ export default {
   confirmationPopup: {
     title: 'Підтвердіть дію',
   },
+  autocompleteList: {
+    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті'
+  }
 };
