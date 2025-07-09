@@ -24,8 +24,8 @@
 
     <quick-replies
       v-show="showQuickReplies"
-      :search="chat.draft"
-      @close="closeQuickReplies"
+      :search="searchReply"
+      @close="hideQuickRepliesPanel"
       @select="selectQuickReply"
     />
 
@@ -52,6 +52,7 @@
         @paste="handleFilePaste"
         @keydown="onKeyDown"
         @input="inputMessage"
+        @blur="onBlur"
       />
       <div class="chat-messaging-text-entry__actions">
         <div class="chat-messaging-file-input-wrapper">
@@ -116,7 +117,7 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
 import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 
-const VARIABLES_REGEX = /\$\{([\w.]+)\}/ //search variables in ${value} format
+const VARIABLES_REGEX = /\$\{([\w.]+)\}/g //search variables in ${value} format
 
 export default {
   name: 'ChatMessagingContainer',
@@ -182,6 +183,7 @@ export default {
   },
   data: () => ({
     hotkeyUnsubscribers: [],
+    searchReply: '',
   }),
   computed: {
     ...mapGetters('features/chat', {
@@ -271,6 +273,7 @@ export default {
       await this.sendFile(files);
     },
     hideQuickRepliesPanel() {
+      if (this.searchReply && !this.chat.draft) this.chat.draft = this.searchReply;
       // author @Lera24
       // https://webitel.atlassian.net/browse/WTEL-4923
       // Because quick replies open and close with animation. And need slow change of content
@@ -288,10 +291,7 @@ export default {
     selectQuickReply({ text }) {
       const replacedText = VARIABLES_REGEX.test(text) ? this.replaceQuickReplyVariables(text) : text;
       this.chat.draft = this.chat.draft ? `${this.chat.draft} ${replacedText}` : replacedText;
-      this.hideQuickRepliesPanel();
-    },
-    closeQuickReplies() {
-      this.chat.draft = '';
+      this.searchReply = '';
       this.hideQuickRepliesPanel();
     },
     selectAutocompleteOption({ id }) {
@@ -308,9 +308,29 @@ export default {
       this.chat.draft = this.chat.draft.slice(0, -1);
       this.$emit('handle-quick-replies', true);
     },
-    inputMessage(event) {
-      this.chat.draft = event;
-      this.onAutocompleteInput(event);
+    inputMessage(text) {
+      if(this.showQuickReplies && text) {
+        // @author @Lera24
+        // [https://webitel.atlassian.net/browse/WTEL-4923]
+        // searchReply is text that input after opening quickReplies panel,
+        // and this.chat.draft value is ignored. Necessary when choosing more than 1 reply
+        this.searchReply = text.replace(new RegExp(this.chat.draft, 'g'), '').replace(/\s{2,}/g, ' ').trim();
+      } else {
+        this.searchReply = '';
+        this.chat.draft = text;
+      }
+      this.onAutocompleteInput(text);
+    },
+    onBlur() {
+      // @author @Lera24
+      // [https://webitel.atlassian.net/browse/WTEL-4923]
+      // becouse blur is triggered before clicking, so clicking elsewhere on the screen should close the chat-helper-list,
+      // and click on selected value should open quickReplies panel
+      setTimeout(() => {
+        if (!this.showQuickReplies) {
+          this.closeAutocomplete();
+        }
+      }, 100);
     },
   },
 };
