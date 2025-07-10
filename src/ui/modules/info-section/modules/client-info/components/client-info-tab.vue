@@ -14,10 +14,9 @@
 </template>
 
 <script setup>
+import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { EngineSystemSettingName } from 'webitel-sdk';
 
 import Contact from '../modules/contact/components/the-contact.vue';
