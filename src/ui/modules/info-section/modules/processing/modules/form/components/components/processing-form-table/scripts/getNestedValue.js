@@ -1,23 +1,28 @@
-export default function getNestedValue(parentValue, path) {
-  let nestedValue;
+import get from 'lodash/get';
 
-  if (path.length <= 1) return parentValue || '';
-
-  // @author @liza-pohranichna
-  // delete current path step before next step
-  const newPath = path.slice(1);
+export default function getNestedValue(currentValue, arrayPath) {
+  if (!currentValue) return '';
+  if (!arrayPath.length) return currentValue;
 
   // @author @liza-pohranichna
-  // take key of object for current path step
-  const key = newPath[0];
+  // check is lodash-get work with current path
+  const value = get(currentValue, arrayPath, undefined);
 
-  if (Array.isArray(parentValue) && typeof parentValue[0] === 'object') {
-    // @author @liza-pohranichna
-    // get needed value from every object in array
-    nestedValue = parentValue.map((object) => getNestedValue(object[key], newPath)).join(', ');
-  } else if (typeof parentValue === 'object') {
-    nestedValue = getNestedValue(parentValue[key], newPath);
-  } else nestedValue = parentValue || '';
+  if (value) return value;
 
-  return nestedValue;
+  // @author @liza-pohranichna
+  // start main logic after all checking:
+  const [step, ...restPath] = arrayPath; // @author @liza-pohranichna Example: step:'contact', restPath:['emails', '5', 'type']
+
+  if (Array.isArray(currentValue)) {
+    return currentValue // get value from every object in array @author @liza-pohranichna
+    .map((object) => getNestedValue(object[step], restPath))
+    ?.filter(Boolean)
+    .join(', ');
+
+  } else if (typeof currentValue === 'object') {
+
+    return getNestedValue(currentValue[step], restPath);
+
+  } else return currentValue;
 }

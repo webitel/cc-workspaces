@@ -26,7 +26,7 @@
             :grid-actions="false"
           >
             <template
-              v-for="action in props.actions"
+              v-for="action in actions"
               #[action.field]="{ item }"
               :key="action.field"
             >
@@ -105,63 +105,99 @@ const isSystemSource = computed(() => props.table?.isSystemSource);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 const filters = computed(() => props?.filters || []);
+
+function getPathArray(path) {
+  const string = path.replace(/[\[\]]/g, columnsFieldSeparator);
+  // @author @liza-pohranichna
+  // reformatting string path to array.
+  // Example: 'contact.emails[11].update_by.name' ====> ['contact', 'emails', '11', 'update_by', 'name']
+  const array = string.includes(columnsFieldSeparator)
+    ? string.split(columnsFieldSeparator)
+    : [string];
+
+  return applyTransform(array.filter(Boolean), [snakeToCamel()]);
+}
+
+function normalizeSlotKey(key) {
+  // @author @liza-pohranichna
+  // replace '[', ']', '.' in string to '_'. Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
+  return key.replace(/[.\[\]]/g, '_');
+}
+
 const tableColumns = computed(() => {
-  return props.table?.displayColumns.map((column) => {
+  return props.table?.displayColumns.map((column, index) => {
 
-    // @author @liza-pohranichna
-    // reformatting path to nested object from string to array. Example: 'contact.emails.name' ====> ['contact', 'emails', 'name']
-    let fieldPath = column.field.includes(columnsFieldSeparator)
-        ? column.field.split(columnsFieldSeparator)
-        : [column.field];
-
-    fieldPath = applyTransform(fieldPath, [snakeToCamel()]);
+    const columnField = normalizeSlotKey(column.field, index);
+    const arrayPath = getPathArray(column.field);
 
     return {
       ...column,
-      field: fieldPath[0],
-      fieldPath,
+      arrayPath, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
+      firstPathStep: arrayPath[0],
+      header: columnField , // header for wt-table prop
     }
   })
 });
 
+const fields = computed(() => { // fields for API request (get dataList)
+  const fieldsArray = tableColumns.value.map((column) => ( column.firstPathStep ));
+  return [...new Set(fieldsArray)]; // remove duplicates
+});
+
+
 const headers = computed(() => {
-  return tableColumns.value.map((header) => ({
-    ...header,
-    text: header.name,
-    value: header.field,
-    width: header.width ? header.width + 'px' : '',
+  return tableColumns.value.map((column) => ({
+    ...column,
+    text: column.name,
+    value: column.header,
+    width: column.width ? column.width + 'px' : '',
+  }));
+});
+
+const actions = computed(() => {
+  return props.actions.map((action) => ({
+    ...action,
+    field: normalizeSlotKey(action.field),
   }));
 });
 
 async function handleTableList(dataList) {
+
   return dataList.map((item) => {
-    let newItem = item;
+    let newItem = { ...item }; // table row
 
-    for (const key in newItem) { // look inside every field in item @author @liza-pohranichna
-      let value = newItem[key];
-      const pathToNestedValue = tableColumns.value.find((column) => column.field === key)?.fieldPath || []; // Example of pathToNestedValue ['contact', 'name'] @author @liza-pohranichna
-      const isNeedNestedValue = value && typeof value === 'object' && pathToNestedValue.length;
+    tableColumns.value.forEach((column) => { // use for item every column @author @liza-pohranichna
+      const [firstStep, ...restSteps] = column.arrayPath;
+      const parentValue = item[firstStep];
+      const isNeedNestedValue = parentValue && restSteps?.length && typeof parentValue === 'object';
 
-      value = isNeedNestedValue ? getNestedValue(value, pathToNestedValue) : value;
-      newItem = { ...newItem, [key]: value };
-    }
+      const newValue = isNeedNestedValue
+        ? getNestedValue(parentValue, restSteps)
+        : parentValue;
+
+      newItem = {
+        ...newItem,
+        [column.header]: newValue
+      };
+
+    });
 
     return newItem;
   });
 }
 
 async function getDataList() {
-  const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API @author @liza-pohranichna
   try {
     const { items, next } = await TableApi.getList({
       path: systemSourcePath.value,
       filters: filters.value,
       page: currentTablePage.value,
-      fields,
+      fields: fields.value,
     });
 
     return { items, next };
   } catch (error) {
+
     eventBus.$emit('notification', {
       type: 'error',
       text: t('infoSec.processing.form.formTable.error'),
