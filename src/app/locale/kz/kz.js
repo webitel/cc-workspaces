@@ -21,10 +21,18 @@ export default {
     description: 'Сипаттама',
     settings: 'Баптау',
     edit: 'Редакциялау',
+    select: 'Таңдау',
+    run: 'Іске қосу',
+    today: 'Бүгін',
   },
   appNavigator: {
     title: 'Webitel қосымшасы',
     admin: 'Admin',
+    agent: 'Оператор жұмыс орны',
+    supervisor: 'Супервизор жұмыс орны',
+    audit: 'Аудит',
+    history: 'Қоңыраулар тарихы',
+    grafana: 'Grafana',
   },
   header: {
     docs: 'Құжаттама',
@@ -46,16 +54,56 @@ export default {
     chatAht: 'Чатты өңдеудің орташа уақыты',
     scoreCount: 'Бағаланған қоңыраулар',
     scoreAvg: 'Ортақ баға',
+    sumTalk: 'Жалпы сөйлесу уақыты',
+    processing: 'Қоңыраудан кейінгі өңдеу уақыты',
+    available: 'Қол жетімді',
+    voiceMail: 'Дауыстық пошта уақыты',
+    queueTalk: 'Кезектегі сөйлесу уақыты',
+    taskAccepts: 'Тапсырмалар саны',
   },
   queueSec: {
     call: {
-      calls: 'Қоңыраулар',
+      call: 'Қоңырау | Қоңыраулар',
+      preview: {
+        md: {
+          active: 'Белсенді қоңыраулар',
+          missed: 'Қабылданбаған қоңыраулар',
+          offline: 'Офлайн қоңыраулар',
+          manual: 'Өзіне тағайындалған қоңыраулар',
+        },
+        sm: {
+          active: 'Белсенді',
+          missed: 'Қабылданбаған',
+          offline: 'Офлайн',
+          manual: 'Өзіне тағайындалған',
+        },
+      },
     },
     chat: {
-      chats: 'Чаттар',
+      chats: 'Чат | Чаттар',
+      preview: {
+        md: {
+          active: 'Белсенді чаттар',
+          manual: 'Өзіне тағайындалған чаттар',
+          closed: 'Жабық чаттар',
+        },
+        sm: {
+          active: 'Белсенді',
+          manual: 'Өзіне тағайындалған',
+          closed: 'Жабық',
+        },
+      },
     },
     job: {
-      jobs: 'Тапсырмалар',
+      jobs: 'Тапсырма | Тапсырмалар',
+      preview: {
+        md: {
+          active: 'Белсенді тапсырмалар',
+        },
+        sm: {
+          active: 'Белсенді',
+        },
+      },
     },
   },
   infoSec: {
