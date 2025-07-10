@@ -108,7 +108,7 @@ export default {
   },
   infoSec: {
     generalInfo: {
-      generalInfo: 'Негізгі ақпарат',
+      generalInfo: 'Жалпы ақпарат',
       queueWaiting: 'Күтуде',
       queue: 'Кезек | Кезектер',
       agents: 'Операторлар',
@@ -118,6 +118,22 @@ export default {
       score: 'Операторды бағалау',
     },
     clientInfo: 'Ақпарат',
+    memberDescription: 'Мүшенің сипаттамасы', // TODO: Translate
+    variables: 'Айнымалылар', // TODO: Translate
+    contacts: {
+      client: 'Клиент',
+      manager: 'Иесі', // TODO: Translate
+      attributes: 'Атрибут | Атрибуттар',
+      emptyContact: 'Байланыс табылмады',
+      emptyLabels: 'Жапсырмалар жоқ',
+      emptyAttributes: 'Атрибуттар жоқ',
+      emptyDescription: 'Сипаттама жоқ',
+      foundOneContact: '{ count } байланыс табылды',
+      foundSomeContact: '{ current } / { count } байланыс',
+      communications: 'Байланыс опциялары',
+      destination: 'Мақсат',
+      searchPlaceholder: 'Іздеу критерийлерін енгізіңіз',
+    },
     knowledgeBase: 'Білім қоры',
     processing: {
       title: 'Тапсырманы өңдеу',
@@ -133,7 +149,16 @@ export default {
           deleteConfirmation: 'Бұл файлды  жойғыңыз келетініне сенімдісіз бе?',
           empty: 'Бұл жерде әзірге файлдар жоқ',
         },
+        formTable: {
+          title: 'Кесте',
+          error: 'Кесте деректерінің форматы дұрыс емес. Ағымды тексеріңіз.',
+        },
       },
+    },
+    flows: {
+      dummy: 'Схемалар әлі конфигурацияланбаған',
+      runFlowSuccess: 'Схема сәтті іске қосылды',
+      runFlowError: 'Схеманы іске қосу сәтсіз аяқталды',
     },
   },
   workspaceSec: {
@@ -143,7 +168,8 @@ export default {
       hangup: 'Соңы',
     },
     chat: {
-      acceptPreviewText: 'Жауап беруге дайын болсаңыз, «Қабылдау» батырмасын басыңыз',
+      acceptPreviewText:
+        'Жауап беруге дайын болсаңыз, «Қабылдау» батырмасын басыңыз',
       draftPlaceholder: 'Хабарлама жазыңыз..',
       dropzone: {
         title: 'Файлдарды осы жерге жылжытып апарыңыз',
@@ -151,6 +177,11 @@ export default {
       },
       confirmClose: 'Белсенді чатты  жабуға сенімдісіз бе?',
       closedСhat: 'Чат жабылды',
+      chatStarted: 'Чат басталды', // TODO: Translate
+      chatEnded: 'Чат аяқталды', // TODO: Translate
+      chatTransferred: 'Чат ауыстырылды', // TODO: Translate
+      chatsAgent: '{ agentName } чатқа қосылды', // TODO: Translate
+      chatsAgentsList: '{ agentName } чатқа қатысты', // TODO: Translate
     },
   },
   emptyWorkspace: {
@@ -174,10 +205,15 @@ export default {
   history: {
     today: 'Бүгін',
     yesterday: 'Кеше',
+    openInHistory: 'Тарихта ашу',
   },
   transfer: {
     selectAgent: 'Агентті таңдаңыз',
     transfer: 'Ауыстыру',
+  },
+  contacts: {
+    phones: 'Телефон | Телефондар',
+    emails: 'Email | Email-дар',
   },
   agentStatus: {
     callCenter: 'Байланыс орталығы',
@@ -224,13 +260,18 @@ export default {
     },
   },
   error: {
+    general: 'Қате орын алды. Қайталап көріңіз.', // TODO: Translate
     websocket: {
-      [DeviceNotFoundError.id]: 'Микрофон қосылмаған. Әрекетті орындау мүмкін емес.',
-      [DeviceNotAllowPermissionError.id]: 'Микрофонды қосу мүмкін емес. Әрекетті орындау мүмкін емес.',
-      [LicencePermissionError.id.replaceAll('.', '_')]: 'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
+      [DeviceNotFoundError.id]:
+        'Микрофон қосылмаған. Әрекетті орындау мүмкін емес.',
+      [DeviceNotAllowPermissionError.id]:
+        'Микрофонды қосу мүмкін емес. Әрекетті орындау мүмкін емес.',
+      [LicencePermissionError.id.replaceAll('.', '_')]:
+        'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
     },
     endpoint: {
-      noLicense: 'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
+      noLicense:
+        'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
     },
   },
   notifications: {
@@ -238,17 +279,23 @@ export default {
     userInvite: '{name} жіберген жаңа чат',
     closeConversation: '{name} чаттан шықты',
     [JobState.Distribute]: 'Жаңа тапсырма: {name}',
+    newCall: 'Жаңа қоңырау', // TODO: Translate
+    closedChatError: 'Жабық чаттарды жүктеу сәтсіз аяқталды', // TODO: Translate
   },
   emojiPicker: {
     categoriesLabel: 'Санаттар',
-    emojiUnsupportedMessage: 'Сіздің браузеріңіз түрлі-түсті эмодзилерді көрсетпейді.',
+    emojiUnsupportedMessage:
+      'Сіздің браузеріңіз түрлі-түсті эмодзилерді көрсетпейді.',
     favoritesLabel: 'Таңдаулылар',
     loadingMessage: 'Жүктелуде…',
     networkErrorMessage: 'Эмодзи жүктелмеді.',
-    searchDescription: 'Іздеу нәтижесі қолжетімді болса, шарлау үшін жоғары немесе төмен батырмасын басыңыз және таңдау үшін еenter басыңыз.',
+    regionLabel: 'Эмодзи таңдаушы', // TODO: Translate
+    searchDescription:
+      'Іздеу нәтижесі қолжетімді болса, шарлау үшін жоғары немесе төмен батырмасын басыңыз және таңдау үшін еenter басыңыз.',
     searchLabel: 'Іздеу',
     searchResultsLabel: 'Іздеу нәтижесі ',
-    skinToneDescription: 'Ашылғаннан кейін шарлау үшін жоғары немесе төмен батырмасын басыңыз және таңдау үшін еnter басыңыз.',
+    skinToneDescription:
+      'Ашылғаннан кейін шарлау үшін жоғары немесе төмен батырмасын басыңыз және таңдау үшін еnter басыңыз.',
     skinToneLabel: 'Терінің түсін таңдаңыз',
     skinTonesLabel: 'Терінің түсі',
     skinTones: [
@@ -262,10 +309,10 @@ export default {
     categories: {
       custom: 'Өз',
       'smileys-emotion': 'Смайл мен смайлдар',
-      'people -body': 'Адамдар және дене',
-      'animals - nature': 'Жануарлар және табиғат',
-      'food - drink': 'Ас және сусындар',
-      'travel - places': 'Саяхат және орындар',
+      'people-body': 'Адамдар және дене',
+      'animals-nature': 'Жануарлар және табиғат',
+      'food-drink': 'Ас және сусындар',
+      'travel-places': 'Саяхат және орындар',
       activities: 'Іс-шаралар',
       objects: 'Нысандар',
       symbols: 'Таңбалар',

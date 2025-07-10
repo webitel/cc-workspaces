@@ -1,7 +1,9 @@
 import {
   AgentStatus,
   DeviceNotAllowPermissionError,
-  DeviceNotFoundError, JobState, LicencePermissionError,
+  DeviceNotFoundError,
+  JobState,
+  LicencePermissionError,
 } from 'webitel-sdk';
 
 export default {
@@ -74,7 +76,6 @@ export default {
           missed: 'Пропущені',
           offline: 'Офлайн',
           manual: 'Самостійно призначені',
-
         },
       },
     },
@@ -193,10 +194,10 @@ export default {
       active: 'Активний',
       hold: 'Утримання',
       transfer: 'Трансфер',
-      bridge: 'З\'єднання',
+      bridge: "З'єднання",
       end: 'Завершено',
       missed: 'Пропущено',
-      disconnect: 'Роз\'єднано',
+      disconnect: "Роз'єднано",
     },
     callActions: {
       title: 'Дії',
@@ -235,8 +236,8 @@ export default {
       submit: 'Пропущено',
     },
     callDisconnect: {
-      title: 'Роз\'єднано',
-      submit: 'Роз\'єднано',
+      title: "Роз'єднано",
+      submit: "Роз'єднано",
     },
   },
   chatSec: {
@@ -257,10 +258,10 @@ export default {
       active: 'Активний',
       hold: 'Утримання',
       transfer: 'Трансфер',
-      bridge: 'З\'єднання',
+      bridge: "З'єднання",
       end: 'Завершено',
       missed: 'Пропущено',
-      disconnect: 'Роз\'єднано',
+      disconnect: "Роз'єднано",
     },
     chatActions: {
       title: 'Дії',
@@ -282,8 +283,8 @@ export default {
       submit: 'Пропущено',
     },
     chatDisconnect: {
-      title: 'Роз\'єднано',
-      submit: 'Роз\'єднано',
+      title: "Роз'єднано",
+      submit: "Роз'єднано",
     },
   },
   jobSec: {
@@ -304,10 +305,10 @@ export default {
       active: 'Активний',
       hold: 'Утримання',
       transfer: 'Трансфер',
-      bridge: 'З\'єднання',
+      bridge: "З'єднання",
       end: 'Завершено',
       missed: 'Пропущено',
-      disconnect: 'Роз\'єднано',
+      disconnect: "Роз'єднано",
     },
     jobActions: {
       title: 'Дії',
@@ -329,8 +330,8 @@ export default {
       submit: 'Пропущено',
     },
     jobDisconnect: {
-      title: 'Роз\'єднано',
-      submit: 'Роз\'єднано',
+      title: "Роз'єднано",
+      submit: "Роз'єднано",
     },
     jobState: {
       [JobState.Waiting]: 'Очікування',
@@ -345,7 +346,8 @@ export default {
   },
   errors: {
     [DeviceNotFoundError.name]: 'Пристрій не знайдено',
-    [DeviceNotAllowPermissionError.name]: 'Немає дозволу на використання пристрою',
+    [DeviceNotAllowPermissionError.name]:
+      'Немає дозволу на використання пристрою',
     [LicencePermissionError.name]: 'Немає ліцензії',
   },
   status: {
