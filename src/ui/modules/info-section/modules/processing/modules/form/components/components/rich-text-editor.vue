@@ -90,8 +90,7 @@ export default {
       return `${this.value}`;
     },
     language() {
-      const lang = this.$i18n.locale;
-      return lang === 'ua' ? 'uk' : lang;
+      return this.$i18n.locale;
     },
     config() {
       return {
