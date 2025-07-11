@@ -50,7 +50,7 @@ import { ChatHelperItem } from "../types/ChatHelperItem.types";
 
 const props = defineProps<{
   search?: string;
-}>;
+}>();
 
 const emit = defineEmits<{
   (e: 'close'): void;
