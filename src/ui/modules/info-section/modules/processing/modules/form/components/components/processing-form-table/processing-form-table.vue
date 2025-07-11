@@ -107,19 +107,20 @@ const systemSourcePath = computed(() => props.table?.systemSource?.path);
 const filters = computed(() => props?.filters || []);
 
 function getPathArray(path) {
-  const string = path.replace(/[\[\]]/g, columnsFieldSeparator);
   // @author @liza-pohranichna
-  // reformatting string path to array.
+  // method reformatting string path to array.
   // Example: 'contact.emails[11].update_by.name' ====> ['contact', 'emails', '11', 'update_by', 'name']
-  const array = string.includes(columnsFieldSeparator)
-    ? string.split(columnsFieldSeparator)
-    : [string];
+  const stringFieldPath = path.replace(/[\[\]]/g, columnsFieldSeparator);
+  const arrayFieldPath = stringFieldPath.includes(columnsFieldSeparator)
+    ? stringFieldPath.split(columnsFieldSeparator)
+    : [stringFieldPath];
 
-  return applyTransform(array.filter(Boolean), [snakeToCamel()]);
+  return applyTransform(arrayFieldPath.filter(Boolean), [snakeToCamel()]);
 }
 
 function normalizeSlotKey(key) {
   // @author @liza-pohranichna
+  // need this for slots in wt-table component.
   // replace '[', ']', '.' in string to '_'. Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
   return key.replace(/[.\[\]]/g, '_');
 }
@@ -133,14 +134,13 @@ const tableColumns = computed(() => {
     return {
       ...column,
       arrayPath, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
-      firstPathStep: arrayPath[0],
       header: columnField , // header for wt-table prop
     }
   })
 });
 
 const fields = computed(() => { // fields for API request (get dataList)
-  const fieldsArray = tableColumns.value.map((column) => ( column.firstPathStep ));
+  const fieldsArray = tableColumns.value.map((column) => ( column.arrayPath[0] ));
   return [...new Set(fieldsArray)]; // remove duplicates
 });
 

@@ -6,7 +6,7 @@ export default function getNestedValue(currentValue, arrayPath) {
 
   // @author @liza-pohranichna
   // check is lodash-get work with current path
-  const value = get(currentValue, arrayPath, undefined);
+  const value = get(currentValue, arrayPath);
 
   if (value) return value;
 
