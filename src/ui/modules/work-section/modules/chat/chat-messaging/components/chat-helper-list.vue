@@ -12,22 +12,24 @@
         v-if="idx"
       />
 
-      <div class="chat-helper-wrapper">
-        <p class="chat-helper-wrapper__name">{{ item.name }}</p>
-        <p class="chat-helper-wrapper__text">{{ item.text }}</p>
+      <div class="chat-helper">
+        <p class="chat-helper__name">{{ item.name }}</p>
+        <p class="chat-helper__text">{{ item.text }}</p>
       </div>
     </li>
   </ul>
 </template>
-<script setup>
-const props = defineProps({
-  list: {
-    type: Array,
-    default: () => [],
-  },
-});
+<script setup lang="ts">
+import { ChatHelperItem} from "../types/ChatHelperItem.types";
 
-const emit = defineEmits(['select']);
+
+const props = defineProps<{
+  list: ChatHelperItem[];
+}>();
+
+const emit = defineEmits<{
+  (e: 'select', item: ChatHelperItem): void;
+}>();
 
 const select = (item) => {
   emit('select', item);
@@ -53,7 +55,7 @@ const select = (item) => {
   }
 }
 
-.chat-helper-wrapper {
+.chat-helper {
   margin-top: var(--spacing-xs);
   padding: var(--spacing-xs);
 

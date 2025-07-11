@@ -39,24 +39,25 @@
   </wt-replace-transition>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { QuickRepliesAPI } from '@webitel/api-services/api';
 import ChatHelperList from '../components/chat-helper-list.vue';
 import EmptyPicLight from './assets/emptyLight.svg';
 import EmptyPicDark from './assets/emptyDark.svg';
+import { ChatHelperItem } from "../types/ChatHelperItem.types";
 
-const props = defineProps({
-  search: {
-    type: String,
-    default: '',
-  },
-});
+const props = defineProps<{
+  search?: string;
+}>;
 
-const emit = defineEmits(['close', 'select']);
+const emit = defineEmits<{
+  (e: 'close'): void;
+  (e: 'select', item: ChatHelperItem): void;
+}>();
 
-const replies = ref([]);
+const replies = ref<ChatHelperItem[]>([]);
 const isLoading = ref(false);
 
 const store = useStore();
@@ -64,13 +65,13 @@ const store = useStore();
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 const emptyPic = computed(() => (darkMode.value ? EmptyPicDark : EmptyPicLight));
 
-const callQuickReply = async (params = {}) => {
+const callQuickReply = async (params = {}):Promise<void> => {
   try {
     isLoading.value = true;
     const { items } = await QuickRepliesAPI.getList(params);
     replies.value = items;
   } catch (error) {
-    console.error('Error fetching quick replies:', error);
+    throw new Error('Error fetching quick replies:', error);
   } finally {
     isLoading.value = false;
   }
@@ -86,7 +87,7 @@ const select = (item) => {
 
 onMounted(() => callQuickReply());
 
-watch(() => props.search, (search) => {
+watch(() => props.search, (search: string | undefined) => {
   callQuickReply(search ? { search } : {});
 });
 </script>

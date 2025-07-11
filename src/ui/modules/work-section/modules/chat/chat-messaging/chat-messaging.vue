@@ -25,7 +25,7 @@
     <quick-replies
       v-show="showQuickReplies"
       :search="searchReply"
-      @close="hideQuickRepliesPanel"
+      @close="closeQuickRepliesPanel"
       @select="selectQuickReply"
     />
 
@@ -272,7 +272,7 @@ export default {
       const files = Array.from(event.target.files);
       await this.sendFile(files);
     },
-    hideQuickRepliesPanel() {
+    closeQuickRepliesPanel() {
       if (this.searchReply && !this.chat.draft) this.chat.draft = this.searchReply;
       // author @Lera24
       // https://webitel.atlassian.net/browse/WTEL-4923
@@ -292,7 +292,7 @@ export default {
       const replacedText = VARIABLES_REGEX.test(text) ? this.replaceQuickReplyVariables(text) : text;
       this.chat.draft = this.chat.draft ? `${this.chat.draft} ${replacedText}` : replacedText;
       this.searchReply = '';
-      this.hideQuickRepliesPanel();
+      this.closeQuickRepliesPanel();
     },
     selectAutocompleteOption({ id }) {
       switch (id) {
