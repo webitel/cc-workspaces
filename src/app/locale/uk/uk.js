@@ -356,4 +356,8 @@ export default {
     [AgentStatus.Offline]: 'Офлайн',
     [AgentStatus.BreakOut]: 'Примусова перерва',
   },
+  autocompleteList: {
+    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті'
+  }
 };
