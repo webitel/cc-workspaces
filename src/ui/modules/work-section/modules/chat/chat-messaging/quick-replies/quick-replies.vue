@@ -40,13 +40,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { useStore } from 'vuex';
 import { QuickRepliesAPI } from '@webitel/api-services/api';
+import { computed,onMounted, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
 import ChatHelperList from '../components/chat-helper-list.vue';
-import EmptyPicLight from './assets/emptyLight.svg';
-import EmptyPicDark from './assets/emptyDark.svg';
 import { ChatHelperItem } from "../types/ChatHelperItem.types";
+import EmptyPicDark from './assets/emptyDark.svg';
+import EmptyPicLight from './assets/emptyLight.svg';
 
 const props = defineProps<{
   search?: string;
