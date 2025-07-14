@@ -18,7 +18,7 @@ const getList = async ({ path, filters, ...params }) => {
   const url = applyTransform(params, [
     merge(getDefaultGetParams()),
     (params) => ({ ...params, q: params.search }),
-    camelToSnake(),
+    camelToSnake(['fields']),
     generateUrl(path),
     addQueryParamsToUrl(filters),
   ]);
