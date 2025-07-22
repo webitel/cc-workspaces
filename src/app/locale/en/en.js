@@ -106,6 +106,9 @@ export default {
       },
     },
   },
+  notification: {
+    callEnded: 'Call ended text',
+  },
   infoSec: {
     generalInfo: {
       generalInfo: 'General info',
@@ -322,7 +325,9 @@ export default {
     title: 'Confirm action',
   },
   autocompleteList: {
-    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Opens a menu of pre-set quick replies for chat responses'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription:
+      'Opens a menu of pre-set quick replies for chat responses',
+  },
 };

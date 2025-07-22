@@ -79,6 +79,17 @@ export default {
       return '';
     },
   },
+  watch: {
+    ['task.state']() {
+      if (this.task.state === CallActions.Hangup) {
+        this.$eventBus.$emit('notification', {
+          type: 'error',
+          text: this.$t('notification.callEnded'),
+          timeout: 20,
+        });
+      }
+    },
+  },
 };
 </script>
 

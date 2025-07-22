@@ -106,6 +106,9 @@ export default {
       },
     },
   },
+  notification: {
+    callEnded: 'Call ended text',
+  },
   infoSec: {
     generalInfo: {
       generalInfo: 'Основная информация',
@@ -323,7 +326,8 @@ export default {
     title: 'Подтвердите действие',
   },
   autocompleteList: {
-    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Открывает меню быстрых ответов в чате'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Открывает меню быстрых ответов в чате',
+  },
 };

@@ -13,11 +13,10 @@
         @open-tab="currentTab = $event"
       ></call-header>
     </template>
-
     <template #body>
       <component
         :is="currentTab"
-        :size="size"/>
+        :size="size" />
     </template>
 
     <template #footer>
@@ -65,7 +64,7 @@ export default {
   data: () => ({
     currentTab: 'numpad',
     isPreviewTransfer: false,
-    hotkeyUnsubscribers : [],
+    hotkeyUnsubscribers: [],
   }),
 
   watch: {
@@ -90,7 +89,7 @@ export default {
   },
 
   unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 
   methods: {
@@ -111,8 +110,8 @@ export default {
           },
         },
       ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
-    }
+      this.hotkeyUnsubscribers = useHotkeys(subscribers);
+    },
   },
 
 };

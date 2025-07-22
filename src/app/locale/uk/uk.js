@@ -106,6 +106,9 @@ export default {
       },
     },
   },
+  notification: {
+    callEnded: 'Call ended text',
+  },
   infoSec: {
     generalInfo: {
       generalInfo: 'Основна інформація',
@@ -357,7 +360,8 @@ export default {
     [AgentStatus.BreakOut]: 'Примусова перерва',
   },
   autocompleteList: {
-    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті',
+  },
 };
