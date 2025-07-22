@@ -79,6 +79,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  fields: {
+    type: Array,
+    default: () => [],
+  },
   actions: {
     type: Array,
     default: () => [],
@@ -105,14 +109,16 @@ const isSystemSource = computed(() => props.table?.isSystemSource);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 const filters = computed(() => props?.filters || []);
+const tableFields = computed(() => props?.fields || []);
+
 const tableColumns = computed(() => {
   return props.table?.displayColumns.map((column) => {
 
     // @author @liza-pohranichna
     // reformatting path to nested object from string to array. Example: 'contact.emails.name' ====> ['contact', 'emails', 'name']
     let fieldPath = column.field.includes(columnsFieldSeparator)
-        ? column.field.split(columnsFieldSeparator)
-        : [column.field];
+      ? column.field.split(columnsFieldSeparator)
+      : [column.field];
 
     fieldPath = applyTransform(fieldPath, [snakeToCamel()]);
 
@@ -120,8 +126,8 @@ const tableColumns = computed(() => {
       ...column,
       field: fieldPath[0],
       fieldPath,
-    }
-  })
+    };
+  });
 });
 
 const headers = computed(() => {
@@ -151,13 +157,13 @@ async function handleTableList(dataList) {
 }
 
 async function getDataList() {
-  const fields = headers.value.map((item) => ( item.value )); // all fields we want to get from API @author @liza-pohranichna
+  const fields = headers.value.map((item) => (item.value)); // all fields we want to get from API @author @liza-pohranichna
   try {
     const { items, next } = await TableApi.getList({
       path: systemSourcePath.value,
       filters: filters.value,
       page: currentTablePage.value,
-      fields,
+      fields: [...fields, ...tableFields.value],
     });
 
     return { items, next };
@@ -220,9 +226,9 @@ useInfiniteScroll(infiniteScrollWrap,
   },
   {
     distance: 100,
-    canLoadMore: () => (!nextLoading.value && nextAllowed.value)
-  }
-)
+    canLoadMore: () => (!nextLoading.value && nextAllowed.value),
+  },
+);
 
 </script>
 

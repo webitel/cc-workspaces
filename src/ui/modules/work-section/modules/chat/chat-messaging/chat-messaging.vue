@@ -103,6 +103,8 @@ import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
+import {ComponentSize} from '@webitel/ui-sdk';
+import { WebitelContactsContact } from '@webitel/api-services/gen';
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import {useDropzoneHandlers} from '../../../../../composibles/useDropzoneHandlers';
@@ -117,11 +119,15 @@ import CurrentChat from './current-chat/current-chat.vue';
 import {useQuickReplies} from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   size?: string;
-  contact?: Object; // дописати тип якщо такий є
-  showQuickReplies?: boolean
-}>();
+  contact?: WebitelContactsContact,
+  showQuickReplies?: boolean;
+}>(), {
+  size: ComponentSize.MD,
+  showQuickReplies: false,
+  contact: undefined,
+});
 
 const emit = defineEmits<{
   (e: 'handle-quick-replies'): void;
@@ -153,6 +159,7 @@ const {
 const {
   isOpenAutocomplete,
   autocompleteList,
+
   onInput: onAutocompleteInput,
   onKeyDown,
   onBlur,
@@ -166,9 +173,9 @@ const {
   close: closeQuickReplies,
   select: selectQuickReply,
   input: inputQuickReply,
-} = useQuickReplies({emit, variables: chat.value.variables});
+} = useQuickReplies({ emit, variables: chat.value.variables });
 
-const hotkeyUnsubscribers: Function[] = [];
+const hotkeyUnsubscribers = [];
 
 function sendFile (files) {
   return store.dispatch('features/chat/SEND_FILE', files);
@@ -189,7 +196,7 @@ function setDraftFocus() {
 
 function insertEmoji(unicode: string) {
   // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
-  insertTextAtCursor(textarea, unicode);
+  insertTextAtCursor(textarea.value, unicode);
 }
 
 async function sendMessage() {
@@ -204,17 +211,17 @@ async function sendMessage() {
 }
 
 function setupHotkeys() {
-  hotkeyUnsubscribers.push(useHotkeys([{event: HotkeyAction.ACCEPT, callback: accept}])); ////this.accept
+  hotkeyUnsubscribers.value = useHotkeys([{event: HotkeyAction.ACCEPT, callback: accept}]);
 }
 
 function handleDrop(event: DragEvent) {
-  const files = Array.from(event.dataTransfer?.files || []);
+  const files = Array.from(event.dataTransfer?.files);
   sendFile(files);
   handleDragLeave();
 }
 
 function handleFilePaste(event: ClipboardEvent) {
-  const files = Array.from(event.clipboardData?.items || [])
+  const files = Array.from(event.clipboardData?.items)
     .map(item => item.getAsFile())
     .filter(Boolean);
   if (files.length) {
@@ -224,7 +231,7 @@ function handleFilePaste(event: ClipboardEvent) {
 }
 
 async function handleAttachments(event: Event) {
-  const files = Array.from((event.target).files || []);
+  const files = Array.from(event.target.files);
   await sendFile(files);
 }
 
@@ -243,7 +250,7 @@ function selectAutocompleteOption({id}: { id: string }) {
     case AutocompleteOptions.QUICK_REPLIES:
       showQuickRepliesPanel();
       break;
-      default:console.warn(`Unknown autocomplete option selected: ${id}`);
+      default: console.warn(`Unknown autocomplete option selected: ${id}`);
   }
 }
 
@@ -254,8 +261,11 @@ function showQuickRepliesPanel() {
 }
 
 function inputMessage(text: string) {
-  inputQuickReply({text, draft: chat.value.draft});
-  chat.value.draft = text;
+  if(props.showQuickReplies) {
+    inputQuickReply({text, draft: chat.value.draft});
+  } else {
+    chat.value.draft = text;
+  }
   onAutocompleteInput(text);
 }
 
@@ -275,7 +285,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   eventBus?.$off('chat-input-focus', setDraftFocus);
-  hotkeyUnsubscribers.forEach(unsub => unsub());
+  hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
 });
 </script>
 

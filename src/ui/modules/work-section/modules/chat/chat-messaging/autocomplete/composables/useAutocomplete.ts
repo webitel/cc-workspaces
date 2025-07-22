@@ -19,8 +19,8 @@ export function useAutocomplete(options = []) {
   function onInput(value: string) {
     const idx = value.lastIndexOf('/');
     if (idx !== -1) {
-      open();
       search.value = value.slice(idx + 1);
+      open();
     } else {
       close();
     }

@@ -36,11 +36,7 @@ export function useQuickReplies({ emit, variables = []}) {
     // [https://webitel.atlassian.net/browse/WTEL-4923]
     // search is text that input after opening quickReplies panel,
     // and chat.draft value is ignored. Necessary when choosing more than 1 reply
-    if(search.value && text) {
-      search.value = text.replace(new RegExp(draft, 'g'), '').replace(/\s{2,}/g, ' ').trim();
-    } else {
-      search.value = '';
-    }
+    search.value = text ? text.replace(new RegExp(draft, 'g'), '').replace(/\s{2,}/g, ' ').trim() : '';
   }
 
   return {
