@@ -1,3 +1,6 @@
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
+
+import i18n from '../../../app/locale/i18n';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
@@ -10,33 +13,33 @@ const state = {
 };
 
 const getters = {
-  CALL_ON_WORKSPACE: (s, g, rS, rootGetters) => (
+  CALL_ON_WORKSPACE: (s, g, rS, rootGetters) =>
     rootGetters['workspace/IS_CALL_WORKSPACE'] &&
-    rootGetters['workspace/TASK_ON_WORKSPACE']
-  ),
+    rootGetters['workspace/TASK_ON_WORKSPACE'],
 
-  GET_CALL_BY_ID: (state) => (callId) => state.callList.find((call) => call.id ===
-    callId),
+  GET_CALL_BY_ID: (state) => (callId) =>
+    state.callList.find((call) => call.id === callId),
 
-  IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE &&
-    getters.CALL_ON_WORKSPACE._isNew,
+  IS_NEW_CALL: (state, getters) =>
+    getters.CALL_ON_WORKSPACE && getters.CALL_ON_WORKSPACE._isNew,
 
   GET_CURRENT_CALL_DIGITS: (state, getters) => {
-    if (getters.CALL_ON_WORKSPACE.digits
-      && getters.CALL_ON_WORKSPACE.digits.length) {
+    if (
+      getters.CALL_ON_WORKSPACE.digits &&
+      getters.CALL_ON_WORKSPACE.digits.length
+    ) {
       return getters.CALL_ON_WORKSPACE.digits;
     }
     return '';
   },
 
   // every returns true on empty array, so we have to check for array length
-  IS_ANY_RINGING: (state) => state.callList.length &&
+  IS_ANY_RINGING: (state) =>
+    state.callList.length &&
     state.callList.every((call) => isIncomingRinging(call)),
 
-  IS_OFFLINE_CALL: (
-    state,
-    getters,
-  ) => getters.CALL_ON_WORKSPACE.queue?.queue_type === 'offline',
+  IS_OFFLINE_CALL: (state, getters) =>
+    getters.CALL_ON_WORKSPACE.queue?.queue_type === 'offline',
 };
 
 const actions = {
@@ -52,7 +55,6 @@ const actions = {
 
   // destructuring arg in order to skip mouse events
   CALL: async (context, { user, number }) => {
-
     // deprecated from 20.02.2024. remove me in 6 months
     if (user) throw new Error('{ user } param for CALL is deprecated');
 
@@ -62,7 +64,8 @@ const actions = {
     if (number) {
       destination = number;
     } else {
-      destination = context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
+      destination =
+        context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
     }
 
     // eslint-disable-next-line no-useless-escape
@@ -97,8 +100,7 @@ const actions = {
       await call.blindTransfer(number);
       // context.commit('REMOVE_CALL', call);
       // context.dispatch('RESET_WORKSPACE');
-    } catch {
-    }
+    } catch {}
   },
 
   BRIDGE: async (context, callToBridge) => {
@@ -107,8 +109,7 @@ const actions = {
       await call.bridgeTo(callToBridge);
       // context.commit('REMOVE_CALL', call);
       // context.dispatch('RESET_WORKSPACE');
-    } catch {
-    }
+    } catch {}
   },
 
   TOGGLE_MUTE: async (context, { callId } = {}) => {
@@ -123,12 +124,10 @@ const actions = {
     const call = callId
       ? context.getters.GET_CALL_BY_ID(callId)
       : context.getters.CALL_ON_WORKSPACE;
-    if ((!call.isHold && call.allowHold)
-      || (call.isHold && call.allowUnHold)) {
+    if ((!call.isHold && call.allowHold) || (call.isHold && call.allowUnHold)) {
       try {
         await call.toggleHold();
-      } catch {
-      }
+      } catch {}
     }
   },
 
@@ -143,8 +142,7 @@ const actions = {
     if (call.allowDtmf) {
       try {
         await call.sendDTMF(value);
-      } catch {
-      }
+      } catch {}
     }
   },
 
@@ -155,7 +153,15 @@ const actions = {
     if (call.allowHangup) {
       try {
         await call.hangup();
-      } catch {
+
+        //TODO display notification by settings
+        eventBus.$emit('notification', {
+          type: 'error',
+          text: i18n.global.t('notification.callEnded', { name: 'myName' }),
+          timeout: 5, // TODO set timeout from settings
+        });
+      } catch (error) {
+        console.log('error on hangup', error);
       }
     }
   },
@@ -165,13 +171,11 @@ const actions = {
   },
 
   // new number destructuring to prevent mouse event
-  OPEN_NEW_CALL: (
-    context,
-    { newNumber } = {},
-  ) => context.dispatch('SET_WORKSPACE', {
-    _isNew: true,
-    newNumber: newNumber || '',
-  }),
+  OPEN_NEW_CALL: (context, { newNumber } = {}) =>
+    context.dispatch('SET_WORKSPACE', {
+      _isNew: true,
+      newNumber: newNumber || '',
+    }),
 
   CLOSE_NEW_CALL: (context) => context.dispatch('RESET_WORKSPACE'),
 
@@ -185,7 +189,7 @@ const actions = {
       const newNumber = call.newNumber + value;
 
       // cannot mutate newCall because its instance only on 'workspace' state
-       
+
       context.getters.CALL_ON_WORKSPACE.newNumber = newNumber;
     }
   },
@@ -195,7 +199,7 @@ const actions = {
     { call = context.getters.CALL_ON_WORKSPACE, value },
   ) => {
     // cannot mutate newCall because its instance only on 'workspace' state
-     
+
     call.newNumber = value;
   },
 
@@ -218,15 +222,18 @@ const actions = {
     if (value) context.commit('SET_VIDEO', JSON.parse(value));
   },
 
-  SET_WORKSPACE: (
-    context,
-    call,
-  ) => context.dispatch('workspace/SET_WORKSPACE_STATE', {
-    type: WorkspaceStates.CALL,
-    task: call,
-  }, { root: true }),
+  SET_WORKSPACE: (context, call) =>
+    context.dispatch(
+      'workspace/SET_WORKSPACE_STATE',
+      {
+        type: WorkspaceStates.CALL,
+        task: call,
+      },
+      { root: true },
+    ),
 
-  RESET_WORKSPACE: (context) => context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
+  RESET_WORKSPACE: (context) =>
+    context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
 };
 
 const mutations = {

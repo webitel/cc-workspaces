@@ -107,7 +107,8 @@ export default {
     },
   },
   notification: {
-    callEnded: 'Call ended text',
+    callEnded: 'Call ended text by {name}',
+    chatEnded: 'Chat ended text by {name}',
   },
   infoSec: {
     generalInfo: {

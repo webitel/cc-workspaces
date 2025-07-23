@@ -24,7 +24,8 @@
     <div
       v-if="dtmf"
       class="numpad-state__secondary-text"
-    >{{ dtmf.join('') }}</div>
+    >{{ dtmf.join('') }}
+    </div>
   </div>
 </template>
 
@@ -77,17 +78,6 @@ export default {
       }
       if (this.isCallActive) return activeSonar;
       return '';
-    },
-  },
-  watch: {
-    ['task.state']() {
-      if (this.task.state === CallActions.Hangup) {
-        this.$eventBus.$emit('notification', {
-          type: 'error',
-          text: this.$t('notification.callEnded'),
-          timeout: 20,
-        });
-      }
     },
   },
 };
