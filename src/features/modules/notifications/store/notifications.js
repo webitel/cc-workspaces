@@ -1,5 +1,10 @@
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
+import ConfigurationAPI from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import NotificationsStoreModule from '@webitel/ui-sdk/src/modules/Notifications/store/NotificationsStoreModule';
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
+import deepCopy from 'deep-copy';
+import zipObject from 'lodash/zipObject.js';
 import { CallActions } from 'webitel-sdk';
 
 import i18n from '../../../../app/locale/i18n';
@@ -8,6 +13,13 @@ const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
 const state = {
   isHangupSoundAllowed: false, // for prevent STOP_SOUND before we play hangup sound after call end
+  settings: null, // settings for notifications
+};
+
+const getters = {
+  GET_NOTIFICATION_SETTING: (state) => (key) => {
+    return state.settings[key];
+  },
 };
 
 const actions = {
@@ -30,6 +42,32 @@ const actions = {
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
 
+  LOAD_NOTIFICATION_SETTINGS: async (context) => {
+    const configurations = await ConfigurationAPI.getList({
+      name: [
+        EngineSystemSettingName.CallEndSoundNotification,
+        EngineSystemSettingName.CallEndPushNotification,
+        EngineSystemSettingName.ChatEndSoundNotification,
+        EngineSystemSettingName.ChatEndPushNotification,
+        EngineSystemSettingName.TaskEndSoundNotification,
+        EngineSystemSettingName.TaskEndPushNotification,
+        EngineSystemSettingName.PushNotificationTimeout,
+        EngineSystemSettingName.NewMessageSoundNotification,
+        EngineSystemSettingName.NewChatSoundNotification,
+      ],
+    });
+
+    if (!configurations?.items.length) return;
+
+    const keys = configurations?.items.map((config) => config.name);
+    const value = configurations?.items.map((config) => config.value);
+
+    context.commit('SET', {
+      path: 'settings',
+      value: deepCopy(zipObject(keys, value)), // create object from arrays by keys and values from configurations
+    });
+  },
+
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
     context.dispatch('PLAY_SOUND', { action });
     if (!document.hasFocus() && context.getters.IS_MAIN_TAB) {
@@ -49,21 +87,85 @@ const actions = {
   },
 
   HANDLE_CALL_END: async (context, call) => {
-    // TODO use this action for handle call end sound and message
+    console.log('call', call);
+    const isCallEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.CallEndPushNotification,
+    );
+    const isCallEndSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.CallEndSoundNotification,
+    );
+
     const isCallEndSound = localStorage.getItem('settings/callEndSound');
 
     await context.dispatch('STOP_SOUND'); // ringing
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    if (
-      call.state === CallActions.Hangup &&
-      isCallEndSound && // is sound allowed in settings
-      call.answeredAt // is call was answered
-    ) {
-      context.commit('SET_HANGUP_SOUND_ALLOW', true);
-      await context.dispatch('PLAY_SOUND', { action: call.state });
+    if (isCallEndPushNotification || isCallEndSound) {
+      eventBus.$emit('notification', {
+        type: 'error',
+        text: i18n.global.t('notification.chatEnded', {
+          name: call.displayName,
+        }),
+        timeout: 5, // TODO set timeout from settings
+      });
     }
+
+    if (isCallEndSoundNotification) {
+      // TODO implement sound notification
+    }
+
+    context.commit('SET_HANGUP_SOUND_ALLOW', true);
+    await context.dispatch('PLAY_SOUND', { action: call.state });
+
+    // if (
+    //   call.state === CallActions.Hangup &&
+    //   isCallEndSound && // is sound allowed in settings
+    //   call.answeredAt // is call was answered
+    // ) {
+    // }
+  },
+
+  HANDLE_CHAT_END: async (context, chat) => {
+    const displayChatName = () => {
+      if (chat?.members?.length) {
+        return chat?.members?.map((member) => member.name).join(', ');
+      }
+
+      if (chat?.title) {
+        return chat.title;
+      }
+
+      return 'unknown';
+    };
+
+    context.commit('SET_CURRENTLY_PLAYING', null);
+
+    eventBus.$emit('notification', {
+      type: 'error',
+      text: i18n.global.t('notification.chatEnded', {
+        name: displayChatName(),
+      }),
+      timeout: 5, // TODO set timeout from settings
+    });
+
+    context.commit('SET_HANGUP_SOUND_ALLOW', true);
+    await context.dispatch('PLAY_SOUND', { action: chat.state });
+  },
+
+  HANDLE_JOB_END: async (context, job) => {
+    context.commit('SET_CURRENTLY_PLAYING', null);
+
+    eventBus.$emit('notification', {
+      type: 'error',
+      text: i18n.global.t('notification.chatEnded', {
+        name: job.displayName,
+      }),
+      timeout: 5, // TODO set timeout from settings
+    });
+
+    context.commit('SET_HANGUP_SOUND_ALLOW', true);
+    await context.dispatch('PLAY_SOUND', { action: job.state });
   },
 
   // is called on ringing event on call store to send notification
@@ -143,6 +245,7 @@ const mutations = {
 const notifications = new NotificationsStoreModule().getModule({
   state,
   actions,
+  getters,
   mutations,
 });
 

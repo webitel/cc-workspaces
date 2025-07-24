@@ -93,19 +93,19 @@ const actions = {
   CLOSE: async (context) => {
     const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
     try {
-      console.log('chatOnWorkspace', chatOnWorkspace);
       if (chatOnWorkspace.allowLeave) {
         await chatOnWorkspace.leave();
       } else {
         await chatOnWorkspace.decline();
       }
 
-      //TODO display notification by settings
-      eventBus.$emit('notification', {
-        type: 'error',
-        text: i18n.global.t('notification.chatEnded', { name: 'myName' }),
-        timeout: 5, // TODO set timeout from settings
-      });
+      await context.dispatch(
+        'features/notifications/HANDLE_CHAT_END',
+        chatOnWorkspace,
+        {
+          root: true,
+        },
+      );
     } catch (err) {
       throw err;
     }

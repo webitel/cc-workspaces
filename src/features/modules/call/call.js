@@ -154,15 +154,11 @@ const actions = {
       try {
         await call.hangup();
 
-        //TODO display notification by settings
-        eventBus.$emit('notification', {
-          type: 'error',
-          text: i18n.global.t('notification.callEnded', { name: 'myName' }),
-          timeout: 5, // TODO set timeout from settings
+        await context.dispatch('features/notifications/HANDLE_CALL_END', call, {
+          root: true,
         });
-      } catch (error) {
-        console.log('error on hangup', error);
-      }
+        //TODO display notification by settings
+      } catch {}
     }
   },
 
