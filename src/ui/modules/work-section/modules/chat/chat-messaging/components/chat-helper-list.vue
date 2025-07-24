@@ -28,7 +28,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'select', item: ChatHelperItem): void;
+  select: [item: ChatHelperItem]
 }>();
 
 const select = (item) => {

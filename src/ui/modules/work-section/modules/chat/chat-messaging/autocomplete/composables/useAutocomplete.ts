@@ -16,15 +16,11 @@ export function useAutocomplete(options = []) {
     isOpenAutocomplete.value = false;
   }
 
-  function setSearch(value: string) {
-    search.value = value;
-  }
-
   function onInput(value: string) {
     const idx = value.lastIndexOf('/');
     if (idx !== -1) {
+      search.value = value.slice(idx + 1);
       open();
-      setSearch(value.slice(idx + 1));
     } else {
       close();
     }
@@ -32,6 +28,10 @@ export function useAutocomplete(options = []) {
 
   function onKeyDown(event: KeyboardEvent) {
     return event.key === '/' && open();
+  }
+
+  function onBlur() {
+    setTimeout(() => close(), 100);
   }
 
   return {
@@ -43,5 +43,6 @@ export function useAutocomplete(options = []) {
     close,
     onInput,
     onKeyDown,
+    onBlur,
   };
 }
