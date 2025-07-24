@@ -54,8 +54,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-  (e: 'select', item: ChatHelperItem): void;
+  close: [],
+  select: [item: ChatHelperItem]
 }>();
 
 const replies = ref<ChatHelperItem[]>([]);

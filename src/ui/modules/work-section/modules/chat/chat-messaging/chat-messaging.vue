@@ -103,7 +103,7 @@ import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
-import {ComponentSize} from '@webitel/ui-sdk';
+import {ComponentSize} from '@webitel/ui-sdk/enums';
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
@@ -130,7 +130,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-  (e: 'handle-quick-replies'): void;
+  handleQuickReplies: [boolean];
 }>();
 
 const { t } = useI18n();
@@ -175,7 +175,7 @@ const {
   input: inputQuickReply,
 } = useQuickReplies({ emit, variables: chat.value.variables });
 
-const hotkeyUnsubscribers = [];
+const hotkeyUnsubscribers = ref([]);
 
 function sendFile (files) {
   return store.dispatch('features/chat/SEND_FILE', files);
@@ -285,7 +285,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   eventBus?.$off('chat-input-focus', setDraftFocus);
-  hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
 
