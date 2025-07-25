@@ -20,6 +20,14 @@ const getters = {
   GET_NOTIFICATION_SETTING: (state) => (key) => {
     return state.settings[key];
   },
+  PUSH_NOTIFICATION_TIMEOUT: (state) => {
+    const notificationDefaultTimeout = 30;
+
+    return (
+      state.settings[EngineSystemSettingName.PushNotificationTimeout] ||
+      notificationDefaultTimeout
+    );
+  },
 };
 
 const actions = {
@@ -107,7 +115,7 @@ const actions = {
         text: i18n.global.t('notification.chatEnded', {
           name: call.displayName,
         }),
-        timeout: 5, // TODO set timeout from settings
+        timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
       });
     }
 
@@ -146,7 +154,7 @@ const actions = {
       text: i18n.global.t('notification.chatEnded', {
         name: displayChatName(),
       }),
-      timeout: 5, // TODO set timeout from settings
+      timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
     });
 
     context.commit('SET_HANGUP_SOUND_ALLOW', true);
@@ -161,7 +169,7 @@ const actions = {
       text: i18n.global.t('notification.chatEnded', {
         name: job.displayName,
       }),
-      timeout: 5, // TODO set timeout from settings
+      timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
     });
 
     context.commit('SET_HANGUP_SOUND_ALLOW', true);
