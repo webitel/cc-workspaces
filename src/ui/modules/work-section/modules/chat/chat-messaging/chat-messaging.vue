@@ -83,7 +83,7 @@
           :size="size"
           rounded
           wide
-          @click="$emit('handle-quick-replies', true)"
+          @click="handleQuickReplies"
         />
         <wt-rounded-action
           icon="chat-send"
@@ -267,6 +267,10 @@ function inputMessage(text: string) {
     chat.value.draft = text;
   }
   onAutocompleteInput(text);
+}
+
+function handleQuickReplies() {
+  return props.showQuickReplies ? closeQuickReplies() : openQuickReplies();
 }
 
 watch(chat, async () => {
