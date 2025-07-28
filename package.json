@@ -10,7 +10,8 @@
     "lint:fix-staged": "npx lint-staged",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "utils:i": "npm install --install-links"
+    "utils:i": "npm install --install-links",
+    "utils:up-libs": "npm update @webitel/ui-sdk && npm ls @webitel/ui-sdk"
   },
   "type": "module",
   "dependencies": {
@@ -19,7 +20,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.4.1",
-    "@webitel/api-services": "^0.0.30",
+    "@webitel/api-services": "=0.0.36",
     "@webitel/ui-sdk": "~25.8",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",
