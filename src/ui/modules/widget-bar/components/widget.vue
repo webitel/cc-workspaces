@@ -6,7 +6,7 @@
   >
     <wt-checkbox
       v-show="selectionMode"
-      v-model:show="showValue"
+      v-model:selected="showValue"
       class="widget-checkbox"
     />
 
