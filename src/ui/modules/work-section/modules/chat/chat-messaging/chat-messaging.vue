@@ -243,6 +243,7 @@ function closeQuickRepliesPanel() {
 function applyQuickReply({ text }) {
   const replacedText = selectQuickReply(text);
   chat.value.draft = chat.value.draft ? `${chat.value.draft} ${replacedText}` : replacedText;
+  setDraftFocus();
 }
 
 function selectAutocompleteOption({id}: { id: string }) {
