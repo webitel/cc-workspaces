@@ -33,19 +33,27 @@ const getters = {
 const actions = {
   // utils
   HANDLE_CHAT_EVENT: (context, { action, chat }) => {
-    context.dispatch('PLAY_SOUND', { action });
-    if (
-      (!document.hasFocus() ||
-        context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !==
-          chat.channelId) &&
-      context.getters.IS_MAIN_TAB
-    ) {
-      const name =
-        getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
-      const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
-        name,
-      });
-      context.dispatch('SEND_NOTIFICATION', { text });
+    // split event by incoming chat and incoming message
+    const isNewMessageSoundNotification =
+      context.getters.GET_NOTIFICATION_SETTING(
+        EngineSystemSettingName.NewMessageSoundNotification,
+      );
+
+    if (isNewMessageSoundNotification) {
+      context.dispatch('PLAY_SOUND', { action });
+      if (
+        (!document.hasFocus() ||
+          context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !==
+            chat.channelId) &&
+        context.getters.IS_MAIN_TAB
+      ) {
+        const name =
+          getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
+        const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
+          name,
+        });
+        context.dispatch('SEND_NOTIFICATION', { text });
+      }
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
@@ -95,7 +103,6 @@ const actions = {
   },
 
   HANDLE_CALL_END: async (context, call) => {
-    console.log('call', call);
     const isCallEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
       EngineSystemSettingName.CallEndPushNotification,
     );
@@ -109,12 +116,16 @@ const actions = {
     localStorage.removeItem('wtIsPlaying');
     context.commit('SET_CURRENTLY_PLAYING', null);
 
+    const text = i18n.global.t('notification.callEnded', {
+      name: call.displayName,
+      interval: context.getters.PUSH_NOTIFICATION_TIMEOUT * 1000,
+    });
+
     if (isCallEndPushNotification || isCallEndSound) {
+      context.dispatch('SEND_NOTIFICATION', { text });
       eventBus.$emit('notification', {
         type: 'error',
-        text: i18n.global.t('notification.chatEnded', {
-          name: call.displayName,
-        }),
+        text,
         timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
       });
     }
@@ -135,6 +146,13 @@ const actions = {
   },
 
   HANDLE_CHAT_END: async (context, chat) => {
+    const isChatEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.ChatEndPushNotification,
+    );
+    const isChatEndSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.ChatEndSoundNotification,
+    );
+
     const displayChatName = () => {
       if (chat?.members?.length) {
         return chat?.members?.map((member) => member.name).join(', ');
@@ -149,28 +167,47 @@ const actions = {
 
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    eventBus.$emit('notification', {
-      type: 'error',
-      text: i18n.global.t('notification.chatEnded', {
-        name: displayChatName(),
-      }),
-      timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
+    const text = i18n.global.t('notification.chatEnded', {
+      name: displayChatName(),
+      interval: context.getters.PUSH_NOTIFICATION_TIMEOUT * 1000,
     });
+
+    if (isChatEndPushNotification) {
+      context.dispatch('SEND_NOTIFICATION', { text });
+      eventBus.$emit('notification', {
+        type: 'error',
+        text,
+        timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
+      });
+    }
 
     context.commit('SET_HANGUP_SOUND_ALLOW', true);
     await context.dispatch('PLAY_SOUND', { action: chat.state });
   },
 
   HANDLE_JOB_END: async (context, job) => {
+    const isJobEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.TaskEndPushNotification,
+    );
+    const isJobEndSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.TaskEndSoundNotification,
+    );
+
     context.commit('SET_CURRENTLY_PLAYING', null);
 
-    eventBus.$emit('notification', {
-      type: 'error',
-      text: i18n.global.t('notification.chatEnded', {
-        name: job.displayName,
-      }),
-      timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
+    const text = i18n.global.t('notification.jobEnded', {
+      name: job.displayName,
+      interval: context.getters.PUSH_NOTIFICATION_TIMEOUT * 1000,
     });
+
+    if (isJobEndPushNotification) {
+      context.dispatch('SEND_NOTIFICATION', { text });
+      eventBus.$emit('notification', {
+        type: 'error',
+        text,
+        timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
+      });
+    }
 
     context.commit('SET_HANGUP_SOUND_ALLOW', true);
     await context.dispatch('PLAY_SOUND', { action: job.state });
