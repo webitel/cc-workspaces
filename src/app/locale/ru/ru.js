@@ -107,8 +107,9 @@ export default {
     },
   },
   notification: {
-    callEnded: 'Call ended text by {name}',
-    chatEnded: 'Chat ended text by {name}',
+    callEnded: 'Звонок с {name} окончен',
+    chatEnded: 'Чат с {name} закрыт',
+    jobEnded: 'Задача “{name}“ закончена',
   },
   infoSec: {
     generalInfo: {

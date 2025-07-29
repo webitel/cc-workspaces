@@ -1,11 +1,10 @@
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import ConfigurationAPI from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
-import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import NotificationsStoreModule from '@webitel/ui-sdk/src/modules/Notifications/store/NotificationsStoreModule';
 import { snakeToCamel } from '@webitel/ui-sdk/src/scripts/caseConverters';
 import deepCopy from 'deep-copy';
 import zipObject from 'lodash/zipObject.js';
-import { CallActions } from 'webitel-sdk';
+import { CallActions, ChatActions } from 'webitel-sdk';
 
 import i18n from '../../../../app/locale/i18n';
 
@@ -38,22 +37,29 @@ const actions = {
       context.getters.GET_NOTIFICATION_SETTING(
         EngineSystemSettingName.NewMessageSoundNotification,
       );
+    const isNewChatSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
+      EngineSystemSettingName.NewChatSoundNotification,
+    );
 
-    if (isNewMessageSoundNotification) {
+    if (
+      (isNewChatSoundNotification && action === ChatActions.UserInvite) ||
+      (isNewMessageSoundNotification && action === ChatActions.Message)
+    ) {
       context.dispatch('PLAY_SOUND', { action });
-      if (
-        (!document.hasFocus() ||
-          context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !==
-            chat.channelId) &&
-        context.getters.IS_MAIN_TAB
-      ) {
-        const name =
-          getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
-        const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
-          name,
-        });
-        context.dispatch('SEND_NOTIFICATION', { text });
-      }
+    }
+
+    if (
+      (!document.hasFocus() ||
+        context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !==
+          chat.channelId) &&
+      context.getters.IS_MAIN_TAB
+    ) {
+      const name =
+        getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
+      const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
+        name,
+      });
+      context.dispatch('SEND_NOTIFICATION', { text });
     }
     context.dispatch('INCREMENT_UNREAD_COUNT');
   },
@@ -121,28 +127,16 @@ const actions = {
       interval: context.getters.PUSH_NOTIFICATION_TIMEOUT * 1000,
     });
 
-    if (isCallEndPushNotification || isCallEndSound) {
-      context.dispatch('SEND_NOTIFICATION', { text });
-      eventBus.$emit('notification', {
-        type: 'error',
-        text,
-        timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
-      });
+    if (call.state === CallActions.Hangup) {
+      if (isCallEndPushNotification || isCallEndSound) {
+        context.dispatch('SEND_NOTIFICATION', { text });
+      }
+
+      if (isCallEndSoundNotification || isCallEndSound) {
+        context.commit('SET_HANGUP_SOUND_ALLOW', true);
+        await context.dispatch('PLAY_SOUND', { action: call.state });
+      }
     }
-
-    if (isCallEndSoundNotification) {
-      // TODO implement sound notification
-    }
-
-    context.commit('SET_HANGUP_SOUND_ALLOW', true);
-    await context.dispatch('PLAY_SOUND', { action: call.state });
-
-    // if (
-    //   call.state === CallActions.Hangup &&
-    //   isCallEndSound && // is sound allowed in settings
-    //   call.answeredAt // is call was answered
-    // ) {
-    // }
   },
 
   HANDLE_CHAT_END: async (context, chat) => {
@@ -174,11 +168,6 @@ const actions = {
 
     if (isChatEndPushNotification) {
       context.dispatch('SEND_NOTIFICATION', { text });
-      eventBus.$emit('notification', {
-        type: 'error',
-        text,
-        timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
-      });
     }
 
     context.commit('SET_HANGUP_SOUND_ALLOW', true);
@@ -202,15 +191,13 @@ const actions = {
 
     if (isJobEndPushNotification) {
       context.dispatch('SEND_NOTIFICATION', { text });
-      eventBus.$emit('notification', {
-        type: 'error',
-        text,
-        timeout: context.getters.PUSH_NOTIFICATION_TIMEOUT,
-      });
     }
 
     context.commit('SET_HANGUP_SOUND_ALLOW', true);
-    await context.dispatch('PLAY_SOUND', { action: job.state });
+
+    if (isJobEndSoundNotification) {
+      await context.dispatch('PLAY_SOUND', { action: job.state });
+    }
   },
 
   // is called on ringing event on call store to send notification
