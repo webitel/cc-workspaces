@@ -20,7 +20,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.4.1",
-    "@webitel/api-services": "^0.0.33",
+    "@webitel/api-services": "=0.0.36",
     "@webitel/ui-sdk": "~25.8",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",

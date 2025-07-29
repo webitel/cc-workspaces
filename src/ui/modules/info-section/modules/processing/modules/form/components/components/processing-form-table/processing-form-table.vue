@@ -79,6 +79,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  fields: {
+    type: Array,
+    default: () => [],
+  },
   actions: {
     type: Array,
     default: () => [],
@@ -105,6 +109,7 @@ const isSystemSource = computed(() => props.table?.isSystemSource);
 const systemSourcePath = computed(() => props.table?.systemSource?.path);
 
 const filters = computed(() => props?.filters || []);
+const tableFields = computed(() => props?.fields || []);
 
 function getPathArray(path) {
   // @author @liza-pohranichna
@@ -192,12 +197,11 @@ async function getDataList() {
       path: systemSourcePath.value,
       filters: filters.value,
       page: currentTablePage.value,
-      fields: fields.value,
+      fields: [...fields.value, ...tableFields.value],
     });
 
     return { items, next };
   } catch (error) {
-
     eventBus.$emit('notification', {
       type: 'error',
       text: t('infoSec.processing.form.formTable.error'),

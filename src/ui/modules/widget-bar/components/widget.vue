@@ -6,9 +6,9 @@
   >
     <wt-checkbox
       v-show="selectionMode"
+      v-model:selected="showValue"
       class="widget-checkbox"
-      :selected="show">
-    </wt-checkbox>
+    />
 
     <wt-icon
       class="widget-icon"
@@ -49,6 +49,11 @@ export default {
     iconWidgetName() {
       return this.widget.icon.split('-').slice(1).join('-');
     },
+    showValue: {
+      get() {
+        return this.show;
+      }
+    }
   },
 
   methods: {
