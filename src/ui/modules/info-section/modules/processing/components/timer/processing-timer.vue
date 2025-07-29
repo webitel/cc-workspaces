@@ -5,15 +5,13 @@
       :max="processingEndSec"
       :value="processingProgressSec"
     >
-      <wt-tooltip v-show="showRenewalButton">
-        <template #activator>
-          <wt-icon-btn
-            icon="plus"
-            @click="handleClick"
-          ></wt-icon-btn>
-        </template>
-        {{ renewalTooltip }}
-      </wt-tooltip>
+      <wt-icon-btn
+        v-show="showRenewalButton"
+        v-tooltip="renewalTooltip"
+        icon="plus"
+        @click="handleClick"
+      ></wt-icon-btn>
+
       <span
         v-show="!showRenewalButton"
       >{{ processingSecLeft }}</span>

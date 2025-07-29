@@ -19,14 +19,17 @@
         <slot name="icon-status"></slot>
       </div>
 
-      <wt-tooltip>
-        <template #activator>
-          <wt-icon-btn
-            color="info"
-            icon="rounded-info"
-            size="sm"
-          ></wt-icon-btn>
+      <wt-popover>
+        <template #activator="{ show, hide }">
+          <div @pointerenter="show" @pointerleave="hide">
+            <wt-icon-btn
+              color="info"
+              icon="rounded-info"
+              size="sm"
+            ></wt-icon-btn>
+          </div>
         </template>
+
         <div class="queue-preview-tooltip-content">
           <span
             v-if="$slots['tooltip-title']"
@@ -49,7 +52,7 @@
             </wt-chip>
           </div>
         </div>
-      </wt-tooltip>
+      </wt-popover>
     </header>
 
     <section class="queue-preview-avatar">
