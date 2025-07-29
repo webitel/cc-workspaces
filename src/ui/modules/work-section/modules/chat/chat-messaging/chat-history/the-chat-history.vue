@@ -1,10 +1,13 @@
 <template>
-  <article class="chat-history chat-messages-container" @click="focusOnInput">
+  <article
+    v-element-size="handleChatResize"
+    class="chat-history chat-messages-container"
+    @click="focusOnInput"
+  >
     <div
-      ref="chatContainer"
+      ref="chat-container"
       class="chat-history__messages chat-messages-items"
       @scroll="handleChatScroll"
-      @resize="updateThreshold"
     >
       <div class="chat-history__observer-wrapper">
         <wt-intersection-observer
@@ -16,7 +19,6 @@
       <message
         v-for="(message, index) of messages"
         :key="message.id"
-        class="chat-message"
         :message="message"
         :size="props.size"
         :show-avatar="showAvatar(index) || isChatStarted(index)"
@@ -60,7 +62,7 @@
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -70,6 +72,7 @@ import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
 import { useChatScroll } from '../composables/useChatScroll';
 import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages';
+import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
 
 const props = defineProps({
   contact: {
@@ -87,7 +90,7 @@ const store = useStore();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
-const chatContainer = ref(null);
+const chatContainer = useTemplateRef('chat-container');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null);  // message on top of the chat
 
@@ -106,7 +109,7 @@ const {
   newUnseenMessages,
   scrollToBottom,
   handleChatScroll,
-  updateThreshold,
+  handleChatResize,
 } = useChatScroll(chatContainer);
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
@@ -130,6 +133,7 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
+  if (!message || !message.chat) return {};
   const { via } = message.chat || message.member; // chat history or current chat gateway
   return via
     ? { type: via.type, name: via.name }
