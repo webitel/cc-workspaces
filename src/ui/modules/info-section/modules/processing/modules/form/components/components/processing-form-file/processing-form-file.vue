@@ -37,34 +37,32 @@
         ></wt-icon>
       </aside>
       <div class="processing-form-file__actions-wrapper">
-        <wt-tooltip v-if="readonly">
-          <template #activator>
-            <wt-icon-btn
-              icon="download"
-              @click="downloadAll"
-            ></wt-icon-btn>
-          </template>
-          {{ $t('reusable.downloadAll') }}
-        </wt-tooltip>
-        <wt-tooltip
+        <wt-icon-btn
+          v-if="readonly"
+          v-tooltip="$t('reusable.downloadAll')"
+          icon="download"
+          @click="downloadAll"
+        ></wt-icon-btn>
+
+        <div
           v-if="!readonly"
+          v-tooltip="$t('reusable.import')"
           class="processing-form-file-attach"
         >
-          <template #activator>
-            <wt-icon-btn
-              icon="attach"
-              @click="$refs['file-input'].click()"
-            ></wt-icon-btn>
-            <input
-              ref="file-input"
-              class="processing-form-file-attach__input"
-              multiple
-              type="file"
-              @input="handleFileInput"
-            >
-          </template>
-          {{ $t('reusable.import') }}
-        </wt-tooltip>
+          <wt-icon-btn
+            icon="attach"
+            @click="$refs['file-input'].click()"
+          ></wt-icon-btn>
+
+          <input
+            ref="file-input"
+            class="processing-form-file-attach__input"
+            multiple
+            type="file"
+            @input="handleFileInput"
+          >
+        </div>
+
         <wt-icon-btn
           v-show="collapsible || !collapsed"
           :icon="collapsed ? 'arrow-right' : 'arrow-down'"
@@ -162,10 +160,10 @@ export default {
     async downloadAll() {
       const zip = new JSZip();
       const cli = await this.client.getCliInstance();
-       
+
       for (const { name, id } of this.value) {
         const url = cli.fileUrlDownload(id);
-         
+
         await new Promise((resolve, reject) => {
           jszipUtils.getBinaryContent(url, (err, file) => {
             if (err) reject(err);
@@ -205,7 +203,7 @@ export default {
     },
 
     handleFileSuccessUpload({ snapshot, file }) {
-       
+
       snapshot.metadata.done = true;
 
       setTimeout(() => {
@@ -215,11 +213,11 @@ export default {
     },
 
     handleFileErrorUpload({ snapshot }) {
-       
+
       snapshot.metadata.error = true;
 
       setTimeout(() => {
-         
+
         snapshot.metadata.close = () => (
           this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1)
         );
