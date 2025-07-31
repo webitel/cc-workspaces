@@ -314,5 +314,9 @@ export default {
   confirmationPopup: {
     title: 'Harakatni tasdiqlang',
   },
+  autocompleteList: {
+    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Chatda tezkor javoblar menyusini ochadi'
+  }
 };
 
