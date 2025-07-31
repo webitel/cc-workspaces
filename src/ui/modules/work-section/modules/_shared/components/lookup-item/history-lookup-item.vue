@@ -47,11 +47,13 @@
           :visible="isContextMenuVisible"
           @click="$event.option.handler()"
         >
-          <template #activator>
-            <wt-icon
-              icon="options"
-              :size="size"
-            />
+          <template #activator="{ toggle }">
+            <div @click="toggle">
+              <wt-icon
+                icon="options"
+                :size="size"
+              />
+            </div>
           </template>
           <template #option="option">
             <div class="history-lookup-item-options__card">
