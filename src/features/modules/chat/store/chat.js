@@ -100,7 +100,7 @@ const actions = {
       }
 
       await context.dispatch(
-        'features/notifications/HANDLE_CHAT_END',
+        'features/chatNotification/HANDLE_CHAT_END',
         chatOnWorkspace,
         {
           root: true,

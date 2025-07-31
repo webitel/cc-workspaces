@@ -8,8 +8,6 @@ import { CallActions, ChatActions } from 'webitel-sdk';
 
 import i18n from '../../../../app/locale/i18n';
 
-const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
-
 const state = {
   isHangupSoundAllowed: false, // for prevent STOP_SOUND before we play hangup sound after call end
   settings: null, // settings for notifications
@@ -17,7 +15,7 @@ const state = {
 
 const getters = {
   GET_NOTIFICATION_SETTING: (state) => (key) => {
-    return state.settings[key];
+    return state.settings ? state?.settings[key] : null;
   },
   PUSH_NOTIFICATION_TIMEOUT: (state) => {
     const notificationDefaultTimeout = 30;
@@ -30,40 +28,6 @@ const getters = {
 };
 
 const actions = {
-  // utils
-  HANDLE_CHAT_EVENT: (context, { action, chat }) => {
-    // split event by incoming chat and incoming message
-    const isNewMessageSoundNotification =
-      context.getters.GET_NOTIFICATION_SETTING(
-        EngineSystemSettingName.NewMessageSoundNotification,
-      );
-    const isNewChatSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
-      EngineSystemSettingName.NewChatSoundNotification,
-    );
-
-    if (
-      (isNewChatSoundNotification && action === ChatActions.UserInvite) ||
-      (isNewMessageSoundNotification && action === ChatActions.Message)
-    ) {
-      context.dispatch('PLAY_SOUND', { action });
-    }
-
-    if (
-      (!document.hasFocus() ||
-        context.rootGetters['workspace/TASK_ON_WORKSPACE'].channelId !==
-          chat.channelId) &&
-      context.getters.IS_MAIN_TAB
-    ) {
-      const name =
-        getLastMessage(chat)?.member?.name || chat.messages[0].member.name;
-      const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
-        name,
-      });
-      context.dispatch('SEND_NOTIFICATION', { text });
-    }
-    context.dispatch('INCREMENT_UNREAD_COUNT');
-  },
-
   LOAD_NOTIFICATION_SETTINGS: async (context) => {
     const configurations = await ConfigurationAPI.getList({
       name: [
@@ -90,18 +54,6 @@ const actions = {
     });
   },
 
-  HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
-    context.dispatch('PLAY_SOUND', { action });
-    if (!document.hasFocus() && context.getters.IS_MAIN_TAB) {
-      const name = job.displayName;
-      const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
-        name,
-      });
-      context.dispatch('SEND_NOTIFICATION', { text });
-    }
-    context.dispatch('INCREMENT_UNREAD_COUNT');
-  },
-
   HANDLE_CALL_START: async (context) => {
     await context.dispatch('STOP_SOUND'); // ringing
     localStorage.setItem('wtIsPlaying', 'true');
@@ -109,6 +61,8 @@ const actions = {
   },
 
   HANDLE_CALL_END: async (context, call) => {
+    console.log('context call end', context.state);
+
     const isCallEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
       EngineSystemSettingName.CallEndPushNotification,
     );
@@ -136,67 +90,6 @@ const actions = {
         context.commit('SET_HANGUP_SOUND_ALLOW', true);
         await context.dispatch('PLAY_SOUND', { action: call.state });
       }
-    }
-  },
-
-  HANDLE_CHAT_END: async (context, chat) => {
-    const isChatEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
-      EngineSystemSettingName.ChatEndPushNotification,
-    );
-    const isChatEndSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
-      EngineSystemSettingName.ChatEndSoundNotification,
-    );
-
-    const displayChatName = () => {
-      if (chat?.members?.length) {
-        return chat?.members?.map((member) => member.name).join(', ');
-      }
-
-      if (chat?.title) {
-        return chat.title;
-      }
-
-      return 'unknown';
-    };
-
-    context.commit('SET_CURRENTLY_PLAYING', null);
-
-    const text = i18n.global.t('notification.chatEnded', {
-      name: displayChatName(),
-      interval: context.getters.PUSH_NOTIFICATION_TIMEOUT * 1000,
-    });
-
-    if (isChatEndPushNotification) {
-      context.dispatch('SEND_NOTIFICATION', { text });
-    }
-
-    context.commit('SET_HANGUP_SOUND_ALLOW', true);
-    await context.dispatch('PLAY_SOUND', { action: chat.state });
-  },
-
-  HANDLE_JOB_END: async (context, job) => {
-    const isJobEndPushNotification = context.getters.GET_NOTIFICATION_SETTING(
-      EngineSystemSettingName.TaskEndPushNotification,
-    );
-    const isJobEndSoundNotification = context.getters.GET_NOTIFICATION_SETTING(
-      EngineSystemSettingName.TaskEndSoundNotification,
-    );
-
-    context.commit('SET_CURRENTLY_PLAYING', null);
-
-    const text = i18n.global.t('notification.jobEnded', {
-      name: job.displayName,
-      interval: context.getters.PUSH_NOTIFICATION_TIMEOUT * 1000,
-    });
-
-    if (isJobEndPushNotification) {
-      context.dispatch('SEND_NOTIFICATION', { text });
-    }
-
-    context.commit('SET_HANGUP_SOUND_ALLOW', true);
-
-    if (isJobEndSoundNotification) {
-      await context.dispatch('PLAY_SOUND', { action: job.state });
     }
   },
 
