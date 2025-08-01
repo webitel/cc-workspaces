@@ -100,8 +100,8 @@ const actions = {
   },
 };
 
-const chatNotification = createBaseStoreModule({
+const chatNotifications = createBaseStoreModule({
   actions,
 });
 
-export default chatNotification;
+export default chatNotifications;

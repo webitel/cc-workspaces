@@ -80,7 +80,7 @@ const actions = {
   },
   HANDLE_CHAT_EVENT: (context, { action, chat }) =>
     context.dispatch(
-      'features/chatNotification/HANDLE_CHAT_EVENT',
+      'features/chatNotifications/HANDLE_CHAT_EVENT',
       {
         action,
         chat,

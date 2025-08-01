@@ -25,7 +25,7 @@ const actions = {
   },
   REMOVE_JOB: async (context, job) => {
     context.commit('REMOVE_JOB', job);
-    await context.dispatch('features/jobNotification/HANDLE_JOB_END', job, {
+    await context.dispatch('features/jobNotifications/HANDLE_JOB_END', job, {
       root: true,
     });
     if (job === context.getters.JOB_ON_WORKSPACE)

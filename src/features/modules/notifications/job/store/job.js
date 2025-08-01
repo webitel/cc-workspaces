@@ -45,7 +45,11 @@ const actions = {
     }
   },
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
-    context.dispatch('PLAY_SOUND', { action });
+    context.dispatch(
+      'features/notifications/PLAY_SOUND',
+      { action },
+      { root: true },
+    );
     if (
       !document.hasFocus() &&
       context.rootGetters['features/notifications/IS_MAIN_TAB']
@@ -66,8 +70,8 @@ const actions = {
   },
 };
 
-const jobNotification = createBaseStoreModule({
+const jobNotifications = createBaseStoreModule({
   actions,
 });
 
-export default jobNotification;
+export default jobNotifications;

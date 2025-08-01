@@ -16,8 +16,6 @@ const actions = {
   },
 
   HANDLE_CALL_END: async (context, call) => {
-    console.log('context call end', context.state);
-
     const isCallEndPushNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.CallEndPushNotification);
@@ -43,6 +41,7 @@ const actions = {
     });
 
     if (call.state === CallActions.Hangup) {
+      // We check option by admin settings and after user setting for check if we need to send notification
       if (isCallEndPushNotification || isCallEndSound) {
         context.dispatch(
           'features/notifications/SEND_NOTIFICATION',
@@ -51,9 +50,16 @@ const actions = {
         );
       }
 
+      // We check option by admin settings and after user setting for check if we need to play sound
       if (isCallEndSoundNotification || isCallEndSound) {
-        context.commit('SET_HANGUP_SOUND_ALLOW', true);
-        await context.dispatch('PLAY_SOUND', { action: call.state });
+        context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
+          root: true,
+        });
+        await context.dispatch(
+          'features/notifications/PLAY_SOUND',
+          { action: call.state },
+          { root: true },
+        );
       }
     }
   },
@@ -110,20 +116,26 @@ const actions = {
       parseFloat(localStorage.getItem('settings/ringtone-volume')) || 1.0;
 
     const playSound = () =>
-      context.dispatch('PLAY_SOUND', {
-        action: CallActions.Ringing,
-        sound: customRingtone,
-        volume: ringtoneVolume,
-      });
+      context.dispatch(
+        'features/notifications/PLAY_SOUND',
+        {
+          action: CallActions.Ringing,
+          sound: customRingtone,
+          volume: ringtoneVolume,
+        },
+        { root: true },
+      );
 
     // sometimes we need to wait when call end sound is finished before playing ringtone
     // https://webitel.atlassian.net/browse/WTEL-4918
-    context.state.currentlyPlaying ? setTimeout(playSound, 1000) : playSound();
+    context.rootState['features/notifications/currentlyPlaying']
+      ? setTimeout(playSound, 1000)
+      : playSound();
   },
 };
 
-const callNotification = createBaseStoreModule({
+const callNotifications = createBaseStoreModule({
   actions,
 });
 
-export default callNotification;
+export default callNotifications;

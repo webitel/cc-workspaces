@@ -3,7 +3,6 @@ import { JobState } from 'webitel-sdk';
 import OpenLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
 const handler = (context) => (action, job) => {
-  console.log('action', action);
   switch (action) {
     case JobState.Distribute:
       context.dispatch('HANDLE_DISTRIBUTE_ACTION', { action, job });
@@ -15,7 +14,6 @@ const handler = (context) => (action, job) => {
       context.dispatch('HANDLE_DESTROY_ACTION', { action, job });
       break;
     default:
-    // console.log('default', action);
   }
 };
 
@@ -29,7 +27,7 @@ const actions = {
   HANDLE_DISTRIBUTE_ACTION: async (context, { action, job }) => {
     context.commit('ADD_JOB', job);
     await context.dispatch(
-      'features/jobNotification/HANDLE_JOB_DISTRIBUTE',
+      'features/jobNotifications/HANDLE_JOB_DISTRIBUTE',
       {
         action,
         job,
