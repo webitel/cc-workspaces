@@ -2,22 +2,22 @@
   <header
     class="task-header"
     :class="[`task-header--${size}`]"
-    >
+  >
     <div class="task-header-actions">
       <div class="task-header-actions__action-section">
-        <slot name="before-avatar"/>
+        <slot name="before-avatar" />
       </div>
-      <wt-avatar :size="size" :username="username"/>
+      <wt-avatar :size="size" :username="username" />
       <div class="task-header-actions__action-section">
-        <slot name="after-avatar"/>
+        <slot name="after-avatar" />
       </div>
     </div>
     <div class="task-header-info">
       <p class="task-header-info__title">
-        <slot name="title"/>
+        <slot name="title" />
       </p>
       <p class="task-header-info__subtitle">
-        <slot name="subtitle"/>
+        <slot name="subtitle" />
       </p>
     </div>
   </header>
@@ -74,7 +74,7 @@ export default {
   }
 
   &--sm {
-    .task-header-actions{
+    .task-header-actions {
       grid-template-columns: 1fr 32px 1fr;
     }
   }

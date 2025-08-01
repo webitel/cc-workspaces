@@ -17,13 +17,13 @@ import { useUserinfoStore } from './ui/modules/userinfo/userinfoStore';
 const setTokenFromUrl = () => {
   try {
     const queryMap = window.location.search
-        .slice(1)
-        .split('&')
-        .reduce((obj, query) => {
-          const [key, value] = query.split('=');
-          obj[key] = value;
-          return obj;
-        }, {});
+      .slice(1)
+      .split('&')
+      .reduce((obj, query) => {
+        const [key, value] = query.split('=');
+        obj[key] = value;
+        return obj;
+      }, {});
 
     if (queryMap.accessToken) {
       localStorage.setItem('access-token', queryMap.accessToken);
@@ -90,6 +90,7 @@ const initApp = async () => {
     config = await fetchConfig();
     await store.dispatch('SET_CONFIG', config);
     localStorage.setItem('CONFIG', JSON.stringify(config));
+    await store.dispatch('features/notifications/LOAD_NOTIFICATION_SETTINGS');
   } finally {
     const app = await initApp();
     app.provide('$config', config);

@@ -106,6 +106,11 @@ export default {
       },
     },
   },
+  notification: {
+    callEnded: 'The call with {name} has ended',
+    chatEnded: 'The chat with {name} has ended',
+    jobEnded: 'The task "{name}" has ended',
+  },
   infoSec: {
     generalInfo: {
       generalInfo: 'General info',
@@ -322,7 +327,9 @@ export default {
     title: 'Confirm action',
   },
   autocompleteList: {
-    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Opens a menu of pre-set quick replies for chat responses'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription:
+      'Opens a menu of pre-set quick replies for chat responses',
+  },
 };

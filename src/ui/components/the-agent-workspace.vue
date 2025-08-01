@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import WebitelApplications from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import WebitelApplications
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { mapActions, mapGetters } from 'vuex';
 
 import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
@@ -105,7 +106,10 @@ export default {
         }
       } catch (err) {
         if (!this.$route.query.failureRefresh) {
-          await this.$router.push({ ...this.$router.currentRoute, query: { failureRefresh: 'true' } });
+          await this.$router.push({
+            ...this.$router.currentRoute,
+            query: { failureRefresh: 'true' },
+          });
           document.location.reload();
         }
       } finally {
