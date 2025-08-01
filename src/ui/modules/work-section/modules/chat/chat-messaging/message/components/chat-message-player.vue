@@ -37,6 +37,7 @@ export default {
 
 <style lang="scss" scoped>
 .chat-message-player {
+  min-height: var(--player-audio-height);
   .wt-player :deep(.plyr) {
     .wt-player__close-icon,
     //.plyr__menu,

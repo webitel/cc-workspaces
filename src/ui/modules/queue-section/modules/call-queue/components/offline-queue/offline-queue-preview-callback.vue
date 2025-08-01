@@ -21,13 +21,14 @@
         :options="options"
         max-width="300px"
       >
-        <template #activator>
+        <template #activator="{ toggle }">
           <wt-rounded-action
             :size="size"
             color="success"
             icon="call--filled"
             :loading="showLoader"
             rounded
+            @click="toggle"
           />
         </template>
         <template #option="{ text, communicationId }">

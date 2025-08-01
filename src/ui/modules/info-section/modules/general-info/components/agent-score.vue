@@ -26,19 +26,14 @@
               {{ $t('widgets.scoreAvg') }}
             </div>
             <div class="agent-score-item__value-tooltip">
-              <wt-tooltip>
-                <template #activator>
-                  <div class="agent-score-item__value">
-                    <wt-icon
-                      icon="widget-score-avg"
-                      icon-prefix="ws"
-                      :size="size"
-                    ></wt-icon>
-                    {{ (+scoreAvg || 0).toFixed(2) }}
-                  </div>
-                </template>
-                {{ scoreAvg || 0 }}
-              </wt-tooltip>
+              <div v-tooltip.left="(scoreAvg || 0).toString()" class="agent-score-item__value">
+                <wt-icon
+                  icon="widget-score-avg"
+                  icon-prefix="ws"
+                  :size="size"
+                ></wt-icon>
+                {{ (+scoreAvg || 0).toFixed(2) }}
+              </div>
             </div>
           </li>
         </ul>

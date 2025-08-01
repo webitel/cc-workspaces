@@ -322,4 +322,8 @@ export default {
   confirmationPopup: {
     title: 'Әрекетті растаңыз',
   },
+  autocompleteList: {
+    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады'
+  }
 };

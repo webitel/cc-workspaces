@@ -63,7 +63,7 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Звонок | Звонки',
+      call: 'Звонок | Звонки',
       preview: {
         md: {
           active: 'Активные звонки',
