@@ -64,29 +64,10 @@ import { useI18n } from 'vue-i18n';
 import TableApi from './api/table';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
-import get from 'lodash/get';
+import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
+import type { Filter, Table, TableAction, TableColumn, TableRow } from './types/FormTable';
 
 const { t } = useI18n();
-
-interface Table {
-  displayColumns: TableColumn[]
-  source: object[]
-  isSystemSource?: boolean
-  systemSource?: { path: string}
-}
-
-interface TableColumn {
-  field: string
-  name: string
-  width?: number
-  header?: string
-  pathArray: string[]
-}
-
-interface Filter {
-  field: string
-  value: string | number | boolean
-}
 
 interface Props {
   componentId: string
@@ -94,23 +75,6 @@ interface Props {
   filters: Filter[]
   fields?: string[]
   actions?: object[]
-}
-
-interface Header {
-  value: string
-  text: string
-  width?: string
-}
-
-interface TableRow { // Processing Form Table can show multiple types of data with different structure
-  [key: string]: any
-}
-
-interface TableAction {
-  field: string
-  action: string
-  buttonName: string
-  color: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -137,15 +101,16 @@ const infiniteScrollWrap = useTemplateRef('infiniteScrollWrap');
 const isSystemSource = computed<boolean>(() => props.table?.isSystemSource);
 const systemSourcePath = computed<string>(() => props.table?.systemSource?.path);
 
-const filters = computed(() => props?.filters || []); //!
-const tableFields = computed<string[]>(() => {
-  if (!props.fields.length && tableColumns.value.length) {
+const tableFields = computed<string[]>(() => { // fields for API request
+  let fields:string[] = props.fields;
+  if (tableColumns.value.length) {
     // @author @liza-pohranichna
-    // if no fields provided, we need try to get all fields from tableColumns
-    const fieldsArray:string[] = tableColumns.value.map((column) => ( column.pathArray[0] ));
-    return [...new Set(fieldsArray)]; // remove duplicates
+    // try to get all fields from tableColumns
+    const fieldsFromColumns:string[] = tableColumns.value.map((column) => ( column.pathArray[0] ));
+    fields = [...props.fields, ...fieldsFromColumns]; // merge arrays
+    fields = [...new Set(fields)]; // remove duplicates
   }
-  return props.fields;
+  return fields;
 });
 
 function normalizeSlotKey(key: string): string {
@@ -170,7 +135,7 @@ const tableColumns = computed<TableColumn[]>(() => {
   })
 });
 
-const headers = computed<Header[]>(() => { // headers for wt-table prop
+const headers = computed<WtTableHeader[]>(() => { // headers for wt-table prop
   return tableColumns.value.map((column) => ({
     ...column,
     value: column.header,
@@ -184,22 +149,6 @@ const tableActions = computed<TableAction[]>(() => {
     field: normalizeSlotKey(action.field),
   }));
 });
-
-// [
-//   {
-//     id: "bc623b65-b09e-49ed-b604-30a856522676",
-//     prod: "CALL_CENTER",
-//     issued_at: "1708432935690",
-//     expires_at: "1767225599000",
-//     numbers: [1212, 1213, 1214],
-//   },
-//   {
-//     id: "9fdc635f-2523-4753-b52e-f729a2302c04",
-//     prod: "CALL_MANAGER",
-//     issued_at: "1710153766332",
-//     expires_at: "1767225599000",
-//   },
-// ]
 
 function handleTableList(tableList: TableRow[]): TableRow[] {
 
@@ -216,7 +165,7 @@ function handleTableList(tableList: TableRow[]): TableRow[] {
 
       newItem = {
         ...newItem,
-        [column.header]: newValue // set new value in item by column header. Example: 'contact_emails_11_name': 'John Doe'
+        [column.header]: newValue // set new value in item by column header. Example: contact_emails_11_name: 'John Doe'
       };
 
     });
@@ -229,7 +178,7 @@ async function getDataList(): Promise<{ items: TableRow[], next: boolean }> {
   try {
     const { items, next } = await TableApi.getList({
       path: systemSourcePath.value,
-      filters: filters.value,
+      filters: props.filters,
       page: currentTablePage.value,
       fields: tableFields.value,
     });
@@ -256,7 +205,7 @@ async function initDataList(): Promise<void> {
 
   } else data = applyTransform(props.table?.source, [
     merge(getDefaultGetListResponse()),
-    snakeToCamel,
+    snakeToCamel(),
   ]);
 
   dataList.value = handleTableList(data);

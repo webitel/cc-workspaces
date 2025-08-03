@@ -1,0 +1,31 @@
+export interface Filter {
+  field: string
+  value: string | number | boolean
+}
+
+export interface Table {
+  displayColumns: TableColumn[]
+  source: object[]
+  isSystemSource?: boolean
+  systemSource?: { path: string}
+}
+
+export interface TableColumn {
+  field: string
+  name: string
+  width?: number
+  header?: string
+  pathArray: string[]
+}
+
+export interface TableRow { // Processing Form Table can show multiple types of data with different structure
+  [key: string]: any
+}
+
+export interface TableAction {
+  field: string
+  action: string
+  buttonName: string
+  color: string
+}
+
