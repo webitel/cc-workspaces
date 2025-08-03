@@ -26,7 +26,7 @@
             :grid-actions="false"
           >
             <template
-              v-for="action in actions"
+              v-for="action in tableActions"
               #[action.field]="{ item }"
               :key="action.field"
             >
@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import { useInfiniteScroll } from '@vueuse/core';
 import { getDefaultGetListResponse } from '@webitel/api-services/api/defaults';
@@ -63,126 +63,160 @@ import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
 import getNestedValue from './scripts/getNestedValue';
+import getPathArray from './scripts/getPathArray';
+import get from 'lodash/get';
 
 const { t } = useI18n();
 
-const props = defineProps({
-  componentId: {
-    type: String,
-    required: true,
-  },
-  table: { // get from v-bind in parent component
-    type: Object,
-    required: true,
-  },
-  filters: {
-    type: Object,
-    required: true,
-  },
-  fields: {
-    type: Array,
-    default: () => [],
-  },
-  actions: {
-    type: Array,
-    default: () => [],
-  },
+interface Table {
+  displayColumns: TableColumn[]
+  source: object[]
+  isSystemSource?: boolean
+  systemSource?: { path: string}
+}
+
+interface TableColumn {
+  field: string
+  name: string
+  width?: number
+  header?: string
+  pathArray: string[]
+}
+
+interface Filter {
+  field: string
+  value: string | number | boolean
+}
+
+interface Props {
+  componentId: string
+  table: Table
+  filters: Filter[]
+  fields?: string[]
+  actions?: object[]
+}
+
+interface Header {
+  value: string
+  text: string
+  width?: string
+}
+
+interface TableRow { // Processing Form Table can show multiple types of data with different structure
+  [key: string]: any
+}
+
+interface TableAction {
+  field: string
+  action: string
+  buttonName: string
+  color: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  fields: () => [],
+  actions: () => [],
 });
 
-const emit = defineEmits([
-  'call-table-action',
-]);
+const emit = defineEmits<{
+  (e: 'call-table-action', payload: object): void
+}>()
 
 const eventBus = inject('$eventBus');
 
 // @author @liza-pohranichna
-// https://webitel.atlassian.net/browse/WTEL-6890
+// why? => https://webitel.atlassian.net/browse/WTEL-6890
 const columnsFieldSeparator = '.';
 
 const nextAllowed = ref(false);
 const nextLoading = ref(false);
 const currentTablePage = ref(1);
-const dataList = ref([]);
+const dataList = ref<TableRow[]>([]);
 const infiniteScrollWrap = useTemplateRef('infiniteScrollWrap');
 
-const isSystemSource = computed(() => props.table?.isSystemSource);
-const systemSourcePath = computed(() => props.table?.systemSource?.path);
+const isSystemSource = computed<boolean>(() => props.table?.isSystemSource);
+const systemSourcePath = computed<string>(() => props.table?.systemSource?.path);
 
-const filters = computed(() => props?.filters || []);
-const tableFields = computed(() => props?.fields || []);
+const filters = computed(() => props?.filters || []); //!
+const tableFields = computed<string[]>(() => {
+  if (!props.fields.length && tableColumns.value.length) {
+    // @author @liza-pohranichna
+    // if no fields provided, we need try to get all fields from tableColumns
+    const fieldsArray:string[] = tableColumns.value.map((column) => ( column.pathArray[0] ));
+    return [...new Set(fieldsArray)]; // remove duplicates
+  }
+  return props.fields;
+});
 
-function getPathArray(path) {
-  // @author @liza-pohranichna
-  // method reformatting string path to array.
-  // Example: 'contact.emails[11].update_by.name' ====> ['contact', 'emails', '11', 'update_by', 'name']
-  const stringFieldPath = path.replace(/[\[\]]/g, columnsFieldSeparator);
-  const arrayFieldPath = stringFieldPath.includes(columnsFieldSeparator)
-    ? stringFieldPath.split(columnsFieldSeparator)
-    : [stringFieldPath];
-
-  return applyTransform(arrayFieldPath.filter(Boolean), [snakeToCamel()]);
-}
-
-function normalizeSlotKey(key) {
+function normalizeSlotKey(key: string): string {
   // @author @liza-pohranichna
   // need this for slots in wt-table component.
-  // replace '[', ']', '.' in string to '_'. Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
-  return key.replace(/[.\[\]]/g, '_');
+  // Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
+  return key
+  .replace(columnsFieldSeparator, '_')
+  .replace('[', '_')
+  .replace(']', '_');
 }
 
-const tableColumns = computed(() => {
-  return props.table?.displayColumns.map((column, index) => {
+const tableColumns = computed<TableColumn[]>(() => {
+  return props.table?.displayColumns.map((column) => {
 
-    const columnField = normalizeSlotKey(column.field, index);
-    const arrayPath = getPathArray(column.field);
-
+    const pathArray = applyTransform(getPathArray(column.field, columnsFieldSeparator), [snakeToCamel()]);
     return {
       ...column,
-      arrayPath, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
-      header: columnField , // header for wt-table prop
+      header: normalizeSlotKey(column.field) , // normalize slot key for wt-table component
+      pathArray, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
     }
   })
 });
 
-const fields = computed(() => { // fields for API request (get dataList)
-  const fieldsArray = tableColumns.value.map((column) => ( column.arrayPath[0] ));
-  return [...new Set(fieldsArray)]; // remove duplicates
-});
-
-
-const headers = computed(() => {
+const headers = computed<Header[]>(() => { // headers for wt-table prop
   return tableColumns.value.map((column) => ({
     ...column,
-    text: column.name,
     value: column.header,
+    text: column.name,
     width: column.width ? column.width + 'px' : '',
   }));
 });
-
-const actions = computed(() => {
-  return props.actions.map((action) => ({
+const tableActions = computed<TableAction[]>(() => {
+  return props.actions.map((action: TableAction) => ({
     ...action,
     field: normalizeSlotKey(action.field),
   }));
 });
 
-async function handleTableList(dataList) {
+// [
+//   {
+//     id: "bc623b65-b09e-49ed-b604-30a856522676",
+//     prod: "CALL_CENTER",
+//     issued_at: "1708432935690",
+//     expires_at: "1767225599000",
+//     numbers: [1212, 1213, 1214],
+//   },
+//   {
+//     id: "9fdc635f-2523-4753-b52e-f729a2302c04",
+//     prod: "CALL_MANAGER",
+//     issued_at: "1710153766332",
+//     expires_at: "1767225599000",
+//   },
+// ]
 
-  return dataList.map((item) => {
+function handleTableList(tableList: TableRow[]): TableRow[] {
+
+  return tableList.map((item: TableRow) => {
     let newItem = { ...item }; // table row
 
-    tableColumns.value.forEach((column) => { // use for item every column @author @liza-pohranichna
-      const [firstStep, ...restSteps] = column.arrayPath;
-      const parentValue = item[firstStep];
-      const isNeedNestedValue = parentValue && restSteps?.length && typeof parentValue === 'object';
+    tableColumns.value.forEach((column: TableColumn) => { // iterate all columns to get needed value for each table cell in row
+      const [firstStep, ...restSteps] = column.pathArray; // get first step and rest steps from pathArray. Example: ['emails', 'data', 'name'] => firstStep = 'emails', restSteps = ['data', 'name']
+      const value = item[firstStep]; // get value by first step from item. Example: item['emails']
 
-      const newValue = isNeedNestedValue
-        ? getNestedValue(parentValue, restSteps)
-        : parentValue;
+      const newValue = restSteps?.length // if we have steps to get nested value
+        ? getNestedValue(value, restSteps) // try to get nested value by steps
+        : value; // or just use initial value
 
       newItem = {
         ...newItem,
-        [column.header]: newValue
+        [column.header]: newValue // set new value in item by column header. Example: 'contact_emails_11_name': 'John Doe'
       };
 
     });
@@ -191,13 +225,13 @@ async function handleTableList(dataList) {
   });
 }
 
-async function getDataList() {
+async function getDataList(): Promise<{ items: TableRow[], next: boolean }> {
   try {
     const { items, next } = await TableApi.getList({
       path: systemSourcePath.value,
       filters: filters.value,
       page: currentTablePage.value,
-      fields: [...fields.value, ...tableFields.value],
+      fields: tableFields.value,
     });
 
     return { items, next };
@@ -211,8 +245,8 @@ async function getDataList() {
   }
 }
 
-async function initDataList() {
-  let data;
+async function initDataList(): Promise<void> {
+  let data: TableRow[];
 
   if (isSystemSource.value) {
 
@@ -222,18 +256,18 @@ async function initDataList() {
 
   } else data = applyTransform(props.table?.source, [
     merge(getDefaultGetListResponse()),
-    snakeToCamel(),
+    snakeToCamel,
   ]);
 
-  dataList.value = await handleTableList(data);
+  dataList.value = handleTableList(data);
 }
 
-async function loadNext() {
+async function loadNext(): Promise<void> {
   nextLoading.value = true;
 
   currentTablePage.value += 1;
   const { items, next } = await getDataList();
-  const newItems = await handleTableList(items);
+  const newItems: TableRow[] = handleTableList(items);
 
   dataList.value = [...dataList.value, ...newItems];
   nextAllowed.value = next;
@@ -241,12 +275,13 @@ async function loadNext() {
   nextLoading.value = false;
 }
 
-function sendAction(action, row) {
+function sendAction(action: string, row: object): void {
   const payload = {
     componentId: props.componentId,
     action,
     row,
   };
+
   emit('call-table-action', payload);
 }
 
