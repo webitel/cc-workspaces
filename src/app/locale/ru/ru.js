@@ -63,7 +63,7 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Звонок | Звонки',
+      call: 'Звонок | Звонки',
       preview: {
         md: {
           active: 'Активные звонки',
@@ -323,7 +323,7 @@ export default {
     title: 'Подтвердите действие',
   },
   autocompleteList: {
-    quickReplies: ({linked}) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
     quickRepliesDescription: 'Открывает меню быстрых ответов в чате'
   }
 };
