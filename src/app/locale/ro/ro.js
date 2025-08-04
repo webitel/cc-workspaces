@@ -323,4 +323,8 @@ export default {
   confirmationPopup: {
     title: 'Confirmă acțiunea',
   },
+  autocompleteList: {
+    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat'
+  }
 };
