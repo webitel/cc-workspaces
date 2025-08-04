@@ -1,6 +1,6 @@
-export interface Filter {
-  field: string
-  value: string | number | boolean
+export interface TableFilter {
+  field: FilterName
+  value: FilterValue
 }
 
 export interface Table {

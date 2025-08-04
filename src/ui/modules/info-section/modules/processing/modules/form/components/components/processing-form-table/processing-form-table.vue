@@ -65,14 +65,14 @@ import TableApi from './api/table';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
-import type { Filter, Table, TableAction, TableColumn, TableRow } from './types/FormTable';
+import type { TableFilter, Table, TableAction, TableColumn, TableRow } from './types/FormTable';
 
 const { t } = useI18n();
 
 interface Props {
   componentId: string
   table: Table
-  filters: Filter[]
+  filters: TableFilter[]
   fields?: string[]
   actions?: object[]
 }
@@ -107,8 +107,7 @@ const tableFields = computed<string[]>(() => { // fields for API request
     // @author @liza-pohranichna
     // try to get all fields from tableColumns
     const fieldsFromColumns:string[] = tableColumns.value.map((column) => ( column.pathArray[0] ));
-    fields = [...props.fields, ...fieldsFromColumns]; // merge arrays
-    fields = [...new Set(fields)]; // remove duplicates
+    fields = [...new Set([...props.fields, ...fieldsFromColumns])]; // merge arrays and remove duplicates
   }
   return fields;
 });
