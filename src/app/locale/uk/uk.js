@@ -106,6 +106,11 @@ export default {
       },
     },
   },
+  notification: {
+    callEnded: 'Дзвінок з {name} завершено',
+    chatEnded: 'Чат з {name} закрито',
+    jobEnded: 'Завдання “{name}“ завершене',
+  },
   infoSec: {
     generalInfo: {
       generalInfo: 'Основна інформація',
@@ -315,7 +320,8 @@ export default {
     title: 'Підтвердіть дію',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті',
+  },
 };
