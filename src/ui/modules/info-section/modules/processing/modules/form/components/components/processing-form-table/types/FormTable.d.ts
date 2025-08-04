@@ -19,7 +19,7 @@ export interface TableColumn {
 }
 
 export interface TableRow { // Processing Form Table can show multiple types of data with different structure
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface TableAction {

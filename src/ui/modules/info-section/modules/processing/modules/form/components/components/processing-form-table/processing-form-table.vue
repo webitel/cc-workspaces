@@ -83,7 +83,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (e: 'call-table-action', payload: object): void
+  (e: 'call-table-action', payload: Record<string, unknown>): void
 }>()
 
 const eventBus = inject('$eventBus');

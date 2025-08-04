@@ -1,4 +1,4 @@
-import get from 'lodash/get';
+import { get } from 'lodash-es';
 /**
  * This function retrieves a nested value from an object based on a given path array.
  * It first attempts to use lodash's `get` function, and if that fails, it manually traverses the object.
