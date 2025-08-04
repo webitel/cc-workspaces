@@ -16,6 +16,8 @@ const actions = {
   },
 
   HANDLE_CALL_END: async (context, call) => {
+    // @author @stanislav-kozak
+    // We got setting from admin panel to check if we need to send push notification and sound notification
     const isCallEndPushNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.CallEndPushNotification);
@@ -41,6 +43,7 @@ const actions = {
     });
 
     if (call.state === CallActions.Hangup) {
+      // @author @stanislav-kozak
       // We check option by admin settings and after user setting for check if we need to send notification
       if (isCallEndPushNotification || isCallEndSound) {
         context.dispatch(
@@ -50,6 +53,7 @@ const actions = {
         );
       }
 
+      // @author @stanislav-kozak
       // We check option by admin settings and after user setting for check if we need to play sound
       if (isCallEndSoundNotification || isCallEndSound) {
         context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {

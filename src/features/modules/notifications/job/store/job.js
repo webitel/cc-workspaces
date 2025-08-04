@@ -5,6 +5,8 @@ import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import i18n from '../../../../../app/locale/i18n.js';
 
 const actions = {
+  // @author @stanislav-kozak
+  // Action what call when job is ended
   HANDLE_JOB_END: async (context, job) => {
     const isJobEndPushNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'

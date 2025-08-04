@@ -9,7 +9,8 @@ const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
 const actions = {
   HANDLE_CHAT_EVENT: (context, { action, chat }) => {
-    // split event by incoming chat and incoming message
+    // @author @stanislav-kozak
+    // We got setting from admin panel to check if we need to send push notification and sound notification
     const isNewMessageSoundNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.NewMessageSoundNotification);
@@ -17,6 +18,9 @@ const actions = {
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.NewChatSoundNotification);
 
+    // @author @stanislav-kozak
+    // When chat action is ChatActions.UserInvite do we need to play sound notification
+    // also when chat action is ChatActions.Message do we need to play sound notification
     if (
       (isNewChatSoundNotification && action === ChatActions.UserInvite) ||
       (isNewMessageSoundNotification && action === ChatActions.Message)
@@ -50,6 +54,8 @@ const actions = {
     });
   },
 
+  // @author @stanislav-kozak
+  // Action what call when chat is ended
   HANDLE_CHAT_END: async (context, chat) => {
     const isChatEndPushNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
@@ -58,6 +64,8 @@ const actions = {
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.ChatEndSoundNotification);
 
+    // @author @stanislav-kozak
+    // Function for display chat name
     const displayChatName = () => {
       if (chat?.members?.length) {
         return chat?.members?.map((member) => member.name).join(', ');
@@ -81,6 +89,8 @@ const actions = {
         1000,
     });
 
+    // @author @stanislav-kozak
+    // We check option by admin settings enable for send push notification
     if (isChatEndPushNotification) {
       await context.dispatch(
         'features/notifications/SEND_NOTIFICATION',
@@ -89,6 +99,8 @@ const actions = {
       );
     }
 
+    // @author @stanislav-kozak
+    // We check option by admin settings enable for play sound notification
     if (isChatEndSoundNotification) {
       context.commit('SET_HANGUP_SOUND_ALLOW', true);
       await context.dispatch(
