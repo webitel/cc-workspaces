@@ -1,4 +1,5 @@
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { CallActions } from 'webitel-sdk';
 
@@ -37,20 +38,20 @@ const actions = {
 
     const text = i18n.global.t('notification.callEnded', {
       name: call.displayName,
-      interval:
-        context.rootGetters['features/notification/PUSH_NOTIFICATION_TIMEOUT'] *
-        1000,
     });
 
     if (call.state === CallActions.Hangup) {
       // @author @stanislav-kozak
       // We check option by admin settings and after user setting for check if we need to send notification
       if (isCallEndPushNotification || isCallEndSound) {
-        context.dispatch(
-          'features/notifications/SEND_NOTIFICATION',
-          { text },
-          { root: true },
-        );
+        eventBus.$emit('notification', {
+          type: 'error',
+          text,
+          timeout:
+            context.rootGetters[
+              'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+            ],
+        });
       }
 
       // @author @stanislav-kozak

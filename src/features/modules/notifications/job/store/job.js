@@ -1,5 +1,6 @@
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { snakeToCamel } from '@webitel/api-services/utils';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 
 import i18n from '../../../../../app/locale/i18n.js';
@@ -21,17 +22,17 @@ const actions = {
 
     const text = i18n.global.t('notification.jobEnded', {
       name: job.displayName,
-      interval:
-        context.rootGetters['features/notification/PUSH_NOTIFICATION_TIMEOUT'] *
-        1000,
     });
 
     if (isJobEndPushNotification) {
-      await context.dispatch(
-        'features/notifications/SEND_NOTIFICATION',
-        { text },
-        { root: true },
-      );
+      eventBus.$emit('notification', {
+        type: 'error',
+        text,
+        timeout:
+          context.rootGetters[
+            'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+          ],
+      });
     }
 
     context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
@@ -47,11 +48,21 @@ const actions = {
     }
   },
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
-    context.dispatch(
-      'features/notifications/PLAY_SOUND',
-      { action },
-      { root: true },
-    );
+    const isJobEndPushNotification = context.rootGetters[
+      'features/notifications/GET_NOTIFICATION_SETTING'
+    ](EngineSystemSettingName.TaskEndPushNotification);
+    const isJobEndSoundNotification = context.rootGetters[
+      'features/notifications/GET_NOTIFICATION_SETTING'
+    ](EngineSystemSettingName.TaskEndSoundNotification);
+
+    if (isJobEndSoundNotification) {
+      context.dispatch(
+        'features/notifications/PLAY_SOUND',
+        { action },
+        { root: true },
+      );
+    }
+
     if (
       !document.hasFocus() &&
       context.rootGetters['features/notifications/IS_MAIN_TAB']
@@ -60,11 +71,16 @@ const actions = {
       const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
         name,
       });
-      context.dispatch(
-        'features/notifications/SEND_NOTIFICATION',
-        { text },
-        { root: true },
-      );
+      if (isJobEndPushNotification) {
+        eventBus.$emit('notification', {
+          type: 'error',
+          text,
+          timeout:
+            context.rootGetters[
+              'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+            ],
+        });
+      }
     }
     context.dispatch('features/notifications/INCREMENT_UNREAD_COUNT', null, {
       root: true,
