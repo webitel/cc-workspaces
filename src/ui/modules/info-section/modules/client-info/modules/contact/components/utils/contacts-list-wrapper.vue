@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';

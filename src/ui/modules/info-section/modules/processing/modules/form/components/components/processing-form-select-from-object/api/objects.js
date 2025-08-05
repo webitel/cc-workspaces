@@ -62,7 +62,7 @@ const getObjectRecordsLookup = async ({
     merge(getDefaultGetParams()),
     (params) => ({ ...params, q: params.search }),
     sanitize(fieldsToSend),
-    camelToSnake(),
+    camelToSnake(['fields']),
     generateUrl(path),
     addQueryParamsToUrl(filters),
   ]);

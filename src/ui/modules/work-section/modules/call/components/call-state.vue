@@ -24,7 +24,8 @@
     <div
       v-if="dtmf"
       class="numpad-state__secondary-text"
-    >{{ dtmf.join('') }}</div>
+    >{{ dtmf.join('') }}
+    </div>
   </div>
 </template>
 

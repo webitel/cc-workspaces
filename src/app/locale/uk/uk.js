@@ -1,7 +1,9 @@
 import {
   AgentStatus,
   DeviceNotAllowPermissionError,
-  DeviceNotFoundError, JobState, LicencePermissionError,
+  DeviceNotFoundError,
+  JobState,
+  LicencePermissionError,
 } from 'webitel-sdk';
 
 export default {
@@ -61,7 +63,7 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Дзвінок | Дзвінки',
+      call: 'Дзвінок | Дзвінки',
       preview: {
         md: {
           active: 'Активні дзвінки',
@@ -74,7 +76,6 @@ export default {
           missed: 'Пропущені',
           offline: 'Офлайн',
           manual: 'Самостійно призначені',
-
         },
       },
     },
@@ -104,6 +105,11 @@ export default {
         },
       },
     },
+  },
+  notification: {
+    callEnded: 'Дзвінок з {name} завершено',
+    chatEnded: 'Чат з {name} закрито',
+    jobEnded: 'Завдання “{name}“ завершене',
   },
   infoSec: {
     generalInfo: {
@@ -312,5 +318,10 @@ export default {
   },
   confirmationPopup: {
     title: 'Підтвердіть дію',
+  },
+  autocompleteList: {
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті',
   },
 };

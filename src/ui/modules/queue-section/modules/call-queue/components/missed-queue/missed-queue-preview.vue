@@ -10,12 +10,12 @@
           class="missed-queue-preview-icon"
           color="error"
           icon="call-missed"
-        ></wt-icon>
+        />
         <wt-icon-btn
           class="missed-queue-preview-hide-action"
           icon="close"
           @click.prevent="$emit('hide')"
-        ></wt-icon-btn>
+        />
       </div>
     </template>
 
@@ -35,10 +35,11 @@
       <wt-rounded-action
         color="success"
         icon="call--filled"
+        :loading="showLoader"
         rounded
         size="md"
-        @click.prevent="$emit('call')"
-      ></wt-rounded-action>
+        @click.prevent="call"
+      />
     </template>
   </task-queue-preview-md>
 
@@ -53,13 +54,13 @@
           color="error"
           size="sm"
           icon="call-missed"
-        ></wt-icon>
+        />
         <wt-icon-btn
           class="missed-queue-preview-hide-action"
           icon="close"
           size="sm"
           @click.prevent="$emit('hide')"
-        ></wt-icon-btn>
+        />
       </div>
     </template>
 
@@ -83,10 +84,11 @@
       <wt-rounded-action
         color="success"
         icon="call--filled"
+        :loading="showLoader"
         rounded
         size="sm"
-        @click.prevent="$emit('call')"
-      ></wt-rounded-action>
+        @click.prevent="call"
+      />
     </template>
   </task-queue-preview-sm>
 
@@ -112,6 +114,11 @@ export default {
     'hide',
     'call',
   ],
+  data() {
+    return {
+      showLoader: false,
+    }
+  },
   computed: {
     displayName() {
       return this.task.from?.name || '';
@@ -123,6 +130,15 @@ export default {
       return prettifyTime(this.task.createdAt);
     },
   },
+  methods: {
+    call() {
+      if(this.showLoader) return;
+
+      this.showLoader = true;
+      this.$emit('call');
+      this.showLoader = false;
+    },
+  }
 };
 </script>
 

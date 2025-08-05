@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed,ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -1,6 +1,12 @@
-import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/index.js';
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/index';
+import applyTransform, {
+  notify,
+} from '@webitel/ui-sdk/src/api/transformers/index';
 
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
+import i18n from '../../../../app/locale/i18n';
+import { formatChatMessages } from '../scripts/formatChatMessages';
+
+const { t } = i18n.global;
 
 const state = {
   chatHistoryMessages: [], // messages from ChatHistoryApi
@@ -11,12 +17,25 @@ const state = {
 
 const actions = {
   LOAD_CHAT_HISTORY: async (context, contactId) => {
-    const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId });
+    try {
+      const { items, next } = await contactChatMessagesHistory.getAllMessages({ contactId });
+      const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
 
-    const messages = formatChatMessages(items);// make chat-history messages more similar with current-chat messages
-    context.commit('SET_CHAT_HISTORY', messages);
-    context.commit('SET_NEXT_STATE', next);
-    context.commit('SET_IS_LOADED', true);
+      context.commit('SET_CHAT_HISTORY', messages);
+      context.commit('SET_NEXT_STATE', next);
+      context.commit('SET_IS_LOADED', true);
+    } catch (err) {
+      throw applyTransform(err, [
+        notify(({ callback }) =>
+          callback({
+            type: 'error',
+            text: t('errorNotifications.chatHistoryApi'),
+          }),
+        ),
+      ]);
+    } finally {
+      context.commit('SET_IS_LOADED', true);
+    }
   },
   LOAD_NEXT: async (context, contactId) => {
     if (!context.state.next) return;

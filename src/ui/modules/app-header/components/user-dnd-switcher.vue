@@ -1,14 +1,10 @@
 <template>
-  <wt-tooltip>
-    <template #activator>
-      <wt-switcher
-        :label="$t('header.dnd.label')"
-        :value="isDnd"
-        @change="toggleDnd"
-      ></wt-switcher>
-    </template>
-    {{ $t('header.dnd.tooltip') }}
-  </wt-tooltip>
+  <wt-switcher
+    v-tooltip="$t('header.dnd.tooltip')"
+    :label="$t('header.dnd.label')"
+    :value="isDnd"
+    @change="toggleDnd"
+  ></wt-switcher>
 </template>
 
 <script>

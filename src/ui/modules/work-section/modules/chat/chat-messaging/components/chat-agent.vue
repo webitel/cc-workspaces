@@ -4,21 +4,26 @@
         <p>
           {{ $t('workspaceSec.chat.chatsAgentsList', { agentName: firstAgentName }) }}
         </p>
-        <wt-tooltip>
-          <template #activator>
-            <wt-chip class="chat-agent-content__activator">
-              +{{ agents.length - 1 }}
-            </wt-chip>
+
+        <wt-popover>
+          <template #actovator="{ show, hide }">
+            <div @pointerenter="show" @pointerleave="hide">
+              <wt-chip class="chat-agent-content__activator">
+                +{{ agents.length - 1 }}
+              </wt-chip>
+            </div>
           </template>
+
           <ul>
             <li
               v-for="(agent) of hiddenAgents"
+              :key="agent.id"
               class="chat-agent-content__item"
             >
               {{ agent.name }}
             </li>
           </ul>
-        </wt-tooltip>
+        </wt-popover>
       </div>
 
     <div v-else class="chat-agent-content">

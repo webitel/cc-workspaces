@@ -1,18 +1,25 @@
 <template>
-  <article class="chat-history chat-messages-container" @click="focusOnInput">
+  <article
+    v-element-size="handleChatResize"
+    class="chat-history chat-messages-container"
+    @click="focusOnInput"
+  >
     <wt-replace-transition>
       <wt-loader v-show="!showAllMessages" class="chat-history__loader"/>
     </wt-replace-transition>
     <div
-      ref="chat-messages-items"
+      ref="chat-container"
       class="chat-history__messages chat-messages-items"
       :class="{'chat-history__messages--processing': !showAllMessages}"
+      @scroll="handleChatScroll"
     >
-      <wt-intersection-observer
-        :next="next"
-        :loading="nextLoading"
-        @next="loadNextMessages"
-      />
+      <div class="chat-history__observer-wrapper">
+        <wt-intersection-observer
+          :next="next"
+          :loading="isLoading"
+          @next="loadNextMessages"
+        />
+      </div>
       <message
         v-for="(message, index) of messages"
         :key="message.id"
@@ -47,29 +54,30 @@
           />
         </template>
       </message>
-      <scroll-to-bottom-btn
-        v-if="showScrollToBottomBtn"
-        :new-message-count="newUnseenMessages"
-        @scroll="scrollToBottom('smooth')"
-      />
-  </div>
+      </div>
+    <scroll-to-bottom-btn
+      v-if="showScrollToBottomBtn"
+      :new-message-count="newUnseenMessages"
+      @scroll="scrollToBottom('smooth')"
+    />
   </article>
 </template>
 
 <script setup>
+import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick, onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef,watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
 import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
-import { useChatScroll } from '../composables/useChatScroll.js';
+import { useChatScroll } from '../composables/useChatScroll';
 import Message from '../message/chat-message.vue';
-import { useChatMessages } from '../message/composables/useChatMessages.js';
+import { useChatMessages } from '../message/composables/useChatMessages';
 
 const props = defineProps({
   contact: {
@@ -87,9 +95,10 @@ const store = useStore();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
-const nextLoading = ref(false);
+const chatContainer = useTemplateRef('chat-container');
+const isLoading = ref(false);
+const lastVisibleMessageEl = ref(null);  // message on top of the chat
 const showAllMessages = ref(false);
-const el = useTemplateRef('chat-messages-items');
 
 const {
   messages,
@@ -104,8 +113,10 @@ const {
 const {
   showScrollToBottomBtn,
   newUnseenMessages,
-  scrollToBottom
-} = useChatScroll(el);
+  scrollToBottom,
+  handleChatScroll,
+  handleChatResize,
+} = useChatScroll(chatContainer);
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
@@ -116,11 +127,6 @@ const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
 const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
-const loadNextMessages = async () => {
-  nextLoading.value = true;
-  await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
-  nextLoading.value = false;
-}
 
 function isChatStarted(index) {
   const { prevMessage, message, nextMessage } = getMessage(index);
@@ -134,9 +140,35 @@ function isHistoryStart(index) { // first message of all chats
 }
 
 function getChatProvider(message) {
+  if (!message || !message.chat) return {};
   const { via } = message.chat || message.member; // chat history or current chat gateway
+  return via
+    ? { type: via.type, name: via.name }
+    : {};
+}
 
-  return { type: via?.type, name: via?.name };
+const getTopMessageEl = () => { // help to fix chat viewing position when new messages was loaded
+  if (!chatContainer.value.children) return;
+
+  lastVisibleMessageEl.value = chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
+}
+
+const loadNextMessages = async () => {
+  if (isLoading.value || !next.value) return;
+  isLoading.value = true;
+
+  setTimeout(async () => { // timeout to avoid loader blinking
+    await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
+    await nextTick();
+
+    if (lastVisibleMessageEl.value?.scrollIntoView) { // fast return the scroll view on prev position
+      lastVisibleMessageEl.value.scrollIntoView({ block: 'start', behavior: 'auto' })
+    }
+
+    isLoading.value = false;
+  }, 200);
+
+  getTopMessageEl();
 }
 
 async function loadMessagesList() {
@@ -146,11 +178,17 @@ async function loadMessagesList() {
   });
   setTimeout(() => showAllMessages.value = true, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
+onMounted(() => {
+  getTopMessageEl();
+})
 
 watch(
   () => props.contact?.id,
   async () => {
-    await loadMessagesList()
+    loadMessagesList()
+    // await loadHistory();
+    // await nextTick();
+    // scrollToBottom();
   },
   { immediate: true }
 );
@@ -158,10 +196,9 @@ watch(
 watch(() => chat.value?.id,
   async () => {
     await loadMessagesList()
-    },
+  },
   { immediate: true }
 );
-
 
 onUnmounted(() => {
   resetHistory();
@@ -170,6 +207,13 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+// reserve height for the loader to avoid unnecessary chat height changes https://webitel.atlassian.net/browse/WTEL-5366
+.chat-history__observer-wrapper {
+  min-height: calc(var(--spacing-lg)*2 + var(--icon-md-size)); // observer loader height
+  // to place observer at the bottom of observer wrapper (closer to messages)
+  display: flex;
+  align-items: flex-end;
+}
 .chat-history__messages {
   opacity: 100%;
   transition: all var(--transition-fast);

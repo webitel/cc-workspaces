@@ -1,7 +1,9 @@
 import {
   AgentStatus,
   DeviceNotAllowPermissionError,
-  DeviceNotFoundError, JobState, LicencePermissionError,
+  DeviceNotFoundError,
+  JobState,
+  LicencePermissionError,
 } from 'webitel-sdk';
 
 export default {
@@ -61,7 +63,7 @@ export default {
   },
   queueSec: {
     call: {
-      calls: 'Звонок | Звонки',
+      call: 'Звонок | Звонки',
       preview: {
         md: {
           active: 'Активные звонки',
@@ -90,7 +92,6 @@ export default {
           manual: 'Самостоятельно назначенные',
           closed: 'Закрытые',
         },
-
       },
     },
     job: {
@@ -102,9 +103,13 @@ export default {
         sm: {
           active: 'Активные',
         },
-
       },
     },
+  },
+  notification: {
+    callEnded: 'Звонок с {name} окончен',
+    chatEnded: 'Чат с {name} закрыт',
+    jobEnded: 'Задача “{name}“ закончена',
   },
   infoSec: {
     generalInfo: {
@@ -151,7 +156,8 @@ export default {
         },
         formTable: {
           title: 'Таблиця',
-          error: 'Данные таблицы имеют неверный формат. Пожалуйста, проверьте схему.',
+          error:
+            'Данные таблицы имеют неверный формат. Пожалуйста, проверьте схему.',
         },
       },
     },
@@ -243,7 +249,8 @@ export default {
   },
   welcomePopup: {
     title: 'Добро пожаловать в Webitel Agent Workspace!',
-    subtitle: 'Пожалуйста, проверьте свои устройства и настройки браузера перед началом работы',
+    subtitle:
+      'Пожалуйста, проверьте свои устройства и настройки браузера перед началом работы',
     mic: {
       status: 'Разрешение на использование Микрофона',
       message: {
@@ -261,12 +268,16 @@ export default {
   error: {
     general: 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
     websocket: {
-      [DeviceNotFoundError.id]: 'Микрофон не подсоединён. Невозможно выполнить действие.',
-      [DeviceNotAllowPermissionError.id]: 'Нет доступа к микрофону. Невозможно выполнить действие.',
-      [LicencePermissionError.id.replaceAll('.', '_')]: 'Невозможно работать в Workspace. Истёк срок действия лицензии.',
+      [DeviceNotFoundError.id]:
+        'Микрофон не подсоединён. Невозможно выполнить действие.',
+      [DeviceNotAllowPermissionError.id]:
+        'Нет доступа к микрофону. Невозможно выполнить действие.',
+      [LicencePermissionError.id.replaceAll('.', '_')]:
+        'Невозможно работать в Workspace. Истёк срок действия лицензии.',
     },
     endpoint: {
-      noLicense: 'Невозможно работать в Workspace. Истёк срок действия лицензии.',
+      noLicense:
+        'Невозможно работать в Workspace. Истёк срок действия лицензии.',
     },
   },
   notifications: {
@@ -284,10 +295,12 @@ export default {
     loadingMessage: 'Загрузка…',
     networkErrorMessage: 'Не удалось загрузить эмодзи.',
     regionLabel: 'Emoji picker',
-    searchDescription: 'Если результат поиска доступен, нажимайте кнопки вверх или вниз для навигации, и enter для выбора.',
+    searchDescription:
+      'Если результат поиска доступен, нажимайте кнопки вверх или вниз для навигации, и enter для выбора.',
     searchLabel: 'Поиск',
     searchResultsLabel: 'Результаты поиска',
-    skinToneDescription: 'После открытия, нажимайте кнопки вверх или вниз для навигации, и enter для выбора.',
+    skinToneDescription:
+      'После открытия, нажимайте кнопки вверх или вниз для навигации, и enter для выбора.',
     skinToneLabel: 'Выберите тон кожи',
     skinTonesLabel: 'Тон кожи',
     skinTones: [
@@ -313,5 +326,10 @@ export default {
   },
   confirmationPopup: {
     title: 'Подтвердите действие',
+  },
+  autocompleteList: {
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Открывает меню быстрых ответов в чате',
   },
 };

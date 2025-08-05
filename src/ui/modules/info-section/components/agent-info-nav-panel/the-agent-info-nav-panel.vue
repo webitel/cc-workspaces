@@ -1,23 +1,17 @@
 <template>
   <nav class="agent-info-nav-panel">
-    <wt-tooltip
+    <wt-rounded-action
       v-for="(tab) of tabs"
       :key="tab.value"
-    >
-      <template #activator>
-        <wt-rounded-action
-          :icon="tab.icon || tab.value"
-          :icon-prefix="tab.iconPrefix"
-          :active="tab.value === currentTab?.value"
-          :size="size"
-          rounded
-          wide
-          @click="$emit('input', tab)"
-        ></wt-rounded-action>
-      </template>
-      {{ tab.text }}
-    </wt-tooltip>
-
+      v-tooltip="tab.text"
+      :icon="tab.icon || tab.value"
+      :icon-prefix="tab.iconPrefix"
+      :active="tab.value === currentTab?.value"
+      :size="size"
+      rounded
+      wide
+      @click="$emit('input', tab)"
+    ></wt-rounded-action>
   </nav>
 </template>
 

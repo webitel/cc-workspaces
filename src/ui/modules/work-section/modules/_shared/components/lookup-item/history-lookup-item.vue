@@ -36,34 +36,37 @@
           color="success"
           rounded
           :size="size"
+          :loading="showLoader"
           wide
           @click="call"
         />
         <wt-context-menu
-            :key="item.id"
-            class="history-lookup-item-options"
-            :options="contextMenuOptions"
-            :visible="isContextMenuVisible"
-            @click="$event.option.handler()"
-          >
-            <template #activator>
+          :key="item.id"
+          class="history-lookup-item-options"
+          :options="contextMenuOptions"
+          :visible="isContextMenuVisible"
+          @click="$event.option.handler()"
+        >
+          <template #activator="{ toggle }">
+            <div @click="toggle">
               <wt-icon
                 icon="options"
                 :size="size"
               />
-            </template>
-            <template #option="option">
-              <div class="history-lookup-item-options__card">
-                <a :href="historyIdLink">
-                  <wt-icon
-                    :icon="option.icon"
-                    :size="size"
-                  />
-                  {{ option.text }}
-                </a>
-              </div>
-            </template>
-          </wt-context-menu>
+            </div>
+          </template>
+          <template #option="option">
+            <div class="history-lookup-item-options__card">
+              <a :href="historyIdLink">
+                <wt-icon
+                  :icon="option.icon"
+                  :size="size"
+                />
+                {{ option.text }}
+              </a>
+            </div>
+          </template>
+        </wt-context-menu>
       </div>
     </template>
   </lookup-item>
@@ -88,7 +91,8 @@ export default {
   },
   data(){
     return{
-      isContextMenuVisible: false
+      isContextMenuVisible: false,
+      showLoader: false,
     }
   },
 
@@ -166,6 +170,8 @@ export default {
       makeCall: 'CALL',
     }),
     call() {
+      if(this.showLoader) return;
+      this.showLoader = true;
       let number;
 
       if (this.item.direction === CallDirection.Inbound) {
@@ -174,7 +180,9 @@ export default {
         number = this.item.to.number || this.item.destination;
       }
 
-      return this.makeCall({ number });
+      this.makeCall({ number });
+
+      this.showLoader = false;
     },
     goToHistoryItem() {
       window.open(this.historyIdLink, '_blank')
@@ -184,38 +192,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .lookup-item {
-    cursor: pointer;
+.lookup-item {
+  cursor: pointer;
+}
+
+.history-lookup-item{
+  &-wrapper{
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xs);
   }
 
-  .history-lookup-item{
-    &-wrapper{
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-2xs);
-    }
+  &-after{
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
 
-    &-after{
+    :deep(.wt-context-menu__option){
+      padding: 0;
+    }
+    :deep(.wt-tooltip .wt-tooltip-floating){
+      z-index: var(--ws-tooltip-z-index);
+    }
+  }
+
+  &-options{
+    &__card a{
       display: flex;
       align-items: center;
       gap: var(--spacing-xs);
-
-      :deep(.wt-context-menu__option){
-        padding: 0;
-      }
-      :deep(.wt-tooltip .wt-tooltip-floating){
-        z-index: var(--ws-tooltip-z-index);
-      }
-    }
-
-    &-options{
-      &__card a{
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-xs);
-        padding: var(--wt-context-menu-option-padding);
-      }
+      padding: var(--wt-context-menu-option-padding);
     }
   }
+}
 </style>
+
+
 

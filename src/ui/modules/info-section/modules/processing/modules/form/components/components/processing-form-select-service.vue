@@ -47,8 +47,8 @@
 
 <script setup>
 
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import deepCopy from 'deep-copy';
 import { computed, defineEmits, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';

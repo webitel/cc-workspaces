@@ -77,7 +77,6 @@ export default {
           offline: 'Offline',
           manual: 'Self-assigned',
         },
-
       },
     },
     chat: {
@@ -106,6 +105,11 @@ export default {
         },
       },
     },
+  },
+  notification: {
+    callEnded: 'The call with {name} has ended',
+    chatEnded: 'The chat with {name} has ended',
+    jobEnded: 'The task "{name}" has ended',
   },
   infoSec: {
     generalInfo: {
@@ -169,7 +173,8 @@ export default {
       hangup: 'Hangup',
     },
     chat: {
-      acceptPreviewText: 'If you are ready to answer, click "Accept" button first',
+      acceptPreviewText:
+        'If you are ready to answer, click "Accept" button first',
       draftPlaceholder: 'Write a message...',
       dropzone: {
         title: 'Drop your files here',
@@ -262,12 +267,16 @@ export default {
   error: {
     general: 'An error occured. Please, try again.',
     websocket: {
-      [DeviceNotFoundError.id]: 'Microphone is\'nt connected. Cannot perform action.',
-      [DeviceNotAllowPermissionError.id]: 'Microphone access is denied. Cannot perform action.',
-      [LicencePermissionError.id.replaceAll('.', '_')]: 'You can not work in Workspace because your license has expired.',
+      [DeviceNotFoundError.id]:
+        "Microphone is'nt connected. Cannot perform action.",
+      [DeviceNotAllowPermissionError.id]:
+        'Microphone access is denied. Cannot perform action.',
+      [LicencePermissionError.id.replaceAll('.', '_')]:
+        'You can not work in Workspace because your license has expired.',
     },
     endpoint: {
-      noLicense: 'You can not work in Workspace because your license has expired.',
+      noLicense:
+        'You can not work in Workspace because your license has expired.',
     },
   },
   notifications: {
@@ -285,10 +294,12 @@ export default {
     loadingMessage: 'Loading…',
     networkErrorMessage: 'Could not load emoji.',
     regionLabel: 'Emoji picker',
-    searchDescription: 'When search results are available, press up or down to select and enter to choose.',
+    searchDescription:
+      'When search results are available, press up or down to select and enter to choose.',
     searchLabel: 'Search',
     searchResultsLabel: 'Search results',
-    skinToneDescription: 'When expanded, press up or down to select and enter to choose.',
+    skinToneDescription:
+      'When expanded, press up or down to select and enter to choose.',
     skinToneLabel: 'Choose a skin tone',
     skinTonesLabel: 'Skin tones',
     skinTones: [
@@ -314,5 +325,11 @@ export default {
   },
   confirmationPopup: {
     title: 'Confirm action',
+  },
+  autocompleteList: {
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription:
+      'Opens a menu of pre-set quick replies for chat responses',
   },
 };

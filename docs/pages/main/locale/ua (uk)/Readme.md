@@ -1,2 +1,2 @@
-<<< ../../../../../src/app/locale/ua/ua.js
+<<< ../../../../../src/app/locale/uk/uk.js
 
