@@ -58,14 +58,15 @@ import {
   merge,
   snakeToCamel,
 } from '@webitel/api-services/api/transformers';
+import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { computed, defineProps, inject, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
-import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
-import type { TableFilter, Table, TableAction, TableColumn, TableRow } from './types/FormTable';
+import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './types/FormTable';
 
 const { t } = useI18n();
 
@@ -74,7 +75,7 @@ interface Props {
   table: Table
   filters: TableFilter[]
   fields?: string[]
-  actions?: object[]
+  actions?: TableAction[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -83,10 +84,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (e: 'call-table-action', payload: Record<string, unknown>): void
+  (e: 'call-table-action', payload: TableRow): void
 }>()
-
-const eventBus = inject('$eventBus');
 
 // @author @liza-pohranichna
 // why? => https://webitel.atlassian.net/browse/WTEL-6890
@@ -223,7 +222,7 @@ async function loadNext(): Promise<void> {
   nextLoading.value = false;
 }
 
-function sendAction(action: string, row: object): void {
+function sendAction(action: string, row: TableRow): void {
   const payload = {
     componentId: props.componentId,
     action,

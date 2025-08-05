@@ -5,7 +5,7 @@ export interface TableFilter {
 
 export interface Table {
   displayColumns: TableColumn[]
-  source: object[]
+  source: TableRow[]
   isSystemSource?: boolean
   systemSource?: { path: string}
 }
