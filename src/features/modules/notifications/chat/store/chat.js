@@ -1,9 +1,24 @@
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { snakeToCamel } from '@webitel/api-services/utils';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { ChatActions } from 'webitel-sdk';
 
 import i18n from '../../../../../app/locale/i18n.js';
+
+// @author @stanislav-kozak
+// Function for display chat name
+const displayChatName = (chat) => {
+  if (chat?.members?.length) {
+    return chat?.members?.map((member) => member.name).join(', ');
+  }
+
+  if (chat?.title) {
+    return chat.title;
+  }
+
+  return 'unknown';
+};
 
 const getLastMessage = (chat) => chat.messages[chat.messages.length - 1];
 
@@ -17,19 +32,41 @@ const actions = {
     const isNewChatSoundNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.NewChatSoundNotification);
+    const isChatEndPushNotification = context.rootGetters[
+      'features/notifications/GET_NOTIFICATION_SETTING'
+    ](EngineSystemSettingName.ChatEndPushNotification);
+    const isChatEndSoundNotification = context.rootGetters[
+      'features/notifications/GET_NOTIFICATION_SETTING'
+    ](EngineSystemSettingName.ChatEndSoundNotification);
 
     // @author @stanislav-kozak
     // When chat action is ChatActions.UserInvite do we need to play sound notification
     // also when chat action is ChatActions.Message do we need to play sound notification
     if (
       (isNewChatSoundNotification && action === ChatActions.UserInvite) ||
-      (isNewMessageSoundNotification && action === ChatActions.Message)
+      (isNewMessageSoundNotification && action === ChatActions.Message) ||
+      (isChatEndSoundNotification && action === ChatActions.Close)
     ) {
       context.dispatch(
         'features/notifications/PLAY_SOUND',
         { action },
         { root: true },
       );
+    }
+
+    if (isChatEndPushNotification && action === ChatActions.Close) {
+      const text = i18n.global.t('notification.chatEnded', {
+        name: displayChatName(chat),
+      });
+
+      eventBus.$emit('notification', {
+        type: 'error',
+        text,
+        timeout:
+          context.rootGetters[
+            'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+          ],
+      });
     }
 
     if (
@@ -64,45 +101,33 @@ const actions = {
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.ChatEndSoundNotification);
 
-    // @author @stanislav-kozak
-    // Function for display chat name
-    const displayChatName = () => {
-      if (chat?.members?.length) {
-        return chat?.members?.map((member) => member.name).join(', ');
-      }
-
-      if (chat?.title) {
-        return chat.title;
-      }
-
-      return 'unknown';
-    };
-
     context.commit('features/notifications/SET_CURRENTLY_PLAYING', null, {
       root: true,
     });
 
     const text = i18n.global.t('notification.chatEnded', {
-      name: displayChatName(),
-      interval:
-        context.rootGetters['features/notification/PUSH_NOTIFICATION_TIMEOUT'] *
-        1000,
+      name: displayChatName(chat),
     });
 
     // @author @stanislav-kozak
     // We check option by admin settings enable for send push notification
     if (isChatEndPushNotification) {
-      await context.dispatch(
-        'features/notifications/SEND_NOTIFICATION',
-        { text },
-        { root: true },
-      );
+      eventBus.$emit('notification', {
+        type: 'error',
+        text,
+        timeout:
+          context.rootGetters[
+            'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+          ],
+      });
     }
 
     // @author @stanislav-kozak
     // We check option by admin settings enable for play sound notification
     if (isChatEndSoundNotification) {
-      context.commit('SET_HANGUP_SOUND_ALLOW', true);
+      context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
+        root: true,
+      });
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
         { action: chat.state },
