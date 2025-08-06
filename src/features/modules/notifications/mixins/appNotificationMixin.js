@@ -27,9 +27,11 @@ export default {
 
   methods: {
     ...mapActions('features/notifications', {
-      playRinging: 'HANDLE_ANY_CALL_RINGING',
       stopPlaying: 'STOP_SOUND',
       changeHangupSoundAllowance: 'HANDLE_HANGUP_SOUND_ALLOW',
+    }),
+    ...mapActions('features/callNotifications', {
+      playRinging: 'HANDLE_ANY_CALL_RINGING',
     }),
   },
 };

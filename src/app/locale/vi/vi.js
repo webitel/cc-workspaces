@@ -315,4 +315,8 @@ export default {
   confirmationPopup: {
     title: 'Xác nhận hành động',
   },
+  autocompleteList: {
+    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Mở menu trả lời nhanh trong chat'
+  }
 };
