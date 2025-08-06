@@ -23,19 +23,19 @@
     </confirmation-popup>
 
     <header class="processing-form-file__title">
+      <wt-icon
+        class="processing-form-file__icon"
+        color="active"
+        icon="docs"
+      ></wt-icon>
       {{ label }}
+      <span class="processing-form-file__count" v-if="fileCounter">
+        ({{ fileCounter}} {{ $t('vocabulary.files') }})
+      </span>
       <wt-hint
         v-if="hint"
       >{{ hint }}
       </wt-hint>
-
-      <aside class="processing-form-file__icon">
-        <wt-icon
-          color="contrast"
-          icon="docs"
-          size="sm"
-        ></wt-icon>
-      </aside>
       <div class="processing-form-file__actions-wrapper">
         <wt-icon-btn
           v-if="readonly"
@@ -62,7 +62,6 @@
             @input="handleFileInput"
           >
         </div>
-
         <wt-icon-btn
           v-show="collapsible || !collapsed"
           :icon="collapsed ? 'arrow-right' : 'arrow-down'"
@@ -155,6 +154,9 @@ export default {
     isFormFile() {
       return !this.readonly || !isEmpty(this.value);
     },
+    fileCounter () {
+      return this.value.length
+    }
   },
   methods: {
     async downloadAll() {
@@ -245,24 +247,29 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-sm);
-  border: 1px dashed var(--job-color);
+  padding: 0 0 var(--spacing-sm) 0;
+  border: 1px dashed var(--wt-chip-secondary-background-color);
   border-radius: var(--border-radius);
   gap: var(--spacing-sm);
 
   .processing-form-file__icon {
-    position: absolute;
-    top: 0;
-    right: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
     padding: var(--spacing-3xs);
     line-height: 0;
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-radius: var(--border-radius);
     background: var(--job-color);
+  }
+
+  .processing-form-file__count {
+    margin-left: var(--spacing-2xs);
   }
 
   .processing-form-file__title {
     display: flex;
     align-items: center;
+    background: var(--wt-chip-secondary-background-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
   }
 }
 

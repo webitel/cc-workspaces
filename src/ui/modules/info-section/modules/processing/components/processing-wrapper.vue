@@ -76,5 +76,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
 }
 </style>
