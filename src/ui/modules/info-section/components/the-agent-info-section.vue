@@ -23,20 +23,23 @@
         v-model="currentTab"
         :tabs="tabs"
         :size="infoSecSize"
-      ></the-agent-info-nav-panel>
-      <keep-alive>
-        <component
-          :is="currentTab.value"
-          class="info-tab"
-          :task="taskOnWorkspace"
-          :size="infoSecSize"
-        ></component>
-      </keep-alive>
+      />
+      <wt-replace-transition>
+        <keep-alive>
+          <component
+            :is="currentTab.value"
+            class="info-tab"
+            :task="taskOnWorkspace"
+            :size="infoSecSize"
+          ></component>
+        </keep-alive>
+      </wt-replace-transition>
     </div>
   </section>
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
@@ -45,7 +48,6 @@ import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import PinAction from '../../../../app/components/utils/pin-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
-import WorkspaceState from '../../../enums/WorkspaceState.enum';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import Flows from '../modules/flows/components/flows-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
@@ -64,6 +66,7 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {
@@ -208,11 +211,7 @@ export default {
   },
   methods: {
     async loadFlowsList() {
-      try {
-        await this.$store.dispatch(`${this.flowsNamespace}/LOAD_FLOWS_LIST`);
-      } catch (err) {
-        throw err;
-      }
+      await this.$store.dispatch(`${this.flowsNamespace}/LOAD_FLOWS_LIST`);
     }
   }
 };

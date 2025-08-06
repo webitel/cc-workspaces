@@ -9,7 +9,7 @@
       v-if="collapsible"
       :collapsed="collapsed"
       @click="$emit('resize')"
-    ></collapse-action>
+    />
     <wt-tabs
       :current="currentTab"
       :tabs="tabs"
@@ -25,37 +25,39 @@
           <wt-badge
             v-show="tab.value !== currentTab.value && tab.showIndicator"
             :color-variable="`${tab.iconColor}-color`"
-          ></wt-badge>
+          />
           <wt-icon
             :color="tab.iconColor"
             :icon="tab.icon"
             :size="size"
-          ></wt-icon>
+          />
         </div>
       </template>
     </wt-tabs>
-    <component
-      :is="`${currentTab.value}-queue`"
-      :size="size"
-      class="queue-section-wrapper"
-    ></component>
+    <wt-replace-transition>
+      <component
+        :is="`${currentTab.value}-queue`"
+        :size="size"
+        class="queue-section-wrapper"
+      />
+    </wt-replace-transition>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
       rounded
       size="lg"
       @click="toggleNewCall"
-    ></wt-rounded-action>
+    />
   </section>
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
-import WorkspaceStates from '../../../enums/WorkspaceState.enum';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
@@ -69,6 +71,7 @@ export default {
     ChatQueue,
     JobQueue,
     CollapseAction,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {

@@ -1,16 +1,18 @@
 <template>
   <div>
-    <wt-loader v-if="isLoading"/>
-    <contacts-list-wrapper
-      v-else
-      :mode="props.mode"
-      :size="props.size"
-      :list="listedContacts"
-      :linked-contact="contact"
-      :namespace="props.namespace"
-      @link="linkContact"
-      @add="add"
-    />
+    <wt-replace-transition duration="normal" >
+      <wt-loader v-if="isLoading"/>
+      <contacts-list-wrapper
+        v-else
+        :mode="props.mode"
+        :size="props.size"
+        :list="listedContacts"
+        :linked-contact="contact"
+        :namespace="props.namespace"
+        @link="linkContact"
+        @add="add"
+      />
+    </wt-replace-transition>
   </div>
 </template>
 
@@ -21,6 +23,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   namespace: {
@@ -57,5 +60,4 @@ function linkContact(contact) {
 </script>
 
 <style scoped lang="scss">
-
 </style>

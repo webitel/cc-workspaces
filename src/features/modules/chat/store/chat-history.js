@@ -23,6 +23,7 @@ const actions = {
 
       context.commit('SET_CHAT_HISTORY', messages);
       context.commit('SET_NEXT_STATE', next);
+      context.commit('SET_IS_LOADED', true);
     } catch (err) {
       throw applyTransform(err, [
         notify(({ callback }) =>

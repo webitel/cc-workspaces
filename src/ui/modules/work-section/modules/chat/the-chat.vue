@@ -1,5 +1,6 @@
 <template>
   <article class="chat">
+    <wt-replace-transition appear>
     <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
       <template #header>
         <chat-header
@@ -28,10 +29,12 @@
         />
       </template>
     </task-container>
+    </wt-replace-transition>
   </article>
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters, mapState } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
@@ -56,13 +59,16 @@ export default {
     ChatTransferContainer,
     EmptyWorkspace,
     ChatFooter,
+    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   data: () => ({
     hotkeyUnsubscribers : [],
     chatContact: null,
-    currentTab: { component: defaultTab },
     chatContactIsLoaded: false,
+    currentTab: {
+      component: defaultTab
+    },
     showQuickReplies: false, // used to show/hide header when opened quick replies panel. Need only for ui components
   }),
   computed: {
@@ -75,24 +81,31 @@ export default {
     isChatHeader() {
       return this.currentTab.component !== 'empty-workspace';
     },
-    // hide footer in transfer and empty-workspace tab or if closed chat was opened
+    // hide footer in transfer, empty-workspace tab and if closed chat opened
     isChatFooter() {
       return this.currentTab.component === defaultTab;
     },
+    chatId() {
+      return this.chat.id;
+    },
   },
   watch: {
-    chat: {
+    chatId: { // if chat changed
       async handler() {
+        this.chatContactIsLoaded = false;
         this.resetTab();
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
         this.chatContactIsLoaded = true;
       },
       immediate: true,
     },
-    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-      this.chatContactIsLoaded = true;
+    contact: { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+      async handler() {
+        this.chatContactIsLoaded = false;
+        this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+        this.chatContactIsLoaded = true;
     },
+  },
   },
   methods: {
     openTab(tab) {

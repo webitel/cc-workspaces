@@ -37,12 +37,11 @@
 
 <script>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-import { getLinkedContact } from '../scripts/getLinkedContact.js';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
@@ -56,26 +55,15 @@ export default {
       type: String,
       default: ComponentSize.MD,
     },
+    chatContact: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data: () => ({
     hotkeyUnsubscribers: [],
-    chatContact: null,
   }),
-  watch: {
-    chat: {
-      async handler() {
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This computed must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-      },
-      immediate: true,
-    },
-    async contact() { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      this.chatContact = await getLinkedContact(this.chat, this.contact); // We must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-    },
-  },
   computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: state => state.contact,
-    }),
     ...mapGetters('features/chat', {
       chat: 'CHAT_ON_WORKSPACE',
       isCloseAction: 'ALLOW_CHAT_CLOSE',

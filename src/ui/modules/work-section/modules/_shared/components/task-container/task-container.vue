@@ -4,7 +4,9 @@
       <slot name="header"></slot>
     </div>
     <div class="task-container__body-wrapper">
-      <slot name="body"></slot>
+      <wt-replace-transition>
+        <slot name="body"></slot>
+      </wt-replace-transition>
     </div>
     <div class="task-container__footer-wrapper">
       <slot name="footer"></slot>
@@ -13,8 +15,10 @@
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 export default {
   name: 'TaskContainer',
+  components: { WtReplaceTransition }
 };
 </script>
 

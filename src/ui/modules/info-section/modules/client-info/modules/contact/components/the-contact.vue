@@ -20,26 +20,28 @@
         </div>
       </template>
       <template #default>
-        <add-contact
-          v-if="mode === ContactMode.ADD"
-          :size="props.size"
-          :namespace="namespace"
-          @close="changeMode(ContactMode.VIEW)"
-        />
-        <search-contact
-          v-if="mode === ContactMode.SEARCH"
-          :size="props.size"
-          :namespace="namespace"
-          @add="changeMode(ContactMode.ADD)"
-          @close="changeMode(ContactMode.VIEW)"
-        />
-        <view-contact
-          v-if="mode === ContactMode.VIEW"
-          :mode="mode"
-          :size="props.size"
-          :namespace="namespace"
-          @add="changeMode(ContactMode.ADD)"
-        />
+        <wt-replace-transition>
+          <add-contact
+            v-if="mode === ContactMode.ADD"
+            :size="props.size"
+            :namespace="namespace"
+            @close="changeMode(ContactMode.VIEW)"
+          />
+          <search-contact
+            v-if="mode === ContactMode.SEARCH"
+            :size="props.size"
+            :namespace="namespace"
+            @add="changeMode(ContactMode.ADD)"
+            @close="changeMode(ContactMode.VIEW)"
+          />
+          <view-contact
+            v-if="mode === ContactMode.VIEW"
+            :mode="mode"
+            :size="props.size"
+            :namespace="namespace"
+            @add="changeMode(ContactMode.ADD)"
+          />
+        </wt-replace-transition>
       </template>
     </wt-expansion-panel>
   </article>
@@ -50,6 +52,7 @@ import { computed,ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
@@ -140,11 +143,6 @@ watch([
     flex: 1;
     justify-content: end;
     gap: var(--spacing-xs);
-  }
-
-  :deep(.wt-expansion-panel), :deep(.wt-expansion-panel .wt-expansion-panel-body) {
-    flex: 1;
-    min-height: 0;
   }
 }
 </style>

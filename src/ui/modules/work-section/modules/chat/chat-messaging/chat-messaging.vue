@@ -12,16 +12,17 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <chat-history
-      v-if="contact?.id && !showQuickReplies"
-      :contact="contact"
-      :size="size"
-    />
-    <current-chat
-      v-else-if="!showQuickReplies"
-      :size="size"
-    />
-
+    <wt-replace-transition appear>
+      <chat-history
+        v-if="contact?.id && !showQuickReplies"
+        :contact="contact"
+        :size="size"
+      />
+      <current-chat
+        v-else-if="!showQuickReplies"
+        :size="size"
+      />
+    </wt-replace-transition>
     <quick-replies
       v-show="showQuickReplies"
       :search="searchReply"
@@ -99,12 +100,13 @@
 </template>
 
 <script setup lang="ts">
+import { WebitelContactsContact } from '@webitel/api-services/gen';
+import {ComponentSize} from '@webitel/ui-sdk/enums';
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import {computed, inject, onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
+import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
-import {ComponentSize} from '@webitel/ui-sdk/enums';
-import { WebitelContactsContact } from '@webitel/api-services/gen';
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import {useDropzoneHandlers} from '../../../../../composibles/useDropzoneHandlers';
