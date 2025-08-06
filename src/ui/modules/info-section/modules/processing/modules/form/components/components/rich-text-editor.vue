@@ -5,6 +5,7 @@
       :hint="hint"
     >{{ label }}</wt-label>
     <editor
+      id="editor"
       :model-value="strValue"
       :initial-value="strValue"
       :init="config"
@@ -18,6 +19,7 @@
 
 <script>
 import Editor from '@tinymce/tinymce-vue';
+import { mapGetters } from 'vuex';
 
 /**
  * Тут піздєц. Який? Описую в таску
@@ -85,6 +87,9 @@ export default {
     'input',
   ],
   computed: {
+    ...mapGetters('ui/appearance', {
+      darkMode: 'DARK_MODE',
+    }),
     strValue() {
       // editor breaks on Number data type :( [WTEL-4477]
       return `${this.value}`;
@@ -93,6 +98,8 @@ export default {
       return this.$i18n.locale;
     },
     config() {
+      const { bgColor, textColor } = this.getColors()
+
       return {
         toolbar_sticky: true,
         skin: false,
@@ -102,7 +109,12 @@ export default {
         statusbar: this.isHtml,
         toolbar_mode: 'sliding',
         language: this.language,
-        // content_style: `${contentUiCss}\n${contentCss}`,
+        content_style: `
+          body {
+            background-color: ${bgColor};
+            color: ${textColor};
+          }
+        `
       };
     },
     isHtml() {
@@ -134,9 +146,57 @@ export default {
         : 'undo redo';
     },
   },
+  watch: {
+    darkMode() {
+      this.updateEditorColors();
+    }
+  },
+  methods: {
+    updateEditorColors() {
+      const editor = tinymce?.get('editor');
+      if (editor) {
+        const { bgColor, textColor } = this.getColors()
+
+        editor.dom.setStyles(editor.getBody(), {
+          backgroundColor: bgColor,
+          color: textColor
+        });
+      }
+    },
+    getColors() {
+      const bgColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--content-wrapper-color')
+        .trim();
+      const textColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--wt-text-field-text-color')
+        .trim();
+
+      return { bgColor, textColor }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-
+.rich-text-editor {
+  :deep(.tox-toolbar__primary) {
+    background-color: var(--content-wrapper-color);
+  }
+  :deep(.tox-editor-header) {
+    background-color: var(--content-wrapper-color);
+  }
+  :deep(.tox-tbtn svg) {
+    fill: var(--icon-active-color);
+  }
+  :deep(.tox-tbtn--disabled) {
+    &:hover {
+      svg {
+        fill: var(--icon-color);
+      }
+    }
+    svg {
+      fill: var(--icon-color);
+    }
+  }
+}
 </style>
