@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -62,7 +63,6 @@ import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 export default {
   name: 'TheAgentQueueSection',

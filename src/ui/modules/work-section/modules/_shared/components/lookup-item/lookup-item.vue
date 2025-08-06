@@ -77,6 +77,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.lookup-item {
+  cursor: pointer;
+}
 .lookup-item__main {
   display: flex;
   gap: var(--spacing-xs);

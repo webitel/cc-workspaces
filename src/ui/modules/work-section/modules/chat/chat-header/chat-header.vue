@@ -37,7 +37,7 @@
 
 <script>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
