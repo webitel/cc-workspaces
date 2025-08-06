@@ -43,7 +43,7 @@
         :label="t(label)"
         :value="mode"
         :selected="searchMode"
-        @input="changeSearchMode"
+        @update:selected="changeSearchMode"
       ></wt-radio>
     </div>
 
