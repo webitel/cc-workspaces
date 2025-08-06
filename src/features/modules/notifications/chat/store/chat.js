@@ -47,6 +47,11 @@ const actions = {
       (isNewMessageSoundNotification && action === ChatActions.Message) ||
       (isChatEndSoundNotification && action === ChatActions.Close)
     ) {
+      // @author @stanislav-kozak
+      // We need stop sound for prevent play sound notification, and play sound for each new message action
+      context.dispatch('features/notifications/STOP_SOUND', null, {
+        root: true,
+      });
       context.dispatch(
         'features/notifications/PLAY_SOUND',
         { action },
