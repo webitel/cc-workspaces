@@ -25,15 +25,13 @@
         :size="infoSecSize"
       />
       <keep-alive>
-        <wt-replace-transition>
-          <component
-            :is="currentTab.value"
-            class="info-tab"
-            :task="taskOnWorkspace"
-            :size="infoSecSize"
-          ></component>
-          </wt-replace-transition>
-        </keep-alive>
+        <component
+          :is="currentTab.value"
+          class="info-tab"
+          :task="taskOnWorkspace"
+          :size="infoSecSize"
+        ></component>
+      </keep-alive>
     </div>
   </section>
 </template>
@@ -128,6 +126,7 @@ export default {
     }),
     ...mapState({
       flowsList(state) {
+        console.log('flowsList state:', state);
         return getNamespacedState(state, `${this.flowsNamespace}`).flows;
       },
     }),
@@ -204,6 +203,7 @@ export default {
     },
   },
   created() {
+    console.log('created TheAgentInfoSection currentTab:', this.currentTab);
     this.currentTab = this.tabsObject.generalInfo;
   },
   mounted() {

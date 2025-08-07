@@ -25,7 +25,7 @@ class="flow-tab__button"
 
 <script setup>
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import FlowButton from './flow-button.vue';
