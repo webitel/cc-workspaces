@@ -12,12 +12,14 @@
         @click="$emit('resize')"
       />
     </div>
-    <wt-replace-transition appear>
-      <component
-        :is="workspaceComponent"
-        class="work-section__main-content"
-        :size="size"
-      />
+    <wt-replace-transition>
+      <keep-alive>
+        <component
+          :is="workspaceComponent"
+          class="work-section__main-content"
+          :size="size"
+        />
+      </keep-alive>
     </wt-replace-transition>
   </section>
 </template>

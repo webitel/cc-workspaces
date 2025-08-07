@@ -63,11 +63,13 @@ const agentInfo = computed(() => getNamespacedState(store.state, namespace));
 const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
 
 async function loadAgentInfo(payload) {
+  console.log('GeneralInfoTab loadAgentInfo', payload);
   await store.dispatch(`${namespace}/LOAD_AGENT_INFO`, payload);
   isLoaded.value = true;
 }
 
-watchOnce(agent, () => {
+watchOnce(agent.value, () => {
+  console.log('GeneralInfoTab Watch Once agent', agent.value);
   subscribe(loadAgentInfo);
 });
 </script>
