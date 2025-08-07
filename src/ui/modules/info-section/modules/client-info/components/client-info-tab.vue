@@ -54,7 +54,6 @@ const isAllowedContacts = computed(() => {
 );
 
 onMounted(async () => {
-  console.log('ClientInfoTab onMounted hook!');
   isHideContact.value = await getValueWbtHideContactVariable();
 })
 </script>

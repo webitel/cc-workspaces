@@ -24,22 +24,19 @@
         :tabs="tabs"
         :size="infoSecSize"
       />
-      <wt-replace-transition>
-        <keep-alive>
-          <component
-            :is="currentTab.value"
-            class="info-tab"
-            :task="taskOnWorkspace"
-            :size="infoSecSize"
-          ></component>
-        </keep-alive>
-      </wt-replace-transition>
+      <keep-alive>
+        <component
+          :is="currentTab.value"
+          class="info-tab"
+          :task="taskOnWorkspace"
+          :size="infoSecSize"
+        ></component>
+      </keep-alive>
     </div>
   </section>
 </template>
 
 <script>
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
@@ -66,7 +63,6 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
-    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {
@@ -128,7 +124,6 @@ export default {
     }),
     ...mapState({
       flowsList(state) {
-        console.log('flowsList state:', state);
         return getNamespacedState(state, `${this.flowsNamespace}`).flows;
       },
     }),
@@ -205,7 +200,6 @@ export default {
     },
   },
   created() {
-    console.log('created TheAgentInfoSection currentTab:', this.currentTab);
     this.currentTab = this.tabsObject.generalInfo;
   },
   mounted() {
