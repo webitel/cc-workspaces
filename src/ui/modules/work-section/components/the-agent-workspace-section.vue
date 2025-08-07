@@ -12,7 +12,6 @@
         @click="$emit('resize')"
       />
     </div>
-    <wt-replace-transition>
       <keep-alive>
         <component
           :is="workspaceComponent"
@@ -20,12 +19,10 @@
           :size="size"
         />
       </keep-alive>
-    </wt-replace-transition>
   </section>
 </template>
 
 <script>
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters } from 'vuex';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
@@ -48,7 +45,6 @@ export default {
     Job,
     EmptyWorkspace,
     CollapseAction,
-    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {
