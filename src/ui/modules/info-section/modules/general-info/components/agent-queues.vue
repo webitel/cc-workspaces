@@ -18,7 +18,7 @@
                 :agents="queue.agents"
                 :size="size"
               ></agent-indicators>
-              <wt-chip>{{ queue.waitingMembers }}</wt-chip>
+              <wt-chip>{{ displayMembers(queue) }}</wt-chip>
             </div>
           </li>
         </ul>
@@ -43,6 +43,13 @@ export default {
       required: true,
     },
   },
+  methods: {
+    displayMembers(queue) {
+      return queue.maxMemberLimit && queue.waitingMembers > queue.maxMemberLimit
+        ? `${queue.maxMemberLimit}+`
+        : queue.waitingMembers;
+    },
+  }
 };
 </script>
 
