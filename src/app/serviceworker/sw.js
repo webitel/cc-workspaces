@@ -1,6 +1,7 @@
 // https://vite-pwa-org.netlify.app/guide/inject-manifest.html
 import { clientsClaim } from 'workbox-core';
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
+import logo from '@webitel/ui-sdk/dist/img/sprite/webitel-logo.svg?url';
 
 self.__WB_DISABLE_DEV_LOGS = true;
 
@@ -17,10 +18,14 @@ const showNotification = ({
                             title,
                             body,
                             actions,
-                          }) => self.registration.showNotification(title, {
-  body,
-  actions,
-});
+                          }) => {
+  self.registration.showNotification(title, {
+    body,
+    actions,
+    icon: logo,
+    badge: logo
+  });
+}
 
 self.addEventListener('message', async (event) => {
   const { type, payload } = event.data;
