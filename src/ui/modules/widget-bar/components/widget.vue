@@ -117,37 +117,37 @@ $widget-chat-aht-color:  var(--success-color);
 .widget-icon {
   margin-right: var(--spacing-xs);
 
-  &--widget-call-inbound.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-call-inbound {
     fill: $widget-inbound-color;
     stroke: $widget-inbound-color;
   }
 
-  &--widget-call-handled.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-call-handled {
     fill: $widget-handled-color;
     stroke: $widget-handled-color;
   }
 
-  &--widget-call-missed.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-call-missed {
     fill: $widget-missed-color;
     stroke: $widget-missed-color;
   }
 
-  &--widget-avg-talk.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-avg-talk {
     fill: $widget-avg-talk-color;
     stroke: $widget-avg-talk-color;
   }
 
-  &--widget-avg-hold.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-avg-hold {
     fill: $widget-avg-hold-color;
     stroke: $widget-avg-hold-color;
   }
 
-  &--widget-chat-accepts.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-chat-accepts {
     fill: $widget-chat-accepts-color;
     stroke: $widget-chat-accepts-color;
   }
 
-  &--widget-chat-aht.wt-icon ::v-deep .wt-icon__icon {
+  &--widget-chat-aht {
     fill: $widget-chat-aht-color;
     stroke: $widget-chat-aht-color;
   }

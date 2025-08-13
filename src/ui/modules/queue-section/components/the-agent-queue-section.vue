@@ -197,7 +197,7 @@ export default {
     background: var(--success-color);
     z-index: var(--ws-main-call-button-z-index);
 
-    :deep .wt-icon__icon {
+    :deep .wt-icon {
       fill: var(--icon-on-dark-color);
     }
   }
