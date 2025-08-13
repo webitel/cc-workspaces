@@ -16,7 +16,7 @@ import Autolinker from 'autolinker';
 
 interface IChatMessageTextProps {
   text: string;
-  agent: boolean;
+  agent?: boolean;
 }
 
 const props = withDefaults(defineProps<IChatMessageTextProps>(), {
