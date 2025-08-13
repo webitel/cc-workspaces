@@ -126,7 +126,7 @@ export default {
     },
 
     historyIdLink(){
-      return `${import.meta.env.VITE_HISTORY_URL}/${this.item.id}`
+      return `${import.meta.env.VITE_HISTORY_URL}/view/call_view/${this.item.id}`
     },
 
     date() {
