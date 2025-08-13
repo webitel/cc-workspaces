@@ -18,9 +18,6 @@
           ref="infiniteScrollWrap"
           class="processing-form-table__scroll-wrapper"
         >
-          <pre>
-            dataList {{ dataList }}
-          </pre>
           <wt-table
             class="processing-form-table__table"
             :data="dataList"
