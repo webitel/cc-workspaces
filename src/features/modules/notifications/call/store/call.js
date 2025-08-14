@@ -45,11 +45,11 @@ const actions = {
       // We check option by admin settings and after user setting for check if we need to send notification
       if (isCallEndPushNotification || isCallEndSound) {
         eventBus.$emit('notification', {
-          type: 'error',
+          type: 'info',
           text,
           timeout:
             context.rootGetters[
-              'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+              'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
             ],
         });
       }
