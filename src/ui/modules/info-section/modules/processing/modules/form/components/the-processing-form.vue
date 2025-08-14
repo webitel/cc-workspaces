@@ -188,7 +188,7 @@ export default {
   },
 
   unmounted() {
-    this.hotkeyUnsubscribers((unsubscribe) => unsubscribe());
+    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
   },
 };
 </script>
