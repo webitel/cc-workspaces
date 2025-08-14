@@ -17,6 +17,7 @@ const getList = async (params) => {
   const defaultObject = {
     countMembers: 0,
     waitingMembers: 0,
+    maxMemberLimit: 0,
     agents: {},
   };
 

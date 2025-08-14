@@ -71,11 +71,11 @@ import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './t
 const { t } = useI18n();
 
 interface Props {
-  componentId: string
-  table: Table
-  filters: TableFilter[]
-  fields?: string[]
-  actions?: TableAction[]
+  componentId: string;
+  table: Table;
+  filters: TableFilter[];
+  fields?: string[];
+  actions?: TableAction[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -85,7 +85,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'call-table-action', payload: TableRow): void
-}>()
+}>();
 
 // @author @liza-pohranichna
 // why? => https://webitel.atlassian.net/browse/WTEL-6890
@@ -101,11 +101,11 @@ const isSystemSource = computed<boolean>(() => props.table?.isSystemSource);
 const systemSourcePath = computed<string>(() => props.table?.systemSource?.path);
 
 const tableFields = computed<string[]>(() => { // fields for API request
-  let fields:string[] = props.fields;
+  let fields: string[] = props.fields;
   if (tableColumns.value.length) {
     // @author @liza-pohranichna
     // try to get all fields from tableColumns
-    const fieldsFromColumns:string[] = tableColumns.value.map((column) => ( column.pathArray[0] ));
+    const fieldsFromColumns: string[] = tableColumns.value.map((column) => (column.pathArray[0]));
     fields = [...new Set([...props.fields, ...fieldsFromColumns])]; // merge arrays and remove duplicates
   }
   return fields;
@@ -116,21 +116,21 @@ function normalizeSlotKey(key: string): string {
   // need this for slots in wt-table component.
   // Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
   return key
-  .replace(columnsFieldSeparator, '_')
-  .replace('[', '_')
-  .replace(']', '_');
+    .replace(columnsFieldSeparator, '_')
+    .replace('[', '_')
+    .replace(']', '_');
 }
 
 const tableColumns = computed<TableColumn[]>(() => {
   return props.table?.displayColumns.map((column) => {
 
-    const pathArray = applyTransform(getPathArray(column.field, columnsFieldSeparator), [snakeToCamel()]);
+    const pathArray = getPathArray(column.field, columnsFieldSeparator);
     return {
       ...column,
-      header: normalizeSlotKey(column.field) , // normalize slot key for wt-table component
+      header: normalizeSlotKey(column.field), // normalize slot key for wt-table component
       pathArray, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
-    }
-  })
+    };
+  });
 });
 
 const headers = computed<WtTableHeader[]>(() => { // headers for wt-table prop
@@ -163,7 +163,7 @@ function handleTableList(tableList: TableRow[]): TableRow[] {
 
       newItem = {
         ...newItem,
-        [column.header]: newValue // set new value in item by column header. Example: contact_emails_11_name: 'John Doe'
+        [column.header]: newValue, // set new value in item by column header. Example: contact_emails_11_name: 'John Doe'
       };
 
     });
@@ -203,7 +203,6 @@ async function initDataList(): Promise<void> {
 
   } else data = applyTransform(props.table?.source, [
     merge(getDefaultGetListResponse()),
-    snakeToCamel(),
   ]);
 
   dataList.value = handleTableList(data);
@@ -242,9 +241,9 @@ useInfiniteScroll(infiniteScrollWrap,
   },
   {
     distance: 100,
-    canLoadMore: () => (!nextLoading.value && nextAllowed.value)
-  }
-)
+    canLoadMore: () => (!nextLoading.value && nextAllowed.value),
+  },
+);
 
 </script>
 

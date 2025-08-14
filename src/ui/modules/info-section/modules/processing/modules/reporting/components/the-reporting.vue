@@ -9,20 +9,17 @@
     </template>
     <template #form>
       <div class="reporting__status-wrapper">
-        <wt-button
-          :outline="!taskReporting.success"
-          class="post-processing__status-control"
-          color="success"
-          @click="setSuccess(true)"
-        >{{ $t('infoSec.processing.reporting.yes') }}
-        </wt-button>
-        <wt-button
-          :outline="taskReporting.success"
-          class="post-processing__status-control"
-          color="error"
-          @click="setSuccess(false)"
-        >{{ $t('infoSec.processing.reporting.no') }}
-        </wt-button>
+        <wt-radio
+          v-model="taskReporting.success"
+          :label="$t('infoSec.processing.reporting.yes')"
+          :value="true"
+        ></wt-radio>
+
+        <wt-radio
+          v-model="taskReporting.success"
+          :label="$t('infoSec.processing.reporting.no')"
+          :value="false"
+        ></wt-radio>
       </div>
       <form class="reportingg-form">
         <failure-form
