@@ -26,11 +26,11 @@ const actions = {
 
     if (isJobEndPushNotification) {
       eventBus.$emit('notification', {
-        type: 'error',
+        type: 'info',
         text,
         timeout:
           context.rootGetters[
-            'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+            'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
           ],
       });
     }
@@ -73,11 +73,11 @@ const actions = {
       });
       if (isJobEndPushNotification) {
         eventBus.$emit('notification', {
-          type: 'error',
+          type: 'info',
           text,
           timeout:
             context.rootGetters[
-              'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+              'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
             ],
         });
       }
