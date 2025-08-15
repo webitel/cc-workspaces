@@ -26,7 +26,7 @@
       <wt-icon
         class="processing-form-file__icon"
         color="active"
-        icon="docs"
+        icon="file"
       ></wt-icon>
       {{ label }}
       <span class="processing-form-file__count" v-if="fileCounter">
@@ -261,13 +261,13 @@ export default {
   }
 
   .processing-form-file__count {
-    margin-left: var(--spacing-2xs);
+    margin: var(--spacing-2xs);
   }
 
   .processing-form-file__title {
     display: flex;
     align-items: center;
-    background: var(--wt-chip-secondary-background-color);
+    background: var(--wt-expansion-panel-header-background-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
   }
