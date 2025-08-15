@@ -46,54 +46,70 @@
   </processing-wrapper>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
+<script setup lang="ts">
+import { computed, watch, defineProps } from 'vue'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
-import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FailureForm from './reporting-failure-form.vue';
+import ProcessingWrapper from '../../../components/processing-wrapper.vue';
 
-export default {
-  name: 'TheReporting',
-  components: { FailureForm },
-  mixins: [processingModuleMixin],
-  computed: {
-    // is needed for watcher
-    isTaskReporting() {
-      return !!this.taskReporting;
-    },
-    taskReporting() {
-      return this.task.postProcessData;
-    },
-    reportingSent() {
-      return this.task.attempt.reportedAt;
-    },
-    reportButtonColor() {
-      return this.reportingSent ? 'secondary' : 'primary';
-    },
-    reportButtonText() {
-      return this.reportingSent ? this.$t('reusable.edit') : this.$t('reusable.send');
-    },
-  },
+export interface IReportingPayload {
+  success: boolean;
+  description: string;
+  nextDistributeAt?: number;
+}
 
-  methods: {
-    ...mapActions('ui/infoSec/processing/reporting', {
-      initReportingForm: 'INIT_REPORTING_FORM',
-    }),
-    sendReporting() {
-      const reporting = this.taskReporting.generateReporting();
-      this.task.reporting(reporting);
-    },
-    setSuccess(value) {
-      this.taskReporting.success = value;
-    },
-  },
-  watch: {
-    isTaskReporting: {
-      handler() { this.initReportingForm(); },
-      immediate: true,
-    },
-  },
-};
+export interface IReportingForm {
+  success: boolean;
+  description: string;
+  nextDistributeAt: number;
+  isScheduleCall: boolean;
+  generateReporting: () => IReportingPayload;
+}
+
+interface ITask {
+  postProcessData: IReportingForm;
+  attempt: {
+    reportedAt?: number | string | null;
+  };
+  reporting: (payload: IReportingPayload) => void;
+}
+
+interface IReportingProps {
+  task: ITask;
+}
+
+const store = useStore()
+const { t } = useI18n()
+
+const props = defineProps<IReportingProps>()
+
+const taskReporting = computed(() => props.task.postProcessData)
+const isTaskReporting = computed(() => !!taskReporting.value)
+const reportingSent = computed(() => props.task.attempt?.reportedAt)
+
+const reportButtonColor = computed(() =>
+  reportingSent.value ? 'secondary' : 'primary'
+)
+
+const reportButtonText = computed(() =>
+  reportingSent.value ? t('reusable.edit') : t('reusable.send')
+)
+
+const initReportingForm = () =>
+  store.dispatch('ui/infoSec/processing/reporting/INIT_REPORTING_FORM')
+
+const sendReporting = () => {
+  const reporting = taskReporting.value.generateReporting()
+  props.task.reporting(reporting)
+}
+
+
+watch(isTaskReporting, () => {
+  initReportingForm()
+}, { immediate: true })
+
 </script>
 
 <style lang="scss" scoped>
