@@ -7,12 +7,12 @@
       </h2>
       <div class="processing-form__schedule-call-select-wrapper">
         <wt-radio
-          v-model="reporting.isScheduleCall"
+          v-model:selected="reporting.isScheduleCall"
           :label="$t('infoSec.processing.reporting.yes')"
           :value="true"
         ></wt-radio>
         <wt-radio
-          v-model="reporting.isScheduleCall"
+          v-model:selected="reporting.isScheduleCall"
           :label="$t('infoSec.processing.reporting.no')"
           :value="false"
         ></wt-radio>

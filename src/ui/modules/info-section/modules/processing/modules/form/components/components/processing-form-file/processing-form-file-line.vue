@@ -86,7 +86,7 @@ export default {
       if (type.includes('application')) return 'preview-tag-application';
       if (type.includes('video')) return 'preview-tag-video';
       if (type.includes('audio')) return 'preview-tag-audio';
-      return 'docs';
+      return 'file';
     },
     actionIcon() {
       switch (this.status) {
@@ -122,7 +122,7 @@ export default {
 <style lang="scss" scoped>
 .processing-form-file-line {
   display: grid;
-  padding: var(--spacing-xs) 0;
+  padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
   grid-template-columns: 24px 1fr 100px 100px 24px;
   gap: var(--spacing-xs);
 

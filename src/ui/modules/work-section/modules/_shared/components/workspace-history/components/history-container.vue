@@ -14,7 +14,7 @@
 
     <template #content>
       <div
-v-for="dataItem in dataList"
+        v-for="dataItem in dataList"
         class="history-container-contact">
         <p class="history-container-contact__caption">
           {{dataItem.groupName}}
@@ -63,7 +63,7 @@ export default {
   data: () => ({
     dataList: '',
     historyNumber: '',
-    dataFields: ['id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact'],
+    dataFields: ['id', 'parent_id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact'],
   }),
 
   watch: {

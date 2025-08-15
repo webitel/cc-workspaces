@@ -27,7 +27,6 @@ const getList = async ({ path, filters, ...params }) => {
     const response = await instance.get(url);
     const { data, items, next } = applyTransform(response.data, [
       merge(getDefaultGetListResponse()),
-      snakeToCamel(),
     ]);
 
     return {
