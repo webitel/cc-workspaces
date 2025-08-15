@@ -85,6 +85,9 @@
     "workbox-core": "^7.0.0",
     "workbox-precaching": "^7.0.0"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4"
+  },
   "overrides": {
     "vite": "^6.2.6"
   }
