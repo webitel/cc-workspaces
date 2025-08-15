@@ -260,16 +260,13 @@ export default {
     background: var(--job-color);
   }
 
-  .processing-form-file__count {
-    margin: var(--spacing-2xs);
-  }
-
   .processing-form-file__title {
     display: flex;
     align-items: center;
     background: var(--wt-expansion-panel-header-background-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
+    gap: var(--spacing-2xs);
   }
 }
 
