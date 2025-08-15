@@ -45,6 +45,7 @@ const text = computed(() => {
   border-radius: var(--border-radius);
   background: var(--primary-light-color);
   color: var(--primary-on-color);
+  place-self: flex-start;
 
   // reset links inside text
   :deep(.chat-message-text__link) {
