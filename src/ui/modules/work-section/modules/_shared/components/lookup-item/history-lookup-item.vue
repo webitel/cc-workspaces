@@ -126,7 +126,8 @@ export default {
     },
 
     historyIdLink(){
-      return `${import.meta.env.VITE_HISTORY_URL}/view/call_view/${this.item.id}`
+      const historyId = this.item.parentId ? this.item.parentId : this.item.id;
+      return `${import.meta.env.VITE_HISTORY_URL}/view/call_view/${historyId}`;
     },
 
     date() {
