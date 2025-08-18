@@ -26,14 +26,22 @@
             :grid-actions="false"
           >
             <template
+              v-for="header in headers"
+              #[header.value]="{ item }"
+              :key="header.value"
+            >
+              <component
+                :is="cellTableComponents[header.type]"
+                :value="item[header.value]"
+              />
+            </template>
+            <template
               v-for="action in tableActions"
               #[action.field]="{ item }"
               :key="action.field"
             >
               <div class="processing-form-table__action">
-                <p>
-                  {{ item[action.field] }}
-                </p>
+                <p> {{ item[action.field] }} </p>
                 <wt-button
                   :color="action.color"
                   @click="sendAction(action.action, item)"
@@ -55,20 +63,34 @@ import { useInfiniteScroll } from '@vueuse/core';
 import { getDefaultGetListResponse } from '@webitel/api-services/api/defaults';
 import {
   applyTransform,
+  camelToSnake,
   merge,
   snakeToCamel,
 } from '@webitel/api-services/api/transformers';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
-import { computed, defineProps, inject, onMounted, ref, useTemplateRef } from 'vue';
+import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TableApi from './api/table';
+import BooleanTableContent from './components/boolean-table-content.vue';
+import DateTimeTableContent from './components/date-time-table-content.vue';
+import LinkTableContent from './components/link-table-content.vue';
+import NumberTableContent from './components/number-table-content.vue';
+import TextTableContent from './components/text-table-content.vue';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
 import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './types/FormTable';
 
 const { t } = useI18n();
+
+const cellTableComponents = { // components for each cell in table depending on type of value @author @liza-pohranichna
+  number: NumberTableContent,
+  text: TextTableContent,
+  bool: BooleanTableContent,
+  link: LinkTableContent,
+  datetime: DateTimeTableContent,
+}
 
 interface Props {
   componentId: string;
@@ -99,16 +121,17 @@ const infiniteScrollWrap = useTemplateRef('infiniteScrollWrap');
 
 const isSystemSource = computed<boolean>(() => props.table?.isSystemSource);
 const systemSourcePath = computed<string>(() => props.table?.systemSource?.path);
-
 const tableFields = computed<string[]>(() => { // fields for API request
-  let fields: string[] = props.fields;
+  let fields:string[] = props.fields;
+
   if (tableColumns.value.length) {
     // @author @liza-pohranichna
     // try to get all fields from tableColumns
     const fieldsFromColumns: string[] = tableColumns.value.map((column) => (column.pathArray[0]));
     fields = [...new Set([...props.fields, ...fieldsFromColumns])]; // merge arrays and remove duplicates
   }
-  return fields;
+
+  return applyTransform(fields, [camelToSnake()]); // convert to snake case for API request before return
 });
 
 function normalizeSlotKey(key: string): string {
@@ -128,7 +151,7 @@ const tableHeader = computed<string>(() => {
 const tableColumns = computed<TableColumn[]>(() => {
   return props.table?.displayColumns.map((column) => {
 
-    const pathArray = getPathArray(column.field, columnsFieldSeparator);
+    const pathArray = applyTransform(getPathArray(column.field, columnsFieldSeparator), [snakeToCamel()]);
     return {
       ...column,
       header: normalizeSlotKey(column.field), // normalize slot key for wt-table component
@@ -145,6 +168,7 @@ const headers = computed<WtTableHeader[]>(() => { // headers for wt-table prop
     width: column.width ? column.width + 'px' : '',
   }));
 });
+
 const tableActions = computed<TableAction[]>(() => {
   return props.actions.map((action: TableAction) => ({
     ...action,
@@ -205,10 +229,12 @@ async function initDataList(): Promise<void> {
     data = items;
     nextAllowed.value = next;
 
-  } else data = applyTransform(props.table?.source, [
-    merge(getDefaultGetListResponse()),
-  ]);
+  } else data = props.table?.source;
 
+  data = applyTransform(data, [
+    merge(getDefaultGetListResponse()),
+    snakeToCamel(),
+  ]);
   dataList.value = handleTableList(data);
 }
 

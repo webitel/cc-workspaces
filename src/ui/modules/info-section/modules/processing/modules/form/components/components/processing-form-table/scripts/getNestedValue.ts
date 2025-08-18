@@ -24,7 +24,6 @@ export default function getNestedValue(value, pathArray: string[]) {
     return value
     .map((object) => getNestedValue(object, pathArray))
     ?.filter(Boolean) // filter out empty values
-    .join(', '); // join values with comma
 
     // Example: We have array of permissions:[{ name:'PN1' }, { name:'PN2' }, { name:'PN3' }] and need to take permissions.name
     // Result will be 'PN1, PN2, PN3'
