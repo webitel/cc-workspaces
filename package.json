@@ -85,6 +85,10 @@
     "workbox-core": "^7.0.0",
     "workbox-precaching": "^7.0.0"
   },
+  "optionalDependencies": {
+    "@esbuild/darwin-arm64": "^0.24.0",
+    "@rollup/rollup-linux-x64-gnu": "^4"
+  },
   "overrides": {
     "vite": "^6.2.6"
   }

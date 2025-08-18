@@ -1,6 +1,6 @@
 <template>
   <div class="processing-form-table">
-    <wt-expansion-panel collapsed>
+    <wt-expansion-panel :collapsed="table.defaultCollapsed">
       <template #title>
         <div class="processing-form-table__title">
           <div class="processing-form-table__title-icon-wrap">
@@ -10,7 +10,7 @@
             />
           </div>
 
-          <span> {{ t('infoSec.processing.form.formTable.title') }} </span>
+          <span> {{ tableHeader }} </span>
         </div>
       </template>
       <template #default>
@@ -143,6 +143,10 @@ function normalizeSlotKey(key: string): string {
     .replace('[', '_')
     .replace(']', '_');
 }
+
+const tableHeader = computed<string>(() => {
+  return props.table?.headerTitle || t('infoSec.processing.form.formTable.title');
+});
 
 const tableColumns = computed<TableColumn[]>(() => {
   return props.table?.displayColumns.map((column) => {
