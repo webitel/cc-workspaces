@@ -29,7 +29,7 @@
         icon="file"
       ></wt-icon>
       {{ label }}
-      <span class="processing-form-file__count" v-if="fileCounter">
+      <span v-if="fileCounter">
         ({{ fileCounter}} {{ $t('vocabulary.file', 2) }})
       </span>
       <wt-hint
