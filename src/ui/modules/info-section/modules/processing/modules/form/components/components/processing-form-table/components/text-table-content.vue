@@ -13,7 +13,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '-----',
+  value: '-',
 });
 
 const text = computed(() => Array.isArray(props.value) ? props.value.join(', ') : props.value);

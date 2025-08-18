@@ -1,7 +1,7 @@
 <template>
   <div class="boolean-table-content">
     <wt-icon
-      :icon="props.value ? 'true-ic' : 'false-ic'"
+      :icon="`${props.value}-ic`"
       :color="props.value ? 'success' : 'error'"
     />
   </div>

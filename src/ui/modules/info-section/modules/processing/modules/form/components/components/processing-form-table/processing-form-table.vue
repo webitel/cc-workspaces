@@ -31,7 +31,7 @@
               :key="header.value"
             >
               <component
-                :is="typeComponents[header.type]"
+                :is="cellTableComponents[header.type]"
                 :value="item[header.value]"
               />
             </template>
@@ -84,7 +84,7 @@ import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './t
 
 const { t } = useI18n();
 
-const typeComponents = {
+const cellTableComponents = { // components for each cell in table depending on type of value @author @liza-pohranichna
   number: NumberTableContent,
   text: TextTableContent,
   bool: BooleanTableContent,
@@ -225,11 +225,12 @@ async function initDataList(): Promise<void> {
     data = items;
     nextAllowed.value = next;
 
-  } else data = applyTransform(props.table?.source, [
+  } else data = props.table?.source;
+
+  data = applyTransform(data, [
     merge(getDefaultGetListResponse()),
     snakeToCamel(),
   ]);
-
   dataList.value = handleTableList(data);
 }
 

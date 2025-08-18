@@ -8,7 +8,7 @@
 import { defineProps } from 'vue';
 
 interface Props {
-  value?: string | number | boolean;
+  value?: string | number;
 }
 
 const props = withDefaults(defineProps<Props>(), {

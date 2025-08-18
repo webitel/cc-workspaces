@@ -9,11 +9,13 @@ import { computed, defineProps } from 'vue';
 
 const props = defineProps({
   value: {
-    type: [Number],
+    type: Number,
     required: true,
   },
 });
 
-const dataTimeValue = computed<string>(() =>  new Date(+props.value).toLocaleString())
+const dataTimeValue = computed<string>(() =>  {
+  return new Date(+props.value).toLocaleString()
+})
 
 </script>
