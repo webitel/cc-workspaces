@@ -10,13 +10,13 @@
     <template #form>
       <div class="reporting__status-wrapper">
         <wt-radio
-          v-model="taskReporting.success"
+          v-model:selected="taskReporting.success"
           :label="$t('infoSec.processing.reporting.yes')"
           :value="true"
         ></wt-radio>
 
         <wt-radio
-          v-model="taskReporting.success"
+          v-model:selected="taskReporting.success"
           :label="$t('infoSec.processing.reporting.no')"
           :value="false"
         ></wt-radio>
