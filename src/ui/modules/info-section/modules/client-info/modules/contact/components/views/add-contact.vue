@@ -34,9 +34,8 @@
         @input="draft.labels = $event"
       ></wt-tags-input>
       <wt-textarea
-        :value="draft.about"
+        v-model="draft.about"
         :label="t('vocabulary.description')"
-        @input="draft.about = $event"
       ></wt-textarea>
     </div>
     <div class="add-contact__actions">
