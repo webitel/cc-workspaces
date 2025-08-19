@@ -25,8 +25,8 @@
     <header class="processing-form-file__title">
       <wt-icon
         class="processing-form-file__icon"
-        color="active"
-        icon="file"
+        color="on-dark"
+        icon="log"
       ></wt-icon>
       {{ label }}
       <span v-if="fileCounter">

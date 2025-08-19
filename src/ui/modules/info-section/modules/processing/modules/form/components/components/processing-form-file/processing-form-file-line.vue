@@ -86,7 +86,7 @@ export default {
       if (type.includes('application')) return 'preview-tag-application';
       if (type.includes('video')) return 'preview-tag-video';
       if (type.includes('audio')) return 'preview-tag-audio';
-      return 'file';
+      return 'log';
     },
     actionIcon() {
       switch (this.status) {
