@@ -26,7 +26,7 @@
       <wt-icon
         class="processing-form-file__icon"
         color="on-dark"
-        icon="file"
+        icon="log"
       ></wt-icon>
       {{ label }}
       <span v-if="fileCounter">
