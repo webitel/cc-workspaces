@@ -1,7 +1,5 @@
 <template>
-  <wt-replace-transition
-    pattern="slide-up"
-  >
+  <wt-replace-transition>
     <div class="quick-replies">
       <div class="quick-replies__header">
         <div class="quick-replies__title-wrapper">

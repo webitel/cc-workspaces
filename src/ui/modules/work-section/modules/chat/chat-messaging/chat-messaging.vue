@@ -22,13 +22,14 @@
         v-else-if="!showQuickReplies"
         :size="size"
       />
+      <quick-replies
+        v-else
+        :search="searchReply"
+        @close="closeQuickRepliesPanel"
+        @select="applyQuickReply"
+      />
     </wt-replace-transition>
-    <quick-replies
-      v-show="showQuickReplies"
-      :search="searchReply"
-      @close="closeQuickRepliesPanel"
-      @select="applyQuickReply"
-    />
+
 
     <div
       v-if="isChatActive"

@@ -1,7 +1,9 @@
 <template>
   <section class="task-container">
     <div class="task-container__header-wrapper">
-      <slot name="header"></slot>
+      <wt-replace-transition>
+       <slot name="header"></slot>
+      </wt-replace-transition>
     </div>
     <div class="task-container__body-wrapper">
       <wt-replace-transition>
