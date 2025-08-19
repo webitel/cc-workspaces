@@ -10,7 +10,7 @@ import { get } from 'lodash-es';
  */
 
 export default function getNestedValue(value, pathArray: string[]) {
-  if (!value) return '';
+  if (!value) return undefined;
   if (!pathArray.length) return value; // if pathArray is empty it means we don't need to get nested value, return value as is @author @liza-pohranichna
 
   // check is lodash-get work with current path
