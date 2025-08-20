@@ -36,7 +36,7 @@ import WtCcAgentStatusTimers
   from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, watch, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
 import AgentOrgStructure from './agent-org-structure.vue';
@@ -65,10 +65,13 @@ async function loadAgentInfo(payload) {
   await store.dispatch(`${namespace}/LOAD_AGENT_INFO`, payload);
   isLoaded.value = true;
 }
+const unwatch = watch(agent, () => {
+  if (agent.value) {
+    subscribe(loadAgentInfo);
+  }
+}, { immediate: true });
 
-onMounted(() => {
-  subscribe(loadAgentInfo);
-});
+onUnmounted(() => unwatch());
 </script>
 
 <style lang="scss" scoped>
