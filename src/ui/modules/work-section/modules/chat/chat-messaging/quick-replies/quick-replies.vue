@@ -1,5 +1,4 @@
 <template>
-  <wt-replace-transition>
     <div class="quick-replies">
       <div class="quick-replies__header">
         <div class="quick-replies__title-wrapper">
@@ -34,7 +33,6 @@
         @select="select"
       />
     </div>
-  </wt-replace-transition>
 </template>
 
 <script setup lang="ts">
