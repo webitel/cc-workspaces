@@ -31,9 +31,11 @@
               :key="header.value"
             >
               <component
+                v-if="isShowTypeComponent(item, header)"
                 :is="cellTableComponents[header.type]"
                 :value="item[header.value]"
               />
+              <span v-else>{{ EMPTY_SYMBOL }}</span>
             </template>
             <template
               v-for="action in tableActions"
@@ -112,6 +114,7 @@ const emit = defineEmits<{
 // @author @liza-pohranichna
 // why? => https://webitel.atlassian.net/browse/WTEL-6890
 const columnsFieldSeparator = '.';
+const EMPTY_SYMBOL = '-';
 
 const nextAllowed = ref(false);
 const nextLoading = ref(false);
@@ -133,6 +136,11 @@ const tableFields = computed<string[]>(() => { // fields for API request
 
   return applyTransform(fields, [camelToSnake()]); // convert to snake case for API request before return
 });
+function isShowTypeComponent(item: TableRow, header: WtTableHeader): boolean {
+  // @author @liza-pohranichna
+  // we always show component for bool type, because it can be true or false
+  return !!item[header.value] || header.type === 'bool';
+};
 
 function normalizeSlotKey(key: string): string {
   // @author @liza-pohranichna
