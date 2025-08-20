@@ -24,16 +24,17 @@
         :tabs="tabs"
         :size="infoSecSize"
       />
-      <keep-alive>
-        <wt-replace-transition>
-          <component
-            :is="currentTab.value"
-            class="info-tab"
-            :task="taskOnWorkspace"
-            :size="infoSecSize"
-          ></component>
-        </wt-replace-transition>
-      </keep-alive>
+      <wt-replace-transition>
+        <keep-alive>
+            <component
+              :is="currentTab.value"
+              class="info-tab"
+              :task="taskOnWorkspace"
+              :size="infoSecSize"
+            ></component>
+        </keep-alive>
+      </wt-replace-transition>
+
     </div>
   </section>
 </template>
