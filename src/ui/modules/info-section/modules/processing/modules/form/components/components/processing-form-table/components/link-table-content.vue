@@ -12,15 +12,12 @@
         </a>
       </li>
     </ul>
-    <span v-else> {{ EMPTY_SYMBOL }} </span>
   </div>
 </template>
 
 <script setup lang="ts">
 
 import { computed, defineProps } from 'vue';
-
-import { EMPTY_SYMBOL } from '../scripts/tableEmptySymbol';
 
 interface Props {
   value?: string | string[];
