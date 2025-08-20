@@ -1,6 +1,6 @@
 <template>
   <div class="link-table-content">
-    <ul v-if="props.value">
+    <ul>
       <li v-for="(link, index) in links"
           :key="index"
       >
