@@ -60,4 +60,8 @@
   flex-wrap: nowrap;
   gap: var(--spacing-2xs);
   word-break: break-word;
+
+  .wt-chip {
+    white-space: break-spaces;
+  }
 }

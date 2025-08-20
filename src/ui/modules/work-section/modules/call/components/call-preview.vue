@@ -90,6 +90,10 @@
       gap: var(--spacing-2xs);
     }
 
+    .call-preview-wrap {
+      max-width: 100%;
+    }
+
     &--md {
       .call-preview-wrap {
         width: 100%;
