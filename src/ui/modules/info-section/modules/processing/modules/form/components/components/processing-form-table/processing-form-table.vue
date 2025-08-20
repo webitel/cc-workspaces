@@ -237,12 +237,13 @@ async function initDataList(): Promise<void> {
     data = items;
     nextAllowed.value = next;
 
-  } else data = props.table?.source;
+  } else {
+    data = applyTransform(props.table?.source, [
+      merge(getDefaultGetListResponse()),
+      snakeToCamel(),
+    ]);
+  }
 
-  data = applyTransform(data, [
-    merge(getDefaultGetListResponse()),
-    snakeToCamel(),
-  ]);
   dataList.value = handleTableList(data);
 }
 
