@@ -135,7 +135,7 @@ const actions = {
       });
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action: chat.state },
+        { action: ChatActions.Close },
         { root: true },
       );
     }

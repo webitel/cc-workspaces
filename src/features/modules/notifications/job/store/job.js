@@ -2,6 +2,7 @@ import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { snakeToCamel } from '@webitel/api-services/utils';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
+import { JobState } from 'webitel-sdk';
 
 import i18n from '../../../../../app/locale/i18n.js';
 
@@ -42,7 +43,7 @@ const actions = {
     if (isJobEndSoundNotification) {
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action: job.state },
+        { action: JobState.Closed },
         { root: true },
       );
     }
