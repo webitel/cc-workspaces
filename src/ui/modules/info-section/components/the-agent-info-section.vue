@@ -27,11 +27,11 @@
       <keep-alive>
         <wt-replace-transition>
           <component
-                :is="currentTab.value"
-                :key="currentTab.value"
-                class="info-tab"
-                :task="taskOnWorkspace"
-                :size="infoSecSize"
+            :is="currentTab.value"
+            :key="currentTab.value"
+            class="info-tab"
+            :task="taskOnWorkspace"
+            :size="infoSecSize"
           ></component>
         </wt-replace-transition>
       </keep-alive>
