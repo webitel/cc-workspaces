@@ -1,6 +1,6 @@
 <template>
   <section class="general-info">
-    <div v-show="isLoaded" class="general-info__content-wrapper">
+    <div v-show="isLoaded || agent" class="general-info__content-wrapper">
       <wt-cc-agent-status-timers
         :size="props.size"
         :status="agentInfo.agent"
@@ -69,10 +69,6 @@ async function loadAgentInfo(payload) {
 watchOnce(agent, () => {
   subscribe(loadAgentInfo);
 });
-
-onMounted(() => {
-  isLoaded.value = !!agent.value
-})
 </script>
 
 <style lang="scss" scoped>
