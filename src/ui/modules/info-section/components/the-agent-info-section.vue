@@ -28,6 +28,7 @@
         <keep-alive>
             <component
               :is="currentTab.value"
+              :key="currentTab.value"
               class="info-tab"
               :task="taskOnWorkspace"
               :size="infoSecSize"
@@ -86,7 +87,7 @@ export default {
     return { subscribe };
   },
   data: () => ({
-    currentTab: '',
+    currentTab: null,
     pin: false,
     flowsNamespace: 'ui/infoSec/flows',
   }),
@@ -168,31 +169,31 @@ export default {
     tabsObject() {
       const generalInfo = {
         text: this.$t('infoSec.generalInfo.generalInfo'),
-        value: 'general-info',
+        value: GeneralInfo,
         icon: 'general-info',
         iconPrefix: 'ws',
       };
       const clientInfo = {
         text: this.$t('infoSec.clientInfo'),
-        value: 'client-info',
+        value: ClientInfo,
         icon: 'client-info',
         iconPrefix: 'ws',
       };
       const knowledgeBase = {
         text: this.$t('infoSec.knowledgeBase'),
-        value: 'knowledge-base',
+        value: KnowledgeBase,
         icon: 'knowledge-base',
         iconPrefix: 'ws',
       };
       const processing = {
         text: this.$t('infoSec.processing.title'),
-        value: 'processing',
+        value: Processing,
         icon: 'processing',
         iconPrefix: 'ws',
       };
       const flows = {
         text: this.$tc('objects.flow.name', 2),
-        value: 'flows',
+        value: Flows,
         icon: 'flows',
       };
       return {
