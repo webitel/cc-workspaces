@@ -55,7 +55,7 @@ const props = defineProps({
 const namespace = 'ui/infoSec/agentInfo';
 
 const store = useStore();
-const isLoaded = ref(false);
+const isLoaded = ref(true);
 
 const agent = computed(() => store.state.features.status.agent);
 const agentInfo = computed(() => getNamespacedState(store.state, namespace));
@@ -63,6 +63,7 @@ const agentInfo = computed(() => getNamespacedState(store.state, namespace));
 const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
 
 async function loadAgentInfo(payload) {
+  isLoaded.value = false;
   await store.dispatch(`${namespace}/LOAD_AGENT_INFO`, payload);
   isLoaded.value = true;
 }
