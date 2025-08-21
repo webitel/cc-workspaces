@@ -24,17 +24,17 @@
         :tabs="tabs"
         :size="infoSecSize"
       />
-      <wt-replace-transition>
-        <keep-alive>
-            <component
-              :is="currentTab.value"
-              :key="currentTab.value"
-              class="info-tab"
-              :task="taskOnWorkspace"
-              :size="infoSecSize"
-            ></component>
-        </keep-alive>
-      </wt-replace-transition>
+      <keep-alive>
+        <wt-replace-transition>
+          <component
+            :is="currentTab.value"
+            :key="currentTab.value"
+            class="info-tab"
+            :task="taskOnWorkspace"
+            :size="infoSecSize"
+          ></component>
+        </wt-replace-transition>
+      </keep-alive>
 
     </div>
   </section>
@@ -169,31 +169,31 @@ export default {
     tabsObject() {
       const generalInfo = {
         text: this.$t('infoSec.generalInfo.generalInfo'),
-        value: GeneralInfo,
+        value: 'general-info',
         icon: 'general-info',
         iconPrefix: 'ws',
       };
       const clientInfo = {
         text: this.$t('infoSec.clientInfo'),
-        value: ClientInfo,
+        value: 'client-info',
         icon: 'client-info',
         iconPrefix: 'ws',
       };
       const knowledgeBase = {
         text: this.$t('infoSec.knowledgeBase'),
-        value: KnowledgeBase,
+        value: 'knowledge-base',
         icon: 'knowledge-base',
         iconPrefix: 'ws',
       };
       const processing = {
         text: this.$t('infoSec.processing.title'),
-        value: Processing,
+        value: 'processing',
         icon: 'processing',
         iconPrefix: 'ws',
       };
       const flows = {
         text: this.$tc('objects.flow.name', 2),
-        value: Flows,
+        value: 'flows',
         icon: 'flows',
       };
       return {
