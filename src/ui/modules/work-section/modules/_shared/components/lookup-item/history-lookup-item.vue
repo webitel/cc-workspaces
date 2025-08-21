@@ -42,9 +42,10 @@
         />
         <wt-context-menu
           :key="item.id"
-          class="history-lookup-item-options"
           :options="contextMenuOptions"
           :visible="isContextMenuVisible"
+          :pt="{ content: { class: 'history-lookup-item-options-content' } }"
+          class="history-lookup-item-options"
           @click="$event.option.handler()"
         >
           <template #activator="{ toggle }">
@@ -208,10 +209,6 @@ export default {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-
-    :deep(.wt-context-menu__option){
-      padding: 0;
-    }
     :deep(.wt-tooltip .wt-tooltip-floating){
       z-index: var(--ws-tooltip-z-index);
     }
@@ -224,6 +221,14 @@ export default {
       gap: var(--spacing-xs);
       padding: var(--wt-context-menu-option-padding);
     }
+  }
+}
+</style>
+
+<style lang="scss">
+.history-lookup-item-options-content {
+  .wt-context-menu__option {
+    padding: 0;
   }
 }
 </style>
