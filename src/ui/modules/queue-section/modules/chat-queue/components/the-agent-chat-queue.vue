@@ -68,6 +68,9 @@ const {
 } = useCachedExpansionState({ entity: 'chat' });
 
 const chatList = computed(() => store.state.features.chat.chatList);
+
+const closedChat = computed(() => store.state.features.chat.closed.processed.chatsList)
+
 const manualList = computed(() => store.state.features.chat.manual.manualList);
 
 const invitedChats = computed(() => chatList.value.filter((chat) => chat.state === ConversationState.Invite));
@@ -102,6 +105,12 @@ const expansions = computed(() => [
   {
     value: 'closed',
     initiallyCollapsed: restoreExpansionState({ expansion: 'closed' }),
+    counters: [
+      {
+        color: 'secondary',
+        count: closedChat.value.length,
+      },
+    ]
   },
 ]);
 
