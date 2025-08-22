@@ -1,6 +1,12 @@
 <template>
 <!--  v-show instead of v-if: https://my.webitel.com/browse/WTEL-2827 -->
-  <wt-popup v-show="isDisconnectPopup" class="disconnect-popup" size="sm" @close="closePopup">
+  <wt-popup 
+    v-show="isDisconnectPopup"
+    ref="disconnectPopupRef"
+    class="disconnect-popup"
+    size="sm"
+    @close="closePopup"
+  >
     <template #title>{{ $t('disconnectPopup.title') }}</template>
     <template #main>
       <article class="disconnect-popup__main">
@@ -43,15 +49,15 @@ export default {
   watch: {
     isDisconnectPopup: {
       handler(newVal) {
-        if (!this.isDisconnectSoundAllow) return;
         if (newVal) {
-          this.audio.play();
+          this.handlePopupOpen();
         } else {
-          this.audio.pause();
+          this.handlePopupClose();
         }
       },
     },
   },
+
   created() { // TODO: add after changes in client app https://webitel.atlassian.net/browse/WTEL-6860?focusedCommentId=671316
     this.isDisconnectSoundAllow = !!localStorage.getItem('settings/socketCloseSound');
     this.audio = new Audio(disconnectSound);
@@ -63,6 +69,26 @@ export default {
     }),
     reloadPage() {
       this.$router.go(0);
+    },
+    playDisconnectSound() {
+      if (!this.isDisconnectSoundAllow) return;
+      this.audio.play();
+    },
+    pauseDisconnectSound() {
+      if (!this.isDisconnectSoundAllow) return;
+      this.audio.pause();
+    },
+    handlePopupOpen() {
+      this.prioritizePopup();
+      this.playDisconnectSound();
+    },
+    handlePopupClose() {
+      this.pauseDisconnectSound();
+    },
+    prioritizePopup() {
+      const popupElement = this.$refs.disconnectPopupRef.$el;
+      const currentZIndex = parseInt(window.getComputedStyle(popupElement).zIndex);
+      popupElement.style.zIndex = currentZIndex + 1;
     },
   },
 };
