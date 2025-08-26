@@ -220,6 +220,11 @@ export default {
       align-items: center;
       gap: var(--spacing-xs);
       padding: var(--wt-context-menu-option-padding);
+      color: var(--wt-context-menu-option-color);
+      text-decoration: none;
+      &:hover{
+        color: var(--wt-context-menu-option-color-hover);
+      }
     }
   }
 }
