@@ -71,7 +71,7 @@ import {
 } from '@webitel/api-services/api/transformers';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
-import { ProcessingTableColumnType } from '@webitel/ui-sdk/src/enums';
+import { ProcessingTableColumnType } from '@webitel/ui-sdk/enums';
 import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
