@@ -71,7 +71,7 @@ import {
 } from '@webitel/api-services/api/transformers';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
-import TableColumnType from '@webitel/ui-sdk/src/enums/ProcessingTableColumnType/ProcessingTableColumnType.enum';
+import { ProcessingTableColumnType } from '@webitel/ui-sdk/src/enums';
 import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -141,7 +141,7 @@ const tableFields = computed<string[]>(() => { // fields for API request
 function isShowTypeComponent(item: TableRow, header: WtTableHeader): boolean {
   return !!item[header.value]
     || item[header.value] === 0 // we show type component, because 0 is valid value @author @liza-pohranichna
-    || header.type === TableColumnType.BOOL // we always show component for bool type, because it can be true or false @author @liza-pohranichna
+    || header.type === ProcessingTableColumnType.BOOL // we always show component for bool type, because it can be true or false @author @liza-pohranichna
 };
 
 function normalizeSlotKey(key: string): string {
