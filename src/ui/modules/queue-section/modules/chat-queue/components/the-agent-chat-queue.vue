@@ -110,7 +110,7 @@ const expansions = computed(() => [
         color: 'secondary',
         count: closedChat.value.length,
       },
-    ]
+    ].filter(({ count }) => count)
   },
 ]);
 
