@@ -1,6 +1,6 @@
 <template>
   <section class="general-info">
-    <div v-show="isLoaded" class="general-info__content-wrapper">
+    <div v-show="isLoaded || agent" class="general-info__content-wrapper">
       <wt-cc-agent-status-timers
         :size="props.size"
         :status="agentInfo.agent"
@@ -37,7 +37,7 @@ import WtCcAgentStatusTimers
   from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
-import { computed,ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import AgentOrgStructure from './agent-org-structure.vue';
@@ -66,7 +66,6 @@ async function loadAgentInfo(payload) {
   await store.dispatch(`${namespace}/LOAD_AGENT_INFO`, payload);
   isLoaded.value = true;
 }
-
 watchOnce(agent, () => {
   subscribe(loadAgentInfo);
 });

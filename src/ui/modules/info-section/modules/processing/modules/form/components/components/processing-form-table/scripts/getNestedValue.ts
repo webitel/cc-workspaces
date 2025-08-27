@@ -10,7 +10,7 @@ import { get } from 'lodash-es';
  */
 
 export default function getNestedValue(value, pathArray: string[]) {
-  if (!value) return '';
+  if (!value) return undefined;
   if (!pathArray.length) return value; // if pathArray is empty it means we don't need to get nested value, return value as is @author @liza-pohranichna
 
   // check is lodash-get work with current path
@@ -24,7 +24,6 @@ export default function getNestedValue(value, pathArray: string[]) {
     return value
     .map((object) => getNestedValue(object, pathArray))
     ?.filter(Boolean) // filter out empty values
-    .join(', '); // join values with comma
 
     // Example: We have array of permissions:[{ name:'PN1' }, { name:'PN2' }, { name:'PN3' }] and need to take permissions.name
     // Result will be 'PN1, PN2, PN3'

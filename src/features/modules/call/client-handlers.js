@@ -70,7 +70,6 @@ const actions = {
 
   HANDLE_DESTROY_ACTION: async (context, call) => {
     // order is important: awaiting handle_call_end fixes https://my.webitel.com/browse/DEV-2401
-    await context.dispatch('HANDLE_CALL_END', call);
 
     context.commit('REMOVE_CALL', call);
 

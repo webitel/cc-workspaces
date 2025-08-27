@@ -65,11 +65,11 @@ const actions = {
       });
 
       eventBus.$emit('notification', {
-        type: 'error',
+        type: 'info',
         text,
         timeout:
           context.rootGetters[
-            'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+            'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
           ],
       });
     }
@@ -118,11 +118,11 @@ const actions = {
     // We check option by admin settings enable for send push notification
     if (isChatEndPushNotification) {
       eventBus.$emit('notification', {
-        type: 'error',
+        type: 'info',
         text,
         timeout:
           context.rootGetters[
-            'features/notification/PUSH_NOTIFICATION_TIMEOUT'
+            'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
           ],
       });
     }
@@ -135,7 +135,7 @@ const actions = {
       });
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action: chat.state },
+        { action: ChatActions.Close },
         { root: true },
       );
     }

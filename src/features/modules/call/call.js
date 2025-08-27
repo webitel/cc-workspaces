@@ -153,8 +153,11 @@ const actions = {
     if (call.allowHangup) {
       try {
         await call.hangup();
-        //TODO display notification by settings
       } catch {}
+
+      await context.dispatch('features/call/HANDLE_CALL_END', call, {
+        root: true,
+      });
     }
   },
 

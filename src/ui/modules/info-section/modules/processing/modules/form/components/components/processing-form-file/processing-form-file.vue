@@ -25,11 +25,11 @@
     <header class="processing-form-file__title">
       <wt-icon
         class="processing-form-file__icon"
-        color="active"
-        icon="docs"
+        color="on-dark"
+        icon="log"
       ></wt-icon>
       {{ label }}
-      <span class="processing-form-file__count" v-if="fileCounter">
+      <span v-if="fileCounter">
         ({{ fileCounter}} {{ $t('vocabulary.file', 2) }})
       </span>
       <wt-hint
@@ -260,16 +260,13 @@ export default {
     background: var(--job-color);
   }
 
-  .processing-form-file__count {
-    margin-left: var(--spacing-2xs);
-  }
-
   .processing-form-file__title {
     display: flex;
     align-items: center;
-    background: var(--wt-chip-secondary-background-color);
+    background: var(--wt-expansion-panel-header-background-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
+    gap: var(--spacing-2xs);
   }
 }
 

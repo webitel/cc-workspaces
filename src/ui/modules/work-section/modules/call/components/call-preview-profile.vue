@@ -54,5 +54,12 @@ export default {
     @extend %typo-body-2;
     margin-bottom: var(--spacing-sm);
   }
+
+  .wt-chip {
+    max-width: 100%;
+    display: inline-block;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+  }
 }
 </style>

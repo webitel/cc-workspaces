@@ -133,7 +133,7 @@ export default {
       emptyLabels: 'Нет меток',
       emptyAttributes: 'Нет атрибутов',
       emptyDescription: 'Нет описания',
-      foundOneContact: 'Найдено { count } контактов',
+      foundOneContact: 'Найдено { count } контакт',
       foundSomeContact: '{ current } с { count } контактов',
       destination: 'Назначение',
       communications: 'Средства связи',

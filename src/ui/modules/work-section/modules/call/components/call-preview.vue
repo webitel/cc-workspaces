@@ -18,14 +18,6 @@
         ></wt-rounded-action>
         <wt-rounded-action
           :size="size"
-          icon="call-transfer--filled"
-          color="transfer"
-          rounded
-          wide
-          @click="openTransfer"
-        ></wt-rounded-action>
-        <wt-rounded-action
-          :size="size"
           icon="call-end--filled"
           color="error"
           rounded
@@ -61,10 +53,6 @@
         answer: 'ANSWER',
         hangup: 'HANGUP',
       }),
-
-      openTransfer() {
-        this.$emit('transfer');
-      },
       setupHotkeys() {
         const subscribers = [
           {
@@ -100,6 +88,10 @@
     .call-preview__actions {
       display: flex;
       gap: var(--spacing-2xs);
+    }
+
+    .call-preview-wrap {
+      max-width: 100%;
     }
 
     &--md {

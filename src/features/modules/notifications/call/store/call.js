@@ -40,32 +40,30 @@ const actions = {
       name: call.displayName,
     });
 
-    if (call.state === CallActions.Hangup) {
-      // @author @stanislav-kozak
-      // We check option by admin settings and after user setting for check if we need to send notification
-      if (isCallEndPushNotification || isCallEndSound) {
-        eventBus.$emit('notification', {
-          type: 'error',
-          text,
-          timeout:
-            context.rootGetters[
-              'features/notification/PUSH_NOTIFICATION_TIMEOUT'
-            ],
-        });
-      }
+    // @author @stanislav-kozak
+    // We check option by admin settings and after user setting for check if we need to send notification
+    if (isCallEndPushNotification || isCallEndSound) {
+      eventBus.$emit('notification', {
+        type: 'info',
+        text,
+        timeout:
+          context.rootGetters[
+            'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
+          ],
+      });
+    }
 
-      // @author @stanislav-kozak
-      // We check option by admin settings and after user setting for check if we need to play sound
-      if (isCallEndSoundNotification || isCallEndSound) {
-        context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
-          root: true,
-        });
-        await context.dispatch(
-          'features/notifications/PLAY_SOUND',
-          { action: call.state },
-          { root: true },
-        );
-      }
+    // @author @stanislav-kozak
+    // We check option by admin settings and after user setting for check if we need to play sound
+    if (isCallEndSoundNotification || isCallEndSound) {
+      context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
+        root: true,
+      });
+      await context.dispatch(
+        'features/notifications/PLAY_SOUND',
+        { action: CallActions.Hangup },
+        { root: true },
+      );
     }
   },
 
