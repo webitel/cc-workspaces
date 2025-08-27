@@ -23,13 +23,14 @@
         :size="size"
       />
     </wt-replace-transition>
-    <quick-replies
-      v-show="showQuickReplies"
-      :search="searchReply"
-      @close="closeQuickRepliesPanel"
-      @select="applyQuickReply"
-    />
-
+    <wt-replace-transition pattern="slide-up" duration="normal">
+      <quick-replies
+        v-show="isShowQuickReplies"
+        :search="searchReply"
+        @close="closeQuickRepliesPanel"
+        @select="applyQuickReply"
+      />
+    </wt-replace-transition>
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
@@ -178,6 +179,7 @@ const {
 } = useQuickReplies({ emit, variables: chat.value.variables });
 
 const hotkeyUnsubscribers = ref([]);
+const isShowQuickReplies = ref(false);
 
 function sendFile (files) {
   return store.dispatch('features/chat/SEND_FILE', files);
@@ -276,11 +278,34 @@ function handleQuickReplies() {
   return props.showQuickReplies ? closeQuickReplies() : openQuickReplies();
 }
 
+ const readCssVariableInMs = (varName: string, el: HTMLElement = document.documentElement, fallback = 300): number => {
+  const raw = getComputedStyle(el).getPropertyValue(varName).trim();
+  if (!raw) return fallback;
+
+  const m = raw.match(/^([\d.]+)\s*(ms|s)?$/i);
+  if (!m) return fallback;
+
+  const value = parseFloat(m[1]);
+  const unit = (m[2] || 'ms').toLowerCase();
+  return unit === 's' ? Math.round(value * 1000) : Math.round(value);
+}
+
 watch(chat, async () => {
   await nextTick();
   setDraftFocus();
 }, {immediate: true});
 
+watch(() => props.showQuickReplies, (value) => {
+  const delay = readCssVariableInMs('--transition-fast', document.documentElement, 300);
+
+  if (value) {
+    //wait for animation to finish with chat
+    setTimeout(() => {
+      isShowQuickReplies.value = true;
+    }, delay)
+  }
+  isShowQuickReplies.value = false
+})
 onMounted(() => {
   eventBus?.$on('chat-input-focus', setDraftFocus);
   setupHotkeys();
@@ -308,6 +333,7 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   flex-direction: column;
   height: 100%;
   gap: $chatGap;
+  overflow: hidden;
 
   &--md {
     .chat-messaging__textarea {
