@@ -18,15 +18,15 @@
     ></break-timer-popup>
     <user-dnd-switcher></user-dnd-switcher>
 <!--    <wt-switcher-->
-<!--      :value="isVideo"-->
+<!--      :model-value="isVideo"-->
 <!--      :label="$t('header.enableVideo')"-->
-<!--      @change="toggleVideo"-->
+<!--      @update:model-value="toggleVideo"-->
 <!--    ></wt-switcher>-->
     <wt-switcher
       v-if="isAgent"
-      :value="isCcenterOn"
+      :model-value="isCcenterOn"
       :label="$t('agentStatus.callCenter')"
-      @change="toggleCCenterMode"
+      @update:model-value="toggleCCenterMode"
     ></wt-switcher>
 
     <agent-status-select

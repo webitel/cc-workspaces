@@ -2,8 +2,8 @@
   <wt-switcher
     v-tooltip="$t('header.dnd.tooltip')"
     :label="$t('header.dnd.label')"
-    :value="isDnd"
-    @change="toggleDnd"
+    :model-value="isDnd"
+    @update:model-value="toggleDnd"
   ></wt-switcher>
 </template>
 
