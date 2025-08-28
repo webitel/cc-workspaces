@@ -12,24 +12,28 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <wt-replace-transition appear>
-      <chat-history
-        v-if="contact?.id && !showQuickReplies"
-        :contact="contact"
-        :size="size"
+      <quick-replies
+        v-show="showQuickReplies"
+        :search="searchReply"
+        @close="closeQuickRepliesPanel"
+        @select="applyQuickReply"
       />
-      <current-chat
-        v-else-if="!showQuickReplies"
-        :size="size"
-      />
-    </wt-replace-transition>
-    <quick-replies
-      v-show="showQuickReplies"
-      :search="searchReply"
-      @close="closeQuickRepliesPanel"
-      @select="applyQuickReply"
-    />
-
+      <div
+        v-if="!showQuickReplies"
+        class="chat-messaging__messaging chat-messages-container"
+      >
+        <wt-replace-transition appear>
+          <chat-history
+            v-if="contact?.id"
+            :contact="contact"
+            :size="size"
+          />
+          <current-chat
+            v-else
+            :size="size"
+          />
+        </wt-replace-transition>
+      </div>
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
