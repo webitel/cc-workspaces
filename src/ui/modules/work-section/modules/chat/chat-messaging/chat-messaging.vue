@@ -324,6 +324,13 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
       max-height: calc((100% - $textEntryActionsSm) - $chatGap);
     }
   }
+
+  &__messaging {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .chat-messaging-text-entry {
