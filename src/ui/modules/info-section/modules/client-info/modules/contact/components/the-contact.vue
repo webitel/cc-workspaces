@@ -113,10 +113,13 @@ function openView(open, mode) {
 
 watch([
   () => taskId.value,
-  () => props.task.contactId
-], ([taskId, contactId], [prevTaskId, prevContactId]) => {
-
-  if (taskId !== prevTaskId || !taskId) {
+  () => props.task.contactId,
+  () => props.task.bridgedId, // to reset contact if bridgedId changes
+], (
+  [taskId, contactId, bridgedId],
+  [prevTaskId, prevContactId, prevBridgedId]
+) => {
+  if (taskId !== prevTaskId || !taskId || bridgedId !== prevBridgedId) {
     changeMode(ContactMode.VIEW);
     initializeContact();
     return;
