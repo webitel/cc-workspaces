@@ -225,6 +225,7 @@ onUnmounted(() => {
 
 .chat-history {
   position: relative;
+  width: 100%;
 
   &__loader {
     position: absolute;
