@@ -195,12 +195,23 @@ function accept() {
   return store.dispatch('features/chat/ACCEPT');
 }
 
-function setDraftFocus() {
+async function setDraftFocus() {
+  if (messageDraft.value && messageDraft.value.$el) {
+    textarea.value = messageDraft.value.$el.querySelector('textarea');
+  }
   if(!messageDraft.value || !textarea.value) return;
   textarea?.value.focus();
 }
 
-function insertEmoji(unicode: string) {
+async function insertEmoji(unicode: string) {
+  if (!textarea.value) {
+    await setDraftFocus();
+    return;
+  }
+
+  await nextTick();
+
+  textarea.value.focus();
   // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
   insertTextAtCursor(textarea.value, unicode);
 }
@@ -282,16 +293,15 @@ function handleQuickReplies() {
 
 watch(chat, async () => {
   await nextTick();
-  setDraftFocus();
+  await setDraftFocus();
 }, {immediate: true});
 
-onMounted(() => {
+onMounted(async () => {
   eventBus?.$on('chat-input-focus', setDraftFocus);
   setupHotkeys();
 
-  if (messageDraft.value && messageDraft.value.$el) {
-    textarea.value = messageDraft.value.$el.querySelector('textarea');
-  }
+  await nextTick();
+  await setDraftFocus();
 });
 
 onUnmounted(() => {
