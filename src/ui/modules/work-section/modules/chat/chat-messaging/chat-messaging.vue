@@ -20,7 +20,7 @@
       />
       <div
         v-if="!showQuickReplies"
-        class="chat-messaging__messaging chat-messages-container"
+        class="chat-messaging__messaging"
       >
         <wt-replace-transition appear>
           <chat-history
@@ -323,6 +323,18 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
     .chat-messaging__textarea {
       max-height: calc((100% - $textEntryActionsSm) - $chatGap);
     }
+  }
+
+  &__messaging {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 }
 
