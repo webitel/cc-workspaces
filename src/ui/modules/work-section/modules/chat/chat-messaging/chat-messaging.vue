@@ -20,7 +20,7 @@
       />
       <div
         v-if="!showQuickReplies"
-        class="chat-messaging__messaging"
+        class="chat-messaging__messaging chat-messages-container"
       >
         <wt-replace-transition appear>
           <chat-history
@@ -326,14 +326,9 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   }
 
   &__messaging {
-    position: relative;
-    display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
     max-width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
     box-sizing: border-box;
   }
 }
