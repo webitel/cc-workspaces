@@ -53,7 +53,7 @@
             </template>
           </wt-table>
           <wt-intersection-observer
-            :canLoadMore="!nextLoading.value && nextAllowed.value"
+            :canLoadMore="!nextLoading && nextAllowed"
             :loading="nextLoading"
             @next="loadNext"
           />
