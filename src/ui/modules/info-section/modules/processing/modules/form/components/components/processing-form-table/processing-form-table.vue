@@ -15,7 +15,6 @@
       </template>
       <template #default>
         <div
-          ref="infiniteScrollWrap"
           class="processing-form-table__scroll-wrapper"
         >
           <wt-table
@@ -53,6 +52,11 @@
               </div>
             </template>
           </wt-table>
+          <wt-intersection-observer
+            :canLoadMore="!nextLoading.value && nextAllowed.value"
+            :loading="nextLoading"
+            @next="loadNext"
+          />
         </div>
       </template>
     </wt-expansion-panel>
@@ -61,7 +65,6 @@
 
 <script setup lang="ts">
 
-import { useInfiniteScroll } from '@vueuse/core';
 import { getDefaultGetListResponse } from '@webitel/api-services/api/defaults';
 import {
   applyTransform,
@@ -84,6 +87,8 @@ import TextTableContent from './components/text-table-content.vue';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
 import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './types/FormTable';
+import WtIntersectionObserver
+  from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 
 const { t } = useI18n();
 
@@ -275,16 +280,6 @@ function sendAction(action: string, row: TableRow): void {
 onMounted(() => {
   initDataList();
 });
-
-useInfiniteScroll(infiniteScrollWrap,
-  () => {
-    loadNext();
-  },
-  {
-    distance: 100,
-    canLoadMore: () => (!nextLoading.value && nextAllowed.value),
-  },
-);
 
 </script>
 
