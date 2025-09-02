@@ -1,0 +1,48 @@
+name: libs.update.yml
+on:
+  #  https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Which library to update'
+        required: true
+        type: choice
+        options:
+          - '@webitel/ui-sdk'
+          - '@webitel/api-services'
+      version:
+        description: 'Target version (optional: latest or x.y.z)'
+        required: false
+        type: string
+
+jobs:
+  publish:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          check-latest: true
+
+      - run: npm i
+
+      - name: Update selected lib
+        run: |
+          PKG="${{ inputs.package }}"
+          VER="${{ inputs.version }}"
+          if [ -n "$VER" ]; then
+            npm i "$PKG@$VER"
+          else
+            npm update "$PKG"
+          fi
+          npm ls "$PKG"
+
+      # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update ${{ inputs.package }}${{ inputs.version && format('@{0}', inputs.version) || '' }}"
