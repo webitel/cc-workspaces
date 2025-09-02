@@ -24,20 +24,11 @@
       </p>
     </header>
     <section
-      ref="scrollWrap"
       class="lookup-item-container-body"
     >
       <wt-replace-transition appear>
         <div
-          v-if="loading"
-          class="lookup-item-container-loader"
-        >
-          <slot name="loader">
-            <wt-loader />
-          </slot>
-        </div>
-        <div
-          v-else-if="showEmpty"
+          v-if="showEmpty"
           class="lookup-item-container-empty"
         >
           <slot name="empty" :show="showEmpty"></slot>
@@ -50,10 +41,10 @@
         </div>
       </wt-replace-transition>
 
-      <observer
-        v-if="scrollWrap"
-        :root="scrollWrap"
-        @intersect="emit('more')"
+      <wt-intersection-observer
+        :canLoadMore="true"
+        :loading="loading"
+        @next="emit('more')"
       />
     </section>
 
@@ -66,8 +57,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
 import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
+import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 
 const props = defineProps({
   size: {

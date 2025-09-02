@@ -15,9 +15,10 @@ v-for="(task, index) of dataList"
         />
         <wt-divider v-if="dataList.length > index + 1"/>
       </div>
-      <observer
-        :options="obsOptions"
-        @intersect="handleIntersect"
+      <wt-intersection-observer
+        :canLoadMore="true"
+        :loading="isLoading"
+        @next="handleIntersect"
       />
     </div>
   </task-queue-container>
@@ -31,12 +32,14 @@ import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollM
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import OfflinePreview from './offline-queue-preview.vue';
+import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 
 export default {
   name: 'OfflineQueueContainer',
   components: {
     TaskQueueContainer,
     OfflinePreview,
+    WtIntersectionObserver
   },
   mixins: [infiniteScrollMixin, sizeMixin],
   setup() {
@@ -53,8 +56,9 @@ export default {
   },
 
   methods: {
-    loadDataList() {
-      this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
+    async loadDataList() {
+      await this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
+      this.isLoading = false
     },
 
     ...mapActions('features/member', {

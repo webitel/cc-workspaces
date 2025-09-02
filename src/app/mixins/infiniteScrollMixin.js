@@ -19,19 +19,6 @@ export default {
     this.isMounted = true;
   },
 
-  computed: {
-    obsOptions() {
-      if (this.isMounted) {
-        const root = this.$refs['scroll-wrap'];
-        return {
-          root,
-          rootMargin: this.rootMargin,
-        };
-      }
-      return null;
-    },
-  },
-
   methods: {
     setData(items) {
       if (this.dataPage === 1) {
