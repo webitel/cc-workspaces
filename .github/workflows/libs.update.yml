@@ -40,7 +40,6 @@ jobs:
 #            npm i "$PKG@$VER"
 #          else
           npm update "$PKG"
-#          fi
           npm ls "$PKG"
 
       # Commit all changed files back to the repository
