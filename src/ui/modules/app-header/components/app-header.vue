@@ -1,49 +1,57 @@
 <template>
   <wt-app-header>
-    <a :href="startPageHref">
-      <wt-logo
-        :dark-mode="darkMode"
+    <template #start>
+      <a :href="startPageHref">
+        <wt-logo
+          :dark-mode="darkMode"
+        />
+      </a>
+
+      <wt-dark-mode-switcher
+        namespace="ui/appearance"
       />
-    </a>
-    <wt-dark-mode-switcher
-      namespace="ui/appearance"
-    />
+    </template>
 
-    <wt-chip
-      :color="isPhoneReg ? 'success' : 'primary'"
-    >SIP
-    </wt-chip>
-    <break-timer-popup
-      v-if="isAgent"
-    ></break-timer-popup>
-    <user-dnd-switcher></user-dnd-switcher>
-<!--    <wt-switcher-->
-<!--      :model-value="isVideo"-->
-<!--      :label="$t('header.enableVideo')"-->
-<!--      @update:model-value="toggleVideo"-->
-<!--    ></wt-switcher>-->
-    <wt-switcher
-      v-if="isAgent"
-      :model-value="isCcenterOn"
-      :label="$t('agentStatus.callCenter')"
-      @update:model-value="toggleCCenterMode"
-    ></wt-switcher>
+    <template #end>
+      <wt-chip
+        :color="isPhoneReg ? 'success' : 'primary'"
+      >SIP
+      </wt-chip>
 
-    <agent-status-select
-      v-if="isAgent"
-    ></agent-status-select>
+      <break-timer-popup
+        v-if="isAgent"
+      ></break-timer-popup>
 
-    <wt-app-navigator
-      :current-app="currentApp"
-      :apps="apps"
-      :dark-mode="darkMode"
-    ></wt-app-navigator>
-    <wt-header-actions
-      :user="userinfo"
-      :build-info="buildInfo"
-      @settings="settings"
-      @logout="logoutUser"
-    />
+      <user-dnd-switcher></user-dnd-switcher>
+      <!--    <wt-switcher-->
+      <!--      :model-value="isVideo"-->
+      <!--      :label="$t('header.enableVideo')"-->
+      <!--      @update:model-value="toggleVideo"-->
+      <!--    ></wt-switcher>-->
+      <wt-switcher
+        v-if="isAgent"
+        :model-value="isCcenterOn"
+        :label="$t('agentStatus.callCenter')"
+        @update:model-value="toggleCCenterMode"
+      ></wt-switcher>
+
+      <agent-status-select
+        v-if="isAgent"
+      ></agent-status-select>
+
+      <wt-app-navigator
+        :current-app="currentApp"
+        :apps="apps"
+        :dark-mode="darkMode"
+      ></wt-app-navigator>
+
+      <wt-header-actions
+        :user="userinfo"
+        :build-info="buildInfo"
+        @settings="settings"
+        @logout="logoutUser"
+      />
+    </template>
   </wt-app-header>
 </template>
 
