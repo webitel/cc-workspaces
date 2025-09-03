@@ -29,17 +29,17 @@ jobs:
           node-version: lts/*
           check-latest: true
 
-      - run: npm ci
+      - name: Install deps
+        run: npm ci
 
       - name: Update selected lib
+        #          VER="${{ inputs.version }}"
+        #          if [ -n "$VER" ]; then
+        #            npm i "$PKG@$VER"
+        #          else
         run: |
           PKG="${{ inputs.package }}"
-#          VER="${{ inputs.version }}"
-#          if [ -n "$VER" ]; then
-#            npm i "$PKG@$VER"
-#          else
-            npm update "$PKG"
-#          fi
+          npm update "$PKG"
           npm ls "$PKG"
 
       # Commit all changed files back to the repository
