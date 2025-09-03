@@ -39,7 +39,7 @@ jobs:
 #          if [ -n "$VER" ]; then
 #            npm i "$PKG@$VER"
 #          else
-            npm update "$PKG"
+          npm update "$PKG"
 #          fi
           npm ls "$PKG"
 
