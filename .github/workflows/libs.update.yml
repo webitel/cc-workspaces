@@ -29,7 +29,8 @@ jobs:
           node-version: lts/*
           check-latest: true
 
-      - run: npm ci
+      - name: Install deps
+        run: npm ci
 
       - name: Update selected lib
         run: |
