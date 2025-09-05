@@ -1,11 +1,8 @@
 import {
   getDefaultGetListResponse,
-  getDefaultGetParams,
   getDefaultInstance,
 } from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
-  addQueryParamsToUrl,
-  camelToSnake,
   generateUrl,
   merge,
   notify,
@@ -14,13 +11,7 @@ import applyTransform, {
 const instance = getDefaultInstance();
 
 const getFeedback = async ({ ...params }) => {
-  const url = applyTransform(params, [
-    merge(getDefaultGetParams()),
-    (params) => ({ ...params, q: params.search }),
-    camelToSnake(),
-    generateUrl('feedback'),
-    addQueryParamsToUrl(filters),
-  ]);
+  const url = applyTransform(params, [generateUrl('feedback')]);
 
   try {
     const response = await instance.get(url);
@@ -34,8 +25,24 @@ const getFeedback = async ({ ...params }) => {
   }
 };
 
+const setFeedback = async ({ ...params }) => {
+  try {
+    const url = applyTransform(params, [generateUrl('feedback')]);
+    
+    const response = await instance.post(url);
+    const { data } = applyTransform(response.data, [
+      merge(getDefaultGetListResponse()),
+    ]);
+
+    return data;
+  } catch (err) {
+    throw applyTransform(err, [notify]);
+  }
+};
+
 const FeedbackApi = {
   getFeedback,
+  setFeedback,
 };
 
 export default FeedbackApi;
