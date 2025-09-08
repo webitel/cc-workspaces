@@ -104,13 +104,14 @@ function handlePlayerInitialize(player) {
 
 <style lang="scss" scoped>
 $message-gap: var(--spacing-xs);
+$chat-info-gap: var(--spacing-2xs);
 
 .chat-message {
   position: relative;
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  gap: var(--spacing-2xs);
+  gap: var($chat-info-gap);
 
   :last-child {
     margin-bottom: $message-gap;
