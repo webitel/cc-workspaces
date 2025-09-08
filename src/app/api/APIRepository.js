@@ -4,8 +4,8 @@ import communicationsAPIRepository
   from './agent-workspace/endpoints/communications/CommunicationsAPIRepository';
 import historyAPIRepository from './agent-workspace/endpoints/history/HistoryAPIRepository';
 import usersAPIRepository from './agent-workspace/endpoints/users/UsersAPIRepository';
-import agentsAPIRepository from './agent-workspace/endpoints/agent-info/agentsApiRepository';
-import queuesApiRepository from './agent-workspace/endpoints/queues/QueuesApiRepository.js';
+import queuesApiRepository from '@webitel/ui-sdk/api/clients/queues/queues'
+import agentsAPIRepository from '@webitel/ui-sdk/api/clients/agents/agents'
 
 const APIRepository = {
   history: historyAPIRepository,

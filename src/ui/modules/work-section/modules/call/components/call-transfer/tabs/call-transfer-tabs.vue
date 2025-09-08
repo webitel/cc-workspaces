@@ -1,5 +1,6 @@
 <template>
   <wt-tabs
+    class="transfer-tabs"
     :current="currentTab"
     :tabs="tabs"
     @change="$emit('changeTab', $event)"
@@ -46,5 +47,9 @@ defineEmits<CallTransferTabsEmits>()
 </script>
 
 <style scoped lang="scss">
-
+  .transfer-tabs {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+  }
 </style>
