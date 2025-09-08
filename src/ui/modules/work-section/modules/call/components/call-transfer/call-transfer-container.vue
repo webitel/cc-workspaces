@@ -118,13 +118,20 @@ const changeTab = (tab) => {
 
 const transfer = (item = {}) => {
   const number = item.extension || scroll.dataSearch.value;
+  if (currentTab.value === 'queues') {
+    return cli.allCall()[0].blindTransferQueue(item.id)
+  }
   store.dispatch('features/call/BLIND_TRANSFER', number);
 };
 
 const consultation = (item = {}) => {
   const number = item.extension || scroll.dataSearch.value;
   store.dispatch('features/call/TOGGLE_HOLD', item.id);
+  if (currentTab.value === 'queues') {
+    return cli.allCall()[0].processTransferQueue(Number(item.id));
+  }
   store.dispatch('features/call/CALL', { user: store.state['ui/userinfo'], number });
+
 }
 
 const { dataList, dataSearch, isLoading, handleIntersect, resetData } = scroll;
