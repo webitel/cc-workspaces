@@ -25,6 +25,16 @@ export default {
     run: 'Uruchom',
     today: 'Dzisiaj',
   },
+  feedback: {
+    success: {
+      title: 'Dziękujemy!',
+      description: 'Twoja odpowiedź została pomyślnie zapisana',
+    },
+    error: {
+      title: 'Ups!',
+      description: 'Coś poszło nie tak',
+    },
+  },
   appNavigator: {
     title: 'Aplikacje Webitel',
     admin: 'Admin',

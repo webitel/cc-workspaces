@@ -4,10 +4,27 @@
       <Transition name="feedback-card-transition">
         <div v-if="showAnswer" class="client-feedback__card">
           <img
+            v-if="!isError"
             class="client-feedback__image"
-            src="../../../../app/assets/image/client-feedback/success.png" alt="success" />
-          <h3 class="client-feedback__title">Thank You!</h3>
-          <p class="client-feedback__description">We’ve saved your response successfully</p>
+            src="../../../../app/assets/image/client-feedback/success.png"
+            alt="success"
+          />
+          <img
+            v-else
+            class="client-feedback__image"
+            src="../../../../app/assets/image/client-feedback/error.png"
+            alt="error"
+          />
+          <h3 class="client-feedback__title">
+            {{
+              t(`feedback.${isError ? 'error' : 'success'}.title`, {}, { locale: lang })
+            }}
+          </h3>
+          <p class="client-feedback__description">
+            {{
+              t(`feedback.${isError ? 'error' : 'success'}.description`, {}, { locale: lang })
+            }}
+          </p>
         </div>
       </Transition>
     </div>
@@ -17,18 +34,38 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+
+import FeedbackApi from '../api/feedback.js';
 
 const route = useRoute();
 
+const { t } = useI18n();
+
 const showAnswer = ref(false);
 const isError = ref(false);
-const lang = ref(route.query.lang || 'en');
+const lang = ref<string>((route.query.lang as string) || 'en');
+const rating = ref(route.query.rating || 0);
 const hk = ref(route.query.hk);
 
 onMounted(async () => {
+  try {
+    await FeedbackApi.getFeedback({
+      key: hk.value,
+    });
 
-
+    isError.value = true;
+  } catch (error) {
+    if (error.status === 404) {
+      await FeedbackApi.setFeedback({
+        key: hk.value,
+        rating: rating.value,
+      });
+    } else {
+      isError.value = true;
+    }
+  }
   showAnswer.value = true;
 });
 </script>
