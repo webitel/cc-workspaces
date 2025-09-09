@@ -5,7 +5,7 @@
         <wt-avatar
           :src="src"
           :size="size"
-          :badge="type !== TransferDestination.CHATPLAN"
+          :badge="badge"
           :status="userStatus"
         ></wt-avatar>
       </slot>
@@ -63,6 +63,7 @@ interface TransferLookupItemProps {
   size?: string;
   showTransferButton: boolean;
   showConsultationTransfer: boolean;
+  showStatus?: boolean;
 }
 
 interface TransferLookupItemEmits {
@@ -75,7 +76,8 @@ const props = withDefaults(defineProps<TransferLookupItemProps>(), {
   size: '',
   src: '',
   showTransferButton: true,
-  showConsultationTransfer: false
+  showConsultationTransfer: false,
+  showStatus: true
 });
 
 
@@ -87,6 +89,7 @@ const showLoader = ref(false);
 const state = computed<string>(() => store.getters['workspace/WORKSRACE_STATE']);
 
 const userStatus = computed(() => {
+  if (!props.showStatus) return undefined;
   const statusMap = parseUserStatus(props.item?.presence);
   if (statusMap[UserStatus.DND]) return AbstractUserStatus.DND;
   if (statusMap[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
@@ -97,6 +100,10 @@ const userStatus = computed(() => {
   if (props.item?.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
   return AbstractUserStatus.OFFLINE;
 });
+
+const badge = computed(() =>
+  props.type !== TransferDestination.CHATPLAN && props.showStatus
+)
 
 const name = computed(() => props.item?.name || props.item?.username || props.item?.queue?.name);
 const extension = computed(() => props.item?.extension);

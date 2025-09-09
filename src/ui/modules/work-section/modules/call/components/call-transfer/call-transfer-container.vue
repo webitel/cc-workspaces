@@ -29,6 +29,7 @@
         :show
         :showConsultationTransfer
         :showTransferButton
+        :showStatus
         @changeTab="changeTab"
         @transfer="transfer"
         @consultation="consultation"
@@ -82,8 +83,7 @@ const scroll = useInfiniteScroll({
       if (!agentId.value) return Promise.resolve({ items: [], next: false });
       return queuesAPI.getList({
         parentId: agentId.value,
-        size: 100,
-        fields: [],
+        size: 20,
       });
     }
     return usersAPI.getUsers({ ...params, notId: [userId.value] });
@@ -110,6 +110,7 @@ const tabs = computed(() => ([
 
 const showTransferButton = computed(() => currentTab.value === 'users' || currentTab.value === 'queues');
 const showConsultationTransfer = computed(() => currentTab.value === 'queues' || currentTab.value === 'agents');
+const showStatus = computed(() => currentTab.value !== 'queues');
 
 const changeTab = (tab) => {
   currentTab.value = tab.value;

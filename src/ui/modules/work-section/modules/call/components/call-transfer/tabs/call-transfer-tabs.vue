@@ -13,6 +13,7 @@
     :size="size"
     :showConsultationTransfer
     :showTransferButton
+    :showStatus
     @input="$emit('transfer', $event)"
     @consultation="$emit('consultation', $event)"
   ></transfer-lookup-item>
@@ -29,6 +30,7 @@ interface CallTransferTabsProps {
   currentTab: string;
   showConsultationTransfer: boolean;
   showTransferButton: boolean;
+  showStatus?: boolean;
 }
 
 interface CallTransferTabsEmits {
