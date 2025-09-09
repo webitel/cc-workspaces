@@ -1,26 +1,26 @@
 <template>
-  <div class="client-feedback">
-    <div class="client-feedback__content">
+  <div class="feedback-page">
+    <div class="feedback-page__content">
       <wt-replace-transition>
-        <div v-if="showAnswer" class="client-feedback__card">
+        <div v-if="showAnswer" class="feedback-page__card">
           <img
             v-if="!isError"
-            class="client-feedback__image"
-            src="../../../../app/assets/image/client-feedback/success.png"
+            class="feedback-page__image"
+            src="../../../../app/assets/image/feedback-page/success.png"
             alt="success"
           />
           <img
             v-else
-            class="client-feedback__image"
-            src="../../../../app/assets/image/client-feedback/error.png"
+            class="feedback-page__image"
+            src="../../../../app/assets/image/feedback-page/error.png"
             alt="error"
           />
-          <h3 class="client-feedback__title">
+          <h3 class="feedback-page__title">
             {{
               t(`feedback.${isError ? 'error' : 'success'}.title`, {}, { locale: lang })
             }}
           </h3>
-          <p class="client-feedback__description">
+          <p class="feedback-page__description">
             {{
               t(`feedback.${isError ? 'error' : 'success'}.description`, {}, { locale: lang })
             }}
@@ -28,7 +28,7 @@
         </div>
       </wt-replace-transition>
     </div>
-    <div class="client-feedback__background"></div>
+    <div class="feedback-page__background"></div>
   </div>
 </template>
 
@@ -55,8 +55,11 @@ onMounted(async () => {
       key: hashKey.value,
     });
 
+    // @author @stanislav-kozak
+    // If feedback already set, we should display error state
     isError.value = true;
   } catch (error) {
+    // @author @stanislav-kozak
     // If feedback not found (404 error), we should set feedback by rating from params
     if (error.status === 404) {
       await FeedbackApi.setFeedback({
@@ -72,7 +75,7 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-.client-feedback {
+.feedback-page {
   &__content {
     position: absolute;
     right: 0;
@@ -92,7 +95,7 @@ onMounted(async () => {
     width: 300px;
     padding: var(--spacing-lg);
     background: var(--white);
-    border-radius: 16px;
+    border-radius: var(--border-radius);
   }
 
   &__image {
@@ -121,7 +124,7 @@ onMounted(async () => {
     min-width: 100%;
     height: 1080px;
     width: 1920px;
-    background: url('../../../../app/assets/image/client-feedback/background.svg') no-repeat;
+    background: url('../../../../app/assets/image/feedback-page/background.svg') no-repeat;
     background-size: cover;
   }
 }

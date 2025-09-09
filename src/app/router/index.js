@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
-import ClientFeedback from '../../ui/modules/client-feedback/components/the-client-feedback.vue';
+import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
 
 const routes = [
   {
@@ -10,9 +10,9 @@ const routes = [
     component: AgentWorkspace,
   },
   {
-    path: '/client-feedback',
-    name: 'client-feedback',
-    component: ClientFeedback,
+    path: '/feedback-page',
+    name: 'feedback-page',
+    component: FeedbackPage,
   },
   {
     path: '/:pathMatch(.*)*',
@@ -30,7 +30,7 @@ const router = createRouter({
   routes,
 });
 
-const excludeRouteAuth = ['client-feedback'];
+const excludeRouteAuth = ['feedback-page'];
 
 router.beforeEach((to, from, next) => {
   if (excludeRouteAuth.includes(to.name)) {
