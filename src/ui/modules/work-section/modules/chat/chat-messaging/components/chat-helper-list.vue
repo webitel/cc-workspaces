@@ -24,7 +24,7 @@
 
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { ChatHelperItem } from "../types/ChatHelperItem.types";
 
 const props = defineProps<{
@@ -39,6 +39,8 @@ const emit = defineEmits<{
   select: [item: ChatHelperItem]
 }>();
 
+const isActiveIndexInRange = computed(() => activeIndex.value < props.list.length - 1);
+
 const select = (item) => {
   emit('select', item);
 };
@@ -47,21 +49,36 @@ const setItemRef = (el: HTMLElement | null, index: number) => {
   if (el) itemRefs.value[index] = el;
 };
 
+const moveDown = () => {
+  // If click on the arrow down we assign the value +1
+  return activeIndex.value = isActiveIndexInRange.value && activeIndex.value +1;
+};
+
+const moveUp = () => {
+
+  // If no item is active, set the first one as active
+  if(activeIndex.value === -1) return activeIndex.value = 0;
+  // If click on the arrow up we assign the value -1
+  if(activeIndex.value > 0) return activeIndex.value =- 1;
+};
+
+const selectItem = () => {
+  if(activeIndex.value >= 0 && isActiveIndexInRange.value) {
+    select(props.list[activeIndex.value]);
+  }
+}
+
 const handleKeydown = (event) => {
-  if (event.key === 'ArrowDown') {
-    if (activeIndex.value < props.list.length - 1) {
-      activeIndex.value += 1;
-    }
-  } else if (event.key === 'ArrowUp') {
-    if(activeIndex.value === -1) {
-      activeIndex.value = 0;
-    } else if (activeIndex.value > 0) {
-      activeIndex.value -= 1;
-    }
-  } else if (event.key === 'Enter') {
-    if (activeIndex.value >= 0 && activeIndex.value < props.list.length) {
-      select(props.list[activeIndex.value]);
-    }
+  switch (event.key) {
+    case 'ArrowDown':
+      moveDown();
+      break;
+    case 'ArrowUp':
+      moveUp();
+      break;
+    case 'Enter':
+      selectItem();
+      break;
   }
   event.preventDefault();
 };
@@ -75,6 +92,7 @@ onUnmounted(() => {
 })
 
 watch(() => activeIndex.value, (newIndex) => {
+  // Scroll to the active item if we use arrow down key
   const el = itemRefs.value[newIndex ?? -1];
   if (el) {
     el.scrollIntoView({
