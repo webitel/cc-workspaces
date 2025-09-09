@@ -1,7 +1,7 @@
 <template>
   <div class="client-feedback">
     <div class="client-feedback__content">
-      <Transition name="feedback-card-transition">
+      <wt-replace-transition>
         <div v-if="showAnswer" class="client-feedback__card">
           <img
             v-if="!isError"
@@ -26,7 +26,7 @@
             }}
           </p>
         </div>
-      </Transition>
+      </wt-replace-transition>
     </div>
     <div class="client-feedback__background"></div>
   </div>
@@ -47,19 +47,20 @@ const showAnswer = ref(false);
 const isError = ref(false);
 const lang = ref<string>((route.query.lang as string) || 'en');
 const rating = ref(route.query.rating || 0);
-const hk = ref(route.query.hk);
+const hashKey = ref(route.query.hk);
 
 onMounted(async () => {
   try {
     await FeedbackApi.getFeedback({
-      key: hk.value,
+      key: hashKey.value,
     });
 
     isError.value = true;
   } catch (error) {
+    // If feedback not found (404 error), we should set feedback by rating from params
     if (error.status === 404) {
       await FeedbackApi.setFeedback({
-        key: hk.value,
+        key: hashKey.value,
         rating: rating.value,
       });
     } else {
@@ -123,15 +124,5 @@ onMounted(async () => {
     background: url('../../../../app/assets/image/client-feedback/background.svg') no-repeat;
     background-size: cover;
   }
-}
-
-.feedback-card-transition-enter-active,
-.feedback-card-transition-leave-active {
-  transition: all var(--transition) ease;
-}
-
-.feedback-card-transition-enter-from,
-.feedback-card-transition-leave-to {
-  opacity: 0;
 }
 </style>
