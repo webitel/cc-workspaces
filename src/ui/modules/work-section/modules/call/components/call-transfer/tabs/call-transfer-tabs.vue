@@ -14,6 +14,8 @@
     :showConsultationTransfer
     :showTransferButton
     :showStatus
+    :showTeamName
+    :showUserNameAvatar
     @input="$emit('transfer', $event)"
     @consultation="$emit('consultation', $event)"
   ></transfer-lookup-item>
@@ -31,6 +33,8 @@ interface CallTransferTabsProps {
   showConsultationTransfer: boolean;
   showTransferButton: boolean;
   showStatus?: boolean;
+  showTeamName?: boolean;
+  showUserNameAvatar?: boolean;
 }
 
 interface CallTransferTabsEmits {

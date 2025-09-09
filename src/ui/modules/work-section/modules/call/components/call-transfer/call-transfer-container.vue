@@ -30,6 +30,8 @@
         :showConsultationTransfer
         :showTransferButton
         :showStatus
+        :showTeamName
+        :showUserNameAvatar
         @changeTab="changeTab"
         @transfer="transfer"
         @consultation="consultation"
@@ -74,19 +76,18 @@ const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 
 const scroll = useInfiniteScroll({
   filters: dataFilters.value,
-  sort: dataSort.value,
   fields: dataFields.value,
   fetchFn: (params) => {
     if (currentTab.value === 'agents') {
-      return agentsAPI.getList({ enabled: true });
+      return agentsAPI.getList({ ...params, enabled: true });
     } else if (currentTab.value === 'queues') {
       if (!agentId.value) return Promise.resolve({ items: [], next: false });
       return queuesAPI.getList({
+        ...params,
         parentId: agentId.value,
-        size: 20,
       });
     }
-    return usersAPI.getUsers({ ...params, notId: [userId.value] });
+    return usersAPI.getUsers({ ...params, notId: [userId.value], staus: dataSort });
   },
 });
 
@@ -110,7 +111,9 @@ const tabs = computed(() => ([
 
 const showTransferButton = computed(() => currentTab.value === 'users' || currentTab.value === 'queues');
 const showConsultationTransfer = computed(() => currentTab.value === 'queues' || currentTab.value === 'agents');
-const showStatus = computed(() => currentTab.value !== 'queues');
+const showStatus = computed(() => currentTab.value === 'users');
+const showTeamName = computed(() => currentTab.value === 'agents');
+const showUserNameAvatar = computed(() => currentTab.value === 'users');
 
 const changeTab = (tab) => {
   currentTab.value = tab.value;

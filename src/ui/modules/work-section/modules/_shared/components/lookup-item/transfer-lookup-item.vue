@@ -3,6 +3,7 @@
     <template #before>
       <slot name="before">
         <wt-avatar
+          :username="usernameAvatar"
           :src="src"
           :size="size"
           :badge="badge"
@@ -64,6 +65,8 @@ interface TransferLookupItemProps {
   showTransferButton: boolean;
   showConsultationTransfer: boolean;
   showStatus?: boolean;
+  showTeamName?: boolean;
+  showUserNameAvatar?: boolean;
 }
 
 interface TransferLookupItemEmits {
@@ -77,7 +80,9 @@ const props = withDefaults(defineProps<TransferLookupItemProps>(), {
   src: '',
   showTransferButton: true,
   showConsultationTransfer: false,
-  showStatus: true
+  showStatus: true,
+  showTeamName: false,
+  showUserNameAvatar: false,
 });
 
 
@@ -107,7 +112,8 @@ const badge = computed(() =>
 
 const name = computed(() => props.item?.name || props.item?.username || props.item?.queue?.name);
 const extension = computed(() => props.item?.extension);
-const teamName = computed(() => props.item?.team?.name);
+const teamName = computed(() => props.showTeamName && props.item?.team?.name);
+const usernameAvatar = computed(() => props.showUserNameAvatar && props.item?.name || props.item?.username);
 
 const handleInput = () => {
   if (showLoader.value) return;
