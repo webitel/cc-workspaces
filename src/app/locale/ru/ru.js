@@ -25,6 +25,16 @@ export default {
     run: 'Запустить',
     today: 'Сегодня',
   },
+  feedback: {
+    success: {
+      title: 'Спасибо!',
+      description: 'Ваш ответ успешно сохранен',
+    },
+    error: {
+      title: 'Упс!',
+      description: 'Что-то пошло не так',
+    },
+  },
   appNavigator: {
     title: 'Приложения Webitel',
     admin: 'Admin',

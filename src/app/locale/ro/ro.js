@@ -25,6 +25,16 @@ export default {
     run: 'Rulează',
     today: 'Astăzi',
   },
+  feedback: {
+    success: {
+      title: 'Mulțumim!',
+      description: 'Răspunsul tău a fost salvat cu succes',
+    },
+    error: {
+      title: 'Ups!',
+      description: 'Ceva a mers prost',
+    },
+  },
   appNavigator: {
     title: 'Aplicații Webitel',
     admin: 'Admin',
@@ -324,7 +334,8 @@ export default {
     title: 'Confirmă acțiunea',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat',
+  },
 };

@@ -25,6 +25,16 @@ export default {
     run: 'Chạy',
     today: 'Hôm nay',
   },
+  feedback: {
+    success: {
+      title: 'Cảm ơn!',
+      description: 'Phản hồi của bạn đã được lưu thành công',
+    },
+    error: {
+      title: 'Rất tiếc!',
+      description: 'Đã xảy ra sự cố',
+    },
+  },
   appNavigator: {
     title: 'Ứng dụng Webitel',
     admin: 'Admin',
@@ -316,7 +326,8 @@ export default {
     title: 'Xác nhận hành động',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Mở menu trả lời nhanh trong chat'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Mở menu trả lời nhanh trong chat',
+  },
 };

@@ -25,6 +25,16 @@ export default {
     run: 'Іске қосу',
     today: 'Бүгін',
   },
+  feedback: {
+    success: {
+      title: 'Рақмет!',
+      description: 'Жауабыңыз сәтті сақталды',
+    },
+    error: {
+      title: 'Қате!',
+      description: 'Бір нәрсе дұрыс болмады',
+    },
+  },
   appNavigator: {
     title: 'Webitel қосымшасы',
     admin: 'Admin',
@@ -323,7 +333,8 @@ export default {
     title: 'Әрекетті растаңыз',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады',
+  },
 };
