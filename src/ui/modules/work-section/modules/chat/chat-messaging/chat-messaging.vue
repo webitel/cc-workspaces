@@ -13,7 +13,7 @@
       @drop="handleDrop"
     />
       <quick-replies
-        v-show="showQuickReplies"
+        v-if="showQuickReplies"
         :search="searchReply"
         @close="closeQuickRepliesPanel"
         @select="applyQuickReply"
@@ -274,7 +274,9 @@ function selectAutocompleteOption({id}: { id: string }) {
 
 function showQuickRepliesPanel() {
   closeAutocomplete();
-  chat.value.draft = chat.value.draft.slice(0, -1);
+  if(chat.value.draft?.length > 1) {
+    chat.value.draft = chat.value.draft.slice(0, -1);
+  }
   openQuickReplies();
 }
 
