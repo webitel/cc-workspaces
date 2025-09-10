@@ -111,6 +111,7 @@ import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
+import { useChatStore } from '@/features/modules/chat/store/chat.store';
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import {useDropzoneHandlers} from '../../../../../composibles/useDropzoneHandlers';
@@ -142,6 +143,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const eventBus = inject('$eventBus');
 const store = useStore();
+const chatStore = useChatStore();
 
 const messageDraft = ref();
 const attachmentInput = ref();
@@ -184,15 +186,15 @@ const {
 const hotkeyUnsubscribers = ref([]);
 
 function sendFile (files) {
-  return store.dispatch('features/chat/SEND_FILE', files);
+  return chatStore.sendFile(chat.value, files);
 }
 
 function send (draft) {
-  return store.dispatch('features/chat/SEND', draft);
+  return chatStore.send(chat.value, draft);
 }
 
 function accept() {
-  return store.dispatch('features/chat/ACCEPT');
+  return chatStore.accept(chat.value);
 }
 
 async function setDraftFocus() {

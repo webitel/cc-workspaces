@@ -36,7 +36,6 @@ import { watchOnce } from '@vueuse/core';
 import WtCcAgentStatusTimers
   from '@webitel/ui-sdk/src/components/on-demand/wt-cc-agent-status-timers/wt-cc-agent-status-timers.vue';
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -44,6 +43,7 @@ import AgentOrgStructure from './agent-org-structure.vue';
 import AgentPauseCauses from './agent-pause-causes.vue';
 import AgentQueues from './agent-queues.vue';
 import AgentScore from './agent-score.vue';
+import { useAgentInfoStore } from '../store/agentInfo.store';
 
 const props = defineProps({
   size: {
@@ -52,18 +52,19 @@ const props = defineProps({
   },
 });
 
-const namespace = 'ui/infoSec/agentInfo';
-
 const store = useStore();
 const isLoaded = ref(false);
 
 const agent = computed(() => store.state.features.status.agent);
-const agentInfo = computed(() => getNamespacedState(store.state, namespace));
+const agentInfoStore = useAgentInfoStore();
+const agentInfo = computed(() => agentInfoStore);
 
 const { subscribe } = useCachedInterval({ timeout: 5 * 1000 });
 
-async function loadAgentInfo(payload) {
-  await store.dispatch(`${namespace}/LOAD_AGENT_INFO`, payload);
+async function loadAgentInfo() {
+  const agentId = agent.value?.agentId;
+  if (!agentId) return;
+  await agentInfoStore.loadAgentInfo(agentId);
   isLoaded.value = true;
 }
 watchOnce(agent, () => {
