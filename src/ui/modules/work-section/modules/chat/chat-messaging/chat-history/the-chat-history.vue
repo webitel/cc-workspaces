@@ -15,7 +15,7 @@
     >
       <div class="chat-history__observer-wrapper">
         <wt-intersection-observer
-          :next="next"
+          :canLoadMore="next"
           :loading="isLoading"
           @next="loadNextMessages"
         />
