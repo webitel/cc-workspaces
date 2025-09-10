@@ -25,6 +25,7 @@ const getHistory = async (params) => {
     createdAtFrom,
     createdAtTo,
     userId,
+    ownerId,
     memberId,
     cause,
     direction,
@@ -39,7 +40,9 @@ const getHistory = async (params) => {
       page, size, undefined, sort, fields, createdAtFrom, createdAtTo, userId, undefined,
       undefined, undefined, memberId, undefined, undefined, undefined,
       undefined, undefined, cause, undefined, undefined, search, direction,
-      undefined, undefined, isMissed
+      undefined, undefined, isMissed, undefined, undefined,
+      undefined, undefined, undefined, undefined, undefined, undefined,
+      undefined, undefined, undefined, undefined, undefined, ownerId
     );
     const { items, next } = applyTransform(response.data, [
       snakeToCamel(),
