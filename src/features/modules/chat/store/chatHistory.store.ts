@@ -8,7 +8,7 @@ import { formatChatMessages } from '../scripts/formatChatMessages';
 const { t } = i18n.global;
 
 export const useChatHistoryStore = defineStore('features/chat/chatHistory', () => {
-  const chatHistoryMessages = ref<any[]>([]);
+  const chatHistoryMessages = ref<Record<string, unknown>[]>([]);
   const page = ref(1);
   const next = ref(false);
   const isLoaded = ref(false);

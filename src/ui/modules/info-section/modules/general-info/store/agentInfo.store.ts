@@ -5,16 +5,16 @@ import AgentPauseCausesAPI from '../../../../../../app/api/agent-workspace/endpo
 import AgentQueuesAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-queues';
 import AgentStatusAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-status';
 
-type Agent = Record<string, unknown>;
-type PauseCause = Record<string, unknown>;
+export type Agent = Record<string, unknown>;
+export type PauseCause = Record<string, unknown>;
 
-interface AgentQueueAgentStats {
+export interface AgentQueueAgentStats {
   pause: number;
   online: number;
   allowPause: boolean;
 }
 
-interface AgentQueueItem {
+export interface AgentQueueItem {
   queue: {
     id: string;
     name: string;
