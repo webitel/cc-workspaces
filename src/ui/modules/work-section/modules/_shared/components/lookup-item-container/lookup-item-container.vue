@@ -26,7 +26,6 @@
     <section
       class="lookup-item-container-body"
     >
-      <wt-replace-transition appear>
         <div
           v-if="showEmpty"
           class="lookup-item-container-empty"
@@ -39,7 +38,6 @@
         >
           <slot name="content"></slot>
         </div>
-      </wt-replace-transition>
 
       <wt-intersection-observer
         :canLoadMore="true"
@@ -55,10 +53,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   size: {

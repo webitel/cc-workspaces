@@ -1,7 +1,6 @@
 <template>
   <div class="feedback-page">
     <div class="feedback-page__content">
-      <wt-replace-transition>
         <div v-if="showAnswer" class="feedback-page__card">
           <img
             v-if="!isError"
@@ -26,7 +25,6 @@
             }}
           </p>
         </div>
-      </wt-replace-transition>
     </div>
     <div class="feedback-page__background"></div>
   </div>

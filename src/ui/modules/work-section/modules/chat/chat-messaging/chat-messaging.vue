@@ -22,17 +22,15 @@
         v-if="!showQuickReplies"
         class="chat-messaging__messaging chat-messages-container"
       >
-        <wt-replace-transition appear>
-          <chat-history
-            v-if="contact?.id"
-            :contact="contact"
-            :size="size"
-          />
-          <current-chat
-            v-else
-            :size="size"
-          />
-        </wt-replace-transition>
+        <chat-history
+          v-if="contact?.id"
+          :contact="contact"
+          :size="size"
+        />
+        <current-chat
+          v-else
+          :size="size"
+        />
       </div>
     <div
       v-if="isChatActive"
@@ -106,7 +104,6 @@
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import {ComponentSize} from '@webitel/ui-sdk/enums';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
