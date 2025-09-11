@@ -25,7 +25,6 @@
         :size="infoSecSize"
       />
       <keep-alive>
-        <wt-replace-transition>
           <component
             :is="currentTab.value"
             :key="currentTab.value"
@@ -33,7 +32,6 @@
             :task="taskOnWorkspace"
             :size="infoSecSize"
           ></component>
-        </wt-replace-transition>
       </keep-alive>
 
     </div>
@@ -55,7 +53,6 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 export default {
   name: 'TheAgentInfoSection',
@@ -68,7 +65,6 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
-    WtReplaceTransition
   },
   mixins: [sizeMixin],
   props: {

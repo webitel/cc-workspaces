@@ -27,7 +27,6 @@
       ref="scrollWrap"
       class="lookup-item-container-body"
     >
-      <wt-replace-transition appear>
         <div
           v-if="loading"
           class="lookup-item-container-loader"
@@ -48,7 +47,6 @@
         >
           <slot name="content"></slot>
         </div>
-      </wt-replace-transition>
 
       <observer
         v-if="scrollWrap"
@@ -67,7 +65,6 @@
 import { computed, ref } from 'vue';
 
 import Observer from '../../../../../../../app/components/utils/scroll-observer.vue';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   size: {
