@@ -24,7 +24,7 @@
 
 </template>
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { ChatHelperItem } from "../types/ChatHelperItem.types";
 
 const props = defineProps<{
@@ -39,8 +39,6 @@ const emit = defineEmits<{
   select: [item: ChatHelperItem]
 }>();
 
-const isActiveIndexInRange = computed(() => activeIndex.value < props.list.length - 1);
-
 const select = (item) => {
   emit('select', item);
 };
@@ -51,19 +49,23 @@ const setItemRef = (el: HTMLElement | null, index: number) => {
 
 const moveDown = () => {
   // If click on the arrow down we assign the value +1
-  return activeIndex.value = isActiveIndexInRange.value && activeIndex.value +1;
+  if (activeIndex.value < props.list.length - 1) {
+    return activeIndex.value += 1;
+  }
 };
 
 const moveUp = () => {
-
   // If no item is active, set the first one as active
-  if(activeIndex.value === -1) return activeIndex.value = 0;
-  // If click on the arrow up we assign the value -1
-  if(activeIndex.value > 0) return activeIndex.value =- 1;
+  if(activeIndex.value === -1) {
+    return activeIndex.value = 0;
+    // If click on the arrow up we assign the value -1
+  } else if(activeIndex.value > 0) {
+    return activeIndex.value -= 1;
+  }
 };
 
 const selectItem = () => {
-  if(activeIndex.value >= 0 && isActiveIndexInRange.value) {
+  if(activeIndex.value >= 0 && activeIndex.value < props.list.length) {
     select(props.list[activeIndex.value]);
   }
 }
