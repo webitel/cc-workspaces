@@ -1,6 +1,5 @@
 <template>
   <article class="chat">
-    <wt-replace-transition appear>
     <task-container v-if="chatContactIsLoaded" class="chat__wrapper">
       <template #header>
         <chat-header
@@ -29,12 +28,10 @@
         />
       </template>
     </task-container>
-    </wt-replace-transition>
   </article>
 </template>
 
 <script>
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapGetters, mapState } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
@@ -59,7 +56,6 @@ export default {
     ChatTransferContainer,
     EmptyWorkspace,
     ChatFooter,
-    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   data: () => ({

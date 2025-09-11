@@ -20,7 +20,6 @@
         </div>
       </template>
       <template #default>
-        <wt-replace-transition>
           <add-contact
             v-if="mode === ContactMode.ADD"
             :size="props.size"
@@ -41,18 +40,16 @@
             :namespace="namespace"
             @add="changeMode(ContactMode.ADD)"
           />
-        </wt-replace-transition>
       </template>
     </wt-expansion-panel>
   </article>
 </template>
 
 <script setup>
-import { computed,ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
 import AddContact from './views/add-contact.vue';
