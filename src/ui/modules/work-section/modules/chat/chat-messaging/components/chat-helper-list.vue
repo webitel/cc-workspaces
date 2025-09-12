@@ -82,7 +82,6 @@ const handleKeydown = (event) => {
       selectItem();
       break;
   }
-  event.preventDefault();
 };
 
 onMounted(() => {
