@@ -25,7 +25,6 @@
     </header>
     <section
       class="lookup-item-container-body"
-      ref="scrollWrap"
     >
         <div
           v-if="showEmpty"
