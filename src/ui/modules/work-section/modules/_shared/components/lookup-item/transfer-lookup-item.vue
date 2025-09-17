@@ -23,22 +23,15 @@
 
     <template #after>
       <div class="transfer-actions">
-        <wt-rounded-action
-          v-if="showTransferButton"
-          color="transfer"
-          :icon="`${state}-transfer--filled`"
-          :loading="showLoader"
-          rounded
-          @click="handleInput"
-        />
-        <wt-rounded-action
-          v-if="showConsultationTransfer"
-          color="transfer"
-          icon="consultative-transfer"
-          :loading="showLoader"
-          rounded
-          @click="handleConsultationTransfer"
-        />
+        <slot name="actions" :item="item">
+          <wt-rounded-action
+            color="transfer"
+            :icon="`${state}-transfer--filled`"
+            :loading="showLoader"
+            rounded
+            @click="handleInput"
+          />
+        </slot>
       </div>
     </template>
   </lookup-item>
@@ -62,8 +55,6 @@ interface TransferLookupItemProps {
   type: string;
   src?: string;
   size?: string;
-  showTransferButton: boolean;
-  showConsultationTransfer: boolean;
   showStatus?: boolean;
   showTeamName?: boolean;
   showUserNameAvatar?: boolean;
@@ -71,15 +62,12 @@ interface TransferLookupItemProps {
 
 interface TransferLookupItemEmits {
   (e: 'input', item: transferItem): void;
-  (e: 'consultation', item: transferItem): void;
 }
 
 const props = withDefaults(defineProps<TransferLookupItemProps>(), {
   type: TransferDestination.USER,
   size: '',
   src: '',
-  showTransferButton: true,
-  showConsultationTransfer: false,
   showStatus: true,
   showTeamName: false,
   showUserNameAvatar: false,
@@ -119,13 +107,6 @@ const handleInput = () => {
   if (showLoader.value) return;
   showLoader.value = true;
   emit('input', props.item);
-  showLoader.value = false;
-};
-
-const handleConsultationTransfer = () => {
-  if (showLoader.value) return;
-  showLoader.value = true;
-  emit('consultation', props.item);
   showLoader.value = false;
 };
 </script>

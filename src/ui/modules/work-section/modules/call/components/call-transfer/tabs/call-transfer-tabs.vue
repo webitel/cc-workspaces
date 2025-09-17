@@ -18,7 +18,11 @@
     :showUserNameAvatar
     @input="$emit('transfer', $event)"
     @consultation="$emit('consultation', $event)"
-  ></transfer-lookup-item>
+  >
+    <template #actions>
+      <slot name="actions" :item="item"></slot>
+    </template>
+  </transfer-lookup-item>
 </template>
 <script setup lang="ts">
 import TransferLookupItem
@@ -30,8 +34,6 @@ interface CallTransferTabsProps {
   size: string;
   tabs: tab[];
   currentTab: string;
-  showConsultationTransfer: boolean;
-  showTransferButton: boolean;
   showStatus?: boolean;
   showTeamName?: boolean;
   showUserNameAvatar?: boolean;

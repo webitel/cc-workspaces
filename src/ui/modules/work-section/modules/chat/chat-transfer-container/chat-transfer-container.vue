@@ -29,7 +29,6 @@
     <template #content>
       <transfer-lookup-item
         v-for="(item, key) of dataList"
-        :id="`scroll-item-${key}`"
         :key="`${item.id}${key}`"
         :item="item"
         :size="size"

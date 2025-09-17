@@ -26,16 +26,30 @@
         :data-list
         :size
         :tabs
-        :show
-        :showConsultationTransfer
-        :showTransferButton
         :showStatus
         :showTeamName
         :showUserNameAvatar
         @changeTab="changeTab"
         @transfer="transfer"
         @consultation="consultation"
-      />
+      >
+        <template #actions="{ item }">
+          <wt-rounded-action
+            v-if="showTransferButton"
+            color="transfer"
+            :icon="`${state}-transfer--filled`"
+            rounded
+            @click="transfer(item)"
+          />
+          <wt-rounded-action
+            v-if="showConsultationTransfer"
+            color="transfer"
+            icon="consultative-transfer"
+            rounded
+            @click="consultation(item)"
+          />
+        </template>
+      </call-transfer-tabs>
     </template>
   </lookup-item-container>
 </template>
@@ -72,7 +86,7 @@ const dataFields = ref(['name', 'id', 'extension', 'presence']);
 
 const userId = computed(() => store.state['ui/userinfo']?.userId);
 const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
-
+const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 
 const scroll = useInfiniteScroll({
   filters: dataFilters.value,
