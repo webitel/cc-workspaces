@@ -113,7 +113,7 @@ $chat-info-gap: var(--spacing-2xs);
   max-width: 100%;
   gap: var($chat-info-gap);
 
-  :last-child {
+  &:last-child {
     margin-bottom: $message-gap;
   }
 
