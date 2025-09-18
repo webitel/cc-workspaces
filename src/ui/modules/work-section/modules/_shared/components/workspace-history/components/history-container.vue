@@ -116,7 +116,7 @@ export default {
     getAgentHistory(argParams) {
       const params = {
         ...argParams,
-        userId: this.userId,
+        ownerId: this.userId,
       };
       return historyAPI.getHistory(params);
     },
