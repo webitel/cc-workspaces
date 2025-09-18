@@ -7,17 +7,12 @@
   ></wt-tabs>
   <transfer-lookup-item
     v-for="(item, key) of dataList"
-    :id="`scroll-item-${key}`"
     :key="`${item.id}${key}`"
     :item="item"
     :size="size"
-    :showConsultationTransfer
-    :showTransferButton
     :showStatus
     :showTeamName
     :showUserNameAvatar
-    @input="$emit('transfer', $event)"
-    @consultation="$emit('consultation', $event)"
   >
     <template #actions>
       <slot name="actions" :item="item"></slot>
@@ -40,9 +35,7 @@ interface CallTransferTabsProps {
 }
 
 interface CallTransferTabsEmits {
-  (e: 'transfer', item: transferItem): void;
   (e: 'changeTab', tab: tab): void;
-  (e: 'consultation', item: transferItem): void;
 }
 
 interface tab {
