@@ -21,17 +21,14 @@
     </template>
 
     <template #content>
-      <call-transfer-tabs
-        :current-tab
-        :data-list
-        :size
-        :tabs
+      <transfer-lookup-item
+        v-for="(item, key) of dataList"
+        :key="`${item.id}${key}`"
+        :item="item"
+        :size="size"
         :showStatus
         :showTeamName
         :showUserNameAvatar
-        @changeTab="changeTab"
-        @transfer="transfer"
-        @consultation="consultation"
       >
         <template #actions="{ item }">
           <wt-rounded-action
@@ -49,13 +46,13 @@
             @click="consultation(item)"
           />
         </template>
-      </call-transfer-tabs>
+      </transfer-lookup-item>
     </template>
   </lookup-item-container>
 </template>
 
-<script setup>
-import { computed, ref } from 'vue';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
@@ -64,11 +61,16 @@ import useInfiniteScroll from '../../../../../../../app/composables/useInfiniteS
 import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import CallTransferTabs from './tabs/call-transfer-tabs.vue';
+import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
 
 const props = defineProps({
   size: {
     type: String,
     default: '',
+  },
+  currentTab: {
+    type: String,
+    default: 'users',
   },
 });
 
@@ -79,7 +81,6 @@ const queuesAPI = APIRepository.queues;
 const store = useStore();
 const { t } = useI18n();
 
-const currentTab = ref('users');
 const dataFilters = ref('presence.status=sip,!dnd');
 const dataSort = ref('presence.status');
 const dataFields = ref(['name', 'id', 'extension', 'presence']);
@@ -92,9 +93,9 @@ const scroll = useInfiniteScroll({
   filters: dataFilters.value,
   fields: dataFields.value,
   fetchFn: (params) => {
-    if (currentTab.value === 'agents') {
+    if (props.currentTab === 'agents') {
       return agentsAPI.getList({ ...params, enabled: true });
-    } else if (currentTab.value === 'queues') {
+    } else if (props.currentTab === 'queues') {
       if (!agentId.value) return Promise.resolve({ items: [], next: false });
       return queuesAPI.getList({
         ...params,
@@ -108,36 +109,17 @@ const scroll = useInfiniteScroll({
 
 const isTransferToNumberDisabled = computed(() => !scroll.dataSearch.value);
 
-const tabs = computed(() => ([
-  {
-    text: t('WebitelApplications.admin.sections.users', 2),
-    value: 'users',
-  },
-  {
-    text: t('WebitelApplications.admin.sections.agents', 2),
-    value: 'agents',
-  },
-  {
-    text: t('WebitelApplications.admin.sections.queues', 2),
-    value: 'queues',
-  },
-]));
 
-const showTransferButton = computed(() => currentTab.value === 'users' || currentTab.value === 'queues');
-const showConsultationTransfer = computed(() => currentTab.value === 'queues' || currentTab.value === 'agents');
-const showStatus = computed(() => currentTab.value === 'users');
-const showTeamName = computed(() => currentTab.value === 'agents');
-const showUserNameAvatar = computed(() => currentTab.value === 'users');
-
-const changeTab = (tab) => {
-  currentTab.value = tab.value;
-  scroll.resetData();
-};
+const showTransferButton = computed(() => props.currentTab === 'users' || props.currentTab === 'queues');
+const showConsultationTransfer = computed(() => props.currentTab === 'queues' || props.currentTab === 'agents');
+const showStatus = computed(() => props.currentTab === 'users');
+const showTeamName = computed(() => props.currentTab === 'agents');
+const showUserNameAvatar = computed(() => props.currentTab === 'users');
 
 const transfer = (item = {}) => {
   const number = item.extension || scroll.dataSearch.value;
-  if (currentTab.value === 'queues') {
-    return cli.allCall()[0].blindTransferQueue(item.id)
+  if (props.currentTab === 'queues') {
+    return cli.allCall()[0].blindTransferQueue(Number(item.id))
   }
   store.dispatch('features/call/BLIND_TRANSFER', number);
 };
@@ -145,7 +127,7 @@ const transfer = (item = {}) => {
 const consultation = (item = {}) => {
   const number = item.extension || scroll.dataSearch.value;
   store.dispatch('features/call/TOGGLE_HOLD', item.id);
-  if (currentTab.value === 'queues') {
+  if (props.currentTab === 'queues') {
     return cli.allCall()[0].processTransferQueue(Number(item.id));
   }
   store.dispatch('features/call/CALL', { user: store.state['ui/userinfo'], number });
@@ -153,6 +135,14 @@ const consultation = (item = {}) => {
 }
 
 const { dataList, dataSearch, isLoading, handleIntersect, resetData } = scroll;
+
+watch(
+  () => props.currentTab,
+  () => {
+    scroll.resetData();
+  },
+  { immediate: true },
+)
 </script>
 
 <style lang="scss" scoped>

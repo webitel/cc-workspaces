@@ -3,48 +3,38 @@
     class="transfer-tabs"
     :current="currentTab"
     :tabs="tabs"
-    @change="$emit('changeTab', $event)"
+    @change="currentTab = $event.value;"
   ></wt-tabs>
-  <transfer-lookup-item
-    v-for="(item, key) of dataList"
-    :key="`${item.id}${key}`"
-    :item="item"
-    :size="size"
-    :showStatus
-    :showTeamName
-    :showUserNameAvatar
-  >
-    <template #actions>
-      <slot name="actions" :item="item"></slot>
-    </template>
-  </transfer-lookup-item>
+  <call-transfer-container :size="size" :currentTab="currentTab"/>
 </template>
 <script setup lang="ts">
-import TransferLookupItem
-  from '../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
-import { transferItem } from '../../../../_shared/components/lookup-item/types/transfer-lookup-item.js';
+import callTransferContainer from '../call-transfer-container.vue';
+import { useI18n } from 'vue-i18n';
+import { computed, ref } from 'vue';
 
+const { t } = useI18n();
+const currentTab = ref('users');
 interface CallTransferTabsProps {
-  dataList: transferItem[];
   size: string;
-  tabs: tab[];
-  currentTab: string;
-  showStatus?: boolean;
-  showTeamName?: boolean;
-  showUserNameAvatar?: boolean;
 }
 
-interface CallTransferTabsEmits {
-  (e: 'changeTab', tab: tab): void;
-}
 
-interface tab {
-  text: string;
-  value: string;
-}
+const tabs = computed(() => ([
+  {
+    text: t('WebitelApplications.admin.sections.users', 2),
+    value: 'users',
+  },
+  {
+    text: t('WebitelApplications.admin.sections.agents', 2),
+    value: 'agents',
+  },
+  {
+    text: t('WebitelApplications.admin.sections.queues', 2),
+    value: 'queues',
+  },
+]));
 
 defineProps<CallTransferTabsProps>()
-defineEmits<CallTransferTabsEmits>()
 </script>
 
 <style scoped lang="scss">
@@ -52,5 +42,6 @@ defineEmits<CallTransferTabsEmits>()
     display: grid;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
+    margin-bottom: var(--spacing-sm);
   }
 </style>
