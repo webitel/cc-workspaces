@@ -46,7 +46,7 @@ const isLabelToLimitContactsGranted = ref(false);
 
 async function checkLabelToLimitContacts() {
   const { items } = await configurations.getList({
-    name: EngineSystemSettingName.labels_to_limit_contacts,
+    name: EngineSystemSettingName.LabelsToLimitContacts,
   });
 
   isLabelToLimitContactsGranted.value = !!items.length;
