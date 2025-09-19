@@ -4,6 +4,8 @@ import communicationsAPIRepository
   from './agent-workspace/endpoints/communications/CommunicationsAPIRepository';
 import historyAPIRepository from './agent-workspace/endpoints/history/HistoryAPIRepository';
 import usersAPIRepository from './agent-workspace/endpoints/users/UsersAPIRepository';
+import queuesApiRepository from '@webitel/ui-sdk/api/clients/queues/queues'
+import agentsAPIRepository from '@webitel/ui-sdk/api/clients/agents/agents'
 
 const APIRepository = {
   history: historyAPIRepository,
@@ -11,6 +13,8 @@ const APIRepository = {
   users: usersAPIRepository,
   widgets: widgetsAPIRepository,
   chatplans: chatplanAPIRepository,
+  agents: agentsAPIRepository,
+  queues: queuesApiRepository,
 };
 
 export default APIRepository;
