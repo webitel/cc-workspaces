@@ -107,7 +107,7 @@ export default {
     }),
     async checkLabelsToLimitContacts() {
       const { items } = await configurations.getList({
-        name: EngineSystemSettingName.labels_to_limit_contacts,
+        name: EngineSystemSettingName.LabelsToLimitContacts,
       });
 
       if (items.length) {
