@@ -47,7 +47,7 @@ const emit = defineEmits(['scroll']);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--btn-success-color);
+    background: var(--success-color);
     border-radius: 50%;
     color: var(--text-on-brand-color);
   }
