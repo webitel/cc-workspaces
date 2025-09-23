@@ -18,32 +18,68 @@
     </template>
   </call-transfer-container>
 </template>
+
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../../call-transfer-container.vue';
+import { EngineQueue } from 'webitel-sdk';
 
-const queuesAPI = APIRepository.queues;
-
-const store = useStore();
-const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
-const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
-const transfer = (item = {}) => {
-  return cli.allCall()[0].blindTransferQueue(Number(item.id))
-};
-
-const consultationTransfer = (item = {}) => {
-  return cli.allCall()[0].processTransferQueue(Number(item.id));
+interface TransferParams {
+  page?: number;
+  size?: number;
+  q?: string;
+  sort?: string;
+  fields?: string[];
+  parentId?: string;
+  [key: string]: any;
 }
 
-const getQueues = (params) => {
-  if (!agentId.value) return Promise.resolve({ items: [], next: false });
+interface APIResponse {
+  items: EngineQueue[];
+  next: boolean;
+  [key: string]: any;
+}
+
+interface CLI {
+  allCall: () => Array<{
+    blindTransferQueue: (queueId: number) => void;
+    processTransferQueue: (queueId: number) => void;
+  }>;
+}
+
+const store = useStore();
+const queuesAPI = APIRepository.queues;
+
+const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
+const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
+const cli = computed(() => store.state.cli as CLI);
+
+const transfer = (item: QueueItem = {} as QueueItem) => {
+  const calls = cli.value?.allCall?.();
+  if (calls && calls.length > 0) {
+    return calls[0].blindTransferQueue(Number(item.id));
+  }
+};
+
+const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
+  const calls = cli.value?.allCall?.();
+  if (calls && calls.length > 0) {
+    return calls[0].processTransferQueue(Number(item.id));
+  }
+};
+
+const getQueues = (params: TransferParams): Promise<APIResponse> => {
+  if (!agentId.value) {
+    return Promise.resolve({ items: [], next: false });
+  }
+
   return queuesAPI.getList({
     ...params,
     parentId: agentId.value,
   });
-}
+};
 </script>
 <style scoped lang="scss">
 
