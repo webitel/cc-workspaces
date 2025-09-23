@@ -13,7 +13,7 @@
         color="transfer"
         icon="consultative-transfer"
         rounded
-        @click="consultation(item)"
+        @click="consultationTransfer(item)"
       />
     </template>
   </call-transfer-container>
@@ -22,7 +22,7 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
-import callTransferContainer from '../../call-transfer-container.vue';
+import CallTransferContainer from '../../call-transfer-container.vue';
 
 const queuesAPI = APIRepository.queues;
 
@@ -33,7 +33,7 @@ const transfer = (item = {}) => {
   return cli.allCall()[0].blindTransferQueue(Number(item.id))
 };
 
-const consultation = (item = {}) => {
+const consultationTransfer = (item = {}) => {
   return cli.allCall()[0].processTransferQueue(Number(item.id));
 }
 

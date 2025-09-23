@@ -2,25 +2,25 @@
   <call-transfer-container
     showTeamName
     :getData="getAgens"
-    @transfer="consultation"
+    @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
       <wt-rounded-action
         color="transfer"
         icon="consultative-transfer"
         rounded
-        @click="consultation(item)"
+        @click="consultationTransfer(item)"
       />
     </template>
   </call-transfer-container>
 </template>
 <script setup lang="ts">
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
-import callTransferContainer from '../../call-transfer-container.vue';
+import CallTransferContainer from '../../call-transfer-container.vue';
 
 const agentsAPI = APIRepository.agents;
 
-const consultation = (item = {}) => {
+const consultationTransfer = (item = {}) => {
   const number = item.extension || scroll.dataSearch.value;
   store.dispatch('features/call/TOGGLE_HOLD', item.id);
   store.dispatch('features/call/CALL', { user: store.state['ui/userinfo'], number });

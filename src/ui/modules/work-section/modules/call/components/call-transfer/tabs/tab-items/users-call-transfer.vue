@@ -21,7 +21,7 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
-import callTransferContainer from '../../call-transfer-container.vue';
+import CallTransferContainer from '../../call-transfer-container.vue';
 
 
 const usersAPI = APIRepository.users;

@@ -81,6 +81,8 @@ const scroll = useInfiniteScroll({
 const isTransferToNumberDisabled = computed(() => !scroll.dataSearch.value);
 
 const { dataList, dataSearch, isLoading, handleIntersect, resetData } = scroll;
+
+
 </script>
 
 <style lang="scss" scoped>

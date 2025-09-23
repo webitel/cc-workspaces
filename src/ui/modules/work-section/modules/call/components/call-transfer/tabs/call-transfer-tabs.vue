@@ -14,9 +14,9 @@
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 
-import CallTransferUsers from './tab-items/call-transfer-users.vue';
-import CallTransferAgents from './tab-items/call-transfer-agents.vue';
-import CallTransferQueues from './tab-items/call-transfer-queues.vue';
+import AgentsCallTransfer from './tab-items/agents-call-transfer.vue';
+import QueuesCallTransfer from './tab-items/queues-call-transfer.vue';
+import UsersCallTransfer from './tab-items/users-call-transfer.vue';
 
 const { t } = useI18n();
 
@@ -30,17 +30,17 @@ const tabs = computed(() => ([
   {
     text: t('WebitelApplications.admin.sections.users', 2),
     value: 'users',
-    component: CallTransferUsers,
+    component: UsersCallTransfer,
   },
   {
     text: t('WebitelApplications.admin.sections.agents', 2),
     value: 'agents',
-    component: CallTransferAgents,
+    component: AgentsCallTransfer,
   },
   {
     text: t('WebitelApplications.admin.sections.queues', 2),
     value: 'queues',
-    component: CallTransferQueues,
+    component: QueuesCallTransfer,
   },
 ]));
 
