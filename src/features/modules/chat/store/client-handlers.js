@@ -46,6 +46,7 @@ const actions = {
 
   HANDLE_JOINED_ACTION: (context, { chat }) => {
     openLinkFromVariable(chat);
+    context.dispatch('SET_MEMBERS_TO_CHAT', chat);
   },
 
   HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
