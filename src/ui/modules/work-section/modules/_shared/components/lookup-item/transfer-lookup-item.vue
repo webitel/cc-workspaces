@@ -17,7 +17,7 @@
     </template>
 
     <template #subtitle>
-      <span>{{ extension }}</span>
+      <span>{{ item?.extension }}</span>
       <div v-if="teamName"> {{ teamName }} </div>
     </template>
 
@@ -99,7 +99,6 @@ const badge = computed(() =>
 )
 
 const name = computed(() => props.item?.name || props.item?.username || props.item?.queue?.name);
-const extension = computed(() => props.item?.extension);
 const teamName = computed(() => props.showTeamName && props.item?.team?.name);
 const usernameAvatar = computed(() => props.showUserNameAvatar && props.item?.name || props.item?.username);
 
