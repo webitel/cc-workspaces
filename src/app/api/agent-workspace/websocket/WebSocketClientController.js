@@ -74,12 +74,22 @@ class WebSocketClientController {
     cli.callStore = reactive(cli.callStore);
 
     this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
-    this._on[WebSocketClientEvent.ERROR].forEach((callback) => cli.on('error', callback));
-    cli.on(`show_message`, e => eventBus.$emit('notification', {
-      type: e.type,
-      text: e.message,
-      timeout: e.timeout,
-    }));
+    this._on[WebSocketClientEvent.ERROR].forEach((callback) =>
+      cli.on('error', callback),
+    );
+    cli.on(`show_message`, (e) =>
+      eventBus.$emit('notification', {
+        type: e.type,
+        text: e.message,
+        timeout: e.timeout,
+      }),
+    );
+    cli.on(`open_link`, (e) => {
+      window.open(
+        e.url.startsWith('https://') ? e.url : `https://${e.url}`,
+        '_blank',
+      );
+    });
 
     await cli.connect();
 
