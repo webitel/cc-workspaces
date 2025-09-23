@@ -80,7 +80,7 @@ const store = useStore();
 const showLoader = ref(false);
 
 const state = computed<string>(() => store.getters['workspace/WORKSRACE_STATE']);
-
+// NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
 const userStatus = computed(() => {
   if (!props.showStatus) return undefined;
   const statusMap = parseUserStatus(props.item?.presence);
