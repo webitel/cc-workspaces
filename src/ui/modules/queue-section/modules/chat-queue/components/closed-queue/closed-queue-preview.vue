@@ -1,14 +1,22 @@
 <template>
-  <task-queue-preview-md
+  <chat-card
     v-if="size === 'md'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
-    :opened="opened"
+    :task="task"
+    status="closed"
+    :title="displayTaskName"
+    :subtitle="lastMessagePreview"
     :queue-name="displayQueueName"
+    :icon="displayIcon"
+    :selected="opened"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
-
-    <template #icon>
+    <template #timer>
+      {{ duration }}
+    </template>
+    
+    <template #actions>
       <wt-icon-btn
         v-if="!processed"
         :size="size"
@@ -17,32 +25,13 @@
         @click.stop="markChatAsProcessed"
       />
       <wt-icon
-        :icon="displayIcon"
-        :size="size"
-        class="closed-queue-preview__provider"
-      />
-    </template>
-
-    <template #title>
-      {{ displayTaskName }}
-    </template>
-
-    <template #subtitle>
-      {{ lastMessagePreview }}
-    </template>
-
-    <template #timer>
-      {{ duration }}
-    </template>
-
-    <template #icon-status>
-      <wt-icon
         :icon="closeReasonIcon"
         icon-prefix="ws"
         color="error"
+        class="closed-queue-preview__status"
       />
     </template>
-  </task-queue-preview-md>
+  </chat-card>
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
@@ -109,6 +98,7 @@ import ChatCloseReason
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import ChatCard from '../chat-card.vue';
 
 const props = defineProps({
   task: {
@@ -172,15 +162,13 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
     width: 100%;
   }
 
-  .closed-queue-preview__close {
-    position: absolute;
+  &__close {
     opacity: 0;
     pointer-events: none;
     transition: var(--transition);
   }
 
-  .closed-queue-preview__provider {
-    position: absolute; // for exactly the same placing as close icon
+  &__status {
     opacity: 1;
     transition: var(--transition);
   }
@@ -198,7 +186,7 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
       pointer-events: auto;
     }
 
-    .closed-queue-preview__provider {
+    .closed-queue-preview__status {
       opacity: 0;
       pointer-events: none;
     }

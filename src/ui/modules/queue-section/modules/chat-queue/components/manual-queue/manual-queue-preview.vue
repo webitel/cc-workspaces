@@ -1,29 +1,20 @@
 <template>
-  <task-queue-preview-md
+  <chat-card
     v-if="size === 'md'"
-    :opened="opened"
+    :task="task"
+    status="new"
+    :title="task.displayName"
+    :subtitle="lastMessage"
     :queue-name="task.queue.name"
+    :icon="displayIcon"
+    :selected="opened"
     @click="emit('click', task)"
   >
-    <template #icon>
-      <wt-icon
-        :icon="displayIcon"
-      />
-    </template>
-
-    <template #title>
-      {{ task.displayName }}
-    </template>
-
-    <template #subtitle>
-      {{ lastMessage }}
-    </template>
-
     <template #timer>
       {{ wait }}
     </template>
 
-    <template #quick-action>
+    <template #actions>
       <wt-rounded-action
         size="md"
         color="transfer"
@@ -33,13 +24,7 @@
         @click="accept(task)"
       />
     </template>
-
-    <template #footer>
-      <manual-deadline-progress-bar
-        :deadline="task.deadline"
-      />
-    </template>
-  </task-queue-preview-md>
+  </chat-card>
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
@@ -92,6 +77,7 @@ import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import ChatCard from '../chat-card.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 const props = defineProps({

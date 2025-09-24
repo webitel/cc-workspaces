@@ -1,31 +1,21 @@
 <template>
-  <task-queue-preview-md
+  <chat-card
     v-if="size === 'md'"
-    :opened="opened"
+    :task="task"
+    :status="chatStatus"
+    :title="displayChatName"
+    :subtitle="lastMessage"
     :queue-name="displayQueueName"
+    :icon="displayIcon"
+    :selected="opened"
     @click="$emit('click', task)"
   >
-
-    <template #icon>
-      <wt-icon
-        :icon="displayIcon"
-      />
-    </template>
-
-    <template #title>
-      {{ displayChatName }}
-    </template>
-
-    <template #subtitle>
-      {{ lastMessage }}
-    </template>
-
     <template #timer>
       <queue-preview-timer
         :task="task"
       />
     </template>
-  </task-queue-preview-md>
+  </chat-card>
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
@@ -66,9 +56,11 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import ChatCard from '../chat-card.vue';
 
 export default {
   name: 'ActiveQueuePreview',
+  components: { ChatCard },
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
@@ -78,6 +70,13 @@ export default {
     displayIcon() {
       const member = this.task.members[0];
       return messengerIcon(member.type);
+    },
+    chatStatus() {
+      return this.task.closedAt && this.task.closeReason 
+        ? 'closed' 
+        : this.task.state === 'invite' 
+          ? 'new' 
+          : 'active';
     },
   },
 };
