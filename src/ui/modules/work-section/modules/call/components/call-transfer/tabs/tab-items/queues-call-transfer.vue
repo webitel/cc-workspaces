@@ -31,16 +31,8 @@ import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../../call-transfer-container.vue';
 import { EngineQueue } from 'webitel-sdk';
+import { TransferParams } from '../../types/transfer-tabs';
 
-interface TransferParams {
-  page?: number;
-  size?: number;
-  q?: string;
-  sort?: string;
-  fields?: string[];
-  parentId?: string;
-  [key: string]: any;
-}
 
 interface APIResponse {
   items: EngineQueue[];

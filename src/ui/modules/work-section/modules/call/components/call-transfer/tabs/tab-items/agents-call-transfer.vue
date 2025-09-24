@@ -21,15 +21,7 @@ import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../../call-transfer-container.vue';
 import { EngineAgent } from 'webitel-sdk';
-
-interface TransferParams {
-  page?: number;
-  size?: number;
-  q?: string;
-  sort?: string;
-  fields?: string[];
-  [key: string]: any;
-}
+import { TransferParams } from '../../types/transfer-tabs';
 
 interface APIResponse {
   items: EngineAgent[];

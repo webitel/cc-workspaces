@@ -25,17 +25,7 @@ import APIRepository from '../../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../../call-transfer-container.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { ApiUser } from 'webitel-sdk';
-
-interface TransferParams {
-  page?: number;
-  size?: number;
-  q?: string;
-  sort?: string;
-  fields?: string[];
-  notId?: string[];
-  staus?: string;
-  [key: string]: any;
-}
+import { TransferParams } from '../../types/transfer-tabs';
 
 interface APIResponse {
   items: ApiUser[];
