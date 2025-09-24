@@ -22,23 +22,31 @@
         #[tab.value]
       >
         <div class="queue-section-tab-wrapper">
-          <wt-badge
-            v-show="tab.value !== currentTab.value && tab.showIndicator"
-            :color-variable="`${tab.iconColor}-color`"
-          />
           <wt-icon
             :color="tab.iconColor"
             :icon="tab.icon"
             :size="size"
           />
+          <wt-chip
+            v-if="tab.count > 0"
+            :color="tab.showIndicator ? 'success' : 'primary'"
+            :class="[
+              'queue-section-chip',
+              tab.showIndicator ? 'queue-section-chip--before' : 'queue-section-chip--after'
+            ]"
+          >
+            {{ tab.count }}
+          </wt-chip>
         </div>
       </template>
     </wt-tabs>
+    <keep-alive>
       <component
-        :is="`${currentTab.value}-queue`"
+        :is="currentTab.component"
         :size="size"
         class="queue-section-wrapper"
       />
+    </keep-alive>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
@@ -49,121 +57,112 @@
   </section>
 </template>
 
-<script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+<script setup>
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
-import sizeMixin from '../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 
-export default {
-  name: 'TheAgentQueueSection',
-  components: {
-    CallQueue,
-    ChatQueue,
-    JobQueue,
-    CollapseAction,
+const props = defineProps({
+  collapsed: {
+    type: Boolean,
+    default: false,
   },
-  mixins: [sizeMixin],
-  props: {
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
-    collapsible: {
-      type: Boolean,
-      default: false,
-    },
+  collapsible: {
+    type: Boolean,
+    default: false,
   },
-  data: () => ({
-    currentTab: {},
-    hotkeyUnsubscribers : [],
-  }),
-  computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
-    ...mapState('features/call/manual', {
-      manualCallsList: (state) => state.manualList,
-    }),
-    ...mapState('features/chat', {
-      chatList: (state) => state.chatList,
-    }),
-    ...mapState('features/chat/manual', {
-      manualChatList: (state) => state.manualList,
-    }),
-    ...mapState('features/job', {
-      jobList: (state) => state.jobList,
-    }),
-    ...mapGetters('workspace', {
-      isCallWorkspace: 'IS_CALL_WORKSPACE',
-    }),
-    ...mapGetters('features/call', {
-      isNewCall: 'IS_NEW_CALL',
-    }),
-    tabs() {
-      return [
-        {
-          value: 'call',
-          icon: 'call',
-          iconColor: 'success',
-          showIndicator: this.callList.some(({ state }) => state === CallActions.Ringing) || this.manualCallsList.length,
-        },
-        {
-          value: 'chat',
-          icon: 'chat',
-          iconColor: 'chat',
-          showIndicator: this.chatList.some(({ state }) => state === ConversationState.Invite) || this.manualChatList.length,
-        },
-        {
-          value: 'job',
-          icon: 'job',
-          iconColor: 'job',
-          showIndicator: this.jobList.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
-        },
-      ];
-    },
-    isNewCallButton() {
-      return !this.isNewCall || !this.isCallWorkspace;
-    },
+  size: {
+    type: String,
+    default: 'md',
   },
+});
 
-  methods: {
-    ...mapActions('features/call', {
-      openNewCall: 'OPEN_NEW_CALL',
-      closeNewCall: 'CLOSE_NEW_CALL',
-    }),
-    toggleNewCall() {
-      return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
+const emit = defineEmits(['resize']);
+
+const store = useStore();
+const currentTab = ref({});
+const hotkeyUnsubscribers = ref([]);
+
+const callList = computed(() => store.state.features?.call?.callList || []);
+const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
+const chatList = computed(() => store.state.features?.chat?.chatList || []);
+const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
+const jobList = computed(() => store.state.features?.job?.jobList || []);
+
+const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+
+const tabs = computed(() => {
+
+  const callCount = window.cli ? cli?.allCall?.()?.length : 0;
+  const chatCount = window.cli ? cli?.allConversations?.()?.length : 0;
+  const jobCount = window.cli ? cli?.allJob?.()?.length : 0;
+
+
+  return [
+    {
+      value: 'call',
+      icon: 'call',
+      iconColor: 'success',
+      count: callCount,
+      component: CallQueue,
+      showIndicator: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
     },
-    setupHotkeys() {
-      const subscripers = [
-        {
-          event: HotkeyAction.NEW_CALL,
-          callback: this.toggleNewCall,
-        },
-      ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    {
+      value: 'chat',
+      icon: 'chat',
+      iconColor: 'chat',
+      count: chatCount,
+      component: ChatQueue,
+      showIndicator: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
     },
-  },
+    {
+      value: 'job',
+      icon: 'job',
+      iconColor: 'job',
+      count: jobCount,
+      component: JobQueue,
+      showIndicator: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
+    }
+  ]
+});
 
-  created() {
-    this.currentTab = this.tabs[0];
-  },
+const isNewCallButton = computed(() => {
+  return !isNewCall.value || !isCallWorkspace.value;
+});
 
-  mounted() {
-    this.setupHotkeys();
-  },
+const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
+const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
 
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
-  },
+const toggleNewCall = () => {
+  return isNewCallButton.value ? openNewCall() : closeNewCall();
 };
+
+const setupHotkeys = () => {
+  const subscribers = [
+    {
+      event: HotkeyAction.NEW_CALL,
+      callback: toggleNewCall,
+    },
+  ];
+  hotkeyUnsubscribers.value = useHotkeys(subscribers);
+};
+
+onMounted(() => {
+  currentTab.value = tabs.value[0];
+  setupHotkeys();
+});
+
+onUnmounted(() => {
+  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+});
 </script>
 
 <style lang="scss" scoped>
@@ -208,6 +207,28 @@ export default {
 
 .queue-section-tab-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  justify-content: center;
+}
+
+.queue-section-chip {
+  min-width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.queue-section-chip--before {
+  order: -1; /* Перед іконкою */
+}
+
+.queue-section-chip--after {
+  order: 1; /* Після іконки */
 }
 
 .queue-section-wrapper {

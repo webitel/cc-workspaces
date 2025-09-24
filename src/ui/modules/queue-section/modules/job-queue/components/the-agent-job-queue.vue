@@ -11,8 +11,8 @@
       class="task-queue-item"
       :collapsed="initiallyCollapsed"
       :size="size"
-      @closed="cacheExpansionState({ expansion: value, state: false })"
-      @opened="cacheExpansionState({ expansion: value, state: true })"
+      @closed="handleExpansionChange(value, false)"
+      @opened="handleExpansionChange(value, true)"
     >
       <template #title>
         <span
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
@@ -70,12 +70,28 @@ const taskList = computed(() => store.state.features.job.jobList);
 
 const distributedTasks = computed(() => taskList.value.filter((task) => task.state === JobState.Offering));
 const activeTasks = computed(() => taskList.value.filter((task) => task.state !== JobState.Offering));
+const allActiveTasks = computed(() => activeTasks.value.length + distributedTasks.value.length);
+
+const expansionStates = ref({
+  active: restoreExpansionState({ expansion: 'active' }),
+});
+
+const isActiveExpanded = computed(() => expansionStates.value.active);
+
+const handleExpansionChange = (expansion, state) => {
+  expansionStates.value[expansion] = state;
+  cacheExpansionState({ expansion, state });
+};
 
 const expansions = computed(() => [
   {
     value: 'active',
     initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
     counters: [
+      {
+        color: 'secondary',
+        count: !isActiveExpanded.value ? allActiveTasks.value : 0,
+      },
       {
         color: 'main',
         count: activeTasks.value.length,

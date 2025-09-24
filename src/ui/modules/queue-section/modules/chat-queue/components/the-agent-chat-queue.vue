@@ -11,8 +11,8 @@
       class="task-queue-item"
       :collapsed="initiallyCollapsed"
       :size="size"
-      @closed="cacheExpansionState({expansion: value, state: false })"
-      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="handleExpansionChange(value, false)"
+      @opened="handleExpansionChange(value, true)"
     >
       <template #title>
         <span
@@ -44,9 +44,9 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import { ChatActions, ConversationState } from 'webitel-sdk';
+import { ConversationState } from 'webitel-sdk';
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 import ActiveQueue from './active-queue/active-queue-container.vue';
@@ -75,13 +75,34 @@ const manualList = computed(() => store.state.features.chat.manual.manualList);
 
 const invitedChats = computed(() => chatList.value.filter((chat) => chat.state === ConversationState.Invite));
 
-const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ConversationState.Invite));
+const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ConversationState.Invite))
+
+const allActiveChats = computed(() => invitedChats.value.length + activeChats.value.length)
+
+const expansionStates = ref({
+  active: restoreExpansionState({ expansion: 'active' }),
+  manual: restoreExpansionState({ expansion: 'manual' }),
+  closed: restoreExpansionState({ expansion: 'closed' }),
+});
+
+const isActiveExpanded = computed(() => expansionStates.value.active);
+const isManualExpanded = computed(() => expansionStates.value.manual);
+const isClosedExpanded = computed(() => expansionStates.value.closed);
+
+const handleExpansionChange = (expansion, state) => {
+  expansionStates.value[expansion] = state;
+  cacheExpansionState({ expansion, state });
+};
 
 const expansions = computed(() => [
   {
     value: 'active',
     initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
     counters: [
+      {
+        color: 'secondary',
+        count: !isActiveExpanded.value ? allActiveChats.value : 0,
+      },
       {
         color: 'main',
         count: activeChats.value.length,
