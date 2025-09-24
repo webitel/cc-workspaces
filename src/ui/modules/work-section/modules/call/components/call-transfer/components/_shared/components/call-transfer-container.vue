@@ -45,11 +45,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll'
-import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
-import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import TransferLookupItem from '../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
-import { transferParams } from '../types/transfer-tabs'
+import useInfiniteScroll from '../../../../../../../../../../app/composables/useInfiniteScroll'
+import LookupItemContainer from '../../../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
+import EmptySearch from '../../../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
+import TransferLookupItem from '../../../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import { transferParams } from '../../../types/transfer-tabs'
 
 interface CallTransferContainerProps {
   size?: string;

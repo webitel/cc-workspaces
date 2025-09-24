@@ -24,7 +24,7 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
-import CallTransferContainer from '../call-transfer-container.vue';
+import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { ApiUser } from 'webitel-sdk';
 import { TransferParams } from '../../types/transfer-tabs';
