@@ -31,6 +31,9 @@
         :showTeamName
         :showUserNameAvatar
       >
+        <template #before>
+          <slot name="avatar"/>
+        </template>
         <template #actions="{ item }">
           <slot name="actions" :item="item"/>
         </template>

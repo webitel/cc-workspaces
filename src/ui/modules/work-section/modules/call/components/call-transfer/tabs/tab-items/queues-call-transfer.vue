@@ -2,6 +2,12 @@
   <call-transfer-container
     :getData="getQueues"
   >
+    <template #avatar>
+      <wt-icon
+        icon="bot"
+        :size="size"
+      ></wt-icon>
+    </template>
     <template #actions="{ item }">
       <wt-rounded-action
         color="transfer"
