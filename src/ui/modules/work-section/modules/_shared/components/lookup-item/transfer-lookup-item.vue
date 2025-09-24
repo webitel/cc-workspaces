@@ -41,7 +41,7 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
-import { transferItem } from './types/transfer-lookup-item.js';
+import { transferItem } from './types/transfer-lookup-item';
 
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';

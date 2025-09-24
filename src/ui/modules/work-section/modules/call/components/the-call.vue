@@ -44,7 +44,7 @@ import CallHeader from './call-header.vue';
 import Bridge from './call-merge/call-bridge-container.vue';
 import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
-import Transfer from './call-transfer/tabs/call-transfer-tabs.vue';
+import Transfer from './call-transfer/the-call-transfer.vue';
 
 export default {
   name: 'TheCall',

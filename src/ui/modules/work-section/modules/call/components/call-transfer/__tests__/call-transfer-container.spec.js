@@ -1,7 +1,7 @@
 import { mount,shallowMount } from '@vue/test-utils';
 
 import CallTransferContainer
-  from '../call-transfer-container.vue';
+  from '../components/call-transfer-container.vue';
 
 describe('CallTransferContainer', () => {
   it('renders a component', () => {
