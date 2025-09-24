@@ -19,10 +19,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import APIRepository from '../../../../../../../../../app/api/APIRepository';
+import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { EngineAgent } from 'webitel-sdk';
-import { TransferParams } from '../../types/transfer-tabs';
+import { TransferParams } from '../types/transfer-tabs';
 
 interface APIResponse {
   items: EngineAgent[];

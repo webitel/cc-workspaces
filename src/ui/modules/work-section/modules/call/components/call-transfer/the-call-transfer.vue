@@ -14,9 +14,9 @@
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 
-import AgentsCallTransfer from './components/tabs/agents-call-transfer.vue';
-import QueuesCallTransfer from './components/tabs/queues-call-transfer.vue';
-import UsersCallTransfer from './components/tabs/users-call-transfer.vue';
+import AgentsCallTransfer from './components/agents-call-transfer.vue';
+import QueuesCallTransfer from './components/queues-call-transfer.vue';
+import UsersCallTransfer from './components/users-call-transfer.vue';
 
 const { t } = useI18n();
 
