@@ -29,10 +29,10 @@
           />
           <wt-chip
             v-if="tab.count > 0"
-            :color="tab.showIndicator ? 'success' : 'primary'"
+            :color="tab.isNew ? 'success' : 'primary'"
             :class="[
               'queue-section-chip',
-              tab.showIndicator ? 'queue-section-chip--before' : 'queue-section-chip--after'
+              tab.isNew ? 'queue-section-chip--new' : 'queue-section-chip--active'
             ]"
           >
             {{ tab.count }}
@@ -113,7 +113,7 @@ const tabs = computed(() => {
       iconColor: 'success',
       count: callCount,
       component: CallQueue,
-      showIndicator: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
+      isNew: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
     },
     {
       value: 'chat',
@@ -121,7 +121,7 @@ const tabs = computed(() => {
       iconColor: 'chat',
       count: chatCount,
       component: ChatQueue,
-      showIndicator: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
+      isNew: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
     },
     {
       value: 'job',
@@ -129,7 +129,7 @@ const tabs = computed(() => {
       iconColor: 'job',
       count: jobCount,
       component: JobQueue,
-      showIndicator: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
+      isNew: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
     }
   ]
 });
@@ -214,21 +214,19 @@ onUnmounted(() => {
 }
 
 .queue-section-chip {
-  min-width: 20px;
-  height: 20px;
-  font-size: 12px;
-  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.queue-section-chip--before {
-  order: -1; /* Перед іконкою */
-}
+.queue-section-chip {
+  &--new {
+    order: -1;
+  }
 
-.queue-section-chip--after {
-  order: 1; /* Після іконки */
+  &--active {
+    order: 1;
+  }
 }
 
 .queue-section-wrapper {
