@@ -41,7 +41,7 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
-import { transferItem } from './types/transfer-lookup-item';
+import { TransferItem } from './types/transfer-lookup-item';
 
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
@@ -51,7 +51,7 @@ import TransferDestination from '../../../chat/enums/ChatTransferDestination.enu
 import LookupItem from './lookup-item.vue';
 
 interface TransferLookupItemProps {
-  item: transferItem;
+  item: TransferItem;
   type: string;
   src?: string;
   size?: string;
@@ -61,7 +61,7 @@ interface TransferLookupItemProps {
 }
 
 interface TransferLookupItemEmits {
-  (e: 'input', item: transferItem): void;
+  input: [item: TransferItem]
 }
 
 const props = withDefaults(defineProps<TransferLookupItemProps>(), {

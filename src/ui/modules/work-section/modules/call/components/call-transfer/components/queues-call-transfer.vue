@@ -1,6 +1,6 @@
 <template>
   <call-transfer-container
-    :getData="getQueues"
+    :get-data="getQueues"
     :size
     type="queue"
   >
@@ -32,45 +32,31 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
-import { EngineQueue } from 'webitel-sdk';
+import { EngineListQueue } from '@webitel/api-services/gen';
 import { TransferParams } from '../types/transfer-tabs';
 
-
-interface APIResponse {
-  items: EngineQueue[];
-  next: boolean;
-  [key: string]: any;
-}
-
-interface CLI {
-  allCall: () => Array<{
-    blindTransferQueue: (queueId: number) => void;
-    processTransferQueue: (queueId: number) => void;
-  }>;
-}
 
 const store = useStore();
 const queuesAPI = APIRepository.queues;
 
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
-const cli = computed(() => store.state.cli as CLI);
 
 const transfer = (item: QueueItem = {} as QueueItem) => {
-  const calls = cli.value?.allCall?.();
+  const calls = cli?.allCall?.();
   if (calls && calls.length > 0) {
     return calls[0].blindTransferQueue(Number(item.id));
   }
 };
 
 const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
-  const calls = cli.value?.allCall?.();
+  const calls = cli?.allCall?.();
   if (calls && calls.length > 0) {
     return calls[0].processTransferQueue(Number(item.id));
   }
 };
 
-const getQueues = (params: TransferParams): Promise<APIResponse> => {
+const getQueues = (params: TransferParams): Promise<EngineListQueue> => {
   if (!agentId.value) {
     return Promise.resolve({ items: [], next: false });
   }

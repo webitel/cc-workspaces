@@ -1,8 +1,8 @@
 <template>
   <call-transfer-container
-    showTeamName
+    show-team-name
     type="agent"
-    :getData="getAgens"
+    :get-data="getAgens"
     @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
@@ -21,7 +21,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
-import { EngineAgent } from 'webitel-sdk';
+import { EngineAgent } from '@webitel/api-services/gen';
 import { TransferParams } from '../types/transfer-tabs';
 
 interface APIResponse {

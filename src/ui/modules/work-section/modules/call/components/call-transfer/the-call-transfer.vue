@@ -17,11 +17,12 @@ import { computed, ref } from 'vue';
 import AgentsCallTransfer from './components/agents-call-transfer.vue';
 import QueuesCallTransfer from './components/queues-call-transfer.vue';
 import UsersCallTransfer from './components/users-call-transfer.vue';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const { t } = useI18n();
 
 interface CallTransferTabsProps {
-  size: string;
+  size: ComponentSize;
 }
 
 defineProps<CallTransferTabsProps>();

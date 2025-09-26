@@ -1,4 +1,4 @@
-export interface transferItem {
+export interface TransferItem {
   id: string;
   name?: string;
   username?: string;

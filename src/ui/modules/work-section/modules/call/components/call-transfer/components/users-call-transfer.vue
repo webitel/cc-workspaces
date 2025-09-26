@@ -1,12 +1,12 @@
 <template>
   <call-transfer-container
-    showStatus
-    showUserNameAvatar
+    show-status
+    show-user-name-avatar
     type="user"
     :size="size"
-    :dataFilters="dataFilters"
-    :dataFields="dataFields"
-    :getData="getUsers"
+    :data-filters="dataFilters"
+    :data-fields="dataFields"
+    :get-data="getUsers"
     @transfer="transfer"
   >
     <template #actions="{ item }">
@@ -26,8 +26,9 @@ import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { ApiUser } from 'webitel-sdk';
+import { ApiUser } from '@webitel/api-services/gen';
 import { TransferParams } from '../types/transfer-tabs';
+
 
 interface APIResponse {
   items: ApiUser[];
@@ -36,7 +37,7 @@ interface APIResponse {
 }
 
 interface Props {
-  size?: string;
+  size?: ComponentSize;
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -27,9 +27,9 @@
         :item="item"
         :type="type"
         :size="size"
-        :showStatus
-        :showTeamName
-        :showUserNameAvatar
+        :show-status="showStatus"
+        :show-team-name="showTeamName"
+        :show-user-name-avatar="showUserNameAvatar"
       >
         <template #before>
           <slot name="avatar"/>
@@ -50,6 +50,8 @@ import LookupItemContainer from '../../../../../_shared/components/lookup-item-c
 import EmptySearch from '../../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferLookupItem from '../../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
 import { transferParams } from '../../types/transfer-tabs'
+import TransferDestination from '../../../../../chat/enums/ChatTransferDestination.enum.js'
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 interface CallTransferContainerProps {
   size?: string;
@@ -67,8 +69,8 @@ interface CallTransferContainerEmits {
 }
 
 const props = withDefaults(defineProps<CallTransferContainerProps>(), {
-  size: 'md',
-  type: 'user',
+  size: ComponentSize.MD,
+  type: TransferDestination.USER,
   showStatus: false,
   showTeamName: false,
   showUserNameAvatar: false,
