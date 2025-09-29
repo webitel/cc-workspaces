@@ -74,12 +74,13 @@ const tabsObject = computed(() => ({
 const scope = computed(() => getNamespacedState(store.state, 'ui/userinfo').scope);
 
 const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === 'contacts'));
+const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_CENTER_LICENSE']);
 
 const tabs = computed(() => {
   const tabs = [tabsObject.value.CallUsersTab];
 
   if (
-    hasLicenseOnCrm.value &&
+    hasLicenseOnCrm.value && hasCallCenterLicense.value &&
     (!isLimitContactsGranted || isLabelToLimitContactsGranted.value)
   ) {
     tabs.unshift(tabsObject.value.CallContactsTab);
