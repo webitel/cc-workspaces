@@ -33,55 +33,55 @@
   </lookup-item-container>
 </template>
 
-<script>
-import { mapActions, mapState } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../app/api/APIRepository';
-import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import useInfiniteScroll from '../../../../../../../app/composables/useInfiniteScroll.js';
 import TransferLookupItem from '../../../_shared/components/lookup-item/transfer-lookup-item.vue';
 import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 
 const usersAPI = APIRepository.users;
 
-export default {
-  name: 'CallTransferContainer',
-  components: {
-    LookupItemContainer,
-    TransferLookupItem,
-    EmptySearch,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [infiniteScrollMixin, sizeMixin],
+});
 
-  data: () => ({
-    dataList: [],
-    dataFilters: 'presence.status=sip,!dnd',
-    dataSort: 'presence.status',
-    dataFields: ['name', 'id', 'extension', 'presence'],
-  }),
+const store = useStore();
 
-  computed: {
-    ...mapState('ui/userinfo', {
-      userId: (state) => state.userId,
-    }),
-    isTransferToNumberDisabled() {
-      return !this.dataSearch;
-    },
-  },
+const userId = computed(() => store.state['ui/userinfo']?.userId);
 
-  methods: {
-    ...mapActions('features/call', {
-      blindTransfer: 'BLIND_TRANSFER',
-    }),
-    fetch(params) {
-      return usersAPI.getUsers({ ...params, notId: [this.userId] });
-    },
-    transfer(item = {}) {
-      const number = item.extension || this.dataSearch;
-      this.blindTransfer(number);
-    },
-  },
+const fetchFn = (params) => {
+  return usersAPI.getUsers({
+    ...params,
+    notId: [userId.value],
+    filters: 'presence.status=sip,!dnd',
+    sort: 'presence.status',
+    fields: ['name', 'id', 'extension', 'presence'],
+  });
+};
+
+const {
+  dataList,
+  isLoading,
+  dataSearch,
+  handleIntersect,
+  resetData,
+} = useInfiniteScroll({
+  fetchFn,
+  size: 20,
+});
+
+const isTransferToNumberDisabled = computed(() => !dataSearch.value);
+
+const transfer = (item = {}) => {
+  const number = item.extension || dataSearch.value;
+  store.dispatch('features/call/BLIND_TRANSFER', number);
 };
 </script>
 
