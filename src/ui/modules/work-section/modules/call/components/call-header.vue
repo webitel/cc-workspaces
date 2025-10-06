@@ -9,7 +9,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', 'history')"
+        @click="$emit('openTab', CallTab.HISTORY)"
       ></wt-rounded-action>
       <wt-rounded-action
         class="call-action"
@@ -19,7 +19,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', 'contacts')"
+        @click="$emit('openTab', CallTab.CONTACTS)"
       ></wt-rounded-action>
     </template>
     <template #after-avatar>
@@ -32,7 +32,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', 'bridge')"
+        @click="$emit('openTab', CallTab.BRIDGE)"
       ></wt-rounded-action>
       <wt-rounded-action
         v-if="isTransfer"
@@ -42,7 +42,7 @@
         color="transfer"
         rounded
         wide
-        @click="$emit('openTab', 'transfer')"
+        @click="$emit('openTab', CallTab.TRANSFER)"
       ></wt-rounded-action>
       <wt-rounded-action
         v-if="isHangup"
@@ -83,6 +83,7 @@
   import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
   import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
   import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+  import { CallTab } from '../enums/CallTab.enum';
 
   export default {
     name: 'CallHeader',
@@ -96,6 +97,7 @@
 
     data: () => ({
       hotkeyUnsubscribers : [],
+      CallTab: CallTab,
     }),
 
     computed: {
@@ -108,19 +110,19 @@
       }),
 
       isOnContacts() {
-        return this.currentTab === 'contacts';
+        return this.currentTab === this.CallTab.CONTACTS;
       },
 
       isOnHistory() {
-        return this.currentTab === 'history';
+        return this.currentTab === this.CallTab.HISTORY;
       },
 
       isOnBridge() {
-        return this.currentTab === 'bridge';
+        return this.currentTab === this.CallTab.BRIDGE;
       },
 
       isOnNumpad() {
-        return this.currentTab === 'numpad';
+        return this.currentTab === this.CallTab.NUMPAD;
       },
 
       isBridge() {
@@ -146,7 +148,7 @@
 
       isDisplayCallButton() {
         return (this.isOnNumpad || this.isOnBridge) && this.isCall;
-      },
+      }
     },
 
     methods: {

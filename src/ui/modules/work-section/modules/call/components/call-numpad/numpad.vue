@@ -24,50 +24,55 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script setup>
+import { ref, computed, onMounted, watch, useTemplateRef } from 'vue';
+import { useStore } from 'vuex';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import CallState from '../call-state.vue';
 import NumpadExpansionBtn from './numpad-expansion-btn.vue';
 import NumpadNumbers from './numpad-numbers.vue';
 
-export default {
-  name: 'TheNumpad',
-  components: {
-    CallState,
-    NumpadNumbers,
-    NumpadExpansionBtn,
+const props = defineProps({
+  size: {
+    type: ComponentSize,
+    default: ComponentSize.MD,
   },
-  mixins: [sizeMixin],
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  data: () => ({
-    isNumpadOpened: false,
-  }),
-  computed: {
-    ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
-      isNewCall: 'IS_NEW_CALL',
-    }),
-  },
-  methods: {
-    ...mapActions('features/call', {
-      input: 'ADD_DIGIT',
-      makeCall: 'CALL',
-    }),
-    setNumberFocus() {
-      const input = this.$refs['number-input'].$el.querySelector('input');
-      if (input) input.focus();
-    },
-    handleNumpadInput(value) {
-      this.input(value);
-      this.setNumberFocus();
-    },
-  },
-  mounted() {
-    this.setNumberFocus();
-  },
+const store = useStore();
+
+const isNumpadOpened = ref(false);
+const numberInput = useTemplateRef('number-input');
+const numpadNumbers = ref(null);
+
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+
+const input = (value) => store.dispatch('features/call/ADD_DIGIT', value);
+const makeCall = () => store.dispatch('features/call/CALL');
+
+const setNumberFocus = () => {
+  const input = numberInput.value?.$el?.querySelector('input');
+  if (input) input.focus();
 };
+
+const handleNumpadInput = (value) => {
+  input(value);
+  setNumberFocus();
+};
+
+onMounted(() => {
+  setNumberFocus();
+});
+
+watch(() => props.isActive, (active) => {
+  if (active) setNumberFocus();
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>
