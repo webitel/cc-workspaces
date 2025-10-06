@@ -24,7 +24,7 @@ export default {
     type: 'CallManual',
     field: 'CallManual',
     icon: 'ws-widget-manual-calls',
-    locale: 'widgets.CallManual',
+    locale: 'widgets.callManual',
     show: true,
   },
   HANDLED: {

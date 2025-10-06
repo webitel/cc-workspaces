@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Llamadas entrantes',
+    callInboundQueue: 'Llamadas de cola entrante',
+    callDialerQueue: 'Todas las llamadas del marcador',
+    callManual: 'Llamadas manuales',
     callHandled: 'Llamadas procesadas',
     callMissed: 'Llamadas perdidas',
+    callQueueMissed: 'Perdidas de colas',
     avgTalk: 'Tiempo promedio de conversación',
     avgHold: 'Tiempo promedio de espera',
     utilization: 'Utilización',

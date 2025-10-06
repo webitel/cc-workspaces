@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Cuộc gọi đến',
+    callInboundQueue: 'Cuộc gọi từ hàng đợi đến',
+    callDialerQueue: 'Tất cả cuộc gọi từ dialer',
+    callManual: 'Cuộc gọi thủ công',
     callHandled: 'Cuộc gọi đã xử lý',
     callMissed: 'Cuộc gọi nhỡ',
+    callQueueMissed: 'Bỏ lỡ từ hàng đợi',
     avgTalk: 'Thời gian nói trung bình',
     avgHold: 'Thời gian giữ máy trung bình',
     utilization: 'Sử dụng',

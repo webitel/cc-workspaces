@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Połączenia przychodzące',
+    callInboundQueue: 'Połączenia z kolejki przychodzącej',
+    callDialerQueue: 'Wszystkie połączenia z dialera',
+    callManual: 'Połączenia ręczne',
     callHandled: 'Obsłużone połączenia',
     callMissed: 'Nieodebrane połączenia',
+    callQueueMissed: 'Przegapione z kolejek',
     avgTalk: 'Śr. czas rozmowy',
     avgHold: 'Śr. czas oczekiwania',
     utilization: 'Wykorzystanie',
