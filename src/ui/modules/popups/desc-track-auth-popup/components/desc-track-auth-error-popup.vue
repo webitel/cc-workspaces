@@ -11,7 +11,7 @@
       <div class="desc-track-auth-error-popup__image">
         <img
           :src="darkMode ? DescTrackAuthErrorDark : DescTrackAuthError"
-          alt="desc-track-auth-error"
+          :alt="$t('descTrackAuthPopup.title')"
         >
       </div>
       <div class="desc-track-auth-error-popup__label">

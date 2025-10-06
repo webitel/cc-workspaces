@@ -12,7 +12,7 @@
       <div class="desc-track-auth-success-popup__image">
         <img
           :src="darkMode ? DescTrackAuthSuccessDark : DescTrackAuthSuccess"
-          alt="desc-track-auth-success"
+          :alt="$t('descTrackAuthPopup.title')"
         >
       </div>
       <div class="desc-track-auth-success-popup__label">
