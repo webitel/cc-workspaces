@@ -9,7 +9,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', CallTab.HISTORY)"
+        @click="$emit('openTab', CallTab.History)"
       ></wt-rounded-action>
       <wt-rounded-action
         class="call-action"
@@ -19,7 +19,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', CallTab.CONTACTS)"
+        @click="$emit('openTab', CallTab.Contacts)"
       ></wt-rounded-action>
     </template>
     <template #after-avatar>
@@ -32,7 +32,7 @@
         color="secondary"
         rounded
         wide
-        @click="$emit('openTab', CallTab.BRIDGE)"
+        @click="$emit('openTab', CallTab.Bridge)"
       ></wt-rounded-action>
       <wt-rounded-action
         v-if="isTransfer"
@@ -42,7 +42,7 @@
         color="transfer"
         rounded
         wide
-        @click="$emit('openTab', CallTab.TRANSFER)"
+        @click="$emit('openTab', CallTab.Transfer)"
       ></wt-rounded-action>
       <wt-rounded-action
         v-if="isHangup"
@@ -111,19 +111,19 @@
       }),
 
       isOnContacts() {
-        return this.currentTab === CallTab.CONTACTS;
+        return this.currentTab === CallTab.Contacts;
       },
 
       isOnHistory() {
-        return this.currentTab === CallTab.HISTORY;
+        return this.currentTab === CallTab.History;
       },
 
       isOnBridge() {
-        return this.currentTab === CallTab.BRIDGE;
+        return this.currentTab === CallTab.Bridge;
       },
 
       isOnNumpad() {
-        return this.currentTab === CallTab.NUMPAD;
+        return this.currentTab === CallTab.Numpad;
       },
 
       isBridge() {

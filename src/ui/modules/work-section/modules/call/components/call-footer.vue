@@ -11,7 +11,7 @@
       icon="numpad"
       rounded
       wide
-      @click="$emit('openTab', CallTab.NUMPAD)"
+      @click="$emit('openTab', CallTab.Numpad)"
     ></wt-rounded-action>
     <wt-rounded-action
       :active="isOnHold"
@@ -76,7 +76,7 @@ export default {
 
     // controls Active state
     isOnNumpad() {
-      return this.currentTab === CallTab.NUMPAD;
+      return this.currentTab === CallTab.Numpad;
     },
 
     // controls btn Appearance

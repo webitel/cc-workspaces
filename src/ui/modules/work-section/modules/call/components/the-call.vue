@@ -52,11 +52,11 @@ import { CallTab } from '../enums/CallTab.enum';
 
 // Component mapping
 const callTabComponents = {
-  [CallTab.NUMPAD]: Numpad,
-  [CallTab.CONTACTS]: Contacts,
-  [CallTab.HISTORY]: History,
-  [CallTab.TRANSFER]: Transfer,
-  [CallTab.BRIDGE]: Bridge,
+  [CallTab.Numpad]: Numpad,
+  [CallTab.Contacts]: Contacts,
+  [CallTab.History]: History,
+  [CallTab.Transfer]: Transfer,
+  [CallTab.Bridge]: Bridge,
 };
 
 const props = defineProps({
@@ -68,7 +68,7 @@ const props = defineProps({
 
 const store = useStore();
 
-const currentTab = ref(CallTab.NUMPAD);
+const currentTab = ref(CallTab.Numpad);
 const isPreviewTransfer = ref(false);
 const hotkeyUnsubscribers = ref([]);
 //variable to check if the component is active
@@ -86,12 +86,12 @@ const currentComponent = computed(() => callTabComponents[currentTab.value]);
 
 const openTransfer = () => {
   isPreviewTransfer.value = true;
-  currentTab.value = CallTab.TRANSFER;
+  currentTab.value = CallTab.Transfer;
 };
 
 const openCall = () => {
   isPreviewTransfer.value = false;
-  currentTab.value = CallTab.NUMPAD;
+  currentTab.value = CallTab.Numpad;
 };
 
 const setupHotkeys = () => {

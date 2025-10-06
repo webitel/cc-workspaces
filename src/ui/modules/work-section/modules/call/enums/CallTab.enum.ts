@@ -1,9 +1,9 @@
-export enum CallTab {
-  NUMPAD = 'numpad',
-  CONTACTS = 'contacts',
-  HISTORY = 'history',
-  TRANSFER = 'transfer',
-  BRIDGE = 'bridge',
+export const enum CallTab {
+  Numpad = 'numpad',
+  Contacts = 'contacts',
+  History = 'history',
+  Transfer = 'transfer',
+  Bridge = 'bridge',
 }
 
 export default CallTab;

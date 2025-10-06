@@ -72,7 +72,7 @@ onMounted(() => {
 
 watch(() => props.isActive, (active) => {
   if (active) setNumberFocus();
-}, { immediate: true })
+})
 </script>
 
 <style lang="scss" scoped>
