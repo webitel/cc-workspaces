@@ -72,6 +72,8 @@ const distributedTasks = computed(() => taskList.value.filter((task) => task.sta
 const activeTasks = computed(() => taskList.value.filter((task) => task.state !== JobState.Offering));
 const allActiveTasks = computed(() => activeTasks.value.length + distributedTasks.value.length);
 
+// This is to keep track of which tabs are open and which
+// are closed, because the expand component doesn't tell you about this
 const expansionStates = ref({
   active: restoreExpansionState({ expansion: 'active' }),
 });

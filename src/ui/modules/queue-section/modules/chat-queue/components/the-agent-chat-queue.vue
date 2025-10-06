@@ -79,6 +79,8 @@ const activeChats = computed(() => chatList.value.filter((chat) => chat.state !=
 
 const allActiveChats = computed(() => invitedChats.value.length + activeChats.value.length)
 
+// This is to keep track of which tabs are open and which
+// are closed, because the expand component doesn't tell you about this
 const expansionStates = ref({
   active: restoreExpansionState({ expansion: 'active' }),
   manual: restoreExpansionState({ expansion: 'manual' }),
@@ -98,10 +100,10 @@ const expansions = computed(() => [
   {
     value: 'active',
     initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
-    counters: [
+    counters: !isActiveExpanded.value ? [
       {
         color: 'secondary',
-        count: !isActiveExpanded.value ? allActiveChats.value : 0,
+        count: allActiveChats.value,
       },
       {
         color: 'main',
@@ -111,7 +113,7 @@ const expansions = computed(() => [
         color: 'success',
         count: invitedChats.value.length,
       },
-    ].filter(({ count }) => count),
+    ].filter(({ count }) => count) : [],
   },
   {
     value: 'manual',

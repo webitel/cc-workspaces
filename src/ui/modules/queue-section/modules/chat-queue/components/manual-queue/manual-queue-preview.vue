@@ -1,5 +1,5 @@
 <template>
-  <chat-card
+  <chat-queue-preview-md
     v-if="size === 'md'"
     :task="task"
     status="new"
@@ -24,11 +24,12 @@
         @click="accept(task)"
       />
     </template>
-  </chat-card>
+  </chat-queue-preview-md>
 
-  <task-queue-preview-sm
+  <chat-queue-preview-sm
     v-else-if="size === 'sm'"
-    :opened="opened"
+    :selected="opened"
+    status="new"
     :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
@@ -67,7 +68,7 @@
         :deadline="task.deadline"
       />
     </template>
-  </task-queue-preview-sm>
+  </chat-queue-preview-sm>
 </template>
 
 <script setup>
@@ -75,9 +76,8 @@ import { computed, ref } from 'vue';
 
 import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
-import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
-import ChatCard from '../chat-card.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
 const props = defineProps({

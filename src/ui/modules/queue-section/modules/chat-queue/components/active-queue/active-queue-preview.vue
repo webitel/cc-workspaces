@@ -1,5 +1,5 @@
 <template>
-  <chat-card
+  <chat-queue-preview-md
     v-if="size === 'md'"
     :task="task"
     :status="chatStatus"
@@ -15,11 +15,12 @@
         :task="task"
       />
     </template>
-  </chat-card>
+  </chat-queue-preview-md>
 
-  <task-queue-preview-sm
+  <chat-queue-preview-sm
     v-else-if="size === 'sm'"
-    :opened="opened"
+    :selected="opened"
+    :status="chatStatus"
     :queue-name="displayQueueName"
     @click="$emit('click', task)"
   >
@@ -48,7 +49,7 @@
         :task="task"
       />
     </template>
-  </task-queue-preview-sm>
+  </chat-queue-preview-sm>
 </template>
 
 <script>
@@ -56,11 +57,12 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import ChatCard from '../chat-card.vue';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 export default {
   name: 'ActiveQueuePreview',
-  components: { ChatCard },
+  components: { ChatQueuePreviewMd, ChatQueuePreviewSm },
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
@@ -72,10 +74,10 @@ export default {
       return messengerIcon(member.type);
     },
     chatStatus() {
-      return this.task.closedAt && this.task.closeReason 
-        ? 'closed' 
-        : this.task.state === 'invite' 
-          ? 'new' 
+      return this.task.closedAt && this.task.closeReason
+        ? 'closed'
+        : this.task.state === 'invite'
+          ? 'new'
           : 'active';
     },
   },

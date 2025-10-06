@@ -82,7 +82,6 @@ const props = defineProps({
   status: {
     type: String,
     default: 'active',
-    validator: (value) => ['new', 'active', 'self-assigned', 'closed'].includes(value),
   },
   title: {
     type: String,
@@ -152,7 +151,7 @@ function getStatusColor(status) {
   background: var(--content-wrapper);
   cursor: pointer;
   transition: all var(--transition);
-  min-height: 60px;
+  outline: 0;
 
   &--new {
     border-color: var(--success-color);
@@ -175,7 +174,8 @@ function getStatusColor(status) {
   }
 
   &--selected {
-    box-shadow: 0 0 0 2px var(--current-border-color);
+    border-color: var(--current-border-color);
+    outline: 2px solid var(--current-border-color);
 
     &.chat-card--new {
       --current-border-color: var(--success-color);
@@ -195,7 +195,7 @@ function getStatusColor(status) {
   }
 
   &:focus {
-    outline-offset: 2px;
+    outline-offset: 0;
   }
 }
 

@@ -81,6 +81,8 @@ const ringingCallsCount = computed(() => callList.value.filter((call) => call.st
 const activeCallsCount = computed(() => callList.value.length - ringingCallsCount.value);
 const allActiveCalls = computed(() => activeCallsCount.value + ringingCallsCount.value);
 
+// This is to keep track of which tabs are open and which
+// are closed, because the expand component doesn't tell you about this
 const expansionStates = ref({
   active: restoreExpansionState({ expansion: 'active' }),
   missed: restoreExpansionState({ expansion: 'missed' }),

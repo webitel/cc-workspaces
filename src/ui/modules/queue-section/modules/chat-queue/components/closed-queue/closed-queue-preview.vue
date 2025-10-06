@@ -1,5 +1,5 @@
 <template>
-  <chat-card
+  <chat-queue-preview-md
     v-if="size === 'md'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :task="task"
@@ -15,7 +15,7 @@
     <template #timer>
       {{ duration }}
     </template>
-    
+
     <template #actions>
       <wt-icon-btn
         v-if="!processed"
@@ -31,18 +31,19 @@
         class="closed-queue-preview__status"
       />
     </template>
-  </chat-card>
+  </chat-queue-preview-md>
 
-  <task-queue-preview-sm
+  <chat-queue-preview-sm
     v-else-if="size === 'sm'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
-    :opened="opened"
     :queue-name="displayQueueName"
+    :selected="opened"
+    status="closed"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
 
-    <template #icon>
+    <template #close-icon>
       <wt-icon-btn
         v-if="!processed"
         :size="size"
@@ -50,6 +51,8 @@
         icon="close--filled"
         @click.stop="markChatAsProcessed"
       />
+    </template>
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
         :size="size"
@@ -83,7 +86,7 @@
       </div>
     </template>
 
-  </task-queue-preview-sm>
+  </chat-queue-preview-sm>
 </template>
 
 <script setup>
@@ -95,10 +98,9 @@ import { useStore } from 'vuex';
 
 import ChatCloseReason
   from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import ChatCard from '../chat-card.vue';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 
 const props = defineProps({
   task: {

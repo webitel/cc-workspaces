@@ -21,23 +21,34 @@
         :key="key"
         #[tab.value]
       >
-        <div class="queue-section-tab-wrapper">
-          <wt-icon
-            :color="tab.iconColor"
-            :icon="tab.icon"
-            :size="size"
-          />
-          <wt-chip
-            v-if="tab.count > 0"
-            :color="tab.isNew ? 'success' : 'primary'"
-            :class="[
-              'queue-section-chip',
-              tab.isNew ? 'queue-section-chip--new' : 'queue-section-chip--active'
-            ]"
-          >
-            {{ tab.count }}
-          </wt-chip>
+        <div
+          class="queue-section-tab-wrapper"
+          :class="{ 'queue-section-tab-wrapper--small': collapsed }"
+        >
+          <span class="chip-box">
+            <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
+            <wt-chip
+              v-if="tab.count && tab.isNew"
+              color="success"
+              class="queue-section-chip queue-section-chip--success"
+            >
+              {{ tab.count }}
+            </wt-chip>
+          </span>
+          <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
+
+          <span class="chip-box">
+            <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
+            <wt-chip
+              v-if="tab.count && !tab.isNew"
+              color="primary"
+              class="queue-section-chip queue-section-chip--primary"
+            >
+              {{ tab.count }}
+            </wt-chip>
+          </span>
         </div>
+
       </template>
     </wt-tabs>
     <keep-alive>
@@ -134,16 +145,12 @@ const tabs = computed(() => {
   ]
 });
 
-const isNewCallButton = computed(() => {
-  return !isNewCall.value || !isCallWorkspace.value;
-});
+const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
 const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
 
-const toggleNewCall = () => {
-  return isNewCallButton.value ? openNewCall() : closeNewCall();
-};
+const toggleNewCall = () => isNewCallButton.value ? openNewCall() : closeNewCall();
 
 const setupHotkeys = () => {
   const subscribers = [
@@ -205,11 +212,34 @@ onUnmounted(() => {
   grid-template-columns: repeat(3, 1fr);
 }
 
+$chip-w: 30px;
+$chip-h: 24px;
+
 .queue-section-tab-wrapper {
-  position: relative;
-  display: flex;
+  display: grid;
   align-items: center;
-  gap: var(--spacing-xs);
+  justify-items: center;
+
+  grid-template-columns: $chip-w auto $chip-w;
+
+  &--small {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2xs);
+
+    .chip-box {
+      order: -1;
+    }
+  }
+}
+
+.chip-box {
+  width: $chip-w;
+  height: $chip-h;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
 }
 
@@ -217,17 +247,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: $chip-w;
+  height: $chip-h;
 }
 
-.queue-section-chip {
-  &--new {
-    order: -1;
-  }
-
-  &--active {
-    order: 1;
-  }
-}
 
 .queue-section-wrapper {
   flex-grow: 1;
