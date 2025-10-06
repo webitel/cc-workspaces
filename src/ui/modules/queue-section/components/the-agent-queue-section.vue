@@ -222,6 +222,7 @@ $chip-h: 24px;
   align-items: center;
   justify-items: center;
 
+  // after adding badge with primevue, need delete this
   grid-template-columns: $chip-w auto $chip-w;
 
   &--small {
