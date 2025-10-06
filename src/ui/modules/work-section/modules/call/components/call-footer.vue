@@ -64,6 +64,7 @@ export default {
 
   data: () => ({
     hotkeyUnsubscribers : [],
+    // Made CallTab available in template (required for Options API)
     CallTab: CallTab,
   }),
 

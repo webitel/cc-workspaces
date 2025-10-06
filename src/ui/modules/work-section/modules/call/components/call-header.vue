@@ -97,6 +97,7 @@
 
     data: () => ({
       hotkeyUnsubscribers : [],
+      // Made CallTab available in template (required for Options API)
       CallTab: CallTab,
     }),
 
@@ -110,19 +111,19 @@
       }),
 
       isOnContacts() {
-        return this.currentTab === this.CallTab.CONTACTS;
+        return this.currentTab === CallTab.CONTACTS;
       },
 
       isOnHistory() {
-        return this.currentTab === this.CallTab.HISTORY;
+        return this.currentTab === CallTab.HISTORY;
       },
 
       isOnBridge() {
-        return this.currentTab === this.CallTab.BRIDGE;
+        return this.currentTab === CallTab.BRIDGE;
       },
 
       isOnNumpad() {
-        return this.currentTab === this.CallTab.NUMPAD;
+        return this.currentTab === CallTab.NUMPAD;
       },
 
       isBridge() {
