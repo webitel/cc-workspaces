@@ -269,6 +269,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Назар аударыңыз',
+    errorLabel: 'Сіз Workspace-те жұмыс істей алмайсыз',
+    errorDescription: 'DeskTrack іске қосылмаған немесе сіз жүйеге кірмедіңіз',
+    successLabel: 'DeskTrack сәтті іске қосылды',
+    successDescription: 'Сіз Workspace-те жұмыс істей аласыз',
+  },
   error: {
     general: 'Қате орын алды. Қайталап көріңіз.', // TODO: Translate
     websocket: {
