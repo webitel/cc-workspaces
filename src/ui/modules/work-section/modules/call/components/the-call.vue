@@ -15,7 +15,8 @@
     </template>
     <template #body>
       <component
-        :is="currentTab"
+        :is-active="isActive"
+        :is="currentComponent"
         :size="size" />
     </template>
 
@@ -29,10 +30,12 @@
   </task-container>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { ref, computed, watch, onMounted, onUnmounted, onActivated, onDeactivated } from 'vue';
+import { useStore } from 'vuex';
 
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+
 import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
@@ -45,76 +48,83 @@ import Bridge from './call-merge/call-bridge-container.vue';
 import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/the-call-transfer.vue';
+import { CallTab } from '../enums/CallTab.enum';
 
-export default {
-  name: 'TheCall',
-  components: {
-    TaskContainer,
-    CallPreview,
-    CallHeader,
-    CallFooter,
-    History,
-    Contacts,
-    Numpad,
-    Transfer,
-    Bridge,
-  },
-  mixins: [sizeMixin],
-
-  data: () => ({
-    currentTab: 'numpad',
-    isPreviewTransfer: false,
-    hotkeyUnsubscribers: [],
-  }),
-
-  watch: {
-    call() {
-      this.openCall();
-    },
-  },
-
-  computed: {
-    ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
-    }),
-
-    isPreviewCall() {
-      if (this.isPreviewTransfer) return false;
-      return isIncomingRinging(this.call);
-    },
-  },
-
-  mounted() {
-    this.setupHotkeys();
-  },
-
-  unmounted() {
-    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
-
-  methods: {
-    openTransfer() {
-      this.isPreviewTransfer = true;
-      this.currentTab = 'transfer';
-    },
-    openCall() {
-      this.isPreviewTransfer = false;
-      this.currentTab = 'numpad';
-    },
-    setupHotkeys() {
-      const subscribers = [
-        {
-          event: HotkeyAction.TRANSFER,
-          callback: () => {
-            this.isPreviewTransfer ? this.openCall() : this.openTransfer();
-          },
-        },
-      ];
-      this.hotkeyUnsubscribers = useHotkeys(subscribers);
-    },
-  },
-
+// Component mapping
+const callTabComponents = {
+  [CallTab.Numpad]: Numpad,
+  [CallTab.Contacts]: Contacts,
+  [CallTab.History]: History,
+  [CallTab.Transfer]: Transfer,
+  [CallTab.Bridge]: Bridge,
 };
+
+const props = defineProps({
+  size: {
+    type: ComponentSize,
+    default: ComponentSize.MD,
+  },
+});
+
+const store = useStore();
+
+const currentTab = ref(CallTab.Numpad);
+const isPreviewTransfer = ref(false);
+const hotkeyUnsubscribers = ref([]);
+//variable to check if the component is active
+const isActive = ref(false);
+
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+
+const isPreviewCall = computed(() => {
+  if (isPreviewTransfer.value) return false;
+  return isIncomingRinging(call.value);
+});
+
+// Computed property to get the actual component
+const currentComponent = computed(() => callTabComponents[currentTab.value]);
+
+const openTransfer = () => {
+  isPreviewTransfer.value = true;
+  currentTab.value = CallTab.Transfer;
+};
+
+const openCall = () => {
+  isPreviewTransfer.value = false;
+  currentTab.value = CallTab.Numpad;
+};
+
+const setupHotkeys = () => {
+  const subscribers = [
+    {
+      event: HotkeyAction.TRANSFER,
+      callback: () => {
+        isPreviewTransfer.value ? openCall() : openTransfer();
+      },
+    },
+  ];
+  hotkeyUnsubscribers.value = useHotkeys(subscribers);
+};
+
+watch(call, () => {
+  openCall();
+});
+
+onMounted(() => {
+  setupHotkeys();
+});
+
+onUnmounted(() => {
+  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+});
+
+onActivated(() => {
+  isActive.value = true;
+});
+
+onDeactivated(() => {
+  isActive.value = false;
+});
 </script>
 
 <style lang="scss" scoped>
