@@ -7,5 +7,3 @@ export const CallTab = {
 } as const;
 
 export type CallTabType = typeof CallTab[keyof typeof CallTab];
-
-export default CallTab;
