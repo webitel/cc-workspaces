@@ -3,13 +3,19 @@
     v-if="size === 'md'"
     :task="task"
     status="new"
-    :title="task.displayName"
-    :subtitle="lastMessage"
     :queue-name="task.queue.name"
     :icon="displayIcon"
     :selected="opened"
     @click="emit('click', task)"
   >
+    <template #title>
+      {{ task.displayName }}
+    </template>
+
+    <template #subtitle>
+      {{ lastMessage }}
+    </template>
+
     <template #timer>
       {{ wait }}
     </template>

@@ -143,7 +143,7 @@ function getStatusColor(status) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // styles should be unscoped due to tooltip contents styling
 @import '../../_shared/css/queue-preview';
 
@@ -176,7 +176,7 @@ function getStatusColor(status) {
     align-items: center;
     justify-content: center;
 
-    .closed-queue-preview__close {
+    :deep(.closed-queue-preview__close) {
       position: absolute;
       opacity: 0;
       pointer-events: none;

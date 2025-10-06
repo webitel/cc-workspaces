@@ -3,13 +3,18 @@
     v-if="size === 'md'"
     :task="task"
     :status="chatStatus"
-    :title="displayChatName"
-    :subtitle="lastMessage"
     :queue-name="displayQueueName"
     :icon="displayIcon"
     :selected="opened"
     @click="$emit('click', task)"
   >
+    <template #title>
+      {{ displayChatName }}
+    </template>
+
+    <template #subtitle>
+      {{ lastMessage }}
+    </template>
     <template #timer>
       <queue-preview-timer
         :task="task"

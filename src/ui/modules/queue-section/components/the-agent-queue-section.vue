@@ -212,6 +212,8 @@ onUnmounted(() => {
   grid-template-columns: repeat(3, 1fr);
 }
 
+//value for chip, which should be different
+// after adding badge with primevue, need delete this
 $chip-w: 30px;
 $chip-h: 24px;
 
@@ -236,6 +238,7 @@ $chip-h: 24px;
 }
 
 .chip-box {
+  // after adding badge with primevue, need delete this
   width: $chip-w;
   height: $chip-h;
   display: inline-flex;
@@ -247,6 +250,7 @@ $chip-h: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  // after adding badge with primevue, need delete this
   min-width: $chip-w;
   height: $chip-h;
 }

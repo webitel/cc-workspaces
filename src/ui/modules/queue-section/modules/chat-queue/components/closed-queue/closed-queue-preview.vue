@@ -4,19 +4,25 @@
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :task="task"
     status="closed"
-    :title="displayTaskName"
-    :subtitle="lastMessagePreview"
     :queue-name="displayQueueName"
     :icon="displayIcon"
     :selected="opened"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
+    <template #title>
+      {{ displayTaskName }}
+    </template>
+
+    <template #subtitle>
+      {{ lastMessagePreview }}
+    </template>
+
     <template #timer>
       {{ duration }}
     </template>
 
-    <template #actions>
+    <template #close-icon>
       <wt-icon-btn
         v-if="!processed"
         :size="size"
@@ -24,6 +30,8 @@
         icon="close--filled"
         @click.stop="markChatAsProcessed"
       />
+    </template>
+    <template #icon-status>
       <wt-icon
         :icon="closeReasonIcon"
         icon-prefix="ws"

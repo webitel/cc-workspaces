@@ -14,24 +14,29 @@
     @mouseenter="isHovered = true"
     @mouseleave="isHovered = false"
   >
-    <div class="chat-card__icon">
-      <wt-icon
-        :icon="isSelected ? 'chat--filled': 'chat'"
-        size="md"
-        class="chat-card__icon--selected"
-        :color="getStatusColor(status)"
-      />
-    </div>
 
     <div class="chat-card__content">
       <div class="chat-card__header">
+        <div class="chat-card__icon">
+          <div class="queue-preview-icon">
+            <slot name="close-icon"></slot>
+            <wt-icon
+              :icon="isSelected ? 'chat--filled': 'chat'"
+              size="md"
+              class="chat-card__icon--selected"
+              :color="getStatusColor(status)"
+            />
+          </div>
+        </div>
         <div class="chat-card__icon--messenger">
-          <wt-icon
-            v-if="showIcon"
-            :icon="icon"
-            :color="iconColor"
-            size="md"
-          />
+          <slot name="icon" :iconColor="iconColor">
+            <wt-icon
+              v-if="showIcon"
+              :icon="icon"
+              :color="iconColor"
+              size="md"
+            />
+          </slot>
         </div>
         <h3 class="chat-card__title">
           <slot name="title">{{ title }}</slot>
@@ -42,30 +47,27 @@
       </div>
 
       <div class="chat-card__body">
-        <p class="chat-card__subtitle">
-          <slot name="subtitle">{{ subtitle }}</slot>
-        </p>
-        <div class="chat-card__queue">
-          <wt-chip
-            v-if="queueName"
-            color="secondary"
-            size="sm"
-          >
-            {{ queueName }}
-          </wt-chip>
+        <div class="chat-card__body-content">
+          <p class="chat-card__subtitle">
+            <slot name="subtitle">{{ subtitle }}</slot>
+          </p>
+          <div class="chat-card__queue">
+            <wt-chip
+              v-if="queueName"
+              color="secondary"
+              size="sm"
+            >
+              {{ queueName }}
+            </wt-chip>
+          </div>
+        </div>
+        <div class="chat-card__body-icons">
+          <slot name="icon-status"></slot>
         </div>
       </div>
     </div>
 
     <div class="chat-card__actions">
-      <wt-icon-btn
-        v-if="showCloseButton"
-        icon="close--filled"
-        color="error"
-        size="sm"
-        class="chat-card__close-btn"
-        @click.stop="$emit('close', task)"
-      />
       <slot name="actions"></slot>
     </div>
   </article>
@@ -216,6 +218,13 @@ function getStatusColor(status) {
     height: 24px;
     flex-shrink: 0;
   }
+
+  :deep(.closed-queue-preview__close) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+  }
 }
 
 .chat-card__content {
@@ -249,8 +258,24 @@ function getStatusColor(status) {
 
 .chat-card__body {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.chat-card__body-content {
+  display: flex;
   flex-direction: column;
   gap: var(--spacing-2xs);
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-card__body-icons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  flex-shrink: 0;
 }
 
 .chat-card__subtitle {
@@ -281,4 +306,5 @@ function getStatusColor(status) {
 .chat-card:hover .chat-card__close-btn {
   opacity: 1;
 }
+
 </style>
