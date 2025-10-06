@@ -14,6 +14,13 @@
       @input="initSession"
     ></welcome-popup>
 
+    <desc-track-auth-error-popup 
+      v-if="isDescTrackAuthErrorPopup"
+    />
+    <desc-track-auth-success-popup 
+      v-model:shown="isDescTrackAuthSuccessPopup"
+    />
+
     <wt-notifications-bar />
     <cc-header />
     <div class="workspace-wrap">
@@ -60,6 +67,8 @@ import QueueSection from '../modules/queue-section/components/the-agent-queue-se
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
+import DescTrackAuthErrorPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-error-popup.vue';
+import DescTrackAuthSuccessPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-success-popup.vue';
 
 export default {
   name: 'TheAgentWorkspace',
@@ -72,6 +81,8 @@ export default {
     VideoContainer,
     DisconnectPopup,
     WelcomePopup,
+    DescTrackAuthErrorPopup,
+    DescTrackAuthSuccessPopup,
   },
   mixins: [
     appNotificationMixin,
@@ -80,11 +91,15 @@ export default {
   data: () => ({
     isInitLoading: false,
     isWelcomePopup: true,
+    isDescTrackAuthSuccessPopup: false,
   }),
 
   computed: {
     ...mapGetters('ui/userinfo', {
       checkAppAccess: 'CHECK_APP_ACCESS',
+    }),
+    ...mapGetters('ui/infoSec/agentInfo', {
+      isDescTrackAuthErrorPopup: 'IS_DESC_TRACK_AUTH_NEEDED',
     }),
     hasAccess() {
       return this.checkAppAccess(WebitelApplications.AGENT);
@@ -95,6 +110,9 @@ export default {
     ...mapActions('workspace', {
       openSession: 'OPEN_SESSION',
       closeSession: 'CLOSE_SESSION',
+    }),
+    ...mapActions('features/status', {
+      agentLogout: 'AGENT_LOGOUT',
     }),
 
     async initSession() {
@@ -127,6 +145,15 @@ export default {
       const adminUrl = import.meta.env.VITE_APPLICATION_HUB_URL;
       window.location.href = adminUrl;
     },
+  },
+  watch: {
+    isDescTrackAuthErrorPopup() {
+      if (this.isDescTrackAuthErrorPopup) {
+        this.agentLogout()
+      } else {
+        this.descTrackAuthErrorPopup = true
+      }
+    }
   },
 
   unmounted() {

@@ -10,6 +10,12 @@ const state = {
 
 const getters = {
   AGENT_ID: (state, getters, rootState) => rootState.features.status.agent.agentId, // used for initial agent data loading
+  IS_DESC_TRACK_AUTH_NEEDED: (state, getters, rootState, rootGetters) => {
+    return state.agent?.screenControl 
+        && !state.agent?.descTrack 
+        && !rootGetters['features/call/CALL_ON_WORKSPACE']
+        && !rootGetters['ui/infoSec/processing/ALLOW_PROCESSING']
+  }
 };
 
 const actions = {
