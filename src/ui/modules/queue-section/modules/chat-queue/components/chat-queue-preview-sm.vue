@@ -1,32 +1,29 @@
 <template>
   <article
     :class="[
-      { 'queue-preview--hover': isHovered },
-      { 'queue-preview--selected': selected },
-      `queue-preview--${status}`,
+      { 'chat-queue-preview-sm--selected': selected },
+      `chat-queue-preview-sm--${status}`,
     ]"
-    class="queue-preview queue-preview-sm"
+    class="chat-queue-preview-sm"
     tabindex="0"
     @click="$emit('click')"
     @keydown.enter="$emit('click')"
-    @mouseenter="isHovered = true"
-    @mouseleave="isHovered = false"
   >
 
-    <header class="queue-preview-header">
-      <div class="queue-preview-icon">
+    <header class="chat-queue-preview-sm__header">
+      <div class="chat-queue-preview-sm__icon">
         <slot name="close-icon"></slot>
 
         <wt-icon
           :icon="opened ? 'chat--filled': 'chat'"
           size="sm"
-          class="chat-card__icon--selected"
+          class="chat-queue-preview-sm__icon--selected"
           :color="getStatusColor(status)"
         />
 
       </div>
 
-      <div class="queue-preview-icon-status">
+      <div class="chat-queue-preview-sm__icon-status">
         <slot name="icon-status"></slot>
       </div>
 
@@ -41,22 +38,22 @@
           </div>
         </template>
 
-        <div class="queue-preview-tooltip-content">
+        <div class="chat-queue-preview-sm__tooltip-content">
           <span
             v-if="$slots['tooltip-title']"
-            class="queue-preview-tooltip-title"
+            class="chat-queue-preview-sm__tooltip-title"
           >
             <slot name="tooltip-title"></slot>
           </span>
           <span
             v-if="$slots['tooltip-subtitle']"
-            class="queue-preview-tooltip-subtitle"
+            class="chat-queue-preview-sm__tooltip-subtitle"
           >
             <slot name="tooltip-subtitle"></slot>
           </span>
           <div
             v-if="queueName"
-            class="queue-preview-tooltip-chips"
+            class="chat-queue-preview-sm__tooltip-chips"
           >
             <wt-chip color="secondary">
               {{ queueName }}
@@ -66,24 +63,24 @@
       </wt-popover>
     </header>
 
-    <div class="queue-messenger-icon">
+    <div class="chat-queue-preview-sm__messenger-icon">
       <slot name="icon"></slot>
     </div>
     <div
       v-if="$slots.title"
-      class="queue-preview-title"
+      class="chat-queue-preview-sm__title"
     >
       <slot name="title"></slot>
     </div>
 
     <div
       v-if="$slots.subtitle"
-      class="queue-preview-subtitle"
+      class="chat-queue-preview-sm__subtitle"
     >
       <slot name="subtitle"></slot>
     </div>
 
-    <section class="queue-preview-avatar">
+    <section class="chat-queue-preview-sm__avatar">
       <slot name="avatar">
         <wt-avatar
           size="sm"
@@ -93,14 +90,14 @@
 
     <div
       v-if="$slots.actions"
-      class="queue-preview-actions"
+      class="chat-queue-preview-sm__actions"
     >
       <slot name="actions"></slot>
     </div>
 
     <footer
       v-if="$slots.footer"
-      class="queue-preview-footer"
+      class="chat-queue-preview-sm__footer"
     >
       <slot name="footer"></slot>
     </footer>
@@ -130,13 +127,11 @@ const props = defineProps({
 
 const emit = defineEmits(['click']);
 
-const isHovered = ref(false);
-
 function getStatusColor(status) {
   const colors = {
     new: 'success',
     active: 'warning',
-    'self-assigned': 'secondary',
+    'manual': 'secondary',
     closed: 'secondary',
   };
   return colors[status] || 'secondary';
@@ -147,30 +142,29 @@ function getStatusColor(status) {
 // styles should be unscoped due to tooltip contents styling
 @import '../../_shared/css/queue-preview';
 
-.queue-preview {
+.chat-queue-preview-sm {
   position: relative;
   border: 2px solid transparent;
   transition: all var(--transition);
   cursor: pointer;
 
-  &.queue-preview--opened {
+  &--opened {
     border-color: var(--primary-color);
   }
 
-  &.queue-preview--hover {
+  &:hover {
     background: var(--content-wrapper-hover-color);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
-  &.queue-preview--selected {
+  &--selected {
     border-color: var(--current-border-color);
     outline: 2px solid var(--current-border-color);
     outline-offset: 2px;
     background: var(--content-wrapper-hover-color);
   }
 
-  .queue-preview-icon {
+  .chat-queue-preview-sm__icon {
     flex: 0 0 var(--icon-sm-size);
     display: flex;
     align-items: center;
@@ -203,7 +197,7 @@ function getStatusColor(status) {
   &--new {
     border-color: var(--success-color);
 
-    &.queue-preview--selected {
+    &.chat-queue-preview-sm--selected {
       border-color: var(--success-color);
       outline-color: var(--success-color);
     }
@@ -212,16 +206,16 @@ function getStatusColor(status) {
   &--active {
     border-color: var(--warning-color);
 
-    &.queue-preview--selected {
+    &.chat-queue-preview-sm--selected {
       border-color: var(--warning-color);
       outline-color: var(--warning-color);
     }
   }
 
-  &--self-assigned {
+  &--manual {
     border-color: var(--secondary-color);
 
-    &.queue-preview--selected {
+    &.chat-queue-preview-sm--selected {
       border-color: var(--secondary-color);
       outline-color: var(--secondary-color);
     }
@@ -230,19 +224,19 @@ function getStatusColor(status) {
   &--closed {
     border-color: var(--secondary-color);
 
-    &.queue-preview--selected {
+    &.chat-queue-preview-sm--selected {
       border-color: var(--secondary-color);
       outline-color: var(--secondary-color);
     }
   }
 
-  .queue-messenger-icon {
+  .chat-queue-preview-sm__messenger-icon {
     margin: auto;
   }
 }
 
 // tooltip content styling
-.queue-preview-tooltip-content {
+.chat-queue-preview-sm__tooltip-content {
   display: flex;
   flex-direction: column;
   max-width: 400px;

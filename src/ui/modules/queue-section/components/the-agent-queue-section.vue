@@ -22,27 +22,27 @@
         #[tab.value]
       >
         <div
-          class="queue-section-tab-wrapper"
-          :class="{ 'queue-section-tab-wrapper--small': collapsed }"
+          class="queue-section-tab-content"
+          :class="{ 'queue-section-tab-content--small': size === ComponentSize.MD }"
         >
-          <span class="chip-box">
+          <span class="count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
-              v-if="tab.count && tab.isNew"
+              v-if="tab.count && tab.hasIncoming"
               color="success"
-              class="queue-section-chip queue-section-chip--success"
+              class="count count--incoming"
             >
               {{ tab.count }}
             </wt-chip>
           </span>
           <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
 
-          <span class="chip-box">
+          <span class="count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
-              v-if="tab.count && !tab.isNew"
+              v-if="tab.count && !tab.hasIncoming"
               color="primary"
-              class="queue-section-chip queue-section-chip--primary"
+              class="count count--active"
             >
               {{ tab.count }}
             </wt-chip>
@@ -72,6 +72,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
@@ -90,8 +91,8 @@ const props = defineProps({
     default: false,
   },
   size: {
-    type: String,
-    default: 'md',
+    type: ComponentSize,
+    default: ComponentSize.MD,
   },
 });
 
@@ -124,7 +125,7 @@ const tabs = computed(() => {
       iconColor: 'success',
       count: callCount,
       component: CallQueue,
-      isNew: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
+      hasIncoming: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
     },
     {
       value: 'chat',
@@ -132,7 +133,7 @@ const tabs = computed(() => {
       iconColor: 'chat',
       count: chatCount,
       component: ChatQueue,
-      isNew: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
+      hasIncoming: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
     },
     {
       value: 'job',
@@ -140,7 +141,7 @@ const tabs = computed(() => {
       iconColor: 'job',
       count: jobCount,
       component: JobQueue,
-      isNew: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
+      hasIncoming: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
     }
   ]
 });
@@ -183,13 +184,13 @@ onUnmounted(() => {
   gap: var(--spacing-2xs);
   will-change: width;
 
-  &--md {
-    flex: 0 0 320px;
-  }
-
-  &--sm {
-    flex: 0 0 132px;
-  }
+  //&--md {
+  //  flex: 0 0 320px;
+  //}
+  //
+  //&--sm {
+  //  flex: 0 0 132px;
+  //}
 
   .wt-rounded-action {
     position: fixed;
@@ -212,18 +213,18 @@ onUnmounted(() => {
   grid-template-columns: repeat(3, 1fr);
 }
 
-//value for chip, which should be different
+//TODO value for count indicator, which should be different
 // after adding badge with primevue, need delete this
-$chip-w: 30px;
-$chip-h: 24px;
+$indicator-w: 30px;
+$indicator-h: 24px;
 
-.queue-section-tab-wrapper {
+.queue-section-tab-content {
   display: grid;
   align-items: center;
   justify-items: center;
 
-  // after adding badge with primevue, need delete this
-  grid-template-columns: $chip-w auto $chip-w;
+  //TODO after adding badge with primevue, need delete this
+  grid-template-columns: $indicator-w auto $indicator-w;
 
   &--small {
     display: flex !important;
@@ -232,28 +233,28 @@ $chip-h: 24px;
     justify-content: center;
     gap: var(--spacing-2xs);
 
-    .chip-box {
+    .count-indicator {
       order: -1;
     }
   }
 }
 
-.chip-box {
-  // after adding badge with primevue, need delete this
-  width: $chip-w;
-  height: $chip-h;
+.count-indicator {
+  //TODO after adding badge with primevue, need delete this
+  width: $indicator-w;
+  height: $indicator-h;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.queue-section-chip {
+.count {
   display: flex;
   align-items: center;
   justify-content: center;
-  // after adding badge with primevue, need delete this
-  min-width: $chip-w;
-  height: $chip-h;
+  //TODO after adding badge with primevue, need delete this
+  min-width: $indicator-w;
+  height: $indicator-h;
 }
 
 

@@ -1,34 +1,31 @@
 <template>
   <article
     :class="[
-      'chat-card',
-      `chat-card--${status}`,
+      'chat-queue-preview-md',
+      `chat-queue-preview-md--${status}`,
       {
-        'chat-card--hover': isHovered,
-        'chat-card--selected': isSelected,
+        'chat-queue-preview-md--selected': isSelected,
       }
     ]"
     tabindex="0"
     @click="$emit('click', task)"
     @keydown.enter="$emit('click', task)"
-    @mouseenter="isHovered = true"
-    @mouseleave="isHovered = false"
   >
 
-    <div class="chat-card__content">
-      <div class="chat-card__header">
-        <div class="chat-card__icon">
+    <div class="chat-queue-preview-md__content">
+      <div class="chat-queue-preview-md__header">
+        <div class="chat-queue-preview-md__icon">
           <div class="queue-preview-icon">
             <slot name="close-icon"></slot>
             <wt-icon
               :icon="isSelected ? 'chat--filled': 'chat'"
               size="md"
-              class="chat-card__icon--selected"
+              class="chat-queue-preview-md__icon--selected"
               :color="getStatusColor(status)"
             />
           </div>
         </div>
-        <div class="chat-card__icon--messenger">
+        <div class="chat-queue-preview-md__icon--messenger">
           <slot name="icon" :iconColor="iconColor">
             <wt-icon
               v-if="showIcon"
@@ -38,20 +35,20 @@
             />
           </slot>
         </div>
-        <h3 class="chat-card__title">
+        <h3 class="chat-queue-preview-md__title">
           <slot name="title">{{ title }}</slot>
         </h3>
-        <div class="chat-card__timer">
+        <div class="chat-queue-preview-md__timer">
           <slot name="timer"></slot>
         </div>
       </div>
 
-      <div class="chat-card__body">
-        <div class="chat-card__body-content">
-          <p class="chat-card__subtitle">
+      <div class="chat-queue-preview-md__body">
+        <div class="chat-queue-preview-md__body-content">
+          <p class="chat-queue-preview-md__subtitle">
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
-          <div class="chat-card__queue">
+          <div class="chat-queue-preview-md__queue">
             <wt-chip
               v-if="queueName"
               color="secondary"
@@ -61,13 +58,13 @@
             </wt-chip>
           </div>
         </div>
-        <div class="chat-card__body-icons">
+        <div class="chat-queue-preview-md__body-icons">
           <slot name="icon-status"></slot>
         </div>
       </div>
     </div>
 
-    <div class="chat-card__actions">
+    <div class="chat-queue-preview-md__actions">
       <slot name="actions"></slot>
     </div>
   </article>
@@ -109,13 +106,11 @@ const props = defineProps({
 
 const emit = defineEmits(['click', 'close']);
 
-const isHovered = ref(false);
-
 const isSelected = computed(() => props.selected);
 
 const showIcon = computed(() => {
-  // Self-assigned chats don't show icon in default state
-  return props.status !== 'self-assigned' || isSelected.value;
+  // Manual chats don't show icon in default state
+  return props.status !== 'manual' || isSelected.value;
 });
 
 const showCloseButton = computed(() => {
@@ -134,7 +129,7 @@ function getStatusColor(status) {
   const colors = {
     new: 'success',
     active: 'warning',
-    'self-assigned': 'secondary',
+    'manual': 'secondary',
     closed: 'secondary',
   };
   return colors[status] || 'secondary';
@@ -142,7 +137,7 @@ function getStatusColor(status) {
 </script>
 
 <style lang="scss" scoped>
-.chat-card {
+.chat-queue-preview-md {
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -163,7 +158,7 @@ function getStatusColor(status) {
     border-color: var(--warning-color);
   }
 
-  &--self-assigned {
+  &--manual {
     border-color: var(--secondary-color);
   }
 
@@ -171,7 +166,7 @@ function getStatusColor(status) {
     border-color: var(--secondary-color);
   }
 
-  &--hover {
+  &:hover {
     background: var(--content-wrapper-hover-color);
   }
 
@@ -179,19 +174,19 @@ function getStatusColor(status) {
     border-color: var(--current-border-color);
     outline: 2px solid var(--current-border-color);
 
-    &.chat-card--new {
+    &.chat-queue-preview-md--new {
       --current-border-color: var(--success-color);
     }
 
-    &.chat-card--active {
+    &.chat-queue-preview-md--active {
       --current-border-color: var(--warning-color);
     }
 
-    &.chat-card--self-assigned {
+    &.chat-queue-preview-md--manual {
       --current-border-color: var(--secondary-color);
     }
 
-    &.chat-card--closed {
+    &.chat-queue-preview-md--closed {
       --current-border-color: var(--secondary-color);
     }
   }
@@ -201,7 +196,7 @@ function getStatusColor(status) {
   }
 }
 
-.chat-card__icon {
+.chat-queue-preview-md__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -227,7 +222,7 @@ function getStatusColor(status) {
   }
 }
 
-.chat-card__content {
+.chat-queue-preview-md__content {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -235,14 +230,14 @@ function getStatusColor(status) {
   gap: var(--spacing-2xs);
 }
 
-.chat-card__header {
+.chat-queue-preview-md__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-xs);
 }
 
-.chat-card__title {
+.chat-queue-preview-md__title {
   @extend %typo-subtitle-2;
   margin: 0;
   overflow: hidden;
@@ -251,19 +246,19 @@ function getStatusColor(status) {
   flex: 1;
 }
 
-.chat-card__timer {
+.chat-queue-preview-md__timer {
   @extend %typo-body-2;
   flex-shrink: 0;
 }
 
-.chat-card__body {
+.chat-queue-preview-md__body {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: var(--spacing-sm);
 }
 
-.chat-card__body-content {
+.chat-queue-preview-md__body-content {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2xs);
@@ -271,14 +266,14 @@ function getStatusColor(status) {
   min-width: 0;
 }
 
-.chat-card__body-icons {
+.chat-queue-preview-md__body-icons {
   display: flex;
   align-items: center;
   gap: var(--spacing-2xs);
   flex-shrink: 0;
 }
 
-.chat-card__subtitle {
+.chat-queue-preview-md__subtitle {
   @extend %typo-body-2;
   margin: 0;
   overflow: hidden;
@@ -286,24 +281,24 @@ function getStatusColor(status) {
   text-overflow: ellipsis;
 }
 
-.chat-card__queue {
+.chat-queue-preview-md__queue {
   display: flex;
   align-items: center;
 }
 
-.chat-card__actions {
+.chat-queue-preview-md__actions {
   display: flex;
   align-items: center;
   gap: var(--spacing-2xs);
   flex-shrink: 0;
 }
 
-.chat-card__close-btn {
+.chat-queue-preview-md__close-btn {
   opacity: 0;
   transition: var(--transition);
 }
 
-.chat-card:hover .chat-card__close-btn {
+.chat-queue-preview-md:hover .chat-queue-preview-md__close-btn {
   opacity: 1;
 }
 
