@@ -49,7 +49,7 @@ const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPAC
 
 const fetchFn = async (params) => {
   const response = await store.dispatch('features/member/LOAD_DATA_LIST', params);
-  return { items: response.items, next: response.next }; // Mock response since data is in store
+  return { items: response.items, next: response.next };
 };
 
 const {
