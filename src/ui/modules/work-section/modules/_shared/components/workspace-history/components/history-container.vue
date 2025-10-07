@@ -43,7 +43,7 @@ import { useI18n } from 'vue-i18n';
 import { CallDirection } from 'webitel-sdk';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
-import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll.js';
+import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum';
 import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
 import LookupItemContainer from '../../lookup-item-container/lookup-item-container.vue';

@@ -26,7 +26,7 @@
 import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
-import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll.js';
+import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';

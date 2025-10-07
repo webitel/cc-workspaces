@@ -52,7 +52,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../app/api/APIRepository.js';
-import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll.js';
+import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import botAvatar from '../../_shared/assets/avatars/bot-avatar.svg';

@@ -1,5 +1,11 @@
 import { onMounted, reactive, toRefs } from 'vue';
 
+const DEFAULT_PAGE_SIZE = 20;
+const DEFAULT_PAGE = 1;
+// Distance from the intersection root at which the intersection observer should trigger
+// 200px means it will start loading when the target element is 200px away from being visible
+const DEFAULT_LOAD_TRIGGER_DISTANCE = '200px';
+
 /**
  * Composable that mirrors behavior of infiniteScrollMixin without modifying it.
  * Consumer must pass a fetchFn that returns { items?, data?, next }
@@ -7,10 +13,10 @@ import { onMounted, reactive, toRefs } from 'vue';
 export default function useInfiniteScroll(options = {}) {
   const state = reactive({
     dataList: options.initialList || [],
-    dataPage: 1,
-    dataSize: options.size || 20,
+    dataPage: DEFAULT_PAGE,
+    dataSize: options.size || DEFAULT_PAGE_SIZE,
     dataSearch: options.initialSearch || '',
-    rootMargin: options.rootMargin || '200px',
+    loadTriggerDistance: options.loadTriggerDistance || DEFAULT_LOAD_TRIGGER_DISTANCE,
     isMounted: false,
     isNext: true,
     isLoading: true,
@@ -42,11 +48,16 @@ export default function useInfiniteScroll(options = {}) {
   const loadDataList = async () => {
     if (!state.dataList.length) state.isLoading = true;
     const params = collectParams();
-    const { items, data, next } = await options.fetchFn(params);
-    state.isNext = next;
-    setData(items || data || []);
-    state.dataPage += 1;
-    state.isLoading = false;
+    try {
+      const { items, data, next } = await options.fetchFn(params);
+      state.isNext = next;
+      setData(items || data || []);
+      state.dataPage += 1;
+    } catch (error) {
+      console.error(error)
+    } finally {
+      state.isLoading = false;
+    }
   };
 
   const handleIntersect = async () => {

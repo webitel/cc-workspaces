@@ -29,7 +29,7 @@ import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInte
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
-import useInfiniteScroll from '../../../../../../../app/composables/useInfiniteScroll.js';
+import useInfiniteScroll from '../../../../../../../app/composables/useInfiniteScroll';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import OfflinePreview from './offline-queue-preview.vue';
 import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
@@ -62,14 +62,12 @@ const {
   size: 20,
 });
 
-const loadDataList = async () => {
-  await store.dispatch('features/member/LOAD_DATA_LIST', {
-    search: dataSearch.value,
-    page: 1,
-    size: 20
-  });
-  isLoading.value = false;
-};
+// Use the same function for initial load and infinite scroll
+const loadDataList = () => fetchFn({
+  search: dataSearch.value,
+  page: 1,
+  size: 20
+});
 
 const toggleMemberDisplay = (task) => {
   taskOnWorkspace.value.id === task.id
