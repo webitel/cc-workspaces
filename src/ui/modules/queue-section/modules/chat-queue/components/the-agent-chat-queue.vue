@@ -87,10 +87,12 @@ const expansionStates = ref({
   closed: restoreExpansionState({ expansion: 'closed' }),
 });
 
+// Computed properties to track which chat queue sections are currently expanded
 const isActiveExpanded = computed(() => expansionStates.value.active);
 const isManualExpanded = computed(() => expansionStates.value.manual);
 const isClosedExpanded = computed(() => expansionStates.value.closed);
 
+// Updates expansion state and saves it to localStorage
 const handleExpansionChange = (expansion, state) => {
   expansionStates.value[expansion] = state;
   cacheExpansionState({ expansion, state });

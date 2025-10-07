@@ -1,13 +1,18 @@
 <template>
-  {{ opened }}
   <chat-queue-preview-md
     v-if="size === 'md'"
     :task="task"
     :status="chatStatus"
-    :icon="displayIcon"
     :opened="opened"
     @click="$emit('click', task)"
   >
+    <template #icon="{ iconColor }">
+      <wt-icon
+        :icon="displayIcon"
+        :color="iconColor"
+        size="md"
+      />
+    </template>
     <template #title>
       {{ displayChatName }}
     </template>
@@ -73,6 +78,8 @@ export default {
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
+      console.log(this.task);
+
       const lastMessage = this.task.messages[this.task.messages.length - 1] || {};
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;
     },

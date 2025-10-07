@@ -72,7 +72,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { CHAT_STATUS_COLORS } from '../enums/ChatStatus.enum';
+import { CHAT_STATUS_COLORS, ChatStatus } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {
@@ -107,7 +107,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
 
 const showIcon = computed(() => {
   // Manual chats don't show icon in default state
-  return props.status !== 'manual' || props.opened;
+  return props.status !== ChatStatus.MANUAL || props.opened;
 });
 
 const iconColor = computed(() => {

@@ -3,10 +3,16 @@
     v-if="size === 'md'"
     :task="task"
     :status="ChatStatus.NEW"
-    :icon="displayIcon"
     :opened="opened"
     @click="emit('click', task)"
   >
+    <template #icon="{ iconColor }">
+      <wt-icon
+        :icon="displayIcon"
+        :color="iconColor"
+        size="md"
+      />
+    </template>
     <template #title>
       {{ task.displayName }}
     </template>

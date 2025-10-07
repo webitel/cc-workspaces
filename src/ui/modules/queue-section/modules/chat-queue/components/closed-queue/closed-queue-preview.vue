@@ -4,11 +4,17 @@
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :task="task"
     :status="ChatStatus.CLOSED"
-    :icon="displayIcon"
     :opened="opened"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
+    <template #icon="{ iconColor }">
+      <wt-icon
+        :icon="displayIcon"
+        :color="iconColor"
+        size="md"
+      />
+    </template>
     <template #title>
       {{ displayTaskName }}
     </template>
