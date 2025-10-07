@@ -23,7 +23,7 @@
       >
         <div
           class="queue-section-tab-content"
-          :class="{ 'queue-section-tab-content--small': size === ComponentSize.MD }"
+          :class="{ 'queue-section-tab-content--small': size === ComponentSize.SM }"
         >
           <span class="count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
