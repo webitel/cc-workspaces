@@ -30,6 +30,7 @@ const actions = {
       ? context.state.agent : await context.dispatch('GET_AGENT_INSTANCE');
     const response = await agent.offlineMembers(search, page, size);
     context.commit('SET_DATA_LIST', { page, items: response.items });
+    return response;
   },
 
   OPEN_MEMBER_ON_WORKSPACE: (context, member) => {
