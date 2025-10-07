@@ -52,13 +52,15 @@
   <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
 </template>
 
-<script>
+<script setup lang="ts">
 import WebitelApplications
   from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, onUnmounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import appNotificationMixin from '../../features/modules/notifications/mixins/appNotificationMixin';
-import panelSizeControllerMixin from '../mixins/panelSizeControllerMixin';
+import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
+import { usePanelSizeController } from '../composables/usePanelSizeController';
 import CcHeader from '../modules/app-header/components/app-header.vue';
 import InfoSection from '../modules/info-section/components/the-agent-info-section.vue';
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
@@ -70,96 +72,79 @@ import WorkspaceSection from '../modules/work-section/components/the-agent-works
 import DescTrackAuthErrorPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-error-popup.vue';
 import DescTrackAuthSuccessPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-success-popup.vue';
 
-export default {
-  name: 'TheAgentWorkspace',
-  components: {
-    CcHeader,
-    WidgetBar,
-    QueueSection,
-    WorkspaceSection,
-    InfoSection,
-    VideoContainer,
-    DisconnectPopup,
-    WelcomePopup,
-    DescTrackAuthErrorPopup,
-    DescTrackAuthSuccessPopup,
-  },
-  mixins: [
-    appNotificationMixin,
-    panelSizeControllerMixin,
-  ],
-  data: () => ({
-    isInitLoading: false,
-    isWelcomePopup: true,
-    isDescTrackAuthSuccessPopup: false,
-  }),
+const store = useStore();
+const route = useRoute();
+const router = useRouter();
 
-  computed: {
-    ...mapGetters('ui/userinfo', {
-      checkAppAccess: 'CHECK_APP_ACCESS',
-    }),
-    ...mapGetters('ui/infoSec/agentInfo', {
-      isDescTrackAuthErrorPopup: 'IS_DESC_TRACK_AUTH_NEEDED',
-    }),
-    hasAccess() {
-      return this.checkAppAccess(WebitelApplications.AGENT);
-    },
-  },
+useAppNotification();
+const {
+  queueSecCollapsed,
+  workspaceSecCollapsed,
+  infoSecCollapsed,
+  queueSecSize,
+  workspaceSecSize,
+  infoSecSize,
+  collapsible,
+  resizeQueuePanel,
+  resizeWorkspacePanel,
+  resizeInfoPanel,
+} = usePanelSizeController();
 
-  methods: {
-    ...mapActions('workspace', {
-      openSession: 'OPEN_SESSION',
-      closeSession: 'CLOSE_SESSION',
-    }),
-    ...mapActions('features/status', {
-      agentLogout: 'AGENT_LOGOUT',
-    }),
+const isInitLoading = ref(false);
+const isWelcomePopup = ref(true);
+const isDescTrackAuthSuccessPopup = ref(false);
 
-    async initSession() {
-      try {
-        this.isInitLoading = true;
-        await this.openSession();
-        if (this.$route.query.failureRefresh) {
-          this.$router.push({ ...this.$router.currentRoute, query: { failureRefresh: undefined } });
-        }
-      } catch (err) {
-        if (!this.$route.query.failureRefresh) {
-          await this.$router.push({
-            ...this.$router.currentRoute,
-            query: { failureRefresh: 'true' },
-          });
-          document.location.reload();
-        }
-      } finally {
-        this.isInitLoading = false;
-        this.isWelcomePopup = false;
-      }
-    },
+const checkAppAccess = computed(() => store.getters['ui/userinfo/CHECK_APP_ACCESS']);
+const isDescTrackAuthErrorPopup = computed(() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_NEEDED']);
 
-    preventDrop(event) {
-      event.preventDefault();
-      event.stopPropagation();
-    },
+const hasAccess = computed(() => checkAppAccess.value(WebitelApplications.AGENT));
 
-    goToApplicationHub() {
-      const adminUrl = import.meta.env.VITE_APPLICATION_HUB_URL;
-      window.location.href = adminUrl;
-    },
-  },
-  watch: {
-    isDescTrackAuthErrorPopup() {
-      if (this.isDescTrackAuthErrorPopup) {
-        this.agentLogout()
-      } else {
-        this.descTrackAuthErrorPopup = true
-      }
+const openSession = () => store.dispatch('workspace/OPEN_SESSION');
+const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
+const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
+
+const initSession = async () => {
+  try {
+    isInitLoading.value = true;
+    await openSession();
+    if (route.query.failureRefresh) {
+      router.push({ ...router.currentRoute, query: { failureRefresh: undefined } });
     }
-  },
-
-  unmounted() {
-    this.closeSession();
-  },
+  } catch (err) {
+    if (!route.query.failureRefresh) {
+      await router.push({
+        ...router.currentRoute,
+        query: { failureRefresh: 'true' },
+      });
+      document.location.reload();
+    }
+  } finally {
+    isInitLoading.value = false;
+    isWelcomePopup.value = false;
+  }
 };
+
+const preventDrop = (event: DragEvent) => {
+  event.preventDefault();
+  event.stopPropagation();
+};
+
+const goToApplicationHub = () => {
+  const adminUrl = import.meta.env.VITE_APPLICATION_HUB_URL;
+  window.location.href = adminUrl;
+};
+
+watch(isDescTrackAuthErrorPopup, () => {
+  if (isDescTrackAuthErrorPopup.value) {
+    agentLogout();
+  } else {
+    isDescTrackAuthSuccessPopup.value = true;
+  }
+});
+
+onUnmounted(() => {
+  closeSession();
+});
 </script>
 
 <style lang="scss" scoped>
