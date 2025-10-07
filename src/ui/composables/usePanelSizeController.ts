@@ -1,4 +1,5 @@
 import { ref, computed, getCurrentInstance } from 'vue';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/ComponentSize/ComponentSize.ts';
 
 export function usePanelSizeController() {
   const instance = getCurrentInstance();
@@ -11,17 +12,17 @@ export function usePanelSizeController() {
   const collapsible = computed(() => breakpoint.mdAndUp);
 
   const queueSecSize = computed(() => {
-    if (collapsible.value && queueSecCollapsed.value) return 'sm';
-    if (breakpoint.md) return 'sm';
-    if (breakpoint.lg) return 'md';
-    return 'md';
+    if (collapsible.value && queueSecCollapsed.value) return ComponentSize.SM;
+    if (breakpoint.md) return ComponentSize.SM;
+    if (breakpoint.lg) return ComponentSize.MD;
+    return ComponentSize.MD;
   });
 
   const workspaceSecSize = computed(() => {
-    if (collapsible.value && !workspaceSecCollapsed.value) return 'md';
-    if (breakpoint.md) return 'sm';
-    if (breakpoint.lg) return 'sm';
-    return 'sm';
+    if (collapsible.value && !workspaceSecCollapsed.value) return ComponentSize.MD;
+    if (breakpoint.md) return ComponentSize.SM;
+    if (breakpoint.lg) return ComponentSize.SM;
+    return ComponentSize.SM;
   });
 
   const infoSecSize = computed(() => {
