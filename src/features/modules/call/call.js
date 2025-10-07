@@ -58,7 +58,6 @@ const actions = {
     // deprecated from 20.02.2024. remove me in 6 months
     if (user) throw new Error('{ user } param for CALL is deprecated');
 
-    console.log(contactId);
     const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun, contactId };
     let destination;
 
