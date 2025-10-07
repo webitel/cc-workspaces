@@ -11,7 +11,7 @@
       icon="numpad"
       rounded
       wide
-      @click="$emit('openTab', 'numpad')"
+      @click="$emit('openTab', CallTab.Numpad)"
     ></wt-rounded-action>
     <wt-rounded-action
       :active="isOnHold"
@@ -50,6 +50,7 @@ import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
+import { CallTab } from '../enums/CallTab.enum';
 
 export default {
   name: 'CallFooter',
@@ -63,6 +64,8 @@ export default {
 
   data: () => ({
     hotkeyUnsubscribers : [],
+    // Made CallTab available in template (required for Options API)
+    CallTab: CallTab,
   }),
 
   computed: {
@@ -73,7 +76,7 @@ export default {
 
     // controls Active state
     isOnNumpad() {
-      return this.currentTab === 'numpad';
+      return this.currentTab === CallTab.Numpad;
     },
 
     // controls btn Appearance

@@ -270,6 +270,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Diqqat',
+    errorLabel: "Siz Workspace'da ishlay olmaysiz",
+    errorDescription: "DeskTrack ishga tushirilmagan yoki siz tizimga kirmagansiz",
+    successLabel: 'DeskTrack muvaffaqiyatli ishga tushirildi',
+    successDescription: "Siz Workspace'da ishlashingiz mumkin",
+  },
   error: {
     general: 'Xatolik yuz berdi. Qayta urinib koʻring.',
     websocket: {

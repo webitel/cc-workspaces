@@ -276,6 +276,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Увага',
+    errorLabel: 'Ви не можете працювати в Workspace',
+    errorDescription: 'DeskTrack не запущений, або ви не увійшли в систему',
+    successLabel: 'DeskTrack успішно запущено',
+    successDescription: 'Ви можете працювати в Workspace',
+  },
   error: {
     general: 'Сталася помилка. Будь ласка, спробуйте ще раз.',
     websocket: {

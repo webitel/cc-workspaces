@@ -272,6 +272,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Atención',
+    errorLabel: 'No puedes trabajar en Workspace',
+    errorDescription: 'DeskTrack no está en ejecución, o no has iniciado sesión',
+    successLabel: 'DeskTrack se inició con éxito',
+    successDescription: 'Puedes trabajar en Workspace',
+  },
   error: {
     general: 'Ocurrió un error. Por favor, inténtelo de nuevo.',
     websocket: {
