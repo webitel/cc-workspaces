@@ -11,7 +11,8 @@
         :processing-timeout-at="task.attempt.processingTimeoutAt"
         :processing-sec="task.attempt.processingSec"
         :renewal-sec="task.attempt.renewalSec"
-        @click="task.attempt.renew()"
+        :processing="processing"
+        @click="renewProcessing"
       ></processing-timer>
     </div>
     <footer class="processing-actions">
@@ -21,6 +22,9 @@
 </template>
 
 <script>
+import applyTransform, {
+  snakeToCamel,
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
 import ProcessingTimer from './timer/processing-timer.vue';
 
 export default {
@@ -35,6 +39,15 @@ export default {
   computed: {
     showTimer() {
       return this.task.attempt?.processingSec;
+    },
+    processing() {
+      return applyTransform(this.task.task._processing, [snakeToCamel()]);
+    },
+  },
+
+  methods: {
+    renewProcessing(prolongationSec) {
+      this.task.attempt.renew(prolongationSec)
     },
   },
 };
@@ -54,8 +67,7 @@ export default {
 }
 
 .processing-timer {
-  display: flex;
-  justify-content: center;
+  align-items: center;
   padding-top: var(--spacing-sm);
 }
 

@@ -1,21 +1,28 @@
 <template>
   <div class="processing-timer">
-    <radial-progress
-      :color="progressColor"
-      :max="processingEndSec"
-      :value="processingProgressSec"
-    >
-      <wt-icon-btn
-        v-show="showRenewalButton"
-        v-tooltip="renewalTooltip"
-        icon="plus"
-        @click="handleClick"
-      ></wt-icon-btn>
+    <div class="processing-timer__progress">
+      <radial-progress
+        :color="progressColor"
+        :max="processingEndSec"
+        :value="processingProgressSec"
+      >
+        <wt-icon-btn
+          v-show="showRenewalButton"
+          v-tooltip="renewalTooltip"
+          icon="plus"
+          @click="handleClick"
+        ></wt-icon-btn>
 
-      <span
-        v-show="!showRenewalButton"
-      >{{ processingSecLeft }}</span>
-    </radial-progress>
+        <span
+          v-show="!showRenewalButton"
+        >{{ processingSecLeft }}</span>
+      </radial-progress>
+    </div>
+
+    <div class="processing-timer__retries" v-show="processing?.processingProlongation">
+      <span>Retries left</span>
+      <wt-chip>{{ remainingProlongations }}</wt-chip>
+    </div>
   </div>
 </template>
 
@@ -52,6 +59,10 @@ export default {
       default: 5,
       description: 'How many sec should left before processingTimeout',
     },
+    processing: {
+      type: Object,
+      default: null,
+    },
   },
   computed: {
     ...mapState('ui/now', {
@@ -68,8 +79,11 @@ export default {
       if (!this.now) return 0; // reactive ticking
       return this.processingEndSec - this.processingSecLeft;
     },
+    remainingProlongations() {
+      return this.processing?.processingProlongation?.remainingProlongations ?? 0;
+    },
     showRenewalButton() {
-      return this.processingSecLeft <= this.renewalSec;
+      return (this.processingSecLeft <= this.renewalSec) && this.remainingProlongations;
     },
     renewalTooltip() {
       return `+${this.processingSec} ${this.$t('date.sec')}`;
@@ -82,7 +96,7 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit('click');
+      this.$emit('click', this.processing?.processingProlongation?.prolongationSec || 0);
     },
   },
 };
@@ -90,6 +104,17 @@ export default {
 
 <style lang="scss" scoped>
 .processing-timer {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  &__progress {
+    display: inline-block;
+  }
+
+  &__retries {
+    display: flex;
+    gap: var(--spacing-xs);
+  }
 }
 </style>
