@@ -3,10 +3,9 @@
     v-if="size === 'md'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :task="task"
-    status="closed"
-    :queue-name="displayQueueName"
+    :status="ChatStatus.CLOSED"
     :icon="displayIcon"
-    :selected="opened"
+    :opened="opened"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
@@ -44,9 +43,9 @@
   <chat-queue-preview-sm
     v-else-if="size === 'sm'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
-    :queue-name="displayQueueName"
-    :selected="opened"
-    status="closed"
+    :task="task"
+    :opened="opened"
+    :status="ChatStatus.CLOSED"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
@@ -109,6 +108,7 @@ import ChatCloseReason
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {

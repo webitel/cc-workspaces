@@ -4,7 +4,7 @@
       'chat-queue-preview-md',
       `chat-queue-preview-md--${status}`,
       {
-        'chat-queue-preview-md--selected': isSelected,
+        'chat-queue-preview-md--selected': opened,
       }
     ]"
     tabindex="0"
@@ -18,10 +18,10 @@
           <div class="queue-preview-icon">
             <slot name="close-icon"></slot>
             <wt-icon
-              :icon="isSelected ? 'chat--filled': 'chat'"
+              :icon="opened ? 'chat--filled': 'chat'"
               size="md"
               class="chat-queue-preview-md__icon--selected"
-              :color="getStatusColor(status)"
+              :color="CHAT_STATUS_COLORS[status] || 'secondary'"
             />
           </div>
         </div>
@@ -72,6 +72,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { CHAT_STATUS_COLORS } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {
@@ -90,15 +91,11 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  queueName: {
-    type: String,
-    default: '',
-  },
   icon: {
     type: String,
     default: 'chat',
   },
-  selected: {
+  opened: {
     type: Boolean,
     default: false,
   },
@@ -106,34 +103,19 @@ const props = defineProps({
 
 const emit = defineEmits(['click', 'close']);
 
-const isSelected = computed(() => props.selected);
+const queueName = computed(() => props.task?.queue?.name || '');
 
 const showIcon = computed(() => {
   // Manual chats don't show icon in default state
-  return props.status !== 'manual' || isSelected.value;
-});
-
-const showCloseButton = computed(() => {
-  // Show close button for active chats that are not selected
-  return props.status === 'active' && !isSelected.value;
+  return props.status !== 'manual' || props.opened;
 });
 
 const iconColor = computed(() => {
-  if (isSelected.value) {
-    return getStatusColor(props.status);
+  if (props.opened) {
+    return CHAT_STATUS_COLORS[props.status] || 'secondary';
   }
   return 'secondary';
 });
-
-function getStatusColor(status) {
-  const colors = {
-    new: 'success',
-    active: 'warning',
-    'manual': 'secondary',
-    closed: 'secondary',
-  };
-  return colors[status] || 'secondary';
-}
 </script>
 
 <style lang="scss" scoped>

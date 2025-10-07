@@ -1,11 +1,11 @@
 <template>
+  {{ opened }}
   <chat-queue-preview-md
     v-if="size === 'md'"
     :task="task"
     :status="chatStatus"
-    :queue-name="displayQueueName"
     :icon="displayIcon"
-    :selected="opened"
+    :opened="opened"
     @click="$emit('click', task)"
   >
     <template #title>
@@ -24,9 +24,9 @@
 
   <chat-queue-preview-sm
     v-else-if="size === 'sm'"
-    :selected="opened"
+    :task="task"
+    :opened="opened"
     :status="chatStatus"
-    :queue-name="displayQueueName"
     @click="$emit('click', task)"
   >
 
@@ -65,6 +65,7 @@ import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import { ConversationState } from 'webitel-sdk';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 export default {
   name: 'ActiveQueuePreview',
@@ -82,11 +83,11 @@ export default {
     chatStatus() {
       // Check if chat is closed
       if (this.task.closedAt && this.task.closeReason) {
-        return 'closed';
+        return ChatStatus.CLOSED;
       }
 
       // Check if chat is new (invite state) or active
-      return this.task.state === ConversationState.Invite ? 'new' : 'active';
+      return this.task.state === ConversationState.Invite ? ChatStatus.NEW : ChatStatus.ACTIVE;
     }
   },
 };

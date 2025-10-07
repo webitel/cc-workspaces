@@ -1,7 +1,7 @@
 <template>
   <article
     :class="[
-      { 'chat-queue-preview-sm--selected': selected },
+      { 'chat-queue-preview-sm--selected': opened },
       `chat-queue-preview-sm--${status}`,
     ]"
     class="chat-queue-preview-sm"
@@ -18,7 +18,7 @@
           :icon="opened ? 'chat--filled': 'chat'"
           size="sm"
           class="chat-queue-preview-sm__icon--selected"
-          :color="getStatusColor(status)"
+          :color="CHAT_STATUS_COLORS[status]"
         />
 
       </div>
@@ -105,21 +105,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { CHAT_STATUS_COLORS } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
+  },
   opened: {
     type: Boolean,
     default: false,
   },
-  queueName: {
-    type: String,
-    default: '',
-  },
   status: {
     type: String,
   },
-  selected: {
+  opened: {
     type: Boolean,
     default: false,
   }
@@ -127,15 +128,7 @@ const props = defineProps({
 
 const emit = defineEmits(['click']);
 
-function getStatusColor(status) {
-  const colors = {
-    new: 'success',
-    active: 'warning',
-    'manual': 'secondary',
-    closed: 'secondary',
-  };
-  return colors[status] || 'secondary';
-}
+const queueName = computed(() => props.task?.queue?.name || '');
 </script>
 
 <style lang="scss" scoped>

@@ -2,10 +2,9 @@
   <chat-queue-preview-md
     v-if="size === 'md'"
     :task="task"
-    status="new"
-    :queue-name="task.queue.name"
+    :status="ChatStatus.NEW"
     :icon="displayIcon"
-    :selected="opened"
+    :opened="opened"
     @click="emit('click', task)"
   >
     <template #title>
@@ -34,9 +33,9 @@
 
   <chat-queue-preview-sm
     v-else-if="size === 'sm'"
-    :selected="opened"
-    status="new"
-    :queue-name="task.queue.name"
+    :task="task"
+    :opened="opened"
+    :status="ChatStatus.NEW"
     @click="emit('click', task)"
   >
     <template #icon>
@@ -85,6 +84,7 @@ import ManualDeadlineProgressBar
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {

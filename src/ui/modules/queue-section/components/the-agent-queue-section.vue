@@ -184,13 +184,15 @@ onUnmounted(() => {
   gap: var(--spacing-2xs);
   will-change: width;
 
-  //&--md {
-  //  flex: 0 0 320px;
-  //}
-  //
-  //&--sm {
-  //  flex: 0 0 132px;
-  //}
+  &--md {
+    flex: 0 0 320px;
+    max-width: 320px;
+  }
+  
+  &--sm {
+    flex: 0 0 132px;
+    max-width: 132px;
+  }
 
   .wt-rounded-action {
     position: fixed;
