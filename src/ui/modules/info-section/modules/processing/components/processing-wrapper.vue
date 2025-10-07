@@ -21,35 +21,30 @@
   </article>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
 import applyTransform, {
   snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import ProcessingTimer from './timer/processing-timer.vue';
 
-export default {
-  name: 'ProcessingWrapper',
-  components: { ProcessingTimer },
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    showTimer() {
-      return this.task.attempt?.processingSec;
-    },
-    processing() {
-      return applyTransform(this.task.task._processing, [snakeToCamel()]);
-    },
-  },
+});
 
-  methods: {
-    renewProcessing(prolongationSec) {
-      this.task.attempt.renew(prolongationSec)
-    },
-  },
+const showTimer = computed(() => {
+  return props.task.attempt?.processingSec;
+});
+
+const processing = computed(() => {
+  return applyTransform(props.task.task._processing, [snakeToCamel()]);
+});
+
+const renewProcessing = (prolongationSec) => {
+  props.task.attempt.renew(prolongationSec);
 };
 </script>
 

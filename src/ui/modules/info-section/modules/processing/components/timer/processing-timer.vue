@@ -26,79 +26,84 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 
 import RadialProgress from '../../../../../../../app/components/utils/radial-progress.vue';
 
 const ms = 1000;
 
-export default {
-  name: 'ProcessingTimer',
-  components: {
-    RadialProgress,
+const props = defineProps({
+  startProcessingAt: {
+    type: Number,
+    required: true,
+    description: 'Timestamp. Processing start time',
   },
-  props: {
-    startProcessingAt: {
-      type: Number,
-      required: true,
-      description: 'Timestamp. Processing start time',
-    },
-    processingTimeoutAt: {
-      type: Number,
-      required: true,
-      description: 'Timestamp. Processing end and destroy() task event',
-    },
-    processingSec: {
-      type: Number,
-      required: true,
-      description: 'Base processing time. Default renewal time.',
-    },
-    renewalSec: {
-      type: Number,
-      default: 5,
-      description: 'How many sec should left before processingTimeout',
-    },
-    processing: {
-      type: Object,
-      default: null,
-    },
+  processingTimeoutAt: {
+    type: Number,
+    required: true,
+    description: 'Timestamp. Processing end and destroy() task event',
   },
-  computed: {
-    ...mapState('ui/now', {
-      now: (state) => state.now,
-    }),
-    processingSecLeft() {
-      return Math.floor((this.processingTimeoutAt - this.now) / ms);
-    },
-    processingEndSec() {
-      if (!this.now) return 0; // reactive ticking
-      return Math.ceil((this.processingTimeoutAt - this.startProcessingAt) / ms);
-    },
-    processingProgressSec() {
-      if (!this.now) return 0; // reactive ticking
-      return this.processingEndSec - this.processingSecLeft;
-    },
-    remainingProlongations() {
-      return this.processing?.processingProlongation?.remainingProlongations ?? 0;
-    },
-    showRenewalButton() {
-      return (this.processingSecLeft <= this.renewalSec) && this.remainingProlongations;
-    },
-    renewalTooltip() {
-      return `+${this.processingSec} ${this.$t('date.sec')}`;
-    },
-    progressColor() {
-      if (this.processingProgressSec / this.processingEndSec < 0.5) return 'success';
-      if (this.processingProgressSec / this.processingEndSec < 0.75) return 'primary';
-      return 'danger';
-    },
+  processingSec: {
+    type: Number,
+    required: true,
+    description: 'Base processing time. Default renewal time.',
   },
-  methods: {
-    handleClick() {
-      this.$emit('click', this.processing?.processingProlongation?.prolongationSec || 0);
-    },
+  renewalSec: {
+    type: Number,
+    default: 5,
+    description: 'How many sec should left before processingTimeout',
   },
+  processing: {
+    type: Object,
+    default: null,
+    description: 'Processing object with prolongation info',
+  },
+});
+
+const emit = defineEmits(['click']);
+
+const store = useStore();
+const { t } = useI18n();
+
+const now = computed(() => store.state.ui.now.now);
+
+const processingSecLeft = computed(() => {
+  return Math.floor((props.processingTimeoutAt - now.value) / ms);
+});
+
+const processingEndSec = computed(() => {
+  if (!now.value) return 0; // reactive ticking
+  return Math.ceil((props.processingTimeoutAt - props.startProcessingAt) / ms);
+});
+
+const processingProgressSec = computed(() => {
+  if (!now.value) return 0; // reactive ticking
+  return processingEndSec.value - processingSecLeft.value;
+});
+
+const remainingProlongations = computed(() => {
+  return props.processing?.processingProlongation?.remainingProlongations ?? 0;
+});
+
+const showRenewalButton = computed(() => {
+  return (processingSecLeft.value <= props.renewalSec) && remainingProlongations.value;
+});
+
+const renewalTooltip = computed(() => {
+  return `+${props.processingSec} ${t('date.sec')}`;
+});
+
+const progressColor = computed(() => {
+  if (processingProgressSec.value / processingEndSec.value < 0.5) return 'success';
+  if (processingProgressSec.value / processingEndSec.value < 0.75) return 'primary';
+  return 'danger';
+});
+
+const handleClick = () => {
+  emit('click', props.processing?.processingProlongation?.prolongationSec || 0);
 };
 </script>
 
