@@ -13,7 +13,7 @@
     <wt-tabs
       :current="currentTab"
       :tabs="tabs"
-      class="queue-section-tabs"
+      class="queue-section__tabs"
       @change="currentTab = $event"
     >
       <template
@@ -22,27 +22,27 @@
         #[tab.value]
       >
         <div
-          class="queue-section-tab-content"
-          :class="{ 'queue-section-tab-content--small': size === ComponentSize.SM }"
+          class="queue-section__tab-content"
+          :class="{ 'queue-section__tab-content--sm': size === ComponentSize.SM }"
         >
-          <span class="count-indicator">
+          <span class="queue-section__count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
               v-if="tab.count && tab.hasIncoming"
               color="success"
-              class="count count--incoming"
+              class="queue-section__count queue-section__count--incoming"
             >
               {{ tab.count }}
             </wt-chip>
           </span>
           <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
 
-          <span class="count-indicator">
+          <span class="queue-section__count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
               v-if="tab.count && !tab.hasIncoming"
               color="primary"
-              class="count count--active"
+              class="queue-section__count queue-section__count--active"
             >
               {{ tab.count }}
             </wt-chip>
@@ -55,7 +55,7 @@
       <component
         :is="currentTab.component"
         :size="size"
-        class="queue-section-wrapper"
+        class="queue-section__wrapper"
       />
     </keep-alive>
     <wt-rounded-action
@@ -188,7 +188,7 @@ onUnmounted(() => {
     flex: 0 0 320px;
     max-width: 320px;
   }
-  
+
   &--sm {
     flex: 0 0 132px;
     max-width: 132px;
@@ -209,7 +209,7 @@ onUnmounted(() => {
 }
 
 // increase specificity
-.queue-section-tabs.wt-tabs {
+.queue-section__tabs.wt-tabs {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
@@ -217,50 +217,50 @@ onUnmounted(() => {
 
 //TODO value for count indicator, which should be different
 // after adding badge with primevue, need delete this
-$indicator-w: 30px;
-$indicator-h: 24px;
+$indicator-width: 30px;
+$indicator-height: 24px;
 
-.queue-section-tab-content {
+.queue-section__tab-content {
   display: grid;
   align-items: center;
   justify-items: center;
 
   //TODO after adding badge with primevue, need delete this
-  grid-template-columns: $indicator-w auto $indicator-w;
+  grid-template-columns: $indicator-width auto $indicator-width;
 
-  &--small {
+  &--sm {
     display: flex !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-2xs);
 
-    .count-indicator {
+    .queue-section__count-indicator {
       order: -1;
     }
   }
 }
 
-.count-indicator {
+.queue-section__count-indicator {
   //TODO after adding badge with primevue, need delete this
-  width: $indicator-w;
-  height: $indicator-h;
+  width: $indicator-width;
+  height: $indicator-height;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.count {
+.queue-section__count {
   display: flex;
   align-items: center;
   justify-content: center;
   //TODO after adding badge with primevue, need delete this
-  min-width: $indicator-w;
-  height: $indicator-h;
+  min-width: $indicator-width;
+  height: $indicator-height;
 }
 
 
-.queue-section-wrapper {
+.queue-section__wrapper {
   flex-grow: 1;
 }
 </style>

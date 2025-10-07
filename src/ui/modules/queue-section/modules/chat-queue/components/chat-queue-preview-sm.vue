@@ -177,13 +177,6 @@ const queueName = computed(() => props.task?.queue?.name || '');
     display: flex;
     align-items: center;
     justify-content: center;
-
-    :deep(.closed-queue-preview__close) {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-      transition: var(--transition);
-    }
   }
 
   .chat-queue-preview-sm__icon-status {

@@ -196,12 +196,6 @@ const iconColor = computed(() => {
     flex-shrink: 0;
   }
 
-  :deep(.closed-queue-preview__close) {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    transition: var(--transition);
-  }
 }
 
 .chat-queue-preview-md__content {

@@ -78,7 +78,6 @@ export default {
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
-      console.log(this.task);
 
       const lastMessage = this.task.messages[this.task.messages.length - 1] || {};
       return lastMessage.file ? lastMessage.file.name : lastMessage.text;

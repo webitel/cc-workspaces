@@ -208,4 +208,11 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
     }
   }
 }
+
+.closed-queue-preview__close {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+}
 </style>
