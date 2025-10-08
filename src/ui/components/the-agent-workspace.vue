@@ -6,8 +6,6 @@
     @dragenter.prevent
     @dragover.prevent
   >
-    <disconnect-popup />
-
     <welcome-popup
       v-if="isWelcomePopup"
       :loading="isInitLoading"
@@ -48,6 +46,8 @@
     </div>
 
     <video-container />
+    
+    <disconnect-popup />
   </main>
   <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
 </template>
