@@ -48,8 +48,8 @@ const dataList = computed(() => store.state['features/member']?.memberList || []
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 
 const fetchFn = async (params) => {
-  await store.dispatch('features/member/LOAD_DATA_LIST', params);
-  return { items: dataList.value, next: true }; // Mock response since data is in store
+  const response = await store.dispatch('features/member/LOAD_DATA_LIST', params);
+  return { items: response.items, next: response.next };
 };
 
 const {
