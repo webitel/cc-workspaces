@@ -12,24 +12,26 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-    <wt-replace-transition appear>
-      <chat-history
-        v-if="contact?.id && !showQuickReplies"
-        :contact="contact"
-        :size="size"
+      <quick-replies
+        v-if="showQuickReplies"
+        :search="searchReply"
+        @close="closeQuickRepliesPanel"
+        @select="applyQuickReply"
       />
-      <current-chat
-        v-else-if="!showQuickReplies"
-        :size="size"
-      />
-    </wt-replace-transition>
-    <quick-replies
-      v-show="showQuickReplies"
-      :search="searchReply"
-      @close="closeQuickRepliesPanel"
-      @select="applyQuickReply"
-    />
-
+      <div
+        v-if="!showQuickReplies"
+        class="chat-messaging__messaging chat-messages-container"
+      >
+        <chat-history
+          v-if="contact?.id"
+          :contact="contact"
+          :size="size"
+        />
+        <current-chat
+          v-else
+          :size="size"
+        />
+      </div>
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
@@ -102,7 +104,6 @@
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import {ComponentSize} from '@webitel/ui-sdk/enums';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
@@ -191,12 +192,23 @@ function accept() {
   return store.dispatch('features/chat/ACCEPT');
 }
 
-function setDraftFocus() {
+async function setDraftFocus() {
+  if (messageDraft.value && messageDraft.value.$el) {
+    textarea.value = messageDraft.value.$el.querySelector('textarea');
+  }
   if(!messageDraft.value || !textarea.value) return;
   textarea?.value.focus();
 }
 
-function insertEmoji(unicode: string) {
+async function insertEmoji(unicode: string) {
+  if (!textarea.value) {
+    await setDraftFocus();
+    return;
+  }
+
+  await nextTick();
+
+  textarea.value.focus();
   // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
   insertTextAtCursor(textarea.value, unicode);
 }
@@ -259,7 +271,10 @@ function selectAutocompleteOption({id}: { id: string }) {
 
 function showQuickRepliesPanel() {
   closeAutocomplete();
-  chat.value.draft = chat.value.draft.slice(0, -1);
+  if(chat.value.draft?.length > 1) {
+    // delete last space only if there is more than 1 symbol in draft
+    chat.value.draft = chat.value.draft.slice(0, -1);
+  }
   openQuickReplies();
 }
 
@@ -278,16 +293,15 @@ function handleQuickReplies() {
 
 watch(chat, async () => {
   await nextTick();
-  setDraftFocus();
+  await setDraftFocus();
 }, {immediate: true});
 
-onMounted(() => {
+onMounted(async () => {
   eventBus?.$on('chat-input-focus', setDraftFocus);
   setupHotkeys();
 
-  if (messageDraft.value && messageDraft.value.$el) {
-    textarea.value = messageDraft.value.$el.querySelector('textarea');
-  }
+  await nextTick();
+  await setDraftFocus();
 });
 
 onUnmounted(() => {
@@ -319,6 +333,13 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
     .chat-messaging__textarea {
       max-height: calc((100% - $textEntryActionsSm) - $chatGap);
     }
+  }
+
+  &__messaging {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <wt-replace-transition duration="normal" >
       <wt-loader v-if="isLoading"/>
       <contacts-list-wrapper
         v-else
@@ -12,7 +11,6 @@
         @link="linkContact"
         @add="add"
       />
-    </wt-replace-transition>
   </div>
 </template>
 
@@ -23,7 +21,6 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 
 const props = defineProps({
   namespace: {

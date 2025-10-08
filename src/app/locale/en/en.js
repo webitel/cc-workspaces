@@ -25,6 +25,16 @@ export default {
     run: 'Run',
     today: 'Today',
   },
+  feedback: {
+    success: {
+      title: 'Thank You!',
+      description: 'We’ve saved your response successfully',
+    },
+    error: {
+      title: 'Oops!',
+      description: 'Something went wrong',
+    },
+  },
   appNavigator: {
     title: 'Webitel applications',
     admin: 'Admin',
@@ -263,6 +273,13 @@ export default {
         denied: 'Permission denied',
       },
     },
+  },
+  descTrackAuthPopup: {
+    title: 'Attention',
+    errorLabel: 'You can’t work in Workspace',
+    errorDescription: 'DeskTrack is not running, or you are not logged in',
+    successLabel: 'DeskTrack is launched successfully',
+    successDescription: 'You can work in Workspace',
   },
   error: {
     general: 'An error occured. Please, try again.',

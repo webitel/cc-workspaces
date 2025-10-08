@@ -80,7 +80,7 @@ export default {
       if (this.showLoader) return;
 
       this.showLoader = true;
-      this.$emit('call', { number: number || this.primaryPhoneNumber });
+      this.$emit('call', { number: number || this.primaryPhoneNumber, contactId: this.item.id });
       this.showLoader = false;
     },
   },

@@ -22,40 +22,43 @@
   </lookup-item-container>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
+<script setup>
+import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
-import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
-import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
+import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 
 const usersAPI = APIRepository.users;
 
-export default {
-  name: 'UsersContainer',
-  components: {
-    UserLookupItem,
-    EmptySearch,
-    LookupItemContainer,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [infiniteScrollMixin, sizeMixin],
+});
 
-  data: () => ({
-    dataList: [],
-    dataSort: 'presence.status',
-    dataFields: ['name', 'id', 'extension', 'presence', 'username'],
-  }),
+const store = useStore();
 
-  methods: {
-    ...mapActions('features/call', {
-      makeCall: 'CALL',
-    }),
+const fetchFn = usersAPI.getUsers;
 
-    fetch: usersAPI.getUsers,
-  },
+const {
+  dataList,
+  isLoading,
+  dataSearch,
+  handleIntersect,
+  resetData,
+} = useInfiniteScroll({
+  fetchFn,
+  size: 20,
+  sort: 'presence.status',
+  fields: ['name', 'id', 'extension', 'presence', 'username'],
+});
+
+const makeCall = (item) => {
+  store.dispatch('features/call/CALL', item);
 };
 </script>
 

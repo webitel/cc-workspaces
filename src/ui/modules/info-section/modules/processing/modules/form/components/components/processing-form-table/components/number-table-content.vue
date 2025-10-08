@@ -1,11 +1,11 @@
 <template>
   <div class="number-table-content">
-    {{ props.value }}
+    {{ content }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 
 interface Props {
   value?: string | number;
@@ -14,5 +14,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   value: 0,
 });
+
+const content = computed(() => Array.isArray(props.value) ? props.value.join(', ') : props.value);
 
 </script>

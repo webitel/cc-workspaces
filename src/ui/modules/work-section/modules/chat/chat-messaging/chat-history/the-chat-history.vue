@@ -4,9 +4,7 @@
     class="chat-history chat-messages-container"
     @click="focusOnInput"
   >
-    <wt-replace-transition>
       <wt-loader v-show="!showAllMessages" class="chat-history__loader"/>
-    </wt-replace-transition>
     <div
       ref="chat-container"
       class="chat-history__messages chat-messages-items"
@@ -15,7 +13,7 @@
     >
       <div class="chat-history__observer-wrapper">
         <wt-intersection-observer
-          :next="next"
+          :canLoadMore="next"
           :loading="isLoading"
           @next="loadNextMessages"
         />
@@ -66,7 +64,6 @@
 <script setup>
 import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef,watch } from 'vue';
 import { useStore } from 'vuex';

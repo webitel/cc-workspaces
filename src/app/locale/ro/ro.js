@@ -25,6 +25,16 @@ export default {
     run: 'Rulează',
     today: 'Astăzi',
   },
+  feedback: {
+    success: {
+      title: 'Mulțumim!',
+      description: 'Răspunsul tău a fost salvat cu succes',
+    },
+    error: {
+      title: 'Ups!',
+      description: 'Ceva a mers prost',
+    },
+  },
   appNavigator: {
     title: 'Aplicații Webitel',
     admin: 'Admin',
@@ -261,6 +271,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Atenție',
+    errorLabel: 'Nu puteți lucra în Workspace',
+    errorDescription: 'DeskTrack nu rulează sau nu sunteți autentificat',
+    successLabel: 'DeskTrack a fost lansat cu succes',
+    successDescription: 'Puteți lucra în Workspace',
+  },
   error: {
     general: 'A apărut o eroare. Vă rugăm să încercați din nou.',
     websocket: {
@@ -324,7 +341,8 @@ export default {
     title: 'Confirmă acțiunea',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat',
+  },
 };

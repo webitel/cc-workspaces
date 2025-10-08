@@ -25,6 +25,16 @@ export default {
     run: 'Ishga tushirish',
     today: 'Bugun',
   },
+  feedback: {
+    success: {
+      title: 'Rahmat!',
+      description: 'Javobingiz muvaffaqiyatli saqlandi',
+    },
+    error: {
+      title: 'Xato!',
+      description: 'Nimadir noto‘g‘ri bajarildi',
+    },
+  },
   appNavigator: {
     title: 'Webitel ilovalari',
     admin: 'Admin',
@@ -151,7 +161,8 @@ export default {
         },
         formTable: {
           title: 'Jadval',
-          error: 'Jadval maʼlumotlari notoʻgʻri formatda. Iltimos, oqimni tekshiring.',
+          error:
+            'Jadval maʼlumotlari notoʻgʻri formatda. Iltimos, oqimni tekshiring.',
         },
       },
     },
@@ -168,7 +179,8 @@ export default {
       hangup: 'Tugatish',
     },
     chat: {
-      acceptPreviewText: 'Agar javob berishga tayyor boʻlsangiz, avval "Qabul qilish" tugmasini bosing',
+      acceptPreviewText:
+        'Agar javob berishga tayyor boʻlsangiz, avval "Qabul qilish" tugmasini bosing',
       draftPlaceholder: 'Xabar yozing...',
       dropzone: {
         title: 'Fayllarni shu yerga tashlang',
@@ -258,12 +270,21 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Diqqat',
+    errorLabel: "Siz Workspace'da ishlay olmaysiz",
+    errorDescription: "DeskTrack ishga tushirilmagan yoki siz tizimga kirmagansiz",
+    successLabel: 'DeskTrack muvaffaqiyatli ishga tushirildi',
+    successDescription: "Siz Workspace'da ishlashingiz mumkin",
+  },
   error: {
     general: 'Xatolik yuz berdi. Qayta urinib koʻring.',
     websocket: {
       [DeviceNotFoundError.id]: 'Mikrofon ulanmagan. Amalni bajarib boʻlmaydi.',
-      [DeviceNotAllowPermissionError.id]: 'Mikrofonga ruxsat yoʻq. Amalni bajarib boʻlmaydi.',
-      [LicencePermissionError.id.replaceAll('.', '_')]: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
+      [DeviceNotAllowPermissionError.id]:
+        'Mikrofonga ruxsat yoʻq. Amalni bajarib boʻlmaydi.',
+      [LicencePermissionError.id.replaceAll('.', '_')]:
+        'Workspace ishlamaydi. Litsenziya muddati tugagan.',
     },
     endpoint: {
       noLicense: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
@@ -284,10 +305,12 @@ export default {
     loadingMessage: 'Yuklanmoqda…',
     networkErrorMessage: 'Emoji yuklab boʻlmadi.',
     regionLabel: 'Emoji tanlovchi',
-    searchDescription: 'Qidiruv natijalari mavjud boʻlsa, yuqoriga yoki pastga bosing va tanlash uchun enter ni bosing.',
+    searchDescription:
+      'Qidiruv natijalari mavjud boʻlsa, yuqoriga yoki pastga bosing va tanlash uchun enter ni bosing.',
     searchLabel: 'Qidirish',
     searchResultsLabel: 'Qidiruv natijalari',
-    skinToneDescription: 'Kengaytirilganda, yuqoriga yoki pastga bosing va tanlash uchun enter ni bosing.',
+    skinToneDescription:
+      'Kengaytirilganda, yuqoriga yoki pastga bosing va tanlash uchun enter ni bosing.',
     skinToneLabel: 'Teri rangini tanlang',
     skinTonesLabel: 'Teri ranglari',
     skinTones: [
@@ -315,8 +338,9 @@ export default {
     title: 'Harakatni tasdiqlang',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Chatda tezkor javoblar menyusini ochadi'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Chatda tezkor javoblar menyusini ochadi',
+  },
 };
 

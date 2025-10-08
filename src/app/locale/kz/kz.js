@@ -25,6 +25,16 @@ export default {
     run: 'Іске қосу',
     today: 'Бүгін',
   },
+  feedback: {
+    success: {
+      title: 'Рақмет!',
+      description: 'Жауабыңыз сәтті сақталды',
+    },
+    error: {
+      title: 'Қате!',
+      description: 'Бір нәрсе дұрыс болмады',
+    },
+  },
   appNavigator: {
     title: 'Webitel қосымшасы',
     admin: 'Admin',
@@ -259,6 +269,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Назар аударыңыз',
+    errorLabel: 'Сіз Workspace-те жұмыс істей алмайсыз',
+    errorDescription: 'DeskTrack іске қосылмаған немесе сіз жүйеге кірмедіңіз',
+    successLabel: 'DeskTrack сәтті іске қосылды',
+    successDescription: 'Сіз Workspace-те жұмыс істей аласыз',
+  },
   error: {
     general: 'Қате орын алды. Қайталап көріңіз.', // TODO: Translate
     websocket: {
@@ -323,7 +340,8 @@ export default {
     title: 'Әрекетті растаңыз',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады',
+  },
 };

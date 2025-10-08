@@ -142,6 +142,14 @@ export default {
     attemptId: {
       type: Number,
     },
+    entityId: {
+      type: String,
+      default: '',
+    },
+    channel: {
+      type: String,
+      default: '',
+    },
   },
   data: () => ({
     uploadingSnapshots: [],
@@ -196,7 +204,14 @@ export default {
           snapshot.metadata.progress = { loaded, total };
         };
         const client = await this.client.getCliInstance();
-        const storedFile = await client.storeFile(this.attemptId, [uploadedFile], fileUploadProgress);
+
+        let storedFile;
+
+        if (this.channel) {
+          storedFile = await client.storeFile(this.entityId, [uploadedFile], fileUploadProgress, 'case');
+        } else {
+          storedFile = await client.storeFile(this.attemptId, [uploadedFile], fileUploadProgress);
+        }
 
         this.handleFileSuccessUpload({ snapshot, file: storedFile });
       } catch (err) {

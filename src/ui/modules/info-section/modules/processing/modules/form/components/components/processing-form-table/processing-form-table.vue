@@ -15,7 +15,6 @@
       </template>
       <template #default>
         <div
-          ref="infiniteScrollWrap"
           class="processing-form-table__scroll-wrapper"
         >
           <wt-table
@@ -53,6 +52,11 @@
               </div>
             </template>
           </wt-table>
+          <wt-intersection-observer
+            :canLoadMore="!nextLoading && nextAllowed"
+            :loading="nextLoading"
+            @next="loadNext"
+          />
         </div>
       </template>
     </wt-expansion-panel>
@@ -61,7 +65,6 @@
 
 <script setup lang="ts">
 
-import { useInfiniteScroll } from '@vueuse/core';
 import { getDefaultGetListResponse } from '@webitel/api-services/api/defaults';
 import {
   applyTransform,
@@ -71,6 +74,7 @@ import {
 } from '@webitel/api-services/api/transformers';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
+import { ProcessingTableColumnType } from '@webitel/ui-sdk/enums';
 import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -83,6 +87,8 @@ import TextTableContent from './components/text-table-content.vue';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
 import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './types/FormTable';
+import WtIntersectionObserver
+  from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 
 const { t } = useI18n();
 
@@ -136,10 +142,11 @@ const tableFields = computed<string[]>(() => { // fields for API request
 
   return applyTransform(fields, [camelToSnake()]); // convert to snake case for API request before return
 });
+
 function isShowTypeComponent(item: TableRow, header: WtTableHeader): boolean {
-  // @author @liza-pohranichna
-  // we always show component for bool type, because it can be true or false
-  return !!item[header.value] || header.type === 'bool';
+  return !!item[header.value]
+    || item[header.value] === 0 // we show type component, because 0 is valid value @author @liza-pohranichna
+    || header.type === ProcessingTableColumnType.BOOL // we always show component for bool type, because it can be true or false @author @liza-pohranichna
 };
 
 function normalizeSlotKey(key: string): string {
@@ -273,16 +280,6 @@ function sendAction(action: string, row: TableRow): void {
 onMounted(() => {
   initDataList();
 });
-
-useInfiniteScroll(infiniteScrollWrap,
-  () => {
-    loadNext();
-  },
-  {
-    distance: 100,
-    canLoadMore: () => (!nextLoading.value && nextAllowed.value),
-  },
-);
 
 </script>
 

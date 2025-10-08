@@ -25,6 +25,16 @@ export default {
     run: 'Запустить',
     today: 'Сегодня',
   },
+  feedback: {
+    success: {
+      title: 'Спасибо!',
+      description: 'Ваш ответ успешно сохранен',
+    },
+    error: {
+      title: 'Упс!',
+      description: 'Что-то пошло не так',
+    },
+  },
   appNavigator: {
     title: 'Приложения Webitel',
     admin: 'Admin',
@@ -264,6 +274,13 @@ export default {
         denied: 'Запрещено',
       },
     },
+  },
+  descTrackAuthPopup: {
+    title: 'Внимание',
+    errorLabel: 'Вы не можете работать в Workspace',
+    errorDescription: 'DeskTrack не запущен, или вы не вошли в систему',
+    successLabel: 'DeskTrack успешно запущен',
+    successDescription: 'Вы можете работать в Workspace',
   },
   error: {
     general: 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',

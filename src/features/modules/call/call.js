@@ -54,11 +54,11 @@ const actions = {
   },
 
   // destructuring arg in order to skip mouse events
-  CALL: async (context, { user, number }) => {
+  CALL: async (context, { user, number, contactId }) => {
     // deprecated from 20.02.2024. remove me in 6 months
     if (user) throw new Error('{ user } param for CALL is deprecated');
 
-    const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun };
+    const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun, contactId };
     let destination;
 
     if (number) {
@@ -153,8 +153,11 @@ const actions = {
     if (call.allowHangup) {
       try {
         await call.hangup();
-        //TODO display notification by settings
       } catch {}
+
+      await context.dispatch('features/call/HANDLE_CALL_END', call, {
+        root: true,
+      });
     }
   },
 

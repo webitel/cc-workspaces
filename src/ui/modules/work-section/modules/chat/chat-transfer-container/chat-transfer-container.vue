@@ -29,7 +29,6 @@
     <template #content>
       <transfer-lookup-item
         v-for="(item, key) of dataList"
-        :id="`scroll-item-${key}`"
         :key="`${item.id}${key}`"
         :item="item"
         :size="size"
@@ -47,12 +46,12 @@
   </lookup-item-container>
 </template>
 
-<script>
-import { mapActions, mapState } from 'vuex';
+<script setup>
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../app/api/APIRepository.js';
-import infiniteScrollMixin from '../../../../../../app/mixins/infiniteScrollMixin.js';
-import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
+import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import botAvatar from '../../_shared/assets/avatars/bot-avatar.svg';
@@ -64,80 +63,86 @@ import TransferDestination from '../enums/ChatTransferDestination.enum.js';
 const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
 
-export default {
-  name: 'ChatTransferContainer',
-  components: {
-    LookupItemContainer,
-    TransferLookupItem,
-    EmptySearch,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [infiniteScrollMixin, sizeMixin],
+});
 
-  data: () => ({
-    dataList: [],
-    TransferDestination,
-    transferDestination: TransferDestination.CHATPLAN,
-    botAvatar,
-    hotkeyUnsubscribers : [],
-  }),
+const emit = defineEmits(['openTab', 'closeTab']);
 
-  computed: {
-    ...mapState('ui/userinfo', {
-      userId: (state) => state.userId,
-    }),
-  },
+const store = useStore();
 
-  methods: {
-    ...mapActions('features/chat', {
-      transfer: 'TRANSFER',
-    }),
-    async handleTransfer(item) {
-      await this.transfer({ destination: this.transferDestination, item });
-      this.$emit('openTab', 'successful-transfer');
-    },
-    fetch(params) {
-      if (this.transferDestination === TransferDestination.CHATPLAN) {
-        return this.fetchChatplans(params);
-      }
-      return this.fetchUsers(params);
-    },
-    fetchUsers(params) {
-      const userParams = {
-        filters: 'presence.status=sip,!dnd',
-        sort: 'presence.status',
-        fields: ['name', 'id', 'extension', 'presence'],
-      };
-      return usersAPI.getUsers({ ...userParams, ...params, notId: [this.userId] });
-    },
-    fetchChatplans(params) {
-      return chatplansAPI.getChatplans({ ...params, enabled: true });
-    },
-    closeTab() {
-      this.$emit('closeTab');
-    },
-    setupHotkeys() {
-      const subscribers = [
-        {
-          event: HotkeyAction.TRANSFER,
-          callback: this.closeTab,
-        },
-      ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
-    },
-  },
-  watch: {
-    transferDestination() {
-      this.resetData();
-    },
-  },
-  mounted() {
-    this.setupHotkeys();
-  },
+const transferDestination = ref(TransferDestination.CHATPLAN);
+const hotkeyUnsubscribers = ref([]);
 
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
-  },
+const userId = computed(() => store.state['ui/userinfo']?.userId);
+
+const fetchUsers = (params) => {
+  const userParams = {
+    filters: 'presence.status=sip,!dnd',
+    sort: 'presence.status',
+    fields: ['name', 'id', 'extension', 'presence'],
+  };
+  return usersAPI.getUsers({ ...userParams, ...params, notId: [userId.value] });
 };
+
+const fetchChatplans = (params) => {
+  return chatplansAPI.getChatplans({ ...params, enabled: true });
+};
+
+const fetchFn = (params) => {
+  if (transferDestination.value === TransferDestination.CHATPLAN) {
+    return fetchChatplans(params);
+  }
+  return fetchUsers(params);
+};
+
+const {
+  dataList,
+  isLoading,
+  dataSearch,
+  handleIntersect,
+  resetData,
+} = useInfiniteScroll({
+  fetchFn,
+  size: 20,
+});
+
+const handleTransfer = async (item) => {
+  await store.dispatch('features/chat/TRANSFER', {
+    destination: transferDestination.value,
+    item
+  });
+  emit('openTab', 'successful-transfer');
+};
+
+const closeTab = () => {
+  emit('closeTab');
+};
+
+const setupHotkeys = () => {
+  const subscribers = [
+    {
+      event: HotkeyAction.TRANSFER,
+      callback: closeTab,
+    },
+  ];
+  hotkeyUnsubscribers.value = useHotkeys(subscribers);
+};
+
+watch(transferDestination, () => {
+  resetData();
+});
+
+onMounted(() => {
+  setupHotkeys();
+});
+
+onUnmounted(() => {
+  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+});
 </script>
 
 <style lang="scss" scoped>

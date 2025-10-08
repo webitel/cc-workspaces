@@ -25,6 +25,16 @@ export default {
     run: 'Ejecutar',
     today: 'Hoy',
   },
+  feedback: {
+    success: {
+      title: '¡Gracias!',
+      description: 'Hemos guardado tu respuesta correctamente',
+    },
+    error: {
+      title: '¡Vaya!',
+      description: 'Algo salió mal',
+    },
+  },
   appNavigator: {
     title: 'Aplicaciones de Webitel',
     admin: 'Administrador',
@@ -262,6 +272,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Atención',
+    errorLabel: 'No puedes trabajar en Workspace',
+    errorDescription: 'DeskTrack no está en ejecución, o no has iniciado sesión',
+    successLabel: 'DeskTrack se inició con éxito',
+    successDescription: 'Puedes trabajar en Workspace',
+  },
   error: {
     general: 'Ocurrió un error. Por favor, inténtelo de nuevo.',
     websocket: {
@@ -325,7 +342,9 @@ export default {
     title: 'Confirmar acción',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Abre un menú de respuestas rápidas preestablecidas para respuestas de chat'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription:
+      'Abre un menú de respuestas rápidas preestablecidas para respuestas de chat',
+  },
 };

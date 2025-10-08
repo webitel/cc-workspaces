@@ -34,13 +34,11 @@
         </div>
       </template>
     </wt-tabs>
-    <wt-replace-transition>
       <component
         :is="`${currentTab.value}-queue`"
         :size="size"
         class="queue-section-wrapper"
       />
-    </wt-replace-transition>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
@@ -52,7 +50,6 @@
 </template>
 
 <script>
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -71,7 +68,6 @@ export default {
     ChatQueue,
     JobQueue,
     CollapseAction,
-    WtReplaceTransition,
   },
   mixins: [sizeMixin],
   props: {
