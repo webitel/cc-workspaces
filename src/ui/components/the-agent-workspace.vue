@@ -46,7 +46,8 @@
     </div>
 
     <video-container />
-    
+
+    <!-- https://webitel.atlassian.net/browse/WTEL-7256 -->
     <disconnect-popup />
   </main>
   <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
