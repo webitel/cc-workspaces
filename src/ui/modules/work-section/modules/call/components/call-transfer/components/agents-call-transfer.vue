@@ -2,6 +2,7 @@
   <call-transfer-container
     show-team-name
     type="agent"
+    show-status
     :get-data="getAgens"
     @transfer="consultationTransfer"
   >
