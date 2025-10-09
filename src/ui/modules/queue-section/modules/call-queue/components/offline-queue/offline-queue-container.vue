@@ -44,7 +44,7 @@ const props = defineProps({
 const store = useStore();
 const { subscribe } = useCachedInterval({ timeout: 15 * 1000 });
 
-const dataList = computed(() => store.state['features/member']?.memberList || []);
+const dataList = computed(() => store.state.features.member?.memberList || []);
 const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
 
 const fetchFn = async (params) => {
