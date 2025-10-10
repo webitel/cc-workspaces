@@ -1,6 +1,7 @@
 <template>
   <div class="call-transfer-container">
     <wt-tabs
+      v-if="hasCallCenterLicense"
       class="call-transfer-tabs"
       :current="currentTab"
       :tabs="tabs"
@@ -15,6 +16,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
 
 import AgentsCallTransfer from './components/agents-call-transfer.vue';
 import QueuesCallTransfer from './components/queues-call-transfer.vue';
@@ -22,6 +24,7 @@ import UsersCallTransfer from './components/users-call-transfer.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const { t } = useI18n();
+const store = useStore();
 
 interface CallTransferTabsProps {
   size: ComponentSize;
@@ -48,6 +51,8 @@ const tabs = computed(() => ([
 ]));
 
 const currentTab = ref(tabs.value[0]);
+
+const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_CENTER_LICENSE']);
 
 </script>
 
