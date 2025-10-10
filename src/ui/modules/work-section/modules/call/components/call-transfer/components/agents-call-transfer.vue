@@ -31,6 +31,8 @@ interface APIResponse {
   [key: string]: any;
 }
 
+const emits = defineEmits(['onTransfer']);
+
 const store = useStore();
 const agentsAPI = APIRepository.agents;
 
@@ -43,6 +45,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
     user: store.state['ui/userinfo'],
     number
   });
+  emits('onTransfer');
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {

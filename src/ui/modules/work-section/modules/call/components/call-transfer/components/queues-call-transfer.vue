@@ -35,6 +35,7 @@ import CallTransferContainer from '../_shared/components/call-transfer-container
 import { EngineListQueue } from '@webitel/api-services/gen';
 import { TransferParams } from '../types/transfer-tabs';
 
+const emits = defineEmits(['onTransfer']);
 
 const store = useStore();
 const queuesAPI = APIRepository.queues;
@@ -45,14 +46,17 @@ const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 const transfer = (item: QueueItem = {} as QueueItem) => {
   const calls = cli?.allCall?.();
   if (calls && calls.length > 0) {
-    return calls[0].blindTransferQueue(Number(item.id));
+    calls[0].blindTransferQueue(Number(item.id));
+    return emits('onTransfer');
+
   }
 };
 
 const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
   const calls = cli?.allCall?.();
   if (calls && calls.length > 0) {
-    return calls[0].processTransferQueue(Number(item.id));
+    calls[0].processTransferQueue(Number(item.id));
+    return emits('onTransfer');
   }
 };
 

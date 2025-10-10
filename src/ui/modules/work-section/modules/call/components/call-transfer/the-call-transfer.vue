@@ -8,6 +8,7 @@
     <component
       :is="currentTab.component"
       :size="size"
+      @onTransfer="transferClick"
     />
 </template>
 <script setup lang="ts">
@@ -26,6 +27,9 @@ interface CallTransferTabsProps {
 }
 
 defineProps<CallTransferTabsProps>();
+const emits = defineEmits(['openCall'])
+
+const transferClickCount = ref(0)
 
 const tabs = computed(() => ([
   {
@@ -46,6 +50,12 @@ const tabs = computed(() => ([
 ]));
 
 const currentTab = ref(tabs.value[0]);
+
+const transferClick = () => {
+  if (transferClickCount.value < 1) return transferClickCount.value++
+  emits('openCall')
+  return transferClickCount.value = 0
+}
 
 </script>
 

@@ -43,6 +43,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   size: ComponentSize.MD,
 });
+const emits = defineEmits(['onTransfer']);
 
 const store = useStore();
 const usersAPI = APIRepository.users;
@@ -58,6 +59,7 @@ const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } 
 const transfer = (item: UserItem = {} as UserItem) => {
   const number = item.extension || scroll.value.dataSearch?.value;
   store.dispatch('features/call/BLIND_TRANSFER', number);
+  emits('onTransfer');
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {
