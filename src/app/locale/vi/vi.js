@@ -274,6 +274,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Chú ý',
+    errorLabel: 'Bạn không thể làm việc trong Workspace',
+    errorDescription: 'DeskTrack chưa chạy hoặc bạn chưa đăng nhập',
+    successLabel: 'DeskTrack đã khởi động thành công',
+    successDescription: 'Bạn có thể làm việc trong Workspace',
+  },
   error: {
     general: 'Đã xảy ra lỗi. Vui lòng thử lại.',
     websocket: {

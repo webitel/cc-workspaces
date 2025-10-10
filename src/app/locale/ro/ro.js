@@ -275,6 +275,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Atenție',
+    errorLabel: 'Nu puteți lucra în Workspace',
+    errorDescription: 'DeskTrack nu rulează sau nu sunteți autentificat',
+    successLabel: 'DeskTrack a fost lansat cu succes',
+    successDescription: 'Puteți lucra în Workspace',
+  },
   error: {
     general: 'A apărut o eroare. Vă rugăm să încercați din nou.',
     websocket: {

@@ -49,20 +49,11 @@ const actions = {
     }
   },
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
-    const isJobEndPushNotification = context.rootGetters[
-      'features/notifications/GET_NOTIFICATION_SETTING'
-    ](EngineSystemSettingName.TaskEndPushNotification);
-    const isJobEndSoundNotification = context.rootGetters[
-      'features/notifications/GET_NOTIFICATION_SETTING'
-    ](EngineSystemSettingName.TaskEndSoundNotification);
-
-    if (isJobEndSoundNotification) {
-      context.dispatch(
-        'features/notifications/PLAY_SOUND',
-        { action },
-        { root: true },
-      );
-    }
+    context.dispatch(
+      'features/notifications/PLAY_SOUND',
+      { action },
+      { root: true },
+    );
 
     if (
       !document.hasFocus() &&
@@ -72,16 +63,14 @@ const actions = {
       const text = i18n.global.t(`notifications.${snakeToCamel(action)}`, {
         name,
       });
-      if (isJobEndPushNotification) {
-        eventBus.$emit('notification', {
-          type: 'info',
-          text,
-          timeout:
-            context.rootGetters[
-              'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
-            ],
-        });
-      }
+      eventBus.$emit('notification', {
+        type: 'info',
+        text,
+        timeout:
+          context.rootGetters[
+            'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
+          ],
+      });
     }
     context.dispatch('features/notifications/INCREMENT_UNREAD_COUNT', null, {
       root: true,

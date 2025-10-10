@@ -11,7 +11,8 @@
         :processing-timeout-at="task.attempt.processingTimeoutAt"
         :processing-sec="task.attempt.processingSec"
         :renewal-sec="task.attempt.renewalSec"
-        @click="task.attempt.renew()"
+        :processing="processing"
+        @click="renewProcessing"
       ></processing-timer>
     </div>
     <footer class="processing-actions">
@@ -20,23 +21,33 @@
   </article>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
+import applyTransform, {
+  snakeToCamel,
+} from '@webitel/ui-sdk/src/api/transformers/index.js';
 import ProcessingTimer from './timer/processing-timer.vue';
 
-export default {
-  name: 'ProcessingWrapper',
-  components: { ProcessingTimer },
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    showTimer() {
-      return this.task.attempt?.processingSec;
-    },
-  },
+});
+
+const showTimer = computed(() => {
+  return props.task.attempt?.processingSec;
+});
+
+
+//NOTE: this is needed to convert _processing keys from snake_case to camelCase
+//https://webitel.atlassian.net/browse/WTEL-5536
+const processing = computed(() => {
+  return applyTransform(props.task.task._processing, [snakeToCamel()]);
+});
+
+const renewProcessing = (prolongationSec) => {
+  props.task.attempt.renew(prolongationSec);
 };
 </script>
 
@@ -54,8 +65,7 @@ export default {
 }
 
 .processing-timer {
-  display: flex;
-  justify-content: center;
+  align-items: center;
   padding-top: var(--spacing-sm);
 }
 
