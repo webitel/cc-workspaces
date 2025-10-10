@@ -1,7 +1,8 @@
 <template>
+  <div class="call-transfer-container">
     <wt-tabs
       v-if="hasCallCenterLicense"
-      class="transfer-tabs"
+      class="call-transfer-tabs"
       :current="currentTab"
       :tabs="tabs"
       @change="currentTab = $event"
@@ -10,6 +11,7 @@
       :is="currentTab.component"
       :size="size"
     />
+  </div>
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
@@ -55,10 +57,21 @@ const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_C
 </script>
 
 <style scoped lang="scss">
-  .transfer-tabs {
+.call-transfer {
+
+  &-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--spacing-xs);
+  }
+
+  &-tabs {
     display: grid;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
     margin-bottom: var(--spacing-sm);
   }
+
+}
 </style>
