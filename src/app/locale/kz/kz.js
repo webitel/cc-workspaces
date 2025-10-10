@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Кіріс қоңыраулар',
+    callInboundQueue: 'Кіру кезегінен қоңыраулар',
+    callDialerQueue: 'Дайлерден барлық қоңыраулар',
+    callManual: 'Қолмен қоңыраулар',
     callHandled: 'Қоңыраулар өңделді',
     callMissed: 'Қабылданбаған қоңыраулар',
+    callQueueMissed: 'Кезектен жіберілген қоңыраулар',
     avgTalk: 'Орташа сөйлесу уақыты',
     avgHold: 'Орташа ұстап тұру уақыты',
     utilization: 'Утилизация',

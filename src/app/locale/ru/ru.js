@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Входящих звонков',
+    callInboundQueue: 'Звонки из входящих очередей',
+    callDialerQueue: 'Все звонки из дайлеров',
+    callManual: 'Ручные звонки',
     callHandled: 'Обработано звонков',
     callMissed: 'Пропущено звонков',
+    callQueueMissed: 'Пропущенные звонки из очередей',
     avgTalk: 'Среднее время разговора',
     avgHold: 'Среднее время удержания',
     utilization: 'Утилизация',
