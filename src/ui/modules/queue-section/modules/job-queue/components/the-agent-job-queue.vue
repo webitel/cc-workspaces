@@ -51,7 +51,6 @@ import { JobState } from 'webitel-sdk';
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 
-//TODO: do it similarly as in chats, so that it is not a common component with chats, jobs and calls, because https://webitel.atlassian.net/browse/WTEL-5273?focusedCommentId=700057
 import ActiveQueue from './active/job-queue-container.vue';
 
 const props = defineProps({

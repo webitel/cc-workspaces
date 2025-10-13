@@ -1,18 +1,16 @@
 <template>
-  <chat-queue-preview-md
+  <task-queue-preview-md
     v-if="size === 'md'"
-    :task="task"
-    :status="ChatStatus.NEW"
     :opened="opened"
+    :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
-    <template #icon="{ iconColor }">
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
-        :color="iconColor"
-        size="md"
       />
     </template>
+
     <template #title>
       {{ task.displayName }}
     </template>
@@ -25,7 +23,7 @@
       {{ wait }}
     </template>
 
-    <template #actions>
+    <template #quick-action>
       <wt-rounded-action
         size="md"
         color="transfer"
@@ -35,13 +33,18 @@
         @click="accept(task)"
       />
     </template>
-  </chat-queue-preview-md>
 
-  <chat-queue-preview-sm
+    <template #footer>
+      <manual-deadline-progress-bar
+        :deadline="task.deadline"
+      />
+    </template>
+  </task-queue-preview-md>
+
+  <task-queue-preview-sm
     v-else-if="size === 'sm'"
-    :task="task"
     :opened="opened"
-    :status="ChatStatus.NEW"
+    :queue-name="task.queue.name"
     @click="emit('click', task)"
   >
     <template #icon>
@@ -79,7 +82,7 @@
         :deadline="task.deadline"
       />
     </template>
-  </chat-queue-preview-sm>
+  </task-queue-preview-sm>
 </template>
 
 <script setup>
@@ -87,10 +90,9 @@ import { computed, ref } from 'vue';
 
 import ManualDeadlineProgressBar
   from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
-import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
-import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
+import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {

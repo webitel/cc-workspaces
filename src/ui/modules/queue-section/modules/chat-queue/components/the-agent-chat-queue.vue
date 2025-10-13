@@ -50,7 +50,6 @@ import { ConversationState } from 'webitel-sdk';
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 
-//these components have a different appearance than jobs and calls because https://webitel.atlassian.net/browse/WTEL-5273?focusedCommentId=700057
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import ClosedQueue from './closed-queue/closed-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
