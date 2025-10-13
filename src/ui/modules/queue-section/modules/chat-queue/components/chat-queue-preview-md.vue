@@ -21,7 +21,7 @@
               :icon="opened ? 'chat--filled': 'chat'"
               size="md"
               class="chat-queue-preview-md__icon--opened"
-              :color="CHAT_STATUS_COLORS[status] || 'secondary'"
+              :color="CHAT_COLORS[status] || 'secondary'"
             />
           </div>
         </div>
@@ -72,7 +72,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { CHAT_STATUS_COLORS, ChatStatus } from '../enums/ChatStatus.enum';
+import { CHAT_COLORS, ChatTypes } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {
@@ -107,12 +107,12 @@ const queueName = computed(() => props.task?.queue?.name || '');
 
 const showIcon = computed(() => {
   // Manual chats don't show icon in default state
-  return props.status !== ChatStatus.MANUAL || props.opened;
+  return props.status !== ChatTypes.MANUAL || props.opened;
 });
 
 const iconColor = computed(() => {
   if (props.opened) {
-    return CHAT_STATUS_COLORS[props.status] || 'secondary';
+    return CHAT_COLORS[props.status] || 'secondary';
   }
   return 'secondary';
 });

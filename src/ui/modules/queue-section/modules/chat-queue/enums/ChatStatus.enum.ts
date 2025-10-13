@@ -4,8 +4,7 @@
  */
 export const ChatStatus = {
   NEW: 'new',
-  ACTIVE: 'active', 
-  MANUAL: 'manual',
+  ACTIVE: 'active',
   CLOSED: 'closed',
 } as const;
 
@@ -14,13 +13,17 @@ export const ChatStatus = {
  */
 export type ChatStatusType = typeof ChatStatus[keyof typeof ChatStatus];
 
+export const ChatTypes = {
+  MANUAL: 'manual',
+}
+
 /**
  * Chat status colors mapping
  * Maps each status to its corresponding color
  */
-export const CHAT_STATUS_COLORS = {
+export const CHAT_COLORS = {
   [ChatStatus.NEW]: 'success',
   [ChatStatus.ACTIVE]: 'warning',
-  [ChatStatus.MANUAL]: 'secondary',
+  [ChatTypes.MANUAL]: 'secondary',
   [ChatStatus.CLOSED]: 'secondary',
 } as const;

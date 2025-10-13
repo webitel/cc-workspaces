@@ -18,7 +18,7 @@
           :icon="opened ? 'chat--filled': 'chat'"
           size="sm"
           class="chat-queue-preview-sm__icon--opened"
-          :color="CHAT_STATUS_COLORS[status]"
+          :color="CHAT_COLORS[status]"
         />
 
       </div>
@@ -106,7 +106,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { CHAT_STATUS_COLORS } from '../enums/ChatStatus.enum';
+import { CHAT_COLORS } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {
