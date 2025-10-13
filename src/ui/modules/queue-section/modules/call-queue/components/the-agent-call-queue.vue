@@ -51,6 +51,8 @@ import { useStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+
+//TODO: do it similarly as in chats, so that it is not a common component with chats, jobs and calls, because https://webitel.atlassian.net/browse/WTEL-5273?focusedCommentId=700057
 import ActiveQueue from './active-queue/active-queue-container.vue';
 import ManualQueue from './manual-queue/manual-queue-container.vue';
 import MissedQueue from './missed-queue/missed-queue-container.vue';
