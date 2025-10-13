@@ -1,13 +1,13 @@
 <template>
   <article
     :class="[
-      { 'chat-queue-preview-sm--selected': opened },
+      { 'chat-queue-preview-sm--opened': opened },
       `chat-queue-preview-sm--${status}`,
     ]"
     class="chat-queue-preview-sm"
     tabindex="0"
-    @click="$emit('click')"
-    @keydown.enter="$emit('click')"
+    @click="emit('click')"
+    @keydown.enter="emit('click')"
   >
 
     <header class="chat-queue-preview-sm__header">
@@ -17,7 +17,7 @@
         <wt-icon
           :icon="opened ? 'chat--filled': 'chat'"
           size="sm"
-          class="chat-queue-preview-sm__icon--selected"
+          class="chat-queue-preview-sm__icon--opened"
           :color="CHAT_STATUS_COLORS[status]"
         />
 
@@ -157,7 +157,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
     transform: translateY(-1px);
   }
 
-  &--selected {
+  &--opened {
     border-color: var(--current-border-color);
     outline: 2px solid var(--current-border-color);
     outline-offset: 2px;
@@ -210,7 +210,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
   &--new {
     border-color: var(--success-color);
 
-    &.chat-queue-preview-sm--selected {
+    &.chat-queue-preview-sm--opened {
       border-color: var(--success-color);
       outline-color: var(--success-color);
     }
@@ -219,7 +219,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
   &--active {
     border-color: var(--warning-color);
 
-    &.chat-queue-preview-sm--selected {
+    &.chat-queue-preview-sm--opened {
       border-color: var(--warning-color);
       outline-color: var(--warning-color);
     }
@@ -228,7 +228,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
   &--manual {
     border-color: var(--secondary-color);
 
-    &.chat-queue-preview-sm--selected {
+    &.chat-queue-preview-sm--opened {
       border-color: var(--secondary-color);
       outline-color: var(--secondary-color);
     }
@@ -237,7 +237,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
   &--closed {
     border-color: var(--secondary-color);
 
-    &.chat-queue-preview-sm--selected {
+    &.chat-queue-preview-sm--opened {
       border-color: var(--secondary-color);
       outline-color: var(--secondary-color);
     }

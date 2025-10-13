@@ -4,12 +4,12 @@
       'chat-queue-preview-md',
       `chat-queue-preview-md--${status}`,
       {
-        'chat-queue-preview-md--selected': opened,
+        'chat-queue-preview-md--opened': opened,
       }
     ]"
     tabindex="0"
-    @click="$emit('click', task)"
-    @keydown.enter="$emit('click', task)"
+    @click="emit('click', task)"
+    @keydown.enter="emit('click', task)"
   >
 
     <div class="chat-queue-preview-md__content">
@@ -20,7 +20,7 @@
             <wt-icon
               :icon="opened ? 'chat--filled': 'chat'"
               size="md"
-              class="chat-queue-preview-md__icon--selected"
+              class="chat-queue-preview-md__icon--opened"
               :color="CHAT_STATUS_COLORS[status] || 'secondary'"
             />
           </div>
@@ -152,7 +152,7 @@ const iconColor = computed(() => {
     background: var(--content-wrapper-hover-color);
   }
 
-  &--selected {
+  &--opened {
     border-color: var(--current-border-color);
     outline: 2px solid var(--current-border-color);
 
@@ -182,8 +182,6 @@ const iconColor = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
   flex-shrink: 0;
   margin-top: 2px;
 
@@ -191,8 +189,6 @@ const iconColor = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
     flex-shrink: 0;
   }
 
