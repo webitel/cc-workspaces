@@ -32,6 +32,12 @@
           </div>
         </div>
       </div>
+      <div
+        v-if="statusComment"
+        class="break-timer-popup__status-comment"
+      >
+        {{ statusComment }}
+      </div>
     </template>
     <template #actions>
       <wt-button
@@ -104,6 +110,9 @@ export default {
         ? this.agent.statusPayload
         : this.$t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`);
     },
+    statusComment () {
+      return this.agent.info?.status_comment
+    }
   },
 
   methods: {
@@ -166,5 +175,11 @@ export default {
   @extend %typo-subtitle-2;
   text-align: center;
   color: var(--primary-on-color);
+}
+
+.break-timer-popup__status-comment {
+  margin-top: var(--spacing-sm);
+  max-height: 80px;
+  overflow: auto;
 }
 </style>
