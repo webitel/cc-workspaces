@@ -113,9 +113,9 @@ const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const tabs = computed(() => {
 
-  const callCount = window.cli ? cli?.allCall?.()?.length : 0;
-  const chatCount = window.cli ? cli?.allConversations?.()?.length : 0;
-  const jobCount = window.cli ? cli?.allJob?.()?.length : 0;
+  const callCount = callList.value.length || 0;
+  const chatCount = chatList.value.length || 0;
+  const jobCount = jobList.value.length || 0;
 
 
   return [
