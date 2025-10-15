@@ -2,7 +2,7 @@
   <chat-queue-preview-md
     v-if="size === 'md'"
     :task="task"
-    :status="ChatStatus.NEW"
+    :status="ChatStatus.New"
     :opened="opened"
     @click="emit('click', task)"
   >
@@ -41,7 +41,7 @@
     v-else-if="size === 'sm'"
     :task="task"
     :opened="opened"
-    :status="ChatStatus.NEW"
+    :status="ChatStatus.New"
     @click="emit('click', task)"
   >
     <template #icon>

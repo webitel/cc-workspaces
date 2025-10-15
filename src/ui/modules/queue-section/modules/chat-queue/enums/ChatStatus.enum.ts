@@ -3,9 +3,9 @@
  * Defines possible states for chat queue preview components
  */
 export const ChatStatus = {
-  NEW: 'new',
-  ACTIVE: 'active',
-  CLOSED: 'closed',
+  New: 'new',
+  Active: 'active',
+  Closed: 'closed',
 } as const;
 
 /**
@@ -14,16 +14,16 @@ export const ChatStatus = {
 export type ChatStatusType = typeof ChatStatus[keyof typeof ChatStatus];
 
 export const ChatTypes = {
-  MANUAL: 'manual',
+  Manual: 'manual',
 }
 
 /**
  * Chat status colors mapping
  * Maps each status to its corresponding color
  */
-export const CHAT_COLORS = {
-  [ChatStatus.NEW]: 'success',
-  [ChatStatus.ACTIVE]: 'warning',
-  [ChatTypes.MANUAL]: 'secondary',
-  [ChatStatus.CLOSED]: 'secondary',
+export const ChatColorsMap = {
+  [ChatStatus.New]: 'success',
+  [ChatStatus.Active]: 'warning',
+  [ChatStatus.Closed]: 'secondary',
+  [ChatTypes.Manual]: 'secondary',
 } as const;

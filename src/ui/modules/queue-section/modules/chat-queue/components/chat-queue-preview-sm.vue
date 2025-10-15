@@ -17,8 +17,7 @@
         <wt-icon
           :icon="opened ? 'chat--filled': 'chat'"
           size="sm"
-          class="chat-queue-preview-sm__icon--opened"
-          :color="CHAT_COLORS[status]"
+          :color="ChatColorsMap[status]"
         />
 
       </div>
@@ -41,19 +40,16 @@
         <div class="chat-queue-preview-sm__tooltip-content">
           <span
             v-if="$slots['tooltip-title']"
-            class="chat-queue-preview-sm__tooltip-title"
           >
             <slot name="tooltip-title"></slot>
           </span>
           <span
             v-if="$slots['tooltip-subtitle']"
-            class="chat-queue-preview-sm__tooltip-subtitle"
           >
             <slot name="tooltip-subtitle"></slot>
           </span>
           <div
             v-if="queueName"
-            class="chat-queue-preview-sm__tooltip-chips"
           >
             <wt-chip color="secondary">
               {{ queueName }}
@@ -106,7 +102,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { CHAT_COLORS } from '../enums/ChatStatus.enum';
+import { ChatColorsMap } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {
@@ -262,7 +258,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
 .chat-queue-preview-sm__tooltip-content {
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  max-width: var(--ws-task-queue-tooltip-max-width-sm);
   gap: var(--spacing-2xs);
 }
 

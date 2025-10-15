@@ -63,14 +63,16 @@
 </template>
 
 <script>
+import { ConversationState } from 'webitel-sdk';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
-import { ConversationState } from 'webitel-sdk';
-import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 export default {
   name: 'ActiveQueuePreview',
@@ -89,11 +91,11 @@ export default {
     chatStatus() {
       // Check if chat is closed
       if (this.task.closedAt && this.task.closeReason) {
-        return ChatStatus.CLOSED;
+        return ChatStatus.Closed;
       }
 
       // Check if chat is new (invite state) or active
-      return this.task.state === ConversationState.Invite ? ChatStatus.NEW : ChatStatus.ACTIVE;
+      return this.task.state === ConversationState.Invite ? ChatStatus.New : ChatStatus.Active;
     }
   },
 };

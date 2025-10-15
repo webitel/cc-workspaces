@@ -11,21 +11,20 @@
     @click="emit('click', task)"
     @keydown.enter="emit('click', task)"
   >
-
-    <div class="chat-queue-preview-md__content">
-      <div class="chat-queue-preview-md__header">
-        <div class="chat-queue-preview-md__icon">
+    <div class="chat-queue-preview-md-content">
+      <div class="chat-queue-preview-md-header">
+        <div class="chat-queue-preview-md-header__icon">
           <div class="queue-preview-icon">
             <slot name="close-icon"></slot>
             <wt-icon
-              :icon="opened ? 'chat--filled': 'chat'"
+              :icon="opened ? 'chat--filled' : 'chat'"
               size="md"
-              class="chat-queue-preview-md__icon--opened"
-              :color="CHAT_COLORS[status] || 'secondary'"
+              :color="ChatColorsMap[status] || 'secondary'"
             />
           </div>
         </div>
-        <div class="chat-queue-preview-md__icon--messenger">
+
+        <div class="chat-queue-preview-md-header__icon--messenger">
           <slot name="icon" :iconColor="iconColor">
             <wt-icon
               v-if="showIcon"
@@ -35,44 +34,43 @@
             />
           </slot>
         </div>
-        <h3 class="chat-queue-preview-md__title">
+
+        <h3 class="chat-queue-preview-md-header__title">
           <slot name="title">{{ title }}</slot>
         </h3>
-        <div class="chat-queue-preview-md__timer">
+
+        <div class="chat-queue-preview-md-header__timer">
           <slot name="timer"></slot>
         </div>
       </div>
 
-      <div class="chat-queue-preview-md__body">
-        <div class="chat-queue-preview-md__body-content">
-          <p class="chat-queue-preview-md__subtitle">
+      <div class="chat-queue-preview-md-body">
+        <div class="chat-queue-preview-md-body__content">
+          <p class="chat-queue-preview-md-body__subtitle">
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
-          <div class="chat-queue-preview-md__queue">
-            <wt-chip
-              v-if="queueName"
-              color="secondary"
-              size="sm"
-            >
+          <div class="chat-queue-preview-md-body__queue">
+            <wt-chip v-if="queueName" color="secondary" size="sm">
               {{ queueName }}
             </wt-chip>
           </div>
         </div>
-        <div class="chat-queue-preview-md__body-icons">
+
+        <div class="chat-queue-preview-md-body__icons">
           <slot name="icon-status"></slot>
         </div>
       </div>
     </div>
 
-    <div class="chat-queue-preview-md__actions">
+    <div class="chat-queue-preview-md-actions">
       <slot name="actions"></slot>
     </div>
   </article>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { CHAT_COLORS, ChatTypes } from '../enums/ChatStatus.enum';
+import { computed } from 'vue'
+import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum'
 
 const props = defineProps({
   task: {
@@ -112,7 +110,7 @@ const showIcon = computed(() => {
 
 const iconColor = computed(() => {
   if (props.opened) {
-    return CHAT_COLORS[props.status] || 'secondary';
+    return ChatColorsMap[props.status] || 'secondary';
   }
   return 'secondary';
 });
@@ -135,15 +133,12 @@ const iconColor = computed(() => {
   &--new {
     border-color: var(--success-color);
   }
-
   &--active {
     border-color: var(--warning-color);
   }
-
   &--manual {
     border-color: var(--secondary-color);
   }
-
   &--closed {
     border-color: var(--secondary-color);
   }
@@ -159,15 +154,11 @@ const iconColor = computed(() => {
     &.chat-queue-preview-md--new {
       --current-border-color: var(--success-color);
     }
-
     &.chat-queue-preview-md--active {
-      --current-border-color: var(--warning-color);
-    }
-
+      --current-border-color: var(--warning-color); }
     &.chat-queue-preview-md--manual {
       --current-border-color: var(--secondary-color);
     }
-
     &.chat-queue-preview-md--closed {
       --current-border-color: var(--secondary-color);
     }
@@ -178,87 +169,79 @@ const iconColor = computed(() => {
   }
 }
 
-.chat-queue-preview-md__icon {
+.chat-queue-preview-md-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
 
-  &--messenger {
+  &__icon,
+  &__icon--messenger {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
 
+  &__title {
+    @extend %typo-subtitle-2;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  &__timer {
+    @extend %typo-body-2;
+    flex-shrink: 0;
+  }
 }
 
-.chat-queue-preview-md__content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2xs);
-}
-
-.chat-queue-preview-md__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-xs);
-}
-
-.chat-queue-preview-md__title {
-  @extend %typo-subtitle-2;
-  margin: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  flex: 1;
-}
-
-.chat-queue-preview-md__timer {
-  @extend %typo-body-2;
-  flex-shrink: 0;
-}
-
-.chat-queue-preview-md__body {
+.chat-queue-preview-md-body {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: var(--spacing-sm);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__icons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xs);
+    flex-shrink: 0;
+  }
+
+  &__subtitle {
+    @extend %typo-body-2;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__queue {
+    display: flex;
+    align-items: center;
+  }
 }
 
-.chat-queue-preview-md__body-content {
+.chat-queue-preview-md-content {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2xs);
-  flex: 1;
-  min-width: 0;
 }
 
-.chat-queue-preview-md__body-icons {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2xs);
-  flex-shrink: 0;
-}
-
-.chat-queue-preview-md__subtitle {
-  @extend %typo-body-2;
-  margin: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.chat-queue-preview-md__queue {
-  display: flex;
-  align-items: center;
-}
-
-.chat-queue-preview-md__actions {
+.chat-queue-preview-md-actions {
   display: flex;
   align-items: center;
   gap: var(--spacing-2xs);
@@ -266,12 +249,9 @@ const iconColor = computed(() => {
 }
 
 .chat-queue-preview-md__close-btn {
-  opacity: 0;
-  transition: var(--transition);
+  opacity: 0; transition: var(--transition);
 }
-
 .chat-queue-preview-md:hover .chat-queue-preview-md__close-btn {
   opacity: 1;
 }
-
 </style>

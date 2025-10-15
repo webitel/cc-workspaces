@@ -3,7 +3,7 @@
     v-if="size === 'md'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :task="task"
-    :status="ChatStatus.CLOSED"
+    :status="ChatStatus.Closed"
     :opened="opened"
     class="closed-queue-preview"
     @click="$emit('click', task)"
@@ -51,7 +51,7 @@
     :class="[{ 'closed-queue-preview--processed': processed }]"
     :task="task"
     :opened="opened"
-    :status="ChatStatus.CLOSED"
+    :status="ChatStatus.Closed"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
