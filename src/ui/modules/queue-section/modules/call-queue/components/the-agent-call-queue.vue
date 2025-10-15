@@ -11,8 +11,8 @@
       class="task-queue-item"
       :size="size"
       :collapsed="initiallyCollapsed"
-      @opened="cacheExpansionState({expansion: value, state: true })"
-      @closed="cacheExpansionState({expansion: value, state: false })"
+      @opened="handleExpansionChange(value, true)"
+      @closed="handleExpansionChange(value, false)"
     >
       <template #title>
 <!--         title is for tooltip -->
@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted } from 'vue';
+import { computed, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 
@@ -81,12 +81,38 @@ const membersList = computed(() => store.state.features.member.memberList);
 
 const ringingCallsCount = computed(() => callList.value.filter((call) => call.state === CallActions.Ringing).length);
 const activeCallsCount = computed(() => callList.value.length - ringingCallsCount.value);
+const allActiveCalls = computed(() => activeCallsCount.value + ringingCallsCount.value);
+
+// This is to keep track of which tabs are open and which
+// are closed, because the expand component doesn't tell you about this
+const expansionStates = ref({
+  active: restoreExpansionState({ expansion: 'active' }),
+  missed: restoreExpansionState({ expansion: 'missed' }),
+  offline: restoreExpansionState({ expansion: 'offline' }),
+  manual: restoreExpansionState({ expansion: 'manual' }),
+});
+
+// Computed properties to track which chat queue sections are currently expanded
+const isActiveExpanded = computed(() => expansionStates.value.active);
+const isMissedExpanded = computed(() => expansionStates.value.missed);
+const isOfflineExpanded = computed(() => expansionStates.value.offline);
+const isManualExpanded = computed(() => expansionStates.value.manual);
+
+// Updates expansion state and saves it to localStorage
+const handleExpansionChange = (expansion, state) => {
+  expansionStates.value[expansion] = state;
+  cacheExpansionState({ expansion, state });
+};
 
 const expansions = computed(() => [
   {
     value: 'active',
     initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
     counters: [
+      {
+        color: 'secondary',
+        count: !isActiveExpanded.value ? allActiveCalls.value : 0,
+      },
       { color: 'main', count: activeCallsCount.value },
       { color: 'success', count: ringingCallsCount.value },
     ].filter(({ count }) => count),

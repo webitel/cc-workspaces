@@ -13,7 +13,7 @@
     <wt-tabs
       :current="currentTab"
       :tabs="tabs"
-      class="queue-section-tabs"
+      class="queue-section__tabs"
       @change="currentTab = $event"
     >
       <template
@@ -21,24 +21,43 @@
         :key="key"
         #[tab.value]
       >
-        <div class="queue-section-tab-wrapper">
-          <wt-badge
-            v-show="tab.value !== currentTab.value && tab.showIndicator"
-            :color-variable="`${tab.iconColor}-color`"
-          />
-          <wt-icon
-            :color="tab.iconColor"
-            :icon="tab.icon"
-            :size="size"
-          />
+        <div
+          class="queue-section__tab-content"
+          :class="{ 'queue-section__tab-content--sm': size === ComponentSize.SM }"
+        >
+          <span class="queue-section__count-indicator">
+            <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
+            <wt-chip
+              v-if="tab.count && tab.hasIncoming"
+              color="success"
+              class="queue-section__count queue-section__count--incoming"
+            >
+              {{ tab.count }}
+            </wt-chip>
+          </span>
+          <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
+
+          <span class="queue-section__count-indicator">
+            <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
+            <wt-chip
+              v-if="tab.count && !tab.hasIncoming"
+              color="primary"
+              class="queue-section__count queue-section__count--active"
+            >
+              {{ tab.count }}
+            </wt-chip>
+          </span>
         </div>
+
       </template>
     </wt-tabs>
+    <keep-alive>
       <component
-        :is="`${currentTab.value}-queue`"
+        :is="currentTab.component"
         :size="size"
-        class="queue-section-wrapper"
+        class="queue-section__wrapper"
       />
+    </keep-alive>
     <wt-rounded-action
       :icon="isNewCallButton ? 'call-ringing' : 'close'"
       color="success"
@@ -49,121 +68,109 @@
   </section>
 </template>
 
-<script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+<script setup>
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
-import sizeMixin from '../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 
-export default {
-  name: 'TheAgentQueueSection',
-  components: {
-    CallQueue,
-    ChatQueue,
-    JobQueue,
-    CollapseAction,
+const props = defineProps({
+  collapsed: {
+    type: Boolean,
+    default: false,
   },
-  mixins: [sizeMixin],
-  props: {
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
-    collapsible: {
-      type: Boolean,
-      default: false,
-    },
+  collapsible: {
+    type: Boolean,
+    default: false,
   },
-  data: () => ({
-    currentTab: {},
-    hotkeyUnsubscribers : [],
-  }),
-  computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
-    ...mapState('features/call/manual', {
-      manualCallsList: (state) => state.manualList,
-    }),
-    ...mapState('features/chat', {
-      chatList: (state) => state.chatList,
-    }),
-    ...mapState('features/chat/manual', {
-      manualChatList: (state) => state.manualList,
-    }),
-    ...mapState('features/job', {
-      jobList: (state) => state.jobList,
-    }),
-    ...mapGetters('workspace', {
-      isCallWorkspace: 'IS_CALL_WORKSPACE',
-    }),
-    ...mapGetters('features/call', {
-      isNewCall: 'IS_NEW_CALL',
-    }),
-    tabs() {
-      return [
-        {
-          value: 'call',
-          icon: 'call',
-          iconColor: 'success',
-          showIndicator: this.callList.some(({ state }) => state === CallActions.Ringing) || this.manualCallsList.length,
-        },
-        {
-          value: 'chat',
-          icon: 'chat',
-          iconColor: 'chat',
-          showIndicator: this.chatList.some(({ state }) => state === ConversationState.Invite) || this.manualChatList.length,
-        },
-        {
-          value: 'job',
-          icon: 'job',
-          iconColor: 'job',
-          showIndicator: this.jobList.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
-        },
-      ];
-    },
-    isNewCallButton() {
-      return !this.isNewCall || !this.isCallWorkspace;
-    },
+  size: {
+    type: ComponentSize,
+    default: ComponentSize.MD,
   },
+});
 
-  methods: {
-    ...mapActions('features/call', {
-      openNewCall: 'OPEN_NEW_CALL',
-      closeNewCall: 'CLOSE_NEW_CALL',
-    }),
-    toggleNewCall() {
-      return this.isNewCallButton ? this.openNewCall() : this.closeNewCall();
+const emit = defineEmits(['resize']);
+
+const store = useStore();
+const currentTab = ref({});
+const hotkeyUnsubscribers = ref([]);
+
+const callList = computed(() => store.state.features?.call?.callList || []);
+const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
+const chatList = computed(() => store.state.features?.chat?.chatList || []);
+const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
+const jobList = computed(() => store.state.features?.job?.jobList || []);
+
+const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+
+const tabs = computed(() => {
+
+  const callCount = callList.value.length || 0;
+  const chatCount = chatList.value.length || 0;
+  const jobCount = jobList.value.length || 0;
+
+
+  return [
+    {
+      value: 'call',
+      icon: 'call',
+      iconColor: 'success',
+      count: callCount,
+      component: CallQueue,
+      hasIncoming: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
     },
-    setupHotkeys() {
-      const subscripers = [
-        {
-          event: HotkeyAction.NEW_CALL,
-          callback: this.toggleNewCall,
-        },
-      ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscripers);
+    {
+      value: 'chat',
+      icon: 'chat',
+      iconColor: 'chat',
+      count: chatCount,
+      component: ChatQueue,
+      hasIncoming: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
     },
-  },
+    {
+      value: 'job',
+      icon: 'job',
+      iconColor: 'job',
+      count: jobCount,
+      component: JobQueue,
+      hasIncoming: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
+    }
+  ]
+});
 
-  created() {
-    this.currentTab = this.tabs[0];
-  },
+const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
 
-  mounted() {
-    this.setupHotkeys();
-  },
+const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
+const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
 
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
-  },
+const toggleNewCall = () => isNewCallButton.value ? openNewCall() : closeNewCall();
+
+const setupHotkeys = () => {
+  const subscribers = [
+    {
+      event: HotkeyAction.NEW_CALL,
+      callback: toggleNewCall,
+    },
+  ];
+  hotkeyUnsubscribers.value = useHotkeys(subscribers);
 };
+
+onMounted(() => {
+  currentTab.value = tabs.value[0];
+  setupHotkeys();
+});
+
+onUnmounted(() => {
+  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+});
 </script>
 
 <style lang="scss" scoped>
@@ -179,10 +186,12 @@ export default {
 
   &--md {
     flex: 0 0 320px;
+    max-width: 320px;
   }
 
   &--sm {
     flex: 0 0 132px;
+    max-width: 132px;
   }
 
   .wt-rounded-action {
@@ -200,17 +209,58 @@ export default {
 }
 
 // increase specificity
-.queue-section-tabs.wt-tabs {
+.queue-section__tabs.wt-tabs {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
 }
 
-.queue-section-tab-wrapper {
-  position: relative;
+//TODO value for count indicator, which should be different
+// after adding badge with primevue, need delete this
+$indicator-width: 30px;
+$indicator-height: 24px;
+
+.queue-section__tab-content {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+
+  //TODO after adding badge with primevue, need delete this
+  grid-template-columns: $indicator-width auto $indicator-width;
+
+  &--sm {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2xs);
+
+    .queue-section__count-indicator {
+      order: -1;
+    }
+  }
 }
 
-.queue-section-wrapper {
+.queue-section__count-indicator {
+  //TODO after adding badge with primevue, need delete this
+  width: $indicator-width;
+  height: $indicator-height;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.queue-section__count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //TODO after adding badge with primevue, need delete this
+  min-width: $indicator-width;
+  height: $indicator-height;
+}
+
+
+.queue-section__wrapper {
   flex-grow: 1;
 }
 </style>

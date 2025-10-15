@@ -11,8 +11,8 @@
       class="task-queue-item"
       :collapsed="initiallyCollapsed"
       :size="size"
-      @closed="cacheExpansionState({expansion: value, state: false })"
-      @opened="cacheExpansionState({expansion: value, state: true })"
+      @closed="handleExpansionChange(value, false)"
+      @opened="handleExpansionChange(value, true)"
     >
       <template #title>
         <span
@@ -44,9 +44,9 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import { ChatActions, ConversationState } from 'webitel-sdk';
+import { ConversationState } from 'webitel-sdk';
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 
@@ -77,13 +77,38 @@ const manualList = computed(() => store.state.features.chat.manual.manualList);
 
 const invitedChats = computed(() => chatList.value.filter((chat) => chat.state === ConversationState.Invite));
 
-const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ConversationState.Invite));
+const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ConversationState.Invite))
+
+const allActiveChats = computed(() => invitedChats.value.length + activeChats.value.length)
+
+// This is to keep track of which tabs are open and which
+// are closed, because the expand component doesn't tell you about this
+const expansionStates = ref({
+  active: restoreExpansionState({ expansion: 'active' }),
+  manual: restoreExpansionState({ expansion: 'manual' }),
+  closed: restoreExpansionState({ expansion: 'closed' }),
+});
+
+// Computed properties to track which chat queue sections are currently expanded
+const isActiveExpanded = computed(() => expansionStates.value.active);
+const isManualExpanded = computed(() => expansionStates.value.manual);
+const isClosedExpanded = computed(() => expansionStates.value.closed);
+
+// Updates expansion state and saves it to localStorage
+const handleExpansionChange = (expansion, state) => {
+  expansionStates.value[expansion] = state;
+  cacheExpansionState({ expansion, state });
+};
 
 const expansions = computed(() => [
   {
     value: 'active',
     initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
-    counters: [
+    counters: !isActiveExpanded.value ? [
+      {
+        color: 'secondary',
+        count: allActiveChats.value,
+      },
       {
         color: 'main',
         count: activeChats.value.length,
@@ -92,7 +117,7 @@ const expansions = computed(() => [
         color: 'success',
         count: invitedChats.value.length,
       },
-    ].filter(({ count }) => count),
+    ].filter(({ count }) => count) : [],
   },
   {
     value: 'manual',

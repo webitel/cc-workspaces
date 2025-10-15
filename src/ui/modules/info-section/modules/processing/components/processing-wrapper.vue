@@ -43,7 +43,7 @@ const showTimer = computed(() => {
 //NOTE: this is needed to convert _processing keys from snake_case to camelCase
 //https://webitel.atlassian.net/browse/WTEL-5536
 const processing = computed(() => {
-  return applyTransform(props.task?.task?._processing, [snakeToCamel()]);
+  return applyTransform(props.task?.attempt?._processing, [snakeToCamel()]);
 });
 
 const renewProcessing = (prolongationSec) => {
