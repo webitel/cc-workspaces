@@ -9,55 +9,72 @@
       icon="chat-emoji"
       rounded
       wide
-      @click="isOpened = !isOpened"
+      @click="toggleEmojiPicker"
     ></wt-rounded-action>
     <div
       v-show="isOpened"
-      ref="emoji-picker-wrapper"
+      ref="emojiPickerWrapper"
       class="chat-emoji__wrapper"
     ></div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted, inject } from 'vue';
 import { Picker } from 'emoji-picker-element';
+import { useI18n } from 'vue-i18n';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin.js';
+const emit = defineEmits(['insert-emoji']);
 
-export default {
-  name: 'ChatEmoji',
-  mixins: [sizeMixin],
-  data: () => ({
-    picker: {},
-    isOpened: false,
-  }),
-  mounted() {
-    this.initPicker();
-    this.picker.addEventListener('emoji-click', this.emitEmojiClickEvent);
+const props = defineProps({
+  size: {
+    type: String,
+    default: ComponentSize.MD,
   },
-  unmounted() {
-    this.picker.removeEventListener('emoji-click', this.emitEmojiClickEvent);
-  },
-  methods: {
-    initPicker() {
-      // https://github.com/nolanlawson/emoji-picker-element#javascript-api
-      this.picker = new Picker({
-                                 i18n: this.$i18n.messages[this.$i18n.locale].emojiPicker,
-                               });
-      this.appendPicker();
-    },
-    appendPicker() {
-      this.$refs['emoji-picker-wrapper'].appendChild(this.picker);
-    },
-    emitEmojiClickEvent(event) {
-      const { unicode } = event.detail;
-      this.$emit('insert-emoji', unicode);
-    },
-    closePicker() {
-      this.isOpened = false;
-    },
-  },
+});
+
+const { locale, tm } = useI18n();
+const eventBus = inject('$eventBus');
+
+const picker = ref({});
+const isOpened = ref(false);
+const emojiPickerWrapper = ref(null);
+
+const initPicker = () => {
+  // https://github.com/nolanlawson/emoji-picker-element#javascript-api
+  picker.value = new Picker({
+    i18n: tm('emojiPicker'),
+  });
+  appendPicker();
 };
+
+const appendPicker = () => {
+  emojiPickerWrapper.value.appendChild(picker.value);
+};
+
+const emitEmojiClickEvent = (event) => {
+  const { unicode } = event.detail;
+  emit('insert-emoji', unicode);
+};
+
+const closePicker = () => {
+  isOpened.value = false;
+};
+
+const toggleEmojiPicker = () => {
+  isOpened.value = !isOpened.value;
+  eventBus.$emit('chat-input-focus');
+};
+
+onMounted(() => {
+  initPicker();
+  picker.value.addEventListener('emoji-click', emitEmojiClickEvent);
+});
+
+onUnmounted(() => {
+  picker.value.removeEventListener('emoji-click', emitEmojiClickEvent);
+});
 </script>
 
 <style lang="scss" scoped>
