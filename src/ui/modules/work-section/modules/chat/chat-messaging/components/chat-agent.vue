@@ -6,7 +6,7 @@
         </p>
 
         <wt-popover>
-          <template #actovator="{ show, hide }">
+          <template #activator="{ show, hide }">
             <div @pointerenter="show" @pointerleave="hide">
               <wt-chip class="chat-agent-content__activator">
                 +{{ agents.length - 1 }}
@@ -36,7 +36,7 @@
 <script setup>
 
 import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index.js';
-import { computed, onMounted,ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import { getMessageMember } from '../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
@@ -108,7 +108,12 @@ const setAgentsArray = async () => {
 
 onMounted(() => {
   setAgentsArray();
-})
+});
+
+// Watch for currentChat changes to update agents
+watch(currentChat, () => {
+  setAgentsArray();
+}, { deep: true });
 
 </script>
 
