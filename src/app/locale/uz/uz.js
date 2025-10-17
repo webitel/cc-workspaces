@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Kirish qo‘ng‘iroqlari',
+    callInboundQueue: 'Kiruvchi navbatdan qo‘ng‘iroqlar',
+    callDialerQueue: 'Dailerdan barcha qo‘ng‘iroqlar',
+    callManual: 'Qo‘lda qo‘ng‘iroqlar',
     callHandled: 'Qabul qilingan qo‘ng‘iroqlar',
     callMissed: 'O‘tkazib yuborilgan qo‘ng‘iroqlar',
+    callQueueMissed: 'Navbatdan o‘tkazib yuborilgan qo‘ng‘iroqlar',
     avgTalk: 'O‘rtacha suhbat vaqti',
     avgHold: 'O‘rtacha kutish vaqti',
     utilization: 'Foydalanish',

@@ -26,3 +26,8 @@ import './ws-user-description.svg';
 import './ws-client-disconnection.svg';
 import './ws-agent-disconnection.svg';
 import './ws-timeout-disconnection.svg';
+import './ws-widget-all-call-missed.svg';
+import './ws-widget-all-dialer-calls.svg';
+import './ws-widget-call-inbound-queue.svg';
+import './ws-widget-manual-calls.svg';
+import './ws-widget-queue-missed.svg';
