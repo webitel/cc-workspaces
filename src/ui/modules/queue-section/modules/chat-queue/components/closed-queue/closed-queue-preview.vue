@@ -27,9 +27,8 @@
       {{ duration }}
     </template>
 
-    <template #close-icon>
+    <template #close-icon v-if="!processed">
       <wt-icon-btn
-        v-if="!processed"
         :size="size"
         class="closed-queue-preview__close"
         icon="close--filled"
