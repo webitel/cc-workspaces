@@ -122,6 +122,7 @@ const iconColor = computed(() => {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-xs);
+  margin: 0 var(--spacing-3xs);
   padding: var(--spacing-xs);
   border: 1px solid transparent;
   border-radius: var(--border-radius);
