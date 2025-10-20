@@ -64,7 +64,7 @@
 
 <script>
 import { ConversationState } from 'webitel-sdk';
-import { ChatStatus } from '../../enums/ChatStatus.enum';
+import { ChatStatus, ChatTypes } from '../../enums/ChatStatus.enum';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
