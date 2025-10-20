@@ -158,7 +158,7 @@ const tabs = computed(() => {
 
 const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
 
-function countByStates (list, states = []) {
+const countByStates = (list, states = []) => {
   if (!list?.length) return 0;
   return list.reduce((acc, item) => acc + (states.includes(item.state) ? 1 : 0), 0);
 }
