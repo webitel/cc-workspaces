@@ -28,11 +28,11 @@
           <span class="queue-section__count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
-              v-if="tab.count && tab.hasIncoming"
+              v-if="tab.countIncoming"
               color="success"
               class="queue-section__count queue-section__count--incoming"
             >
-              {{ tab.count }}
+              {{ tab.countIncoming }}
             </wt-chip>
           </span>
           <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
@@ -40,11 +40,11 @@
           <span class="queue-section__count-indicator">
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
-              v-if="tab.count && !tab.hasIncoming"
+              v-if="tab.countActive"
               color="primary"
               class="queue-section__count queue-section__count--active"
             >
-              {{ tab.count }}
+              {{ tab.countActive }}
             </wt-chip>
           </span>
         </div>
@@ -113,40 +113,55 @@ const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const tabs = computed(() => {
 
-  const callCount = callList.value.length || 0;
-  const chatCount = chatList.value.length || 0;
-  const jobCount = jobList.value.length || 0;
+  const calls = callList.value ?? [];
+  const chats = chatList.value ?? [];
+  const jobs  = jobList.value ?? [];
 
+  const activeCallCount = countByStates(calls, [CallActions.Active, CallActions.Hold]);
+  const incomingCallCount =
+    countByStates(calls, [CallActions.Ringing]) + (manualCallsList.value?.length ?? 0);
+
+  const activeChatCount = countByStates(chats, [ConversationState.Active]);
+  const incomingChatCount =
+    countByStates(chats, [ConversationState.Invite]) + (manualChatList.value?.length ?? 0);
+
+  const activeJobCount = countByStates(jobs, [JobState.Bridged, JobState.Processing]);
+  const incomingJobCount = countByStates(jobs, [JobState.Distribute, JobState.Offering]);
 
   return [
     {
       value: 'call',
       icon: 'call',
       iconColor: 'success',
-      count: callCount,
+      countActive: activeCallCount,
       component: CallQueue,
-      hasIncoming: callList?.value.some(({ state }) => state === CallActions.Ringing) || manualCallsList.value.length,
+      countIncoming:incomingCallCount,
     },
     {
       value: 'chat',
       icon: 'chat',
       iconColor: 'chat',
-      count: chatCount,
+      countActive: activeChatCount,
       component: ChatQueue,
-      hasIncoming: chatList?.value.some(({ state }) => state === ConversationState.Invite) || manualChatList.value.length,
+      countIncoming: incomingChatCount,
     },
     {
       value: 'job',
       icon: 'job',
       iconColor: 'job',
-      count: jobCount,
+      countActive: activeJobCount,
       component: JobQueue,
-      hasIncoming: jobList?.value.some(({ state }) => state === JobState.Distribute || state === JobState.Offering),
+      countIncoming: incomingJobCount,
     }
   ]
 });
 
 const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
+
+const countByStates = (list, states = []) => {
+  if (!list?.length) return 0;
+  return list.reduce((acc, item) => acc + (states.includes(item.state) ? 1 : 0), 0);
+}
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
 const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
