@@ -1,4 +1,5 @@
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
+import { getPhones } from '@webitel/api-services/gen'
 
 const state = {
   contact: null, // this is actual contact, linked to the task
@@ -106,6 +107,16 @@ const actions = {
   RESET_CONTACT: (context) => {
     context.commit('SET_CONTACT', null);
   },
+
+  ADD_NUMBER_TO_CONTACT: async (context, phoneData) => {
+    const phoneApi = getPhones()
+    try {
+      const resp = await phoneApi.mergePhones(state.contact.id, [phoneData])
+
+      return context.commit('SET_NUMBER_TO_CONTACT', resp.data.data)
+    } catch (e) {
+    }
+  }
 };
 
 const mutations = {
@@ -124,6 +135,9 @@ const mutations = {
   SET_CONTACTS_BY_SEARCH: (state, contacts) => {
     state.contactsBySearch = contacts;
   },
+  SET_NUMBER_TO_CONTACT: (state, phoneData) => {
+    state.contact.phones.push(...phoneData)
+  }
 };
 
 export default {

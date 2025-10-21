@@ -5,15 +5,25 @@
     <template #title>{{ t('infoSec.contacts.communications') }}</template>
     <template #default>
       <div class="contact-card-communications">
-        <wt-tabs
-          :current="currentTab"
-          :tabs="tabs"
-          @change="changeTab"
-        ></wt-tabs>
+        <div class="contact-card-communications__header">
+          <wt-tabs
+            :current="currentTab"
+            :tabs="tabs"
+            @change="changeTab"
+          ></wt-tabs>
+
+          <wt-icon-btn
+            v-if="showAddingButton"
+            icon="plus"
+            @click="isAdding = true"
+          />
+        </div>
         <component
           :is="currentTab.component"
           :size="props.size"
           :contact="props.contact"
+          :is-adding="isAdding"
+          @cancel-adding="isAdding = false"
         ></component>
       </div>
     </template>
@@ -61,14 +71,24 @@ const tabs = computed(() => [
 ]);
 
 const currentTab = ref(tabs.value[0]);
+const isAdding = ref(false);
 
 function changeTab(tab) {
   currentTab.value = tab;
 }
+
+const showAddingButton = computed(() => currentTab.value.value === 'phones');
 </script>
 
 <style lang="scss" scoped>
 .contact-card-communications {
   padding: var(--spacing-xs);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+  }
 }
 </style>
