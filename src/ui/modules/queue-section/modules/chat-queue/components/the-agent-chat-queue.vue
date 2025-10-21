@@ -110,7 +110,7 @@ const expansions = computed(() => [
         count: allActiveChats.value,
       },
       {
-        color: 'main',
+        color: 'warning',
         count: activeChats.value.length,
       },
       {
