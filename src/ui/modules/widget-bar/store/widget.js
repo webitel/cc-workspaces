@@ -5,6 +5,10 @@ const state = {
     callInbound: 0,
     callHandled: 0,
     callMissed: 0,
+    callManual: 0,
+    callQueueMissed: 0,
+    callInboundQueue: 0,
+    callDialerQueue: 0,
     avgHoldSec: 0,
     avgTalkSec: 0,
     occupancy: 0,
@@ -36,6 +40,7 @@ const actions = {
 
 const mutations = {
   SET_WIDGET_DATA: (state, data) => {
+    console.log(data);
     state.data = data;
   },
 };

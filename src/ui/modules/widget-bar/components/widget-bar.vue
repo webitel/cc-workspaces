@@ -95,7 +95,7 @@ export default {
         widgets = widgets.split(',');
         Object.values(this.widgets)
           .forEach((widget) => {
-             
+
             widget.show = widgets.indexOf(widget.type) !== -1;
           });
       }
