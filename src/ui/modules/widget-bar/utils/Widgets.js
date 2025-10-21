@@ -21,8 +21,8 @@ export default {
     show: true,
   },
   MANUAL_CALLS: {
-    type: 'CallManual',
-    field: 'CallManual',
+    type: 'callManual',
+    field: 'callManual',
     icon: 'ws-widget-manual-calls',
     locale: 'widgets.callManual',
     show: true,
