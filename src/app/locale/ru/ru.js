@@ -24,6 +24,7 @@ export default {
     select: 'Выбрать',
     run: 'Запустить',
     today: 'Сегодня',
+    phone: 'Номер телефона',
   },
   feedback: {
     success: {

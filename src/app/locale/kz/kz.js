@@ -24,6 +24,7 @@ export default {
     select: 'Таңдау',
     run: 'Іске қосу',
     today: 'Бүгін',
+    phone: 'Телефон нөмірі',
   },
   feedback: {
     success: {
