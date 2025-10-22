@@ -23,7 +23,7 @@
           :size="props.size"
           :contact="props.contact"
           :is-adding="isAdding"
-          @cancel-adding="isAdding = false"
+          @close-adding="isAdding = false"
         ></component>
       </div>
     </template>

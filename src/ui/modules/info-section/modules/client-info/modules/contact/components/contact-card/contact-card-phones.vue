@@ -15,18 +15,18 @@
       <wt-select
         v-model="newPhone.type"
         :label="t('objects.communicationType', 1)"
-        :search-method="(params) => CommunicationsAPI.getLookup({...params, channel: EngineCommunicationChannels.Phone })"
+        :search-method="getCommunicationType"
         class="contact-card-phones__select"
       />
       <div class="contact-card-phones__actions">
         <wt-icon-btn
           icon="tick"
-          @click="savePhone"
           size="md"
+          @click="savePhone"
         />
         <wt-icon-btn
           icon="close"
-          @click="cancelAdding"
+          @click="closeAdding"
         />
       </div>
     </div>
@@ -84,7 +84,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['cancel-adding', 'phone-added']);
+const emit = defineEmits(['close-adding', 'phone-added']);
 
 const newPhone = ref({
   number: '',
@@ -94,13 +94,13 @@ const newPhone = ref({
 
 const phones = computed(() => props.contact?.phones || []);
 
-const cancelAdding = () => {
+const closeAdding = () => {
   newPhone.value = {
     number: '',
     type: null,
     primary: false,
   };
-  emit('cancel-adding');
+  emit('close-adding');
 };
 
 const savePhone = async () => {
@@ -113,8 +113,14 @@ const savePhone = async () => {
   };
 
   await store.dispatch('ui/infoSec/client/contact/ADD_NUMBER_TO_CONTACT', newPhoneData);
-  cancelAdding();
+  closeAdding();
 };
+
+const getCommunicationType = async (params) => CommunicationsAPI.getLookup({
+  ...params,
+  channel: EngineCommunicationChannels.Phone }
+)
+
 
 
 watch(() => props.isAdding, (isAdding) => {

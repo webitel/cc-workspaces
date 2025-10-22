@@ -1,6 +1,6 @@
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
-import { getPhones } from '@webitel/api-services/gen'
-
+import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { PhonesAPI } from '@webitel/ui-sdk/api'
 const state = {
   contact: null, // this is actual contact, linked to the task
   isLoading: false,
@@ -109,12 +109,17 @@ const actions = {
   },
 
   ADD_NUMBER_TO_CONTACT: async (context, phoneData) => {
-    const phoneApi = getPhones()
     try {
-      const resp = await phoneApi.mergePhones(state.contact.id, [phoneData])
+      const resp = await PhonesAPI.add({
+        contactId: state.contact.id,
+        phones: [phoneData],
+      });
 
       return context.commit('SET_NUMBER_TO_CONTACT', resp.data.data)
-    } catch (e) {
+    } catch (err) {
+      throw applyTransform(err, [
+        notify,
+      ]);
     }
   }
 };
