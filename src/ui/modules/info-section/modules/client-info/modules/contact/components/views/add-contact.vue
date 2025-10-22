@@ -16,7 +16,7 @@
         :value="draft.phones[0]?.number || ''"
         :label="t('reusable.phone')"
         prevent-trim
-        @input="updatePhoneNumber($event)"
+        @input="updatePhoneNumber"
       ></wt-input>
       <wt-select
         :value="draft.timezones[0]?.timezone"
