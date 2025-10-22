@@ -170,12 +170,16 @@ const iconColor = computed(() => {
   }
 }
 
-.chat-queue-preview-md__icon--hidden {
-  visibility: visible;
-}
+.chat-queue-preview-md {
+  &__icon--hidden {
+    visibility: visible;
+  }
 
-.chat-queue-preview-md:hover .chat-queue-preview-md__icon--hidden {
-  visibility: hidden;
+  &:hover {
+    .chat-queue-preview-md__icon--hidden {
+      visibility: hidden;
+    }
+  }
 }
 
 .chat-queue-preview-md-header {
