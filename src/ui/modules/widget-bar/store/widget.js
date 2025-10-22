@@ -40,7 +40,6 @@ const actions = {
 
 const mutations = {
   SET_WIDGET_DATA: (state, data) => {
-    console.log(data);
     state.data = data;
   },
 };
