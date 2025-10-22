@@ -1,6 +1,7 @@
-import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { PhonesAPI } from '@webitel/ui-sdk/api'
+import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
+
 const state = {
   contact: null, // this is actual contact, linked to the task
   isLoading: false,
