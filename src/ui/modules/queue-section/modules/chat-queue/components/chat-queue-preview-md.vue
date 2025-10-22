@@ -18,6 +18,7 @@
             <slot name="close-icon"></slot>
             <wt-icon
               v-if="showIcon"
+              :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
               :icon="opened ? 'chat--filled' : 'chat'"
               size="md"
               :color="ChatColorsMap[status] || 'secondary'"
@@ -167,6 +168,18 @@ const iconColor = computed(() => {
 
   &:focus {
     outline-offset: 0;
+  }
+}
+
+.chat-queue-preview-md {
+  &__icon--hidden {
+    visibility: visible;
+  }
+
+  &:hover {
+    .chat-queue-preview-md__icon--hidden {
+      visibility: hidden;
+    }
   }
 }
 
