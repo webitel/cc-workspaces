@@ -3,7 +3,10 @@
     show-team-name
     type="agent"
     show-status
+    :data-fields="dataFields"
+    :data-filters="dataFilters"
     :get-data="getAgens"
+    :presence-status-field="PresenceStatusField"
     @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
@@ -18,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
@@ -33,6 +36,11 @@ interface APIResponse {
 
 const store = useStore();
 const agentsAPI = APIRepository.agents;
+const PresenceStatusField = 'userPresenceStatus'
+
+const dataFields = ref(['status', 'user_presence_status', 'name', 'extension', 'team']);
+const dataFilters = ref('user_presence_status.status=sip,!dnd');
+const dataSort = ref('position');
 
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 
@@ -46,7 +54,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {
-  return agentsAPI.getList({ ...params, enabled: true });
+  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort.value});
 };
 </script>
 <style scoped lang="scss">
