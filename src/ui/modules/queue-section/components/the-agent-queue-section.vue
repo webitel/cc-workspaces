@@ -41,7 +41,7 @@
             <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
             <wt-chip
               v-if="tab.countActive"
-              color="primary"
+              color="warning"
               class="queue-section__count queue-section__count--active"
             >
               {{ tab.countActive }}

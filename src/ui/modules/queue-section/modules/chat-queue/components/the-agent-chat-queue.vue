@@ -106,11 +106,11 @@ const expansions = computed(() => [
     initiallyCollapsed: restoreExpansionState({ expansion: 'active' }),
     counters: !isActiveExpanded.value ? [
       {
-        color: 'secondary',
+        color: 'primary',
         count: allActiveChats.value,
       },
       {
-        color: 'main',
+        color: 'warning',
         count: activeChats.value.length,
       },
       {
