@@ -24,7 +24,7 @@ export default {
     select: 'Select',
     run: 'Run',
     today: 'Today',
-    phone: 'Phone number'
+    phoneNumber: 'Phone number'
   },
   feedback: {
     success: {

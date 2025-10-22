@@ -14,7 +14,7 @@
       ></wt-input>
       <wt-input
         :value="draft.phones[0]?.number || ''"
-        :label="t('reusable.phone')"
+        :label="t('reusable.phoneNumber')"
         prevent-trim
         @input="updatePhoneNumber"
       ></wt-input>

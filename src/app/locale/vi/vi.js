@@ -24,7 +24,7 @@ export default {
     select: 'Chọn',
     run: 'Chạy',
     today: 'Hôm nay',
-    phone: 'Số điện thoại',
+    phoneNumber: 'Số điện thoại',
   },
   feedback: {
     success: {
