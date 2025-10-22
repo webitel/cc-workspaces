@@ -17,6 +17,7 @@
           <div class="queue-preview-icon">
             <slot name="close-icon"></slot>
             <wt-icon
+              v-if="showIcon"
               :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
               :icon="opened ? 'chat--filled' : 'chat'"
               size="md"
@@ -28,7 +29,6 @@
         <div class="chat-queue-preview-md-header__icon--messenger">
           <slot name="icon" :iconColor="iconColor">
             <wt-icon
-              v-if="showIcon"
               :icon="icon"
               :color="iconColor"
               size="md"
@@ -106,7 +106,7 @@ const queueName = computed(() => props.task?.queue?.name || '');
 
 const showIcon = computed(() => {
   // Manual chats don't show icon in default state
-  return props.status !== ChatTypes.MANUAL || props.opened;
+  return props.status !== ChatTypes.Manual;
 });
 
 const iconColor = computed(() => {
@@ -123,6 +123,7 @@ const iconColor = computed(() => {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-xs);
+  margin: 0 var(--spacing-3xs);
   padding: var(--spacing-xs);
   border: 1px solid transparent;
   border-radius: var(--border-radius);

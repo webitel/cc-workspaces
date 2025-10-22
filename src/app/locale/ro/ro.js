@@ -54,8 +54,12 @@ export default {
   },
   widgets: {
     callInbound: 'Apeluri primite',
+    callInboundQueue: 'Apeluri din coada de intrare',
+    callDialerQueue: 'Toate apelurile din dialer',
+    callManual: 'Apeluri manuale',
     callHandled: 'Apeluri procesate',
     callMissed: 'Apeluri pierdute',
+    callQueueMissed: 'Ratate din cozi',
     avgTalk: 'Timp mediu de conversație',
     avgHold: 'Timp mediu de așteptare',
     utilization: 'Utilizare',
