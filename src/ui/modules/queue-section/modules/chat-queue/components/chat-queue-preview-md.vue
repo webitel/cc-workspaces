@@ -132,16 +132,16 @@ const iconColor = computed(() => {
   outline: 0;
 
   &--new {
-    border-color: var(--success-color);
+    border-color: var(--p-success-color);
   }
   &--active {
-    border-color: var(--warning-color);
+    border-color: var(--p-warn-color);
   }
   &--manual {
-    border-color: var(--secondary-color);
+    border-color: var(--p-secondary-color);
   }
   &--closed {
-    border-color: var(--secondary-color);
+    border-color: var(--p-secondary-color);
   }
 
   &:hover {
@@ -153,15 +153,15 @@ const iconColor = computed(() => {
     outline: 2px solid var(--current-border-color);
 
     &.chat-queue-preview-md--new {
-      --current-border-color: var(--success-color);
+      --current-border-color: var(--p-success-color);
     }
     &.chat-queue-preview-md--active {
-      --current-border-color: var(--warning-color); }
+      --current-border-color: var(--p-warn-color); }
     &.chat-queue-preview-md--manual {
-      --current-border-color: var(--secondary-color);
+      --current-border-color: var(--p-secondary-color);
     }
     &.chat-queue-preview-md--closed {
-      --current-border-color: var(--secondary-color);
+      --current-border-color: var(--p-secondary-color);
     }
   }
 
