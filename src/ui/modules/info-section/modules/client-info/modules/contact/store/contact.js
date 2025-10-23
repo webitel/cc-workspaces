@@ -25,7 +25,7 @@ const actions = {
     const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
     const number = task.displayNumber; // for CALLS
     const qin = isCallWorkspace ? 'phones' : 'emails,phones'; // for calls search contacts just by phones https://webitel.atlassian.net/browse/WTEL-7041
-    const searchParams = { q: number, qin, size: 5000 }; // load all
+    const searchParams = { q: number, qin, size: 100 }; // load only 100 (should be enough) // https://webitel.atlassian.net/browse/WTEL-7906
     try {
       context.commit('SET_IS_LOADING', true);
       const { items: contacts } = await ContactsAPI.getList(searchParams);
