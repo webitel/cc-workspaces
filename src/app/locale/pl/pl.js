@@ -24,6 +24,7 @@ export default {
     select: 'Wybierz',
     run: 'Uruchom',
     today: 'Dzisiaj',
+    phoneNumber: 'Numer telefonu',
   },
   feedback: {
     success: {

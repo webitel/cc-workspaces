@@ -12,6 +12,12 @@
         prevent-trim
         @input="draft.name = $event"
       ></wt-input>
+      <wt-input
+        :value="draft.phones[0]?.number || ''"
+        :label="t('reusable.phoneNumber')"
+        prevent-trim
+        @input="updatePhoneNumber"
+      ></wt-input>
       <wt-select
         :value="draft.timezones[0]?.timezone"
         :label="t('date.timezone', 1)"
@@ -94,6 +100,7 @@ const draft = ref({
   name: '',
   timezones: [],
   managers: [],
+  phones: [],
   labels: [],
   about: '',
   createdBy: '',
@@ -116,11 +123,24 @@ function close() {
   emit('close');
 }
 
+function updatePhoneNumber(phoneNumber) {
+  if (!draft.value.phones[0]) {
+    draft.value.phones[0] = {
+      number: phoneNumber,
+      primary: true,
+      type: {}
+    };
+  } else {
+    draft.value.phones[0].number = phoneNumber;
+  }
+}
+
 async function createCommunication() {
   const { items } = await CommunicationsAPI.getList({ channel: EngineCommunicationChannels.Phone, defaultValue: true });
-  if (!displayNumber.value && !items.length) return;
+  if ((!displayNumber.value || !draft.value.phones[0]?.number) && !items.length) return;
+
   draft.value.phones = [{
-    number: displayNumber.value,
+    number: draft.value.phones[0]?.number || displayNumber.value,
     primary: true,
     type: {
       ...items[0],
@@ -130,6 +150,7 @@ async function createCommunication() {
 
 async function save() {
   if (isCallWorkspace.value) await createCommunication();
+  if (!draft.value.phones[0]?.number) delete draft.value.phones
   await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
   close();
 }
