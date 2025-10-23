@@ -76,7 +76,8 @@
             @change="handleAttachments"
           >
         </div>
-        <chat-emoji
+        <wt-chat-emoji
+          class="chat-messaging__emoji"
           :size="size"
           @insert-emoji="insertEmoji"
         />
@@ -108,6 +109,8 @@ import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
+import { WtChatEmoji } from '@webitel/ui-sdk/components';
+
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import {useDropzoneHandlers} from '../../../../../composibles/useDropzoneHandlers';
@@ -116,7 +119,6 @@ import {useHotkeys} from '../../../../../hotkeys/useHotkeys';
 import {useAutocomplete} from './autocomplete/composables/useAutocomplete';
 import {AutocompleteOptions} from './autocomplete/enums/AutocompleteOptions';
 import ChatHistory from './chat-history/the-chat-history.vue';
-import ChatEmoji from './components/chat-emoji.vue';
 import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import {useQuickReplies} from './quick-replies/composables/useQuickReplies';
@@ -315,6 +317,7 @@ $chatGap: var(--spacing-2xs);
 $roundedAction: calc(var(--rounded-action-padding) * 2 + var(--rounded-action-border-size) * 2);
 $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
+$input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
 
 .chat-messaging {
   position: relative;
@@ -372,5 +375,15 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   position: absolute;
   bottom: 100%;
   width: 100%;
+}
+
+.chat-messaging__emoji {
+  ::v-deep emoji-picker {
+    position: absolute;
+    z-index: var(--ws-dropdown-z-index);
+    bottom: calc(100% + $input-height);
+    left: 100%;
+    transform: translateX(-50%);
+  }
 }
 </style>
