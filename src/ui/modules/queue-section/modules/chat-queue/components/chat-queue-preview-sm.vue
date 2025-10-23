@@ -204,38 +204,38 @@ const queueName = computed(() => props.task?.queue?.name || '');
 
   // Status-based border colors
   &--new {
-    border-color: var(--success-color);
+    border-color: var(--p-success-color);
 
     &.chat-queue-preview-sm--opened {
-      border-color: var(--success-color);
-      outline-color: var(--success-color);
+      border-color: var(--p-success-color);
+      outline-color: var(--p-success-color);
     }
   }
 
   &--active {
-    border-color: var(--warning-color);
+    border-color: var(--p-warn-color);
 
     &.chat-queue-preview-sm--opened {
-      border-color: var(--warning-color);
-      outline-color: var(--warning-color);
+      border-color: var(--p-warn-color);
+      outline-color: var(--p-warn-color);
     }
   }
 
   &--manual {
-    border-color: var(--secondary-color);
+    border-color: var(--p-secondary-color);
 
     &.chat-queue-preview-sm--opened {
-      border-color: var(--secondary-color);
-      outline-color: var(--secondary-color);
+      border-color: var(--p-secondary-color);
+      outline-color: var(--p-secondary-color);
     }
   }
 
   &--closed {
-    border-color: var(--secondary-color);
+    border-color: var(--p-secondary-color);
 
     &.chat-queue-preview-sm--opened {
-      border-color: var(--secondary-color);
-      outline-color: var(--secondary-color);
+      border-color: var(--p-secondary-color);
+      outline-color: var(--p-secondary-color);
     }
   }
 
