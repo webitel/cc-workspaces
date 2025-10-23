@@ -154,7 +154,7 @@ async function callSearch() {
   await store.dispatch(`${props.namespace}/SEARCH_CONTACTS`, {
     q: searchValue.value,
     qin: searchMode.value,
-    size: 5000,
+    size: 100, // coz 100 should be enough, if we dont have pagination atm https://webitel.atlassian.net/browse/WTEL-7906
   });
   alreadySearched.value = true;
 }
