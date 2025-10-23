@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
@@ -38,9 +38,9 @@ const store = useStore();
 const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus'
 
-const dataFields = ref(['status', 'user_presence_status', 'name', 'extension', 'team']);
-const dataFilters = ref('user_presence_status.status=sip,!dnd');
-const dataSort = ref('position');
+const dataFields = ['status', 'user_presence_status', 'name', 'extension', 'team'];
+const dataFilters = 'user_presence_status.status=sip,!dnd';
+const dataSort = 'position';
 
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 
