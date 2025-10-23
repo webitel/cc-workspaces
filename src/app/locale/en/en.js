@@ -201,6 +201,7 @@ export default {
       chatTransferred: 'Chat transferred',
       chatsAgent: '{ agentName } has joined the chat',
       chatsAgentsList: '{ agentName } participated in the chat',
+      chatsFileBlocked: 'File quarantined or blocked',
     },
   },
   emptyWorkspace: {

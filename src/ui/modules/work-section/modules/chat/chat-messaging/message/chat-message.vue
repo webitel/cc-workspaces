@@ -15,7 +15,8 @@
         :username="getClientUsername"
       />
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
-      <div @click.stop>
+      <message-blocked-error @click.stop v-if="message.file?.malware" />
+      <div @click.stop v-else>
         <message-player
           v-if="props.message.file"
           :file="props.message.file"
@@ -58,6 +59,7 @@ import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageText from './components/chat-message-text.vue';
 import MessageTime from './components/chat-message-time.vue';
+import MessageBlockedError from './components/chat-message-blocked-error.vue';
 
 const props = defineProps({
   message: {
@@ -111,7 +113,7 @@ $chat-info-gap: var(--spacing-2xs);
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  gap: var($chat-info-gap);
+  gap: $chat-info-gap;
 
   &:last-child {
     margin-bottom: $message-gap;

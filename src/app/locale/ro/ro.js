@@ -197,6 +197,7 @@ export default {
       chatTransferred: 'Chat transferat',
       chatsAgent: '{ agentName } s-a alăturat chat-ului',
       chatsAgentsList: '{ agentName } a participat la chat',
+      chatsFileBlocked: 'Fișier în carantină sau blocat',
     },
   },
   emptyWorkspace: {

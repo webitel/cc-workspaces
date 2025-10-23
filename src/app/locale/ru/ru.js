@@ -201,6 +201,7 @@ export default {
       chatTransferred: 'Чат переведен',
       chatsAgent: '{ agentName } присоединился к чату',
       chatsAgentsList: '{ agentName } принимали участие в чате',
+      chatsFileBlocked: 'Файл в карантине или заблокирован',
     },
   },
   emptyWorkspace: {

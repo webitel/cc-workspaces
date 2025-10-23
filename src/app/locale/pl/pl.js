@@ -197,6 +197,7 @@ export default {
       chatTransferred: 'Czat przekazany', // TODO: Translate
       chatsAgent: '{ agentName } dołączył do czatu', // TODO: Translate
       chatsAgentsList: '{ agentName } uczestniczył w czacie', // TODO: Translate
+      chatsFileBlocked: 'Plik w kwarantannie lub zablokowany', // TODO: Translate
     },
   },
   emptyWorkspace: {

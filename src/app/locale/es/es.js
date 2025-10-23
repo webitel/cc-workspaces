@@ -198,6 +198,7 @@ export default {
       chatTransferred: 'Chat transferido',
       chatsAgent: '{ agentName } se ha unido al chat',
       chatsAgentsList: '{ agentName } participó en el chat',
+      chatsFileBlocked: 'Archivo en cuarentena o bloqueado',
     },
   },
   emptyWorkspace: {
