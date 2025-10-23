@@ -24,6 +24,17 @@ export default {
     select: 'Обрати',
     run: 'Запустити',
     today: 'Сьогодні',
+    phoneNumber: 'Номер телефону',
+  },
+  feedback: {
+    success: {
+      title: 'Дякуємо!',
+      description: 'Вашу відповідь успішно збережено',
+    },
+    error: {
+      title: 'Ой!',
+      description: 'Щось пішло не так',
+    },
   },
   appNavigator: {
     title: 'Додатки Webitel',
@@ -44,10 +55,14 @@ export default {
   },
   widgets: {
     callInbound: 'Вхідних дзвінків',
+    callInboundQueue: 'Дзвінки з вхідних черг',
+    callDialerQueue: 'Всі дзвінки з дайлерів',
+    callManual: 'Ручні дзвінки',
     callHandled: 'Опрацьовано дзвінків',
     callMissed: 'Пропущено дзвінків',
-    avgTalk: 'Средній час розмови',
-    avgHold: 'Средній час утримання',
+    callQueueMissed: 'Пропущені дзвінки з черг',
+    avgTalk: 'Середній час розмови',
+    avgHold: 'Середній час утримання',
     utilization: 'Утилізація',
     occupancy: 'Зайнятість',
     chatAccepts: 'Кількість прийнятих чатів',
@@ -136,7 +151,7 @@ export default {
       foundOneContact: 'Знайдено { count } контакт',
       foundSomeContact: '{ current } з { count } контактів',
       destination: 'Призначення',
-      communications: 'Засоби зв\'язку',
+      communications: "Засоби зв'язку",
       searchPlaceholder: 'Введіть критерії для пошуку ',
     },
     knowledgeBase: 'База знань',
@@ -156,7 +171,8 @@ export default {
         },
         formTable: {
           title: 'Таблиця',
-          error: 'Дані таблиці мають неправильний формат. Будь ласка, перевірте схему.',
+          error:
+            'Дані таблиці мають неправильний формат. Будь ласка, перевірте схему.',
         },
       },
     },
@@ -173,7 +189,8 @@ export default {
       hangup: 'Кінець',
     },
     chat: {
-      acceptPreviewText: 'Якщо Ви готові відповісти, натисніть кнопку "Прийняти"',
+      acceptPreviewText:
+        'Якщо Ви готові відповісти, натисніть кнопку "Прийняти"',
       draftPlaceholder: 'Напишіть повідомлення...',
       dropzone: {
         title: 'Перетягніть файли сюди',
@@ -204,7 +221,7 @@ export default {
   },
   bridge: {
     activeCalls: 'Активні дзвінки',
-    bridge: 'З\'єднати',
+    bridge: "З'єднати",
   },
   history: {
     today: 'Сьогодні',
@@ -243,12 +260,13 @@ export default {
   },
   disconnectPopup: {
     title: 'Охх... Щось пішло не так!',
-    mainText: 'Зв\'язок було втрачено.',
+    mainText: "Зв'язок було втрачено.",
     reloadBtn: 'Оновити сторінку',
   },
   welcomePopup: {
     title: 'Вітаємо вас у Webitel Agent Workspace!',
-    subtitle: 'Будь ласка, перевірте свої пристрої та налаштування браузера перед початком роботи',
+    subtitle:
+      'Будь ласка, перевірте свої пристрої та налаштування браузера перед початком роботи',
     mic: {
       status: 'Дозвіл на використання Мікрофону',
       message: {
@@ -263,12 +281,22 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Увага',
+    errorLabel: 'Ви не можете працювати в Workspace',
+    errorDescription: 'DeskTrack не запущений, або ви не увійшли в систему',
+    successLabel: 'DeskTrack успішно запущено',
+    successDescription: 'Ви можете працювати в Workspace',
+  },
   error: {
     general: 'Сталася помилка. Будь ласка, спробуйте ще раз.',
     websocket: {
-      [DeviceNotFoundError.id]: 'Мікрофон не під\'єднаний. Неможливо виконати дію.',
-      [DeviceNotAllowPermissionError.id]: 'Немає доступу до мікрофона. Неможливо виконати дію.',
-      [LicencePermissionError.id.replaceAll('.', '_')]: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
+      [DeviceNotFoundError.id]:
+        "Мікрофон не під'єднаний. Неможливо виконати дію.",
+      [DeviceNotAllowPermissionError.id]:
+        'Немає доступу до мікрофона. Неможливо виконати дію.',
+      [LicencePermissionError.id.replaceAll('.', '_')]:
+        'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
     },
     endpoint: {
       noLicense: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
@@ -289,10 +317,12 @@ export default {
     loadingMessage: 'Завантаження…',
     networkErrorMessage: 'Не вдалось завантажити емодзі.',
     regionLabel: 'Emoji picker',
-    searchDescription: 'Коли результат пошуку доступний, тисніть кнопки вверх або вниз для навігації, та enter для вибору.',
+    searchDescription:
+      'Коли результат пошуку доступний, тисніть кнопки вверх або вниз для навігації, та enter для вибору.',
     searchLabel: 'Пошук',
     searchResultsLabel: 'Результати пошуку',
-    skinToneDescription: 'Після відкриття, тисніть кнопки вверх або вниз для навігації, та enter для вибору.',
+    skinToneDescription:
+      'Після відкриття, тисніть кнопки вверх або вниз для навігації, та enter для вибору.',
     skinToneLabel: 'Виберіть тон шкіри',
     skinTonesLabel: 'Тони шкіри',
     skinTones: [
@@ -311,7 +341,7 @@ export default {
       'food-drink': 'Їжа та напої',
       'travel-places': 'Подорожі та місця',
       activities: 'Активності',
-      objects: 'Об\'єкти',
+      objects: "Об'єкти",
       symbols: 'Символи',
       flags: 'Прапори',
     },

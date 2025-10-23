@@ -48,7 +48,6 @@
     </div>
 
     <div class="search-contact__content">
-      <wt-replace-transition duration="normal">
         <wt-loader v-if="isLoading"/>
         <wt-dummy
           v-else-if="!isLoading && !contactsBySearch.length"
@@ -61,7 +60,6 @@
           :list="contactsBySearch"
           @link="linkContact"
         />
-      </wt-replace-transition>
     </div>
     <div class="search-contact__actions">
       <wt-button
@@ -80,7 +78,6 @@
 <script setup>
 import { useVuelidate } from '@vuelidate/core';
 import { requiredIf } from '@vuelidate/validators';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';

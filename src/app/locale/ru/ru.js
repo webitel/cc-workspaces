@@ -24,6 +24,17 @@ export default {
     select: 'Выбрать',
     run: 'Запустить',
     today: 'Сегодня',
+    phoneNumber: 'Номер телефона',
+  },
+  feedback: {
+    success: {
+      title: 'Спасибо!',
+      description: 'Ваш ответ успешно сохранен',
+    },
+    error: {
+      title: 'Упс!',
+      description: 'Что-то пошло не так',
+    },
   },
   appNavigator: {
     title: 'Приложения Webitel',
@@ -44,8 +55,12 @@ export default {
   },
   widgets: {
     callInbound: 'Входящих звонков',
+    callInboundQueue: 'Звонки из входящих очередей',
+    callDialerQueue: 'Все звонки из дайлеров',
+    callManual: 'Ручные звонки',
     callHandled: 'Обработано звонков',
     callMissed: 'Пропущено звонков',
+    callQueueMissed: 'Пропущенные звонки из очередей',
     avgTalk: 'Среднее время разговора',
     avgHold: 'Среднее время удержания',
     utilization: 'Утилизация',
@@ -264,6 +279,13 @@ export default {
         denied: 'Запрещено',
       },
     },
+  },
+  descTrackAuthPopup: {
+    title: 'Внимание',
+    errorLabel: 'Вы не можете работать в Workspace',
+    errorDescription: 'DeskTrack не запущен, или вы не вошли в систему',
+    successLabel: 'DeskTrack успешно запущен',
+    successDescription: 'Вы можете работать в Workspace',
   },
   error: {
     general: 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',

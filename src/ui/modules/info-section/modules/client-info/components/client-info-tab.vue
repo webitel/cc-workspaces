@@ -39,6 +39,7 @@ const isHideContact = ref(false);
 
 const isJob = computed(() => store.getters['workspace/IS_JOB_WORKSPACE']);
 const isChatClosed = computed(() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED']);
+const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_CENTER_LICENSE']);
 
 const getValueWbtHideContactVariable = async () => {
   const { items } = await ConfigurationAPI.getList({
@@ -49,7 +50,7 @@ const getValueWbtHideContactVariable = async () => {
 
 const isAllowedContacts = computed(() => {
     if (isJob.value) return;
-    return !isHideContact.value && !props.task?.hideContact && !isChatClosed.value;
+    return !isHideContact.value && !props.task?.hideContact && !isChatClosed.value && hasCallCenterLicense.value;
   }
 );
 

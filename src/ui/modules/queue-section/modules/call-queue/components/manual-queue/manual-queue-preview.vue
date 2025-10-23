@@ -128,11 +128,11 @@ const wait = computed(() => {
   return `${minutes}:${seconds}`;
 });
 
-function accept(task) {
+function accept() {
   if (showLoader.value) return;
 
   showLoader.value = true;
-  emit('accept', task);
+  emit('accept', props.task);
   showLoader.value = false;
 }
 </script>

@@ -24,6 +24,17 @@ export default {
     select: 'Select',
     run: 'Run',
     today: 'Today',
+    phoneNumber: 'Phone number'
+  },
+  feedback: {
+    success: {
+      title: 'Thank You!',
+      description: 'We’ve saved your response successfully',
+    },
+    error: {
+      title: 'Oops!',
+      description: 'Something went wrong',
+    },
   },
   appNavigator: {
     title: 'Webitel applications',
@@ -44,13 +55,17 @@ export default {
   },
   widgets: {
     callInbound: 'Inbound calls',
+    callInboundQueue: 'Inbound queue calls',
+    callDialerQueue: 'All dialer calls',
+    callManual: 'Manual calls',
     callHandled: 'Processed Calls',
     callMissed: 'Missed Calls',
+    callQueueMissed: 'Missed from queues',
     avgTalk: 'Avg Talk Time',
     avgHold: 'Avg Hold Time',
     utilization: 'Utilization',
     occupancy: 'Occupancy',
-    chatAccepts: 'Accepted chats',
+    chatAccepts: 'Processed Chats',
     chatAht: 'Chat Handling Time',
     scoreCount: 'Rated calls',
     scoreAvg: 'Total score',
@@ -263,6 +278,13 @@ export default {
         denied: 'Permission denied',
       },
     },
+  },
+  descTrackAuthPopup: {
+    title: 'Attention',
+    errorLabel: 'You can’t work in Workspace',
+    errorDescription: 'DeskTrack is not running, or you are not logged in',
+    successLabel: 'DeskTrack is launched successfully',
+    successDescription: 'You can work in Workspace',
   },
   error: {
     general: 'An error occured. Please, try again.',

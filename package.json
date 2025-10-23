@@ -21,7 +21,7 @@
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/components": "^13.6.0",
     "@vueuse/core": "^10.4.1",
-    "@webitel/api-services": "=0.0.36",
+    "@webitel/api-services": "^0.0.57",
     "@webitel/ui-sdk": "~25.10",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",
@@ -46,7 +46,7 @@
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^25.5.9"
+    "webitel-sdk": "^25.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

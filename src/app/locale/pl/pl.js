@@ -24,6 +24,17 @@ export default {
     select: 'Wybierz',
     run: 'Uruchom',
     today: 'Dzisiaj',
+    phoneNumber: 'Numer telefonu',
+  },
+  feedback: {
+    success: {
+      title: 'Dziękujemy!',
+      description: 'Twoja odpowiedź została pomyślnie zapisana',
+    },
+    error: {
+      title: 'Ups!',
+      description: 'Coś poszło nie tak',
+    },
   },
   appNavigator: {
     title: 'Aplikacje Webitel',
@@ -44,8 +55,12 @@ export default {
   },
   widgets: {
     callInbound: 'Połączenia przychodzące',
+    callInboundQueue: 'Połączenia z kolejki przychodzącej',
+    callDialerQueue: 'Wszystkie połączenia z dialera',
+    callManual: 'Połączenia ręczne',
     callHandled: 'Obsłużone połączenia',
     callMissed: 'Nieodebrane połączenia',
+    callQueueMissed: 'Przegapione z kolejek',
     avgTalk: 'Śr. czas rozmowy',
     avgHold: 'Śr. czas oczekiwania',
     utilization: 'Wykorzystanie',
@@ -260,6 +275,13 @@ export default {
         denied: 'Odmowa dostępu',
       },
     },
+  },
+  descTrackAuthPopup: {
+    title: 'Uwaga',
+    errorLabel: 'Nie możesz pracować w Workspace',
+    errorDescription: 'DeskTrack nie jest uruchomiony lub nie jesteś zalogowany',
+    successLabel: 'DeskTrack uruchomiony pomyślnie',
+    successDescription: 'Możesz pracować w Workspace',
   },
   error: {
     general: 'Wystąpił błąd. Spróbuj ponownie.',

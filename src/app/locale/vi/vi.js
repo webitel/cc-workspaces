@@ -24,6 +24,17 @@ export default {
     select: 'Chọn',
     run: 'Chạy',
     today: 'Hôm nay',
+    phoneNumber: 'Số điện thoại',
+  },
+  feedback: {
+    success: {
+      title: 'Cảm ơn!',
+      description: 'Phản hồi của bạn đã được lưu thành công',
+    },
+    error: {
+      title: 'Rất tiếc!',
+      description: 'Đã xảy ra sự cố',
+    },
   },
   appNavigator: {
     title: 'Ứng dụng Webitel',
@@ -44,8 +55,12 @@ export default {
   },
   widgets: {
     callInbound: 'Cuộc gọi đến',
+    callInboundQueue: 'Cuộc gọi từ hàng đợi đến',
+    callDialerQueue: 'Tất cả cuộc gọi từ dialer',
+    callManual: 'Cuộc gọi thủ công',
     callHandled: 'Cuộc gọi đã xử lý',
     callMissed: 'Cuộc gọi nhỡ',
+    callQueueMissed: 'Bỏ lỡ từ hàng đợi',
     avgTalk: 'Thời gian nói trung bình',
     avgHold: 'Thời gian giữ máy trung bình',
     utilization: 'Sử dụng',
@@ -260,6 +275,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Chú ý',
+    errorLabel: 'Bạn không thể làm việc trong Workspace',
+    errorDescription: 'DeskTrack chưa chạy hoặc bạn chưa đăng nhập',
+    successLabel: 'DeskTrack đã khởi động thành công',
+    successDescription: 'Bạn có thể làm việc trong Workspace',
+  },
   error: {
     general: 'Đã xảy ra lỗi. Vui lòng thử lại.',
     websocket: {
@@ -316,7 +338,8 @@ export default {
     title: 'Xác nhận hành động',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Mở menu trả lời nhanh trong chat'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Mở menu trả lời nhanh trong chat',
+  },
 };

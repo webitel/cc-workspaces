@@ -3,7 +3,7 @@
     :empty="!dataList.length"
     :loading="isLoading"
     :search="dataSearch"
-    @more="handleIntersect"
+    @more="customHandleIntersect"
     @search:input="dataSearch = $event"
     @search:change="resetData"
   >
@@ -36,158 +36,163 @@
   </lookup-item-container>
 </template>
 
-<script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+<script setup>
+import { computed, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 import { CallDirection } from 'webitel-sdk';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
-import infiniteScrollMixin from '../../../../../../../../app/mixins/infiniteScrollMixin';
-import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
-import WorkspaceStates
-  from '../../../../../../../enums/WorkspaceState.enum';
+import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
+import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum';
 import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
 import LookupItemContainer from '../../lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
 
 const historyAPI = APIRepository.history;
 
-export default {
-  name: 'HistoryContainer',
-  components: {
-    LookupItemContainer,
-    HistoryLookupItem,
-    EmptySearch,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [infiniteScrollMixin, sizeMixin],
+});
 
-  data: () => ({
-    dataList: '',
-    historyNumber: '',
-    dataFields: ['id', 'parent_id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact'],
-  }),
+const { t } = useI18n();
+const store = useStore();
 
-  watch: {
-    call() {
-      this.resetHistoryNumber();
-    },
-  },
+const historyNumber = ref('');
 
-  computed: {
-    ...mapState('ui/userinfo', {
-      userId: (state) => state.userId,
-    }),
-    ...mapGetters('workspace', {
-      workspaceState: 'WORKSRACE_STATE',
-    }),
-    ...mapGetters('features/member', {
-      member: 'MEMBER_ON_WORKSPACE',
-    }),
-    ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
-      isNewCall: 'IS_NEW_CALL',
-    }),
-  },
+const userId = computed(() => store.state['ui/userinfo']?.userId);
+const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
+const member = computed(() => store.getters['features/member/MEMBER_ON_WORKSPACE']);
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
-
-  methods: {
-    ...mapActions('features/call', {
-      setNumber: 'SET_NEW_NUMBER',
-    }),
-    select(item) {
-      let destination = '';
-      if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
-      if (item.direction === CallDirection.Outbound) destination = item.destination;
-      this.setNumber({ value: destination });
-    },
-
-    async fetch(argParams) {
-      let response;
-      const params = { ...argParams };
-      if (this.workspaceState === WorkspaceStates.MEMBER) {
-        response = await this.getMemberHistory(params);
-      } else if (!this.isNewCall) {
-        response = await this.getNumberHistory(params);
-      } else {
-        response = await this.getAgentHistory(params);
-      }
-      return response;
-    },
-
-    getAgentHistory(argParams) {
-      const params = {
-        ...argParams,
-        userId: this.userId,
-      };
-      return historyAPI.getHistory(params);
-    },
-    getMemberHistory(argParams) {
-      const params = {
-        ...argParams,
-        memberId: this.member.id,
-      };
-      return historyAPI.getHistory(params);
-    },
-    getNumberHistory(argParams) {
-      const number = this.call.displayNumber;
-      const params = {
-        ...argParams,
-        search: number,
-      };
-      this.historyNumber = number;
-      return historyAPI.getHistory(params);
-    },
-
-    resetHistoryNumber() {
-      this.historyNumber = '';
-    },
-
-    async loadDataList() {
-      if (!this.dataList.length) this.isLoading = true;
-      const params = this.collectParams();
-      // both items and data because contacts return { data }, and other endpoints return { items }
-      const { items, data, next } = await this.fetch(params);
-      this.isNext = next;
-      const sortedData = await this.groupAndSortByDate(items || data);
-      this.setData(sortedData);
-      this.dataPage += 1;
-      this.isLoading = false;
-    },
-    groupAndSortByDate(data) {
-      const groupedData = {};
-      data.forEach(item => {
-        const date = new Date(parseInt(item.createdAt));
-        let dateKey;
-
-        this.isToday(date) ? dateKey = this.$t('history.today'):
-          dateKey = this.formatDate(item.createdAt);
-
-        if (!groupedData[dateKey]) groupedData[dateKey] = [];
-        groupedData[dateKey].push(item);
-      });
-
-      const result = Object.keys(groupedData).map(key => {
-        return {
-          groupName: key,
-          groupData: groupedData[key].sort((a, b) => b.createdAt - a.createdAt)
-        };
-      });
-
-      return result;
-    },
-    isToday(date) {
-      const today = new Date();
-      return (
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear()
-      );
-    },
-    formatDate(timestamp) {
-      const date = new Date(parseInt(timestamp));
-      return `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
-    },
-  },
+const select = (item) => {
+  let destination = '';
+  if (item.direction === CallDirection.Inbound) destination = item.from.number || '';
+  if (item.direction === CallDirection.Outbound) destination = item.destination;
+  store.dispatch('features/call/SET_NEW_NUMBER', { value: destination });
 };
+
+const getAgentHistory = (argParams) => {
+  const params = {
+    ...argParams,
+    ownerId: userId.value,
+  };
+  return historyAPI.getHistory(params);
+};
+
+const getMemberHistory = (argParams) => {
+  const params = {
+    ...argParams,
+    memberId: member.value.id,
+  };
+  return historyAPI.getHistory(params);
+};
+
+const getNumberHistory = (argParams) => {
+  const number = call.value.displayNumber;
+  const params = {
+    ...argParams,
+    search: number,
+  };
+  historyNumber.value = number;
+  return historyAPI.getHistory(params);
+};
+
+const resetHistoryNumber = () => {
+  historyNumber.value = '';
+};
+
+const groupAndSortByDate = (data) => {
+  const groupedData = {};
+  data.forEach(item => {
+    const date = new Date(parseInt(item.createdAt));
+    let dateKey;
+
+    isToday(date) ? dateKey = t('history.today') : dateKey = formatDate(item.createdAt);
+
+    if (!groupedData[dateKey]) groupedData[dateKey] = [];
+    groupedData[dateKey].push(item);
+  });
+
+  const result = Object.keys(groupedData).map(key => {
+    return {
+      groupName: key,
+      groupData: groupedData[key].sort((a, b) => b.createdAt - a.createdAt)
+    };
+  });
+
+  return result;
+};
+
+const isToday = (date) => {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+};
+
+const formatDate = (timestamp) => {
+  const date = new Date(parseInt(timestamp));
+  return `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+};
+
+const fetchFn = async (argParams) => {
+  let response;
+  const params = { ...argParams };
+  if (workspaceState.value === WorkspaceStates.MEMBER) {
+    response = await getMemberHistory(params);
+  } else if (!isNewCall.value) {
+    response = await getNumberHistory(params);
+  } else {
+    response = await getAgentHistory(params);
+  }
+  return response;
+};
+
+// Custom loadDataList with grouping
+const loadDataListWithGrouping = async () => {
+  if (!dataList.value.length) isLoading.value = true;
+  const params = collectParams();
+  const { items, data, next } = await fetchFn(params);
+  isNext.value = next;
+  const sortedData = await groupAndSortByDate(items || data);
+  setData(sortedData);
+  dataPage.value += 1;
+  isLoading.value = false;
+};
+
+const {
+  dataList,
+  isLoading,
+  dataSearch,
+  handleIntersect,
+  resetData,
+  dataPage,
+  isNext,
+  setData,
+  collectParams,
+} = useInfiniteScroll({
+  fetchFn,
+  size: 20,
+  fields: ['id', 'parent_id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact'],
+});
+
+// Override handleIntersect to use custom loadDataList
+const customHandleIntersect = async () => {
+  if (isNext.value) {
+    await loadDataListWithGrouping();
+  }
+};
+
+watch(call, () => {
+  resetHistoryNumber();
+});
 </script>
 
 <style lang="scss" scoped>

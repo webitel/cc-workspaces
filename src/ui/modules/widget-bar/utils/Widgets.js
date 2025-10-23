@@ -6,6 +6,27 @@ export default {
     locale: 'widgets.callInbound',
     show: true,
   },
+  INBOUND_QUEUE: {
+    type: 'callInboundQueue',
+    field: 'callInboundQueue',
+    icon: 'ws-widget-call-inbound-queue',
+    locale: 'widgets.callInboundQueue',
+    show: true,
+  },
+  DIALER_QUEUE: {
+    type: 'callDialerQueue',
+    field: 'callDialerQueue',
+    icon: 'ws-widget-all-dialer-calls',
+    locale: 'widgets.callDialerQueue',
+    show: true,
+  },
+  MANUAL_CALLS: {
+    type: 'callManual',
+    field: 'callManual',
+    icon: 'ws-widget-manual-calls',
+    locale: 'widgets.callManual',
+    show: true,
+  },
   HANDLED: {
     type: 'callHandled',
     field: 'callHandled',
@@ -16,8 +37,15 @@ export default {
   MISSED: {
     type: 'callMissed',
     field: 'callMissed',
-    icon: 'ws-widget-call-missed',
+    icon: 'ws-widget-all-call-missed',
     locale: 'widgets.callMissed',
+    show: true,
+  },
+  MISSED_QUEUE: {
+    type: 'callQueueMissed',
+    field: 'callQueueMissed',
+    icon: 'ws-widget-queue-missed',
+    locale: 'widgets.callQueueMissed',
     show: true,
   },
   AVG_TALK: {

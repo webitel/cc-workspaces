@@ -24,6 +24,17 @@ export default {
     select: 'Seleccionar',
     run: 'Ejecutar',
     today: 'Hoy',
+    phoneNumber: 'Número de teléfono',
+  },
+  feedback: {
+    success: {
+      title: '¡Gracias!',
+      description: 'Hemos guardado tu respuesta correctamente',
+    },
+    error: {
+      title: '¡Vaya!',
+      description: 'Algo salió mal',
+    },
   },
   appNavigator: {
     title: 'Aplicaciones de Webitel',
@@ -44,8 +55,12 @@ export default {
   },
   widgets: {
     callInbound: 'Llamadas entrantes',
+    callInboundQueue: 'Llamadas de cola entrante',
+    callDialerQueue: 'Todas las llamadas del marcador',
+    callManual: 'Llamadas manuales',
     callHandled: 'Llamadas procesadas',
     callMissed: 'Llamadas perdidas',
+    callQueueMissed: 'Perdidas de colas',
     avgTalk: 'Tiempo promedio de conversación',
     avgHold: 'Tiempo promedio de espera',
     utilization: 'Utilización',
@@ -262,6 +277,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Atención',
+    errorLabel: 'No puedes trabajar en Workspace',
+    errorDescription: 'DeskTrack no está en ejecución, o no has iniciado sesión',
+    successLabel: 'DeskTrack se inició con éxito',
+    successDescription: 'Puedes trabajar en Workspace',
+  },
   error: {
     general: 'Ocurrió un error. Por favor, inténtelo de nuevo.',
     websocket: {
@@ -325,7 +347,9 @@ export default {
     title: 'Confirmar acción',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Abre un menú de respuestas rápidas preestablecidas para respuestas de chat'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription:
+      'Abre un menú de respuestas rápidas preestablecidas para respuestas de chat',
+  },
 };

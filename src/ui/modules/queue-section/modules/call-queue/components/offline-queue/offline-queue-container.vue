@@ -15,69 +15,78 @@ v-for="(task, index) of dataList"
         />
         <wt-divider v-if="dataList.length > index + 1"/>
       </div>
-      <observer
-        :options="obsOptions"
-        @intersect="handleIntersect"
+      <wt-intersection-observer
+        :canLoadMore="true"
+        :loading="isLoading"
+        @next="handleIntersect"
       />
     </div>
   </task-queue-container>
 </template>
 
-<script>
+<script setup>
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { computed, onMounted, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
 
-import infiniteScrollMixin from '../../../../../../../app/mixins/infiniteScrollMixin';
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import useInfiniteScroll from '../../../../../../../app/composables/useInfiniteScroll';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import OfflinePreview from './offline-queue-preview.vue';
+import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 
-export default {
-  name: 'OfflineQueueContainer',
-  components: {
-    TaskQueueContainer,
-    OfflinePreview,
+const props = defineProps({
+  size: {
+    type: String,
+    default: 'md',
   },
-  mixins: [infiniteScrollMixin, sizeMixin],
-  setup() {
-    const { subscribe } = useCachedInterval({ timeout: 15 * 1000 });
-    return { subscribe };
-  },
-  computed: {
-    ...mapState('features/member', {
-      dataList: (state) => state.memberList,
-    }),
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
-  },
+});
 
-  methods: {
-    loadDataList() {
-      this.loadList({ search: this.dataSearch, page: this.dataPage, size: this.dataSize });
-    },
+const store = useStore();
+const { subscribe } = useCachedInterval({ timeout: 15 * 1000 });
 
-    ...mapActions('features/member', {
-      loadList: 'LOAD_DATA_LIST',
-      openMember: 'OPEN_MEMBER_ON_WORKSPACE',
-      resetWorkspace: 'RESET_WORKSPACE',
-    }),
-    toggleMemberDisplay(task) {
-     this.taskOnWorkspace.id === task.id ? this.resetWorkspace() : this.openMember(task);
-    },
-  },
-  mounted() {
-    this.subscribe(this.loadDataList);
-  },
-  unmounted() {
-    /*
-    [WTEL-3064]
-    When unmounting a offline-queue-container component (for example, when clicking on missed calls),
-    in agent-workspace-action panel should display the last active event, except for the offline queue
-    */
-    this.resetWorkspace();
-  },
+const dataList = computed(() => store.state.features.member?.memberList || []);
+const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+
+const fetchFn = async (params) => {
+  const response = await store.dispatch('features/member/LOAD_DATA_LIST', params);
+  return { items: response.items, next: response.next };
 };
+
+const {
+  isLoading,
+  dataSearch,
+  handleIntersect,
+  resetData,
+} = useInfiniteScroll({
+  fetchFn,
+  size: 20,
+});
+
+// Use the same function for initial load and infinite scroll
+const loadDataList = () => fetchFn({
+  search: dataSearch.value,
+  page: 1,
+  size: 20
+});
+
+const toggleMemberDisplay = (task) => {
+  taskOnWorkspace.value.id === task.id
+    ? store.dispatch('features/member/RESET_WORKSPACE')
+    : store.dispatch('features/member/OPEN_MEMBER_ON_WORKSPACE', task);
+};
+
+onMounted(() => {
+  subscribe(loadDataList);
+});
+
+onUnmounted(() => {
+  /*
+  [WTEL-3064]
+  When unmounting a offline-queue-container component (for example, when clicking on missed calls),
+  in agent-workspace-action panel should display the last active event, except for the offline queue
+  */
+  store.dispatch('features/member/RESET_WORKSPACE');
+});
 </script>
 
 <style lang="scss" scoped>

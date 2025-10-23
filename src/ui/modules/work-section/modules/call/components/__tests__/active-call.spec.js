@@ -10,7 +10,7 @@ import Numpad
 import CallPreview
   from '../call-preview.vue';
 import Transfer
-  from '../call-transfer/call-transfer-container.vue';
+  from '../call-transfer/_shared/components/call-transfer-container.vue';
 import TheCall
   from '../the-call.vue';
 

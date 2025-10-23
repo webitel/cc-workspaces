@@ -220,6 +220,8 @@ export default {
       align-items: center;
       gap: var(--spacing-xs);
       padding: var(--wt-context-menu-option-padding);
+      color: var(--wt-context-menu-option-text-color);
+      text-decoration: none;
     }
   }
 }

@@ -24,6 +24,17 @@ export default {
     select: 'Таңдау',
     run: 'Іске қосу',
     today: 'Бүгін',
+    phoneNumber: 'Телефон нөмірі',
+  },
+  feedback: {
+    success: {
+      title: 'Рақмет!',
+      description: 'Жауабыңыз сәтті сақталды',
+    },
+    error: {
+      title: 'Қате!',
+      description: 'Бір нәрсе дұрыс болмады',
+    },
   },
   appNavigator: {
     title: 'Webitel қосымшасы',
@@ -44,8 +55,12 @@ export default {
   },
   widgets: {
     callInbound: 'Кіріс қоңыраулар',
+    callInboundQueue: 'Кіру кезегінен қоңыраулар',
+    callDialerQueue: 'Дайлерден барлық қоңыраулар',
+    callManual: 'Қолмен қоңыраулар',
     callHandled: 'Қоңыраулар өңделді',
     callMissed: 'Қабылданбаған қоңыраулар',
+    callQueueMissed: 'Кезектен жіберілген қоңыраулар',
     avgTalk: 'Орташа сөйлесу уақыты',
     avgHold: 'Орташа ұстап тұру уақыты',
     utilization: 'Утилизация',
@@ -259,6 +274,13 @@ export default {
       },
     },
   },
+  descTrackAuthPopup: {
+    title: 'Назар аударыңыз',
+    errorLabel: 'Сіз Workspace-те жұмыс істей алмайсыз',
+    errorDescription: 'DeskTrack іске қосылмаған немесе сіз жүйеге кірмедіңіз',
+    successLabel: 'DeskTrack сәтті іске қосылды',
+    successDescription: 'Сіз Workspace-те жұмыс істей аласыз',
+  },
   error: {
     general: 'Қате орын алды. Қайталап көріңіз.', // TODO: Translate
     websocket: {
@@ -323,7 +345,8 @@ export default {
     title: 'Әрекетті растаңыз',
   },
   autocompleteList: {
-    quickReplies: ({ linked }) => `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
-    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады'
-  }
+    quickReplies: ({ linked }) =>
+      `/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
+    quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады',
+  },
 };

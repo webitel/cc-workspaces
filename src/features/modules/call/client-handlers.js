@@ -98,14 +98,32 @@ const actions = {
     }
   },
 
-  HANDLE_START_TALKING: (context) =>
+  // @author @stanislav-kozak
+  // https://webitel.atlassian.net/browse/WTEL-7915
+  // We need close notification after start talking
+  HANDLE_START_TALKING: async (context) => {
+    await context.dispatch('features/swController/HIDE_NOTIFICATIONS', {
+      title: 'New call'
+    }, {
+      root: true
+    })
     context.dispatch('features/callNotifications/HANDLE_CALL_START', null, {
       root: true,
-    }),
-  HANDLE_CALL_END: (context, call) =>
+    })
+  },
+  // @author @stanislav-kozak
+  // https://webitel.atlassian.net/browse/WTEL-7915
+  // We need close notification after end call
+  HANDLE_CALL_END: async (context, call) => {
+    await context.dispatch('features/swController/HIDE_NOTIFICATIONS', {
+      title: 'New call'
+    }, {
+      root: true
+    })
     context.dispatch('features/callNotifications/HANDLE_CALL_END', call, {
       root: true,
-    }),
+    })
+  }
 };
 
 export default {

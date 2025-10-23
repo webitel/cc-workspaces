@@ -13,7 +13,7 @@
       @drop="handleDrop"
     />
       <quick-replies
-        v-show="showQuickReplies"
+        v-if="showQuickReplies"
         :search="searchReply"
         @close="closeQuickRepliesPanel"
         @select="applyQuickReply"
@@ -22,17 +22,15 @@
         v-if="!showQuickReplies"
         class="chat-messaging__messaging chat-messages-container"
       >
-        <wt-replace-transition appear>
-          <chat-history
-            v-if="contact?.id"
-            :contact="contact"
-            :size="size"
-          />
-          <current-chat
-            v-else
-            :size="size"
-          />
-        </wt-replace-transition>
+        <chat-history
+          v-if="contact?.id"
+          :contact="contact"
+          :size="size"
+        />
+        <current-chat
+          v-else
+          :size="size"
+        />
       </div>
     <div
       v-if="isChatActive"
@@ -78,7 +76,8 @@
             @change="handleAttachments"
           >
         </div>
-        <chat-emoji
+        <wt-chat-emoji
+          class="chat-messaging__emoji"
           :size="size"
           @insert-emoji="insertEmoji"
         />
@@ -106,11 +105,12 @@
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import {ComponentSize} from '@webitel/ui-sdk/enums';
-import WtReplaceTransition from '@webitel/ui-sdk/src/components/transitions/cases/wt-replace-transition.vue';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
+import { WtChatEmoji } from '@webitel/ui-sdk/components';
+
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import {useDropzoneHandlers} from '../../../../../composibles/useDropzoneHandlers';
@@ -119,7 +119,6 @@ import {useHotkeys} from '../../../../../hotkeys/useHotkeys';
 import {useAutocomplete} from './autocomplete/composables/useAutocomplete';
 import {AutocompleteOptions} from './autocomplete/enums/AutocompleteOptions';
 import ChatHistory from './chat-history/the-chat-history.vue';
-import ChatEmoji from './components/chat-emoji.vue';
 import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import {useQuickReplies} from './quick-replies/composables/useQuickReplies';
@@ -195,12 +194,23 @@ function accept() {
   return store.dispatch('features/chat/ACCEPT');
 }
 
-function setDraftFocus() {
+async function setDraftFocus() {
+  if (messageDraft.value && messageDraft.value.$el) {
+    textarea.value = messageDraft.value.$el.querySelector('textarea');
+  }
   if(!messageDraft.value || !textarea.value) return;
   textarea?.value.focus();
 }
 
-function insertEmoji(unicode: string) {
+async function insertEmoji(unicode: string) {
+  if (!textarea.value) {
+    await setDraftFocus();
+    return;
+  }
+
+  await nextTick();
+
+  textarea.value.focus();
   // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
   insertTextAtCursor(textarea.value, unicode);
 }
@@ -263,7 +273,10 @@ function selectAutocompleteOption({id}: { id: string }) {
 
 function showQuickRepliesPanel() {
   closeAutocomplete();
-  chat.value.draft = chat.value.draft.slice(0, -1);
+  if(chat.value.draft?.length > 1) {
+    // delete last space only if there is more than 1 symbol in draft
+    chat.value.draft = chat.value.draft.slice(0, -1);
+  }
   openQuickReplies();
 }
 
@@ -282,16 +295,15 @@ function handleQuickReplies() {
 
 watch(chat, async () => {
   await nextTick();
-  setDraftFocus();
+  await setDraftFocus();
 }, {immediate: true});
 
-onMounted(() => {
+onMounted(async () => {
   eventBus?.$on('chat-input-focus', setDraftFocus);
   setupHotkeys();
 
-  if (messageDraft.value && messageDraft.value.$el) {
-    textarea.value = messageDraft.value.$el.querySelector('textarea');
-  }
+  await nextTick();
+  await setDraftFocus();
 });
 
 onUnmounted(() => {
@@ -305,6 +317,7 @@ $chatGap: var(--spacing-2xs);
 $roundedAction: calc(var(--rounded-action-padding) * 2 + var(--rounded-action-border-size) * 2);
 $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
+$input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
 
 .chat-messaging {
   position: relative;
@@ -323,6 +336,13 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
     .chat-messaging__textarea {
       max-height: calc((100% - $textEntryActionsSm) - $chatGap);
     }
+  }
+
+  &__messaging {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -355,5 +375,15 @@ $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
   position: absolute;
   bottom: 100%;
   width: 100%;
+}
+
+.chat-messaging__emoji {
+  ::v-deep emoji-picker {
+    position: absolute;
+    z-index: var(--ws-dropdown-z-index);
+    bottom: calc(100% + $input-height);
+    left: 100%;
+    transform: translateX(-50%);
+  }
 }
 </style>

@@ -1,28 +1,20 @@
 <template>
-  <task-queue-preview-md
+  <chat-queue-preview-md
     v-if="size === 'md'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
+    :task="task"
+    :status="ChatStatus.Closed"
     :opened="opened"
-    :queue-name="displayQueueName"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
-
-    <template #icon>
-      <wt-icon-btn
-        v-if="!processed"
-        :size="size"
-        class="closed-queue-preview__close"
-        icon="close--filled"
-        @click.stop="markChatAsProcessed"
-      />
+    <template #icon="{ iconColor }">
       <wt-icon
         :icon="displayIcon"
-        :size="size"
-        class="closed-queue-preview__provider"
+        :color="iconColor"
+        size="md"
       />
     </template>
-
     <template #title>
       {{ displayTaskName }}
     </template>
@@ -35,25 +27,35 @@
       {{ duration }}
     </template>
 
+    <template #close-icon v-if="!processed">
+      <wt-icon-btn
+        :size="size"
+        class="closed-queue-preview__close"
+        icon="close--filled"
+        @click.stop="markChatAsProcessed"
+      />
+    </template>
     <template #icon-status>
       <wt-icon
         :icon="closeReasonIcon"
         icon-prefix="ws"
         color="error"
+        class="closed-queue-preview__status"
       />
     </template>
-  </task-queue-preview-md>
+  </chat-queue-preview-md>
 
-  <task-queue-preview-sm
+  <chat-queue-preview-sm
     v-else-if="size === 'sm'"
     :class="[{ 'closed-queue-preview--processed': processed }]"
+    :task="task"
     :opened="opened"
-    :queue-name="displayQueueName"
+    :status="ChatStatus.Closed"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
 
-    <template #icon>
+    <template #close-icon>
       <wt-icon-btn
         v-if="!processed"
         :size="size"
@@ -61,6 +63,8 @@
         icon="close--filled"
         @click.stop="markChatAsProcessed"
       />
+    </template>
+    <template #icon>
       <wt-icon
         :icon="displayIcon"
         :size="size"
@@ -94,7 +98,7 @@
       </div>
     </template>
 
-  </task-queue-preview-sm>
+  </chat-queue-preview-sm>
 </template>
 
 <script setup>
@@ -106,9 +110,10 @@ import { useStore } from 'vuex';
 
 import ChatCloseReason
   from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
-import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 const props = defineProps({
   task: {
@@ -172,15 +177,13 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
     width: 100%;
   }
 
-  .closed-queue-preview__close {
-    position: absolute;
+  &__close {
     opacity: 0;
     pointer-events: none;
     transition: var(--transition);
   }
 
-  .closed-queue-preview__provider {
-    position: absolute; // for exactly the same placing as close icon
+  &__status {
     opacity: 1;
     transition: var(--transition);
   }
@@ -198,10 +201,17 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
       pointer-events: auto;
     }
 
-    .closed-queue-preview__provider {
+    .closed-queue-preview__status {
       opacity: 0;
       pointer-events: none;
     }
   }
+}
+
+.closed-queue-preview__close {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
 }
 </style>

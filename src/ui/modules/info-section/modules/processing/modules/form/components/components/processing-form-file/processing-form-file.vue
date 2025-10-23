@@ -30,7 +30,7 @@
       ></wt-icon>
       {{ label }}
       <span v-if="fileCounter">
-        ({{ fileCounter}} {{ $t('vocabulary.file', 2) }})
+        ({{ fileCounter }} {{ $tc('vocabulary.file', filePluralChoice) }})
       </span>
       <wt-hint
         v-if="hint"
@@ -142,6 +142,14 @@ export default {
     attemptId: {
       type: Number,
     },
+    entityId: {
+      type: String,
+      default: '',
+    },
+    channel: {
+      type: String,
+      default: '',
+    },
   },
   data: () => ({
     uploadingSnapshots: [],
@@ -156,6 +164,9 @@ export default {
     },
     fileCounter () {
       return this.value.length
+    },
+    filePluralChoice () {
+      return this.fileCounter < 2 ? 1 : 2
     }
   },
   methods: {
@@ -196,7 +207,14 @@ export default {
           snapshot.metadata.progress = { loaded, total };
         };
         const client = await this.client.getCliInstance();
-        const storedFile = await client.storeFile(this.attemptId, [uploadedFile], fileUploadProgress);
+
+        let storedFile;
+
+        if (this.channel) {
+          storedFile = await client.storeFile(this.entityId, [uploadedFile], fileUploadProgress, 'case');
+        } else {
+          storedFile = await client.storeFile(this.attemptId, [uploadedFile], fileUploadProgress);
+        }
 
         this.handleFileSuccessUpload({ snapshot, file: storedFile });
       } catch (err) {

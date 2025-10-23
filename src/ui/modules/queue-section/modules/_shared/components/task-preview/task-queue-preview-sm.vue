@@ -143,7 +143,7 @@ export default {
 .queue-preview-tooltip-content {
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  max-width: var(--ws-task-queue-tooltip-max-width-sm);
   gap: var(--spacing-2xs);
 }
 
