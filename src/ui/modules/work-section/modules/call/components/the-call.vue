@@ -10,7 +10,7 @@
       <call-header
         :current-tab="currentTab"
         :size="size"
-        @open-tab="currentTab = $event"
+        @open-tab="openTabs"
       ></call-header>
     </template>
     <template #body>
@@ -93,6 +93,8 @@ const openCall = () => {
   isPreviewTransfer.value = false;
   currentTab.value = CallTab.Numpad;
 };
+
+const openTabs = (tab) => currentTab.value = currentTab.value === tab ? CallTab.Numpad : tab;
 
 const setupHotkeys = () => {
   const subscribers = [
