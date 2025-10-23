@@ -24,6 +24,7 @@ export default {
     select: 'Tanlash',
     run: 'Ishga tushirish',
     today: 'Bugun',
+    phoneNumber: 'Telefon raqami',
   },
   feedback: {
     success: {

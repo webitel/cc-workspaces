@@ -24,6 +24,6 @@ export const ChatTypes = {
 export const ChatColorsMap = {
   [ChatStatus.New]: 'success',
   [ChatStatus.Active]: 'warning',
-  [ChatStatus.Closed]: 'secondary',
-  [ChatTypes.Manual]: 'secondary',
+  [ChatStatus.Closed]: 'disabled',
+  [ChatTypes.Manual]: 'disabled',
 } as const;

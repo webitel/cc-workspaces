@@ -24,6 +24,7 @@ export default {
     select: 'Selectează',
     run: 'Rulează',
     today: 'Astăzi',
+    phoneNumber: 'Număr de telefon',
   },
   feedback: {
     success: {

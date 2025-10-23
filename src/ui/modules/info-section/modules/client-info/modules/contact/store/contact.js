@@ -1,3 +1,5 @@
+import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { PhonesAPI } from '@webitel/api-services/api'
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 
 const state = {
@@ -106,6 +108,21 @@ const actions = {
   RESET_CONTACT: (context) => {
     context.commit('SET_CONTACT', null);
   },
+
+  ADD_NUMBER_TO_CONTACT: async (context, phoneData) => {
+    try {
+      const resp = await PhonesAPI.merge({
+        contactId: state.contact.id,
+        phones: [phoneData],
+      });
+
+      return context.commit('SET_NUMBER_TO_CONTACT', resp.data)
+    } catch (err) {
+      throw applyTransform(err, [
+        notify,
+      ]);
+    }
+  }
 };
 
 const mutations = {
@@ -124,6 +141,9 @@ const mutations = {
   SET_CONTACTS_BY_SEARCH: (state, contacts) => {
     state.contactsBySearch = contacts;
   },
+  SET_NUMBER_TO_CONTACT: (state, phoneData) => {
+    state.contact.phones.push(...phoneData)
+  }
 };
 
 export default {
