@@ -196,7 +196,7 @@ export default {
       chatTransferred: 'Чат ауыстырылды', // TODO: Translate
       chatsAgent: '{ agentName } чатқа қосылды', // TODO: Translate
       chatsAgentsList: '{ agentName } чатқа қатысты', // TODO: Translate
-      chatsFileBlocked: 'Файл карантинде немесе бұғатталған', // TODO: Translate
+      chatsFileBlocked: 'Файл карантинде немесе бұғатталған',
     },
   },
   emptyWorkspace: {

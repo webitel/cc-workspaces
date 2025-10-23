@@ -196,7 +196,7 @@ export default {
       chatTransferred: 'Chat đã chuyển', // TODO: Translate
       chatsAgent: '{ agentName } đã tham gia chat', // TODO: Translate
       chatsAgentsList: '{ agentName } đã tham gia chat', // TODO: Translate
-      chatsFileBlocked: 'Tệp bị cách ly hoặc bị chặn', // TODO: Translate
+      chatsFileBlocked: 'Tệp bị cách ly hoặc bị chặn',
     },
   },
   emptyWorkspace: {

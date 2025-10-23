@@ -15,7 +15,7 @@
         :username="getClientUsername"
       />
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
-      <message-blocked-error @click.stop v-if="message.file?.malware" />
+      <message-blocked-error @click.stop v-if="!message.file?.malware" />
       <div @click.stop v-else>
         <message-player
           v-if="props.message.file"

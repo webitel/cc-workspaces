@@ -4,11 +4,16 @@
       icon="protection-error"
       color="error"
     />
-    <div >
-      {{ $t('workspaceSec.chat.chatsFileBlocked') }}
-    </div>
+    <p>
+      {{ t('workspaceSec.chat.chatsFileBlocked') }}
+    </p>
   </div>
 </template>
+<script setup>
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+</script>
 
 <style scoped lang="scss">
 .chat-message-blocked-error {
@@ -22,7 +27,9 @@
   gap: var(--spacing-xs);
   white-space: pre-line;
   text-align: center;
-  max-width: 138px;
+
+  //width limit for blocking error message
+  max-width: 132px;
 }
 </style>
 <script setup lang="ts">
