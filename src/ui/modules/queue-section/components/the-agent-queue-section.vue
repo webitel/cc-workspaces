@@ -25,28 +25,21 @@
           class="queue-section__tab-content"
           :class="{ 'queue-section__tab-content--sm': size === ComponentSize.SM }"
         >
-          <span class="queue-section__count-indicator">
-            <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
-            <wt-chip
-              v-if="tab.countIncoming"
-              color="success"
-              class="queue-section__count queue-section__count--incoming"
-            >
-              {{ tab.countIncoming }}
-            </wt-chip>
-          </span>
-          <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
-
-          <span class="queue-section__count-indicator">
-            <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
-            <wt-chip
-              v-if="tab.countActive"
-              color="warning"
-              class="queue-section__count queue-section__count--active"
-            >
-              {{ tab.countActive }}
-            </wt-chip>
-          </span>
+          <div class="queue-section_indicator">
+            <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
+            <wt-badge
+              v-if="tab.showIndicator"
+              color-variable="error-color"
+            />
+          </div>
+          <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
+          <wt-chip
+            v-if="tab.countActive"
+            color="warning"
+            class="queue-section__count queue-section__count--active"
+          >
+            {{ tab.countActive }}
+          </wt-chip>
         </div>
 
       </template>
@@ -135,7 +128,7 @@ const tabs = computed(() => {
       iconColor: 'success',
       countActive: activeCallCount,
       component: CallQueue,
-      countIncoming:incomingCallCount,
+      showIndicator: !!incomingCallCount,
     },
     {
       value: 'chat',
@@ -143,7 +136,7 @@ const tabs = computed(() => {
       iconColor: 'chat',
       countActive: activeChatCount,
       component: ChatQueue,
-      countIncoming: incomingChatCount,
+      showIndicator: !!incomingChatCount,
     },
     {
       value: 'job',
@@ -151,7 +144,7 @@ const tabs = computed(() => {
       iconColor: 'job',
       countActive: activeJobCount,
       component: JobQueue,
-      countIncoming: incomingJobCount,
+      showIndicator: !!incomingJobCount,
     }
   ]
 });
@@ -232,37 +225,29 @@ onUnmounted(() => {
 
 //TODO value for count indicator, which should be different
 // after adding badge with primevue, need delete this
-$indicator-width: 30px;
-$indicator-height: 24px;
+$indicator-width: 34px;
+$indicator-height: 16px;
 
 .queue-section__tab-content {
-  display: grid;
+  position: relative;
+  display: flex;
   align-items: center;
-  justify-items: center;
-
-  //TODO after adding badge with primevue, need delete this
-  grid-template-columns: $indicator-width auto $indicator-width;
+  gap: var(--spacing-xs);
+  justify-content: center;
 
   &--sm {
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     gap: var(--spacing-2xs);
+    height: 100%;
 
-    .queue-section__count-indicator {
+
+    .queue-section__count {
       order: -1;
     }
   }
-}
-
-.queue-section__count-indicator {
-  //TODO after adding badge with primevue, need delete this
-  width: $indicator-width;
-  height: $indicator-height;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .queue-section__count {
@@ -274,8 +259,12 @@ $indicator-height: 24px;
   height: $indicator-height;
 }
 
-
 .queue-section__wrapper {
   flex-grow: 1;
+}
+
+.queue-section_indicator {
+  display: flex;
+  position: relative;
 }
 </style>
