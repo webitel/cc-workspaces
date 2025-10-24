@@ -3,7 +3,10 @@
     show-team-name
     type="agent"
     show-status
+    :data-fields="dataFields"
+    :data-filters="dataFilters"
     :get-data="getAgens"
+    :presence-status-field="PresenceStatusField"
     @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
@@ -33,6 +36,11 @@ interface APIResponse {
 
 const store = useStore();
 const agentsAPI = APIRepository.agents;
+const PresenceStatusField = 'userPresenceStatus'
+
+const dataFields = ['status', 'user_presence_status', 'name', 'extension', 'team'];
+const dataFilters = 'user_presence_status.status=sip,!dnd';
+const dataSort = 'position';
 
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 
@@ -46,7 +54,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {
-  return agentsAPI.getList({ ...params, enabled: true });
+  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort.value});
 };
 </script>
 <style scoped lang="scss">

@@ -7,6 +7,7 @@
     :data-filters="dataFilters"
     :data-fields="dataFields"
     :get-data="getUsers"
+    :presence-status-field="PresenceStatusField"
     @transfer="transfer"
   >
     <template #actions="{ item }">
@@ -47,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
 const store = useStore();
 const usersAPI = APIRepository.users;
 
+const PresenceStatusField = 'presence'
 const dataFilters = ref('presence.status=sip,!dnd');
 const dataSort = ref('presence.status');
 const dataFields = ref(['name', 'id', 'extension', 'presence']);
