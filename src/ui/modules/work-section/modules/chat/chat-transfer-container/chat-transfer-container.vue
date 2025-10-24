@@ -77,7 +77,7 @@ const store = useStore();
 const transferDestination = ref(TransferDestination.CHATPLAN);
 const hotkeyUnsubscribers = ref([]);
 
-const userId = computed(() => store.state['ui/userinfo']?.userId);
+const userId = computed(() => store.state.ui.userinfo?.userId);
 
 const fetchUsers = (params) => {
   const userParams = {

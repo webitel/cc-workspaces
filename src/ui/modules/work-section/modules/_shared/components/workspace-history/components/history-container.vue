@@ -63,7 +63,7 @@ const store = useStore();
 
 const historyNumber = ref('');
 
-const userId = computed(() => store.state['ui/userinfo']?.userId);
+const userId = computed(() => store.state.ui.userinfo?.userId);
 const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const member = computed(() => store.getters['features/member/MEMBER_ON_WORKSPACE']);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
