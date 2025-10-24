@@ -48,7 +48,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
   const number = item.extension || scroll.value.dataSearch?.value;
   store.dispatch('features/call/TOGGLE_HOLD', item.id);
   store.dispatch('features/call/CALL', {
-    user: store.state['ui/userinfo'],
+    user: store.state.ui.userinfo,
     number
   });
 };

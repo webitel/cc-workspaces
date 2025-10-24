@@ -53,7 +53,7 @@ const dataFilters = ref('presence.status=sip,!dnd');
 const dataSort = ref('presence.status');
 const dataFields = ref(['name', 'id', 'extension', 'presence']);
 
-const userId = computed(() => store.state['ui/userinfo']?.userId);
+const userId = computed(() => store.state.ui.userinfo?.userId);
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 
