@@ -10,7 +10,7 @@
       <call-header
         :current-tab="currentTab"
         :size="size"
-        @open-tab="currentTab = $event"
+        @open-tab="openTabs"
       ></call-header>
     </template>
     <template #body>
@@ -93,6 +93,11 @@ const openCall = () => {
   isPreviewTransfer.value = false;
   currentTab.value = CallTab.Numpad;
 };
+
+
+//toggle for open numpad if you click on tab button that is already open
+// https://webitel.atlassian.net/browse/WTEL-7773
+const openTabs = (tab) => currentTab.value = currentTab.value === tab ? CallTab.Numpad : tab;
 
 const setupHotkeys = () => {
   const subscribers = [

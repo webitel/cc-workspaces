@@ -30,6 +30,7 @@
         :show-status="showStatus"
         :show-team-name="showTeamName"
         :show-user-name-avatar="showUserNameAvatar"
+        :presence-status-field="presenceStatusField"
       >
         <template #before>
           <slot name="avatar"/>
@@ -62,6 +63,7 @@ interface CallTransferContainerProps {
   showUserNameAvatar?: boolean;
   dataFilters?: string;
   dataFields?: string[];
+  presenceStatusField?: string;
 }
 
 interface CallTransferContainerEmits {
@@ -76,6 +78,7 @@ const props = withDefaults(defineProps<CallTransferContainerProps>(), {
   showUserNameAvatar: false,
   dataFilters: '',
   dataFields: () => [],
+  presenceStatusField: 'presence'
 });
 
 const emit = defineEmits<CallTransferContainerEmits>();

@@ -46,6 +46,20 @@ const actions = {
       },
     });
   },
+
+  HIDE_NOTIFICATIONS: async (context, {
+    title
+  }) => {
+    // Wait until the SW is ready (installed + active)
+    const reg = await sw.ready;
+
+    // Optional: filter by tag if you used one when showing the notification
+    const list = await reg.getNotifications(title ? { title } : undefined);
+
+    list.forEach(n => n.close());
+
+    return sw.controller
+  }
 };
 
 const swController = new BaseStoreModule().getModule({ actions });
