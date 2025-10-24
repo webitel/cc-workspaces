@@ -198,6 +198,7 @@ export default {
       chatTransferred: 'Chat oʻtkazildi',
       chatsAgent: '{ agentName } chatga qoʻshildi',
       chatsAgentsList: '{ agentName } chatda ishtirok etdi',
+      chatsFileBlocked: 'Fayl karantinda yoki bloklangan',
     },
   },
   emptyWorkspace: {

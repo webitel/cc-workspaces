@@ -31,3 +31,4 @@ import './ws-widget-all-dialer-calls.svg';
 import './ws-widget-call-inbound-queue.svg';
 import './ws-widget-manual-calls.svg';
 import './ws-widget-queue-missed.svg';
+import './protection-error.svg'
