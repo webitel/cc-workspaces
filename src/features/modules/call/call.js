@@ -61,6 +61,11 @@ const actions = {
     const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun, contactId };
     let destination;
 
+    //if any call is active, hold it
+    if (context.getters.CALL_ON_WORKSPACE?.active) {
+      context.dispatch('TOGGLE_HOLD');
+    }
+
     if (number) {
       destination = number;
     } else {
