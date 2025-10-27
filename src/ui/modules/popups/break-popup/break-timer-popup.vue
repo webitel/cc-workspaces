@@ -111,7 +111,7 @@ export default {
         : this.$t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`);
     },
     statusComment () {
-      return this.agent.info?.status_comment
+      return this.agent?.statusComment
     }
   },
 
