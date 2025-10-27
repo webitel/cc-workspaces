@@ -62,7 +62,7 @@ const actions = {
     let destination;
 
     //if any call is active, hold it
-    if (context.rootGetters['workspace/TASK_ON_WORKSPACE'].active) {
+    if (context.getters.CALL_ON_WORKSPACE?.active) {
       context.dispatch('TOGGLE_HOLD');
     }
 
