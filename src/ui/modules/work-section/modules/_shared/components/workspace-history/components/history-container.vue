@@ -157,12 +157,15 @@ const fetchFn = async (argParams) => {
 
 // Custom loadDataList with grouping
 const loadDataListWithGrouping = async () => {
-  if (!dataList.value.length) isLoading.value = true;
+  if (dataPage.value === 1) isLoading.value = true;
   const params = collectParams();
   const { items, data, next } = await fetchFn(params);
   isNext.value = next;
-  const sortedData = await groupAndSortByDate(items || data);
-  setData(sortedData);
+
+  const rawData = items || data || [];
+  const sortedData = groupAndSortByDate(rawData);
+  setData(sortedData)
+
   dataPage.value += 1;
   isLoading.value = false;
 };
@@ -172,7 +175,6 @@ const {
   isLoading,
   dataSearch,
   handleIntersect,
-  resetData,
   dataPage,
   isNext,
   setData,
@@ -182,6 +184,15 @@ const {
   size: 20,
   fields: ['id', 'parent_id', 'from', 'to', 'created_at', 'destination', 'duration', 'direction', 'answered_at', 'contact'],
 });
+
+// Custom reset that handles data properly
+const resetData = async () => {
+  dataPage.value = 1;
+  dataList.value = [];
+  if (isNext.value) {
+    await loadDataListWithGrouping();
+  }
+};
 
 // Override handleIntersect to use custom loadDataList
 const customHandleIntersect = async () => {
