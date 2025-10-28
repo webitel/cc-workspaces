@@ -30,11 +30,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import { EngineListQueue } from '@webitel/api-services/gen';
+import { QueueType } from '@webitel/ui-sdk/enums'
+
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
-import { EngineListQueue } from '@webitel/api-services/gen';
 import { TransferParams } from '../types/transfer-tabs';
-
 
 const store = useStore();
 const queuesAPI = APIRepository.queues;
@@ -57,13 +58,9 @@ const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
 };
 
 const getQueues = (params: TransferParams): Promise<EngineListQueue> => {
-  if (!agentId.value) {
-    return Promise.resolve({ items: [], next: false });
-  }
-
   return queuesAPI.getList({
     ...params,
-    parentId: agentId.value,
+    queueType: QueueType.INBOUND_QUEUE
   });
 };
 </script>
