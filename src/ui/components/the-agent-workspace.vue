@@ -98,7 +98,7 @@ const isDescTrackAuthSuccessPopup = ref(false);
 const checkAppAccess = computed(() => store.getters['ui/userinfo/CHECK_APP_ACCESS']);
 const isDescTrackAuthPopupsAllow = computed(() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW']);
 const agent = computed(() => store.state.ui.infoSec.agentInfo.agent)
-const isDescTrackAuthErrorPopup = computed(() => !agent.value?.descTrack && isDescTrackAuthPopupsAllow.value);
+const isDescTrackAuthErrorPopup = computed(() =>  !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
 
 const hasAccess = computed(() => checkAppAccess.value(WebitelApplications.AGENT));
 
