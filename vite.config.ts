@@ -38,6 +38,9 @@ export default ({ mode }) => {
         '@aliasedDeps/api-services/axios': resolve(__dirname, 'src/app/api/instance'),
       },
     },
+    optimizeDeps: {
+      include: ['clipboard-copy', 'deep-equal', 'deepmerge'],
+    },
     plugins: [
       // basicSsl(),
       vue({
