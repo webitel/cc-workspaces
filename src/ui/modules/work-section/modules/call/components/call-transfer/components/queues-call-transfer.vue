@@ -41,18 +41,17 @@ const queuesAPI = APIRepository.queues;
 
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const transfer = (item: QueueItem = {} as QueueItem) => {
-  const calls = cli?.allCall?.();
-  if (calls && calls.length > 0) {
-    return calls[0].blindTransferQueue(Number(item.id));
+  if (call) {
+    return call.value.blindTransferQueue(Number(item.id));
   }
 };
 
 const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
-  const calls = cli?.allCall?.();
-  if (calls && calls.length > 0) {
-    return calls[0].processTransferQueue(Number(item.id));
+  if (call) {
+    return call.value.processTransferQueue(Number(item.id));
   }
 };
 

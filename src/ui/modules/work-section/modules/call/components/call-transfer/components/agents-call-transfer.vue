@@ -38,19 +38,18 @@ const store = useStore();
 const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus'
 
-const dataFields = ['status', 'user_presence_status', 'name', 'extension', 'team'];
+const dataFields = ['status', 'user_presence_status', 'name', 'extension', 'team', 'id'];
 const dataFilters = 'user_presence_status.status=sip,!dnd';
 const dataSort = 'position';
 
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
-  const number = item.extension || scroll.value.dataSearch?.value;
   store.dispatch('features/call/TOGGLE_HOLD', item.id);
-  store.dispatch('features/call/CALL', {
-    user: store.state.ui.userinfo,
-    number
-  });
+  if (call.value) {
+    call.value.processTransferAgent(Number(item.id));
+  }
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {
