@@ -81,6 +81,7 @@ export default {
     @extend %typo-subtitle-2;
     cursor: pointer;
     overflow-wrap: break-word;
+    color: var(--text-main-color);
   }
 
   &__size {
