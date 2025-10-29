@@ -38,7 +38,7 @@ const store = useStore();
 const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus'
 
-const dataFields = ['status', 'user_presence_status', 'name', 'extension', 'team', 'id'];
+const dataFields = ['status', 'user_presence_status', 'name', 'extension', 'team', 'id', 'position'];
 const dataFilters = 'user_presence_status.status=sip,!dnd';
 const dataSort = 'position';
 
@@ -53,7 +53,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {
-  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort.value});
+  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort});
 };
 </script>
 <style scoped lang="scss">
