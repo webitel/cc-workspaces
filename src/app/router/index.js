@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { eventBus } from '@webitel/ui-sdk/scripts';
+import i18n from '../locale/i18n'
+import { nextTick } from 'vue';
 
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
@@ -49,6 +52,24 @@ router.beforeEach((to, from, next) => {
     next({ ...to, query: newQuery });
   } else {
     next();
+  }
+});
+
+router.afterEach(async () => {
+  const passwordExpirationDays = localStorage.getItem('passwordExpirationDays');
+
+  await nextTick();
+
+  if (passwordExpirationDays) {
+    const { t } = i18n.global;
+    eventBus.$emit('notification', {
+      type: 'info',
+      text: t('systemNotifications.info.passwordExpirationMessage', { days: passwordExpirationDays }),
+    });
+
+    setTimeout(() => {
+      localStorage.removeItem('passwordExpirationDays')
+    }, 5000);
   }
 });
 
