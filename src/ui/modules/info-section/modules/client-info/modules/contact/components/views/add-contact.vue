@@ -140,7 +140,7 @@ async function createCommunication() {
   if ((!displayNumber.value || !draft.value.phones[0]?.number) && !items.length) return;
 
   draft.value.phones = [{
-    number: draft.value.phones[0]?.number || displayNumber.value,
+    number: draft.value.phones[0]?.number,
     primary: true,
     type: {
       ...items[0],
