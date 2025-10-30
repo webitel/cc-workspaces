@@ -203,6 +203,9 @@ export default {
       chatsAgent: '{ agentName } has joined the chat',
       chatsAgentsList: '{ agentName } participated in the chat',
       chatsFileBlocked: 'File quarantined or blocked',
+      errors: {
+        uploadFileLimitSize: 'File size limit exceeded'
+      }
     },
   },
   emptyWorkspace: {

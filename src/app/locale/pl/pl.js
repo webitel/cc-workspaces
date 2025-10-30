@@ -199,6 +199,9 @@ export default {
       chatsAgent: '{ agentName } dołączył do czatu', // TODO: Translate
       chatsAgentsList: '{ agentName } uczestniczył w czacie', // TODO: Translate
       chatsFileBlocked: 'Plik w kwarantannie lub zablokowany',
+      errors: {
+        uploadFileLimitSize: 'Przekroczono limit rozmiaru pliku',
+      },
     },
   },
   emptyWorkspace: {

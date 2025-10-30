@@ -198,6 +198,9 @@ export default {
       chatsAgent: '{ agentName } đã tham gia chat', // TODO: Translate
       chatsAgentsList: '{ agentName } đã tham gia chat', // TODO: Translate
       chatsFileBlocked: 'Tệp bị cách ly hoặc bị chặn',
+      errors: {
+        uploadFileLimitSize: 'Vượt quá giới hạn dung lượng tệp',
+      },
     },
   },
   emptyWorkspace: {
