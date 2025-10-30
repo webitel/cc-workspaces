@@ -24,6 +24,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../../../app/api/APIRepository';
+import { AgentsAPI } from '@webitel/api-services/api'
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { EngineAgent } from '@webitel/api-services/gen';
 import { TransferParams } from '../types/transfer-tabs';
@@ -44,6 +45,7 @@ const dataSort = 'position';
 
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const userId = computed(() => store.state.ui.userinfo?.userId);
 
 const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
   store.dispatch('features/call/TOGGLE_HOLD', item.id);
@@ -53,7 +55,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {
-  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort});
+  return AgentsAPI.getList({ ...params, enabled: true, sort: dataSort, notUserId: userId.value });
 };
 </script>
 <style scoped lang="scss">
