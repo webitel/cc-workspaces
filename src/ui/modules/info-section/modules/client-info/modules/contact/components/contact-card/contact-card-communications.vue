@@ -15,6 +15,7 @@
           <wt-icon-btn
             v-if="showAddingButton"
             icon="plus"
+            :disabled="isAdding"
             @click="isAdding = true"
           />
         </div>
