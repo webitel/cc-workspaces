@@ -49,8 +49,7 @@ const store = useStore();
 const usersAPI = APIRepository.users;
 
 const PresenceStatusField = 'presence'
-const dataFilters = ref('presence.status=sip,!dnd');
-const dataSort = ref('presence.status');
+const dataSort = ref('position');
 const dataFields = ref(['name', 'id', 'extension', 'presence']);
 
 const userId = computed(() => store.state.ui.userinfo?.userId);
@@ -66,7 +65,7 @@ const getUsers = (params: TransferParams): Promise<APIResponse> => {
   return usersAPI.getUsers({
     ...params,
     notId: [userId.value],
-    staus: dataSort.value
+    sort: dataSort.value
   });
 };
 </script>
