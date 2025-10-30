@@ -9,7 +9,7 @@
     >
       <wt-input
         v-model="newPhone.number"
-        :label="t('reusable.phone')"
+        :label="t('reusable.phoneNumber')"
         class="contact-card-phones__input"
       />
       <wt-select
