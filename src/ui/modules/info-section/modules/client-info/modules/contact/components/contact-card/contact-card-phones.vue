@@ -22,6 +22,7 @@
         <wt-icon-btn
           icon="tick"
           size="md"
+          :disabled="!newPhone.type"
           @click="savePhone"
         />
         <wt-icon-btn
