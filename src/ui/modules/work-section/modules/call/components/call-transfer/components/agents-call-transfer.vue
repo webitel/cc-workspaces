@@ -53,7 +53,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {
-  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort.value});
+  return agentsAPI.getList({ ...params, enabled: true, sort: dataSort});
 };
 </script>
 <style scoped lang="scss">
