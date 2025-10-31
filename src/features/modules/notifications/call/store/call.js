@@ -109,7 +109,7 @@ const actions = {
       'features/swController/SEND_NOTIFICATION',
       {
         title: i18n.global.t('notifications.newCall'),
-        body: `${i18n.global.t('reusable.queue')}: ${prettifyQueue(queueName)}\n${displayName}: ${displayNumber}`,
+        body: `${i18n.global.t('objects.queue.queue')}: ${prettifyQueue(queueName)}\n${displayName}: ${displayNumber}`,
         actions: [
           { action: 'accept', title: 'Accept' },
           { action: 'decline', title: 'Decline' },
