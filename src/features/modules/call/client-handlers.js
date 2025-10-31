@@ -55,6 +55,7 @@ const actions = {
         {
           displayName: call.displayName,
           displayNumber: call.displayNumber,
+          queueName: call.queue.queue_name,
           answer: () => context.dispatch('ANSWER', { callId }),
           hangup: () => context.dispatch('HANGUP', { callId }),
         },

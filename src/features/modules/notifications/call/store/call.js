@@ -5,6 +5,17 @@ import { CallActions } from 'webitel-sdk';
 
 import i18n from '../../../../../app/locale/i18n.js';
 
+const prettifyQueue = (queue) => {
+  return queue
+    .split('_')
+    .map((word, i) =>
+      i === 0
+        ? word.charAt(0).toUpperCase() + word.slice(1)
+        : word.toLowerCase()
+    )
+    .join(' ');
+}
+
 const actions = {
   HANDLE_CALL_START: async (context) => {
     await context.dispatch('features/notifications/STOP_SOUND', null, {
@@ -70,7 +81,7 @@ const actions = {
   // is called on ringing event on call store to send notification
   HANDLE_INBOUND_CALL_RINGING: async (
     context,
-    { displayName, displayNumber, answer, hangup },
+    { displayName, displayNumber, queueName, answer, hangup },
   ) => {
     await context.dispatch(
       'features/swController/SUBSCRIBE_TO_MESSAGE',
@@ -98,7 +109,7 @@ const actions = {
       'features/swController/SEND_NOTIFICATION',
       {
         title: i18n.global.t('notifications.newCall'),
-        body: `${displayName}: ${displayNumber}`,
+        body: `${i18n.global.t('reusable.queue')}: ${prettifyQueue(queueName)}\n${displayName}: ${displayNumber}`,
         actions: [
           { action: 'accept', title: 'Accept' },
           { action: 'decline', title: 'Decline' },
