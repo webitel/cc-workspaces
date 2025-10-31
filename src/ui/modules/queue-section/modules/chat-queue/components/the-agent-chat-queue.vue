@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, ref, onMounted, watch, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
 import { AgentChatsAPI } from '@webitel/api-services/api';
@@ -87,15 +87,15 @@ const counts = ref({
   closed: 0,
 });
 
+const { closed: closedCount } = toRefs(counts.value);
+
 const fetchCounts = async () => {
   try {
-    const [closedCount] = await Promise.all([
+    const [closedCountResult] = await Promise.all([
       AgentChatsAPI.getChatCount({ onlyClosed: true }),
     ]);
 
-    counts.value = {
-      closed: closedCount ?? 0,
-    };
+    closedCount.value = closedCountResult
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -157,7 +157,7 @@ const expansions = computed(() => [
     counters: [
       {
         color: 'secondary',
-        count: counts.value.closed,
+        count: closedCount.value,
       },
     ].filter(({ count }) => count)
   },
