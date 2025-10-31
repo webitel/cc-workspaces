@@ -44,9 +44,11 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
+import { AgentChatsAPI } from '@webitel/api-services/api';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
 
@@ -80,6 +82,26 @@ const invitedChats = computed(() => chatList.value.filter((chat) => chat.state =
 const activeChats = computed(() => chatList.value.filter((chat) => chat.state !== ConversationState.Invite))
 
 const allActiveChats = computed(() => invitedChats.value.length + activeChats.value.length)
+
+const counts = ref({
+  closed: 0,
+});
+
+const fetchCounts = async () => {
+  try {
+    const [closedCount] = await Promise.all([
+      AgentChatsAPI.getChatCount({ onlyClosed: true }),
+    ]);
+
+    counts.value = {
+      closed: closedCount ?? 0,
+    };
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
 
 // This is to keep track of which tabs are open and which
 // are closed, because the expand component doesn't tell you about this
@@ -135,7 +157,7 @@ const expansions = computed(() => [
     counters: [
       {
         color: 'secondary',
-        count: closedChat.value.length,
+        count: counts.value.closed,
       },
     ].filter(({ count }) => count)
   },
@@ -154,6 +176,17 @@ const getComponent = (value) => {
   }
 };
 
+onMounted(() => {
+  fetchCounts();
+});
+
+watch(
+  [closedChat],
+  () => {
+    fetchCounts();
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss" scoped>
