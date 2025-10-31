@@ -1,6 +1,6 @@
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { ConversationState } from 'webitel-sdk';
-import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
 import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../app/locale/i18n';
