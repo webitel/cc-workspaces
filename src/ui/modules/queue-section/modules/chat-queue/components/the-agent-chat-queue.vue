@@ -91,11 +91,10 @@ const { closed: closedCount } = toRefs(counts.value);
 
 const fetchCounts = async () => {
   try {
-    const [closedCountResult] = await Promise.all([
-      AgentChatsAPI.getChatCount({ onlyClosed: true }),
-    ]);
 
-    closedCount.value = closedCountResult
+  // NOTE: If additional counters are added in the future (e.g. onlyUnprocessed, ...),
+  // this can be refactored to use Promise.all([...]) and update all values inside counts.
+    closedCount.value = await AgentChatsAPI.getChatCount({ onlyClosed: true });
   } catch (err) {
     throw applyTransform(err, [
       notify,
