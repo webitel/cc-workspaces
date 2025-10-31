@@ -24,14 +24,14 @@
 
 <script setup>
 import { useStore } from 'vuex';
+import { computed } from 'vue';
 
-import APIRepository from '../../../../../../../../app/api/APIRepository';
+import { AgentsAPI } from '@webitel/api-services/api'
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 
-const usersAPI = APIRepository.users;
 
 const props = defineProps({
   size: {
@@ -42,7 +42,11 @@ const props = defineProps({
 
 const store = useStore();
 
-const fetchFn = usersAPI.getUsers;
+const userId = computed(() => store.state.ui.userinfo?.userId);
+
+const fetchFn = (params) => {
+  return AgentsAPI.getUsersStatus({ ...params, notUserId: userId.value})
+};
 
 const {
   dataList,
@@ -53,7 +57,7 @@ const {
 } = useInfiniteScroll({
   fetchFn,
   size: 20,
-  sort: 'presence.status',
+  sort: 'position',
   fields: ['name', 'id', 'extension', 'presence', 'username'],
 });
 

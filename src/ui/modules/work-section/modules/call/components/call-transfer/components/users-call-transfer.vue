@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import APIRepository from '../../../../../../../../app/api/APIRepository';
+import { AgentsAPI } from '@webitel/api-services/api'
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { ApiUser } from '@webitel/api-services/gen';
@@ -46,7 +46,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useStore();
-const usersAPI = APIRepository.users;
 
 const PresenceStatusField = 'presence'
 const dataSort = ref('position');
@@ -62,9 +61,9 @@ const transfer = (item: UserItem = {} as UserItem) => {
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {
-  return usersAPI.getUsers({
+  return AgentsAPI.getUsersStatus({
     ...params,
-    notId: [userId.value],
+    notUserId: [userId.value],
     sort: dataSort.value
   });
 };
