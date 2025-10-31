@@ -76,11 +76,14 @@ const actions = {
         ? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
         : await context.dispatch('SEND', files);
     } catch (err) {
+      const errorMessage = err.response?.data?.id === 'file.malware'
+        ? t('workspaceSec.chat.chatsFileBlocked')
+        : t('workspaceSec.chat.errors.uploadFileLimitSize')
       throw applyTransform(err, [
         notify(({ callback }) =>
           callback({
             type: 'error',
-            text: t('workspaceSec.chat.errors.uploadFileLimitSize'),
+            text: errorMessage,
           })
         )
       ]);
