@@ -204,6 +204,9 @@ export default {
       chatsAgent: '{ agentName } долучився до чату',
       chatsAgentsList: '{ agentName } брали участь в чаті',
       chatsFileBlocked: 'Файл в карантині чи заблокований',
+      errors: {
+        uploadFileLimitSize: 'Перевищено ліміт розміру файлу',
+      },
     },
   },
   emptyWorkspace: {

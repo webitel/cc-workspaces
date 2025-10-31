@@ -4,6 +4,8 @@ import './app/css/main.scss';
 import deepmerge from 'deepmerge';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
+import { setConfig as setApiServicesConfig } from '@webitel/api-services';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { createUserAccessControl } from './app/composables/useUserAccessControl';
 import i18n from './app/locale/i18n';
@@ -57,6 +59,10 @@ const fetchConfig = async () => {
   };
   return deepmerge(fileConfig, await apiResponse(), electronConfig);
 };
+
+setApiServicesConfig({
+  eventBus,
+});
 
 const pinia = createPinia();
 

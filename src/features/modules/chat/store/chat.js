@@ -1,5 +1,6 @@
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { ConversationState } from 'webitel-sdk';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
 import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../app/locale/i18n';
@@ -11,6 +12,8 @@ import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import chatHistory from './chat-history.js';
 import chatMedia from './chat-media.js';
 import clientHandlers from './client-handlers';
+
+const { t } = i18n.global;
 
 const state = {
   chatList: [],
@@ -73,7 +76,14 @@ const actions = {
         ? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
         : await context.dispatch('SEND', files);
     } catch (err) {
-      throw err;
+      throw applyTransform(err, [
+        notify(({ callback }) =>
+          callback({
+            type: 'error',
+            text: t('workspaceSec.chat.errors.uploadFileLimitSize'),
+          })
+        )
+      ]);
     }
   },
 
