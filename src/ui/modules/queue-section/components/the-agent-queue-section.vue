@@ -94,6 +94,29 @@ const emit = defineEmits(['resize']);
 const store = useStore();
 const currentTab = ref({});
 const hotkeyUnsubscribers = ref([]);
+const chatsMessagesLength = ref({});
+
+const hasNewChatMessages = computed(() => {
+  const chats = chatList.value ?? [];
+  let hasNew = false;
+  const nextState = { ...chatsMessagesLength.value };
+
+  chats.forEach((chat) => {
+    const id = chat.id;
+    const messagesLen = chat.messages ? chat.messages.length : 0;
+    const prevLen = chatsMessagesLength.value[id] ?? messagesLen;
+    if (messagesLen > prevLen) {
+      hasNew = store.getters['features/chat/CHAT_ON_WORKSPACE']?.id !== id;
+    }
+
+    nextState[id] = messagesLen;
+  });
+
+  chatsMessagesLength.value = nextState;
+
+  return hasNew;
+});
+
 
 const callList = computed(() => store.state.features?.call?.callList || []);
 const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
@@ -136,7 +159,7 @@ const tabs = computed(() => {
       iconColor: 'chat',
       countActive: activeChatCount,
       component: ChatQueue,
-      showIndicator: !!incomingChatCount,
+      showIndicator: !!incomingChatCount || hasNewChatMessages.value,
     },
     {
       value: 'job',
