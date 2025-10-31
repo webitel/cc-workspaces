@@ -64,7 +64,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { CallActions, ConversationState, JobState } from 'webitel-sdk';
+import { CallActions, ConversationState, JobState, CallDirection } from 'webitel-sdk';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
@@ -110,9 +110,9 @@ const tabs = computed(() => {
   const chats = chatList.value ?? [];
   const jobs  = jobList.value ?? [];
 
-  const activeCallCount = countByStates(calls, [CallActions.Active, CallActions.Hold]);
+  const activeCallCount = countByStatesAndDirection(calls, [CallActions.Active, CallActions.Hold, CallActions.Ringing], [CallDirection.Outbound]);
   const incomingCallCount =
-    countByStates(calls, [CallActions.Ringing]) + (manualCallsList.value?.length ?? 0);
+    countByStatesAndDirection(calls, [CallActions.Ringing], [CallDirection.Inbound]) + (manualCallsList.value?.length ?? 0);
 
   const activeChatCount = countByStates(chats, [ConversationState.Active]);
   const incomingChatCount =
@@ -154,6 +154,11 @@ const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.valu
 const countByStates = (list, states = []) => {
   if (!list?.length) return 0;
   return list.reduce((acc, item) => acc + (states.includes(item.state) ? 1 : 0), 0);
+}
+
+const countByStatesAndDirection = (list, states = [], direction = []) => {
+  if (!list?.length) return 0;
+  return list.reduce((acc, item) => acc + (states.includes(item.state) && (direction.includes(item.direction)) ? 1 : 0), 0);
 }
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
