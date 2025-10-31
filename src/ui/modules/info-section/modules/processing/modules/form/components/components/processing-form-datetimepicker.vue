@@ -1,7 +1,7 @@
 <template>
   <wt-datepicker
     v-bind="$attrs"
-    :value="value"
+    :value="date"
     mode="datetime"
     @input="$emit('input', $event)"
   />
@@ -16,7 +16,13 @@ export default {
   props: {
     value: {
       type: [String, Number],
-      default: '',
+    },
+  },
+  computed: {
+    date() {
+     return !this.value || this.value === 'now'
+        ? Date.now()
+        : this.value;
     },
   },
   created() {
