@@ -77,13 +77,13 @@ const actions = {
         : await context.dispatch('SEND', files);
     } catch (err) {
       const errorMessage = err.response?.data?.id === 'file.malware'
-        ? 'workspaceSec.chat.chatsFileBlocked'
-        :'workspaceSec.chat.errors.uploadFileLimitSize'
+        ? t('workspaceSec.chat.chatsFileBlocked')
+        : t('workspaceSec.chat.errors.uploadFileLimitSize')
       throw applyTransform(err, [
         notify(({ callback }) =>
           callback({
             type: 'error',
-            text: t(errorMessage),
+            text: errorMessage,
           })
         )
       ]);
