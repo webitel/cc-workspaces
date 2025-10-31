@@ -94,27 +94,27 @@ const emit = defineEmits(['resize']);
 const store = useStore();
 const currentTab = ref({});
 const hotkeyUnsubscribers = ref([]);
-const chatsMessagesLength = ref({});
+const chatMessagesLengthMap = ref({});
 
 const hasNewChatMessages = computed(() => {
   const chats = chatList.value ?? [];
-  let hasNew = false;
-  const nextState = { ...chatsMessagesLength.value };
+  let hasNewMessage = false;
+  const nextState = { ...chatMessagesLengthMap.value };
 
   chats.forEach((chat) => {
     const id = chat.id;
-    const messagesLen = chat.messages ? chat.messages.length : 0;
-    const prevLen = chatsMessagesLength.value[id] ?? messagesLen;
-    if (messagesLen > prevLen) {
-      hasNew = store.getters['features/chat/CHAT_ON_WORKSPACE']?.id !== id;
+    const messageLength = chat.messages ? chat.messages.length : 0;
+    const prevLength = chatMessagesLengthMap.value[id] ?? messageLength;
+    if (messageLength > prevLength) {
+      hasNewMessage = store.getters['features/chat/CHAT_ON_WORKSPACE']?.id !== id;
     }
 
-    nextState[id] = messagesLen;
+    nextState[id] = messageLength;
   });
 
-  chatsMessagesLength.value = nextState;
+  chatMessagesLengthMap.value = nextState;
 
-  return hasNew;
+  return hasNewMessage;
 });
 
 
