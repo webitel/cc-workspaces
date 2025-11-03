@@ -22,7 +22,7 @@
         <wt-icon-btn
           icon="tick"
           size="md"
-          :disabled="!newPhone.type || !newPhone.number"
+          :disabled="!newPhone.type?.id || !newPhone.number"
           @click="savePhone"
         />
         <wt-icon-btn
@@ -121,7 +121,6 @@ const getCommunicationType = async (params) => CommunicationsAPI.getLookup({
   ...params,
   channel: EngineCommunicationChannels.Phone }
 )
-
 
 
 watch(() => props.isAdding, (isAdding) => {
