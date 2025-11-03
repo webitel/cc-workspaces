@@ -63,7 +63,7 @@ const actions = {
 
     const isActiveCall = context.state.callList.find(call => call.active)
 
-    //if any call is active, hold it and then task call clear
+    //If there's an active call, or call was active but cleared from TASK_ON_WORKSPACE,
     if (isActiveCall) {
       context.dispatch('HOLD_OTHER_CALLS', {});
     }
