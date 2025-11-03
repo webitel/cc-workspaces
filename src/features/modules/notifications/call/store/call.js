@@ -108,7 +108,7 @@ const actions = {
     return context.dispatch(
       'features/swController/SEND_NOTIFICATION',
       {
-        title: `${i18n.global.t('notifications.newCall')} | ${i18n.global.t('objects.queue.queue')}: ${prettifyQueue(queueName)}`,
+        title: `${i18n.global.t('notifications.newCall')}\n${i18n.global.t('objects.queue.queue')}: ${prettifyQueue(queueName)}`,
         body: `${displayName}: ${displayNumber}`,
         actions: [
           { action: 'accept', title: 'Accept' },
