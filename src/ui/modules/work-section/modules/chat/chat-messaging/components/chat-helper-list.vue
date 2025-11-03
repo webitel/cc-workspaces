@@ -39,7 +39,10 @@ const emit = defineEmits<{
   select: [item: ChatHelperItem]
 }>();
 
-const select = (item) => {
+const select = (item, event?: Event) => {
+  if (event) {
+    event.preventDefault();
+  }
   emit('select', item);
 };
 
@@ -79,6 +82,7 @@ const handleKeydown = (event) => {
       moveUp();
       break;
     case 'Enter':
+      event.preventDefault();
       selectItem();
       break;
   }
