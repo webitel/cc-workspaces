@@ -39,10 +39,7 @@ const emit = defineEmits<{
   select: [item: ChatHelperItem]
 }>();
 
-const select = (item, event?: Event) => {
-  if (event) {
-    event.preventDefault();
-  }
+const select = (item) => {
   emit('select', item);
 };
 
