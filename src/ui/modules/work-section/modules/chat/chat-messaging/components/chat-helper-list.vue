@@ -79,6 +79,7 @@ const handleKeydown = (event) => {
       moveUp();
       break;
     case 'Enter':
+      event.preventDefault();
       selectItem();
       break;
   }
