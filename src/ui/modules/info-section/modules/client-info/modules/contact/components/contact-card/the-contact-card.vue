@@ -21,6 +21,7 @@
     <communications
       :contact="props.contact"
       :size="props.size"
+      :linked="props.linked"
     />
   </div>
 </template>

@@ -13,7 +13,7 @@
           ></wt-tabs>
 
           <wt-icon-btn
-            v-if="showAddingButton"
+            v-if="showAddingButton && linked"
             icon="plus"
             :disabled="isAdding"
             @click="isAdding = true"
@@ -48,6 +48,10 @@ const props = defineProps({
   contact: {
     type: Object,
     required: true,
+  },
+  linked: {
+    type: Boolean,
+    default: false,
   },
 });
 
