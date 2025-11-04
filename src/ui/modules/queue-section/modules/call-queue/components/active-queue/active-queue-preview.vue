@@ -139,6 +139,7 @@
 
 <script>
 import { CallActions, CallDirection } from 'webitel-sdk';
+import { QueueTypeName } from '@webitel/ui-sdk/enums'
 
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
@@ -160,10 +161,15 @@ export default {
       //@author o.chorpita
       // When transferring a call to a user, skip showing the "transfer" queue name
       // https://webitel.atlassian.net/browse/WTEL-7762
-      if (this.task.attempt?.queue?.name === 'transfer' && this.task?.queue?.type === 'NOT_IMPLEMENT') {
-        return;
+      if (this.isTransferQueue) {
+        return '';
       }
+
       return this.task.attempt?.queue?.name;
+    },
+
+    isTransferQueue () {
+      return this.task.attempt?.queue?.name === 'transfer' && this.task?.queue?.type === QueueTypeName.NOT_IMPLEMENT;
     },
 
     isRinging() {
