@@ -54,7 +54,7 @@ const actions = {
   },
 
   // destructuring arg in order to skip mouse events
-  CALL: async (context, { user, number, contactId }) => {
+  CALL: async (context, { user, number, contactId } = {}) => {
     // deprecated from 20.02.2024. remove me in 6 months
     if (user) throw new Error('{ user } param for CALL is deprecated');
 
