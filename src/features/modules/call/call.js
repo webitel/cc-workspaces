@@ -61,9 +61,11 @@ const actions = {
     const CALL_PARAMS = { disableStun: !context.rootState.config.CLI.stun, contactId };
     let destination;
 
-    //if any call is active, hold it
-    if (context.getters.CALL_ON_WORKSPACE?.active) {
-      context.dispatch('TOGGLE_HOLD');
+    const isActiveCall = context.state.callList.find(call => call.active)
+    //@author Oles Chorpita
+    //If there's an active call, or call was active but cleared from TASK_ON_WORKSPACE,
+    if (isActiveCall) {
+      context.dispatch('HOLD_OTHER_CALLS', {});
     }
 
     if (number) {
