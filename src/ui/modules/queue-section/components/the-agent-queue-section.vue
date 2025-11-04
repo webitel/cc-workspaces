@@ -73,6 +73,7 @@ import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
+import isIncomingRinging from '../../../../features/modules/call/scripts/isIncomingRinging.js';
 
 const props = defineProps({
   collapsed: {
@@ -133,9 +134,8 @@ const tabs = computed(() => {
   const chats = chatList.value ?? [];
   const jobs  = jobList.value ?? [];
 
-  const activeCallCount = countByStatesAndDirection(calls, [CallActions.Active, CallActions.Hold, CallActions.Ringing], [CallDirection.Outbound]);
-  const incomingCallCount =
-    countByStatesAndDirection(calls, [CallActions.Ringing], [CallDirection.Inbound]) + (manualCallsList.value?.length ?? 0);
+  const activeCallCount = countActiveCalls(calls);
+  const incomingCallCount = countIncomingRingingCalls(calls) + (manualCallsList.value?.length ?? 0);
 
   const activeChatCount = countByStates(chats, [ConversationState.Active]);
   const incomingChatCount =
@@ -179,10 +179,19 @@ const countByStates = (list, states = []) => {
   return list.reduce((acc, item) => acc + (states.includes(item.state) ? 1 : 0), 0);
 }
 
-const countByStatesAndDirection = (list, states = [], direction = []) => {
-  if (!list?.length) return 0;
-  return list.reduce((acc, item) => acc + (states.includes(item.state) && (direction.includes(item.direction)) ? 1 : 0), 0);
+const countActiveCalls = (calls = []) => {
+  if (!calls?.length) return 0;
+  calls.reduce((acc, call) => {
+    const isActive = [CallActions.Active, CallActions.Hold].includes(call.state);
+    const isRingingButNotIncoming = call.state === CallActions.Ringing && !isIncomingRinging(call);
+    return acc + (isActive || isRingingButNotIncoming ? 1 : 0);
+  }, 0);
 }
+
+const countIncomingRingingCalls = (calls = []) => {
+  if (!calls.length) return 0;
+  return calls.reduce((acc, call) => acc + (isIncomingRinging(call) ? 1 : 0), 0);
+};
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
 const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
