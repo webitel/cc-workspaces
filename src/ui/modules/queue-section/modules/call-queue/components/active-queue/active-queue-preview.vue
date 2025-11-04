@@ -158,14 +158,13 @@ export default {
     },
 
     queueName() {
+      if (!this.isTransferQueue) {
+        return this.task.attempt?.queue?.name;
+      }
       //@author o.chorpita
       // When transferring a call to a user, skip showing the "transfer" queue name
       // https://webitel.atlassian.net/browse/WTEL-7762
-      if (this.isTransferQueue) {
-        return '';
-      }
-
-      return this.task.attempt?.queue?.name;
+      return '';
     },
 
     isTransferQueue () {
