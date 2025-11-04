@@ -118,11 +118,11 @@ export default {
       this.formBody.forEach((component) => {
         if (!this.shouldInitComponent(component)) return;
 
-        if (this.isSelectComponent(component)) {
+        if (component.view.component === 'wt-select') {
           return this.initSelectComponent(component);
         }
 
-        if (this.isDatetimepickerComponent(component)) {
+        if (component.view.component === 'wt-datetimepicker') {
           return this.initDatetimepickerComponent(component);
         }
 
@@ -136,9 +136,6 @@ export default {
       return isEmpty(component.value) && component.view.initialValue;
     },
 
-    isSelectComponent(component) {
-      return component.view.component === 'wt-select';
-    },
 
     initSelectComponent(component) {
       // For component wt-select we need get by initialValue value from options
@@ -147,10 +144,6 @@ export default {
         component.view.options.find(
           (option) => option.value === component.view.initialValue,
         ) || component.view.initialValue;
-    },
-
-    isDatetimepickerComponent(component) {
-      return component.view.component === 'wt-datetimepicker';
     },
 
     initDatetimepickerComponent(component) {
