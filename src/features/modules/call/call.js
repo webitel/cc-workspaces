@@ -1,4 +1,5 @@
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
+import { QueueTypeName } from '@webitel/ui-sdk/enums'
 
 import i18n from '../../../app/locale/i18n';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
@@ -39,7 +40,7 @@ const getters = {
     state.callList.every((call) => isIncomingRinging(call)),
 
   IS_OFFLINE_CALL: (state, getters) =>
-    getters.CALL_ON_WORKSPACE.queue?.queue_type === 'offline',
+    getters.CALL_ON_WORKSPACE.queue?.queue_type === QueueTypeName.OFFLINE_QUEUE,
 };
 
 const actions = {

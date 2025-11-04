@@ -169,6 +169,7 @@ export default {
     },
 
     isTransferQueue () {
+      //https://webitel.atlassian.net/browse/WTEL-7762?focusedCommentId=704701
       return this.task.attempt?.queue?.name === 'transfer' && this.task?.queue?.type === QueueTypeName.NOT_IMPLEMENT;
     },
 
