@@ -118,7 +118,15 @@ export default {
       this.formBody.forEach((component) => {
         if (!this.shouldInitComponent(component)) return;
 
-        component.value = this.resolveInitialValue(component);
+        if (component.view.component === 'wt-select') {
+          return component.value = this.getSelectInitialValue(component.view.initialValue, component.view.options);
+        }
+
+        if (component.view.component === 'wt-datetimepicker') {
+          return component.value = this.getDatetimepickerInitialValue(component.view.initialValue);
+        }
+
+        return component.value = this.parseJsonInitialValue(component.view.initialValue);
       });
 
       this.task.attempt.form.metadata.isInited = true;
@@ -126,20 +134,6 @@ export default {
 
     shouldInitComponent(component) {
       return isEmpty(component.value) && component.view.initialValue;
-    },
-
-    resolveInitialValue(component) {
-      const view = component.view;
-
-      if (view.component === 'wt-select') {
-        return this.getSelectInitialValue(view.initialValue, view.options);
-      }
-
-      if (view.component === 'wt-datetimepicker') {
-        return this.getDatetimepickerInitialValue(view.initialValue);
-      }
-
-      return this.parseJsonInitialValue(view.initialValue);
     },
 
     getSelectInitialValue(initialValue, options = []) {
