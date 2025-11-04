@@ -49,6 +49,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  linked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { t } = useI18n();
@@ -78,7 +82,7 @@ function changeTab(tab) {
   currentTab.value = tab;
 }
 
-const showAddingButton = computed(() => currentTab.value.value === 'phones');
+const showAddingButton = computed(() => currentTab.value.value === 'phones' && props.linked);
 </script>
 
 <style lang="scss" scoped>
