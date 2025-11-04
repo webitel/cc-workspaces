@@ -63,7 +63,7 @@ const transfer = (item: UserItem = {} as UserItem) => {
 const getUsers = (params: TransferParams): Promise<APIResponse> => {
   return AgentsAPI.getUsersStatus({
     ...params,
-    notUserId: [userId.value],
+    notUserId: userId.value,
     sort: dataSort.value
   });
 };
