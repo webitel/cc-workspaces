@@ -1,3 +1,65 @@
+<template>
+  <section
+    :class="[
+      `queue-section--${size}`
+    ]"
+    class="workspace-section queue-section"
+  >
+    <collapse-action
+      v-if="collapsible"
+      :collapsed="collapsed"
+      @click="$emit('resize')"
+    />
+    <wt-tabs
+      :current="currentTab"
+      :tabs="tabs"
+      class="queue-section__tabs"
+      @change="currentTab = $event"
+    >
+      <template
+        v-for="(tab, key) of tabs"
+        :key="key"
+        #[tab.value]
+      >
+        <div
+          class="queue-section__tab-content"
+          :class="{ 'queue-section__tab-content--sm': size === ComponentSize.SM }"
+        >
+          <div class="queue-section_indicator">
+            <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
+            <wt-badge
+              v-if="tab.showIndicator"
+              color-variable="error-color"
+            />
+          </div>
+          <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
+          <wt-chip
+            v-if="tab.countActive"
+            color="warning"
+            class="queue-section__count queue-section__count--active"
+          >
+            {{ tab.countActive }}
+          </wt-chip>
+        </div>
+
+      </template>
+    </wt-tabs>
+    <keep-alive>
+      <component
+        :is="currentTab.component"
+        :size="size"
+        class="queue-section__wrapper"
+      />
+    </keep-alive>
+    <wt-rounded-action
+      :icon="isNewCallButton ? 'call-ringing' : 'close'"
+      color="success"
+      rounded
+      size="lg"
+      @click="toggleNewCall"
+    />
+  </section>
+</template>
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
@@ -149,3 +211,90 @@ onUnmounted(() => {
   hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
+<style lang="scss" scoped>
+.workspace-section.queue-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: var(--transition);
+
+  gap: var(--spacing-2xs);
+  will-change: width;
+
+  &--md {
+    flex: 0 0 320px;
+    max-width: 320px;
+  }
+
+  &--sm {
+    flex: 0 0 132px;
+    max-width: 132px;
+  }
+
+  .wt-rounded-action {
+    position: fixed;
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
+    border-color: var(--success-color);
+    background: var(--success-color);
+    z-index: var(--ws-main-call-button-z-index);
+
+    :deep .wt-icon {
+      fill: var(--icon-on-dark-color);
+    }
+  }
+}
+
+// increase specificity
+.queue-section__tabs.wt-tabs {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+//TODO value for count indicator, which should be different
+// after adding badge with primevue, need delete this
+$indicator-width: 34px;
+$indicator-height: 16px;
+
+.queue-section__tab-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  justify-content: center;
+
+  &--sm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    gap: var(--spacing-2xs);
+    height: 100%;
+
+
+    .queue-section__count {
+      order: -1;
+    }
+  }
+}
+
+.queue-section__count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //TODO after adding badge with primevue, need delete this
+  min-width: $indicator-width;
+  height: $indicator-height;
+}
+
+.queue-section__wrapper {
+  flex-grow: 1;
+}
+
+.queue-section_indicator {
+  display: flex;
+  position: relative;
+}
+</style>
