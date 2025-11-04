@@ -51,6 +51,8 @@ import { useStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 
 import { useCachedExpansionState } from '../../_shared/composables/useCachedExpansionState';
+import isIncomingRinging
+  from '../../../../../../features/modules/call/scripts/isIncomingRinging.js';
 
 //TODO: do it similarly as in chats, so that it is not a common component with chats, jobs and calls, because https://webitel.atlassian.net/browse/WTEL-5273?focusedCommentId=700057
 import ActiveQueue from './active-queue/active-queue-container.vue';
@@ -79,7 +81,7 @@ const missedNext = computed(() => store.state.features.call.missed.next);
 const manualList = computed(() => store.state.features.call.manual.manualList);
 const membersList = computed(() => store.state.features.member.memberList);
 
-const ringingCallsCount = computed(() => callList.value.filter((call) => call.state === CallActions.Ringing).length);
+const ringingCallsCount = computed(() => callList.value.filter((call) => isIncomingRinging(call)).length);
 const activeCallsCount = computed(() => callList.value.length - ringingCallsCount.value);
 const allActiveCalls = computed(() => activeCallsCount.value + ringingCallsCount.value);
 

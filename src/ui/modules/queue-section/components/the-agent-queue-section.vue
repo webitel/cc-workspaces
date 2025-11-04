@@ -60,11 +60,10 @@
     />
   </section>
 </template>
-
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { CallActions, ConversationState, JobState, CallDirection } from 'webitel-sdk';
+import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
@@ -73,6 +72,7 @@ import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
+import isIncomingRinging from '../../../../features/modules/call/scripts/isIncomingRinging.js';
 
 const props = defineProps({
   collapsed: {
@@ -96,6 +96,40 @@ const currentTab = ref({});
 const hotkeyUnsubscribers = ref([]);
 const chatMessagesLengthMap = ref({});
 
+const callList = computed(() => store.state.features?.call?.callList || []);
+const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
+const chatList = computed(() => store.state.features?.chat?.chatList || []);
+const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
+const jobList = computed(() => store.state.features?.job?.jobList || []);
+
+const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+
+const isActiveCall = (call) => {
+  const isActiveState = [CallActions.Active, CallActions.Hold].includes(call.state);
+  const isOutgoingRinging = call.state === CallActions.Ringing && !isIncomingRinging(call);
+  return isActiveState || isOutgoingRinging;
+};
+const getCountByStates = (list = [], states = []) =>
+  list.filter((item) => states.includes(item.state)).length;
+
+const activeCallCount = computed(() => callList.value.filter(isActiveCall).length);
+const incomingCallCount = computed(
+  () => callList.value.filter(isIncomingRinging).length + manualCallsList.value?.length,
+);
+
+const activeChatCount = computed(() => getCountByStates(chatList.value, [ConversationState.Active]));
+const incomingChatCount = computed(
+  () => getCountByStates(chatList.value, [ConversationState.Invite]) + manualChatList.value?.length,
+);
+
+const activeJobCount = computed(() =>
+  getCountByStates(jobList.value, [JobState.Bridged, JobState.Processing]),
+);
+const incomingJobCount = computed(() =>
+  getCountByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
+);
+
 const hasNewChatMessages = computed(() => {
   const chats = chatList.value ?? [];
   let hasNewMessage = false;
@@ -117,72 +151,34 @@ const hasNewChatMessages = computed(() => {
   return hasNewMessage;
 });
 
-
-const callList = computed(() => store.state.features?.call?.callList || []);
-const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
-const chatList = computed(() => store.state.features?.chat?.chatList || []);
-const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
-const jobList = computed(() => store.state.features?.job?.jobList || []);
-
-const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
-const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
-
-const tabs = computed(() => {
-
-  const calls = callList.value ?? [];
-  const chats = chatList.value ?? [];
-  const jobs  = jobList.value ?? [];
-
-  const activeCallCount = countByStatesAndDirection(calls, [CallActions.Active, CallActions.Hold, CallActions.Ringing], [CallDirection.Outbound]);
-  const incomingCallCount =
-    countByStatesAndDirection(calls, [CallActions.Ringing], [CallDirection.Inbound]) + (manualCallsList.value?.length ?? 0);
-
-  const activeChatCount = countByStates(chats, [ConversationState.Active]);
-  const incomingChatCount =
-    countByStates(chats, [ConversationState.Invite]) + (manualChatList.value?.length ?? 0);
-
-  const activeJobCount = countByStates(jobs, [JobState.Bridged, JobState.Processing]);
-  const incomingJobCount = countByStates(jobs, [JobState.Distribute, JobState.Offering]);
-
-  return [
-    {
-      value: 'call',
-      icon: 'call',
-      iconColor: 'success',
-      countActive: activeCallCount,
-      component: CallQueue,
-      showIndicator: !!incomingCallCount,
-    },
-    {
-      value: 'chat',
-      icon: 'chat',
-      iconColor: 'chat',
-      countActive: activeChatCount,
-      component: ChatQueue,
-      showIndicator: !!incomingChatCount || hasNewChatMessages.value,
-    },
-    {
-      value: 'job',
-      icon: 'job',
-      iconColor: 'job',
-      countActive: activeJobCount,
-      component: JobQueue,
-      showIndicator: !!incomingJobCount,
-    }
-  ]
-});
+const tabs = computed(() => [
+  {
+    value: 'call',
+    icon: 'call',
+    iconColor: 'success',
+    countActive: activeCallCount.value,
+    component: CallQueue,
+    showIndicator: !!incomingCallCount.value,
+  },
+  {
+    value: 'chat',
+    icon: 'chat',
+    iconColor: 'chat',
+    countActive: activeChatCount.value,
+    component: ChatQueue,
+    showIndicator: !!incomingChatCount.value || hasNewChatMessages.value,
+  },
+  {
+    value: 'job',
+    icon: 'job',
+    iconColor: 'job',
+    countActive: activeJobCount.value,
+    component: JobQueue,
+    showIndicator: !!incomingJobCount.value,
+  },
+]);
 
 const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
-
-const countByStates = (list, states = []) => {
-  if (!list?.length) return 0;
-  return list.reduce((acc, item) => acc + (states.includes(item.state) ? 1 : 0), 0);
-}
-
-const countByStatesAndDirection = (list, states = [], direction = []) => {
-  if (!list?.length) return 0;
-  return list.reduce((acc, item) => acc + (states.includes(item.state) && (direction.includes(item.direction)) ? 1 : 0), 0);
-}
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
 const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
@@ -208,7 +204,6 @@ onUnmounted(() => {
   hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
-
 <style lang="scss" scoped>
 .workspace-section.queue-section {
   position: relative;
