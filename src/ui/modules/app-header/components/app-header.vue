@@ -160,6 +160,9 @@ export default {
 
 <style lang="scss" scoped>
 .wt-app-header {
+  max-height: fit-content;
+  height: -webkit-fill-available;
+
   .wt-dark-mode-switcher {
     margin-right: auto;
   }
