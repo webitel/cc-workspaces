@@ -110,31 +110,24 @@ const isActiveCall = (call) => {
   const isOutgoingRinging = call.state === CallActions.Ringing && !isIncomingRinging(call);
   return isActiveState || isOutgoingRinging;
 };
-
-const countActiveCalls = (calls = []) =>
-  calls.filter(isActiveCall).length;
-
-const countIncomingRingingCalls = (calls = []) =>
-  calls.filter(isIncomingRinging).length;
-
-const countByStates = (list = [], states = []) =>
+const getCountByStates = (list = [], states = []) =>
   list.filter((item) => states.includes(item.state)).length;
 
-const activeCallCount = computed(() => countActiveCalls(callList.value));
+const activeCallCount = computed(() => callList.value.filter(isActiveCall).length);
 const incomingCallCount = computed(
-  () => countIncomingRingingCalls(callList.value) + manualCallsList.value?.length,
+  () => callList.value.filter(isIncomingRinging).length + manualCallsList.value?.length,
 );
 
-const activeChatCount = computed(() => countByStates(chatList.value, [ConversationState.Active]));
+const activeChatCount = computed(() => getCountByStates(chatList.value, [ConversationState.Active]));
 const incomingChatCount = computed(
-  () => countByStates(chatList.value, [ConversationState.Invite]) + manualChatList.value?.length,
+  () => getCountByStates(chatList.value, [ConversationState.Invite]) + manualChatList.value?.length,
 );
 
 const activeJobCount = computed(() =>
-  countByStates(jobList.value, [JobState.Bridged, JobState.Processing]),
+  getCountByStates(jobList.value, [JobState.Bridged, JobState.Processing]),
 );
 const incomingJobCount = computed(() =>
-  countByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
+  getCountByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
 );
 
 const hasNewChatMessages = computed(() => {
