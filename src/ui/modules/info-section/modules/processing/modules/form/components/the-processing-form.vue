@@ -118,15 +118,7 @@ export default {
       this.formBody.forEach((component) => {
         if (!this.shouldInitComponent(component)) return;
 
-        if (component.view.component === 'wt-select') {
-          return this.initSelectComponent(component);
-        }
-
-        if (component.view.component === 'wt-datetimepicker') {
-          return this.initDatetimepickerComponent(component);
-        }
-
-        this.initFromInitialValue(component);
+        component.value = this.resolveInitialValue(component);
       });
 
       this.task.attempt.form.metadata.isInited = true;
@@ -136,36 +128,48 @@ export default {
       return isEmpty(component.value) && component.view.initialValue;
     },
 
+    resolveInitialValue(component) {
+      const view = component.view;
 
-    initSelectComponent(component) {
+      if (view.component === 'wt-select') {
+        return this.getSelectInitialValue(view.initialValue, view.options);
+      }
+
+      if (view.component === 'wt-datetimepicker') {
+        return this.getDatetimepickerInitialValue(view.initialValue);
+      }
+
+      return this.parseJsonInitialValue(view.initialValue);
+    },
+
+    getSelectInitialValue(initialValue, options = []) {
       // For component wt-select we need get by initialValue value from options
       // https://webitel.atlassian.net/browse/WTEL-6742
-      component.value =
-        component.view.options.find(
-          (option) => option.value === component.view.initialValue,
-        ) || component.view.initialValue;
+      return (
+        options.find((option) => option.value === initialValue) ||
+        initialValue
+      );
     },
 
-    initDatetimepickerComponent(component) {
-      component.value =
-        component.view.initialValue === 'now'
-          ? Date.now()
-          : component.view.initialValue;
+    getDatetimepickerInitialValue(initialValue) {
+      return initialValue === 'now'
+        ? Date.now()
+        : initialValue;
     },
 
-    initFromInitialValue(component) {
+    parseJsonInitialValue(initialValue) {
       try {
-        const parseValue = JSON.parse(component.view.initialValue);
+        const parsed = JSON.parse(initialValue);
 
         // For component form-text if pass object without keys we need set null
         // https://webitel.atlassian.net/browse/WTEL-6568
-        if (typeof parseValue === 'object') {
-          component.value = Object.keys(parseValue).length ? parseValue : null;
-        } else {
-          component.value = parseValue;
+        if (typeof parsed === 'object') {
+          return Object.keys(parsed).length ? parsed : null;
         }
+
+        return parsed;
       } catch {
-        component.value = component.view.initialValue;
+        return initialValue;
       }
     },
     setupAutofocus() {
