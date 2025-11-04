@@ -116,30 +116,64 @@ export default {
     }),
     initializeValues() {
       this.formBody.forEach((component) => {
-        if (isEmpty(component.value) && component.view.initialValue) {
+        if (!this.shouldInitComponent(component)) return;
 
-          // For component wt-select we need get by initialValue value from options
-          // https://webitel.atlassian.net/browse/WTEL-6742
-          if (component.view.component === 'wt-select') {
-            return component.value = component.view.options.find((option) => option.value === component.view.initialValue) || component.view.initialValue;
-          }
-
-          try {
-            const parseValue = JSON.parse(component.view.initialValue);
-
-            // For component form-text if pass object without keys we need set null
-            // https://webitel.atlassian.net/browse/WTEL-6568
-            if (typeof parseValue === 'object') {
-              component.value = Object.keys(parseValue).length ? parseValue : null;
-            } else {
-              component.value = parseValue;
-            }
-          } catch {
-            component.value = component.view.initialValue;
-          }
+        if (this.isSelectComponent(component)) {
+          return this.initSelectComponent(component);
         }
+
+        if (this.isDatetimepickerComponent(component)) {
+          return this.initDatetimepickerComponent(component);
+        }
+
+        this.initFromInitialValue(component);
       });
+
       this.task.attempt.form.metadata.isInited = true;
+    },
+
+    shouldInitComponent(component) {
+      return isEmpty(component.value) && component.view.initialValue;
+    },
+
+    isSelectComponent(component) {
+      return component.view.component === 'wt-select';
+    },
+
+    initSelectComponent(component) {
+      // For component wt-select we need get by initialValue value from options
+      // https://webitel.atlassian.net/browse/WTEL-6742
+      component.value =
+        component.view.options.find(
+          (option) => option.value === component.view.initialValue,
+        ) || component.view.initialValue;
+    },
+
+    isDatetimepickerComponent(component) {
+      return component.view.component === 'wt-datetimepicker';
+    },
+
+    initDatetimepickerComponent(component) {
+      component.value =
+        component.view.initialValue === 'now'
+          ? Date.now()
+          : component.view.initialValue;
+    },
+
+    initFromInitialValue(component) {
+      try {
+        const parseValue = JSON.parse(component.view.initialValue);
+
+        // For component form-text if pass object without keys we need set null
+        // https://webitel.atlassian.net/browse/WTEL-6568
+        if (typeof parseValue === 'object') {
+          component.value = Object.keys(parseValue).length ? parseValue : null;
+        } else {
+          component.value = parseValue;
+        }
+      } catch {
+        component.value = component.view.initialValue;
+      }
     },
     setupAutofocus() {
       const input = this.$refs['processing-form'].$el.querySelector('input, textarea');

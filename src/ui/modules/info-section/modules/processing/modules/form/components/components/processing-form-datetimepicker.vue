@@ -25,18 +25,6 @@ export default {
         : this.value;
     },
   },
-  watch: {
-    value(newValue) {
-      if (newValue === 'now') {
-        this.$emit('input', Date.now());
-      }
-    }
-  },
-  created() {
-    if (this.value === 'now') {
-      this.$emit('input', Date.now());
-    }
-  },
 };
 </script>
 
