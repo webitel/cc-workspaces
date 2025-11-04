@@ -1,70 +1,7 @@
-<template>
-  <section
-    :class="[
-      `queue-section--${size}`
-    ]"
-    class="workspace-section queue-section"
-  >
-    <collapse-action
-      v-if="collapsible"
-      :collapsed="collapsed"
-      @click="$emit('resize')"
-    />
-    <wt-tabs
-      :current="currentTab"
-      :tabs="tabs"
-      class="queue-section__tabs"
-      @change="currentTab = $event"
-    >
-      <template
-        v-for="(tab, key) of tabs"
-        :key="key"
-        #[tab.value]
-      >
-        <div
-          class="queue-section__tab-content"
-          :class="{ 'queue-section__tab-content--sm': size === ComponentSize.SM }"
-        >
-          <div class="queue-section_indicator">
-            <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
-            <wt-badge
-              v-if="tab.showIndicator"
-              color-variable="error-color"
-            />
-          </div>
-          <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
-          <wt-chip
-            v-if="tab.countActive"
-            color="warning"
-            class="queue-section__count queue-section__count--active"
-          >
-            {{ tab.countActive }}
-          </wt-chip>
-        </div>
-
-      </template>
-    </wt-tabs>
-    <keep-alive>
-      <component
-        :is="currentTab.component"
-        :size="size"
-        class="queue-section__wrapper"
-      />
-    </keep-alive>
-    <wt-rounded-action
-      :icon="isNewCallButton ? 'call-ringing' : 'close'"
-      color="success"
-      rounded
-      size="lg"
-      @click="toggleNewCall"
-    />
-  </section>
-</template>
-
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { CallActions, ConversationState, JobState, CallDirection } from 'webitel-sdk';
+import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
@@ -97,6 +34,47 @@ const currentTab = ref({});
 const hotkeyUnsubscribers = ref([]);
 const chatMessagesLengthMap = ref({});
 
+const callList = computed(() => store.state.features?.call?.callList || []);
+const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
+const chatList = computed(() => store.state.features?.chat?.chatList || []);
+const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
+const jobList = computed(() => store.state.features?.job?.jobList || []);
+
+const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+
+const isActiveCall = (call) => {
+  const isActiveState = [CallActions.Active, CallActions.Hold].includes(call.state);
+  const isOutgoingRinging = call.state === CallActions.Ringing && !isIncomingRinging(call);
+  return isActiveState || isOutgoingRinging;
+};
+
+const countActiveCalls = (calls = []) =>
+  calls.filter(isActiveCall).length;
+
+const countIncomingRingingCalls = (calls = []) =>
+  calls.filter(isIncomingRinging).length;
+
+const countByStates = (list = [], states = []) =>
+  list.filter((item) => states.includes(item.state)).length;
+
+const activeCallCount = computed(() => countActiveCalls(callList.value));
+const incomingCallCount = computed(
+  () => countIncomingRingingCalls(callList.value) + (manualCallsList.value?.length ?? 0),
+);
+
+const activeChatCount = computed(() => countByStates(chatList.value, [ConversationState.Active]));
+const incomingChatCount = computed(
+  () => countByStates(chatList.value, [ConversationState.Invite]) + (manualChatList.value?.length ?? 0),
+);
+
+const activeJobCount = computed(() =>
+  countByStates(jobList.value, [JobState.Bridged, JobState.Processing]),
+);
+const incomingJobCount = computed(() =>
+  countByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
+);
+
 const hasNewChatMessages = computed(() => {
   const chats = chatList.value ?? [];
   let hasNewMessage = false;
@@ -118,80 +96,34 @@ const hasNewChatMessages = computed(() => {
   return hasNewMessage;
 });
 
-
-const callList = computed(() => store.state.features?.call?.callList || []);
-const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
-const chatList = computed(() => store.state.features?.chat?.chatList || []);
-const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
-const jobList = computed(() => store.state.features?.job?.jobList || []);
-
-const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
-const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
-
-const tabs = computed(() => {
-
-  const calls = callList.value ?? [];
-  const chats = chatList.value ?? [];
-  const jobs  = jobList.value ?? [];
-
-  const activeCallCount = countActiveCalls(calls);
-  const incomingCallCount = countIncomingRingingCalls(calls) + (manualCallsList.value?.length ?? 0);
-
-  const activeChatCount = countByStates(chats, [ConversationState.Active]);
-  const incomingChatCount =
-    countByStates(chats, [ConversationState.Invite]) + (manualChatList.value?.length ?? 0);
-
-  const activeJobCount = countByStates(jobs, [JobState.Bridged, JobState.Processing]);
-  const incomingJobCount = countByStates(jobs, [JobState.Distribute, JobState.Offering]);
-
-  return [
-    {
-      value: 'call',
-      icon: 'call',
-      iconColor: 'success',
-      countActive: activeCallCount,
-      component: CallQueue,
-      showIndicator: !!incomingCallCount,
-    },
-    {
-      value: 'chat',
-      icon: 'chat',
-      iconColor: 'chat',
-      countActive: activeChatCount,
-      component: ChatQueue,
-      showIndicator: !!incomingChatCount || hasNewChatMessages.value,
-    },
-    {
-      value: 'job',
-      icon: 'job',
-      iconColor: 'job',
-      countActive: activeJobCount,
-      component: JobQueue,
-      showIndicator: !!incomingJobCount,
-    }
-  ]
-});
+const tabs = computed(() => [
+  {
+    value: 'call',
+    icon: 'call',
+    iconColor: 'success',
+    countActive: activeCallCount.value,
+    component: CallQueue,
+    showIndicator: !!incomingCallCount.value,
+  },
+  {
+    value: 'chat',
+    icon: 'chat',
+    iconColor: 'chat',
+    countActive: activeChatCount.value,
+    component: ChatQueue,
+    showIndicator: !!incomingChatCount.value || hasNewChatMessages.value,
+  },
+  {
+    value: 'job',
+    icon: 'job',
+    iconColor: 'job',
+    countActive: activeJobCount.value,
+    component: JobQueue,
+    showIndicator: !!incomingJobCount.value,
+  },
+]);
 
 const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
-
-const countByStates = (list, states = []) => {
-  if (!list?.length) return 0;
-  return list.reduce((acc, item) => acc + (states.includes(item.state) ? 1 : 0), 0);
-}
-
-const countActiveCalls = (calls = []) => {
-  if (!calls?.length) return 0;
-  calls.reduce((acc, call) => {
-    const isActive = [CallActions.Active, CallActions.Hold].includes(call.state);
-    const isRingingButNotIncoming = call.state === CallActions.Ringing && !isIncomingRinging(call);
-    return acc + (isActive || isRingingButNotIncoming ? 1 : 0);
-  }, 0);
-}
-
-const countIncomingRingingCalls = (calls = []) => {
-  if (!calls.length) return 0;
-  return calls.reduce((acc, call) => acc + (isIncomingRinging(call) ? 1 : 0), 0);
-};
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
 const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
@@ -217,91 +149,3 @@ onUnmounted(() => {
   hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
-
-<style lang="scss" scoped>
-.workspace-section.queue-section {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  transition: var(--transition);
-
-  gap: var(--spacing-2xs);
-  will-change: width;
-
-  &--md {
-    flex: 0 0 320px;
-    max-width: 320px;
-  }
-
-  &--sm {
-    flex: 0 0 132px;
-    max-width: 132px;
-  }
-
-  .wt-rounded-action {
-    position: fixed;
-    bottom: var(--spacing-md);
-    left: var(--spacing-md);
-    border-color: var(--success-color);
-    background: var(--success-color);
-    z-index: var(--ws-main-call-button-z-index);
-
-    :deep .wt-icon {
-      fill: var(--icon-on-dark-color);
-    }
-  }
-}
-
-// increase specificity
-.queue-section__tabs.wt-tabs {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-//TODO value for count indicator, which should be different
-// after adding badge with primevue, need delete this
-$indicator-width: 34px;
-$indicator-height: 16px;
-
-.queue-section__tab-content {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  justify-content: center;
-
-  &--sm {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: end;
-    gap: var(--spacing-2xs);
-    height: 100%;
-
-
-    .queue-section__count {
-      order: -1;
-    }
-  }
-}
-
-.queue-section__count {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  //TODO after adding badge with primevue, need delete this
-  min-width: $indicator-width;
-  height: $indicator-height;
-}
-
-.queue-section__wrapper {
-  flex-grow: 1;
-}
-
-.queue-section_indicator {
-  display: flex;
-  position: relative;
-}
-</style>
