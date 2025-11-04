@@ -273,8 +273,8 @@ function selectAutocompleteOption({id}: { id: string }) {
 
 function showQuickRepliesPanel() {
   closeAutocomplete();
-  if(chat.value.draft?.length > 1) {
-    // delete last space only if there is more than 1 symbol in draft
+  if(chat.value.draft?.length > 0) {
+    // delete last space only if there any symbol in draft
     chat.value.draft = chat.value.draft.slice(0, -1);
   }
   openQuickReplies();
