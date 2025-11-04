@@ -178,8 +178,10 @@ export default {
 }
 
 .break-timer-popup__status-comment {
+  @extend %wt-scrollbar;
   margin-top: var(--spacing-sm);
   max-height: 80px;
   overflow: auto;
+  word-break: break-word;
 }
 </style>
