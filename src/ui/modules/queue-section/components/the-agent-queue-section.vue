@@ -122,12 +122,12 @@ const countByStates = (list = [], states = []) =>
 
 const activeCallCount = computed(() => countActiveCalls(callList.value));
 const incomingCallCount = computed(
-  () => countIncomingRingingCalls(callList.value) + (manualCallsList.value?.length ?? 0),
+  () => countIncomingRingingCalls(callList.value) + manualCallsList.value?.length,
 );
 
 const activeChatCount = computed(() => countByStates(chatList.value, [ConversationState.Active]));
 const incomingChatCount = computed(
-  () => countByStates(chatList.value, [ConversationState.Invite]) + (manualChatList.value?.length ?? 0),
+  () => countByStates(chatList.value, [ConversationState.Invite]) + manualChatList.value?.length,
 );
 
 const activeJobCount = computed(() =>
