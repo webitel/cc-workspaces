@@ -10,6 +10,7 @@ import applyTransform, {
   merge,
   notify,
   sanitize,
+  starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index';
 import get from 'lodash/get';
 
@@ -60,6 +61,7 @@ const getObjectRecordsLookup = async ({
 
   const url = applyTransform(params, [
     merge(getDefaultGetParams()),
+    starToSearch('search'),
     (params) => ({ ...params, q: params.search }),
     sanitize(fieldsToSend),
     camelToSnake(['fields']),
