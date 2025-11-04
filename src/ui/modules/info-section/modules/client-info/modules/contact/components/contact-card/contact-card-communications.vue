@@ -13,7 +13,7 @@
           ></wt-tabs>
 
           <wt-icon-btn
-            v-if="showAddingButton && linked"
+            v-if="showAddingButton"
             icon="plus"
             :disabled="isAdding"
             @click="isAdding = true"
@@ -82,7 +82,7 @@ function changeTab(tab) {
   currentTab.value = tab;
 }
 
-const showAddingButton = computed(() => currentTab.value.value === 'phones');
+const showAddingButton = computed(() => currentTab.value.value === 'phones' && props.linked);
 </script>
 
 <style lang="scss" scoped>
