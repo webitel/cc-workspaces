@@ -139,7 +139,6 @@
 
 <script>
 import { CallActions, CallDirection } from 'webitel-sdk';
-import { QueueTypeName } from '@webitel/ui-sdk/enums'
 
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
@@ -148,6 +147,7 @@ import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-so
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import { getQueueName } from '../../../_shared/scripts/getQueueName'
 
 export default {
   name: 'ActiveQueuePreview',
@@ -158,18 +158,7 @@ export default {
     },
 
     queueName() {
-      if (!this.isTransferQueue) {
-        return this.task.attempt?.queue?.name;
-      }
-      //@author o.chorpita
-      // When transferring a call to a user, skip showing the "transfer" queue name
-      // https://webitel.atlassian.net/browse/WTEL-7762
-      return '';
-    },
-
-    isTransferQueue () {
-      //https://webitel.atlassian.net/browse/WTEL-7762?focusedCommentId=704701
-      return this.task.attempt?.queue?.name === 'transfer' && this.task?.queue?.type === QueueTypeName.NOT_IMPLEMENT;
+      return getQueueName(this.task)
     },
 
     isRinging() {
