@@ -25,11 +25,6 @@ export default {
         : this.value;
     },
   },
-  created() {
-    if (this.value === 'now') {
-      this.$emit('input', Date.now());
-    }
-  },
 };
 </script>
 
