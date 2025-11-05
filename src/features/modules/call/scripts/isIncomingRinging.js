@@ -13,8 +13,8 @@ const isOutboundPreviewDialer = (call) => (
 const isOutboundCallWithDisableAutoAnswer = (call) => (
   // call.direction === CallDirection.Outbound && call.allowAnswer
   // should i check for autoAnswer? https://webitel.atlassian.net/browse/DEV-4714
-  call.direction === CallDirection.Outbound && call.allowAnswer &&
-  !call.params.autoAnswer
+  call.direction === CallDirection.Outbound && call.allowAnswer && (call.params &&
+  !call.params.autoAnswer)
 );
 
 const isInboundRinging = (call) => (
