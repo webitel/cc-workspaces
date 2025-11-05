@@ -8,6 +8,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { getQueueName } from '../../../../../queue-section/modules/_shared/scripts/getQueueName'
 
 export default {
   name: 'ClientInfoChips',
@@ -16,8 +17,7 @@ export default {
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
     }),
     queueName() {
-      return this.taskOnWorkspace.attempt?.queue?.name
-        || this.taskOnWorkspace.queue?.name
+      return getQueueName(this.taskOnWorkspace)
     },
   },
 };
