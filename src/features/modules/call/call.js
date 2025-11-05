@@ -65,7 +65,7 @@ const actions = {
     //@author Oles Chorpita
     //If there's an active call, or call was active but cleared from TASK_ON_WORKSPACE,
     if (isActiveCall) {
-      context.dispatch('TOGGLE_HOLD', isActiveCall);
+      context.dispatch('SET_HOLD', isActiveCall);
     }
 
     if (number) {
