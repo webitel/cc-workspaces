@@ -1,9 +1,10 @@
 import { CallActions, CallDirection } from 'webitel-sdk';
+import { QueueTypeName } from '@webitel/ui-sdk/enums'
 
 const isRinging = (call) => call.state === CallActions.Ringing;
 
 const isPreviewDialer = (call) => call.queue && call.queue.queue_type ===
-  'preview';
+  QueueTypeName.PREVIEW_DIALER;
 
 const isOutboundPreviewDialer = (call) => (
   call.direction === CallDirection.Outbound && isPreviewDialer(call)
@@ -26,7 +27,7 @@ const isNotManualCall = (call) => (
 );
 
 const isNotOfflineCall = (call) => (
-  call.queue?.queue_type !== 'offline'
+  call.queue?.queue_type !== QueueTypeName.OFFLINE_QUEUE
 );
 
 const isIncomingRinging = (call) => {
