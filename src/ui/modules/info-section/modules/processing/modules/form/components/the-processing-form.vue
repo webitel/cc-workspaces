@@ -126,7 +126,7 @@ export default {
           return component.value = this.getDatetimepickerInitialValue(component.view.initialValue);
         }
 
-        return component.value = this.parseJsonInitialValue(component.view.initialValue);
+        return component.value = this.parseInitialValueToJson(component.view.initialValue);
       });
 
       this.task.attempt.form.metadata.isInited = true;
@@ -151,7 +151,7 @@ export default {
         : initialValue;
     },
 
-    parseJsonInitialValue(initialValue) {
+    parseInitialValueToJson(initialValue) {
       try {
         const parsed = JSON.parse(initialValue);
 
