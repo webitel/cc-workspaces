@@ -351,7 +351,8 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   position: relative;
 
   &__actions {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: $chatGap;
   }
 }
@@ -369,16 +370,15 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   width: 100%;
 }
 
+
 .chat-messaging__emoji {
-  display: block;
-  transition: var(--transition);
-  //border: var(--rounded-action-border-size) solid;
-  //border-color: var(--rounded-action-bg-color);
-  //border-radius: var(--border-radius);
-  //background: var(--rounded-action-bg-color);
-  //padding: var(--rounded-action-padding);
-  width: 100%;
-  line-height: 0;
-  cursor: pointer;
+  display: inline-block;
+  ::v-deep emoji-picker {
+    position: absolute;
+    z-index: var(--ws-dropdown-z-index);
+    bottom: calc(100% + $input-height);
+    left: 100%;
+    transform: translateX(-50%);
+  }
 }
 </style>
