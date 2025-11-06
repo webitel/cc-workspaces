@@ -371,9 +371,7 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   width: 100%;
 }
 
-
 .chat-messaging__emoji {
-  display: inline-block;
   ::v-deep emoji-picker {
     position: absolute;
     z-index: var(--ws-dropdown-z-index);
