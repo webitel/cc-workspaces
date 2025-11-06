@@ -150,7 +150,6 @@ const queueName = computed(() => props.task?.queue?.name || '');
 
   &:hover {
     background: var(--content-wrapper-hover-color);
-    transform: translateY(-1px);
   }
 
   &--opened {

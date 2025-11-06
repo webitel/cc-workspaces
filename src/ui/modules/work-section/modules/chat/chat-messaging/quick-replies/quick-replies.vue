@@ -63,9 +63,13 @@ const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 const emptyPic = computed(() => (darkMode.value ? EmptyPicDark : EmptyPicLight));
 
 const callQuickReply = async (params = {}):Promise<void> => {
+  const repliesParams = {
+    ...params,
+    restrictToAgent: true,
+  }
   try {
     isLoading.value = true;
-    const { items } = await QuickRepliesAPI.getList(params);
+    const { items } = await QuickRepliesAPI.getList(repliesParams);
     replies.value = items;
   } catch (error) {
     throw new Error('Error fetching quick replies:', error);
