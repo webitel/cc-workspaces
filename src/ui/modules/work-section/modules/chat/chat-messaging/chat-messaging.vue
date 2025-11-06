@@ -33,7 +33,6 @@
         />
       </div>
     <div
-      v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
 
@@ -58,8 +57,7 @@
         @blur="showQuickReplies && onBlur()"
       />
       <div class="chat-messaging-text-entry__actions">
-        <div class="chat-messaging-file-input-wrapper">
-          <wt-rounded-action
+        <wt-rounded-action
             class="chat-messaging-file-input"
             color="secondary"
             icon="attach"
@@ -68,14 +66,13 @@
             wide
             @click="attachmentInput?.click()"
           />
-          <input
+        <input
             ref="attachmentInput"
             class="chat-messaging-file-input__input"
             type="file"
             multiple
             @change="handleAttachments"
           >
-        </div>
         <wt-chat-emoji
           class="chat-messaging__emoji"
           :size="size"
@@ -359,11 +356,6 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   }
 }
 
-.chat-messaging-file-input-wrapper {
-  position: relative;
-  width: 100%;
-}
-
 .chat-messaging-file-input__input {
   position: absolute;
   width: 0;
@@ -378,12 +370,15 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
 }
 
 .chat-messaging__emoji {
-  ::v-deep emoji-picker {
-    position: absolute;
-    z-index: var(--ws-dropdown-z-index);
-    bottom: calc(100% + $input-height);
-    left: 100%;
-    transform: translateX(-50%);
-  }
+  display: block;
+  transition: var(--transition);
+  //border: var(--rounded-action-border-size) solid;
+  //border-color: var(--rounded-action-bg-color);
+  //border-radius: var(--border-radius);
+  //background: var(--rounded-action-bg-color);
+  //padding: var(--rounded-action-padding);
+  width: 100%;
+  line-height: 0;
+  cursor: pointer;
 }
 </style>
