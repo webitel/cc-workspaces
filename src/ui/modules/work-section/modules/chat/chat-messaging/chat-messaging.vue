@@ -33,6 +33,7 @@
         />
       </div>
     <div
+      v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
 
