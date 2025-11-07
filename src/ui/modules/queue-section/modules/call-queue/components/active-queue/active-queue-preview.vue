@@ -147,6 +147,7 @@ import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-so
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
+import { getQueueName } from '../../../_shared/scripts/getQueueName'
 
 export default {
   name: 'ActiveQueuePreview',
@@ -157,7 +158,7 @@ export default {
     },
 
     queueName() {
-      return this.task.attempt?.queue?.name;
+      return getQueueName(this.task)
     },
 
     isRinging() {

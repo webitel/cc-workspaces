@@ -1,3 +1,5 @@
+import { getQueueName } from '../modules/queue-section/modules/_shared/scripts/getQueueName.js';
+
 export default {
   computed: {
     displayChatName() {
@@ -20,7 +22,7 @@ export default {
       return (this.task || this.call)?.displayNumber;
     },
     displayQueueName() {
-      return (this.task || this.call)?.attempt?.queue?.name;
+      return getQueueName(this.task || this.call);
     },
   },
 };
