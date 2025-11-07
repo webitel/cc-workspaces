@@ -11,7 +11,7 @@
       :class="{'chat-history__messages--processing': !showAllMessages}"
       @scroll="handleChatScroll"
     >
-      <div class="chat-history__observer-wrapper">
+      <div v-if="next" class="chat-history__observer-wrapper">
         <wt-intersection-observer
           :canLoadMore="next"
           :loading="isLoading"
