@@ -58,8 +58,7 @@
         @blur="showQuickReplies && onBlur()"
       />
       <div class="chat-messaging-text-entry__actions">
-        <div class="chat-messaging-file-input-wrapper">
-          <wt-rounded-action
+        <wt-rounded-action
             class="chat-messaging-file-input"
             color="secondary"
             icon="attach"
@@ -68,14 +67,13 @@
             wide
             @click="attachmentInput?.click()"
           />
-          <input
+        <input
             ref="attachmentInput"
             class="chat-messaging-file-input__input"
             type="file"
             multiple
             @change="handleAttachments"
           >
-        </div>
         <wt-chat-emoji
           class="chat-messaging__emoji"
           :size="size"
@@ -354,14 +352,10 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   position: relative;
 
   &__actions {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: $chatGap;
   }
-}
-
-.chat-messaging-file-input-wrapper {
-  position: relative;
-  width: 100%;
 }
 
 .chat-messaging-file-input__input {
