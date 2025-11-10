@@ -1,6 +1,7 @@
 import applyTransform, { notify } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { PhonesAPI } from '@webitel/api-services/api'
 import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
+import { ContactPath } from '../enums/ContactPath.ts';
 
 const state = {
   contact: null, // this is actual contact, linked to the task
@@ -12,9 +13,12 @@ const state = {
 
 const getters = {
   CONTACT_LINK: (state) => (id) => {
-    const contactPath = !state.showFullContact ? 'view/contact_view' : 'contacts';
+    const contactPath = !state.showFullContact ? ContactPath.ReadOnlyContact : ContactPath.FullContact;
     return `${import.meta.env.VITE_CRM_URL}/${contactPath}/${id}`
   }, // pass arguments to getter for different contents of usage
+  READ_ONLY_CONTACT_LINK: (state) => (id) => {
+    return `${import.meta.env.VITE_CRM_URL}/${ContactPath.ReadOnlyContact}/${id}`
+  }
 };
 
 const actions = {
