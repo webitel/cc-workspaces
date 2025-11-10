@@ -135,11 +135,6 @@ const {
   fetchFn,
   size: 20,
 });
-
-// Watchers
-watch(filterQuery, () => {
-  resetData();
-});
 </script>
 
 <style lang="scss" scoped>
