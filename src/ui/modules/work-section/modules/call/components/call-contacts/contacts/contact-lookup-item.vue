@@ -1,7 +1,7 @@
 <template>
   <lookup-item>
     <template #before>
-      <a :href="contactLink(item.id)" target="_blank">
+      <a :href="contactLink(item.etag)" target="_blank">
         <wt-avatar
           :size="size"
           :username="item.name"
@@ -12,7 +12,7 @@
     <template #title>
       <a
         class="contact-lookup-item__title"
-        :href="contactLink(item.id)"
+        :href="contactLink(item.etag)"
         target="_blank">
         {{ item.name }}
       </a>
@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     ...mapGetters('ui/infoSec/client/contact', {
-      contactLink: 'CONTACT_LINK',
+      contactLink: 'READ_ONLY_CONTACT_LINK',
     }),
     primaryPhoneNumber() {
       return this.item.phones?.find((phone) => phone.primary === true)?.number;
