@@ -66,6 +66,7 @@ const callQuickReply = async (params = {}):Promise<void> => {
   const repliesParams = {
     ...params,
     restrictToAgent: true,
+    sort: '+agent_priority',
   }
   try {
     isLoading.value = true;
