@@ -130,26 +130,7 @@ const incomingJobCount = computed(() =>
   getCountByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
 );
 
-const hasNewChatMessages = computed(() => {
-  const chats = chatList.value ?? [];
-  let hasNewMessage = false;
-  const nextState = { ...chatMessagesLengthMap.value };
-
-  chats.forEach((chat) => {
-    const id = chat.id;
-    const messageLength = chat.messages ? chat.messages.length : 0;
-    const prevLength = chatMessagesLengthMap.value[id] ?? messageLength;
-    if (messageLength > prevLength) {
-      hasNewMessage = store.getters['features/chat/CHAT_ON_WORKSPACE']?.id !== id;
-    }
-
-    nextState[id] = messageLength;
-  });
-
-  chatMessagesLengthMap.value = nextState;
-
-  return hasNewMessage;
-});
+const hasNewChatMessages = computed(() => store.state.features?.notifications?.unreadCount ?? 0);
 
 const tabs = computed(() => [
   {
