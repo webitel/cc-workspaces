@@ -191,37 +191,31 @@ onUnmounted(() => {
   hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 
+//@author Oles Chorpita
 // Watch for changes in the chat list or the currently opened chat
+//https://webitel.atlassian.net/browse/WTEL-8123
 watch(
   [chatList, activeChatId],
   ([chats = [], currentActiveId]) => {
-    let hasNew = false;
-    const map = chatMessagesLengthMap.value;
-
+    hasNewChatMessages.value = false;
     chats.forEach((chat) => {
       const id = chat.id;
       const messageLength = getChatMessagesLength(chat);
 
-      // Initialize counter the first time we see this chat
-      if (map[id] == null) {
-        map[id] = messageLength;
+      if (chatMessagesLengthMap.value[id] == null || id === currentActiveId) {
+        // Initialize counter the first time we see this chat
+        chatMessagesLengthMap.value[id] = messageLength;
+        // When user opens a chat — mark it as read
+        if (id === currentActiveId) return;
       }
 
-      // When user opens a chat — mark it as read
-      if (id === currentActiveId) {
-        map[id] = messageLength;
-        return;
-      }
-
-      const prevLength = map[id];
+      const prevLength = chatMessagesLengthMap.value[id];
 
       // Detect new messages for non-active chats
       if (messageLength > prevLength) {
-        hasNew = true;
+        return hasNewChatMessages.value = true;
       }
     });
-
-    hasNewChatMessages.value = hasNew;
   },
   {
     deep: true,
