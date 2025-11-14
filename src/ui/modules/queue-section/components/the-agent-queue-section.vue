@@ -202,10 +202,12 @@ watch(
       const id = chat.id;
       const messageLength = getChatMessagesLength(chat);
 
+      // Initialize counter the first time we see this chat
       if (map[id] == null) {
         map[id] = messageLength;
       }
 
+      // When user opens a chat — mark it as read
       if (id === currentActiveId) {
         map[id] = messageLength;
         return;
@@ -213,6 +215,7 @@ watch(
 
       const prevLength = map[id];
 
+      // Detect new messages for non-active chats
       if (messageLength > prevLength) {
         hasNew = true;
       }
