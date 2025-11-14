@@ -61,7 +61,7 @@
   </section>
 </template>
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
@@ -95,6 +95,7 @@ const store = useStore();
 const currentTab = ref({});
 const hotkeyUnsubscribers = ref([]);
 const chatMessagesLengthMap = ref({});
+const hasNewChatMessages = ref(false);
 
 const callList = computed(() => store.state.features?.call?.callList || []);
 const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
@@ -130,7 +131,12 @@ const incomingJobCount = computed(() =>
   getCountByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
 );
 
-const hasNewChatMessages = computed(() => store.state.features?.notifications?.unreadCount ?? 0);
+const activeChatId = computed(
+  () => store.getters['features/chat/CHAT_ON_WORKSPACE']?.id,
+);
+
+const getChatMessagesLength = (chat) =>
+  chat.messages?.length ?? 0;
 
 const tabs = computed(() => [
   {
@@ -184,6 +190,41 @@ onMounted(() => {
 onUnmounted(() => {
   hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
+
+// Watch for changes in the chat list or the currently opened chat
+watch(
+  [chatList, activeChatId],
+  ([chats = [], currentActiveId]) => {
+    let hasNew = false;
+    const map = chatMessagesLengthMap.value;
+
+    chats.forEach((chat) => {
+      const id = chat.id;
+      const messageLength = getChatMessagesLength(chat);
+
+      if (map[id] == null) {
+        map[id] = messageLength;
+      }
+
+      if (id === currentActiveId) {
+        map[id] = messageLength;
+        return;
+      }
+
+      const prevLength = map[id];
+
+      if (messageLength > prevLength) {
+        hasNew = true;
+      }
+    });
+
+    hasNewChatMessages.value = hasNew;
+  },
+  {
+    deep: true,
+    immediate: true,
+  },
+);
 </script>
 <style lang="scss" scoped>
 .workspace-section.queue-section {
