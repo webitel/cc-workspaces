@@ -34,7 +34,7 @@
         @input="draft.labels = $event"
       ></wt-tags-input>
       <wt-textarea
-        v-model="draft.about"
+        v-model:model-value="draft.about"
         :label="t('vocabulary.description')"
       ></wt-textarea>
     </div>

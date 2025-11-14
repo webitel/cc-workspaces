@@ -29,7 +29,7 @@
           :reporting="taskReporting"
         ></failure-form>
         <wt-textarea
-          v-model="taskReporting.description"
+          v-model:model-value="taskReporting.description"
           :label="$t('reusable.description')"
           :placeholder="$t('reusable.description')"
         ></wt-textarea>
