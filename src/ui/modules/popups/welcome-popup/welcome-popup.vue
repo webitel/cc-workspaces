@@ -15,16 +15,16 @@
           <div class="welcome-popup-permission__status">
             <div
               class="welcome-popup-permission__status-content"
-              :class="{ 'welcome-popup-permission__status-main--disabled': permission.disabled }"
+              :class="{ 'welcome-popup-permission__status-content--disabled': permission.disabled }"
             >
               <wt-icon :icon="permission.icon"></wt-icon>
               {{ $t(`welcomePopup.${permission.id}.status`) }}:
 
-              <wt-indicator
-                :color="permission.status ? 'success' : 'error'"
-                size="sm"
-              />
             </div>
+            <wt-indicator
+              :color="permission.status ? 'success' : 'error'"
+              size="sm"
+            />
             <wt-switcher
               v-if="permission.toggle"
               class="welcome-popup-permission__switch"
