@@ -19,6 +19,7 @@
         @select="applyQuickReply"
       />
       <div
+      
         v-if="!showQuickReplies"
         class="chat-messaging__messaging chat-messages-container"
       >
@@ -33,6 +34,7 @@
         />
       </div>
     <div
+    style="display: none;"
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
@@ -98,6 +100,12 @@
       </div>
     </div>
   </div>
+  <chat-container
+    :size="size as ComponentSize"
+    :messages="chtMessgs"
+    @send-message="sendMessage"
+    @send-file="sendFile"
+  />
 </template>
 
 <script setup lang="ts">
@@ -108,6 +116,7 @@ import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
+import { ChatContainer } from '@webitel/ui-chats/ui';
 
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
@@ -121,6 +130,7 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import {useQuickReplies} from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
+import { useChatMessages } from './message/composables/useChatMessages';
 
 const props = withDefaults(defineProps<{
   size?: string;
@@ -152,6 +162,8 @@ const autocompleteOptions = computed(() => [{
   text: t('autocompleteList.quickRepliesDescription'),
   id: AutocompleteOptions.QUICK_REPLIES,
 }]);
+
+const { messages: chtMessgs } = useChatMessages();
 
 const {
   isDropzoneVisible,
@@ -213,15 +225,9 @@ async function insertEmoji(unicode: string) {
   insertTextAtCursor(textarea.value, unicode);
 }
 
-async function sendMessage() {
-  const draft = chat.value.draft;
-  try {
-    chat.value.draft = '';
-    await send(draft);
-  } catch {
-    chat.value.draft = draft;
-    eventBus?.$emit('notification', {type: 'error', text: t('error.general')});
-  }
+async function sendMessage(message: string, options: { onSuccess: () => void }) {
+  await send(message);
+  options.onSuccess();
 }
 
 function setupHotkeys() {
@@ -242,11 +248,6 @@ function handleFilePaste(event: ClipboardEvent) {
     sendFile(files);
     event.preventDefault();
   }
-}
-
-async function handleAttachments(event: Event) {
-  const files = Array.from(event.target.files);
-  await sendFile(files);
 }
 
 function closeQuickRepliesPanel() {
