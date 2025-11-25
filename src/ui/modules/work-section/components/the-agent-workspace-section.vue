@@ -24,8 +24,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { VideoMediaFlow } from 'webitel-sdk'
-
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
