@@ -139,13 +139,11 @@
 
 <script>
 import { CallActions, CallDirection } from 'webitel-sdk';
-import { mapGetters } from 'vuex';
 
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
 import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-sonar.svg';
-import videoCam from '../../../../../../../app/assets/video/video-cam.svg';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
@@ -155,9 +153,6 @@ export default {
   name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   computed: {
-    ...mapGetters('workspace', {
-      isVideoCall: 'IS_VIDEO_CALL_WORKSPACE',
-    }),
     isHold() {
       return this.task.isHold;
     },
@@ -171,7 +166,6 @@ export default {
     },
 
     sonarIcon() {
-      if (this.isVideoCall) return videoCam;
       if (this.task.isHold) return holdSonar;
       if (this.task.state === CallActions.Ringing) {
         if (this.task.direction === CallDirection.Inbound) return inboundSonar;
