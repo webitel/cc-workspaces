@@ -53,6 +53,7 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
+import Screenshot from '../modules/screenshots/components/screenshots-tab.vue';
 
 export default {
   name: 'TheAgentInfoSection',
@@ -65,6 +66,7 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
+    Screenshot
   },
   mixins: [sizeMixin],
   props: {
@@ -120,6 +122,7 @@ export default {
     ...mapGetters('workspace', {
       workspaceState: 'WORKSRACE_STATE',
       taskOnWorkspace: 'TASK_ON_WORKSPACE',
+      isVideoCall: 'IS_VIDEO_CALL_WORKSPACE',
     }),
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
@@ -149,6 +152,10 @@ export default {
       return this.flowsList.length
     },
 
+    showScreenshots() {
+      return this.isVideoCall
+    },
+
     hasKnowledgeBase() {
       const { variables } = this.taskOnWorkspace;
       return !!variables?.knowledge_base;
@@ -160,6 +167,7 @@ export default {
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
       if (this.showFlows) tabs.push(this.tabsObject.flows);
+      if (this.showScreenshots) tabs.push(this.tabsObject.screenshots)
       return tabs;
     },
     tabsObject() {
@@ -192,12 +200,18 @@ export default {
         value: 'flows',
         icon: 'flows',
       };
+      const screenshots = {
+        text: this.$t('infoSec.screenshots'),
+        value: 'screenshots',
+        icon: 'preview-tag-image',
+      }
       return {
         generalInfo,
         clientInfo,
         knowledgeBase,
         processing,
         flows,
+        screenshots,
       };
     },
   },

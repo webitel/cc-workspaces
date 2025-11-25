@@ -165,7 +165,31 @@ export default {
       return isIncomingRinging(this.task);
     },
 
+    peerStreams() {
+      return this.task.peerStreams || [];
+    },
+
+    localStreams() {
+      return this.task.localStreams || [];
+    },
+    isPeerVideo() {
+      return this.peerStreams.some((stream) => (
+        stream.getTracks().some((track) => track.kind === 'video')
+      ));
+    },
+
+    isLocalVideo() {
+      return this.localStreams.some((stream) => (
+        stream.getTracks().some((track) => track.kind === 'video')
+      ));
+    },
+
+    isVideo() {
+      return this.isPeerVideo || this.isLocalVideo;
+    },
+
     sonarIcon() {
+      if (this.isVideo) return 'video-cam';
       if (this.task.isHold) return holdSonar;
       if (this.task.state === CallActions.Ringing) {
         if (this.task.direction === CallDirection.Inbound) return inboundSonar;

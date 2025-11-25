@@ -1,4 +1,4 @@
-import { CallActions, ConversationState } from 'webitel-sdk'
+import { CallActions, ConversationState, VideoMediaFlow } from 'webitel-sdk'
 
 import instance from '../../app/api/instance';
 import WorkspaceStates from '../enums/WorkspaceState.enum.js';
@@ -14,6 +14,13 @@ const getters = {
   IS_CALL_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CALL,
   IS_CHAT_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.CHAT,
   IS_JOB_WORKSPACE: (state,getters) => getters.WORKSRACE_STATE === WorkspaceStates.JOB,
+  IS_VIDEO_CALL_WORKSPACE: (state, getters) =>  {
+    if (!getters.IS_CALL_WORKSPACE) return false;
+    const video = getters.TASK_ON_WORKSPACE.video;
+    return video === VideoMediaFlow.SendOnly
+    || video === VideoMediaFlow.SendRecv
+    || video === VideoMediaFlow.RecvOnly
+  },
   IS_TASK_ACTIVE: (state,getters) =>
     getters.TASK_ON_WORKSPACE.state === ConversationState.Active
     || getters.TASK_ON_WORKSPACE.state === CallActions.Active
