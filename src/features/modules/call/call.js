@@ -139,6 +139,14 @@ const actions = {
     }
   },
 
+  VIDEO_TOGGLE: async (context, { callId } = {}) => {
+    const call = callId
+      ? context.getters.GET_CALL_BY_ID(callId)
+      : context.getters.CALL_ON_WORKSPACE;
+
+    const localVideo = call.localStreams[0].getTracks().find(p => p.kind === 'video');
+    localVideo.enabled = !localVideo.enabled;
+  },
   SET_HOLD: async (context, call) => {
     if (!call.isHold && call.allowHold) {
       call.hold();
