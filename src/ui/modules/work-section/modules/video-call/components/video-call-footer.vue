@@ -3,7 +3,7 @@
     <wt-rounded-action
       :size="size"
       class="call-action"
-      icon="video-cam"
+      :icon="!isVideoMuted ? 'video-cam' : 'video-cam-off'"
       rounded
       wide
       @click="toggleVideo"
@@ -62,6 +62,10 @@ export default {
     isMuted() {
       return !this.isNewCall;
     },
+
+    isVideoMuted () {
+      return this.call.mutedVideo
+    }
   },
 
   methods: {
