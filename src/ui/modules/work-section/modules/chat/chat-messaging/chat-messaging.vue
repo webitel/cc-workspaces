@@ -12,12 +12,6 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-      <quick-replies
-        v-if="showQuickReplies"
-        :search="searchReply"
-        @close="closeQuickRepliesPanel"
-        @select="applyQuickReply"
-      />
       <div
       
         v-if="!showQuickReplies"
@@ -34,7 +28,6 @@
         />
       </div>
     <div
-    style="display: none;"
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
@@ -46,7 +39,7 @@
         @select="selectAutocompleteOption"
       />
 
-      <wt-textarea
+      <!-- <wt-textarea
         ref="messageDraft"
         :value="chat.draft"
         class="chat-messaging__textarea"
@@ -58,30 +51,28 @@
         @keydown="onKeyDown"
         @input="inputMessage"
         @blur="showQuickReplies && onBlur()"
+      /> -->
+    </div>
+  </div>
+  <chat-container-component
+    :size="(size as ComponentSize)"
+    :chat-actions="[ChatAction.SendMessage, ChatAction.AttachFiles, ChatAction.EmojiPicker, ChatAction.QuickReplies]"
+    :messages="chtMessgs"
+    @[`action:${ChatAction.SendMessage}`]="sendMessage"
+    @[`action:${ChatAction.AttachFiles}`]="sendFile"
+  >
+  <template 
+    v-if="showQuickReplies"
+    #main
+  >
+    <quick-replies
+        :search="searchReply"
+        @close="closeQuickRepliesPanel"
+        @select="applyQuickReply"
       />
-      <div class="chat-messaging-text-entry__actions">
-        <wt-rounded-action
-            class="chat-messaging-file-input"
-            color="secondary"
-            icon="attach"
-            :size="size"
-            rounded
-            wide
-            @click="attachmentInput?.click()"
-          />
-        <input
-            ref="attachmentInput"
-            class="chat-messaging-file-input__input"
-            type="file"
-            multiple
-            @change="handleAttachments"
-          >
-        <wt-chat-emoji
-          class="chat-messaging__emoji"
-          :size="size"
-          @insert-emoji="insertEmoji"
-        />
-        <wt-rounded-action
+  </template>
+  <template #[`action:${ChatAction.QuickReplies}`]>
+    <wt-rounded-action
           icon="quick-replies"
           color="accent"
           :size="size"
@@ -89,23 +80,8 @@
           wide
           @click="handleQuickReplies"
         />
-        <wt-rounded-action
-          icon="chat-send"
-          color="accent"
-          :size="size"
-          rounded
-          wide
-          @click="sendMessage"
-        />
-      </div>
-    </div>
-  </div>
-  <chat-container
-    :size="size as ComponentSize"
-    :messages="chtMessgs"
-    @send-message="sendMessage"
-    @send-file="sendFile"
-  />
+  </template>
+  </chat-container-component>
 </template>
 
 <script setup lang="ts">
@@ -115,8 +91,7 @@ import insertTextAtCursor from 'insert-text-at-cursor';
 import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useStore} from 'vuex';
-import { WtChatEmoji } from '@webitel/ui-sdk/components';
-import { ChatContainer } from '@webitel/ui-chats/ui';
+import { ChatContainerComponent, ChatAction } from '@webitel/ui-chats/ui';
 
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
@@ -192,7 +167,7 @@ const {
 
 const hotkeyUnsubscribers = ref([]);
 
-function sendFile (files) {
+function sendFile (files: File[]) {
   return store.dispatch('features/chat/SEND_FILE', files);
 }
 
@@ -202,27 +177,6 @@ function send (draft) {
 
 function accept() {
   return store.dispatch('features/chat/ACCEPT');
-}
-
-async function setDraftFocus() {
-  if (messageDraft.value && messageDraft.value.$el) {
-    textarea.value = messageDraft.value.$el.querySelector('textarea');
-  }
-  if(!messageDraft.value || !textarea.value) return;
-  textarea?.value.focus();
-}
-
-async function insertEmoji(unicode: string) {
-  if (!textarea.value) {
-    await setDraftFocus();
-    return;
-  }
-
-  await nextTick();
-
-  textarea.value.focus();
-  // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
-  insertTextAtCursor(textarea.value, unicode);
 }
 
 async function sendMessage(message: string, options: { onSuccess: () => void }) {
@@ -292,21 +246,7 @@ function handleQuickReplies() {
   return props.showQuickReplies ? closeQuickReplies() : openQuickReplies();
 }
 
-watch(chat, async () => {
-  await nextTick();
-  await setDraftFocus();
-}, {immediate: true});
-
-onMounted(async () => {
-  eventBus?.$on('chat-input-focus', setDraftFocus);
-  setupHotkeys();
-
-  await nextTick();
-  await setDraftFocus();
-});
-
 onUnmounted(() => {
-  eventBus?.$off('chat-input-focus', setDraftFocus);
   hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
