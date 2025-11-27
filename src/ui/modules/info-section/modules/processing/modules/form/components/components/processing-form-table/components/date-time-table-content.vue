@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import { formatDate } from '@webitel/ui-sdk/utils';
 import { computed, defineProps } from 'vue';
 
 const props = defineProps({
@@ -15,7 +16,7 @@ const props = defineProps({
 });
 
 const dataTimeValue = computed<string>(() =>  {
-  return new Date(+props.value).toLocaleString()
+  return formatDate(+props.value, 'datetime')
 })
 
 </script>
