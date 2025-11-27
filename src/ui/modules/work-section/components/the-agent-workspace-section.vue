@@ -30,7 +30,7 @@ import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
-import VideoCall from '../modules/video-call/components/the-video-call.vue'
+import VideoCall from '../modules/call/module/video-call/components/the-video-call.vue'
 import Chat from '../modules/chat/the-chat.vue';
 import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspace-empty.vue';
 import Job from '../modules/job/components/the-job.vue';

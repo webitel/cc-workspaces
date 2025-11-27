@@ -23,27 +23,29 @@
       ></wt-rounded-action>
     </template>
     <template #after-avatar>
-      <wt-rounded-action
-        v-if="isBridge"
-        class="call-action"
-        :active="isOnBridge"
-        :size="size"
-        icon="call-add-to"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Bridge)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isTransfer"
-        class="call-action"
-        :size="size"
-        icon="call-transfer--filled"
-        color="transfer"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Transfer)"
-      ></wt-rounded-action>
+      <slot name="after-avatar">
+        <wt-rounded-action
+          v-if="isBridge"
+          class="call-action"
+          :active="isOnBridge"
+          :size="size"
+          icon="call-add-to"
+          color="secondary"
+          rounded
+          wide
+          @click="$emit('openTab', CallTab.Bridge)"
+        ></wt-rounded-action>
+        <wt-rounded-action
+          v-if="isTransfer"
+          class="call-action"
+          :size="size"
+          icon="call-transfer--filled"
+          color="transfer"
+          rounded
+          wide
+          @click="$emit('openTab', CallTab.Transfer)"
+        ></wt-rounded-action>
+      </slot>
       <wt-rounded-action
         v-if="isHangup"
         class="call-action"

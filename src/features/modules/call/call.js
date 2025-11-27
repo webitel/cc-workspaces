@@ -6,6 +6,7 @@ import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
 import missed from './modules/missed-calls/store/missed-calls';
+import videoCall from './video-call/video-call.js';
 import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
@@ -139,12 +140,6 @@ const actions = {
     }
   },
 
-  VIDEO_TOGGLE: async (context, { callId } = {}) => {
-    const call = callId
-      ? context.getters.GET_CALL_BY_ID(callId)
-      : context.getters.CALL_ON_WORKSPACE;
-    call.muteVideo(!call.mutedVideo)
-  },
   SET_HOLD: async (context, call) => {
     if (!call.isHold && call.allowHold) {
       call.hold();
@@ -271,5 +266,5 @@ export default {
   getters,
   actions,
   mutations,
-  modules: { missed, manual },
+  modules: { missed, manual, videoCall },
 };

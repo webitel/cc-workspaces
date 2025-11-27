@@ -10,7 +10,11 @@
         :current-tab="currentTab"
         :size="size"
         @open-tab="openTabs"
-      ></call-header>
+      >
+        <template #after-avatar>
+          <span class="call-header-after-avatar-empty" aria-hidden="true"></span>
+        </template>
+      </call-header>
     </template>
     <template #body>
       <component
@@ -23,7 +27,6 @@
       <call-footer
         :current-tab="currentTab"
         :size="size"
-        @open-tab="currentTab = $event"
       ></call-footer>
     </template>
   </task-container>
@@ -35,13 +38,13 @@ import { useStore } from 'vuex';
 
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
-import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
-import TaskContainer from '../../_shared/components/task-container/task-container.vue';
-import History from '../../_shared/components/workspace-history/components/history-container.vue';
-import Contacts from '../../call/components/call-contacts/call-contacts-container.vue';
+import isIncomingRinging from '../../../../../../../../features/modules/call/scripts/isIncomingRinging';
+import TaskContainer from '../../../../_shared/components/task-container/task-container.vue';
+import History from '../../../../_shared/components/workspace-history/components/history-container.vue';
+import Contacts from '../../../../call/components/call-contacts/call-contacts-container.vue';
 import CallFooter from './video-call-footer.vue';
-import CallHeader from './video-call-header.vue';
-import CallPreview from './video-call-preview.vue';
+import CallHeader from './../../../components/call-header.vue';
+import CallPreview from '../../../components/call-preview.vue';
 import VideoCallProcessing from './video-call-processing.vue';
 import { VideoCallTab } from '../enums/VideoCallTab.enum.ts';
 

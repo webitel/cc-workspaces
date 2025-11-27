@@ -1,43 +1,51 @@
 <template>
-  <div class="numpad-state">
-    <div class="numpad-state__animation">
+  <div class="processing-state">
+    <div class="processing-state__animation">
       <img
         alt=""
         :src="sonarIcon"
       >
     </div>
+
     <div
       v-if="!isCallActive"
-      class="numpad-state__primary-text"
-    >{{ callState }}
+      class="processing-state__primary-text"
+    >
+      {{ callState }}
     </div>
+
     <div
       v-else
-      class="numpad-state__primary-text"
+      class="processing-state__primary-text"
     >
       <span
         v-for="(digit, key) of startTime.split('')"
         :key="key"
-        class="numpad-state__primary-text__time-digit"
-      >{{ digit }}</span>
+        class="processing-state__primary-text__time-digit"
+      >
+        {{ digit }}
+      </span>
     </div>
+
     <div
       v-if="dtmf"
-      class="numpad-state__secondary-text"
-    >{{ dtmf.join('') }}
+      class="processing-state__secondary-text"
+    >
+      {{ dtmf.join('') }}
     </div>
   </div>
 </template>
+
 
 <script>
 import { mapGetters } from 'vuex';
 import { CallActions, CallDirection } from 'webitel-sdk';
 
-import activeSonar from '../../../../../../app/assets/call-sonars/active-sonar.svg';
-import holdSonar from '../../../../../../app/assets/call-sonars/hold-sonar.svg';
-import inboundSonar from '../../../../../../app/assets/call-sonars/inbound-sonar.svg';
-import ringingSonar from '../../../../../../app/assets/call-sonars/ringing-sonar.svg';
-import callTimer from '../../../../../mixins/callTimerMixin';
+import activeSonar from '../../../../../../../../app/assets/call-sonars/active-sonar.svg';
+import holdSonar from '../../../../../../../../app/assets/call-sonars/hold-sonar.svg';
+import inboundSonar from '../../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
+import ringingSonar from '../../../../../../../../app/assets/call-sonars/ringing-sonar.svg';
+import callTimer from '../../../../../../../mixins/callTimerMixin';
 
 export default {
   name: 'CallState',
@@ -83,11 +91,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.numpad-state {
+.processing-state {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   max-width: 100%;
+  height: 100%;
 
   &__animation {
     width: 52px;
@@ -100,12 +110,12 @@ export default {
     @extend %typo-heading-1;
     text-align: center;
 
-    .numpad-state__primary-text__time-digit {
+    .processing-state__primary-text__time-digit {
       display: inline-block;
       text-align: center;
       width: 20px;
 
-      /*semicolons*/
+      // semicolons
       &:nth-child(3), &:nth-child(6) {
         width: 12px;
       }
