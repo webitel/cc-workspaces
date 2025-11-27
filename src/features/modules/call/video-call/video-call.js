@@ -1,7 +1,8 @@
 
 
 const actions = {
-  VIDEO_TOGGLE: ({ rootGetters }, { callId }) => {
+  //functions for on/off video in video call
+  TOGGLE_VIDEO: ({ rootGetters }, { callId }) => {
     const call = callId
       ? rootGetters['features/call/GET_CALL_BY_ID'](callId)
       : rootGetters['features/call/CALL_ON_WORKSPACE'];

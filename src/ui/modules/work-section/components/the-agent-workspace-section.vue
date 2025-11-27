@@ -63,7 +63,6 @@ export default {
   computed: {
     ...mapGetters('workspace', {
       state: 'WORKSRACE_STATE',
-      task: 'TASK_ON_WORKSPACE',
       isVideoCall: 'IS_VIDEO_CALL_WORKSPACE',
     }),
     workspaceComponent() {
