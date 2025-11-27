@@ -278,6 +278,12 @@ export default {
         denied: 'Ruxsat berilmadi',
       },
     },
+    camera: {
+      status: 'Kamera ruxsat holati',
+      message: {
+        denied: 'Ruxsat berilmadi',
+      },
+    },
   },
   descTrackAuthPopup: {
     title: 'Diqqat',
