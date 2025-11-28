@@ -1,32 +1,34 @@
 <template>
   <task-footer>
-    <wt-rounded-action
-      :active="isOnNumpad"
-      :class="{
-          'hidden': !isNumpad,
-         }"
-      :size="size"
-      class="call-action"
-      color="secondary"
-      icon="numpad"
-      rounded
-      wide
-      @click="$emit('openTab', CallTab.Numpad)"
-    ></wt-rounded-action>
-    <wt-rounded-action
-      :active="isOnHold"
-      :class="{
-          'hidden': !isHold,
-          'hold': isOnHold,
-        }"
-      :color="isOnHold ? 'hold' : 'secondary'"
-      :size="size"
-      class="call-action"
-      icon="hold"
-      rounded
-      wide
-      @click="toggleHold"
-    ></wt-rounded-action>
+    <slot name="before-mute-micro">
+      <wt-rounded-action
+        :active="isOnNumpad"
+        :class="{
+            'hidden': !isNumpad,
+           }"
+        :size="size"
+        class="call-action"
+        color="secondary"
+        icon="numpad"
+        rounded
+        wide
+        @click="$emit('openTab', CallTab.Numpad)"
+      ></wt-rounded-action>
+      <wt-rounded-action
+        :active="isOnHold"
+        :class="{
+            'hidden': !isHold,
+            'hold': isOnHold,
+          }"
+        :color="isOnHold ? 'hold' : 'secondary'"
+        :size="size"
+        class="call-action"
+        icon="hold"
+        rounded
+        wide
+        @click="toggleHold"
+      ></wt-rounded-action>
+    </slot>
     <wt-rounded-action
       :active="isOnMuted"
       :class="{
