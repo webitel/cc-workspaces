@@ -69,7 +69,6 @@ const props = defineProps({
 const store = useStore();
 
 const currentTab = ref(VideoCallTab.Processing);
-//variable to check if the component is active
 const isActive = ref(false);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
@@ -78,7 +77,6 @@ const isPreviewCall = computed(() => {
   return isIncomingRinging(call.value);
 });
 
-// Computed property to get the actual component
 const currentComponent = computed(() => videoCallTabComponents[currentTab.value]);
 
 

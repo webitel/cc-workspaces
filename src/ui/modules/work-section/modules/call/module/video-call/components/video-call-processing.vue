@@ -1,6 +1,6 @@
 <template>
-  <div class="processing">
-    <div class="processing__animation">
+  <div class="processing-state">
+    <div class="processing-state__animation">
       <img
         alt=""
         :src="sonarIcon"
@@ -9,19 +9,19 @@
 
     <div
       v-if="!isCallActive"
-      class="processing__primary-text"
+      class="processing-state__primary-text"
     >
       {{ callState }}
     </div>
 
     <div
       v-else
-      class="processing__primary-text"
+      class="processing-state__primary-text"
     >
       <span
-        v-for="(digit, key) of startTime.split('')"
+        v-for="(digit, key) in startTime.split('')"
         :key="key"
-        class="processing__primary-text__time-digit"
+        class="processing-state__primary-text__time-digit"
       >
         {{ digit }}
       </span>
@@ -29,60 +29,69 @@
 
     <div
       v-if="dtmf"
-      class="processing__secondary-text"
+      class="processing-state__secondary-text"
     >
       {{ dtmf.join('') }}
     </div>
   </div>
 </template>
 
-
-<script>
-import { mapGetters } from 'vuex';
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 import { CallActions } from 'webitel-sdk';
 
+import { useCallTimer } from '../../../../../../../composables/useCallTimer.ts';
 import holdSonar from '../../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
-import callTimer from '../../../../../../../mixins/callTimerMixin';
 
-export default {
+defineOptions({
   name: 'CallState',
-  mixins: [callTimer],
+});
 
-  data: () => ({
-    CallActions,
-  }),
+const store = useStore();
+const { t } = useI18n();
 
-  computed: {
-    ...mapGetters('features/call', {
-      task: 'CALL_ON_WORKSPACE',
-      dtmf: 'GET_CURRENT_CALL_DIGITS',
-    }),
-    callState() {
-      switch (this.task.state) {
-        case CallActions.Ringing:
-          return this.$t('workspaceSec.callState.ringing');
-        case CallActions.Hold:
-          return this.$t('workspaceSec.callState.hold');
-        case CallActions.Hangup:
-          return this.$t('workspaceSec.callState.hangup');
-        case CallActions.Active:
-          return this.startTime;
-        default:
-          return this.task.state || '';
-      }
-    },
+const task = computed(
+  () => store.getters['features/call/CALL_ON_WORKSPACE'],
+);
+const dtmf = computed(
+  () => store.getters['features/call/GET_CURRENT_CALL_DIGITS'],
+);
 
-    isCallActive() {
-      return this.task.state === CallActions.Active;
-    },
-    sonarIcon() {
-      if (this.task.isHold) return holdSonar;
-      if (this.isCallActive) return inboundSonar;
-      return '';
-    },
-  },
-};
+const { startTime } = useCallTimer(task);
+
+const isCallActive = computed(
+  () => task.value?.state === CallActions.Active,
+);
+
+const callState = computed(() => {
+  const currentTask = task.value;
+  if (!currentTask) return '';
+
+  switch (currentTask.state) {
+    case CallActions.Ringing:
+      return t('workspaceSec.callState.ringing');
+    case CallActions.Hold:
+      return t('workspaceSec.callState.hold');
+    case CallActions.Hangup:
+      return t('workspaceSec.callState.hangup');
+    case CallActions.Active:
+      return startTime.value;
+    default:
+      return currentTask.state || '';
+  }
+});
+
+const sonarIcon = computed(() => {
+  const currentTask = task.value;
+  if (!currentTask) return '';
+
+  if (currentTask.isHold) return holdSonar;
+  if (currentTask.state === CallActions.Active) return inboundSonar;
+  return '';
+});
 </script>
 
 <style lang="scss" scoped>
