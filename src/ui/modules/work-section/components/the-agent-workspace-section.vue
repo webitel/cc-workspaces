@@ -68,7 +68,7 @@ export default {
       isVideoCall: 'IS_VIDEO_CALL',
     }),
     workspaceComponent() {
-      if (this.isVideoCall) return 'video-call'
+      if (this.isVideoCall) return VideoCall
       switch (this.state) {
         case WorkspaceStates.CALL:
           return 'call';
