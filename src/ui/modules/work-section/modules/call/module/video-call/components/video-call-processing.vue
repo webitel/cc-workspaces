@@ -1,6 +1,6 @@
 <template>
-  <div class="processing-state">
-    <div class="processing-state__animation">
+  <div class="processing">
+    <div class="processing__animation">
       <img
         alt=""
         :src="sonarIcon"
@@ -9,19 +9,19 @@
 
     <div
       v-if="!isCallActive"
-      class="processing-state__primary-text"
+      class="processing__primary-text"
     >
       {{ callState }}
     </div>
 
     <div
       v-else
-      class="processing-state__primary-text"
+      class="processing__primary-text"
     >
       <span
         v-for="(digit, key) of startTime.split('')"
         :key="key"
-        class="processing-state__primary-text__time-digit"
+        class="processing__primary-text__time-digit"
       >
         {{ digit }}
       </span>
@@ -29,7 +29,7 @@
 
     <div
       v-if="dtmf"
-      class="processing-state__secondary-text"
+      class="processing__secondary-text"
     >
       {{ dtmf.join('') }}
     </div>
@@ -39,7 +39,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { CallActions, CallDirection } from 'webitel-sdk';
+import { CallActions } from 'webitel-sdk';
 
 import holdSonar from '../../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../../../app/assets/call-sonars/inbound-sonar.svg';

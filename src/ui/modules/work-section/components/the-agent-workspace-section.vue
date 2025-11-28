@@ -63,7 +63,9 @@ export default {
   computed: {
     ...mapGetters('workspace', {
       state: 'WORKSRACE_STATE',
-      isVideoCall: 'IS_VIDEO_CALL_WORKSPACE',
+    }),
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL',
     }),
     workspaceComponent() {
       if (this.isVideoCall) return 'video-call'

@@ -34,11 +34,9 @@ defineProps({
     type: String,
   },
 })
-
-const toggleVideo = (event) => store.dispatch('features/call/videoCall/TOGGLE_VIDEO', event)
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE'])
-
 const isVideoMuted = computed(() => call.value.mutedVideo)
+const toggleVideo = (event) => store.dispatch('features/call/videoCall/TOGGLE_VIDEO', event)
 </script>
 
 <style lang="scss" scoped>

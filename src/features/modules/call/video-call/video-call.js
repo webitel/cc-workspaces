@@ -1,3 +1,4 @@
+import { VideoMediaFlow } from 'webitel-sdk';
 
 
 const actions = {
@@ -10,8 +11,30 @@ const actions = {
   },
 }
 
+const getters = {
+  IS_VIDEO_CALL: (state, getters, rootState, rootGetters) => {
+    const taskOnWorkspace = rootGetters['workspace/TASK_ON_WORKSPACE'];
+
+    if (
+      !rootGetters['workspace/IS_CALL_WORKSPACE'] &&
+      !taskOnWorkspace?.IS_CALL_WORKSPACE
+    ) {
+      return false;
+    }
+
+    const video = taskOnWorkspace?.video;
+
+    return (
+      video === VideoMediaFlow.SendOnly ||
+      video === VideoMediaFlow.SendRecv ||
+      video === VideoMediaFlow.RecvOnly
+    );
+  },
+}
+
 
 export default {
   namespaced: true,
   actions,
+  getters,
 };

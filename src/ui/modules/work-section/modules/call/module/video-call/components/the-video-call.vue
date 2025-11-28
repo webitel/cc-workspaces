@@ -12,7 +12,11 @@
         @open-tab="openTabs"
       >
         <template #after-avatar>
-          <span class="call-header-after-avatar-empty" aria-hidden="true"></span>
+          <!-- Empty slot override so call-action buttons from CallHeader are not shown -->
+          <div
+             class="video-call__after-avatar-placeholder"
+             aria-hidden="true"
+           ></div>
         </template>
       </call-header>
     </template>
@@ -32,7 +36,7 @@
   </task-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, onActivated, onDeactivated } from 'vue';
 import { useStore } from 'vuex';
 
@@ -49,7 +53,7 @@ import VideoCallProcessing from './video-call-processing.vue';
 import { VideoCallTab } from '../enums/VideoCallTab.enum.ts';
 
 // Component mapping
-const callTabComponents = {
+const videoCallTabComponents = {
   [VideoCallTab.Processing]: VideoCallProcessing,
   [VideoCallTab.Contacts]: Contacts,
   [VideoCallTab.History]: History,
@@ -75,7 +79,7 @@ const isPreviewCall = computed(() => {
 });
 
 // Computed property to get the actual component
-const currentComponent = computed(() => callTabComponents[currentTab.value]);
+const currentComponent = computed(() => videoCallTabComponents[currentTab.value]);
 
 
 const openCall = () => {
