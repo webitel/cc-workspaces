@@ -151,7 +151,6 @@ import activeSonar from '../../../../../../../app/assets/call-sonars/active-sona
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
 import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-sonar.svg';
-import videoCam from '../../../../../../../app/assets/video/video-cam.svg';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
