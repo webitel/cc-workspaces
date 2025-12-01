@@ -3,7 +3,7 @@
     :size="size"
     :current-tab="currentTab"
   >
-      <template #before-mute-micro>
+    <template #numpad>
       <wt-rounded-action
         :size="size"
         class="call-action"
@@ -11,7 +11,14 @@
         rounded
         wide
         @click="toggleVideo"
-      ></wt-rounded-action>
+      />
+    </template>
+    <template #hold>
+      <!-- Empty slot override so call-action buttons from CallFooter are not shown -->
+      <div
+        class="video-call__bridge-placeholder"
+        aria-hidden="true"
+      ></div>
     </template>
   </call-footer>
 </template>
@@ -23,17 +30,16 @@ import { computed } from 'vue';
 
 import callFooter from '../../../components/call-footer.vue';
 
+interface Props {
+  size?: ComponentSize
+  currentTab?: string
+}
+withDefaults(defineProps<Props>(), {
+  size: ComponentSize.MD,
+})
+
 const store = useStore()
 
-defineProps({
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
-  currentTab: {
-    type: String,
-  },
-})
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE'])
 const isVideoMuted = computed(() => call.value.mutedVideo)
 const toggleVideo = (event) => store.dispatch('features/call/videoCall/TOGGLE_VIDEO', event)

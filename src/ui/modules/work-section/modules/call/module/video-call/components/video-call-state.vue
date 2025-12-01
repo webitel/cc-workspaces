@@ -1,6 +1,6 @@
 <template>
-  <div class="processing-state">
-    <div class="processing-state__animation">
+  <div class="video-call-state">
+    <div class="video-call-state__animation">
       <img
         alt=""
         :src="sonarIcon"
@@ -9,29 +9,29 @@
 
     <div
       v-if="!isCallActive"
-      class="processing-state__primary-text"
+      class="video-call-state__primary-text"
     >
       {{ callState }}
     </div>
 
     <div
       v-else
-      class="processing-state__primary-text"
+      class="video-call-state__primary-text"
     >
       <span
         v-for="(digit, key) in startTime.split('')"
         :key="key"
-        class="processing-state__primary-text__time-digit"
+        class="video-call-state__time-digit"
       >
         {{ digit }}
       </span>
     </div>
 
     <div
-      v-if="dtmf"
-      class="processing-state__secondary-text"
+      v-if="getDtmfDigits && getDtmfDigits.length"
+      class="video-call-state__secondary-text"
     >
-      {{ dtmf.join('') }}
+      {{ getDtmfDigits.join('') }}
     </div>
   </div>
 </template>
@@ -47,7 +47,7 @@ import holdSonar from '../../../../../../../../app/assets/call-sonars/hold-sonar
 import inboundSonar from '../../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
 
 defineOptions({
-  name: 'CallState',
+  name: 'VideoCallState',
 });
 
 const store = useStore();
@@ -56,7 +56,7 @@ const { t } = useI18n();
 const task = computed(
   () => store.getters['features/call/CALL_ON_WORKSPACE'],
 );
-const dtmf = computed(
+const getDtmfDigits = computed(
   () => store.getters['features/call/GET_CURRENT_CALL_DIGITS'],
 );
 
@@ -94,8 +94,8 @@ const sonarIcon = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.processing-state {
+<style scoped lang="scss">
+.video-call-state {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,16 +113,17 @@ const sonarIcon = computed(() => {
   &__primary-text {
     @extend %typo-heading-1;
     text-align: center;
+  }
 
-    .processing-state__primary-text__time-digit {
-      display: inline-block;
-      text-align: center;
-      width: 20px;
+  &__time-digit {
+    display: inline-block;
+    text-align: center;
+    width: 20px;
 
-      // semicolons
-      &:nth-child(3), &:nth-child(6) {
-        width: 12px;
-      }
+    // semicolons
+    &:nth-child(3),
+    &:nth-child(6) {
+      width: 12px;
     }
   }
 

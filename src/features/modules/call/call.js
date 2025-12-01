@@ -6,7 +6,7 @@ import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
 import missed from './modules/missed-calls/store/missed-calls';
-import videoCall from './video-call/video-call.js';
+import videoCall from './video-call/video-call';
 import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {

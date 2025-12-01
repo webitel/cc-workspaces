@@ -1,6 +1,6 @@
 import { computed, type ComputedRef, type Ref } from 'vue';
 import { useStore } from 'vuex';
-import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import { convertDuration } from '@webitel/ui-sdk/scripts';
 
 type Task = {
   answeredAt?: number | string | Date;

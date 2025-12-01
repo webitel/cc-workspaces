@@ -11,12 +11,19 @@
         :size="size"
         @open-tab="openTabs"
       >
-        <template #after-avatar>
+        <template #bridge >
           <!-- Empty slot override so call-action buttons from CallHeader are not shown -->
           <div
-             class="video-call__after-avatar-placeholder"
-             aria-hidden="true"
-           ></div>
+            class="video-call__bridge-placeholder"
+            aria-hidden="true"
+          ></div>
+        </template>
+        <template #transfer >
+          <!-- Empty slot override so call-action buttons from CallHeader are not shown -->
+          <div
+            class="video-call__transfer-placeholder"
+            aria-hidden="true"
+          ></div>
         </template>
       </call-header>
     </template>
@@ -49,22 +56,22 @@ import Contacts from '../../../../call/components/call-contacts/call-contacts-co
 import CallFooter from './video-call-footer.vue';
 import CallHeader from './../../../components/call-header.vue';
 import CallPreview from '../../../components/call-preview.vue';
-import VideoCallProcessing from './video-call-processing.vue';
+import VideoCallState from './video-call-state.vue';
 import { VideoCallTab } from '../enums/VideoCallTab.enum.ts';
 
+interface Props {
+  size?: ComponentSize
+}
 // Component mapping
 const videoCallTabComponents = {
-  [VideoCallTab.Processing]: VideoCallProcessing,
+  [VideoCallTab.Processing]: VideoCallState,
   [VideoCallTab.Contacts]: Contacts,
   [VideoCallTab.History]: History,
 };
 
-const props = defineProps({
-  size: {
-    type: ComponentSize,
-    default: ComponentSize.MD,
-  },
-});
+const props = withDefaults(defineProps<Props>(), {
+  size: ComponentSize.MD
+})
 
 const store = useStore();
 

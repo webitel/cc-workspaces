@@ -15,10 +15,7 @@ const getters = {
   IS_VIDEO_CALL: (state, getters, rootState, rootGetters) => {
     const taskOnWorkspace = rootGetters['workspace/TASK_ON_WORKSPACE'];
 
-    if (
-      !rootGetters['workspace/IS_CALL_WORKSPACE'] &&
-      !taskOnWorkspace?.IS_CALL_WORKSPACE
-    ) {
+    if (!rootGetters['features/call/CALL_ON_WORKSPACE']) {
       return false;
     }
 
