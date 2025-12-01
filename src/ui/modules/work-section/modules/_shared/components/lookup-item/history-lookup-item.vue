@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import { FormatDateMode } from '@webitel/ui-sdk/enums'
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
@@ -133,7 +134,7 @@ export default {
     },
 
     date() {
-      return formatDate(+this.item.createdAt, 'time');
+      return formatDate(+this.item.createdAt, FormatDateMode.TIME);
     },
 
     duration() {

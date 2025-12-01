@@ -1,5 +1,6 @@
+import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { formatDate } from '@webitel/ui-sdk/utils';
 
 export default function(ms) {
-  formatDate(Number(ms), 'date');
+  return formatDate(Number(ms), FormatDateMode.DATE);
 }
