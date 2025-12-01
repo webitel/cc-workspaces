@@ -6,7 +6,13 @@
     @click="$emit('click', task)"
   >
     <template #icon>
+      <wt-icon
+        v-if="isVideoCall"
+        icon="video-cam"
+        color="success"
+      />
       <img
+        v-else
         :alt="task.state"
         :src="sonarIcon"
       >
@@ -155,8 +161,8 @@ export default {
   name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   computed: {
-    ...mapGetters('workspace', {
-      isVideoCall: 'IS_VIDEO_CALL_WORKSPACE',
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL',
     }),
     isHold() {
       return this.task.isHold;
@@ -171,7 +177,6 @@ export default {
     },
 
     sonarIcon() {
-      if (this.isVideoCall) return videoCam;
       if (this.task.isHold) return holdSonar;
       if (this.task.state === CallActions.Ringing) {
         if (this.task.direction === CallDirection.Inbound) return inboundSonar;
