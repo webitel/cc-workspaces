@@ -17,7 +17,7 @@
     </template>
 
     <template #subtitle>
-      {{ task.displayNumber }}
+      {{ displayNumber }}
     </template>
 
     <template #timer>
@@ -96,7 +96,7 @@
     </template>
 
     <template #tooltip-subtitle>
-      {{ task.displayNumber }}
+      {{ displayNumber }}
     </template>
 
     <template
@@ -139,6 +139,7 @@
 
 <script>
 import { CallActions, CallDirection } from 'webitel-sdk';
+import { mapGetters } from 'vuex';
 
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
@@ -153,6 +154,9 @@ export default {
   name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   computed: {
+    ...mapGetters('features/call', {
+      normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
+    }),
     isHold() {
       return this.task.isHold;
     },
@@ -163,6 +167,10 @@ export default {
 
     isRinging() {
       return isIncomingRinging(this.task);
+    },
+
+    displayNumber() {
+      return this.normalizePhoneNumber(this.task.displayNumber);
     },
 
     sonarIcon() {
