@@ -97,7 +97,7 @@ const actions = {
       ? context.getters.GET_CALL_BY_ID(callId)
       : context.getters.CALL_ON_WORKSPACE;
     if (call.allowAnswer) {
-      const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
+      const params = { ...ANSWER_PARAMS, video: context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'] };
       await call.answer(params);
       await context.dispatch('SET_WORKSPACE', call);
     }
