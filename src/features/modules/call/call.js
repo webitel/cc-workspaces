@@ -41,6 +41,13 @@ const getters = {
 
   IS_OFFLINE_CALL: (state, getters) =>
     getters.CALL_ON_WORKSPACE.queue?.queue_type === QueueTypeName.OFFLINE_QUEUE,
+
+  NORMALIZE_PHONE_NUMBER: () => (phone) => {
+    if (!phone) return '';
+    return phone.replace(/[()\-\s]/g, '');
+  },
+
+
 };
 
 const actions = {
