@@ -1,11 +1,22 @@
 import { computed, type ComputedRef, type Ref } from 'vue';
 import { useStore } from 'vuex';
-import { convertDuration } from '@webitel/ui-sdk/scripts';
+import { addSeconds, startOfDay, format } from 'date-fns';
 
 type Task = {
   answeredAt?: number | string | Date;
   createdAt?: number | string | Date;
 } | null | undefined;
+
+const EMPTY_TIME = '00:00:00';
+
+function formatDurationToHMS(seconds: number): string {
+  if (seconds <= 0) return EMPTY_TIME;
+
+  const base = startOfDay(new Date(0));
+  const dateWithSeconds = addSeconds(base, seconds);
+
+  return format(dateWithSeconds, 'HH:mm:ss');
+}
 
 export function useCallTimer(task: Ref<Task> | ComputedRef<Task>) {
   const store = useStore();
@@ -16,20 +27,19 @@ export function useCallTimer(task: Ref<Task> | ComputedRef<Task>) {
     const currentTask = task.value;
     const currentNow = now.value;
 
-    if (!currentTask || !currentNow) return '00:00:00';
+    if (!currentTask || !currentNow) return EMPTY_TIME;
 
     const start = currentTask.answeredAt || currentTask.createdAt;
-    if (!start) return '00:00:00';
+    if (!start) return EMPTY_TIME;
 
     const startMs =
       start instanceof Date ? start.getTime() : Number(start);
 
-    if (Number.isNaN(startMs)) return '00:00:00';
+    if (Number.isNaN(startMs)) return EMPTY_TIME;
 
-    let sec = Math.round((currentNow - startMs) / 10 ** 3);
-    sec = sec <= 0 ? 0 : sec; // handles -1 time after answer
+    const sec = Math.max(0, Math.round((currentNow - startMs) / 1000));
 
-    return convertDuration(sec);
+    return formatDurationToHMS(sec);
   });
 
   return {
