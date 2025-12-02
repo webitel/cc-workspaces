@@ -1,8 +1,8 @@
 <template>
   <video-call
     v-if="isVideo"
-    :sender="senderStream"
-    :receiver="receiverStream"
+    :sender="call.peerStreams[0]"
+    :receiver="call.localStreams[0]"
 
     :recordings="recordings"
     :screenshot-status="screenshotStatus"
@@ -28,9 +28,7 @@ const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
 const senderStream = computed<MediaStream | undefined>(
-  () => {
-    return peerStreams.value[0] || localStreams.value[0]
-  }
+  () => peerStreams.value[0]
 );
 const receiverStream = computed<MediaStream | undefined>(
   () => localStreams.value[0],
@@ -48,7 +46,7 @@ const isLocalVideo = computed(() =>
   ),
 );
 
-const isVideo = computed(() => isPeerVideo.value || isLocalVideo.value);
+const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const screenshotStatus = computed(() => call.value.screenshotStatus ?? null);
@@ -56,8 +54,8 @@ const screenshotIsLoading = computed<boolean>(
   () => !!call.value.screenshotIsLoading,
 );
 
-const onToggleRecordings = () =>
-  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS');
-const onScreenshot = () => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT');
+const onToggleRecordings = (e) =>
+  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', e);
+const onScreenshot = (e) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', e);
 
 </script>
