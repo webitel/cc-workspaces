@@ -1,22 +1,33 @@
 <template>
-  <video-call
-    v-if="isVideo"
-    :sender="call.peerStreams[0]"
-    :receiver="call.localStreams[0]"
+  <div v-if="isVideo" class="video-container">
+    <video-call
+      v-if="isVideo"
+      :sender="call.peerStreams[0]"
+      :receiver="call.localStreams[0]"
 
-    :recordings="recordings"
-    :screenshot-status="screenshotStatus"
-    :screenshot-is-loading="screenshotIsLoading"
+      :recordings="recordings"
+      :screenshot-status="screenshotStatus"
+      :screenshot-is-loading="screenshotIsLoading"
 
-    :screenshot-callback="onScreenshot"
-    :recordings-callback="onToggleRecordings"
-  />
+      :screenshot-callback="onScreenshot"
+      :recordings-callback="onToggleRecordings"
+    />
+
+    <video-call-screenshot
+      v-if="screenshotPreviewUrl"
+      :src="screenshotPreviewUrl"
+      :right-side="false"
+      @zoom="onZoomScreenshot"
+      @close="onCloseScreenshot"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall } from '@webitel/ui-sdk/src/modules/CallSession/index';
+import VideoCallScreenshot from './video-call-screenshot/video-call-screenshot.vue';
 
 const store = useStore();
 
@@ -54,8 +65,25 @@ const screenshotIsLoading = computed<boolean>(
   () => !!call.value.screenshotIsLoading,
 );
 
+const screenshotPreviewUrl = computed<string | null>(
+  () => store.getters['features/call/videoCall/SCREENSHOT_PREVIEW_URL'],
+);
+
 const onToggleRecordings = (e) =>
   store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', e);
 const onScreenshot = (e) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', e);
 
+
+const onCloseScreenshot = () =>
+  store.dispatch('features/call/videoCall/CLOSE_SCREENSHOT');
+
+const onZoomScreenshot = () => {
+  console.log('zoom screenshot', screenshotPreviewUrl.value);
+};
+
 </script>
+<style scoped lang="scss">
+.video-container {
+  position: relative;
+}
+</style>
