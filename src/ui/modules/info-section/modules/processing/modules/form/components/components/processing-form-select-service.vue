@@ -38,7 +38,18 @@
             item-data="id"
             children-prop="service"
             @update:model-value="updateForm"
-          />
+          >
+            <template #item-prefix="{data}">
+              <wt-icon-btn
+                v-tooltip.bottom="data.description"
+                class="form-select-service__description-icon"
+                :disabled="!data.description"
+                :size="ComponentSize.SM"
+                color="info"
+                icon="docs"
+              />
+            </template>
+          </wt-tree>
         </div>
       </template>
     </wt-expansion-panel>
@@ -82,7 +93,7 @@ const loadCatalogs = async () => {
     const { items } = await caseServiceCatalogs.getList({
       size: -1, // It this case for get all catalogs with services we need to pass size -1
       search: search.value,
-      fields: ['id', 'name', 'closeReasonGroup', 'status', 'service'],
+      fields: ['id', 'name', 'closeReasonGroup', 'status', 'service', 'description'],
       hasSubservices: true,
       state: true,
     });
@@ -169,6 +180,11 @@ watch(() => selectedElement.value, () => findCatalogDataNames());
     width: var(--icon-md-size);
     height: var(--icon-md-size);
     border-radius: var(--border-radius);
+  }
+
+  &__description-icon {
+    margin: auto 0;
+    flex-shrink: 0;
   }
 }
 </style>
