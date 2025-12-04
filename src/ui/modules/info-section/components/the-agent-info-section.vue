@@ -203,7 +203,7 @@ export default {
         icon: 'flows',
       };
       const screenshots = {
-        text: this.$tc('objects.quickReplies.quickReplies', 1),
+        text: this.$tc('objects.screenshots', 2),
         value: 'screenshots',
         icon: 'preview-tag-image',
       }
