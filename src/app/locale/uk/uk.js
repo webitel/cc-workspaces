@@ -284,6 +284,12 @@ export default {
         denied: 'Заборонено',
       },
     },
+    camera: {
+      status: 'Дозвіл на викоритання Камери',
+      message: {
+        denied: 'Заборонено',
+      },
+    },
   },
   descTrackAuthPopup: {
     title: 'Увага',
