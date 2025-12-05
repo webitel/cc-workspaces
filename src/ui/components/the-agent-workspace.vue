@@ -12,10 +12,10 @@
       @input="initSession"
     ></welcome-popup>
 
-    <desc-track-auth-error-popup 
+    <desc-track-auth-error-popup
       v-if="isDescTrackAuthErrorPopup"
     />
-    <desc-track-auth-success-popup 
+    <desc-track-auth-success-popup
       v-model:shown="isDescTrackAuthSuccessPopup"
     />
 

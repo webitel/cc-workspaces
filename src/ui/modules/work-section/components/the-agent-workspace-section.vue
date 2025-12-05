@@ -30,6 +30,7 @@ import sizeMixin from '../../../../app/mixins/sizeMixin';
 import WorkspaceStates
   from '../../../enums/WorkspaceState.enum';
 import Call from '../modules/call/components/the-call.vue';
+import VideoCall from '../modules/call/module/video-call/components/the-video-call.vue'
 import Chat from '../modules/chat/the-chat.vue';
 import EmptyWorkspace from '../modules/empty-workspace/components/empty-workspace-empty.vue';
 import Job from '../modules/job/components/the-job.vue';
@@ -40,6 +41,7 @@ export default {
   name: 'TheAgentWorkspaceSection',
   components: {
     Call,
+    VideoCall,
     Chat,
     Member,
     Job,
@@ -62,10 +64,13 @@ export default {
     ...mapGetters('workspace', {
       state: 'WORKSRACE_STATE',
     }),
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL',
+    }),
     workspaceComponent() {
       switch (this.state) {
         case WorkspaceStates.CALL:
-          return 'call';
+          return this.isVideoCall ? VideoCall : 'call';
         case WorkspaceStates.CHAT:
           return 'chat';
         case WorkspaceStates.MEMBER:
