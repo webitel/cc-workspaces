@@ -9,15 +9,15 @@
 
       <template v-if="permissions.length">
         <div
-          class="welcome-popup-permission"
+          class="welcome-popup"
           v-for="permission in permissions"
           :key="permission.id"
         >
-          <div class="welcome-popup-permission__status">
+          <div class="welcome-popup__status">
             <div
-              class="welcome-popup-permission__status-content"
+              class="welcome-popup__status-content"
               :class="{
-                'welcome-popup-permission__status-content--disabled':
+                'welcome-popup__status-content--disabled':
                   permission.disabled,
               }"
             >
@@ -32,15 +32,15 @@
 
             <wt-switcher
               v-if="permission.toggle"
-              class="welcome-popup-permission__switch"
+              class="welcome-popup--enabled"
               :model-value="permission.enabled"
-              @update:model-value="(val) => permission.handleToggle?.(val)"
+              @update:model-value="permission?.handleToggle"
             />
           </div>
 
           <p
             v-if="permission.message"
-            class="welcome-popup-permission__detail"
+            class="welcome-popup__detail"
           >
             {{ t(`welcomePopup.${permission.id}.message.${permission.message}`) }}
           </p>
@@ -138,16 +138,9 @@ async function handleCameraToggle(value: boolean) {
   camera.value.enabled = value;
   camera.value.disabled = !value;
 
-  if (value) {
-    const granted = await ensureCameraPermissions();
-    if (!granted) {
-      camera.value.status = false;
-      camera.value.message = 'denied';
-    }
-  } else {
-    camera.value.status = false;
-    camera.value.message = '';
-  }
+  const granted = value ? await ensureCameraPermissions() : false;
+  camera.value.message = !granted ? 'denied' : '';
+  camera.value.status = false;
 }
 
 const permissions = computed<Permission[]>(() => [
@@ -156,6 +149,31 @@ const permissions = computed<Permission[]>(() => [
   camera.value,
 ]);
 
+function applyNotificationState(state: NotificationPermission | null) {
+  if (!state) {
+    notification.value.status = false;
+    notification.value.message = '';
+    return;
+  }
+
+  switch (state) {
+    case 'granted':
+      notification.value.status = true;
+      notification.value.message = '';
+      break;
+
+    case 'denied':
+      notification.value.status = false;
+      notification.value.message = 'denied';
+      break;
+
+    default:
+      notification.value.status = false;
+      notification.value.message = '';
+  }
+}
+
+
 type MediaPermissionWatchConfig = {
   permissionState: Ref<NotificationPermission | PermissionState | undefined>;
   permissionGranted: Ref<boolean>;
@@ -163,6 +181,22 @@ type MediaPermissionWatchConfig = {
   target: Ref<Permission>;
   withToggle?: boolean;
 };
+
+function applyMediaPermissionState(
+  target: Ref<Permission>,
+  { isGranted, isDenied, hasDevices },
+) {
+  const message =
+    isDenied
+      ? 'denied'
+      : isGranted && !hasDevices
+        ? 'notFound'
+        : '';
+
+  target.value.status = isGranted && hasDevices;
+  target.value.message = message;
+}
+
 
 function setupMediaPermissionWatch({
  permissionState,
@@ -180,32 +214,21 @@ function setupMediaPermissionWatch({
       const isDenied = state === 'denied';
 
       if (withToggle) {
-        if (isGranted || isDenied) {
-          target.value.enabled = true;
-          target.value.disabled = false;
-        } else {
-          target.value.enabled = false;
-          target.value.disabled = true;
-        }
+        const isKnownState = isGranted || isDenied;
+        target.value.enabled = isKnownState;
+        target.value.disabled = !isKnownState;
       }
 
-      if (isGranted && (granted || inputs.length > 0)) {
-        target.value.status = true;
-        target.value.message = '';
-      } else if (isDenied) {
-        target.value.status = false;
-        target.value.message = 'denied';
-      } else if (isGranted && inputs.length === 0) {
-        target.value.status = false;
-        target.value.message = 'notFound';
-      } else {
-        target.value.status = false;
-        target.value.message = '';
-      }
+      applyMediaPermissionState(target, {
+        isGranted,
+        isDenied,
+        hasDevices: granted || inputs.length > 0,
+      });
     },
     { immediate: true },
   );
 }
+
 
 setupMediaPermissionWatch({
   permissionState: micPermissionState,
@@ -224,43 +247,21 @@ setupMediaPermissionWatch({
 
 watch(
   notificationPermissionState,
-  (state) => {
-    if (!state) return;
-
-    if (state === 'granted') {
-      notification.value.status = true;
-      notification.value.message = '';
-    } else if (state === 'denied') {
-      notification.value.status = false;
-      notification.value.message = 'denied';
-    } else {
-      notification.value.status = false;
-      notification.value.message = '';
-    }
-  },
+  (state) => applyNotificationState(state),
   { immediate: true },
 );
 
-async function requestNotificationPermission() {
-  if (typeof window === 'undefined' || !('Notification' in window)) return;
+  async function requestNotificationPermission() {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
 
-  try {
-    const status = await window.Notification.requestPermission();
-    if (status === 'granted') {
-      notification.value.status = true;
-      notification.value.message = '';
-    } else if (status === 'denied') {
-      notification.value.status = false;
-      notification.value.message = 'denied';
-    } else {
-      notification.value.status = false;
-      notification.value.message = '';
+    try {
+      const status = await window.Notification.requestPermission();
+      applyNotificationState(status);
+    } catch {
+      applyNotificationState('denied');
     }
-  } catch {
-    notification.value.status = false;
-    notification.value.message = 'denied';
   }
-}
+
 
 async function initPermissionChecks() {
   await ensureMicPermissions();
@@ -309,7 +310,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.welcome-popup-permission {
+.welcome-popup {
   &__status {
     display: flex;
     align-items: center;
