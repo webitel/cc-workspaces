@@ -93,6 +93,7 @@ export default {
           manual: 'Tự gán',
         },
       },
+      dataAndTime: 'Ngày và giờ',
     },
     chat: {
       chats: 'Chat | Các chat',

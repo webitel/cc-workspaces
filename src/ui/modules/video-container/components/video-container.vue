@@ -55,7 +55,7 @@ const screenshotIsLoading = computed<boolean>(
 );
 
 const onToggleRecordings = (e) =>
-  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', e);
-const onScreenshot = (e) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', e);
+  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', call.value.id);
+const onScreenshot = (e) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id);
 
 </script>

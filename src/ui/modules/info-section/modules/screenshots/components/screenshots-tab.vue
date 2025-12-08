@@ -1,12 +1,16 @@
 <template>
   <h3>{{ $tc('objects.screenshots', 2) }}</h3>
   <wt-table
+    class="screenshots-table"
     :data="data"
     :headers="headers"
     :selectable="false"
   >
     <template #screenshot="{ item }">
-      <img :src="getScreenRecordingMediaUrl(item.id, false)">
+      <img
+        class="screenshots-table__preview"
+        :src="getMediaUrl(item.id, false)"
+      >
     </template>
     <template #dataAndTime="{ item }">
       {{ getTime(item.uploaded_at) }}
@@ -18,27 +22,30 @@
       />
       <wt-icon-btn
         icon="bucket"
-        @click="removeFile"
+        @click="removeFile(item)"
       />
     </template>
   </wt-table>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onActivated, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+
 import { FileServicesAPI } from '@webitel/api-services/api';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import {
   downloadFile,
-  getScreenRecordingMediaUrl,
+  getMediaUrl,
 } from '@webitel/api-services/api';
 
 const { t } = useI18n();
+const store = useStore();
 
 const data = ref([]);
 
-const headers = ref([
+const headers = computed(() => [
   { value: 'screenshot', text: t('objects.screenshots', 2) },
   { value: 'name', text: t('reusable.name') },
   { value: 'dataAndTime', text: t('queueSec.call.dataAndTime') },
@@ -47,17 +54,21 @@ const headers = ref([
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const removeFile = (item) => {
-  FileServicesAPI.delete(item.id).then(res =>
+  FileServicesAPI.delete([item.id]).then(res =>
     data.value = data.value.filter(file => file.id !== item.id),
   );
 };
-const getTime = (time) => formatDate(new Date(time), FormatDateMode.DATETIME);
+const getTime = (time) => formatDate(new Date(Number(time)), FormatDateMode.DATETIME);
 
-onMounted(async () => {
-  FileServicesAPI.getListByCall(call.value.id).then(res => data.value = res.items)
+onActivated(async () => {
+  FileServicesAPI.getListByCall({ callId: call.value.id }).then(res => data.value = res.items)
 })
 </script>
 
 <style scoped lang="scss">
-
+.screenshots-table__preview {
+  max-width: 100%;
+  width: 48px;
+  height: 32px;
+}
 </style>

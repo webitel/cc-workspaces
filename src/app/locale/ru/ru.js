@@ -93,6 +93,7 @@ export default {
           manual: 'Самостоятельно назначенные',
         },
       },
+      dataAndTime: 'Дата и время',
     },
     chat: {
       chats: 'Звонки | Чаты',

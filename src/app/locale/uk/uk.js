@@ -93,6 +93,7 @@ export default {
           manual: 'Самостійно призначені',
         },
       },
+      dataAndTime: 'Дата та час',
     },
     chat: {
       chats: 'Чат | Чати',
