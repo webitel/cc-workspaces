@@ -1,5 +1,5 @@
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { QueueTypeName } from '@webitel/ui-sdk/enums'
+import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 
 import i18n from '../../../app/locale/i18n';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
@@ -163,10 +163,6 @@ const actions = {
       try {
         await call.hangup();
       } catch {}
-
-      await context.dispatch('features/call/HANDLE_CALL_END', call, {
-        root: true,
-      });
     }
   },
 

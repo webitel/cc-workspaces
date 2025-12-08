@@ -53,7 +53,7 @@ import isIncomingRinging from '../../../../../../../../features/modules/call/scr
 import TaskContainer from '../../../../_shared/components/task-container/task-container.vue';
 import History from '../../../../_shared/components/workspace-history/components/history-container.vue';
 import Contacts from '../../../../call/components/call-contacts/call-contacts-container.vue';
-import CallFooter from './video-call-footer.vue';
+import CallFooter from './../../../components/call-footer.vue';
 import CallHeader from './../../../components/call-header.vue';
 import CallPreview from '../../../components/call-preview.vue';
 import VideoCallState from './video-call-state.vue';

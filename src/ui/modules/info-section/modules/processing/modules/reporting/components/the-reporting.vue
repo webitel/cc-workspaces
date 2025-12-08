@@ -29,7 +29,7 @@
           :reporting="taskReporting"
         ></failure-form>
         <wt-textarea
-          v-model="taskReporting.description"
+          v-model:model-value="taskReporting.description"
           :label="$t('reusable.description')"
           :placeholder="$t('reusable.description')"
         ></wt-textarea>
@@ -65,7 +65,7 @@ export default {
       return this.task.postProcessData;
     },
     reportingSent() {
-      return this.task.attempt.reportedAt;
+      return this.task.attempt?.reportedAt;
     },
     reportButtonColor() {
       return this.reportingSent ? 'secondary' : 'primary';

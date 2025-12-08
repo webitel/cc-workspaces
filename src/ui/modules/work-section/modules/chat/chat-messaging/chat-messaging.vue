@@ -46,15 +46,16 @@
 
       <wt-textarea
         ref="messageDraft"
-        :value="chat.draft"
+        :model-value="chat.draft"
         class="chat-messaging__textarea"
         :placeholder="$t('workspaceSec.chat.draftPlaceholder')"
         autoresize
         name="draft"
+        :rows="1"
         @enter="sendMessage"
         @paste="handleFilePaste"
         @keydown="onKeyDown"
-        @input="inputMessage"
+        @update:model-value="inputMessage"
         @blur="showQuickReplies && onBlur()"
       />
       <div class="chat-messaging-text-entry__actions">
@@ -342,6 +343,12 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     max-width: 100%;
     box-sizing: border-box;
   }
+}
+
+.chat-messaging__textarea :deep(textarea) {
+  max-height: 100%;
+  min-height: auto;
+  overflow: auto !important;
 }
 
 .chat-messaging-text-entry {
