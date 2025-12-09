@@ -1,6 +1,7 @@
-import { computed, type ComputedRef, type Ref } from 'vue';
+import { computed, type Ref, type ComputedRef } from 'vue';
 import { useStore } from 'vuex';
 import { convertDuration } from '@webitel/ui-sdk/scripts';
+import { differenceInSeconds } from 'date-fns';
 
 type Task = {
   answeredAt?: number | string | Date;
@@ -21,13 +22,10 @@ export function useCallTimer(task: Ref<Task> | ComputedRef<Task>) {
     const start = currentTask.answeredAt || currentTask.createdAt;
     if (!start) return '00:00:00';
 
-    const startMs =
-      start instanceof Date ? start.getTime() : Number(start);
+    const startDate = new Date(start);
+    const nowDate = new Date(currentNow);
 
-    if (Number.isNaN(startMs)) return '00:00:00';
-
-    let sec = Math.round((currentNow - startMs) / 10 ** 3);
-    sec = sec <= 0 ? 0 : sec; // handles -1 time after answer
+    const sec = Math.max(0, differenceInSeconds(nowDate, startDate));
 
     return convertDuration(sec);
   });

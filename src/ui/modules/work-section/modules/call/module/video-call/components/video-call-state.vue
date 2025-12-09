@@ -42,7 +42,7 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { CallActions } from 'webitel-sdk';
 
-import { useCallTimer } from '../../../../../../../composables/useCallTimer.ts';
+import { useCallTimer } from '../../../../../../../composables/useCallTimer';
 import holdSonar from '../../../../../../../../app/assets/call-sonars/hold-sonar.svg';
 import inboundSonar from '../../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
 

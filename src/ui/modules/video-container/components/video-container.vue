@@ -1,33 +1,34 @@
 <template>
-  <div v-if="isVideo" class="video-container">
-    <wt-galleria
-      v-model:visible="galleriaVisible"
-      v-model:active-index="galleriaActiveIndex"
-      :value="galleriaData"
-      @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
-      @delete="handleDeleteFromGalleria"
-    />
-    <video-call
-      v-if="isVideo"
-      :sender="call.peerStreams[0]"
-      :receiver="call.localStreams[0]"
-
-      :recordings="recordings"
-      :screenshot-status="screenshotStatus"
-      :screenshot-is-loading="screenshotIsLoading"
-
-      :screenshot-callback="onScreenshot"
-      :recordings-callback="onToggleRecordings"
-    />
-
-    <video-call-screenshot
-      v-if="screenshotPreviewUrl"
-      :src="screenshotPreviewUrl"
-      :right-side="false"
-      @zoom="onZoomScreenshot"
-      @close="onCloseScreenshot"
-    />
-  </div>
+  <wt-galleria
+    v-model:visible="galleriaVisible"
+    v-model:active-index="galleriaActiveIndex"
+    :value="galleriaData"
+    @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
+    @delete="handleDeleteFromGalleria"
+  />
+  <video-call
+    v-if="isVideo"
+    v-bind="{
+      'sender:stream': senderStream,
+      'receiver:stream': receiverStream,
+      'sender:video:enabled': isPeerVideo,
+      'receiver:video:enabled': mutedVideo,
+      recordings,
+      'screenshot:status': screenshotStatus,
+      'screenshot:loading': screenshotIsLoading,
+      actions: videoCallActions,
+      username: userName
+    }"
+    @action:screenshot="onScreenshot"
+    @action:recordings="onToggleRecordings"
+  />
+  <video-call-screenshot
+    v-if="screenshotPreviewUrl"
+    :src="screenshotPreviewUrl"
+    :right-side="false"
+    @zoom="onZoomScreenshot"
+    @close="onCloseScreenshot"
+  />
 </template>
 
 <script setup lang="ts">
@@ -37,6 +38,8 @@ import { VideoCall } from '@webitel/ui-sdk/src/modules/CallSession/index';
 import VideoCallScreenshot from './video-call-screenshot/video-call-screenshot.vue';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI } from '@webitel/api-services/api';
+import { VideoCallAction } from '@webitel/ui-sdk/src/modules/CallSession/index';
+
 import {
   downloadFile,
   getScreenRecordingMediaUrl,
@@ -44,6 +47,10 @@ import {
 
 const store = useStore();
 
+const videoCallActions = [
+  VideoCallAction.Screenshot,
+  VideoCallAction.Recordings,
+];
 const galleriaVisible = ref(false);
 const galleriaActiveIndex = ref(0);
 const screenshotData = ref([]);
@@ -55,6 +62,12 @@ const call = computed<any>(
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
+const senderStream = computed<MediaStream | undefined>(
+  () => peerStreams.value[0]
+);
+const receiverStream = computed<MediaStream | undefined>(
+  () => localStreams.value[0],
+);
 
 const isPeerVideo = computed(() =>
   peerStreams.value.some((stream) =>
@@ -69,6 +82,8 @@ const isLocalVideo = computed(() =>
 );
 
 const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
+const userName = computed(() => call.value.displayName|| '');
+const mutedVideo = computed(() => call.value.mutedVideo);
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const screenshotStatus = computed(() => call.value.screenshotStatus ?? null);
@@ -76,6 +91,9 @@ const screenshotIsLoading = computed<boolean>(
   () => !!call.value.screenshotIsLoading,
 );
 
+const onToggleRecordings = () =>
+  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', call.value.id);
+const onScreenshot = () => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id);
 const screenshotPreviewUrl = computed<string | null>(
   () => store.getters['features/call/videoCall/SCREENSHOT_PREVIEW_URL'],
 );
@@ -89,11 +107,6 @@ const galleriaData = computed(() => {
     alt: item.view_name,
   }));
 });
-
-const onToggleRecordings = (e) =>
-  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', e);
-const onScreenshot = (e) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', e);
-
 
 const onCloseScreenshot = () =>
   store.dispatch('features/call/videoCall/CLOSE_SCREENSHOT');
@@ -127,8 +140,3 @@ const handleDelete = async (items: []) => {
   }
 };
 </script>
-<style scoped lang="scss">
-.video-container {
-  position: relative;
-}
-</style>

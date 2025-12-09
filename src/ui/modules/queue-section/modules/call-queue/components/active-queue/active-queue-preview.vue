@@ -6,7 +6,13 @@
     @click="$emit('click', task)"
   >
     <template #icon>
+      <wt-icon
+        v-if="isVideoCall"
+        icon="video-cam"
+        color="success"
+      />
       <img
+        v-else
         :alt="task.state"
         :src="sonarIcon"
       >
@@ -139,6 +145,7 @@
 
 <script>
 import { CallActions, CallDirection } from 'webitel-sdk';
+import { mapGetters } from 'vuex';
 
 import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
 import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
@@ -153,6 +160,9 @@ export default {
   name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   computed: {
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL',
+    }),
     isHold() {
       return this.task.isHold;
     },
