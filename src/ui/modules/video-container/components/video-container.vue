@@ -18,9 +18,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { VideoCall } from '@webitel/ui-sdk/modules/CallSession';
-import { VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
-
+import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 const store = useStore();
 
 const videoCallActions = [
