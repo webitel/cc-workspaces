@@ -23,12 +23,10 @@ const actions = {
         : rootGetters['features/call/CALL_ON_WORKSPACE'];
 
       const { blob, file } = await call.screenshot();
-      console.log(blob);
-      console.log(file);
-
       const url = URL.createObjectURL(blob);
       commit('SET_SCREENSHOT', { url, file });
     } catch (e) {
+      commit('SET_SCREENSHOT_STATUS', 'error');
       console.error('MAKE_SCREENSHOT error', e);
     } finally {
       commit('SET_SCREENSHOT_LOADING', false);
@@ -72,12 +70,14 @@ const getters = {
 const mutations = {
   SET_SCREENSHOT_LOADING(state, value) {
     state.screenshotIsLoading = value;
-    state.screenshotStatus = value ? 'loading' : state.screenshotStatus;
   },
   SET_SCREENSHOT(state, payload) {
     state.screenshotPreviewUrl = payload.url;
     state.screenshotFile = payload.file;
     state.screenshotStatus = 'done';
+  },
+  SET_SCREENSHOT_STATUS(state, status) {
+    state.screenshotStatus = status;
   },
   CLEAR_SCREENSHOT(state) {
     if (state.screenshotPreviewUrl) {

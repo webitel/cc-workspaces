@@ -6,6 +6,7 @@
     @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
     @delete="handleDeleteFromGalleria"
   />
+  {{ screenshotIsLoading }}
   <video-call
     v-if="isVideo"
     v-bind="{
@@ -16,19 +17,21 @@
       recordings,
       'screenshot:status': screenshotStatus,
       'screenshot:loading': screenshotIsLoading,
+      'screenshot:src': screenshotPreviewUrl,
       actions: videoCallActions,
-      username: userName
+      username: userName,
     }"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
+    @action:ZoomScreenshot="onZoomScreenshot"
   />
-  <video-call-screenshot
-    v-if="screenshotPreviewUrl"
-    :src="screenshotPreviewUrl"
-    :right-side="false"
-    @zoom="onZoomScreenshot"
-    @close="onCloseScreenshot"
-  />
+<!--  <video-call-screenshot-->
+<!--    v-if="screenshotPreviewUrl"-->
+<!--    :src="screenshotPreviewUrl"-->
+<!--    :right-side="false"-->
+<!--    @zoom="onZoomScreenshot"-->
+<!--    @close="onCloseScreenshot"-->
+<!--  />-->
 </template>
 
 <script setup lang="ts">
@@ -42,7 +45,7 @@ import { VideoCallAction } from '@webitel/ui-sdk/src/modules/CallSession/index';
 
 import {
   downloadFile,
-  getScreenRecordingMediaUrl,
+  getMediaUrl,
 } from '@webitel/api-services/api';
 
 const store = useStore();
@@ -51,6 +54,7 @@ const videoCallActions = [
   VideoCallAction.Screenshot,
   VideoCallAction.Recordings,
 ];
+
 const galleriaVisible = ref(false);
 const galleriaActiveIndex = ref(0);
 const screenshotData = ref([]);
@@ -86,9 +90,9 @@ const userName = computed(() => call.value.displayName|| '');
 const mutedVideo = computed(() => call.value.mutedVideo);
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
-const screenshotStatus = computed(() => call.value.screenshotStatus ?? null);
+const screenshotStatus = computed(() => store.getters['features/call/videoCall/SCREENSHOT_STATUS']);
 const screenshotIsLoading = computed<boolean>(
-  () => !!call.value.screenshotIsLoading,
+  () => store.getters['features/call/videoCall/SCREENSHOT_IS_LOADING'],
 );
 
 const onToggleRecordings = () =>
@@ -101,8 +105,8 @@ const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 
 const galleriaData = computed(() => {
   return screenshotData.value?.map((item) => ({
-    src: getScreenRecordingMediaUrl(item.id, false),
-    thumbnailSrc: getScreenRecordingMediaUrl(item.id, true),
+    src: getMediaUrl(item.id, false),
+    thumbnailSrc: getMediaUrl(item.id, true),
     title: item.view_name,
     alt: item.view_name,
   }));
