@@ -30,13 +30,19 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
-import { FileServicesAPI } from '@webitel/api-services/api';
+import { useScreenSharingSession } from '@webitel/ui-sdk/composables';
+import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
 
-import {
-  downloadFile,
-  getMediaUrl,
-} from '@webitel/api-services/api';
 const store = useStore();
+
+const {
+  screenshotStatus,
+  screenshotIsLoading,
+  screenshotPreviewUrl,
+  makeScreenshot,
+  toggleRecordAction,
+  closeScreenshot,
+} = useScreenSharingSession();
 
 const videoCallActions = [
   VideoCallAction.Screenshot,
@@ -55,7 +61,7 @@ const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
 const senderStream = computed<MediaStream | undefined>(
-  () => peerStreams.value[0]
+  () => peerStreams.value[0],
 );
 const receiverStream = computed<MediaStream | undefined>(
   () => localStreams.value[0],
@@ -74,60 +80,44 @@ const isLocalVideo = computed(() =>
 );
 
 const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
-const userName = computed(() => call.value.displayName|| '');
+const userName = computed(() => call.value.displayName || '');
 const mutedVideo = computed(() => call.value.mutedVideo);
-
 const recordings = computed<boolean>(() => !!call.value.recordings);
-const screenshotStatus = computed(() => store.getters['features/call/videoCall/SCREENSHOT_STATUS']);
-const screenshotIsLoading = computed<boolean>(
-  () => store.getters['features/call/videoCall/SCREENSHOT_IS_LOADING'],
-);
+const onToggleRecordings = () => toggleRecordAction(call.value);
 
-const onToggleRecordings = () =>
-  store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', call.value.id);
-const onScreenshot = (_payload, options) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id)
-  .finally(() => {
+const onScreenshot = (_payload, options) =>
+  makeScreenshot(call.value).finally(() => {
     options?.onComplete?.();
   });
-const screenshotPreviewUrl = computed<string | null>(
-  () => store.getters['features/call/videoCall/SCREENSHOT_PREVIEW_URL'],
-);
-const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 
-const galleriaData = computed(() => {
-  return screenshotData.value?.map((item) => ({
+const onCloseScreenshot = () => closeScreenshot();
+
+const onZoomScreenshot = async () => {
+  await getScreenshots();
+  galleriaVisible.value = true;
+};
+
+const getScreenshots = async () =>
+  await FileServicesAPI.getListByCall({ callId: call.value.id })
+    .then((res) => (screenshotData.value = res.items));
+
+const galleriaData = computed(() =>
+  screenshotData.value?.map((item) => ({
     src: getMediaUrl(item.id, false),
     thumbnailSrc: getMediaUrl(item.id, true),
     title: item.view_name,
     alt: item.view_name,
-  }));
-});
-
-const onCloseScreenshot = () =>
-  store.dispatch('features/call/videoCall/CLOSE_SCREENSHOT');
-
-const onZoomScreenshot = async () => {
-  await getScreenshots()
-  galleriaVisible.value = true;
-};
-const getScreenshots = async () => await FileServicesAPI.getListByCall({ callId: call.value.id })
-  .then(res => screenshotData.value = res.items)
+  })),
+);
 
 const handleDeleteFromGalleria = () => {
   handleDelete([screenshotData.value[galleriaActiveIndex.value]]);
   if (galleriaActiveIndex.value > 0) galleriaActiveIndex.value -= 1;
 };
 
-const handleDelete = async (items: []) => {
-  const deleteEl = (el) => {
-    return FileServicesAPI.deleteScreenRecordingsByAgent({
-      id: el.id,
-      agentId: agentId,
-    });
-  };
-
+const handleDelete = async (items: any[]) => {
   try {
-    await Promise.all(items.map(deleteEl));
+    await FileServicesAPI.delete(items.map((item) => item.id));
   } finally {
     await getScreenshots();
   }
