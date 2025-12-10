@@ -1,25 +1,30 @@
 <template>
   <video-call
     v-if="isVideo"
-    :sender="call.peerStreams[0]"
-    :receiver="call.localStreams[0]"
-
+    :sender:stream=senderStream
+    :receiver:stream="receiverStream"
+    :sender:video:enabled="isPeerVideo"
+    :receiver:video:enabled="!mutedVideo"
+    :screenshot:status="screenshotStatus"
+    :screenshot:loading="screenshotIsLoading"
     :recordings="recordings"
-    :screenshot-status="screenshotStatus"
-    :screenshot-is-loading="screenshotIsLoading"
-
-    :screenshot-callback="onScreenshot"
-    :recordings-callback="onToggleRecordings"
+    :actions="videoCallActions"
+    :username="userName"
+    @action:screenshot="onScreenshot"
+    @action:recordings="onToggleRecordings"
   />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { VideoCall } from '@webitel/ui-sdk/src/modules/CallSession/index';
-
+import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 const store = useStore();
 
+const videoCallActions = [
+  VideoCallAction.Screenshot,
+  VideoCallAction.Recordings,
+];
 const call = computed<any>(
   () => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
 );
@@ -47,6 +52,8 @@ const isLocalVideo = computed(() =>
 );
 
 const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
+const userName = computed(() => call.value.displayName|| '');
+const mutedVideo = computed(() => call.value.mutedVideo);
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const screenshotStatus = computed(() => call.value.screenshotStatus ?? null);
@@ -54,8 +61,8 @@ const screenshotIsLoading = computed<boolean>(
   () => !!call.value.screenshotIsLoading,
 );
 
-const onToggleRecordings = (e) =>
+const onToggleRecordings = () =>
   store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', call.value.id);
-const onScreenshot = (e) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id);
+const onScreenshot = () => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id);
 
 </script>

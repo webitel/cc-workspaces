@@ -1,46 +1,55 @@
 <template>
   <task-footer>
-    <slot name="numpad">
-      <wt-rounded-action
-        :active="isOnNumpad"
-        :class="{ hidden: !isNumpad }"
-        :size="size"
-        class="call-action"
-        color="secondary"
-        icon="numpad"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Numpad)"
-      />
-    </slot>
-
-    <slot name="hold">
-      <wt-rounded-action
-        :active="isOnHold"
-        :class="{ hidden: !isHold, hold: isOnHold }"
-        :color="isOnHold ? 'hold' : 'secondary'"
-        :size="size"
-        class="call-action"
-        icon="hold"
-        rounded
-        wide
-        @click="toggleHold"
-      />
-    </slot>
-
-    <slot name="mute">
-      <wt-rounded-action
-        :active="isOnMuted"
-        :class="{ hidden: !isMuted }"
-        :icon="isOnMuted ? 'mic-muted' : 'mic'"
-        :size="size"
-        class="call-action call-action__mic"
-        color="secondary"
-        rounded
-        wide
-        @click="toggleMute"
-      />
-    </slot>
+    <wt-rounded-action
+      v-if="!isVideoCall"
+      :active="isOnNumpad"
+      :class="{
+          'hidden': !isNumpad,
+         }"
+      :size="size"
+      class="call-action"
+      color="secondary"
+      icon="numpad"
+      rounded
+      wide
+      @click="$emit('openTab', CallTab.Numpad)"
+    ></wt-rounded-action>
+    <wt-rounded-action
+      :active="isOnHold"
+      :class="{
+          'hidden': !isHold,
+          'hold': isOnHold,
+        }"
+      :color="isOnHold ? 'hold' : 'secondary'"
+      :size="size"
+      class="call-action"
+      icon="hold"
+      rounded
+      wide
+      @click="toggleHold"
+    ></wt-rounded-action>
+    <wt-rounded-action
+      :active="isOnMuted"
+      :class="{
+          'hidden': !isMuted,
+        }"
+      :icon="isOnMuted ? 'mic-muted' : 'mic'"
+      :size="size"
+      class="call-action call-action__mic"
+      color="secondary"
+      rounded
+      wide
+      @click="toggleMute"
+    ></wt-rounded-action>
+    <wt-rounded-action
+      v-if="isVideoCall"
+      :size="size"
+      class="call-action"
+      :icon="!isVideoMuted ? 'video-cam' : 'video-cam-off'"
+      rounded
+      wide
+      @click="toggleVideo"
+    />
   </task-footer>
 </template>
 
@@ -73,6 +82,9 @@ export default {
     ...mapGetters('features/call', {
       call: 'CALL_ON_WORKSPACE',
       isNewCall: 'IS_NEW_CALL',
+    }),
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL'
     }),
 
     // controls Active state
@@ -124,12 +136,18 @@ export default {
     isNote() {
       return !this.isNewCall;
     },
+    isVideoMuted () {
+      return this.call.mutedVideo
+    }
   },
 
   methods: {
     ...mapActions('features/call', {
       toggleMute: 'TOGGLE_MUTE',
       toggleHold: 'TOGGLE_HOLD',
+    }),
+    ...mapActions('features/call/videoCall', {
+      toggleVideo: 'TOGGLE_VIDEO'
     }),
     setupHotkeys() {
       const subscribers = [
@@ -158,3 +176,4 @@ export default {
 
 <style lang="scss" scoped>
 </style>
+

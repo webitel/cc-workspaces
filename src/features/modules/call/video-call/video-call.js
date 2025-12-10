@@ -27,7 +27,6 @@ const actions = {
 const getters = {
   IS_VIDEO_CALL: (state, getters, rootState, rootGetters) => {
     const taskOnWorkspace = rootGetters['workspace/TASK_ON_WORKSPACE'];
-    return true
 
     if (!rootGetters['features/call/CALL_ON_WORKSPACE']) {
       return false;

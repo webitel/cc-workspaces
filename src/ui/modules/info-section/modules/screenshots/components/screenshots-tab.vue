@@ -68,7 +68,7 @@ onActivated(async () => {
 <style scoped lang="scss">
 .screenshots-table__preview {
   max-width: 100%;
-  width: 48px;
-  height: 32px;
+  width: var(--screenshots-table-preview-width);
+  height: var(--p-player-cam-preview-sm-height);
 }
 </style>
