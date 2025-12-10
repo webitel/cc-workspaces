@@ -9,18 +9,16 @@
   {{ screenshotIsLoading }}
   <video-call
     v-if="isVideo"
-    v-bind="{
-      'sender:stream': senderStream,
-      'receiver:stream': receiverStream,
-      'sender:video:enabled': isPeerVideo,
-      'receiver:video:enabled': mutedVideo,
-      recordings,
-      'screenshot:status': screenshotStatus,
-      'screenshot:loading': screenshotIsLoading,
-      'screenshot:src': screenshotPreviewUrl,
-      actions: videoCallActions,
-      username: userName,
-    }"
+    :sender:stream=senderStream
+    :receiver:stream="receiverStream"
+    :sender:video:enabled="isPeerVideo"
+    :receiver:video:enabled="!mutedVideo"
+    :screenshot:status="screenshotStatus"
+    :screenshot:loading="screenshotIsLoading"
+    :screenshot:src="screenshotPreviewUrl"
+    :recordings="recordings"
+    :actions="videoCallActions"
+    :username="userName"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
     @action:ZoomScreenshot="onZoomScreenshot"
@@ -30,16 +28,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import { VideoCall } from '@webitel/ui-sdk/src/modules/CallSession/index';
+import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI } from '@webitel/api-services/api';
-import { VideoCallAction } from '@webitel/ui-sdk/src/modules/CallSession/index';
 
 import {
   downloadFile,
   getMediaUrl,
 } from '@webitel/api-services/api';
-
 const store = useStore();
 
 const videoCallActions = [
