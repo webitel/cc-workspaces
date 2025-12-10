@@ -6,7 +6,6 @@
     @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
     @delete="handleDeleteFromGalleria"
   />
-  {{ screenshotIsLoading }}
   <video-call
     v-if="isVideo"
     :sender:stream=senderStream
@@ -21,7 +20,7 @@
     :username="userName"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
-    @action:ZoomScreenshot="onZoomScreenshot"
+    @action:zoom-screenshot="onZoomScreenshot"
   />
 </template>
 
