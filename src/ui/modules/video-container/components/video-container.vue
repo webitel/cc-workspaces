@@ -25,20 +25,12 @@
     @action:recordings="onToggleRecordings"
     @action:ZoomScreenshot="onZoomScreenshot"
   />
-<!--  <video-call-screenshot-->
-<!--    v-if="screenshotPreviewUrl"-->
-<!--    :src="screenshotPreviewUrl"-->
-<!--    :right-side="false"-->
-<!--    @zoom="onZoomScreenshot"-->
-<!--    @close="onCloseScreenshot"-->
-<!--  />-->
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall } from '@webitel/ui-sdk/src/modules/CallSession/index';
-import VideoCallScreenshot from './video-call-screenshot/video-call-screenshot.vue';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI } from '@webitel/api-services/api';
 import { VideoCallAction } from '@webitel/ui-sdk/src/modules/CallSession/index';
