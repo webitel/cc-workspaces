@@ -21,6 +21,7 @@
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
     @action:zoom-screenshot="onZoomScreenshot"
+    @action:close-screenshot="onCloseScreenshot"
   />
 </template>
 
@@ -84,7 +85,10 @@ const screenshotIsLoading = computed<boolean>(
 
 const onToggleRecordings = () =>
   store.dispatch('features/call/videoCall/TOGGLE_RECORDINGS', call.value.id);
-const onScreenshot = () => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id);
+const onScreenshot = (_payload, options) => store.dispatch('features/call/videoCall/MAKE_SCREENSHOT', call.value.id)
+  .finally(() => {
+    options?.onComplete?.();
+  });
 const screenshotPreviewUrl = computed<string | null>(
   () => store.getters['features/call/videoCall/SCREENSHOT_PREVIEW_URL'],
 );
@@ -106,7 +110,7 @@ const onZoomScreenshot = async () => {
   await getScreenshots()
   galleriaVisible.value = true;
 };
-const getScreenshots = async () => FileServicesAPI.getListByCall({ callId: call.value.id })
+const getScreenshots = async () => await FileServicesAPI.getListByCall({ callId: call.value.id })
   .then(res => screenshotData.value = res.items)
 
 const handleDeleteFromGalleria = () => {

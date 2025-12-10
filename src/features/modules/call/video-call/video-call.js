@@ -25,6 +25,11 @@ const actions = {
       const { blob, file } = await call.screenshot();
       const url = URL.createObjectURL(blob);
       commit('SET_SCREENSHOT', { url, file });
+      commit('SET_SCREENSHOT_STATUS', 'done');
+
+      setTimeout(() => {
+        commit('CLEAR_SCREENSHOT');
+      }, 2000);
     } catch (e) {
       commit('SET_SCREENSHOT_STATUS', 'error');
       console.error('MAKE_SCREENSHOT error', e);
@@ -71,21 +76,19 @@ const mutations = {
   SET_SCREENSHOT_LOADING(state, value) {
     state.screenshotIsLoading = value;
   },
-  SET_SCREENSHOT(state, payload) {
-    state.screenshotPreviewUrl = payload.url;
-    state.screenshotFile = payload.file;
-    state.screenshotStatus = 'done';
+
+  SET_SCREENSHOT(state, { url, file }) {
+    state.screenshotPreviewUrl = url;
+    state.screenshotFile = file;
   },
+
   SET_SCREENSHOT_STATUS(state, status) {
     state.screenshotStatus = status;
   },
   CLEAR_SCREENSHOT(state) {
-    if (state.screenshotPreviewUrl) {
-      URL.revokeObjectURL(state.screenshotPreviewUrl);
-    }
     state.screenshotPreviewUrl = null;
     state.screenshotFile = null;
-    state.screenshotStatus = 'idle';
+    state.screenshotStatus = '';
   },
 };
 
