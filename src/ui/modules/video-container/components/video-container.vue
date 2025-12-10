@@ -106,10 +106,8 @@ const onZoomScreenshot = async () => {
   await getScreenshots()
   galleriaVisible.value = true;
 };
-const getScreenshots = async () => FileServicesAPI.getListByCall(call.value.id)
+const getScreenshots = async () => FileServicesAPI.getListByCall({ callId: call.value.id })
   .then(res => screenshotData.value = res.items)
-
-
 
 const handleDeleteFromGalleria = () => {
   handleDelete([screenshotData.value[galleriaActiveIndex.value]]);
