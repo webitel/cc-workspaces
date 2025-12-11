@@ -1,6 +1,5 @@
 import { VideoMediaFlow } from 'webitel-sdk';
 
-
 const actions = {
   //functions for on/off video in video call
   TOGGLE_VIDEO: ({ rootGetters }, { callId }) => {
@@ -8,19 +7,6 @@ const actions = {
       ? rootGetters['features/call/GET_CALL_BY_ID'](callId)
       : rootGetters['features/call/CALL_ON_WORKSPACE'];
     call.muteVideo(!call.mutedVideo)
-  },
-
-  MAKE_SCREENSHOT: ({ rootGetters }, { callId }) => {
-    const call = callId
-      ? rootGetters['features/call/GET_CALL_BY_ID'](callId)
-      : rootGetters['features/call/CALL_ON_WORKSPACE'];
-    call.screenshot()
-  },
-  TOGGLE_RECORDINGS: ({ rootGetters }, { callId }) => {
-    const call = callId
-      ? rootGetters['features/call/GET_CALL_BY_ID'](callId)
-      : rootGetters['features/call/CALL_ON_WORKSPACE'];
-    call.startRecord()
   },
 }
 
