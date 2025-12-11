@@ -93,7 +93,6 @@ export default {
           manual: 'Qo‘lda tayinlangan',
         },
       },
-      dataAndTime: 'Sana va vaqt',
     },
     chat: {
       chats: 'Chat | Chatlar',

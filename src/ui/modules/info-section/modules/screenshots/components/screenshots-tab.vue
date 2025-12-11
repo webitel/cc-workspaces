@@ -48,7 +48,7 @@ const data = ref([]);
 const headers = computed(() => [
   { value: 'screenshot', text: t('objects.screenshots', 2) },
   { value: 'name', text: t('reusable.name') },
-  { value: 'dataAndTime', text: t('queueSec.call.dataAndTime') },
+  { value: 'dataAndTime', text: t('reusable.dateTime') },
 ]);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);

@@ -93,7 +93,6 @@ export default {
           manual: 'Өзіне тағайындалған',
         },
       },
-      dataAndTime: 'Күні мен уақыты',
     },
     chat: {
       chats: 'Чат | Чаттар',

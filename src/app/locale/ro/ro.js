@@ -93,7 +93,6 @@ export default {
           manual: 'Auto-atribuite',
         },
       },
-      dataAndTime: 'Data și ora',
     },
     chat: {
       chats: 'Chat | Chat-uri',

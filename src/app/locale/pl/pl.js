@@ -93,7 +93,6 @@ export default {
           manual: 'Ręcznie przypisane',
         },
       },
-      dataAndTime: 'Data i czas',
     },
     chat: {
       chats: 'Czat | Czaty',

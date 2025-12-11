@@ -93,7 +93,6 @@ export default {
           manual: 'Autoasignadas',
         },
       },
-      dataAndTime: 'Fecha y hora',
     },
     chat: {
       chats: 'Chat | Chats',
