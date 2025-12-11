@@ -25,13 +25,13 @@
         :size="infoSecSize"
       />
       <keep-alive>
-          <component
-            :is="currentTab.value"
-            :key="currentTab.value"
-            class="info-tab"
-            :task="taskOnWorkspace"
-            :size="infoSecSize"
-          ></component>
+        <component
+          :is="currentTab.value"
+          :key="currentTab.value"
+          class="info-tab"
+          :task="taskOnWorkspace"
+          :size="infoSecSize"
+        ></component>
       </keep-alive>
 
     </div>
@@ -53,6 +53,7 @@ import GeneralInfo from '../modules/general-info/components/general-info-tab.vue
 import KnowledgeBase from '../modules/knowledge-base/knowledge-base-tab.vue';
 import Processing from '../modules/processing/components/processing-tab.vue';
 import TheAgentInfoNavPanel from './agent-info-nav-panel/the-agent-info-nav-panel.vue';
+import Screenshots from '../modules/screenshots/components/screenshots-tab.vue';
 
 export default {
   name: 'TheAgentInfoSection',
@@ -65,6 +66,7 @@ export default {
     CollapseAction,
     PinAction,
     Flows,
+    Screenshots
   },
   mixins: [sizeMixin],
   props: {
@@ -124,6 +126,9 @@ export default {
     ...mapGetters('ui/infoSec/processing', {
       showProcessing: 'ALLOW_PROCESSING',
     }),
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL',
+    }),
     ...mapState({
       flowsList(state) {
         return getNamespacedState(state, `${this.flowsNamespace}`).flows;
@@ -149,6 +154,10 @@ export default {
       return this.flowsList.length
     },
 
+    showScreenshots() {
+      return this.isVideoCall
+    },
+
     hasKnowledgeBase() {
       const { variables } = this.taskOnWorkspace;
       return !!variables?.knowledge_base;
@@ -160,6 +169,7 @@ export default {
       if (this.hasKnowledgeBase) tabs.push(this.tabsObject.knowledgeBase);
       if (this.showProcessing) tabs.push(this.tabsObject.processing);
       if (this.showFlows) tabs.push(this.tabsObject.flows);
+      if (this.showScreenshots) tabs.push(this.tabsObject.screenshots)
       return tabs;
     },
     tabsObject() {
@@ -192,12 +202,18 @@ export default {
         value: 'flows',
         icon: 'flows',
       };
+      const screenshots = {
+        text: this.$tc('objects.screenshots', 2),
+        value: 'screenshots',
+        icon: 'preview-tag-image',
+      }
       return {
         generalInfo,
         clientInfo,
         knowledgeBase,
         processing,
         flows,
+        screenshots,
       };
     },
   },

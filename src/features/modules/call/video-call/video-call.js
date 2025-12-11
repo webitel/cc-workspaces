@@ -32,7 +32,7 @@ const getters = {
       return false;
     }
 
-    const video = taskOnWorkspace?.video;
+    const video = taskOnWorkspace?.remoteVideo;
 
     return (
       video === VideoMediaFlow.SendOnly ||
