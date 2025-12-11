@@ -1,31 +1,33 @@
 <template>
-  <h3>{{ $tc('objects.screenshots', 2) }}</h3>
-  <wt-table
-    class="screenshots-table"
-    :data="data"
-    :headers="headers"
-    :selectable="false"
-  >
-    <template #screenshot="{ item }">
-      <img
-        class="screenshots-table__preview"
-        :src="getMediaUrl(item.id, false)"
-      >
-    </template>
-    <template #dataAndTime="{ item }">
-      {{ getTime(item.uploaded_at) }}
-    </template>
-    <template #actions="{ item }">
-      <wt-icon-btn
-        icon="download"
-        @click="downloadFile(item.id)"
-      />
-      <wt-icon-btn
-        icon="bucket"
-        @click="removeFile(item)"
-      />
-    </template>
+  <div>
+    <h3>{{ $tc('objects.screenshots', 2) }}</h3>
+    <wt-table
+      class="screenshots-table"
+      :data="data"
+      :headers="headers"
+      :selectable="false"
+    >
+      <template #screenshot="{ item }">
+        <img
+          class="screenshots-table__preview"
+          :src="getMediaUrl(item.id, false)"
+        >
+      </template>
+      <template #dataAndTime="{ item }">
+        {{ getTime(item.uploaded_at) }}
+      </template>
+      <template #actions="{ item }">
+        <wt-icon-btn
+          icon="download"
+          @click="downloadFile(item.id)"
+        />
+        <wt-icon-btn
+          icon="bucket"
+          @click="removeFile(item)"
+        />
+      </template>
   </wt-table>
+  </div>
 </template>
 <script setup lang="ts">
 import { computed, onActivated, ref } from 'vue';
