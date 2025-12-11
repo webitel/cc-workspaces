@@ -30,9 +30,10 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
-import { useScreenShot } from '../composable/useScreenshot';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
 import { applyTransform, notify } from '@webitel/api-services/api/transformers'
+
+import { useScreenShot } from '../composable/useScreenshot';
 
 const store = useStore();
 
@@ -109,7 +110,6 @@ const onZoomScreenshot = async () => {
 const getScreenshots = async () => {
   try {
     const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    console.log(res.items);
     screenshotData.value = res.items;
   } catch (err) {
     throw applyTransform(err, [
