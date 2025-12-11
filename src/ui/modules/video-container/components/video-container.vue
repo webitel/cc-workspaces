@@ -30,7 +30,7 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
-import { useScreenSharingSession } from '@webitel/ui-sdk/composables';
+import { useScreenShot } from '../composable/useScreenshot';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
 
 const store = useStore();
@@ -42,7 +42,7 @@ const {
   makeScreenshot,
   toggleRecordAction,
   closeScreenshot,
-} = useScreenSharingSession();
+} = useScreenShot();
 
 const videoCallActions = [
   VideoCallAction.Screenshot,
