@@ -32,6 +32,7 @@ import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession'
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { useScreenShot } from '../composable/useScreenshot';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
 const store = useStore();
 
@@ -85,10 +86,18 @@ const mutedVideo = computed(() => call.value.mutedVideo);
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const onToggleRecordings = () => toggleRecordAction(call.value);
 
-const onScreenshot = (_payload, options) =>
-  makeScreenshot(call.value).finally(() => {
+const onScreenshot = async (_payload, options) => {
+  try {
+    await makeScreenshot(call.value);
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  } finally {
     options?.onComplete?.();
-  });
+  }
+};
+
 
 const onCloseScreenshot = () => closeScreenshot();
 
@@ -97,9 +106,18 @@ const onZoomScreenshot = async () => {
   galleriaVisible.value = true;
 };
 
-const getScreenshots = async () =>
-  await FileServicesAPI.getListByCall({ callId: call.value.id })
-    .then((res) => (screenshotData.value = res.items));
+const getScreenshots = async () => {
+  try {
+    const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
+    console.log(res.items);
+    screenshotData.value = res.items;
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
+
 
 const galleriaData = computed(() =>
   screenshotData.value?.map((item) => ({

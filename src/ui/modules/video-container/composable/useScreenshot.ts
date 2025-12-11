@@ -1,5 +1,6 @@
 import { ref, onBeforeUnmount } from 'vue';
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
 type ScreenshotStatus = 'done' | 'error' | null;
 
@@ -62,8 +63,10 @@ export function useScreenShot() {
 
       changeScreenshotStatus('done');
     } catch (err) {
-      console.error('MAKE_SCREENSHOT error', err);
       changeScreenshotStatus('error');
+      throw applyTransform(err, [
+        notify,
+      ]);
     } finally {
       screenshotIsLoading.value = false;
     }
