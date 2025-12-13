@@ -3,41 +3,51 @@
     <template #title>
       {{ $t('welcomePopup.title') }}
     </template>
+
     <template #main>
       <p>{{ $t('welcomePopup.subtitle') }}</p>
-      <div class="welcome-popup-permission">
-        <div class="welcome-popup-permission__status">
-          <wt-icon icon="mic"></wt-icon>
-          {{ $t('welcomePopup.mic.status') }}:
-          <wt-indicator
-            :color="mic.status ? 'success' : 'error'"
-            size="sm"
-          ></wt-indicator>
-        </div>
-        <p
-          v-if="mic.message"
-          class="welcome-popup-permission__detail"
+
+      <template v-if="permissions.length">
+        <div
+          class="welcome-popup"
+          v-for="permission in permissions"
+          :key="permission.id"
         >
-          {{ $t(`welcomePopup.mic.message.${mic.message}`) }}
-        </p>
-      </div>
-      <div class="welcome-popup-permission">
-        <div class="welcome-popup-permission__status">
-          <wt-icon icon="bell"></wt-icon>
-          {{ $t('welcomePopup.notifications.status') }}:
-          <wt-indicator
-            :color="notification.status ? 'success' : 'error'"
-            size="sm"
-          ></wt-indicator>
+          <div class="welcome-popup__status">
+            <div
+              class="welcome-popup__status-content"
+              :class="{
+                'welcome-popup__status-content--disabled':
+                  permission.disabled,
+              }"
+            >
+              <wt-icon :icon="permission.icon" />
+              {{ $t(`welcomePopup.${permission.id}.status`) }}:
+            </div>
+
+            <wt-indicator
+              :color="permission.status ? 'success' : 'error'"
+              size="sm"
+            />
+
+            <wt-switcher
+              v-if="permission.toggle"
+              class="welcome-popup--enabled"
+              :model-value="permission.enabled"
+              @update:model-value="permission?.handleToggle"
+            />
+          </div>
+
+          <p
+            v-if="permission.message"
+            class="welcome-popup__detail"
+          >
+            {{ t(`welcomePopup.${permission.id}.message.${permission.message}`) }}
+          </p>
         </div>
-        <p
-          v-if="notification.message"
-          class="welcome-popup-permission__detail"
-        >
-          {{ $t(`welcomePopup.notifications.message.${notification.message}`) }}
-        </p>
-      </div>
+      </template>
     </template>
+
     <template #actions>
       <wt-button
         wide
@@ -50,100 +60,272 @@
   </wt-popup>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed, watch, type Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useDevicesList, usePermission } from '@vueuse/core';
 import silenceSound from './assets/audio/silence.mp3';
 
-export default {
-  name: 'WelcomePopup',
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data: () => ({
-    mic: {
-      status: false,
-      message: '',
-    },
-    notification: {
-      status: false,
-      message: '',
-    },
-  }),
-  created() {
-    this.initWindowKeyPressListener();
-    this.checkPermissions();
-  },
-  unmounted() {
-    this.removeWindowKeyPressListener();
-  },
-  methods: {
-    playSilence() {
-      // https://webitel.atlassian.net/browse/WTEL-4389
-      const silence = new Audio(silenceSound);
-      silence.play();
-    },
-    close() {
-      if (!this.loading) {
-        this.playSilence();
-        this.$emit('input');
-      };
-    },
-    async checkMic() {
-      try {
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-        this.mic.status = true;
-      } catch (err) {
-        this.mic.status = false;
-        if (err.message.includes('Permission denied')) this.mic.message = 'denied';
-        else if (err.message.includes('Requested device not found')) this.mic.message = 'notFound';
-      }
-    },
-    async checkNotifications() {
-      try {
-        const status = await window.Notification.requestPermission();
+const { t } = useI18n();
 
-        if (status === 'granted') {
-          this.notification.status = true;
-        } else {
-          this.notification.status = false;
-          this.notification.message = 'denied';
-        }
-      } catch (err) {
-        this.notification.status = false;
-        this.notification.message = err;
-      }
-    },
-    checkPermissions() {
-      this.checkMic();
-      this.checkNotifications();
-    },
-    handleKeyPress(e) {
-      if (e.keyCode === 13 // enter
-        || e.key === ' '
-        || e.code === 'Space'
-        || e.keyCode === 32) { // space
-        this.close();
-      }
-    },
-    initWindowKeyPressListener() {
-      window.addEventListener('keypress', this.handleKeyPress);
-    },
-    removeWindowKeyPressListener() {
-      window.removeEventListener('keypress', this.handleKeyPress);
-    },
-  },
+const props = defineProps({
+  loading: { type: Boolean, default: false },
+});
+
+const emit = defineEmits(['input']);
+
+type PermissionId = 'mic' | 'notifications' | 'camera';
+
+type Permission = {
+  id: PermissionId;
+  status: boolean;
+  message: string;
+  icon: string;
+  disabled?: boolean;
+  toggle?: boolean;
+  enabled?: boolean;
+  handleToggle?: (value: boolean) => void | Promise<void>;
 };
+
+const {
+  audioInputs,
+  permissionGranted: micPermissionGranted,
+  ensurePermissions: ensureMicPermissions,
+} = useDevicesList({
+  constraints: { audio: true },
+  requestPermissions: false,
+});
+
+const {
+  videoInputs,
+  permissionGranted: cameraPermissionGranted,
+  ensurePermissions: ensureCameraPermissions,
+} = useDevicesList({
+  constraints: { video: true },
+  requestPermissions: false,
+});
+
+const micPermissionState = usePermission('microphone');
+const cameraPermissionState = usePermission('camera');
+const notificationPermissionState = usePermission('notifications');
+
+const mic = ref<Permission>({
+  id: 'mic',
+  status: false,
+  message: '',
+  icon: 'mic',
+});
+
+const notification = ref<Permission>({
+  id: 'notifications',
+  status: false,
+  message: '',
+  icon: 'bell',
+});
+
+const camera = ref<Permission>({
+  id: 'camera',
+  status: false,
+  message: '',
+  icon: 'video-cam',
+  disabled: true,
+  toggle: true,
+  enabled: false,
+  handleToggle: handleCameraToggle,
+});
+
+async function handleCameraToggle(value: boolean) {
+  camera.value.enabled = value;
+  camera.value.disabled = !value;
+
+  const granted = value ? await ensureCameraPermissions() : false;
+  camera.value.message = !granted ? 'denied' : '';
+  camera.value.status = false;
+}
+
+const permissions = computed<Permission[]>(() => [
+  mic.value,
+  notification.value,
+  camera.value,
+]);
+
+function applyNotificationState(state: NotificationPermission | null) {
+  if (!state) {
+    notification.value.status = false;
+    notification.value.message = '';
+    return;
+  }
+
+  switch (state) {
+    case 'granted':
+      notification.value.status = true;
+      notification.value.message = '';
+      break;
+
+    case 'denied':
+      notification.value.status = false;
+      notification.value.message = 'denied';
+      break;
+
+    default:
+      notification.value.status = false;
+      notification.value.message = '';
+  }
+}
+
+
+type MediaPermissionWatchConfig = {
+  permissionState: Ref<NotificationPermission | PermissionState | undefined>;
+  permissionGranted: Ref<boolean>;
+  devices: Ref<MediaDeviceInfo[]>;
+  target: Ref<Permission>;
+  withToggle?: boolean;
+};
+
+function applyMediaPermissionState(
+  target: Ref<Permission>,
+  { isGranted, isDenied, hasDevices },
+) {
+  const message =
+    isDenied
+      ? 'denied'
+      : isGranted && !hasDevices
+        ? 'notFound'
+        : '';
+
+  target.value.status = isGranted && hasDevices;
+  target.value.message = message;
+}
+
+
+function setupMediaPermissionWatch({
+ permissionState,
+ permissionGranted,
+ devices,
+ target,
+ withToggle = false,
+}: MediaPermissionWatchConfig) {
+  watch(
+    [permissionState, permissionGranted, devices],
+    ([state, granted, inputs]) => {
+      if (!state) return;
+
+      const isGranted = state === 'granted';
+      const isDenied = state === 'denied';
+
+      if (withToggle) {
+        const isKnownState = isGranted || isDenied;
+        target.value.enabled = isKnownState;
+        target.value.disabled = !isKnownState;
+      }
+
+      applyMediaPermissionState(target, {
+        isGranted,
+        isDenied,
+        hasDevices: granted || inputs.length > 0,
+      });
+    },
+    { immediate: true },
+  );
+}
+
+
+setupMediaPermissionWatch({
+  permissionState: micPermissionState,
+  permissionGranted: micPermissionGranted,
+  devices: audioInputs,
+  target: mic,
+});
+
+setupMediaPermissionWatch({
+  permissionState: cameraPermissionState,
+  permissionGranted: cameraPermissionGranted,
+  devices: videoInputs,
+  target: camera,
+  withToggle: true,
+});
+
+watch(
+  notificationPermissionState,
+  (state) => applyNotificationState(state),
+  { immediate: true },
+);
+
+  async function requestNotificationPermission() {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+
+    try {
+      const status = await window.Notification.requestPermission();
+      applyNotificationState(status);
+    } catch {
+      applyNotificationState('denied');
+    }
+  }
+
+
+async function initPermissionChecks() {
+  await ensureMicPermissions();
+  await requestNotificationPermission();
+}
+function playSilence() {
+  // https://webitel.atlassian.net/browse/WTEL-4389
+  const silence = new Audio(silenceSound);
+  silence.play?.();
+}
+
+function close() {
+  if (!props.loading) {
+    playSilence();
+    emit('input');
+  }
+}
+
+function handleKeyPress(e: KeyboardEvent) {
+  if (
+    e.keyCode === 13 || // Enter
+    e.key === ' ' ||
+    e.code === 'Space' ||
+    e.keyCode === 32 // Space
+  ) {
+    close();
+  }
+}
+
+function initWindowKeyPressListener() {
+  window.addEventListener('keypress', handleKeyPress);
+}
+
+function removeWindowKeyPressListener() {
+  window.removeEventListener('keypress', handleKeyPress);
+}
+
+onMounted(() => {
+  initWindowKeyPressListener();
+  initPermissionChecks();
+});
+
+onUnmounted(() => {
+  removeWindowKeyPressListener();
+});
 </script>
 
 <style lang="scss" scoped>
-.welcome-popup-permission {
+.welcome-popup {
   &__status {
     display: flex;
     align-items: center;
     margin: var(--spacing-xs) 0;
     gap: var(--spacing-2xs);
+
+    &-content {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2xs);
+
+      &--disabled {
+        opacity: 0.5;
+      }
+    }
   }
 
   &__detail {

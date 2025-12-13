@@ -280,6 +280,12 @@ export default {
         denied: 'Permiso denegado',
       },
     },
+    camera: {
+      status: 'Estado del permiso de cámara',
+      message: {
+        denied: 'Permiso denegado',
+      },
+    },
   },
   descTrackAuthPopup: {
     title: 'Atención',
