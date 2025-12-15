@@ -278,3 +278,28 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress);
 });
 </script>
+<style lang="scss" scoped>
+.welcome-popup {
+  &__status {
+    display: flex;
+    align-items: center;
+    margin: var(--spacing-xs) 0;
+    gap: var(--spacing-2xs);
+
+    &-content {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2xs);
+
+      &--disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &__detail {
+    @extend %typo-body-2;
+    color: var(--text-error-color);
+  }
+}
+</style>
