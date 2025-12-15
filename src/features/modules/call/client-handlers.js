@@ -97,6 +97,10 @@ const actions = {
       call.workspaceAudio.pause();
       call.workspaceAudio = null;
     }
+
+    await context.dispatch('features/call/HANDLE_CALL_END', call, {
+      root: true,
+    });
   },
 
   // @author @stanislav-kozak

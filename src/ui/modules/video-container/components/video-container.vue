@@ -1,221 +1,144 @@
 <template>
-  <aside v-if="isVideo" class="video-container" :class="{'large': isExpanded}">
-    <div class="video-wrap peer">
-      <video
-        class="peer-video"
-        :srcObject.prop="peerStreams[0] || localStreams[0]"
-        autoplay
-        muted
-      ></video>
-    </div>
-
-    <div
-      v-if="isLocalVideo && isPeerVideo"
-      class="video-wrap local"
-    >
-      <video
-        class="local-video"
-        :srcObject.prop="localStreams[0]"
-        autoplay
-        muted
-      ></video>
-    </div>
-    <button
-      class="icon-btn video-action video-action__expand"
-      @click.prevent="isExpanded = !isExpanded"
-    >
-      <icon v-if="isExpanded">
-        <svg class="icon xl">
-          <use xlink:href="#icon-collapse-xl__bold"></use>
-        </svg>
-      </icon>
-      <icon v-else>
-        <svg class="icon md">
-          <use xlink:href="#icon-expand-md__bold"></use>
-        </svg>
-      </icon>
-    </button>
-    <rounded-action
-      class="end video-action video-action__hangup"
-      @click.native="hangup"
-    >
-      <icon>
-        <svg class="icon icon-call-end-md md">
-          <use xlink:href="#icon-call-end-md"></use>
-        </svg>
-      </icon>
-    </rounded-action>
-    <button
-      class="icon-btn video-action video-action__mic"
-      @click.prevent="toggleMute"
-    >
-      <icon v-if="isExpanded">
-        <svg class="icon xl">
-          <use :xlink:href="micIcon"></use>
-        </svg>
-      </icon>
-      <icon v-else>
-        <svg class="icon md">
-          <use :xlink:href="micIcon"></use>
-        </svg>
-      </icon>
-    </button>
-  </aside>
+  <wt-galleria
+    v-model:visible="galleriaVisible"
+    v-model:active-index="galleriaActiveIndex"
+    :value="galleriaData"
+    @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
+    @delete="handleDeleteFromGalleria"
+  />
+  <video-call
+    v-if="isVideo"
+    :sender:stream=senderStream
+    :receiver:stream="receiverStream"
+    :sender:video:enabled="isPeerVideo"
+    :receiver:video:enabled="!mutedVideo"
+    :screenshot:status="screenshotStatus"
+    :screenshot:loading="screenshotIsLoading"
+    :screenshot:src="screenshotPreviewUrl"
+    :recordings="recordings"
+    :actions="videoCallActions"
+    :username="userName"
+    position="left-bottom"
+    @action:screenshot="onScreenshot"
+    @action:recordings="onToggleRecordings"
+    @action:zoom-screenshot="onZoomScreenshot"
+    @action:close-screenshot="onCloseScreenshot"
+  />
 </template>
 
-<script>
-  import { mapActions,mapGetters } from 'vuex';
-  // import RoundedAction from '../../utils/rounded-action.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
+import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
+import { WtGalleria } from '@webitel/ui-sdk/components';
+import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
-  export default {
-    name: 'VideoContainer',
-    components: {
-      // RoundedAction,
-    },
+import { useScreenShot } from '../composable/useScreenshot';
 
-    data: () => ({
-      isExpanded: false,
-    }),
+const store = useStore();
 
-    computed: {
-      ...mapGetters('features/call', {
-        call: 'CALL_ON_WORKSPACE',
-      }),
+const {
+  screenshotStatus,
+  screenshotIsLoading,
+  screenshotPreviewUrl,
+  makeScreenshot,
+  toggleRecordAction,
+  closeScreenshot,
+} = useScreenShot();
 
-      peerStreams() {
-        return this.call.peerStreams || [];
-      },
+const videoCallActions = [
+  VideoCallAction.Screenshot,
+  VideoCallAction.Recordings,
+];
 
-      localStreams() {
-        return this.call.localStreams || [];
-      },
+const galleriaVisible = ref(false);
+const galleriaActiveIndex = ref(0);
+const screenshotData = ref([]);
 
-      isPeerVideo() {
-        return this.peerStreams.some((stream) => (
-          stream.getTracks().some((track) => track.kind === 'video')
-        ));
-      },
+const call = computed<any>(
+  () => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
+);
 
-      isLocalVideo() {
-        return this.localStreams.some((stream) => (
-          stream.getTracks().some((track) => track.kind === 'video')
-        ));
-      },
+const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
+const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
-      isVideo() {
-        return this.isPeerVideo || this.isLocalVideo;
-      },
+const senderStream = computed<MediaStream | undefined>(
+  () => peerStreams.value[0],
+);
+const receiverStream = computed<MediaStream | undefined>(
+  () => localStreams.value[0],
+);
 
-      // controls Active state
-      isOnMuted() {
-        return this.call.muted;
-      },
+const isPeerVideo = computed(() =>
+  peerStreams.value.some((stream) =>
+    stream.getTracks().some((track) => track.kind === 'video'),
+  ),
+);
 
-      micIcon() {
-        return this.isOnMuted ? '#icon-mic-muted-xl__bold' : '#icon-mic-xl__bold';
-      },
-    },
+const isLocalVideo = computed(() =>
+  localStreams.value.some((stream) =>
+    stream.getTracks().some((track) => track.kind === 'video'),
+  ),
+);
 
-    methods: {
-      ...mapActions('features/call', {
-        hangup: 'HANGUP',
-        toggleMute: 'TOGGLE_MUTE',
-      }),
-    },
-  };
+const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
+const userName = computed(() => call.value.displayName || '');
+const mutedVideo = computed(() => call.value.mutedVideo);
+const recordings = computed<boolean>(() => !!call.value.recordings);
+const onToggleRecordings = () => toggleRecordAction(call.value);
+
+const onScreenshot = async (_payload, options) => {
+  try {
+    await makeScreenshot(call.value);
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  } finally {
+    options?.onComplete?.();
+  }
+};
+
+
+const onCloseScreenshot = () => closeScreenshot();
+
+const onZoomScreenshot = async () => {
+  await getScreenshots();
+  galleriaVisible.value = true;
+};
+
+const getScreenshots = async () => {
+  try {
+    const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
+    screenshotData.value = res.items;
+  } catch (err) {
+    throw applyTransform(err, [
+      notify,
+    ]);
+  }
+};
+
+
+const galleriaData = computed(() =>
+  screenshotData.value?.map((item) => ({
+    src: getMediaUrl(item.id, false),
+    thumbnailSrc: getMediaUrl(item.id, true),
+    title: item.view_name,
+    alt: item.view_name,
+  })),
+);
+
+const handleDeleteFromGalleria = () => {
+  handleDelete([screenshotData.value[galleriaActiveIndex.value]]);
+  if (galleriaActiveIndex.value > 0) galleriaActiveIndex.value -= 1;
+};
+
+const handleDelete = async (items: any[]) => {
+  try {
+    await FileServicesAPI.delete(items.map((item) => item.id));
+  } finally {
+    await getScreenshots();
+  }
+};
 </script>
-
-<style lang="scss" scoped>
-  $video-action-color: #fff;
-
-  .video-container {
-    position: fixed;
-    right: (30px);
-    bottom: (70px);
-    border-radius: var(--border-radius);
-    z-index: var(--ws-video-container-z-index);
-    overflow: hidden;
-
-    &.large {
-      right: 50%;
-      bottom: 50%;
-      transform: translate(50%, 50%);
-    }
-
-    .video-action {
-      position: absolute;
-      z-index: var(--ws-video-action-z-index);
-
-      .icon {
-        fill: $video-action-color;
-        stroke: $video-action-color;
-      }
-
-      &__expand {
-        top: (30px);
-        left: (30px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        border-radius: 50%;
-        transition: var(--transition);
-        cursor: pointer;
-      }
-
-      &__hangup {
-        top: (30px);
-        right: (30px);
-      }
-
-      &__mic {
-        bottom: (48px);
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    }
-  }
-
-  .video-wrap {
-    line-height: 0; // container larger than video bug
-
-    &.local {
-      position: absolute;
-      right: (30px);
-      bottom: (30px);
-      width: fit-content;
-      width: -moz-fit-content;
-      height: fit-content;
-      border: 2px solid var(--primary-color);
-    }
-
-    .peer-video {
-      width: 100%;
-      height: auto;
-      max-width: (444px);
-      object-fit: cover;
-    }
-
-    .local-video {
-      width: (60px);
-      height: (60px);
-      /*width: 13.5%; // 60px from 444px container width*/
-      //height: 20.1%; // 60px from 298px container height
-      object-fit: cover;
-    }
-  }
-
-  .video-container.large {
-    .peer-video {
-      height: auto;
-      min-width: 60vw;
-      max-width: 90vw;
-      max-height: 90vh;
-    }
-
-    .local-video {
-      width: 15vh;
-      height: 15vh;
-    }
-  }
-</style>

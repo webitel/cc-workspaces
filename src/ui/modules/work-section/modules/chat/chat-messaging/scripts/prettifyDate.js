@@ -1,4 +1,6 @@
+import { FormatDateMode } from '@webitel/ui-sdk/enums';
+import { formatDate } from '@webitel/ui-sdk/utils';
+
 export default function(ms) {
-  const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-  return  new Date(Number(ms)).toLocaleDateString([], options);
+  return formatDate(Number(ms), FormatDateMode.DATE);
 }

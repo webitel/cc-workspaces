@@ -6,6 +6,7 @@ const HotkeyAction = Object.freeze({
   TRANSFER: 'TRANSFER',
   NEW_CALL: 'NEW_CALL',
   SUBMIT_FORM: 'SUBMIT_FORM',
+  TOGGLE_VIDEO: 'TOGGLE_VIDEO',
 });
 
 export default HotkeyAction;

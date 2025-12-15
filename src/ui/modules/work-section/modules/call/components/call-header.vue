@@ -1,69 +1,85 @@
 <template>
   <task-header :size="size">
     <template #before-avatar>
-      <wt-rounded-action
-        class="call-action"
-        :active="isOnHistory"
-        :size="size"
-        icon="history"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.History)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        class="call-action"
-        :active="isOnContacts"
-        :size="size"
-        icon="contacts"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Contacts)"
-      ></wt-rounded-action>
+      <slot name="history">
+        <wt-rounded-action
+          class="call-action"
+          :active="isOnHistory"
+          :size="size"
+          icon="history"
+          color="secondary"
+          rounded
+          wide
+          @click="$emit('openTab', CallTab.History)"
+        />
+      </slot>
+
+      <slot name="contacts">
+        <wt-rounded-action
+          class="call-action"
+          :active="isOnContacts"
+          :size="size"
+          icon="contacts"
+          color="secondary"
+          rounded
+          wide
+          @click="$emit('openTab', CallTab.Contacts)"
+        />
+      </slot>
     </template>
+
     <template #after-avatar>
-      <wt-rounded-action
-        v-if="isBridge"
-        class="call-action"
-        :active="isOnBridge"
-        :size="size"
-        icon="call-add-to"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Bridge)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isTransfer"
-        class="call-action"
-        :size="size"
-        icon="call-transfer--filled"
-        color="transfer"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Transfer)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isHangup"
-        class="call-action"
-        :size="size"
-        icon="call-end--filled"
-        color="error"
-        rounded
-        wide
-        @click="hangup"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isDisplayCallButton"
-        class="call-action"
-        :size="size"
-        icon="call-ringing--filled"
-        color="success"
-        rounded
-        wide
-        @click="makeCall"
-      ></wt-rounded-action>
+      <slot name="bridge">
+        <wt-rounded-action
+          v-if="isBridge"
+          class="call-action"
+          :active="isOnBridge"
+          :size="size"
+          icon="call-add-to"
+          color="secondary"
+          rounded
+          wide
+          @click="$emit('openTab', CallTab.Bridge)"
+        />
+      </slot>
+
+      <slot name="transfer">
+        <wt-rounded-action
+          v-if="isTransfer"
+          class="call-action"
+          :size="size"
+          icon="call-transfer--filled"
+          color="transfer"
+          rounded
+          wide
+          @click="$emit('openTab', CallTab.Transfer)"
+        />
+      </slot>
+
+      <slot name="hangup">
+        <wt-rounded-action
+          v-if="isHangup"
+          class="call-action"
+          :size="size"
+          icon="call-end--filled"
+          color="error"
+          rounded
+          wide
+          @click="hangup"
+        />
+      </slot>
+      <slot name="call">
+        <wt-rounded-action
+          v-if="isDisplayCallButton"
+          class="call-action"
+          :size="size"
+          icon="call-ringing--filled"
+          color="success"
+          rounded
+          wide
+          @click="makeCall"
+        />
+      </slot>
     </template>
     <template #title>
       {{ displayName }}
