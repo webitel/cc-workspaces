@@ -53,12 +53,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, type Ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDevicesList, usePermission } from '@vueuse/core';
-import silenceSound from './assets/audio/silence.mp3';
-import { Permission, PermissionId, PermissionMessage } from './types/permissions.types';
 import { usePermissionDevice } from './composable/usePermissionDevice';
+import { Permission, PermissionId, PermissionMessage } from './types/permissions.types';
+import silenceSound from './assets/audio/silence.mp3';
+
 
 const { t } = useI18n();
 
