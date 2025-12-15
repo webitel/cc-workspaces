@@ -58,6 +58,7 @@ import { useI18n } from 'vue-i18n';
 import { useDevicesList, usePermission } from '@vueuse/core';
 import silenceSound from './assets/audio/silence.mp3';
 import { Permission, PermissionId, PermissionMessage } from './types/permissions.types';
+import { usePermissionDevice } from './composable/usePermissionDevice';
 
 const { t } = useI18n();
 
@@ -83,14 +84,10 @@ const createPermission = (
   ...overrides,
 });
 
-const setPermission = (
-  target: Ref<Permission>,
-  status: boolean,
-  message: PermissionMessage = PermissionMessage.None,
-): void => {
-  target.value.status = status;
-  target.value.message = message;
-};
+const {
+  setupMediaPermissionWatch,
+  setPermission
+} = usePermissionDevice()
 
 const applyNotificationState = (state: NotificationPermission | null): void => {
   if (state === 'granted') return setPermission(notification, true);
@@ -107,57 +104,6 @@ const requestNotificationPermission = async (): Promise<void> => {
   } catch {
     applyNotificationState('denied');
   }
-};
-
-const applyMediaPermissionState = (
-  target: Ref<Permission>,
-  isGranted: boolean,
-  isDenied: boolean,
-  hasDevices: boolean,
-): void => {
-  let message = PermissionMessage.None;
-
-  if (isDenied) {
-    message = PermissionMessage.Denied;
-  } else if (isGranted && !hasDevices) {
-    message = PermissionMessage.NotFound;
-  }
-
-  setPermission(target, isGranted && hasDevices, message);
-};
-
-const setupMediaPermissionWatch = ({
- permissionState,
- permissionGranted,
- devices,
- target,
- withToggle = false,
-}: {
-  permissionState: Ref<PermissionState | undefined>;
-  permissionGranted: Ref<boolean>;
-  devices: Ref<MediaDeviceInfo[]>;
-  target: Ref<Permission>;
-  withToggle?: boolean;
-}) => {
-  watch(
-    [permissionState, permissionGranted, devices],
-    ([state, granted, inputs]) => {
-      if (!state) return;
-
-      const isGranted = state === 'granted';
-      const isDenied = state === 'denied';
-      const hasDevices = granted || inputs.length > 0;
-
-      if (withToggle) {
-        const isKnownState = isGranted || isDenied;
-        target.value.enabled = isKnownState;
-        target.value.disabled = !isKnownState;
-      }
-
-      applyMediaPermissionState(target, isGranted, isDenied, hasDevices);
-    },
-    { immediate: true },
-  );
 };
 
 const {
