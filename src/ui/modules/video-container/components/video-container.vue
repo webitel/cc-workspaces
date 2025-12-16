@@ -10,8 +10,8 @@
     v-if="isVideo"
     :sender:stream=senderStream
     :receiver:stream="receiverStream"
-    :sender:video:enabled="isPeerVideo"
-    :receiver:video:enabled="!mutedVideo"
+    :sender:video:enabled="!mutedVideo"
+    :receiver:video:enabled="isSenderVideo"
     :screenshot:status="screenshotStatus"
     :screenshot:loading="screenshotIsLoading"
     :screenshot:src="screenshotPreviewUrl"
@@ -64,25 +64,21 @@ const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
 const senderStream = computed<MediaStream | undefined>(
-  () => peerStreams.value[0],
-);
-const receiverStream = computed<MediaStream | undefined>(
   () => localStreams.value[0],
 );
 
-const isPeerVideo = computed(() =>
-  peerStreams.value.some((stream) =>
-    stream.getTracks().some((track) => track.kind === 'video'),
-  ),
+const receiverStream = computed<MediaStream | undefined>(
+  () => peerStreams.value[0],
+);
+const isSenderVideo = computed(() =>
+  localStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
 );
 
-const isLocalVideo = computed(() =>
-  localStreams.value.some((stream) =>
-    stream.getTracks().some((track) => track.kind === 'video'),
-  ),
+const isReceiverVideo = computed(() =>
+  peerStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
 );
 
-const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
+const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
 const userName = computed(() => call.value.displayName || '');
 const mutedVideo = computed(() => call.value.mutedVideo);
 const recordings = computed<boolean>(() => !!call.value.recordings);
