@@ -60,8 +60,8 @@ const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const loadScreenshots = async () => {
   if (!call.value?.id) return;
   try {
-    const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    data.value = res.items;
+    const { items } = await FileServicesAPI.getListByCall({ callId: call.value.id });
+    data.value = items;
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -76,19 +76,13 @@ const removeFile = (item) => {
 };
 const getTime = (time) => formatDate(new Date(Number(time)), FormatDateMode.DATETIME);
 
-const handleScreenshotsUpdated = (payload: { callId: string }) => {
-  if (payload.callId === call.value?.id) {
-    loadScreenshots();
-  }
-};
-
 onActivated(async () => {
   await loadScreenshots();
-  eventBus.$on('screenshots:updated', handleScreenshotsUpdated);
+  eventBus.$on('screenshots:updated', loadScreenshots);
 });
 
 onBeforeUnmount(() => {
-  eventBus.$off('screenshots:updated', handleScreenshotsUpdated);
+  eventBus.$off('screenshots:updated', loadScreenshots);
 });
 </script>
 
