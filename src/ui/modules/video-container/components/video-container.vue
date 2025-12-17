@@ -32,7 +32,8 @@ import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers'
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { useScreenShot } from '../composable/useScreenshot';
 
@@ -87,6 +88,7 @@ const onToggleRecordings = () => toggleRecordAction(call.value);
 const onScreenshot = async (_payload, options) => {
   try {
     await makeScreenshot(call.value);
+    eventBus.$emit('screenshots:updated', { callId: call.value.id });
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -133,6 +135,7 @@ const handleDeleteFromGalleria = () => {
 const handleDelete = async (items: any[]) => {
   try {
     await FileServicesAPI.delete(items.map((item) => item.id));
+    eventBus.$emit('screenshots:updated', { callId: call.value.id });
   } finally {
     await getScreenshots();
   }
