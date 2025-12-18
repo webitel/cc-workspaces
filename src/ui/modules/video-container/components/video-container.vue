@@ -18,6 +18,7 @@
     :recordings="recordings"
     :actions="videoCallActions"
     :username="userName"
+    :overlay="false"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"

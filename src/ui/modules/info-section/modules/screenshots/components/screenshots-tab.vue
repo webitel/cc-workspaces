@@ -59,14 +59,12 @@ const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const loadScreenshots = async () => {
   if (!call.value?.id) return;
-  try {
-    const { items } = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    data.value = items;
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  }
+
+  const { items } = await FileServicesAPI.getListByCall({
+    callId: call.value.id,
+  });
+
+  data.value = items;
 };
 
 const removeFile = (item) => {
