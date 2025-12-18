@@ -30,9 +30,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onActivated, ref } from 'vue';
+import { computed, onActivated, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { eventBus } from '@webitel/ui-sdk/scripts';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 
 import { FileServicesAPI } from '@webitel/api-services/api';
 import { formatDate } from '@webitel/ui-sdk/utils';
@@ -55,6 +57,16 @@ const headers = computed(() => [
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
+const loadScreenshots = async () => {
+  if (!call.value?.id) return;
+
+  const { items } = await FileServicesAPI.getListByCall({
+    callId: call.value.id,
+  });
+
+  data.value = items;
+};
+
 const removeFile = (item) => {
   FileServicesAPI.delete([item.id]).then(res =>
     data.value = data.value.filter(file => file.id !== item.id),
@@ -63,8 +75,13 @@ const removeFile = (item) => {
 const getTime = (time) => formatDate(new Date(Number(time)), FormatDateMode.DATETIME);
 
 onActivated(async () => {
-  FileServicesAPI.getListByCall({ callId: call.value.id }).then(res => data.value = res.items)
-})
+  await loadScreenshots();
+  eventBus.$on('screenshots:updated', loadScreenshots);
+});
+
+onBeforeUnmount(() => {
+  eventBus.$off('screenshots:updated', loadScreenshots);
+});
 </script>
 
 <style scoped lang="scss">

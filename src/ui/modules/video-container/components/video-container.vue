@@ -18,6 +18,7 @@
     :recordings="recordings"
     :actions="videoCallActions"
     :username="userName"
+    :overlay="false"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
@@ -32,7 +33,8 @@ import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers'
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { useScreenShot } from '../composable/useScreenshot';
 
@@ -87,6 +89,7 @@ const onToggleRecordings = () => toggleRecordAction(call.value);
 const onScreenshot = async (_payload, options) => {
   try {
     await makeScreenshot(call.value);
+    eventBus.$emit('screenshots:updated');
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -106,8 +109,8 @@ const onZoomScreenshot = async () => {
 
 const getScreenshots = async () => {
   try {
-    const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    screenshotData.value = res.items;
+    const { items } = await FileServicesAPI.getListByCall({ callId: call.value.id });
+    screenshotData.value = items;
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -133,6 +136,7 @@ const handleDeleteFromGalleria = () => {
 const handleDelete = async (items: any[]) => {
   try {
     await FileServicesAPI.delete(items.map((item) => item.id));
+    eventBus.$emit('screenshots:updated');
   } finally {
     await getScreenshots();
   }
