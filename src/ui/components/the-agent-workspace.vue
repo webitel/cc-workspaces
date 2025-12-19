@@ -152,8 +152,8 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .main-agent-workspace {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
   height: 100vh;
 }
 

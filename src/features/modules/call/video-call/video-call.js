@@ -11,19 +11,6 @@ const actions = {
       : rootGetters['features/call/CALL_ON_WORKSPACE'];
     call.muteVideo(!call.mutedVideo)
   },
-
-  MAKE_SCREENSHOT: ({ rootGetters }, { callId }) => {
-    const call = callId
-      ? rootGetters['features/call/GET_CALL_BY_ID'](callId)
-      : rootGetters['features/call/CALL_ON_WORKSPACE'];
-    call.screenshot()
-  },
-  TOGGLE_RECORDINGS: ({ rootGetters }, { callId }) => {
-    const call = callId
-      ? rootGetters['features/call/GET_CALL_BY_ID'](callId)
-      : rootGetters['features/call/CALL_ON_WORKSPACE'];
-    call.startRecord()
-  },
 }
 
 const getters = {
@@ -34,13 +21,9 @@ const getters = {
       return false;
     }
 
-    const video = taskOnWorkspace?.video;
+    const video = taskOnWorkspace?.remoteVideo;
 
-    return (
-      video === VideoMediaFlow.SendOnly ||
-      video === VideoMediaFlow.SendRecv ||
-      video === VideoMediaFlow.RecvOnly
-    );
+    return [VideoMediaFlow.SendRecv].includes(video);
   },
 }
 

@@ -29,6 +29,7 @@
       @click="toggleHold"
     ></wt-rounded-action>
     <wt-rounded-action
+      v-if="!isVideoCall"
       :active="isOnMuted"
       :class="{
           'hidden': !isMuted,
