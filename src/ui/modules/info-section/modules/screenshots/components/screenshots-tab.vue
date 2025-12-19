@@ -1,7 +1,12 @@
 <template>
   <div>
     <h3>{{ $tc('objects.screenshots', 2) }}</h3>
+    <wt-dummy
+      v-if="!data.length"
+      :text="t('webitelUI.empty.text.empty')"
+    />
     <wt-table
+      v-else
       class="screenshots-table"
       :data="data"
       :headers="headers"
@@ -11,6 +16,7 @@
         <img
           class="screenshots-table__preview"
           :src="getMediaUrl(item.id, false)"
+          @click="openScreenshotInGalleria(item)"
         >
       </template>
       <template #dataAndTime="{ item }">
@@ -33,6 +39,7 @@
 import { computed, onActivated, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { FileServicesAPI } from '@webitel/api-services/api';
 import { formatDate } from '@webitel/ui-sdk/utils';
@@ -55,10 +62,20 @@ const headers = computed(() => [
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
+const openScreenshotInGalleria = (item: any) => {
+  if (!call.value?.id || !item?.id) return;
+
+  const index = data.value.findIndex((screenshot) => screenshot.id === item.id);
+  eventBus.$emit('screenshots:open-galleria', {
+    screenshotId: item.id,
+    index: index >= 0 ? index : 0,
+  });
+};
+
 const removeFile = (item) => {
-  FileServicesAPI.delete([item.id]).then(res =>
-    data.value = data.value.filter(file => file.id !== item.id),
-  );
+  FileServicesAPI.delete([item.id]).then(() => {
+    data.value = data.value.filter(file => file.id !== item.id);
+  });
 };
 const getTime = (time) => formatDate(new Date(Number(time)), FormatDateMode.DATETIME);
 

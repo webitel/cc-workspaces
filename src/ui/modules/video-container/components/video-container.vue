@@ -27,12 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers'
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { useScreenShot } from '../composable/useScreenshot';
 
@@ -137,4 +138,30 @@ const handleDelete = async (items: any[]) => {
     await getScreenshots();
   }
 };
+
+const handleOpenGalleria = async (payload: { callId: string; screenshotId: string; index: number }) => {
+  if (!call.value?.id) return;
+
+  try {
+    await getScreenshots();
+
+    const foundIndex = screenshotData.value.findIndex((item) => item.id === payload.screenshotId);
+    const targetIndex = foundIndex >= 0 ? foundIndex : payload.index;
+
+    if (screenshotData.value.length > 0) {
+      galleriaActiveIndex.value = Math.max(0, Math.min(targetIndex, screenshotData.value.length - 1));
+      galleriaVisible.value = true;
+    }
+  } catch (err) {
+    console.error('Error opening galleria:', err);
+  }
+};
+
+onMounted(() => {
+  eventBus.$on('screenshots:open-galleria', handleOpenGalleria);
+});
+
+onBeforeUnmount(() => {
+  eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
+});
 </script>
