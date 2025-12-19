@@ -10,14 +10,15 @@
     v-if="isVideo"
     :sender:stream=senderStream
     :receiver:stream="receiverStream"
-    :sender:video:enabled="isPeerVideo"
-    :receiver:video:enabled="!mutedVideo"
+    :sender:video:enabled="!mutedVideo"
+    :receiver:video:enabled="isSenderVideo"
     :screenshot:status="screenshotStatus"
     :screenshot:loading="screenshotIsLoading"
     :screenshot:src="screenshotPreviewUrl"
     :recordings="recordings"
     :actions="videoCallActions"
     :username="userName"
+    :overlay="false"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
@@ -32,7 +33,8 @@ import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers'
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { useScreenShot } from '../composable/useScreenshot';
 
@@ -64,25 +66,21 @@ const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
 const senderStream = computed<MediaStream | undefined>(
-  () => peerStreams.value[0],
-);
-const receiverStream = computed<MediaStream | undefined>(
   () => localStreams.value[0],
 );
 
-const isPeerVideo = computed(() =>
-  peerStreams.value.some((stream) =>
-    stream.getTracks().some((track) => track.kind === 'video'),
-  ),
+const receiverStream = computed<MediaStream | undefined>(
+  () => peerStreams.value[0],
+);
+const isSenderVideo = computed(() =>
+  localStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
 );
 
-const isLocalVideo = computed(() =>
-  localStreams.value.some((stream) =>
-    stream.getTracks().some((track) => track.kind === 'video'),
-  ),
+const isReceiverVideo = computed(() =>
+  peerStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
 );
 
-const isVideo = computed(() => isPeerVideo.value && isLocalVideo.value);
+const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
 const userName = computed(() => call.value.displayName || '');
 const mutedVideo = computed(() => call.value.mutedVideo);
 const recordings = computed<boolean>(() => !!call.value.recordings);
@@ -91,6 +89,7 @@ const onToggleRecordings = () => toggleRecordAction(call.value);
 const onScreenshot = async (_payload, options) => {
   try {
     await makeScreenshot(call.value);
+    eventBus.$emit('screenshots:updated');
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -110,8 +109,8 @@ const onZoomScreenshot = async () => {
 
 const getScreenshots = async () => {
   try {
-    const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    screenshotData.value = res.items;
+    const { items } = await FileServicesAPI.getListByCall({ callId: call.value.id });
+    screenshotData.value = items;
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -137,6 +136,7 @@ const handleDeleteFromGalleria = () => {
 const handleDelete = async (items: any[]) => {
   try {
     await FileServicesAPI.delete(items.map((item) => item.id));
+    eventBus.$emit('screenshots:updated');
   } finally {
     await getScreenshots();
   }
