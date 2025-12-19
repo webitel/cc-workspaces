@@ -18,6 +18,7 @@
     :recordings="recordings"
     :actions="videoCallActions"
     :username="userName"
+    :overlay="false"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
@@ -88,6 +89,7 @@ const onToggleRecordings = () => toggleRecordAction(call.value);
 const onScreenshot = async (_payload, options) => {
   try {
     await makeScreenshot(call.value);
+    eventBus.$emit('screenshots:updated');
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -107,8 +109,8 @@ const onZoomScreenshot = async () => {
 
 const getScreenshots = async () => {
   try {
-    const res = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    screenshotData.value = res.items;
+    const { items } = await FileServicesAPI.getListByCall({ callId: call.value.id });
+    screenshotData.value = items;
   } catch (err) {
     throw applyTransform(err, [
       notify,
@@ -134,6 +136,7 @@ const handleDeleteFromGalleria = () => {
 const handleDelete = async (items: any[]) => {
   try {
     await FileServicesAPI.delete(items.map((item) => item.id));
+    eventBus.$emit('screenshots:updated');
   } finally {
     await getScreenshots();
   }

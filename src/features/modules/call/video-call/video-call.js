@@ -20,11 +20,7 @@ const getters = {
 
     const video = taskOnWorkspace?.remoteVideo;
 
-    return (
-      video === VideoMediaFlow.SendOnly ||
-      video === VideoMediaFlow.SendRecv ||
-      video === VideoMediaFlow.RecvOnly
-    );
+    return [VideoMediaFlow.SendRecv].includes(video);
   },
 }
 
