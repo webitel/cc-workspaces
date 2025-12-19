@@ -31,16 +31,18 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted, onActivated, onDeactivated } from 'vue';
-import { useStore } from 'vuex';
-
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed, onActivated, onDeactivated,onMounted, onUnmounted, ref, watch } from 'vue';
+import { useStore } from 'vuex';
 
 import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
+import { CallTab } from '../enums/CallTab.enum';
+import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum.js';
+import VideoCallChat from '../module/video-call/module/chat/components/the-video-call-chat.vue';
 import Contacts from './call-contacts/call-contacts-container.vue';
 import CallFooter from './call-footer.vue';
 import CallHeader from './call-header.vue';
@@ -48,7 +50,6 @@ import Bridge from './call-merge/call-bridge-container.vue';
 import Numpad from './call-numpad/numpad.vue';
 import CallPreview from './call-preview.vue';
 import Transfer from './call-transfer/the-call-transfer.vue';
-import { CallTab } from '../enums/CallTab.enum';
 
 // Component mapping
 const callTabComponents = {
@@ -57,6 +58,7 @@ const callTabComponents = {
   [CallTab.History]: History,
   [CallTab.Transfer]: Transfer,
   [CallTab.Bridge]: Bridge,
+  [VideoCallTab.Chat]: VideoCallChat,
 };
 
 const props = defineProps({

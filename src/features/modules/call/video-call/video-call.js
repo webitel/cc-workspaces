@@ -1,5 +1,7 @@
 import { VideoMediaFlow } from 'webitel-sdk';
 
+import chat from './modules/chat/store/chat'
+
 
 const actions = {
   //functions for on/off video in video call
@@ -47,4 +49,7 @@ export default {
   namespaced: true,
   actions,
   getters,
+  modules: {
+    chat
+  },
 };
