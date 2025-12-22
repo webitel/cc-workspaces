@@ -37,6 +37,11 @@ import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import { eventBus } from '@webitel/ui-sdk/scripts';
 
 import { useScreenShot } from '../composable/useScreenshot';
+import {
+  ScreenshotFileItem,
+  ScreenshotsOpenGalleriaPayload,
+  VideoCallScreenshotHandler,
+} from '../types/videoCall.types';
 
 const store = useStore();
 
@@ -56,7 +61,7 @@ const videoCallActions = [
 
 const galleriaVisible = ref(false);
 const galleriaActiveIndex = ref(0);
-const screenshotData = ref([]);
+const screenshotData = ref<ScreenshotFileItem[]>([]);
 
 const call = computed<any>(
   () => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
@@ -86,7 +91,7 @@ const mutedVideo = computed(() => call.value.mutedVideo);
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const onToggleRecordings = () => toggleRecordAction(call.value);
 
-const onScreenshot = async (_payload, options) => {
+const onScreenshot: VideoCallScreenshotHandler = async (_payload, options) => {
   try {
     await makeScreenshot(call.value);
     eventBus.$emit('screenshots:updated');
@@ -133,7 +138,7 @@ const handleDeleteFromGalleria = () => {
   if (galleriaActiveIndex.value > 0) galleriaActiveIndex.value -= 1;
 };
 
-const handleDelete = async (items: any[]) => {
+const handleDelete = async (items: ScreenshotFileItem[]) => {
   try {
     await FileServicesAPI.delete(items.map((item) => item.id));
     eventBus.$emit('screenshots:updated');
@@ -142,7 +147,7 @@ const handleDelete = async (items: any[]) => {
   }
 };
 
-const handleOpenGalleria = async (payload: { callId: string; screenshotId: string; index: number }) => {
+const handleOpenGalleria = async (payload: ScreenshotsOpenGalleriaPayload) => {
   if (!call.value?.id) return;
 
   try {
@@ -151,7 +156,7 @@ const handleOpenGalleria = async (payload: { callId: string; screenshotId: strin
     const foundIndex = screenshotData.value.findIndex((item) => item.id === payload.screenshotId);
     const targetIndex = foundIndex >= 0 ? foundIndex : payload.index;
 
-    if (screenshotData.value.length > 0) {
+    if (screenshotData.value.length) {
       galleriaActiveIndex.value = Math.max(0, Math.min(targetIndex, screenshotData.value.length - 1));
       galleriaVisible.value = true;
     }
