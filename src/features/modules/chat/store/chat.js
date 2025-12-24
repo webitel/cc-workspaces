@@ -54,6 +54,10 @@ const actions = {
     context.commit('ADD_CHAT', chat);
   },
 
+  SET_MEMBERS_TO_CHAT: (context, { conversationId, member }) => {
+    context.commit('SET_MEMBERS_TO_CHAT', { conversationId, member });
+  },
+
   ACCEPT: async (context) => {
     try {
       await context.getters.CHAT_ON_WORKSPACE.join();
@@ -173,6 +177,9 @@ const mutations = {
   },
   ADD_CHAT: (state, chat) => {
     state.chatList.push(chat);
+  },
+  SET_MEMBERS_TO_CHAT: (state, { conversationId, member }) => {
+    state.chatList.find((chat) => chat.conversationId === conversationId)?.members.push(member);
   },
   REMOVE_CHAT: (state, removedChat) => {
     state.chatList = state.chatList.filter((chat) => chat !== removedChat);
