@@ -41,8 +41,6 @@ import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
 import { CallTab } from '../enums/CallTab.enum';
-import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum.js';
-import VideoCallChat from '../module/video-call/module/chat/components/the-video-call-chat.vue';
 import Contacts from './call-contacts/call-contacts-container.vue';
 import CallFooter from './call-footer.vue';
 import CallHeader from './call-header.vue';
@@ -58,7 +56,6 @@ const callTabComponents = {
   [CallTab.History]: History,
   [CallTab.Transfer]: Transfer,
   [CallTab.Bridge]: Bridge,
-  [VideoCallTab.Chat]: VideoCallChat,
 };
 
 const props = defineProps({
