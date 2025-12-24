@@ -1,23 +1,55 @@
-import type { Ref } from 'vue';
+import { watch, type Ref } from 'vue';
 import { Permission, PermissionMessage } from '../types/permissions.types';
-import { watch } from 'vue';
 
-export function usePermissionDevice () {
-  const setPermission = (
-    target: Ref<Permission>,
-    status: boolean,
-    message: PermissionMessage = PermissionMessage.None,
-  ): void => {
-    target.value.status = status;
-    target.value.message = message;
+type PermissionPayload = {
+  status: boolean;
+  message?: PermissionMessage;
+};
+
+type SetPermissionArgs = {
+  target: Ref<Permission>;
+  payload: PermissionPayload;
+};
+
+type MediaPermissionPayload = {
+  state: PermissionState;
+  hasDevices: boolean;
+};
+
+type ApplyMediaPermissionArgs = {
+  target: Ref<Permission>;
+  payload: MediaPermissionPayload;
+};
+
+type SetupMediaPermissionWatchArgs = {
+  permissionState: Ref<PermissionState | undefined>;
+  permissionGranted: Ref<boolean>;
+  devices: Ref<MediaDeviceInfo[]>;
+  target: Ref<Permission>;
+  withToggle?: boolean;
+};
+
+type ApplyNotificationPermissionArgs = {
+  target: Ref<Permission>;
+  state: NotificationPermission | null | undefined;
+};
+
+export function usePermissionDevice() {
+  const setPermission = ({ target, payload }: SetPermissionArgs): void => {
+    target.value.status = payload.status;
+    target.value.message = payload.message ?? PermissionMessage.None;
   };
-  const applyMediaPermissionState = (
-    target: Ref<Permission>,
-    isGranted: boolean,
-    isDenied: boolean,
-    hasDevices: boolean,
-  ): void => {
-    let message = PermissionMessage.None;
+
+  const applyMediaPermissionState = ({
+     target,
+     payload,
+   }: ApplyMediaPermissionArgs): void => {
+    const { state, hasDevices } = payload;
+
+    const isGranted = state === 'granted';
+    const isDenied = state === 'denied';
+
+    let message: PermissionMessage | undefined;
 
     if (isDenied) {
       message = PermissionMessage.Denied;
@@ -25,7 +57,12 @@ export function usePermissionDevice () {
       message = PermissionMessage.NotFound;
     }
 
-    setPermission(target, isGranted && hasDevices, message);
+    const status = isGranted && hasDevices;
+
+    setPermission({
+      target,
+      payload: { status, message },
+    });
   };
 
 const setupMediaPermissionWatch = ({
@@ -34,37 +71,49 @@ const setupMediaPermissionWatch = ({
  devices,
  target,
  withToggle = false,
-}: {
-    permissionState: Ref<PermissionState | undefined>;
-    permissionGranted: Ref<boolean>;
-    devices: Ref<MediaDeviceInfo[]>;
-    target: Ref<Permission>;
-    withToggle?: boolean;
-  }) => {
+}: SetupMediaPermissionWatchArgs): void => {
     watch(
       [permissionState, permissionGranted, devices],
       ([state, granted, inputs]) => {
         if (!state) return;
 
-        const isGranted = state === 'granted';
-        const isDenied = state === 'denied';
         const hasDevices = granted || inputs.length > 0;
 
         if (withToggle) {
-          const isKnownState = isGranted || isDenied;
+          const isKnownState = state === 'granted' || state === 'denied';
           target.value.enabled = isKnownState;
-          target.value.disabled = !isKnownState;
+          target.value.disabled = !target.value.enabled;
         }
 
-        applyMediaPermissionState(target, isGranted, isDenied, hasDevices);
+        applyMediaPermissionState({
+          target,
+          payload: { state, hasDevices },
+        });
       },
       { immediate: true },
     );
   };
 
+  const applyNotificationPermissionState = ({
+    target,
+    state,
+  }: ApplyNotificationPermissionArgs): void => {
+    if (state === 'denied') {
+      setPermission({
+        target,
+        payload: { status: false, message: PermissionMessage.Denied },
+      });
+      return;
+    }
+
+    setPermission({ target, payload: { status: state === 'granted' }});
+  };
+
+
   return {
     setupMediaPermissionWatch,
     setPermission,
-    applyMediaPermissionState
-  }
+    applyMediaPermissionState,
+    applyNotificationPermissionState,
+  };
 }

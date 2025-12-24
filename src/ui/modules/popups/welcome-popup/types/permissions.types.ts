@@ -1,5 +1,5 @@
 export enum PermissionId {
-  Mic = 'mic',
+  Microphone = 'microphone',
   Notifications = 'notifications',
   Camera = 'camera',
 }
@@ -13,7 +13,7 @@ export enum PermissionMessage {
 export type Permission = {
   id: PermissionId;
   status: boolean;
-  message: PermissionMessage;
+  message?: PermissionMessage;
   icon: string;
   disabled?: boolean;
   toggle?: boolean;

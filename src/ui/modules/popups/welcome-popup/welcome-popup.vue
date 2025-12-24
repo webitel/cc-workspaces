@@ -76,7 +76,6 @@ const createPermission = (
 ): Permission => ({
   id,
   status: false,
-  message: PermissionMessage.None,
   icon,
   disabled: false,
   toggle: false,
@@ -87,15 +86,13 @@ const createPermission = (
 
 const {
   setupMediaPermissionWatch,
-  setPermission
+  setPermission,
+  applyNotificationPermissionState
 } = usePermissionDevice()
 
 const applyNotificationState = (state: NotificationPermission | null): void => {
-  if (state === 'granted') return setPermission(notification, true);
-  if (state === 'denied') return setPermission(notification, false, PermissionMessage.Denied);
-  setPermission(notification, false);
+  applyNotificationPermissionState({ target: notification, state });
 };
-
 const requestNotificationPermission = async (): Promise<void> => {
   if (typeof window === 'undefined' || !('Notification' in window)) return;
 
@@ -125,37 +122,43 @@ const {
   requestPermissions: false,
 });
 
-const micPermissionState = usePermission('microphone');
+const microphonePermissionState = usePermission('microphone');
 const cameraPermissionState = usePermission('camera');
 const notificationPermissionState = usePermission('notifications');
 
-const mic = ref<Permission>(createPermission(PermissionId.Mic, 'mic'));
+const mic = ref<Permission>(createPermission(PermissionId.Microphone, 'mic'));
 const notification = ref<Permission>(createPermission(PermissionId.Notifications, 'bell'));
 
 const camera = ref<Permission>(createPermission(PermissionId.Camera, 'video-cam'));
 
 const handleCameraToggle = async (value: boolean): Promise<void> => {
   camera.value.enabled = value;
-  camera.value.disabled = !value;
-
-  const granted = value ? await ensureCameraPermissions() : false;
+  camera.value.disabled = !camera.value.enabled;
 
   if (!value) {
-    setPermission(camera, false);
+    setPermission({ target: camera, payload: { status: false } });
     return;
   }
 
+  const granted = await ensureCameraPermissions();
+
   if (!granted) {
-    setPermission(camera, false, PermissionMessage.Denied);
+    setPermission({
+      target: camera,
+      payload: { status: false, message: PermissionMessage.Denied },
+    });
     return;
   }
 
   const hasDevices = cameraPermissionGranted.value || videoInputs.value.length > 0;
-  setPermission(
-    camera,
-    hasDevices,
-    hasDevices ? PermissionMessage.None : PermissionMessage.NotFound,
-  );
+
+  setPermission({
+    target: camera,
+    payload: {
+      status: hasDevices,
+      message: hasDevices ? undefined : PermissionMessage.NotFound,
+    },
+  });
 };
 
 camera.value = createPermission(PermissionId.Camera, 'video-cam', {
@@ -174,7 +177,7 @@ const permissions = computed<Permission[]>(() => [
 watch(notificationPermissionState, (state) => applyNotificationState(state), { immediate: true });
 
 setupMediaPermissionWatch({
-  permissionState: micPermissionState,
+  permissionState: microphonePermissionState,
   permissionGranted: micPermissionGranted,
   devices: audioInputs,
   target: mic,
