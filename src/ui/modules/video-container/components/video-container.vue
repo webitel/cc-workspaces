@@ -18,23 +18,26 @@
     :recordings="recordings"
     :actions="videoCallActions"
     :username="userName"
+    :size="videoCallSize"
     :overlay="false"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
     @action:zoom-screenshot="onZoomScreenshot"
     @action:close-screenshot="onCloseScreenshot"
+    @change-size="changeSize"
   />
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
 import { WtGalleria } from '@webitel/ui-sdk/components';
 import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import { useScreenShot } from '../composable/useScreenshot';
 import {
@@ -62,6 +65,7 @@ const videoCallActions = [
 const galleriaVisible = ref(false);
 const galleriaActiveIndex = ref(0);
 const screenshotData = ref<ScreenshotFileItem[]>([]);
+const videoCallSize = ref<ComponentSize>(ComponentSize.SM);
 
 const call = computed<any>(
   () => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
@@ -165,6 +169,11 @@ const handleOpenGalleria = async (payload: ScreenshotsOpenGalleriaPayload) => {
   }
 };
 
+const exitFullscreen = () => {
+  document.exitFullscreen()
+  videoCallSize.value = ComponentSize.SM;
+}
+
 onMounted(() => {
   eventBus.$on('screenshots:open-galleria', handleOpenGalleria);
 });
@@ -172,4 +181,14 @@ onMounted(() => {
 onBeforeUnmount(() => {
   eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
 });
+
+const changeSize = (size) => videoCallSize.value = size
+
+watch(galleriaVisible, (visible) => {
+  if (visible && videoCallSize.value === ComponentSize.LG) exitFullscreen();
+});
+watch(isVideo, (hasVideo) => {
+  if (!hasVideo) exitFullscreen()
+})
+
 </script>

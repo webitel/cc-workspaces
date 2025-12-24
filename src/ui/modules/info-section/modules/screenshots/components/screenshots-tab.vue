@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ $tc('objects.screenshots', 2) }}</h3>
+    <h3 class="screenshots__title">{{ $tc('objects.screenshots', 2) }}</h3>
     <wt-dummy
       v-if="!data.length"
       :text="t('webitelUI.empty.text.empty')"
@@ -104,5 +104,10 @@ onBeforeUnmount(() => {
   max-width: 100%;
   width: var(--screenshots-table-preview-width);
   height: var(--p-player-cam-preview-sm-height);
+}
+
+.screenshots__title {
+  @extend %typo-heading-3;
+
 }
 </style>
