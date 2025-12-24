@@ -87,7 +87,8 @@ const createPermission = (
 const {
   setupMediaPermissionWatch,
   setPermission,
-  applyNotificationPermissionState
+  applyNotificationPermissionState,
+  applyToggleState
 } = usePermissionDevice()
 
 const applyNotificationState = (state: NotificationPermission | null): void => {
@@ -132,8 +133,7 @@ const notification = ref<Permission>(createPermission(PermissionId.Notifications
 const camera = ref<Permission>(createPermission(PermissionId.Camera, 'video-cam'));
 
 const handleCameraToggle = async (value: boolean): Promise<void> => {
-  camera.value.enabled = value;
-  camera.value.disabled = !camera.value.enabled;
+  applyToggleState({ target: camera, enabled: value });
 
   if (!value) {
     setPermission({ target: camera, payload: { status: false } });

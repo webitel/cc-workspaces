@@ -34,6 +34,11 @@ type ApplyNotificationPermissionArgs = {
   state: NotificationPermission | null | undefined;
 };
 
+type ApplyToggleStateArgs = {
+  target: Ref<Permission>;
+  enabled: boolean;
+};
+
 export function usePermissionDevice() {
   const setPermission = ({ target, payload }: SetPermissionArgs): void => {
     target.value.status = payload.status;
@@ -109,11 +114,17 @@ const setupMediaPermissionWatch = ({
     setPermission({ target, payload: { status: state === 'granted' }});
   };
 
+  const applyToggleState = ({ target, enabled }: ApplyToggleStateArgs): void => {
+    target.value.enabled = enabled;
+    target.value.disabled = !enabled;
+  };
+
 
   return {
     setupMediaPermissionWatch,
     setPermission,
     applyMediaPermissionState,
     applyNotificationPermissionState,
+    applyToggleState
   };
 }
