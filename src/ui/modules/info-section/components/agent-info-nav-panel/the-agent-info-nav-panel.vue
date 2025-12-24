@@ -39,6 +39,6 @@ export default {
 .agent-info-nav-panel {
   display: grid;
   gap: var(--spacing-sm);
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 }
 </style>

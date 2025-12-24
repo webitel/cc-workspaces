@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <h3>{{ $tc('objects.screenshots', 2) }}</h3>
+  <div class="screenshots-tab">
+    <h3 class="screenshots-tab__title">{{ $tc('objects.screenshots', 2) }}</h3>
     <wt-dummy
       v-if="!data.length"
       :text="t('webitelUI.empty.text.empty')"
     />
     <wt-table
       v-else
-      class="screenshots-table"
+      class="screenshots-tab__table"
       :data="data"
       :headers="headers"
       :selectable="false"
     >
       <template #screenshot="{ item }">
         <img
-          class="screenshots-table__preview"
+          class="screenshots-tab__table--preview"
           :src="getMediaUrl(item.id, false)"
           @click="openScreenshotInGalleria(item)"
         >
@@ -100,9 +100,16 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.screenshots-table__preview {
-  max-width: 100%;
-  width: var(--screenshots-table-preview-width);
-  height: var(--p-player-cam-preview-sm-height);
+.screenshots-tab {
+
+  &__title {
+    @extend %typo-heading-3;
+  }
+
+  &__table--preview {
+    max-width: 100%;
+    width: var(--screenshots-table-preview-width);
+    height: var(--p-player-cam-preview-sm-height);
+  }
 }
 </style>
