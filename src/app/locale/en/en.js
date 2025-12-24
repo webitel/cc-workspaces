@@ -282,6 +282,12 @@ export default {
         denied: 'Permission denied',
       },
     },
+    camera: {
+      status: 'Camera permission status',
+      message: {
+        denied: 'Permission denied',
+      },
+    }
   },
   descTrackAuthPopup: {
     title: 'Attention',
