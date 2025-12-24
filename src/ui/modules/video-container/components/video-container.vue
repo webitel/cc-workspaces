@@ -18,14 +18,14 @@
     :recordings="recordings"
     :actions="videoCallActions"
     :username="userName"
-    :size="videoCallSize"
+    :size="videoContainerSize"
     :overlay="false"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
     @action:zoom-screenshot="onZoomScreenshot"
     @action:close-screenshot="onCloseScreenshot"
-    @change-size="changeSize"
+    @change-size="changeVideoContainerSize"
   />
 </template>
 
@@ -65,7 +65,7 @@ const videoCallActions = [
 const galleriaVisible = ref(false);
 const galleriaActiveIndex = ref(0);
 const screenshotData = ref<ScreenshotFileItem[]>([]);
-const videoCallSize = ref<ComponentSize>(ComponentSize.SM);
+const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
 const call = computed<any>(
   () => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
@@ -171,7 +171,7 @@ const handleOpenGalleria = async (payload: ScreenshotsOpenGalleriaPayload) => {
 
 const exitFullscreen = () => {
   document.exitFullscreen()
-  videoCallSize.value = ComponentSize.SM;
+  videoContainerSize.value = ComponentSize.SM;
 }
 
 onMounted(() => {
@@ -182,10 +182,10 @@ onBeforeUnmount(() => {
   eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
 });
 
-const changeSize = (size) => videoCallSize.value = size
+const changeVideoContainerSize = (containerSize) => videoContainerSize.value = containerSize
 
 watch(galleriaVisible, (visible) => {
-  if (visible && videoCallSize.value === ComponentSize.LG) exitFullscreen();
+  if (visible && videoContainerSize.value === ComponentSize.LG) exitFullscreen();
 });
 watch(isVideo, (hasVideo) => {
   if (!hasVideo) exitFullscreen()
