@@ -19,7 +19,6 @@ const getters = {
     }
 
     const video = taskOnWorkspace?.remoteVideo;
-    console.log(video);
 
     return [VideoMediaFlow.SendRecv].includes(video);
   },
