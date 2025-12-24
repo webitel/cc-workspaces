@@ -1,16 +1,22 @@
 <template>
-  <div>
-    <h3>{{ $tc('objects.screenshots', 2) }}</h3>
+  <div class="screenshots-tab">
+    <h3 class="screenshots-tab__title">{{ $tc('objects.screenshots', 2) }}</h3>
+    <wt-dummy
+      v-if="!data.length"
+      :text="t('webitelUI.empty.text.empty')"
+    />
     <wt-table
-      class="screenshots-table"
+      v-else
+      class="screenshots-tab__table"
       :data="data"
       :headers="headers"
       :selectable="false"
     >
       <template #screenshot="{ item }">
         <img
-          class="screenshots-table__preview"
+          class="screenshots-tab__table--preview"
           :src="getMediaUrl(item.id, false)"
+          @click="openScreenshotInGalleria(item)"
         >
       </template>
       <template #dataAndTime="{ item }">
@@ -34,7 +40,6 @@ import { computed, onActivated, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { eventBus } from '@webitel/ui-sdk/scripts';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 
 import { FileServicesAPI } from '@webitel/api-services/api';
 import { formatDate } from '@webitel/ui-sdk/utils';
@@ -67,10 +72,20 @@ const loadScreenshots = async () => {
   data.value = items;
 };
 
+const openScreenshotInGalleria = (item: any) => {
+  if (!call.value?.id || !item?.id) return;
+
+  const index = data.value.findIndex((screenshot) => screenshot.id === item.id);
+  eventBus.$emit('screenshots:open-galleria', {
+    screenshotId: item.id,
+    index: index >= 0 ? index : 0,
+  });
+};
+
 const removeFile = (item) => {
-  FileServicesAPI.delete([item.id]).then(res =>
-    data.value = data.value.filter(file => file.id !== item.id),
-  );
+  FileServicesAPI.delete([item.id]).then(() => {
+    data.value = data.value.filter(file => file.id !== item.id);
+  });
 };
 const getTime = (time) => formatDate(new Date(Number(time)), FormatDateMode.DATETIME);
 
@@ -85,9 +100,16 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.screenshots-table__preview {
-  max-width: 100%;
-  width: var(--screenshots-table-preview-width);
-  height: var(--p-player-cam-preview-sm-height);
+.screenshots-tab {
+
+  &__title {
+    @extend %typo-heading-3;
+  }
+
+  &__table--preview {
+    max-width: 100%;
+    width: var(--screenshots-table-preview-width);
+    height: var(--p-player-cam-preview-sm-height);
+  }
 }
 </style>

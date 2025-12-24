@@ -15,6 +15,7 @@
       @click="$emit('openTab', CallTab.Numpad)"
     ></wt-rounded-action>
     <wt-rounded-action
+      v-if="!isVideoCall"
       :active="isOnHold"
       :class="{
           'hidden': !isHold,
@@ -29,7 +30,6 @@
       @click="toggleHold"
     ></wt-rounded-action>
     <wt-rounded-action
-      v-if="!isVideoCall"
       :active="isOnMuted"
       :class="{
           'hidden': !isMuted,
