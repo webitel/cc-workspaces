@@ -24,7 +24,6 @@ const chatHandler = (context) => async (action, chat) => {
       context.dispatch('HANDLE_DESTROY_ACTION', { action, chat });
       break;
     default:
-    // console.log('default', action);
   }
 };
 
