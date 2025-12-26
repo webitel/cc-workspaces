@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang="ts">
+import { applyTransform,
+  notify,
+} from '@webitel/api-services/api/transformers';
 import { ChatAction, ChatContainer } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import applyTransform, {
-  notify,
-} from '@webitel/ui-sdk/src/api/transformers/index';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
@@ -33,6 +33,7 @@ const props = withDefaults(
     size: ComponentSize.MD,
   },
 );
+
 const store = useStore();
 
 const chat = computed(() =>
@@ -66,6 +67,10 @@ async function sendFiles(files: File[], options?: ResultCallbacks) {
 }
 
 onMounted(() => {
+  // @author ye.pohranichna
+  // because the video calls chat mast be always auto-answered
+  // can be removed after the fix on backend side
+  // https://webitel.atlassian.net/browse/WTEL-7689
   chat.value?.join()
 });
 

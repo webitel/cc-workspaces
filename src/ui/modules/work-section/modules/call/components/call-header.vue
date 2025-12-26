@@ -66,7 +66,6 @@
           color="secondary"
           rounded
           wide
-
           @click="emit('openTab', VideoCallTab.Chat)"
         />
       </slot>
@@ -109,9 +108,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-import { CallActions } from 'webitel-sdk';
 
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
@@ -119,13 +118,20 @@ import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
 
-interface Props {
-  currentTab?: string;
-  size?: string;
-}
+const props = withDefaults(
+  defineProps<{
+    currentTab?: string;
+    size?: string;
+  }>(),
+  {
+    currentTab: CallTab.Numpad,
+    size: ComponentSize.MD,
+  },
+);
 
-const props = defineProps<Props>();
-const emit = defineEmits(['openTab']);
+const emit = defineEmits<{
+  (e: 'openTab', value: string): void;
+}>();
 
 const store = useStore();
 
@@ -139,15 +145,9 @@ const isOnHistory = computed(() => props.currentTab === CallTab.History);
 const isOnBridge = computed(() => props.currentTab === CallTab.Bridge);
 const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
 const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat)
-const isBridge = computed(() => {
-  const c = call.value;
-  return (
-    (c.state !== CallActions.Hangup || c.state !== CallActions.Ringing) &&
-    callList.value?.filter(
-      (c) => c.state !== CallActions.Hangup || c.state !== CallActions.Ringing
-    ).length > 1
-  );
-});
+const isBridge = computed(() => callList.value?.length > 1);
+
+
 const isTransfer = computed(() => call.value?.allowHangup);
 const isHangup = computed(() => call.value?.allowHangup);
 const isCall = computed(() => isNewCall.value && call.value?.newNumber);
@@ -175,7 +175,7 @@ const setupHotkeys = () => {
 };
 
 onMounted(() => setupHotkeys());
-onUnmounted(() => hotkeyUnsubscribers.forEach((u) => u()));
+onUnmounted(() => hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe()));
 </script>
 
 <style lang="scss" scoped>
