@@ -127,14 +127,17 @@ const microphonePermissionState = usePermission('microphone');
 const cameraPermissionState = usePermission('camera');
 const notificationPermissionState = usePermission('notifications');
 
-const mic = ref<Permission>(createPermission(PermissionId.Microphone, 'mic'));
+const microphone = ref<Permission>(createPermission(PermissionId.Microphone, 'mic'));
 const notification = ref<Permission>(createPermission(PermissionId.Notifications, 'bell'));
 
 const camera = ref<Permission>(createPermission(PermissionId.Camera, 'video-cam'));
 
 const handleCameraToggle = async (value: boolean): Promise<void> => {
-  applyToggleState({ target: camera, enabled: value });
-
+  applyToggleState({
+    target: camera,
+    enabled: value,
+    onDisable: { status: false },
+  });
   if (!value) {
     setPermission({ target: camera, payload: { status: false } });
     return;
@@ -150,7 +153,7 @@ const handleCameraToggle = async (value: boolean): Promise<void> => {
     return;
   }
 
-  const hasDevices = cameraPermissionGranted.value || videoInputs.value.length > 0;
+  const hasDevices = cameraPermissionGranted.value || videoInputs.value.length;
 
   setPermission({
     target: camera,
@@ -169,7 +172,7 @@ camera.value = createPermission(PermissionId.Camera, 'video-cam', {
 });
 
 const permissions = computed<Permission[]>(() => [
-  mic.value,
+  microphone.value,
   notification.value,
   camera.value,
 ]);
@@ -180,7 +183,7 @@ setupMediaPermissionWatch({
   permissionState: microphonePermissionState,
   permissionGranted: micPermissionGranted,
   devices: audioInputs,
-  target: mic,
+  target: microphone,
 });
 
 setupMediaPermissionWatch({
@@ -188,7 +191,7 @@ setupMediaPermissionWatch({
   permissionGranted: cameraPermissionGranted,
   devices: videoInputs,
   target: camera,
-  withToggle: true,
+  controlToggleAvailability: true,
 });
 
 const initPermissionChecks = async (): Promise<void> => {

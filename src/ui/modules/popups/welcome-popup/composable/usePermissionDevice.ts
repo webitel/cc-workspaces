@@ -24,7 +24,7 @@ type ApplyMediaPermissionArgs = {
 type SetupMediaPermissionWatchArgs = {
   permissionState: Ref<PermissionState | undefined>;
   permissionGranted: Ref<boolean>;
-  devices: Ref<MediaDeviceInfo[]>;
+  availableDevices: Ref<MediaDeviceInfo[]>;
   target: Ref<Permission>;
   withToggle?: boolean;
 };
@@ -34,9 +34,12 @@ type ApplyNotificationPermissionArgs = {
   state: NotificationPermission | null | undefined;
 };
 
-type ApplyToggleStateArgs = {
+type ApplyToggleState = {
   target: Ref<Permission>;
   enabled: boolean;
+  onEnable?: PermissionPayload;
+  onDisable?: PermissionPayload;
+  syncDisabled?: boolean;
 };
 
 export function usePermissionDevice() {
@@ -70,24 +73,24 @@ export function usePermissionDevice() {
     });
   };
 
-const setupMediaPermissionWatch = ({
- permissionState,
- permissionGranted,
- devices,
- target,
- withToggle = false,
-}: SetupMediaPermissionWatchArgs): void => {
+  const setupMediaPermissionWatch = ({
+    permissionState,
+    permissionGranted,
+    availableDevices,
+    target,
+    controlToggleAvailability = false,
+  }: SetupMediaPermissionWatchArgs): void => {
     watch(
-      [permissionState, permissionGranted, devices],
-      ([state, granted, inputs]) => {
+      [permissionState, permissionGranted, availableDevices],
+      ([state, granted, devicesList]) => {
         if (!state) return;
 
-        const hasDevices = granted || inputs.length > 0;
+        const hasDevices = granted || devicesList.length;
 
-        if (withToggle) {
+        if (controlToggleAvailability) {
           const isKnownState = state === 'granted' || state === 'denied';
           target.value.enabled = isKnownState;
-          target.value.disabled = !target.value.enabled;
+          target.value.disabled = !isKnownState;
         }
 
         applyMediaPermissionState({
@@ -98,6 +101,7 @@ const setupMediaPermissionWatch = ({
       { immediate: true },
     );
   };
+
 
   const applyNotificationPermissionState = ({
     target,
@@ -114,10 +118,29 @@ const setupMediaPermissionWatch = ({
     setPermission({ target, payload: { status: state === 'granted' }});
   };
 
-  const applyToggleState = ({ target, enabled }: ApplyToggleStateArgs): void => {
+  const applyToggleState = ({
+    target,
+    enabled,
+    onEnable,
+    onDisable,
+    syncDisabled = true,
+  }: ApplyToggleState): void => {
     target.value.enabled = enabled;
-    target.value.disabled = !enabled;
+
+    if (syncDisabled) {
+      target.value.disabled = !enabled;
+    }
+
+    if (!enabled && onDisable) {
+      setPermission({ target, payload: onDisable });
+      return;
+    }
+
+    if (enabled && onEnable) {
+      setPermission({ target, payload: onEnable });
+    }
   };
+
 
 
   return {
