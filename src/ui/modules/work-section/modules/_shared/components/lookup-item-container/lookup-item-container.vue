@@ -88,6 +88,8 @@ const showEmpty = computed(() => !props.loading && props.empty);
 </script>
 
 <style scoped lang="scss">
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .lookup-item-container {
   display: flex;
   flex-direction: column;

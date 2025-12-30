@@ -107,6 +107,8 @@ onMounted(initShowFullContactState);
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .contact-card-general {
   display: flex;
   gap: var(--spacing-sm);

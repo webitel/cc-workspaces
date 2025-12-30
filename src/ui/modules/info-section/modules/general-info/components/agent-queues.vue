@@ -54,6 +54,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .agent-queues {
   .agent-queues-item {
     display: grid;

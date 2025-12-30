@@ -107,6 +107,8 @@ watch(() => activeIndex.value, (newIndex) => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .chat-helper-list {
   @extend %wt-scrollbar;
   display: flex;

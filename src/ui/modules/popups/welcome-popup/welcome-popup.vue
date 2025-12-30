@@ -138,6 +138,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .welcome-popup-permission {
   &__status {
     display: flex;

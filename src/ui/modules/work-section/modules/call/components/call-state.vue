@@ -84,6 +84,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .numpad-state {
   display: flex;
   align-items: center;

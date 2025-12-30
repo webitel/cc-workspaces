@@ -28,6 +28,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .chat-message-time {
   display: flex;
   flex-direction: column;

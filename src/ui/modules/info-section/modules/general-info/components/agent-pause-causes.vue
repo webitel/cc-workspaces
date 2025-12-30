@@ -54,6 +54,8 @@ const { representablePauseCause } = useRepresentableAgentPauseCause(pauseCauses)
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .agent-pause-causes {
   .agent-pause-causes-item {
     @extend %typo-body-1;

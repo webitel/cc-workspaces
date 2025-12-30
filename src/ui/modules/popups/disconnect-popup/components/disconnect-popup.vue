@@ -69,6 +69,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .disconnect-popup__main {
   text-align: center;
 }
