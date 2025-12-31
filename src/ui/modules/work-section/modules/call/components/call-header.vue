@@ -104,6 +104,12 @@
     <template #subtitle>
       {{ call?.displayNumber }}
     </template>
+
+    <template v-if="queueName" #queue>
+      <wt-chip color="secondary">
+        {{ queueName }}
+      </wt-chip>
+    </template>
   </task-header>
 </template>
 
@@ -114,6 +120,7 @@ import { useStore } from 'vuex';
 
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
@@ -157,6 +164,8 @@ const isCallChatExist = computed(() =>
 const isDisplayCallButton = computed(
   () => (isOnNumpad.value || isOnBridge.value) && isCall.value
 );
+
+const queueName = computed(() => getQueueName(call.value));
 
 
 const makeCall = () => store.dispatch('features/call/CALL');
