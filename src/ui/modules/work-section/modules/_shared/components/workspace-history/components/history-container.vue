@@ -92,16 +92,6 @@ const getMemberHistory = (argParams) => {
   return historyAPI.getHistory(params);
 };
 
-const getNumberHistory = (argParams) => {
-  const number = call.value.displayNumber;
-  const params = {
-    ...argParams,
-    search: number,
-  };
-  historyNumber.value = number;
-  return historyAPI.getHistory(params);
-};
-
 const resetHistoryNumber = () => {
   historyNumber.value = '';
 };
@@ -147,8 +137,6 @@ const fetchFn = async (argParams) => {
   const params = { ...argParams };
   if (workspaceState.value === WorkspaceStates.MEMBER) {
     response = await getMemberHistory(params);
-  } else if (!isNewCall.value) {
-    response = await getNumberHistory(params);
   } else {
     response = await getAgentHistory(params);
   }
@@ -187,6 +175,7 @@ const {
 
 // Custom reset that handles data properly
 const resetData = async () => {
+  isNext.value = false;
   dataPage.value = 1;
   dataList.value = [];
   await loadDataListWithGrouping();
@@ -194,9 +183,8 @@ const resetData = async () => {
 
 // Override handleIntersect to use custom loadDataList
 const customHandleIntersect = async () => {
-  if (isNext.value) {
-    await loadDataListWithGrouping();
-  }
+  if (!isNext.value) return;
+  await loadDataListWithGrouping();
 };
 
 watch(call, () => {

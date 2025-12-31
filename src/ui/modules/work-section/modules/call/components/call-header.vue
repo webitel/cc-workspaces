@@ -1,182 +1,190 @@
 <template>
   <task-header :size="size">
     <template #before-avatar>
-      <wt-rounded-action
-        class="call-action"
-        :active="isOnHistory"
-        :size="size"
-        icon="history"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.History)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        class="call-action"
-        :active="isOnContacts"
-        :size="size"
-        icon="contacts"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Contacts)"
-      ></wt-rounded-action>
+      <slot :name="CallTab.History">
+        <wt-rounded-action
+          class="call-action"
+          :active="isOnHistory"
+          :size="size"
+          icon="history"
+          color="secondary"
+          rounded
+          wide
+          @click="emit('openTab', CallTab.History)"
+        />
+      </slot>
+
+      <slot :name="CallTab.Contacts">
+        <wt-rounded-action
+          class="call-action"
+          :active="isOnContacts"
+          :size="size"
+          icon="contacts"
+          color="secondary"
+          rounded
+          wide
+          @click="emit('openTab', CallTab.Contacts)"
+        />
+      </slot>
     </template>
+
     <template #after-avatar>
-      <wt-rounded-action
-        v-if="isBridge"
-        class="call-action"
-        :active="isOnBridge"
-        :size="size"
-        icon="call-add-to"
-        color="secondary"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Bridge)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isTransfer"
-        class="call-action"
-        :size="size"
-        icon="call-transfer--filled"
-        color="transfer"
-        rounded
-        wide
-        @click="$emit('openTab', CallTab.Transfer)"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isHangup"
-        class="call-action"
-        :size="size"
-        icon="call-end--filled"
-        color="error"
-        rounded
-        wide
-        @click="hangup"
-      ></wt-rounded-action>
-      <wt-rounded-action
-        v-if="isDisplayCallButton"
-        class="call-action"
-        :size="size"
-        icon="call-ringing--filled"
-        color="success"
-        rounded
-        wide
-        @click="makeCall"
-      ></wt-rounded-action>
+      <slot :name="CallTab.Bridge">
+        <wt-rounded-action
+          v-if="isBridge"
+          class="call-action"
+          :active="isOnBridge"
+          :size="size"
+          icon="call-add-to"
+          color="secondary"
+          rounded
+          wide
+          @click="emit('openTab', CallTab.Bridge)"
+        />
+      </slot>
+
+      <slot :name="CallTab.Transfer">
+        <wt-rounded-action
+          v-if="isTransfer"
+          class="call-action"
+          :size="size"
+          icon="call-transfer--filled"
+          color="transfer"
+          rounded
+          wide
+          @click="emit('openTab', CallTab.Transfer)"
+        />
+      </slot>
+
+      <slot name="chat">
+        <wt-rounded-action
+          class="call-action"
+          :active="isOnChat"
+          :disabled="!isCallChatExist"
+          :size="size"
+          icon="chat"
+          color="secondary"
+          rounded
+          wide
+          @click="emit('openTab', VideoCallTab.Chat)"
+        />
+      </slot>
+
+      <slot name="hangup">
+        <wt-rounded-action
+          v-if="isHangup"
+          class="call-action"
+          :size="size"
+          icon="call-end--filled"
+          color="error"
+          rounded
+          wide
+          @click="hangup"
+        />
+      </slot>
+
+      <slot name="call">
+        <wt-rounded-action
+          v-if="isDisplayCallButton"
+          class="call-action"
+          :size="size"
+          icon="call-ringing--filled"
+          color="success"
+          rounded
+          wide
+          @click="makeCall"
+        />
+      </slot>
     </template>
+
     <template #title>
-      {{ displayName }}
+      {{ call?.displayName }}
     </template>
+
     <template #subtitle>
-      {{ displayNumber }}
+      {{ call?.displayNumber }}
+    </template>
+
+    <template v-if="queueName" #queue>
+      <wt-chip color="secondary">
+        {{ queueName }}
+      </wt-chip>
     </template>
   </task-header>
 </template>
 
-<script>
-  import { mapActions, mapGetters,mapState } from 'vuex';
-  import { CallActions } from 'webitel-sdk';
+<script lang="ts" setup>
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed, onMounted, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
 
-  import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-  import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
-  import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
-  import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
-  import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-  import { CallTab } from '../enums/CallTab.enum';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
+import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+import { CallTab } from '../enums/CallTab.enum';
+import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
 
-  export default {
-    name: 'CallHeader',
-    components: { TaskHeader },
-    mixins: [displayInfoMixin, sizeMixin],
-    props: {
-      currentTab: {
-        type: String,
-      },
+const props = withDefaults(
+  defineProps<{
+    currentTab?: string;
+    size?: string;
+  }>(),
+  {
+    currentTab: CallTab.Numpad,
+    size: ComponentSize.MD,
+  },
+);
+
+const emit = defineEmits<{
+  (e: 'openTab', value: string): void;
+}>();
+
+const store = useStore();
+
+const callList = computed(() => store.state['features/call']?.callList);
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+
+
+const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
+const isOnHistory = computed(() => props.currentTab === CallTab.History);
+const isOnBridge = computed(() => props.currentTab === CallTab.Bridge);
+const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
+const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat)
+const isBridge = computed(() => callList.value?.length > 1);
+
+
+const isTransfer = computed(() => call.value?.allowHangup);
+const isHangup = computed(() => call.value?.allowHangup);
+const isCall = computed(() => isNewCall.value && call.value?.newNumber);
+const isCallChatExist = computed(() =>
+  !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
+);
+const isDisplayCallButton = computed(
+  () => (isOnNumpad.value || isOnBridge.value) && isCall.value
+);
+
+const queueName = computed(() => getQueueName(call.value));
+
+
+const makeCall = () => store.dispatch('features/call/CALL');
+const hangup = () => store.dispatch('features/call/HANGUP');
+
+
+let hotkeyUnsubscribers: Array<() => void> = [];
+
+const setupHotkeys = () => {
+  hotkeyUnsubscribers = useHotkeys([
+    {
+      event: HotkeyAction.END,
+      callback: hangup,
     },
+  ]);
+};
 
-    data: () => ({
-      hotkeyUnsubscribers : [],
-      // Made CallTab available in template (required for Options API)
-      CallTab: CallTab,
-    }),
-
-    computed: {
-      ...mapState('features/call', {
-        callList: (state) => state.callList,
-      }),
-      ...mapGetters('features/call', {
-        call: 'CALL_ON_WORKSPACE',
-        isNewCall: 'IS_NEW_CALL',
-      }),
-
-      isOnContacts() {
-        return this.currentTab === CallTab.Contacts;
-      },
-
-      isOnHistory() {
-        return this.currentTab === CallTab.History;
-      },
-
-      isOnBridge() {
-        return this.currentTab === CallTab.Bridge;
-      },
-
-      isOnNumpad() {
-        return this.currentTab === CallTab.Numpad;
-      },
-
-      isBridge() {
-        return (this.call.state !== CallActions.Hangup
-          || this.call.state !== CallActions.Ringing)
-          && this.callList.filter((call) => (
-            call.state !== CallActions.Hangup
-            || call.state !== CallActions.Ringing
-          )).length > 1;
-      },
-
-      isTransfer() {
-        return this.call.allowHangup;
-      },
-
-      isHangup() {
-        return this.call.allowHangup;
-      },
-
-      isCall() {
-        return this.isNewCall && this.call.newNumber;
-      },
-
-      isDisplayCallButton() {
-        return (this.isOnNumpad || this.isOnBridge) && this.isCall;
-      }
-    },
-
-    methods: {
-      ...mapActions('features/call', {
-        makeCall: 'CALL',
-        hangup: 'HANGUP',
-        setNumber: 'SET_NEW_NUMBER',
-      }),
-      setupHotkeys() {
-        const subscribers = [
-          {
-            event: HotkeyAction.END,
-            callback: this.hangup
-          }
-        ];
-        this.hotkeyUnsubscribers  = useHotkeys(subscribers);
-      }
-    },
-
-    mounted() {
-      this.setupHotkeys();
-    },
-
-    unmounted() {
-      this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
-    },
-  };
+onMounted(() => setupHotkeys());
+onUnmounted(() => hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe()));
 </script>
 
 <style lang="scss" scoped>

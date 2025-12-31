@@ -26,12 +26,14 @@ const actions = {
   HANDLE_CHAT_EVENT: (context, { action, chat }) => {
     // @author @stanislav-kozak
     // We got setting from admin panel to check if we need to send push notification and sound notification
+    // By default newMessage and newChat notification if null should be true
+    // https://webitel.atlassian.net/browse/WTEL-7865
     const isNewMessageSoundNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
-    ](EngineSystemSettingName.NewMessageSoundNotification);
+    ](EngineSystemSettingName.NewMessageSoundNotification) ?? true;
     const isNewChatSoundNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
-    ](EngineSystemSettingName.NewChatSoundNotification);
+    ](EngineSystemSettingName.NewChatSoundNotification) ?? true;
     const isChatEndPushNotification = context.rootGetters[
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.ChatEndPushNotification);

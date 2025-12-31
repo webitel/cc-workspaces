@@ -6,6 +6,7 @@ import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
 import missed from './modules/missed-calls/store/missed-calls';
+import videoCall from './video-call/video-call';
 import isIncomingRinging from './scripts/isIncomingRinging';
 
 const state = {
@@ -103,7 +104,7 @@ const actions = {
       ? context.getters.GET_CALL_BY_ID(callId)
       : context.getters.CALL_ON_WORKSPACE;
     if (call.allowAnswer) {
-      const params = { ...ANSWER_PARAMS, video: context.state.isVideo };
+      const params = { ...ANSWER_PARAMS, video: context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'] };
       await call.answer(params);
       await context.dispatch('SET_WORKSPACE', call);
     }
@@ -268,5 +269,5 @@ export default {
   getters,
   actions,
   mutations,
-  modules: { missed, manual },
+  modules: { missed, manual, videoCall },
 };

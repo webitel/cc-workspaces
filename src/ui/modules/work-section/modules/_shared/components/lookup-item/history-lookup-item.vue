@@ -74,7 +74,9 @@
 </template>
 
 <script>
+import { FormatDateMode } from '@webitel/ui-sdk/enums'
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
+import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 
@@ -132,8 +134,7 @@ export default {
     },
 
     date() {
-      const createdAt = new Date(+this.item.createdAt);
-      return createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+      return formatDate(+this.item.createdAt, FormatDateMode.TIME);
     },
 
     duration() {

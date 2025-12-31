@@ -6,7 +6,13 @@
     @click="$emit('click', task)"
   >
     <template #icon>
+      <wt-icon
+        v-if="isVideoCall"
+        icon="video-cam"
+        color="success"
+      />
       <img
+        v-else
         :alt="task.state"
         :src="sonarIcon"
       >
@@ -156,6 +162,9 @@ export default {
   computed: {
     ...mapGetters('features/call', {
       normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
+    }),
+    ...mapGetters('features/call/videoCall', {
+      isVideoCall: 'IS_VIDEO_CALL',
     }),
     isHold() {
       return this.task.isHold;
