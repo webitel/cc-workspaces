@@ -3,7 +3,7 @@
     v-bind="$attrs"
     :value="date"
     mode="datetime"
-    @input="$emit('input', $event)"
+    @input="handleInput"
   />
 </template>
 
@@ -20,9 +20,14 @@ export default {
   },
   computed: {
     date() {
-     return !this.value || this.value === 'now'
+      return !this.value || this.value === 'now'
         ? Date.now()
         : this.value;
+    },
+  },
+  methods: {
+    handleInput(timestamp) {
+      this.$emit('input', timestamp);
     },
   },
 };
