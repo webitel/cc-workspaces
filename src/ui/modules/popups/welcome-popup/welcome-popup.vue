@@ -37,13 +37,33 @@
           {{ $t(`welcomePopup.notifications.message.${notification.message}`) }}
         </p>
       </div>
+
+      <div class="welcome-popup-permission">
+        <div class="welcome-popup-permission__status">
+          <wt-icon icon="video-cam"></wt-icon>
+          {{ $t('welcomePopup.camera.status') }}:
+
+          <wt-indicator
+            :color="camera.status ? 'success' : 'error'"
+            size="sm"
+          ></wt-indicator>
+
+          <wt-switcher
+            class="welcome-popup-permission__switcher"
+            :model-value="camera.enabled"
+            :disabled="camera.toggleDisabled"
+            @update:model-value="handleCameraToggle"
+          />
+        </div>
+
+        <p v-if="camera.message" class="welcome-popup-permission__detail">
+          {{ $t(`welcomePopup.camera.message.${camera.message}`) }}
+        </p>
+      </div>
     </template>
+
     <template #actions>
-      <wt-button
-        wide
-        :loading="loading"
-        @click="close"
-      >
+      <wt-button wide :loading="loading" @click="close">
         {{ $t('reusable.ok') }}
       </wt-button>
     </template>
@@ -69,6 +89,12 @@ export default {
     notification: {
       status: false,
       message: '',
+    },
+    camera: {
+      status: false,
+      message: '',
+      enabled: false,
+      toggleDisabled: false,
     },
   }),
   created() {
@@ -100,6 +126,18 @@ export default {
         else if (err.message.includes('Requested device not found')) this.mic.message = 'notFound';
       }
     },
+    async checkCamera() {
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+        this.camera.status = true;
+        this.camera.message = '';
+      } catch (err) {
+        this.camera.status = false;
+        if (err?.message?.includes('Permission denied')) this.camera.message = 'denied';
+        else if (err?.message?.includes('Requested device not found')) this.camera.message = 'notFound';
+        else this.camera.message = 'denied';
+      }
+    },
     async checkNotifications() {
       try {
         const status = await window.Notification.requestPermission();
@@ -119,6 +157,22 @@ export default {
       this.checkMic();
       this.checkNotifications();
     },
+
+    async handleCameraToggle(value) {
+      this.camera.enabled = value;
+      this.camera.message = '';
+
+      if (!value) {
+        this.camera.status = false;
+        return;
+      }
+
+      await this.checkCamera();
+      if (!this.camera.status) {
+        this.camera.enabled = false;
+      }
+    },
+
     handleKeyPress(e) {
       if (e.keyCode === 13 // enter
         || e.key === ' '
