@@ -23,7 +23,7 @@
     </template>
 
     <template #subtitle>
-      {{ task.displayNumber }}
+      {{ displayNumber }}
     </template>
 
     <template #timer>
@@ -102,7 +102,7 @@
     </template>
 
     <template #tooltip-subtitle>
-      {{ task.displayNumber }}
+      {{ displayNumber }}
     </template>
 
     <template
@@ -160,6 +160,9 @@ export default {
   name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
   computed: {
+    ...mapGetters('features/call', {
+      normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
+    }),
     ...mapGetters('features/call/videoCall', {
       isVideoCall: 'IS_VIDEO_CALL',
     }),
@@ -173,6 +176,11 @@ export default {
 
     isRinging() {
       return isIncomingRinging(this.task);
+    },
+
+    displayNumber() {
+      //https://webitel.atlassian.net/browse/WTEL-8215
+      return this.normalizePhoneNumber(this.task.displayNumber);
     },
 
     sonarIcon() {
