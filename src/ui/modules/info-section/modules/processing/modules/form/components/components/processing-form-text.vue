@@ -158,6 +158,11 @@ export default {
       margin-right: var(--spacing-xs);
     }
   }
-}
 
+  &__content {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
 </style>
