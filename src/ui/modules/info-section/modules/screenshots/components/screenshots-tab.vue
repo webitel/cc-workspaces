@@ -104,6 +104,7 @@ onBeforeUnmount(() => {
 
   &__title {
     @extend %typo-heading-3;
+    margin-bottom: var(--spacing-sm);
   }
 
   &__table--preview {
