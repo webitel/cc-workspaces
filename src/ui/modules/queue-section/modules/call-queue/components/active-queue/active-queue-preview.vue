@@ -179,6 +179,7 @@ export default {
     },
 
     displayNumber() {
+      //https://webitel.atlassian.net/browse/WTEL-8215
       return this.normalizePhoneNumber(this.task.displayNumber);
     },
 
