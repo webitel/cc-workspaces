@@ -282,6 +282,12 @@ export default {
       message: {
         denied: 'Запрещено',
       },
+      camera: {
+        status: 'Разрешение на использование Камеры',
+        message: {
+          denied: 'Запрещено',
+        },
+      },
     },
   },
   descTrackAuthPopup: {

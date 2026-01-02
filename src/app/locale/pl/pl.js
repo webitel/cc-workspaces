@@ -278,6 +278,12 @@ export default {
       message: {
         denied: 'Odmowa dostępu',
       },
+      camera: {
+        status: 'Status uprawnień do kamery',
+        message: {
+          denied: 'Odmowa dostępu',
+        },
+      },
     },
   },
   descTrackAuthPopup: {

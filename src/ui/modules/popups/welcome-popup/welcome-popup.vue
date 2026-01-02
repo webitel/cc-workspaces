@@ -126,7 +126,7 @@ export default {
         else if (err.message.includes('Requested device not found')) this.mic.message = 'notFound';
       }
     },
-    async checkCamera() {
+    async requestCameraAccess() {
       try {
         await navigator.mediaDevices.getUserMedia({ video: true });
         this.camera.status = true;
@@ -136,6 +136,17 @@ export default {
         if (err?.message?.includes('Permission denied')) this.camera.message = 'denied';
         else if (err?.message?.includes('Requested device not found')) this.camera.message = 'notFound';
         else this.camera.message = 'denied';
+      }
+    },
+    async getCameraPermissionState() {
+      try {
+        const res = await navigator.permissions.query({ name: 'camera' });
+        if (res.state !== 'granted') return
+        this.camera.status = true;
+        this.camera.message = '';
+        this.camera.enabled = true;
+      } catch {
+        return 'unknown';
       }
     },
     async checkNotifications() {
@@ -156,6 +167,7 @@ export default {
     checkPermissions() {
       this.checkMic();
       this.checkNotifications();
+      this.getCameraPermissionState()
     },
 
     async handleCameraToggle(value) {
@@ -167,7 +179,7 @@ export default {
         return;
       }
 
-      await this.checkCamera();
+      await this.requestCameraAccess();
       if (!this.camera.status) {
         this.camera.enabled = false;
       }

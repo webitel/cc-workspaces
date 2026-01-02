@@ -277,6 +277,12 @@ export default {
       message: {
         denied: 'Từ chối quyền',
       },
+      camera: {
+        status: 'Trạng thái quyền truy cập camera',
+        message: {
+          denied: 'Từ chối quyền',
+        },
+      },
     },
   },
   descTrackAuthPopup: {
