@@ -144,13 +144,13 @@
 </template>
 
 <script>
-import { CallActions, CallDirection } from 'webitel-sdk';
 import { mapGetters } from 'vuex';
+import { CallActions, CallDirection } from 'webitel-sdk';
 
-import activeSonar from '../../../../../../../app/assets/call-sonars/active-sonar.svg';
-import holdSonar from '../../../../../../../app/assets/call-sonars/hold-sonar.svg';
-import inboundSonar from '../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
-import ringingSonar from '../../../../../../../app/assets/call-sonars/ringing-sonar.svg';
+import blackSonar from '../../../../../../../app/assets/call-sonars/black-sonar.svg';
+import greenSonar from '../../../../../../../app/assets/call-sonars/green-sonar.svg';
+import redSonar from '../../../../../../../app/assets/call-sonars/red-sonar.svg';
+import yellowSonar from '../../../../../../../app/assets/call-sonars/yellow-sonar.svg';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
@@ -184,12 +184,12 @@ export default {
     },
 
     sonarIcon() {
-      if (this.task.isHold) return holdSonar;
+      if (this.task.isHold) return yellowSonar;
       if (this.task.state === CallActions.Ringing) {
-        if (this.task.direction === CallDirection.Inbound) return inboundSonar;
-        return ringingSonar;
+        if (this.task.direction === CallDirection.Inbound) return redSonar;
+        return blackSonar;
       }
-      return activeSonar;
+      return greenSonar;
     },
     eavesdropStatusIcon() {
       if (this.task.eavesdropIsConference) return 'conference';
