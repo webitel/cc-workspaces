@@ -279,6 +279,12 @@ export default {
         denied: 'Permisiune refuzată',
       },
     },
+    camera: {
+      status: 'Starea permisiunii camerei',
+      message: {
+        denied: 'Permisiune refuzată',
+      }
+    },
   },
   descTrackAuthPopup: {
     title: 'Atenție',

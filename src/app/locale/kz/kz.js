@@ -277,6 +277,12 @@ export default {
         denied: 'Тыйым салынған',
       },
     },
+    camera: {
+      status: 'Камераны пайдалануға рұқсат',
+      message: {
+        denied: 'Тыйым салынған',
+      },
+    },
   },
   descTrackAuthPopup: {
     title: 'Назар аударыңыз',
