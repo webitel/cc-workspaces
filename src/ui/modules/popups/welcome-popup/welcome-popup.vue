@@ -138,6 +138,17 @@ export default {
         else this.camera.message = 'denied';
       }
     },
+    async getCameraPermissionState() {
+      try {
+        const res = await navigator.permissions.query({ name: 'camera' });
+        if (res.state !== 'granted') return
+        this.camera.status = true;
+        this.camera.message = '';
+        this.camera.enabled = true;
+      } catch {
+        return 'unknown';
+      }
+    },
     async checkNotifications() {
       try {
         const status = await window.Notification.requestPermission();
@@ -156,6 +167,7 @@ export default {
     checkPermissions() {
       this.checkMic();
       this.checkNotifications();
+      this.getCameraPermissionState()
     },
 
     async handleCameraToggle(value) {
