@@ -272,6 +272,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .radial-progress-container {
   position: relative;
 }

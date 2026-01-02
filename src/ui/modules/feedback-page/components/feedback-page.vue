@@ -73,6 +73,8 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .feedback-page {
   &__content {
     position: absolute;

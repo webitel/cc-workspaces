@@ -232,6 +232,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .workspace-section {
   display: flex;
   flex-direction: column;

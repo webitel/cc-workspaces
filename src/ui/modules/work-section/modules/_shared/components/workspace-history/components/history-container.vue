@@ -193,7 +193,9 @@ watch(call, () => {
 </script>
 
 <style lang="scss" scoped>
-  .history-container-contact{
+@use '@webitel/ui-sdk/src/css/main' as *;
+
+.history-container-contact{
     display: flex;
     flex-direction: column;
     gap: var(--spacing-2xs);

@@ -128,6 +128,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 %typo-timer-digits {
   font-family: 'Montserrat', monospace;
   font-size: 64px;

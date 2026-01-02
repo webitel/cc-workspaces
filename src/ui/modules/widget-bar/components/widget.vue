@@ -67,6 +67,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 $widget-inbound-color: var(--primary-color);
 $widget-handled-color: var(--success-color);
 $widget-missed-color: var(--error-color);

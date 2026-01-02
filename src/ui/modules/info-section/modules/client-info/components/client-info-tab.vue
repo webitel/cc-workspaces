@@ -60,6 +60,8 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .client-info {
   @extend %wt-scrollbar;
   max-height: 100%;

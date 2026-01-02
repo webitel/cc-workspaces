@@ -80,6 +80,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .client-info-member {
   @extend %typo-body-1;
   display: flex;

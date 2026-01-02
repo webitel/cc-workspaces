@@ -60,6 +60,7 @@ const content = computed(() =>
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-activity-info {
   display: flex;

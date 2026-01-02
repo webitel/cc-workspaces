@@ -118,6 +118,8 @@ const iconColor = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .chat-queue-preview-md {
   position: relative;
   display: flex;

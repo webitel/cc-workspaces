@@ -30,6 +30,7 @@ const emit = defineEmits(['scroll']);
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
 
 .scroll-to-bottom-btn {
   position: absolute;

@@ -132,6 +132,8 @@ watch([
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .contact {
   @extend %typo-body-1;
   @extend %wt-scrollbar;

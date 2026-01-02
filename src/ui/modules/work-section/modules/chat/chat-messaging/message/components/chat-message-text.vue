@@ -36,6 +36,7 @@ const text = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-text {
   @extend %typo-body-1;

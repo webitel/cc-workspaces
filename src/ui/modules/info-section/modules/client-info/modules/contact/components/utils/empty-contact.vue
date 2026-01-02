@@ -38,6 +38,8 @@ function add() {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .empty-contact {
   display: flex;
   gap: var(--spacing-sm);

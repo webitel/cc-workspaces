@@ -52,6 +52,8 @@ const renewProcessing = (prolongationSec) => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .processing-wrapper {
   height: 100%;
   display: flex;

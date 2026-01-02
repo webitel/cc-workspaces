@@ -55,6 +55,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .chat-message-document {
   display: flex;
   align-items: flex-start;
