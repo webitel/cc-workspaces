@@ -179,8 +179,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Qoʻngʻiroq qilinmoqda...',
-      hold: 'Kutish',
+      ringing: 'Qoʻngʻiroq',
+      inCall: 'Suhbatda',
+      onHold: 'Kutish',
       hangup: 'Tugatish',
     },
     chat: {

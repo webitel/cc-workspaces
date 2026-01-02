@@ -183,8 +183,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Ringing..',
-      hold: 'Hold',
+      ringing: 'Ringing',
+      inCall: 'In call',
+      onHold: 'On hold',
       hangup: 'Hangup',
     },
     chat: {

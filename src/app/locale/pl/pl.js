@@ -179,8 +179,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Dzwoni...',
-      hold: 'Wstrzymaj',
+      ringing: 'Dzwoni',
+      inCall: 'W rozmowie',
+      onHold: 'Wstrzymane',
       hangup: 'Zakończ',
     },
     chat: {

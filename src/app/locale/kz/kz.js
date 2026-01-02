@@ -178,8 +178,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'қоңырау шалудамыз',
-      hold: 'Ұстап тұру',
+      ringing: 'Қоңырау шалу',
+      inCall: 'Сөйлесуде',
+      onHold: 'Ұстап тұру',
       hangup: 'Соңы',
     },
     chat: {
