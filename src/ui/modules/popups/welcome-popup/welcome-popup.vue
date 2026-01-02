@@ -126,7 +126,7 @@ export default {
         else if (err.message.includes('Requested device not found')) this.mic.message = 'notFound';
       }
     },
-    async checkCamera() {
+    async requestCameraAccess() {
       try {
         await navigator.mediaDevices.getUserMedia({ video: true });
         this.camera.status = true;
@@ -179,7 +179,7 @@ export default {
         return;
       }
 
-      await this.checkCamera();
+      await this.requestCameraAccess();
       if (!this.camera.status) {
         this.camera.enabled = false;
       }
