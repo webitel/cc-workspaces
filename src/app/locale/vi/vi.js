@@ -178,8 +178,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Đang đổ chuông...',
-      hold: 'Giữ máy',
+      ringing: 'Đang đổ chuông',
+      inCall: 'Đang gọi',
+      onHold: 'Giữ máy',
       hangup: 'Kết thúc',
     },
     chat: {

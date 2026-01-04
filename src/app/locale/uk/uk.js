@@ -184,8 +184,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Телефоную..',
-      hold: 'Утримання',
+      ringing: 'Телефоную',
+      inCall: 'У розмові',
+      onHold: 'На утриманні',
       hangup: 'Кінець',
     },
     chat: {
