@@ -47,15 +47,7 @@
             :color="camera.status ? 'success' : 'error'"
             size="sm"
           ></wt-indicator>
-
-          <wt-switcher
-            class="welcome-popup-permission__switcher"
-            :model-value="camera.enabled"
-            :disabled="camera.toggleDisabled"
-            @update:model-value="handleCameraToggle"
-          />
         </div>
-
         <p v-if="camera.message" class="welcome-popup-permission__detail">
           {{ $t(`welcomePopup.camera.message.${camera.message}`) }}
         </p>
@@ -93,8 +85,6 @@ export default {
     camera: {
       status: false,
       message: '',
-      enabled: false,
-      toggleDisabled: false,
     },
   }),
   created() {
@@ -122,31 +112,17 @@ export default {
         this.mic.status = true;
       } catch (err) {
         this.mic.status = false;
-        if (err.message.includes('Permission denied')) this.mic.message = 'denied';
-        else if (err.message.includes('Requested device not found')) this.mic.message = 'notFound';
+        this.mic.message = this.getPermissionErrorMessage(err);
+
       }
     },
     async requestCameraAccess() {
       try {
         await navigator.mediaDevices.getUserMedia({ video: true });
         this.camera.status = true;
-        this.camera.message = '';
       } catch (err) {
         this.camera.status = false;
-        if (err?.message?.includes('Permission denied')) this.camera.message = 'denied';
-        else if (err?.message?.includes('Requested device not found')) this.camera.message = 'notFound';
-        else this.camera.message = 'denied';
-      }
-    },
-    async getCameraPermissionState() {
-      try {
-        const res = await navigator.permissions.query({ name: 'camera' });
-        if (res.state !== 'granted') return
-        this.camera.status = true;
-        this.camera.message = '';
-        this.camera.enabled = true;
-      } catch {
-        return 'unknown';
+        this.camera.message = this.getPermissionErrorMessage(err);
       }
     },
     async checkNotifications() {
@@ -167,22 +143,12 @@ export default {
     checkPermissions() {
       this.checkMic();
       this.checkNotifications();
-      this.getCameraPermissionState()
+      this.requestCameraAccess()
     },
 
-    async handleCameraToggle(value) {
-      this.camera.enabled = value;
-      this.camera.message = '';
-
-      if (!value) {
-        this.camera.status = false;
-        return;
-      }
-
-      await this.requestCameraAccess();
-      if (!this.camera.status) {
-        this.camera.enabled = false;
-      }
+    getPermissionErrorMessage (err) {
+      if (err?.message?.includes('Requested device not found')) return 'notFound'
+      return 'denied';
     },
 
     handleKeyPress(e) {
