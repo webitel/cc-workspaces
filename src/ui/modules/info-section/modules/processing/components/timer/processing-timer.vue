@@ -71,7 +71,7 @@ const { t } = useI18n();
 const now = computed(() => store.state.ui.now.now);
 
 const processingSecLeft = computed(() => {
-  return Math.floor((props.processingTimeoutAt - now.value) / ms);
+  return Math.max(0, Math.floor((props.processingTimeoutAt - now.value) / ms));
 });
 
 const processingEndSec = computed(() => {

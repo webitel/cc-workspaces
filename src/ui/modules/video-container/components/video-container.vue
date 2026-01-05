@@ -169,10 +169,20 @@ const handleOpenGalleria = async (payload: ScreenshotsOpenGalleriaPayload) => {
   }
 };
 
-const exitFullscreen = () => {
-  document.exitFullscreen()
-  videoContainerSize.value = ComponentSize.SM;
-}
+const exitFullscreen = async () => {
+  if (!document.fullscreenElement) {
+    videoContainerSize.value = ComponentSize.SM;
+    return;
+  }
+
+  try {
+    await document.exitFullscreen();
+  } catch (e) {
+    console.warn('exitFullscreen failed', e);
+  } finally {
+    videoContainerSize.value = ComponentSize.SM;
+  }
+};
 
 onMounted(() => {
   eventBus.$on('screenshots:open-galleria', handleOpenGalleria);
