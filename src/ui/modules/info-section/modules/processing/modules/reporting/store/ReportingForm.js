@@ -1,3 +1,5 @@
+import { toNaiveUtcTimestamp } from '../../../script/naiveUtcTimestamp';
+
 export default class ReportingForm {
   // Sent props - props, sent to task reporting
   success = true;
@@ -13,7 +15,7 @@ export default class ReportingForm {
       description: this.description,
     };
     if (this.isScheduleCall) {
-      reporting.nextDistributeAt = this.nextDistributeAt;
+      reporting.nextDistributeAt = toNaiveUtcTimestamp(this.nextDistributeAt);
     }
 
     return reporting;
