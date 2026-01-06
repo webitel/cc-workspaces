@@ -64,7 +64,7 @@ export default {
       return this.isCommSelected;
     },
     queueName() {
-      return this.member ? getQueueName(this.member) : '';
+      return getQueueName(this.member);
     },
   },
 
