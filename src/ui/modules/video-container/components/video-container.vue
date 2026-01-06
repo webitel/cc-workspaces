@@ -74,10 +74,13 @@ const call = computed<any>(
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
-//@author o.chorpita
-// create a MediaStream containing only the video track,
-// to prevent duplicated audio playback (echo)
-//https://webitel.atlassian.net/browse/WTEL-8408
+/**
+ * @author o.chorpita
+ * // create a MediaStream containing only the video track,
+ * // to prevent duplicated audio playback (echo)
+ * //https://webitel.atlassian.net/browse/WTEL-8408
+ */
+
 const senderStream = computed<MediaStream | undefined>(() => {
   const stream = localStreams.value[0]
   if (!stream) return undefined
