@@ -19,7 +19,8 @@ export default class ReportingForm {
      * @author @rzaritskyi
      *
      * [WTEL-8323](https://webitel.atlassian.net/browse/WTEL-8323)
-     * Backend expects a raw(naive) timestamp without timezone offsets
+     * Backend expects a raw(naive) timestamp without timezone offsets.
+     * A naive datetime is one that lacks any associated timezone information.
      */
       reporting.nextDistributeAt = toNaiveUtcTimestamp(this.nextDistributeAt);
     }
