@@ -113,6 +113,7 @@ onBeforeUnmount(() => {
   &__table--preview {
     max-width: 100%;
     width: var(--p-player-cam-preview-sm-width);
+    //Override image component height to ensure the overlay matches the image size
     height: var(--p-player-cam-preview-sm-height)!important;
   }
 }
