@@ -74,7 +74,7 @@ const callState = computed(() => {
     case CallActions.Ringing:
       return t('workspaceSec.callState.ringing');
     case CallActions.Hold:
-      return t('workspaceSec.callState.hold');
+      return t('workspaceSec.callState.onHold');
     case CallActions.Hangup:
       return t('workspaceSec.callState.hangup');
     case CallActions.Active:
