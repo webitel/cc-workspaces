@@ -1,3 +1,5 @@
+import { toNaiveUtcTimestamp } from '../../../script/naiveUtcTimestamp';
+
 export default class ReportingForm {
   // Sent props - props, sent to task reporting
   success = true;
@@ -13,7 +15,14 @@ export default class ReportingForm {
       description: this.description,
     };
     if (this.isScheduleCall) {
-      reporting.nextDistributeAt = this.nextDistributeAt;
+     /**
+     * @author @rzaritskyi
+     *
+     * [WTEL-8323](https://webitel.atlassian.net/browse/WTEL-8323)
+     * Backend expects a raw(naive) timestamp without timezone offsets.
+     * A naive datetime is one that lacks any associated timezone information.
+     */
+      reporting.nextDistributeAt = toNaiveUtcTimestamp(this.nextDistributeAt);
     }
 
     return reporting;
