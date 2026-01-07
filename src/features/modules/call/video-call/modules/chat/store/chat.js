@@ -1,7 +1,7 @@
 import {
   isMemberTypeBot,
   isSelfSideChatMessage,
-} from '../../../../../chat/scripts/formatChatMessages.js';
+} from '../../../../../chat/scripts/formatChatMessages';
 
 const state = {
 };
