@@ -1,3 +1,4 @@
+import { toNaiveUtcTimestamp } from '../../../../script/naiveUtcTimestamp';
 import ReportingForm from '../ReportingForm';
 
 const comm = { id: '123' };
@@ -30,10 +31,12 @@ describe('Reporting class', () => {
 
     reporting.nextDistributeAt = nextDistributeAt;
 
+    const nextDistributeAtNaive = toNaiveUtcTimestamp(nextDistributeAt);
+
     const finalReporting = {
       success: true,
       description: '',
-      nextDistributeAt,
+      nextDistributeAt: nextDistributeAtNaive,
     };
     Object.assign(reporting, finalReporting);
     const result = reporting.generateReporting();

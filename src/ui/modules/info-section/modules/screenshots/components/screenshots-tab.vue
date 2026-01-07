@@ -13,11 +13,13 @@
       :selectable="false"
     >
       <template #screenshot="{ item }">
-        <img
+        <wt-image
           class="screenshots-tab__table--preview"
           :src="getMediaUrl(item.id, false)"
+          overlay-icon="zoom-in"
+          :size="ComponentSize.XXS"
           @click="openScreenshotInGalleria(item)"
-        >
+        />
       </template>
       <template #dataAndTime="{ item }">
         {{ getTime(item.uploaded_at) }}
@@ -48,6 +50,7 @@ import {
   downloadFile,
   getMediaUrl,
 } from '@webitel/api-services/api';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const { t } = useI18n();
 const store = useStore();
@@ -109,8 +112,9 @@ onBeforeUnmount(() => {
 
   &__table--preview {
     max-width: 100%;
-    width: var(--screenshots-table-preview-width);
-    height: var(--p-player-cam-preview-sm-height);
+    width: var(--p-player-cam-preview-sm-width);
+    //Override image component height to ensure the overlay matches the image size
+    height: var(--p-player-cam-preview-sm-height)!important;
   }
 }
 </style>
