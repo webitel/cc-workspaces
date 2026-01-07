@@ -4,7 +4,7 @@ import { getUserTimezone } from './getUserTimezone';
 * @author @rzaritskyi
 *
 * [WTEL-8323](https://webitel.atlassian.net/browse/WTEL-8323)
-* [WTEL-8582](https://webitel.atlassian.net/browse/WTEL-8582)
+* [WTEL-8569](https://webitel.atlassian.net/browse/WTEL-8569)
 *
 * getTime() represents an absolute moment in time — the same for everyone.
 *
