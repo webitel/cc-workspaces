@@ -2,7 +2,7 @@
   <section class="the-video-call-chat">
     <media-viewer />
     <chat-container
-      :messages="chat?.messages"
+      :messages="messages"
       :size="props.size"
       :chat-actions="[
         ChatAction.SendMessage,
@@ -45,6 +45,12 @@ const store = useStore();
 const chat = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
 );
+
+const messages = computed(() =>
+  store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES']
+);
+
+
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
   try {
