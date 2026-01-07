@@ -58,6 +58,7 @@
 
       <slot name="chat">
         <wt-rounded-action
+          v-if="isDisplayChatButton"
           class="call-action"
           :active="isOnChat"
           :disabled="!isCallChatExist"
@@ -158,12 +159,14 @@ const isBridge = computed(() => callList.value?.length > 1);
 const isTransfer = computed(() => call.value?.allowHangup);
 const isHangup = computed(() => call.value?.allowHangup);
 const isCall = computed(() => isNewCall.value && call.value?.newNumber);
-const isCallChatExist = computed(() =>
-  !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
-);
 const isDisplayCallButton = computed(
   () => (isOnNumpad.value || isOnBridge.value) && isCall.value
 );
+
+const isDisplayChatButton = computed(() =>
+  store.getters['features/call/videoCall/IS_VIDEO_CALL']);
+const isCallChatExist = computed(() =>
+  !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']);
 
 const queueName = computed(() => getQueueName(call.value));
 
