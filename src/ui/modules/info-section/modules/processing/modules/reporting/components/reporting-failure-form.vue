@@ -28,6 +28,7 @@
         v-model="reporting.nextDistributeAt"
         :disabled-dates="(d) => d.getTime() < new Date().setDate(new Date().getDate() - 1)"
         :label="$t('infoSec.processing.reporting.nextDistributeAt')"
+        :timezone="timezone"
         mode="datetime"
       ></wt-datepicker>
     </div>
@@ -35,6 +36,8 @@
 </template>
 
 <script>
+import { getUserTimezone } from '../../../script/getUserTimezone';
+
 export default {
   name: 'ReportingFailureForm',
   props: {
@@ -45,6 +48,11 @@ export default {
     member: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    timezone() {
+      return getUserTimezone();
     },
   },
 };
