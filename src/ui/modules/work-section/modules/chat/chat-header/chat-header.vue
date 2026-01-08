@@ -33,10 +33,8 @@
       </span>
     </template>
 
-    <template v-if="displayQueueName" #queue>
-      <wt-chip color="secondary">
-        {{ displayQueueName }}
-      </wt-chip>
+    <template #queue>
+      <queue-name-chip :name="displayQueueName" />
     </template>
   </task-header>
 </template>
@@ -48,12 +46,14 @@ import { mapActions, mapGetters } from 'vuex';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName.js';
+import QueueNameChip from '../../_shared/components/queue-name-chip/queue-name-chip.vue';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 export default {
   name: 'ChatHeader',
   components: {
+    QueueNameChip,
     TaskHeader,
     ChatHeaderCloseAction,
   },
