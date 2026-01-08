@@ -50,8 +50,6 @@ const messages = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES']
 );
 
-
-
 async function sendMessage(text: string, options?: ResultCallbacks) {
   try {
     chat.value?.send(text);
@@ -79,8 +77,6 @@ async function sendFiles(files: File[], options?: ResultCallbacks) {
 }
 
 const openMedia = (message) => {
-  console.log('message', message)
-
   store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message)
 };
 
