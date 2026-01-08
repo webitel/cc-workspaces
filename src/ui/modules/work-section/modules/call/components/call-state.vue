@@ -73,17 +73,34 @@ const callState = computed(
   }
 )
 
+const isRinging = computed(
+  () => task.value.state === CallActions.Ringing
+)
+
 const isCallActive = computed(
   () => task.value.state === CallActions.Active
 )
 
+const isCallOnHold = computed(
+  () => task.value.isHold
+)
+
+const isCallHangup = computed(
+  () => task.value.state === CallActions.Hangup
+)
+
+const isCallInbound = computed(
+  () => task.value.direction === CallDirection.Inbound
+)
+
+
 const showTimer = computed(
-  () => isCallActive.value || task.value.isHold || task.value.state === CallActions.Hangup
+  () => isRinging.value || isCallActive.value || isCallOnHold.value || isCallHangup.value
 )
 
 const displayTime = computed(
   () => {
-    if (task.value.state === CallActions.Hangup) return hangupTime.value;
+    if (isCallHangup.value) return hangupTime.value;
     if (task.value.isHold) return holdTime.value;
     return startTime.value;
   }
@@ -91,10 +108,10 @@ const displayTime = computed(
 
 const sonarIcon = computed(
   () => {
-    if (task.value.state === CallActions.Hangup) return redSonar;
-    if (task.value.isHold) return yellowSonar;
-    if (task.value.state === CallActions.Ringing) {
-      if (task.value.direction === CallDirection.Inbound) return redSonar;
+    if (isCallHangup.value) return redSonar;
+    if (isCallOnHold.value) return yellowSonar;
+    if (isRinging.value) {
+      if (isCallInbound.value) return redSonar;
       return blackSonar;
     }
     if (isCallActive.value) return greenSonar;
