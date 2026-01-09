@@ -51,9 +51,7 @@
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
           <div class="chat-queue-preview-md-body__queue">
-            <wt-chip v-if="queueName" color="secondary" size="sm">
-              {{ queueName }}
-            </wt-chip>
+            <queue-name-chip v-if="queueName" :name="queueName" />
           </div>
         </div>
 
@@ -71,6 +69,8 @@
 
 <script setup>
 import { computed } from 'vue'
+
+import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum'
 
 const props = defineProps({

@@ -19,7 +19,9 @@
       <p class="task-header-info__subtitle">
         <slot name="subtitle" />
       </p>
-      <slot name="queue" />
+      <p class="task-header-info__queue">
+        <slot name="queue" />
+      </p>
     </div>
   </header>
 </template>
