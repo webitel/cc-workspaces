@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
+import NotFoundPage from '../../ui/components/not-found-page.vue';
 
 const routes = [
   {
@@ -17,7 +18,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    // component: notFound
+    component: NotFoundPage,
   },
 ];
 
@@ -30,7 +31,7 @@ const router = createRouter({
   routes,
 });
 
-const excludeRouteAuth = ['feedback-page'];
+const excludeRouteAuth = ['feedback-page', 'not-found'];
 
 router.beforeEach((to, from, next) => {
   if (excludeRouteAuth.includes(to.name)) {
