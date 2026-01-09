@@ -4,7 +4,7 @@
     :class="[`agent-org-structure--${size}`]"
   >
     <wt-expansion-panel :size="size">
-      <template #title>{{ $tc('objects.team', 1) }}</template>
+      <template #title>{{ $t('objects.team', 1) }}</template>
       <template #default>
         <ul>
           <li class="agent-org-structure-item">
@@ -13,7 +13,7 @@
           </li>
           <wt-divider />
           <li class="agent-org-structure-item">
-            <div class="agent-org-structure-item__title">{{ $tc('objects.supervisor', 1) }}</div>
+            <div class="agent-org-structure-item__title">{{ $t('objects.supervisor', 1) }}</div>
             <div>
               <div
                 v-for="(sup, key) of supervisors"
@@ -25,7 +25,7 @@
           </li>
           <wt-divider />
           <li class="agent-org-structure-item">
-            <div class="agent-org-structure-item__title">{{ $tc('objects.auditor', 1) }}</div>
+            <div class="agent-org-structure-item__title">{{ $t('objects.auditor', 1) }}</div>
             <div>
               <div
                 v-for="(auditor, key) of auditors"

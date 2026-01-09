@@ -7,7 +7,7 @@
             color="info"
           ></wt-icon>
           <p class="quick-replies__title">
-            {{ $tc('objects.quickReplies.quickReplies', 1) }}</p>
+            {{ $t('objects.quickReplies.quickReplies', 1) }}</p>
         </div>
         <wt-icon-btn
           icon="close--filled"

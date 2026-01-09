@@ -1,6 +1,6 @@
 <template>
   <div class="screenshots-tab">
-    <h3 class="screenshots-tab__title">{{ $tc('objects.screenshots', 2) }}</h3>
+    <h3 class="screenshots-tab__title">{{ $t('objects.screenshots', 2) }}</h3>
     <wt-dummy
       v-if="!data.length"
       :text="t('webitelUI.empty.text.empty')"
