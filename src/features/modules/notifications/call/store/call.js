@@ -53,7 +53,7 @@ const actions = {
 
     // @author @stanislav-kozak
     // We check option by admin settings and after user setting for check if we need to send notification
-    if (isCallEndPushNotification || isCallEndSound) {
+    if (isCallEndPushNotification) {
       eventBus.$emit('notification', {
         type: 'info',
         text,
@@ -66,7 +66,7 @@ const actions = {
 
     // @author @stanislav-kozak
     // We check option by admin settings and after user setting for check if we need to play sound
-    if (isCallEndSoundNotification || isCallEndSound) {
+    if (isCallEndSoundNotification && isCallEndSound) {
       context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
         root: true,
       });
