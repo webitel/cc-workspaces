@@ -95,6 +95,8 @@ const sonarIcon = computed(() => {
 </script>
 
 <style scoped lang="scss">
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .video-call-state {
   display: flex;
   align-items: center;

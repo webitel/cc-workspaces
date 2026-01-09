@@ -47,6 +47,8 @@ const { t } = useI18n();
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .contact-card-variables {
   padding: var(--spacing-xs);
 

@@ -60,6 +60,7 @@ export default {
 
 <style lang="scss" scoped>
 //@import '../../css/post-processing';
+@use '@webitel/ui-sdk/src/css/main' as *;
 
 .processing-form__schedule-call-select__title {
   @extend %typo-body-1;

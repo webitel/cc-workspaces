@@ -16,6 +16,8 @@ const { t } = useI18n();
 </script>
 
 <style scoped lang="scss">
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .chat-message-blocked-error {
   @extend %typo-body-1;
   background: var(--p-error-highlight-color);

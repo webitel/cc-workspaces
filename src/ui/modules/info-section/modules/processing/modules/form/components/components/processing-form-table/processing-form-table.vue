@@ -284,6 +284,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .processing-form-table {
   &__table {
     padding: var(--spacing-xs);

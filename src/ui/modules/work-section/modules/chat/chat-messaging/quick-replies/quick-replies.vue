@@ -95,6 +95,8 @@ watch(() => props.search, (search: string | undefined) => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .quick-replies {
   display: flex;
   flex-direction: column;

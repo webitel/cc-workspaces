@@ -41,6 +41,8 @@ const emit = defineEmits(['call']);
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .contact-communications-item {
   display: grid;
   align-items: center;

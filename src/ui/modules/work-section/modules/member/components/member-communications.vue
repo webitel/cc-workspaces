@@ -50,6 +50,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .member-communications {
   &__item {
     padding: var(--spacing-xs) var(--spacing-sm);

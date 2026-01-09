@@ -39,6 +39,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .task-header {
   .task-header-actions {
     display: grid;

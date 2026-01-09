@@ -25,6 +25,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .queue-preview-timer {
   display: inline-flex;
   align-items: flex-start;
