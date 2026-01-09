@@ -25,6 +25,10 @@ jobs:
         with:
           node-version: ">=22"
 
+      - name: get prevTag
+        id: prevTag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
@@ -39,6 +43,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "full_version=$FULL_VERSION" >> $GITHUB_OUTPUT
           echo "version_tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "version_git_tag=v${VERSION}-tagged" >> $GITHUB_OUTPUT
 
       - name: Create release branch
         run: |
@@ -62,12 +67,24 @@ jobs:
 
       - name: Create and push tag (after merge)
         run: |
-          git tag "${{ steps.version.outputs.version_tag }}-tagged"
+          git tag ${{ steps.version.outputs.version_git_tag }}
           git push --tags
+
+      - name: generate Release Changelog
+        id: changelog
+        uses: requarks/changelog-action@v1
+        continue-on-error: true
+        with:
+          writeToFile: false
+          reverseOrder: true
+          excludeTypes: build
+          token: ${{ github.token }}
+          fromTag: ${{ steps.version.outputs.version_git_tag }}
+          toTag: ${{ steps.prevTag.outputs.tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "${{ steps.version.outputs.version_tag }}-tagged"
-          name: Release ${{ steps.version.outputs.version_tag }}
-          generate_release_notes: true
+          tag_name: ${{ steps.version.outputs.version_git_tag }}
+          name: cc-workspaces@${{ steps.version.outputs.version_tag }}
+          body: ${{ steps.changelog.outputs.changes }}
