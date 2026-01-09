@@ -1,6 +1,5 @@
 <template>
   <wt-chip
-    v-if="name"
     class="queue-name-chip"
     :color="color"
   >
@@ -24,7 +23,7 @@ withDefaults(
 
 <style lang="scss" scoped>
 .queue-name-chip {
-  word-break: break-word;
   white-space: break-spaces;
+  word-break: break-word;
 }
 </style>

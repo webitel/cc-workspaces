@@ -3,7 +3,7 @@
     <template #title>{{ task.displayName }}</template>
     <template #subtitle>{{ task.displayNumber }}</template>
 
-    <template #queue>
+    <template v-if="queueName" #queue>
       <queue-name-chip :name="queueName" />
     </template>
   </task-header>

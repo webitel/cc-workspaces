@@ -33,7 +33,7 @@
       </span>
     </template>
 
-    <template #queue>
+    <template v-if="displayQueueName" #queue>
       <queue-name-chip :name="displayQueueName" />
     </template>
   </task-header>

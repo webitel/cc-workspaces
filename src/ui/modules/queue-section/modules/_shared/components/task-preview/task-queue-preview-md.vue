@@ -41,7 +41,7 @@
       class="queue-preview-main-section"
     >
       <article class="queue-preview-chips">
-        <queue-name-chip :name="queueName" />
+        <queue-name-chip v-if="queueName" :name="queueName" />
       </article>
       <div
         v-if="$slots['icon-status']"
