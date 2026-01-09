@@ -47,9 +47,7 @@
             v-if="queueName"
             class="queue-preview-tooltip-chips"
           >
-            <wt-chip color="secondary">
-              {{ queueName }}
-            </wt-chip>
+            <queue-name-chip :name="queueName" />
           </div>
         </div>
       </wt-popover>
@@ -95,9 +93,11 @@
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
   name: 'TaskQueuePreviewSm',
+  components: { QueueNameChip },
   mixins: [sizeMixin],
   props: {
     opened: {

@@ -51,9 +51,7 @@
           <div
             v-if="queueName"
           >
-            <wt-chip color="secondary">
-              {{ queueName }}
-            </wt-chip>
+            <queue-name-chip :name="queueName" />
           </div>
         </div>
       </wt-popover>
@@ -101,7 +99,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
+
+import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
 
 const props = defineProps({

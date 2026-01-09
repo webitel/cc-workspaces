@@ -41,12 +41,7 @@
       class="queue-preview-main-section"
     >
       <article class="queue-preview-chips">
-        <wt-chip
-          v-if="queueName"
-          color="secondary"
-        >
-          {{ queueName }}
-        </wt-chip>
+        <queue-name-chip v-if="queueName" :name="queueName" />
       </article>
       <div
         v-if="$slots['icon-status']"
@@ -74,9 +69,11 @@
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
   name: 'TaskQueuePreview',
+  components: { QueueNameChip },
   mixins: [sizeMixin],
   props: {
     opened: {
