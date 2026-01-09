@@ -31,7 +31,7 @@
         v-else-if="status === FileStatus.AFTER_ERROR || status === FileStatus.ERROR"
         class="processing-form-file-line__error-message"
       >
-        {{ $tc('vocabulary.errors', 1) }}
+        {{ $t('vocabulary.errors', 1) }}
       </p>
     </div>
     <div

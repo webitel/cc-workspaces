@@ -4,7 +4,7 @@
     class="agent-score"
   >
     <wt-expansion-panel :size="size">
-      <template #title>{{ $tc('infoSec.generalInfo.score') }}</template>
+      <template #title>{{ $t('infoSec.generalInfo.score') }}</template>
       <template #default>
         <ul>
           <li class="agent-score-item">

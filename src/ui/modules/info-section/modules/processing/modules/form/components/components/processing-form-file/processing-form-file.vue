@@ -30,7 +30,7 @@
       ></wt-icon>
       {{ label }}
       <span v-if="fileCounter">
-        ({{ fileCounter }} {{ $tc('vocabulary.file', filePluralChoice) }})
+        ({{ fileCounter }} {{ $t('vocabulary.file', filePluralChoice) }})
       </span>
       <wt-hint
         v-if="hint"
