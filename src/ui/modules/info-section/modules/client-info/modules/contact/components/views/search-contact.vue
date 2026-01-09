@@ -201,6 +201,8 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .search-contact {
   display: flex;
   flex-direction: column;

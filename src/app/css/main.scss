@@ -1,5 +1,6 @@
 @forward 'reusable';
-@use 'reusable' as *;
+@use 'reusable';
+@use '@webitel/ui-sdk/src/css/main' as *;
 
 html {
   height: 100%;

@@ -31,7 +31,9 @@ const formattedDate = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-  .chat-date {
+@use '@webitel/ui-sdk/src/css/main' as *;
+
+.chat-date {
     @extend %typo-subtitle-1;
     width: 100%;
     display: flex;

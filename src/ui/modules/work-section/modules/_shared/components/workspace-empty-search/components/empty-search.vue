@@ -40,7 +40,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .empty-search {
+@use '@webitel/ui-sdk/src/css/main' as *;
+
+.empty-search {
     text-align: center;
     max-width: 75%;
   }

@@ -46,6 +46,8 @@ const flowsList = computed(() => getNamespacedState(store.state, namespace).flow
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .flows-tab {
   @extend %wt-scrollbar;
 

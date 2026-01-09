@@ -20,6 +20,8 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .queue-task-container {
   @extend %wt-scrollbar;
   display: flex;

@@ -113,6 +113,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@webitel/ui-sdk/src/css/main' as *;
+
 .chat-agent {
   @extend %typo-caption;
   width: 100%;

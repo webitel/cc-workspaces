@@ -24,8 +24,7 @@ export default ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          api: 'modern-compiler',
-          additionalData: `@use '@webitel/ui-sdk/src/css/main' as *;`,
+          api: 'modern',
         },
       },
     },

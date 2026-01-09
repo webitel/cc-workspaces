@@ -79,6 +79,7 @@ const currentTab = ref(VideoCallTab.Processing);
 const isActive = ref(false);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const videoCallChat = computed(() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']);
 
 const isPreviewCall = computed(() => {
   return isIncomingRinging(call.value);
@@ -86,16 +87,21 @@ const isPreviewCall = computed(() => {
 
 const currentComponent = computed(() => videoCallTabComponents[currentTab.value]);
 
-
 const openCall = () => {
   currentTab.value = VideoCallTab.Processing;
 };
 
 const openTab = (tab) => currentTab.value = currentTab.value === tab ? VideoCallTab.Processing : tab;
 
-watch(call, () => {
-  openCall();
-});
+watch([call, videoCallChat], ([isCall, isVideoChat]) => {
+ if (isCall) {
+   openCall();
+ }
+
+ if (isVideoChat) {
+   openTab(VideoCallTab.Chat);
+ }
+}, { immediate: true});
 
 
 onActivated(() => {

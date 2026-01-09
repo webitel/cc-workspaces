@@ -32,7 +32,9 @@ import { mapGetters } from 'vuex';
 </script>
 
 <style lang="scss" scoped>
-  .knowledge-base {
+@use '@webitel/ui-sdk/src/css/main' as *;
+
+.knowledge-base {
     @extend %wt-scrollbar;
     height: 100%;
     width: 100%;
