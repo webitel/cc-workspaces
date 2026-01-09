@@ -43,8 +43,8 @@ import { useI18n } from 'vue-i18n';
 import { CallActions } from 'webitel-sdk';
 
 import { useCallTimer } from '../../../../../../../composables/useCallTimer';
-import holdSonar from '../../../../../../../../app/assets/call-sonars/hold-sonar.svg';
-import inboundSonar from '../../../../../../../../app/assets/call-sonars/inbound-sonar.svg';
+import yellowSonar from '../../../../../../../../app/assets/call-sonars/yellow-sonar.svg';
+import greenSonar from '../../../../../../../../app/assets/call-sonars/green-sonar.svg';
 
 defineOptions({
   name: 'VideoCallState',
@@ -74,7 +74,7 @@ const callState = computed(() => {
     case CallActions.Ringing:
       return t('workspaceSec.callState.ringing');
     case CallActions.Hold:
-      return t('workspaceSec.callState.hold');
+      return t('workspaceSec.callState.onHold');
     case CallActions.Hangup:
       return t('workspaceSec.callState.hangup');
     case CallActions.Active:
@@ -88,8 +88,8 @@ const sonarIcon = computed(() => {
   const currentTask = task.value;
   if (!currentTask) return '';
 
-  if (currentTask.isHold) return holdSonar;
-  if (currentTask.state === CallActions.Active) return inboundSonar;
+  if (currentTask.isHold) return yellowSonar;
+  if (currentTask.state === CallActions.Active) return greenSonar;
   return '';
 });
 </script>

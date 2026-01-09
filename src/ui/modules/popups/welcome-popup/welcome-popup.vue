@@ -37,13 +37,25 @@
           {{ $t(`welcomePopup.notifications.message.${notification.message}`) }}
         </p>
       </div>
+
+      <div class="welcome-popup-permission">
+        <div class="welcome-popup-permission__status">
+          <wt-icon icon="video-cam"></wt-icon>
+          {{ $t('welcomePopup.camera.status') }}:
+
+          <wt-indicator
+            :color="camera.status ? 'success' : 'error'"
+            size="sm"
+          ></wt-indicator>
+        </div>
+        <p v-if="camera.message" class="welcome-popup-permission__detail">
+          {{ $t(`welcomePopup.camera.message.${camera.message}`) }}
+        </p>
+      </div>
     </template>
+
     <template #actions>
-      <wt-button
-        wide
-        :loading="loading"
-        @click="close"
-      >
+      <wt-button wide :loading="loading" @click="close">
         {{ $t('reusable.ok') }}
       </wt-button>
     </template>
@@ -67,6 +79,10 @@ export default {
       message: '',
     },
     notification: {
+      status: false,
+      message: '',
+    },
+    camera: {
       status: false,
       message: '',
     },
@@ -96,8 +112,17 @@ export default {
         this.mic.status = true;
       } catch (err) {
         this.mic.status = false;
-        if (err.message.includes('Permission denied')) this.mic.message = 'denied';
-        else if (err.message.includes('Requested device not found')) this.mic.message = 'notFound';
+        this.mic.message = this.getPermissionErrorMessage(err);
+
+      }
+    },
+    async requestCameraAccess() {
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+        this.camera.status = true;
+      } catch (err) {
+        this.camera.status = false;
+        this.camera.message = this.getPermissionErrorMessage(err);
       }
     },
     async checkNotifications() {
@@ -118,7 +143,14 @@ export default {
     checkPermissions() {
       this.checkMic();
       this.checkNotifications();
+      this.requestCameraAccess()
     },
+
+    getPermissionErrorMessage (err) {
+      if (err?.message?.includes('Requested device not found')) return 'notFound'
+      return 'denied';
+    },
+
     handleKeyPress(e) {
       if (e.keyCode === 13 // enter
         || e.key === ' '

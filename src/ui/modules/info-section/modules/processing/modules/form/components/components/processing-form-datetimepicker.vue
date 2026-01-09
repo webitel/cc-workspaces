@@ -2,12 +2,15 @@
   <wt-datepicker
     v-bind="$attrs"
     :value="date"
+    :timezone="timezone"
     mode="datetime"
     @input="$emit('input', $event)"
   />
 </template>
 
 <script>
+import { getUserTimezone } from '../../../../script/getUserTimezone';
+
 export default {
   name: 'ProcessingFormDatetimepicker',
   model: {
@@ -23,6 +26,9 @@ export default {
      return !this.value || this.value === 'now'
         ? Date.now()
         : this.value;
+    },
+    timezone() {
+      return getUserTimezone();
     },
   },
 };

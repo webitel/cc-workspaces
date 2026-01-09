@@ -180,8 +180,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Sonando...',
-      hold: 'En espera',
+      ringing: 'Llamando',
+      inCall: 'En llamada',
+      onHold: 'En espera',
       hangup: 'Colgar',
     },
     chat: {
@@ -276,6 +277,12 @@ export default {
     },
     notifications: {
       status: 'Estado del permiso de notificaciones',
+      message: {
+        denied: 'Permiso denegado',
+      },
+    },
+    camera: {
+      status: 'Estado del permiso de cámara',
       message: {
         denied: 'Permiso denegado',
       },

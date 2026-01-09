@@ -178,8 +178,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Đang đổ chuông...',
-      hold: 'Giữ máy',
+      ringing: 'Đang đổ chuông',
+      inCall: 'Đang gọi',
+      onHold: 'Giữ máy',
       hangup: 'Kết thúc',
     },
     chat: {
@@ -276,6 +277,12 @@ export default {
       status: 'Trạng thái quyền thông báo',
       message: {
         denied: 'Từ chối quyền',
+      },
+      camera: {
+        status: 'Trạng thái quyền truy cập camera',
+        message: {
+          denied: 'Từ chối quyền',
+        },
       },
     },
   },

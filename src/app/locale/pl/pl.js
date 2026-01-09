@@ -179,8 +179,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Dzwoni...',
-      hold: 'Wstrzymaj',
+      ringing: 'Dzwoni',
+      inCall: 'W rozmowie',
+      onHold: 'Wstrzymane',
       hangup: 'Zakończ',
     },
     chat: {
@@ -277,6 +278,12 @@ export default {
       status: 'Status uprawnień do powiadomień',
       message: {
         denied: 'Odmowa dostępu',
+      },
+      camera: {
+        status: 'Status uprawnień do kamery',
+        message: {
+          denied: 'Odmowa dostępu',
+        },
       },
     },
   },

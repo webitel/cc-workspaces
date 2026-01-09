@@ -1,3 +1,5 @@
+import { toNaiveUtcTimestamp } from './naiveUtcTimestamp';
+
 export function formattingFormBeforeSend(formBody) {
   // backend need to get form values in an object, not array
   return formBody.reduce((form, { id, value, view }) => {
@@ -11,6 +13,9 @@ export function formattingFormBeforeSend(formBody) {
       } else if (typeof value === 'object') {
         _value = value.value;
       }
+    }
+    if (view.component === 'wt-datetimepicker') {
+      _value = toNaiveUtcTimestamp(value);
     }
     return {
       ...form,

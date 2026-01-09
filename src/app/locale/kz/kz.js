@@ -178,8 +178,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'қоңырау шалудамыз',
-      hold: 'Ұстап тұру',
+      ringing: 'Қоңырау шалу',
+      inCall: 'Сөйлесуде',
+      onHold: 'Ұстап тұру',
       hangup: 'Соңы',
     },
     chat: {
@@ -273,6 +274,12 @@ export default {
     },
     notifications: {
       status: 'Хабарламаларды алуға рұқсат',
+      message: {
+        denied: 'Тыйым салынған',
+      },
+    },
+    camera: {
+      status: 'Камераны пайдалануға рұқсат',
       message: {
         denied: 'Тыйым салынған',
       },

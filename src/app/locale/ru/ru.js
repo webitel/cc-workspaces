@@ -184,8 +184,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Звоним..',
-      hold: 'Удержание',
+      ringing: 'Звоню',
+      inCall: 'В разговоре',
+      onHold: 'В удержании',
       hangup: 'Конец',
     },
     chat: {
@@ -281,6 +282,12 @@ export default {
       status: 'Разрешение на получение Оповещений',
       message: {
         denied: 'Запрещено',
+      },
+      camera: {
+        status: 'Разрешение на использование Камеры',
+        message: {
+          denied: 'Запрещено',
+        },
       },
     },
   },

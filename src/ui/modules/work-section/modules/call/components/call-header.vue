@@ -58,6 +58,7 @@
 
       <slot name="chat">
         <wt-rounded-action
+          v-if="isDisplayChatButton"
           class="call-action"
           :active="isOnChat"
           :disabled="!isCallChatExist"
@@ -104,6 +105,12 @@
     <template #subtitle>
       {{ call?.displayNumber }}
     </template>
+
+    <template v-if="queueName" #queue>
+      <wt-chip color="secondary">
+        {{ queueName }}
+      </wt-chip>
+    </template>
   </task-header>
 </template>
 
@@ -114,6 +121,7 @@ import { useStore } from 'vuex';
 
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
@@ -151,12 +159,16 @@ const isBridge = computed(() => callList.value?.length > 1);
 const isTransfer = computed(() => call.value?.allowHangup);
 const isHangup = computed(() => call.value?.allowHangup);
 const isCall = computed(() => isNewCall.value && call.value?.newNumber);
-const isCallChatExist = computed(() =>
-  !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
-);
 const isDisplayCallButton = computed(
   () => (isOnNumpad.value || isOnBridge.value) && isCall.value
 );
+
+const isDisplayChatButton = computed(() =>
+  store.getters['features/call/videoCall/IS_VIDEO_CALL']);
+const isCallChatExist = computed(() =>
+  !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']);
+
+const queueName = computed(() => getQueueName(call.value));
 
 
 const makeCall = () => store.dispatch('features/call/CALL');

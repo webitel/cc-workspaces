@@ -183,8 +183,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Ringing..',
-      hold: 'Hold',
+      ringing: 'Ringing',
+      inCall: 'In call',
+      onHold: 'On hold',
       hangup: 'Hangup',
     },
     chat: {
@@ -282,6 +283,12 @@ export default {
         denied: 'Permission denied',
       },
     },
+    camera: {
+      status: 'Camera permission status',
+      message: {
+        denied: 'Permission denied',
+      },
+    }
   },
   descTrackAuthPopup: {
     title: 'Attention',

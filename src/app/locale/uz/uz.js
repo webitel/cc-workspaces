@@ -179,8 +179,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Qoʻngʻiroq qilinmoqda...',
-      hold: 'Kutish',
+      ringing: 'Qoʻngʻiroq',
+      inCall: 'Suhbatda',
+      onHold: 'Kutish',
       hangup: 'Tugatish',
     },
     chat: {
@@ -274,6 +275,12 @@ export default {
     },
     notifications: {
       status: 'Bildirishnoma ruxsat holati',
+      message: {
+        denied: 'Ruxsat berilmadi',
+      },
+    },
+    camera: {
+      status: 'Kamera ruxsat holati',
       message: {
         denied: 'Ruxsat berilmadi',
       },

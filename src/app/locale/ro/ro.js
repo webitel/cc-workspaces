@@ -179,8 +179,9 @@ export default {
   },
   workspaceSec: {
     callState: {
-      ringing: 'Sună...',
-      hold: 'În așteptare',
+      ringing: 'Sună',
+      inCall: 'În convorbire',
+      onHold: 'În așteptare',
       hangup: 'Închide',
     },
     chat: {
@@ -278,6 +279,12 @@ export default {
       message: {
         denied: 'Permisiune refuzată',
       },
+    },
+    camera: {
+      status: 'Starea permisiunii camerei',
+      message: {
+        denied: 'Permisiune refuzată',
+      }
     },
   },
   descTrackAuthPopup: {

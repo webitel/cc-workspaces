@@ -175,6 +175,7 @@ const {
 
 // Custom reset that handles data properly
 const resetData = async () => {
+  isNext.value = false;
   dataPage.value = 1;
   dataList.value = [];
   await loadDataListWithGrouping();
@@ -182,9 +183,8 @@ const resetData = async () => {
 
 // Override handleIntersect to use custom loadDataList
 const customHandleIntersect = async () => {
-  if (isNext.value) {
-    await loadDataListWithGrouping();
-  }
+  if (!isNext.value) return;
+  await loadDataListWithGrouping();
 };
 
 watch(call, () => {

@@ -74,9 +74,20 @@ const call = computed<any>(
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
 
-const senderStream = computed<MediaStream | undefined>(
-  () => localStreams.value[0],
-);
+/**
+ * @author o.chorpita
+ * // create a MediaStream containing only the video track,
+ * // to prevent duplicated audio playback (echo)
+ * //https://webitel.atlassian.net/browse/WTEL-8408
+ */
+
+const senderStream = computed<MediaStream | undefined>(() => {
+  const stream = localStreams.value[0]
+  if (!stream) return undefined
+  const videoTrack = stream.getVideoTracks()[0]
+  if (!videoTrack) return undefined;
+  return new MediaStream([videoTrack]);
+});
 
 const receiverStream = computed<MediaStream | undefined>(
   () => peerStreams.value[0],
@@ -169,10 +180,20 @@ const handleOpenGalleria = async (payload: ScreenshotsOpenGalleriaPayload) => {
   }
 };
 
-const exitFullscreen = () => {
-  document.exitFullscreen()
-  videoContainerSize.value = ComponentSize.SM;
-}
+const exitFullscreen = async () => {
+  if (!document.fullscreenElement) {
+    videoContainerSize.value = ComponentSize.SM;
+    return;
+  }
+
+  try {
+    await document.exitFullscreen();
+  } catch (e) {
+    console.warn('exitFullscreen failed', e);
+  } finally {
+    videoContainerSize.value = ComponentSize.SM;
+  }
+};
 
 onMounted(() => {
   eventBus.$on('screenshots:open-galleria', handleOpenGalleria);

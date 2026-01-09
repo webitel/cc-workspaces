@@ -1,7 +1,8 @@
 <template>
   <section class="the-video-call-chat">
+    <media-viewer />
     <chat-container
-      :messages="chat?.messages"
+      :messages="messages"
       :size="props.size"
       :chat-actions="[
         ChatAction.SendMessage,
@@ -11,6 +12,7 @@
         ]"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
+      @[MessageAction.ClickOnImage]="openMedia"
     />
   </section>
 </template>
@@ -19,11 +21,15 @@
 import { applyTransform,
   notify,
 } from '@webitel/api-services/api/transformers';
-import { ChatAction, ChatContainer } from '@webitel/ui-chats/ui';
+import { ChatAction, ChatContainer, MessageAction } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+
+import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
+
+const chatNamespace = 'features/chat';
 
 const props = withDefaults(
   defineProps<{
@@ -38,6 +44,10 @@ const store = useStore();
 
 const chat = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
+);
+
+const messages = computed(() =>
+  store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES']
 );
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
@@ -65,6 +75,10 @@ async function sendFiles(files: File[], options?: ResultCallbacks) {
     options?.onSuccess?.();
   }
 }
+
+const openMedia = (message) => {
+  store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message)
+};
 
 onMounted(() => {
   // @author ye.pohranichna

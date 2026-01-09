@@ -123,7 +123,7 @@ export default {
         }
 
         if (component.view.component === 'wt-datetimepicker') {
-          return component.value = this.getDatetimepickerInitialValue(component.view.initialValue);
+          return component.value = this.getDatetimepickerInitialValue(component.view.initialValue, component.view);
         }
 
         return component.value = this.parseInitialValueToJson(component.view.initialValue);
@@ -145,8 +145,8 @@ export default {
       );
     },
 
-    getDatetimepickerInitialValue(initialValue) {
-      return initialValue === 'now'
+    getDatetimepickerInitialValue(initialValue, { currentTime } = {}) {
+      return currentTime || initialValue === 'now'
         ? Date.now()
         : initialValue;
     },
