@@ -15,7 +15,7 @@
         v-else
         :alt="task.state"
         :src="sonarIcon"
-      >
+      />
     </template>
 
     <template #title>
@@ -78,12 +78,11 @@
     :queue-name="queueName"
     @click="$emit('click', task)"
   >
-
     <template #icon>
       <img
         :alt="task.state"
         :src="sonarIcon"
-      >
+      />
     </template>
 
     <template
@@ -135,30 +134,32 @@
     </template>
   </task-queue-preview-sm>
 
-  <div
-    v-else
-  >unknown task size
-    <br>
+  <div v-else>
+    unknown task size
+    <br />
     {{ task }}
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { CallActions, CallDirection } from 'webitel-sdk';
 
-import blackSonar from '../../../../../../../app/assets/call-sonars/black-sonar.svg';
-import greenSonar from '../../../../../../../app/assets/call-sonars/green-sonar.svg';
-import redSonar from '../../../../../../../app/assets/call-sonars/red-sonar.svg';
-import yellowSonar from '../../../../../../../app/assets/call-sonars/yellow-sonar.svg';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import isIncomingRinging from '../../../../../../../features/modules/call/scripts/isIncomingRinging';
+import { useCallState } from '../../../../../../composables/useCallState';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
-import { getQueueName } from '../../../_shared/scripts/getQueueName'
+import { getQueueName } from '../../../_shared/scripts/getQueueName';
 
 export default {
   name: 'ActiveQueuePreview',
   mixins: [taskPreviewMixin, sizeMixin],
+  setup() {
+    const { sonarIcon } = useCallState();
+
+    return {
+      sonarIcon,
+    };
+  },
   computed: {
     ...mapGetters('features/call', {
       normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
@@ -171,7 +172,7 @@ export default {
     },
 
     queueName() {
-      return getQueueName(this.task)
+      return getQueueName(this.task);
     },
 
     isRinging() {
@@ -183,14 +184,6 @@ export default {
       return this.normalizePhoneNumber(this.task.displayNumber);
     },
 
-    sonarIcon() {
-      if (this.task.isHold) return yellowSonar;
-      if (this.task.state === CallActions.Ringing) {
-        if (this.task.direction === CallDirection.Inbound) return redSonar;
-        return blackSonar;
-      }
-      return greenSonar;
-    },
     eavesdropStatusIcon() {
       if (this.task.eavesdropIsConference) return 'conference';
       if (this.task.eavesdropIsPrompt) return 'prompter';
@@ -200,5 +193,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
