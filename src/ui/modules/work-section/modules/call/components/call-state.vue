@@ -47,7 +47,6 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
   display: flex;
   flex-direction: column;
   align-items: center;
-  align-items: center;
   max-width: 100%;
 
   &__animation {
