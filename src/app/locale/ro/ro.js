@@ -25,6 +25,7 @@ export default {
     run: 'Rulează',
     today: 'Astăzi',
     phoneNumber: 'Număr de telefon',
+    unknownTaskSize: 'Dimensiune necunoscută a sarcinii',
   },
   feedback: {
     success: {

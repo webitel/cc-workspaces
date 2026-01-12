@@ -25,6 +25,7 @@ export default {
     run: 'Uruchom',
     today: 'Dzisiaj',
     phoneNumber: 'Numer telefonu',
+    unknownTaskSize: 'Nieznany rozmiar zadania',
   },
   feedback: {
     success: {

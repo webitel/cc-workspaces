@@ -25,6 +25,7 @@ export default {
     run: 'Chạy',
     today: 'Hôm nay',
     phoneNumber: 'Số điện thoại',
+    unknownTaskSize: 'Kích thước nhiệm vụ không xác định',
   },
   feedback: {
     success: {
