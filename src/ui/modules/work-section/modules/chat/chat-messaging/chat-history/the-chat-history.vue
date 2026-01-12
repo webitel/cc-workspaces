@@ -65,16 +65,7 @@
 import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import {
-  computed,
-  inject,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  ref,
-  useTemplateRef,
-  watch,
-} from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef,watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
