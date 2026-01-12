@@ -65,7 +65,16 @@
 import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef,watch } from 'vue';
+import {
+  computed,
+  inject,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  ref,
+  useTemplateRef,
+  watch,
+} from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -173,7 +182,10 @@ async function loadMessagesList() {
   await nextTick(() => {
     scrollToBottom();
   });
-  setTimeout(() => showAllMessages.value = true, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+  setTimeout(() => {
+    focusOnInput() //  manually focus textarea after load message to fix emoji insertion on first interaction
+    showAllMessages.value = true
+  }, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
 onMounted(() => {
   getTopMessageEl();
