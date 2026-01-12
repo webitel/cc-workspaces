@@ -135,7 +135,7 @@
   </task-queue-preview-sm>
 
   <div v-else>
-    unknown task size
+    {{ $t('reusable.unknownTaskSize') }}
     <br />
     {{ task }}
   </div>
