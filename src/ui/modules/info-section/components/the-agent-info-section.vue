@@ -198,12 +198,12 @@ export default {
         iconPrefix: 'ws',
       };
       const flows = {
-        text: this.$tc('objects.flow.name', 2),
+        text: this.$t('objects.flow.name', 2),
         value: 'flows',
         icon: 'flows',
       };
       const screenshots = {
-        text: this.$tc('objects.screenshots', 2),
+        text: this.$t('objects.screenshots', 2),
         value: 'screenshots',
         icon: 'preview-tag-image',
       }
