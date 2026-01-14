@@ -223,4 +223,13 @@ footer.processing-actions .wt-button:focus {
   // https://stackoverflow.com/questions/73658895/document-getelementbyid-focus-not-working-on-button
   outline: -webkit-focus-ring-color auto 1px;
 }
+
+.wt-select {
+  :deep(.multiselect__content-wrapper) {
+    z-index: calc(var(--p-galleria-mask-z-index) - 2);
+  }
+  :deep(.multiselect--active) {
+    z-index: calc(var(--p-galleria-mask-z-index) - 2); // lowered z-index to prevent overlapping the gallery and video container
+  }
+}
 </style>
