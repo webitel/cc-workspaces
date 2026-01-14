@@ -50,7 +50,6 @@
     <!-- https://webitel.atlassian.net/browse/WTEL-7256 -->
     <disconnect-popup />
   </main>
-  <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
 </template>
 
 <script setup lang="ts">
@@ -131,12 +130,6 @@ const preventDrop = (event: DragEvent) => {
   event.preventDefault();
   event.stopPropagation();
 };
-
-const goToApplicationHub = () => {
-  const adminUrl = import.meta.env.VITE_APPLICATION_HUB_URL;
-  window.location.href = adminUrl;
-};
-
 watch(isDescTrackAuthErrorPopup, () => {
   if (isDescTrackAuthErrorPopup.value) {
     agentLogout();
@@ -144,6 +137,12 @@ watch(isDescTrackAuthErrorPopup, () => {
     isDescTrackAuthSuccessPopup.value = isDescTrackAuthPopupsAllow.value;
   }
 });
+
+watch(hasAccess, (access) => {
+  if (!access) {
+    router.replace({ name: 'not-found', query: { type: '403' } });
+  }
+}, { immediate: true });
 
 onUnmounted(() => {
   closeSession();
