@@ -318,7 +318,7 @@ $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
 $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
 
-// label has 0 height but still adds vertical padding, so we subtract it from textarea max-height to prevent overflow.
+// total label vertical padding (top + bottom).
 $textAreaLabelPadding: calc(var(--spacing-xs) * 2);
 
 .chat-messaging {
@@ -355,6 +355,7 @@ $textAreaLabelPadding: calc(var(--spacing-xs) * 2);
 }
 
 .chat-messaging__textarea :deep(.wt-textarea__wrapper) {
+  //label has 0 height but still adds vertical padding, so we subtract it from textarea max-height to prevent overflow.
   max-height: calc(100% - $textAreaLabelPadding);
 }
 
