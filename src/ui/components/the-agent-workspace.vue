@@ -1,6 +1,5 @@
 <template>
   <main
-    v-if="hasAccess"
     class="main-agent-workspace"
     @drop="preventDrop"
     @dragenter.prevent
@@ -53,8 +52,6 @@
 </template>
 
 <script setup lang="ts">
-import WebitelApplications
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -99,8 +96,6 @@ const isDescTrackAuthPopupsAllow = computed(() => store.getters['ui/infoSec/agen
 const agent = computed(() => store.state.ui.infoSec.agentInfo.agent)
 const isDescTrackAuthErrorPopup = computed(() =>  !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
 
-const hasAccess = computed(() => checkAppAccess.value(WebitelApplications.AGENT));
-
 const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
@@ -137,12 +132,6 @@ watch(isDescTrackAuthErrorPopup, () => {
     isDescTrackAuthSuccessPopup.value = isDescTrackAuthPopupsAllow.value;
   }
 });
-
-watch(hasAccess, (access) => {
-  if (!access) {
-    router.replace({ name: 'not-found', query: { type: '403' } });
-  }
-}, { immediate: true });
 
 onUnmounted(() => {
   closeSession();

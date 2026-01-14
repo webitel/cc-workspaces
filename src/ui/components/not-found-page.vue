@@ -14,7 +14,7 @@ import AppHeader from '../modules/app-header/components/app-header.vue';
 const route = useRoute();
 const router = useRouter();
 
-const errorType = computed(() => route.query.type === '403' ? '403' : '404');
+const errorType = computed(() => route.query.type || '404');
 
 const handleBack = () => {
   if (errorType.value === '403') {
