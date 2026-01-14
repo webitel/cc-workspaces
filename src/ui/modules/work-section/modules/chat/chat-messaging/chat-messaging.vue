@@ -317,7 +317,9 @@ $roundedAction: calc(var(--rounded-action-padding) * 2 + var(--rounded-action-bo
 $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
 $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
-$textAreaLabelPadding: calc(var(--spacing-xs) * 2); //https://webitel.atlassian.net/browse/WTEL-8479
+
+// label has 0 height but still adds vertical padding, so we subtract it from textarea max-height to prevent overflow.
+$textAreaLabelPadding: calc(var(--spacing-xs) * 2);
 
 .chat-messaging {
   position: relative;
