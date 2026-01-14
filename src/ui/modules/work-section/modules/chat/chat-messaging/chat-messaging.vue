@@ -317,6 +317,7 @@ $roundedAction: calc(var(--rounded-action-padding) * 2 + var(--rounded-action-bo
 $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
 $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
+$textAreaLabelPadding: calc(var(--spacing-xs) * 2); //https://webitel.atlassian.net/browse/WTEL-8479
 
 .chat-messaging {
   position: relative;
@@ -349,6 +350,10 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   max-height: 100%;
   min-height: auto;
   overflow: auto !important;
+}
+
+.chat-messaging__textarea :deep(.wt-textarea__wrapper) {
+  max-height: calc(100% - $textAreaLabelPadding);
 }
 
 .chat-messaging-text-entry {
