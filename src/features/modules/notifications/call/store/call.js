@@ -37,7 +37,7 @@ const actions = {
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.CallEndSoundNotification);
 
-    const isCallEndSound = localStorage.getItem('settings/callEndSound');
+    const isCallEndSound = localStorage.getItem(`settings/${EngineSystemSettingName.CallEndSoundNotification}`);
 
     await context.dispatch('features/notifications/STOP_SOUND', null, {
       root: true,
