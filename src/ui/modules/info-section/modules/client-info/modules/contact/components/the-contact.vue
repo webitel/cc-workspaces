@@ -139,12 +139,28 @@ watch([
   @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   &-actions {
     display: flex;
     flex: 1;
     justify-content: end;
     gap: var(--spacing-xs);
+  }
+
+  :deep(.wt-expansion-panel) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  :deep(.wt-expansion-panel-body) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
 }
 </style>
