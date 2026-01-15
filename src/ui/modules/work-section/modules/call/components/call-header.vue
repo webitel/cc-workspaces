@@ -142,7 +142,7 @@ const emit = defineEmits<{
 
 const store = useStore();
 
-const callList = computed(() => store.state['features/call']?.callList);
+const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
