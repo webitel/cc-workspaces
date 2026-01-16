@@ -1,6 +1,5 @@
 <template>
   <main
-    v-if="hasAccess"
     class="main-agent-workspace"
     @drop="preventDrop"
     @dragenter.prevent
@@ -50,12 +49,9 @@
     <!-- https://webitel.atlassian.net/browse/WTEL-7256 -->
     <disconnect-popup />
   </main>
-  <wt-error-page v-else type="403" @back="goToApplicationHub"></wt-error-page>
 </template>
 
 <script setup lang="ts">
-import WebitelApplications
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -100,8 +96,6 @@ const isDescTrackAuthPopupsAllow = computed(() => store.getters['ui/infoSec/agen
 const agent = computed(() => store.state.ui.infoSec.agentInfo.agent)
 const isDescTrackAuthErrorPopup = computed(() =>  !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
 
-const hasAccess = computed(() => checkAppAccess.value(WebitelApplications.AGENT));
-
 const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
@@ -131,12 +125,6 @@ const preventDrop = (event: DragEvent) => {
   event.preventDefault();
   event.stopPropagation();
 };
-
-const goToApplicationHub = () => {
-  const adminUrl = import.meta.env.VITE_APPLICATION_HUB_URL;
-  window.location.href = adminUrl;
-};
-
 watch(isDescTrackAuthErrorPopup, () => {
   if (isDescTrackAuthErrorPopup.value) {
     agentLogout();

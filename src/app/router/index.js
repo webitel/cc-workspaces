@@ -1,13 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import WebitelApplications
+  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
+import store from '../store';
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
+import NotFoundPage from '../../ui/components/not-found-page.vue';
 
 const routes = [
   {
     path: '/',
     name: 'agent-ws',
     component: AgentWorkspace,
+    meta: { appAccess: WebitelApplications.AGENT },
   },
   {
     path: '/feedback-page',
@@ -17,7 +22,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    // component: notFound
+    component: NotFoundPage,
   },
 ];
 
@@ -30,7 +35,7 @@ const router = createRouter({
   routes,
 });
 
-const excludeRouteAuth = ['feedback-page'];
+const excludeRouteAuth = ['feedback-page', 'not-found'];
 
 router.beforeEach((to, from, next) => {
   if (excludeRouteAuth.includes(to.name)) {
@@ -42,14 +47,26 @@ router.beforeEach((to, from, next) => {
     const desiredUrl = encodeURIComponent(window.location.href);
     const authUrl = import.meta.env.VITE_AUTH_URL;
     window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
-  } else if (to.query.accessToken) {
+    return;
+  }
+  if (to.query.accessToken) {
     // assume that access token was set from query before app initialization in main.js
     const newQuery = { ...to.query };
     delete newQuery.accessToken;
-    next({ ...to, query: newQuery });
-  } else {
-    next();
+    return next({ ...to, query: newQuery });
   }
+
+  const requiredApp = to.meta.appAccess;
+  if (requiredApp) {
+    const checkAppAccess = store.getters['ui/userinfo/CHECK_APP_ACCESS'];
+    const hasAccess = checkAppAccess(requiredApp);
+
+    if (!hasAccess) {
+      return next({ name: 'not-found', query: { type: '403' } });
+    }
+  }
+
+  next();
 });
 
 export default router;
