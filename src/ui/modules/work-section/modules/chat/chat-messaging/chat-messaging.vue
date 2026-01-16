@@ -352,7 +352,7 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
 }
 
 .chat-messaging__textarea :deep(.wt-label) {
-  //label has 0 height but still adds vertical padding
+  //label has 0 height but still adds vertical padding (https://webitel.atlassian.net/browse/WTEL-8479?)
   padding: 0;
 }
 
