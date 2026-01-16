@@ -3,8 +3,10 @@ import { snakeToCamel } from '@webitel/api-services/utils';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { JobState } from 'webitel-sdk';
+import { RingtoneType } from '@webitel/ui-sdk/enums';
 
 import i18n from '../../../../../app/locale/i18n.js';
+import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
 
 const actions = {
   // @author @stanislav-kozak
@@ -43,7 +45,7 @@ const actions = {
     if (isJobEndSoundNotification) {
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action: JobState.Closed },
+        { action: JobState.Closed, volume: getRingtoneVolume(RingtoneType.Task) },
         { root: true },
       );
     }
@@ -51,7 +53,7 @@ const actions = {
   HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
     context.dispatch(
       'features/notifications/PLAY_SOUND',
-      { action },
+      { action, volume: getRingtoneVolume(RingtoneType.Task) },
       { root: true },
     );
 

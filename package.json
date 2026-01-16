@@ -21,7 +21,7 @@
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/components": "^13.6.0",
     "@vueuse/core": "^10.4.1",
-    "@webitel/api-services": "^0.0.100",
+    "@webitel/api-services": "^0.0.112",
     "@webitel/ui-sdk": "~26.2",
     "@webitel/ui-chats": "^0.0.23",
     "autolinker": "^4.0.0",
