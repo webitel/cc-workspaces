@@ -351,6 +351,11 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   overflow: auto !important;
 }
 
+.chat-messaging__textarea :deep(.wt-label) {
+  //label has 0 height but still adds vertical padding
+  padding: 0;
+}
+
 .chat-messaging-text-entry {
   display: flex;
   flex-direction: column;
