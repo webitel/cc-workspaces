@@ -5,7 +5,7 @@ import WebitelApplications
 import store from '../store';
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
-import NotFoundPage from '../../ui/components/not-found-page.vue';
+import ErrorPage from '../../ui/components/error-page.vue';
 
 const routes = [
   {
@@ -21,8 +21,8 @@ const routes = [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: 'not-found',
-    component: NotFoundPage,
+    name: 'error-page',
+    component: ErrorPage,
   },
 ];
 
@@ -35,7 +35,7 @@ const router = createRouter({
   routes,
 });
 
-const excludeRouteAuth = ['feedback-page', 'not-found'];
+const excludeRouteAuth = ['feedback-page', 'error-page'];
 
 router.beforeEach((to, from, next) => {
   if (excludeRouteAuth.includes(to.name)) {
@@ -62,7 +62,7 @@ router.beforeEach((to, from, next) => {
     const hasAccess = checkAppAccess(requiredApp);
 
     if (!hasAccess) {
-      return next({ name: 'not-found', query: { type: '403' } });
+      return next({ name: 'error-page', query: { type: '403' } });
     }
   }
 
