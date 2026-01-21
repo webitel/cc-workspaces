@@ -9,7 +9,7 @@
           src="../assets/disconnect-popup-animation.svg"
           alt="disconnect pic"
         >
-        <p class="disconnect-popup__main__text">{{ $t('disconnectPopup.mainText') }}</p>
+        <p class="disconnect-popup__main__text typo-body-1">{{ $t('disconnectPopup.mainText') }}</p>
       </article>
     </template>
     <template #actions>
@@ -75,7 +75,6 @@ export default {
   text-align: center;
 }
 .disconnect-popup__main__text {
-  @extend %typo-body-1;
   text-align: center;
 }
 

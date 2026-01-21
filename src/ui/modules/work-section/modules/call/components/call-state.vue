@@ -10,20 +10,22 @@
       v-if="showTimer"
       class="numpad-state__primary-text"
     >
-      <span
-        class="numpad-state__primary-text__state">
+      <span class="numpad-state__primary-text__state">
         {{ callState }}{{ showTimer ? ': ' : '' }}
       </span>
       <span
         v-for="(digit, key) of displayTime.split('')"
         :key="key"
         class="numpad-state__primary-text__time-digit"
-      >{{ digit }}</span>
+      >
+        {{ digit }}
+      </span>
     </div>
     <div
       v-if="dtmf"
-      class="numpad-state__secondary-text"
-    >{{ dtmf.join('') }}
+      class="numpad-state__secondary-text typo-subtitle-1"
+    >
+      {{ dtmf.join('') }}
     </div>
   </div>
 </template>
@@ -120,7 +122,10 @@ const sonarIcon = computed(
 )
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .numpad-state {
@@ -139,29 +144,20 @@ const sonarIcon = computed(
   &__primary-text {
     text-align: center;
 
-    &__state {
-      @extend %typo-body-1-bold;
-    }
-
     &__time-digit {
-      @extend %typo-body-1;
       display: inline-block;
       text-align: center;
       width: 9px;
 
       /*semicolons*/
-      &:nth-child(4), &:nth-child(7) {
+      &:nth-child(4),
+      &:nth-child(7) {
         width: 6px;
       }
     }
   }
 
   &__secondary-text {
-    @extend %typo-subtitle-1;
-    text-align: center;
-    min-height: 40px;
-    width: 100%;
-    padding: var(--spacing-xs);
     border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     word-wrap: break-word;

@@ -3,7 +3,7 @@
     :class="[
       `chat-queue--${size}`
     ]"
-    class="task-queue chat-queue"
+    class="task-queue chat-queue wt-scrollbar"
   >
     <wt-expansion-panel
       v-for="({ value, initiallyCollapsed, counters }) in expansions"

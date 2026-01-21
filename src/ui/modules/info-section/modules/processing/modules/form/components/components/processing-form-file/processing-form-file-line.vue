@@ -2,10 +2,10 @@
   <div
     :class="[
       `processing-form-file-line--${size}`,
-     {
-      'processing-form-file-line--readonly': readonly,
-     },
-     ]"
+      {
+        'processing-form-file-line--readonly': readonly,
+      },
+    ]"
     class="processing-form-file-line"
   >
     <wt-icon
@@ -31,7 +31,7 @@
         v-else-if="status === FileStatus.AFTER_ERROR || status === FileStatus.ERROR"
         class="processing-form-file-line__error-message"
       >
-        {{ $tc('vocabulary.errors', 1) }}
+        {{ $t('vocabulary.errors', 1) }}
       </p>
     </div>
     <div
@@ -75,8 +75,8 @@ export default {
   }),
   computed: {
     ...mapState({
-                  client: (state) => state.client,
-                }),
+      client: (state) => state.client,
+    }),
     readableSize() {
       return prettifyFileSize(this.file.size);
     },
@@ -119,7 +119,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .processing-form-file-line {
   display: grid;
   padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
@@ -156,7 +159,7 @@ export default {
     display: grid;
     grid-template-columns: 24px repeat(7, 1fr) 24px;
     grid-template-areas: 'type-icon name name name name name name name action-icon'
-                            '. size size size loader loader loader loader .';
+      '. size size size loader loader loader loader .';
 
     .processing-form-file-line__type-icon {
       grid-area: type-icon;

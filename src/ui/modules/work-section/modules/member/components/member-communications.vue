@@ -12,8 +12,8 @@
           :class="{'selected': communication.id === selectedCommId}"
           @click="selectCommunication(communication)"
         >
-          <div class="member-communications__type">{{ communication.type.name }}</div>
-          <div class="member-communications__destination">{{ communication.destination }}</div>
+          <div class="member-communications__type typo-subtitle-1">{{ communication.type.name }}</div>
+          <div class="member-communications__destination typo-caption">{{ communication.destination }}</div>
         </li>
       </ul>
     </template>
@@ -72,12 +72,7 @@ export default {
   }
 
   &__type {
-    @extend %typo-subtitle-1;
     margin-bottom: 6px;
-  }
-
-  &__destination {
-    @extend %typo-caption;
   }
 }
 

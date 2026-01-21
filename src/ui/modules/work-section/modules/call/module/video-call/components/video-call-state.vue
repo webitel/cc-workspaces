@@ -9,19 +9,19 @@
 
     <div
       v-if="!isCallActive"
-      class="video-call-state__primary-text"
+      class="video-call-state__primary-text typo-heading-1"
     >
       {{ callState }}
     </div>
 
     <div
       v-else
-      class="video-call-state__primary-text"
+      class="video-call-state__primary-text typo-heading-1"
     >
       <span
         v-for="(digit, key) in startTime.split('')"
         :key="key"
-        class="video-call-state__time-digit"
+        class="video-call-state__primary-text__time-digit typo-body-1"
       >
         {{ digit }}
       </span>
@@ -29,7 +29,7 @@
 
     <div
       v-if="getDtmfDigits && getDtmfDigits.length"
-      class="video-call-state__secondary-text"
+      class="video-call-state__secondary-text typo-subtitle-1"
     >
       {{ getDtmfDigits.join('') }}
     </div>
@@ -94,7 +94,10 @@ const sonarIcon = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style
+  scoped
+  lang="scss"
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .video-call-state {
@@ -113,28 +116,22 @@ const sonarIcon = computed(() => {
   }
 
   &__primary-text {
-    @extend %typo-heading-1;
     text-align: center;
-  }
 
-  &__time-digit {
-    display: inline-block;
-    text-align: center;
-    width: 20px;
+    &__time-digit {
+      display: inline-block;
+      width: 9px;
+      text-align: center;
 
-    // semicolons
-    &:nth-child(3),
-    &:nth-child(6) {
-      width: 12px;
+      // semicolons
+      &:nth-child(4),
+      &:nth-child(7) {
+        width: 6px;
+      }
     }
   }
 
   &__secondary-text {
-    @extend %typo-subtitle-1;
-    text-align: center;
-    min-height: 40px;
-    width: 100%;
-    padding: var(--spacing-xs);
     border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     word-wrap: break-word;

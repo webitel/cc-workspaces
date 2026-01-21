@@ -1,5 +1,5 @@
 <template>
-  <article v-if="agents.length" class="chat-agent">
+  <article v-if="agents.length" class="chat-agent typo-caption">
       <div v-if="agents.length > 1" class="chat-agent-content">
         <p>
           {{ $t('workspaceSec.chat.chatsAgentsList', { agentName: firstAgentName }) }}
@@ -18,7 +18,7 @@
             <li
               v-for="(agent) of hiddenAgents"
               :key="agent.id"
-              class="chat-agent-content__item"
+              class="chat-agent-content__item typo-body-1"
             >
               {{ agent.name }}
             </li>
@@ -116,7 +116,6 @@ onMounted(() => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-agent {
-  @extend %typo-caption;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -135,8 +134,5 @@ onMounted(() => {
     cursor: pointer;
   }
 
-  &__item {
-    @extend %typo-body-1;
-  }
 }
 </style>

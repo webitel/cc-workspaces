@@ -1,5 +1,5 @@
 <template>
-  <article class="knowledge-base">
+  <article class="knowledge-base wt-scrollbar">
     <iframe
       v-if="knowledgeSource"
       class="knowledge-base__iframe"
@@ -35,7 +35,6 @@ import { mapGetters } from 'vuex';
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .knowledge-base {
-    @extend %wt-scrollbar;
     height: 100%;
     width: 100%;
     overflow: scroll;

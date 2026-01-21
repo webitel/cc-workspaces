@@ -1,7 +1,7 @@
 <template>
   <p
     v-if="text"
-    class="chat-message-text"
+    class="chat-message-text typo-body-1"
     :class="{
       'chat-message-text--right': agent,
      }"
@@ -39,7 +39,6 @@ const text = computed(() => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-text {
-  @extend %typo-body-1;
   overflow-wrap: anywhere;
   white-space: pre-line; // read \n as "new line"
   padding: var(--spacing-xs);

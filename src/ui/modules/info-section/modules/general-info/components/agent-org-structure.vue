@@ -4,33 +4,36 @@
     :class="[`agent-org-structure--${size}`]"
   >
     <wt-expansion-panel :size="size">
-      <template #title>{{ $tc('objects.team', 1) }}</template>
+      <template #title>{{ $t('objects.team', 1) }}</template>
       <template #default>
         <ul>
           <li class="agent-org-structure-item">
-            <div class="agent-org-structure-item__title">{{ $t('reusable.name') }}</div>
-            <div class="agent-org-structure-item__value">{{ team }}</div>
+            <div class="agent-org-structure-item__title typo-body-1">{{ $t('reusable.name') }}</div>
+            <div :class="['agent-org-structure-item__value', size === 'sm' ? 'typo-body-2' : 'typo-body-1']">{{ team }}
+            </div>
           </li>
           <wt-divider />
           <li class="agent-org-structure-item">
-            <div class="agent-org-structure-item__title">{{ $tc('objects.supervisor', 1) }}</div>
+            <div :class="['agent-org-structure-item__title', size === 'sm' ? 'typo-subtitle-2' : 'typo-subtitle-1']">{{
+              $t('objects.supervisor', 1) }}</div>
             <div>
               <div
                 v-for="(sup, key) of supervisors"
                 :key="key"
-                class="agent-org-structure-item__value"
+                :class="['agent-org-structure-item__value', size === 'sm' ? 'typo-body-2' : 'typo-subtitle-2']"
               >{{ sup }}
               </div>
             </div>
           </li>
           <wt-divider />
           <li class="agent-org-structure-item">
-            <div class="agent-org-structure-item__title">{{ $tc('objects.auditor', 1) }}</div>
+            <div :class="['agent-org-structure-item__title', size === 'sm' ? 'typo-subtitle-2' : 'typo-subtitle-1']">{{
+              $t('objects.auditor', 1) }}</div>
             <div>
               <div
                 v-for="(auditor, key) of auditors"
                 :key="key"
-                class="agent-org-structure-item__value"
+                :class="['agent-org-structure-item__value', size === 'sm' ? 'typo-body-2' : 'typo-body-1']"
               >{{ auditor }}
               </div>
             </div>
@@ -56,7 +59,7 @@ export default {
     team() {
       return this.agent.team?.name || '';
     },
-      supervisors() {
+    supervisors() {
       if (!this.agent.supervisor) return '';
       return this.agent.supervisor.map((supervisor) => supervisor.name);
     },
@@ -68,7 +71,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .agent-org-structure {
@@ -81,25 +87,14 @@ export default {
 
 
     &__value {
-      @extend %typo-body-1;
       overflow-wrap: break-word;
       word-break: break-all;
-    }
-
-    &__title {
-      @extend %typo-subtitle-1;
     }
   }
 
   &--sm {
     .agent-org-structure-item {
       grid-template-columns: 3fr 2fr;
-    }
-    .agent-org-structure-item__title {
-      @extend %typo-subtitle-2;
-    }
-    .agent-org-structure-item__value {
-      @extend %typo-body-2;
     }
   }
 }

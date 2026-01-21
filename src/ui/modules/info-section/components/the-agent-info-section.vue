@@ -28,7 +28,7 @@
         <component
           :is="currentTab.value"
           :key="currentTab.value"
-          class="info-tab"
+          class="info-tab wt-scrollbar"
           :task="taskOnWorkspace"
           :size="infoSecSize"
         ></component>
@@ -102,8 +102,8 @@ export default {
     },
     taskState() {
       if ((this.taskState === CallActions.Hangup
-          || this.taskState === ConversationState.Closed
-          || this.taskState === JobState.Processing)
+        || this.taskState === ConversationState.Closed
+        || this.taskState === JobState.Processing)
         && this.showProcessing) {
         this.currentTab = this.tabsObject.processing;
       }
@@ -198,12 +198,12 @@ export default {
         iconPrefix: 'ws',
       };
       const flows = {
-        text: this.$tc('objects.flow.name', 2),
+        text: this.$t('objects.flow.name', 2),
         value: 'flows',
         icon: 'flows',
       };
       const screenshots = {
-        text: this.$tc('objects.screenshots', 2),
+        text: this.$t('objects.screenshots', 2),
         value: 'screenshots',
         icon: 'preview-tag-image',
       }
@@ -231,7 +231,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .workspace-section {
@@ -295,7 +298,6 @@ export default {
   flex-direction: column;
   flex-grow: 1;
   min-height: 0;
-  @extend %wt-scrollbar;
   max-height: 100%;
   padding-right: var(--scrollbar-width); // scrollbar offset
   scrollbar-gutter: stable both-edges;

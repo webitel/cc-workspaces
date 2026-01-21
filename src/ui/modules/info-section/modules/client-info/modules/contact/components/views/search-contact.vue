@@ -47,7 +47,7 @@
       ></wt-radio>
     </div>
 
-    <div class="search-contact__content">
+    <div class="search-contact__content wt-scrollbar">
         <wt-loader v-if="isLoading"/>
         <wt-dummy
           v-else-if="!isLoading && !contactsBySearch.length"
@@ -230,7 +230,6 @@ onUnmounted(() => {
     overflow: auto;
     flex: 1;
     flex-direction: column;
-    @extend %wt-scrollbar;
 
     .wt-dummy {
       flex: 1;

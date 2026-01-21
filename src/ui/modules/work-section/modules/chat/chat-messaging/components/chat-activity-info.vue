@@ -81,7 +81,6 @@ const content = computed(() =>
 
   &__title,
   &-provider__title {
-    @extend %typo-caption;
     white-space: nowrap;
   }
 }

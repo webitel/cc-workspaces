@@ -4,7 +4,7 @@
     <span
       v-for="(digit, key) of startTime.split('')"
       :key="key"
-      class="queue-preview-timer__digit"
+      class="queue-preview-timer__digit typo-body-2"
     >{{ digit }}</span>
   </div>
 </template>
@@ -32,7 +32,6 @@ export default {
   align-items: flex-start;
 
   &__digit {
-    @extend %typo-body-2;
     text-align: center;
     width: 7.5px;
 

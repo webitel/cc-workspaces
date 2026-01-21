@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-message-blocked-error">
+  <div class="chat-message-blocked-error typo-body-1">
     <wt-icon
       icon="protection-error"
       color="error"
@@ -19,7 +19,6 @@ const { t } = useI18n();
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-blocked-error {
-  @extend %typo-body-1;
   background: var(--p-error-highlight-color);
   border-radius: var(--spacing-xs);
   padding: var(--spacing-xs);

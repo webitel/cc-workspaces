@@ -12,14 +12,6 @@
     align-items: center;
     justify-content: center;
   }
-
-  &__heading {
-    @extend %typo-subtitle-1;
-  }
-
-  &__text {
-    @extend %typo-caption;
-  }
 }
 
 .workspace-pic {

@@ -1,6 +1,6 @@
 <template>
   <article
-    class="task-queue call-queue"
+    class="task-queue call-queue wt-scrollbar"
     :class="[
       `call-queue--${size}`
     ]"

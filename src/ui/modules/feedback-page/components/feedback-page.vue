@@ -14,12 +14,12 @@
             src="../../../../app/assets/image/feedback-page/error.png"
             alt="error"
           />
-          <h3 class="feedback-page__title">
+          <h3 class="feedback-page__title typo-heading-2">
             {{
               t(`feedback.${isError ? 'error' : 'success'}.title`, {}, { locale: lang })
             }}
           </h3>
-          <p class="feedback-page__description">
+          <p class="feedback-page__description typo-body-1">
             {{
               t(`feedback.${isError ? 'error' : 'success'}.description`, {}, { locale: lang })
             }}
@@ -104,13 +104,11 @@ onMounted(async () => {
   }
 
   &__title {
-    @extend %typo-heading-2;
     text-align: center;
 
   }
 
   &__description {
-    @extend %typo-body-1;
     text-align: center;
     max-width: 240px;
   }

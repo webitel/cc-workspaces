@@ -3,7 +3,7 @@
     :class="[
       `job-queue--${size}`
     ]"
-    class="task-queue job-queue"
+    class="task-queue job-queue wt-scrollbar"
   >
     <wt-expansion-panel
       v-for="({ value, initiallyCollapsed, counters }) in expansions"

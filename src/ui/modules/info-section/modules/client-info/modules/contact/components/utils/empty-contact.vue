@@ -4,7 +4,7 @@
     :class="[`empty-contact--${props.size}`]"
   >
     <wt-avatar size="2xl"/>
-    <p class="empty-contact__title">{{ $t('infoSec.contacts.emptyContact') }}</p>
+    <p class="empty-contact__title typo-heading-2">{{ $t('infoSec.contacts.emptyContact') }}</p>
 
     <wt-button
       v-if="allowAddition"
@@ -47,7 +47,6 @@ function add() {
   align-items: center;
 
   &__title {
-    @extend %typo-heading-2;
     flex-grow: 1;
   }
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="client-info-member"
+    class="client-info-member typo-body-1"
     :class="[`client-info-member--${size}`]"
   >
     <wt-expansion-panel
@@ -27,8 +27,8 @@
           >
             <wt-divider v-if="idx"></wt-divider>
             <div class="client-info-member-wrapper">
-              <p class="client-info-member-item__key">{{ key }}:</p>
-              <p class="client-info-member-item__value md markdown-body" v-html="value"></p>
+              <p :class="['client-info-member-item__key', size === 'sm' ? 'typo-subtitle-1' : 'typo-subtitle-1']">{{ key }}:</p>
+              <p :class="['client-info-member-item__value', size === 'sm' ? 'typo-body-1' : 'typo-body-1', 'md', 'markdown-body']" v-html="value"></p>
             </div>
           </li>
         </ul>
@@ -83,7 +83,6 @@ export default {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .client-info-member {
-  @extend %typo-body-1;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -101,13 +100,6 @@ export default {
     padding: var(--spacing-xs) 0;
   }
 
-  &-item__key {
-    @extend %typo-subtitle-1;
-  }
-
-  &-item__value {
-    @extend %typo-body-1;
-  }
 
   &--sm {
     .client-info-member-wrapper {
