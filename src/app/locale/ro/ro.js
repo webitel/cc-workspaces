@@ -283,6 +283,7 @@ export default {
     camera: {
       status: 'Starea permisiunii camerei',
       message: {
+        notFound: 'Cameră negăsită',
         denied: 'Permisiune refuzată',
       }
     },

@@ -286,6 +286,7 @@ export default {
     camera: {
       status: 'Camera permission status',
       message: {
+        notFound: 'Camera not found',
         denied: 'Permission denied',
       },
     }

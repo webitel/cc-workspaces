@@ -278,11 +278,12 @@ export default {
       message: {
         denied: 'Từ chối quyền',
       },
-      camera: {
-        status: 'Trạng thái quyền truy cập camera',
-        message: {
-          denied: 'Từ chối quyền',
-        },
+    },
+    camera: {
+      status: 'Trạng thái quyền truy cập camera',
+      message: {
+        notFound: 'Không tìm thấy camera',
+        denied: 'Từ chối quyền',
       },
     },
   },
