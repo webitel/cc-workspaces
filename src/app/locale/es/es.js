@@ -284,6 +284,7 @@ export default {
     camera: {
       status: 'Estado del permiso de cámara',
       message: {
+        notFound: 'Cámara no encontrada',
         denied: 'Permiso denegado',
       },
     },

@@ -283,11 +283,12 @@ export default {
       message: {
         denied: 'Запрещено',
       },
-      camera: {
-        status: 'Разрешение на использование Камеры',
-        message: {
-          denied: 'Запрещено',
-        },
+    },
+    camera: {
+      status: 'Разрешение на использование Камеры',
+      message: {
+        notFound: 'Камера не найдена',
+        denied: 'Запрещено',
       },
     },
   },
