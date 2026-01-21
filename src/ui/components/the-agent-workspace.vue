@@ -1,7 +1,7 @@
 <template>
   <main
     v-if="hasAccess"
-    class="main-agent-workspace"
+    class="main-agent-workspace typo-body-1"
     @drop="preventDrop"
     @dragenter.prevent
     @dragover.prevent
