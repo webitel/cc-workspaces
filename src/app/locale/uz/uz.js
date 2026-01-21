@@ -283,6 +283,7 @@ export default {
     camera: {
       status: 'Kamera ruxsat holati',
       message: {
+        notFound: 'Kamera topilmadi',
         denied: 'Ruxsat berilmadi',
       },
     },

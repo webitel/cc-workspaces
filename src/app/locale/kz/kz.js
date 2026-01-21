@@ -282,6 +282,7 @@ export default {
     camera: {
       status: 'Камераны пайдалануға рұқсат',
       message: {
+        notFound: 'Камера табылмады',
         denied: 'Тыйым салынған',
       },
     },
