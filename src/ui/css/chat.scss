@@ -15,7 +15,6 @@
   height: inherit;
 
   .chat-messages-items {
-    @extend %wt-scrollbar;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -27,4 +26,3 @@
     gap: var(--spacing-xs);
   }
 }
-

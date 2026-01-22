@@ -2,7 +2,7 @@
   <section class="current-chat chat-messages-container" @click="focusOnInput">
     <div
       ref="chat-messages-items"
-      class="chat-messages-items"
+      class="chat-messages-items wt-scrollbar"
       @scroll="handleChatScroll"
       @resize="updateThreshold"
     >

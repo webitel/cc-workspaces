@@ -3,7 +3,7 @@
 
     <div
       v-show="props.newMessageCount"
-      class="scroll-to-bottom-btn__messages-counter"
+      class="scroll-to-bottom-btn__messages-counter typo-body-2"
     >
       {{ props.newMessageCount }}
     </div>
@@ -42,7 +42,6 @@ const emit = defineEmits(['scroll']);
   gap: var(--spacing-2xs);
 
   &__messages-counter {
-    @extend %typo-body-2;
     width: 24px;
     height: 24px;
     display: flex;

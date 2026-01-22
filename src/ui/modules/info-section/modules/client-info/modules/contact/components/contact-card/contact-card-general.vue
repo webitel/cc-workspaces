@@ -15,7 +15,7 @@
         <a
           target="_blank"
           :href="contactLink(contactId)"
-          class="contact-card-general__link"
+          class="contact-card-general__link typo-heading-2"
         >{{ name }}
           <wt-icon
             icon="link"
@@ -40,7 +40,7 @@
           v-if="timezone"
           class="contact-card-general__item"
         >
-          <p class="contact-card-general__title">
+          <p class="contact-card-general__title typo-subtitle-1">
             {{ t('date.timezone', 1) }}
           </p>
           <p>{{ timezone }}</p>
@@ -130,7 +130,6 @@ onMounted(initShowFullContactState);
   }
 
   &__link {
-    @extend %typo-heading-2;
     display: flex;
     align-items: baseline;
     gap: var(--spacing-xs);
@@ -141,10 +140,6 @@ onMounted(initShowFullContactState);
   &__item {
     display: grid;
     grid-template-columns: 1fr 2fr;
-  }
-
-  &__title {
-    @extend %typo-subtitle-1;
   }
 
   &--sm {

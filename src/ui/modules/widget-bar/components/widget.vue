@@ -18,8 +18,8 @@
       size="sm">
     </wt-icon>
 
-    <div class="widget__title">{{ $t(widget.locale) }}:</div>
-    <div class="widget__value">{{ value }}</div>
+    <div class="widget__title typo-caption">{{ $t(widget.locale) }}:</div>
+    <div class="widget__value typo-caption">{{ value }}</div>
   </div>
 </template>
 
@@ -86,12 +86,7 @@ $widget-chat-aht-color:  var(--success-color);
   white-space: nowrap;
 
   .widget__title {
-    @extend %typo-caption;
     margin-right: var(--spacing-2xs);
-  }
-
-  .widget__value {
-    @extend %typo-caption;
   }
 
   @media screen and (max-width: 1336px) {

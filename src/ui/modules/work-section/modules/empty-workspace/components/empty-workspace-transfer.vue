@@ -5,8 +5,8 @@
       src="../assets/empty-ws-transfer.svg"
       alt="workspace is empty"
     >
-    <h1 class="empty-workspace__heading">{{$t('emptyWorkspace.transfer.heading')}}</h1>
-    <p class="empty-workspace__text">{{$t('emptyWorkspace.transfer.text')}}</p>
+    <h1 class="empty-workspace__heading typo-subtitle-1">{{$t('emptyWorkspace.transfer.heading')}}</h1>
+    <p class="empty-workspace__text typo-caption">{{$t('emptyWorkspace.transfer.text')}}</p>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div v-if="image" class="chat-message-image" @click="$emit('open', image)">
     <img
-      class="chat-message-image__img"
+      class="chat-message-image__img typo-body-1"
       :src="image.url"
       :alt="image.name"
       draggable="false"
@@ -25,7 +25,6 @@ export default {
   cursor: pointer;
 
   &__img {
-    @extend %typo-body-1;
     max-height: var(--chat-file-max-height);
     max-width: var(--chat-file-max-width);
     width: 100%;

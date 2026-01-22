@@ -63,7 +63,6 @@ export default {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .processing-form__schedule-call-select__title {
-  @extend %typo-body-1;
   text-align: center;
   margin-bottom: var(--spacing-xs);
 }

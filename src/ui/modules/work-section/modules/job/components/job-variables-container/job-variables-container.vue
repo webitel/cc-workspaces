@@ -1,6 +1,6 @@
 <template>
   <section
-    class="job-variables-container md markdown-body"
+    class="job-variables-container md markdown-body wt-scrollbar"
     v-html="variables"
   ></section>
 </template>
@@ -45,8 +45,6 @@ export default {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .job-variables-container {
-  @extend %wt-scrollbar;
-
   height: 100%;
   overflow: auto;
 }

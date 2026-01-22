@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
-import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 import vueDevtools from 'vite-plugin-vue-devtools';
 import { resolve } from 'path';
 
@@ -61,9 +60,6 @@ export default ({ mode }) => {
         globals: {
           Buffer: true, // can also be 'build', 'dev', or false
         },
-      }),
-      createSvgSpritePlugin({
-        include: '**/sprite/*.svg',
       }),
       // https://webitel.atlassian.net/browse/WTEL-4240
       VitePWA({

@@ -1,5 +1,5 @@
 <template>
-  <ul class="chat-helper-list">
+  <ul class="chat-helper-list wt-scrollbar">
     <li
       v-for="(item, idx) in props.list"
       :key="item.id || idx"
@@ -16,7 +16,7 @@
         class="chat-helper"
         @mouseenter="() => activeIndex = idx"
         @mouseleave="() => activeIndex = -1">
-        <p class="chat-helper__name">{{ item.name }}</p>
+        <p class="chat-helper__name typo-body-1-bold">{{ item.name }}</p>
         <p class="chat-helper__text">{{ item.text }}</p>
       </div>
     </li>
@@ -110,7 +110,6 @@ watch(() => activeIndex.value, (newIndex) => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-helper-list {
-  @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -123,9 +122,6 @@ watch(() => activeIndex.value, (newIndex) => {
   margin-top: var(--spacing-xs);
   padding: var(--spacing-xs);
 
-  &__name {
-    @extend %typo-body-1-bold;
-  }
 
   &--active {
     background-color: var(--content-wrapper-hover-color);

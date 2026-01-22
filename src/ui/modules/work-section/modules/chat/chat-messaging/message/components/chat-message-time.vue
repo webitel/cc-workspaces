@@ -1,6 +1,6 @@
 <template>
   <aside class="chat-message-time">
-    <div class="chat-message-time__sent-at">
+    <div class="chat-message-time__sent-at typo-caption">
       {{ time }}
     </div>
   </aside>
@@ -37,7 +37,6 @@ export default {
   align-items: flex-end;
 
   &__sent-at {
-    @extend %typo-caption;
     color: var(--text-main-color);
     white-space: nowrap;
   }

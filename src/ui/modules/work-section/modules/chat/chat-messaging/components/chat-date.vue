@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-date">
+  <div class="chat-date typo-subtitle-1">
     {{ formattedDate }}
   </div>
 </template>
@@ -34,7 +34,6 @@ const formattedDate = computed(() => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-date {
-    @extend %typo-subtitle-1;
     width: 100%;
     display: flex;
     justify-content: center;

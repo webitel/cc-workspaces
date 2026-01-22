@@ -12,7 +12,7 @@
       />
     </div>
     <div class="contact-communications-item__main">
-      <span class="contact-communications-item__title">{{ phone.number }}</span>
+      <span class="contact-communications-item__title typo-body-2">{{ phone.number }}</span>
     </div>
     <div class="contact-communications-item__after">
       <wt-icon-btn
@@ -66,7 +66,6 @@ const emit = defineEmits(['call']);
   }
 
   &__title {
-    @extend %typo-body-2;
     overflow-wrap: anywhere;
   }
 }

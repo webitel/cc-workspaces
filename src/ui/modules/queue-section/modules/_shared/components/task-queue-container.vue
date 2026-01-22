@@ -1,6 +1,6 @@
 <template>
   <section
-    class="queue-task-container"
+    class="queue-task-container wt-scrollbar"
     :class="{
     'queue-task-container--empty': empty,
     }"
@@ -23,7 +23,6 @@ const props = defineProps({
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .queue-task-container {
-  @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
   min-height: 0;

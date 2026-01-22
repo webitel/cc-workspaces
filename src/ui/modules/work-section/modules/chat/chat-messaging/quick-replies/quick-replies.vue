@@ -1,43 +1,46 @@
 <template>
-    <div class="quick-replies">
-      <div class="quick-replies__header">
-        <div class="quick-replies__title-wrapper">
-          <wt-icon
-            icon="quick-replies"
-            color="info"
-          ></wt-icon>
-          <p class="quick-replies__title">
-            {{ $tc('objects.quickReplies.quickReplies', 1) }}</p>
-        </div>
-        <wt-icon-btn
-          icon="close--filled"
-          @click="close"
-        >
-
-        </wt-icon-btn>
+  <div class="quick-replies">
+    <div class="quick-replies__header">
+      <div class="quick-replies__title-wrapper">
+        <wt-icon
+          icon="quick-replies"
+          color="info"
+        ></wt-icon>
+        <p class="quick-replies__title typo-body-1-bold">
+          {{ $t('objects.quickReplies.quickReplies', 1) }}</p>
       </div>
-
-      <wt-loader v-if="isLoading" />
-
-      <wt-empty
-        v-if="!isLoading && !replies.length"
-        :image="emptyPic"
-        class="quick-replies__empty"
-        :text="$t('objects.quickReplies.quickRepliesEmpty')"
+      <wt-icon-btn
+        icon="close--filled"
+        @click="close"
       >
-      </wt-empty>
 
-      <chat-helper-list
-        v-if="!isLoading && replies.length"
-        :list="replies"
-        @select="select"
-      />
+      </wt-icon-btn>
     </div>
+
+    <wt-loader v-if="isLoading" />
+
+    <wt-empty
+      v-if="!isLoading && !replies.length"
+      :image="emptyPic"
+      class="quick-replies__empty"
+      :text="$t('objects.quickReplies.quickRepliesEmpty')"
+    >
+    </wt-empty>
+
+    <chat-helper-list
+      v-if="!isLoading && replies.length"
+      :list="replies"
+      @select="select"
+    />
+  </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { QuickRepliesAPI } from '@webitel/api-services/api';
-import { computed,onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatHelperList from '../components/chat-helper-list.vue';
@@ -62,7 +65,7 @@ const store = useStore();
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 const emptyPic = computed(() => (darkMode.value ? EmptyPicDark : EmptyPicLight));
 
-const callQuickReply = async (params = {}):Promise<void> => {
+const callQuickReply = async (params = {}): Promise<void> => {
   const repliesParams = {
     ...params,
     restrictToAgent: true,
@@ -94,7 +97,10 @@ watch(() => props.search, (search: string | undefined) => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .quick-replies {
@@ -115,9 +121,6 @@ watch(() => props.search, (search: string | undefined) => {
     gap: var(--spacing-xs);
   }
 
-  &__title {
-    @extend %typo-body-1-bold;
-  }
 
   &__empty {
     width: 100%;

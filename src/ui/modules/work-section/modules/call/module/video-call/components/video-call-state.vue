@@ -8,24 +8,28 @@
     </div>
 
     <div
-      v-if="showTimer"
-      class="video-call-state__primary-text"
+      v-if="!isCallActive"
+      class="video-call-state__primary-text typo-heading-1"
     >
-      <span class="video-call-state__primary-text__state">
-        {{ callState }}{{ showTimer ? ': ' : '' }}
-      </span>
+      {{ callState }}
+    </div>
+
+    <div
+      v-else
+      class="video-call-state__primary-text typo-heading-1"
+    >
       <span
         v-for="(digit, key) of displayTime.split('')"
         :key="key"
-        class="video-call-state__primary-text__time-digit"
+        class="video-call-state__primary-text__time-digit typo-body-1"
       >
         {{ digit }}
       </span>
     </div>
 
     <div
-      v-if="dtmf"
-      class="video-call-state__secondary-text"
+      v-if="getDtmfDigits && getDtmfDigits.length"
+      class="video-call-state__secondary-text typo-subtitle-1"
     >
       {{ dtmf.join('') }}
     </div>
@@ -42,7 +46,10 @@ defineOptions({
 const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
 </script>
 
-<style scoped lang="scss">
+<style
+  scoped
+  lang="scss"
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .video-call-state {
@@ -63,15 +70,16 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
   &__primary-text {
     text-align: center;
 
-    &__state {
-      @extend %typo-body-1-bold;
-    }
-
     &__time-digit {
-      @extend %typo-body-1;
       display: inline-block;
       width: 9px;
       text-align: center;
+
+      // semicolons
+      &:nth-child(4),
+      &:nth-child(7) {
+        width: 6px;
+      }
 
       // semicolons
       &:nth-child(4),
@@ -82,7 +90,6 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
   }
 
   &__secondary-text {
-    @extend %typo-subtitle-1;
     border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-xs);

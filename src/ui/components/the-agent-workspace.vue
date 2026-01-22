@@ -1,6 +1,6 @@
 <template>
   <main
-    class="main-agent-workspace"
+    class="main-agent-workspace typo-body-1"
     @drop="preventDrop"
     @dragenter.prevent
     @dragover.prevent
@@ -11,12 +11,8 @@
       @input="initSession"
     ></welcome-popup>
 
-    <desc-track-auth-error-popup
-      v-if="isDescTrackAuthErrorPopup"
-    />
-    <desc-track-auth-success-popup
-      v-model:shown="isDescTrackAuthSuccessPopup"
-    />
+    <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
+    <desc-track-auth-success-popup v-model:shown="isDescTrackAuthSuccessPopup" />
 
     <wt-notifications-bar />
     <cc-header />
@@ -51,7 +47,10 @@
   </main>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -94,7 +93,7 @@ const isDescTrackAuthSuccessPopup = ref(false);
 const checkAppAccess = computed(() => store.getters['ui/userinfo/CHECK_APP_ACCESS']);
 const isDescTrackAuthPopupsAllow = computed(() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW']);
 const agent = computed(() => store.state.ui.infoSec.agentInfo.agent)
-const isDescTrackAuthErrorPopup = computed(() =>  !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
+const isDescTrackAuthErrorPopup = computed(() => !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
 
 const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
@@ -138,7 +137,10 @@ onUnmounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .main-agent-workspace {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -184,5 +186,4 @@ onUnmounted(() => {
   position: relative;
   padding: var(--spacing-sm);
 }
-
 </style>

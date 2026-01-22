@@ -4,7 +4,7 @@
     class="agent-queues"
   >
     <wt-expansion-panel :size="size">
-      <template #title>{{ $tc('infoSec.generalInfo.queue', 2) }}</template>
+      <template #title>{{ $t('infoSec.generalInfo.queue', 2) }}</template>
       <template #default>
         <ul>
           <li
@@ -12,7 +12,8 @@
             :key="queue.queue.id"
             class="agent-queues-item"
           >
-            <div class="agent-queues-item__title">{{ queue.queue.name }}</div>
+            <div :class="['agent-queues-item__title', size === 'sm' ? 'typo-body-2' : 'typo-body-1']">{{
+              queue.queue.name }}</div>
             <div class="agent-queues-item__status-wrapper">
               <agent-indicators
                 :agents="queue.agents"
@@ -53,7 +54,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .agent-queues {
@@ -73,7 +77,6 @@ export default {
     }
 
     .agent-queues-item__title {
-      @extend %typo-body-1;
       word-break: break-all;
       overflow-wrap: break-word;
     }
@@ -87,12 +90,7 @@ export default {
 
   &--sm {
     .agent-queues-item {
-      @extend %typo-body-2;
       grid-template-columns: 3fr 2fr;
-
-      .agent-queues-item__title {
-        @extend %typo-body-2;
-      }
     }
   }
 }

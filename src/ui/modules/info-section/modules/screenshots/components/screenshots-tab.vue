@@ -1,6 +1,6 @@
 <template>
   <div class="screenshots-tab">
-    <h3 class="screenshots-tab__title">{{ $tc('objects.screenshots', 2) }}</h3>
+    <h3 class="screenshots-tab__title typo-heading-3">{{ $t('objects.screenshots', 2) }}</h3>
     <wt-dummy
       v-if="!data.length"
       :text="t('webitelUI.empty.text.empty')"
@@ -34,10 +34,13 @@
           @click="removeFile(item)"
         />
       </template>
-  </wt-table>
+    </wt-table>
   </div>
 </template>
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { computed, onActivated, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
@@ -102,13 +105,15 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style
+  scoped
+  lang="scss"
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .screenshots-tab {
 
   &__title {
-    @extend %typo-heading-3;
     margin-bottom: var(--spacing-sm);
   }
 
@@ -116,7 +121,7 @@ onBeforeUnmount(() => {
     max-width: 100%;
     width: var(--p-player-cam-preview-sm-width);
     //Override image component height to ensure the overlay matches the image size
-    height: var(--p-player-cam-preview-sm-height)!important;
+    height: var(--p-player-cam-preview-sm-height) !important;
   }
 }
 </style>

@@ -33,7 +33,6 @@
 
 .queue-preview-title,
 .queue-preview-tooltip-title {
-  @extend %typo-subtitle-2;
   overflow: hidden;
   flex-grow: 1;
   white-space: nowrap;
@@ -42,14 +41,9 @@
 
 .queue-preview-subtitle,
 .queue-preview-tooltip-subtitle {
-  @extend %typo-body-2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.queue-preview-timer {
-  @extend %typo-body-2;
 }
 
 .queue-preview-icon-status {
