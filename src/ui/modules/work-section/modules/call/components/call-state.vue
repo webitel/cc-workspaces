@@ -94,4 +94,6 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
       text-align: center;
       word-wrap: break-word;
     }
-  }</style>
+  }
+}
+</style>
