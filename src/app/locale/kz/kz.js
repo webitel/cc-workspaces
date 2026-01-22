@@ -25,6 +25,7 @@ export default {
     run: 'Іске қосу',
     today: 'Бүгін',
     phoneNumber: 'Телефон нөмірі',
+    unknownTaskSize: 'Тапсырма өлшемі белгісіз',
   },
   feedback: {
     success: {
@@ -281,6 +282,7 @@ export default {
     camera: {
       status: 'Камераны пайдалануға рұқсат',
       message: {
+        notFound: 'Камера табылмады',
         denied: 'Тыйым салынған',
       },
     },

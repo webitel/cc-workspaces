@@ -4,7 +4,7 @@
       <img
         alt=""
         :src="sonarIcon"
-      >
+      />
     </div>
 
     <div
@@ -19,7 +19,7 @@
       class="video-call-state__primary-text typo-heading-1"
     >
       <span
-        v-for="(digit, key) in startTime.split('')"
+        v-for="(digit, key) of displayTime.split('')"
         :key="key"
         class="video-call-state__primary-text__time-digit typo-body-1"
       >
@@ -31,67 +31,19 @@
       v-if="getDtmfDigits && getDtmfDigits.length"
       class="video-call-state__secondary-text typo-subtitle-1"
     >
-      {{ getDtmfDigits.join('') }}
+      {{ dtmf.join('') }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-import { useI18n } from 'vue-i18n';
-import { CallActions } from 'webitel-sdk';
-
-import { useCallTimer } from '../../../../../../../composables/useCallTimer';
-import yellowSonar from '../../../../../../../../app/assets/call-sonars/yellow-sonar.svg';
-import greenSonar from '../../../../../../../../app/assets/call-sonars/green-sonar.svg';
+import { useCallState } from '../../../../../../../composables/useCallState';
 
 defineOptions({
   name: 'VideoCallState',
 });
 
-const store = useStore();
-const { t } = useI18n();
-
-const task = computed(
-  () => store.getters['features/call/CALL_ON_WORKSPACE'],
-);
-const getDtmfDigits = computed(
-  () => store.getters['features/call/GET_CURRENT_CALL_DIGITS'],
-);
-
-const { startTime } = useCallTimer(task);
-
-const isCallActive = computed(
-  () => task.value?.state === CallActions.Active,
-);
-
-const callState = computed(() => {
-  const currentTask = task.value;
-  if (!currentTask) return '';
-
-  switch (currentTask.state) {
-    case CallActions.Ringing:
-      return t('workspaceSec.callState.ringing');
-    case CallActions.Hold:
-      return t('workspaceSec.callState.onHold');
-    case CallActions.Hangup:
-      return t('workspaceSec.callState.hangup');
-    case CallActions.Active:
-      return startTime.value;
-    default:
-      return currentTask.state || '';
-  }
-});
-
-const sonarIcon = computed(() => {
-  const currentTask = task.value;
-  if (!currentTask) return '';
-
-  if (currentTask.isHold) return yellowSonar;
-  if (currentTask.state === CallActions.Active) return greenSonar;
-  return '';
-});
+const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
 </script>
 
 <style
@@ -102,16 +54,16 @@ const sonarIcon = computed(() => {
 
 .video-call-state {
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   max-width: 100%;
   height: 100%;
 
   &__animation {
+    margin-bottom: var(--spacing-xs);
     width: 52px;
     height: 52px;
-    margin-bottom: var(--spacing-xs);
     overflow: hidden;
   }
 
@@ -128,12 +80,22 @@ const sonarIcon = computed(() => {
       &:nth-child(7) {
         width: 6px;
       }
+
+      // semicolons
+      &:nth-child(4),
+      &:nth-child(7) {
+        width: 6px;
+      }
     }
   }
 
   &__secondary-text {
     border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
+    padding: var(--spacing-xs);
+    width: 100%;
+    min-height: 40px;
+    text-align: center;
     word-wrap: break-word;
   }
 }

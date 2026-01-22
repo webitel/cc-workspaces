@@ -25,6 +25,7 @@ export default {
     run: 'Rulează',
     today: 'Astăzi',
     phoneNumber: 'Număr de telefon',
+    unknownTaskSize: 'Dimensiune necunoscută a sarcinii',
   },
   feedback: {
     success: {
@@ -283,6 +284,7 @@ export default {
     camera: {
       status: 'Starea permisiunii camerei',
       message: {
+        notFound: 'Cameră negăsită',
         denied: 'Permisiune refuzată',
       }
     },

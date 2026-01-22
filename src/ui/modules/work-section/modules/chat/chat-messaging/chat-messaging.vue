@@ -318,6 +318,7 @@ $textEntryActionsMd: calc(var(--icon-md-size) + $roundedAction);
 $textEntryActionsSm: calc(var(--icon-sm-size) + $roundedAction);
 $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments)
 
+
 .chat-messaging {
   position: relative;
   display: flex;

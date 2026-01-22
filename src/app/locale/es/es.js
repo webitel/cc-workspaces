@@ -25,6 +25,7 @@ export default {
     run: 'Ejecutar',
     today: 'Hoy',
     phoneNumber: 'Número de teléfono',
+    unknownTaskSize: 'Tamaño de tarea desconocido',
   },
   feedback: {
     success: {
@@ -284,6 +285,7 @@ export default {
     camera: {
       status: 'Estado del permiso de cámara',
       message: {
+        notFound: 'Cámara no encontrada',
         denied: 'Permiso denegado',
       },
     },

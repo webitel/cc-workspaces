@@ -25,6 +25,7 @@ export default {
     run: 'Запустити',
     today: 'Сьогодні',
     phoneNumber: 'Номер телефону',
+    unknownTaskSize: 'Невідомий розмір завдання',
   },
   feedback: {
     success: {
@@ -288,6 +289,7 @@ export default {
     camera: {
       status: 'Дозвіл на викоритання Камери',
       message: {
+        notFound: 'Камера не знайдена',
         denied: 'Заборонено',
       },
     },

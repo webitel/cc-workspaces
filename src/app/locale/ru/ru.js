@@ -25,6 +25,7 @@ export default {
     run: 'Запустить',
     today: 'Сегодня',
     phoneNumber: 'Номер телефона',
+    unknownTaskSize: 'Неизвестный размер задачи',
   },
   feedback: {
     success: {
@@ -283,11 +284,12 @@ export default {
       message: {
         denied: 'Запрещено',
       },
-      camera: {
-        status: 'Разрешение на использование Камеры',
-        message: {
-          denied: 'Запрещено',
-        },
+    },
+    camera: {
+      status: 'Разрешение на использование Камеры',
+      message: {
+        notFound: 'Камера не найдена',
+        denied: 'Запрещено',
       },
     },
   },

@@ -25,6 +25,7 @@ export default {
     run: 'Ishga tushirish',
     today: 'Bugun',
     phoneNumber: 'Telefon raqami',
+    unknownTaskSize: 'Vazifa o‘lchami noma\'lum',
   },
   feedback: {
     success: {
@@ -282,6 +283,7 @@ export default {
     camera: {
       status: 'Kamera ruxsat holati',
       message: {
+        notFound: 'Kamera topilmadi',
         denied: 'Ruxsat berilmadi',
       },
     },
@@ -359,4 +361,3 @@ export default {
     quickRepliesDescription: 'Chatda tezkor javoblar menyusini ochadi',
   },
 };
-

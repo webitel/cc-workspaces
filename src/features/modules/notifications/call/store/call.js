@@ -2,8 +2,10 @@ import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { CallActions } from 'webitel-sdk';
+import { RingtoneType } from '@webitel/ui-sdk/enums';
 
 import i18n from '../../../../../app/locale/i18n.js';
+import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
 
 const prettifyQueue = (queue) => {
   return queue
@@ -37,8 +39,6 @@ const actions = {
       'features/notifications/GET_NOTIFICATION_SETTING'
     ](EngineSystemSettingName.CallEndSoundNotification);
 
-    const isCallEndSound = localStorage.getItem('settings/callEndSound');
-
     await context.dispatch('features/notifications/STOP_SOUND', null, {
       root: true,
     }); // ringing
@@ -66,13 +66,13 @@ const actions = {
 
     // @author @stanislav-kozak
     // We check option by admin settings and after user setting for check if we need to play sound
-    if (isCallEndSoundNotification && isCallEndSound) {
+    if (isCallEndSoundNotification) {
       context.commit('features/notifications/SET_HANGUP_SOUND_ALLOW', true, {
         root: true,
       });
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action: CallActions.Hangup },
+        { action: CallActions.Hangup, volume: getRingtoneVolume(RingtoneType.Call) },
         { root: true },
       );
     }
@@ -126,16 +126,13 @@ const actions = {
       ? `${import.meta.env.VITE_RINGTONES_URL}/${ringtoneName}`
       : undefined;
 
-    const ringtoneVolume =
-      parseFloat(localStorage.getItem('settings/ringtone-volume')) || 1.0;
-
     const playSound = () =>
       context.dispatch(
         'features/notifications/PLAY_SOUND',
         {
           action: CallActions.Ringing,
           sound: customRingtone,
-          volume: ringtoneVolume,
+          volume: getRingtoneVolume(RingtoneType.Call),
         },
         { root: true },
       );

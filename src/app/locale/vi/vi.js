@@ -25,6 +25,7 @@ export default {
     run: 'Chạy',
     today: 'Hôm nay',
     phoneNumber: 'Số điện thoại',
+    unknownTaskSize: 'Kích thước nhiệm vụ không xác định',
   },
   feedback: {
     success: {
@@ -278,11 +279,12 @@ export default {
       message: {
         denied: 'Từ chối quyền',
       },
-      camera: {
-        status: 'Trạng thái quyền truy cập camera',
-        message: {
-          denied: 'Từ chối quyền',
-        },
+    },
+    camera: {
+      status: 'Trạng thái quyền truy cập camera',
+      message: {
+        notFound: 'Không tìm thấy camera',
+        denied: 'Từ chối quyền',
       },
     },
   },
