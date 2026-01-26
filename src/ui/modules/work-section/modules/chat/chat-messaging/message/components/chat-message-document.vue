@@ -12,10 +12,10 @@
       />
     </div>
     <div class="chat-message-document__info-wrapper">
-      <a class="chat-message-document__name" :title="document.name">
+      <a class="chat-message-document__name typo-subtitle-2" :title="document.name">
         {{ document.name }}
       </a>
-      <div class="chat-message-document__size">
+      <div class="chat-message-document__size typo-caption">
         {{ documentSize }}
       </div>
     </div>
@@ -80,14 +80,12 @@ export default {
   }
 
   &__name {
-    @extend %typo-subtitle-2;
     cursor: pointer;
     overflow-wrap: break-word;
     color: var(--text-main-color);
   }
 
   &__size {
-    @extend %typo-caption;
     color: var(--text-main-color);
   }
 

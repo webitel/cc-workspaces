@@ -16,7 +16,7 @@
           >
             <wt-divider v-if="idx"/>
             <div class="contact-card-variables-wrapper">
-              <p class="contact-card-variables-item__key">{{ key }}:</p>
+              <p class="contact-card-variables-item__key typo-subtitle-1">{{ key }}:</p>
               <p class="contact-card-variables-item__value">{{ value }}</p>
             </div>
           </li>
@@ -64,9 +64,6 @@ const { t } = useI18n();
   flex-direction: column;
   justify-items: flex-start;
 
-  &__key {
-    @extend %typo-subtitle-1;
-  }
 }
 
 .contact-card-variables-wrapper {

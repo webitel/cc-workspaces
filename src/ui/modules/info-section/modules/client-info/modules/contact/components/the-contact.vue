@@ -1,6 +1,6 @@
 <template>
   <article
-    class="contact"
+    class="contact typo-body-1 wt-scrollbar"
   >
     <wt-expansion-panel>
       <template #title>{{ t('infoSec.contacts.client') }}</template>
@@ -135,8 +135,6 @@ watch([
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .contact {
-  @extend %typo-body-1;
-  @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
 

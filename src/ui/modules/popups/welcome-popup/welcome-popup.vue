@@ -16,7 +16,7 @@
         </div>
         <p
           v-if="mic.message"
-          class="welcome-popup-permission__detail"
+          class="welcome-popup-permission__detail typo-body-2"
         >
           {{ $t(`welcomePopup.mic.message.${mic.message}`) }}
         </p>
@@ -32,7 +32,7 @@
         </div>
         <p
           v-if="notification.message"
-          class="welcome-popup-permission__detail"
+          class="welcome-popup-permission__detail typo-body-2"
         >
           {{ $t(`welcomePopup.notifications.message.${notification.message}`) }}
         </p>
@@ -48,7 +48,7 @@
             size="sm"
           ></wt-indicator>
         </div>
-        <p v-if="camera.message" class="welcome-popup-permission__detail">
+        <p v-if="camera.message" class="welcome-popup-permission__detail typo-body-2">
           {{ $t(`welcomePopup.camera.message.${camera.message}`) }}
         </p>
       </div>
@@ -181,7 +181,6 @@ export default {
   }
 
   &__detail {
-    @extend %typo-body-2;
     color: var(--text-error-color);
   }
 }

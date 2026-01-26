@@ -1,5 +1,5 @@
 <template>
-<!-- show form-file only if its write mode, or if it has value to show -->
+  <!-- show form-file only if its write mode, or if it has value to show -->
   <article
     v-if="isFormFile"
     class="processing-form-file"
@@ -30,11 +30,9 @@
       ></wt-icon>
       {{ label }}
       <span v-if="fileCounter">
-        ({{ fileCounter }} {{ $tc('vocabulary.file', filePluralChoice) }})
+        ({{ fileCounter }} {{ $t('vocabulary.file', filePluralChoice) }})
       </span>
-      <wt-hint
-        v-if="hint"
-      >{{ hint }}
+      <wt-hint v-if="hint">{{ hint }}
       </wt-hint>
       <div class="processing-form-file__actions-wrapper">
         <wt-icon-btn
@@ -157,15 +155,15 @@ export default {
   }),
   computed: {
     ...mapState({
-                  client: (state) => state.client,
-                }),
+      client: (state) => state.client,
+    }),
     isFormFile() {
       return !this.readonly || !isEmpty(this.value);
     },
-    fileCounter () {
+    fileCounter() {
       return this.value.length
     },
-    filePluralChoice () {
+    filePluralChoice() {
       return this.fileCounter < 2 ? 1 : 2
     }
   },
@@ -260,7 +258,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 .processing-form-file {
   position: relative;
   display: flex;

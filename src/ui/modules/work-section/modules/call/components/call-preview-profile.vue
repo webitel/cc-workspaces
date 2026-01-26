@@ -4,10 +4,10 @@
         size="xl"
         class="preview-profile__pic"
       ></wt-avatar>
-    <div class="preview-profile__name">
+    <div class="preview-profile__name typo-subtitle-2">
       {{ displayName }}
     </div>
-    <div class="preview-profile__number">
+    <div class="preview-profile__number typo-body-2">
       {{ displayNumber }}
     </div>
     <wt-chip
@@ -48,12 +48,7 @@ export default {
     margin-bottom: var(--spacing-sm);
   }
 
-  &__name {
-    @extend %typo-subtitle-2;
-  }
-
   &__number {
-    @extend %typo-body-2;
     margin-bottom: var(--spacing-sm);
   }
 

@@ -3,8 +3,10 @@ import { snakeToCamel } from '@webitel/api-services/utils';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { ChatActions } from 'webitel-sdk';
+import { RingtoneType } from '@webitel/ui-sdk/enums';
 
 import i18n from '../../../../../app/locale/i18n.js';
+import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
 
 // @author @stanislav-kozak
 // Function for display chat name
@@ -56,7 +58,7 @@ const actions = {
       });
       context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action },
+        { action, volume: getRingtoneVolume(RingtoneType.Chat) },
         { root: true },
       );
     }
@@ -137,7 +139,7 @@ const actions = {
       });
       await context.dispatch(
         'features/notifications/PLAY_SOUND',
-        { action: ChatActions.Close },
+        { action: ChatActions.Close, volume: getRingtoneVolume(RingtoneType.Chat) },
         { root: true },
       );
     }

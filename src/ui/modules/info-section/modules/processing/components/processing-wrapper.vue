@@ -1,7 +1,7 @@
 <template>
   <article class="processing-wrapper">
-    <div class="processing-content">
-      <header class="processing-header">
+    <div class="processing-content wt-scrollbar">
+      <header class="processing-header typo-heading-2">
         <slot name="title"></slot>
       </header>
       <slot name="form"></slot>
@@ -62,7 +62,6 @@ const renewProcessing = (prolongationSec) => {
 }
 
 .processing-header {
-  @extend %typo-heading-2;
   text-align: center;
 }
 
@@ -82,7 +81,6 @@ const renewProcessing = (prolongationSec) => {
 }
 
 .processing-content {
-  @extend %wt-scrollbar;
   overflow-y: scroll;
   flex-grow: 1;
   display: flex;

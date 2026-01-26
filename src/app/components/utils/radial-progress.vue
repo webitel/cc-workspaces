@@ -2,7 +2,7 @@
 
 <template>
   <div class="radial-progress-container" :style="containerStyle">
-    <div class="radial-progress-inner" :style="innerCircleStyle">
+    <div class="radial-progress-inner typo-subtitle-2" :style="innerCircleStyle">
       <slot></slot>
     </div>
     <svg
@@ -279,8 +279,6 @@ export default {
 }
 
 .radial-progress-inner {
-  @extend %typo-subtitle-2;
-
   position: absolute;
   top: 0;
   right: 0;

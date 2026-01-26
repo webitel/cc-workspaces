@@ -2,7 +2,7 @@
   <task-footer class="chat-footer">
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
-        <p class="chat-footer__chat-preview__text">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
+        <p class="chat-footer__chat-preview__text typo-body-1">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
         <wt-button color="chat" @click="accept">{{ $t('reusable.accept') }}</wt-button>
       </div>
     </div>
@@ -59,7 +59,6 @@ export default {
   }
 
   .chat-footer__chat-preview__text {
-    @extend %typo-body-1;
     margin-bottom: 20px;
     text-align: center;
     color: var(--text-main-color);

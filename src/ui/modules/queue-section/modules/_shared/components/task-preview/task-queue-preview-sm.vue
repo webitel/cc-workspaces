@@ -63,14 +63,14 @@
 
     <div
       v-if="$slots.title"
-      class="queue-preview-title"
+      class="queue-preview-title typo-subtitle-2"
     >
       <slot name="title"></slot>
     </div>
 
     <div
       v-if="$slots.subtitle"
-      class="queue-preview-subtitle"
+      class="queue-preview-subtitle typo-body-2"
     >
       <slot name="subtitle"></slot>
     </div>

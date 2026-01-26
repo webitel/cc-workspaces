@@ -1,7 +1,6 @@
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .task-queue {
-  @extend %wt-scrollbar;
   display: flex;
   flex-direction: column;
   min-height: 0;

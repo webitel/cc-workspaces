@@ -4,8 +4,8 @@
       class="empty-search__pic"
       :src="emptySearchPic"
       alt="no results pic">
-    <h2 class="empty-search__heading">{{$t('emptySearch.heading')}}</h2>
-    <p class="empty-search__text">{{$t('emptySearch.text')}}</p>
+    <h2 class="empty-search__heading typo-subtitle-1">{{$t('emptySearch.heading')}}</h2>
+    <p class="empty-search__text typo-caption">{{$t('emptySearch.text')}}</p>
   </div>
 </template>
 
@@ -54,11 +54,6 @@
   }
 
   .empty-search__heading {
-    @extend %typo-subtitle-1;
     margin-bottom: var(--spacing-2xs);
-  }
-
-  .empty-search__text {
-    @extend %typo-caption;
   }
 </style>

@@ -15,10 +15,10 @@
           :alt="$t('descTrackAuthPopup.title')"
         >
       </div>
-      <div class="desc-track-auth-success-popup__label">
+      <div class="desc-track-auth-success-popup__label typo-subtitle-1">
         <span>{{ $t('descTrackAuthPopup.successLabel') }}</span>
       </div>
-      <div class="desc-track-auth-success-popup__description">
+      <div class="desc-track-auth-success-popup__description typo-body-1">
         <span>{{ $t('descTrackAuthPopup.successDescription') }}</span>
       </div>
     </template>
@@ -58,13 +58,11 @@ const close = () => {
 }
 
 .desc-track-auth-success-popup__label {
-  @extend %typo-subtitle-1;
   color: var(--text-success-color);
   text-align: center;
 }
 
 .desc-track-auth-success-popup__description {
-  @extend %typo-body-1;
   text-align: center;
 }
 </style>

@@ -4,11 +4,11 @@
     class="agent-score"
   >
     <wt-expansion-panel :size="size">
-      <template #title>{{ $tc('infoSec.generalInfo.score') }}</template>
+      <template #title>{{ $t('infoSec.generalInfo.score') }}</template>
       <template #default>
         <ul>
           <li class="agent-score-item">
-            <div class="agent-score-item__title">
+            <div :class="['agent-score-item__title', size === 'sm' ? 'typo-body-2' : 'typo-body-1']">
               {{ $t('widgets.scoreCount') }}
             </div>
             <div class="agent-score-item__value">
@@ -22,11 +22,14 @@
           </li>
           <wt-divider />
           <li class="agent-score-item">
-            <div class="agent-score-item__title">
+            <div :class="['agent-score-item__title', size === 'sm' ? 'typo-body-2' : 'typo-body-1']">
               {{ $t('widgets.scoreAvg') }}
             </div>
             <div class="agent-score-item__value-tooltip">
-              <div v-tooltip.left="(scoreAvg || 0).toString()" class="agent-score-item__value">
+              <div
+                v-tooltip.left="(scoreAvg || 0).toString()"
+                class="agent-score-item__value"
+              >
                 <wt-icon
                   icon="widget-score-avg"
                   icon-prefix="ws"
@@ -59,7 +62,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .agent-score {
@@ -68,10 +74,6 @@ export default {
     align-items: center;
     padding: var(--spacing-xs);
     grid-template-columns: 3fr 2fr;
-
-    .agent-score-item__title {
-      @extend %typo-body-1;
-    }
 
     .agent-score-item__value-tooltip {
       width: fit-content;
@@ -85,14 +87,6 @@ export default {
     }
   }
 
-  &--sm {
-    .agent-score-item {
-      @extend %typo-body-2;
-
-      .agent-score-item__title {
-        @extend %typo-body-2;
-      }
-    }
-  }
+  &--sm {}
 }
 </style>

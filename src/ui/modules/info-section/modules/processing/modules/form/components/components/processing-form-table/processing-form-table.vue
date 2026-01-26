@@ -15,7 +15,7 @@
       </template>
       <template #default>
         <div
-          class="processing-form-table__scroll-wrapper"
+          class="processing-form-table__scroll-wrapper wt-scrollbar"
         >
           <wt-table
             class="processing-form-table__table"
@@ -292,7 +292,6 @@ onMounted(() => {
   }
 
   &__scroll-wrapper {
-    @extend %wt-scrollbar;
     height: 600px;
     overflow: auto;
   }

@@ -10,7 +10,7 @@
           <li
             v-for="(cause) of representablePauseCause"
             :key="cause.id"
-            class="agent-pause-causes-item"
+            :class="['agent-pause-causes-item', size === 'sm' ? 'typo-body-2' : 'typo-body-1']"
           >
             <span class="agent-pause-causes-item__name">{{ cause.name }}</span>
             <div class="agent-pause-causes-item__wrapper">
@@ -58,7 +58,6 @@ const { representablePauseCause } = useRepresentableAgentPauseCause(pauseCauses)
 
 .agent-pause-causes {
   .agent-pause-causes-item {
-    @extend %typo-body-1;
     display: grid;
     align-items: center;
     padding: var(--spacing-xs);
@@ -92,7 +91,6 @@ const { representablePauseCause } = useRepresentableAgentPauseCause(pauseCauses)
 
   &--sm {
     .agent-pause-causes-item {
-      @extend %typo-body-2;
       grid-template-columns: 1fr;
 
       &__name {

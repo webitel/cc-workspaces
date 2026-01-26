@@ -1,5 +1,5 @@
 <template>
-  <section class="flows-tab">
+  <section class="flows-tab wt-scrollbar">
     <ul v-if="flowsList.length">
       <div
         v-for="(flow) in flowsList"
@@ -7,7 +7,7 @@
         class="flows-tab-item-wrapper"
       >
         <li class="flows-tab-item">
-          <span class="flows-tab-item__name">
+          <span class="flows-tab-item__name typo-body-1">
             {{ flow.name }}
           </span>
           <flow-button
@@ -49,8 +49,6 @@ const flowsList = computed(() => getNamespacedState(store.state, namespace).flow
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .flows-tab {
-  @extend %wt-scrollbar;
-
   .flows-tab-item-wrapper:last-child hr {
     display: none;
   }
@@ -63,7 +61,6 @@ const flowsList = computed(() => getNamespacedState(store.state, namespace).flow
     gap: var(--spacing-xs);
 
     &__name {
-      @extend %typo-body-1;
       flex: 1;
       overflow-wrap: break-word;
       word-break: break-all;

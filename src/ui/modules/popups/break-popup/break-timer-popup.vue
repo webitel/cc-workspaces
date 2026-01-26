@@ -22,19 +22,19 @@
             <span
               v-for="(digit, key) of duration.split('')"
               :key="key"
-              class="break-timer-popup-timer__digit"
+              class="break-timer-popup-timer__digit typo-timer-digits"
             >
               {{ digit }}
             </span>
           </div>
-          <div class="break-timer-popup-pause-cause">
+          <div class="break-timer-popup-pause-cause typo-subtitle-2">
             {{ breakInfo }}
           </div>
         </div>
       </div>
       <div
         v-if="statusComment"
-        class="break-timer-popup__status-comment"
+        class="break-timer-popup__status-comment wt-scrollbar"
       >
         {{ statusComment }}
       </div>
@@ -161,7 +161,6 @@ export default {
 }
 
 .break-timer-popup-timer__digit {
-  @extend %typo-timer-digits;
   text-align: center;
   display: inline-block;
   width: 40px;
@@ -174,13 +173,11 @@ export default {
 }
 
 .break-timer-popup-pause-cause {
-  @extend %typo-subtitle-2;
   text-align: center;
   color: var(--primary-on-color);
 }
 
 .break-timer-popup__status-comment {
-  @extend %wt-scrollbar;
   margin-top: var(--spacing-sm);
   max-height: 80px;
   overflow: auto;

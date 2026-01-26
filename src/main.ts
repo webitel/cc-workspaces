@@ -1,4 +1,3 @@
-import './app/assets/icons/sprite';
 import './app/css/main.scss';
 
 import deepmerge from 'deepmerge';
@@ -14,6 +13,7 @@ import BreakpointPlugin from './app/plugins/breakpoint.plugin';
 import WebitelUi from './app/plugins/webitel-ui';
 import router from './app/router';
 import store from './app/store';
+import './app/assets/icons/sprite';
 import App from './app/the-app.vue';
 import { useUserinfoStore } from './ui/modules/userinfo/userinfoStore';
 

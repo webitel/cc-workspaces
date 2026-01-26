@@ -2,8 +2,8 @@
   <aside class="dropzone dropzone--animated" v-on="$listeners">
     <div class="dropzone__border-animation"></div>
     <article class="dropzone__text-wrapper">
-      <h3 class="dropzone__title">{{ $t('workspaceSec.chat.dropzone.title') }}</h3>
-      <p class="dropzone__description">{{ $t('workspaceSec.chat.dropzone.description') }}</p>
+      <h3 class="dropzone__title typo-heading-2">{{ $t('workspaceSec.chat.dropzone.title') }}</h3>
+      <p class="dropzone__description typo-body-2">{{ $t('workspaceSec.chat.dropzone.description') }}</p>
     </article>
   </aside>
 </template>
@@ -62,12 +62,10 @@ export default {
 }
 
 .dropzone__title {
-  @extend %typo-heading-2;
   text-align: center;
 }
 
 .dropzone__description {
-  @extend %typo-body-2;
   text-align: center;
 }
 </style>

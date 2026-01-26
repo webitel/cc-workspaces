@@ -13,10 +13,10 @@
       </div>
     </div>
     <div class="task-header-info">
-      <p class="task-header-info__title">
+      <p class="task-header-info__title typo-subtitle-1">
         <slot name="title" />
       </p>
-      <p class="task-header-info__subtitle">
+      <p class="task-header-info__subtitle typo-body-2">
         <slot name="subtitle" />
       </p>
       <p class="task-header-info__queue">
@@ -69,11 +69,9 @@ export default {
     text-align: center;
 
     &__title {
-      @extend %typo-subtitle-1;
     }
 
     &__subtitle {
-      @extend %typo-body-2;
       word-break: break-all;
     }
   }

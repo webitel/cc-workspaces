@@ -16,7 +16,7 @@
       <div
         v-for="dataItem in dataList"
         class="history-container-contact">
-        <p class="history-container-contact__caption">
+        <p class="history-container-contact__caption typo-caption">
           {{dataItem.groupName}}
         </p>
         <history-lookup-item
@@ -202,7 +202,6 @@ watch(call, () => {
     padding-top: var(--spacing-2xs);
 
     &__caption{
-      @extend %typo-caption;
       text-align: center;
     }
   }

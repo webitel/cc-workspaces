@@ -7,7 +7,7 @@
       <wt-loader v-show="!showAllMessages" class="chat-history__loader"/>
     <div
       ref="chat-container"
-      class="chat-history__messages chat-messages-items"
+      class="chat-history__messages chat-messages-items wt-scrollbar"
       :class="{'chat-history__messages--processing': !showAllMessages}"
       @scroll="handleChatScroll"
     >

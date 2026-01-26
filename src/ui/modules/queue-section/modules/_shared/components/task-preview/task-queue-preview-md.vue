@@ -14,10 +14,10 @@
       </div>
 
       <div class="queue-preview-header-text-content">
-      <span class="queue-preview-title">
+      <span class="queue-preview-title typo-subtitle-2">
         <slot name="title"></slot>
       </span>
-        <p class="queue-preview-subtitle">
+        <p class="queue-preview-subtitle typo-body-2">
           <slot name="subtitle"></slot>
         </p>
       </div>

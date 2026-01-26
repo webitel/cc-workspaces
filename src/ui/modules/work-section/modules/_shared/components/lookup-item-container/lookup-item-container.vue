@@ -19,12 +19,12 @@
         </slot>
       </div>
 
-      <p class="lookup-item-container-subtitle">
+      <p class="lookup-item-container-subtitle typo-subtitle-1">
         <slot name="subtitle"></slot>
       </p>
     </header>
     <section
-      class="lookup-item-container-body"
+      class="lookup-item-container-body wt-scrollbar"
     >
         <div
           v-if="showEmpty"
@@ -116,12 +116,10 @@ const showEmpty = computed(() => !props.loading && props.empty);
 }
 
 .lookup-item-container-subtitle {
-  @extend %typo-subtitle-1;
   text-align: center;
 }
 
 .lookup-item-container-body {
-  @extend %wt-scrollbar;
   flex-grow: 1;
   position: relative;
   display: flex;

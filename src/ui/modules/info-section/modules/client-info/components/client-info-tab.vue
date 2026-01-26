@@ -1,5 +1,5 @@
 <template>
-  <section class="client-info">
+  <section class="client-info wt-scrollbar">
     <client-info-chips />
     <contact
       v-if="isAllowedContacts"
@@ -63,7 +63,6 @@ onMounted(async () => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .client-info {
-  @extend %wt-scrollbar;
   max-height: 100%;
   min-height: 0;
   overflow: auto;

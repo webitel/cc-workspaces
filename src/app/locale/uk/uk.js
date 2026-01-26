@@ -289,6 +289,7 @@ export default {
     camera: {
       status: 'Дозвіл на викоритання Камери',
       message: {
+        notFound: 'Камера не знайдена',
         denied: 'Заборонено',
       },
     },

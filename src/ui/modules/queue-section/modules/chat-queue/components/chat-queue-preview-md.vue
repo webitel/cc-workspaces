@@ -36,18 +36,18 @@
           </slot>
         </div>
 
-        <h3 class="chat-queue-preview-md-header__title">
+        <h3 class="chat-queue-preview-md-header__title typo-subtitle-2">
           <slot name="title">{{ title }}</slot>
         </h3>
 
-        <div class="chat-queue-preview-md-header__timer">
+        <div class="chat-queue-preview-md-header__timer typo-body-2">
           <slot name="timer"></slot>
         </div>
       </div>
 
       <div class="chat-queue-preview-md-body">
         <div class="chat-queue-preview-md-body__content">
-          <p class="chat-queue-preview-md-body__subtitle">
+          <p class="chat-queue-preview-md-body__subtitle typo-body-2">
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
           <div class="chat-queue-preview-md-body__queue">
@@ -200,7 +200,6 @@ const iconColor = computed(() => {
   }
 
   &__title {
-    @extend %typo-subtitle-2;
     margin: 0;
     overflow: hidden;
     white-space: nowrap;
@@ -209,7 +208,6 @@ const iconColor = computed(() => {
   }
 
   &__timer {
-    @extend %typo-body-2;
     flex-shrink: 0;
   }
 }
@@ -236,7 +234,6 @@ const iconColor = computed(() => {
   }
 
   &__subtitle {
-    @extend %typo-body-2;
     margin: 0;
     overflow: hidden;
     white-space: nowrap;

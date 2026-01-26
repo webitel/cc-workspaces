@@ -14,10 +14,10 @@
           :alt="$t('descTrackAuthPopup.title')"
         >
       </div>
-      <div class="desc-track-auth-error-popup__label">
+      <div class="desc-track-auth-error-popup__label typo-subtitle-1">
         <span>{{ $t('descTrackAuthPopup.errorLabel') }}</span>
       </div>
-      <div class="desc-track-auth-error-popup__description">
+      <div class="desc-track-auth-error-popup__description typo-body-1">
         <span>{{ $t('descTrackAuthPopup.errorDescription') }}</span>
       </div>
     </template>
@@ -55,13 +55,11 @@ const refreshAgentState = () => {
 }
 
 .desc-track-auth-error-popup__label {
-  @extend %typo-subtitle-1;
   color: var(--text-error-color);
   text-align: center;
 }
 
 .desc-track-auth-error-popup__description {
-  @extend %typo-body-1;
   text-align: center;
 }
 </style>
