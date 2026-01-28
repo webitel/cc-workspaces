@@ -4,7 +4,12 @@
     <chat-container
       :messages="messages"
       :size="props.size"
-      :chat-actions="chatActions"
+      :chat-actions="[
+        ChatAction.AttachFiles,
+        ChatAction.EmojiPicker,
+        ChatAction.SendMessage,
+      ]"
+      :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
       @[MessageAction.ClickOnImage]="openMedia"
@@ -19,18 +24,13 @@ import { applyTransform,
 import { ChatAction, ChatContainer, ChatMessageType, MessageAction } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
-import { computed, onMounted, watch, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
 import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
 import { ConversationState } from 'webitel-sdk';
 
 const chatNamespace = 'features/chat';
-const actionsForOpenedChat = [
-  ChatAction.AttachFiles,
-  ChatAction.EmojiPicker,
-  ChatAction.SendMessage,
-];
 
 const props = withDefaults(
   defineProps<{
@@ -42,8 +42,6 @@ const props = withDefaults(
 );
 
 const store = useStore();
-
-const chatActions = ref(actionsForOpenedChat);
 
 const chat = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
@@ -90,11 +88,6 @@ onMounted(() => {
   // https://webitel.atlassian.net/browse/WTEL-7689
   chat.value?.join()
 });
-
-watch(isChatClosed, (value:boolean) => {
-  if (value) chatActions.value = [];
-  if (!value && chatActions.value) chatActions.value = actionsForOpenedChat;
-})
 
 </script>
 <style scoped>
