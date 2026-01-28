@@ -23,7 +23,7 @@
     "@vueuse/core": "^14.x",
     "@webitel/api-services": "^0.1.1",
     "@webitel/styleguide": "^26.2.5",
-    "@webitel/ui-chats": "^0.1.4",
+    "@webitel/ui-chats": "^0.1.5",
     "@webitel/ui-sdk": "^26.2.31",
     "autolinker": "^4.x",
     "axios": "^1.13",
