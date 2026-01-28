@@ -12,7 +12,7 @@ const getters = {
     && rootGetters['features/call/CALL_ON_WORKSPACE']?.conversation),
 
   VIDEO_CALL_CHAT_MESSAGES: ((state, getters) =>
-    getters.VIDEO_CALL_CHAT.messages.map((message) => ({
+    getters.VIDEO_CALL_CHAT.messages?.map((message) => ({
       ...message,
       member: {
         ...message.member,

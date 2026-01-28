@@ -5,11 +5,11 @@
       :messages="messages"
       :size="props.size"
       :chat-actions="[
-        ChatAction.SendMessage,
         ChatAction.AttachFiles,
         ChatAction.EmojiPicker,
-        ChatAction.QuickReplies
-        ]"
+        ChatAction.SendMessage,
+      ]"
+      :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
       @[MessageAction.ClickOnImage]="openMedia"
@@ -21,13 +21,14 @@
 import { applyTransform,
   notify,
 } from '@webitel/api-services/api/transformers';
-import { ChatAction, ChatContainer, MessageAction } from '@webitel/ui-chats/ui';
+import { ChatAction, ChatContainer, ChatMessageType, MessageAction } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
 import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
+import { ConversationState } from 'webitel-sdk';
 
 const chatNamespace = 'features/chat';
 
@@ -45,10 +46,10 @@ const store = useStore();
 const chat = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
 );
-
 const messages = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES']
 );
+const isChatClosed = computed(() => chat?.value.state === ConversationState.Closed);
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
   try {
@@ -65,8 +66,8 @@ async function sendMessage(text: string, options?: ResultCallbacks) {
 async function sendFiles(files: File[], options?: ResultCallbacks) {
   try {
     Array.isArray(files)
-      ? await Promise.all(files.map((file) => chat.value?.sendFile(file)))
-      : await chat.value.sendFile(files);
+      ? await Promise.all(files?.map((file) => chat.value?.sendFile(file)))
+      : await chat.value?.sendFile(files);
   } catch (error) {
     throw applyTransform(error, [
       notify,
@@ -76,7 +77,7 @@ async function sendFiles(files: File[], options?: ResultCallbacks) {
   }
 }
 
-const openMedia = (message) => {
+const openMedia = (message: ChatMessageType) => {
   store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message)
 };
 
