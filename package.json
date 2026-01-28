@@ -24,7 +24,7 @@
     "@webitel/api-services": "^0.1.1",
     "@webitel/styleguide": "^26.2.5",
     "@webitel/ui-chats": "^0.1.4",
-    "@webitel/ui-sdk": "^26.2.15",
+    "@webitel/ui-sdk": "^26.2.31",
     "autolinker": "^4.x",
     "axios": "^1.13",
     "deep-copy": "^1.x",
@@ -82,7 +82,9 @@
     "vitest": "^4.x",
     "vue-tsc": "^3.x",
     "workbox-core": "^7.0.0",
-    "workbox-precaching": "^7.0.0"
+    "workbox-precaching": "^7.0.0",
+    "date-fns": "^4.1.0",
+    "clipboard-copy": "^4.x"
   },
   "optionalDependencies": {
     "@esbuild/darwin-arm64": "^0.24.0",
