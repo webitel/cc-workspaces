@@ -16,16 +16,16 @@
         v-else
         class="search-contact__variables"
       >
-        <wt-input
-          v-model="keyVariable"
+        <wt-input-text
+          v-model:model-value="keyVariable"
           :v="v$.keyVariable"
           :placeholder="t('vocabulary.keys',1)"
-        ></wt-input>
-        <wt-input
-          v-model="valueVariables"
+        />
+        <wt-input-text
+          v-model:model-value="valueVariables"
           :v="v$.valueVariables"
           :placeholder="t('vocabulary.values',1)"
-        ></wt-input>
+        />
       </div>
 
       <wt-button

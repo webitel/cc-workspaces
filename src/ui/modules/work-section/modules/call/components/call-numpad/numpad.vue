@@ -1,12 +1,11 @@
 <template>
   <div class="numpad">
-    <wt-input
+    <wt-input-text
       v-show="isNewCall"
       ref="number-input"
-      :model-value="call.newNumber"
-      @update:model-value="call.newNumber = $event"
+      v-model:model-value="call.newNumber"
       @keyup.enter="makeCall"
-    ></wt-input>
+    />
     <call-state />
     <div class="numpad-wrapper">
       <numpad-numbers
