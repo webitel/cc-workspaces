@@ -7,8 +7,8 @@
       v-if="isAdding"
       class="contact-card-phones__add-form"
     >
-      <wt-input
-        v-model="newPhone.number"
+      <wt-input-text
+        v-model:model-value="newPhone.number"
         :label="t('reusable.phoneNumber')"
         class="contact-card-phones__input"
       />

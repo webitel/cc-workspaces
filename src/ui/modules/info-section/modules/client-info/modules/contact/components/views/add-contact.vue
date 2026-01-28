@@ -4,20 +4,19 @@
     :class="[`add-contact--${props.size}`]"
   >
     <div>
-      <wt-input
-        :value="draft.name"
+      <wt-input-text
+        v-model:model-value="draft.name"
         :label="t('reusable.name')"
         :v="v$.draft.name"
         required
         prevent-trim
-        @input="draft.name = $event"
-      ></wt-input>
-      <wt-input
-        :value="draft.phones[0]?.number || ''"
+      />
+      <wt-input-text
+        :model-value="draft.phones[0]?.number || ''"
         :label="t('reusable.phoneNumber')"
         prevent-trim
-        @input="updatePhoneNumber"
-      ></wt-input>
+        @update:model-value="updatePhoneNumber"
+      />
       <wt-select
         :value="draft.timezones[0]?.timezone"
         :label="t('date.timezone', 1)"
