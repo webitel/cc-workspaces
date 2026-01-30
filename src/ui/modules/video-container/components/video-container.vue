@@ -6,12 +6,13 @@
     @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
     @delete="handleDeleteFromGalleria"
   />
-  <video-call
+  {{ call.remoteVideoMuted }}
+   <video-call
     v-if="isVideo"
     :sender:stream=senderStream
     :receiver:stream="receiverStream"
     :sender:video:enabled="!mutedVideo"
-    :receiver:video:enabled="isSenderVideo"
+    :receiver:video:enabled="call.remoteVideoMuted"
     :screenshot:status="screenshotStatus"
     :screenshot:loading="screenshotIsLoading"
     :screenshot:src="screenshotPreviewUrl"
@@ -211,5 +212,8 @@ watch(galleriaVisible, (visible) => {
 watch(isVideo, (hasVideo) => {
   if (!hasVideo) exitFullscreen()
 })
+
+watch(call.value, (value) => console.log(value?.sip?.remoteVideoMuted, 'remoteVideoMuted' ), { deep: true })
+watch(call.value.sip, (value) => console.log(value?.remoteVideoMuted, 'sip remoteVideoMuted' ), { deep: true })
 
 </script>
