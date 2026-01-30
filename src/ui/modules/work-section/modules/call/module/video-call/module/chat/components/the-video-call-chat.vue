@@ -8,8 +8,8 @@
         ChatAction.SendMessage,
         ChatAction.AttachFiles,
         ChatAction.EmojiPicker,
-        ChatAction.QuickReplies
         ]"
+      :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
       @[MessageAction.ClickOnImage]="openMedia"
@@ -26,6 +26,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { ConversationState } from 'webitel-sdk';
 
 import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
 
@@ -45,10 +46,10 @@ const store = useStore();
 const chat = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
 );
-
 const messages = computed(() =>
   store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES']
 );
+const isChatClosed = computed(() => chat?.value.state === ConversationState.Closed);
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
   try {
