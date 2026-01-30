@@ -48,7 +48,7 @@
     "vue-i18n": "^11.x",
     "vue-router": "^4.x",
     "vuex": "^4.1.0",
-    "webitel-sdk": "^25.10.16"
+    "webitel-sdk": "^26.1.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -59,6 +59,8 @@
     "@vitest/coverage-v8": "^4.x",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.x",
+    "clipboard-copy": "^4.x",
+    "date-fns": "^4.1.0",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -82,9 +84,7 @@
     "vitest": "^4.x",
     "vue-tsc": "^3.x",
     "workbox-core": "^7.0.0",
-    "workbox-precaching": "^7.0.0",
-    "date-fns": "^4.1.0",
-    "clipboard-copy": "^4.x"
+    "workbox-precaching": "^7.0.0"
   },
   "optionalDependencies": {
     "@esbuild/darwin-arm64": "^0.24.0",
