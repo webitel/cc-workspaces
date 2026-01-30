@@ -17,6 +17,14 @@ const getConfig = () => {
   return cliConfig;
 };
 
+const ConnectionState = Object.freeze({
+  IDLE: 'IDLE',
+  CONNECTING: 'CONNECTING',
+  CONNECTED: 'CONNECTED',
+  RECONNECTING: 'RECONNECTING',
+  DISCONNECTED: 'DISCONNECTED',
+});
+
 const WebSocketClientEvent = Object.freeze({
   AFTER_AUTH: 'afterAuth',
   ERROR: 'error',
@@ -24,45 +32,82 @@ const WebSocketClientEvent = Object.freeze({
 
 class WebSocketClientController {
   cli = null;
+  state = ConnectionState.IDLE;
+
+  _connectPromise = null;
+
   Event = WebSocketClientEvent;
 
-  _config = getConfig();
   _on = {
     [WebSocketClientEvent.ERROR]: [websocketErrorEventHandler],
     [WebSocketClientEvent.AFTER_AUTH]: [],
   };
 
-  getCliInstance() {
-    if (!this.cli) this.cli = this._createCliInstance();
-    return this.cli;
+  async getCliInstance({ force = false } = {}) {
+    if (this._connectPromise) return this._connectPromise;
+
+    if (!force && this.cli && this.state === ConnectionState.CONNECTED) {
+      return this.cli;
+    }
+
+    this.state = this.cli
+      ? ConnectionState.RECONNECTING
+      : ConnectionState.CONNECTING;
+
+    this._connectPromise = this._createCliInstance()
+    .then((cli) => {
+      this.cli = cli;
+      this.state = ConnectionState.CONNECTED;
+      return cli;
+    })
+    .catch((err) => {
+      this.state = ConnectionState.DISCONNECTED;
+      this.cli = null;
+      throw err;
+    })
+    .finally(() => {
+      this._connectPromise = null;
+    });
+
+    return this._connectPromise;
   }
 
   async destroyCliInstance() {
-    if (!window.cli) return;
+    if (!this.cli) return;
 
-    await window.cli.destroy();
+    try {
+      if (this.cli.destroy) {
+        await this.cli.destroy();
+      }
+    } catch (e) {
+      console.warn('[WS] destroy error', e);
+    }
+
     this.cli = null;
-    window.cli = null;
+    this.state = ConnectionState.DISCONNECTED;
   }
 
   addEventListener(event, callback) {
-    if (Array.isArray(callback)) this._on[event] = this._on[event].concat(callback);
-    else this._on[event].push(callback);
+    if (Array.isArray(callback)) {
+      this._on[event].push(...callback);
+    } else {
+      this._on[event].push(callback);
+    }
   }
 
-  _createCliInstance = async () => {
+  async _createCliInstance() {
     const token = localStorage.getItem('access-token');
-    const configCli = getConfig();
+    const cliConfig = getConfig();
 
-    if (typeof configCli.registerWebDevice === 'undefined') {
-      configCli.registerWebDevice = true;
+    if (typeof cliConfig.registerWebDevice === 'undefined') {
+      cliConfig.registerWebDevice = true;
     }
 
     const config = {
       endpoint,
       token,
-      registerWebDevice: configCli.registerWebDevice,
-      debug: configCli.debug,
+      registerWebDevice: cliConfig.registerWebDevice,
+      debug: cliConfig.debug,
     };
 
     // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
@@ -73,55 +118,86 @@ class WebSocketClientController {
     cli.conversationStore = reactive(cli.conversationStore);
     cli.callStore = reactive(cli.callStore);
 
-    this._on[WebSocketClientEvent.AFTER_AUTH].forEach((callback) => callback());
-    this._on[WebSocketClientEvent.ERROR].forEach((callback) =>
-      cli.on('error', callback),
+    this._attachCoreHandlers(cli);
+
+    await cli.connect();
+    await cli.auth();
+
+    this._on[WebSocketClientEvent.AFTER_AUTH].forEach((cb) => cb(cli));
+
+    await this._ensurePhoneUA(cli);
+
+    window.cli = cli;
+    return cli;
+  }
+
+  _attachCoreHandlers(cli) {
+    this._on[WebSocketClientEvent.ERROR].forEach((cb) =>
+      cli.on('error', cb),
     );
-    cli.on(`show_message`, (e) =>
+
+    cli.on('disconnected', () => this._handleDisconnect());
+
+    cli.on('show_message', (e) =>
       eventBus.$emit('notification', {
         type: e.type,
         text: e.message,
         timeout: e.timeout,
       }),
     );
-    cli.on(`open_link`, (e) => {
+
+    cli.on('open_link', (e) => {
       window.open(
         e.url.startsWith('https://') ? e.url : `https://${e.url}`,
         '_blank',
       );
     });
+  }
 
-    await cli.connect();
+  async _ensurePhoneUA(cli) {
+    return new Promise((resolve) => {
+      const timeout = setTimeout(() => resolve(), 5000);
 
-    await cli.auth();
-
-    /*
-    cli.phone.ua contains "configuration" property, which has no setter so cannot be wrapped with reactivity.
-    so that, reactivity breaks
-     for more info, see WTEL-4236
-     */
-    await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        console.error('Phone user agent is not connected :(');
-        resolve();
-      }, 5000);
-
-      const markUa = () => cli.phone?.ua && (cli.phone.ua = markRaw(cli.phone.ua));
+      const markUa = () => {
+        if (cli.phone?.ua) {
+          cli.phone.ua = markRaw(cli.phone.ua);
+          clearTimeout(timeout);
+          resolve();
+        }
+      };
 
       if (cli.phone?.ua) {
         markUa();
-        clearTimeout(timeout);
-        resolve();
-      } else cli.on('phone_connected', () => {
-        markUa();
-        clearTimeout(timeout);
-        resolve();
-      });
+      } else {
+        cli.on('phone_connected', markUa);
+      }
     });
+  }
 
-    window.cli = cli;
-    return cli;
-  };
+  async _handleDisconnect() {
+    if (
+      this.state === ConnectionState.RECONNECTING ||
+      this.state === ConnectionState.CONNECTING
+    ) return;
+
+    this.state = ConnectionState.RECONNECTING;
+
+    await this.destroyCliInstance();
+    this._reconnectWithBackoff();
+  }
+
+  _reconnectWithBackoff(attempt = 1) {
+    const delay = Math.min(1000 * 2 ** attempt, 15000);
+
+    setTimeout(async () => {
+      try {
+        await this.getCliInstance({ force: true });
+        console.info('[WS] Reconnected');
+      } catch {
+        this._reconnectWithBackoff(attempt + 1);
+      }
+    }, delay);
+  }
 }
 
 const webSocketClientController = new WebSocketClientController();
