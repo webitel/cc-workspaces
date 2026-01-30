@@ -1,16 +1,18 @@
 <template>
-  <div>
-      <wt-loader v-if="isLoading"/>
-      <contacts-list-wrapper
-        v-else
-        :mode="props.mode"
-        :size="props.size"
-        :list="listedContacts"
-        :linked-contact="contact"
-        :namespace="props.namespace"
-        @link="linkContact"
-        @add="add"
-      />
+  <div class="view-contact-wrapper">
+    <div v-if="!isLoading" class="view-contact-wrapper__loader">
+      <wt-loader />
+    </div>
+    <contacts-list-wrapper
+      v-else
+      :mode="props.mode"
+      :size="props.size"
+      :list="listedContacts"
+      :linked-contact="contact"
+      :namespace="props.namespace"
+      @link="linkContact"
+      @add="add"
+    />
   </div>
 </template>
 
@@ -57,4 +59,17 @@ function linkContact(contact) {
 </script>
 
 <style scoped lang="scss">
+.view-contact-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.view-contact-wrapper__loader {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
