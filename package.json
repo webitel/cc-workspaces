@@ -23,7 +23,7 @@
     "@vueuse/core": "^10.4.1",
     "@webitel/api-services": "^0.0.100",
     "@webitel/ui-sdk": "~25.12",
-    "@webitel/ui-chats": "^0.0.24",
+    "@webitel/ui-chats": "^0.0.23",
     "autolinker": "^4.0.0",
     "axios": "^1.6.8",
     "deep-copy": "^1.4.2",
