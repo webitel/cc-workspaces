@@ -25,6 +25,7 @@ export default {
     run: 'Ejecutar',
     today: 'Hoy',
     phoneNumber: 'Número de teléfono',
+    unknownTaskSize: 'Tamaño de tarea desconocido',
   },
   feedback: {
     success: {

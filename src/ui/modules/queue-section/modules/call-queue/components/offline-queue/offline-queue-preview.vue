@@ -56,7 +56,8 @@
 
   <div
     v-else
-  >unknown task size
+  >
+    {{ $t('reusable.unknownTaskSize') }}
     <br>
     {{ task }}
   </div>

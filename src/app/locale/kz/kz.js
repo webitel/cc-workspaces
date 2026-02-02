@@ -25,6 +25,7 @@ export default {
     run: 'Іске қосу',
     today: 'Бүгін',
     phoneNumber: 'Телефон нөмірі',
+    unknownTaskSize: 'Тапсырма өлшемі белгісіз',
   },
   feedback: {
     success: {
