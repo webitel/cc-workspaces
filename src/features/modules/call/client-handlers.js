@@ -19,6 +19,9 @@ const callHandler = (context) => (action, call) => {
     case CallActions.PeerStream:
       context.dispatch('HANDLE_STREAM_ACTION', call);
       break;
+    case CallActions.Info:
+      context.dispatch('HANDLE_INFO_ACTION', call);
+      break;
     default:
     // console.log('default', action);
   }
@@ -90,6 +93,11 @@ const actions = {
       call.workspaceAudio = audio;
       context.dispatch('HANDLE_START_TALKING');
     }
+  },
+
+  HANDLE_INFO_ACTION: (context, call) => {
+    if (context.getters.CALL_ON_WORKSPACE?.id !== call.id) return;
+    context.dispatch('workspace/UPDATE_WORKSPACE_TASK', call, { root: true });
   },
 
   HANDLE_HANGUP_ACTION: async (context, call) => {
