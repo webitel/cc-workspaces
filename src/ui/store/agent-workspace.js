@@ -107,11 +107,35 @@ const mutations = {
   UPDATE_LAST_TASK: (state, task) => {
     if (state.stateHistory.length) {
       const lastIndex = state.stateHistory.length - 1;
+      const lastState = state.stateHistory[lastIndex];
+      
+      //https://webitel.atlassian.net/browse/WTEL-8416
+      // Create a deep copy of task to ensure reactivity
+      // Especially important for deeply nested properties that can be changed by webitel-sdk
+      // Use structuredClone for deep copying with support for most types
+      let newTask;
+      try {
+        newTask = structuredClone(task);
+      } catch (e) {
+        // If structuredClone is not supported or cannot copy (e.g., MediaStream),
+        // use shallow copying with deep copying of nested objects
+        newTask = { ...task };
+        // Deep copy nested objects that can change
+        if (task.sip) {
+          newTask.sip = { ...task.sip };
+        }
+      }
+      
+      // Restore non-serializable properties (MediaStream, etc.) that cannot be cloned
+      if (task.peerStreams) newTask.peerStreams = task.peerStreams;
+      if (task.localStreams) newTask.localStreams = task.localStreams;
+      if (task.workspaceAudio) newTask.workspaceAudio = task.workspaceAudio;
+      
       state.stateHistory = [
         ...state.stateHistory.slice(0, lastIndex),
         {
-          ...state.stateHistory[lastIndex],
-          task: task,
+          ...lastState,
+          task: newTask,
         },
       ];
     }
