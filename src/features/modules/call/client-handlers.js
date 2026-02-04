@@ -96,8 +96,23 @@ const actions = {
   },
 
   HANDLE_INFO_ACTION: (context, call) => {
-    if (context.getters.CALL_ON_WORKSPACE?.id !== call.id) return;
-    context.dispatch('workspace/UPDATE_WORKSPACE_TASK', call, { root: true });
+    const callOnWorkspace = context.getters.CALL_ON_WORKSPACE;
+    if (!callOnWorkspace || callOnWorkspace.id !== call.id) return;
+
+    const info = {
+      sip: {
+        remoteVideoMuted: call.sip?.remoteVideoMuted,
+      },
+      remoteHold: call.sip?.remoteHold,
+      remoteVideoMuted: call.remoteVideoMuted,
+    };
+
+    if (Object.keys(info).length) {
+      context.commit('UPDATE_CALL_INFO', {
+        callId: call.id,
+        info,
+      });
+    }
   },
 
   HANDLE_HANGUP_ACTION: async (context, call) => {

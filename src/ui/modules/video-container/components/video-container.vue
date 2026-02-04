@@ -6,7 +6,7 @@
     @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
     @delete="handleDeleteFromGalleria"
   />
-   <video-call
+  <video-call
     v-if="isVideo"
     :sender:stream=senderStream
     :receiver:stream="receiverStream"
@@ -104,21 +104,12 @@ const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
 const userName = computed(() => call.value.displayName || '');
 const mutedVideo = computed(() => call.value.mutedVideo);
 
-const remoteVideoMuted = ref<boolean>(false);
+const remoteVideoMuted = computed(() => {
+  if (!call.value?.id) return false;
 
-const updateRemoteVideoMuted = () => {
-  const stateHistory = store.state.workspace?.stateHistory || [];
-  const lastState = stateHistory[stateHistory.length - 1];
-  const task = lastState?.type === 'call' ? lastState?.task : null;
-
-  if (!task) {
-    remoteVideoMuted.value = false;
-    return;
-  }
-  if (remoteVideoMuted.value === !!task.remoteVideoMuted) return;
-
-  remoteVideoMuted.value = !!task.remoteVideoMuted;
-};
+  const callInfo = store.state.features.call.callInfo.get(call.value.id);
+  return!!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted ;
+});
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const onToggleRecordings = () => toggleRecordAction(call.value);
@@ -228,20 +219,5 @@ watch(galleriaVisible, (visible) => {
 watch(isVideo, (hasVideo) => {
   if (!hasVideo) exitFullscreen()
 })
-
-/*
-@author o.chorpita
- We don't watch `call` directly because reactivity is lost in nested call properties.
- Instead, we watch `workspace.stateHistory`, which is always updated with the latest call state
- (including `remoteVideoMuted`)
-https://webitel.atlassian.net/browse/WTEL-8416
- */
-watch(
-  () => store.state.workspace?.stateHistory,
-  () => {
-    updateRemoteVideoMuted();
-  },
-  { deep: true, immediate: true }
-);
 
 </script>

@@ -12,6 +12,7 @@ import isIncomingRinging from './scripts/isIncomingRinging';
 const state = {
   callList: [],
   isVideo: false,
+  callInfo: new Map(),
 };
 
 const getters = {
@@ -260,6 +261,14 @@ const mutations = {
 
   REMOVE_CALL: (state, removedCall) => {
     state.callList = state.callList.filter((call) => call !== removedCall);
+    if (removedCall?.id) {
+      state.callInfo.delete(removedCall.id);
+    }
+  },
+  UPDATE_CALL_INFO: (state, { callId, info }) => {
+    if (!callId) return;
+    const existing = state.callInfo.get(callId) || {};
+    state.callInfo.set(callId, { ...existing, ...info });
   },
 };
 
