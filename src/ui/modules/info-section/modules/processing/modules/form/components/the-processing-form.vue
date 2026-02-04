@@ -83,6 +83,7 @@ export default {
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
+      'wt-input': 'wt-input-text',
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
     },
