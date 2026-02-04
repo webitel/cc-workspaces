@@ -95,6 +95,8 @@ class WebSocketClientController {
 
     await cli.auth();
 
+    cli.phone.sessionCache = reactive(cli.phone.sessionCache);
+
     /*
     cli.phone.ua contains "configuration" property, which has no setter so cannot be wrapped with reactivity.
     so that, reactivity breaks

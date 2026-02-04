@@ -59,6 +59,15 @@ const actions = {
   SET_WORKSPACE_STATE: (context, payload) => {
     context.commit('ADD_WORKSPACE_STATE', payload);
   },
+  UPDATE_WORKSPACE_TASK: (context, task) => {
+    if (!context.state.stateHistory.length) return
+
+    const lastState = context.state.stateHistory[context.state.stateHistory.length - 1];
+
+    if (lastState.task?.id !== task.id) return;
+
+    context.commit('UPDATE_LAST_TASK', task);
+  },
   RESET_WORKSPACE_STATE: (context, config) => {
     let stateHistory = [...context.state.stateHistory];
 
@@ -94,6 +103,18 @@ const mutations = {
   },
   ADD_WORKSPACE_STATE: (state, { type, task }) => {
     state.stateHistory.push({ type, task });
+  },
+  UPDATE_LAST_TASK: (state, task) => {
+    if (state.stateHistory.length) {
+      const lastIndex = state.stateHistory.length - 1;
+      state.stateHistory = [
+        ...state.stateHistory.slice(0, lastIndex),
+        {
+          ...state.stateHistory[lastIndex],
+          task: task,
+        },
+      ];
+    }
   },
 };
 

@@ -11,7 +11,7 @@
     :sender:stream=senderStream
     :receiver:stream="receiverStream"
     :sender:video:enabled="!mutedVideo"
-    :receiver:video:enabled="isSenderVideo"
+    :receiver:video:enabled="!remoteVideoMuted"
     :screenshot:status="screenshotStatus"
     :screenshot:loading="screenshotIsLoading"
     :screenshot:src="screenshotPreviewUrl"
@@ -103,6 +103,14 @@ const isReceiverVideo = computed(() =>
 const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
 const userName = computed(() => call.value.displayName || '');
 const mutedVideo = computed(() => call.value.mutedVideo);
+
+const remoteVideoMuted = computed(() => {
+  if (!call.value?.id) return false;
+
+  const callInfo = store.state.features.call.callInfo.get(call.value.id);
+  return!!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted ;
+});
+
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const onToggleRecordings = () => toggleRecordAction(call.value);
 

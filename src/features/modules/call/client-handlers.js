@@ -19,6 +19,9 @@ const callHandler = (context) => (action, call) => {
     case CallActions.PeerStream:
       context.dispatch('HANDLE_STREAM_ACTION', call);
       break;
+    case CallActions.Info:
+      context.dispatch('HANDLE_INFO_ACTION', call);
+      break;
     default:
     // console.log('default', action);
   }
@@ -89,6 +92,26 @@ const actions = {
       audio.play();
       call.workspaceAudio = audio;
       context.dispatch('HANDLE_START_TALKING');
+    }
+  },
+
+  HANDLE_INFO_ACTION: (context, call) => {
+    const callOnWorkspace = context.getters.CALL_ON_WORKSPACE;
+    if (!callOnWorkspace || callOnWorkspace.id !== call.id) return;
+
+    const info = {
+      sip: {
+        remoteVideoMuted: call.sip?.remoteVideoMuted,
+      },
+      remoteHold: call.sip?.remoteHold,
+      remoteVideoMuted: call.remoteVideoMuted,
+    };
+
+    if (Object.keys(info).length) {
+      context.commit('UPDATE_CALL_INFO', {
+        callId: call.id,
+        info,
+      });
     }
   },
 
