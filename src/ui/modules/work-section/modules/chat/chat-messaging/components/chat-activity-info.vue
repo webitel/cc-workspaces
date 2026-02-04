@@ -7,7 +7,7 @@
           :color="content.iconColor"
           size="sm"
         />
-        <p class="chat-activity-info__title">
+        <p class="chat-activity-info__title typo-caption">
           {{ content.title }}
         </p>
         <wt-hint v-if="props.provider">
@@ -69,6 +69,7 @@ const content = computed(() =>
 
   &__content {
     display: flex;
+    align-items: center;
     cursor: default;
     gap: var(--spacing-2xs)
   }
