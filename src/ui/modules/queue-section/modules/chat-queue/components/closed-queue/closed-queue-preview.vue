@@ -20,7 +20,12 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessagePreview }}
+      <div class="close-queue-preview__last-message-wrapper">
+        <div>
+          <wt-icon :icon="lastMessageSenderIcon"></wt-icon>
+        </div>
+        <p>{{ textLastMessage }}</p>
+      </div>
     </template>
 
     <template #timer>
@@ -77,7 +82,7 @@
     </template>
 
     <template #tooltip-subtitle>
-      {{ lastMessagePreview }}
+      {{ textLastMessage }}
     </template>
 
     <template #title>
@@ -145,9 +150,14 @@ const duration = computed(() => {
   return convertDuration(sec);
 });
 
-const lastMessagePreview = computed(() => {
-  const lastMessage = props.task.lastMessage || {};
-  return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+const lastMessage = computed(() => props.task.lastMessage || {});
+
+const textLastMessage = computed(() => {
+  return lastMessage.value.file ? lastMessage.value.file.name : lastMessage.value.text;
+});
+const lastMessageSenderIcon = computed(() => {
+  if(lastMessage.value.from.type === 'contact') return 'contacts';
+  return lastMessage.value.from.type;
 });
 
 const closeReasonIcon = computed(() => {
@@ -213,5 +223,11 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   opacity: 0;
   pointer-events: none;
   transition: var(--transition);
+}
+
+.close-queue-preview__last-message-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 </style>

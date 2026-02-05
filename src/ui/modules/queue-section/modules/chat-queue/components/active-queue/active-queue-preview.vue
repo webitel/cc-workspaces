@@ -18,7 +18,12 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessage }}
+      <div class="active-queue-preview__last-message-wrapper">
+        <div>
+          <wt-icon :icon="lastMessageSenderIcon"></wt-icon>
+        </div>
+        <p>{{ textLastMessage }}</p>
+      </div>
     </template>
     <template #timer>
       <queue-preview-timer
@@ -80,9 +85,15 @@ export default {
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
-
-      const lastMessage = this.task.messages[this.task.messages.length - 1] || {};
-      return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+      return this.task.messages[this.task.messages.length - 1] || {};
+    },
+    textLastMessage() {
+      return this.lastMessage.file ? this.lastMessage.file.name : this.lastMessage.text;
+    },
+    lastMessageSenderIcon() {
+      if(!this.lastMessage.member) return 'bot';
+      if(this.lastMessage.member?.self) return 'contacts';
+      if(this.lastMessage.member?.type) return 'agent';
     },
     displayIcon() {
       const member = this.task.members[0];
@@ -102,4 +113,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.active-queue-preview__last-message-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
 </style>
