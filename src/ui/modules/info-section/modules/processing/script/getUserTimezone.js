@@ -1,4 +1,4 @@
-import { TIMEZONE_STORAGE_KEY } from '@webitel/ui-sdk/src/modules/Userinfo/v2/constants/UserSettingsConstants';
+import { TIMEZONE_STORAGE_KEY } from '@webitel/ui-sdk/src/modules/Userinfo/constants/UserSettingsConstants';
 
 export function getUserTimezone() {
   const storedTimezone = localStorage.getItem(TIMEZONE_STORAGE_KEY);

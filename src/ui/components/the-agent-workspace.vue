@@ -67,6 +67,7 @@ import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
 import DescTrackAuthErrorPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-error-popup.vue';
 import DescTrackAuthSuccessPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-success-popup.vue';
+import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 
 const store = useStore();
 const route = useRoute();
@@ -90,9 +91,10 @@ const isInitLoading = ref(false);
 const isWelcomePopup = ref(true);
 const isDescTrackAuthSuccessPopup = ref(false);
 
-const checkAppAccess = computed(() => store.getters['ui/userinfo/CHECK_APP_ACCESS']);
+const userinfoStore = useUserinfoStore();
+const { hasApplicationVisibility } = userinfoStore;
 const isDescTrackAuthPopupsAllow = computed(() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW']);
-const agent = computed(() => store.state.ui.infoSec.agentInfo.agent)
+const agent = computed(() => store.state.ui.infoSec.agentInfo.agent);
 const isDescTrackAuthErrorPopup = computed(() => !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
 
 const openSession = () => store.dispatch('workspace/OPEN_SESSION');

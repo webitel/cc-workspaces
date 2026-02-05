@@ -11,7 +11,9 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "utils:i": "npm install --install-links",
-    "utils:up-libs": "npm update @webitel/ui-sdk && npm ls @webitel/ui-sdk"
+    "utils:up-libs": "npm up @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk && npm run utils:ls-libs",
+    "utils:ln-libs": "npm ln @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk && npm run utils:ls-libs",
+    "utils:ls-libs": "npm ls @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk"
   },
   "type": "module",
   "dependencies": {

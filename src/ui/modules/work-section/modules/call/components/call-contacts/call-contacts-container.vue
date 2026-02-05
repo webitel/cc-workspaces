@@ -18,7 +18,7 @@
 <script setup>
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
 import { configurations } from '@webitel/ui-sdk/src/api/clients/index.js';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
