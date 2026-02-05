@@ -160,9 +160,10 @@ export default {
   }
 
   &__content {
-    white-space: pre-wrap;
+    white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
+    min-width: 0;
   }
 }
 </style>
