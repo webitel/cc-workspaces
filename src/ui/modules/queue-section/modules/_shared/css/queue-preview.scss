@@ -46,6 +46,11 @@
   white-space: nowrap;
 }
 
+.queue-preview-icon {
+  display: flex;
+  align-items: center;
+}
+
 .queue-preview-icon-status {
   line-height: 0;
 }
