@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
@@ -48,6 +49,7 @@ import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum';
 import HistoryLookupItem from '../../lookup-item/history-lookup-item.vue';
 import LookupItemContainer from '../../lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../workspace-empty-search/components/empty-search.vue';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 
 const historyAPI = APIRepository.history;
 
@@ -63,7 +65,9 @@ const store = useStore();
 
 const historyNumber = ref('');
 
-const userId = computed(() => store.state.ui.userinfo?.userId);
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
+
 const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const member = computed(() => store.getters['features/member/MEMBER_ON_WORKSPACE']);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
@@ -193,7 +197,6 @@ watch(call, () => {
 </script>
 
 <style lang="scss" scoped>
-@use '@webitel/ui-sdk/src/css/main' as *;
 
 .history-container-contact{
     display: flex;

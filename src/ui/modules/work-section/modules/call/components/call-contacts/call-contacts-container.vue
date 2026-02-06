@@ -17,16 +17,18 @@
 
 <script setup>
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/src/api/clients/index.js';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
+import { configurations } from '@webitel/ui-sdk/api/clients';
+import { SpecialGlobalAction, WebitelLicense } from '@webitel/ui-sdk/modules/Userinfo';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { WtObject } from '@webitel/ui-sdk/enums';
 
-import { useUserinfoStore } from '../../../../../userinfo/userinfoStore.js';
+import { useUserinfoStore } from '../../../../../../modules/userinfo/userinfoStore';
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
+import { useUserAccessControl } from '../../../../../../../app/composables/useUserAccessControl';
 
 const { t } = useI18n();
 const store = useStore();
@@ -39,7 +41,7 @@ const props = defineProps({
   },
 });
 
-const { hasSpecialGlobalActionAccess } = useUserinfoStore();
+const { hasSpecialGlobalActionAccess, hasLicense } = useUserinfoStore();
 const isLimitContactsGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
 
 const isLabelToLimitContactsGranted = ref(false);
@@ -71,16 +73,14 @@ const tabsObject = computed(() => ({
   },
 }));
 
-const scope = computed(() => getNamespacedState(store.state, 'ui/userinfo').scope);
-
-const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === 'contacts'));
-const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_CENTER_LICENSE']);
+const { hasReadAccess: hasContactsReadAccess } = useUserAccessControl(WtObject.Contact);
+const hasCallCenterLicense = computed(() => hasLicense(WebitelLicense.CallCenter));
 
 const tabs = computed(() => {
   const tabs = [tabsObject.value.CallUsersTab];
 
   if (
-    hasLicenseOnCrm.value && hasCallCenterLicense.value &&
+    hasContactsReadAccess.value && hasCallCenterLicense.value &&
     (!isLimitContactsGranted || isLabelToLimitContactsGranted.value)
   ) {
     tabs.unshift(tabsObject.value.CallContactsTab);

@@ -48,7 +48,7 @@ import { useI18n } from 'vue-i18n';
 import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
-import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore.js';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import ContactLookupItem from './contact-lookup-item.vue';

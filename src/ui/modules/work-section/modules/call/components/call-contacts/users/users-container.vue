@@ -25,12 +25,14 @@
 <script setup>
 import { useStore } from 'vuex';
 import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { AgentsAPI } from '@webitel/api-services/api';
 
-import { AgentsAPI } from '@webitel/api-services/api'
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 
 
 const props = defineProps({
@@ -42,7 +44,8 @@ const props = defineProps({
 
 const store = useStore();
 
-const userId = computed(() => store.state.ui.userinfo?.userId);
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
 
 const fetchFn = (params) => {
   return AgentsAPI.getUsersStatus({ ...params, notUserId: userId.value})

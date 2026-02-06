@@ -29,7 +29,7 @@
       :dark-mode="darkMode"
     ></wt-app-navigator>
     <wt-header-actions
-      :user="userinfo"
+      :user="userInfo"
       :build-info="buildInfo"
       @settings="settings"
       @logout="logoutUser"
@@ -54,8 +54,8 @@ const store = useStore();
 const config = inject('$config');
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser: logout } = userinfoStore;
-const { userinfo } = storeToRefs(userinfoStore);
+const { hasApplicationVisibility, logoutUser } = userinfoStore;
+const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Agent);
 
 const isVideo = computed(() => store.state.features?.call?.isVideo);
@@ -116,10 +116,6 @@ function restoreVideoParam() {
 function settings() {
   const settingsUrl = import.meta.env.VITE_SETTINGS_URL;
   window.open(settingsUrl);
-}
-
-function logoutUser() {
-  return logout();
 }
 
 onMounted(() => {

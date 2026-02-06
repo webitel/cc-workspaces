@@ -22,12 +22,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useStore } from 'vuex';
-import APIRepository from '../../../../../../../../app/api/APIRepository';
 import { AgentsAPI } from '@webitel/api-services/api'
-import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { EngineAgent } from '@webitel/api-services/gen';
+
+import APIRepository from '../../../../../../../../app/api/APIRepository';
+import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 
 interface APIResponse {
   items: EngineAgent[];
@@ -45,7 +48,8 @@ const dataSort = 'position';
 
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
-const userId = computed(() => store.state.ui.userinfo?.userId);
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
 
 const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
   store.dispatch('features/call/TOGGLE_HOLD', item.id);

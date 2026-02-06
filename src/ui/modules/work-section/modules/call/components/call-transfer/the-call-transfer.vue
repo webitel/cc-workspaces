@@ -17,11 +17,13 @@
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { WebitelLicense } from '@webitel/ui-sdk/modules/Userinfo';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import AgentsCallTransfer from './components/agents-call-transfer.vue';
 import QueuesCallTransfer from './components/queues-call-transfer.vue';
 import UsersCallTransfer from './components/users-call-transfer.vue';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { useUserinfoStore } from '../../../../../../modules/userinfo/userinfoStore';
 
 const { t } = useI18n();
 const store = useStore();
@@ -31,6 +33,11 @@ interface CallTransferTabsProps {
 }
 
 defineProps<CallTransferTabsProps>();
+
+const userinfoStore = useUserinfoStore();
+const { hasLicense } = userinfoStore;
+
+const hasCallCenterLicense = computed(() => hasLicense(WebitelLicense.CallCenter));
 
 const tabs = computed(() => ([
   {
@@ -51,8 +58,6 @@ const tabs = computed(() => ([
 ]));
 
 const currentTab = ref(tabs.value[0]);
-
-const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_CENTER_LICENSE']);
 
 </script>
 

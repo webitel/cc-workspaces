@@ -23,7 +23,7 @@ const getters = {
 const actions = {
   OPEN_SESSION: async (context) => {
     try {
-      // Userinfo v2 is initialized in main.ts, so we don't need to call OPEN_SESSION here
+      // Userinfo is initialized in main.ts, so we don't need to call OPEN_SESSION here
       await context.dispatch('features/status/SUBSCRIBE_STATUS', null, { root: true });
       // then, async open workspace session
       return Promise.allSettled(
