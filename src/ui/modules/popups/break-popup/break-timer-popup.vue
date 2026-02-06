@@ -130,7 +130,7 @@ export default {
 <style lang="scss" scoped>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
-%typo-timer-digits {
+.typo-timer-digits {
   font-family: 'Montserrat', monospace;
   font-size: 64px;
   line-height: 78px;
