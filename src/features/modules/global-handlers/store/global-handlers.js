@@ -1,3 +1,5 @@
+import { watch } from 'vue'
+
 const state = {
   isDisconnectPopup: false,
   isPhoneReg: false,
@@ -7,11 +9,31 @@ const getters = {};
 
 const actions = {
   INIT_GLOBAL_HANDLERS: (context) => {
-    context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
+    context.dispatch('SUBSCRIBE_TO_CONNECTION_STATE');
     context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
   },
   RESET_GLOBAL_HANDLERS: (context) => {
     context.dispatch('CLOSE_DISCONNECT_POPUP');
+  },
+  SUBSCRIBE_TO_CONNECTION_STATE: (context) => {
+    let stop = null;
+
+    stop = watch(
+      () => context.rootState.client.state,
+      (value) => {
+        console.log(value, ' value');
+        if (value === 'RECONNECTING' || value === 'DISCONNECTED') {
+          context.dispatch('OPEN_DISCONNECT_POPUP');
+        }
+
+        if (value === 'CONNECTED') {
+          context.dispatch('CLOSE_DISCONNECT_POPUP');
+        }
+      },
+      { immediate: true },
+    );
+
+    return stop;
   },
   SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
     const client = await context.rootState.client.getCliInstance();
