@@ -19,25 +19,35 @@ const getters = {
 const actions = {
   ...clientHandlers.actions,
 
-  SET_AGENT_WAITING_STATUS: (context) => {
+  GET_AGENT_INSTANCE: async (context) => {
+    const client = await context.rootState.client.getCliInstance();
+    return client.agentSession();
+  },
+
+  SET_AGENT_WAITING_STATUS: async (context) => {
     try {
-      context.state.agent.online();
+      console.log('start');
+      const agent = await context.dispatch('GET_AGENT_INSTANCE');
+      agent.online();
+      console.log('end');
     } catch (err) {
       throw err;
     }
   },
 
-  SET_AGENT_PAUSE_STATUS: (context, note = '') => {
+  SET_AGENT_PAUSE_STATUS: async (context, note = '') => {
     try {
-      context.state.agent.pause(note);
+      const agent = await context.dispatch('GET_AGENT_INSTANCE');
+      await agent.pause(note);
     } catch (err) {
       throw err;
     }
   },
 
-  AGENT_LOGOUT: (context) => {
+  AGENT_LOGOUT: async (context) => {
     try {
-      context.state.agent.offline();
+      const agent = await context.dispatch('GET_AGENT_INSTANCE');
+      agent.offline();
     } catch (err) {
       throw err;
     }

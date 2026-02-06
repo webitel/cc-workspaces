@@ -3,13 +3,15 @@ import { createStore } from 'vuex';
 import features from '../../features/store/features';
 import workspace from '../../ui/store/agent-workspace';
 import ui from '../../ui/store/ui';
-import webSocketClientController from '../api/agent-workspace/websocket/WebSocketClientController';
+import { useWebSocketClient } from '../api/agent-workspace/websocket/useWebSocketClient.ts';
 import instance from '../api/instance';
 import OpenAPIConfig from '../api/openAPIConfig';
 
+const wsClient = useWebSocketClient();
+
 const store = createStore({
   state: {
-    client: webSocketClientController,
+    client: wsClient,
     config: {},
     api: {
       instance,
