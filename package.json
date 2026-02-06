@@ -26,7 +26,7 @@
     "@webitel/api-services": "^0.1.7",
     "@webitel/styleguide": "^26.2.5",
     "@webitel/ui-chats": "^0.1.5",
-    "@webitel/ui-sdk": "^26.2.59",
+    "@webitel/ui-sdk": "~26.2",
     "autolinker": "^4.x",
     "axios": "^1.13",
     "deep-copy": "^1.x",
