@@ -49,7 +49,9 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+import { storeToRefs } from 'pinia';
 
+import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import APIRepository from '../../../../../../app/api/APIRepository.js';
 import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
@@ -77,7 +79,8 @@ const store = useStore();
 const transferDestination = ref(TransferDestination.CHATPLAN);
 const hotkeyUnsubscribers = ref([]);
 
-const userId = computed(() => store.state.ui.userinfo?.userId);
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
 
 const fetchUsers = (params) => {
   const userParams = {

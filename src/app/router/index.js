@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
-import WebitelApplications
-  from '@webitel/ui-sdk/src/enums/WebitelApplications/WebitelApplications.enum';
-import store from '../store';
+import { WtApplication } from '@webitel/ui-sdk/enums';
 import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
 import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
 import ErrorPage from '../../ui/components/error-page.vue';
@@ -12,7 +9,7 @@ const routes = [
     path: '/',
     name: 'agent-ws',
     component: AgentWorkspace,
-    meta: { appAccess: WebitelApplications.AGENT },
+    meta: { appAccess: WtApplication.Agent },
   },
   {
     path: '/feedback-page',
@@ -54,16 +51,6 @@ router.beforeEach((to, from, next) => {
     const newQuery = { ...to.query };
     delete newQuery.accessToken;
     return next({ ...to, query: newQuery });
-  }
-
-  const requiredApp = to.meta.appAccess;
-  if (requiredApp) {
-    const checkAppAccess = store.getters['ui/userinfo/CHECK_APP_ACCESS'];
-    const hasAccess = checkAppAccess(requiredApp);
-
-    if (!hasAccess) {
-      return next({ name: 'error-page', query: { type: '403' } });
-    }
   }
 
   next();

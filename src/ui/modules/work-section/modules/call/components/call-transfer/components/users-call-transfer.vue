@@ -25,10 +25,13 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { AgentsAPI } from '@webitel/api-services/api'
-import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { ApiUser } from '@webitel/api-services/gen';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+
+import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 
 
 interface APIResponse {
@@ -51,7 +54,8 @@ const PresenceStatusField = 'presence'
 const dataSort = ref('position');
 const dataFields = ref(['name', 'id', 'extension', 'presence']);
 
-const userId = computed(() => store.state.ui.userinfo?.userId);
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const scroll = computed(() => store.state.scroll || { dataSearch: { value: '' } });
 

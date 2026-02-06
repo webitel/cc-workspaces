@@ -112,7 +112,8 @@ const v$ = useVuelidate(computed(() => ({
 
 v$.value.$touch();
 
-const userinfo = computed(() => store.state.ui.userinfo);
+const userinfoStore = useUserinfoStore();
+const { userInfo, userId } = storeToRefs(userinfoStore);
 const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
 const displayNumber = computed(() => store.getters['workspace/TASK_ON_WORKSPACE'].displayNumber);
 
@@ -155,8 +156,8 @@ async function save() {
 function setDefaultManager() {
   draft.value.managers[0] = {
     user: {
-      id: userinfo.value.userId,
-      name: userinfo.value.name,
+      id: userId.value,
+      name: userInfo.value.name,
     },
   };
 }

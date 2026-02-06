@@ -1,5 +1,6 @@
 import { CallDirection } from 'webitel-sdk';
 
+import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
 import missedAPI from '../api/missed';
 
 let subscribedToRefresh = false;
@@ -12,7 +13,9 @@ const state = {
 
 const getters = {
   REQUEST_PARAMS: (state, g, rootState) => {
-    const { userId } = rootState.ui.userinfo;
+    const userinfoStore = useUserinfoStore();
+    const { userId } = userinfoStore; // NOTE! its not reactive!
+    console.info('userId got from userinfoStore: ', userId);
     return {
       userId,
       size: 10,
