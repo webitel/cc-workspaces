@@ -83,7 +83,7 @@ watch(() => props.isActive, (active) => {
   gap: 25px;
   height: 100%;
 
-  .wt-input ::v-deep .wt-input__input {
+  .wt-input-text ::v-deep .wt-input-text__input {
     text-align: center;
   }
 
