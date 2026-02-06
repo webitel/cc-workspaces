@@ -1,9 +1,8 @@
 <template>
   <task-header
     :size="size"
-    :username="displayChatName"
   >
-    <template #after-avatar>
+    <template #end-section>
       <wt-rounded-action
         v-show="isTransferAction"
         :size="size"
@@ -19,7 +18,7 @@
         @click="close"
       />
     </template>
-    <template #title>
+    <template #info>
       <a
         v-if="chatContact?.id"
         :href="contactLink(chatContact.id)"

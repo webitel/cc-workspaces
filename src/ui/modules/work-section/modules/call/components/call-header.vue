@@ -1,6 +1,6 @@
 <template>
   <task-header :size="size">
-    <template #before-avatar>
+    <template #first-part>
       <slot :name="CallTab.History">
         <wt-rounded-action
           class="call-action"
@@ -28,7 +28,7 @@
       </slot>
     </template>
 
-    <template #after-avatar>
+    <template #second-part>
       <slot :name="CallTab.Bridge">
         <wt-rounded-action
           v-if="isBridge"
@@ -98,15 +98,8 @@
       </slot>
     </template>
 
-    <template #title>
-      {{ call?.displayName }}
-    </template>
-
-    <template #subtitle>
-      {{ call?.displayNumber }}
-    </template>
-
-    <template v-if="queueName" #queue>
+    <template #info>
+      <p>{{ call?.displayName }}</p>
       <queue-name-chip :name="queueName" />
     </template>
   </task-header>
