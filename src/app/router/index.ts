@@ -9,7 +9,7 @@ const routes = [
     path: '/',
     name: 'agent-ws',
     component: AgentWorkspace,
-    meta: { app: WtApplication.Agent },
+    meta: { WtApplication: WtApplication.Agent },
   },
   {
     path: '/feedback-page',
