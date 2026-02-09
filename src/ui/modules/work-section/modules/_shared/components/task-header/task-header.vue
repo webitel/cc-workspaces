@@ -1,85 +1,49 @@
 <template>
   <header
     class="task-header"
-    :class="[`task-header--${size}`]"
+    :class="[`task-header--${props.size}`]"
   >
     <div class="task-header-actions">
       <div class="task-header-actions__action-section">
-        <slot name="before-avatar" />
+        <slot name="start-section" />
       </div>
-      <wt-avatar :size="size" :username="username" />
       <div class="task-header-actions__action-section">
-        <slot name="after-avatar" />
+        <slot name="end-section" />
       </div>
     </div>
     <div class="task-header-info">
-      <p class="task-header-info__title typo-subtitle-1">
-        <slot name="title" />
-      </p>
-      <p class="task-header-info__subtitle typo-body-2">
-        <slot name="subtitle" />
-      </p>
-      <p class="task-header-info__queue">
-        <slot name="queue" />
-      </p>
+      <slot name="info" />
     </div>
   </header>
 </template>
 
-<script>
-import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+<script setup lang="ts">
 
-export default {
-  name: 'TaskHeader',
-  mixins: [sizeMixin],
-  props: {
-    username: {
-      type: String,
-    },
+const props = withDefaults(
+  defineProps<{
+    size?: 'sm' | 'md';
+  }>(),
+  {
+    size: 'md',
   },
-};
+);
+
 </script>
 
-<style lang="scss" scoped>
-@use '@webitel/ui-sdk/src/css/main' as *;
+<style scoped>
+.task-header-actions {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: var(--spacing-2xs);
+}
 
-.task-header {
-  .task-header-actions {
-    display: grid;
-    box-sizing: border-box;
-    grid-template-columns: 1fr 40px 1fr;
-    grid-gap: var(--spacing-2xs);
+.task-header-actions__action-section {
+  display: flex;
+  gap: var(--spacing-2xs);
+}
 
-    &__action-section {
-      display: flex;
-      gap: var(--spacing-2xs);
-
-      &:nth-child(2) {
-        justify-content: flex-end;
-      }
-    }
-
-    .wt-avatar {
-      flex: 0 0 32px;
-      transition: var(--transition);
-    }
-  }
-
-  .task-header-info {
-    text-align: center;
-
-    &__title {
-    }
-
-    &__subtitle {
-      word-break: break-all;
-    }
-  }
-
-  &--sm {
-    .task-header-actions {
-      grid-template-columns: 1fr 32px 1fr;
-    }
-  }
+.task-header-actions__action-section:nth-child(2) {
+  justify-content: flex-end;
 }
 </style>
