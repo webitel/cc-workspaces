@@ -17,6 +17,7 @@ export default {
     window.addEventListener('beforeunload', async (e) => {
       // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload
       // https://my.webitel.com/browse/WTEL-2397
+      console.log('isOnPWA', isOnPWA());
       if (isOnPWA()) e.preventDefault();
     });
 
