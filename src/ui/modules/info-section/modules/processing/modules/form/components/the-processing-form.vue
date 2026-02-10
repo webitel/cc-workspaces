@@ -8,20 +8,19 @@
     </template>
     <template #form>
       <!--      pass size prop only to form file component -->
-      <template v-for="(el, key) of formBody"
-                :key="el.id+key.toString()">
-        <component
-          :is="processingComponent[el.view.component] || el.view.component"
-          v-model="el.value"
-          :label-props="{ hint: el.view.hint }"
-          :attempt-id="task.attempt.id"
-          :component-id="el.id"
-          :size="el.view.component === 'form-file' ? size : null"
-          v-bind="el.view"
-          @input="change"
-          @call-table-action="sendTableAction"
-        />
-      </template>
+      <component
+        :is="processingComponent[el.view.component] || el.view.component"
+        v-for="(el, key) of formBody"
+        :key="el.id+key.toString()"
+        v-model="el.value"
+        :label-props="{ hint: el.view.hint }"
+        :attempt-id="task.attempt.id"
+        :component-id="el.id"
+        :size="el.view.component === 'form-file' ? size : null"
+        v-bind="el.view"
+        @input="change"
+        @call-table-action="sendTableAction"
+      />
     </template>
     <template #actions>
       <wt-button
@@ -84,7 +83,6 @@ export default {
   ],
   data: () => ({
     namespace: 'ui/infoSec/processing/form',
-    inputValue: '',
     processingComponent: {
       'wt-select': 'form-select',
       'wt-input': 'form-input-text',
@@ -189,9 +187,6 @@ export default {
         },
       ];
       this.hotkeyUnsubscribers = useHotkeys(subscripers);
-    },
-    logValue(logValueValue) {
-      console.log('logValue', logValueValue);
     },
     change() {
       nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
