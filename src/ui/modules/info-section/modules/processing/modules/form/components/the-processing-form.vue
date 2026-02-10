@@ -50,6 +50,7 @@ import FormDatetimepicker from './components/processing-form-datetimepicker.vue'
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
+import FormInputText from './components/processing-form-input-text.vue';
 import FormSelectFromObject
   from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
@@ -63,6 +64,7 @@ export default {
     FormIFrame,
     FormText,
     FormSelect,
+    FormInputText,
     FormSelectService,
     FormFile,
     FormDatetimepicker,
@@ -83,7 +85,7 @@ export default {
     namespace: 'ui/infoSec/processing/form',
     processingComponent: {
       'wt-select': 'form-select',
-      'wt-input': 'wt-input-text',
+      'wt-input': 'form-input-text',
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
     },
