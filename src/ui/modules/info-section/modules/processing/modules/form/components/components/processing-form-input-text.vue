@@ -1,7 +1,7 @@
 <template>
   <wt-input-text
     v-bind="$attrs"
-    :modelValue="props.value"
+    :value="props.value"
     @update:modelValue="emit('input', $event)"
   ></wt-input-text>
 </template>

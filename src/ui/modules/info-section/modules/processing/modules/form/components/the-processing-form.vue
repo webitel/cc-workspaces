@@ -8,19 +8,20 @@
     </template>
     <template #form>
       <!--      pass size prop only to form file component -->
-      <component
-        :is="processingComponent[el.view.component] || el.view.component"
-        v-for="(el, key) of formBody"
-        :key="el.id+key.toString()"
-        v-model="el.value"
-        :label-props="{ hint: el.view.hint }"
-        :attempt-id="task.attempt.id"
-        :component-id="el.id"
-        :size="el.view.component === 'form-file' ? size : null"
-        v-bind="el.view"
-        @input="change"
-        @call-table-action="sendTableAction"
-      />
+      <template v-for="(el, key) of formBody"
+                :key="el.id+key.toString()">
+        <component
+          :is="processingComponent[el.view.component] || el.view.component"
+          v-model="el.value"
+          :label-props="{ hint: el.view.hint }"
+          :attempt-id="task.attempt.id"
+          :component-id="el.id"
+          :size="el.view.component === 'form-file' ? size : null"
+          v-bind="el.view"
+          @input="change"
+          @call-table-action="sendTableAction"
+        />
+      </template>
     </template>
     <template #actions>
       <wt-button
@@ -50,6 +51,7 @@ import FormDatetimepicker from './components/processing-form-datetimepicker.vue'
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
 import FormSelect from './components/processing-form-select.vue';
+import FormInputText from './components/processing-form-input-text.vue';
 import FormSelectFromObject
   from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
@@ -63,6 +65,7 @@ export default {
     FormIFrame,
     FormText,
     FormSelect,
+    FormInputText,
     FormSelectService,
     FormFile,
     FormDatetimepicker,
@@ -81,9 +84,10 @@ export default {
   ],
   data: () => ({
     namespace: 'ui/infoSec/processing/form',
+    inputValue: '',
     processingComponent: {
       'wt-select': 'form-select',
-      'wt-input': 'wt-input-text',
+      'wt-input': 'form-input-text',
       'wt-datetimepicker': 'form-datetimepicker',
       'form-i-frame': 'form-i-frame',
     },
@@ -185,6 +189,9 @@ export default {
         },
       ];
       this.hotkeyUnsubscribers = useHotkeys(subscripers);
+    },
+    logValue(logValueValue) {
+      console.log('logValue', logValueValue);
     },
     change() {
       nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
