@@ -4,7 +4,7 @@
       v-show="isNewCall"
       ref="number-input"
       v-model:model-value="call.newNumber"
-      @enter="makeCall"
+      @keyup.enter.native="makeCall"
     />
     <call-state />
     <div class="numpad-wrapper">
