@@ -19,12 +19,14 @@
 
 <script setup lang="ts">
 
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+
 const props = withDefaults(
   defineProps<{
-    size?: 'sm' | 'md';
+    size?: ComponentSize;
   }>(),
   {
-    size: 'md',
+    size: ComponentSize.MD,
   },
 );
 
@@ -45,5 +47,11 @@ const props = withDefaults(
 
 .task-header-actions__action-section:nth-child(2) {
   justify-content: flex-end;
+}
+
+.task-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
 }
 </style>

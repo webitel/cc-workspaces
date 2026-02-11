@@ -10,7 +10,7 @@
         icon="chat-transfer--filled"
         rounded
         wide
-        @click="openTab"
+        @click="openTransferTab"
       />
       <chat-header-close-action
         v-show="isCloseAction"
@@ -32,108 +32,113 @@
       </span>
     </template>
 
-    <template v-if="displayQueueName" #queue>
-      <queue-name-chip :name="displayQueueName" />
-    </template>
+    <queue-name-chip
+      v-if="displayQueueName"
+      :name="displayQueueName"
+    />
   </task-header>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, onMounted, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
 
-import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
-import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
-import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName.js';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
+
 import QueueNameChip from '../../_shared/components/queue-name-chip/queue-name-chip.vue';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
-export default {
-  name: 'ChatHeader',
-  components: {
-    QueueNameChip,
-    TaskHeader,
-    ChatHeaderCloseAction,
-  },
-  props: {
-    size: {
-      type: String,
-      default: ComponentSize.MD,
-    },
-    chatContact: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  data: () => ({
-    hotkeyUnsubscribers: [],
-  }),
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-      isCloseAction: 'ALLOW_CHAT_CLOSE',
-      isTransferAction: 'ALLOW_CHAT_TRANSFER',
-    }),
-    ...mapGetters('ui/infoSec/client/contact', {
-      contactLink: 'CONTACT_LINK',
-    }),
-    displayChatName() {
-      const chat = this.chat || this.task;
+interface ChatContact {
+  id?: string | number;
+  name?: string;
+}
 
-      if (this.chatContact?.id) return this.chatContact.name;
+const props = withDefaults(
+  defineProps<{
+    size?: ComponentSize;
+    chatContact?: ChatContact;
+  }>(),
+  {
+    size: ComponentSize.MD,
+    chatContact: {},
+  },
+);
 
-      if (chat?.members?.length) {
-        return chat?.members?.map((member) => member.name).join(', ');
-      }
+const emit = defineEmits<{
+  openTab: [string];
+}>();
 
-      if (chat?.title) return chat.title;
 
-      return 'unknown';
+const store = useStore();
+
+const chat = computed(() =>
+  store.getters['features/chat/CHAT_ON_WORKSPACE'],
+);
+
+const isCloseAction = computed(() =>
+  store.getters['features/chat/ALLOW_CHAT_CLOSE'],
+);
+
+const isTransferAction = computed(() =>
+  store.getters['features/chat/ALLOW_CHAT_TRANSFER'],
+);
+
+const contactLink = computed(() =>
+  store.getters['ui/infoSec/client/contact/CONTACT_LINK'],
+);
+
+const displayChatName = computed(() => {
+  const currentChat = chat.value;
+
+  if (props.chatContact?.id) return props.chatContact?.name;
+
+  if (currentChat?.members?.length) {
+    return currentChat.members.map((member: any) => member.name).join(', ');
+  }
+
+  if (currentChat?.title) return currentChat.title;
+
+  return 'unknown';
+});
+
+const displayName = computed(() => chat.value?.displayName);
+const displayNumber = computed(() => chat.value?.displayNumber);
+const displayQueueName = computed(() => getQueueName(chat.value),);
+
+
+const close = () => store.dispatch('features/chat/CLOSE');
+const openTransferTab = () => { emit('openTab', 'transfer');};
+
+let hotkeyUnsubscribers: Array<() => void> = []; ///??????
+
+const setupHotkeys = () => {
+  hotkeyUnsubscribers = useHotkeys([
+    {
+      event: HotkeyAction.END,
+      callback: close,
     },
-    displayName() {
-      return (this.task || this.call)?.displayName;
+    {
+      event: HotkeyAction.TRANSFER,
+      callback: () => {
+        if (isTransferAction.value) openTransferTab();
+      },
     },
-    displayNumber() {
-      return (this.task || this.call)?.displayNumber;
-    },
-    displayQueueName() {
-      return getQueueName(this.chat);
-    },
-  },
-  methods: {
-    ...mapActions('features/chat', {
-      close: 'CLOSE',
-    }),
-    openTab() {
-      this.$emit('openTab', 'transfer');
-    },
-    setupHotkeys() {
-      const subscripers = [
-        {
-          event: HotkeyAction.END,
-          callback: this.close,
-        },
-        {
-          event: HotkeyAction.TRANSFER,
-          callback: () => {
-            if (this.isTransferAction) this.openTab();
-          },
-        },
-      ];
-      this.hotkeyUnsubscribers = useHotkeys(subscripers);
-    },
-  },
-  mounted() {
-    this.setupHotkeys();
-  },
-  unmounted() {
-    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
+  ]);
 };
+
+onMounted(setupHotkeys);
+
+onUnmounted(() => {
+  hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+});
 </script>
 
-<style lang="scss" scoped>
+
+<style scoped>
 .chat-header-title {
   color: var(--text-main-color);
 }

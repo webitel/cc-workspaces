@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="size">
+  <task-header :size="props.size">
     <template #first-part>
       <slot :name="CallTab.History">
         <wt-rounded-action
@@ -100,7 +100,10 @@
 
     <template #info>
       <p>{{ call?.displayName }}</p>
-      <queue-name-chip :name="queueName" />
+      <queue-name-chip
+        v-if="queueName"
+        :name="queueName"
+      />
     </template>
   </task-header>
 </template>
@@ -121,7 +124,7 @@ import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
 const props = withDefaults(
   defineProps<{
     currentTab?: string;
-    size?: string;
+    size?: ComponentSize;
   }>(),
   {
     currentTab: CallTab.Numpad,
