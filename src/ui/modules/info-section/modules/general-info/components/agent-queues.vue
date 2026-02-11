@@ -33,24 +33,26 @@ import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import agentIndicators from './agent-indicators.vue';
 
 export default {
-  name: 'AgentQueues',
-  components: {
-    agentIndicators,
-  },
-  mixins: [sizeMixin],
-  props: {
-    queues: {
-      type: Array,
-      required: true,
-    },
-  },
-  methods: {
-    displayMembers(queue) {
-      return queue.maxMemberLimit && queue.waitingMembers > queue.maxMemberLimit
-        ? `${queue.maxMemberLimit}+`
-        : queue.waitingMembers;
-    },
-  }
+	name: 'AgentQueues',
+	components: {
+		agentIndicators,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		queues: {
+			type: Array,
+			required: true,
+		},
+	},
+	methods: {
+		displayMembers(queue) {
+			return queue.maxMemberLimit && queue.waitingMembers > queue.maxMemberLimit
+				? `${queue.maxMemberLimit}+`
+				: queue.waitingMembers;
+		},
+	},
 };
 </script>
 

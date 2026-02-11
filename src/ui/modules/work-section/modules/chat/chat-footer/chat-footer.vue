@@ -10,29 +10,30 @@
 </template>
 
 <script>
-
 import { mapActions, mapGetters } from 'vuex';
 
 import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 
 export default {
-  name: 'ChatFooter',
-  components: {
-    TaskFooter,
-  },
-  mixins: [sizeMixin],
-  computed: {
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-      isChatPreview: 'ALLOW_CHAT_JOIN',
-    }),
-  },
-  methods: {
-    ...mapActions('features/chat', {
-      accept: 'ACCEPT',
-    }),
-  },
+	name: 'ChatFooter',
+	components: {
+		TaskFooter,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	computed: {
+		...mapGetters('features/chat', {
+			chat: 'CHAT_ON_WORKSPACE',
+			isChatPreview: 'ALLOW_CHAT_JOIN',
+		}),
+	},
+	methods: {
+		...mapActions('features/chat', {
+			accept: 'ACCEPT',
+		}),
+	},
 };
 </script>
 

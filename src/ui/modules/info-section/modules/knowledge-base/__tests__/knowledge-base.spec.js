@@ -3,25 +3,28 @@ import { createStore } from 'vuex';
 
 import call from '../../../../../../features/modules/call/call';
 import workspace from '../../../../../store/agent-workspace';
-import KnowledgeBaseTab
-  from '../knowledge-base-tab.vue';
+import KnowledgeBaseTab from '../knowledge-base-tab.vue';
 
 describe('knowledge base info section tab', () => {
-  let store;
+	let store;
 
-  beforeEach(() => {
-    store = createStore({
-      modules: {
-        workspace,
-        call,
-      },
-    });
-  });
+	beforeEach(() => {
+		store = createStore({
+			modules: {
+				workspace,
+				call,
+			},
+		});
+	});
 
-  it('renders a component', () => {
-    const wrapper = shallowMount(KnowledgeBaseTab, {
-      global: { plugins: [store] },
-    });
-    expect(wrapper.exists()).toBe(true);
-  });
+	it('renders a component', () => {
+		const wrapper = shallowMount(KnowledgeBaseTab, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
+		expect(wrapper.exists()).toBe(true);
+	});
 });

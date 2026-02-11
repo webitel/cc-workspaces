@@ -57,7 +57,6 @@
 </template>
 
 <script setup>
-
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
 import deepCopy from 'deep-copy';
@@ -65,18 +64,18 @@ import { computed, defineEmits, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  value: {
-    type: Object,
-    required: true,
-  },
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
+	value: {
+		type: Object,
+		required: true,
+	},
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+	},
 });
 
 const emit = defineEmits([
-  'input',
+	'input',
 ]);
 
 const { t } = useI18n();
@@ -87,75 +86,94 @@ const catalogData = ref([]);
 const loading = ref(false);
 
 const loadCatalogs = async () => {
-  try {
-    loading.value = true;
+	try {
+		loading.value = true;
 
-    const { items } = await caseServiceCatalogs.getList({
-      size: -1, // It this case for get all catalogs with services we need to pass size -1
-      search: search.value,
-      fields: ['id', 'name', 'closeReasonGroup', 'status', 'service', 'description'],
-      hasSubservices: true,
-      state: true,
-    });
+		const { items } = await caseServiceCatalogs.getList({
+			size: -1, // It this case for get all catalogs with services we need to pass size -1
+			search: search.value,
+			fields: [
+				'id',
+				'name',
+				'closeReasonGroup',
+				'status',
+				'service',
+				'description',
+			],
+			hasSubservices: true,
+			state: true,
+		});
 
-    catalogData.value = deepCopy(items);
-  } finally {
-    loading.value = false;
-  }
+		catalogData.value = deepCopy(items);
+	} finally {
+		loading.value = false;
+	}
 };
 
 const updateForm = (event) => {
-  selectedElement.value = event;
-  emit('input', event);
-}
+	selectedElement.value = event;
+	emit('input', event);
+};
 
 onMounted(() => {
-  loadCatalogs();
+	loadCatalogs();
 });
 
 const catalogDataNames = ref([]);
-const catalogDataPatch = computed(() => selectedElement.value ? catalogDataNames.value.join(' / ') : t('cases.selectAService'));
+const catalogDataPatch = computed(() =>
+	selectedElement.value
+		? catalogDataNames.value.join(' / ')
+		: t('cases.selectAService'),
+);
 
 // Author @Lera24
 // [https://webitel.atlassian.net/browse/WTEL-6955]
 // Builds the hierarchical path for the service within the catalog.
 function findPath(services, targetId, path = []) {
-  for (const service of services) {
-    const newPath = [...path, service.name];
+	for (const service of services) {
+		const newPath = [
+			...path,
+			service.name,
+		];
 
-    if (service.id === targetId) {
-      return newPath;
-    }
+		if (service.id === targetId) {
+			return newPath;
+		}
 
-    if (service.service && Array.isArray(service.service)) {
-      const result = findPath(service.service, targetId, newPath);
-      if (result) return result;
-    }
-  }
-  return null;
+		if (service.service && Array.isArray(service.service)) {
+			const result = findPath(service.service, targetId, newPath);
+			if (result) return result;
+		}
+	}
+	return null;
 }
 
 const findCatalogDataNames = () => {
-  if (!selectedElement.value) {
-    catalogDataNames.value = null;
-    return;
-  }
+	if (!selectedElement.value) {
+		catalogDataNames.value = null;
+		return;
+	}
 
-  for (const catalog of catalogData.value) {
-    if (catalog.service && Array.isArray(catalog.service)) {
-      const path = findPath(catalog.service, selectedElement.value);
-      if (path) {
-        catalogDataNames.value = [catalog.name, ...path];
-        return;
-      }
-    }
-  }
+	for (const catalog of catalogData.value) {
+		if (catalog.service && Array.isArray(catalog.service)) {
+			const path = findPath(catalog.service, selectedElement.value);
+			if (path) {
+				catalogDataNames.value = [
+					catalog.name,
+					...path,
+				];
+				return;
+			}
+		}
+	}
 
-  catalogDataNames.value = null;
-}
+	catalogDataNames.value = null;
+};
 
-watch(() => selectedElement.value, () => findCatalogDataNames());
-
+watch(
+	() => selectedElement.value,
+	() => findCatalogDataNames(),
+);
 </script>
 
 <style lang="scss" scoped>

@@ -54,220 +54,238 @@
 
 <script>
 export default {
-  name: 'RadialProgress',
-  props: {
-    diameter: {
-      type: Number,
-      required: false,
-      default: 60,
-    },
-    max: {
-      type: Number,
-      required: true,
-      default: 10,
-    },
-    value: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    color: {
-      type: String,
-      required: false,
-      default: 'primary',
-    },
-    strokeWidth: {
-      type: Number,
-      required: false,
-      default: 5,
-    },
-    innerStrokeWidth: {
-      type: Number,
-      required: false,
-      default: 5,
-    },
-    strokeLinecap: {
-      type: String,
-      required: false,
-      default: 'round',
-    },
-    animateSpeed: {
-      type: Number,
-      required: false,
-      default: 1000,
-    },
-    innerStrokeColor: {
-      type: String,
-      required: false,
-      default: 'secondary',
-    },
-    fps: {
-      type: Number,
-      required: false,
-      default: 60,
-    },
-    timingFunc: {
-      type: String,
-      required: false,
-      default: 'linear',
-    },
-    isClockwise: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      gradient: {
-        fx: 0.99,
-        fy: 0.5,
-        cx: 0.5,
-        cy: 0.5,
-        r: 0.65,
-      },
-      gradientAnimation: null,
-      currentAngle: 0,
-      strokeDashoffset: 0,
-    };
-  },
-  computed: {
-    radius() {
-      return this.diameter / 2;
-    },
-    circumference() {
-      return Math.PI * this.innerCircleDiameter;
-    },
-    stepSize() {
-      if (this.max === 0) {
-        return 0;
-      }
-      return 100 / this.max;
-    },
-    finishedPercentage() {
-      return this.stepSize * this.value;
-    },
-    circleSlice() {
-      return (2 * Math.PI) / this.max;
-    },
-    animateSlice() {
-      return this.circleSlice / this.totalPoints;
-    },
-    innerCircleDiameter() {
-      return this.diameter - (this.innerStrokeWidth * 2);
-    },
-    innerCircleRadius() {
-      return this.innerCircleDiameter / 2;
-    },
-    totalPoints() {
-      return this.animateSpeed / this.animationIncrements;
-    },
-    animationIncrements() {
-      return 1000 / this.fps;
-    },
-    containerStyle() {
-      return {
-        height: `${this.diameter}px`,
-        width: `${this.diameter}px`,
-      };
-    },
-    progressStyle() {
-      return {
-        height: `${this.diameter}px`,
-        width: `${this.diameter}px`,
-        strokeWidth: `${this.strokeWidth}px`,
-        strokeDashoffset: this.strokeDashoffset,
-        transition: `stroke-dashoffset ${this.animateSpeed}ms ${this.timingFunc}`,
-      };
-    },
-    strokeStyle() {
-      return {
-        height: `${this.diameter}px`,
-        width: `${this.diameter}px`,
-        strokeWidth: `${this.innerStrokeWidth}px`,
-        stroke: 'var(--secondary-color)',
-      };
-    },
-    innerCircleStyle() {
-      return {
-        width: `${this.innerCircleDiameter}px`,
-      };
-    },
-  },
-  watch: {
-    max() {
-      this.changeProgress({ isAnimate: true });
-    },
-    value() {
-      this.changeProgress({ isAnimate: true });
-    },
-    diameter() {
-      this.changeProgress({ isAnimate: true });
-    },
-    strokeWidth() {
-      this.changeProgress({ isAnimate: true });
-    },
-  },
-  created() {
-    this.changeProgress({ isAnimate: false });
-  },
-  methods: {
-    getStopPointsOfCircle(steps) {
-      const points = [];
-      for (let i = 0; i < steps; i += 1) {
-        const angle = this.circleSlice * i;
-        points.push(this.getPointOfCircle(angle));
-      }
-      return points;
-    },
-    getPointOfCircle(angle) {
-      const radius = 0.5;
-      const x = radius + (radius * Math.cos(angle));
-      const y = radius + (radius * Math.sin(angle));
-      return { x, y };
-    },
-    gotoPoint() {
-      const point = this.getPointOfCircle(this.currentAngle);
-      if (point.x && point.y) {
-        this.gradient.fx = point.x;
-        this.gradient.fy = point.y;
-      }
-    },
-    direction() {
-      if (this.isClockwise) {
-        return 1;
-      }
-      return -1;
-    },
-    changeProgress({ isAnimate = true }) {
-      this.strokeDashoffset = ((100 - this.finishedPercentage) / 100) * this.circumference * this.direction();
-      if (this.gradientAnimation) {
-        clearInterval(this.gradientAnimation);
-      }
-      if (!isAnimate) {
-        this.gotoNextStep();
-        return;
-      }
-      const angleOffset = (this.value - 1) * this.circleSlice;
-      let i = (this.currentAngle - angleOffset) / this.animateSlice;
-      const incrementer = Math.abs(i - this.totalPoints) / this.totalPoints;
-      const isMoveForward = i < this.totalPoints;
-      this.gradientAnimation = setInterval(() => {
-        if ((isMoveForward && i >= this.totalPoints)
-          || (!isMoveForward && i < this.totalPoints)) {
-          clearInterval(this.gradientAnimation);
-          return;
-        }
-        this.currentAngle = angleOffset + (this.animateSlice * i);
-        this.gotoPoint();
-        i += isMoveForward ? incrementer : -incrementer;
-      }, this.animationIncrements);
-    },
-    gotoNextStep() {
-      this.currentAngle = this.value * this.circleSlice;
-      this.gotoPoint();
-    },
-  },
+	name: 'RadialProgress',
+	props: {
+		diameter: {
+			type: Number,
+			required: false,
+			default: 60,
+		},
+		max: {
+			type: Number,
+			required: true,
+			default: 10,
+		},
+		value: {
+			type: Number,
+			required: true,
+			default: 0,
+		},
+		color: {
+			type: String,
+			required: false,
+			default: 'primary',
+		},
+		strokeWidth: {
+			type: Number,
+			required: false,
+			default: 5,
+		},
+		innerStrokeWidth: {
+			type: Number,
+			required: false,
+			default: 5,
+		},
+		strokeLinecap: {
+			type: String,
+			required: false,
+			default: 'round',
+		},
+		animateSpeed: {
+			type: Number,
+			required: false,
+			default: 1000,
+		},
+		innerStrokeColor: {
+			type: String,
+			required: false,
+			default: 'secondary',
+		},
+		fps: {
+			type: Number,
+			required: false,
+			default: 60,
+		},
+		timingFunc: {
+			type: String,
+			required: false,
+			default: 'linear',
+		},
+		isClockwise: {
+			type: Boolean,
+			required: false,
+			default: true,
+		},
+	},
+	data() {
+		return {
+			gradient: {
+				fx: 0.99,
+				fy: 0.5,
+				cx: 0.5,
+				cy: 0.5,
+				r: 0.65,
+			},
+			gradientAnimation: null,
+			currentAngle: 0,
+			strokeDashoffset: 0,
+		};
+	},
+	computed: {
+		radius() {
+			return this.diameter / 2;
+		},
+		circumference() {
+			return Math.PI * this.innerCircleDiameter;
+		},
+		stepSize() {
+			if (this.max === 0) {
+				return 0;
+			}
+			return 100 / this.max;
+		},
+		finishedPercentage() {
+			return this.stepSize * this.value;
+		},
+		circleSlice() {
+			return (2 * Math.PI) / this.max;
+		},
+		animateSlice() {
+			return this.circleSlice / this.totalPoints;
+		},
+		innerCircleDiameter() {
+			return this.diameter - this.innerStrokeWidth * 2;
+		},
+		innerCircleRadius() {
+			return this.innerCircleDiameter / 2;
+		},
+		totalPoints() {
+			return this.animateSpeed / this.animationIncrements;
+		},
+		animationIncrements() {
+			return 1000 / this.fps;
+		},
+		containerStyle() {
+			return {
+				height: `${this.diameter}px`,
+				width: `${this.diameter}px`,
+			};
+		},
+		progressStyle() {
+			return {
+				height: `${this.diameter}px`,
+				width: `${this.diameter}px`,
+				strokeWidth: `${this.strokeWidth}px`,
+				strokeDashoffset: this.strokeDashoffset,
+				transition: `stroke-dashoffset ${this.animateSpeed}ms ${this.timingFunc}`,
+			};
+		},
+		strokeStyle() {
+			return {
+				height: `${this.diameter}px`,
+				width: `${this.diameter}px`,
+				strokeWidth: `${this.innerStrokeWidth}px`,
+				stroke: 'var(--secondary-color)',
+			};
+		},
+		innerCircleStyle() {
+			return {
+				width: `${this.innerCircleDiameter}px`,
+			};
+		},
+	},
+	watch: {
+		max() {
+			this.changeProgress({
+				isAnimate: true,
+			});
+		},
+		value() {
+			this.changeProgress({
+				isAnimate: true,
+			});
+		},
+		diameter() {
+			this.changeProgress({
+				isAnimate: true,
+			});
+		},
+		strokeWidth() {
+			this.changeProgress({
+				isAnimate: true,
+			});
+		},
+	},
+	created() {
+		this.changeProgress({
+			isAnimate: false,
+		});
+	},
+	methods: {
+		getStopPointsOfCircle(steps) {
+			const points = [];
+			for (let i = 0; i < steps; i += 1) {
+				const angle = this.circleSlice * i;
+				points.push(this.getPointOfCircle(angle));
+			}
+			return points;
+		},
+		getPointOfCircle(angle) {
+			const radius = 0.5;
+			const x = radius + radius * Math.cos(angle);
+			const y = radius + radius * Math.sin(angle);
+			return {
+				x,
+				y,
+			};
+		},
+		gotoPoint() {
+			const point = this.getPointOfCircle(this.currentAngle);
+			if (point.x && point.y) {
+				this.gradient.fx = point.x;
+				this.gradient.fy = point.y;
+			}
+		},
+		direction() {
+			if (this.isClockwise) {
+				return 1;
+			}
+			return -1;
+		},
+		changeProgress({ isAnimate = true }) {
+			this.strokeDashoffset =
+				((100 - this.finishedPercentage) / 100) *
+				this.circumference *
+				this.direction();
+			if (this.gradientAnimation) {
+				clearInterval(this.gradientAnimation);
+			}
+			if (!isAnimate) {
+				this.gotoNextStep();
+				return;
+			}
+			const angleOffset = (this.value - 1) * this.circleSlice;
+			let i = (this.currentAngle - angleOffset) / this.animateSlice;
+			const incrementer = Math.abs(i - this.totalPoints) / this.totalPoints;
+			const isMoveForward = i < this.totalPoints;
+			this.gradientAnimation = setInterval(() => {
+				if (
+					(isMoveForward && i >= this.totalPoints) ||
+					(!isMoveForward && i < this.totalPoints)
+				) {
+					clearInterval(this.gradientAnimation);
+					return;
+				}
+				this.currentAngle = angleOffset + this.animateSlice * i;
+				this.gotoPoint();
+				i += isMoveForward ? incrementer : -incrementer;
+			}, this.animationIncrements);
+		},
+		gotoNextStep() {
+			this.currentAngle = this.value * this.circleSlice;
+			this.gotoPoint();
+		},
+	},
 };
 </script>
 

@@ -8,13 +8,14 @@
 import { computed, defineProps } from 'vue';
 
 interface Props {
-  value?: string | number;
+	value?: string | number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: 0,
+	value: 0,
 });
 
-const content = computed(() => Array.isArray(props.value) ? props.value.join(', ') : props.value);
-
+const content = computed(() =>
+	Array.isArray(props.value) ? props.value.join(', ') : props.value,
+);
 </script>

@@ -49,36 +49,44 @@ import collapsibleProcessingFormComponentMixin from '../../mixins/collapsiblePro
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 const md = markdownit({
-  linkify: true,
-  html: true,
+	linkify: true,
+	html: true,
 });
 
 patchMDRender(md);
 
 export default {
-  name: 'FormText',
-  mixins: [processingFormComponentMixin, collapsibleProcessingFormComponentMixin],
-  props: {
-    color: {
-      type: String,
-      default: 'info',
-      options: ['info', 'secondary', 'primary', 'success', 'error'],
-    },
-    enableCopying: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data: () => ({
-  }),
-  computed: {
-    valueToCopy() {
-      return this.initialValue.replace(/<br\s*\/?>/gi, '\n');
-    },
-    content() {
-      return md.render(dompurify.sanitize(this.initialValue));
-    },
-  },
+	name: 'FormText',
+	mixins: [
+		processingFormComponentMixin,
+		collapsibleProcessingFormComponentMixin,
+	],
+	props: {
+		color: {
+			type: String,
+			default: 'info',
+			options: [
+				'info',
+				'secondary',
+				'primary',
+				'success',
+				'error',
+			],
+		},
+		enableCopying: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data: () => ({}),
+	computed: {
+		valueToCopy() {
+			return this.initialValue.replace(/<br\s*\/?>/gi, '\n');
+		},
+		content() {
+			return md.render(dompurify.sanitize(this.initialValue));
+		},
+	},
 };
 </script>
 

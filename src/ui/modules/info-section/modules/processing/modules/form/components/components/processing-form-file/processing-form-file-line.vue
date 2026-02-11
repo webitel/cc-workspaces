@@ -57,65 +57,87 @@ import sizeMixin from '../../../../../../../../../../app/mixins/sizeMixin';
 import FileStatus from '../../../enums/FormFileStatus.enum';
 
 export default {
-  name: 'ProcessingFormFileLine',
-  mixins: [sizeMixin],
-  props: {
-    file: {
-      type: Object,
-      required: true,
-    },
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data: () => ({
-    href: '',
-    FileStatus,
-  }),
-  computed: {
-    ...mapState({
-      client: (state) => state.client,
-    }),
-    readableSize() {
-      return prettifyFileSize(this.file.size);
-    },
-    typeIcon() {
-      const type = this.file.mime;
-      if (type.includes('image')) return 'preview-tag-image';
-      if (type.includes('application')) return 'preview-tag-application';
-      if (type.includes('video')) return 'preview-tag-video';
-      if (type.includes('audio')) return 'preview-tag-audio';
-      return 'log';
-    },
-    actionIcon() {
-      switch (this.status) {
-        case FileStatus.DONE: return { component: 'wt-icon-btn', icon: 'bucket', handler: () => this.$emit('delete') };
-        case FileStatus.ERROR: return { component: 'wt-icon-btn', icon: 'close', handler: () => this.file.metadata.close() };
-        case FileStatus.AFTER_DONE: return { component: 'wt-icon', icon: 'done' };
-        case FileStatus.AFTER_ERROR: return { component: 'wt-icon', icon: 'attention', color: 'danger' };
-        default: return {};
-      }
-    },
-    status() {
-      // order is important cause properties are set one after another
-      if (this.file.id) return FileStatus.DONE;
-      if (this.file.metadata?.done) return FileStatus.AFTER_DONE;
-      if (this.file.metadata?.close) return FileStatus.ERROR;
-      if (this.file.metadata?.error) return FileStatus.AFTER_ERROR;
-      if (this.file.metadata?.progress) return FileStatus.PROGRESS;
-      return '';
-    },
-  },
-  created() {
-    this.initHref();
-  },
-  methods: {
-    async initHref() {
-      const cli = await this.client.getCliInstance();
-      this.href = cli.fileUrlDownload(this.file.id);
-    },
-  },
+	name: 'ProcessingFormFileLine',
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		file: {
+			type: Object,
+			required: true,
+		},
+		readonly: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data: () => ({
+		href: '',
+		FileStatus,
+	}),
+	computed: {
+		...mapState({
+			client: (state) => state.client,
+		}),
+		readableSize() {
+			return prettifyFileSize(this.file.size);
+		},
+		typeIcon() {
+			const type = this.file.mime;
+			if (type.includes('image')) return 'preview-tag-image';
+			if (type.includes('application')) return 'preview-tag-application';
+			if (type.includes('video')) return 'preview-tag-video';
+			if (type.includes('audio')) return 'preview-tag-audio';
+			return 'log';
+		},
+		actionIcon() {
+			switch (this.status) {
+				case FileStatus.DONE:
+					return {
+						component: 'wt-icon-btn',
+						icon: 'bucket',
+						handler: () => this.$emit('delete'),
+					};
+				case FileStatus.ERROR:
+					return {
+						component: 'wt-icon-btn',
+						icon: 'close',
+						handler: () => this.file.metadata.close(),
+					};
+				case FileStatus.AFTER_DONE:
+					return {
+						component: 'wt-icon',
+						icon: 'done',
+					};
+				case FileStatus.AFTER_ERROR:
+					return {
+						component: 'wt-icon',
+						icon: 'attention',
+						color: 'danger',
+					};
+				default:
+					return {};
+			}
+		},
+		status() {
+			// order is important cause properties are set one after another
+			if (this.file.id) return FileStatus.DONE;
+			if (this.file.metadata?.done) return FileStatus.AFTER_DONE;
+			if (this.file.metadata?.close) return FileStatus.ERROR;
+			if (this.file.metadata?.error) return FileStatus.AFTER_ERROR;
+			if (this.file.metadata?.progress) return FileStatus.PROGRESS;
+			return '';
+		},
+	},
+	created() {
+		this.initHref();
+	},
+	methods: {
+		async initHref() {
+			const cli = await this.client.getCliInstance();
+			this.href = cli.fileUrlDownload(this.file.id);
+		},
+	},
 };
 </script>
 

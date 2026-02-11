@@ -17,16 +17,16 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
-  newMessageCount: {
-    type: Number,
-    default: 0,
-  },
-})
+	newMessageCount: {
+		type: Number,
+		default: 0,
+	},
+});
 
-const emit = defineEmits(['scroll']);
-
+const emit = defineEmits([
+	'scroll',
+]);
 </script>
 
 <style lang="scss" scoped>

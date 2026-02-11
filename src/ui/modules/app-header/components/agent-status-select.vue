@@ -13,26 +13,26 @@ import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { mapState } from 'vuex';
 
 export default {
-  name: 'AgentStatusSelect',
-  components: {
-    WtCcAgentStatusSelect,
-  },
+	name: 'AgentStatusSelect',
+	components: {
+		WtCcAgentStatusSelect,
+	},
 
-  computed: {
-    ...mapState('ui/now', {
-      now: (state) => state.now,
-    }),
+	computed: {
+		...mapState('ui/now', {
+			now: (state) => state.now,
+		}),
 
-    ...mapState('features/status', {
-      agent: (state) => state.agent,
-    }),
+		...mapState('features/status', {
+			agent: (state) => state.agent,
+		}),
 
-    statusDuration() {
-      let time = this.now - (this.agent.lastStatusChange || Date.now());
-      time = time < 0 ? 0 : time;
-      return convertDuration(time / 1000);
-    },
-  },
+		statusDuration() {
+			let time = this.now - (this.agent.lastStatusChange || Date.now());
+			time = time < 0 ? 0 : time;
+			return convertDuration(time / 1000);
+		},
+	},
 };
 </script>
 

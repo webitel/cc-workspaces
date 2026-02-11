@@ -35,16 +35,16 @@
 
 <script>
 export default {
-  name: 'ConfirmationPopup',
-  methods: {
-    confirm() {
-      this.$emit('confirm');
-      this.close();
-    },
-    close() {
-      this.$emit('close');
-    },
-  },
+	name: 'ConfirmationPopup',
+	methods: {
+		confirm() {
+			this.$emit('confirm');
+			this.close();
+		},
+		close() {
+			this.$emit('close');
+		},
+	},
 };
 </script>
 

@@ -8,27 +8,27 @@
 </template>
 
 <script>
-import { mapActions,mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
-  name: 'MediaViewer',
-  computed: {
-    ...mapState('features/chat/chatMedia', {
-      mediaView: (state) => state.mediaView,
-    }),
-    photo() {
-      if (!this.isMediaView) return {};
-      return this.mediaView.file;
-    },
-    isMediaView() {
-      return !!this.mediaView;
-    },
-  },
-  methods: {
-    ...mapActions('features/chat/chatMedia', {
-      close: 'CLOSE_MEDIA',
-    }),
-  },
+	name: 'MediaViewer',
+	computed: {
+		...mapState('features/chat/chatMedia', {
+			mediaView: (state) => state.mediaView,
+		}),
+		photo() {
+			if (!this.isMediaView) return {};
+			return this.mediaView.file;
+		},
+		isMediaView() {
+			return !!this.mediaView;
+		},
+	},
+	methods: {
+		...mapActions('features/chat/chatMedia', {
+			close: 'CLOSE_MEDIA',
+		}),
+	},
 };
 </script>
 

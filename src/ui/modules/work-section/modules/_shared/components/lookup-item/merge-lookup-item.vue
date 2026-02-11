@@ -29,14 +29,18 @@ import displayInfo from '../../../../../../mixins/displayInfoMixin';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
-  name: 'MergeLookupItem',
-  mixins: [callTimer, displayInfo, lookupItemMixin],
-  computed: {
-    // for mixins
-    task() {
-      return this.item;
-    },
-  },
+	name: 'MergeLookupItem',
+	mixins: [
+		callTimer,
+		displayInfo,
+		lookupItemMixin,
+	],
+	computed: {
+		// for mixins
+		task() {
+			return this.item;
+		},
+	},
 };
 </script>
 

@@ -10,14 +10,13 @@ import { formatDate } from '@webitel/ui-sdk/utils';
 import { computed, defineProps } from 'vue';
 
 const props = defineProps({
-  value: {
-    type: Number,
-    required: true,
-  },
+	value: {
+		type: Number,
+		required: true,
+	},
 });
 
-const dataTimeValue = computed<string>(() =>  {
-  return formatDate(+props.value, FormatDateMode.DATETIME)
-})
-
+const dataTimeValue = computed<string>(() => {
+	return formatDate(+props.value, FormatDateMode.DATETIME);
+});
 </script>

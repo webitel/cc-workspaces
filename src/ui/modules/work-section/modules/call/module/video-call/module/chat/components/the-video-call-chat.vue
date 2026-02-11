@@ -18,77 +18,80 @@
 </template>
 
 <script setup lang="ts">
-import { applyTransform,
-  notify,
-} from '@webitel/api-services/api/transformers';
-import { ChatAction, ChatContainer, ChatMessageType, MessageAction } from '@webitel/ui-chats/ui';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
+import {
+	ChatAction,
+	ChatContainer,
+	ChatMessageType,
+	MessageAction,
+} from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-
-import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
 import { ConversationState } from 'webitel-sdk';
+import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
 
 const chatNamespace = 'features/chat';
 
 const props = withDefaults(
-  defineProps<{
-    size?: string;
-  }>(),
-  {
-    size: ComponentSize.MD,
-  },
+	defineProps<{
+		size?: string;
+	}>(),
+	{
+		size: ComponentSize.MD,
+	},
 );
 
 const store = useStore();
 
-const chat = computed(() =>
-  store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']
+const chat = computed(
+	() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
 );
-const messages = computed(() =>
-  store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES']
+const messages = computed(
+	() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES'],
 );
-const isChatClosed = computed(() => chat?.value.state === ConversationState.Closed);
+const isChatClosed = computed(
+	() => chat?.value.state === ConversationState.Closed,
+);
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
-  try {
-    chat.value?.send(text);
-  } catch (error) {
-    throw applyTransform(error, [
-      notify,
-    ]);
-  } finally {
-    options?.onSuccess?.();
-  }
+	try {
+		chat.value?.send(text);
+	} catch (error) {
+		throw applyTransform(error, [
+			notify,
+		]);
+	} finally {
+		options?.onSuccess?.();
+	}
 }
 
 async function sendFiles(files: File[], options?: ResultCallbacks) {
-  try {
-    Array.isArray(files)
-      ? await Promise.all(files?.map((file) => chat.value?.sendFile(file)))
-      : await chat.value?.sendFile(files);
-  } catch (error) {
-    throw applyTransform(error, [
-      notify,
-    ]);
-  } finally {
-    options?.onSuccess?.();
-  }
+	try {
+		Array.isArray(files)
+			? await Promise.all(files?.map((file) => chat.value?.sendFile(file)))
+			: await chat.value?.sendFile(files);
+	} catch (error) {
+		throw applyTransform(error, [
+			notify,
+		]);
+	} finally {
+		options?.onSuccess?.();
+	}
 }
 
 const openMedia = (message: ChatMessageType) => {
-  store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message)
+	store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 };
 
 onMounted(() => {
-  // @author ye.pohranichna
-  // because the video calls chat mast be always auto-answered
-  // can be removed after the fix on backend side
-  // https://webitel.atlassian.net/browse/WTEL-7689
-  chat.value?.join()
+	// @author ye.pohranichna
+	// because the video calls chat mast be always auto-answered
+	// can be removed after the fix on backend side
+	// https://webitel.atlassian.net/browse/WTEL-7689
+	chat.value?.join();
 });
-
 </script>
 <style scoped>
 .the-video-call-chat {

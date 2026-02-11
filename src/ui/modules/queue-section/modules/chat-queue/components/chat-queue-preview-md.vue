@@ -68,52 +68,55 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
-import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum'
+import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-  status: {
-    type: String,
-    default: 'active',
-  },
-  title: {
-    type: String,
-    default: '',
-  },
-  subtitle: {
-    type: String,
-    default: '',
-  },
-  icon: {
-    type: String,
-    default: 'chat',
-  },
-  opened: {
-    type: Boolean,
-    default: false,
-  },
+	task: {
+		type: Object,
+		required: true,
+	},
+	status: {
+		type: String,
+		default: 'active',
+	},
+	title: {
+		type: String,
+		default: '',
+	},
+	subtitle: {
+		type: String,
+		default: '',
+	},
+	icon: {
+		type: String,
+		default: 'chat',
+	},
+	opened: {
+		type: Boolean,
+		default: false,
+	},
 });
 
-const emit = defineEmits(['click', 'close']);
+const emit = defineEmits([
+	'click',
+	'close',
+]);
 
 const queueName = computed(() => props.task?.queue?.name || '');
 
 const showIcon = computed(() => {
-  // Manual chats don't show icon in default state
-  return props.status !== ChatTypes.Manual;
+	// Manual chats don't show icon in default state
+	return props.status !== ChatTypes.Manual;
 });
 
 const iconColor = computed(() => {
-  if (props.opened) {
-    return ChatColorsMap[props.status] || 'secondary';
-  }
-  return 'secondary';
+	if (props.opened) {
+		return ChatColorsMap[props.status] || 'secondary';
+	}
+	return 'secondary';
 });
 </script>
 

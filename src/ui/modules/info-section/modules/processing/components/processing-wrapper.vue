@@ -22,32 +22,33 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import applyTransform, {
-  snakeToCamel,
+	snakeToCamel,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { computed } from 'vue';
 import ProcessingTimer from './timer/processing-timer.vue';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
+	task: {
+		type: Object,
+		required: true,
+	},
 });
 
 const showTimer = computed(() => {
-  return props.task.attempt?.processingSec;
+	return props.task.attempt?.processingSec;
 });
-
 
 //NOTE: this is needed to convert _processing keys from snake_case to camelCase
 //https://webitel.atlassian.net/browse/WTEL-5536
 const processing = computed(() => {
-  return applyTransform(props.task?.attempt?._processing, [snakeToCamel()]);
+	return applyTransform(props.task?.attempt?._processing, [
+		snakeToCamel(),
+	]);
 });
 
 const renewProcessing = (prolongationSec) => {
-  props.task.attempt.renew(prolongationSec);
+	props.task.attempt.renew(prolongationSec);
 };
 </script>
 

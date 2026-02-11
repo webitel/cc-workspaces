@@ -77,89 +77,109 @@ import LabelsAPI from '../../api/LabelsAPI';
 import TimezonesAPI from '../../api/TimezonesAPI';
 
 const props = defineProps({
-  namespace: {
-    type: String,
-    required: true,
-  },
-  size: {
-    type: String,
-    default: 'md',
-  },
+	namespace: {
+		type: String,
+		required: true,
+	},
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
 const emit = defineEmits([
-  'close',
+	'close',
 ]);
 
 const store = useStore();
 const { t } = useI18n();
 
 const draft = ref({
-  name: '',
-  timezones: [],
-  managers: [],
-  phones: [],
-  labels: [],
-  about: '',
-  createdBy: '',
+	name: '',
+	timezones: [],
+	managers: [],
+	phones: [],
+	labels: [],
+	about: '',
+	createdBy: '',
 });
 
-const v$ = useVuelidate(computed(() => ({
-  draft: {
-    name: { required },
-  },
-})), { draft }, { $autoDirty: true });
+const v$ = useVuelidate(
+	computed(() => ({
+		draft: {
+			name: {
+				required,
+			},
+		},
+	})),
+	{
+		draft,
+	},
+	{
+		$autoDirty: true,
+	},
+);
 
 v$.value.$touch();
 
 const userinfoStore = useUserinfoStore();
 const { userInfo, userId } = storeToRefs(userinfoStore);
-const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
-const displayNumber = computed(() => store.getters['workspace/TASK_ON_WORKSPACE'].displayNumber);
+const isLoading = computed(
+	() => getNamespacedState(store.state, props.namespace).isLoading,
+);
+const displayNumber = computed(
+	() => store.getters['workspace/TASK_ON_WORKSPACE'].displayNumber,
+);
 
 function close() {
-  emit('close');
+	emit('close');
 }
 
 function updatePhoneNumber(phoneNumber) {
-  if (!draft.value.phones[0]) {
-    draft.value.phones[0] = {
-      number: phoneNumber,
-      primary: true,
-      type: {}
-    };
-  } else {
-    draft.value.phones[0].number = phoneNumber;
-  }
+	if (!draft.value.phones[0]) {
+		draft.value.phones[0] = {
+			number: phoneNumber,
+			primary: true,
+			type: {},
+		};
+	} else {
+		draft.value.phones[0].number = phoneNumber;
+	}
 }
 
 async function createCommunication() {
-  const { items } = await CommunicationsAPI.getList({ channel: EngineCommunicationChannels.Phone, defaultValue: true });
-  if ((!displayNumber.value || !draft.value.phones[0]?.number) && !items.length) return;
+	const { items } = await CommunicationsAPI.getList({
+		channel: EngineCommunicationChannels.Phone,
+		defaultValue: true,
+	});
+	if ((!displayNumber.value || !draft.value.phones[0]?.number) && !items.length)
+		return;
 
-  draft.value.phones = [{
-    number: draft.value.phones[0]?.number,
-    primary: true,
-    type: {
-      ...items[0],
-    },
-  }];
+	draft.value.phones = [
+		{
+			number: draft.value.phones[0]?.number,
+			primary: true,
+			type: {
+				...items[0],
+			},
+		},
+	];
 }
 
 async function save() {
-  await createCommunication();
-  if (!draft.value.phones[0]?.number) delete draft.value.phones
-  await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
-  close();
+	await createCommunication();
+	if (!draft.value.phones[0]?.number) delete draft.value.phones;
+	await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+	close();
 }
 
 function setDefaultManager() {
-  draft.value.managers[0] = {
-    user: {
-      id: userId.value,
-      name: userInfo.value.name,
-    },
-  };
+	draft.value.managers[0] = {
+		user: {
+			id: userId.value,
+			name: userInfo.value.name,
+		},
+	};
 }
 
 onMounted(() => setDefaultManager());

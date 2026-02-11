@@ -27,28 +27,30 @@ import ConfirmationPopup from '../../../../../../app/components/utils/confirmati
 import sizeMixin from '../../../../../../app/mixins/sizeMixin.js';
 
 export default {
-  name: 'ChatHeaderCloseAction',
-  components: {
-    ConfirmationPopup,
-  },
-  mixins: [sizeMixin],
-  data: () => ({
-    isConfirmationPopup: false,
-  }),
-  computed: {
-    ...mapGetters('features/chat', {
-      askChatClose: 'ASK_CHAT_CLOSE',
-    }),
-  },
-  methods: {
-    handleCloseAction() {
-      if (this.askChatClose) this.isConfirmationPopup = true;
-      else this.close();
-    },
-    close() {
-      this.$emit('click');
-    },
-  },
+	name: 'ChatHeaderCloseAction',
+	components: {
+		ConfirmationPopup,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	data: () => ({
+		isConfirmationPopup: false,
+	}),
+	computed: {
+		...mapGetters('features/chat', {
+			askChatClose: 'ASK_CHAT_CLOSE',
+		}),
+	},
+	methods: {
+		handleCloseAction() {
+			if (this.askChatClose) this.isConfirmationPopup = true;
+			else this.close();
+		},
+		close() {
+			this.$emit('click');
+		},
+	},
 };
 </script>
 

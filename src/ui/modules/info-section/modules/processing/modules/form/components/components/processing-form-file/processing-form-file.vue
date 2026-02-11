@@ -104,157 +104,187 @@ import collapsibleProcessingFormComponentMixin from '../../../mixins/collapsible
 import processingFormComponentMixin from '../../../mixins/processingFormComponentMixin';
 import FormFileLine from './processing-form-file-line.vue';
 
-const makeFileSnapshot = (file) => reactive({
-  name: file.name,
-  mime: file.type,
-  size: file.size,
-  metadata: {
-    progress: {
-      total: 0,
-      loaded: 0,
-    },
-    done: false,
-    close: false,
-    error: false,
-  },
-});
+const makeFileSnapshot = (file) =>
+	reactive({
+		name: file.name,
+		mime: file.type,
+		size: file.size,
+		metadata: {
+			progress: {
+				total: 0,
+				loaded: 0,
+			},
+			done: false,
+			close: false,
+			error: false,
+		},
+	});
 
 export default {
-  name: 'ProcessingFormFile',
-  components: { FormFileLine, ConfirmationPopup },
-  mixins: [
-    processingFormComponentMixin,
-    collapsibleProcessingFormComponentMixin,
-    dropzoneMixin,
-    sizeMixin,
-  ],
-  props: {
-    value: {
-      type: Array,
-      required: true,
-    },
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    attemptId: {
-      type: Number,
-    },
-    entityId: {
-      type: String,
-      default: '',
-    },
-    channel: {
-      type: String,
-      default: '',
-    },
-  },
-  data: () => ({
-    uploadingSnapshots: [],
-    deletedFile: null,
-  }),
-  computed: {
-    ...mapState({
-      client: (state) => state.client,
-    }),
-    isFormFile() {
-      return !this.readonly || !isEmpty(this.value);
-    },
-    fileCounter() {
-      return this.value.length
-    },
-    filePluralChoice() {
-      return this.fileCounter < 2 ? 1 : 2
-    }
-  },
-  methods: {
-    async downloadAll() {
-      const zip = new JSZip();
-      const cli = await this.client.getCliInstance();
+	name: 'ProcessingFormFile',
+	components: {
+		FormFileLine,
+		ConfirmationPopup,
+	},
+	mixins: [
+		processingFormComponentMixin,
+		collapsibleProcessingFormComponentMixin,
+		dropzoneMixin,
+		sizeMixin,
+	],
+	props: {
+		value: {
+			type: Array,
+			required: true,
+		},
+		readonly: {
+			type: Boolean,
+			default: false,
+		},
+		attemptId: {
+			type: Number,
+		},
+		entityId: {
+			type: String,
+			default: '',
+		},
+		channel: {
+			type: String,
+			default: '',
+		},
+	},
+	data: () => ({
+		uploadingSnapshots: [],
+		deletedFile: null,
+	}),
+	computed: {
+		...mapState({
+			client: (state) => state.client,
+		}),
+		isFormFile() {
+			return !this.readonly || !isEmpty(this.value);
+		},
+		fileCounter() {
+			return this.value.length;
+		},
+		filePluralChoice() {
+			return this.fileCounter < 2 ? 1 : 2;
+		},
+	},
+	methods: {
+		async downloadAll() {
+			const zip = new JSZip();
+			const cli = await this.client.getCliInstance();
 
-      for (const { name, id } of this.value) {
-        const url = cli.fileUrlDownload(id);
+			for (const { name, id } of this.value) {
+				const url = cli.fileUrlDownload(id);
 
-        await new Promise((resolve, reject) => {
-          jszipUtils.getBinaryContent(url, (err, file) => {
-            if (err) reject(err);
-            console.info(file);
-            zip.file(name, file);
-            resolve();
-          });
-        });
-      }
-      const blob = await zip.generateAsync({ type: 'blob' });
-      saveAs(blob, this.label);
-    },
-    handleDrop(e) {
-      Array.from(e.dataTransfer.files).forEach((file) => this.uploadFile(file));
-      this.handleDragLeave();
-    },
-    async handleFileInput(event) {
-      Array.from(event.target.files).forEach((file) => this.uploadFile(file));
-      this.$refs['file-input'].value = ''; // reset input value
-    },
-    async uploadFile(uploadedFile) {
-      this.collapsed = false; // open, if collapsed
-      const snapshot = makeFileSnapshot(uploadedFile);
-      this.uploadingSnapshots.push(snapshot);
+				await new Promise((resolve, reject) => {
+					jszipUtils.getBinaryContent(url, (err, file) => {
+						if (err) reject(err);
+						console.info(file);
+						zip.file(name, file);
+						resolve();
+					});
+				});
+			}
+			const blob = await zip.generateAsync({
+				type: 'blob',
+			});
+			saveAs(blob, this.label);
+		},
+		handleDrop(e) {
+			Array.from(e.dataTransfer.files).forEach((file) => this.uploadFile(file));
+			this.handleDragLeave();
+		},
+		async handleFileInput(event) {
+			Array.from(event.target.files).forEach((file) => this.uploadFile(file));
+			this.$refs['file-input'].value = ''; // reset input value
+		},
+		async uploadFile(uploadedFile) {
+			this.collapsed = false; // open, if collapsed
+			const snapshot = makeFileSnapshot(uploadedFile);
+			this.uploadingSnapshots.push(snapshot);
 
-      try {
-        const fileUploadProgress = ({ loaded, total }) => {
-          snapshot.metadata.progress = { loaded, total };
-        };
-        const client = await this.client.getCliInstance();
+			try {
+				const fileUploadProgress = ({ loaded, total }) => {
+					snapshot.metadata.progress = {
+						loaded,
+						total,
+					};
+				};
+				const client = await this.client.getCliInstance();
 
-        let storedFile;
+				let storedFile;
 
-        if (this.channel) {
-          storedFile = await client.storeFile(this.entityId, [uploadedFile], fileUploadProgress, 'case');
-        } else {
-          storedFile = await client.storeFile(this.attemptId, [uploadedFile], fileUploadProgress);
-        }
+				if (this.channel) {
+					storedFile = await client.storeFile(
+						this.entityId,
+						[
+							uploadedFile,
+						],
+						fileUploadProgress,
+						'case',
+					);
+				} else {
+					storedFile = await client.storeFile(
+						this.attemptId,
+						[
+							uploadedFile,
+						],
+						fileUploadProgress,
+					);
+				}
 
-        this.handleFileSuccessUpload({ snapshot, file: storedFile });
-      } catch (err) {
-        this.handleFileErrorUpload({ snapshot, err });
-      }
-    },
+				this.handleFileSuccessUpload({
+					snapshot,
+					file: storedFile,
+				});
+			} catch (err) {
+				this.handleFileErrorUpload({
+					snapshot,
+					err,
+				});
+			}
+		},
 
-    handleFileSuccessUpload({ snapshot, file }) {
+		handleFileSuccessUpload({ snapshot, file }) {
+			snapshot.metadata.done = true;
 
-      snapshot.metadata.done = true;
+			setTimeout(() => {
+				this.uploadingSnapshots.splice(
+					this.uploadingSnapshots.indexOf(snapshot),
+					1,
+				);
+				this.addStoredFile(file);
+			}, 1600);
+		},
 
-      setTimeout(() => {
-        this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1);
-        this.addStoredFile(file);
-      }, 1600);
-    },
+		handleFileErrorUpload({ snapshot }) {
+			snapshot.metadata.error = true;
 
-    handleFileErrorUpload({ snapshot }) {
+			setTimeout(() => {
+				snapshot.metadata.close = () =>
+					this.uploadingSnapshots.splice(
+						this.uploadingSnapshots.indexOf(snapshot),
+						1,
+					);
+			}, 1600);
+		},
 
-      snapshot.metadata.error = true;
+		addStoredFile(file) {
+			this.$emit('input', this.value.concat(file));
+		},
 
-      setTimeout(() => {
+		handleDeleteConfirm() {
+			const array = this.value.filter(({ id }) => id !== this.deletedFile.id);
+			this.$emit('input', array);
+		},
 
-        snapshot.metadata.close = () => (
-          this.uploadingSnapshots.splice(this.uploadingSnapshots.indexOf(snapshot), 1)
-        );
-      }, 1600);
-    },
-
-    addStoredFile(file) {
-      this.$emit('input', this.value.concat(file));
-    },
-
-    handleDeleteConfirm() {
-      const array = this.value.filter(({ id }) => id !== this.deletedFile.id);
-      this.$emit('input', array);
-    },
-
-    askDeleteFile(file) {
-      this.deletedFile = file;
-    },
-  },
+		askDeleteFile(file) {
+			this.deletedFile = file;
+		},
+	},
 };
 </script>
 

@@ -15,20 +15,20 @@
 <script>
 import { mapGetters } from 'vuex';
 
-  export default {
-    name: 'KnowledgeBaseTab',
+export default {
+	name: 'KnowledgeBaseTab',
 
-    computed: {
-      ...mapGetters('workspace', {
-        taskOnWorkspace: 'TASK_ON_WORKSPACE',
-      }),
+	computed: {
+		...mapGetters('workspace', {
+			taskOnWorkspace: 'TASK_ON_WORKSPACE',
+		}),
 
-      knowledgeSource() {
-        const { variables } = this.taskOnWorkspace;
-        return variables?.knowledge_base;
-      },
-    },
-  };
+		knowledgeSource() {
+			const { variables } = this.taskOnWorkspace;
+			return variables?.knowledge_base;
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>

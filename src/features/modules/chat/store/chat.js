@@ -1,6 +1,6 @@
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { ConversationState } from 'webitel-sdk';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers'
 
 import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../app/locale/i18n';
@@ -16,182 +16,187 @@ import clientHandlers from './client-handlers';
 const { t } = i18n.global;
 
 const state = {
-  chatList: [],
+	chatList: [],
 };
 
 const getters = {
-  CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) =>
-    rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
-    rootGetters['workspace/TASK_ON_WORKSPACE'],
-  ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-    const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
-    return [
-      ...rootState.features.chat.chatHistory.chatHistoryMessages,
-      ...currentChatMessages,
-    ]; // chat-history messages + current-chat messages
-  },
-  ALLOW_CHAT_TRANSFER: (state, getters) =>
-    getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
-  ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
-  ALLOW_CHAT_CLOSE: (state, getters) =>
-    getters.CHAT_ON_WORKSPACE.allowLeave ||
-    getters.CHAT_ON_WORKSPACE.allowDecline,
-  ASK_CHAT_CLOSE: (state, getters) =>
-    getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
-  IS_CHAT_ACTIVE: (state, getters) =>
-    getters.CHAT_ON_WORKSPACE.state === ConversationState.Active,
-  IS_MY_MESSAGE: () => (message) => message.member?.self,
+	CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) =>
+		rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
+		rootGetters['workspace/TASK_ON_WORKSPACE'],
+	ALL_CHAT_MESSAGES: (state, getters, rootState) => {
+		const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
+		return [
+			...rootState.features.chat.chatHistory.chatHistoryMessages,
+			...currentChatMessages,
+		]; // chat-history messages + current-chat messages
+	},
+	ALLOW_CHAT_TRANSFER: (state, getters) =>
+		getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
+	ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
+	ALLOW_CHAT_CLOSE: (state, getters) =>
+		getters.CHAT_ON_WORKSPACE.allowLeave ||
+		getters.CHAT_ON_WORKSPACE.allowDecline,
+	ASK_CHAT_CLOSE: (state, getters) =>
+		getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
+	IS_CHAT_ACTIVE: (state, getters) =>
+		getters.CHAT_ON_WORKSPACE.state === ConversationState.Active,
+	IS_MY_MESSAGE: () => (message) => message.member?.self,
 };
 
 const actions = {
-  ...clientHandlers.actions,
+	...clientHandlers.actions,
 
-  SET_CHAT_LIST: (context, chatList) => {
-    context.commit('SET_CHAT_LIST', chatList);
-  },
+	SET_CHAT_LIST: (context, chatList) => {
+		context.commit('SET_CHAT_LIST', chatList);
+	},
 
-  ADD_CHAT: (context, chat) => {
-    context.commit('ADD_CHAT', chat);
-  },
+	ADD_CHAT: (context, chat) => {
+		context.commit('ADD_CHAT', chat);
+	},
 
-  ACCEPT: async (context) => {
-    try {
-      await context.getters.CHAT_ON_WORKSPACE.join();
-    } catch (err) {
-      throw err;
-    }
-  },
+	ACCEPT: async (context) => {
+		try {
+			await context.getters.CHAT_ON_WORKSPACE.join();
+		} catch (err) {
+			throw err;
+		}
+	},
 
-  SEND: async (context, message) => {
-    try {
-      await context.getters.CHAT_ON_WORKSPACE.send(message);
-    } catch (err) {
-      throw err;
-    }
-  },
+	SEND: async (context, message) => {
+		try {
+			await context.getters.CHAT_ON_WORKSPACE.send(message);
+		} catch (err) {
+			throw err;
+		}
+	},
 
-  SEND_FILE: async (context, files) => {
-    try {
-      Array.isArray(files)
-        ? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
-        : await context.dispatch('SEND', files);
-    } catch (err) {
-      const errorMessage = err.response?.data?.id === 'file.malware'
-        ? t('workspaceSec.chat.chatsFileBlocked')
-        : t('workspaceSec.chat.errors.uploadFileLimitSize')
-      throw applyTransform(err, [
-        notify(({ callback }) =>
-          callback({
-            type: 'error',
-            text: errorMessage,
-          })
-        )
-      ]);
-    }
-  },
+	SEND_FILE: async (context, files) => {
+		try {
+			Array.isArray(files)
+				? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
+				: await context.dispatch('SEND', files);
+		} catch (err) {
+			const errorMessage =
+				err.response?.data?.id === 'file.malware'
+					? t('workspaceSec.chat.chatsFileBlocked')
+					: t('workspaceSec.chat.errors.uploadFileLimitSize');
+			throw applyTransform(err, [
+				notify(({ callback }) =>
+					callback({
+						type: 'error',
+						text: errorMessage,
+					}),
+				),
+			]);
+		}
+	},
 
-  TRANSFER: async (
-    context,
-    { chat = context.getters.CHAT_ON_WORKSPACE, destination, item },
-  ) => {
-    if (destination === ChatTransferDestination.USER) {
-      return chat.transferToUser(item.id);
-    }
-    if (destination === ChatTransferDestination.CHATPLAN) {
-      return chat.transferToPlan(item.id);
-    }
-    throw new TypeError('Unknown transfer destination: ', destination);
-  },
+	TRANSFER: async (
+		context,
+		{ chat = context.getters.CHAT_ON_WORKSPACE, destination, item },
+	) => {
+		if (destination === ChatTransferDestination.USER) {
+			return chat.transferToUser(item.id);
+		}
+		if (destination === ChatTransferDestination.CHATPLAN) {
+			return chat.transferToPlan(item.id);
+		}
+		throw new TypeError('Unknown transfer destination: ', destination);
+	},
 
-  CLOSE: async (context) => {
-    const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
-    try {
-      if (chatOnWorkspace.allowLeave) {
-        await chatOnWorkspace.leave();
-      } else {
-        await chatOnWorkspace.decline();
-      }
+	CLOSE: async (context) => {
+		const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
+		try {
+			if (chatOnWorkspace.allowLeave) {
+				await chatOnWorkspace.leave();
+			} else {
+				await chatOnWorkspace.decline();
+			}
 
-      await context.dispatch(
-        'features/chatNotifications/HANDLE_CHAT_END',
-        chatOnWorkspace,
-        {
-          root: true,
-        },
-      );
-    } catch (err) {
-      throw err;
-    }
-  },
+			await context.dispatch(
+				'features/chatNotifications/HANDLE_CHAT_END',
+				chatOnWorkspace,
+				{
+					root: true,
+				},
+			);
+		} catch (err) {
+			throw err;
+		}
+	},
 
-  OPEN_CHAT: async (context, chat) => {
-    const isChatClosed =
-      context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(
-        chat,
-      );
+	OPEN_CHAT: async (context, chat) => {
+		const isChatClosed =
+			context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(
+				chat,
+			);
 
-    if (isChatClosed && !chat.contact?.id) {
-      // because closed chats don't have messages
-      const { items: messages } = await CatalogAPI.getChatMessagesList({
-        chatId: chat.id,
-      });
-      // wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-      chat.messages = formatChatMessages(messages);
-    }
+		if (isChatClosed && !chat.contact?.id) {
+			// because closed chats don't have messages
+			const { items: messages } = await CatalogAPI.getChatMessagesList({
+				chatId: chat.id,
+			});
+			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
+			chat.messages = formatChatMessages(messages);
+		}
 
-    await context.dispatch('SET_WORKSPACE', chat);
-  },
+		await context.dispatch('SET_WORKSPACE', chat);
+	},
 
-  CHAT_INSERT_TO_START: (context, chat) => {
-    const chatPosition = context.state.chatList.indexOf(chat);
-    const chatList = context.state.chatList.slice();
-    chatList.splice(chatPosition, 1);
-    chatList.unshift(chat);
-    context.commit('SET_CHAT_LIST', chatList);
-  },
+	CHAT_INSERT_TO_START: (context, chat) => {
+		const chatPosition = context.state.chatList.indexOf(chat);
+		const chatList = context.state.chatList.slice();
+		chatList.splice(chatPosition, 1);
+		chatList.unshift(chat);
+		context.commit('SET_CHAT_LIST', chatList);
+	},
 
-  SET_WORKSPACE: (context, chat) =>
-    context.dispatch(
-      'workspace/SET_WORKSPACE_STATE',
-      {
-        type: WorkspaceStates.CHAT,
-        task: chat,
-      },
-      { root: true },
-    ),
-  RESET_WORKSPACE: (context) =>
-    context.dispatch('workspace/RESET_WORKSPACE_STATE', null, { root: true }),
-  _RESET_UNREAD_COUNT: (context) =>
-    context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, {
-      root: true,
-    }),
+	SET_WORKSPACE: (context, chat) =>
+		context.dispatch(
+			'workspace/SET_WORKSPACE_STATE',
+			{
+				type: WorkspaceStates.CHAT,
+				task: chat,
+			},
+			{
+				root: true,
+			},
+		),
+	RESET_WORKSPACE: (context) =>
+		context.dispatch('workspace/RESET_WORKSPACE_STATE', null, {
+			root: true,
+		}),
+	_RESET_UNREAD_COUNT: (context) =>
+		context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, {
+			root: true,
+		}),
 };
 
 const mutations = {
-  SET_CHAT_LIST: (state, chatList) => {
-    state.chatList = chatList;
-  },
-  ADD_CHAT: (state, chat) => {
-    state.chatList.push(chat);
-  },
-  REMOVE_CHAT: (state, removedChat) => {
-    state.chatList = state.chatList.filter((chat) => chat !== removedChat);
-  },
-  SET_MEDIA_VIEW: (state, mediaView) => {
-    state.mediaView = mediaView;
-  },
+	SET_CHAT_LIST: (state, chatList) => {
+		state.chatList = chatList;
+	},
+	ADD_CHAT: (state, chat) => {
+		state.chatList.push(chat);
+	},
+	REMOVE_CHAT: (state, removedChat) => {
+		state.chatList = state.chatList.filter((chat) => chat !== removedChat);
+	},
+	SET_MEDIA_VIEW: (state, mediaView) => {
+		state.mediaView = mediaView;
+	},
 };
 
 export default {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations,
-  modules: {
-    manual,
-    closed,
-    chatHistory,
-    chatMedia,
-  },
+	namespaced: true,
+	state,
+	getters,
+	actions,
+	mutations,
+	modules: {
+		manual,
+		closed,
+		chatHistory,
+		chatMedia,
+	},
 };

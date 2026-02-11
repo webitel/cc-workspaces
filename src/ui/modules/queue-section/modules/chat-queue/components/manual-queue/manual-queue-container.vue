@@ -22,10 +22,10 @@ import TaskQueueContainer from '../../../_shared/components/task-queue-container
 import ManualPreview from './manual-queue-preview.vue';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-  },
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
 const store = useStore();
@@ -35,11 +35,11 @@ console.info(store.state.features.chat.manual.manualList);
 const manualList = computed(() => store.state.features.chat.manual.manualList);
 
 function acceptTask(task) {
-  return store.dispatch('features/chat/manual/ACCEPT_TASK', task);
+	return store.dispatch('features/chat/manual/ACCEPT_TASK', task);
 }
 
 function openTask(task) {
-  console.info('implement me');
+	console.info('implement me');
 }
 </script>
 

@@ -9,13 +9,13 @@
 
 <script>
 export default {
-  name: 'CollapseAction',
-  props: {
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
-  },
+	name: 'CollapseAction',
+	props: {
+		collapsed: {
+			type: Boolean,
+			default: false,
+		},
+	},
 };
 </script>
 

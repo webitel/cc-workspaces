@@ -32,18 +32,18 @@
 </template>
 
 <script setup lang="ts">
-import DescTrackAuthError from '../assets/desc-track-auth-error.svg'
-import DescTrackAuthErrorDark from '../assets/desc-track-auth-error-dark.svg'
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import DescTrackAuthError from '../assets/desc-track-auth-error.svg';
+import DescTrackAuthErrorDark from '../assets/desc-track-auth-error-dark.svg';
 
-const store = useStore()
+const store = useStore();
 
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
 const refreshAgentState = () => {
-  store.dispatch('ui/infoSec/agentInfo/LOAD_STATUS')
-}
+	store.dispatch('ui/infoSec/agentInfo/LOAD_STATUS');
+};
 </script>
 
 <style lang="scss" scoped>

@@ -25,13 +25,16 @@ import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
 
 export default {
-  name: 'CallPreviewProfile',
-  mixins: [displayInfoMixin, sizeMixin],
-  computed: {
-    ...mapGetters('workspace', {
-      task: 'TASK_ON_WORKSPACE',
-    }),
-  },
+	name: 'CallPreviewProfile',
+	mixins: [
+		displayInfoMixin,
+		sizeMixin,
+	],
+	computed: {
+		...mapGetters('workspace', {
+			task: 'TASK_ON_WORKSPACE',
+		}),
+	},
 };
 </script>
 

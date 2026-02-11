@@ -58,79 +58,88 @@
 
 <script>
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import { mapActions,mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 
 export default {
-  name: 'BreakTimerPopup',
-  data: () => ({
-    AgentStatus,
-    duration: '00:00:00',
-    isBreakPopupValue: false,
-  }),
-  watch: {
-    now: {
-      handler() {
-        this.duration = convertDuration(this.agent?.stateDuration);
-      },
-      immediate: true,
-    },
-    agentStatus: {
-      handler() {
-        if (this.agentStatus === AgentStatus.Pause
-          || this.agentStatus === AgentStatus.BreakOut) this.isBreakPopupValue = true;
-      },
-      immediate: true,
-    },
-    breakInfo: {
-      handler() {
-        if (this.agentStatus === AgentStatus.Pause
-          || this.agentStatus === AgentStatus.BreakOut) this.isBreakPopupValue = true;
-      },
-      immediate: true,
-    },
-  },
+	name: 'BreakTimerPopup',
+	data: () => ({
+		AgentStatus,
+		duration: '00:00:00',
+		isBreakPopupValue: false,
+	}),
+	watch: {
+		now: {
+			handler() {
+				this.duration = convertDuration(this.agent?.stateDuration);
+			},
+			immediate: true,
+		},
+		agentStatus: {
+			handler() {
+				if (
+					this.agentStatus === AgentStatus.Pause ||
+					this.agentStatus === AgentStatus.BreakOut
+				)
+					this.isBreakPopupValue = true;
+			},
+			immediate: true,
+		},
+		breakInfo: {
+			handler() {
+				if (
+					this.agentStatus === AgentStatus.Pause ||
+					this.agentStatus === AgentStatus.BreakOut
+				)
+					this.isBreakPopupValue = true;
+			},
+			immediate: true,
+		},
+	},
 
-  computed: {
-    ...mapState('ui/now', {
-      now: (state) => state.now,
-    }),
-    ...mapState('features/status', {
-      agent: (state) => state.agent,
-    }),
-    isBreakPopup() {
-      return this.isBreakPopupValue
-        && (this.agentStatus === AgentStatus.Pause || this.agentStatus === AgentStatus.BreakOut);
-    },
-    agentStatus() {
-      return this.agent.status;
-    },
-    breakInfo() {
-      return this.agentStatus === AgentStatus.Pause
-        ? this.agent.statusPayload
-        : this.$t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`);
-    },
-    statusComment () {
-      return this.agent?.statusComment
-    }
-  },
+	computed: {
+		...mapState('ui/now', {
+			now: (state) => state.now,
+		}),
+		...mapState('features/status', {
+			agent: (state) => state.agent,
+		}),
+		isBreakPopup() {
+			return (
+				this.isBreakPopupValue &&
+				(this.agentStatus === AgentStatus.Pause ||
+					this.agentStatus === AgentStatus.BreakOut)
+			);
+		},
+		agentStatus() {
+			return this.agent.status;
+		},
+		breakInfo() {
+			return this.agentStatus === AgentStatus.Pause
+				? this.agent.statusPayload
+				: this.$t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`);
+		},
+		statusComment() {
+			return this.agent?.statusComment;
+		},
+	},
 
-  methods: {
-    ...mapActions('features/status', {
-      setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
-      agentLogout: 'AGENT_LOGOUT',
-    }),
-    close() {
-      this.isBreakPopupValue = false;
-    },
-  },
+	methods: {
+		...mapActions('features/status', {
+			setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
+			agentLogout: 'AGENT_LOGOUT',
+		}),
+		close() {
+			this.isBreakPopupValue = false;
+		},
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @use '@webitel/ui-sdk/src/css/main' as *;
 
-%typo-timer-digits {
+.typo-timer-digits {
   font-family: 'Montserrat', monospace;
   font-size: 64px;
   line-height: 78px;

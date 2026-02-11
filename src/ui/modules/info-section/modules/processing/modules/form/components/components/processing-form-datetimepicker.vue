@@ -12,25 +12,26 @@
 import { getUserTimezone } from '../../../../script/getUserTimezone';
 
 export default {
-  name: 'ProcessingFormDatetimepicker',
-  model: {
-    event: 'input',
-  },
-  props: {
-    value: {
-      type: [String, Number],
-    },
-  },
-  computed: {
-    date() {
-     return !this.value || this.value === 'now'
-        ? Date.now()
-        : this.value;
-    },
-    timezone() {
-      return getUserTimezone();
-    },
-  },
+	name: 'ProcessingFormDatetimepicker',
+	model: {
+		event: 'input',
+	},
+	props: {
+		value: {
+			type: [
+				String,
+				Number,
+			],
+		},
+	},
+	computed: {
+		date() {
+			return !this.value || this.value === 'now' ? Date.now() : this.value;
+		},
+		timezone() {
+			return getUserTimezone();
+		},
+	},
 };
 </script>
 

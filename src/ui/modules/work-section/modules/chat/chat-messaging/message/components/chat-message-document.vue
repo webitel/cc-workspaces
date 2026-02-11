@@ -28,29 +28,31 @@ import prettifyFileSize from '@webitel/ui-sdk/src/scripts/prettifyFileSize';
 import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
-  name: 'ChatMessageDocument',
-  mixins: [chatMessageFileMixin],
-  props: {
-    agent: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    documentSize() {
-      if (!this.document) return '';
-      return prettifyFileSize(this.document.size);
-    },
-  },
-  methods: {
-    downloadDocument() {
-      const a = document.createElement('a');
-      a.href = this.document.url;
-      a.target = '_blank';
-      a.download = this.document.name;
-      a.click();
-    },
-  },
+	name: 'ChatMessageDocument',
+	mixins: [
+		chatMessageFileMixin,
+	],
+	props: {
+		agent: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	computed: {
+		documentSize() {
+			if (!this.document) return '';
+			return prettifyFileSize(this.document.size);
+		},
+	},
+	methods: {
+		downloadDocument() {
+			const a = document.createElement('a');
+			a.href = this.document.url;
+			a.target = '_blank';
+			a.download = this.document.name;
+			a.click();
+		},
+	},
 };
 </script>
 
