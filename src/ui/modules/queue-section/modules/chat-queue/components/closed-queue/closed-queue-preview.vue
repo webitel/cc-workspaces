@@ -40,7 +40,6 @@
         :icon="closeReasonIcon"
         icon-prefix="ws"
         color="error"
-        class="closed-queue-preview__status"
       />
     </template>
   </chat-queue-preview-md>
