@@ -23,10 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import WtExpansionCard from '@webitel/ui-sdk/components/wt-expansion-card/wt-expansion-card'
-import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
+import WtExpansionCard from '@webitel/ui-sdk/components/wt-expansion-card/wt-expansion-card'
+import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
 const store  = useStore();
 
