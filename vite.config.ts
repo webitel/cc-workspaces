@@ -17,8 +17,7 @@ export default ({ mode }) => {
       ),
     },
     server: {
-      port: 8080,
-      host: true,
+			// host: true,  // uncomment me to enable localhost access by IP (including from other devices in the network)
     },
     css: {
       preprocessorOptions: {
