@@ -23,6 +23,7 @@ const messages = {
 };
 
 export default createI18n({
+  legacy: false,
   allowComposition: true,
   locale: 'en',
   fallbackLocale: 'en',
