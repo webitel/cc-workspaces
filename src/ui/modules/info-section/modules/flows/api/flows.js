@@ -36,7 +36,6 @@ const getFlowSchemasList = async (params) => {
     starToSearch('search'),
   ]);
 
-  try {
     const response = await flowSchemaService.searchAgentTrigger(
       undefined,
       page,
@@ -57,11 +56,6 @@ const getFlowSchemasList = async (params) => {
       ]),
       next,
     };
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  }
 };
 
 const runFlowSchema = async ({ id }) => {
