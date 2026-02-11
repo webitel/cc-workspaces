@@ -24,47 +24,49 @@
 </template>
 
 <script>
-import { mapActions,mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import disconnectSound from '../../../../../features/modules/global-handlers/assets/disconnect-sound.wav';
 
 // HOW TO TEST DISCONNECT: await cli.socket.close(3001)
 export default {
-  name: 'DisconnectPopup',
-  data: () => ({
-    audio: null,
-    isDisconnectSoundAllow: true,
-  }),
-  computed: {
-    ...mapState('features/globals', {
-      isDisconnectPopup: (state) => state.isDisconnectPopup,
-    }),
-  },
-  watch: {
-    isDisconnectPopup: {
-      handler(newVal) {
-        if (!this.isDisconnectSoundAllow) return;
-        if (newVal) {
-          this.audio.play();
-        } else {
-          this.audio.pause();
-        }
-      },
-    },
-  },
-  created() { // TODO: add after changes in client app https://webitel.atlassian.net/browse/WTEL-6860?focusedCommentId=671316
-    this.isDisconnectSoundAllow = localStorage.getItem('settings/socketCloseSound') === 'true';
-    this.audio = new Audio(disconnectSound);
-    this.audio.loop = true;
-  },
-  methods: {
-    ...mapActions('features/globals', {
-      closePopup: 'CLOSE_DISCONNECT_POPUP',
-    }),
-    reloadPage() {
-      this.$router.go(0);
-    },
-  },
+	name: 'DisconnectPopup',
+	data: () => ({
+		audio: null,
+		isDisconnectSoundAllow: true,
+	}),
+	computed: {
+		...mapState('features/globals', {
+			isDisconnectPopup: (state) => state.isDisconnectPopup,
+		}),
+	},
+	watch: {
+		isDisconnectPopup: {
+			handler(newVal) {
+				if (!this.isDisconnectSoundAllow) return;
+				if (newVal) {
+					this.audio.play();
+				} else {
+					this.audio.pause();
+				}
+			},
+		},
+	},
+	created() {
+		// TODO: add after changes in client app https://webitel.atlassian.net/browse/WTEL-6860?focusedCommentId=671316
+		this.isDisconnectSoundAllow =
+			localStorage.getItem('settings/socketCloseSound') === 'true';
+		this.audio = new Audio(disconnectSound);
+		this.audio.loop = true;
+	},
+	methods: {
+		...mapActions('features/globals', {
+			closePopup: 'CLOSE_DISCONNECT_POPUP',
+		}),
+		reloadPage() {
+			this.$router.go(0);
+		},
+	},
 };
 </script>
 

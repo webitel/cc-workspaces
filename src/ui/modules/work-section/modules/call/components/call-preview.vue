@@ -30,52 +30,54 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
-  import sizeMixin from '../../../../../../app/mixins/sizeMixin';
-  import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
-  import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
-  import PreviewProfile from './call-preview-profile.vue';
+import sizeMixin from '../../../../../../app/mixins/sizeMixin';
+import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import PreviewProfile from './call-preview-profile.vue';
 
-  export default {
-    name: 'CallPreview',
-    components: {
-      PreviewProfile,
-    },
-    mixins: [sizeMixin],
+export default {
+	name: 'CallPreview',
+	components: {
+		PreviewProfile,
+	},
+	mixins: [
+		sizeMixin,
+	],
 
-    data: () => ({
-      hotkeyUnsubscribers : [],
-    }),
+	data: () => ({
+		hotkeyUnsubscribers: [],
+	}),
 
-    methods: {
-      ...mapActions('features/call', {
-        answer: 'ANSWER',
-        hangup: 'HANGUP',
-      }),
-      setupHotkeys() {
-        const subscribers = [
-          {
-            event: HotkeyAction.ACCEPT,
-            callback: this.answer,
-          },
-          {
-            event: HotkeyAction.END,
-            callback: this.hangup,
-          },
-        ];
-        this.hotkeyUnsubscribers  = useHotkeys(subscribers);
-      },
-    },
+	methods: {
+		...mapActions('features/call', {
+			answer: 'ANSWER',
+			hangup: 'HANGUP',
+		}),
+		setupHotkeys() {
+			const subscribers = [
+				{
+					event: HotkeyAction.ACCEPT,
+					callback: this.answer,
+				},
+				{
+					event: HotkeyAction.END,
+					callback: this.hangup,
+				},
+			];
+			this.hotkeyUnsubscribers = useHotkeys(subscribers);
+		},
+	},
 
-    mounted() {
-      this.setupHotkeys();
-    },
+	mounted() {
+		this.setupHotkeys();
+	},
 
-    unmounted() {
-      this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe())
-    },
-  };
+	unmounted() {
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+	},
+};
 </script>
 
 <style lang="scss" scoped>

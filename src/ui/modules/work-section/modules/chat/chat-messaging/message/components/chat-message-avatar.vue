@@ -22,21 +22,23 @@
 import chatMessageDetailMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
-  name: 'ChatMessageAvatar',
-  mixins: [chatMessageDetailMixin],
-  props: {
-    bot: {
-      type: Boolean,
-      default: false,
-    },
-    showAvatar: {
-      type: Boolean,
-      default: true,
-    },
-    username: {
-      type: String,
-    }
-  },
+	name: 'ChatMessageAvatar',
+	mixins: [
+		chatMessageDetailMixin,
+	],
+	props: {
+		bot: {
+			type: Boolean,
+			default: false,
+		},
+		showAvatar: {
+			type: Boolean,
+			default: true,
+		},
+		username: {
+			type: String,
+		},
+	},
 };
 </script>
 

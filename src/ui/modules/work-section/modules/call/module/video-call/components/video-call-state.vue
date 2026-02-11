@@ -40,10 +40,11 @@
 import { useCallState } from '../../../../../../../composables/useCallState';
 
 defineOptions({
-  name: 'VideoCallState',
+	name: 'VideoCallState',
 });
 
-const { dtmf, callState, isCallActive, displayTime, sonarIcon } = useCallState();
+const { dtmf, callState, isCallActive, displayTime, sonarIcon } =
+	useCallState();
 </script>
 
 <style

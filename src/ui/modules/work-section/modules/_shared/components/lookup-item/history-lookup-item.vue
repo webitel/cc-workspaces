@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { FormatDateMode } from '@webitel/ui-sdk/enums'
+import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
@@ -84,113 +84,118 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
-  name: 'HistoryLookupItem',
-  mixins: [lookupItemMixin, sizeMixin],
-  props: {
-    forNumber: {
-      type: String,
-      required: false,
-    },
-  },
-  data(){
-    return{
-      isContextMenuVisible: false,
-      showLoader: false,
-    }
-  },
+	name: 'HistoryLookupItem',
+	mixins: [
+		lookupItemMixin,
+		sizeMixin,
+	],
+	props: {
+		forNumber: {
+			type: String,
+			required: false,
+		},
+	},
+	data() {
+		return {
+			isContextMenuVisible: false,
+			showLoader: false,
+		};
+	},
 
-  computed: {
-    shownDestination() {
-      return this.destination;
-    },
+	computed: {
+		shownDestination() {
+			return this.destination;
+		},
 
-    destinationForNumber() {
-      if (this.item.direction === CallDirection.Outbound) {
-        if (this.item.to.number) {
-          return this.item.to.number;
-        }
-        return this.item.destination;
-      }
+		destinationForNumber() {
+			if (this.item.direction === CallDirection.Outbound) {
+				if (this.item.to.number) {
+					return this.item.to.number;
+				}
+				return this.item.destination;
+			}
 
-      return this.item.from.number;
-    },
+			return this.item.from.number;
+		},
 
-    destination() {
-      if (this.item.contact?.id) return this.item.contact.name;
+		destination() {
+			if (this.item.contact?.id) return this.item.contact.name;
 
-      if (this.item.direction === CallDirection.Outbound) {
-        if (this.item.to.number) {
-          return this.item.to.name;
-        }
-        return this.item.destination;
-      }
+			if (this.item.direction === CallDirection.Outbound) {
+				if (this.item.to.number) {
+					return this.item.to.name;
+				}
+				return this.item.destination;
+			}
 
-      return this.item.from.name;
-    },
+			return this.item.from.name;
+		},
 
-    historyIdLink(){
-      const historyId = this.item.parentId ? this.item.parentId : this.item.id;
-      return `${import.meta.env.VITE_HISTORY_URL}/view/call_view/${historyId}`;
-    },
+		historyIdLink() {
+			const historyId = this.item.parentId ? this.item.parentId : this.item.id;
+			return `${import.meta.env.VITE_HISTORY_URL}/view/call_view/${historyId}`;
+		},
 
-    date() {
-      return formatDate(+this.item.createdAt, FormatDateMode.TIME);
-    },
+		date() {
+			return formatDate(+this.item.createdAt, FormatDateMode.TIME);
+		},
 
-    duration() {
-      return convertDuration(this.item.duration);
-    },
+		duration() {
+			return convertDuration(this.item.duration);
+		},
 
-    statusIcon() {
-      if (this.item.direction === CallDirection.Inbound) {
-        if (!this.item.answeredAt) return 'call-disconnect--filled';
-        return 'call-inbound--filled';
-      }
-      return 'call-outbound--filled';
-    },
+		statusIcon() {
+			if (this.item.direction === CallDirection.Inbound) {
+				if (!this.item.answeredAt) return 'call-disconnect--filled';
+				return 'call-inbound--filled';
+			}
+			return 'call-outbound--filled';
+		},
 
-    statusIconColor() {
-      if (this.item.direction === CallDirection.Inbound) {
-        if (!this.item.answeredAt) return 'error';
-        return 'warning';
-      }
-      return 'success';
-    },
+		statusIconColor() {
+			if (this.item.direction === CallDirection.Inbound) {
+				if (!this.item.answeredAt) return 'error';
+				return 'warning';
+			}
+			return 'success';
+		},
 
-    contextMenuOptions(){
-      return [
-        {
-          text: this.$t('history.openInHistory'),
-          icon: 'link',
-          disabled: false,
-          handler: () => this.goToHistoryItem(),
-        },
-      ]
-    },
-  },
-  methods: {
-    ...mapActions('features/call', {
-      makeCall: 'CALL',
-    }),
-    call() {
-      if(this.showLoader) return;
-      this.showLoader = true;
-      let number;
+		contextMenuOptions() {
+			return [
+				{
+					text: this.$t('history.openInHistory'),
+					icon: 'link',
+					disabled: false,
+					handler: () => this.goToHistoryItem(),
+				},
+			];
+		},
+	},
+	methods: {
+		...mapActions('features/call', {
+			makeCall: 'CALL',
+		}),
+		call() {
+			if (this.showLoader) return;
+			this.showLoader = true;
+			let number;
 
-      if (this.item.direction === CallDirection.Inbound) {
-        number = this.item.from.number;
-      } else {
-        number = this.item.to.number || this.item.destination;
-      }
+			if (this.item.direction === CallDirection.Inbound) {
+				number = this.item.from.number;
+			} else {
+				number = this.item.to.number || this.item.destination;
+			}
 
-      this.makeCall({ number });
+			this.makeCall({
+				number,
+			});
 
-      this.showLoader = false;
-    },
-    goToHistoryItem() {
-      window.open(this.historyIdLink, '_blank')
-    },
-  },
+			this.showLoader = false;
+		},
+		goToHistoryItem() {
+			window.open(this.historyIdLink, '_blank');
+		},
+	},
 };
 </script>
 

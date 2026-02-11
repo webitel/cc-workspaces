@@ -16,19 +16,23 @@
 </template>
 
 <script setup lang="ts">
-
 import { computed, defineProps } from 'vue';
 
 interface Props {
-  value?: string | string[];
+	value?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '',
+	value: '',
 });
 
-const links = computed(() => Array.isArray(props.value) ? props.value : [props.value]);
-
+const links = computed(() =>
+	Array.isArray(props.value)
+		? props.value
+		: [
+				props.value,
+			],
+);
 </script>
 
 <style scoped>

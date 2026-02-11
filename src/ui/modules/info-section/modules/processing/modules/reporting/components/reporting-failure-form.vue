@@ -39,22 +39,22 @@
 import { getUserTimezone } from '../../../script/getUserTimezone';
 
 export default {
-  name: 'ReportingFailureForm',
-  props: {
-    reporting: {
-      type: Object,
-      required: true,
-    },
-    member: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    timezone() {
-      return getUserTimezone();
-    },
-  },
+	name: 'ReportingFailureForm',
+	props: {
+		reporting: {
+			type: Object,
+			required: true,
+		},
+		member: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	computed: {
+		timezone() {
+			return getUserTimezone();
+		},
+	},
 };
 </script>
 

@@ -11,20 +11,20 @@ import notifications from '../modules/notifications/store/notifications';
 import swController from '../modules/sw-controller/store/sw-controller';
 
 const modules = {
-  status,
-  call,
-  chat,
-  job,
-  member,
-  globals,
-  notifications,
-  callNotifications,
-  chatNotifications,
-  jobNotifications,
-  swController,
+	status,
+	call,
+	chat,
+	job,
+	member,
+	globals,
+	notifications,
+	callNotifications,
+	chatNotifications,
+	jobNotifications,
+	swController,
 };
 
 export default {
-  namespaced: true,
-  modules,
+	namespaced: true,
+	modules,
 };

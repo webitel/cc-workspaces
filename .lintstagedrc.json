@@ -1,0 +1,3 @@
+{
+	"*": "npx @biomejs/biome format --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off"
+}

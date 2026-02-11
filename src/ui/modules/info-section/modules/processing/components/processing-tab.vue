@@ -18,24 +18,26 @@ import TheProcessingForm from '../modules/form/components/the-processing-form.vu
 import TheReporting from '../modules/reporting/components/the-reporting.vue';
 
 export default {
-  name: 'ProcessingTab',
-  components: {
-    TheProcessingForm,
-    TheReporting,
-  },
-  mixins: [sizeMixin],
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-    title: {
-      type: String,
-    },
-  },
-  data: () => ({
-    namespace: 'ui/infoSec/processing',
-  }),
+	name: 'ProcessingTab',
+	components: {
+		TheProcessingForm,
+		TheReporting,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		task: {
+			type: Object,
+			required: true,
+		},
+		title: {
+			type: String,
+		},
+	},
+	data: () => ({
+		namespace: 'ui/infoSec/processing',
+	}),
 };
 </script>
 

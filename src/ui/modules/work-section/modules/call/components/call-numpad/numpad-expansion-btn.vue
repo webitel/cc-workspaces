@@ -14,15 +14,15 @@
 </template>
 
 <script>
-  export default {
-    name: 'NumpadExpansionBtn',
-    props: {
-      isOpened: {
-        type: Boolean,
-        required: true,
-      },
-    },
-  };
+export default {
+	name: 'NumpadExpansionBtn',
+	props: {
+		isOpened: {
+			type: Boolean,
+			required: true,
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>

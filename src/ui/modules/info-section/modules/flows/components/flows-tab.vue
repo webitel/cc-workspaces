@@ -33,16 +33,17 @@ import FlowButton from './flow-button.vue';
 const namespace = 'ui/infoSec/flows';
 
 const props = defineProps({
-  size: {
-    type: String,
-    required: false,
-  },
+	size: {
+		type: String,
+		required: false,
+	},
 });
 
 const store = useStore();
 
-const flowsList = computed(() => getNamespacedState(store.state, namespace).flows);
-
+const flowsList = computed(
+	() => getNamespacedState(store.state, namespace).flows,
+);
 </script>
 
 <style lang="scss" scoped>

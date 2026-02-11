@@ -64,20 +64,19 @@
 </template>
 
 <script setup lang="ts">
-
 import { getDefaultGetListResponse } from '@webitel/api-services/api/defaults';
 import {
-  applyTransform,
-  camelToSnake,
-  merge,
-  snakeToCamel,
+	applyTransform,
+	camelToSnake,
+	merge,
+	snakeToCamel,
 } from '@webitel/api-services/api/transformers';
+import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
-import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { ProcessingTableColumnType } from '@webitel/ui-sdk/enums';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
-
 import TableApi from './api/table';
 import BooleanTableContent from './components/boolean-table-content.vue';
 import DateTimeTableContent from './components/date-time-table-content.vue';
@@ -86,36 +85,39 @@ import NumberTableContent from './components/number-table-content.vue';
 import TextTableContent from './components/text-table-content.vue';
 import getNestedValue from './scripts/getNestedValue';
 import getPathArray from './scripts/getPathArray';
-import type { Table, TableAction, TableColumn, TableFilter, TableRow } from './types/FormTable';
-import WtIntersectionObserver
-  from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
+import type {
+	Table,
+	TableAction,
+	TableColumn,
+	TableFilter,
+	TableRow,
+} from './types/FormTable';
 
 const { t } = useI18n();
 
-const cellTableComponents = { // components for each cell in table depending on type of value @author @liza-pohranichna
-  number: NumberTableContent,
-  text: TextTableContent,
-  bool: BooleanTableContent,
-  link: LinkTableContent,
-  datetime: DateTimeTableContent,
-}
+const cellTableComponents = {
+	// components for each cell in table depending on type of value @author @liza-pohranichna
+	number: NumberTableContent,
+	text: TextTableContent,
+	bool: BooleanTableContent,
+	link: LinkTableContent,
+	datetime: DateTimeTableContent,
+};
 
 interface Props {
-  componentId: string;
-  table: Table;
-  filters: TableFilter[];
-  fields?: string[];
-  actions?: TableAction[];
+	componentId: string;
+	table: Table;
+	filters: TableFilter[];
+	fields?: string[];
+	actions?: TableAction[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  fields: () => [],
-  actions: () => [],
+	fields: () => [],
+	actions: () => [],
 });
 
-const emit = defineEmits<{
-  (e: 'call-table-action', payload: TableRow): void
-}>();
+const emit = defineEmits<(e: 'call-table-action', payload: TableRow) => void>();
 
 // @author @liza-pohranichna
 // why? => https://webitel.atlassian.net/browse/WTEL-6890
@@ -129,158 +131,186 @@ const dataList = ref<TableRow[]>([]);
 const infiniteScrollWrap = useTemplateRef('infiniteScrollWrap');
 
 const isSystemSource = computed<boolean>(() => props.table?.isSystemSource);
-const systemSourcePath = computed<string>(() => props.table?.systemSource?.path);
-const tableFields = computed<string[]>(() => { // fields for API request
-  let fields:string[] = props.fields;
+const systemSourcePath = computed<string>(
+	() => props.table?.systemSource?.path,
+);
+const tableFields = computed<string[]>(() => {
+	// fields for API request
+	let fields: string[] = props.fields;
 
-  if (tableColumns.value.length) {
-    // @author @liza-pohranichna
-    // try to get all fields from tableColumns
-    const fieldsFromColumns: string[] = tableColumns.value.map((column) => (column.pathArray[0]));
-    fields = [...new Set([...props.fields, ...fieldsFromColumns])]; // merge arrays and remove duplicates
-  }
+	if (tableColumns.value.length) {
+		// @author @liza-pohranichna
+		// try to get all fields from tableColumns
+		const fieldsFromColumns: string[] = tableColumns.value.map(
+			(column) => column.pathArray[0],
+		);
+		fields = [
+			...new Set([
+				...props.fields,
+				...fieldsFromColumns,
+			]),
+		]; // merge arrays and remove duplicates
+	}
 
-  return applyTransform(fields, [camelToSnake()]); // convert to snake case for API request before return
+	return applyTransform(fields, [
+		camelToSnake(),
+	]); // convert to snake case for API request before return
 });
 
 function isShowTypeComponent(item: TableRow, header: WtTableHeader): boolean {
-  return !!item[header.value]
-    || item[header.value] === 0 // we show type component, because 0 is valid value @author @liza-pohranichna
-    || header.type === ProcessingTableColumnType.BOOL // we always show component for bool type, because it can be true or false @author @liza-pohranichna
-};
+	return (
+		!!item[header.value] ||
+		item[header.value] === 0 || // we show type component, because 0 is valid value @author @liza-pohranichna
+		header.type === ProcessingTableColumnType.BOOL
+	); // we always show component for bool type, because it can be true or false @author @liza-pohranichna
+}
 
 function normalizeSlotKey(key: string): string {
-  // @author @liza-pohranichna
-  // need this for slots in wt-table component.
-  // Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
-  return key
-    .replace(columnsFieldSeparator, '_')
-    .replace('[', '_')
-    .replace(']', '_');
+	// @author @liza-pohranichna
+	// need this for slots in wt-table component.
+	// Example: 'contact.emails[11].name' ====>  'contact_emails_11_name'
+	return key
+		.replace(columnsFieldSeparator, '_')
+		.replace('[', '_')
+		.replace(']', '_');
 }
 
 const tableHeader = computed<string>(() => {
-  return props.table?.headerTitle || t('infoSec.processing.form.formTable.title');
+	return (
+		props.table?.headerTitle || t('infoSec.processing.form.formTable.title')
+	);
 });
 
 const tableColumns = computed<TableColumn[]>(() => {
-  return props.table?.displayColumns.map((column) => {
-
-    const pathArray = applyTransform(getPathArray(column.field, columnsFieldSeparator), [snakeToCamel()]);
-    return {
-      ...column,
-      header: normalizeSlotKey(column.field), // normalize slot key for wt-table component
-      pathArray, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
-    };
-  });
+	return props.table?.displayColumns.map((column) => {
+		const pathArray = applyTransform(
+			getPathArray(column.field, columnsFieldSeparator),
+			[
+				snakeToCamel(),
+			],
+		);
+		return {
+			...column,
+			header: normalizeSlotKey(column.field), // normalize slot key for wt-table component
+			pathArray, // array with "steps" to nested value. Example: ['contact', 'emails', 'name'],
+		};
+	});
 });
 
-const headers = computed<WtTableHeader[]>(() => { // headers for wt-table prop
-  return tableColumns.value.map((column) => ({
-    ...column,
-    value: column.header,
-    text: column.name,
-    width: column.width ? column.width + 'px' : '',
-  }));
+const headers = computed<WtTableHeader[]>(() => {
+	// headers for wt-table prop
+	return tableColumns.value.map((column) => ({
+		...column,
+		value: column.header,
+		text: column.name,
+		width: column.width ? column.width + 'px' : '',
+	}));
 });
 
 const tableActions = computed<TableAction[]>(() => {
-  return props.actions.map((action: TableAction) => ({
-    ...action,
-    field: normalizeSlotKey(action.field),
-  }));
+	return props.actions.map((action: TableAction) => ({
+		...action,
+		field: normalizeSlotKey(action.field),
+	}));
 });
 
 function handleTableList(tableList: TableRow[]): TableRow[] {
+	return tableList.map((item: TableRow) => {
+		let newItem = {
+			...item,
+		}; // table row
 
-  return tableList.map((item: TableRow) => {
-    let newItem = { ...item }; // table row
+		tableColumns.value.forEach((column: TableColumn) => {
+			// iterate all columns to get needed value for each table cell in row
+			const [firstStep, ...restSteps] = column.pathArray; // get first step and rest steps from pathArray. Example: ['emails', 'data', 'name'] => firstStep = 'emails', restSteps = ['data', 'name']
+			const value = item[firstStep]; // get value by first step from item. Example: item['emails']
 
-    tableColumns.value.forEach((column: TableColumn) => { // iterate all columns to get needed value for each table cell in row
-      const [firstStep, ...restSteps] = column.pathArray; // get first step and rest steps from pathArray. Example: ['emails', 'data', 'name'] => firstStep = 'emails', restSteps = ['data', 'name']
-      const value = item[firstStep]; // get value by first step from item. Example: item['emails']
+			const newValue = restSteps?.length // if we have steps to get nested value
+				? getNestedValue(value, restSteps) // try to get nested value by steps
+				: value; // or just use initial value
 
-      const newValue = restSteps?.length // if we have steps to get nested value
-        ? getNestedValue(value, restSteps) // try to get nested value by steps
-        : value; // or just use initial value
+			newItem = {
+				...newItem,
+				[column.header]: newValue, // set new value in item by column header. Example: contact_emails_11_name: 'John Doe'
+			};
+		});
 
-      newItem = {
-        ...newItem,
-        [column.header]: newValue, // set new value in item by column header. Example: contact_emails_11_name: 'John Doe'
-      };
-
-    });
-
-    return newItem;
-  });
+		return newItem;
+	});
 }
 
-async function getDataList(): Promise<{ items: TableRow[], next: boolean }> {
-  try {
-    const { items, next } = await TableApi.getList({
-      path: systemSourcePath.value,
-      filters: props.filters,
-      page: currentTablePage.value,
-      fields: tableFields.value,
-    });
+async function getDataList(): Promise<{
+	items: TableRow[];
+	next: boolean;
+}> {
+	try {
+		const { items, next } = await TableApi.getList({
+			path: systemSourcePath.value,
+			filters: props.filters,
+			page: currentTablePage.value,
+			fields: tableFields.value,
+		});
 
-    return { items, next };
-  } catch (error) {
-    eventBus.$emit('notification', {
-      type: 'error',
-      text: t('infoSec.processing.form.formTable.error'),
-    });
+		return {
+			items,
+			next,
+		};
+	} catch (error) {
+		eventBus.$emit('notification', {
+			type: 'error',
+			text: t('infoSec.processing.form.formTable.error'),
+		});
 
-    throw error;
-  }
+		throw error;
+	}
 }
 
 async function initDataList(): Promise<void> {
-  let data: TableRow[];
+	let data: TableRow[];
 
-  if (isSystemSource.value) {
+	if (isSystemSource.value) {
+		const { items, next } = await getDataList();
+		data = items;
+		nextAllowed.value = next;
+	} else {
+		data = applyTransform(props.table?.source, [
+			merge(getDefaultGetListResponse()),
+			snakeToCamel(),
+		]);
+	}
 
-    const { items, next } = await getDataList();
-    data = items;
-    nextAllowed.value = next;
-
-  } else {
-    data = applyTransform(props.table?.source, [
-      merge(getDefaultGetListResponse()),
-      snakeToCamel(),
-    ]);
-  }
-
-  dataList.value = handleTableList(data);
+	dataList.value = handleTableList(data);
 }
 
 async function loadNext(): Promise<void> {
-  nextLoading.value = true;
+	nextLoading.value = true;
 
-  currentTablePage.value += 1;
-  const { items, next } = await getDataList();
-  const newItems: TableRow[] = handleTableList(items);
+	currentTablePage.value += 1;
+	const { items, next } = await getDataList();
+	const newItems: TableRow[] = handleTableList(items);
 
-  dataList.value = [...dataList.value, ...newItems];
-  nextAllowed.value = next;
+	dataList.value = [
+		...dataList.value,
+		...newItems,
+	];
+	nextAllowed.value = next;
 
-  nextLoading.value = false;
+	nextLoading.value = false;
 }
 
 function sendAction(action: string, row: TableRow): void {
-  const payload = {
-    componentId: props.componentId,
-    action,
-    row,
-  };
+	const payload = {
+		componentId: props.componentId,
+		action,
+		row,
+	};
 
-  emit('call-table-action', payload);
+	emit('call-table-action', payload);
 }
 
 onMounted(() => {
-  initDataList();
+	initDataList();
 });
-
 </script>
 
 <style lang="scss" scoped>

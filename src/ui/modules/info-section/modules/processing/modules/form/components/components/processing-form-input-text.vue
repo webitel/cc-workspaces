@@ -7,12 +7,10 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'input', string): void
-}>();
+const emit = defineEmits<(e: 'input', string) => void>();
 
 const props = defineProps<{
-  modelValue?: string;
-  value?: string;
+	modelValue?: string;
+	value?: string;
 }>();
 </script>

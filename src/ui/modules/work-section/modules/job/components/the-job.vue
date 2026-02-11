@@ -29,19 +29,21 @@ import JobHeader from './job-header/job-header.vue';
 import JobVariablesContainer from './job-variables-container/job-variables-container.vue';
 
 export default {
-  name: 'TheJob',
-  components: {
-    TaskContainer,
-    JobHeader,
-    JobFooter,
-    JobVariablesContainer,
-  },
-  mixins: [sizeMixin],
-  computed: {
-    ...mapGetters('workspace', {
-      task: 'TASK_ON_WORKSPACE',
-    }),
-  },
+	name: 'TheJob',
+	components: {
+		TaskContainer,
+		JobHeader,
+		JobFooter,
+		JobVariablesContainer,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	computed: {
+		...mapGetters('workspace', {
+			task: 'TASK_ON_WORKSPACE',
+		}),
+	},
 };
 </script>
 

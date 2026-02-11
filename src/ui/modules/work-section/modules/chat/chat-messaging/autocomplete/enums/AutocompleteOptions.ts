@@ -1,3 +1,3 @@
 export const AutocompleteOptions = {
-    QUICK_REPLIES: 'quick-replies',
+	QUICK_REPLIES: 'quick-replies',
 } as const;

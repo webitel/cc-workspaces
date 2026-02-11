@@ -13,8 +13,10 @@
 import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
-  name: 'ChatMessageImage',
-  mixins: [chatMessageFileMixin],
+	name: 'ChatMessageImage',
+	mixins: [
+		chatMessageFileMixin,
+	],
 };
 </script>
 

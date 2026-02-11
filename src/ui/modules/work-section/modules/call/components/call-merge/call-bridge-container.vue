@@ -16,35 +16,36 @@
 </template>
 
 <script>
-import { mapActions, mapGetters,mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 import MergeLookupItem from '../../../_shared/components/lookup-item/merge-lookup-item.vue';
 import LookupItemContainer from '../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 
 export default {
-  name: 'CallTransferContainer',
-  components: { LookupItemContainer, MergeLookupItem },
+	name: 'CallTransferContainer',
+	components: {
+		LookupItemContainer,
+		MergeLookupItem,
+	},
 
-  computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
-    ...mapGetters('features/call', {
-      callOnWorkspace: 'CALL_ON_WORKSPACE',
-    }),
+	computed: {
+		...mapState('features/call', {
+			callList: (state) => state.callList,
+		}),
+		...mapGetters('features/call', {
+			callOnWorkspace: 'CALL_ON_WORKSPACE',
+		}),
 
-    bridgeList() {
-      return this.callList.filter(
-        (call) => call !== this.callOnWorkspace,
-      );
-    },
-  },
+		bridgeList() {
+			return this.callList.filter((call) => call !== this.callOnWorkspace);
+		},
+	},
 
-  methods: {
-    ...mapActions('features/call', {
-      bridge: 'BRIDGE',
-    }),
-  },
+	methods: {
+		...mapActions('features/call', {
+			bridge: 'BRIDGE',
+		}),
+	},
 };
 </script>
 

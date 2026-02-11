@@ -96,19 +96,23 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
-  name: 'TaskQueuePreviewSm',
-  components: { QueueNameChip },
-  mixins: [sizeMixin],
-  props: {
-    opened: {
-      type: Boolean,
-      default: false,
-    },
-    queueName: {
-      type: String,
-      default: '',
-    },
-  },
+	name: 'TaskQueuePreviewSm',
+	components: {
+		QueueNameChip,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		opened: {
+			type: Boolean,
+			default: false,
+		},
+		queueName: {
+			type: String,
+			default: '',
+		},
+	},
 };
 </script>
 

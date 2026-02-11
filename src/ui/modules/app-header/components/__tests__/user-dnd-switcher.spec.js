@@ -4,16 +4,16 @@ import UserStatus from '../../../../../features/modules/agent-status/statusUtils
 import UserDndSwitcher from '../user-dnd-switcher.vue';
 
 describe('User Dnd Switcher', () => {
-  it('renders a component', () => {
-    const wrapper = shallowMount(UserDndSwitcher, {
-      computed: {
-        user() {
-          return {
-            status: UserStatus.ACTIVE,
-          };
-        },
-      },
-    });
-    expect(wrapper.exists()).toBe(true);
-  });
+	it('renders a component', () => {
+		const wrapper = shallowMount(UserDndSwitcher, {
+			computed: {
+				user() {
+					return {
+						status: UserStatus.ACTIVE,
+					};
+				},
+			},
+		});
+		expect(wrapper.exists()).toBe(true);
+	});
 });

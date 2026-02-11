@@ -44,38 +44,40 @@ import { mapGetters } from 'vuex';
 
 import patchMDRender from '../client-info-markdown/scripts/patchMDRender';
 
-const md = new MarkdownIt({ linkify: true });
+const md = new MarkdownIt({
+	linkify: true,
+});
 patchMDRender(md);
 
 export default {
-  name: 'ClientInfoMember',
-  props: {
-    size: {
-      type: String,
-      default: ComponentSize.MD,
-    },
-    collapsed: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  computed: {
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
-    variables() {
-      if (this.taskOnWorkspace.variables) {
-        return Object.keys(this.taskOnWorkspace?.variables)
-        .map((key) => ({
-          key,
-          value: md.render(this.taskOnWorkspace.variables[key]),
-        }));
-      } return [];
-    },
-    memberDescription() {
-      return this.taskOnWorkspace.task?.communication?.description || '';
-    },
-  },
+	name: 'ClientInfoMember',
+	props: {
+		size: {
+			type: String,
+			default: ComponentSize.MD,
+		},
+		collapsed: {
+			type: Boolean,
+			default: true,
+		},
+	},
+	computed: {
+		...mapGetters('workspace', {
+			taskOnWorkspace: 'TASK_ON_WORKSPACE',
+		}),
+		variables() {
+			if (this.taskOnWorkspace.variables) {
+				return Object.keys(this.taskOnWorkspace?.variables).map((key) => ({
+					key,
+					value: md.render(this.taskOnWorkspace.variables[key]),
+				}));
+			}
+			return [];
+		},
+		memberDescription() {
+			return this.taskOnWorkspace.task?.communication?.description || '';
+		},
+	},
 };
 </script>
 

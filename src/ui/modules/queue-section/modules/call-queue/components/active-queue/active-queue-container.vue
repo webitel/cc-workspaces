@@ -26,29 +26,31 @@ import TaskQueueContainer from '../../../_shared/components/task-queue-container
 import ActivePreview from './active-queue-preview.vue';
 
 export default {
-  name: 'ActiveQueueContainer',
-  components: {
-    TaskQueueContainer,
-    ActivePreview,
-  },
-  mixins: [sizeMixin],
+	name: 'ActiveQueueContainer',
+	components: {
+		TaskQueueContainer,
+		ActivePreview,
+	},
+	mixins: [
+		sizeMixin,
+	],
 
-  computed: {
-    ...mapState('features/call', {
-      callList: (state) => state.callList,
-    }),
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
-  },
+	computed: {
+		...mapState('features/call', {
+			callList: (state) => state.callList,
+		}),
+		...mapGetters('workspace', {
+			taskOnWorkspace: 'TASK_ON_WORKSPACE',
+		}),
+	},
 
-  methods: {
-    ...mapActions('features/call', {
-      openCall: 'OPEN_ACTIVE_CALL',
-      answer: 'ANSWER',
-      hangup: 'HANGUP',
-    }),
-  },
+	methods: {
+		...mapActions('features/call', {
+			openCall: 'OPEN_ACTIVE_CALL',
+			answer: 'ANSWER',
+			hangup: 'HANGUP',
+		}),
+	},
 };
 </script>
 

@@ -66,106 +66,113 @@
 import silenceSound from './assets/audio/silence.mp3';
 
 export default {
-  name: 'WelcomePopup',
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data: () => ({
-    mic: {
-      status: false,
-      message: '',
-    },
-    notification: {
-      status: false,
-      message: '',
-    },
-    camera: {
-      status: false,
-      message: '',
-    },
-  }),
-  created() {
-    this.initWindowKeyPressListener();
-    this.checkPermissions();
-  },
-  unmounted() {
-    this.removeWindowKeyPressListener();
-  },
-  methods: {
-    playSilence() {
-      // https://webitel.atlassian.net/browse/WTEL-4389
-      const silence = new Audio(silenceSound);
-      silence.play();
-    },
-    close() {
-      if (!this.loading) {
-        this.playSilence();
-        this.$emit('input');
-      };
-    },
-    async checkMic() {
-      try {
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-        this.mic.status = true;
-      } catch (err) {
-        this.mic.status = false;
-        this.mic.message = this.getPermissionErrorMessage(err);
+	name: 'WelcomePopup',
+	props: {
+		loading: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data: () => ({
+		mic: {
+			status: false,
+			message: '',
+		},
+		notification: {
+			status: false,
+			message: '',
+		},
+		camera: {
+			status: false,
+			message: '',
+		},
+	}),
+	created() {
+		this.initWindowKeyPressListener();
+		this.checkPermissions();
+	},
+	unmounted() {
+		this.removeWindowKeyPressListener();
+	},
+	methods: {
+		playSilence() {
+			// https://webitel.atlassian.net/browse/WTEL-4389
+			const silence = new Audio(silenceSound);
+			silence.play();
+		},
+		close() {
+			if (!this.loading) {
+				this.playSilence();
+				this.$emit('input');
+			}
+		},
+		async checkMic() {
+			try {
+				await navigator.mediaDevices.getUserMedia({
+					audio: true,
+				});
+				this.mic.status = true;
+			} catch (err) {
+				this.mic.status = false;
+				this.mic.message = this.getPermissionErrorMessage(err);
+			}
+		},
+		async requestCameraAccess() {
+			try {
+				await navigator.mediaDevices.getUserMedia({
+					video: true,
+				});
+				this.camera.status = true;
+			} catch (err) {
+				this.camera.status = false;
+				this.camera.message = this.getPermissionErrorMessage(err);
+			}
+		},
+		async checkNotifications() {
+			try {
+				const status = await window.Notification.requestPermission();
 
-      }
-    },
-    async requestCameraAccess() {
-      try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
-        this.camera.status = true;
-      } catch (err) {
-        this.camera.status = false;
-        this.camera.message = this.getPermissionErrorMessage(err);
-      }
-    },
-    async checkNotifications() {
-      try {
-        const status = await window.Notification.requestPermission();
+				if (status === 'granted') {
+					this.notification.status = true;
+				} else {
+					this.notification.status = false;
+					this.notification.message = 'denied';
+				}
+			} catch (err) {
+				this.notification.status = false;
+				this.notification.message = err;
+			}
+		},
+		checkPermissions() {
+			this.checkMic();
+			this.checkNotifications();
+			this.requestCameraAccess();
+		},
 
-        if (status === 'granted') {
-          this.notification.status = true;
-        } else {
-          this.notification.status = false;
-          this.notification.message = 'denied';
-        }
-      } catch (err) {
-        this.notification.status = false;
-        this.notification.message = err;
-      }
-    },
-    checkPermissions() {
-      this.checkMic();
-      this.checkNotifications();
-      this.requestCameraAccess()
-    },
+		getPermissionErrorMessage(err) {
+			if (err?.message?.includes('Requested device not found'))
+				return 'notFound';
+			return 'denied';
+		},
 
-    getPermissionErrorMessage (err) {
-      if (err?.message?.includes('Requested device not found')) return 'notFound'
-      return 'denied';
-    },
-
-    handleKeyPress(e) {
-      if (e.keyCode === 13 // enter
-        || e.key === ' '
-        || e.code === 'Space'
-        || e.keyCode === 32) { // space
-        this.close();
-      }
-    },
-    initWindowKeyPressListener() {
-      window.addEventListener('keypress', this.handleKeyPress);
-    },
-    removeWindowKeyPressListener() {
-      window.removeEventListener('keypress', this.handleKeyPress);
-    },
-  },
+		handleKeyPress(e) {
+			if (
+				e.keyCode === 13 || // enter
+				e.key === ' ' ||
+				e.code === 'Space' ||
+				e.keyCode === 32
+			) {
+				// space
+				this.close();
+			}
+		},
+		initWindowKeyPressListener() {
+			window.addEventListener('keypress', this.handleKeyPress);
+		},
+		removeWindowKeyPressListener() {
+			window.removeEventListener('keypress', this.handleKeyPress);
+		},
+	},
 };
 </script>
 

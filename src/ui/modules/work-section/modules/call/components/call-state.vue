@@ -41,7 +41,7 @@
 import { useCallState } from '../../../../../composables/useCallState';
 
 defineOptions({
-  name: 'CallState',
+	name: 'CallState',
 });
 
 const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();

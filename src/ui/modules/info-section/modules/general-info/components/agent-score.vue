@@ -51,14 +51,16 @@ import { mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'AgentScore',
-  mixins: [sizeMixin],
-  computed: {
-    ...mapGetters('ui/widget', {
-      scoreCount: 'SCORE_COUNT',
-      scoreAvg: 'SCORE_REQUIRED_AVG',
-    }),
-  },
+	name: 'AgentScore',
+	mixins: [
+		sizeMixin,
+	],
+	computed: {
+		...mapGetters('ui/widget', {
+			scoreCount: 'SCORE_COUNT',
+			scoreAvg: 'SCORE_REQUIRED_AVG',
+		}),
+	},
 };
 </script>
 

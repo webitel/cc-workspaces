@@ -11,11 +11,11 @@
 
 <script setup>
 const props = defineProps({
-  // because we can't check for empty slot in vue 3 because v-for=0 => non-empty slot :(
-  empty: {
-    type: Boolean,
-    default: true,
-  },
+	// because we can't check for empty slot in vue 3 because v-for=0 => non-empty slot :(
+	empty: {
+		type: Boolean,
+		default: true,
+	},
 });
 </script>
 

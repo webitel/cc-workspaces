@@ -28,16 +28,15 @@ import { mapGetters } from 'vuex';
 const defaultSetup = Editor.setup;
 
 Editor.setup = (props, ctx) => {
-  const _ctx = {
-    ...ctx,
-    attrs: {
-      ...ctx.attrs,
-      'onUpdate:modelValue': true,
-    },
-  };
-  return defaultSetup(props, _ctx);
-}
-
+	const _ctx = {
+		...ctx,
+		attrs: {
+			...ctx.attrs,
+			'onUpdate:modelValue': true,
+		},
+	};
+	return defaultSetup(props, _ctx);
+};
 
 /* Import TinyMCE */
 import 'tinymce/tinymce.min';
@@ -64,77 +63,86 @@ import 'tinymce/themes/silver';
 import processingFormComponentMixin from '../../mixins/processingFormComponentMixin';
 
 export default {
-  name: 'RichTextEditor',
-  components: {
-    Editor,
-  },
-  mixins: [processingFormComponentMixin],
-  props: {
-    value: {
-      type: String,
-    },
-    output: {
-      type: String,
-      default: 'html',
-      options: ['html', 'text'],
-    },
-    height: {
-      type: [Number, String],
-      default: '300',
-    },
-  },
-  emits: [
-    'input',
-  ],
-  computed: {
-    ...mapGetters('ui/appearance', {
-      darkMode: 'DARK_MODE',
-    }),
-    strValue() {
-      // editor breaks on Number data type :( [WTEL-4477]
-      return `${this.value}`;
-    },
-    language() {
-      return this.$i18n.locale;
-    },
-    config() {
-      const { bgColor, textColor } = this.getColors()
+	name: 'RichTextEditor',
+	components: {
+		Editor,
+	},
+	mixins: [
+		processingFormComponentMixin,
+	],
+	props: {
+		value: {
+			type: String,
+		},
+		output: {
+			type: String,
+			default: 'html',
+			options: [
+				'html',
+				'text',
+			],
+		},
+		height: {
+			type: [
+				Number,
+				String,
+			],
+			default: '300',
+		},
+	},
+	emits: [
+		'input',
+	],
+	computed: {
+		...mapGetters('ui/appearance', {
+			darkMode: 'DARK_MODE',
+		}),
+		strValue() {
+			// editor breaks on Number data type :( [WTEL-4477]
+			return `${this.value}`;
+		},
+		language() {
+			return this.$i18n.locale;
+		},
+		config() {
+			const { bgColor, textColor } = this.getColors();
 
-      return {
-        toolbar_sticky: true,
-        skin: false,
-        content_css: false,
-        height: +this.height,
-        menubar: false,
-        statusbar: this.isHtml,
-        toolbar_mode: 'sliding',
-        language: this.language,
-        content_style: `
+			return {
+				toolbar_sticky: true,
+				skin: false,
+				content_css: false,
+				height: +this.height,
+				menubar: false,
+				statusbar: this.isHtml,
+				toolbar_mode: 'sliding',
+				language: this.language,
+				content_style: `
           body {
             background-color: ${bgColor};
             color: ${textColor};
           }
-        `
-      };
-    },
-    isHtml() {
-      return this.output === 'html';
-    },
-    plugins() {
-      return this.isHtml
-        ? [
-          'fullscreen',
-          'image',
-          'link',
-          'table',
-          'lists',
-          'advlist',
-          'emoticons',
-        ] : [];
-    },
-    toolbar() {
-      return this.isHtml
-        ? `undo redo
+        `,
+			};
+		},
+		isHtml() {
+			return this.output === 'html';
+		},
+		plugins() {
+			return this.isHtml
+				? [
+						'fullscreen',
+						'image',
+						'link',
+						'table',
+						'lists',
+						'advlist',
+						'emoticons',
+					]
+				: [];
+		},
+		toolbar() {
+			return this.isHtml
+				? `undo redo
         | bold italic underline strikethrough
         | fullscreen
         | fontfamily fontsize
@@ -143,37 +151,40 @@ export default {
         | forecolor backcolor removeformat
         | emoticons image link table
         `
-        : 'undo redo';
-    },
-  },
-  watch: {
-    darkMode() {
-      this.updateEditorColors();
-    }
-  },
-  methods: {
-    updateEditorColors() {
-      const editor = tinymce?.get('editor');
-      if (editor) {
-        const { bgColor, textColor } = this.getColors()
+				: 'undo redo';
+		},
+	},
+	watch: {
+		darkMode() {
+			this.updateEditorColors();
+		},
+	},
+	methods: {
+		updateEditorColors() {
+			const editor = tinymce?.get('editor');
+			if (editor) {
+				const { bgColor, textColor } = this.getColors();
 
-        editor.dom.setStyles(editor.getBody(), {
-          backgroundColor: bgColor,
-          color: textColor
-        });
-      }
-    },
-    getColors() {
-      const bgColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--content-wrapper-color')
-        .trim();
-      const textColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--wt-text-field-text-color')
-        .trim();
+				editor.dom.setStyles(editor.getBody(), {
+					backgroundColor: bgColor,
+					color: textColor,
+				});
+			}
+		},
+		getColors() {
+			const bgColor = getComputedStyle(document.documentElement)
+				.getPropertyValue('--content-wrapper-color')
+				.trim();
+			const textColor = getComputedStyle(document.documentElement)
+				.getPropertyValue('--wt-text-field-text-color')
+				.trim();
 
-      return { bgColor, textColor }
-    }
-  }
+			return {
+				bgColor,
+				textColor,
+			};
+		},
+	},
 };
 </script>
 

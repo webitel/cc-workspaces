@@ -44,17 +44,19 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatHelperList from '../components/chat-helper-list.vue';
-import { ChatHelperItem } from "../types/ChatHelperItem.types";
+import { ChatHelperItem } from '../types/ChatHelperItem.types';
 import EmptyPicDark from './assets/emptyDark.svg';
 import EmptyPicLight from './assets/emptyLight.svg';
 
 const props = defineProps<{
-  search?: string;
+	search?: string;
 }>();
 
 const emit = defineEmits<{
-  close: [],
-  select: [item: ChatHelperItem]
+	close: [];
+	select: [
+		item: ChatHelperItem,
+	];
 }>();
 
 const replies = ref<ChatHelperItem[]>([]);
@@ -63,38 +65,49 @@ const isLoading = ref(false);
 const store = useStore();
 
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
-const emptyPic = computed(() => (darkMode.value ? EmptyPicDark : EmptyPicLight));
+const emptyPic = computed(() =>
+	darkMode.value ? EmptyPicDark : EmptyPicLight,
+);
 
 const callQuickReply = async (params = {}): Promise<void> => {
-  const repliesParams = {
-    ...params,
-    restrictToAgent: true,
-    sort: '+agent_priority',
-  }
-  try {
-    isLoading.value = true;
-    const { items } = await QuickRepliesAPI.getList(repliesParams);
-    replies.value = items;
-  } catch (error) {
-    throw new Error('Error fetching quick replies:', error);
-  } finally {
-    isLoading.value = false;
-  }
+	const repliesParams = {
+		...params,
+		restrictToAgent: true,
+		sort: '+agent_priority',
+	};
+	try {
+		isLoading.value = true;
+		const { items } = await QuickRepliesAPI.getList(repliesParams);
+		replies.value = items;
+	} catch (error) {
+		throw new Error('Error fetching quick replies:', error);
+	} finally {
+		isLoading.value = false;
+	}
 };
 
 const close = () => {
-  emit('close');
+	emit('close');
 };
 
 const select = (item) => {
-  emit('select', item);
+	emit('select', item);
 };
 
 onMounted(() => callQuickReply());
 
-watch(() => props.search, (search: string | undefined) => {
-  callQuickReply(search ? { search } : {});
-});
+watch(
+	() => props.search,
+	(search: string | undefined) => {
+		callQuickReply(
+			search
+				? {
+						search,
+					}
+				: {},
+		);
+	},
+);
 </script>
 
 <style

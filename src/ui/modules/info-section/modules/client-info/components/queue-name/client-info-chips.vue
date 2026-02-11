@@ -11,18 +11,18 @@ import { getQueueName } from '../../../../../queue-section/modules/_shared/scrip
 import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
-  name: 'ClientInfoChips',
-  components: {
-    QueueNameChip,
-  },
-  computed: {
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
-    queueName() {
-      return getQueueName(this.taskOnWorkspace);
-    },
-  },
+	name: 'ClientInfoChips',
+	components: {
+		QueueNameChip,
+	},
+	computed: {
+		...mapGetters('workspace', {
+			taskOnWorkspace: 'TASK_ON_WORKSPACE',
+		}),
+		queueName() {
+			return getQueueName(this.taskOnWorkspace);
+		},
+	},
 };
 </script>
 
