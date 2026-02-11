@@ -24,23 +24,24 @@ class="contact-card-messaging"
 </template>
 
 <script setup>
-
 import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
 import { computed } from 'vue';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
-  contact: {
-    type: Object,
-  },
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
+	contact: {
+		type: Object,
+	},
 });
 
 const chats = computed(() => props.contact?.imclients?.data);
-
 </script>
 
 <style lang="scss" scoped>

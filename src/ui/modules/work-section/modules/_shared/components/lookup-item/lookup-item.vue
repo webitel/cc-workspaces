@@ -53,26 +53,28 @@
 import LookupItemWrapper from './lookup-item-wrapper.vue';
 
 export default {
-  name: 'LookupItem',
-  components: { LookupItemWrapper },
-  props: {
-    noBefore: {
-      type: Boolean,
-      default: false,
-    },
-    noMain: {
-      type: Boolean,
-      default: false,
-    },
-    noAfter: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: ''
-    }
-  },
+	name: 'LookupItem',
+	components: {
+		LookupItemWrapper,
+	},
+	props: {
+		noBefore: {
+			type: Boolean,
+			default: false,
+		},
+		noMain: {
+			type: Boolean,
+			default: false,
+		},
+		noAfter: {
+			type: Boolean,
+			default: false,
+		},
+		size: {
+			type: String,
+			default: '',
+		},
+	},
 };
 </script>
 

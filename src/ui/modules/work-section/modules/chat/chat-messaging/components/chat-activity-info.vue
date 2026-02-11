@@ -30,33 +30,35 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  ended: {
-    type: Boolean,
-    default: false,
-  },
-  provider: {
-    type: String,
-    default: '',
-  },
-  gateway: {
-    type: String,
-    default: '',
-  },
-
+	ended: {
+		type: Boolean,
+		default: false,
+	},
+	provider: {
+		type: String,
+		default: '',
+	},
+	gateway: {
+		type: String,
+		default: '',
+	},
 });
 
 const { t } = useI18n();
 
 const content = computed(() =>
-  props.ended
-    ? { icon: 'chat-end',
-      iconColor: 'error',
-      title: t('workspaceSec.chat.chatEnded') }
-    : { icon: 'chat',
-      iconColor: 'success',
-      title: t('workspaceSec.chat.chatStarted') }
-)
-
+	props.ended
+		? {
+				icon: 'chat-end',
+				iconColor: 'error',
+				title: t('workspaceSec.chat.chatEnded'),
+			}
+		: {
+				icon: 'chat',
+				iconColor: 'success',
+				title: t('workspaceSec.chat.chatStarted'),
+			},
+);
 </script>
 
 <style lang="scss" scoped>

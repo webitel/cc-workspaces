@@ -15,13 +15,15 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  deadline: {
-    type: Number,
-    required: true,
-  },
+	deadline: {
+		type: Number,
+		required: true,
+	},
 });
 
-const width = computed(() => (props.deadline <= 100 ? `${props.deadline}%` : '100%'));
+const width = computed(() =>
+	props.deadline <= 100 ? `${props.deadline}%` : '100%',
+);
 </script>
 
 <style lang="scss" scoped>

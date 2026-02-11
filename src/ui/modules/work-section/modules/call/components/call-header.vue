@@ -122,19 +122,17 @@ import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
 
 const props = withDefaults(
-  defineProps<{
-    currentTab?: string;
-    size?: ComponentSize;
-  }>(),
-  {
-    currentTab: CallTab.Numpad,
-    size: ComponentSize.MD,
-  },
+	defineProps<{
+		currentTab?: string;
+		size?: ComponentSize;
+	}>(),
+	{
+		currentTab: CallTab.Numpad,
+		size: ComponentSize.MD,
+	},
 );
 
-const emit = defineEmits<{
-  (e: 'openTab', value: string): void;
-}>();
+const emit = defineEmits<(e: 'openTab', value: string) => void>();
 
 const store = useStore();
 
@@ -142,43 +140,41 @@ const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
-
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
 const isOnBridge = computed(() => props.currentTab === CallTab.Bridge);
 const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
-const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat)
+const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat);
 const isBridge = computed(() => callList.value?.length > 1);
-
 
 const isTransfer = computed(() => call.value?.allowHangup);
 const isHangup = computed(() => call.value?.allowHangup);
 const isCall = computed(() => isNewCall.value && call.value?.newNumber);
 const isDisplayCallButton = computed(
-  () => (isOnNumpad.value || isOnBridge.value) && isCall.value
+	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
 );
 
-const isDisplayChatButton = computed(() =>
-  store.getters['features/call/videoCall/IS_VIDEO_CALL']);
-const isCallChatExist = computed(() =>
-  !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT']);
+const isDisplayChatButton = computed(
+	() => store.getters['features/call/videoCall/IS_VIDEO_CALL'],
+);
+const isCallChatExist = computed(
+	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
+);
 
 const queueName = computed(() => getQueueName(call.value));
-
 
 const makeCall = () => store.dispatch('features/call/CALL');
 const hangup = () => store.dispatch('features/call/HANGUP');
 
-
 let hotkeyUnsubscribers: Array<() => void> = [];
 
 const setupHotkeys = () => {
-  hotkeyUnsubscribers = useHotkeys([
-    {
-      event: HotkeyAction.END,
-      callback: hangup,
-    },
-  ]);
+	hotkeyUnsubscribers = useHotkeys([
+		{
+			event: HotkeyAction.END,
+			callback: hangup,
+		},
+	]);
 };
 
 onMounted(() => setupHotkeys());

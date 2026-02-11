@@ -56,34 +56,42 @@ import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/l
 import ContactCommunicationItem from './contact-communication-item.vue';
 
 export default {
-  name: 'ContactLookupItem',
-  components: { ContactCommunicationItem },
-  mixins: [lookupItemMixin, sizeMixin],
-  emits: [
-    'call',
-  ],
-  data() {
-    return {
-      showLoader: false,
-    }
-  },
-  computed: {
-    ...mapGetters('ui/infoSec/client/contact', {
-      contactLink: 'READ_ONLY_CONTACT_LINK',
-    }),
-    primaryPhoneNumber() {
-      return this.item.phones?.find((phone) => phone.primary === true)?.number;
-    },
-  },
-  methods: {
-    call({ number } = {}) {
-      if (this.showLoader) return;
+	name: 'ContactLookupItem',
+	components: {
+		ContactCommunicationItem,
+	},
+	mixins: [
+		lookupItemMixin,
+		sizeMixin,
+	],
+	emits: [
+		'call',
+	],
+	data() {
+		return {
+			showLoader: false,
+		};
+	},
+	computed: {
+		...mapGetters('ui/infoSec/client/contact', {
+			contactLink: 'READ_ONLY_CONTACT_LINK',
+		}),
+		primaryPhoneNumber() {
+			return this.item.phones?.find((phone) => phone.primary === true)?.number;
+		},
+	},
+	methods: {
+		call({ number } = {}) {
+			if (this.showLoader) return;
 
-      this.showLoader = true;
-      this.$emit('call', { number: number || this.primaryPhoneNumber, contactId: this.item.id });
-      this.showLoader = false;
-    },
-  },
+			this.showLoader = true;
+			this.$emit('call', {
+				number: number || this.primaryPhoneNumber,
+				contactId: this.item.id,
+			});
+			this.showLoader = false;
+		},
+	},
 };
 </script>
 

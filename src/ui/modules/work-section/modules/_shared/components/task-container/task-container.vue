@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'TaskContainer',
+	name: 'TaskContainer',
 };
 </script>
 

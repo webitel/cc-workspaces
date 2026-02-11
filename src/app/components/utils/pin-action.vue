@@ -9,13 +9,13 @@
 
 <script>
 export default {
-  name: 'PinAction',
-  props: {
-    pinned: {
-      type: Boolean,
-      default: false,
-    },
-  },
+	name: 'PinAction',
+	props: {
+		pinned: {
+			type: Boolean,
+			default: false,
+		},
+	},
 };
 </script>
 

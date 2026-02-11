@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'TaskFooter',
+	name: 'TaskFooter',
 };
 </script>
 

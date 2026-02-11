@@ -69,18 +69,25 @@ import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import OfflineQueuePreviewCallback from './offline-queue-preview-callback.vue';
 
 export default {
-  name: 'OfflineQueuePreview',
-  components: { OfflineQueuePreviewCallback },
-  mixins: [taskPreviewMixin, sizeMixin],
-  emits: ['click'],
-  computed: {
-    displayName() {
-      return this.task.name;
-    },
-    displayQueueName() {
-      return this.task.queue?.name;
-    },
-  },
+	name: 'OfflineQueuePreview',
+	components: {
+		OfflineQueuePreviewCallback,
+	},
+	mixins: [
+		taskPreviewMixin,
+		sizeMixin,
+	],
+	emits: [
+		'click',
+	],
+	computed: {
+		displayName() {
+			return this.task.name;
+		},
+		displayQueueName() {
+			return this.task.queue?.name;
+		},
+	},
 };
 </script>
 

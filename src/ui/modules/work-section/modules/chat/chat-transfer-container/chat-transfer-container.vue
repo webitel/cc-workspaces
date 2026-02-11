@@ -47,15 +47,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { useStore } from 'vuex';
 import { storeToRefs } from 'pinia';
-
-import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useStore } from 'vuex';
 import APIRepository from '../../../../../../app/api/APIRepository.js';
 import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
+import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import botAvatar from '../../_shared/assets/avatars/bot-avatar.svg';
 import TransferLookupItem from '../../_shared/components/lookup-item/transfer-lookup-item.vue';
 import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
@@ -66,13 +65,16 @@ const usersAPI = APIRepository.users;
 const chatplansAPI = APIRepository.chatplans;
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-  },
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
-const emit = defineEmits(['openTab', 'closeTab']);
+const emit = defineEmits([
+	'openTab',
+	'closeTab',
+]);
 
 const store = useStore();
 
@@ -83,68 +85,77 @@ const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
 
 const fetchUsers = (params) => {
-  const userParams = {
-    filters: 'presence.status=sip,!dnd',
-    sort: 'presence.status',
-    fields: ['name', 'id', 'extension', 'presence'],
-  };
-  return usersAPI.getUsers({ ...userParams, ...params, notId: [userId.value] });
+	const userParams = {
+		filters: 'presence.status=sip,!dnd',
+		sort: 'presence.status',
+		fields: [
+			'name',
+			'id',
+			'extension',
+			'presence',
+		],
+	};
+	return usersAPI.getUsers({
+		...userParams,
+		...params,
+		notId: [
+			userId.value,
+		],
+	});
 };
 
 const fetchChatplans = (params) => {
-  return chatplansAPI.getChatplans({ ...params, enabled: true });
+	return chatplansAPI.getChatplans({
+		...params,
+		enabled: true,
+	});
 };
 
 const fetchFn = (params) => {
-  if (transferDestination.value === TransferDestination.CHATPLAN) {
-    return fetchChatplans(params);
-  }
-  return fetchUsers(params);
+	if (transferDestination.value === TransferDestination.CHATPLAN) {
+		return fetchChatplans(params);
+	}
+	return fetchUsers(params);
 };
 
-const {
-  dataList,
-  isLoading,
-  dataSearch,
-  handleIntersect,
-  resetData,
-} = useInfiniteScroll({
-  fetchFn,
-  size: 20,
-});
+const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
+	useInfiniteScroll({
+		fetchFn,
+		size: 20,
+	});
 
 const handleTransfer = async (item) => {
-  await store.dispatch('features/chat/TRANSFER', {
-    destination: transferDestination.value,
-    item
-  });
-  emit('openTab', 'successful-transfer');
+	await store.dispatch('features/chat/TRANSFER', {
+		destination: transferDestination.value,
+		item,
+	});
+	emit('openTab', 'successful-transfer');
 };
 
 const closeTab = () => {
-  emit('closeTab');
+	emit('closeTab');
 };
 
 const setupHotkeys = () => {
-  const subscribers = [
-    {
-      event: HotkeyAction.TRANSFER,
-      callback: closeTab,
-    },
-  ];
-  hotkeyUnsubscribers.value = useHotkeys(subscribers);
+	const subscribers = [
+		{
+			event: HotkeyAction.TRANSFER,
+			callback: closeTab,
+		},
+	];
+	hotkeyUnsubscribers.value = useHotkeys(subscribers);
 };
 
 watch(transferDestination, () => {
-  resetData();
+	resetData();
 });
 
 onMounted(() => {
-  setupHotkeys();
+	setupHotkeys();
 });
 
 onUnmounted(() => {
-  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
 

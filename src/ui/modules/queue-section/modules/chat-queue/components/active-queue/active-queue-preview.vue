@@ -64,40 +64,48 @@
 
 <script>
 import { ConversationState } from 'webitel-sdk';
-import { ChatStatus, ChatTypes } from '../../enums/ChatStatus.enum';
-
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import { ChatStatus, ChatTypes } from '../../enums/ChatStatus.enum';
 
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 export default {
-  name: 'ActiveQueuePreview',
-  components: { ChatQueuePreviewMd, ChatQueuePreviewSm },
-  mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
-  computed: {
-    lastMessage() {
+	name: 'ActiveQueuePreview',
+	components: {
+		ChatQueuePreviewMd,
+		ChatQueuePreviewSm,
+	},
+	mixins: [
+		taskPreviewMixin,
+		sizeMixin,
+		displayInfoMixin,
+	],
+	computed: {
+		lastMessage() {
+			const lastMessage =
+				this.task.messages[this.task.messages.length - 1] || {};
+			return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+		},
+		displayIcon() {
+			const member = this.task.members[0];
+			return messengerIcon(member.type);
+		},
+		chatStatus() {
+			// Check if chat is closed
+			if (this.task.closedAt && this.task.closeReason) {
+				return ChatStatus.Closed;
+			}
 
-      const lastMessage = this.task.messages[this.task.messages.length - 1] || {};
-      return lastMessage.file ? lastMessage.file.name : lastMessage.text;
-    },
-    displayIcon() {
-      const member = this.task.members[0];
-      return messengerIcon(member.type);
-    },
-    chatStatus() {
-      // Check if chat is closed
-      if (this.task.closedAt && this.task.closeReason) {
-        return ChatStatus.Closed;
-      }
-
-      // Check if chat is new (invite state) or active
-      return this.task.state === ConversationState.Invite ? ChatStatus.New : ChatStatus.Active;
-    }
-  },
+			// Check if chat is new (invite state) or active
+			return this.task.state === ConversationState.Invite
+				? ChatStatus.New
+				: ChatStatus.Active;
+		},
+	},
 };
 </script>
 

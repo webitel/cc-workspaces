@@ -33,20 +33,22 @@
 </template>
 
 <script setup lang="ts">
-import DescTrackAuthSuccess from '../assets/desc-track-auth-success.svg'
-import DescTrackAuthSuccessDark from '../assets/desc-track-auth-success-dark.svg'
-import { computed, defineModel, ref } from 'vue'
-import { useStore } from 'vuex'
+import { computed, defineModel, ref } from 'vue';
+import { useStore } from 'vuex';
+import DescTrackAuthSuccess from '../assets/desc-track-auth-success.svg';
+import DescTrackAuthSuccessDark from '../assets/desc-track-auth-success-dark.svg';
 
-const store = useStore()
+const store = useStore();
 
-const modelShown = defineModel<boolean>('shown', { required: true })
+const modelShown = defineModel<boolean>('shown', {
+	required: true,
+});
 
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
 const close = () => {
-  modelShown.value = false
-}
+	modelShown.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

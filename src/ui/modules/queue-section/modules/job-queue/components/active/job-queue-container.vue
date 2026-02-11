@@ -25,25 +25,27 @@ import TaskQueueContainer from '../../../_shared/components/task-queue-container
 import JobQueuePreview from './job-queue-preview.vue';
 
 export default {
-  name: 'JobQueueContainer',
-  components: {
-    TaskQueueContainer,
-    JobQueuePreview,
-  },
-  mixins: [sizeMixin],
-  computed: {
-    ...mapState('features/job', {
-      taskList: (state) => state.jobList,
-    }),
-    ...mapGetters('workspace', {
-      taskOnWorkspace: 'TASK_ON_WORKSPACE',
-    }),
-  },
-  methods: {
-    ...mapActions('features/job', {
-      openTask: 'OPEN_JOB',
-    }),
-  },
+	name: 'JobQueueContainer',
+	components: {
+		TaskQueueContainer,
+		JobQueuePreview,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	computed: {
+		...mapState('features/job', {
+			taskList: (state) => state.jobList,
+		}),
+		...mapGetters('workspace', {
+			taskOnWorkspace: 'TASK_ON_WORKSPACE',
+		}),
+	},
+	methods: {
+		...mapActions('features/job', {
+			openTask: 'OPEN_JOB',
+		}),
+	},
 };
 </script>
 

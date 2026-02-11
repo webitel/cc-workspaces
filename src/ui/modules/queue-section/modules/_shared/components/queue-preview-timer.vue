@@ -13,14 +13,16 @@
 import callTimer from '../../../../../mixins/callTimerMixin';
 
 export default {
-  name: 'QueuePreviewTimer',
-  mixins: [callTimer],
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-  },
+	name: 'QueuePreviewTimer',
+	mixins: [
+		callTimer,
+	],
+	props: {
+		task: {
+			type: Object,
+			required: true,
+		},
+	},
 };
 </script>
 

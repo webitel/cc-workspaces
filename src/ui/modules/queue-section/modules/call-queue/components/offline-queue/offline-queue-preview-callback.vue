@@ -47,46 +47,49 @@
 import { mapActions } from 'vuex';
 
 export default {
-  name: 'OfflineQueuePreviewCallback',
-  props: {
-    task: {
-      required: true,
-      type: Object,
-    },
-    size: {
-      type: String,
-      required: true,
-    },
-    loader: {
-      type: Boolean,
-      default: false,
-    }
-  },
-  data() {
-    return {
-      showLoader: false,
-    }
-  },
-  computed: {
-    options() {
-      return this.task.communications.map((el) => ({
-        text: el.destination,
-        communicationId: el.id,
-      }));
-    },
-  },
-  methods: {
-    ...mapActions('features/member', {
-      makeCall: 'CALL',
-    }),
-    call(id, communicationId) {
-      if(this.showLoader) return;
+	name: 'OfflineQueuePreviewCallback',
+	props: {
+		task: {
+			required: true,
+			type: Object,
+		},
+		size: {
+			type: String,
+			required: true,
+		},
+		loader: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data() {
+		return {
+			showLoader: false,
+		};
+	},
+	computed: {
+		options() {
+			return this.task.communications.map((el) => ({
+				text: el.destination,
+				communicationId: el.id,
+			}));
+		},
+	},
+	methods: {
+		...mapActions('features/member', {
+			makeCall: 'CALL',
+		}),
+		call(id, communicationId) {
+			if (this.showLoader) return;
 
-      this.showLoader = true;
-      this.makeCall({ id, communicationId });
-      this.showLoader = false;
-    },
-  },
+			this.showLoader = true;
+			this.makeCall({
+				id,
+				communicationId,
+			});
+			this.showLoader = false;
+		},
+	},
 };
 </script>
 

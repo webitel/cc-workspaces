@@ -5,22 +5,22 @@
 </template>
 
 <script>
-  import EmptyWs from './empty-workspace-empty.vue';
-  import TransferWs from './empty-workspace-transfer.vue';
+import EmptyWs from './empty-workspace-empty.vue';
+import TransferWs from './empty-workspace-transfer.vue';
 
-  export default {
-    name: 'EmptyWorkspace',
-    components: {
-      EmptyWs,
-      TransferWs,
-    },
-    props: {
-      type: {
-        type: String,
-        default: 'empty',
-      },
-    },
-  };
+export default {
+	name: 'EmptyWorkspace',
+	components: {
+		EmptyWs,
+		TransferWs,
+	},
+	props: {
+		type: {
+			type: String,
+			default: 'empty',
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>

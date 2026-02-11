@@ -105,24 +105,26 @@ import QueueNameChip from '../../../../work-section/modules/_shared/components/q
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-  opened: {
-    type: Boolean,
-    default: false,
-  },
-  status: {
-    type: String,
-  },
-  opened: {
-    type: Boolean,
-    default: false,
-  }
+	task: {
+		type: Object,
+		required: true,
+	},
+	opened: {
+		type: Boolean,
+		default: false,
+	},
+	status: {
+		type: String,
+	},
+	opened: {
+		type: Boolean,
+		default: false,
+	},
 });
 
-const emit = defineEmits(['click']);
+const emit = defineEmits([
+	'click',
+]);
 
 const queueName = computed(() => props.task?.queue?.name || '');
 </script>

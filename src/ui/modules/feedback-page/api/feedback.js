@@ -1,48 +1,56 @@
 import {
-  getDefaultGetListResponse,
-  getDefaultInstance,
+	getDefaultGetListResponse,
+	getDefaultInstance,
 } from '@webitel/ui-sdk/src/api/defaults/index';
 import applyTransform, {
-  generateUrl,
-  merge,
-  notify,
+	generateUrl,
+	merge,
+	notify,
 } from '@webitel/ui-sdk/src/api/transformers/index';
 
 const instance = getDefaultInstance();
 
 const getFeedback = async ({ ...params }) => {
-  const url = applyTransform(params, [generateUrl('feedback')]);
+	const url = applyTransform(params, [
+		generateUrl('feedback'),
+	]);
 
-  try {
-    const response = await instance.get(url);
-    const { data } = applyTransform(response.data, [
-      merge(getDefaultGetListResponse()),
-    ]);
+	try {
+		const response = await instance.get(url);
+		const { data } = applyTransform(response.data, [
+			merge(getDefaultGetListResponse()),
+		]);
 
-    return data;
-  } catch (err) {
-    throw applyTransform(err, [notify]);
-  }
+		return data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
 };
 
 const setFeedback = async ({ ...params }) => {
-  try {
-    const url = applyTransform(params, [generateUrl('feedback')]);
-    
-    const response = await instance.post(url);
-    const { data } = applyTransform(response.data, [
-      merge(getDefaultGetListResponse()),
-    ]);
+	try {
+		const url = applyTransform(params, [
+			generateUrl('feedback'),
+		]);
 
-    return data;
-  } catch (err) {
-    throw applyTransform(err, [notify]);
-  }
+		const response = await instance.post(url);
+		const { data } = applyTransform(response.data, [
+			merge(getDefaultGetListResponse()),
+		]);
+
+		return data;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
 };
 
 const FeedbackApi = {
-  getFeedback,
-  setFeedback,
+	getFeedback,
+	setFeedback,
 };
 
 export default FeedbackApi;

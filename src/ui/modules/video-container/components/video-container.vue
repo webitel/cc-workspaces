@@ -30,36 +30,43 @@
 </template>
 
 <script setup lang="ts">
+import {
+	downloadFile,
+	FileServicesAPI,
+	getMediaUrl,
+} from '@webitel/api-services/api';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
+import { WtGalleria } from '@webitel/ui-sdk/components';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import {
+	VideoCall,
+	VideoCallAction,
+} from '@webitel/ui-sdk/modules/CallSession';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import { VideoCall, VideoCallAction } from '@webitel/ui-sdk/modules/CallSession';
-import { WtGalleria } from '@webitel/ui-sdk/components';
-import { FileServicesAPI, downloadFile, getMediaUrl } from '@webitel/api-services/api';
-import { applyTransform, notify } from '@webitel/api-services/api/transformers';
-import { eventBus } from '@webitel/ui-sdk/scripts';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import { useScreenShot } from '../composable/useScreenshot';
 import {
-  ScreenshotFileItem,
-  ScreenshotsOpenGalleriaPayload,
-  VideoCallScreenshotHandler,
+	ScreenshotFileItem,
+	ScreenshotsOpenGalleriaPayload,
+	VideoCallScreenshotHandler,
 } from '../types/videoCall.types';
 
 const store = useStore();
 
 const {
-  screenshotStatus,
-  screenshotIsLoading,
-  screenshotPreviewUrl,
-  makeScreenshot,
-  toggleRecordAction,
-  closeScreenshot,
+	screenshotStatus,
+	screenshotIsLoading,
+	screenshotPreviewUrl,
+	makeScreenshot,
+	toggleRecordAction,
+	closeScreenshot,
 } = useScreenShot();
 
 const videoCallActions = [
-  VideoCallAction.Screenshot,
-  VideoCallAction.Recordings,
+	VideoCallAction.Screenshot,
+	VideoCallAction.Recordings,
 ];
 
 const galleriaVisible = ref(false);
@@ -68,11 +75,13 @@ const screenshotData = ref<ScreenshotFileItem[]>([]);
 const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
 const call = computed<any>(
-  () => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
+	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
 );
 
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
-const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []);
+const localStreams = computed<MediaStream[]>(
+	() => call.value.localStreams || [],
+);
 
 /**
  * @author o.chorpita
@@ -82,22 +91,24 @@ const localStreams = computed<MediaStream[]>(() => call.value.localStreams || []
  */
 
 const senderStream = computed<MediaStream | undefined>(() => {
-  const stream = localStreams.value[0]
-  if (!stream) return undefined
-  const videoTrack = stream.getVideoTracks()[0]
-  if (!videoTrack) return undefined;
-  return new MediaStream([videoTrack]);
+	const stream = localStreams.value[0];
+	if (!stream) return undefined;
+	const videoTrack = stream.getVideoTracks()[0];
+	if (!videoTrack) return undefined;
+	return new MediaStream([
+		videoTrack,
+	]);
 });
 
 const receiverStream = computed<MediaStream | undefined>(
-  () => peerStreams.value[0],
+	() => peerStreams.value[0],
 );
 const isSenderVideo = computed(() =>
-  localStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
+	localStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
 );
 
 const isReceiverVideo = computed(() =>
-  peerStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
+	peerStreams.value.some((s) => s.getTracks().some((t) => t.kind === 'video')),
 );
 
 const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
@@ -105,119 +116,127 @@ const userName = computed(() => call.value.displayName || '');
 const mutedVideo = computed(() => call.value.mutedVideo);
 
 const remoteVideoMuted = computed(() => {
-  if (!call.value?.id) return false;
+	if (!call.value?.id) return false;
 
-  const callInfo = store.state.features.call.callInfo.get(call.value.id);
-  return!!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted ;
+	const callInfo = store.state.features.call.callInfo.get(call.value.id);
+	return !!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted;
 });
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
 const onToggleRecordings = () => toggleRecordAction(call.value);
 
 const onScreenshot: VideoCallScreenshotHandler = async (_payload, options) => {
-  try {
-    await makeScreenshot(call.value);
-    eventBus.$emit('screenshots:updated');
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  } finally {
-    options?.onComplete?.();
-  }
+	try {
+		await makeScreenshot(call.value);
+		eventBus.$emit('screenshots:updated');
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	} finally {
+		options?.onComplete?.();
+	}
 };
-
 
 const onCloseScreenshot = () => closeScreenshot();
 
 const onZoomScreenshot = async () => {
-  await getScreenshots();
-  galleriaVisible.value = true;
+	await getScreenshots();
+	galleriaVisible.value = true;
 };
 
 const getScreenshots = async () => {
-  try {
-    const { items } = await FileServicesAPI.getListByCall({ callId: call.value.id });
-    screenshotData.value = items;
-  } catch (err) {
-    throw applyTransform(err, [
-      notify,
-    ]);
-  }
+	try {
+		const { items } = await FileServicesAPI.getListByCall({
+			callId: call.value.id,
+		});
+		screenshotData.value = items;
+	} catch (err) {
+		throw applyTransform(err, [
+			notify,
+		]);
+	}
 };
 
-
 const galleriaData = computed(() =>
-  screenshotData.value?.map((item) => ({
-    src: getMediaUrl(item.id, false),
-    thumbnailSrc: getMediaUrl(item.id, true),
-    title: item.view_name,
-    alt: item.view_name,
-  })),
+	screenshotData.value?.map((item) => ({
+		src: getMediaUrl(item.id, false),
+		thumbnailSrc: getMediaUrl(item.id, true),
+		title: item.view_name,
+		alt: item.view_name,
+	})),
 );
 
 const handleDeleteFromGalleria = () => {
-  handleDelete([screenshotData.value[galleriaActiveIndex.value]]);
-  if (galleriaActiveIndex.value > 0) galleriaActiveIndex.value -= 1;
+	handleDelete([
+		screenshotData.value[galleriaActiveIndex.value],
+	]);
+	if (galleriaActiveIndex.value > 0) galleriaActiveIndex.value -= 1;
 };
 
 const handleDelete = async (items: ScreenshotFileItem[]) => {
-  try {
-    await FileServicesAPI.delete(items.map((item) => item.id));
-    eventBus.$emit('screenshots:updated');
-  } finally {
-    await getScreenshots();
-  }
+	try {
+		await FileServicesAPI.delete(items.map((item) => item.id));
+		eventBus.$emit('screenshots:updated');
+	} finally {
+		await getScreenshots();
+	}
 };
 
 const handleOpenGalleria = async (payload: ScreenshotsOpenGalleriaPayload) => {
-  if (!call.value?.id) return;
+	if (!call.value?.id) return;
 
-  try {
-    await getScreenshots();
+	try {
+		await getScreenshots();
 
-    const foundIndex = screenshotData.value.findIndex((item) => item.id === payload.screenshotId);
-    const targetIndex = foundIndex >= 0 ? foundIndex : payload.index;
+		const foundIndex = screenshotData.value.findIndex(
+			(item) => item.id === payload.screenshotId,
+		);
+		const targetIndex = foundIndex >= 0 ? foundIndex : payload.index;
 
-    if (screenshotData.value.length) {
-      galleriaActiveIndex.value = Math.max(0, Math.min(targetIndex, screenshotData.value.length - 1));
-      galleriaVisible.value = true;
-    }
-  } catch (err) {
-    console.error('Error opening galleria:', err);
-  }
+		if (screenshotData.value.length) {
+			galleriaActiveIndex.value = Math.max(
+				0,
+				Math.min(targetIndex, screenshotData.value.length - 1),
+			);
+			galleriaVisible.value = true;
+		}
+	} catch (err) {
+		console.error('Error opening galleria:', err);
+	}
 };
 
 const exitFullscreen = async () => {
-  if (!document.fullscreenElement) {
-    videoContainerSize.value = ComponentSize.SM;
-    return;
-  }
+	if (!document.fullscreenElement) {
+		videoContainerSize.value = ComponentSize.SM;
+		return;
+	}
 
-  try {
-    await document.exitFullscreen();
-  } catch (e) {
-    console.warn('exitFullscreen failed', e);
-  } finally {
-    videoContainerSize.value = ComponentSize.SM;
-  }
+	try {
+		await document.exitFullscreen();
+	} catch (e) {
+		console.warn('exitFullscreen failed', e);
+	} finally {
+		videoContainerSize.value = ComponentSize.SM;
+	}
 };
 
 onMounted(() => {
-  eventBus.$on('screenshots:open-galleria', handleOpenGalleria);
+	eventBus.$on('screenshots:open-galleria', handleOpenGalleria);
 });
 
 onBeforeUnmount(() => {
-  eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
+	eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
 });
 
-const changeVideoContainerSize = (containerSize) => videoContainerSize.value = containerSize
+const changeVideoContainerSize = (containerSize) =>
+	(videoContainerSize.value = containerSize);
 
 watch(galleriaVisible, (visible) => {
-  if (visible && videoContainerSize.value === ComponentSize.LG) exitFullscreen();
+	if (visible && videoContainerSize.value === ComponentSize.LG)
+		exitFullscreen();
 });
 watch(isVideo, (hasVideo) => {
-  if (!hasVideo) exitFullscreen()
-})
-
+	if (!hasVideo) exitFullscreen();
+});
 </script>

@@ -57,28 +57,31 @@ import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-o
 import { computed, ref } from 'vue';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
-  search: {
-    type: String,
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  empty: {
-    type: Boolean,
-    default: false,
-  },
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
+	search: {
+		type: String,
+	},
+	loading: {
+		type: Boolean,
+		default: false,
+	},
+	empty: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
-  'search:input',
-  'search:change', // debounced
-  'more',
+	'search:input',
+	'search:change', // debounced
+	'more',
 ]);
 
 const inputHandler = (event) => emit('search:input', event);

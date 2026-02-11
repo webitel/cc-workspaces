@@ -24,45 +24,47 @@
 </template>
 
 <script>
-
 export default {
-  name: 'Widget',
-  props: {
-    widget: {
-      type: Object,
-      required: true,
-    },
-    value: {
-      type: [String, Number],
-    },
-    // checkbox value
-    show: {
-      type: Boolean,
-    },
-    selectionMode: {
-      type: Boolean,
-      default: false,
-    },
-  },
+	name: 'Widget',
+	props: {
+		widget: {
+			type: Object,
+			required: true,
+		},
+		value: {
+			type: [
+				String,
+				Number,
+			],
+		},
+		// checkbox value
+		show: {
+			type: Boolean,
+		},
+		selectionMode: {
+			type: Boolean,
+			default: false,
+		},
+	},
 
-  computed: {
-    iconWidgetName() {
-      return this.widget.icon.split('-').slice(1).join('-');
-    },
-    showValue: {
-      get() {
-        return this.show;
-      }
-    }
-  },
+	computed: {
+		iconWidgetName() {
+			return this.widget.icon.split('-').slice(1).join('-');
+		},
+		showValue: {
+			get() {
+				return this.show;
+			},
+		},
+	},
 
-  methods: {
-    select() {
-      if (this.selectionMode) {
-        this.$emit('select');
-      }
-    },
-  },
+	methods: {
+		select() {
+			if (this.selectionMode) {
+				this.$emit('select');
+			}
+		},
+	},
 };
 </script>
 

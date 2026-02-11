@@ -24,29 +24,31 @@ import MemberCommunications from './member-communications.vue';
 import MemberHeader from './member-header.vue';
 
 export default {
-  name: 'TheMember',
-  components: {
-    TaskContainer,
-    MemberHeader,
-    MemberCommunications,
-    History,
-  },
-  mixins: [sizeMixin],
-  data: () => ({
-    currentTab: '',
-  }),
+	name: 'TheMember',
+	components: {
+		TaskContainer,
+		MemberHeader,
+		MemberCommunications,
+		History,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	data: () => ({
+		currentTab: '',
+	}),
 
-  computed: {
-    isHistoryOpened() {
-      return this.currentTab === 'history';
-    },
-  },
+	computed: {
+		isHistoryOpened() {
+			return this.currentTab === 'history';
+		},
+	},
 
-  methods: {
-    openHistory(tab) {
-      this.currentTab = this.currentTab ? '' : tab;
-    },
-  },
+	methods: {
+		openHistory(tab) {
+			this.currentTab = this.currentTab ? '' : tab;
+		},
+	},
 };
 </script>
 

@@ -1,8 +1,8 @@
 export default {
-  props: {
-    size: {
-      type: String,
-      default: '',
-    },
-  },
+	props: {
+		size: {
+			type: String,
+			default: '',
+		},
+	},
 };

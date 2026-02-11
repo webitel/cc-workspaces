@@ -65,42 +65,54 @@ import { useStore } from 'vuex';
 import { EngineSystemSettingName } from 'webitel-sdk';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
-  contact: {
-    type: Object,
-  },
-  linked: {
-    type: Boolean,
-    default: false,
-  },
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
+	contact: {
+		type: Object,
+	},
+	linked: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const { t } = useI18n();
 const store = useStore();
 
 const emit = defineEmits([
-  'link',
+	'link',
 ]);
 
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 const name = computed(() => props.contact.name);
-const contactLink = computed(() => store.getters['ui/infoSec/client/contact/CONTACT_LINK']);
+const contactLink = computed(
+	() => store.getters['ui/infoSec/client/contact/CONTACT_LINK'],
+);
 const manager = computed(() => props.contact?.managers[0]?.user.name);
 const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
-const contactId = computed(() => store.state.ui.infoSec.client.contact.showFullContact
-  ? props.contact?.id
-  : props.contact?.etag);
+const contactId = computed(() =>
+	store.state.ui.infoSec.client.contact.showFullContact
+		? props.contact?.id
+		: props.contact?.etag,
+);
 
 // to get access variable for contact card page in read only mode
 async function initShowFullContactState() {
-  const { items } = await ConfigurationAPI.getList({
-    name: [EngineSystemSettingName.ShowFullContact],
-  });
-  store.dispatch('ui/infoSec/client/contact/INIT_SHOW_FULL_CONTACT_STATE', items?.[0]?.value);
+	const { items } = await ConfigurationAPI.getList({
+		name: [
+			EngineSystemSettingName.ShowFullContact,
+		],
+	});
+	store.dispatch(
+		'ui/infoSec/client/contact/INIT_SHOW_FULL_CONTACT_STATE',
+		items?.[0]?.value,
+	);
 }
 
 onMounted(initShowFullContactState);

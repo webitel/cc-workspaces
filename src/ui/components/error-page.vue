@@ -17,9 +17,9 @@ const router = useRouter();
 const errorType = computed(() => route.query.type || '404');
 
 const handleBack = () => {
-  if (errorType.value === '403') {
-    return window.location.href = import.meta.env.VITE_APPLICATION_HUB_URL;
-  }
-  router.push('/');
+	if (errorType.value === '403') {
+		return (window.location.href = import.meta.env.VITE_APPLICATION_HUB_URL);
+	}
+	router.push('/');
 };
 </script>

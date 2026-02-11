@@ -13,33 +13,30 @@ cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
 // https://webitel.atlassian.net/browse/WTEL-4240
-const showNotification = ({
-                            title,
-                            body,
-                            actions,
-                          }) => self.registration.showNotification(title, {
-  body,
-  actions,
-});
+const showNotification = ({ title, body, actions }) =>
+	self.registration.showNotification(title, {
+		body,
+		actions,
+	});
 
 self.addEventListener('message', async (event) => {
-  const { type, payload } = event.data;
-  switch (type) {
-    case 'notification':
-      await showNotification(payload);
-      break;
-    default:
-      console.info('Unknown message type', type);
-  }
+	const { type, payload } = event.data;
+	switch (type) {
+		case 'notification':
+			await showNotification(payload);
+			break;
+		default:
+			console.info('Unknown message type', type);
+	}
 });
 
 self.addEventListener('notificationclick', async (event) => {
-  const clients = await self.clients.matchAll();
-  clients.forEach((client) => {
-    client.postMessage({
-      type: 'notificationclick',
-      action: event.action,
-    });
-  });
-  event.notification.close();
+	const clients = await self.clients.matchAll();
+	clients.forEach((client) => {
+		client.postMessage({
+			type: 'notificationclick',
+			action: event.action,
+		});
+	});
+	event.notification.close();
 });
