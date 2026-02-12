@@ -45,6 +45,7 @@ export default ({ mode }) => {
           compilerOptions: {
             compatConfig: {
               MODE: 2,
+              COMPONENT_V_MODEL: false,
             },
           },
         },

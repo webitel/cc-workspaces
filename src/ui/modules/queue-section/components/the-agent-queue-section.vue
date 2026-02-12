@@ -60,9 +60,9 @@
     />
   </section>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, markRaw, onMounted, onUnmounted, ref, watch, PropType } from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -84,7 +84,7 @@ const props = defineProps({
 		default: false,
 	},
 	size: {
-		type: ComponentSize,
+		type: String as PropType<ComponentSize>,
 		default: ComponentSize.MD,
 	},
 });
@@ -172,7 +172,7 @@ const tabs = computed(() => [
 		icon: 'call',
 		iconColor: 'success',
 		countActive: activeCallCount.value,
-		component: CallQueue,
+		component: markRaw(CallQueue),
 		showIndicator: !!incomingCallCount.value,
 	},
 	{
@@ -180,7 +180,7 @@ const tabs = computed(() => [
 		icon: 'chat',
 		iconColor: 'chat',
 		countActive: activeChatCount.value,
-		component: ChatQueue,
+		component: markRaw(ChatQueue),
 		showIndicator: !!incomingChatCount.value || hasNewChatMessages.value,
 	},
 	{
@@ -188,7 +188,7 @@ const tabs = computed(() => [
 		icon: 'job',
 		iconColor: 'job',
 		countActive: activeJobCount.value,
-		component: JobQueue,
+		component: markRaw(JobQueue),
 		showIndicator: !!incomingJobCount.value,
 	},
 ]);

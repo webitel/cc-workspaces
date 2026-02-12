@@ -3,10 +3,19 @@
 </template>
 
 <script>
+import { computed, provide } from 'vue';
+import { useStore } from 'vuex';
 import isOnPWA from './scripts/isOnPWA';
 
 export default {
 	name: 'TheApp',
+
+	setup() {
+		const store = useStore();
+		// Provide darkMode for ui-sdk components
+		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
+		provide('darkMode', darkMode);
+	},
 
 	created() {
 		this.setLanguage();
