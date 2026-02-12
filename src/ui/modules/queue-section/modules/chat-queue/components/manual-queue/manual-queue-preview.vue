@@ -18,12 +18,10 @@
     </template>
 
     <template #subtitle>
-      <div class="manual-queue-preview__last-message-wrapper">
-        <div>
-          <wt-icon :icon="lastMessageSenderIcon"></wt-icon>
-        </div>
-        <p>{{ lastMessage }}</p>
-      </div>
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="lastMessage"
+      />
     </template>
 
     <template #timer>
@@ -95,6 +93,7 @@ import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatTypes } from '../../enums/ChatStatus.enum';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
+import LastMessageContainer from '../_shared/last-message-container.vue';
 
 const props = defineProps({
 	task: {
@@ -150,9 +149,4 @@ function accept(task) {
 </script>
 
 <style scoped>
-.manual-queue-preview__last-message-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
 </style>

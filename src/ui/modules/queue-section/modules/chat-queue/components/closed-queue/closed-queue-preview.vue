@@ -20,12 +20,10 @@
     </template>
 
     <template #subtitle>
-      <div class="close-queue-preview__last-message-wrapper">
-        <div>
-          <wt-icon :icon="lastMessageSenderIcon"></wt-icon>
-        </div>
-        <p>{{ textLastMessage }}</p>
-      </div>
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="textLastMessage"
+      />
     </template>
 
     <template #timer>
@@ -119,6 +117,7 @@ import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
+import LastMessageContainer from '../_shared/last-message-container.vue';
 
 const props = defineProps({
   task: {
@@ -223,11 +222,5 @@ const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_P
   opacity: 0;
   pointer-events: none;
   transition: var(--transition);
-}
-
-.close-queue-preview__last-message-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
 }
 </style>

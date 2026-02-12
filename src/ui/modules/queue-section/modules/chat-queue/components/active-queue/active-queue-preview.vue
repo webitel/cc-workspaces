@@ -18,12 +18,10 @@
     </template>
 
     <template #subtitle>
-      <div class="active-queue-preview__last-message-wrapper">
-        <div>
-          <wt-icon :icon="lastMessageSenderIcon"></wt-icon>
-        </div>
-        <p>{{ textLastMessage }}</p>
-      </div>
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="textLastMessage"
+      />
     </template>
     <template #timer>
       <queue-preview-timer
@@ -52,7 +50,7 @@
     </template>
 
     <template #tooltip-subtitle>
-      {{ lastMessage }}
+      {{ textLastMessage }}
     </template>
 
     <template #title>
@@ -69,19 +67,20 @@
 
 <script>
 import { ConversationState } from 'webitel-sdk';
-import { ChatStatus, ChatTypes } from '../../enums/ChatStatus.enum';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 
+import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 export default {
   name: 'ActiveQueuePreview',
-  components: { ChatQueuePreviewMd, ChatQueuePreviewSm },
+  components: { LastMessageContainer, ChatQueuePreviewMd, ChatQueuePreviewSm },
   mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
   computed: {
     lastMessage() {
@@ -113,9 +112,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.active-queue-preview__last-message-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
 </style>
