@@ -64,114 +64,118 @@ import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 import { CallTab } from '../enums/CallTab.enum';
 
 export default {
-  name: 'CallFooter',
-  components: { TaskFooter },
-  mixins: [sizeMixin],
-  props: {
-    currentTab: {
-      type: String,
-    },
-  },
+	name: 'CallFooter',
+	components: {
+		TaskFooter,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		currentTab: {
+			type: String,
+		},
+	},
 
-  data: () => ({
-    hotkeyUnsubscribers : [],
-    // Made CallTab available in template (required for Options API)
-    CallTab: CallTab,
-  }),
+	data: () => ({
+		hotkeyUnsubscribers: [],
+		// Made CallTab available in template (required for Options API)
+		CallTab: CallTab,
+	}),
 
-  computed: {
-    ...mapGetters('features/call', {
-      call: 'CALL_ON_WORKSPACE',
-      isNewCall: 'IS_NEW_CALL',
-    }),
-    ...mapGetters('features/call/videoCall', {
-      isVideoCall: 'IS_VIDEO_CALL'
-    }),
+	computed: {
+		...mapGetters('features/call', {
+			call: 'CALL_ON_WORKSPACE',
+			isNewCall: 'IS_NEW_CALL',
+		}),
+		...mapGetters('features/call/videoCall', {
+			isVideoCall: 'IS_VIDEO_CALL',
+		}),
 
-    // controls Active state
-    isOnNumpad() {
-      return this.currentTab === CallTab.Numpad;
-    },
+		// controls Active state
+		isOnNumpad() {
+			return this.currentTab === CallTab.Numpad;
+		},
 
-    // controls btn Appearance
-    isNumpad() {
-      return true;
-    },
+		// controls btn Appearance
+		isNumpad() {
+			return true;
+		},
 
-    // controls Active state
-    isOnMuted() {
-      return this.call.muted;
-    },
+		// controls Active state
+		isOnMuted() {
+			return this.call.muted;
+		},
 
-    // controls btn visibility
-    isMuted() {
-      return !this.isNewCall;
-    },
+		// controls btn visibility
+		isMuted() {
+			return !this.isNewCall;
+		},
 
-    // controls Active state
-    isOnHold() {
-      return this.call.isHold;
-    },
+		// controls Active state
+		isOnHold() {
+			return this.call.isHold;
+		},
 
-    // controls btn visibility
-    isHold() {
-      return !this.isNewCall;
-    },
+		// controls btn visibility
+		isHold() {
+			return !this.isNewCall;
+		},
 
-    // controls Active state
-    isOnRecord() {
-      return false;
-    },
+		// controls Active state
+		isOnRecord() {
+			return false;
+		},
 
-    // controls btn visibility
-    isRecord() {
-      return !this.isNewCall;
-    },
+		// controls btn visibility
+		isRecord() {
+			return !this.isNewCall;
+		},
 
-    // controls Active state
-    isOnNote() {
-      return false;
-    },
+		// controls Active state
+		isOnNote() {
+			return false;
+		},
 
-    // controls btn visibility
-    isNote() {
-      return !this.isNewCall;
-    },
-    isVideoMuted () {
-      return this.call.mutedVideo
-    }
-  },
+		// controls btn visibility
+		isNote() {
+			return !this.isNewCall;
+		},
+		isVideoMuted() {
+			return this.call.mutedVideo;
+		},
+	},
 
-  methods: {
-    ...mapActions('features/call', {
-      toggleMute: 'TOGGLE_MUTE',
-      toggleHold: 'TOGGLE_HOLD',
-    }),
-    ...mapActions('features/call/videoCall', {
-      toggleVideo: 'TOGGLE_VIDEO'
-    }),
-    setupHotkeys() {
-      const subscribers = [
-        {
-          event: HotkeyAction.MUTE,
-          callback: this.toggleMute,
-        },
-        {
-          event: HotkeyAction.HOLD,
-          callback: this.toggleHold,
-        },
-      ];
-      this.hotkeyUnsubscribers  = useHotkeys(subscribers);
-    },
-  },
+	methods: {
+		...mapActions('features/call', {
+			toggleMute: 'TOGGLE_MUTE',
+			toggleHold: 'TOGGLE_HOLD',
+		}),
+		...mapActions('features/call/videoCall', {
+			toggleVideo: 'TOGGLE_VIDEO',
+		}),
+		setupHotkeys() {
+			const subscribers = [
+				{
+					event: HotkeyAction.MUTE,
+					callback: this.toggleMute,
+				},
+				{
+					event: HotkeyAction.HOLD,
+					callback: this.toggleHold,
+				},
+			];
+			this.hotkeyUnsubscribers = useHotkeys(subscribers);
+		},
+	},
 
-  mounted() {
-    this.setupHotkeys();
-  },
+	mounted() {
+		this.setupHotkeys();
+	},
 
-  unmounted() {
-    this.hotkeyUnsubscribers .forEach((unsubscribe) => unsubscribe());
-  },
+	unmounted() {
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+	},
 };
 </script>
 

@@ -108,38 +108,41 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'MissedQueuePreview',
-  mixins: [taskPreviewMixin, sizeMixin],
-  emits: [
-    'click',
-    'hide',
-    'call',
-  ],
-  data() {
-    return {
-      showLoader: false,
-    }
-  },
-  computed: {
-    displayName() {
-      return this.task.from?.name || '';
-    },
-    displayNumber() {
-      return this.task.from?.number || '';
-    },
-    displayTime() {
-      return prettifyTime(this.task.createdAt);
-    },
-  },
-  methods: {
-    call() {
-      if(this.showLoader) return;
+	name: 'MissedQueuePreview',
+	mixins: [
+		taskPreviewMixin,
+		sizeMixin,
+	],
+	emits: [
+		'click',
+		'hide',
+		'call',
+	],
+	data() {
+		return {
+			showLoader: false,
+		};
+	},
+	computed: {
+		displayName() {
+			return this.task.from?.name || '';
+		},
+		displayNumber() {
+			return this.task.from?.number || '';
+		},
+		displayTime() {
+			return prettifyTime(this.task.createdAt);
+		},
+	},
+	methods: {
+		call() {
+			if (this.showLoader) return;
 
-      this.showLoader = true;
-      this.$emit('call');
-      this.showLoader = false;
-    },
-  }
+			this.showLoader = true;
+			this.$emit('call');
+			this.showLoader = false;
+		},
+	},
 };
 </script>
 

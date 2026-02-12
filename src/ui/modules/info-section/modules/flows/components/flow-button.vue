@@ -18,25 +18,24 @@ import { ref } from 'vue';
 import FlowsAPI from '../api/flows.js';
 
 const props = defineProps({
-  item: {
-    type: Object,
-    required: true,
-  },
-  size: {
-    type: String,
-    required: false,
-  }
+	item: {
+		type: Object,
+		required: true,
+	},
+	size: {
+		type: String,
+		required: false,
+	},
 });
 
 const isLoading = ref(false);
 
-async function runFlow () {
-  try {
-    isLoading.value = true;
-    await FlowsAPI.run(props.item);
-  } finally {
-    isLoading.value = false;
-  }
+async function runFlow() {
+	try {
+		isLoading.value = true;
+		await FlowsAPI.run(props.item);
+	} finally {
+		isLoading.value = false;
+	}
 }
-
 </script>

@@ -1,3 +1,3 @@
-import { createUserinfoStore } from '@webitel/ui-sdk/src/modules/Userinfo/v2/stores/userinfoStore';
+import { createUserinfoStore } from '@webitel/ui-sdk/modules/Userinfo';
 
 export const useUserinfoStore = createUserinfoStore();

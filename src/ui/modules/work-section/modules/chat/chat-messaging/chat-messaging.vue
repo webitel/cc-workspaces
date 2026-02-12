@@ -103,38 +103,50 @@
 
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
-import {ComponentSize} from '@webitel/ui-sdk/enums';
-import insertTextAtCursor from 'insert-text-at-cursor';
-import {computed, inject, nextTick,onMounted, onUnmounted, ref, watch} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {useStore} from 'vuex';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
-
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import insertTextAtCursor from 'insert-text-at-cursor';
+import {
+	computed,
+	inject,
+	nextTick,
+	onMounted,
+	onUnmounted,
+	ref,
+	watch,
+} from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 
 import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
-import {useDropzoneHandlers} from '../../../../../composibles/useDropzoneHandlers';
+import { useDropzoneHandlers } from '../../../../../composibles/useDropzoneHandlers';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
-import {useHotkeys} from '../../../../../hotkeys/useHotkeys';
-import {useAutocomplete} from './autocomplete/composables/useAutocomplete';
-import {AutocompleteOptions} from './autocomplete/enums/AutocompleteOptions';
+import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
+import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 import ChatHistory from './chat-history/the-chat-history.vue';
 import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
-import {useQuickReplies} from './quick-replies/composables/useQuickReplies';
+import { useQuickReplies } from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
 
-const props = withDefaults(defineProps<{
-  size?: string;
-  contact?: WebitelContactsContact,
-  showQuickReplies?: boolean;
-}>(), {
-  size: ComponentSize.MD,
-  showQuickReplies: false,
-  contact: undefined,
-});
+const props = withDefaults(
+	defineProps<{
+		size?: string;
+		contact?: WebitelContactsContact;
+		showQuickReplies?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		showQuickReplies: false,
+		contact: undefined,
+	},
+);
 
 const emit = defineEmits<{
-  handleQuickReplies: [boolean];
+	handleQuickReplies: [
+		boolean,
+	];
 }>();
 
 const { t } = useI18n();
@@ -146,168 +158,193 @@ const attachmentInput = ref();
 const textarea = ref();
 
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
-const isChatActive = computed(() => store.getters['features/chat/IS_CHAT_ACTIVE']);
+const isChatActive = computed(
+	() => store.getters['features/chat/IS_CHAT_ACTIVE'],
+);
 
-const autocompleteOptions = computed(() => [{
-  name: t('autocompleteList.quickReplies'),
-  text: t('autocompleteList.quickRepliesDescription'),
-  id: AutocompleteOptions.QUICK_REPLIES,
-}]);
+const autocompleteOptions = computed(() => [
+	{
+		name: t('autocompleteList.quickReplies'),
+		text: t('autocompleteList.quickRepliesDescription'),
+		id: AutocompleteOptions.QUICK_REPLIES,
+	},
+]);
+
+const { isDropzoneVisible, handleDragEnter, handleDragLeave } =
+	useDropzoneHandlers();
 
 const {
-  isDropzoneVisible,
-  handleDragEnter,
-  handleDragLeave
-} = useDropzoneHandlers();
+	isOpenAutocomplete,
+	autocompleteList,
 
-const {
-  isOpenAutocomplete,
-  autocompleteList,
-
-  onInput: onAutocompleteInput,
-  onKeyDown,
-  onBlur,
-  close: closeAutocomplete
+	onInput: onAutocompleteInput,
+	onKeyDown,
+	onBlur,
+	close: closeAutocomplete,
 } = useAutocomplete(autocompleteOptions);
 
 const {
-  search: searchReply,
+	search: searchReply,
 
-  open: openQuickReplies,
-  close: closeQuickReplies,
-  select: selectQuickReply,
-  input: inputQuickReply,
-} = useQuickReplies({ emit, variables: chat.value.variables });
+	open: openQuickReplies,
+	close: closeQuickReplies,
+	select: selectQuickReply,
+	input: inputQuickReply,
+} = useQuickReplies({
+	emit,
+	variables: chat.value.variables,
+});
 
 const hotkeyUnsubscribers = ref([]);
 
-function sendFile (files) {
-  return store.dispatch('features/chat/SEND_FILE', files);
+function sendFile(files) {
+	return store.dispatch('features/chat/SEND_FILE', files);
 }
 
-function send (draft) {
-  return store.dispatch('features/chat/SEND', draft);
+function send(draft) {
+	return store.dispatch('features/chat/SEND', draft);
 }
 
 function accept() {
-  return store.dispatch('features/chat/ACCEPT');
+	return store.dispatch('features/chat/ACCEPT');
 }
 
 async function setDraftFocus() {
-  if (messageDraft.value && messageDraft.value.$el) {
-    textarea.value = messageDraft.value.$el.querySelector('textarea');
-  }
-  if(!messageDraft.value || !textarea.value) return;
-  textarea?.value.focus();
+	if (messageDraft.value && messageDraft.value.$el) {
+		textarea.value = messageDraft.value.$el.querySelector('textarea');
+	}
+	if (!messageDraft.value || !textarea.value) return;
+	textarea?.value.focus();
 }
 
 async function insertEmoji(unicode: string) {
-  if (!textarea.value) {
-    await setDraftFocus();
-    return;
-  }
+	if (!textarea.value) {
+		await setDraftFocus();
+		return;
+	}
 
-  await nextTick();
+	await nextTick();
 
-  textarea.value.focus();
-  // view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
-  insertTextAtCursor(textarea.value, unicode);
+	textarea.value.focus();
+	// view-source:https://bl.ocks.org/nolanlawson/raw/4f13bc639cdb3483efca8b657f30a1e0/
+	insertTextAtCursor(textarea.value, unicode);
 }
 
 async function sendMessage() {
-  const draft = chat.value.draft;
-  try {
-    chat.value.draft = '';
-    await send(draft);
-  } catch {
-    chat.value.draft = draft;
-    eventBus?.$emit('notification', {type: 'error', text: t('error.general')});
-  }
+	const draft = chat.value.draft;
+	try {
+		chat.value.draft = '';
+		await send(draft);
+	} catch {
+		chat.value.draft = draft;
+		eventBus?.$emit('notification', {
+			type: 'error',
+			text: t('error.general'),
+		});
+	}
 }
 
 function setupHotkeys() {
-  hotkeyUnsubscribers.value = useHotkeys([{event: HotkeyAction.ACCEPT, callback: accept}]);
+	hotkeyUnsubscribers.value = useHotkeys([
+		{
+			event: HotkeyAction.ACCEPT,
+			callback: accept,
+		},
+	]);
 }
 
 function handleDrop(event: DragEvent) {
-  const files = Array.from(event.dataTransfer?.files);
-  sendFile(files);
-  handleDragLeave();
+	const files = Array.from(event.dataTransfer?.files);
+	sendFile(files);
+	handleDragLeave();
 }
 
 function handleFilePaste(event: ClipboardEvent) {
-  const files = Array.from(event.clipboardData?.items)
-    .map(item => item.getAsFile())
-    .filter(Boolean);
-  if (files.length) {
-    sendFile(files);
-    event.preventDefault();
-  }
+	const files = Array.from(event.clipboardData?.items)
+		.map((item) => item.getAsFile())
+		.filter(Boolean);
+	if (files.length) {
+		sendFile(files);
+		event.preventDefault();
+	}
 }
 
 async function handleAttachments(event: Event) {
-  const files = Array.from(event.target.files);
-  await sendFile(files);
+	const files = Array.from(event.target.files);
+	await sendFile(files);
 }
 
 function closeQuickRepliesPanel() {
-  if (searchReply.value && !chat.value.draft) chat.value.draft = searchReply.value;
-  closeQuickReplies();
+	if (searchReply.value && !chat.value.draft)
+		chat.value.draft = searchReply.value;
+	closeQuickReplies();
 }
 
 function applyQuickReply({ text }) {
-  const replacedText = selectQuickReply(text);
-  chat.value.draft = chat.value.draft ? `${chat.value.draft} ${replacedText}` : replacedText;
-  setDraftFocus();
+	const replacedText = selectQuickReply(text);
+	chat.value.draft = chat.value.draft
+		? `${chat.value.draft} ${replacedText}`
+		: replacedText;
+	setDraftFocus();
 }
 
-function selectAutocompleteOption({id}: { id: string }) {
-  switch (id) {
-    case AutocompleteOptions.QUICK_REPLIES:
-      showQuickRepliesPanel();
-      break;
-      default: console.warn(`Unknown autocomplete option selected: ${id}`);
-  }
+function selectAutocompleteOption({ id }: { id: string }) {
+	switch (id) {
+		case AutocompleteOptions.QUICK_REPLIES:
+			showQuickRepliesPanel();
+			break;
+		default:
+			console.warn(`Unknown autocomplete option selected: ${id}`);
+	}
 }
 
 function showQuickRepliesPanel() {
-  closeAutocomplete();
-  if(chat.value.draft?.length > 0) {
-    // delete last space only if there any symbol in draft
-    chat.value.draft = chat.value.draft.slice(0, -1);
-  }
-  openQuickReplies();
+	closeAutocomplete();
+	if (chat.value.draft?.length > 0) {
+		// delete last space only if there any symbol in draft
+		chat.value.draft = chat.value.draft.slice(0, -1);
+	}
+	openQuickReplies();
 }
 
 function inputMessage(text: string) {
-  if(props.showQuickReplies) {
-    inputQuickReply({text, draft: chat.value.draft});
-  } else {
-    chat.value.draft = text;
-  }
-  onAutocompleteInput(text);
+	if (props.showQuickReplies) {
+		inputQuickReply({
+			text,
+			draft: chat.value.draft,
+		});
+	} else {
+		chat.value.draft = text;
+	}
+	onAutocompleteInput(text);
 }
 
 function handleQuickReplies() {
-  return props.showQuickReplies ? closeQuickReplies() : openQuickReplies();
+	return props.showQuickReplies ? closeQuickReplies() : openQuickReplies();
 }
 
-watch(chat, async () => {
-  await nextTick();
-  await setDraftFocus();
-}, {immediate: true});
+watch(
+	chat,
+	async () => {
+		await nextTick();
+		await setDraftFocus();
+	},
+	{
+		immediate: true,
+	},
+);
 
 onMounted(async () => {
-  eventBus?.$on('chat-input-focus', setDraftFocus);
-  setupHotkeys();
+	eventBus?.$on('chat-input-focus', setDraftFocus);
+	setupHotkeys();
 
-  await nextTick();
-  await setDraftFocus();
+	await nextTick();
+	await setDraftFocus();
 });
 
 onUnmounted(() => {
-  eventBus?.$off('chat-input-focus', setDraftFocus);
-  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	eventBus?.$off('chat-input-focus', setDraftFocus);
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 </script>
 

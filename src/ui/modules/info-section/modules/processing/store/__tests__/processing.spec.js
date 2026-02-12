@@ -1,12 +1,11 @@
-import contextMock
-  from '../../../../../../../../tests/unit/mocks/store/contextMock';
+import contextMock from '../../../../../../../../tests/unit/mocks/store/contextMock';
 
 describe.skip('processing: actions', () => {
-  let context;
+	let context;
 
-  beforeEach(() => {
-    context = contextMock(vi);
-  });
+	beforeEach(() => {
+		context = contextMock(vi);
+	});
 
-  it('', () => {});
+	it('', () => {});
 });

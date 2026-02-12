@@ -47,27 +47,29 @@
 <script>
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 export default {
-  name: 'AgentOrgStructure',
-  mixins: [sizeMixin],
-  props: {
-    agent: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    team() {
-      return this.agent.team?.name || '';
-    },
-    supervisors() {
-      if (!this.agent.supervisor) return '';
-      return this.agent.supervisor.map((supervisor) => supervisor.name);
-    },
-    auditors() {
-      if (!this.agent.auditor) return '';
-      return this.agent.auditor.map((auditor) => auditor.name);
-    },
-  },
+	name: 'AgentOrgStructure',
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		agent: {
+			type: Object,
+			required: true,
+		},
+	},
+	computed: {
+		team() {
+			return this.agent.team?.name || '';
+		},
+		supervisors() {
+			if (!this.agent.supervisor) return '';
+			return this.agent.supervisor.map((supervisor) => supervisor.name);
+		},
+		auditors() {
+			if (!this.agent.auditor) return '';
+			return this.agent.auditor.map((auditor) => auditor.name);
+		},
+	},
 };
 </script>
 

@@ -11,13 +11,12 @@
 import { defineProps } from 'vue';
 
 interface Props {
-  value?: boolean;
+	value?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: false,
+	value: false,
 });
-
 </script>
 
 <style scoped></style>

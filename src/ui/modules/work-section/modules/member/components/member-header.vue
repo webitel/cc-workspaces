@@ -40,39 +40,44 @@ import QueueNameChip from '../../_shared/components/queue-name-chip/queue-name-c
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 
 export default {
-  name: 'WorkspaceMemberHeader',
-  components: { QueueNameChip, TaskHeader },
-  mixins: [sizeMixin],
-  props: {
-    currentTab: {
-      type: String,
-    },
-  },
-  computed: {
-    ...mapGetters('features/member', {
-      member: 'MEMBER_ON_WORKSPACE',
-    }),
-    ...mapGetters('features/member', {
-      isCommSelected: 'IS_COMMUNICATION_SELECTED',
-    }),
+	name: 'WorkspaceMemberHeader',
+	components: {
+		QueueNameChip,
+		TaskHeader,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		currentTab: {
+			type: String,
+		},
+	},
+	computed: {
+		...mapGetters('features/member', {
+			member: 'MEMBER_ON_WORKSPACE',
+		}),
+		...mapGetters('features/member', {
+			isCommSelected: 'IS_COMMUNICATION_SELECTED',
+		}),
 
-    isOnHistory() {
-      return this.currentTab === 'history';
-    },
+		isOnHistory() {
+			return this.currentTab === 'history';
+		},
 
-    isCall() {
-      return this.isCommSelected;
-    },
-    queueName() {
-      return getQueueName(this.member);
-    },
-  },
+		isCall() {
+			return this.isCommSelected;
+		},
+		queueName() {
+			return getQueueName(this.member);
+		},
+	},
 
-  methods: {
-    ...mapActions('features/member', {
-      makeCall: 'CALL',
-    }),
-  },
+	methods: {
+		...mapActions('features/member', {
+			makeCall: 'CALL',
+		}),
+	},
 };
 </script>
 

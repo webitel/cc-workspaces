@@ -1,12 +1,12 @@
 const HotkeyAction = Object.freeze({
-  ACCEPT: 'ACCEPT',
-  END: 'END',
-  MUTE: 'MUTE',
-  HOLD: 'HOLD',
-  TRANSFER: 'TRANSFER',
-  NEW_CALL: 'NEW_CALL',
-  SUBMIT_FORM: 'SUBMIT_FORM',
-  TOGGLE_VIDEO: 'TOGGLE_VIDEO',
+	ACCEPT: 'ACCEPT',
+	END: 'END',
+	MUTE: 'MUTE',
+	HOLD: 'HOLD',
+	TRANSFER: 'TRANSFER',
+	NEW_CALL: 'NEW_CALL',
+	SUBMIT_FORM: 'SUBMIT_FORM',
+	TOGGLE_VIDEO: 'TOGGLE_VIDEO',
 });
 
 export default HotkeyAction;

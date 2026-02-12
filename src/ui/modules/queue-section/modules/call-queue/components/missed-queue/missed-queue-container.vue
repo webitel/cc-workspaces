@@ -26,33 +26,35 @@ import TaskQueueContainer from '../../../_shared/components/task-queue-container
 import MissedPreview from './missed-queue-preview.vue';
 
 export default {
-  name: 'MissedQueueContainer',
-  components: {
-    LoadMoreButton,
-    TaskQueueContainer,
-    MissedPreview,
-  },
-  mixins: [sizeMixin],
+	name: 'MissedQueueContainer',
+	components: {
+		LoadMoreButton,
+		TaskQueueContainer,
+		MissedPreview,
+	},
+	mixins: [
+		sizeMixin,
+	],
 
-  computed: {
-    ...mapState('features/call/missed', {
-      missedList: (state) => state.missedList,
-      next: (state) => state.next,
-    }),
-  },
+	computed: {
+		...mapState('features/call/missed', {
+			missedList: (state) => state.missedList,
+			next: (state) => state.next,
+		}),
+	},
 
-  methods: {
-    ...mapActions('features/call/missed', {
-      initializeMissed: 'INITIALIZE_MISSED',
-      loadMore: 'LOAD_NEXT_PAGE',
-      redial: 'REDIAL',
-      hideMissed: 'HIDE_MISSED',
-    }),
-  },
+	methods: {
+		...mapActions('features/call/missed', {
+			initializeMissed: 'INITIALIZE_MISSED',
+			loadMore: 'LOAD_NEXT_PAGE',
+			redial: 'REDIAL',
+			hideMissed: 'HIDE_MISSED',
+		}),
+	},
 
-  created() {
-    this.initializeMissed();
-  },
+	created() {
+		this.initializeMissed();
+	},
 };
 </script>
 

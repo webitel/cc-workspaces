@@ -7,23 +7,22 @@
 </template>
 
 <script>
-
 import prettifyTime from '@webitel/ui-sdk/src/scripts/prettifyTime.js';
 
 export default {
-  name: 'ChatMessageTime',
-  props: {
-    date: {
-      type: String,
-      default: '',
-      required: true,
-    },
-  },
-  computed: {
-    time() {
-      return prettifyTime(this.date)
-    },
-  },
+	name: 'ChatMessageTime',
+	props: {
+		date: {
+			type: String,
+			default: '',
+			required: true,
+		},
+	},
+	computed: {
+		time() {
+			return prettifyTime(this.date);
+		},
+	},
 };
 </script>
 

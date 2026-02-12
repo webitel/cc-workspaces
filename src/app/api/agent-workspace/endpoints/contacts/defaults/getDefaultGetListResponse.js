@@ -1,6 +1,6 @@
 const getDefaultGetListResponse = ({} = {}) => ({
-  data: [],
-  next: false,
+	data: [],
+	next: false,
 });
 
 export default getDefaultGetListResponse;

@@ -107,8 +107,11 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 
 export default {
-  name: 'JobQueuePreview',
-  mixins: [taskPreviewMixin, sizeMixin],
+	name: 'JobQueuePreview',
+	mixins: [
+		taskPreviewMixin,
+		sizeMixin,
+	],
 };
 </script>
 

@@ -1,39 +1,38 @@
-import contextMock
-  from '../../../../../../../../../../tests/unit/mocks/store/contextMock';
-import reportingModule from '../reporting';
+import contextMock from '../../../../../../../../../../tests/unit/mocks/store/contextMock';
 import ReportingForm from '../ReportingForm';
+import reportingModule from '../reporting';
 
 describe('reporting module: actions', () => {
-  let context;
+	let context;
 
-  beforeEach(() => {
-    context = contextMock(vi);
-  });
+	beforeEach(() => {
+		context = contextMock(vi);
+	});
 
-  it('correctly inits reporting form from scratch', async () => {
-    const task = {};
-    context.rootGetters = {
-      'workspace/TASK_ON_WORKSPACE': task,
-      'ui/infoSec/processing/ALLOW_PROCESSING': true,
-    };
-    await reportingModule.actions.INIT_REPORTING_FORM(context, task);
-    expect(task.postProcessData).toBeTruthy();
-    expect(task.postProcessData).toBeInstanceOf(ReportingForm);
-  });
+	it('correctly inits reporting form from scratch', async () => {
+		const task = {};
+		context.rootGetters = {
+			'workspace/TASK_ON_WORKSPACE': task,
+			'ui/infoSec/processing/ALLOW_PROCESSING': true,
+		};
+		await reportingModule.actions.INIT_REPORTING_FORM(context, task);
+		expect(task.postProcessData).toBeTruthy();
+		expect(task.postProcessData).toBeInstanceOf(ReportingForm);
+	});
 
-  it('doesnt set postProcessData, if object exists', async () => {
-    const postProcessData = {
-      jest: 'jest',
-    };
-    const task = {
-      postProcessData,
-    };
-    context.rootGetters = {
-      'workspace/TASK_ON_WORKSPACE': task,
-      'ui/infoSec/processing/ALLOW_PROCESSING': true,
-    };
-    await reportingModule.actions.INIT_REPORTING_FORM(context, task);
-    expect(task.postProcessData).toBeTruthy();
-    expect(task.postProcessData).toEqual(postProcessData);
-  });
+	it('doesnt set postProcessData, if object exists', async () => {
+		const postProcessData = {
+			jest: 'jest',
+		};
+		const task = {
+			postProcessData,
+		};
+		context.rootGetters = {
+			'workspace/TASK_ON_WORKSPACE': task,
+			'ui/infoSec/processing/ALLOW_PROCESSING': true,
+		};
+		await reportingModule.actions.INIT_REPORTING_FORM(context, task);
+		expect(task.postProcessData).toBeTruthy();
+		expect(task.postProcessData).toEqual(postProcessData);
+	});
 });

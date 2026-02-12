@@ -10,33 +10,31 @@
 </template>
 
 <script>
-  import emptyContactsPic
-    from '../../../assets/empty-search/empty-search-contacts.svg';
-  import emptyHistoryPic
-    from '../../../assets/empty-search/empty-search-history.svg';
+import emptyContactsPic from '../../../assets/empty-search/empty-search-contacts.svg';
+import emptyHistoryPic from '../../../assets/empty-search/empty-search-history.svg';
 
-  export default {
-    name: 'EmptySearch',
-    props: {
-      type: {
-        type: String,
-        required: true,
-      },
-    },
+export default {
+	name: 'EmptySearch',
+	props: {
+		type: {
+			type: String,
+			required: true,
+		},
+	},
 
-    computed: {
-      emptySearchPic() {
-        switch (this.type) {
-          case 'contacts':
-            return emptyContactsPic;
-          case 'history':
-            return emptyHistoryPic;
-          default:
-            return '';
-        }
-      },
-    },
-  };
+	computed: {
+		emptySearchPic() {
+			switch (this.type) {
+				case 'contacts':
+					return emptyContactsPic;
+				case 'history':
+					return emptyHistoryPic;
+				default:
+					return '';
+			}
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>

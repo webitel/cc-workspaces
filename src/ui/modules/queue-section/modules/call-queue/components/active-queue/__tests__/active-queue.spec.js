@@ -1,103 +1,123 @@
-import { mount,shallowMount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 
 import MockSocket from '../../../../../../../../../tests/unit/mocks/MockSocket';
-import webSocketClientController
-  from '../../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import webSocketClientController from '../../../../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
 import callModule from '../../../../../../../../features/modules/call/call';
-import missed
-  from '../../../../../../../../features/modules/call/modules/missed-calls/store/missed-calls';
+import missed from '../../../../../../../../features/modules/call/modules/missed-calls/store/missed-calls';
 import workspaceModule from '../../../../../../../store/agent-workspace';
-import ActiveQueue
-  from '../active-queue-container.vue';
-import ActivePreview
-  from '../active-queue-preview.vue';
+import ActiveQueue from '../active-queue-container.vue';
+import ActivePreview from '../active-queue-preview.vue';
 
 const initialCall = {};
 
 const mockSocket = new MockSocket(initialCall);
 
-vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(() => mockSocket);
+vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(
+	() => mockSocket,
+);
 
 describe('Ringing and Hangup events call functionality', () => {
-  let state;
-  const { actions, mutations } = callModule;
-  let store;
+	let state;
+	const { actions, mutations } = callModule;
+	let store;
 
-  beforeEach(() => {
-    state = {
-      callList: [initialCall],
-    };
-    store = createStore({
-      state: {
-        client: webSocketClientController,
-      },
-      modules: {
-        workspace: workspaceModule,
-        features: {
-          namespaced: true,
-          modules: {
-            call: {
-              namespaced: true,
-              state,
-              actions,
-              mutations,
-              modules: { missed },
-            },
-          },
-        },
-      },
-    });
-  });
+	beforeEach(() => {
+		state = {
+			callList: [
+				initialCall,
+			],
+		};
+		store = createStore({
+			state: {
+				client: webSocketClientController,
+			},
+			modules: {
+				workspace: workspaceModule,
+				features: {
+					namespaced: true,
+					modules: {
+						call: {
+							namespaced: true,
+							state,
+							actions,
+							mutations,
+							modules: {
+								missed,
+							},
+						},
+					},
+				},
+			},
+		});
+	});
 
-  it('Draws new call when ringing event fires', async () => {
-    const wrapper = mount(ActiveQueue, {
-      global: { plugins: [store] },
-    });
-    await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
-    await mockSocket.ringing({});
-    expect(wrapper.findAllComponents(ActivePreview).length).toEqual(2);
-  });
+	it('Draws new call when ringing event fires', async () => {
+		const wrapper = mount(ActiveQueue, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
+		await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
+		await mockSocket.ringing({});
+		expect(wrapper.findAllComponents(ActivePreview).length).toEqual(2);
+	});
 
-  it('Removes a call when destroy event fires', async () => {
-    const wrapper = shallowMount(ActiveQueue, {
-      global: { plugins: [store] },
-    });
-    await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
-    await mockSocket.destroyCall(initialCall);
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.findAllComponents(ActivePreview).length).toEqual(0);
-  });
+	it('Removes a call when destroy event fires', async () => {
+		const wrapper = shallowMount(ActiveQueue, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
+		await wrapper.vm.$store.dispatch('features/call/SUBSCRIBE_CALLS');
+		await mockSocket.destroyCall(initialCall);
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.findAllComponents(ActivePreview).length).toEqual(0);
+	});
 });
 
 describe('Answer and Hangup', () => {
-  const callList = [{}];
+	const callList = [
+		{},
+	];
 
-  const computed = {
-    callList: () => callList,
-    taskOnWorkspace: () => ({}),
-  };
+	const computed = {
+		callList: () => callList,
+		taskOnWorkspace: () => ({}),
+	};
 
-  it('Answers to call', () => {
-    const mock = vi.fn();
-    vi.spyOn(ActiveQueue.methods, 'answer').mockImplementationOnce(mock);
+	it('Answers to call', () => {
+		const mock = vi.fn();
+		vi.spyOn(ActiveQueue.methods, 'answer').mockImplementationOnce(mock);
 
-    const wrapper = mount(ActiveQueue, {
-      computed,
-    });
-    wrapper.findComponent({ name: 'active-queue-preview' }).vm.$emit('answer');
-    expect(mock).toHaveBeenCalled();
-  });
+		const wrapper = mount(ActiveQueue, {
+			computed,
+		});
+		wrapper
+			.findComponent({
+				name: 'active-queue-preview',
+			})
+			.vm.$emit('answer');
+		expect(mock).toHaveBeenCalled();
+	});
 
-  it('Hangups to call', () => {
-    const mock = vi.fn();
-    vi.spyOn(ActiveQueue.methods, 'hangup').mockImplementationOnce(mock);
+	it('Hangups to call', () => {
+		const mock = vi.fn();
+		vi.spyOn(ActiveQueue.methods, 'hangup').mockImplementationOnce(mock);
 
-    const wrapper = mount(ActiveQueue, {
-      computed,
-    });
-    wrapper.findComponent({ name: 'active-queue-preview' }).vm.$emit('hangup');
-    expect(mock).toHaveBeenCalled();
-  });
+		const wrapper = mount(ActiveQueue, {
+			computed,
+		});
+		wrapper
+			.findComponent({
+				name: 'active-queue-preview',
+			})
+			.vm.$emit('hangup');
+		expect(mock).toHaveBeenCalled();
+	});
 });

@@ -151,44 +151,47 @@ import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import { getQueueName } from '../../../_shared/scripts/getQueueName';
 
 export default {
-  name: 'ActiveQueuePreview',
-  mixins: [taskPreviewMixin, sizeMixin],
-  setup() {
-    const { sonarIcon } = useCallState();
+	name: 'ActiveQueuePreview',
+	mixins: [
+		taskPreviewMixin,
+		sizeMixin,
+	],
+	setup() {
+		const { sonarIcon } = useCallState();
 
-    return {
-      sonarIcon,
-    };
-  },
-  computed: {
-    ...mapGetters('features/call', {
-      normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
-    }),
-    ...mapGetters('features/call/videoCall', {
-      isVideoCall: 'IS_VIDEO_CALL',
-    }),
-    isHold() {
-      return this.task.isHold;
-    },
+		return {
+			sonarIcon,
+		};
+	},
+	computed: {
+		...mapGetters('features/call', {
+			normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
+		}),
+		...mapGetters('features/call/videoCall', {
+			isVideoCall: 'IS_VIDEO_CALL',
+		}),
+		isHold() {
+			return this.task.isHold;
+		},
 
-    queueName() {
-      return getQueueName(this.task);
-    },
+		queueName() {
+			return getQueueName(this.task);
+		},
 
-    isRinging() {
-      return isIncomingRinging(this.task);
-    },
+		isRinging() {
+			return isIncomingRinging(this.task);
+		},
 
-    displayNumber() {
-      //https://webitel.atlassian.net/browse/WTEL-8215
-      return this.normalizePhoneNumber(this.task.displayNumber);
-    },
+		displayNumber() {
+			//https://webitel.atlassian.net/browse/WTEL-8215
+			return this.normalizePhoneNumber(this.task.displayNumber);
+		},
 
-    eavesdropStatusIcon() {
-      if (this.task.eavesdropIsConference) return 'conference';
-      if (this.task.eavesdropIsPrompt) return 'prompter';
-      return null;
-    },
-  },
+		eavesdropStatusIcon() {
+			if (this.task.eavesdropIsConference) return 'conference';
+			if (this.task.eavesdropIsPrompt) return 'prompter';
+			return null;
+		},
+	},
 };
 </script>

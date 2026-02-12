@@ -20,18 +20,20 @@
 import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
 
 export default {
-  name: 'ChatMessagePlayer',
-  mixins: [chatMessageFileMixin],
-  computed: {
-    mediaUrl() {
-      return this.media.streamUrl || this.media.url;
-    },
-  },
-  methods: {
-    handlePlayerInitialize(player) {
-      this.$emit('initialized', player);
-    },
-  },
+	name: 'ChatMessagePlayer',
+	mixins: [
+		chatMessageFileMixin,
+	],
+	computed: {
+		mediaUrl() {
+			return this.media.streamUrl || this.media.url;
+		},
+	},
+	methods: {
+		handlePlayerInitialize(player) {
+			this.$emit('initialized', player);
+		},
+	},
 };
 </script>
 

@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'EmptyWorkspaceTransfer',
-  };
+export default {
+	name: 'EmptyWorkspaceTransfer',
+};
 </script>
 
 <style lang="scss" scoped>

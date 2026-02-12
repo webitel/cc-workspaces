@@ -11,20 +11,21 @@ import uz from './uz/uz';
 import vi from './vi/vi';
 
 const messages = {
-  en,
-  es,
-  ru,
-  ro,
-  uk,
-  kz,
-  pl,
-  uz,
-  vi,
+	en,
+	es,
+	ru,
+	ro,
+	uk,
+	kz,
+	pl,
+	uz,
+	vi,
 };
 
 export default createI18n({
-  allowComposition: true,
-  locale: 'en',
-  fallbackLocale: 'en',
-  messages,
+	legacy: false,
+	allowComposition: true,
+	locale: 'en',
+	fallbackLocale: 'en',
+	messages,
 });

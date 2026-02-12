@@ -28,7 +28,7 @@
     </div>
 
     <div
-      v-if="getDtmfDigits && getDtmfDigits.length"
+      v-if="dtmf && dtmf.length"
       class="video-call-state__secondary-text typo-subtitle-1"
     >
       {{ dtmf.join('') }}
@@ -40,10 +40,11 @@
 import { useCallState } from '../../../../../../../composables/useCallState';
 
 defineOptions({
-  name: 'VideoCallState',
+	name: 'VideoCallState',
 });
 
-const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
+const { dtmf, callState, isCallActive, displayTime, sonarIcon } =
+	useCallState();
 </script>
 
 <style
@@ -76,14 +77,14 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
       text-align: center;
 
       // semicolons
-      &:nth-child(4),
-      &:nth-child(7) {
+      &:nth-child(3),
+      &:nth-child(6) {
         width: 6px;
       }
 
       // semicolons
-      &:nth-child(4),
-      &:nth-child(7) {
+      &:nth-child(3),
+      &:nth-child(6) {
         width: 6px;
       }
     }

@@ -17,14 +17,18 @@
 
 <script setup>
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/src/api/clients/index.js';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
+import { configurations } from '@webitel/ui-sdk/api/clients';
+import { WtObject } from '@webitel/ui-sdk/enums';
+import {
+	SpecialGlobalAction,
+	WebitelLicense,
+} from '@webitel/ui-sdk/modules/Userinfo';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-
-import { useUserinfoStore } from '../../../../../userinfo/userinfoStore.js';
+import { useUserAccessControl } from '../../../../../../../app/composables/useUserAccessControl';
+import { useUserinfoStore } from '../../../../../../modules/userinfo/userinfoStore';
 import ContactsContainer from './contacts/contacts-container.vue';
 import UsersContainer from './users/users-container.vue';
 
@@ -32,65 +36,75 @@ const { t } = useI18n();
 const store = useStore();
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
 });
 
-const { hasSpecialGlobalActionAccess } = useUserinfoStore();
-const isLimitContactsGranted = hasSpecialGlobalActionAccess(SpecialGlobalAction.LimitWorkspaceContacts);
+const { hasSpecialGlobalActionAccess, hasLicense } = useUserinfoStore();
+const isLimitContactsGranted = hasSpecialGlobalActionAccess(
+	SpecialGlobalAction.LimitWorkspaceContacts,
+);
 
 const isLabelToLimitContactsGranted = ref(false);
 
 async function checkLabelToLimitContacts() {
-  const { items } = await configurations.getList({
-    name: EngineSystemSettingName.LabelsToLimitContacts,
-  });
+	const { items } = await configurations.getList({
+		name: EngineSystemSettingName.LabelsToLimitContacts,
+	});
 
-  isLabelToLimitContactsGranted.value = !!items.length;
+	isLabelToLimitContactsGranted.value = !!items.length;
 }
 
 onMounted(() => {
-  checkLabelToLimitContacts();
+	checkLabelToLimitContacts();
 });
 
 const currentTab = ref({});
 
 const tabsObject = computed(() => ({
-  CallContactsTab: {
-    text: t('WebitelApplications.crm.sections.contacts', 2),
-    value: 'contacts', // tracked by wt-tabs
-    component: ContactsContainer,
-  },
-  CallUsersTab: {
-    text: t('WebitelApplications.admin.sections.users', 2),
-    value: 'users', // tracked by wt-tabs
-    component: UsersContainer,
-  },
+	CallContactsTab: {
+		text: t('WebitelApplications.crm.sections.contacts', 2),
+		value: 'contacts', // tracked by wt-tabs
+		component: ContactsContainer,
+	},
+	CallUsersTab: {
+		text: t('WebitelApplications.admin.sections.users', 2),
+		value: 'users', // tracked by wt-tabs
+		component: UsersContainer,
+	},
 }));
 
-const scope = computed(() => getNamespacedState(store.state, 'ui/userinfo').scope);
-
-const hasLicenseOnCrm = computed(() => scope.value.some(item => item.class === 'contacts'));
-const hasCallCenterLicense = computed(() => store.getters['ui/userinfo/IS_CALL_CENTER_LICENSE']);
+const { hasReadAccess: hasContactsReadAccess } = useUserAccessControl(
+	WtObject.Contact,
+);
+const hasCallCenterLicense = computed(() =>
+	hasLicense(WebitelLicense.CallCenter),
+);
 
 const tabs = computed(() => {
-  const tabs = [tabsObject.value.CallUsersTab];
+	const tabs = [
+		tabsObject.value.CallUsersTab,
+	];
 
-  if (
-    hasLicenseOnCrm.value && hasCallCenterLicense.value &&
-    (!isLimitContactsGranted || isLabelToLimitContactsGranted.value)
-  ) {
-    tabs.unshift(tabsObject.value.CallContactsTab);
-  }
+	if (
+		hasContactsReadAccess.value &&
+		hasCallCenterLicense.value &&
+		(!isLimitContactsGranted || isLabelToLimitContactsGranted.value)
+	) {
+		tabs.unshift(tabsObject.value.CallContactsTab);
+	}
 
-  return tabs;
+	return tabs;
 });
 
 function changeTab(tab) {
-  currentTab.value = tab;
+	currentTab.value = tab;
 }
 
 changeTab(tabs.value[0]);

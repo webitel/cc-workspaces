@@ -17,34 +17,38 @@
 </template>
 
 <script setup>
-
 import { computed } from 'vue';
 
 const props = defineProps({
-  /**
-   * @description Agents object
-   * @type {Object}
-   * @property {Number} pause
-   * @property {Number} allowPause
-   * @property {Number} online
-   */
-  agents: {
-    type: Object,
-    required: true,
-  },
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
+	/**
+	 * @description Agents object
+	 * @type {Object}
+	 * @property {Number} pause
+	 * @property {Number} allowPause
+	 * @property {Number} online
+	 */
+	agents: {
+		type: Object,
+		required: true,
+	},
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
 });
 
 const pause = computed(() => {
-  return props.agents.allowPause !== undefined ? `${props.agents.pause} / ${props.agents.allowPause}` : props.agents.pause;
+	return props.agents.allowPause !== undefined
+		? `${props.agents.pause} / ${props.agents.allowPause}`
+		: props.agents.pause;
 });
 
 const online = computed(() => {
-  return props.agents.online;
+	return props.agents.online;
 });
 </script>
 

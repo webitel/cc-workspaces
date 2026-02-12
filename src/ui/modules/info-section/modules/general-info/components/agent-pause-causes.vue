@@ -32,25 +32,24 @@
 </template>
 
 <script setup>
-import {
-  useRepresentableAgentPauseCause,
-} from '@webitel/ui-sdk/src/composables/useRepresentableAgentPauseCause/useRepresentableAgentPauseCause';
+import { useRepresentableAgentPauseCause } from '@webitel/ui-sdk/src/composables/useRepresentableAgentPauseCause/useRepresentableAgentPauseCause';
 import { toRef } from 'vue';
 
 const props = defineProps({
-  pauseCauses: {
-    type: Array,
-    required: true,
-  },
-  size: {
-    type: String,
-    default: '',
-  },
+	pauseCauses: {
+		type: Array,
+		required: true,
+	},
+	size: {
+		type: String,
+		default: '',
+	},
 });
 
 const pauseCauses = toRef(props, 'pauseCauses');
 
-const { representablePauseCause } = useRepresentableAgentPauseCause(pauseCauses);
+const { representablePauseCause } =
+	useRepresentableAgentPauseCause(pauseCauses);
 </script>
 
 <style lang="scss" scoped>

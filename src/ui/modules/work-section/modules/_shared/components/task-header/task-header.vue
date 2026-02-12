@@ -30,13 +30,15 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'TaskHeader',
-  mixins: [sizeMixin],
-  props: {
-    username: {
-      type: String,
-    },
-  },
+	name: 'TaskHeader',
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		username: {
+			type: String,
+		},
+	},
 };
 </script>
 

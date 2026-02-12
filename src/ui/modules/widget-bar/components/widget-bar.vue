@@ -27,7 +27,7 @@
 
 <script>
 import preventHiddenPageCallsDecorator from '@webitel/ui-sdk/src/scripts/preventHiddenPageCallsDecorator';
-import { mapActions,mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import Widgets from '../utils/Widgets';
 import Widget from './widget.vue';
@@ -35,88 +35,91 @@ import Widget from './widget.vue';
 const REFRESH_INTERVAL_DURATION = 20 * 1000; // 20 sec
 
 export default {
-  name: 'WidgetBar',
-  components: {
-    Widget,
-  },
+	name: 'WidgetBar',
+	components: {
+		Widget,
+	},
 
-  data: () => ({
-    widgets: Widgets,
-    refreshIntervalInstance: null,
-    selectionMode: false,
-  }),
+	data: () => ({
+		widgets: Widgets,
+		refreshIntervalInstance: null,
+		selectionMode: false,
+	}),
 
-  watch: {
-    agent() {
-      if (this.refreshIntervalInstance) this.resetRefreshInterval();
-      this.setRefreshInterval();
-    },
-  },
+	watch: {
+		agent() {
+			if (this.refreshIntervalInstance) this.resetRefreshInterval();
+			this.setRefreshInterval();
+		},
+	},
 
-  created() {
-    this.getWidgetsFromLocalStorage();
-  },
+	created() {
+		this.getWidgetsFromLocalStorage();
+	},
 
-  unmounted() {
-    this.resetRefreshInterval();
-  },
+	unmounted() {
+		this.resetRefreshInterval();
+	},
 
-  computed: {
-    // agent status
-    ...mapState('features/status', {
-      agent: (state) => state.agent,
-    }),
-    ...mapState('ui/widget', {
-      data: (state) => state.data,
-    }),
-  },
-  methods: {
-    ...mapActions({
-      loadWidgetData(dispatch, payload) {
-        return dispatch('ui/widget/LOAD_WIDGET_DATA', payload);
-      },
-    }),
-    toggleSelect(key) {
-      this.widgets[key].show = !this.widgets[key].show;
-      this.setWidgetsToLocalStorage();
-    },
+	computed: {
+		// agent status
+		...mapState('features/status', {
+			agent: (state) => state.agent,
+		}),
+		...mapState('ui/widget', {
+			data: (state) => state.data,
+		}),
+	},
+	methods: {
+		...mapActions({
+			loadWidgetData(dispatch, payload) {
+				return dispatch('ui/widget/LOAD_WIDGET_DATA', payload);
+			},
+		}),
+		toggleSelect(key) {
+			this.widgets[key].show = !this.widgets[key].show;
+			this.setWidgetsToLocalStorage();
+		},
 
-    setWidgetsToLocalStorage() {
-      const widgets = Object.values(this.widgets)
-        .filter((widget) => widget.show)
-        .map((widget) => widget.type)
-        .join(',');
-      localStorage.setItem('widgets', widgets);
-    },
+		setWidgetsToLocalStorage() {
+			const widgets = Object.values(this.widgets)
+				.filter((widget) => widget.show)
+				.map((widget) => widget.type)
+				.join(',');
+			localStorage.setItem('widgets', widgets);
+		},
 
-    getWidgetsFromLocalStorage() {
-      let widgets = localStorage.getItem('widgets');
-      if (widgets) {
-        widgets = widgets.split(',');
-        Object.values(this.widgets)
-          .forEach((widget) => {
+		getWidgetsFromLocalStorage() {
+			let widgets = localStorage.getItem('widgets');
+			if (widgets) {
+				widgets = widgets.split(',');
+				Object.values(this.widgets).forEach((widget) => {
+					widget.show = widgets.indexOf(widget.type) !== -1;
+				});
+			}
+		},
 
-            widget.show = widgets.indexOf(widget.type) !== -1;
-          });
-      }
-    },
+		setRefreshInterval() {
+			this.loadWidgetsData();
+			this.loadWidgetsData = preventHiddenPageCallsDecorator(
+				this.loadWidgetsData,
+			);
+			this.refreshIntervalInstance = setInterval(
+				this.loadWidgetsData,
+				REFRESH_INTERVAL_DURATION,
+			);
+		},
 
-    setRefreshInterval() {
-      this.loadWidgetsData();
-      this.loadWidgetsData = preventHiddenPageCallsDecorator(this.loadWidgetsData);
-      this.refreshIntervalInstance = setInterval(this.loadWidgetsData, REFRESH_INTERVAL_DURATION);
-    },
+		resetRefreshInterval() {
+			clearInterval(this.refreshIntervalInstance);
+		},
 
-    resetRefreshInterval() {
-      clearInterval(this.refreshIntervalInstance);
-    },
-
-    async loadWidgetsData() {
-      if (!this.selectionMode) {
-        this.loadWidgetData();
-      }
-    },
-  },
+		async loadWidgetsData() {
+			if (!this.selectionMode) {
+				this.loadWidgetData();
+			}
+		},
+	},
 };
 </script>
 

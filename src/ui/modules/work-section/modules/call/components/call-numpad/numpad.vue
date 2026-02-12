@@ -24,23 +24,23 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, useTemplateRef } from 'vue';
-import { useStore } from 'vuex';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useStore } from 'vuex';
 
 import CallState from '../call-state.vue';
 import NumpadExpansionBtn from './numpad-expansion-btn.vue';
 import NumpadNumbers from './numpad-numbers.vue';
 
 const props = defineProps({
-  size: {
-    type: ComponentSize,
-    default: ComponentSize.MD,
-  },
-  isActive: {
-    type: Boolean,
-    default: false,
-  },
+	size: {
+		type: ComponentSize,
+		default: ComponentSize.MD,
+	},
+	isActive: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const store = useStore();
@@ -56,22 +56,25 @@ const input = (value) => store.dispatch('features/call/ADD_DIGIT', value);
 const makeCall = () => store.dispatch('features/call/CALL');
 
 const setNumberFocus = () => {
-  const input = numberInput.value?.$el?.querySelector('input');
-  if (input) input.focus();
+	const input = numberInput.value?.$el?.querySelector('input');
+	if (input) input.focus();
 };
 
 const handleNumpadInput = (value) => {
-  input(value);
-  setNumberFocus();
+	input(value);
+	setNumberFocus();
 };
 
 onMounted(() => {
-  setNumberFocus();
+	setNumberFocus();
 });
 
-watch(() => props.isActive, (active) => {
-  if (active) setNumberFocus();
-})
+watch(
+	() => props.isActive,
+	(active) => {
+		if (active) setNumberFocus();
+	},
+);
 </script>
 
 <style lang="scss" scoped>
@@ -83,7 +86,7 @@ watch(() => props.isActive, (active) => {
   gap: 25px;
   height: 100%;
 
-  .wt-input ::v-deep .wt-input__input {
+  .wt-input-text ::v-deep .wt-input-text__input {
     text-align: center;
   }
 

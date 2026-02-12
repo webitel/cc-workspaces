@@ -65,7 +65,15 @@
 import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef,watch } from 'vue';
+import {
+	computed,
+	nextTick,
+	onMounted,
+	onUnmounted,
+	ref,
+	useTemplateRef,
+	watch,
+} from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -77,14 +85,14 @@ import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages';
 
 const props = defineProps({
-  contact: {
-    type: Object,
-    require: true,
-  },
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
+	contact: {
+		type: Object,
+		require: true,
+	},
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+	},
 });
 
 const store = useStore();
@@ -94,113 +102,130 @@ const namespace = `${chatNamespace}/chatHistory`;
 
 const chatContainer = useTemplateRef('chat-container');
 const isLoading = ref(false);
-const lastVisibleMessageEl = ref(null);  // message on top of the chat
+const lastVisibleMessageEl = ref(null); // message on top of the chat
 const showAllMessages = ref(false);
 
 const {
-  messages,
+	messages,
 
-  getMessage,
-  isLastMessage,
-  showChatDate,
-  showAvatar,
-  focusOnInput,
+	getMessage,
+	isLastMessage,
+	showChatDate,
+	showAvatar,
+	focusOnInput,
 } = useChatMessages();
 
 const {
-  showScrollToBottomBtn,
-  newUnseenMessages,
-  scrollToBottom,
-  handleChatScroll,
-  handleChatResize,
+	showScrollToBottomBtn,
+	newUnseenMessages,
+	scrollToBottom,
+	handleChatScroll,
+	handleChatResize,
 } = useChatScroll(chatContainer);
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 
-const loadHistory = async () => await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+const loadHistory = async () =>
+	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
-const attachPlayer = (player) => store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
-const openMedia = (message) => store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
-
+const attachPlayer = (player) =>
+	store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
+const openMedia = (message) =>
+	store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 function isChatStarted(index) {
-  const { prevMessage, message, nextMessage } = getMessage(index);
-  return prevMessage
-    && nextMessage
-    && prevMessage?.chat?.id !== message?.chat?.id // messages from different chats
+	const { prevMessage, message, nextMessage } = getMessage(index);
+	return (
+		prevMessage && nextMessage && prevMessage?.chat?.id !== message?.chat?.id
+	); // messages from different chats
 }
 
-function isHistoryStart(index) { // first message of all chats
-  return !next.value && index === 0;
+function isHistoryStart(index) {
+	// first message of all chats
+	return !next.value && index === 0;
 }
 
 function getChatProvider(message) {
-  if (!message || !message.chat) return {};
-  const { via } = message.chat || message.member; // chat history or current chat gateway
-  return via
-    ? { type: via.type, name: via.name }
-    : {};
+	if (!message || !message.chat) return {};
+	const { via } = message.chat || message.member; // chat history or current chat gateway
+	return via
+		? {
+				type: via.type,
+				name: via.name,
+			}
+		: {};
 }
 
-const getTopMessageEl = () => { // help to fix chat viewing position when new messages was loaded
-  if (!chatContainer.value.children) return;
+const getTopMessageEl = () => {
+	// help to fix chat viewing position when new messages was loaded
+	if (!chatContainer.value.children) return;
 
-  lastVisibleMessageEl.value = chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
-}
+	lastVisibleMessageEl.value =
+		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
+};
 
 const loadNextMessages = async () => {
-  if (isLoading.value || !next.value) return;
-  isLoading.value = true;
+	if (isLoading.value || !next.value) return;
+	isLoading.value = true;
 
-  setTimeout(async () => { // timeout to avoid loader blinking
-    await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
-    await nextTick();
+	setTimeout(async () => {
+		// timeout to avoid loader blinking
+		await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
+		await nextTick();
 
-    if (lastVisibleMessageEl.value?.scrollIntoView) { // fast return the scroll view on prev position
-      lastVisibleMessageEl.value.scrollIntoView({ block: 'start', behavior: 'auto' })
-    }
+		if (lastVisibleMessageEl.value?.scrollIntoView) {
+			// fast return the scroll view on prev position
+			lastVisibleMessageEl.value.scrollIntoView({
+				block: 'start',
+				behavior: 'auto',
+			});
+		}
 
-    isLoading.value = false;
-  }, 200);
+		isLoading.value = false;
+	}, 200);
 
-  getTopMessageEl();
-}
+	getTopMessageEl();
+};
 
 async function loadMessagesList() {
-  await loadHistory();
-  await nextTick(() => {
-    scrollToBottom();
-  });
-  setTimeout(() => showAllMessages.value = true, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+	await loadHistory();
+	await nextTick(() => {
+		scrollToBottom();
+	});
+	setTimeout(() => (showAllMessages.value = true), 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
 onMounted(() => {
-  getTopMessageEl();
-})
+	getTopMessageEl();
+});
 
 watch(
-  () => props.contact?.id,
-  async () => {
-    loadMessagesList()
-    // await loadHistory();
-    // await nextTick();
-    // scrollToBottom();
-  },
-  { immediate: true }
+	() => props.contact?.id,
+	async () => {
+		loadMessagesList();
+		// await loadHistory();
+		// await nextTick();
+		// scrollToBottom();
+	},
+	{
+		immediate: true,
+	},
 );
 
-watch(() => chat.value?.id,
-  async () => {
-    await loadMessagesList()
-  },
-  { immediate: true }
+watch(
+	() => chat.value?.id,
+	async () => {
+		await loadMessagesList();
+	},
+	{
+		immediate: true,
+	},
 );
 
 onUnmounted(() => {
-  resetHistory();
+	resetHistory();
 });
-
 </script>
 
 <style lang="scss" scoped>

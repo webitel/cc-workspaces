@@ -4,12 +4,14 @@ import store from '../../../../../../../app/store';
 import CallQueue from '../the-agent-call-queue.vue';
 
 describe('CallQueue', () => {
-  it('renders a component', () => {
-    const wrapper = shallowMount(CallQueue, {
-      global: {
-        plugins: [store],
-      },
-    });
-    expect(wrapper.exists()).toBe(true);
-  });
+	it('renders a component', () => {
+		const wrapper = shallowMount(CallQueue, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
+		expect(wrapper.exists()).toBe(true);
+	});
 });

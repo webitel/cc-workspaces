@@ -39,25 +39,25 @@
 
 <script setup>
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
-import { SpecialGlobalAction } from '@webitel/ui-sdk/src/modules/Userinfo/v2/enums/index';
+import { configurations } from '@webitel/ui-sdk/api/clients';
+import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import { computed, ref, watch } from 'vue';
-import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 
 import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
-import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore.js';
+import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import ContactLookupItem from './contact-lookup-item.vue';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-  },
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
 const { t } = useI18n();
@@ -68,73 +68,68 @@ const filterQuery = ref(SearchMode.NAME);
 const contactsLabelsConfiguration = ref([]);
 
 const isLimitContactsGranted = computed(() =>
-  userinfoStore.hasSpecialGlobalActionAccess(
-    SpecialGlobalAction.LimitWorkspaceContacts,
-  ),
+	userinfoStore.hasSpecialGlobalActionAccess(
+		SpecialGlobalAction.LimitWorkspaceContacts,
+	),
 );
 
 const searchModeOptions = computed(() => [
-  {
-    value: SearchMode.NAME,
-    text: t('reusable.name'),
-  },
-  {
-    value: SearchMode.PHONES,
-    text: t('contacts.phones', 2),
-  },
-  {
-    value: SearchMode.EMAILS,
-    text: t('contacts.emails', 2),
-  },
+	{
+		value: SearchMode.NAME,
+		text: t('reusable.name'),
+	},
+	{
+		value: SearchMode.PHONES,
+		text: t('contacts.phones', 2),
+	},
+	{
+		value: SearchMode.EMAILS,
+		text: t('contacts.emails', 2),
+	},
 ]);
 
 const checkLabelsToLimitContacts = async () => {
-  const { items } = await configurations.getList({
-    name: EngineSystemSettingName.LabelsToLimitContacts,
-  });
+	const { items } = await configurations.getList({
+		name: EngineSystemSettingName.LabelsToLimitContacts,
+	});
 
-  if (items.length) {
-    contactsLabelsConfiguration.value = items[0].value;
-  }
+	if (items.length) {
+		contactsLabelsConfiguration.value = items[0].value;
+	}
 };
 
 const fetchFn = async (params) => {
-  const defaultParams = {
-    ...params,
-    qin: filterQuery.value,
-  };
+	const defaultParams = {
+		...params,
+		qin: filterQuery.value,
+	};
 
-  if (isLimitContactsGranted.value) {
-    await checkLabelsToLimitContacts();
-    return await contactsAPI.getList({
-      ...defaultParams,
-      label: contactsLabelsConfiguration.value,
-    });
-  }
-  return await contactsAPI.getList({
-    ...defaultParams
-  });
+	if (isLimitContactsGranted.value) {
+		await checkLabelsToLimitContacts();
+		return await contactsAPI.getList({
+			...defaultParams,
+			label: contactsLabelsConfiguration.value,
+		});
+	}
+	return await contactsAPI.getList({
+		...defaultParams,
+	});
 };
 
 const makeCall = (item) => {
-  store.dispatch('features/call/CALL', item);
+	store.dispatch('features/call/CALL', item);
 };
 
 const changeMode = ({ value }) => {
-  filterQuery.value = value;
-  resetData();
+	filterQuery.value = value;
+	resetData();
 };
 
-const {
-  dataList,
-  isLoading,
-  dataSearch,
-  handleIntersect,
-  resetData,
-} = useInfiniteScroll({
-  fetchFn,
-  size: 20,
-});
+const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
+	useInfiniteScroll({
+		fetchFn,
+		size: 20,
+	});
 </script>
 
 <style lang="scss" scoped>

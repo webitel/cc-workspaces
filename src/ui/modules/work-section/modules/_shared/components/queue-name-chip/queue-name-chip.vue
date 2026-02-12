@@ -11,13 +11,13 @@
 import { ChipColor } from '@webitel/ui-sdk/enums';
 
 withDefaults(
-  defineProps<{
-    name: string;
-    color?: ChipColor;
-  }>(),
-  {
-    color: ChipColor.SECONDARY,
-  },
+	defineProps<{
+		name: string;
+		color?: ChipColor;
+	}>(),
+	{
+		color: ChipColor.SECONDARY,
+	},
 );
 </script>
 

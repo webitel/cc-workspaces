@@ -40,16 +40,18 @@
 import WtExpandTransition from '@webitel/ui-sdk/src/components/transitions/wt-expand-transition.vue';
 
 export default {
-  name: 'LookupItemWrapper',
-  components: { WtExpandTransition },
-  data: () => ({
-    expanded: false,
-  }),
-  methods: {
-    toggleExpansion() {
-      this.expanded = !this.expanded;
-    },
-  },
+	name: 'LookupItemWrapper',
+	components: {
+		WtExpandTransition,
+	},
+	data: () => ({
+		expanded: false,
+	}),
+	methods: {
+		toggleExpansion() {
+			this.expanded = !this.expanded;
+		},
+	},
 };
 </script>
 

@@ -21,31 +21,33 @@
 </template>
 
 <script>
-import { mapActions, mapGetters,mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 import LookupItemContainer from '../../_shared/components/lookup-item-container/lookup-item-container.vue';
 
 export default {
-  name: 'MemberCommunications',
-  components: { LookupItemContainer },
+	name: 'MemberCommunications',
+	components: {
+		LookupItemContainer,
+	},
 
-  computed: {
-    ...mapState('features/member', {
-      selectedCommId: (state) => state.selectedCommId,
-    }),
-    ...mapGetters('features/member', {
-      member: 'MEMBER_ON_WORKSPACE',
-    }),
-    communications() {
-      return this.member.communications;
-    },
-  },
+	computed: {
+		...mapState('features/member', {
+			selectedCommId: (state) => state.selectedCommId,
+		}),
+		...mapGetters('features/member', {
+			member: 'MEMBER_ON_WORKSPACE',
+		}),
+		communications() {
+			return this.member.communications;
+		},
+	},
 
-  methods: {
-    ...mapActions('features/member', {
-      selectCommunication: 'SELECT_COMMUNICATION',
-    }),
-  },
+	methods: {
+		...mapActions('features/member', {
+			selectCommunication: 'SELECT_COMMUNICATION',
+		}),
+	},
 };
 </script>
 

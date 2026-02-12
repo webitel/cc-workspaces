@@ -47,83 +47,96 @@ import { getLinkedContact } from './scripts/getLinkedContact.js';
 const defaultTab = 'chat-messaging-container';
 
 export default {
-  name: 'TheChat',
-  components: {
-    TaskContainer,
-    MediaViewer,
-    ChatHeader,
-    ChatMessagingContainer,
-    ChatTransferContainer,
-    EmptyWorkspace,
-    ChatFooter,
-  },
-  mixins: [sizeMixin],
-  data: () => ({
-    hotkeyUnsubscribers : [],
-    chatContact: null,
-    chatContactIsLoaded: false,
-    currentTab: {
-      component: defaultTab
-    },
-    showQuickReplies: false, // used to show/hide header when opened quick replies panel. Need only for ui components
-  }),
-  computed: {
-    ...mapState('ui/infoSec/client/contact', {
-      contact: state => state.contact,
-    }),
-    ...mapGetters('features/chat', {
-      chat: 'CHAT_ON_WORKSPACE',
-    }),
-    isChatHeader() {
-      return this.currentTab.component !== 'empty-workspace';
-    },
-    // hide footer in transfer, empty-workspace tab and if closed chat opened
-    isChatFooter() {
-      return this.currentTab.component === defaultTab;
-    },
-    chatId() {
-      return this.chat.id;
-    },
-  },
-  watch: {
-    chatId: { // if chat changed
-      async handler() {
-        this.chatContactIsLoaded = false;
-        this.resetTab();
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-        this.chatContactIsLoaded = true;
-      },
-      immediate: true,
-    },
-    contact: { // TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-      async handler() {
-        this.chatContactIsLoaded = false;
-        this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
-        this.chatContactIsLoaded = true;
-    },
-  },
-  },
-  methods: {
-    openTab(tab) {
-      switch (tab) {
-        case 'transfer':
-          this.currentTab = { component: 'chat-transfer-container' };
-          break;
-        case 'successful-transfer':
-          this.currentTab = { component: 'empty-workspace', props: { type: 'transfer' } };
-          break;
-        default: {
-          throw new Error(`Unknown chat tab: ${tab}`);
-        }
-      }
-    },
-    resetTab() {
-      this.currentTab = { component: defaultTab };
-    },
-    handleQuickReplies(value) {
-      this.showQuickReplies = value;
-    }
-  },
+	name: 'TheChat',
+	components: {
+		TaskContainer,
+		MediaViewer,
+		ChatHeader,
+		ChatMessagingContainer,
+		ChatTransferContainer,
+		EmptyWorkspace,
+		ChatFooter,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	data: () => ({
+		hotkeyUnsubscribers: [],
+		chatContact: null,
+		chatContactIsLoaded: false,
+		currentTab: {
+			component: defaultTab,
+		},
+		showQuickReplies: false, // used to show/hide header when opened quick replies panel. Need only for ui components
+	}),
+	computed: {
+		...mapState('ui/infoSec/client/contact', {
+			contact: (state) => state.contact,
+		}),
+		...mapGetters('features/chat', {
+			chat: 'CHAT_ON_WORKSPACE',
+		}),
+		isChatHeader() {
+			return this.currentTab.component !== 'empty-workspace';
+		},
+		// hide footer in transfer, empty-workspace tab and if closed chat opened
+		isChatFooter() {
+			return this.currentTab.component === defaultTab;
+		},
+		chatId() {
+			return this.chat.id;
+		},
+	},
+	watch: {
+		chatId: {
+			// if chat changed
+			async handler() {
+				this.chatContactIsLoaded = false;
+				this.resetTab();
+				this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+				this.chatContactIsLoaded = true;
+			},
+			immediate: true,
+		},
+		contact: {
+			// TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
+			async handler() {
+				this.chatContactIsLoaded = false;
+				this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
+				this.chatContactIsLoaded = true;
+			},
+		},
+	},
+	methods: {
+		openTab(tab) {
+			switch (tab) {
+				case 'transfer':
+					this.currentTab = {
+						component: 'chat-transfer-container',
+					};
+					break;
+				case 'successful-transfer':
+					this.currentTab = {
+						component: 'empty-workspace',
+						props: {
+							type: 'transfer',
+						},
+					};
+					break;
+				default: {
+					throw new Error(`Unknown chat tab: ${tab}`);
+				}
+			}
+		},
+		resetTab() {
+			this.currentTab = {
+				component: defaultTab,
+			};
+		},
+		handleQuickReplies(value) {
+			this.showQuickReplies = value;
+		},
+	},
 };
 </script>
 
