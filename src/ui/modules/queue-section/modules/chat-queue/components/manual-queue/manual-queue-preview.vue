@@ -18,7 +18,12 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessage }}
+      <div class="manual-queue-preview__last-message-wrapper">
+        <div>
+          <wt-icon :icon="lastMessageSenderIcon"></wt-icon>
+        </div>
+        <p>{{ lastMessage }}</p>
+      </div>
     </template>
 
     <template #timer>
@@ -130,6 +135,11 @@ const wait = computed(() => {
 	return `${minutes}:${seconds}`;
 });
 
+const lastMessageSenderIcon = computed(() => {
+  if(props.task.member.type === 'contact') return 'contacts';
+  return props.task.member.type;
+});
+
 function accept(task) {
 	if (showLoader.value) return;
 
@@ -139,6 +149,10 @@ function accept(task) {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+.manual-queue-preview__last-message-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
 </style>
