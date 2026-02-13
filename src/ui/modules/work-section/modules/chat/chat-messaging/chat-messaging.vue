@@ -387,6 +387,10 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   max-height: 100%;
   min-height: auto;
   overflow: auto !important;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .chat-messaging__textarea :deep(.wt-label) {
