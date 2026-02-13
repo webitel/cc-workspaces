@@ -142,4 +142,8 @@ export default {
 a:hover {
   text-decoration: underline;
 }
+
+.task-header {
+  margin-bottom: var(--spacing-xs);
+}
 </style>
