@@ -39,11 +39,7 @@ import { getQueueName } from '../../../../../modules/queue-section/modules/_shar
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
-
-interface ChatContact {
-	id?: string | number;
-	name?: string;
-} // винести в окремий файл
+import { ChatContact } from '../../_shared/types/ChatContact.types';
 
 const props = withDefaults(
 	defineProps<{
@@ -52,7 +48,7 @@ const props = withDefaults(
 	}>(),
 	{
 		size: ComponentSize.MD,
-		chatContact: {},
+		chatContact: () => ({}) as ChatContact,
 	},
 );
 
@@ -73,9 +69,6 @@ const isCloseAction = computed(
 const isTransferAction = computed(
 	() => store.getters['features/chat/ALLOW_CHAT_TRANSFER'],
 );
-// const contactLink = computed(() =>
-//   store.getters['ui/infoSec/client/contact/CONTACT_LINK'],
-// );
 const displayChatName = computed(() => {
 	const currentChat = chat.value;
 
@@ -88,7 +81,6 @@ const displayChatName = computed(() => {
 	return 'unknown';
 });
 
-// const displayName = computed(() => chat.value?.displayName);
 const displayNumber = computed(() => chat.value?.displayNumber);
 const displayQueueName = computed(() => getQueueName(chat.value));
 

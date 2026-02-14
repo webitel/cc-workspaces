@@ -18,18 +18,16 @@
 </template>
 
 <script setup lang="ts">
-
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = withDefaults(
-  defineProps<{
-    size?: ComponentSize;
-  }>(),
-  {
-    size: ComponentSize.MD,
-  },
+	defineProps<{
+		size?: ComponentSize;
+	}>(),
+	{
+		size: ComponentSize.MD,
+	},
 );
-
 </script>
 
 <style scoped>
@@ -53,5 +51,6 @@ const props = withDefaults(
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2xs);
+  margin: var(--spacing-2xs);
 }
 </style>

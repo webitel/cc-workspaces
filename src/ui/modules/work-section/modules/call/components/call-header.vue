@@ -1,6 +1,6 @@
 <template>
   <task-header :size="props.size">
-    <template #first-part>
+    <template #start-section>
       <slot :name="CallTab.History">
         <wt-rounded-action
           class="call-action"
@@ -28,7 +28,7 @@
       </slot>
     </template>
 
-    <template #second-part>
+    <template #end-section>
       <slot :name="CallTab.Bridge">
         <wt-rounded-action
           v-if="isBridge"
@@ -99,10 +99,11 @@
     </template>
 
     <template #info>
-      <p>{{ call?.displayName }}</p>
-      <queue-name-chip
-        v-if="queueName"
-        :name="queueName"
+      <task-header-expansion-card
+        v-if="call?.displayName"
+        :username="call?.displayName"
+        :phone-number="call?.displayNumber"
+        :queue-name="queueName"
       />
     </template>
   </task-header>
@@ -116,10 +117,10 @@ import { useStore } from 'vuex';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
-import QueueNameChip from '../../_shared/components/queue-name-chip/queue-name-chip.vue';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
+import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 
 const props = withDefaults(
 	defineProps<{
