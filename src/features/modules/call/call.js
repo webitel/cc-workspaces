@@ -114,7 +114,7 @@ const actions = {
 		if (call.allowAnswer) {
 			const params = {
 				...ANSWER_PARAMS,
-				video: context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'],
+				video: context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'](call),
 			};
 			await call.answer(params);
 			await context.dispatch('SET_WORKSPACE', call);
