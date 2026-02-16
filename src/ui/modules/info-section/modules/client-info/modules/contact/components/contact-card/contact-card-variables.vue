@@ -33,14 +33,17 @@
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
-  variables: {
-    type: Array,
-  },
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
+	variables: {
+		type: Array,
+	},
 });
 
 const { t } = useI18n();

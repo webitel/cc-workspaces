@@ -96,45 +96,47 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-import ManualDeadlineProgressBar
-  from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
+import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
 import TaskQueuePreviewSm from '../../../_shared/components/task-preview/task-queue-preview-sm.vue';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-  opened: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String,
-    default: 'md',
-  },
+	task: {
+		type: Object,
+		required: true,
+	},
+	opened: {
+		type: Boolean,
+		default: false,
+	},
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
-const emit = defineEmits(['click', 'accept']);
+const emit = defineEmits([
+	'click',
+	'accept',
+]);
 const showLoader = ref(false);
 
 const wait = computed(() => {
-  const waitTime = props.task.wait;
-  const minutes = Math.floor(waitTime / 60);
-  let seconds = waitTime % 60;
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-  return `${minutes}:${seconds}`;
+	const waitTime = props.task.wait;
+	const minutes = Math.floor(waitTime / 60);
+	let seconds = waitTime % 60;
+	if (seconds < 10) {
+		seconds = `0${seconds}`;
+	}
+	return `${minutes}:${seconds}`;
 });
 
 function accept() {
-  if (showLoader.value) return;
+	if (showLoader.value) return;
 
-  showLoader.value = true;
-  emit('accept', props.task);
-  showLoader.value = false;
+	showLoader.value = true;
+	emit('accept', props.task);
+	showLoader.value = false;
 }
 </script>
 

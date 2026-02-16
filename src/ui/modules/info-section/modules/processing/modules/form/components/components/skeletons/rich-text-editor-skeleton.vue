@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'RichTextEditorSkeleton',
+	name: 'RichTextEditorSkeleton',
 };
 </script>
 

@@ -16,20 +16,25 @@ import QueueNameChip from '../../../_shared/components/queue-name-chip/queue-nam
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 
 export default {
-  name: 'JobHeader',
-  components: { QueueNameChip, TaskHeader },
-  mixins: [sizeMixin],
-  props: {
-    task: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    queueName() {
-      return getQueueName(this.task);
-    },
-  },
+	name: 'JobHeader',
+	components: {
+		QueueNameChip,
+		TaskHeader,
+	},
+	mixins: [
+		sizeMixin,
+	],
+	props: {
+		task: {
+			type: Object,
+			required: true,
+		},
+	},
+	computed: {
+		queueName() {
+			return getQueueName(this.task);
+		},
+	},
 };
 </script>
 

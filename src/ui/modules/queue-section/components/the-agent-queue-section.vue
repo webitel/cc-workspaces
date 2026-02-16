@@ -61,35 +61,37 @@
   </section>
 </template>
 <script setup>
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
+import isIncomingRinging from '../../../../features/modules/call/scripts/isIncomingRinging.js';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
-import isIncomingRinging from '../../../../features/modules/call/scripts/isIncomingRinging.js';
 
 const props = defineProps({
-  collapsed: {
-    type: Boolean,
-    default: false,
-  },
-  collapsible: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: ComponentSize,
-    default: ComponentSize.MD,
-  },
+	collapsed: {
+		type: Boolean,
+		default: false,
+	},
+	collapsible: {
+		type: Boolean,
+		default: false,
+	},
+	size: {
+		type: ComponentSize,
+		default: ComponentSize.MD,
+	},
 });
 
-const emit = defineEmits(['resize']);
+const emit = defineEmits([
+	'resize',
+]);
 
 const store = useStore();
 const currentTab = ref({});
@@ -98,129 +100,161 @@ const chatMessagesLengthMap = ref({});
 const hasNewChatMessages = ref(false);
 
 const callList = computed(() => store.state.features?.call?.callList || []);
-const manualCallsList = computed(() => store.state.features?.call?.manual?.manualList || []);
+const manualCallsList = computed(
+	() => store.state.features?.call?.manual?.manualList || [],
+);
 const chatList = computed(() => store.state.features?.chat?.chatList || []);
-const manualChatList = computed(() => store.state.features?.chat?.manual?.manualList || []);
+const manualChatList = computed(
+	() => store.state.features?.chat?.manual?.manualList || [],
+);
 const jobList = computed(() => store.state.features?.job?.jobList || []);
 
-const isCallWorkspace = computed(() => store.getters['workspace/IS_CALL_WORKSPACE']);
+const isCallWorkspace = computed(
+	() => store.getters['workspace/IS_CALL_WORKSPACE'],
+);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const isActiveCall = (call) => {
-  const isActiveState = [CallActions.Active, CallActions.Hold].includes(call.state);
-  const isOutgoingRinging = call.state === CallActions.Ringing && !isIncomingRinging(call);
-  return isActiveState || isOutgoingRinging;
+	const isActiveState = [
+		CallActions.Active,
+		CallActions.Hold,
+	].includes(call.state);
+	const isOutgoingRinging =
+		call.state === CallActions.Ringing && !isIncomingRinging(call);
+	return isActiveState || isOutgoingRinging;
 };
 const getCountByStates = (list = [], states = []) =>
-  list.filter((item) => states.includes(item.state)).length;
+	list.filter((item) => states.includes(item.state)).length;
 
-const activeCallCount = computed(() => callList.value.filter(isActiveCall).length);
+const activeCallCount = computed(
+	() => callList.value.filter(isActiveCall).length,
+);
 const incomingCallCount = computed(
-  () => callList.value.filter(isIncomingRinging).length + manualCallsList.value?.length,
+	() =>
+		callList.value.filter(isIncomingRinging).length +
+		manualCallsList.value?.length,
 );
 
-const activeChatCount = computed(() => getCountByStates(chatList.value, [ConversationState.Active]));
+const activeChatCount = computed(() =>
+	getCountByStates(chatList.value, [
+		ConversationState.Active,
+	]),
+);
 const incomingChatCount = computed(
-  () => getCountByStates(chatList.value, [ConversationState.Invite]) + manualChatList.value?.length,
+	() =>
+		getCountByStates(chatList.value, [
+			ConversationState.Invite,
+		]) + manualChatList.value?.length,
 );
 
 const activeJobCount = computed(() =>
-  getCountByStates(jobList.value, [JobState.Bridged, JobState.Processing]),
+	getCountByStates(jobList.value, [
+		JobState.Bridged,
+		JobState.Processing,
+	]),
 );
 const incomingJobCount = computed(() =>
-  getCountByStates(jobList.value, [JobState.Distribute, JobState.Offering]),
+	getCountByStates(jobList.value, [
+		JobState.Distribute,
+		JobState.Offering,
+	]),
 );
 
 const activeChatId = computed(
-  () => store.getters['features/chat/CHAT_ON_WORKSPACE']?.id,
+	() => store.getters['features/chat/CHAT_ON_WORKSPACE']?.id,
 );
 
-const getChatMessagesLength = (chat) =>
-  chat.messages?.length ?? 0;
+const getChatMessagesLength = (chat) => chat.messages?.length ?? 0;
 
 const tabs = computed(() => [
-  {
-    value: 'call',
-    icon: 'call',
-    iconColor: 'success',
-    countActive: activeCallCount.value,
-    component: CallQueue,
-    showIndicator: !!incomingCallCount.value,
-  },
-  {
-    value: 'chat',
-    icon: 'chat',
-    iconColor: 'chat',
-    countActive: activeChatCount.value,
-    component: ChatQueue,
-    showIndicator: !!incomingChatCount.value || hasNewChatMessages.value,
-  },
-  {
-    value: 'job',
-    icon: 'job',
-    iconColor: 'job',
-    countActive: activeJobCount.value,
-    component: JobQueue,
-    showIndicator: !!incomingJobCount.value,
-  },
+	{
+		value: 'call',
+		icon: 'call',
+		iconColor: 'success',
+		countActive: activeCallCount.value,
+		component: CallQueue,
+		showIndicator: !!incomingCallCount.value,
+	},
+	{
+		value: 'chat',
+		icon: 'chat',
+		iconColor: 'chat',
+		countActive: activeChatCount.value,
+		component: ChatQueue,
+		showIndicator: !!incomingChatCount.value || hasNewChatMessages.value,
+	},
+	{
+		value: 'job',
+		icon: 'job',
+		iconColor: 'job',
+		countActive: activeJobCount.value,
+		component: JobQueue,
+		showIndicator: !!incomingJobCount.value,
+	},
 ]);
 
-const isNewCallButton = computed(() => !isNewCall.value || !isCallWorkspace.value);
+const isNewCallButton = computed(
+	() => !isNewCall.value || !isCallWorkspace.value,
+);
 
 const openNewCall = () => store.dispatch('features/call/OPEN_NEW_CALL');
 const closeNewCall = () => store.dispatch('features/call/CLOSE_NEW_CALL');
 
-const toggleNewCall = () => isNewCallButton.value ? openNewCall() : closeNewCall();
+const toggleNewCall = () =>
+	isNewCallButton.value ? openNewCall() : closeNewCall();
 
 const setupHotkeys = () => {
-  const subscribers = [
-    {
-      event: HotkeyAction.NEW_CALL,
-      callback: toggleNewCall,
-    },
-  ];
-  hotkeyUnsubscribers.value = useHotkeys(subscribers);
+	const subscribers = [
+		{
+			event: HotkeyAction.NEW_CALL,
+			callback: toggleNewCall,
+		},
+	];
+	hotkeyUnsubscribers.value = useHotkeys(subscribers);
 };
 
 onMounted(() => {
-  currentTab.value = tabs.value[0];
-  setupHotkeys();
+	currentTab.value = tabs.value[0];
+	setupHotkeys();
 });
 
 onUnmounted(() => {
-  hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
 });
 
 //@author Oles Chorpita
 // Watch for changes in the chat list or the currently opened chat
 //https://webitel.atlassian.net/browse/WTEL-8123
 watch(
-  [chatList, activeChatId],
-  ([chats = [], currentActiveId]) => {
-    hasNewChatMessages.value = false;
-    chats.forEach((chat) => {
-      const id = chat.id;
-      const messageLength = getChatMessagesLength(chat);
+	[
+		chatList,
+		activeChatId,
+	],
+	([chats = [], currentActiveId]) => {
+		hasNewChatMessages.value = false;
+		chats.forEach((chat) => {
+			const id = chat.id;
+			const messageLength = getChatMessagesLength(chat);
 
-      if (chatMessagesLengthMap.value[id] == null || id === currentActiveId) {
-        // Initialize counter the first time we see this chat
-        chatMessagesLengthMap.value[id] = messageLength;
-        // When user opens a chat — mark it as read
-        if (id === currentActiveId) return;
-      }
+			if (chatMessagesLengthMap.value[id] == null || id === currentActiveId) {
+				// Initialize counter the first time we see this chat
+				chatMessagesLengthMap.value[id] = messageLength;
+				// When user opens a chat — mark it as read
+				if (id === currentActiveId) return;
+			}
 
-      const prevLength = chatMessagesLengthMap.value[id];
+			const prevLength = chatMessagesLengthMap.value[id];
 
-      // Detect new messages for non-active chats
-      if (messageLength > prevLength) {
-        return hasNewChatMessages.value = true;
-      }
-    });
-  },
-  {
-    deep: true,
-    immediate: true,
-  },
+			// Detect new messages for non-active chats
+			if (messageLength > prevLength) {
+				return (hasNewChatMessages.value = true);
+			}
+		});
+	},
+	{
+		deep: true,
+		immediate: true,
+	},
 );
 </script>
 <style lang="scss" scoped>

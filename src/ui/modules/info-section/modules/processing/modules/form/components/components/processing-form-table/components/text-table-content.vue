@@ -5,17 +5,17 @@
 </template>
 
 <script setup lang="ts">
-
 import { computed, defineProps } from 'vue';
 
 interface Props {
-  value?: string | string[];
+	value?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '-',
+	value: '-',
 });
 
-const text = computed(() => Array.isArray(props.value) ? props.value.join(', ') : props.value);
-
+const text = computed(() =>
+	Array.isArray(props.value) ? props.value.join(', ') : props.value,
+);
 </script>

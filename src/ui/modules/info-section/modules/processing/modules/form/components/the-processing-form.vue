@@ -49,172 +49,184 @@ import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSe
 import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
+import FormInputText from './components/processing-form-input-text.vue';
 import FormSelect from './components/processing-form-select.vue';
-import FormSelectFromObject
-  from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
+import FormSelectFromObject from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
-  name: 'TheProcessingForm',
-  components: {
-    FormIFrame,
-    FormText,
-    FormSelect,
-    FormSelectService,
-    FormFile,
-    FormDatetimepicker,
-    FormSelectFromObject,
-    FormTable,
-    RichTextEditor: () => ({
-      component: import(
-        './components/rich-text-editor.vue'
-        ),
-      loading: RichTextEditorSkeleton,
-    }),
-  },
-  mixins: [
-    processingModuleMixin,
-    sizeMixin,
-  ],
-  data: () => ({
-    namespace: 'ui/infoSec/processing/form',
-    processingComponent: {
-      'wt-select': 'form-select',
-      'wt-datetimepicker': 'form-datetimepicker',
-      'form-i-frame': 'form-i-frame',
-    },
-    hotkeyUnsubscribers: [],
-  }),
-  computed: {
-    ...mapGetters('workspace', {
-      isCall: 'IS_CALL_WORKSPACE',
-    }),
-    formTitle() {
-      return this.task.attempt.form?.title || '';
-    },
-    formBody() {
-      return this.task.attempt.form?.body || [];
-    },
-    formMetadata() {
-      return this.task.attempt.form?.metadata || {};
-    },
-    formActions() {
-      return this.task.attempt.form?.actions || [];
-    },
-  },
-  methods: {
-    ...mapActions({
-      sendForm(dispatch, payload) {
-        return dispatch(`${this.namespace}/SEND_FORM`, payload);
-      },
-      sendReporting(dispatch, payload) {
-        return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
-      },
-    }),
-    initializeValues() {
-      this.formBody.forEach((component) => {
-        if (!this.shouldInitComponent(component)) return;
+	name: 'TheProcessingForm',
+	components: {
+		FormIFrame,
+		FormText,
+		FormSelect,
+		FormInputText,
+		FormSelectService,
+		FormFile,
+		FormDatetimepicker,
+		FormSelectFromObject,
+		FormTable,
+		RichTextEditor: () => ({
+			component: import('./components/rich-text-editor.vue'),
+			loading: RichTextEditorSkeleton,
+		}),
+	},
+	mixins: [
+		processingModuleMixin,
+		sizeMixin,
+	],
+	data: () => ({
+		namespace: 'ui/infoSec/processing/form',
+		processingComponent: {
+			'wt-select': 'form-select',
+			'wt-input': 'form-input-text',
+			'wt-datetimepicker': 'form-datetimepicker',
+			'form-i-frame': 'form-i-frame',
+		},
+		hotkeyUnsubscribers: [],
+	}),
+	computed: {
+		...mapGetters('workspace', {
+			isCall: 'IS_CALL_WORKSPACE',
+		}),
+		formTitle() {
+			return this.task.attempt.form?.title || '';
+		},
+		formBody() {
+			return this.task.attempt.form?.body || [];
+		},
+		formMetadata() {
+			return this.task.attempt.form?.metadata || {};
+		},
+		formActions() {
+			return this.task.attempt.form?.actions || [];
+		},
+	},
+	methods: {
+		...mapActions({
+			sendForm(dispatch, payload) {
+				return dispatch(`${this.namespace}/SEND_FORM`, payload);
+			},
+			sendReporting(dispatch, payload) {
+				return dispatch(`${this.namespace}/SEND_REPORTING`, payload);
+			},
+		}),
+		initializeValues() {
+			this.formBody.forEach((component) => {
+				if (!this.shouldInitComponent(component)) return;
 
-        if (component.view.component === 'wt-select') {
-          return component.value = this.getSelectInitialValue(component.view.initialValue, component.view.options);
-        }
+				if (component.view.component === 'wt-select') {
+					return (component.value = this.getSelectInitialValue(
+						component.view.initialValue,
+						component.view.options,
+					));
+				}
 
-        if (component.view.component === 'wt-datetimepicker') {
-          return component.value = this.getDatetimepickerInitialValue(component.view.initialValue, component.view);
-        }
+				if (component.view.component === 'wt-datetimepicker') {
+					return (component.value = this.getDatetimepickerInitialValue(
+						component.view.initialValue,
+						component.view,
+					));
+				}
 
-        return component.value = this.parseInitialValueToJson(component.view.initialValue);
-      });
+				return (component.value = this.parseInitialValueToJson(
+					component.view.initialValue,
+				));
+			});
 
-      this.task.attempt.form.metadata.isInited = true;
-    },
+			this.task.attempt.form.metadata.isInited = true;
+		},
 
-    shouldInitComponent(component) {
-      return isEmpty(component.value) && component.view.initialValue;
-    },
+		shouldInitComponent(component) {
+			return isEmpty(component.value) && component.view.initialValue;
+		},
 
-    getSelectInitialValue(initialValue, options = []) {
-      // For component wt-select we need get by initialValue value from options
-      // https://webitel.atlassian.net/browse/WTEL-6742
-      return (
-        options.find((option) => option.value === initialValue) ||
-        initialValue
-      );
-    },
+		getSelectInitialValue(initialValue, options = []) {
+			// For component wt-select we need get by initialValue value from options
+			// https://webitel.atlassian.net/browse/WTEL-6742
+			return (
+				options.find((option) => option.value === initialValue) || initialValue
+			);
+		},
 
-    getDatetimepickerInitialValue(initialValue, { currentTime } = {}) {
-      return currentTime || initialValue === 'now'
-        ? Date.now()
-        : initialValue;
-    },
+		getDatetimepickerInitialValue(initialValue, { currentTime } = {}) {
+			return currentTime || initialValue === 'now' ? Date.now() : initialValue;
+		},
 
-    parseInitialValueToJson(initialValue) {
-      try {
-        const parsed = JSON.parse(initialValue);
+		parseInitialValueToJson(initialValue) {
+			try {
+				const parsed = JSON.parse(initialValue);
 
-        // For component form-text if pass object without keys we need set null
-        // https://webitel.atlassian.net/browse/WTEL-6568
-        if (typeof parsed === 'object') {
-          return Object.keys(parsed).length ? parsed : null;
-        }
+				// For component form-text if pass object without keys we need set null
+				// https://webitel.atlassian.net/browse/WTEL-6568
+				if (typeof parsed === 'object') {
+					return Object.keys(parsed).length ? parsed : null;
+				}
 
-        return parsed;
-      } catch {
-        return initialValue;
-      }
-    },
-    setupAutofocus() {
-      const input = this.$refs['processing-form'].$el.querySelector('input, textarea');
-      if (input && !input.className.includes('select')) input.focus();
-    },
-    setupHotkeys() {
-      const subscripers = [
-        {
-          event: HotkeyAction.SUBMIT_FORM,
-          callback: (event) => {
-            // get digit form event.code. e.g "1" form "Digit1" string
-            const digit = event.code[event.code.length - 1];
-            const index = +digit - 1;
-            const button = this.$refs['form-action-buttons'][index].$el;
-            if (button) button.focus();
-          },
-        },
-      ];
-      this.hotkeyUnsubscribers = useHotkeys(subscripers);
-    },
-    change() {
-      nextTick(() => { // we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
-        if (this.isCall) this.task.attempt.form.fields = formattingFormBeforeSend(this.formBody);
-      });
-    },
-    sendTableAction({ action, componentId, row }) {
-      const vars = { [action]: row };
-      this.task.attempt.componentAction(componentId, action, vars);
-      // https://webitel.atlassian.net/browse/WTEL-6707
-    },
-  },
-  watch: {
-    formBody: {
-      handler(value) {
-        if (value.length && !this.formMetadata.isInited) {
-          this.task.attempt.form.metadata = {}; // init form metadata
-          this.initializeValues();
-        }
-      },
-      immediate: true,
-    },
-  },
-  mounted() {
-    this.setupAutofocus();
-    this.setupHotkeys();
-  },
+				return parsed;
+			} catch {
+				return initialValue;
+			}
+		},
+		setupAutofocus() {
+			const input =
+				this.$refs['processing-form'].$el.querySelector('input, textarea');
+			if (input && !input.className.includes('select')) input.focus();
+		},
+		setupHotkeys() {
+			const subscripers = [
+				{
+					event: HotkeyAction.SUBMIT_FORM,
+					callback: (event) => {
+						// get digit form event.code. e.g "1" form "Digit1" string
+						const digit = event.code[event.code.length - 1];
+						const index = +digit - 1;
+						const button = this.$refs['form-action-buttons'][index].$el;
+						if (button) button.focus();
+					},
+				},
+			];
+			this.hotkeyUnsubscribers = useHotkeys(subscripers);
+		},
+		change() {
+			nextTick(() => {
+				// we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
+				if (this.isCall)
+					this.task.attempt.form.fields = formattingFormBeforeSend(
+						this.formBody,
+					);
+			});
+		},
+		sendTableAction({ action, componentId, row }) {
+			const vars = {
+				[action]: row,
+			};
+			this.task.attempt.componentAction(componentId, action, vars);
+			// https://webitel.atlassian.net/browse/WTEL-6707
+		},
+	},
+	watch: {
+		formBody: {
+			handler(value) {
+				if (value.length && !this.formMetadata.isInited) {
+					this.task.attempt.form.metadata = {}; // init form metadata
+					this.initializeValues();
+				}
+			},
+			immediate: true,
+		},
+	},
+	mounted() {
+		this.setupAutofocus();
+		this.setupHotkeys();
+	},
 
-  unmounted() {
-    this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
-  },
+	unmounted() {
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+	},
 };
 </script>
 

@@ -27,17 +27,19 @@
 
 <script setup>
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-  },
-  phone: {
-    type: Object,
-    required: true,
-  },
+	size: {
+		type: String,
+		default: 'md',
+	},
+	phone: {
+		type: Object,
+		required: true,
+	},
 });
 
-const emit = defineEmits(['call']);
+const emit = defineEmits([
+	'call',
+]);
 </script>
 
 <style lang="scss" scoped>

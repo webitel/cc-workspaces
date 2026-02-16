@@ -18,7 +18,10 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessage }}
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="lastMessage"
+      />
     </template>
 
     <template #timer>
@@ -85,58 +88,65 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-import ManualDeadlineProgressBar
-  from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
-import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
-import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatTypes } from '../../enums/ChatStatus.enum';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
+import LastMessageContainer from '../_shared/last-message-container.vue';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-  opened: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String,
-    default: 'md',
-  },
+	task: {
+		type: Object,
+		required: true,
+	},
+	opened: {
+		type: Boolean,
+		default: false,
+	},
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
-const emit = defineEmits(['click', 'accept']);
+const emit = defineEmits([
+	'click',
+	'accept',
+]);
 const showLoader = ref(false);
 
 const lastMessage = computed(() => {
-  return props.task.message;
+	return props.task.message;
 });
 const displayIcon = computed(() => {
-  const type = props.task.chat;
-  return messengerIcon(type);
+	const type = props.task.chat;
+	return messengerIcon(type);
 });
 
 const wait = computed(() => {
-  const waitTime = props.task.wait;
-  const minutes = Math.floor(waitTime / 60);
-  let seconds = waitTime % 60;
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-  return `${minutes}:${seconds}`;
+	const waitTime = props.task.wait;
+	const minutes = Math.floor(waitTime / 60);
+	let seconds = waitTime % 60;
+	if (seconds < 10) {
+		seconds = `0${seconds}`;
+	}
+	return `${minutes}:${seconds}`;
+});
+
+const lastMessageSenderIcon = computed(() => {
+	if (props.task.member.type === 'contact') return 'contacts';
+	return props.task.member.type;
 });
 
 function accept(task) {
-  if (showLoader.value) return;
+	if (showLoader.value) return;
 
-  showLoader.value = true;
-  emit('accept', task);
-  showLoader.value = false;
+	showLoader.value = true;
+	emit('accept', task);
+	showLoader.value = false;
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
 </style>

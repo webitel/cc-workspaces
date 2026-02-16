@@ -59,14 +59,15 @@ import { useAppNotification } from '../../features/modules/notifications/composa
 import { usePanelSizeController } from '../composables/usePanelSizeController';
 import CcHeader from '../modules/app-header/components/app-header.vue';
 import InfoSection from '../modules/info-section/components/the-agent-info-section.vue';
+import DescTrackAuthErrorPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-error-popup.vue';
+import DescTrackAuthSuccessPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-success-popup.vue';
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
 import WelcomePopup from '../modules/popups/welcome-popup/welcome-popup.vue';
 import QueueSection from '../modules/queue-section/components/the-agent-queue-section.vue';
+import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
-import DescTrackAuthErrorPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-error-popup.vue';
-import DescTrackAuthSuccessPopup from '../modules/popups/desc-track-auth-popup/components/desc-track-auth-success-popup.vue';
 
 const store = useStore();
 const route = useRoute();
@@ -74,66 +75,78 @@ const router = useRouter();
 
 useAppNotification();
 const {
-  queueSecCollapsed,
-  workspaceSecCollapsed,
-  infoSecCollapsed,
-  queueSecSize,
-  workspaceSecSize,
-  infoSecSize,
-  collapsible,
-  resizeQueuePanel,
-  resizeWorkspacePanel,
-  resizeInfoPanel,
+	queueSecCollapsed,
+	workspaceSecCollapsed,
+	infoSecCollapsed,
+	queueSecSize,
+	workspaceSecSize,
+	infoSecSize,
+	collapsible,
+	resizeQueuePanel,
+	resizeWorkspacePanel,
+	resizeInfoPanel,
 } = usePanelSizeController();
 
 const isInitLoading = ref(false);
 const isWelcomePopup = ref(true);
 const isDescTrackAuthSuccessPopup = ref(false);
 
-const checkAppAccess = computed(() => store.getters['ui/userinfo/CHECK_APP_ACCESS']);
-const isDescTrackAuthPopupsAllow = computed(() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW']);
-const agent = computed(() => store.state.ui.infoSec.agentInfo.agent)
-const isDescTrackAuthErrorPopup = computed(() => !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value));
+const userinfoStore = useUserinfoStore();
+const { hasApplicationVisibility } = userinfoStore;
+const isDescTrackAuthPopupsAllow = computed(
+	() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW'],
+);
+const agent = computed(() => store.state.ui.infoSec.agentInfo.agent);
+const isDescTrackAuthErrorPopup = computed(
+	() => !!(!agent.value?.descTrack && isDescTrackAuthPopupsAllow.value),
+);
 
 const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
 const initSession = async () => {
-  try {
-    isInitLoading.value = true;
-    await openSession();
-    if (route.query.failureRefresh) {
-      router.push({ ...router.currentRoute, query: { failureRefresh: undefined } });
-    }
-  } catch (err) {
-    if (!route.query.failureRefresh) {
-      await router.push({
-        ...router.currentRoute,
-        query: { failureRefresh: 'true' },
-      });
-      document.location.reload();
-    }
-  } finally {
-    isInitLoading.value = false;
-    isWelcomePopup.value = false;
-  }
+	try {
+		isInitLoading.value = true;
+		await openSession();
+		if (route.query.failureRefresh) {
+			router.push({
+				...router.currentRoute,
+				query: {
+					failureRefresh: undefined,
+				},
+			});
+		}
+	} catch (err) {
+		if (!route.query.failureRefresh) {
+			await router.push({
+				...router.currentRoute,
+				query: {
+					failureRefresh: 'true',
+				},
+			});
+			document.location.reload();
+		}
+	} finally {
+		isInitLoading.value = false;
+		isWelcomePopup.value = false;
+	}
 };
 
 const preventDrop = (event: DragEvent) => {
-  event.preventDefault();
-  event.stopPropagation();
+	event.preventDefault();
+	event.stopPropagation();
 };
 watch(isDescTrackAuthErrorPopup, () => {
-  if (isDescTrackAuthErrorPopup.value) {
-    agentLogout();
-  } else {
-    isDescTrackAuthSuccessPopup.value = isDescTrackAuthPopupsAllow.value;
-  }
+	if (isDescTrackAuthErrorPopup.value) {
+		agentLogout();
+	} else {
+		isDescTrackAuthSuccessPopup.value = isDescTrackAuthPopupsAllow.value;
+	}
 });
 
 onUnmounted(() => {
-  closeSession();
+	closeSession();
 });
 </script>
 

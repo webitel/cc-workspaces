@@ -28,10 +28,10 @@
 </template>
 
 <script setup lang="ts">
+import { EngineListQueue } from '@webitel/api-services/gen';
+import { QueueType } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { EngineListQueue } from '@webitel/api-services/gen';
-import { QueueType } from '@webitel/ui-sdk/enums'
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
@@ -45,22 +45,22 @@ const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const transfer = (item: QueueItem = {} as QueueItem) => {
-  if (call) {
-    return call.value.blindTransferQueue(Number(item.id));
-  }
+	if (call) {
+		return call.value.blindTransferQueue(Number(item.id));
+	}
 };
 
 const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
-  if (call) {
-    return call.value.processTransferQueue(Number(item.id));
-  }
+	if (call) {
+		return call.value.processTransferQueue(Number(item.id));
+	}
 };
 
 const getQueues = (params: TransferParams): Promise<EngineListQueue> => {
-  return queuesAPI.getList({
-    ...params,
-    queueType: QueueType.INBOUND_QUEUE
-  });
+	return queuesAPI.getList({
+		...params,
+		queueType: QueueType.INBOUND_QUEUE,
+	});
 };
 </script>
 <style scoped lang="scss">

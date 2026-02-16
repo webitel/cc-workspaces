@@ -35,22 +35,22 @@ import Labels from './contact-card-labels.vue';
 import Variables from './contact-card-variables.vue';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'sm',
-  },
-  contact: {
-    type: Object,
-    required: true,
-  },
-  linked: {
-    type: Boolean,
-    default: false,
-  },
+	size: {
+		type: String,
+		default: 'sm',
+	},
+	contact: {
+		type: Object,
+		required: true,
+	},
+	linked: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
-  'link',
+	'link',
 ]);
 
 const labels = computed(() => props.contact?.labels);

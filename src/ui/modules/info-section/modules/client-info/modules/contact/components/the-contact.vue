@@ -57,46 +57,51 @@ import SearchContact from './views/search-contact.vue';
 import ViewContact from './views/view-contact.vue';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-  size: {
-    type: String,
-    default: 'md',
-  },
+	task: {
+		type: Object,
+		required: true,
+	},
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
 const store = useStore();
 const { t } = useI18n();
 const mode = ref(ContactMode.VIEW);
 const namespace = 'ui/infoSec/client/contact';
-const workspaceState = computed(() => store.getters['workspace/WORKSRACE_STATE']);
+const workspaceState = computed(
+	() => store.getters['workspace/WORKSRACE_STATE'],
+);
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
 const taskId = computed(() => {
-  switch (workspaceState.value) {
-    case WorkspaceStates.CHAT: return props.task.conversationId;
-    case WorkspaceStates.CALL: return props.task.id;
-    default: return null;
-  }
+	switch (workspaceState.value) {
+		case WorkspaceStates.CHAT:
+			return props.task.conversationId;
+		case WorkspaceStates.CALL:
+			return props.task.id;
+		default:
+			return null;
+	}
 });
 
 const changeMode = (newMode) => {
-  mode.value = newMode;
+	mode.value = newMode;
 };
 
 function initializeContact() {
-  return store.dispatch(`${namespace}/INITIALIZE_CONTACT`);
+	return store.dispatch(`${namespace}/INITIALIZE_CONTACT`);
 }
 
 function loadContact(contactId) {
-  return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
+	return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
 }
 
 function openView(open, mode) {
-  open();
-  changeMode(mode);
+	open();
+	changeMode(mode);
 }
 
 /*
@@ -108,27 +113,33 @@ function openView(open, mode) {
   so there would be 2 calls of loadContact() and initializeContact() at one time
  */
 
-watch([
-  () => taskId.value,
-  () => props.task.contactId,
-  () => props.task.bridgedId, // to reset contact if bridgedId changes
-], (
-  [taskId, contactId, bridgedId],
-  [prevTaskId, prevContactId, prevBridgedId]
-) => {
-  if (taskId !== prevTaskId || !taskId || bridgedId !== prevBridgedId) {
-    changeMode(ContactMode.VIEW);
-    initializeContact();
-    return;
-  }
+watch(
+	[
+		() => taskId.value,
+		() => props.task.contactId,
+		() => props.task.bridgedId, // to reset contact if bridgedId changes
+	],
+	(
+		[taskId, contactId, bridgedId],
+		[prevTaskId, prevContactId, prevBridgedId],
+	) => {
+		if (taskId !== prevTaskId || !taskId || bridgedId !== prevBridgedId) {
+			changeMode(ContactMode.VIEW);
+			initializeContact();
+			return;
+		}
 
-  if (taskId === prevTaskId && contactId !== prevContactId) {
-    if (contactId) {
-      loadContact(contactId);
-      changeMode(ContactMode.VIEW);
-    }
-  }
-}, { immediate: true });
+		if (taskId === prevTaskId && contactId !== prevContactId) {
+			if (contactId) {
+				loadContact(contactId);
+				changeMode(ContactMode.VIEW);
+			}
+		}
+	},
+	{
+		immediate: true,
+	},
+);
 </script>
 
 <style lang="scss" scoped>

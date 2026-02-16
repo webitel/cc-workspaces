@@ -9,9 +9,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'EmptyWorkspaceEmpty',
-  };
+export default {
+	name: 'EmptyWorkspaceEmpty',
+};
 </script>
 
 <style lang="scss" scoped>

@@ -8,14 +8,12 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
-  loadMore: {
-    type: Function,
-    required: true,
-  }
+	loadMore: {
+		type: Function,
+		required: true,
+	},
 });
-
 </script>
 
 <style lang="scss" scoped>

@@ -25,10 +25,10 @@
 </template>
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { ChatHelperItem } from "../types/ChatHelperItem.types";
+import { ChatHelperItem } from '../types/ChatHelperItem.types';
 
 const props = defineProps<{
-  list: ChatHelperItem[];
+	list: ChatHelperItem[];
 }>();
 
 const activeIndex = ref(-1);
@@ -36,74 +36,78 @@ const activeIndex = ref(-1);
 const itemRefs = ref<HTMLElement[]>([]);
 
 const emit = defineEmits<{
-  select: [item: ChatHelperItem]
+	select: [
+		item: ChatHelperItem,
+	];
 }>();
 
 const select = (item) => {
-  emit('select', item);
+	emit('select', item);
 };
 
 const setItemRef = (el: HTMLElement | null, index: number) => {
-  if (el) itemRefs.value[index] = el;
+	if (el) itemRefs.value[index] = el;
 };
 
 const moveDown = () => {
-  // If click on the arrow down we assign the value +1
-  if (activeIndex.value < props.list.length - 1) {
-    return activeIndex.value += 1;
-  }
+	// If click on the arrow down we assign the value +1
+	if (activeIndex.value < props.list.length - 1) {
+		return (activeIndex.value += 1);
+	}
 };
 
 const moveUp = () => {
-  // If no item is active, set the first one as active
-  if(activeIndex.value === -1) {
-    return activeIndex.value = 0;
-    // If click on the arrow up we assign the value -1
-  } else if(activeIndex.value > 0) {
-    return activeIndex.value -= 1;
-  }
+	// If no item is active, set the first one as active
+	if (activeIndex.value === -1) {
+		return (activeIndex.value = 0);
+		// If click on the arrow up we assign the value -1
+	} else if (activeIndex.value > 0) {
+		return (activeIndex.value -= 1);
+	}
 };
 
 const selectItem = () => {
-  if(activeIndex.value >= 0 && activeIndex.value < props.list.length) {
-    select(props.list[activeIndex.value]);
-  }
-}
+	if (activeIndex.value >= 0 && activeIndex.value < props.list.length) {
+		select(props.list[activeIndex.value]);
+	}
+};
 
 const handleKeydown = (event) => {
-  switch (event.key) {
-    case 'ArrowDown':
-      moveDown();
-      break;
-    case 'ArrowUp':
-      moveUp();
-      break;
-    case 'Enter':
-      event.preventDefault();
-      selectItem();
-      break;
-  }
+	switch (event.key) {
+		case 'ArrowDown':
+			moveDown();
+			break;
+		case 'ArrowUp':
+			moveUp();
+			break;
+		case 'Enter':
+			event.preventDefault();
+			selectItem();
+			break;
+	}
 };
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeydown);
+	window.addEventListener('keydown', handleKeydown);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown);
-})
-
-watch(() => activeIndex.value, (newIndex) => {
-  // Scroll to the active item if we use arrow down key
-  const el = itemRefs.value[newIndex ?? -1];
-  if (el) {
-    el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-    });
-  }
+	window.removeEventListener('keydown', handleKeydown);
 });
 
+watch(
+	() => activeIndex.value,
+	(newIndex) => {
+		// Scroll to the active item if we use arrow down key
+		const el = itemRefs.value[newIndex ?? -1];
+		if (el) {
+			el.scrollIntoView({
+				behavior: 'smooth',
+				block: 'nearest',
+			});
+		}
+	},
+);
 </script>
 
 <style lang="scss" scoped>

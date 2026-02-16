@@ -37,65 +37,74 @@ import ContactHeader from './contact-header.vue';
 import EmptyContact from './empty-contact.vue';
 
 const props = defineProps({
-  list: {
-    type: Array,
-    required: true,
-  },
-  linkedContact: {
-    type: Object,
-    default: null,
-  },
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
-  mode: {
-    type: String,
-  },
-  namespace: {
-    type: String,
-    required: true,
-  },
+	list: {
+		type: Array,
+		required: true,
+	},
+	linkedContact: {
+		type: Object,
+		default: null,
+	},
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+	},
+	mode: {
+		type: String,
+	},
+	namespace: {
+		type: String,
+		required: true,
+	},
 });
 
 const emit = defineEmits([
-  'link', 'add',
+	'link',
+	'add',
 ]);
 
 const index = ref(0);
 const store = useStore();
 
-const isLoading = computed(() => getNamespacedState(store.state, props.namespace).isLoading);
+const isLoading = computed(
+	() => getNamespacedState(store.state, props.namespace).isLoading,
+);
 
 const isNext = computed(() => index.value < props.list.length - 1);
 const isPrev = computed(() => index.value > 0);
 
 const currentContact = computed(() => props.list[index.value]);
-const isEmptyContact = computed(() => !props.list.length && props.mode === ContactMode.VIEW && !isLoading.value);
+const isEmptyContact = computed(
+	() =>
+		!props.list.length && props.mode === ContactMode.VIEW && !isLoading.value,
+);
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
 function linkedContact() {
-  try {
-    emit('link', currentContact.value);
-    index.value = 0;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		emit('link', currentContact.value);
+		index.value = 0;
+	} catch (err) {
+		throw err;
+	}
 }
 
 function next() {
-  index.value += 1;
+	index.value += 1;
 }
 
 function prev() {
-  index.value -= 1;
+	index.value -= 1;
 }
 
 function add() {
-  emit('add');
+	emit('add');
 }
 
-watch(() => props.list, () => index.value = 0);
+watch(
+	() => props.list,
+	() => (index.value = 0),
+);
 </script>
 
 <style scoped lang="scss">

@@ -18,13 +18,15 @@
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
 export default {
-  name: 'NumpadNumbers',
-  mixins: [sizeMixin],
-  methods: {
-    input(value) {
-      this.$emit('input', value);
-    },
-  },
+	name: 'NumpadNumbers',
+	mixins: [
+		sizeMixin,
+	],
+	methods: {
+		input(value) {
+			this.$emit('input', value);
+		},
+	},
 };
 </script>
 

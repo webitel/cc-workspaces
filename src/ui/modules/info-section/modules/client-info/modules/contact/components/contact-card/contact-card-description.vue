@@ -21,15 +21,18 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-    options: ['sm', 'md'],
-  },
-  description: {
-    type: String,
-    default: '',
-  },
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+		options: [
+			'sm',
+			'md',
+		],
+	},
+	description: {
+		type: String,
+		default: '',
+	},
 });
 </script>
 

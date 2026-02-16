@@ -30,36 +30,44 @@ import TaskQueueContainer from '../../../_shared/components/task-queue-container
 import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
 import ActivePreview from './active-queue-preview.vue';
 
-
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-  },
+	size: {
+		type: String,
+		default: 'md',
+	},
 });
 
 const store = useStore();
 const closedChatsNamespace = 'features/chat/closed/unprocessed';
 
-const taskOnWorkspace = computed(() => store.getters['workspace/TASK_ON_WORKSPACE']);
+const taskOnWorkspace = computed(
+	() => store.getters['workspace/TASK_ON_WORKSPACE'],
+);
 
 const activeChats = computed(() => store.state.features.chat.chatList);
-const unprocessedClosedChats = computed(() => store.state.features.chat.closed.unprocessed.chatsList);
+const unprocessedClosedChats = computed(
+	() => store.state.features.chat.closed.unprocessed.chatsList,
+);
 const taskList = computed(() => [
-  ...activeChats.value,
-  ...unprocessedClosedChats.value
+	...activeChats.value,
+	...unprocessedClosedChats.value,
 ]);
 
-const nextClosedChats = computed(() => store.state.features.chat.closed.unprocessed.next);
+const nextClosedChats = computed(
+	() => store.state.features.chat.closed.unprocessed.next,
+);
 
-const loadClosedChatsList = () => store.dispatch(`${closedChatsNamespace}/LOAD_UNPROCESSED_CHATS`);
-const loadNextClosedChats = () => store.dispatch(`${closedChatsNamespace}/LOAD_NEXT_UNPROCESSED_CHATS`)
+const loadClosedChatsList = () =>
+	store.dispatch(`${closedChatsNamespace}/LOAD_UNPROCESSED_CHATS`);
+const loadNextClosedChats = () =>
+	store.dispatch(`${closedChatsNamespace}/LOAD_NEXT_UNPROCESSED_CHATS`);
 
-const getComponent = ((task) => task.closedAt && task.closeReason ? ClosedPreview : ActivePreview);
-const openTask = async (task) => await store.dispatch('features/chat/OPEN_CHAT', task);
+const getComponent = (task) =>
+	task.closedAt && task.closeReason ? ClosedPreview : ActivePreview;
+const openTask = async (task) =>
+	await store.dispatch('features/chat/OPEN_CHAT', task);
 
 loadClosedChatsList();
-
 </script>
 
 <style lang="scss" scoped>

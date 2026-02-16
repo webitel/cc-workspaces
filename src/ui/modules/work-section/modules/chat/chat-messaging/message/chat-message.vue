@@ -49,59 +49,61 @@
 </template>
 
 <script setup>
-
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, defineEmits, defineProps } from 'vue';
 
 import MessageAvatar from './components/chat-message-avatar.vue';
+import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
 import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageText from './components/chat-message-text.vue';
 import MessageTime from './components/chat-message-time.vue';
-import MessageBlockedError from './components/chat-message-blocked-error.vue';
 
 const props = defineProps({
-  message: {
-    type: Object,
-    required: true,
-  },
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
-  showAvatar: {
-    type: Boolean,
-    default: false,
-  },
-  username: {
-    type: String,
-  },
+	message: {
+		type: Object,
+		required: true,
+	},
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+	},
+	showAvatar: {
+		type: Boolean,
+		default: false,
+	},
+	username: {
+		type: String,
+	},
 });
 
-const emit = defineEmits(['open-image', 'initialized-player']);
+const emit = defineEmits([
+	'open-image',
+	'initialized-player',
+]);
 
-
-const isAgent = computed(() =>
-  props.message.member?.self
-  || props.message.member?.type === 'webitel'
+const isAgent = computed(
+	() => props.message.member?.self || props.message.member?.type === 'webitel',
 );
 
-const isBot = computed(() =>
-  props.message.member?.type === 'bot'
-  || (!props.message.member?.type && !props.message.channelId)
+const isBot = computed(
+	() =>
+		props.message.member?.type === 'bot' ||
+		(!props.message.member?.type && !props.message.channelId),
 );
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 const getClientUsername = computed(() => {
-  return !isAgentSide.value ? props.username : ''; // need to show username avatar only for client
+	return !isAgentSide.value ? props.username : ''; // need to show username avatar only for client
 });
 
 function handlePlayerInitialize(player) {
-  emit('initialized-player', { player });
-};
-
+	emit('initialized-player', {
+		player,
+	});
+}
 </script>
 
 <style lang="scss" scoped>

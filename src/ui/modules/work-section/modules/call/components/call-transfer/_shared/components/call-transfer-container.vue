@@ -44,56 +44,51 @@
 </template>
 
 <script setup lang="ts">
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
-
-import useInfiniteScroll from '../../../../../../../../../app/composables/useInfiniteScroll'
+import useInfiniteScroll from '../../../../../../../../../app/composables/useInfiniteScroll';
+import TransferLookupItem from '../../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
 import LookupItemContainer from '../../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
-import TransferLookupItem from '../../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
-import { transferParams } from '../../types/transfer-tabs'
-import TransferDestination from '../../../../../chat/enums/ChatTransferDestination.enum.js'
-import { ComponentSize } from '@webitel/ui-sdk/enums';
+import TransferDestination from '../../../../../chat/enums/ChatTransferDestination.enum.js';
+import { transferParams } from '../../types/transfer-tabs';
 
 interface CallTransferContainerProps {
-  size?: string;
-  type: string;
-  getData: (params: transferParams) => Promise<any>;
-  showStatus?: boolean;
-  showTeamName?: boolean;
-  showUserNameAvatar?: boolean;
-  dataFilters?: string;
-  dataFields?: string[];
-  presenceStatusField?: string;
+	size?: string;
+	type: string;
+	getData: (params: transferParams) => Promise<any>;
+	showStatus?: boolean;
+	showTeamName?: boolean;
+	showUserNameAvatar?: boolean;
+	dataFilters?: string;
+	dataFields?: string[];
+	presenceStatusField?: string;
 }
 
-interface CallTransferContainerEmits {
-  (e: 'transfer', item: any): void;
-}
+type CallTransferContainerEmits = (e: 'transfer', item: any) => void;
 
 const props = withDefaults(defineProps<CallTransferContainerProps>(), {
-  size: ComponentSize.MD,
-  type: TransferDestination.USER,
-  showStatus: false,
-  showTeamName: false,
-  showUserNameAvatar: false,
-  dataFilters: '',
-  dataFields: () => [],
-  presenceStatusField: 'presence'
+	size: ComponentSize.MD,
+	type: TransferDestination.USER,
+	showStatus: false,
+	showTeamName: false,
+	showUserNameAvatar: false,
+	dataFilters: '',
+	dataFields: () => [],
+	presenceStatusField: 'presence',
 });
 
 const emit = defineEmits<CallTransferContainerEmits>();
 
 const scroll = useInfiniteScroll({
-  filters: props.dataFilters,
-  fields: props.dataFields,
-  fetchFn: (params) => props.getData(params)
+	filters: props.dataFilters,
+	fields: props.dataFields,
+	fetchFn: (params) => props.getData(params),
 });
 
 const isTransferToNumberDisabled = computed(() => !scroll.dataSearch.value);
 
 const { dataList, dataSearch, isLoading, handleIntersect, resetData } = scroll;
-
-
 </script>
 
 <style lang="scss" scoped>

@@ -48,27 +48,27 @@ const rating = ref(route.query.rating || 0);
 const hashKey = ref(route.query.hk);
 
 onMounted(async () => {
-  try {
-    await FeedbackApi.getFeedback({
-      key: hashKey.value,
-    });
+	try {
+		await FeedbackApi.getFeedback({
+			key: hashKey.value,
+		});
 
-    // @author @stanislav-kozak
-    // If feedback already set, we should display error state
-    isError.value = true;
-  } catch (error) {
-    // @author @stanislav-kozak
-    // If feedback not found (404 error), we should set feedback by rating from params
-    if (error.status === 404) {
-      await FeedbackApi.setFeedback({
-        key: hashKey.value,
-        rating: rating.value,
-      });
-    } else {
-      isError.value = true;
-    }
-  }
-  showAnswer.value = true;
+		// @author @stanislav-kozak
+		// If feedback already set, we should display error state
+		isError.value = true;
+	} catch (error) {
+		// @author @stanislav-kozak
+		// If feedback not found (404 error), we should set feedback by rating from params
+		if (error.status === 404) {
+			await FeedbackApi.setFeedback({
+				key: hashKey.value,
+				rating: rating.value,
+			});
+		} else {
+			isError.value = true;
+		}
+	}
+	showAnswer.value = true;
 });
 </script>
 

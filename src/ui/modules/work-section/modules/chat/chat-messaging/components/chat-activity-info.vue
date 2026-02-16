@@ -7,7 +7,7 @@
           :color="content.iconColor"
           size="sm"
         />
-        <p class="chat-activity-info__title">
+        <p class="chat-activity-info__title typo-caption">
           {{ content.title }}
         </p>
         <wt-hint v-if="props.provider">
@@ -30,33 +30,35 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  ended: {
-    type: Boolean,
-    default: false,
-  },
-  provider: {
-    type: String,
-    default: '',
-  },
-  gateway: {
-    type: String,
-    default: '',
-  },
-
+	ended: {
+		type: Boolean,
+		default: false,
+	},
+	provider: {
+		type: String,
+		default: '',
+	},
+	gateway: {
+		type: String,
+		default: '',
+	},
 });
 
 const { t } = useI18n();
 
 const content = computed(() =>
-  props.ended
-    ? { icon: 'chat-end',
-      iconColor: 'error',
-      title: t('workspaceSec.chat.chatEnded') }
-    : { icon: 'chat',
-      iconColor: 'success',
-      title: t('workspaceSec.chat.chatStarted') }
-)
-
+	props.ended
+		? {
+				icon: 'chat-end',
+				iconColor: 'error',
+				title: t('workspaceSec.chat.chatEnded'),
+			}
+		: {
+				icon: 'chat',
+				iconColor: 'success',
+				title: t('workspaceSec.chat.chatStarted'),
+			},
+);
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +71,7 @@ const content = computed(() =>
 
   &__content {
     display: flex;
+    align-items: center;
     cursor: default;
     gap: var(--spacing-2xs)
   }

@@ -39,7 +39,14 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { computed, onMounted, nextTick, onUnmounted, useTemplateRef, watch } from 'vue';
+import {
+	computed,
+	nextTick,
+	onMounted,
+	onUnmounted,
+	useTemplateRef,
+	watch,
+} from 'vue';
 import { useStore } from 'vuex';
 
 import ChatActivityInfo from '../components/chat-activity-info.vue';
@@ -54,49 +61,58 @@ const store = useStore();
 const chatMediaNamespace = 'features/chat/chatMedia';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
-})
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+	},
+});
 
 const el = useTemplateRef('chat-messages-items');
-const currentChat = computed(() => store.getters[`features/chat/CHAT_ON_WORKSPACE`]);
+const currentChat = computed(
+	() => store.getters[`features/chat/CHAT_ON_WORKSPACE`],
+);
 
 const {
-  messages,
+	messages,
 
-  showAvatar,
-  showChatDate,
-  focusOnInput,
-  isLastMessage,
+	showAvatar,
+	showChatDate,
+	focusOnInput,
+	isLastMessage,
 } = useChatMessages();
 
 const {
-  showScrollToBottomBtn,
-  newUnseenMessages,
-  scrollToBottom,
-  handleChatScroll,
-  updateThreshold,
+	showScrollToBottomBtn,
+	newUnseenMessages,
+	scrollToBottom,
+	handleChatScroll,
+	updateThreshold,
 } = useChatScroll(el);
 
 onUnmounted(() => {
-  cleanChatPlayers();
-})
+	cleanChatPlayers();
+});
 
-const openMedia = (message) => store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
-const attachPlayer = (player) => store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
-const cleanChatPlayers = (message) => store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
+const openMedia = (message) =>
+	store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
+const attachPlayer = (player) =>
+	store.dispatch(`${chatMediaNamespace}/ATTACH_PLAYER_TO_CHAT`, player);
+const cleanChatPlayers = (message) =>
+	store.dispatch(`${chatMediaNamespace}/CLEAN_CHAT_PLAYERS`, message);
 
-watch(() => currentChat.value?.id,
-  async () => {
-    await nextTick(() => scrollToBottom());
-  },{ immediate: true }
+watch(
+	() => currentChat.value?.id,
+	async () => {
+		await nextTick(() => scrollToBottom());
+	},
+	{
+		immediate: true,
+	},
 );
 
 onUnmounted(() => {
-  cleanChatPlayers();
-})
+	cleanChatPlayers();
+});
 </script>
 
 <style lang="scss" scoped>

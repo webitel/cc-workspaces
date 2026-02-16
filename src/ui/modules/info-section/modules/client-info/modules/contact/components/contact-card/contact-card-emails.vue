@@ -30,14 +30,17 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'md',
-    options: ['sm', 'md'],
-  },
-  contact: {
-    type: Object,
-  },
+	size: {
+		type: String,
+		default: 'md',
+		options: [
+			'sm',
+			'md',
+		],
+	},
+	contact: {
+		type: Object,
+	},
 });
 
 const emails = computed(() => props.contact?.emails);

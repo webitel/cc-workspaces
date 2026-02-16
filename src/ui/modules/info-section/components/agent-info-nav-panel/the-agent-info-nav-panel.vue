@@ -18,20 +18,22 @@
 <script>
 import sizeMixin from '../../../../../app/mixins/sizeMixin';
 export default {
-  name: 'TheAgentInfoSectionNavPanel',
-  mixins: [sizeMixin],
-  model: {
-    prop: 'currentTab',
-  },
-  props: {
-    currentTab: {
-      type: Object,
-    },
-    tabs: {
-      type: Array,
-      default: () => [],
-    },
-  },
+	name: 'TheAgentInfoSectionNavPanel',
+	mixins: [
+		sizeMixin,
+	],
+	model: {
+		prop: 'currentTab',
+	},
+	props: {
+		currentTab: {
+			type: Object,
+		},
+		tabs: {
+			type: Array,
+			default: () => [],
+		},
+	},
 };
 </script>
 

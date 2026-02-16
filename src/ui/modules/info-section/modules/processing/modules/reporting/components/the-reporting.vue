@@ -53,46 +53,54 @@ import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FailureForm from './reporting-failure-form.vue';
 
 export default {
-  name: 'TheReporting',
-  components: { FailureForm },
-  mixins: [processingModuleMixin],
-  computed: {
-    // is needed for watcher
-    isTaskReporting() {
-      return !!this.taskReporting;
-    },
-    taskReporting() {
-      return this.task.postProcessData;
-    },
-    reportingSent() {
-      return this.task.attempt?.reportedAt;
-    },
-    reportButtonColor() {
-      return this.reportingSent ? 'secondary' : 'primary';
-    },
-    reportButtonText() {
-      return this.reportingSent ? this.$t('reusable.edit') : this.$t('reusable.send');
-    },
-  },
+	name: 'TheReporting',
+	components: {
+		FailureForm,
+	},
+	mixins: [
+		processingModuleMixin,
+	],
+	computed: {
+		// is needed for watcher
+		isTaskReporting() {
+			return !!this.taskReporting;
+		},
+		taskReporting() {
+			return this.task.postProcessData;
+		},
+		reportingSent() {
+			return this.task.attempt?.reportedAt;
+		},
+		reportButtonColor() {
+			return this.reportingSent ? 'secondary' : 'primary';
+		},
+		reportButtonText() {
+			return this.reportingSent
+				? this.$t('reusable.edit')
+				: this.$t('reusable.send');
+		},
+	},
 
-  methods: {
-    ...mapActions('ui/infoSec/processing/reporting', {
-      initReportingForm: 'INIT_REPORTING_FORM',
-    }),
-    sendReporting() {
-      const reporting = this.taskReporting.generateReporting();
-      this.task.reporting(reporting);
-    },
-    setSuccess(value) {
-      this.taskReporting.success = value;
-    },
-  },
-  watch: {
-    isTaskReporting: {
-      handler() { this.initReportingForm(); },
-      immediate: true,
-    },
-  },
+	methods: {
+		...mapActions('ui/infoSec/processing/reporting', {
+			initReportingForm: 'INIT_REPORTING_FORM',
+		}),
+		sendReporting() {
+			const reporting = this.taskReporting.generateReporting();
+			this.task.reporting(reporting);
+		},
+		setSuccess(value) {
+			this.taskReporting.success = value;
+		},
+	},
+	watch: {
+		isTaskReporting: {
+			handler() {
+				this.initReportingForm();
+			},
+			immediate: true,
+		},
+	},
 };
 </script>
 
