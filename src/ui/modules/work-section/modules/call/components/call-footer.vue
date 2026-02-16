@@ -3,17 +3,14 @@
     <wt-rounded-action
       v-if="!isVideoCall"
       :active="isOnNumpad"
-      :class="{
-          'hidden': !isNumpad,
-         }"
       :size="size"
-      class="call-action"
+      class="call-footer-action"
       color="secondary"
       icon="numpad"
       rounded
       wide
       @click="$emit('openTab', CallTab.Numpad)"
-    ></wt-rounded-action>
+    />
     <wt-rounded-action
       v-if="!isVideoCall"
       :active="isOnHold"
@@ -23,12 +20,12 @@
         }"
       :color="isOnHold ? 'hold' : 'secondary'"
       :size="size"
-      class="call-action"
+      class="call-footer-action"
       icon="hold"
       rounded
       wide
       @click="toggleHold"
-    ></wt-rounded-action>
+    />
     <wt-rounded-action
       :active="isOnMuted"
       :class="{
@@ -36,17 +33,17 @@
         }"
       :icon="isOnMuted ? 'mic-muted' : 'mic'"
       :size="size"
-      class="call-action call-action__mic"
+      class="call-footer-action call-footer-action__mic"
       color="secondary"
       rounded
       wide
       @click="toggleMute"
-    ></wt-rounded-action>
+    />
     <wt-rounded-action
       v-if="isVideoCall"
       :size="size"
-      class="call-action"
-      :icon="!isVideoMuted ? 'video-cam' : 'video-cam-off'"
+      class="call-footer-action"
+      :icon="isVideoMuted ? 'video-cam-off' : 'video-cam'"
       rounded
       wide
       @click="toggleVideo"
@@ -54,129 +51,69 @@
   </task-footer>
 </template>
 
-<script>
-import { mapActions, mapGetters } from 'vuex';
+<script lang="ts" setup>
+import { ref, computed, onMounted, onUnmounted, withDefaults } from 'vue';
+import { useStore } from 'vuex';
 
-import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 import { CallTab } from '../enums/CallTab.enum';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
-export default {
-	name: 'CallFooter',
-	components: {
-		TaskFooter,
+const props = withDefaults(
+	defineProps<{
+		currentTab?: string;
+		size?: ComponentSize;
+	}>(),
+	{
+		currentTab: CallTab.Numpad,
+		size: ComponentSize.MD,
 	},
-	mixins: [
-		sizeMixin,
-	],
-	props: {
-		currentTab: {
-			type: String,
+);
+
+const store = useStore();
+
+const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+const isVideoCall = computed(
+	() => store.getters['features/call/videoCall/IS_VIDEO_CALL'],
+);
+
+const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
+const isOnMuted = computed(() => call.value?.muted);
+const isOnHold = computed(() => call.value?.isHold);
+
+const isMuted = computed(() => !isNewCall.value);
+const isHold = computed(() => !isNewCall.value);
+
+const isVideoMuted = computed(() => call.value?.mutedVideo);
+
+const toggleMute = () => store.dispatch('features/call/TOGGLE_MUTE');
+const toggleHold = () => store.dispatch('features/call/TOGGLE_HOLD');
+const toggleVideo = () =>
+	store.dispatch('features/call/videoCall/TOGGLE_VIDEO');
+
+const hotkeyUnsubscribers = ref([]);
+
+const setupHotkeys = () => {
+	hotkeyUnsubscribers.value = useHotkeys([
+		{
+			event: HotkeyAction.MUTE,
+			callback: toggleMute,
 		},
-	},
-
-	data: () => ({
-		hotkeyUnsubscribers: [],
-		// Made CallTab available in template (required for Options API)
-		CallTab: CallTab,
-	}),
-
-	computed: {
-		...mapGetters('features/call', {
-			call: 'CALL_ON_WORKSPACE',
-			isNewCall: 'IS_NEW_CALL',
-		}),
-		...mapGetters('features/call/videoCall', {
-			isVideoCall: 'IS_VIDEO_CALL',
-		}),
-
-		// controls Active state
-		isOnNumpad() {
-			return this.currentTab === CallTab.Numpad;
+		{
+			event: HotkeyAction.HOLD,
+			callback: toggleHold,
 		},
-
-		// controls btn Appearance
-		isNumpad() {
-			return true;
-		},
-
-		// controls Active state
-		isOnMuted() {
-			return this.call.muted;
-		},
-
-		// controls btn visibility
-		isMuted() {
-			return !this.isNewCall;
-		},
-
-		// controls Active state
-		isOnHold() {
-			return this.call.isHold;
-		},
-
-		// controls btn visibility
-		isHold() {
-			return !this.isNewCall;
-		},
-
-		// controls Active state
-		isOnRecord() {
-			return false;
-		},
-
-		// controls btn visibility
-		isRecord() {
-			return !this.isNewCall;
-		},
-
-		// controls Active state
-		isOnNote() {
-			return false;
-		},
-
-		// controls btn visibility
-		isNote() {
-			return !this.isNewCall;
-		},
-		isVideoMuted() {
-			return this.call.mutedVideo;
-		},
-	},
-
-	methods: {
-		...mapActions('features/call', {
-			toggleMute: 'TOGGLE_MUTE',
-			toggleHold: 'TOGGLE_HOLD',
-		}),
-		...mapActions('features/call/videoCall', {
-			toggleVideo: 'TOGGLE_VIDEO',
-		}),
-		setupHotkeys() {
-			const subscribers = [
-				{
-					event: HotkeyAction.MUTE,
-					callback: this.toggleMute,
-				},
-				{
-					event: HotkeyAction.HOLD,
-					callback: this.toggleHold,
-				},
-			];
-			this.hotkeyUnsubscribers = useHotkeys(subscribers);
-		},
-	},
-
-	mounted() {
-		this.setupHotkeys();
-	},
-
-	unmounted() {
-		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
-	},
+	]);
 };
+
+onMounted(setupHotkeys);
+
+onUnmounted(() => {
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+});
 </script>
 
 <style lang="scss" scoped>
