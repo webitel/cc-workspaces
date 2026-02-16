@@ -1,5 +1,5 @@
 import { ref, reactive, shallowReactive, markRaw, readonly } from 'vue';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 import { Client } from 'webitel-sdk';
 
 import websocketErrorEventHandler from './websocketErrorEventHandler';
@@ -24,7 +24,7 @@ type EventMap = {
   [WebSocketClientEvent.ERROR]: EventCallback<unknown>;
 };
 
-const client = ref<Client | null>(null);
+let client: Client | null = null;
 const state = ref<keyof typeof WebSocketConnectionState>(WebSocketConnectionState.IDLE);
 
 let clientInitPromise: Promise<Client> | null = null;
@@ -95,7 +95,19 @@ function attachCoreHandlers(cli: Client, generation: number) {
   });
 }
 
-async function ensurePhoneUA(cli: Client) {
+/**
+ * Mark the asynchronously created phone UA instance as raw.
+ *
+ * The phone instance is created after auth, so we wait for it to appear
+ * (or for the `phone_connected` event) and then wrap `cli.phone.ua` in
+ * `markRaw` to prevent Vue from making it reactive.
+ */
+async function markAsyncPhoneRaw(cli: Client) {
+  /*
+    cli.phone.ua contains "configuration" property, which has no setter so cannot be wrapped with reactivity.
+    so that, reactivity breaks
+     for more info, see WTEL-4236
+     */
   return new Promise<void>((resolve) => {
     const timeout = window.setTimeout(resolve, 5000);
 
@@ -119,6 +131,8 @@ async function createClient(): Promise<Client> {
   const token = localStorage.getItem('access-token');
   const cliConfig = getCliConfig();
 
+    // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
+    // const cli = new Client(config);
   const cli = shallowReactive(
     new Client({
       endpoint,
@@ -128,6 +142,7 @@ async function createClient(): Promise<Client> {
     }),
   );
 
+  // why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
   cli.conversationStore = reactive(cli.conversationStore);
   cli.callStore = reactive(cli.callStore);
 
@@ -137,21 +152,21 @@ async function createClient(): Promise<Client> {
   await cli.auth();
 
   emit(WebSocketClientEvent.AFTER_AUTH, cli);
-  await ensurePhoneUA(cli);
+  await markAsyncPhoneRaw(cli);
 
   (window as any).cli = cli;
   return cli;
 }
 
 async function destroyClient() {
-  if (!client.value) return;
+  if (!client) return;
 
   try {
-    await client.value.destroy?.();
+    await client.destroy?.();
   } catch (e) {
     console.warn('[WS] destroy error', e);
   } finally {
-    client.value = null;
+    client = null;
     state.value = WebSocketConnectionState.DISCONNECTED;
     (window as any).cli = null;
   }
@@ -166,7 +181,7 @@ function scheduleReconnect() {
   reconnectTimer = window.setTimeout(async () => {
     reconnectTimer = null;
     try {
-      await getCliInstance({ force: true });
+      await getCliInstance({ forceReconnnect: true });
       reconnectAttempt = 0;
     } catch {
       scheduleReconnect();
@@ -184,26 +199,26 @@ async function handleDisconnect() {
 }
 
 async function getCliInstance(
-  { force = false }: { force?: boolean } = {},
+  { forceReconnnect = false }: { forceReconnnect?: boolean } = {},
 ): Promise<Client> {
   if (
-    !force &&
-    client.value &&
+    !forceReconnnect &&
+    client &&
     state.value === WebSocketConnectionState.CONNECTED
   ) {
-    return client.value;
+    return client;
   }
 
   if (clientInitPromise) return clientInitPromise;
 
-  state.value = client.value
+  state.value = client
     ? WebSocketConnectionState.RECONNECTING
     : WebSocketConnectionState.CONNECTING;
 
   clientInitPromise = (async () => {
     try {
       const cli = await createClient();
-      client.value = cli;
+      client = cli;
       state.value = WebSocketConnectionState.CONNECTED;
       return cli;
     } finally {
@@ -229,7 +244,7 @@ export function useWebSocketClient() {
   }
 
   return {
-    client: readonly(client),
+    client,
     state: readonly(state),
 
     getCliInstance,

@@ -1,4 +1,4 @@
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 import i18n from '../../../locale/i18n';
 
 interface WebSocketError {
