@@ -1,56 +1,56 @@
 <template>
   <task-footer>
-    <wt-rounded-action
+    <wt-button
       v-if="!isVideoCall"
-      :active="isOnNumpad"
+      :variant="isOnNumpad ? 'active' : 'outlined'"
       :class="{
           'hidden': !isNumpad,
          }"
       :size="size"
       class="call-action"
-      color="secondary"
       icon="numpad"
+      color="secondary"
       rounded
       wide
       @click="$emit('openTab', CallTab.Numpad)"
-    ></wt-rounded-action>
-    <wt-rounded-action
-      v-if="!isVideoCall"
-      :active="isOnHold"
-      :class="{
-          'hidden': !isHold,
-          'hold': isOnHold,
-        }"
-      :color="isOnHold ? 'hold' : 'secondary'"
-      :size="size"
-      class="call-action"
-      icon="hold"
-      rounded
-      wide
-      @click="toggleHold"
-    ></wt-rounded-action>
-    <wt-rounded-action
-      :active="isOnMuted"
+    ></wt-button>
+    <wt-button
       :class="{
           'hidden': !isMuted,
         }"
       :icon="isOnMuted ? 'mic-muted' : 'mic'"
+      :variant="isOnMuted ? 'active' : 'outlined'"
       :size="size"
       class="call-action call-action__mic"
       color="secondary"
       rounded
       wide
       @click="toggleMute"
-    ></wt-rounded-action>
-    <wt-rounded-action
+    ></wt-button>
+    <wt-button
       v-if="isVideoCall"
       :size="size"
-      class="call-action"
       :icon="!isVideoMuted ? 'video-cam' : 'video-cam-off'"
+      class="call-action"
+      color="secondary"
+      variant="outlined"
       rounded
       wide
       @click="toggleVideo"
     />
+    <wt-button
+      :class="{
+          'hidden': !isHold,
+        }"
+      :variant="isOnHold ? 'active' : 'outlined'"
+      :size="size"
+      class="call-action"
+      color="secondary"
+      icon="hold"
+      rounded
+      wide
+      @click="toggleHold"
+    ></wt-button>
   </task-footer>
 </template>
 

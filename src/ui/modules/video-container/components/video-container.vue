@@ -20,6 +20,7 @@
     :username="userName"
     :size="videoContainerSize"
     :overlay="false"
+    :call:onHold="callIsOnHold"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
@@ -77,6 +78,9 @@ const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 const call = computed<any>(
 	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
 );
+const callIsOnHold = computed<boolean>(() => {
+  return store.getters['features/call/CALL_ON_WORKSPACE']?.isHold || false
+})
 
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(
@@ -118,8 +122,8 @@ const mutedVideo = computed(() => call.value.mutedVideo);
 const remoteVideoMuted = computed(() => {
 	if (!call.value?.id) return false;
 
-	const callInfo = store.state.features.call.callInfo.get(call.value.id);
-	return !!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted;
+  const callInfo = store.state.features.call.callInfo.get(call.value.id);
+  return !!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted;
 });
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
