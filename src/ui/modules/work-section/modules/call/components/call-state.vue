@@ -6,25 +6,24 @@
         :src="sonarIcon"
       />
     </div>
-    <div
-      v-if="showTimer"
-      class="numpad-state__primary-text"
+    <div v-if="showTimer"
+      class="numpad-state__primary-text typo-heading-1"
     >
       <span class="numpad-state__primary-text__state">
-        <span class="numpad-state__primary-text__state">
+        <span class="numpad-state__primary-text__state typo-heading-1">
           {{ callState }}{{ showTimer ? ': ' : '' }}
         </span>
         <span
           v-for="(digit, key) of displayTime.split('')"
           :key="key"
-          class="numpad-state__primary-text__time-digit"
+          class="numpad-state__primary-text__time-digit typo-body-1"
         >
           {{ digit }}
         </span>
-        >
         {{ digit }}
       </span>
     </div>
+
     <div
       v-if="dtmf"
       class="numpad-state__secondary-text typo-subtitle-1"
@@ -34,10 +33,7 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { useCallState } from '../../../../../composables/useCallState';
 
 defineOptions({
@@ -58,6 +54,7 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
   flex-direction: column;
   align-items: center;
   max-width: 100%;
+  height: 100%;
 
   &__animation {
     margin-bottom: var(--spacing-xs);
