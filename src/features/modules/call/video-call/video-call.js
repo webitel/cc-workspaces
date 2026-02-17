@@ -15,13 +15,9 @@ const actions = {
 const getters = {
 	IS_VIDEO_CALL: (state, getters, rootState, rootGetters) => (call) => {
 		const callOnWorkspace =
-			call || rootGetters['workspace/TASK_ON_WORKSPACE'];
+			call || rootGetters['workspace/CALL_ON_WORKSPACE'];
 
 		if (!callOnWorkspace) return false;
-
-		if (!call && !rootGetters['features/call/CALL_ON_WORKSPACE']) {
-			return false;
-		}
 
 		const video = callOnWorkspace?.remoteVideo;
 
