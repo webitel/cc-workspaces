@@ -1,7 +1,6 @@
 <template>
   <task-footer>
     <wt-rounded-action
-      v-if="!isVideoCall"
       :active="isOnNumpad"
       :size="size"
       class="call-footer-action"

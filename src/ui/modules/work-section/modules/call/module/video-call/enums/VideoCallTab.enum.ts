@@ -1,5 +1,5 @@
 export const VideoCallTab = {
-	Processing: 'processing',
+	Numpad: 'numpad',
 	Contacts: 'contacts',
 	History: 'history',
 	Transfer: 'transfer',

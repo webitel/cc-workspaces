@@ -56,14 +56,14 @@ import CallHeader from './../../../components/call-header.vue';
 import CallPreview from '../../../components/call-preview.vue';
 import { VideoCallTab } from '../enums/VideoCallTab.enum';
 import VideoCallChat from '../module/chat/components/the-video-call-chat.vue';
-import VideoCallState from './video-call-state.vue';
+import Numpad from '../../../components/call-numpad/numpad.vue';
 
 interface Props {
 	size?: ComponentSize;
 }
 // Component mapping
 const videoCallTabComponents = {
-	[VideoCallTab.Processing]: VideoCallState,
+	[VideoCallTab.Numpad]: Numpad,
 	[VideoCallTab.Contacts]: Contacts,
 	[VideoCallTab.History]: History,
 	[VideoCallTab.Chat]: VideoCallChat,
@@ -75,7 +75,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const store = useStore();
 
-const currentTab = ref(VideoCallTab.Processing);
+const currentTab = ref(VideoCallTab.Numpad);
 const isActive = ref(false);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
@@ -92,11 +92,11 @@ const currentComponent = computed(
 );
 
 const openCall = () => {
-	currentTab.value = VideoCallTab.Processing;
+	currentTab.value = VideoCallTab.Numpad;
 };
 
 const openTab = (tab) =>
-	(currentTab.value = currentTab.value === tab ? VideoCallTab.Processing : tab);
+	(currentTab.value = currentTab.value === tab ? VideoCallTab.Numpad : tab);
 
 watch(
 	[
