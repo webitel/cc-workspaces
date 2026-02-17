@@ -17,7 +17,9 @@
       <component
         :is-active="isActive"
         :is="currentComponent"
-        :size="size" />
+        :size="size"
+        @closeTab="openCall"
+      />
     </template>
 
     <template #footer>

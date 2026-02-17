@@ -69,9 +69,14 @@ const scroll = computed(
 		},
 );
 
-const transfer = (item: UserItem = {} as UserItem) => {
+const emit = defineEmits([
+  'closeTab',
+]);
+
+const transfer = async (item: UserItem = {} as UserItem) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
-	store.dispatch('features/call/BLIND_TRANSFER', number);
+  await store.dispatch('features/call/BLIND_TRANSFER', number);
+  emit('closeTab');
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {
