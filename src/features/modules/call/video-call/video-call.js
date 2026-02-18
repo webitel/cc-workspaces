@@ -17,13 +17,7 @@ const getters = {
 		const callOnWorkspace =
 			call || rootGetters['workspace/CALL_ON_WORKSPACE'];
 
-		if (!callOnWorkspace) return false;
-
-		const video = callOnWorkspace?.remoteVideo;
-
-		return [
-			VideoMediaFlow.SendRecv,
-		].includes(video);
+		return  callOnWorkspace?.remoteVideo === VideoMediaFlow.SendRecv;
 	},
 };
 
