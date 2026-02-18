@@ -1,7 +1,7 @@
 <template>
   <div
     class="call-state"
-    :class="{ 'call-state--centered': centered }"
+    :class="{ 'call-state--centered': showTimer }"
   >
     <div class="call-state__animation">
       <img

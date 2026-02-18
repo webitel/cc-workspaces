@@ -28,7 +28,6 @@
     </template>
     <template #body>
       <component
-        centered
         :is="currentComponent"
         :is-active="isActive"
         :size="props.size" />
