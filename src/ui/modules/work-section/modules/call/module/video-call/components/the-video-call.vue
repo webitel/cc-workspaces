@@ -56,14 +56,14 @@ import CallHeader from './../../../components/call-header.vue';
 import CallPreview from '../../../components/call-preview.vue';
 import { VideoCallTab } from '../enums/VideoCallTab.enum';
 import VideoCallChat from '../module/chat/components/the-video-call-chat.vue';
-import VideoCallState from './video-call-state.vue';
+import CallState from '../../../components/call-state.vue';
 
 interface Props {
 	size?: ComponentSize;
 }
 // Component mapping
 const videoCallTabComponents = {
-	[VideoCallTab.Processing]: VideoCallState,
+	[VideoCallTab.Processing]: CallState,
 	[VideoCallTab.Contacts]: Contacts,
 	[VideoCallTab.History]: History,
 	[VideoCallTab.Chat]: VideoCallChat,
