@@ -27,6 +27,12 @@ const callHandler = (context) => (action, call) => {
 	}
 };
 
+const dispatchIfVideoCall = (context, call) => {
+	if (context.getters['videoCall/IS_VIDEO_CALL']) {
+		context.dispatch('HANDLE_INFO_ACTION', call);
+	}
+};
+
 const actions = {
 	SUBSCRIBE_CALLS: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
@@ -44,6 +50,8 @@ const actions = {
 		) {
 			await context.dispatch('SET_WORKSPACE', call);
 		}
+
+		dispatchIfVideoCall(context, call);
 
 		// have to check is call not manual or not from offline queue before send notification https://webitel.atlassian.net/browse/WTEL-4502
 		if (
@@ -78,6 +86,7 @@ const actions = {
 	HANDLE_ACTIVE_ACTION: async (context, call) => {
 		if (call.firstActive) openLinkFromVariable(call);
 		context.dispatch('HOLD_OTHER_CALLS', call);
+		dispatchIfVideoCall(context, call);
 	},
 
 	HANDLE_DESTROY_ACTION: async (context, call) => {
