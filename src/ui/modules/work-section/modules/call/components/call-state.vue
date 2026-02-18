@@ -46,13 +46,6 @@ import { useCallState } from '../../../../../composables/useCallState';
 defineOptions({
 	name: 'CallState',
 });
-
-withDefaults(defineProps<{
-  centered?: boolean;
-}>(), {
-  centered: false,
-});
-
 const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
 </script>
 
