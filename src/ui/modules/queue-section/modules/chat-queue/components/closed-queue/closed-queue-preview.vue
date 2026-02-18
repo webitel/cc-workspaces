@@ -192,11 +192,6 @@ const markChatAsProcessed = () =>
       opacity: 1;
       pointer-events: auto;
     }
-
-    .closed-queue-preview__status {
-      opacity: 0;
-      pointer-events: none;
-    }
   }
 }
 
