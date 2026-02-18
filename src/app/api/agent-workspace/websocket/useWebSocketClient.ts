@@ -1,10 +1,11 @@
-import { ref, reactive, shallowReactive, markRaw, readonly } from 'vue';
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
 import { Client } from 'webitel-sdk';
 
 import { WebSocketClientEvent } from '../../../types/WebSocketClientEvent';
 import { WebSocketConnectionState } from '../../../types/WebSocketConnectionState';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
+
 /* ============================================================================
  * Constants
  * ========================================================================== */

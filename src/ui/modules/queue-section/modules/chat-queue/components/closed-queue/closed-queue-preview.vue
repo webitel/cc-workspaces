@@ -111,11 +111,11 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
 import LastMessageContainer from '../_shared/last-message-container.vue';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 const props = defineProps({
 	task: {
