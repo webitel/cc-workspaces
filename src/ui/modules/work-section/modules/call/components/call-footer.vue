@@ -44,6 +44,7 @@
     ></wt-rounded-action>
     <wt-rounded-action
       v-if="isVideoCall"
+			:active="isVideoMuted"
       :size="size"
       class="call-action"
       :icon="!isVideoMuted ? 'video-cam' : 'video-cam-off'"
