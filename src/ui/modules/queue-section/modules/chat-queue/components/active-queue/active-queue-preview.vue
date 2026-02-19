@@ -67,11 +67,12 @@
 
 <script>
 import { ConversationState } from 'webitel-sdk';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
@@ -100,8 +101,8 @@ export default {
 		},
 		lastMessageSenderIcon() {
 			if (!this.lastMessage.member) return 'bot';
-			if (this.lastMessage.member?.self) return 'contacts';
-			if (this.lastMessage.member?.type) return 'agent';
+			if (this.lastMessage.member?.self) return 'agent';
+			if (this.lastMessage.member?.type) return 'contacts';
 		},
 		displayIcon() {
 			const member = this.task.members[0];

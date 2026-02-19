@@ -43,7 +43,6 @@
         :icon="closeReasonIcon"
         icon-prefix="ws"
         color="error"
-        class="closed-queue-preview__status"
       />
     </template>
   </chat-queue-preview-md>
@@ -192,11 +191,6 @@ const markChatAsProcessed = () =>
     transition: var(--transition);
   }
 
-  &__status {
-    opacity: 1;
-    transition: var(--transition);
-  }
-
   &--processed {
     // https://webitel.atlassian.net/browse/WTEL-5477?focusedCommentId=640209
     position: relative;
@@ -208,11 +202,6 @@ const markChatAsProcessed = () =>
     .closed-queue-preview__close {
       opacity: 1;
       pointer-events: auto;
-    }
-
-    .closed-queue-preview__status {
-      opacity: 0;
-      pointer-events: none;
     }
   }
 }
