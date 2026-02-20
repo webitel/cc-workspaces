@@ -1,4 +1,5 @@
 import { watch } from 'vue';
+import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
 
 const state = {
 	isDisconnectPopup: false,
@@ -22,11 +23,14 @@ const actions = {
 			() => context.rootState.client.state,
 			(value) => {
 				console.log('[WS connection state]:', value);
-				if (value === 'RECONNECTING' || value === 'DISCONNECTED') {
+				if (
+					value === WebSocketConnectionState.Reconnecting ||
+					value === WebSocketConnectionState.Disconnected
+				) {
 					context.dispatch('OPEN_DISCONNECT_POPUP');
 				}
 
-				if (value === 'CONNECTED') {
+				if (value === WebSocketConnectionState.Connected) {
 					context.dispatch('CLOSE_DISCONNECT_POPUP');
 				}
 			},
