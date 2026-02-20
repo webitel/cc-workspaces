@@ -35,6 +35,7 @@ const props = withDefaults(
   display: grid;
   box-sizing: border-box;
   grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xs);
 }
 
 .task-header-actions__action-section {
