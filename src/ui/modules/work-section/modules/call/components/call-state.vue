@@ -24,7 +24,6 @@
         >
           {{ digit }}
         </span>
-        >
         {{ digit }}
       </span>
     </div>

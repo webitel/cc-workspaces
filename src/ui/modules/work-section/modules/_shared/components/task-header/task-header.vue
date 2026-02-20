@@ -35,16 +35,12 @@ const props = withDefaults(
   display: grid;
   box-sizing: border-box;
   grid-template-columns: 1fr 1fr;
-  grid-gap: var(--spacing-2xs);
+  gap: var(--spacing-2xs);
 }
 
 .task-header-actions__action-section {
   display: flex;
   gap: var(--spacing-2xs);
-}
-
-.task-header-actions__action-section:nth-child(2) {
-  justify-content: flex-end;
 }
 
 .task-header-info {

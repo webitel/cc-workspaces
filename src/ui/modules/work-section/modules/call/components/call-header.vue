@@ -1,19 +1,6 @@
 <template>
   <task-header :size="props.size">
     <template #start-section>
-      <slot :name="CallTab.History">
-        <wt-rounded-action
-          class="call-action"
-          :active="isOnHistory"
-          :size="size"
-          icon="history"
-          color="secondary"
-          rounded
-          wide
-          @click="emit('openTab', CallTab.History)"
-        />
-      </slot>
-
       <slot :name="CallTab.Contacts">
         <wt-rounded-action
           class="call-action"
@@ -24,6 +11,19 @@
           rounded
           wide
           @click="emit('openTab', CallTab.Contacts)"
+        />
+      </slot>
+
+      <slot :name="CallTab.History">
+        <wt-rounded-action
+          class="call-action"
+          :active="isOnHistory"
+          :size="size"
+          icon="history"
+          color="secondary"
+          rounded
+          wide
+          @click="emit('openTab', CallTab.History)"
         />
       </slot>
     </template>
