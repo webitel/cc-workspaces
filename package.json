@@ -75,7 +75,7 @@
 		"typescript": "^5.9.x",
 		"vite": "npm:rolldown-vite@^7.3.x",
 		"vite-plugin-node-polyfills": "^0.x",
-		"vite-plugin-pwa": "^0.21.2",
+		"vite-plugin-pwa": "^1.2.0",
 		"vite-plugin-vue-devtools": "^8.x",
 		"vite-plugin-vue-docgen": "^0.3.4",
 		"vitepress": "^1.x",
