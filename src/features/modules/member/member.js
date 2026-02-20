@@ -17,18 +17,14 @@ const getters = {
 const actions = {
 	GET_AGENT_INSTANCE: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
-		const agent = await client.agentSession();
-		context.commit('SET_AGENT_INSTANCE', agent);
-		return agent;
+		return client.agentSession();
 	},
 
 	LOAD_DATA_LIST: async (context, payload) => {
 		const page = payload?.page || 1;
 		const size = payload?.size || 20;
 		const search = payload?.search || '';
-		const agent = context.state.agent
-			? context.state.agent
-			: await context.dispatch('GET_AGENT_INSTANCE');
+		const agent = await context.dispatch('GET_AGENT_INSTANCE');
 		const response = await agent.offlineMembers(search, page, size);
 		context.commit('SET_DATA_LIST', {
 			page,

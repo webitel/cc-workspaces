@@ -12,19 +12,6 @@
       @click="$emit('openTab', CallTab.Numpad)"
     ></wt-button>
     <wt-button
-      :class="{
-          'hidden': !isMuted,
-        }"
-      :icon="isOnMuted ? 'mic-muted' : 'mic'"
-      :variant="isOnMuted ? 'active' : 'outlined'"
-      :size="size"
-      class="call-footer-action call-footer-action__mic"
-      color="secondary"
-      rounded
-      wide
-      @click="toggleMute"
-    ></wt-button>
-    <wt-button
       v-if="isVideoCall"
       :size="size"
       :icon="isVideoMuted ? 'video-cam-off' : 'video-cam'"
@@ -47,6 +34,19 @@
       rounded
       wide
       @click="toggleHold"
+    ></wt-button>
+    <wt-button
+      :class="{
+          'hidden': !isMuted,
+        }"
+      :icon="isOnMuted ? 'mic-muted' : 'mic'"
+      :variant="isOnMuted ? 'active' : 'outlined'"
+      :size="size"
+      class="call-footer-action call-footer-action__mic"
+      color="secondary"
+      rounded
+      wide
+      @click="toggleMute"
     ></wt-button>
   </task-footer>
 </template>
