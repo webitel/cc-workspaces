@@ -1,6 +1,5 @@
 <template>
   <section class="the-video-call-chat">
-    <media-viewer />
     <chat-container
       :messages="messages"
       :size="props.size"
@@ -12,27 +11,18 @@
       :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
-      @[MessageAction.ClickOnImage]="openMedia"
     />
   </section>
 </template>
 
 <script setup lang="ts">
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
-import {
-	ChatAction,
-	ChatContainer,
-	ChatMessageType,
-	MessageAction,
-} from '@webitel/ui-chats/ui';
+import { ChatAction, ChatContainer } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
-import MediaViewer from '../../../../../../chat/media-viewer/media-viewer.vue';
-
-const chatNamespace = 'features/chat';
 
 const props = withDefaults(
 	defineProps<{
@@ -80,10 +70,6 @@ async function sendFiles(files: File[], options?: ResultCallbacks) {
 		options?.onSuccess?.();
 	}
 }
-
-const openMedia = (message: ChatMessageType) => {
-	store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
-};
 
 onMounted(() => {
 	// @author ye.pohranichna
