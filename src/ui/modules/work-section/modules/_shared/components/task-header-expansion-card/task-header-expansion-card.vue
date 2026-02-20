@@ -60,7 +60,7 @@ const contactLink = computed(() =>
 );
 </script>
 
-<style>
+<style scoped>
 .task-header-expansion-card {
   align-items: center;
 }
