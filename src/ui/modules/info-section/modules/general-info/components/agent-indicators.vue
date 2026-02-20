@@ -56,7 +56,7 @@ const online = computed(() => {
 	return props.agents.online;
 });
 
-const busy = computed(() => props.agents.busy)
+const busy = computed(() => props.agents.busy);
 </script>
 
 <style lang="scss" scoped>
