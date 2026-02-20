@@ -28,6 +28,7 @@ const getList = async (params) => {
 		return items.map((item) => ({
 			...item,
 			agents: {
+				busy: item.agents.busy || 0,
 				pause: item.agents.pause || 0,
 				online: item.agents.online || 0,
 				allowPause: item.agents.allowPause,
