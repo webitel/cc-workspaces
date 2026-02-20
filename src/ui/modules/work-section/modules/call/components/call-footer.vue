@@ -91,8 +91,8 @@ const isVideoMuted = computed(() => call.value?.mutedVideo);
 
 const toggleMute = () => store.dispatch('features/call/TOGGLE_MUTE');
 const toggleHold = () => store.dispatch('features/call/TOGGLE_HOLD');
-const toggleVideo = () =>
-	store.dispatch('features/call/videoCall/TOGGLE_VIDEO');
+const toggleVideo = (payload) =>
+	store.dispatch('features/call/videoCall/TOGGLE_VIDEO', payload);
 
 const hotkeyUnsubscribers = ref([]);
 
