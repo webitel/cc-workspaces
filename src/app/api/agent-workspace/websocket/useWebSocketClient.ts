@@ -1,9 +1,8 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
 import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
 import { Client } from 'webitel-sdk';
-
-import { WebSocketClientEvent } from '../../../types/WebSocketClientEvent';
-import { WebSocketConnectionState } from '../../../types/WebSocketConnectionState';
+import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
+import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 /* ============================================================================
@@ -20,23 +19,21 @@ const MAX_RECONNECT_DELAY = 15000;
 type EventCallback<T = unknown> = (payload: T) => void;
 
 type EventMap = {
-	[WebSocketClientEvent.AFTER_AUTH]: EventCallback<Client>;
-	[WebSocketClientEvent.ERROR]: EventCallback<unknown>;
+	[WebSocketClientEvent.AfterAuth]: EventCallback<Client>;
+	[WebSocketClientEvent.Error]: EventCallback<unknown>;
 };
 
 let client: Client | null = null;
-const state = ref<keyof typeof WebSocketConnectionState>(
-	WebSocketConnectionState.IDLE,
-);
+const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 
 let clientInitPromise: Promise<Client> | null = null;
-let reconnectAttempt = 0;
-let reconnectTimer: number | null = null;
-let clientGeneration = 0;
+let reconnectAttemptCount = 0;
+let reconnectTimerId: number | null = null;
+let clientGenerationCount = 0;
 
 const listeners: { [K in keyof EventMap]: EventMap[K][] } = {
-	[WebSocketClientEvent.AFTER_AUTH]: [],
-	[WebSocketClientEvent.ERROR]: [
+	[WebSocketClientEvent.AfterAuth]: [],
+	[WebSocketClientEvent.Error]: [
 		websocketErrorEventHandler,
 	],
 };
@@ -66,8 +63,8 @@ function emit<K extends keyof EventMap>(
 
 function getCliConfig(): Record<string, any> {
 	try {
-		const raw = localStorage.getItem('CONFIG');
-		return raw ? (JSON.parse(raw).CLI ?? {}) : {};
+		const configStr = localStorage.getItem('CONFIG');
+		return configStr ? (JSON.parse(configStr).CLI ?? {}) : {};
 	} catch {
 		return {};
 	}
@@ -75,17 +72,17 @@ function getCliConfig(): Record<string, any> {
 
 function attachCoreHandlers(cli: Client, generation: number) {
 	cli.on('error', (e) => {
-		if (generation !== clientGeneration) return;
-		emit(WebSocketClientEvent.ERROR, e);
+		if (generation !== clientGenerationCount) return;
+		emit(WebSocketClientEvent.Error, e);
 	});
 
 	cli.on('disconnected', () => {
-		if (generation !== clientGeneration) return;
+		if (generation !== clientGenerationCount) return;
 		handleDisconnect();
 	});
 
 	cli.on('show_message', (e: any) => {
-		if (generation !== clientGeneration) return;
+		if (generation !== clientGenerationCount) return;
 		eventBus.$emit('notification', {
 			type: e.type,
 			text: e.message,
@@ -131,7 +128,7 @@ async function markAsyncPhoneRaw(cli: Client) {
  * ========================================================================== */
 
 async function createClient(): Promise<Client> {
-	const generation = ++clientGeneration;
+	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
 
@@ -155,7 +152,7 @@ async function createClient(): Promise<Client> {
 	await cli.connect();
 	await cli.auth();
 
-	emit(WebSocketClientEvent.AFTER_AUTH, cli);
+	emit(WebSocketClientEvent.AfterAuth, cli);
 	await markAsyncPhoneRaw(cli);
 
 	(window as any).cli = cli;
@@ -171,24 +168,28 @@ async function destroyClient() {
 		console.warn('[WS] destroy error', e);
 	} finally {
 		client = null;
-		state.value = WebSocketConnectionState.DISCONNECTED;
+		state.value = WebSocketConnectionState.Disconnected;
 		(window as any).cli = null;
 	}
 }
 
 function scheduleReconnect() {
-	if (reconnectTimer || reconnectAttempt >= MAX_RECONNECT_ATTEMPTS) return;
+	if (reconnectTimerId || reconnectAttemptCount >= MAX_RECONNECT_ATTEMPTS)
+		return;
 
-	const delay = Math.min(1000 * 2 ** reconnectAttempt, MAX_RECONNECT_DELAY);
-	reconnectAttempt++;
+	const delay = Math.min(
+		1000 * 2 ** reconnectAttemptCount,
+		MAX_RECONNECT_DELAY,
+	);
+	reconnectAttemptCount++;
 
-	reconnectTimer = window.setTimeout(async () => {
-		reconnectTimer = null;
+	reconnectTimerId = window.setTimeout(async () => {
+		reconnectTimerId = null;
 		try {
 			await getCliInstance({
-				forceReconnnect: true,
+				forceReconnect: true,
 			});
-			reconnectAttempt = 0;
+			reconnectAttemptCount = 0;
 		} catch {
 			scheduleReconnect();
 		}
@@ -196,23 +197,22 @@ function scheduleReconnect() {
 }
 
 async function handleDisconnect() {
-	if (state.value === WebSocketConnectionState.RECONNECTING) return;
+	if (state.value === WebSocketConnectionState.Reconnecting) return;
 
-	state.value = WebSocketConnectionState.RECONNECTING;
+	state.value = WebSocketConnectionState.Reconnecting;
 	await destroyClient();
 	scheduleReconnect();
-	console.log('[WS] reconnected');
 }
 
 async function getCliInstance({
-	forceReconnnect = false,
+	forceReconnect = false,
 }: {
-	forceReconnnect?: boolean;
+	forceReconnect?: boolean;
 } = {}): Promise<Client> {
 	if (
-		!forceReconnnect &&
+		!forceReconnect &&
 		client &&
-		state.value === WebSocketConnectionState.CONNECTED
+		state.value === WebSocketConnectionState.Connected
 	) {
 		return client;
 	}
@@ -220,14 +220,14 @@ async function getCliInstance({
 	if (clientInitPromise) return clientInitPromise;
 
 	state.value = client
-		? WebSocketConnectionState.RECONNECTING
-		: WebSocketConnectionState.CONNECTING;
+		? WebSocketConnectionState.Reconnecting
+		: WebSocketConnectionState.Connecting;
 
 	clientInitPromise = (async () => {
 		try {
 			const cli = await createClient();
 			client = cli;
-			state.value = WebSocketConnectionState.CONNECTED;
+			state.value = WebSocketConnectionState.Connected;
 			return cli;
 		} finally {
 			clientInitPromise = null;

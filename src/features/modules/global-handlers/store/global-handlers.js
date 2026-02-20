@@ -21,7 +21,7 @@ const actions = {
 		stop = watch(
 			() => context.rootState.client.state,
 			(value) => {
-				console.log(value, ' value');
+				console.log('[WS connection state]:', value);
 				if (value === 'RECONNECTING' || value === 'DISCONNECTED') {
 					context.dispatch('OPEN_DISCONNECT_POPUP');
 				}

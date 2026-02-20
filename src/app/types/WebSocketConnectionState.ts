@@ -1,7 +1,0 @@
-export const WebSocketConnectionState = {
-	IDLE: 'IDLE',
-	CONNECTING: 'CONNECTING',
-	CONNECTED: 'CONNECTED',
-	RECONNECTING: 'RECONNECTING',
-	DISCONNECTED: 'DISCONNECTED',
-} as const;
