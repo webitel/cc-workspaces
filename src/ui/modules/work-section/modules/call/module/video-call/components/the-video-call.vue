@@ -9,22 +9,7 @@
         :current-tab="currentTab"
         :size="size"
         @open-tab="openTab"
-      >
-        <template #bridge >
-          <!-- Empty slot override so call-action buttons from CallHeader are not shown -->
-          <div
-            class="video-call__bridge-placeholder"
-            aria-hidden="true"
-          />
-        </template>
-        <template #transfer >
-          <!-- Empty slot override so call-action buttons from CallHeader are not shown -->
-          <div
-            class="video-call__transfer-placeholder"
-            aria-hidden="true"
-          />
-        </template>
-      </call-header>
+      />
     </template>
     <template #body>
       <component

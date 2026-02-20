@@ -22,11 +22,13 @@
         </span>
       </div>
     </template>
-    <p>{{ props.phoneNumber }}</p>
-    <queue-name-chip
-      v-if="props.queueName"
-      :name="props.queueName"
-    />
+    <div class="task-header-expansion-card__info-wrapper">
+      <p>{{ props.phoneNumber }}</p>
+      <queue-name-chip
+        v-if="props.queueName"
+        :name="props.queueName"
+      />
+    </div>
   </wt-expansion-card>
 </template>
 
@@ -73,6 +75,12 @@ const contactLink = computed(() =>
 
 .task-header-expansion-card__title {
   color: var(--text-main-color);
+}
+
+.task-header-expansion-card__info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-wrapper-gap);
 }
 
 .task-header-expansion-card__title:hover {
