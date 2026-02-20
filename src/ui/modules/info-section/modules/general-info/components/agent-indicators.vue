@@ -13,6 +13,11 @@
       :text="pause"
       :size="size"
     ></wt-indicator>
+    <wt-indicator
+      color="error"
+      :text="busy"
+      :size="size"
+    ></wt-indicator>
   </div>
 </template>
 
@@ -50,13 +55,15 @@ const pause = computed(() => {
 const online = computed(() => {
 	return props.agents.online;
 });
+
+const busy = computed(() => props.agents.busy)
 </script>
 
 <style lang="scss" scoped>
 .agent-indicators {
   display: flex;
   justify-content: space-evenly;
-  gap: var(--spacing-2xs);
+  gap: var(--spacing-sm);
 
   &--sm {
     flex-direction: column;

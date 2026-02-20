@@ -69,12 +69,12 @@ const currentTab = ref({});
 
 const tabsObject = computed(() => ({
 	CallContactsTab: {
-		text: t('WebitelApplications.crm.sections.contacts', 2),
+		text: t('WtApplication.crm.sections.contacts', 2),
 		value: 'contacts', // tracked by wt-tabs
 		component: ContactsContainer,
 	},
 	CallUsersTab: {
-		text: t('WebitelApplications.admin.sections.users', 2),
+		text: t('WtApplication.admin.sections.users', 2),
 		value: 'users', // tracked by wt-tabs
 		component: UsersContainer,
 	},

@@ -42,17 +42,17 @@ const hasCallCenterLicense = computed(() =>
 
 const tabs = computed(() => [
 	{
-		text: t('WebitelApplications.admin.sections.users', 2),
+		text: t('WtApplication.admin.sections.users', 2),
 		value: 'users',
 		component: UsersCallTransfer,
 	},
 	{
-		text: t('WebitelApplications.admin.sections.agents', 2),
+		text: t('WtApplication.admin.sections.agents', 2),
 		value: 'agents',
 		component: AgentsCallTransfer,
 	},
 	{
-		text: t('WebitelApplications.admin.sections.queues', 2),
+		text: t('WtApplication.admin.sections.queues', 2),
 		value: 'queues',
 		component: QueuesCallTransfer,
 	},
