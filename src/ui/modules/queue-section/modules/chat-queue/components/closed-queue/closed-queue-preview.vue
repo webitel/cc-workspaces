@@ -104,37 +104,36 @@
 </template>
 
 <script setup>
-
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
-import ChatCloseReason
-  from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
-import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
+import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
 import LastMessageContainer from '../_shared/last-message-container.vue';
+import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
+import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-  opened: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String,
-    default: ComponentSize.MD,
-  },
-  processed: { // if false - chat will be in active queue tab, if true - in closed queue tab
-    type: Boolean,
-    default: false,
-  },
+	task: {
+		type: Object,
+		required: true,
+	},
+	opened: {
+		type: Boolean,
+		default: false,
+	},
+	size: {
+		type: String,
+		default: ComponentSize.MD,
+	},
+	processed: {
+		// if false - chat will be in active queue tab, if true - in closed queue tab
+		type: Boolean,
+		default: false,
+	},
 });
 
 const store = useStore();
@@ -144,37 +143,38 @@ const displayTaskName = computed(() => props.task.title);
 const displayQueueName = computed(() => props.task.queue?.name);
 
 const duration = computed(() => {
-  const sec = (props.task.closedAt - props.task.startedAt) / 10 ** 3;
-  return convertDuration(sec);
+	const sec = (props.task.closedAt - props.task.startedAt) / 10 ** 3;
+	return convertDuration(sec);
 });
 
 const lastMessage = computed(() => props.task.lastMessage || {});
 
 const textLastMessage = computed(() => {
-  return lastMessage.value.file ? lastMessage.value.file.name : lastMessage.value.text;
+	return lastMessage.value.file
+		? lastMessage.value.file.name
+		: lastMessage.value.text;
 });
 const lastMessageSenderIcon = computed(() => {
-  if(lastMessage.value.from.type === 'contact') return 'contacts';
-  return lastMessage.value.from.type;
+	if (lastMessage.value.from.type === 'contact') return 'contacts';
+	return lastMessage.value.from.type;
 });
 
 const closeReasonIcon = computed(() => {
-  switch (props.task.closeReason) {
+	switch (props.task.closeReason) {
+		case ChatCloseReason.AGENT_LEAVE:
+		case ChatCloseReason.TRANSFER:
+			return 'agent-disconnection';
 
-    case ChatCloseReason.AGENT_LEAVE:
-    case ChatCloseReason.TRANSFER:
-      return 'agent-disconnection';
+		case ChatCloseReason.CLIENT_LEAVE:
+			return 'client-disconnection';
 
-    case ChatCloseReason.CLIENT_LEAVE:
-      return 'client-disconnection';
-
-    default:
-      return 'timeout-disconnection';
-  }
+		default:
+			return 'timeout-disconnection';
+	}
 });
 
-const markChatAsProcessed = () => store.dispatch('features/chat/closed/MARK_AS_PROCESSED', props.task);
-
+const markChatAsProcessed = () =>
+	store.dispatch('features/chat/closed/MARK_AS_PROCESSED', props.task);
 </script>
 
 <style lang="scss" scoped>

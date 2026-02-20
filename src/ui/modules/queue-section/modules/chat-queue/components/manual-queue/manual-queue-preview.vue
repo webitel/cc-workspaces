@@ -91,9 +91,9 @@ import { computed, ref } from 'vue';
 import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatTypes } from '../../enums/ChatStatus.enum';
+import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
-import LastMessageContainer from '../_shared/last-message-container.vue';
 
 const props = defineProps({
 	task: {
@@ -135,8 +135,8 @@ const wait = computed(() => {
 });
 
 const lastMessageSenderIcon = computed(() => {
-  if(props.task.member.type === 'contact') return 'contacts';
-  return props.task.member.type;
+	if (props.task.member.type === 'contact') return 'contacts';
+	return props.task.member.type;
 });
 
 function accept(task) {

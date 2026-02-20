@@ -1,3 +1,6 @@
+import { watch } from 'vue';
+import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
+
 const state = {
 	isDisconnectPopup: false,
 	isPhoneReg: false,
@@ -7,11 +10,36 @@ const getters = {};
 
 const actions = {
 	INIT_GLOBAL_HANDLERS: (context) => {
-		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
+		context.dispatch('SUBSCRIBE_TO_CONNECTION_STATE');
 		context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
+	},
+	SUBSCRIBE_TO_CONNECTION_STATE: (context) => {
+		let stop = null;
+
+		stop = watch(
+			() => context.rootState.client.state,
+			(value) => {
+				console.log('[WS connection state]:', value);
+				if (
+					value === WebSocketConnectionState.Reconnecting ||
+					value === WebSocketConnectionState.Disconnected
+				) {
+					context.dispatch('OPEN_DISCONNECT_POPUP');
+				}
+
+				if (value === WebSocketConnectionState.Connected) {
+					context.dispatch('CLOSE_DISCONNECT_POPUP');
+				}
+			},
+			{
+				immediate: true,
+			},
+		);
+
+		return stop;
 	},
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
@@ -40,12 +68,22 @@ const actions = {
 	 */
 	CLEAR_ALL_TASKS_ON_DISCONNECT: (context) => {
 		// This prevents getters like CALL_ON_WORKSPACE from returning stale tasks
-		context.commit('workspace/SET_STATE_HISTORY', [], { root: true });
-		
-		context.dispatch('features/call/SET_CALL_LIST', [], { root: true });
-		context.commit('features/call/CLEAR_CALL_INFO', null, { root: true });
-		context.dispatch('features/chat/SET_CHAT_LIST', [], { root: true });
-		context.commit('features/job/SET_JOB_LIST', [], { root: true });
+		context.commit('workspace/SET_STATE_HISTORY', [], {
+			root: true,
+		});
+
+		context.dispatch('features/call/SET_CALL_LIST', [], {
+			root: true,
+		});
+		context.commit('features/call/CLEAR_CALL_INFO', null, {
+			root: true,
+		});
+		context.dispatch('features/chat/SET_CHAT_LIST', [], {
+			root: true,
+		});
+		context.commit('features/job/SET_JOB_LIST', [], {
+			root: true,
+		});
 	},
 };
 

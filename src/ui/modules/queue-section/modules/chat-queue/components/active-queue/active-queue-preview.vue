@@ -79,35 +79,47 @@ import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 export default {
-  name: 'ActiveQueuePreview',
-  components: { LastMessageContainer, ChatQueuePreviewMd, ChatQueuePreviewSm },
-  mixins: [taskPreviewMixin, sizeMixin, displayInfoMixin],
-  computed: {
-    lastMessage() {
-      return this.task.messages[this.task.messages.length - 1] || {};
-    },
-    textLastMessage() {
-      return this.lastMessage.file ? this.lastMessage.file.name : this.lastMessage.text;
-    },
-    lastMessageSenderIcon() {
-      if(!this.lastMessage.member) return 'bot';
-      if(this.lastMessage.member?.self) return 'agent';
-      if(this.lastMessage.member?.type) return 'contacts';
-    },
-    displayIcon() {
-      const member = this.task.members[0];
-      return messengerIcon(member.type);
-    },
-    chatStatus() {
-      // Check if chat is closed
-      if (this.task.closedAt && this.task.closeReason) {
-        return ChatStatus.Closed;
-      }
+	name: 'ActiveQueuePreview',
+	components: {
+		LastMessageContainer,
+		ChatQueuePreviewMd,
+		ChatQueuePreviewSm,
+	},
+	mixins: [
+		taskPreviewMixin,
+		sizeMixin,
+		displayInfoMixin,
+	],
+	computed: {
+		lastMessage() {
+			return this.task.messages[this.task.messages.length - 1] || {};
+		},
+		textLastMessage() {
+			return this.lastMessage.file
+				? this.lastMessage.file.name
+				: this.lastMessage.text;
+		},
+		lastMessageSenderIcon() {
+			if (!this.lastMessage.member) return 'bot';
+			if (this.lastMessage.member?.self) return 'agent';
+			if (this.lastMessage.member?.type) return 'contacts';
+		},
+		displayIcon() {
+			const member = this.task.members[0];
+			return messengerIcon(member.type);
+		},
+		chatStatus() {
+			// Check if chat is closed
+			if (this.task.closedAt && this.task.closeReason) {
+				return ChatStatus.Closed;
+			}
 
-      // Check if chat is new (invite state) or active
-      return this.task.state === ConversationState.Invite ? ChatStatus.New : ChatStatus.Active;
-    }
-  },
+			// Check if chat is new (invite state) or active
+			return this.task.state === ConversationState.Invite
+				? ChatStatus.New
+				: ChatStatus.Active;
+		},
+	},
 };
 </script>
 

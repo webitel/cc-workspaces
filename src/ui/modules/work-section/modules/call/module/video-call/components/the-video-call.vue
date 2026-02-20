@@ -58,7 +58,6 @@ import { VideoCallTab } from '../enums/VideoCallTab.enum';
 import VideoCallChat from '../module/chat/components/the-video-call-chat.vue';
 import CallState from '../../../components/call-state.vue';
 
-
 interface Props {
 	size?: ComponentSize;
 }

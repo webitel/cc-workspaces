@@ -108,11 +108,11 @@ export default {
 		},
 		async checkMic() {
 			try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+				const stream = await navigator.mediaDevices.getUserMedia({
 					audio: true,
 				});
-        stream.getTracks().forEach(track => track.stop());
-        this.mic.status = true;
+				stream.getTracks().forEach((track) => track.stop());
+				this.mic.status = true;
 			} catch (err) {
 				this.mic.status = false;
 				this.mic.message = this.getPermissionErrorMessage(err);
@@ -120,11 +120,11 @@ export default {
 		},
 		async requestCameraAccess() {
 			try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+				const stream = await navigator.mediaDevices.getUserMedia({
 					video: true,
 				});
-        stream.getTracks().forEach(track => track.stop());
-        this.camera.status = true;
+				stream.getTracks().forEach((track) => track.stop());
+				this.camera.status = true;
 			} catch (err) {
 				this.camera.status = false;
 				this.camera.message = this.getPermissionErrorMessage(err);

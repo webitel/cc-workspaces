@@ -9,14 +9,15 @@
 
 <script setup lang="ts">
 const props = withDefaults(
-  defineProps<{
-    icon: string;
-    message: string;
-  }>(),
-  {
-    icon: '',
-    message: '',
-  });
+	defineProps<{
+		icon: string;
+		message: string;
+	}>(),
+	{
+		icon: '',
+		message: '',
+	},
+);
 </script>
 
 <style scoped>
