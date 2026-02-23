@@ -2,7 +2,7 @@
   <call-preview
     v-if="isPreviewCall"
     :size="size"
-    @transfer="openTransfer"
+    @transfer="openTransferTab"
   ></call-preview>
 
   <task-container v-else>
@@ -78,7 +78,7 @@ const props = defineProps({
 const store = useStore();
 
 const currentTab = ref(CallTab.Numpad);
-const isPreviewTransfer = ref(false);
+const isTransferTabOpen = ref(false);
 const hotkeyUnsubscribers = ref([]);
 //variable to check if the component is active
 const isActive = ref(false);
@@ -86,20 +86,20 @@ const isActive = ref(false);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const isPreviewCall = computed(() => {
-	if (isPreviewTransfer.value) return false;
+	if (isTransferTabOpen.value) return false;
 	return isIncomingRinging(call.value);
 });
 
 // Computed property to get the actual component
 const currentComponent = computed(() => callTabComponents[currentTab.value]);
 
-const openTransfer = () => {
-	isPreviewTransfer.value = true;
+const openTransferTab = () => {
+  isTransferTabOpen.value = true;
 	currentTab.value = CallTab.Transfer;
 };
 
-const openCall = () => {
-	isPreviewTransfer.value = false;
+const openNumpadTab = () => {
+	isTransferTabOpen.value = false;
 	currentTab.value = CallTab.Numpad;
 };
 
@@ -113,7 +113,7 @@ const setupHotkeys = () => {
 		{
 			event: HotkeyAction.TRANSFER,
 			callback: () => {
-				isPreviewTransfer.value ? openCall() : openTransfer();
+				isTransferTabOpen.value ? openNumpadTab() : openTransferTab();
 			},
 		},
 	];
@@ -121,7 +121,7 @@ const setupHotkeys = () => {
 };
 
 watch(call, () => {
-	openCall();
+	openNumpadTab();
 });
 
 onMounted(() => {
