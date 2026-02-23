@@ -1,21 +1,14 @@
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import vue from '@vitejs/plugin-vue';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import vueDevtools from 'vite-plugin-vue-devtools';
 import { resolve } from 'path';
 
 export default ({ mode }) => {
-	const env = loadEnv(mode, process.cwd(), '');
-
 	return defineConfig({
 		base: '/workspace',
-		define: {
-			'process.env': JSON.parse(
-				JSON.stringify(env).replaceAll('VITE_', 'VUE_APP_'),
-			),
-		},
 		server: {
 			// host: true,  // uncomment me to enable localhost access by IP (including from other devices in the network)
 		},
@@ -52,8 +45,8 @@ export default ({ mode }) => {
 					compilerOptions: {
 						compatConfig: {
 							MODE: 2,
-              // avoid Vue2 compat v-model warnings
-              COMPONENT_V_MODEL: false,
+							// avoid Vue2 compat v-model warnings
+							COMPONENT_V_MODEL: false,
 						},
 					},
 				},
