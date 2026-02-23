@@ -24,6 +24,7 @@ export default {
 	],
 	model: {
 		prop: 'currentTab',
+		event: 'input',
 	},
 	props: {
 		currentTab: {
@@ -34,6 +35,7 @@ export default {
 			default: () => [],
 		},
 	},
+	emits: ['input'],
 };
 </script>
 

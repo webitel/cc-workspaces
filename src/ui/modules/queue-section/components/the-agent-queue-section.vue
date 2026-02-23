@@ -60,9 +60,9 @@
     />
   </section>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, markRaw, onMounted, onUnmounted, ref, watch, PropType } from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -74,20 +74,18 @@ import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 
-const props = defineProps({
-	collapsed: {
-		type: Boolean,
-		default: false,
-	},
-	collapsible: {
-		type: Boolean,
-		default: false,
-	},
-	size: {
-		type: ComponentSize,
-		default: ComponentSize.MD,
-	},
-});
+const props = withDefaults(
+  defineProps<{
+    collapsed?: boolean;
+    collapsible?: boolean;
+    size?: ComponentSize;
+  }>(),
+  {
+    collapsed: false,
+    collapsible: false,
+    size: ComponentSize.MD,
+  },
+);
 
 const emit = defineEmits([
 	'resize',
@@ -172,7 +170,10 @@ const tabs = computed(() => [
 		icon: 'call',
 		iconColor: 'success',
 		countActive: activeCallCount.value,
-		component: CallQueue,
+    // author o.chorpita
+    // markRaw is used to prevent Vue from making the component reactive,
+    // because computed wraps values in Proxy which causes performance warnings for components
+		component: markRaw(CallQueue),
 		showIndicator: !!incomingCallCount.value,
 	},
 	{
@@ -180,7 +181,7 @@ const tabs = computed(() => [
 		icon: 'chat',
 		iconColor: 'chat',
 		countActive: activeChatCount.value,
-		component: ChatQueue,
+		component: markRaw(ChatQueue),
 		showIndicator: !!incomingChatCount.value || hasNewChatMessages.value,
 	},
 	{
@@ -188,7 +189,7 @@ const tabs = computed(() => [
 		icon: 'job',
 		iconColor: 'job',
 		countActive: activeJobCount.value,
-		component: JobQueue,
+		component: markRaw(JobQueue),
 		showIndicator: !!incomingJobCount.value,
 	},
 ]);

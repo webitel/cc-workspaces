@@ -52,6 +52,8 @@ export default ({ mode }) => {
 					compilerOptions: {
 						compatConfig: {
 							MODE: 2,
+              // avoid Vue2 compat v-model warnings
+              COMPONENT_V_MODEL: false,
 						},
 					},
 				},
