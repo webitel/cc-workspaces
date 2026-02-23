@@ -22,6 +22,7 @@
           <wt-search-bar
             :value="search"
             class="form-select-service__search-bar"
+            fullWidth
             @input="search = $event"
             @search="loadCatalogs"
           />
