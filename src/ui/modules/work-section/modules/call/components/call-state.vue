@@ -1,6 +1,9 @@
 <template>
-  <div class="numpad-state">
-    <div class="numpad-state__animation">
+  <div
+    class="call-state"
+    :class="{ 'call-state--centered': showTimer }"
+  >
+    <div class="call-state__animation">
       <img
         alt=""
         :src="sonarIcon"
@@ -8,26 +11,25 @@
     </div>
     <div
       v-if="showTimer"
-      class="numpad-state__primary-text"
+      class="call-state__primary-text"
     >
-      <span class="numpad-state__primary-text__state">
-        <span class="numpad-state__primary-text__state">
+      <span class="call-state__primary-text__state">
+        <span class="call-state__primary-text__state">
           {{ callState }}{{ showTimer ? ': ' : '' }}
         </span>
         <span
           v-for="(digit, key) of displayTime.split('')"
           :key="key"
-          class="numpad-state__primary-text__time-digit"
+          class="call-state__primary-text__time-digit"
         >
           {{ digit }}
         </span>
-        >
         {{ digit }}
       </span>
     </div>
     <div
       v-if="dtmf"
-      class="numpad-state__secondary-text typo-subtitle-1"
+      class="call-state__secondary-text typo-subtitle-1"
     >
       {{ dtmf.join('') }}
     </div>
@@ -43,7 +45,6 @@ import { useCallState } from '../../../../../composables/useCallState';
 defineOptions({
 	name: 'CallState',
 });
-
 const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
 </script>
 
@@ -53,11 +54,16 @@ const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
 >
 @use '@webitel/ui-sdk/src/css/main' as *;
 
-.numpad-state {
+.call-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 100%;
+
+  &--centered {
+    justify-content: center;
+    height: 100%;
+  }
 
   &__animation {
     margin-bottom: var(--spacing-xs);

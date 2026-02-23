@@ -18,7 +18,10 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessage }}
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="lastMessage"
+      />
     </template>
 
     <template #timer>
@@ -88,6 +91,7 @@ import { computed, ref } from 'vue';
 import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatTypes } from '../../enums/ChatStatus.enum';
+import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
@@ -130,6 +134,11 @@ const wait = computed(() => {
 	return `${minutes}:${seconds}`;
 });
 
+const lastMessageSenderIcon = computed(() => {
+	if (props.task.member.type === 'contact') return 'contacts';
+	return props.task.member.type;
+});
+
 function accept(task) {
 	if (showLoader.value) return;
 
@@ -139,6 +148,5 @@ function accept(task) {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
 </style>

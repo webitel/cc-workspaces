@@ -287,6 +287,9 @@ const mutations = {
 			...info,
 		});
 	},
+	CLEAR_CALL_INFO: (state) => {
+		state.callInfo = new Map();
+	},
 };
 
 export default {

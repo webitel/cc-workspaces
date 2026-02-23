@@ -10,6 +10,7 @@ on:
         options:
           - '@webitel/ui-sdk'
           - '@webitel/api-services'
+          - '@webitel/styleguide'
 #      version:
 #        description: 'Target version (optional: latest or x.y.z)'
 #        required: false

@@ -18,7 +18,10 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessage }}
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="textLastMessage"
+      />
     </template>
     <template #timer>
       <queue-preview-timer
@@ -47,7 +50,7 @@
     </template>
 
     <template #tooltip-subtitle>
-      {{ lastMessage }}
+      {{ textLastMessage }}
     </template>
 
     <template #title>
@@ -64,18 +67,21 @@
 
 <script>
 import { ConversationState } from 'webitel-sdk';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
+
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import { ChatStatus, ChatTypes } from '../../enums/ChatStatus.enum';
 
+import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
 export default {
 	name: 'ActiveQueuePreview',
 	components: {
+		LastMessageContainer,
 		ChatQueuePreviewMd,
 		ChatQueuePreviewSm,
 	},
@@ -86,9 +92,17 @@ export default {
 	],
 	computed: {
 		lastMessage() {
-			const lastMessage =
-				this.task.messages[this.task.messages.length - 1] || {};
-			return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+			return this.task.messages[this.task.messages.length - 1] || {};
+		},
+		textLastMessage() {
+			return this.lastMessage.file
+				? this.lastMessage.file.name
+				: this.lastMessage.text;
+		},
+		lastMessageSenderIcon() {
+			if (!this.lastMessage.member) return 'bot';
+			if (this.lastMessage.member?.self) return 'agent';
+			if (this.lastMessage.member?.type) return 'contacts';
 		},
 		displayIcon() {
 			const member = this.task.members[0];

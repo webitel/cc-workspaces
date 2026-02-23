@@ -20,7 +20,10 @@
     </template>
 
     <template #subtitle>
-      {{ lastMessagePreview }}
+      <last-message-container
+        :icon="lastMessageSenderIcon"
+        :message="textLastMessage"
+      />
     </template>
 
     <template #timer>
@@ -40,7 +43,6 @@
         :icon="closeReasonIcon"
         icon-prefix="ws"
         color="error"
-        class="closed-queue-preview__status"
       />
     </template>
   </chat-queue-preview-md>
@@ -77,7 +79,7 @@
     </template>
 
     <template #tooltip-subtitle>
-      {{ lastMessagePreview }}
+      {{ textLastMessage }}
     </template>
 
     <template #title>
@@ -110,6 +112,7 @@ import { useStore } from 'vuex';
 import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
+import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
 import ChatQueuePreviewSm from '../chat-queue-preview-sm.vue';
 
@@ -144,9 +147,16 @@ const duration = computed(() => {
 	return convertDuration(sec);
 });
 
-const lastMessagePreview = computed(() => {
-	const lastMessage = props.task.lastMessage || {};
-	return lastMessage.file ? lastMessage.file.name : lastMessage.text;
+const lastMessage = computed(() => props.task.lastMessage || {});
+
+const textLastMessage = computed(() => {
+	return lastMessage.value.file
+		? lastMessage.value.file.name
+		: lastMessage.value.text;
+});
+const lastMessageSenderIcon = computed(() => {
+	if (lastMessage.value.from.type === 'contact') return 'contacts';
+	return lastMessage.value.from.type;
 });
 
 const closeReasonIcon = computed(() => {
@@ -181,11 +191,6 @@ const markChatAsProcessed = () =>
     transition: var(--transition);
   }
 
-  &__status {
-    opacity: 1;
-    transition: var(--transition);
-  }
-
   &--processed {
     // https://webitel.atlassian.net/browse/WTEL-5477?focusedCommentId=640209
     position: relative;
@@ -197,11 +202,6 @@ const markChatAsProcessed = () =>
     .closed-queue-preview__close {
       opacity: 1;
       pointer-events: auto;
-    }
-
-    .closed-queue-preview__status {
-      opacity: 0;
-      pointer-events: none;
     }
   }
 }
