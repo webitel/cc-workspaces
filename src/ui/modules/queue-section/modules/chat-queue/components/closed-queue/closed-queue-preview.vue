@@ -155,7 +155,9 @@ const textLastMessage = computed(() => {
 		: lastMessage.value.text;
 });
 const lastMessageSenderIcon = computed(() => {
-	if (lastMessage.value.from.type === 'contact') return 'contacts';
+  if (['contact', 'client'].includes(lastMessage.value.from.type)) {
+    return 'contacts';
+  }
 	return lastMessage.value.from.type;
 });
 
