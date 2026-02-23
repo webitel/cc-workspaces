@@ -12,6 +12,7 @@ export default {
 
 	setup() {
 		const store = useStore();
+    // @author o.chorpita
 		// Provide darkMode for ui-sdk components
 		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 		provide('darkMode', darkMode);

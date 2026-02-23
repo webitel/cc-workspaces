@@ -74,20 +74,18 @@ import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue
 import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue';
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 
-const props = defineProps({
-	collapsed: {
-		type: Boolean,
-		default: false,
-	},
-	collapsible: {
-		type: Boolean,
-		default: false,
-	},
-	size: {
-		type: String as PropType<ComponentSize>,
-		default: ComponentSize.MD,
-	},
-});
+const props = withDefaults(
+  defineProps<{
+    collapsed?: boolean;
+    collapsible?: boolean;
+    size?: ComponentSize;
+  }>(),
+  {
+    collapsed: false,
+    collapsible: false,
+    size: ComponentSize.MD,
+  },
+);
 
 const emit = defineEmits([
 	'resize',
@@ -172,6 +170,9 @@ const tabs = computed(() => [
 		icon: 'call',
 		iconColor: 'success',
 		countActive: activeCallCount.value,
+    // author o.chorpita
+    // markRaw is used to prevent Vue from making the component reactive,
+    // because computed wraps values in Proxy which causes performance warnings for components
 		component: markRaw(CallQueue),
 		showIndicator: !!incomingCallCount.value,
 	},
