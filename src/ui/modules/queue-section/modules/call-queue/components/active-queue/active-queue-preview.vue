@@ -7,7 +7,7 @@
   >
     <template #icon>
       <wt-icon
-        v-if="isVideoCall"
+        v-if="isVideoCallByTask(task)"
         icon="video-cam"
         color="success"
       />
@@ -167,8 +167,16 @@ export default {
 		...mapGetters('features/call', {
 			normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
 		}),
+    /*
+      @author o.chorpita
+      Use IS_VIDEO_CALL_BY_CALL because default IS_VIDEO_CALL relies on
+      the active workspace task. When user switches to another task (e.g. chat)
+      during an ongoing video call, the active task changes and IS_VIDEO_CALL
+      becomes false. This getter ensures the icon reflects the actual call state.
+       https://webitel.atlassian.net/browse/WTEL-8971
+    */
 		...mapGetters('features/call/videoCall', {
-			isVideoCall: 'IS_VIDEO_CALL',
+			isVideoCallByTask: 'IS_VIDEO_CALL_BY_CALL',
 		}),
 		isHold() {
 			return this.task.isHold;

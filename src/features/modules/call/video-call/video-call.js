@@ -13,11 +13,11 @@ const actions = {
 };
 
 const getters = {
-	IS_VIDEO_CALL: (state, getters, rootState, rootGetters) => (call) => {
-		const callOnWorkspace =
-			call || rootGetters['workspace/CALL_ON_WORKSPACE'];
-
-		return  callOnWorkspace?.remoteVideo === VideoMediaFlow.SendRecv;
+	IS_VIDEO_CALL: (state, getters, rootState, rootGetters) => {
+		return rootGetters['features/call/CALL_ON_WORKSPACE']?.remoteVideo === VideoMediaFlow.SendRecv;
+	},
+	IS_VIDEO_CALL_BY_CALL: () => (call) => {
+		return call?.remoteVideo === VideoMediaFlow.SendRecv;
 	},
 };
 
