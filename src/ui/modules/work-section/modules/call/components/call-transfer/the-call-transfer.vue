@@ -10,7 +10,7 @@
     <component
       :is="currentTab.component"
       :size="size"
-      @closeTab="$emit('closeTab')"
+      @transfer-complete="$emit('transfer-complete')"
     />
   </div>
 </template>
@@ -35,7 +35,7 @@ interface CallTransferTabsProps {
 defineProps<CallTransferTabsProps>();
 
 const emit = defineEmits([
-  'closeTab',
+  'transfer-complete',
 ]);
 
 

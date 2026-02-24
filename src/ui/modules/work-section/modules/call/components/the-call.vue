@@ -18,7 +18,7 @@
         :is-active="isActive"
         :is="currentComponent"
         :size="size"
-        @closeTab="openCall"
+        @transfer-complete="openNumpadTab"
       />
     </template>
 
