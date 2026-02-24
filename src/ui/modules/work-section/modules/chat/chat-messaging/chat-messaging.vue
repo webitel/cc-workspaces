@@ -59,7 +59,8 @@
         @blur="showQuickReplies && onBlur()"
       />
       <div class="chat-messaging-text-entry__actions">
-        <wt-rounded-action
+        <wt-button
+            variant="outlined"
             class="chat-messaging-file-input"
             color="secondary"
             icon="attach"
@@ -80,17 +81,19 @@
           :size="size"
           @insert-emoji="insertEmoji"
         />
-        <wt-rounded-action
+        <wt-button
+          variant="outlined"
           icon="quick-replies"
-          color="accent"
+          color="secondary"
           :size="size"
           rounded
           wide
           @click="handleQuickReplies"
         />
-        <wt-rounded-action
+        <wt-button
+          variant="outlined"
           icon="chat-send"
-          color="accent"
+          color="secondary"
           :size="size"
           rounded
           wide
