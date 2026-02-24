@@ -28,7 +28,7 @@ const callHandler = (context) => (action, call) => {
 };
 
 const dispatchIfVideoCall = (context, call) => {
-	if (context.getters['videoCall/IS_VIDEO_CALL']) {
+	if (context.getters['videoCall/IS_VIDEO_CALL_ON_WORKSPACE']) {
 		context.dispatch('HANDLE_INFO_ACTION', call);
 	}
 };

@@ -156,7 +156,7 @@ const isDisplayCallButton = computed(
 );
 
 const isDisplayChatButton = computed(
-	() => store.getters['features/call/videoCall/IS_VIDEO_CALL'],
+	() => store.getters['features/call/videoCall/IS_VIDEO_CALL_ON_WORKSPACE'],
 );
 const isCallChatExist = computed(
 	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],

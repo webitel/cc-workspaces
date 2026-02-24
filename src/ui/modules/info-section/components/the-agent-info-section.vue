@@ -135,7 +135,7 @@ export default {
 			showProcessing: 'ALLOW_PROCESSING',
 		}),
 		...mapGetters('features/call/videoCall', {
-			isVideoCall: 'IS_VIDEO_CALL',
+			isVideoCall: 'IS_VIDEO_CALL_ON_WORKSPACE',
 		}),
 		...mapState({
 			flowsList(state) {
