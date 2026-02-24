@@ -1,8 +1,8 @@
 <template>
   <task-header :size="size">
     <template #before-avatar>
-      <wt-rounded-action
-        :active="isOnHistory"
+      <wt-button
+				:variant="isOnHistory ? 'active' : 'outlined'"
         :size="size"
         class="call-action"
         color="secondary"
@@ -10,18 +10,19 @@
         rounded
         wide
         @click="$emit('openTab', 'history')"
-      ></wt-rounded-action>
+      />
     </template>
     <template #after-avatar>
-      <wt-rounded-action
+      <wt-button
         v-show="isCall"
+				variant="outlined"
         :size="size"
         color="success"
         icon="call-ringing"
         rounded
         wide
         @click="makeCall"
-      ></wt-rounded-action>
+      />
     </template>
     <template #title>{{ member.name }}</template>
 

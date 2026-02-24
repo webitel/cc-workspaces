@@ -1,8 +1,9 @@
 <template>
   <task-header :size="props.size">
     <template #end-section>
-      <wt-rounded-action
+      <wt-button
         v-show="isTransferAction"
+				variant="outlined"
         :size="size"
         color="transfer"
         icon="chat-transfer--filled"
