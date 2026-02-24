@@ -77,7 +77,7 @@ const store = useStore();
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 const isVideoCall = computed(
-	() => store.getters['features/call/videoCall/IS_VIDEO_CALL'],
+	() => store.getters['features/call/videoCall/IS_VIDEO_CALL_ON_WORKSPACE'],
 );
 
 const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);

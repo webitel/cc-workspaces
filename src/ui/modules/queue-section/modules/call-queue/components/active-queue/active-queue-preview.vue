@@ -7,7 +7,7 @@
   >
     <template #icon>
       <wt-icon
-        v-if="isVideoCall"
+        v-if="isVideoCallByTask(task)"
         icon="video-cam"
         color="success"
       />
@@ -168,7 +168,7 @@ export default {
 			normalizePhoneNumber: 'NORMALIZE_PHONE_NUMBER',
 		}),
 		...mapGetters('features/call/videoCall', {
-			isVideoCall: 'IS_VIDEO_CALL',
+			isVideoCallByTask: 'IS_VIDEO_CALL',
 		}),
 		isHold() {
 			return this.task.isHold;
