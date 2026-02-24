@@ -10,6 +10,7 @@
     <component
       :is="currentTab.component"
       :size="size"
+      @transfer-complete="$emit('transfer-complete')"
     />
   </div>
 </template>
@@ -32,6 +33,11 @@ interface CallTransferTabsProps {
 }
 
 defineProps<CallTransferTabsProps>();
+
+const emit = defineEmits([
+  'transfer-complete',
+]);
+
 
 const userinfoStore = useUserinfoStore();
 const { hasLicense } = userinfoStore;

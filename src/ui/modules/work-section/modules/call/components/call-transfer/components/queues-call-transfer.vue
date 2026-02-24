@@ -44,15 +44,22 @@ const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
-const transfer = (item: QueueItem = {} as QueueItem) => {
+const emit = defineEmits([
+  'transfer-complete',
+]);
+
+
+const transfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-		return call.value.blindTransferQueue(Number(item.id));
+    await call.value.blindTransferQueue(Number(item.id));
+    emit('transfer-complete');
 	}
 };
 
-const consultationTransfer = (item: QueueItem = {} as QueueItem) => {
+const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-		return call.value.processTransferQueue(Number(item.id));
+    await call.value.processTransferQueue(Number(item.id));
+    emit('transfer-complete');
 	}
 };
 

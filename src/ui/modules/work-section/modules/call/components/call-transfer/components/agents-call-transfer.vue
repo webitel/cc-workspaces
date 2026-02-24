@@ -65,10 +65,15 @@ const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
 
+const emit = defineEmits([
+  'transfer-complete',
+]);
+
 const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 	store.dispatch('features/call/TOGGLE_HOLD', item.id);
 	if (call.value) {
 		call.value.processTransferAgent(Number(item.id));
+    emit('transfer-complete');
 	}
 };
 
