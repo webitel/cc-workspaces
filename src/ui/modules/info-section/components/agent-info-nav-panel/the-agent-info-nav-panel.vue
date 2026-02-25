@@ -1,17 +1,18 @@
 <template>
   <nav class="agent-info-nav-panel">
-    <wt-rounded-action
+    <wt-button
       v-for="(tab) of tabs"
       :key="tab.value"
       v-tooltip="tab.text"
       :icon="tab.icon || tab.value"
       :icon-prefix="tab.iconPrefix"
-      :active="tab.value === currentTab?.value"
+			color="secondary"
+      :variant="tab.value === currentTab?.value ? 'active' : 'outlined'"
       :size="size"
       rounded
       wide
       @click="$emit('input', tab)"
-    ></wt-rounded-action>
+    />
   </nav>
 </template>
 
@@ -35,7 +36,9 @@ export default {
 			default: () => [],
 		},
 	},
-	emits: ['input'],
+	emits: [
+		'input',
+	],
 };
 </script>
 
