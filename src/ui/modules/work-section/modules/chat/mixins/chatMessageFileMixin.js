@@ -2,11 +2,11 @@ export default {
 	props: {
 		file: {
 			type: Object,
-			required: true,
+			default: null,
 		},
 		type: {
-			type: Object,
-			required: true,
+			type: String,
+			default: null,
 		},
 	},
 	computed: {

@@ -203,7 +203,7 @@ const {
 const resetData = async () => {
 	isNext.value = false;
 	dataPage.value = 1;
-	dataList.value = [];
+	setData([]);
 	await loadDataListWithGrouping();
 };
 
