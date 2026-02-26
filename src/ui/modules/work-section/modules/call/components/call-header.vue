@@ -47,7 +47,7 @@
         <wt-button
           v-if="isTransfer"
           class="call-action"
-          variant="outlined"
+          :variant="isOnTransfer ? 'active' : 'outlined'"
           :size="size"
           icon="call-transfer--filled"
           color="transfer"
@@ -148,6 +148,7 @@ const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
 const isOnBridge = computed(() => props.currentTab === CallTab.Bridge);
 const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
+const isOnTransfer = computed(() => props.currentTab === CallTab.Transfer);
 const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat);
 const isBridge = computed(() => callList.value?.length > 1);
 
