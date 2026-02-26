@@ -39,7 +39,7 @@
 
 <script setup>
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/api/clients';
+import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';

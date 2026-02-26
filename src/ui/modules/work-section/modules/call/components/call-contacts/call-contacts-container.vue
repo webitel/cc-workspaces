@@ -17,7 +17,7 @@
 
 <script setup>
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/api/clients';
+import { configurations } from '@webitel/ui-sdk/src/api/clients/index';
 import { WtObject } from '@webitel/ui-sdk/enums';
 import {
 	SpecialGlobalAction,

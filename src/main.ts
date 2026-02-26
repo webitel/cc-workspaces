@@ -115,6 +115,7 @@ const initApp = async () => {
 		await store.dispatch('features/notifications/LOAD_NOTIFICATION_SETTINGS');
 	} finally {
 		const app = await initApp();
+		app.config.warnHandler = (msg, vm, trace) => {};
 		app.provide('$config', config);
 		app.mount('#app');
 	}

@@ -8,16 +8,29 @@ import { resolve } from 'path';
 
 export default ({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
+	console.info('mode', mode);
+	console.info('env', JSON.stringify(env));
 
 	return defineConfig({
 		base: '/workspace',
-		define: {
-			'process.env': JSON.parse(
-				JSON.stringify(env).replaceAll('VITE_', 'VUE_APP_'),
-			),
-		},
+		// define: {
+		// 	'processenv': `JSON.parse(
+		// 		JSON.stringify(env).replaceAll('VITE_', 'VUE_APP_'),
+		// 	)`,
+		// },
 		server: {
 			// host: true,  // uncomment me to enable localhost access by IP (including from other devices in the network)
+		},
+		build: {
+			minify: false,
+			// rolldownOptions: {
+			//   transform: {
+			//     define: {
+			//       'process$1.env.NODE_ENV': 'production',
+			//       // 'processenv': 'env',
+			//     },
+			//   },
+			// },
 		},
 		css: {
 			preprocessorOptions: {
@@ -52,8 +65,8 @@ export default ({ mode }) => {
 					compilerOptions: {
 						compatConfig: {
 							MODE: 2,
-              // avoid Vue2 compat v-model warnings
-              COMPONENT_V_MODEL: false,
+							// avoid Vue2 compat v-model warnings
+							COMPONENT_V_MODEL: false,
 						},
 					},
 				},
@@ -70,10 +83,12 @@ export default ({ mode }) => {
 				],
 				globals: {
 					Buffer: true, // can also be 'build', 'dev', or false
+					process: true,
 				},
 			}),
 			// https://webitel.atlassian.net/browse/WTEL-4240
 			VitePWA({
+				disable: true,
 				registerType: 'autoUpdate',
 				strategies: 'injectManifest',
 				base: mode === 'development' ? 'workspace' : undefined,
