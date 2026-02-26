@@ -44,6 +44,7 @@ import { storeToRefs } from 'pinia';
 import { computed, inject, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
+import packageJson from '../../../../../package.json' with { type: 'json' };
 import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
 import { useUserinfoStore } from '../../userinfo/userinfoStore';
@@ -69,7 +70,7 @@ const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 
 const buildInfo = {
-	release: process.env.npm_package_version,
+	release: packageJson.version,
 	build: import.meta.env.VITE_BUILD_NUMBER,
 };
 
