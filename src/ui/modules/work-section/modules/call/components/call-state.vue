@@ -14,13 +14,13 @@
       class="call-state__primary-text"
     >
       <span class="call-state__primary-text__state">
-        <span class="call-state__primary-text__state">
+        <span class="call-state__primary-text__state typo-body-1-bold">
           {{ callState }}{{ showTimer ? ': ' : '' }}
         </span>
         <span
           v-for="(digit, key) of displayTime.split('')"
           :key="key"
-          class="call-state__primary-text__time-digit"
+          class="call-state__primary-text__time-digit typo-body-1"
         >
           {{ digit }}
         </span>
