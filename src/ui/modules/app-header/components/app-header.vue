@@ -20,10 +20,10 @@
       :label="$t('agentStatus.callCenter')"
       @update:model-value="toggleCCenterMode"
     ></wt-switcher>
+    
+    <agent-status-select v-if="isAgent"></agent-status-select>
 
     <wt-icon :icon="`ws-signal-${connectionQuality}`" />
-
-    <agent-status-select v-if="isAgent"></agent-status-select>
 
     <wt-app-navigator
       :current-app="currentApp"
