@@ -29,6 +29,9 @@ import wsWidgetProcessing from './ws-widget-processing.svg?raw';
 import wsWidgetQueueMissed from './ws-widget-queue-missed.svg?raw';
 import wsWidgetQueueTalk from './ws-widget-queue-talk.svg?raw';
 import wsWidgetScoreAvg from './ws-widget-score-avg.svg?raw';
+import wsSignalHigh from './ws-signal-high.svg?raw';
+import wsSignalMedium from './ws-signal-medium.svg?raw';
+import wsSignalLow from './ws-signal-low.svg?raw';
 import wsWidgetScoreCount from './ws-widget-score-count.svg?raw';
 import wsWidgetSumTalk from './ws-widget-sum-talk.svg?raw';
 import wsWidgetTaskAccepts from './ws-widget-task-accepts.svg?raw';
@@ -52,6 +55,9 @@ const icons = {
 	'ws-widget-processing': wsWidgetProcessing,
 	'ws-widget-queue-talk': wsWidgetQueueTalk,
 	'ws-widget-sum-talk': wsWidgetSumTalk,
+	'ws-signal-high': wsSignalHigh,
+	'ws-signal-medium': wsSignalMedium,
+	'ws-signal-low': wsSignalLow,
 	'ws-widget-task-accepts': wsWidgetTaskAccepts,
 	'ws-widget-voice-mail': wsWidgetVoiceMail,
 	'ws-client-info': wsClientInfo,

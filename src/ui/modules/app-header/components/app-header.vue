@@ -21,6 +21,8 @@
       @update:model-value="toggleCCenterMode"
     ></wt-switcher>
 
+    <wt-icon :icon="`ws-signal-${connectionQuality}`" />
+
     <agent-status-select v-if="isAgent"></agent-status-select>
 
     <wt-app-navigator
@@ -65,6 +67,20 @@ const isCcenterOn = computed(
 	() => store.getters['features/status/IS_CCENTER_ON'],
 );
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
+
+const connectionQuality = computed(() => {
+	const currentLatency = store.getters['features/connectionQuality/LATENCY'];
+
+	// TODO implement display quality by rtp
+	// https://webitel.atlassian.net/browse/WTEL-8733
+	if (currentLatency > 300) {
+		return 'low';
+	} else if (currentLatency < 300 && currentLatency > 100) {
+		return 'medium';
+	} else {
+		return 'high';
+	}
+});
 
 const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 

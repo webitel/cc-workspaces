@@ -52,7 +52,7 @@
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
 		"vuex": "^4.1.0",
-		"webitel-sdk": "^26.1.7"
+		"webitel-sdk": "^26.1.8"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.14",

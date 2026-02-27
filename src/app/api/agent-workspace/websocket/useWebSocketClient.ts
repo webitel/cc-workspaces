@@ -4,6 +4,7 @@ import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
+import { useStore } from 'vuex';
 
 /* ============================================================================
  * Constants
@@ -11,6 +12,7 @@ import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 const MAX_RECONNECT_ATTEMPTS = 10;
 const MAX_RECONNECT_DELAY = 15000;
+const LATENCY_REFRESH_DELAY = 5000;
 
 /* ============================================================================
  * Singleton state
@@ -29,6 +31,7 @@ const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 let clientInitPromise: Promise<Client> | null = null;
 let reconnectAttemptCount = 0;
 let reconnectTimerId: number | null = null;
+let latencyInterval;
 let clientGenerationCount = 0;
 
 const listeners: { [K in keyof EventMap]: EventMap[K][] } = {
@@ -90,11 +93,41 @@ function attachCoreHandlers(cli: Client, generation: number) {
 		});
 	});
 
+	cli.on('call_media_metric', (e: any) => {
+		const store = useStore();
+
+		store.commit('features/connectionQuality/SET', {
+			path: 'rtp',
+			value: e,
+		});
+
+		// TODO Implement notification if rtp have bad value check docs https://webitel.atlassian.net/wiki/x/CQA9Rg
+		// https://webitel.atlassian.net/browse/WTEL-8733
+	});
+
 	cli.on('open_link', (e: any) => {
 		const url = e.url.startsWith('https://') ? e.url : `https://${e.url}`;
 		window.open(url, '_blank');
 	});
 }
+
+const initLatencyInterval = (cli: Client) => {
+	const store = useStore();
+
+	latencyInterval = setInterval(async () => {
+		try {
+			const latency = await cli.latency();
+
+			await store.commit('features/connectionQuality/SET', {
+				path: 'latency',
+				value: latency,
+			});
+
+			// TODO Implement notification if latency have bad value  "latency > 300m"
+			// https://webitel.atlassian.net/browse/WTEL-8733
+		} catch {}
+	}, LATENCY_REFRESH_DELAY);
+};
 
 /**
  * Mark the asynchronously created phone UA instance as raw.
@@ -148,6 +181,7 @@ async function createClient(): Promise<Client> {
 	cli.callStore = reactive(cli.callStore);
 
 	attachCoreHandlers(cli, generation);
+	initLatencyInterval(cli);
 
 	await cli.connect();
 	await cli.auth();
@@ -163,6 +197,7 @@ async function destroyClient() {
 	if (!client) return;
 
 	try {
+		clearInterval(latencyInterval);
 		await client.destroy?.();
 	} catch (e) {
 		console.warn('[WS] destroy error', e);
