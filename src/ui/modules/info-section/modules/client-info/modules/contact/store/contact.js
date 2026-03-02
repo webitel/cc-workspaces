@@ -118,7 +118,7 @@ const actions = {
 		}
 
 		if (isCallWorkspace) {
-			if (task.contact.id) {
+			if (task.contact?.id) {
 				return context.dispatch('LOAD_CONTACT', task.contact.id);
 			} else {
 				context.commit('SET_CONTACT', null);

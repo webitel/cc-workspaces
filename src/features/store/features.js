@@ -9,6 +9,7 @@ import chatNotifications from '../modules/notifications/chat/store/chat.js';
 import jobNotifications from '../modules/notifications/job/store/job.js';
 import notifications from '../modules/notifications/store/notifications';
 import swController from '../modules/sw-controller/store/sw-controller';
+import connectionQuality from '../modules/connection-quality/store/connection-quality';
 
 const modules = {
 	status,
@@ -18,6 +19,7 @@ const modules = {
 	member,
 	globals,
 	notifications,
+	connectionQuality,
 	callNotifications,
 	chatNotifications,
 	jobNotifications,

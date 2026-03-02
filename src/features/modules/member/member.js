@@ -44,7 +44,7 @@ const actions = {
 	CALL: async (context, { id, communicationId }) => {
 		const memberId = id || context.getters.MEMBER_ON_WORKSPACE.id;
 		const commId = communicationId || state.selectedCommId;
-		const { agent } = context.state;
+		const agent = await context.dispatch('GET_AGENT_INSTANCE');
 		await agent.directMember(memberId, commId);
 		return context.dispatch('LOAD_DATA_LIST');
 	},

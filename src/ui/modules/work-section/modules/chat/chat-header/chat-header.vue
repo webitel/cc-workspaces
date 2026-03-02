@@ -1,8 +1,9 @@
 <template>
   <task-header :size="props.size">
     <template #end-section>
-      <wt-rounded-action
+      <wt-button
         v-show="isTransferAction"
+				:variant="isOnTransfer ? 'active' : 'outlined'"
         :size="size"
         color="transfer"
         icon="chat-transfer--filled"
@@ -45,6 +46,7 @@ const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 		chatContact?: ChatContact;
+		currentTab: string;
 	}>(),
 	{
 		size: ComponentSize.MD,
@@ -62,6 +64,9 @@ const store = useStore();
 
 const hotkeyUnsubscribers = ref([]);
 
+const isOnTransfer = computed(
+	() => props.currentTab === 'chat-transfer-container',
+);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 const isCloseAction = computed(
 	() => store.getters['features/chat/ALLOW_CHAT_CLOSE'],

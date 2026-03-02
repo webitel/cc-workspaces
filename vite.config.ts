@@ -47,6 +47,8 @@ export default ({ mode }) => {
 							MODE: 2,
 							// avoid Vue2 compat v-model warnings
 							COMPONENT_V_MODEL: false,
+							// avoid warnings when using boolean attributes
+							ATTR_FALSE_VALUE: false,
 						},
 					},
 				},

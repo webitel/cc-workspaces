@@ -20,9 +20,10 @@
     </div>
     <div class="info-tab-wrapper">
       <the-agent-info-nav-panel
-        v-model="currentTab"
+        v-model:current-tab="currentTab"
         :tabs="tabs"
         :size="infoSecSize"
+				@input="currentTab = $event"
       />
       <keep-alive>
         <component
@@ -135,7 +136,7 @@ export default {
 			showProcessing: 'ALLOW_PROCESSING',
 		}),
 		...mapGetters('features/call/videoCall', {
-			isVideoCall: 'IS_VIDEO_CALL',
+			isVideoCall: 'IS_VIDEO_CALL_ON_WORKSPACE',
 		}),
 		...mapState({
 			flowsList(state) {

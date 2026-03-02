@@ -1,13 +1,14 @@
 <template>
   <div class="chat-header-close-action">
-    <wt-rounded-action
+    <wt-button
       :size="size"
+			variant="outlined"
       color="error"
       icon="chat-end--filled"
       rounded
       wide
       @click="handleCloseAction"
-    ></wt-rounded-action>
+    />
     <confirmation-popup
       v-show="isConfirmationPopup"
       @confirm="close"

@@ -5,14 +5,13 @@
 <script>
 import { computed, provide } from 'vue';
 import { useStore } from 'vuex';
-import isOnPWA from './scripts/isOnPWA';
 
 export default {
 	name: 'TheApp',
 
 	setup() {
 		const store = useStore();
-    // @author o.chorpita
+		// @author o.chorpita
 		// Provide darkMode for ui-sdk components
 		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 		provide('darkMode', darkMode);
@@ -24,11 +23,6 @@ export default {
 		// https://stackoverflow.com/a/34443314/17748106
 
 		// we have to listen to the window event:
-		window.addEventListener('beforeunload', async (e) => {
-			// https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload
-			// https://my.webitel.com/browse/WTEL-2397
-			if (isOnPWA()) e.preventDefault();
-		});
 
 		window.addEventListener('unload', () => {
 			this.$store.dispatch('workspace/CLOSE_SESSION');

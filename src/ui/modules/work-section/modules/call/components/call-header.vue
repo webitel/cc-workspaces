@@ -2,9 +2,9 @@
   <task-header :size="props.size">
     <template #start-section>
       <slot :name="CallTab.Contacts">
-        <wt-rounded-action
+        <wt-button
           class="call-action"
-          :active="isOnContacts"
+          :variant="isOnContacts ? 'active' : 'outlined'"
           :size="size"
           icon="contacts"
           color="secondary"
@@ -15,9 +15,9 @@
       </slot>
 
       <slot :name="CallTab.History">
-        <wt-rounded-action
+        <wt-button
           class="call-action"
-          :active="isOnHistory"
+          :variant="isOnHistory ? 'active' : 'outlined'"
           :size="size"
           icon="history"
           color="secondary"
@@ -30,10 +30,10 @@
 
     <template #end-section>
       <slot :name="CallTab.Bridge">
-        <wt-rounded-action
+        <wt-button
           v-if="isBridge"
           class="call-action"
-          :active="isOnBridge"
+          :variant="isOnBridge ? 'active' : 'outlined'"
           :size="size"
           icon="call-add-to"
           color="secondary"
@@ -44,9 +44,10 @@
       </slot>
 
       <slot :name="CallTab.Transfer">
-        <wt-rounded-action
+        <wt-button
           v-if="isTransfer"
           class="call-action"
+          :variant="isOnTransfer ? 'active' : 'outlined'"
           :size="size"
           icon="call-transfer--filled"
           color="transfer"
@@ -57,10 +58,10 @@
       </slot>
 
       <slot name="chat">
-        <wt-rounded-action
+        <wt-button
           v-if="isDisplayChatButton"
           class="call-action"
-          :active="isOnChat"
+          :variant="isOnChat ? 'active' : 'outlined'"
           :disabled="!isCallChatExist"
           :size="size"
           icon="chat"
@@ -72,8 +73,9 @@
       </slot>
 
       <slot name="hangup">
-        <wt-rounded-action
+        <wt-button
           v-if="isHangup"
+          variant="outlined"
           class="call-action"
           :size="size"
           icon="call-end--filled"
@@ -85,8 +87,9 @@
       </slot>
 
       <slot name="call">
-        <wt-rounded-action
+        <wt-button
           v-if="isDisplayCallButton"
+          variant="outlined"
           class="call-action"
           :size="size"
           icon="call-ringing--filled"
@@ -145,6 +148,7 @@ const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
 const isOnBridge = computed(() => props.currentTab === CallTab.Bridge);
 const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
+const isOnTransfer = computed(() => props.currentTab === CallTab.Transfer);
 const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat);
 const isBridge = computed(() => callList.value?.length > 1);
 
@@ -156,7 +160,7 @@ const isDisplayCallButton = computed(
 );
 
 const isDisplayChatButton = computed(
-	() => store.getters['features/call/videoCall/IS_VIDEO_CALL'],
+	() => store.getters['features/call/videoCall/IS_VIDEO_CALL_ON_WORKSPACE'],
 );
 const isCallChatExist = computed(
 	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
