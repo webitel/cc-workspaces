@@ -11,7 +11,7 @@
 import { mapActions, mapState } from 'vuex';
 
 export default {
-	name: 'MediaViewer',
+	name: 'PhotoViewer',
 	computed: {
 		...mapState('features/chat/chatMedia', {
 			mediaView: (state) => state.mediaView,
