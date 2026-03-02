@@ -48,7 +48,7 @@ interface Props {
 }
 // Component mapping
 const videoCallTabComponents = {
-	[VideoCallTab.Processing]: CallState,
+	[VideoCallTab.State]: CallState,
 	[VideoCallTab.Contacts]: Contacts,
 	[VideoCallTab.History]: History,
 	[VideoCallTab.Chat]: VideoCallChat,
@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const store = useStore();
 
-const currentTab = ref(VideoCallTab.Processing);
+const currentTab = ref(VideoCallTab.State);
 const isActive = ref(false);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
@@ -77,11 +77,11 @@ const currentComponent = computed(
 );
 
 const openCall = () => {
-	currentTab.value = VideoCallTab.Processing;
+	currentTab.value = VideoCallTab.State;
 };
 
 const openTab = (tab) =>
-	(currentTab.value = currentTab.value === tab ? VideoCallTab.Processing : tab);
+	(currentTab.value = currentTab.value === tab ? VideoCallTab.State : tab);
 
 watch(
 	[
