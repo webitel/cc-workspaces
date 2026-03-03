@@ -53,6 +53,11 @@ export default {
 			label: 'Không làm phiền',
 			tooltip: 'Bạn sẽ chỉ nhận cuộc gọi từ các hàng đợi',
 		},
+		connectionQuality: {
+			high: 'Chất lượng mạng rất tốt.',
+			medium: 'Có thể có độ trễ, vui lòng kiểm tra mạng của bạn.',
+			low: 'Chất lượng mạng kém, vui lòng kiểm tra mạng của bạn.',
+		},
 	},
 	widgets: {
 		callInbound: 'Cuộc gọi đến',
