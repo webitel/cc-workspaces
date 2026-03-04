@@ -21,6 +21,7 @@
     :size="videoContainerSize"
     :overlay="false"
     :call:onHold="callIsOnHold"
+    :hide-controls-panel="callIsOnHold"
     position="left-bottom"
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
