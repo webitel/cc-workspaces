@@ -17,7 +17,8 @@ export const useWebSocketLatency = () => {
 		const store = useStore();
 		storeRef = store;
 		if (latencyIntervalId) {
-			window.clearInterval(latencyIntervalId);
+			console.warn('[WS]: latency tracking already started');
+			return;
 		}
 
 		latencyIntervalId = window.setInterval(async () => {
