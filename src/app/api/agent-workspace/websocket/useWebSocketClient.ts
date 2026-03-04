@@ -100,14 +100,6 @@ function attachCoreHandlers(cli: Client, generation: number) {
 	});
 
 	cli.on('call_media_metric', (e: any) => {
-		const store = useStore();
-		console.log(store, ' store call_media_metric');
-
-		store.commit('features/connectionQuality/SET', {
-			path: 'rtp',
-			value: e,
-		});
-
 		websocketRtpConnectionLevelHandler(e);
 	});
 
