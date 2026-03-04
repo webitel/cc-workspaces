@@ -1,5 +1,5 @@
 import { createBaseStoreModule } from '@webitel/ui-sdk/store';
-import { CONNECTION_QUALITY_LEVELS } from '../../../types/connection-quality-level.enum';
+import { ConnectionQualityLevels } from '../../../types/ConnectionQualityLevel.enum.ts';
 
 const state = {
 	latency: 0,
@@ -11,9 +11,9 @@ const getters = {
 		return state.latency;
 	},
 	LATENCY_LEVEL: (state) => {
-		if (state.latency > 300) return CONNECTION_QUALITY_LEVELS.Low;
-		if (state.latency >= 150) return CONNECTION_QUALITY_LEVELS.Medium;
-		return CONNECTION_QUALITY_LEVELS.High;
+		if (state.latency > 300) return ConnectionQualityLevels.Low;
+		if (state.latency >= 150) return ConnectionQualityLevels.Medium;
+		return ConnectionQualityLevels.High;
 	},
 	RTP: (state) => state.rtp,
 };

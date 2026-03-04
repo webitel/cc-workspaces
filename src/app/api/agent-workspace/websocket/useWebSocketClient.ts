@@ -1,11 +1,11 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
 import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
 import { Client } from 'webitel-sdk';
+import type { RtpMetrics } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
-import { useStore } from 'vuex';
 import { useWebSocketLatency } from './useWebSocketLatency';
 
 /* ============================================================================
@@ -99,7 +99,7 @@ function attachCoreHandlers(cli: Client, generation: number) {
 		});
 	});
 
-	cli.on('call_media_metric', (e: any) => {
+	cli.on('call_media_metric', (e: RtpMetrics) => {
 		websocketRtpConnectionLevelHandler(e);
 	});
 
