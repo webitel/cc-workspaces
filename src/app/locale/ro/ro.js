@@ -53,6 +53,11 @@ export default {
 			label: 'Nu deranja',
 			tooltip: 'Veți primi apeluri doar din cozi',
 		},
+		connectionQuality: {
+			high: 'Calitate excelentă a rețelei.',
+			medium: 'Pot apărea întârzieri, verificați rețeaua.',
+			low: 'Calitatea rețelei este slabă, verificați rețeaua.',
+		},
 	},
 	widgets: {
 		callInbound: 'Apeluri primite',
