@@ -40,25 +40,6 @@ export const useWebSocketLatency = () => {
 					path: 'latency',
 					value: latency,
 				});
-
-				const latencyLevel =
-					store.getters['features/connectionQuality/LATENCY_LEVEL'];
-
-				if (latencyLevel === CONNECTION_QUALITY_LEVELS.Low) {
-					eventBus.$emit('notification', {
-						type: 'error',
-						text: i18n.global.t(
-							`header.connectionQuality.${CONNECTION_QUALITY_LEVELS.Low}`,
-						),
-					});
-				} else if (latencyLevel === CONNECTION_QUALITY_LEVELS.Medium) {
-					eventBus.$emit('notification', {
-						type: 'warning',
-						text: i18n.global.t(
-							`header.connectionQuality.${CONNECTION_QUALITY_LEVELS.Medium}`,
-						),
-					});
-				}
 			} catch (e) {
 				console.warn('[WS] latency error', e);
 			}
@@ -137,6 +118,7 @@ export const useWebSocketLatency = () => {
 			reasons.push(`MOS ${mosAvg.toFixed(2)} (3.5–4.0)`);
 		}
 
+		console.log(level, ' level');
 		if (level && level === CONNECTION_QUALITY_LEVELS.Low) {
 			eventBus.$emit('notification', {
 				type: 'error',
