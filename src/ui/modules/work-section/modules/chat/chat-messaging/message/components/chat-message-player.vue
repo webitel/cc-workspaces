@@ -18,6 +18,7 @@
       :autoplay="false"
       :closable="false"
       hide-volume-slider
+      countdown-time-mode
       class="chat-message-player__player"
       @initialized="handlePlayerInitialize"
     />
@@ -50,10 +51,8 @@ export default {
 			};
 		},
 		isVideo() {
-			return (
-				this.media?.type?.includes('video') ||
-				this.mediaSrc?.src?.includes('video')
-			);
+			console.log('mediaSrc:', this.mediaSrc, 'file;', this.file);
+			return this.mediaSrc.type?.includes('video');
 		},
 	},
 	methods: {
