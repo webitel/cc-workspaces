@@ -51,7 +51,6 @@ export default {
 			};
 		},
 		isVideo() {
-			console.log('mediaSrc:', this.mediaSrc, 'file;', this.file);
 			return this.mediaSrc.type?.includes('video');
 		},
 	},
