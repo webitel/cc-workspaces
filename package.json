@@ -27,7 +27,7 @@
 		"@vueuse/core": "^14.x",
 		"@webitel/api-services": "^0.1.7",
 		"@webitel/styleguide": "^26.2.5",
-		"@webitel/ui-chats": "^0.1.5",
+		"@webitel/ui-chats": "^0.1.12",
 		"@webitel/ui-sdk": "~26.2",
 		"autolinker": "^4.x",
 		"axios": "^1.13",
@@ -52,6 +52,7 @@
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
 		"vuex": "^4.1.0",
+		"vidstack": "^1.12.13",
 		"webitel-sdk": "^26.1.9"
 	},
 	"devDependencies": {

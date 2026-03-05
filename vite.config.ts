@@ -5,6 +5,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import vueDevtools from 'vite-plugin-vue-devtools';
 import { resolve } from 'path';
+import { vite as vidstack } from 'vidstack/plugins';
 
 export default ({ mode }) => {
 	return defineConfig({
@@ -30,6 +31,9 @@ export default ({ mode }) => {
 					'src/app/api/instance',
 				),
 			},
+			dedupe: [
+				'vidstack',
+			],
 		},
 		optimizeDeps: {
 			include: [
@@ -50,12 +54,12 @@ export default ({ mode }) => {
 							// avoid warnings when using boolean attributes
 							ATTR_FALSE_VALUE: false,
 						},
+						isCustomElement: (tag) => tag.startsWith('media-'),
 					},
 				},
 			}),
-			vueDevtools({
-				launchEditor: 'webstorm',
-			}),
+			vueDevtools(),
+			vidstack(),
 			// https://www.npmjs.com/package/vite-plugin-node-polyfills
 			nodePolyfills({
 				// are needed for csv-parse

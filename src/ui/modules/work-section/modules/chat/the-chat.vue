@@ -8,7 +8,7 @@
 					:current-tab="currentTab.component"
           @open-tab="openTab"
         />
-        <media-viewer />
+        <photo-viewer />
       </template>
       <template #body>
         <component
@@ -42,7 +42,7 @@ import ChatFooter from './chat-footer/chat-footer.vue';
 import ChatHeader from './chat-header/chat-header.vue';
 import ChatMessagingContainer from './chat-messaging/chat-messaging.vue';
 import ChatTransferContainer from './chat-transfer-container/chat-transfer-container.vue';
-import MediaViewer from './media-viewer/media-viewer.vue';
+import PhotoViewer from './media-viewer/media-viewer.vue';
 import { getLinkedContact } from './scripts/getLinkedContact.js';
 
 const defaultTab = 'chat-messaging-container';
@@ -51,7 +51,7 @@ export default {
 	name: 'TheChat',
 	components: {
 		TaskContainer,
-		MediaViewer,
+		PhotoViewer,
 		ChatHeader,
 		ChatMessagingContainer,
 		ChatTransferContainer,
