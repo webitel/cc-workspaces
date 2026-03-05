@@ -5,8 +5,7 @@
     </a>
     <wt-dark-mode-switcher namespace="ui/appearance" />
 
-    <wt-chip :color="isPhoneReg ? 'success' : 'primary'">SIP
-    </wt-chip>
+    <wt-chip :color="isPhoneReg ? 'success' : 'primary'">SIP </wt-chip>
     <break-timer-popup v-if="isAgent"></break-timer-popup>
     <user-dnd-switcher></user-dnd-switcher>
     <!--    <wt-switcher-->
@@ -17,13 +16,13 @@
     <wt-switcher
       v-if="isAgent"
       :model-value="isCcenterOn"
-      :label="$t('agentStatus.callCenter')"
+      :label="t('agentStatus.callCenter')"
       @update:model-value="toggleCCenterMode"
     ></wt-switcher>
-    
+
     <agent-status-select v-if="isAgent"></agent-status-select>
 
-    <wt-icon :icon="`ws-signal-${connectionQuality}`" />
+    <call-media-metric />
 
     <wt-app-navigator
       :current-app="currentApp"
@@ -44,16 +43,19 @@ import { WtApplication } from '@webitel/ui-sdk/enums';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import { storeToRefs } from 'pinia';
 import { computed, inject, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
-import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
+import packageJson from '../../../../../package.json' with { type: 'json' };
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
 import { useUserinfoStore } from '../../userinfo/userinfoStore';
 import AgentStatusSelect from './agent-status-select.vue';
+import CallMediaMetric from './call-media-metric.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
 
 const store = useStore();
 const config = inject('$config');
+const { t } = useI18n();
 
 const userinfoStore = useUserinfoStore();
 const { hasApplicationVisibility, logoutUser } = userinfoStore;
@@ -68,25 +70,12 @@ const isCcenterOn = computed(
 );
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
-const connectionQuality = computed(() => {
-	const currentLatency = store.getters['features/connectionQuality/LATENCY'];
-
-	// TODO implement display quality by rtp
-	// https://webitel.atlassian.net/browse/WTEL-8733
-	if (currentLatency > 300) {
-		return 'low';
-	} else if (currentLatency < 300 && currentLatency > 100) {
-		return 'medium';
-	} else {
-		return 'high';
-	}
-});
-
 const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 
 const buildInfo = {
-	release: process.env.npm_package_version,
+	release: packageJson.version,
 	build: import.meta.env.VITE_BUILD_NUMBER,
+	timestamp: import.meta.env.VITE_BUILD_TIMESTAMP,
 };
 
 const apps = computed(() => {

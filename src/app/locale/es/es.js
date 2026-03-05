@@ -53,6 +53,11 @@ export default {
 			label: 'No molestar',
 			tooltip: 'Solo recibirá llamadas de colas',
 		},
+		connectionQuality: {
+			high: 'Excelente calidad de red.',
+			medium: 'Puede haber algo de demora, por favor revise su red.',
+			low: 'La calidad de la red es deficiente, por favor revise su red.',
+		},
 	},
 	widgets: {
 		callInbound: 'Llamadas entrantes',

@@ -53,6 +53,12 @@ export default {
 			label: 'Bezovta qilmaslik',
 			tooltip: 'Siz faqat navbatlardan qo‘ng‘iroqlarni qabul qilasiz',
 		},
+		connectionQuality: {
+			high: 'Tarmoq sifati a’lo.',
+			medium:
+				'Kichik kechikish bo‘lishi mumkin, iltimos tarmog‘ingizni tekshiring.',
+			low: 'Tarmoq sifati past, iltimos tarmog‘ingizni tekshiring.',
+		},
 	},
 	widgets: {
 		callInbound: 'Kirish qo‘ng‘iroqlari',
