@@ -75,6 +75,7 @@ const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 const buildInfo = {
 	release: packageJson.version,
 	build: import.meta.env.VITE_BUILD_NUMBER,
+	timestamp: import.meta.env.VITE_BUILD_TIMESTAMP,
 };
 
 const apps = computed(() => {
