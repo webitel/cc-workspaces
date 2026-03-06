@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { WtExpansionCard } from '@webitel/ui-sdk/components';
+import { WtExpansionCard, WtAvatar } from '@webitel/ui-sdk/components';
 
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
@@ -55,7 +55,7 @@ const props = withDefaults(
 		queueName: '',
 		phoneNumber: '',
 		contactId: '',
-		collapsed: true,
+		collapsed: false,
 	},
 );
 
