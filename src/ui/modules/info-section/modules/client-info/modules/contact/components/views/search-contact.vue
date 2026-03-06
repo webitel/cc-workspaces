@@ -7,7 +7,6 @@
       <wt-search-bar
         v-if="isSearchNotByVariables"
         :value="search"
-        :v="v$.search"
         :placeholder="t('infoSec.contacts.searchPlaceholder')"
         @input="search = $event"
       >
@@ -146,10 +145,6 @@ const checkForStar = (value) => value !== '*';
 
 const v$ = useVuelidate(
 	computed(() => ({
-		search: {
-			required: requiredIf(() => isSearchNotByVariables.value),
-			checkForStar,
-		},
 		keyVariable: {
 			required: requiredIf(() => !isSearchNotByVariables.value),
 			checkForStar,
