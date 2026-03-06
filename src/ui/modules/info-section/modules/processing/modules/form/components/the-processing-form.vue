@@ -18,7 +18,7 @@
         :component-id="el.id"
         :size="el.view.component === 'form-file' ? size : null"
         v-bind="el.view"
-        @input="change"
+        @input="change({el, value: $event})"
         @call-table-action="sendTableAction"
       />
     </template>
@@ -56,6 +56,7 @@ import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
+import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
 
 export default {
 	name: 'TheProcessingForm',
@@ -69,6 +70,7 @@ export default {
 		FormDatetimepicker,
 		FormSelectFromObject,
 		FormTable,
+		FormCaseStatusSelect,
 		RichTextEditor: () => ({
 			component: import('./components/rich-text-editor.vue'),
 			loading: RichTextEditorSkeleton,
@@ -85,6 +87,7 @@ export default {
 			'wt-input': 'form-input-text',
 			'wt-datetimepicker': 'form-datetimepicker',
 			'form-i-frame': 'form-i-frame',
+			'form-select-case-status': 'form-case-status-select',
 		},
 		hotkeyUnsubscribers: [],
 	}),
@@ -191,7 +194,8 @@ export default {
 			];
 			this.hotkeyUnsubscribers = useHotkeys(subscripers);
 		},
-		change() {
+		change({ el, value }) {
+			el.value = value;
 			nextTick(() => {
 				// we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
 				if (this.isCall)
