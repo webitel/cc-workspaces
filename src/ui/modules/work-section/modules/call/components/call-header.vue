@@ -31,7 +31,7 @@
     <template #end-section>
       <slot :name="CallTab.Bridge">
         <wt-button
-          v-if="isDisplayBridgeButton"
+          v-if="isBridgeButtonVisible"
           class="call-action"
           :variant="isOnBridge ? 'active' : 'outlined'"
           :size="size"
@@ -45,7 +45,7 @@
 
       <slot :name="CallTab.Transfer">
         <wt-button
-          v-if="isDisplayTransferButton"
+          v-if="isTransferButtonVisible"
           class="call-action"
           :variant="isOnTransfer ? 'active' : 'outlined'"
           :size="size"
@@ -59,7 +59,7 @@
 
       <slot name="chat">
         <wt-button
-          v-if="isDisplayChatButton"
+          v-if="isChatButtonVisible"
           class="call-action"
           :variant="isOnChat ? 'active' : 'outlined'"
           :disabled="!isCallChatExist"
@@ -74,7 +74,7 @@
 
       <slot name="hangup">
         <wt-button
-          v-if="isDisplayHangupButton"
+          v-if="isHangupButtonVisible"
           variant="outlined"
           class="call-action"
           :size="size"
@@ -88,7 +88,7 @@
 
       <slot name="call">
         <wt-button
-          v-if="isDisplayCallButton"
+          v-if="isCallButtonVisible"
           variant="outlined"
           class="call-action"
           :size="size"
@@ -155,13 +155,13 @@ const isVideoCall = computed(
 	() => store.getters['features/call/videoCall/IS_VIDEO_CALL_ON_WORKSPACE'],
 );
 
-const isDisplayBridgeButton = computed(() => callList.value?.length > 1);
-const isDisplayTransferButton = computed(
+const isBridgeButtonVisible = computed(() => callList.value?.length > 1);
+const isTransferButtonVisible = computed(
 	() => call.value?.allowHangup && !isVideoCall.value,
 );
-const isDisplayChatButton = computed(() => isVideoCall.value);
-const isDisplayHangupButton = computed(() => call.value?.allowHangup);
-const isDisplayCallButton = computed(
+const isChatButtonVisible = computed(() => isVideoCall.value);
+const isHangupButtonVisible = computed(() => call.value?.allowHangup);
+const isCallButtonVisible = computed(
 	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
 );
 const isCallChatExist = computed(
