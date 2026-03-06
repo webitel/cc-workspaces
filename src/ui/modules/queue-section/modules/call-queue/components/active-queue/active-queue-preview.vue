@@ -85,6 +85,7 @@
         color="success"
       />
       <img
+        v-else
         :alt="task.state"
         :src="sonarIcon"
       />

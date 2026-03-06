@@ -76,7 +76,7 @@ const actions = {
 			context.dispatch('ui/now/CLEAR_NOW_WATCHER', null, {
 				root: true,
 			}),
-			context.rootState.client.destroyCliInstance(),
+			context.rootState.client.destroyClient(),
 			context.dispatch('features/globals/RESET_GLOBAL_HANDLERS', null, {
 				root: true,
 			}),
