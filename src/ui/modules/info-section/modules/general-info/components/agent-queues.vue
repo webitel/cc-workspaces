@@ -12,15 +12,20 @@
             :key="queue.queue.id"
             class="agent-queues-item"
           >
-            <div :class="['agent-queues-item__title', size === 'sm' ? 'typo-body-2' : 'typo-body-1']">{{
-              queue.queue.name }}</div>
+            <div
+              :class="['agent-queues-item__title', size === 'sm' ? 'typo-body-2' : 'typo-body-1']"
+            >
+              {{ queue.queue.name }}
+            </div>
+
             <div class="agent-queues-item__status-wrapper">
               <agent-indicators
                 :agents="queue.agents"
                 :size="size"
               ></agent-indicators>
-              <wt-chip>{{ displayMembers(queue) }}</wt-chip>
             </div>
+
+            <wt-chip>{{ displayMembers(queue) }}</wt-chip>
           </li>
         </ul>
       </template>
@@ -67,7 +72,8 @@ export default {
     display: grid;
     align-items: center;
     padding: var(--spacing-xs);
-    grid-template-columns: 2fr 2fr;
+    grid-template-columns: 1fr auto auto;
+    gap: var(--spacing-xs);
 
     &:not(:last-child) {
       border-bottom: 1px solid var(--divider-border-color);
@@ -88,12 +94,6 @@ export default {
       align-items: center;
       justify-content: end;
       gap: var(--spacing-xs);
-    }
-  }
-
-  &--sm {
-    .agent-queues-item {
-      grid-template-columns: 3fr 2fr;
     }
   }
 }

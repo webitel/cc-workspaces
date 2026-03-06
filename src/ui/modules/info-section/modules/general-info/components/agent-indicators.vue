@@ -63,7 +63,12 @@ const busy = computed(() => props.agents.busy);
 .agent-indicators {
   display: flex;
   justify-content: space-evenly;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
+
+  :deep(.wt-indicator__text) {
+    // agreed with @Evgeniy Trahtenberg, and in accordance with the design
+    width: 32px;
+  }
 
   &--sm {
     flex-direction: column;

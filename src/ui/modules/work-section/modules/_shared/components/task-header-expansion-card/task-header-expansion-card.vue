@@ -6,7 +6,7 @@
     <template #header>
       <div class="task-header-expansion-card__title-wrapper">
         <wt-avatar
-          size='xs'
+          size="xs"
           :username="props.username"
         />
         <a
@@ -22,21 +22,23 @@
         </span>
       </div>
     </template>
+    <template #body>
     <div class="task-header-expansion-card__info-wrapper">
       <p>{{ props.phoneNumber }}</p>
       <queue-name-chip
         v-if="props.queueName"
-        :name="props.queueName"
-      />
-    </div>
+          :name="props.queueName"
+        />
+      </div>
+    </template>
   </wt-expansion-card>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import { WtExpansionCard } from '@webitel/ui-sdk/components';
 
-import { WtExpansionCard } from '@webitel/ui-sdk/components/index';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
 const store = useStore();
@@ -77,14 +79,16 @@ const contactLink = computed(() =>
   color: var(--text-main-color);
 }
 
-.task-header-expansion-card__info-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--content-wrapper-gap);
-}
-
 .task-header-expansion-card__title:hover {
   text-decoration: underline;
+}
+
+.task-header-expansion-card__info-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--content-wrapper-gap);
 }
 </style>
 
