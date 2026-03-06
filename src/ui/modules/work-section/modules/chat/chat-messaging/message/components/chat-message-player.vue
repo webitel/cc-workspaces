@@ -4,14 +4,14 @@
     class="chat-message-player"
     @click="$emit('open', media)"
   >
-    mediaSrcObject: {{ mediaSrcObject }}
     <wt-vidstack-player
       v-if="isVideo"
+      :size="ComponentSize.SM"
+      :src="mediaSrcObject"
       static
       hide-expand
       stretch
-      :size="ComponentSize.SM"
-      :src="mediaSrcObject"
+      @initialized="handlePlayerInitialize"
     />
     <wt-player
       v-else
@@ -31,7 +31,7 @@
 import { WtVidstackPlayer, WtPlayer } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
-import { useVidstackSrc } from '@webitel/ui-sdk/composables';
+import { useVidstackSrc } from '@webitel/ui-sdk/src/components/wt-vidstack-player/composables/useVidstackSrc';
 
 export default {
 	name: 'ChatMessagePlayer',
@@ -54,6 +54,9 @@ export default {
 	computed: {
 		ComponentSize() {
 			return ComponentSize;
+		},
+		mediaSrc() {
+			return this.media?.streamUrl || this.media?.url;
 		},
 		isVideo() {
 			return this.mediaSrc.type?.includes('video');
