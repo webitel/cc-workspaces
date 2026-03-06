@@ -31,7 +31,7 @@
     <template #end-section>
       <slot :name="CallTab.Bridge">
         <wt-button
-          v-if="isBridge"
+          v-if="isBridgeButtonVisible"
           class="call-action"
           :variant="isOnBridge ? 'active' : 'outlined'"
           :size="size"
@@ -45,7 +45,7 @@
 
       <slot :name="CallTab.Transfer">
         <wt-button
-          v-if="isTransfer"
+          v-if="isTransferButtonVisible"
           class="call-action"
           :variant="isOnTransfer ? 'active' : 'outlined'"
           :size="size"
@@ -59,7 +59,7 @@
 
       <slot name="chat">
         <wt-button
-          v-if="isDisplayChatButton"
+          v-if="isChatButtonVisible"
           class="call-action"
           :variant="isOnChat ? 'active' : 'outlined'"
           :disabled="!isCallChatExist"
@@ -74,7 +74,7 @@
 
       <slot name="hangup">
         <wt-button
-          v-if="isHangup"
+          v-if="isHangupButtonVisible"
           variant="outlined"
           class="call-action"
           :size="size"
@@ -88,7 +88,7 @@
 
       <slot name="call">
         <wt-button
-          v-if="isDisplayCallButton"
+          v-if="isCallButtonVisible"
           variant="outlined"
           class="call-action"
           :size="size"
@@ -150,17 +150,19 @@ const isOnBridge = computed(() => props.currentTab === CallTab.Bridge);
 const isOnNumpad = computed(() => props.currentTab === CallTab.Numpad);
 const isOnTransfer = computed(() => props.currentTab === CallTab.Transfer);
 const isOnChat = computed(() => props.currentTab === VideoCallTab.Chat);
-const isBridge = computed(() => callList.value?.length > 1);
-
-const isTransfer = computed(() => call.value?.allowHangup);
-const isHangup = computed(() => call.value?.allowHangup);
 const isCall = computed(() => isNewCall.value && call.value?.newNumber);
-const isDisplayCallButton = computed(
-	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
+const isVideoCall = computed(
+	() => store.getters['features/call/videoCall/IS_VIDEO_CALL_ON_WORKSPACE'],
 );
 
-const isDisplayChatButton = computed(
-	() => store.getters['features/call/videoCall/IS_VIDEO_CALL_ON_WORKSPACE'],
+const isBridgeButtonVisible = computed(() => callList.value?.length > 1);
+const isTransferButtonVisible = computed(
+	() => call.value?.allowHangup && !isVideoCall.value,
+);
+const isChatButtonVisible = computed(() => isVideoCall.value);
+const isHangupButtonVisible = computed(() => call.value?.allowHangup);
+const isCallButtonVisible = computed(
+	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
 );
 const isCallChatExist = computed(
 	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
