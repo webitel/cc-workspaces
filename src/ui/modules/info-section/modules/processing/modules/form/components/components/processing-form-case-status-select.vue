@@ -4,6 +4,7 @@
         :placeholder="t('cases.status')"
         :options="options"
         :clearable="false"
+        use-value-from-options-by-prop="id"
         @input="emit('input', $event)"
     >
         <template #singleLabel="{ option }">
@@ -32,13 +33,13 @@ import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
-	value: WebitelCasesStatusCondition;
+	value: WebitelCasesStatusCondition['id'];
 	options: WebitelCasesStatusCondition[];
 }>();
 
 const emit = defineEmits<{
 	input: [
-		WebitelCasesStatusCondition,
+		WebitelCasesStatusCondition['id'],
 	];
 }>();
 
