@@ -14,7 +14,7 @@
       <img
         v-else
         :alt="task.state"
-        :src="sonarIcon"
+        :src="getSonarIcon(task)"
       />
     </template>
 
@@ -87,7 +87,7 @@
       <img
         v-else
         :alt="task.state"
-        :src="sonarIcon"
+        :src="getSonarIcon(task)"
       />
     </template>
 
@@ -163,10 +163,10 @@ export default {
 		sizeMixin,
 	],
 	setup() {
-		const { sonarIcon } = useCallState();
+		const { getSonarIcon } = useCallState();
 
 		return {
-			sonarIcon,
+			getSonarIcon,
 		};
 	},
 	computed: {

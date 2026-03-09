@@ -82,10 +82,10 @@
           @insert-emoji="insertEmoji"
         />
         <wt-button
-          variant="outlined"
+          :variant="props.showQuickReplies ? 'active' : 'outlined'"
+          :size="size"
           icon="quick-replies"
           color="secondary"
-          :size="size"
           rounded
           wide
           @click="handleQuickReplies"
