@@ -82,7 +82,7 @@ const displayChatName = computed(() => {
 	if (props.contact?.id) value = props.contact?.name;
 
 	if (currentChat?.members?.length && transferFromAgentName.value) {
-		value = `${value}, ${transferFromAgentName.value}`;
+		value = `${currentChat.title}, ${transferFromAgentName.value}`;
 	}
 
 	return value;
