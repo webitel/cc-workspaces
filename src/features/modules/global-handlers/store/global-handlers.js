@@ -50,6 +50,7 @@ const actions = {
 			context.dispatch('OPEN_DISCONNECT_POPUP');
 		});
 	},
+	// https://webitel.atlassian.net/browse/WTEL-8909
 	SUBSCRIBE_TO_CLIENT_CLOSED: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
 		client.on('close', () => {
