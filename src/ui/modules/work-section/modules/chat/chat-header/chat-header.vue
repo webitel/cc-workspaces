@@ -21,7 +21,7 @@
       <task-header-expansion-card
         :username="displayChatName"
         :phone-number="displayNumber"
-        :contactId="props.chatContact?.id"
+        :contactId="props.contact?.id"
         :queue-name="displayQueueName"
       />
     </template>
@@ -45,12 +45,12 @@ import { ChatContact } from '../../_shared/types/ChatContact.types';
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
-		chatContact?: ChatContact;
+		contact?: ChatContact;
 		currentTab: string;
 	}>(),
 	{
 		size: ComponentSize.MD,
-		chatContact: () => ({}) as ChatContact,
+		contact: () => ({}) as ChatContact,
 	},
 );
 
@@ -76,14 +76,23 @@ const isTransferAction = computed(
 );
 const displayChatName = computed(() => {
 	const currentChat = chat.value;
+	let value = 'unknown';
 
-	if (props.chatContact?.id) return props.chatContact?.name;
-	if (currentChat?.members?.length) {
-		return currentChat.members.map((member: any) => member.name).join(', ');
+	if (currentChat?.title) value = currentChat.title;
+	if (props.contact?.id) value = props.contact?.name;
+
+	if (currentChat?.members?.length && transferFromAgentName.value) {
+		value = `${value}, ${transferFromAgentName.value}`;
 	}
-	if (currentChat?.title) return currentChat.title;
 
-	return 'unknown';
+	return value;
+});
+
+const transferFromAgentName = computed(() => {
+	const allCallAgents = chat.value.members.filter(
+		(member) => member.type === 'webitel',
+	);
+	return allCallAgents.at(-2)?.name; // previous agent
 });
 
 const displayNumber = computed(() => chat.value?.displayNumber);

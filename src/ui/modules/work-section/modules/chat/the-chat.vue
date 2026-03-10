@@ -5,6 +5,7 @@
         <chat-header
           v-show="isChatHeader && !showQuickReplies"
           :size="size"
+          :contact="chatContact"
 					:current-tab="currentTab.component"
           @open-tab="openTab"
         />
