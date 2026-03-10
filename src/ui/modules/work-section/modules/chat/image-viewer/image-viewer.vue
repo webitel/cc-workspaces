@@ -1,8 +1,8 @@
 <template>
-  <aside v-show="isMediaView" class="media-viewer" @click="close">
-    <div class="media-viewer__shadow"></div>
-    <div class="media-viewer__content-wrapper">
-      <img class="media-viewer__content__img" :src="photo.url" :alt="photo.name">
+  <aside v-show="isImageView" class="image-viewer" @click="close">
+    <div class="image-viewer__shadow"></div>
+    <div class="image-viewer__content-wrapper">
+      <img class="image-viewer__content__img" :src="photo.url" :alt="photo.name">
     </div>
   </aside>
 </template>
@@ -11,17 +11,18 @@
 import { mapActions, mapState } from 'vuex';
 
 export default {
-	name: 'MediaViewer',
+	name: 'ImageViewer',
+	// not "MediaViewer" because of using vidstack:  vidstack reserves all component starts with "media-"
 	computed: {
 		...mapState('features/chat/chatMedia', {
-			mediaView: (state) => state.mediaView,
+			imageView: (state) => state.mediaView,
 		}),
 		photo() {
-			if (!this.isMediaView) return {};
-			return this.mediaView.file;
+			if (!this.isImageView) return {};
+			return this.imageView.file;
 		},
-		isMediaView() {
-			return !!this.mediaView;
+		isImageView() {
+			return !!this.imageView;
 		},
 	},
 	methods: {
@@ -33,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.media-viewer {
+.image-viewer {
   position: fixed;
   top: 0;
   right: 0;
@@ -45,7 +46,7 @@ export default {
   justify-content: center;
 }
 
-.media-viewer__shadow {
+.image-viewer__shadow {
   position: absolute;
   top: 0;
   right: 0;
@@ -54,12 +55,12 @@ export default {
   background: var(--wt-popup-shadow-color);
 }
 
-.media-viewer__content-wrapper {
+.image-viewer__content-wrapper {
   position: relative;
   z-index: 1;
 }
 
-.media-viewer__content__img {
+.image-viewer__content__img {
   // like on web telegram preview
   display: block;
   max-width: 100vw;

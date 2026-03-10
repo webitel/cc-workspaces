@@ -4,29 +4,56 @@
     class="chat-message-player"
     @click="$emit('open', media)"
   >
-    <wt-player
-      :src="mediaUrl"
-      :mime="type"
-      :autoplay="false"
-      :hide-duration="type.includes('video')"
-      reset-on-end
-      reset-volume
+    <wt-vidstack-player
+      v-if="isVideo"
+      :size="ComponentSize.SM"
+      :src="mediaSrcObject"
+      static
+      hide-expand
+      stretch
       @initialized="handlePlayerInitialize"
     />
+    <wt-player
+      v-else
+      :src="mediaSrcObject"
+      :autoplay="false"
+      :closable="false"
+      hide-volume-slider
+      countdown-time-mode
+      class="chat-message-player__player"
+      @initialized="handlePlayerInitialize"
+    />
+
   </div>
 </template>
 
 <script>
+import { WtVidstackPlayer, WtPlayer } from '@webitel/ui-sdk/components';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
+import { useVidstackSrc } from '@webitel/ui-sdk/src/components/wt-vidstack-player/composables/useVidstackSrc';
 
 export default {
 	name: 'ChatMessagePlayer',
 	mixins: [
 		chatMessageFileMixin,
 	],
+	components: {
+		WtVidstackPlayer,
+		WtPlayer,
+	},
 	computed: {
-		mediaUrl() {
-			return this.media.streamUrl || this.media.url;
+		ComponentSize() {
+			return ComponentSize;
+		},
+		mediaSrcObject() {
+			return {
+				src: this.media?.streamUrl || this.media?.url,
+				type: this.media?.type,
+			};
+		},
+		isVideo() {
+			return this.media?.type?.includes('video');
 		},
 	},
 	methods: {
@@ -40,18 +67,10 @@ export default {
 <style lang="scss" scoped>
 .chat-message-player {
   min-height: var(--player-audio-height);
-  .wt-player :deep(.plyr) {
-    .wt-player__close-icon,
-    //.plyr__menu,
-    //.plyr__control[download]
-    .plyr__volume {
-      display: none;
-    }
+  min-width: 250px;
 
-    &.plyr--video {
-      max-height: var(--chat-file-max-height);
-      max-width: var(--chat-file-max-width);
-    }
+  .chat-message-player__player {
+    width: 100%;
   }
 }
 </style>

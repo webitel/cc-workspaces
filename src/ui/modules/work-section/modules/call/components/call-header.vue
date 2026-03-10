@@ -107,6 +107,7 @@
         :username="call?.displayName"
         :phone-number="call?.displayNumber"
         :queue-name="queueName"
+        :direction="call?.direction"
       />
     </template>
   </task-header>
