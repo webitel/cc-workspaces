@@ -12,6 +12,8 @@ const actions = {
 	INIT_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('SUBSCRIBE_TO_CONNECTION_STATE');
 		context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
+		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
+		context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
@@ -44,8 +46,14 @@ const actions = {
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
 		client.on('disconnected', () => {
-			context.dispatch('CLEAR_ALL_TASKS_ON_DISCONNECT');
+			context.dispatch('CLEAR_ALL_TASKS');
 			context.dispatch('OPEN_DISCONNECT_POPUP');
+		});
+	},
+	SUBSCRIBE_TO_CLIENT_CLOSED: async (context) => {
+		const client = await context.rootState.client.getCliInstance();
+		client.on('close', () => {
+			context.dispatch('CLEAR_ALL_TASKS');
 		});
 	},
 	SUBSCRIBE_TO_PHONE_REGISTRATION: async (context) => {
@@ -66,7 +74,7 @@ const actions = {
 	 * clears all active tasks (calls, chats, jobs) from store when connection is lost.
 	 * https://webitel.atlassian.net/browse/WTEL-8920
 	 */
-	CLEAR_ALL_TASKS_ON_DISCONNECT: (context) => {
+	CLEAR_ALL_TASKS: (context) => {
 		// This prevents getters like CALL_ON_WORKSPACE from returning stale tasks
 		context.commit('workspace/SET_STATE_HISTORY', [], {
 			root: true,
