@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 
 import chat from '../../../../../../../features/modules/chat/store/chat.js';
-import MediaViewer from '../media-viewer.vue';
+import MediaViewer from '../image-viewer.vue';
 
 const store = createStore({
 	modules: {
