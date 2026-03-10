@@ -42,24 +42,18 @@ export default {
 		WtVidstackPlayer,
 		WtPlayer,
 	},
-	setup(props) {
-		const { mediaSrcObject } = useVidstackSrc({
-			src: props.file.streamUrl || props.file.url,
-			type: props.type,
-		});
-		return {
-			mediaSrcObject,
-		};
-	},
 	computed: {
 		ComponentSize() {
 			return ComponentSize;
 		},
-		mediaSrc() {
-			return this.media?.streamUrl || this.media?.url;
+		mediaSrcObject() {
+			return {
+				src: this.media?.streamUrl || this.media?.url,
+				type: this.media?.type,
+			};
 		},
 		isVideo() {
-			return this.mediaSrc.type?.includes('video');
+			return this.media?.type?.includes('video');
 		},
 	},
 	methods: {
