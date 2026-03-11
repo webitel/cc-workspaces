@@ -7,18 +7,18 @@
       <div class="task-header-expansion-card__title-wrapper">
         <wt-avatar
           size="xs"
-          :username="callTitle"
+          :username="taskTitle"
         />
         <a
-          v-if="props.contactId"
+          v-if="props.isLinkOnContact"
           :href="contactLink"
           class="task-header-expansion-card__title"
           target="_blank"
         >
-          {{ callTitle }}
+          {{ taskTitle }}
         </a>
         <span v-else>
-          {{ callTitle }}
+          {{ taskTitle }}
         </span>
       </div>
     </template>
@@ -42,6 +42,7 @@ import { ChannelType, CallDirection } from 'webitel-sdk';
 import { useI18n } from 'vue-i18n';
 
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
+import type { ChatContact } from '../../types/ChatContact.types';
 
 const store = useStore();
 
@@ -50,13 +51,15 @@ const props = withDefaults(
 		username: string;
 		phoneNumber?: string;
 		queueName?: string;
-		contactId?: string;
+		isLinkOnContact?: boolean;
+		contactId?: ChatContact[id];
 		direction?: CallDirection;
 		collapsed?: boolean;
 	}>(),
 	{
 		queueName: '',
 		phoneNumber: '',
+		isLinkOnContact: false,
 		contactId: '',
 		collapsed: false,
 	},
@@ -69,7 +72,7 @@ const showOutboundCallText = computed(() => {
 });
 
 // https://webitel.atlassian.net/browse/WTEL-9047?focusedCommentId=735052
-const callTitle = computed(() => {
+const taskTitle = computed(() => {
 	if (showOutboundCallText.value) {
 		return t(`channel.type.${ChannelType.OutCall}`); // ui-sdk locale
 	}
