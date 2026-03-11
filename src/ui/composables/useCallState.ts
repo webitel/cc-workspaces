@@ -73,6 +73,22 @@ export const useCallState = () => {
 		return '';
 	});
 
+	const getSonarIcon = (task) => {
+		const isRinging = task.state === CallActions.Ringing;
+		const isCallActive = task.state === CallActions.Active;
+		const isCallHangup = task.state === CallActions.Hangup;
+		const isCallInbound = task.direction === CallDirection.Inbound;
+
+		if (isCallHangup) return redSonar;
+		if (isCallOnHold.value) return yellowSonar;
+		if (isRinging) {
+			if (isCallInbound) return redSonar;
+			return blackSonar;
+		}
+		if (isCallActive) return greenSonar;
+		return '';
+	};
+
 	return {
 		task,
 		dtmf,
@@ -85,5 +101,7 @@ export const useCallState = () => {
 		showTimer,
 		displayTime,
 		sonarIcon,
+
+		getSonarIcon,
 	};
 };
