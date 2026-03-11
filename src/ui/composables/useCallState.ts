@@ -78,9 +78,10 @@ export const useCallState = () => {
 		const isCallActive = task.state === CallActions.Active;
 		const isCallHangup = task.state === CallActions.Hangup;
 		const isCallInbound = task.direction === CallDirection.Inbound;
+		const isCallOnHold = task.isHold;
 
 		if (isCallHangup) return redSonar;
-		if (isCallOnHold.value) return yellowSonar;
+		if (isCallOnHold) return yellowSonar;
 		if (isRinging) {
 			if (isCallInbound) return redSonar;
 			return blackSonar;
