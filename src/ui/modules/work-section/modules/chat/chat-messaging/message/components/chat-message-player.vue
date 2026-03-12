@@ -19,7 +19,6 @@
       :autoplay="false"
       :closable="false"
       hide-volume-slider
-      countdown-time-mode
       class="chat-message-player__player"
       @initialized="handlePlayerInitialize"
     />
