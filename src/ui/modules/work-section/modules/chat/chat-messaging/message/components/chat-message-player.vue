@@ -48,11 +48,14 @@ export default {
 		mediaSrcObject() {
 			return {
 				src: this.media?.streamUrl || this.media?.url,
-				type: this.media?.type,
+				type: this.media?.type || this.media?.mime,
 			};
 		},
 		isVideo() {
-			return this.media?.type?.includes('video');
+			return (
+				this.media?.type?.includes('video') ||
+				this.media?.mime?.includes('video')
+			);
 		},
 	},
 	methods: {
