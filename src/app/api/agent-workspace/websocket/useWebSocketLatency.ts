@@ -94,7 +94,7 @@ export const useWebSocketLatency = () => {
 		if (packetLossAvg > 3) {
 			setLevel(ConnectionQualityLevels.Low);
 			reasons.push(`packet loss ${packetLossAvg.toFixed(1)} % (> 3%)`);
-		} else if (packetLossAvg >= 1) {
+		} else if (packetLossAvg > 1) {
 			setLevel(ConnectionQualityLevels.Medium);
 			reasons.push(`packet loss ${packetLossAvg.toFixed(1)} % (1–3%)`);
 		}
