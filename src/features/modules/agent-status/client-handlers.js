@@ -29,12 +29,6 @@ const actions = {
 			agent = await client.agentSession();
 			client.agent = reactive(client.agent);
 		} catch (err) {
-			if (err.id === RolePermissionError.id) {
-				eventBus.$emit('notification', {
-					type: 'error',
-					text: i18n.global.t('error.endpoint.noLicense'),
-				});
-			}
 			return; // abort action, if no agent
 		}
 
