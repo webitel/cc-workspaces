@@ -156,7 +156,7 @@ const actions = {
 
 		// sometimes we need to wait when call end sound is finished before playing ringtone
 		// https://webitel.atlassian.net/browse/WTEL-4918
-		context.rootState['features/notifications/currentlyPlaying']
+		context.rootState.features.notifications.currentlyPlaying
 			? setTimeout(playSound, 1000)
 			: playSound();
 	},
