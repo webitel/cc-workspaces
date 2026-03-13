@@ -26,44 +26,33 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { WtVidstackPlayer, WtPlayer } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import chatMessageFileMixin from '../../../mixins/chatMessageFileMixin.js';
-import { useVidstackSrc } from '@webitel/ui-sdk/src/components/wt-vidstack-player/composables/useVidstackSrc';
+import { computed } from 'vue';
 
-export default {
-	name: 'ChatMessagePlayer',
-	mixins: [
-		chatMessageFileMixin,
-	],
-	components: {
-		WtVidstackPlayer,
-		WtPlayer,
-	},
-	computed: {
-		ComponentSize() {
-			return ComponentSize;
-		},
-		mediaSrcObject() {
-			return {
-				src: this.media?.streamUrl || this.media?.url,
-				type: this.media?.type || this.media?.mime,
-			};
-		},
-		isVideo() {
-			return (
-				this.media?.type?.includes('video') ||
-				this.media?.mime?.includes('video')
-			);
-		},
-	},
-	methods: {
-		handlePlayerInitialize(player) {
-			this.$emit('initialized', player);
-		},
-	},
-};
+import { type ChatMessageFile, useChatMessageFile } from '@webitel/ui-chats/ui';
+
+const props = defineProps<{
+	file: ChatMessageFile;
+}>();
+
+const emit = defineEmits<{
+	(e: 'initialized', player: unknown): void;
+}>();
+
+const { media } = useChatMessageFile(props.file);
+
+const mediaSrcObject = computed(() => ({
+	src: media.value?.streamUrl || media.value?.url,
+	type: media.value?.mime,
+}));
+
+const isVideo = computed(() => media.value?.mime?.includes('video'));
+
+function handlePlayerInitialize(player: unknown) {
+	emit('initialized', player);
+}
 </script>
 
 <style lang="scss" scoped>
