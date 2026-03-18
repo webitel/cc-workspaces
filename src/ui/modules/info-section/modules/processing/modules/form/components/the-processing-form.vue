@@ -135,6 +135,13 @@ export default {
 					));
 				}
 
+				if (component.view.component === 'form-select-case-status') {
+					return (component.value = this.getCaseStatusInitialValue(
+						component.view.initialValue,
+						component.view.options,
+					));
+				}
+
 				return (component.value = this.parseInitialValueToJson(
 					component.view.initialValue,
 				));
@@ -153,6 +160,12 @@ export default {
 			return (
 				options.find((option) => option.value === initialValue) || initialValue
 			);
+		},
+
+		getCaseStatusInitialValue(initialValue, options = []) {
+			// For component case status select we need get by initialValue value from options or cleare value
+			// https://webitel.atlassian.net/browse/WTEL-9188
+			return options?.find((option) => option.id === Number(initialValue));
 		},
 
 		getDatetimepickerInitialValue(initialValue, { currentTime } = {}) {
