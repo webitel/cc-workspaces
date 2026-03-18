@@ -27,7 +27,6 @@
     setup
     lang="ts"
 >
-import { computed } from 'vue';
 import { WtSelect, WtIndicator } from '@webitel/ui-sdk/components';
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
 import { useI18n } from 'vue-i18n';
