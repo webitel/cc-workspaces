@@ -21,7 +21,7 @@
       <task-header-expansion-card
         :username="displayChatName"
         :phone-number="displayNumber"
-        :is-link-on-contact="!transferFromAgent"
+        :is-title-linked="!isChatTransferred"
         :contact-id="props.contact?.id"
         :queue-name="displayQueueName"
       />
@@ -78,21 +78,18 @@ const isTransferAction = computed(
 const displayChatName = computed(() => {
 	const currentChat = chat.value;
 
-	let value = 'unknown';
-
-	if (props.contact?.id) value = props.contact?.name;
-
-	if (currentChat?.members?.length && transferFromAgent.value) {
-		// if chat was transferred @author ye.pohranichna
-		value = `${currentChat.title}, ${transferFromAgent.value.name}`;
+	if (isChatTransferred.value) {
+		return currentChat.members.map((member: any) => member.name).join(', ');
 	}
 
-	return value;
+	if (props.contact?.id) return props.contact?.name;
+
+	if (currentChat?.title) return currentChat.title;
+
+	return 'unknown';
 });
 
-const transferFromAgent = computed(() =>
-	chat.value.members?.filter((member) => member.type === 'webitel')?.at(-1),
-);
+const isChatTransferred = computed(() => chat.value?.members?.length);
 
 const displayNumber = computed(() => chat.value?.displayNumber);
 const displayQueueName = computed(() => getQueueName(chat.value));

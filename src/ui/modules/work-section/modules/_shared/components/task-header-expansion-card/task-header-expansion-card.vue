@@ -10,7 +10,7 @@
           :username="taskTitle"
         />
         <a
-          v-if="props.isLinkOnContact"
+          v-if="props.isTitleLinked && contactLink"
           :href="contactLink"
           class="task-header-expansion-card__title"
           target="_blank"
@@ -51,7 +51,7 @@ const props = withDefaults(
 		username: string;
 		phoneNumber?: string;
 		queueName?: string;
-		isLinkOnContact?: boolean;
+		isTitleLinked?: boolean;
 		contactId?: ChatContact[id];
 		direction?: CallDirection;
 		collapsed?: boolean;
@@ -59,7 +59,7 @@ const props = withDefaults(
 	{
 		queueName: '',
 		phoneNumber: '',
-		isLinkOnContact: false,
+		isTitleLinked: false,
 		contactId: '',
 		collapsed: false,
 	},
