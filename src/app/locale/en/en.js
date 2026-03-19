@@ -194,6 +194,10 @@ export default {
 			onHold: 'On hold',
 			hangup: 'Hangup',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Unknown contact',
+			hiddenNumber: 'Hidden number',
+		},
 		chat: {
 			acceptPreviewText:
 				'If you are ready to answer, click "Accept" button first',

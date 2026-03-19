@@ -189,6 +189,10 @@ export default {
 			onHold: 'Giữ máy',
 			hangup: 'Kết thúc',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Liên hệ không xác định',
+			hiddenNumber: 'Số ẩn',
+		},
 		chat: {
 			acceptPreviewText:
 				'Nếu bạn sẵn sàng trả lời, hãy nhấn nút "Chấp nhận" trước',

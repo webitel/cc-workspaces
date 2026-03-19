@@ -103,11 +103,11 @@
 
     <template #info>
       <task-header-expansion-card
-        v-if="call?.displayName"
         :username="call?.displayName"
         :phone-number="call?.displayNumber"
         :queue-name="queueName"
         :direction="call?.direction"
+        :hide-number="call?.hideNumber"
       />
     </template>
   </task-header>

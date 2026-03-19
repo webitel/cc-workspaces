@@ -7,7 +7,7 @@
       <div class="task-header-expansion-card__title-wrapper">
         <wt-avatar
           size="xs"
-          :username="taskTitle"
+          :username="avatarTitle"
         />
         <a
           v-if="props.isTitleLinked && contactLink"
@@ -22,11 +22,13 @@
         </span>
       </div>
     </template>
+
     <template #body>
-    <div class="task-header-expansion-card__info-wrapper">
-      <p>{{ props.phoneNumber }}</p>
-      <queue-name-chip
-        v-if="props.queueName"
+      <div class="task-header-expansion-card__info-wrapper">
+        <p>{{ phoneNumberLabel }}</p>
+
+        <queue-name-chip
+          v-if="props.queueName"
           :name="props.queueName"
         />
       </div>
@@ -52,9 +54,10 @@ const props = withDefaults(
 		phoneNumber?: string;
 		queueName?: string;
 		isTitleLinked?: boolean;
-		contactId?: ChatContact[id];
+		contactId?: ChatContact['id'];
 		direction?: CallDirection;
 		collapsed?: boolean;
+		hideNumber?: boolean;
 	}>(),
 	{
 		queueName: '',
@@ -62,21 +65,29 @@ const props = withDefaults(
 		isTitleLinked: false,
 		contactId: '',
 		collapsed: false,
+		hideNumber: false,
 	},
 );
 
 const { t } = useI18n();
 
-const showOutboundCallText = computed(() => {
-	return props.direction === CallDirection.Outbound && !props.queueName;
-});
-
 // https://webitel.atlassian.net/browse/WTEL-9047?focusedCommentId=735052
 const taskTitle = computed(() => {
-	if (showOutboundCallText.value) {
-		return t(`channel.type.${ChannelType.OutCall}`); // ui-sdk locale
+	if (!props.username) {
+		return t('workspaceSec.taskHeaderExpansionCard.unknownContact');
 	}
+
 	return props.username;
+});
+
+const avatarTitle = computed(() => props.username);
+
+const phoneNumberLabel = computed(() => {
+	if (props.hideNumber) {
+		return t('workspaceSec.taskHeaderExpansionCard.hiddenNumber');
+	}
+
+	return props.phoneNumber;
 });
 
 const contactLink = computed(() =>
