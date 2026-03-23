@@ -8,7 +8,7 @@
       <template #default>
         <ul>
           <li class="agent-org-structure-item">
-            <div class="agent-org-structure-item__title typo-body-1">{{ $t('reusable.name') }}</div>
+            <div class="agent-org-structure-item__title typo-subtitle-1">{{ $t('reusable.name') }}</div>
             <div :class="['agent-org-structure-item__value', size === 'sm' ? 'typo-body-2' : 'typo-body-1']">{{ team }}
             </div>
           </li>
