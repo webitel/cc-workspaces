@@ -205,7 +205,6 @@ watch(
 		// await loadHistory();
 		// await nextTick();
 		// scrollToBottom();
-		console.log('messages:', messages.value);
 	},
 	{
 		immediate: true,
