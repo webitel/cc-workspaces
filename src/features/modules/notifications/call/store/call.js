@@ -115,7 +115,10 @@ const actions = {
 		return context.dispatch(
 			'features/swController/SEND_NOTIFICATION',
 			{
-				title: `${i18n.global.t('notifications.newCall')}\n${i18n.global.t('objects.queue.queue')}: ${prettifyQueue(queueName)}`,
+				// direct calls (e.g. agent-to-agent) have no queue
+				title: queueName
+					? `${i18n.global.t('notifications.newCall')}\n${i18n.global.t('objects.queue.queue')}: ${prettifyQueue(queueName)}`
+					: i18n.global.t('notifications.newCall'),
 				body: `${displayName}: ${displayNumber}`,
 				actions: [
 					{
