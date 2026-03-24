@@ -66,7 +66,7 @@ const actions = {
 				{
 					displayName: call.displayName,
 					displayNumber: call.displayNumber,
-					queueName: call.queue.queue_name,
+					queueName: call.queue?.queue_name, // direct calls (e.g. agent-to-agent) have no queue
 					answer: () =>
 						context.dispatch('ANSWER', {
 							callId,
