@@ -136,14 +136,12 @@ const openMedia = (message) =>
 	store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 function isChatStarted(index) {
-	const { prevMessage, message, nextMessage } = getMessage(index);
-	return (
-		prevMessage && nextMessage && prevMessage?.chat?.id !== message?.chat?.id
-	); // messages from different chats
+	const { prevMessage, message } = getMessage(index);
+	return !!prevMessage && prevMessage?.chat?.id !== message?.chat?.id; // messages from different chats
 }
 
 function isHistoryStart(index) {
-	// first message of all chats
+	// first message of all chat history
 	return !next.value && index === 0;
 }
 
