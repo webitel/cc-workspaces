@@ -144,7 +144,7 @@ const store = useStore();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
-console.log(call, ' call');
+
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
