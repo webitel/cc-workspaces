@@ -95,6 +95,10 @@ const contactLink = computed(() =>
   gap: var(--content-wrapper-gap);
 }
 
+.task-header-expansion-card__title-wrapper .wt-avatar {
+  flex: 1 0 auto;
+}
+
 .task-header-expansion-card__title {
   color: var(--text-main-color);
 }
