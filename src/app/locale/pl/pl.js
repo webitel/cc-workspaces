@@ -237,6 +237,8 @@ export default {
 	transfer: {
 		selectAgent: 'Wybierz agenta',
 		transfer: 'Przekaż',
+		blindTransfer: 'Blind transfer',
+		consultTransfer: 'Consult transfer',
 	},
 	contacts: {
 		phones: 'Telefon | Telefony',

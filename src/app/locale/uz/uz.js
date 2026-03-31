@@ -238,6 +238,8 @@ export default {
 	transfer: {
 		selectAgent: 'Iltimos, agentni tanlang',
 		transfer: 'Oʻtkazish',
+		blindTransfer: 'Blind transfer',
+		consultTransfer: 'Consult transfer',
 	},
 	contacts: {
 		phones: 'Telefon | Telefonlar',

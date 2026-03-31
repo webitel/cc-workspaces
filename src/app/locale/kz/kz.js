@@ -236,6 +236,8 @@ export default {
 	transfer: {
 		selectAgent: 'Агентті таңдаңыз',
 		transfer: 'Ауыстыру',
+		blindTransfer: 'Blind transfer',
+		consultTransfer: 'Consult transfer',
 	},
 	contacts: {
 		phones: 'Телефон | Телефондар',

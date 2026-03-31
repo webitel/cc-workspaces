@@ -238,6 +238,8 @@ export default {
 	transfer: {
 		selectAgent: 'Vă rugăm să selectați un agent',
 		transfer: 'Transfer',
+		blindTransfer: 'Blind transfer',
+		consultTransfer: 'Consult transfer',
 	},
 	contacts: {
 		phones: 'Telefon | Telefoane',

@@ -14,12 +14,14 @@
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
+        :tooltip="$t('transfer.blindTransfer')"
         rounded
         @click="transfer(item)"
       />
       <wt-rounded-action
         color="transfer"
         icon="consultative-transfer"
+        :tooltip="$t('transfer.consultTransfer')"
         rounded
         @click="consultationTransfer(item)"
       />
@@ -45,21 +47,20 @@ const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const emit = defineEmits([
-  'transfer-complete',
+	'transfer-complete',
 ]);
-
 
 const transfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-    await call.value.blindTransferQueue(Number(item.id));
-    emit('transfer-complete');
+		await call.value.blindTransferQueue(Number(item.id));
+		emit('transfer-complete');
 	}
 };
 
 const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-    await call.value.processTransferQueue(Number(item.id));
-    emit('transfer-complete');
+		await call.value.processTransferQueue(Number(item.id));
+		emit('transfer-complete');
 	}
 };
 
