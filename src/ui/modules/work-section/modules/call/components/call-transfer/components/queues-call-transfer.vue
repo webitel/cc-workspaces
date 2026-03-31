@@ -1,13 +1,11 @@
 <template>
   <call-transfer-container
     :get-data="getQueues"
-    :size
     type="queue"
   >
     <template #avatar>
       <wt-icon
         icon="bot"
-        :size="size"
       ></wt-icon>
     </template>
     <template #actions="{ item }">
@@ -43,21 +41,20 @@ const store = useStore();
 const queuesAPI = APIRepository.queues;
 
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
-const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const emit = defineEmits([
 	'transfer-complete',
 ]);
 
-const transfer = async (item: QueueItem = {} as QueueItem) => {
+const transfer = async (item) => {
 	if (call) {
 		await call.value.blindTransferQueue(Number(item.id));
 		emit('transfer-complete');
 	}
 };
 
-const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
+const consultationTransfer = async (item) => {
 	if (call) {
 		await call.value.processTransferQueue(Number(item.id));
 		emit('transfer-complete');
@@ -71,6 +68,3 @@ const getQueues = (params: TransferParams): Promise<EngineListQueue> => {
 	});
 };
 </script>
-<style scoped lang="scss">
-
-</style>

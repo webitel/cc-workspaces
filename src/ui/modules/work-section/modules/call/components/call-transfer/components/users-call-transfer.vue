@@ -4,7 +4,6 @@
     show-user-name-avatar
     type="user"
     :size="size"
-    :data-filters="dataFilters"
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
@@ -74,7 +73,7 @@ const emit = defineEmits([
 	'transfer-complete',
 ]);
 
-const transfer = async (item: UserItem = {} as UserItem) => {
+const transfer = async (item) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
 	await store.dispatch('features/call/BLIND_TRANSFER', number);
 	emit('transfer-complete');

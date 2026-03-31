@@ -5,7 +5,7 @@
     show-status
     :data-fields="dataFields"
     :data-filters="dataFilters"
-    :get-data="getAgens"
+    :get-data="getAgents"
     :presence-status-field="PresenceStatusField"
     @transfer="consultationTransfer"
   >
@@ -28,7 +28,6 @@ import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
-import APIRepository from '../../../../../../../../app/api/APIRepository';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
@@ -40,7 +39,6 @@ interface APIResponse {
 }
 
 const store = useStore();
-const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus';
 
 const dataFields = [
@@ -54,14 +52,6 @@ const dataFields = [
 const dataFilters = 'user_presence_status.status=sip,!dnd';
 const dataSort = 'position';
 
-const scroll = computed(
-	() =>
-		store.state.scroll || {
-			dataSearch: {
-				value: '',
-			},
-		},
-);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
@@ -70,7 +60,7 @@ const emit = defineEmits([
 	'transfer-complete',
 ]);
 
-const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
+const consultationTransfer = (item) => {
 	store.dispatch('features/call/TOGGLE_HOLD', item.id);
 	if (call.value) {
 		call.value.processTransferAgent(Number(item.id));
@@ -78,7 +68,7 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 	}
 };
 
-const getAgens = (params: TransferParams): Promise<APIResponse> => {
+const getAgents = (params: TransferParams): Promise<APIResponse> => {
 	return AgentsAPI.getList({
 		...params,
 		enabled: true,
@@ -87,6 +77,3 @@ const getAgens = (params: TransferParams): Promise<APIResponse> => {
 	});
 };
 </script>
-<style scoped lang="scss">
-
-</style>
