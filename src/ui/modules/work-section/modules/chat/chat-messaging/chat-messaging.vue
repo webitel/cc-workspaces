@@ -234,6 +234,8 @@ async function insertEmoji(unicode: string) {
 }
 
 async function sendMessage() {
+	if (isOpenAutocomplete.value || props.showQuickReplies) return;
+
 	const draft = chat.value.draft;
 	try {
 		chat.value.draft = '';
