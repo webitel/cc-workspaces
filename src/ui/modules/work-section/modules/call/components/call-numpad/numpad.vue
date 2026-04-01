@@ -8,6 +8,12 @@
     />
     <call-state />
     <div class="numpad-wrapper">
+      <wt-input-text
+        v-show="isCallActive"
+        :model-value="dtmfValue"
+        readonly
+      />
+
       <numpad-numbers
         ref="numpad-numbers"
         :size="size"
@@ -27,6 +33,7 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
+import { useCallState } from '../../../../../../composables/useCallState.ts';
 
 import CallState from '../call-state.vue';
 import NumpadExpansionBtn from './numpad-expansion-btn.vue';
@@ -44,6 +51,7 @@ const props = defineProps({
 });
 
 const store = useStore();
+const { dtmf, isCallActive } = useCallState();
 
 const isNumpadOpened = ref(false);
 const numberInput = useTemplateRef('number-input');
@@ -51,6 +59,9 @@ const numpadNumbers = ref(null);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+const dtmfValue = computed(() =>
+	typeof dtmf.value === 'array' ? dtmf.value?.join('') : '',
+);
 
 const input = (value) => store.dispatch('features/call/ADD_DIGIT', value);
 const makeCall = () => store.dispatch('features/call/CALL');
@@ -130,5 +141,15 @@ watch(
       }
     }
   }
+}
+
+.numpad-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.numpad-wrapper .numpad-numbers {
+  width: 100%;
 }
 </style>
