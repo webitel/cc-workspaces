@@ -78,13 +78,9 @@ const actions = {
 
 	RESET_CHAT: (context, chat) => {
 		context.commit('REMOVE_CHAT', chat);
+		context.dispatch('RESET_WORKSPACE');
 		context.dispatch('_RESET_UNREAD_COUNT');
 		context.dispatch('LOAD_CLOSED_CHATS');
-
-		if (context.getters.CHAT_ON_WORKSPACE.channelId === chat.channelId) {
-			context.dispatch('RESET_WORKSPACE');
-			context.dispatch('RESET_CHAT_HISTORY');
-		}
 	},
 
 	HANDLE_DESTROY_ACTION: (context, { chat }) => {
