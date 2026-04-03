@@ -28,6 +28,7 @@
           :file="props.message.file"
           :type="props.message.file?.mime"
           @open="emit('open-image')"
+          @image-loaded="emit('image-loaded')"
         />
         <message-document
           :file="props.message.file"
@@ -81,6 +82,7 @@ const props = defineProps({
 const emit = defineEmits([
 	'open-image',
 	'initialized-player',
+	'image-loaded',
 ]);
 
 const isAgent = computed(

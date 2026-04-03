@@ -14,6 +14,7 @@
         :show-avatar="showAvatar(index)"
         @open-image="openMedia(message)"
         @initialized-player="attachPlayer"
+        @image-loaded="scrollOnImageLoad"
       >
         <template #before-message>
           <chat-date
@@ -85,6 +86,7 @@ const {
 	showScrollToBottomBtn,
 	newUnseenMessages,
 	scrollToBottom,
+	scrollOnImageLoad,
 	handleChatScroll,
 	updateThreshold,
 } = useChatScroll(el);
