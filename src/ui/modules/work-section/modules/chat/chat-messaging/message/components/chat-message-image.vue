@@ -5,6 +5,7 @@
       :src="image.url"
       :alt="image.name"
       draggable="false"
+      @load="$emit('image-loaded')"
     >
   </div>
 </template>

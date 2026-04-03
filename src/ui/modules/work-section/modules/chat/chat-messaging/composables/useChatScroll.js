@@ -96,10 +96,17 @@ export const useChatScroll = (element) => {
 		},
 	);
 
+	const scrollOnImageLoad = () => {
+		if (arrivedState.bottom || isLastMessageIsMy.value) {
+			scrollToBottom('smooth');
+		}
+	};
+
 	return {
 		showScrollToBottomBtn,
 		newUnseenMessages,
 		scrollToBottom,
+		scrollOnImageLoad,
 		handleChatScroll,
 		handleChatResize,
 	};
