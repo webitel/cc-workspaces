@@ -60,7 +60,7 @@ const numpadNumbers = ref(null);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 const dtmfValue = computed(() =>
-	typeof dtmf.value === 'array' ? dtmf.value?.join('') : '',
+	dtmf.value?.length > 0 ? dtmf.value?.join('') : '',
 );
 
 const input = (value) => store.dispatch('features/call/ADD_DIGIT', value);
