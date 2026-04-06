@@ -9,11 +9,14 @@
     <slot name="before-message" />
 
     <div class="chat-message__content">
-      <message-avatar
-        :bot="isBot"
-        :show-avatar="props.showAvatar"
-        :username="getClientUsername"
-      />
+      <div class="chat-message-avatar">
+        <wt-avatar
+          v-if="props.showAvatar"
+          :size="ComponentSize.SM"
+          :bot="isBot"
+          :username="getClientUsername"
+        />
+      </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <message-blocked-error @click.stop v-if="message.file?.malware" />
       <div @click.stop v-else>
@@ -52,7 +55,6 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, defineEmits, defineProps } from 'vue';
 
-import MessageAvatar from './components/chat-message-avatar.vue';
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
 import MessageImage from './components/chat-message-image.vue';
@@ -138,15 +140,12 @@ $chat-info-gap: var(--spacing-2xs);
 
   .chat-message-avatar {
     flex: 0 0 var(--spacing-lg);
+    pointer-events: none; // prevents dragging to upload file area
   }
 
   &--right .chat-message__content {
     flex-direction: row-reverse;
     margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
-  }
-
-  .chat-message-avatar {
-    flex: 0 0 var(--icon-lg-size);
   }
 }
 </style>
