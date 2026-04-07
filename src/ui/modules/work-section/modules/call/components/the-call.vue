@@ -15,7 +15,6 @@
     </template>
     <template #body>
       <component
-        :is-active="isActive"
         :is="currentComponent"
         :size="size"
         @transfer-complete="openNumpadTab"
@@ -34,15 +33,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import {
-	computed,
-	onActivated,
-	onDeactivated,
-	onMounted,
-	onUnmounted,
-	ref,
-	watch,
-} from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import isIncomingRinging from '../../../../../../features/modules/call/scripts/isIncomingRinging';
@@ -80,8 +71,6 @@ const store = useStore();
 const currentTab = ref(CallTab.Numpad);
 const isTransferTabOpen = ref(false);
 const hotkeyUnsubscribers = ref([]);
-//variable to check if the component is active
-const isActive = ref(false);
 
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
@@ -94,7 +83,7 @@ const isPreviewCall = computed(() => {
 const currentComponent = computed(() => callTabComponents[currentTab.value]);
 
 const openTransferTab = () => {
-  isTransferTabOpen.value = true;
+	isTransferTabOpen.value = true;
 	currentTab.value = CallTab.Transfer;
 };
 
@@ -130,14 +119,6 @@ onMounted(() => {
 
 onUnmounted(() => {
 	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
-});
-
-onActivated(() => {
-	isActive.value = true;
-});
-
-onDeactivated(() => {
-	isActive.value = false;
 });
 </script>
 
