@@ -71,7 +71,6 @@ const props = withDefaults(
 
 const { t } = useI18n();
 
-// https://webitel.atlassian.net/browse/WTEL-9047?focusedCommentId=735052
 const taskTitle = computed(() => {
 	if (!props.username) {
 		return t('workspaceSec.taskHeaderExpansionCard.unknownContact');
