@@ -195,6 +195,10 @@ export default {
 			onHold: 'На утриманні',
 			hangup: 'Кінець',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Невідомий контакт',
+			hiddenNumber: 'Прихований номер',
+		},
 		chat: {
 			acceptPreviewText:
 				'Якщо Ви готові відповісти, натисніть кнопку "Прийняти"',

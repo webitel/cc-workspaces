@@ -103,11 +103,12 @@
 
     <template #info>
       <task-header-expansion-card
-        v-if="call?.displayName"
+        v-if="call?.contact"
         :username="call?.displayName"
         :phone-number="call?.displayNumber"
         :queue-name="queueName"
         :direction="call?.direction"
+        :hide-number="call?.hideNumber"
       />
     </template>
   </task-header>
@@ -143,6 +144,7 @@ const store = useStore();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);

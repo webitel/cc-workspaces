@@ -191,6 +191,10 @@ export default {
 			onHold: 'Kutish',
 			hangup: 'Tugatish',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: "Noma'lum kontakt",
+			hiddenNumber: 'Yashirin raqam',
+		},
 		chat: {
 			acceptPreviewText:
 				'Agar javob berishga tayyor boʻlsangiz, avval "Qabul qilish" tugmasini bosing',
