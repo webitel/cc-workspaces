@@ -209,6 +209,7 @@ export default {
 			chatsAgent: '{ agentName } чатқа қосылды', // TODO: Translate
 			chatsAgentsList: '{ agentName } чатқа қатысты', // TODO: Translate
 			chatsFileBlocked: 'Файл карантинде немесе бұғатталған',
+			chatsIncorrectFileSize: 'Файл өлшемі қате',
 			errors: {
 				uploadFileLimitSize: 'Файл өлшемі шегінен асты',
 			},

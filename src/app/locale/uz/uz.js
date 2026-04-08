@@ -211,6 +211,7 @@ export default {
 			chatsAgent: '{ agentName } chatga qoʻshildi',
 			chatsAgentsList: '{ agentName } chatda ishtirok etdi',
 			chatsFileBlocked: 'Fayl karantinda yoki bloklangan',
+			chatsIncorrectFileSize: 'Fayl hajmi notoʻgʻri', // TODO: Translate
 			errors: {
 				uploadFileLimitSize: 'Fayl hajmi limiti oshib ketdi',
 			},

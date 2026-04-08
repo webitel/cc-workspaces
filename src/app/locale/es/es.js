@@ -211,6 +211,7 @@ export default {
 			chatsAgent: '{ agentName } se ha unido al chat',
 			chatsAgentsList: '{ agentName } participó en el chat',
 			chatsFileBlocked: 'Archivo en cuarentena o bloqueado',
+			chatsIncorrectFileSize: 'Tamaño de archivo incorrecto',
 			errors: {
 				uploadFileLimitSize: 'Se superó el límite de tamaño de archivo',
 			},
