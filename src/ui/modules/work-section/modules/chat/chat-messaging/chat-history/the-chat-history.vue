@@ -187,17 +187,7 @@ const loadNextMessages = async () => {
 	getTopMessageEl();
 };
 
-/**
- * @author @OleksandrPalonnyi
- *
- * [WTEL-9263](https://webitel.atlassian.net/browse/WTEL-9263)
- *
- * History is reset before loading to prevent stale messages from a previous chat
- * from remaining visible when the store's Destroy/Close cleanup fires late due to
- * async backend events arriving after the user has already switched chats.
- */
 async function loadMessagesList() {
-	resetHistory();
 	await loadHistory();
 	await nextTick(() => {
 		scrollToBottom();
@@ -207,6 +197,10 @@ async function loadMessagesList() {
 
 onMounted(() => {
 	getTopMessageEl();
+});
+
+onUnmounted(() => {
+	resetHistory();
 });
 
 watch(
