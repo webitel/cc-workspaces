@@ -189,6 +189,10 @@ export default {
 			onHold: 'Ұстап тұру',
 			hangup: 'Соңы',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Белгісіз контакт',
+			hiddenNumber: 'Жасырын нөмір',
+		},
 		chat: {
 			acceptPreviewText:
 				'Жауап беруге дайын болсаңыз, «Қабылдау» батырмасын басыңыз',

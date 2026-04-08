@@ -191,6 +191,10 @@ export default {
 			onHold: 'En espera',
 			hangup: 'Colgar',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Contacto desconocido',
+			hiddenNumber: 'Número oculto',
+		},
 		chat: {
 			acceptPreviewText:
 				'Si está listo para responder, haga clic primero en el botón "Aceptar"',

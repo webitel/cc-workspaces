@@ -190,6 +190,10 @@ export default {
 			onHold: 'Wstrzymane',
 			hangup: 'Zakończ',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Nieznany kontakt',
+			hiddenNumber: 'Ukryty numer',
+		},
 		chat: {
 			acceptPreviewText:
 				'Jeśli jesteś gotowy odpowiedzieć, kliknij najpierw przycisk "Akceptuj"',
