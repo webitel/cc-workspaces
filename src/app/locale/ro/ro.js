@@ -210,6 +210,7 @@ export default {
 			chatsAgent: '{ agentName } s-a alăturat chat-ului',
 			chatsAgentsList: '{ agentName } a participat la chat',
 			chatsFileBlocked: 'Fișier în carantină sau blocat',
+			chatsIncorrectFileSize: 'Dimensiune fișier incorectă',
 			errors: {
 				uploadFileLimitSize:
 					'Limita de dimensiune a fișierului a fost depășită',

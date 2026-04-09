@@ -19,6 +19,11 @@
       </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <message-blocked-error @click.stop v-if="message.file?.malware" />
+      <message-size-exceeded-error 
+        v-else-if="isFileSizeExceeded"
+        :agent="isAgentSide" 
+        @click.stop 
+      />
       <div @click.stop v-else>
         <message-player
           v-if="props.message.file"
@@ -56,6 +61,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, defineEmits, defineProps } from 'vue';
 
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
+import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
 import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
@@ -84,6 +90,10 @@ const emit = defineEmits([
 	'open-image',
 	'initialized-player',
 ]);
+
+const isFileSizeExceeded = computed(
+	() => props.message.file && !props.message.file?.size,
+);
 
 const isAgent = computed(
 	() => props.message.member?.self || props.message.member?.type === 'webitel',
