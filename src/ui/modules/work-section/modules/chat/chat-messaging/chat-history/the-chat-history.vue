@@ -194,25 +194,20 @@ async function loadMessagesList() {
 	});
 	setTimeout(() => (showAllMessages.value = true), 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
+
 onMounted(() => {
 	getTopMessageEl();
 });
 
-watch(
-	() => props.contact?.id,
-	async () => {
-		loadMessagesList();
-		// await loadHistory();
-		// await nextTick();
-		// scrollToBottom();
-	},
-	{
-		immediate: true,
-	},
-);
+onUnmounted(() => {
+	resetHistory();
+});
 
 watch(
-	() => chat.value?.id,
+	[
+		() => props.contact?.id,
+		() => chat.value?.id,
+	],
 	async () => {
 		await loadMessagesList();
 	},
@@ -220,10 +215,6 @@ watch(
 		immediate: true,
 	},
 );
-
-onUnmounted(() => {
-	resetHistory();
-});
 </script>
 
 <style lang="scss" scoped>
