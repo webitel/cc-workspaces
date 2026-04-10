@@ -14,15 +14,15 @@
           v-if="props.showAvatar"
           :size="ComponentSize.SM"
           :bot="isBot"
-          :username="getClientUsername"
+          :username="username"
         />
       </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <message-blocked-error @click.stop v-if="message.file?.malware" />
-      <message-size-exceeded-error 
+      <message-size-exceeded-error
         v-else-if="isFileSizeExceeded"
-        :agent="isAgentSide" 
-        @click.stop 
+        :agent="isAgentSide"
+        @click.stop
       />
       <div @click.stop v-else>
         <message-player
@@ -106,10 +106,6 @@ const isBot = computed(
 );
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
-
-const getClientUsername = computed(() => {
-	return !isAgentSide.value ? props.username : ''; // need to show username avatar only for client
-});
 
 function handlePlayerInitialize(player) {
 	emit('initialized-player', {
