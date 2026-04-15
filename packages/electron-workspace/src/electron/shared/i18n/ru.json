@@ -1,0 +1,52 @@
+{
+	"tray": {
+		"Settings": "Настройки",
+		"Exit": "Выйти",
+		"Online": "Онлайн",
+		"Offline": "Оффлайн",
+		"Pause": "Пауза",
+		"UploadConfig": "Загрузить конфигурацию",
+		"Language": "Язык",
+		"SIP": "Использовать SIP"
+	},
+	"notificationCall": {
+		"Reject": "Сбросить",
+		"Answer": "Ответить",
+		"Yes": "Да",
+		"No": "Нет",
+		"callSuccessfulText": "Был ли звонок успешным?",
+		"scheduleCallText": "Запланировать звонок?",
+		"Close": "Закрыть",
+		"Saved": "Сохранено",
+		"Save": "Сохранить"
+	},
+	"calendar": {
+		"January": "Январь",
+		"February": "Февраль",
+		"March": "Март",
+		"April": "Апрель",
+		"May": "Май",
+		"June": "Июнь",
+		"July": "Июль",
+		"August": "Август",
+		"September": "Сентябрь",
+		"October": "Октябрь",
+		"November": "Ноябрь",
+		"December": "Декабрь",
+		"Mo": "Пн",
+		"Tu": "Вт",
+		"We": "Ср",
+		"Th": "Чт",
+		"Fr": "Пт",
+		"Sa": "Сб",
+		"Su": "Вс"
+	},
+	"config": {
+		"uploadConfigurationText": "Выберите файл для загрузки конфигурации",
+		"UploadFile": "Загрузить файл"
+	},
+	"disconnect": {
+		"Text": "Связь была утеряна.",
+		"Connect": "Соединить"
+	}
+}

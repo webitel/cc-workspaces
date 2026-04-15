@@ -1,0 +1,89 @@
+{
+	"name": "webitel",
+	"version": "1.3.1",
+	"description": "Webitel Agent Workspace",
+	"author": {
+		"name": "Webitel Team",
+		"email": "support@webitel.com"
+	},
+	"main": "./src/electron/main/main.js",
+	"homepage": "https://example.webitel.com/",
+	"keywords": [],
+	"scripts": {
+		"start": "npm run build:renderer && electron . --disable-http-cache",
+		"build:renderer": "vite build -c vite.renderer.config.ts",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"dist": "npm run build:renderer && electron-builder -w",
+		"distl": "npm run build:renderer && electron-builder --linux",
+		"distm": "npm run build:renderer && electron-builder --mac"
+	},
+	"build": {
+		"asar": false,
+		"win": {
+			"target": [
+				"nsis",
+				"zip",
+				"msi"
+			],
+			"icon": "./img/app-icon.png"
+		},
+		"nsis": {
+			"perMachine": true,
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		},
+		"linux": {
+			"asar": false,
+			"target": [
+				"AppImage"
+			],
+			"icon": "./img/app-icon.png",
+			"category": "Office",
+			"maintainer": "Webitel",
+			"vendor": "Webitel"
+		},
+		"mac": {
+			"target": [
+				"dmg",
+				"zip"
+			],
+			"category": "public.app-category.productivity",
+			"icon": "./img/app-icon.icns"
+		},
+		"productName": "Webitel",
+		"appId": "org.webitel",
+		"protocols": {
+			"name": "wtel",
+			"schemes": [
+				"wtel"
+			]
+		}
+	},
+	"devDependencies": {
+		"@electron/remote": "^0.0.1",
+		"@types/node": "^24.5.2",
+		"@vitejs/plugin-vue": "^6.0.1",
+		"electron": "^35.1.4",
+		"electron-builder": "26.0.12",
+		"electron-packager": "^17.1.2",
+		"http-server": "^14.1.1",
+		"ora": "^6.1.2",
+		"typescript": "^5.9.2",
+		"vite": "^8.0.8",
+		"vue-tsc": "^3.1.1"
+	},
+	"dependencies": {
+		"axios": "^1.13.2",
+		"dotenv": "^17.2.3",
+		"electron_baresip": "file:./electron_baresip",
+		"electron-localstorage": "^1.0.5",
+		"electron-positioner": "^4.1.0",
+		"electron-updater": "^6.6.2",
+		"markdown-it": "^12.0.6",
+		"rimraf": "^6.0.1",
+		"tslib": "^2.3.1",
+		"vue": "^3.5.22",
+		"vue-i18n": "^11.1.12",
+		"webitel-sdk": "^26.1.16"
+	}
+}
