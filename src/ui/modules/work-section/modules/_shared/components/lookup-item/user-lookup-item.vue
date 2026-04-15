@@ -4,6 +4,7 @@
       <wt-avatar
         :status="userStatus"
         :size="size"
+        :username="item.name"
         badge
       ></wt-avatar>
     </template>
