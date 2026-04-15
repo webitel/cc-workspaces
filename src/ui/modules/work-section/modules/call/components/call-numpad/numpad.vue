@@ -13,7 +13,6 @@
       />
       <numpad-numbers
         ref="numpad-numbers"
-        :size="size"
         @input="handleNumpadInput"
       />
     </div>
