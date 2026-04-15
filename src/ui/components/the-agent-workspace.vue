@@ -51,9 +51,10 @@
   setup
   lang="ts"
 >
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, onUnmounted, provide, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { storeToRefs } from 'pinia';
 
 import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
 import { usePanelSizeController } from '../composables/usePanelSizeController';
@@ -92,7 +93,10 @@ const isWelcomePopup = ref(true);
 const isDescTrackAuthSuccessPopup = ref(false);
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility } = userinfoStore;
+const { userInfo } = storeToRefs(userinfoStore);
+const agentName = computed(() => userInfo.value.name);
+provide('agentName', agentName.value);
+
 const isDescTrackAuthPopupsAllow = computed(
 	() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW'],
 );

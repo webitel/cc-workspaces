@@ -14,7 +14,7 @@
           v-if="props.showAvatar"
           :size="ComponentSize.SM"
           :bot="isBot"
-          :username="username"
+          :username="getClientUsername"
         />
       </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
@@ -58,7 +58,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, defineEmits, defineProps } from 'vue';
+import { computed, defineEmits, defineProps, inject } from 'vue';
 
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
@@ -67,6 +67,8 @@ import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageText from './components/chat-message-text.vue';
 import MessageTime from './components/chat-message-time.vue';
+
+const agentName = inject('agentName');
 
 const props = defineProps({
 	message: {
@@ -106,6 +108,10 @@ const isBot = computed(
 );
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
+
+const getClientUsername = computed(() => {
+	return isAgent.value ? agentName : props.username;
+});
 
 function handlePlayerInitialize(player) {
 	emit('initialized-player', {
