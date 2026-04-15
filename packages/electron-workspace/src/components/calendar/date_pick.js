@@ -66,16 +66,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	hr_element.addEventListener('change', hour_change);
 	min_element.addEventListener('change', minute_change);
 
-	document
-		.getElementById('date-pick-prev1')
-		.addEventListener('click', function () {
-			_makeCalender('prev');
-		});
-	document
-		.getElementById('date-pick-next3')
-		.addEventListener('click', function () {
-			_makeCalender('next');
-		});
+	document.getElementById('date-pick-prev1').addEventListener('click', () => {
+		_makeCalender('prev');
+	});
+	document.getElementById('date-pick-next3').addEventListener('click', () => {
+		_makeCalender('next');
+	});
 
 	var months = [
 		'January',
@@ -100,7 +96,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	window._clearCalendar = () => (oldDate = 0);
 
-	window._makeCalender = function (status, newDate) {
+	window._makeCalender = (status, newDate) => {
 		if (oldDate === newDate) return;
 
 		var newSpan; // for creating a new span node
@@ -149,10 +145,10 @@ window.addEventListener('DOMContentLoaded', () => {
 		var year = (globalYear = d.getFullYear());
 		var month = (globalMonth = d.getMonth());
 
-		let currentDate = new Date();
-		let currentDay = currentDate.getDate();
-		let currentMonth = currentDate.getMonth();
-		let currentYear = currentDate.getFullYear();
+		const currentDate = new Date();
+		const currentDay = currentDate.getDate();
+		const currentMonth = currentDate.getMonth();
+		const currentYear = currentDate.getFullYear();
 
 		var dayOfWeek = (d.getDay() || 7) - 1;
 		var numOfDaysInMonth = daysInMonth(year, month);
@@ -281,7 +277,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	function _sendSelectedDate() {
-		let timestemp = date.valueOf();
+		const timestemp = date.valueOf();
 		ipcRenderer.send('set-processing-property', {
 			prop: 'nextDistributeAt',
 			value: timestemp,

@@ -10,7 +10,7 @@ const conf = require('../shared/config').config();
 const WebitelWindows = require('./windows');
 const WebitelTray = require('./module/webitel_tray');
 
-let win = new WebitelWindows();
+const win = new WebitelWindows();
 let tray = {};
 
 autoUpdater.autoDownload = false;
@@ -62,7 +62,7 @@ function formatBytes(bytes, decimals = 2) {
 
 	const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-	return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+	return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
 }
 
 function showNotification(body) {

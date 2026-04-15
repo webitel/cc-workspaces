@@ -65,7 +65,7 @@ class Workspace {
 
 	changeSIP(value) {
 		if (this.window) {
-			let str = `{'ON_SITE':true,'CLI':{'debug':false,'registerWebDevice':${value}}}`;
+			const str = `{'ON_SITE':true,'CLI':{'debug':false,'registerWebDevice':${value}}}`;
 			this.window.webContents.executeJavaScript(
 				`localStorage.setItem("CONFIG", "${str}");`,
 				true,

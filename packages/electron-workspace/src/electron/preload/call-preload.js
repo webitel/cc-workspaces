@@ -237,8 +237,8 @@ function isValidHttpUrl(string) {
 }
 
 function resizeByElement(name) {
-	let element = document.getElementById(name);
-	let h = Math.max(
+	const element = document.getElementById(name);
+	const h = Math.max(
 		element.clientHeight,
 		element.scrollHeight,
 		element.offsetHeight,
@@ -255,20 +255,20 @@ function sendSize(arg) {
 
 function showHideClientInfo() {
 	if (hidden === true) {
-		let x = document.getElementById('infoClose');
+		const x = document.getElementById('infoClose');
 		if (window.getComputedStyle(x).display === 'none') {
 			x.style.display = 'flex';
 		}
-		let y = document.getElementById('infoOpen');
+		const y = document.getElementById('infoOpen');
 		if (window.getComputedStyle(y).display !== 'none') {
 			y.style.display = 'none';
 		}
 	} else if (hidden === false) {
-		let x = document.getElementById('infoClose');
+		const x = document.getElementById('infoClose');
 		if (window.getComputedStyle(x).display !== 'none') {
 			x.style.display = 'none';
 		}
-		let y = document.getElementById('infoOpen');
+		const y = document.getElementById('infoOpen');
 		if (window.getComputedStyle(y).display === 'none') {
 			y.style.display = 'block';
 		}

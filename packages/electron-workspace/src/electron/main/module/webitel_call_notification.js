@@ -16,7 +16,7 @@ class CallNotification {
 
 	createWindow() {
 		const displayBounds = screen.getPrimaryDisplay();
-		let { width, height } = displayBounds.workAreaSize;
+		const { width, height } = displayBounds.workAreaSize;
 		this.x = width - (this.widtNotification + 20);
 		this.y = height - (this.heightNotification + 30);
 
@@ -69,12 +69,12 @@ class CallNotification {
 
 		//this.window.setAutoResize(false)
 
-		this.window.webContents.on('new-window', function (event, url) {
+		this.window.webContents.on('new-window', (event, url) => {
 			console.log(url);
 			event.preventDefault();
 			shell.openExternal(url);
 		});
-		this.window.webContents.on('will-navigate', function (event, url) {
+		this.window.webContents.on('will-navigate', (event, url) => {
 			console.log(url);
 			event.preventDefault();
 			shell.openExternal(url);
@@ -210,7 +210,7 @@ class CallNotification {
 	}
 
 	updateProcessing(arg) {
-		let needShow = !this.isNawProcesing;
+		const needShow = !this.isNawProcesing;
 		this.call = arg;
 		this.isNawProcesing = true;
 		// todo
@@ -227,7 +227,7 @@ class CallNotification {
 	clearProcessing() {
 		if (this.isNawProcesing) {
 			this.isNawProcesing = false;
-			let left = Math.round(
+			const left = Math.round(
 				(this.call.processingTimeoutAt - this.call.now) / 1000,
 			); // to do ...
 			if (left > 0 && !conf.hidePostProcessing) {

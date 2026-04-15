@@ -12,7 +12,7 @@ const isX64 = process.arch === 'x64';
 
 function isWin7() {
 	if (process.platform === 'win32') {
-		let releaseArray = release().split('.');
+		const releaseArray = release().split('.');
 		if (releaseArray[0] !== '10') {
 			return true;
 		}

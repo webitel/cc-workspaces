@@ -20,7 +20,7 @@ function i18n() {
 	}
 }
 
-i18n.prototype.__ = function (ob, phrase) {
+i18n.prototype.__ = (ob, phrase) => {
 	let translation = loadedLanguage[ob][phrase];
 	if (translation === undefined) {
 		translation = phrase;

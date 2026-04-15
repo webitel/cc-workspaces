@@ -5,7 +5,7 @@ class WebitelConfig {
 	data = null;
 
 	readConfig(filepath) {
-		let file = fs.readFileSync(filepath, 'utf8');
+		const file = fs.readFileSync(filepath, 'utf8');
 
 		this.data = file.trim();
 		if (this.data == '' || !this._chackJSON(this.data))
@@ -37,9 +37,9 @@ class WebitelConfig {
 		if (
 			/^[\],:{}\s]*$/.test(
 				text
-					.replace(/\\["\\\/bfnrtu]/g, '@')
+					.replace(/\\["\\/bfnrtu]/g, '@')
 					.replace(
-						/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+						/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?/g,
 						']',
 					)
 					.replace(/(?:^|:|,)(?:\s*\[)+/g, ''),

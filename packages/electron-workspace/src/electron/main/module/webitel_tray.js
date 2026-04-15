@@ -203,7 +203,7 @@ class WebitelTray extends Tray {
 	};
 
 	_setSipChecked = (id, state) => {
-		let menuItem = this.menuConfig.getMenuItemById(id);
+		const menuItem = this.menuConfig.getMenuItemById(id);
 		if (menuItem && !menuItem.checked) menuItem.checked = state;
 	};
 }

@@ -85,7 +85,7 @@ const changeSIP = async (cli, { isSIP, timeoutSIP, codecs, debugMode }) => {
 		const sipInstance = new sip.SipClient({
 			debug: debugMode,
 		});
-		let connDevice = await cli.deviceConfig('sip');
+		const connDevice = await cli.deviceConfig('sip');
 
 		// TODO deprecated
 		cli.phone = sipInstance;
@@ -193,7 +193,7 @@ function subscribeAction(store) {
 				break;
 
 			case 'features/status/SUBSCRIBE_STATUS':
-				window.cliController.getCliInstance().then(async function (cli) {
+				window.cliController.getCliInstance().then(async (cli) => {
 					//if (cli.phone) {
 					//       await unrg(cli);
 					// }
@@ -254,7 +254,7 @@ function updateCall(callId, state, action) {
 	if (callId) call = getCallById(callId, state);
 	else call = getCallFromWorkspace(state);
 
-	let ob = createCallObject(call);
+	const ob = createCallObject(call);
 	ob.action = action;
 
 	ipcRenderer.send('update-acive-call', ob);
@@ -269,12 +269,12 @@ function openDisconnectPopup() {
 }
 
 function restoreNotification(callList) {
-	let call = getActiveCall(callList);
+	const call = getActiveCall(callList);
 	if (call) setActiveCall(call);
 }
 
 function setActiveCall(payload, isAnswerIvent) {
-	let ob = createCallObject(payload);
+	const ob = createCallObject(payload);
 	ob.isAnswerIvent = isAnswerIvent;
 	ipcRenderer.send('set-acive-call', ob);
 }
@@ -315,19 +315,19 @@ function getCallFromWorkspace(state) {
 }
 
 function removeCallInfo(payload, callList) {
-	let data = {
+	const data = {
 		removeId: payload.id,
 		reserveCall: null,
 	};
 	if (callList.length > 0) {
-		let call = getActiveCall(callList);
+		const call = getActiveCall(callList);
 		data.reserveCall = createCallObject(call);
 	}
 	ipcRenderer.send('remove-call-info', data);
 }
 
 function createCallObject(payload) {
-	let obj = payload;
+	const obj = payload;
 	return {
 		allowAnswer: payload.allowAnswer,
 		id: payload.id,
@@ -359,9 +359,9 @@ function setUserStatus(status) {
 
 //todo fixme
 ipcRenderer.on('reset-timer', (event, arg) => {
-	let tasks = $store.state.features.status?.agent?.task;
+	const tasks = $store.state.features.status?.agent?.task;
 	if (tasks) {
-		let task = tasks.get(arg);
+		const task = tasks.get(arg);
 		task.renew();
 	}
 });
@@ -369,7 +369,7 @@ ipcRenderer.on('reset-timer', (event, arg) => {
 ////////////
 
 ipcRenderer.on('set-processing-property', (event, arg = '') => {
-	let call = fetCallById(arg.id);
+	const call = fetCallById(arg.id);
 	if (call) {
 		switch (arg.prop) {
 			case 'isScheduleCall':
@@ -391,7 +391,7 @@ ipcRenderer.on('set-processing-property', (event, arg = '') => {
 });
 
 ipcRenderer.on('send-reporting', (event, arg) => {
-	let call = fetCallById(arg);
+	const call = fetCallById(arg);
 	if (call && call.postProcessData) {
 		call.reporting(call.postProcessData);
 	}
@@ -417,9 +417,11 @@ function checkActiveTask() {
 
 function getActiveTask() {
 	if (!$store) return;
-	let list = $store.state.features.call.callList;
+	const list = $store.state.features.call.callList;
 	if (list) {
-		let call = list.find((call) => call.hangupAt !== 0 && call.allowReporting);
+		const call = list.find(
+			(call) => call.hangupAt !== 0 && call.allowReporting,
+		);
 		if (call) {
 			setProcessing(call);
 		} else {
@@ -435,7 +437,7 @@ function fetCallById(callId) {
 }
 
 function setProcessing(call) {
-	let ob = {
+	const ob = {
 		id: call.id,
 		taskId: call.task.id,
 		state: call.task.state,

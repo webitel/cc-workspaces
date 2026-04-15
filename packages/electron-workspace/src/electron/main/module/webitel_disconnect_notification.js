@@ -11,7 +11,7 @@ class DisconnectNotification {
 
 	createWindow() {
 		const displayBounds = screen.getPrimaryDisplay();
-		let { width, height } = displayBounds.workAreaSize;
+		const { width, height } = displayBounds.workAreaSize;
 		this.x = width - (this.widtNotification + 20);
 		this.y = height - (this.heightNotification + 30);
 

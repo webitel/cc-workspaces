@@ -65,7 +65,7 @@ class WebitelWindows {
 	}
 
 	callAction(action) {
-		let call = this.callNotification.setCallAction(action);
+		const call = this.callNotification.setCallAction(action);
 		this.workspace.sandCallAction(call);
 	}
 
@@ -78,7 +78,7 @@ class WebitelWindows {
 	}
 
 	openDevTools() {
-		let w = BrowserWindow.getFocusedWindow();
+		const w = BrowserWindow.getFocusedWindow();
 		w.webContents.isDevToolsOpened()
 			? w.webContents.closeDevTools()
 			: w.webContents.openDevTools();
@@ -100,7 +100,7 @@ class WebitelWindows {
 			this.openUrlOnAnswer &&
 			chat &&
 			chat.variables &&
-			chat.variables.hasOwnProperty(this.openUrlOnAnswer)
+			Object.hasOwn(chat.variables, this.openUrlOnAnswer)
 		) {
 			var url = chat.variables[this.openUrlOnAnswer];
 			const protocol = require('url').parse(url).protocol;
@@ -115,7 +115,7 @@ class WebitelWindows {
 			this.openUrlOnAnswer &&
 			call &&
 			call.variables &&
-			call.variables.hasOwnProperty(this.openUrlOnAnswer)
+			Object.hasOwn(call.variables, this.openUrlOnAnswer)
 		) {
 			var url = call.variables[this.openUrlOnAnswer];
 			const protocol = require('url').parse(url).protocol;

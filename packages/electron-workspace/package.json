@@ -13,6 +13,8 @@
 		"start": "npm run build:renderer && electron . --disable-http-cache",
 		"build:renderer": "vite build -c vite.renderer.config.ts",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint": "npx @biomejs/biome check --colors=off .",
+		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
 		"dist": "npm run build:renderer && electron-builder -w",
 		"distl": "npm run build:renderer && electron-builder --linux",
 		"distm": "npm run build:renderer && electron-builder --mac"
@@ -60,6 +62,7 @@
 		}
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.4.10",
 		"@electron/remote": "^0.0.1",
 		"@types/node": "^24.5.2",
 		"@vitejs/plugin-vue": "^6.0.1",
