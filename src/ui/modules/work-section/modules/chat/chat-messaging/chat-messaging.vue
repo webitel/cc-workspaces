@@ -79,6 +79,7 @@
         <wt-chat-emoji
           class="chat-messaging__emoji"
           :size="size"
+          popup-teleport-to=".chat-messaging-text-entry__actions"
           @insert-emoji="insertEmoji"
         />
         <wt-button
