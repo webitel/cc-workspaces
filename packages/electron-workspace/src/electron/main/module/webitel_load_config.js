@@ -13,7 +13,7 @@ class LoadConfig {
 			title: 'Webitel',
 			name: 'loadConfig',
 			frame: false,
-			icon: path.join(__dirname, '../../../img/app-icon.png'),
+			icon: path.join(__dirname, '../../../../img/app-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
 				enableRemoteModule: true,

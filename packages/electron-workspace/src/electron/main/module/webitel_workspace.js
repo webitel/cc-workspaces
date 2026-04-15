@@ -13,7 +13,7 @@ class Workspace {
 			autoHideMenuBar: true,
 			title: 'Webitel',
 			name: 'workspace',
-			icon: path.join(__dirname, '../../../img/app-icon.png'),
+			icon: path.join(__dirname, '../../../../img/app-icon.png'),
 			webPreferences: {
 				webSecurity: false,
 				contextIsolation: false, // protect against prototype pollution

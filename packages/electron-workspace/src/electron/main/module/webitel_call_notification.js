@@ -35,7 +35,7 @@ class CallNotification {
 			useContentSize: true,
 			name: 'callNotification',
 			titleBarStyle: 'hidden',
-			icon: path.join(__dirname, '../../../img/app-active-call-icon.png'),
+			icon: path.join(__dirname, '../../../../img/app-active-call-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
 				enableRemoteModule: true,
@@ -195,7 +195,7 @@ class CallNotification {
 	_setIcon(isHold) {
 		if (isHold)
 			this.window.setOverlayIcon(
-				path.join(__dirname, '../../../img/icon-pause.png'),
+				path.join(__dirname, '../../../../img/icon-pause.png'),
 				'pause',
 			);
 		else this.window.setOverlayIcon(null, 'active');

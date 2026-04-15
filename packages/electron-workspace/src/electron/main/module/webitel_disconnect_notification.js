@@ -25,7 +25,7 @@ class DisconnectNotification {
 			title: 'Webitel',
 			name: 'disconnectNotification',
 			frame: false,
-			icon: path.join(__dirname, '../../../img/app-icon.png'),
+			icon: path.join(__dirname, '../../../../img/app-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
 				enableRemoteModule: true,
