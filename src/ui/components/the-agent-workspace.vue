@@ -93,9 +93,6 @@ const isWelcomePopup = ref(true);
 const isDescTrackAuthSuccessPopup = ref(false);
 
 const userinfoStore = useUserinfoStore();
-const { userInfo } = storeToRefs(userinfoStore);
-const agentName = computed(() => userInfo.value.name);
-provide('agentName', agentName.value);
 
 const isDescTrackAuthPopupsAllow = computed(
 	() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW'],
