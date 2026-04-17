@@ -51,12 +51,12 @@ import TransferLookupItem from '../../../../../_shared/components/lookup-item/tr
 import LookupItemContainer from '../../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferDestination from '../../../../../chat/enums/ChatTransferDestination.enum.js';
-import { transferParams } from '../../types/transfer-tabs';
+import { TransferParams } from '../../types/transfer-tabs';
 
 interface CallTransferContainerProps {
 	size?: string;
 	type: string;
-	getData: (params: transferParams) => Promise<any>;
+	getData: (params: TransferParams) => Promise<any>;
 	showStatus?: boolean;
 	showTeamName?: boolean;
 	showUserNameAvatar?: boolean;

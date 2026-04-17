@@ -241,6 +241,8 @@ export default {
 	transfer: {
 		selectAgent: 'Агентті таңдаңыз',
 		transfer: 'Ауыстыру',
+		blindTransfer: 'Соқыр аудару',
+		consultTransfer: 'Кеңесу аударымы',
 	},
 	contacts: {
 		phones: 'Телефон | Телефондар',

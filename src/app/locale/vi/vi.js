@@ -241,6 +241,8 @@ export default {
 	transfer: {
 		selectAgent: 'Vui lòng chọn tác vụ',
 		transfer: 'Chuyển',
+		blindTransfer: 'Chuyển cuộc gọi mù',
+		consultTransfer: 'Chuyển cuộc gọi tư vấn',
 	},
 	contacts: {
 		phones: 'Điện thoại',
