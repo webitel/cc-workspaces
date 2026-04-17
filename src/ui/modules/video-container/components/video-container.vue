@@ -8,10 +8,11 @@
   />
   <video-call
     v-if="isVideo"
-    :sender:stream=senderStream
+    :sender:stream="senderStream"
     :receiver:stream="receiverStream"
     :sender:video:enabled="!mutedVideo"
     :receiver:video:enabled="!remoteVideoMuted"
+    :receiver:mic:enabled="!remoteAudioMuted"
     :screenshot:status="screenshotStatus"
     :screenshot:loading="screenshotIsLoading"
     :screenshot:src="screenshotPreviewUrl"
@@ -23,6 +24,7 @@
     :call:onHold="callIsOnHold"
     :hide-controls-panel="callIsOnHold"
     position="left-bottom"
+    hide-avatar
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
     @action:zoom-screenshot="onZoomScreenshot"
@@ -125,6 +127,12 @@ const remoteVideoMuted = computed(() => {
 
 	const callInfo = store.state.features.call.callInfo.get(call.value.id);
 	return !!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted;
+});
+
+const remoteAudioMuted = computed(() => {
+	if (!call.value?.id) return false;
+	const callInfo = store.state.features.call.callInfo.get(call.value.id);
+	return callInfo.remoteAudioMuted || call.value?.remoteAudioMuted;
 });
 
 const recordings = computed<boolean>(() => !!call.value.recordings);

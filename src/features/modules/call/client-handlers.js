@@ -122,6 +122,7 @@ const actions = {
 			},
 			remoteHold: call.sip?.remoteHold,
 			remoteVideoMuted: call.remoteVideoMuted,
+			remoteAudioMuted: call.remoteAudioMuted,
 		};
 
 		if (Object.keys(info).length) {
