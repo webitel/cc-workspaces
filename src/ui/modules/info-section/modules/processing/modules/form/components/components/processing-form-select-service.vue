@@ -2,7 +2,7 @@
   <div class="form-select-service">
     <wt-expansion-panel
       :size="props.size"
-      collapsed
+      :collapsed="activeChatViewTableInfo.defaultCollapsed"
     >
       <template #title>
         <div class="form-select-service__title">
@@ -62,6 +62,7 @@ import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
 import deepCopy from 'deep-copy';
 import { computed, defineEmits, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 
 const props = defineProps({
 	value: {
@@ -119,11 +120,23 @@ onMounted(() => {
 	loadCatalogs();
 });
 
+const store = useStore();
+
+const activeChatViewTableInfo = computed(
+	() =>
+		store.getters['features/chat/CHAT_ON_WORKSPACE']?.task?.form?.body?.[0]
+			?.view?.table,
+);
+
+const catalogDataDefaultName = computed(
+	() => activeChatViewTableInfo.value?.headerTitle || t('cases.selectAService'),
+);
+
 const catalogDataNames = ref([]);
 const catalogDataPatch = computed(() =>
 	selectedElement.value
 		? catalogDataNames.value.join(' / ')
-		: t('cases.selectAService'),
+		: catalogDataDefaultName.value,
 );
 
 // Author @Lera24
