@@ -3,6 +3,7 @@
     <chat-container
       :messages="messages"
       :size="props.size"
+      :agent-name="agentName"
       :chat-actions="[
         ChatAction.AttachFiles,
         ChatAction.EmojiPicker,
@@ -23,6 +24,8 @@ import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
+import { storeToRefs } from 'pinia';
+import { useUserinfoStore } from '../../../../../../../../userinfo/userinfoStore';
 
 const props = withDefaults(
 	defineProps<{
@@ -34,6 +37,10 @@ const props = withDefaults(
 );
 
 const store = useStore();
+
+const userinfoStore = useUserinfoStore();
+const { userInfo } = storeToRefs(userinfoStore);
+const agentName = computed(() => userInfo.value.name);
 
 const chat = computed(
 	() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],

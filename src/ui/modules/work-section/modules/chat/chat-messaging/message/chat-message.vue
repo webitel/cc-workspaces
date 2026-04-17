@@ -14,7 +14,7 @@
           v-if="props.showAvatar"
           :size="ComponentSize.SM"
           :bot="isBot"
-          :username="username"
+          :username="getClientUsername"
         />
       </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
@@ -59,6 +59,7 @@
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, defineEmits, defineProps } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
@@ -67,6 +68,8 @@ import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageText from './components/chat-message-text.vue';
 import MessageTime from './components/chat-message-time.vue';
+
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 
 const props = defineProps({
 	message: {
@@ -91,6 +94,10 @@ const emit = defineEmits([
 	'initialized-player',
 ]);
 
+const userinfoStore = useUserinfoStore();
+const { userInfo } = storeToRefs(userinfoStore);
+const agentName = computed(() => userInfo.value.name);
+
 const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
 );
@@ -106,6 +113,10 @@ const isBot = computed(
 );
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
+
+const getClientUsername = computed(() => {
+	return isAgent.value ? agentName?.value : props.username;
+});
 
 function handlePlayerInitialize(player) {
 	emit('initialized-player', {
