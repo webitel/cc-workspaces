@@ -5,7 +5,7 @@
     @click="handleInput">
     <template #before>
       <div class="history-lookup-item-wrapper">
-        <wt-avatar :size="size"/>
+        <wt-avatar :size="size" :username="destination" />
         <wt-icon
           :icon="statusIcon"
           :color="statusIconColor"
