@@ -82,13 +82,17 @@ const initApp = async () => {
 		.use(store)
 		.use(BreakpointPlugin);
 
-	const { initialize, routeAccessGuard } = useUserinfoStore();
+	const { initialize, routeAccessGuard, showUserNotifications } =
+		useUserinfoStore();
 	try {
 		await initialize();
 		createUserAccessControl(useUserinfoStore);
 		await initRouter({
 			beforeEach: [
 				routeAccessGuard,
+			],
+			afterEach: [
+				showUserNotifications,
 			],
 		});
 	} catch (err) {
