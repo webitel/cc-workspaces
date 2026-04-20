@@ -1,8 +1,7 @@
-import { PhonesAPI } from '@webitel/api-services/api';
+import { PhonesAPI, EmailsAPI, ContactsAPI } from '@webitel/api-services/api';
 import applyTransform, {
 	notify,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import ContactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import { ContactPath } from '../enums/ContactPath.ts';
 
 const state = {
@@ -147,6 +146,22 @@ const actions = {
 			]);
 		}
 	},
+	ADD_EMAIL_TO_CONTACT: async (context, emailData) => {
+		try {
+			const resp = await EmailsAPI.add({
+				contactId: state.contact.id,
+				emails: [
+					emailData,
+				],
+			});
+
+			return context.commit('SET_EMAIL_TO_CONTACT', resp.data);
+		} catch (err) {
+			throw applyTransform(err, [
+				notify,
+			]);
+		}
+	},
 };
 
 const mutations = {
@@ -167,6 +182,9 @@ const mutations = {
 	},
 	SET_NUMBER_TO_CONTACT: (state, phoneData) => {
 		state.contact.phones.push(...phoneData);
+	},
+	SET_EMAIL_TO_CONTACT: (state, emailData) => {
+		state.contact.emails.push(...emailData);
 	},
 };
 
