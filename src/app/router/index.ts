@@ -1,8 +1,11 @@
 import { WtApplication } from '@webitel/ui-sdk/enums';
 import { createRouter, createWebHistory } from 'vue-router';
-import ErrorPage from '../../ui/components/error-page.vue';
-import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
-import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
+
+const AgentWorkspace = () =>
+	import('../../ui/components/the-agent-workspace.vue');
+const FeedbackPage = () =>
+	import('../../ui/modules/feedback-page/components/feedback-page.vue');
+const ErrorPage = () => import('../../ui/components/error-page.vue');
 
 const routes = [
 	{
@@ -27,7 +30,7 @@ const routes = [
 
 export let router = null;
 
-export const initRouter = async ({ beforeEach = [] } = {}) => {
+export const initRouter = async ({ beforeEach = [], afterEach = [] } = {}) => {
 	router = createRouter({
 		history: createWebHistory(import.meta.env.BASE_URL),
 
@@ -74,6 +77,10 @@ export const initRouter = async ({ beforeEach = [] } = {}) => {
 
 	beforeEach.forEach((guard) => {
 		router.beforeEach(guard);
+	});
+
+	afterEach.forEach((guard) => {
+		router.afterEach(guard);
 	});
 
 	return router;
