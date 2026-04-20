@@ -103,6 +103,7 @@ const contactLink = computed(() =>
   display: flex;
   align-items: center;
   gap: var(--content-wrapper-gap);
+  word-break: break-all;
 }
 
 .task-header-expansion-card__title-wrapper .wt-avatar {
