@@ -27,7 +27,7 @@
       </div>
 
     <div v-else class="chat-agent-content">
-      <wt-avatar size="xs" />
+      <wt-avatar size="xs" :username="firstAgentName"/>
       <p> {{ $t('workspaceSec.chat.chatsAgent', { agentName: firstAgentName }) }} </p>
     </div>
   </article>
