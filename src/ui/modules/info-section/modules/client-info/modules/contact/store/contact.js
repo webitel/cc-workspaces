@@ -25,19 +25,21 @@ const getters = {
 	},
 };
 
+const getContactIdFromEntity = (entity) => {
+	const id = entity?.contact?.id ?? entity?.contactId;
+	return id != null ? Number(id) : null;
+};
+
 const resolveTaskContactId = (task, callList = []) => {
 	if (!task) return null;
 
-	const directContactId = task.contact?.id || task.contactId;
-	if (directContactId) return Number(directContactId);
+	const directContactId = getContactIdFromEntity(task);
+	if (directContactId) return directContactId;
 
-	if (task.bridgedId) {
-		const bridgedCall = callList.find((call) => call.id === task.bridgedId);
-		const bridgedContactId = bridgedCall?.contact?.id || bridgedCall?.contactId;
-		if (bridgedContactId) return Number(bridgedContactId);
-	}
+	if (!task.bridgedId) return null;
 
-	return null;
+	const bridgedCall = callList.find((call) => call.id === task.bridgedId);
+	return getContactIdFromEntity(bridgedCall);
 };
 
 const actions = {
