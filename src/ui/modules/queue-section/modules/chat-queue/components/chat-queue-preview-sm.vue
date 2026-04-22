@@ -78,6 +78,7 @@
       <slot name="avatar">
         <wt-avatar
           size="sm"
+          :username="task.title"
         ></wt-avatar>
       </slot>
     </section>
@@ -115,10 +116,6 @@ const props = defineProps({
 	},
 	status: {
 		type: String,
-	},
-	opened: {
-		type: Boolean,
-		default: false,
 	},
 });
 

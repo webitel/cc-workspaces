@@ -56,6 +56,7 @@
     <section class="queue-preview-avatar">
       <slot name="avatar">
         <wt-avatar
+          :username="memberName"
           size="sm"
         ></wt-avatar>
       </slot>
@@ -109,6 +110,10 @@ export default {
 			default: false,
 		},
 		queueName: {
+			type: String,
+			default: '',
+		},
+		memberName: {
 			type: String,
 			default: '',
 		},
