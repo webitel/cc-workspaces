@@ -25,6 +25,21 @@ const getters = {
 	},
 };
 
+const resolveTaskContactId = (task, callList = []) => {
+	if (!task) return null;
+
+	const directContactId = task.contact?.id || task.contactId;
+	if (directContactId) return Number(directContactId);
+
+	if (task.bridgedId) {
+		const bridgedCall = callList.find((call) => call.id === task.bridgedId);
+		const bridgedContactId = bridgedCall?.contact?.id || bridgedCall?.contactId;
+		if (bridgedContactId) return Number(bridgedContactId);
+	}
+
+	return null;
+};
+
 const actions = {
 	INIT_SHOW_FULL_CONTACT_STATE: async (context, value) => {
 		context.commit('SET_SHOW_FULL_CONTACT', value);
@@ -118,8 +133,11 @@ const actions = {
 		}
 
 		if (isCallWorkspace) {
-			if (task.contact?.id) {
-				return context.dispatch('LOAD_CONTACT', task.contact.id);
+			const callList = context.rootState.features?.call?.callList || [];
+			const contactId = resolveTaskContactId(task, callList);
+
+			if (contactId) {
+				return context.dispatch('LOAD_CONTACT', contactId);
 			} else {
 				context.commit('SET_CONTACT', null);
 
