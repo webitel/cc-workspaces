@@ -41,11 +41,11 @@
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
 import { configurations } from '@webitel/ui-sdk/api/clients';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
+import { ContactsAPI } from '@webitel/api-services/api';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
-import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
@@ -106,12 +106,12 @@ const fetchFn = async (params) => {
 
 	if (isLimitContactsGranted.value) {
 		await checkLabelsToLimitContacts();
-		return await contactsAPI.getList({
+		return await ContactsAPI.getList({
 			...defaultParams,
 			label: contactsLabelsConfiguration.value,
 		});
 	}
-	return await contactsAPI.getList({
+	return await ContactsAPI.getList({
 		...defaultParams,
 	});
 };

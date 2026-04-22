@@ -80,11 +80,19 @@ const isAdding = ref(false);
 
 function changeTab(tab) {
 	currentTab.value = tab;
+	isAdding.value = false;
 }
 
-const showAddingButton = computed(
-	() => currentTab.value.value === 'phones' && props.linked,
-);
+const showAddingButton = computed(() => {
+	switch (currentTab.value.value) {
+		case 'phones':
+			return props.linked;
+		case 'emails':
+			return true;
+		default:
+			return false;
+	}
+});
 </script>
 
 <style lang="scss" scoped>
