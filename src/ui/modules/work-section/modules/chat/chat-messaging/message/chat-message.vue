@@ -115,7 +115,9 @@ const isBot = computed(
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 const getClientUsername = computed(() => {
-	return isAgent.value ? agentName?.value : props.username;
+	if (isAgent.value) return agentName?.value;
+
+	return props.username || props.message.member?.name;
 });
 
 function handlePlayerInitialize(player) {
