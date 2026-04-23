@@ -17,7 +17,10 @@
         >
           {{ taskTitle }}
         </a>
-        <span v-else>
+        <span
+          v-else
+          class="task-header-expansion-card__title"
+        >
           {{ taskTitle }}
         </span>
       </div>
@@ -103,7 +106,7 @@ const contactLink = computed(() =>
   display: flex;
   align-items: center;
   gap: var(--content-wrapper-gap);
-  word-break: break-all;
+  min-width: 0;
 }
 
 .task-header-expansion-card__title-wrapper .wt-avatar {
@@ -111,6 +114,11 @@ const contactLink = computed(() =>
 }
 
 .task-header-expansion-card__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
   color: var(--text-main-color);
 }
 
