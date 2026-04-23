@@ -16,14 +16,14 @@
           <wt-input-text
             v-model:model-value="newEmail.email"
             class="contact-card-emails__input"
-            :v="$v.newEmail.email"
+            :v="v$.newEmail.email"
             :label="t('vocabulary.emails')"
             required
           />
           <wt-select
             v-model="newEmail.type"
             required
-            :v="$v.newEmail.type"
+            :v="v$.newEmail.type"
             class="contact-card-emails__select"
             :label="t('objects.communicationType', 1)"
             :search-method="getCommunicationType"
