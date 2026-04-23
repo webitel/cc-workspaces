@@ -42,6 +42,7 @@ import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { ChatContact } from '../../_shared/types/ChatContact.types';
+import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 
 const props = withDefaults(
 	defineProps<{
@@ -75,19 +76,12 @@ const isCloseAction = computed(
 const isTransferAction = computed(
 	() => store.getters['features/chat/ALLOW_CHAT_TRANSFER'],
 );
-const displayChatName = computed(() => {
-	const currentChat = chat.value;
-
-	if (isChatTransferred.value) {
-		return currentChat.members.map((member: any) => member.name).join(', ');
-	}
-
-	if (props.contact?.id) return props.contact?.name;
-
-	if (currentChat?.title) return currentChat.title;
-
-	return 'unknown';
-});
+const displayChatName = computed(() =>
+	getDisplayChatName({
+		chat: chat.value,
+		contact: props.contact,
+	}),
+);
 
 const isChatTransferred = computed(() => chat.value?.members?.length);
 
