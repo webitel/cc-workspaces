@@ -105,6 +105,7 @@ import { useStore } from 'vuex';
 
 import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
+import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 
 const props = defineProps({
 	task: {
@@ -129,21 +130,13 @@ const store = useStore();
 const queueName = computed(() => props.task?.queue?.name || '');
 
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
-const isChatTransferred = computed(() => chat.value?.members?.length);
 
-const displayChatName = computed(() => {
-	const currentChat = chat.value;
-
-	if (isChatTransferred.value) {
-		return currentChat.members.map((member) => member.name).join(', ');
-	}
-
-	if (props.contact?.id) return props.contact?.name;
-
-	if (currentChat?.title) return currentChat.title;
-
-	return 'unknown';
-});
+const displayChatName = computed(() =>
+	getDisplayChatName({
+		chat: chat.value,
+		contact: props.contact,
+	}),
+);
 </script>
 
 <style lang="scss" scoped>
