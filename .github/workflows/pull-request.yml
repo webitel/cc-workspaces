@@ -1,0 +1,59 @@
+name: PR (webitel-agent-workspace-app)
+run-name: "webitel-agent-workspace-app@pr${{ github.event.pull_request.number }}#${{ github.run_number }} - ${{ github.event.pull_request.title }}"
+
+on:
+  pull_request:
+
+permissions: { contents: read }
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: Prepare
+    uses: webitel/reusable-workflows/.github/workflows/node-prepare.yml@v2
+    permissions:
+      contents: read
+      pull-requests: read
+
+    with:
+      development-branch: ${{ github.event.repository.default_branch }}
+      triggered-branch: ${{ github.event.pull_request.base.ref }}
+
+  checks:
+    name: Checks
+    needs: [ prepare ]
+    uses: webitel/reusable-workflows/.github/workflows/node-checks.yml@v2
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+      pull-requests: write
+      security-events: write
+
+    with:
+      changes: ${{ needs.prepare.outputs.changes }}
+
+  compile:
+    name: Build
+    needs: [ prepare ]
+    uses: webitel/reusable-workflows/.github/workflows/node-build.yml@v2
+    with:
+      arch: all
+      version: ${{ needs.prepare.outputs.version }}
+      version-build: ${{ github.run_number }}
+      build-timestamp: ${{ needs.prepare.outputs.build-timestamp }}
+      prerelease: dev~pr${{ github.event.pull_request.number }}
+      package-name: webitel-agent-workspace-app
+      package-description: ${{ github.event.repository.description }}
+      app-root: /opt/www/workspaces
+      package-contents: |
+        
+
+      package-depends: 
+      package-conflicts: webitel-agent-workspace
+      package-replaces: webitel-agent-workspace
+      package-provides: webitel-agent-workspace
+      scripts: |
+        
