@@ -59,7 +59,7 @@
 		"@biomejs/biome": "2.3.14",
 		"@tsconfig/node22": "^22.x",
 		"@types/node": "^24.x",
-		"@vitejs/plugin-basic-ssl": "^1.1.0",
+		"@vitejs/plugin-basic-ssl": "^2.3.0",
 		"@vitejs/plugin-vue": "^6.x",
 		"@vitest/coverage-v8": "^4.x",
 		"@vue/test-utils": "^2.4.6",
