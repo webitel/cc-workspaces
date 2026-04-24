@@ -8,9 +8,11 @@
       v-if="isVideo"
       :size="ComponentSize.SM"
       :src="mediaSrcObject"
+      :title="media.name"
       static
       hide-expand
       stretch
+      countdown-time-mode
       @initialized="handlePlayerInitialize"
     />
     <wt-player
