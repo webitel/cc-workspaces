@@ -8,69 +8,78 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 jobs:
   release:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
+    runs-on: [ arc-frontend-runner-set ]
     steps:
+      - name: Create GitHub App token
+        uses: webitel/reusable-workflows/actions/create-github-app-token@create-github-app-token-v1
+        id: app-token
+        with:
+          client-id: ${{ vars.DELIVERY_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.DELIVERY_BOT_APP_PEM }}
+
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
+          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
+          persist-credentials: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ">=22"
-
-      - name: get prevTag
-        id: prevTag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      - name: Get previous tag
+        id: prev-tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name '${{ steps.app-token.outputs.user-name }}'
+          git config user.email '${{ steps.app-token.outputs.user-email }}'
 
       - name: Set version variables
         id: version
         run: |
           VERSION="${{ inputs.version }}"
-          # Add .0 patch version for package.json
           FULL_VERSION="${VERSION}.0"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "full_version=$FULL_VERSION" >> $GITHUB_OUTPUT
-          echo "version_tag=v$VERSION" >> $GITHUB_OUTPUT
-          echo "version_git_tag=v${VERSION}-tagged" >> $GITHUB_OUTPUT
+          
+          {
+            echo "version=$VERSION"
+            echo "full_version=$FULL_VERSION"
+            echo "version_tag=v$VERSION"
+            echo "version_git_tag=v${VERSION}-tagged"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create release branch
         run: |
-          git checkout -b ${{ steps.version.outputs.version_tag }}
+          git checkout -b "${{ steps.version.outputs.version_tag }}"
 
       - name: Update version in package.json
-        run: npm version ${{ steps.version.outputs.full_version }} --no-git-tag-version
+        run: npm version "${{ steps.version.outputs.full_version }}" --no-git-tag-version
 
       - name: Commit and push release branch
         run: |
           git add package.json
+          if [ -f package-lock.json ]; then
+            git add package-lock.json
+          fi
+          
           git commit -m "chore: bump version to ${{ steps.version.outputs.full_version }}"
-          git push -u origin ${{ steps.version.outputs.version_tag }}
+          git push -u origin "${{ steps.version.outputs.version_tag }}"
 
-      - name: Merge release branch to default branch (keep branch)
+      - name: Merge release branch to default branch
         run: |
-          git checkout ${{ github.event.repository.default_branch }}
-          git merge ${{ steps.version.outputs.version_tag }} --no-ff
-          git push origin ${{ github.event.repository.default_branch }}
-          # Note: Release branch is kept and not deleted
+          git checkout "${{ github.event.repository.default_branch }}"
+          git merge "${{ steps.version.outputs.version_tag }}" --no-ff
+          git push origin "${{ github.event.repository.default_branch }}"
 
-      - name: Create and push tag (after merge)
+      - name: Create and push tag
         run: |
-          git tag ${{ steps.version.outputs.version_git_tag }}
-          git push --tags
+          git tag "${{ steps.version.outputs.version_git_tag }}"
+          git push origin "${{ steps.version.outputs.version_git_tag }}"
 
-      - name: generate Release Changelog
+      - name: Generate release changelog
         id: changelog
         uses: requarks/changelog-action@v1
         continue-on-error: true
@@ -78,13 +87,14 @@ jobs:
           writeToFile: false
           reverseOrder: true
           excludeTypes: build
-          token: ${{ github.token }}
+          token: ${{ steps.app-token.outputs.token }}
           fromTag: ${{ steps.version.outputs.version_git_tag }}
-          toTag: ${{ steps.prevTag.outputs.tag }}
+          toTag: ${{ steps.prev-tag.outputs.tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ steps.app-token.outputs.token }}
           tag_name: ${{ steps.version.outputs.version_git_tag }}
-          name: cc-workspaces@${{ steps.version.outputs.version_tag }}
+          name: ${{ github.event.repository.name }}@${{ steps.version.outputs.version_tag }}
           body: ${{ steps.changelog.outputs.changes }}

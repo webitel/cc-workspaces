@@ -1,47 +1,61 @@
-name: libs.update.yml
+name: Update lib
+
 on:
-  #  https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/manually-running-a-workflow
   workflow_dispatch:
     inputs:
       package:
-        description: 'Which library to update'
+        description: Which library to update
         required: true
         type: choice
         options:
           - '@webitel/ui-sdk'
           - '@webitel/api-services'
+          - '@webitel/flow-ui-sdk'
           - '@webitel/styleguide'
-#      version:
-#        description: 'Target version (optional: latest or x.y.z)'
-#        required: false
-#        type: string
+          - '@webitel/ui-datalist'
+
+permissions:
+  contents: write
 
 jobs:
   publish:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
+    runs-on: [ arc-frontend-runner-set ]
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Create GitHub App token
+        uses: webitel/reusable-workflows/actions/create-github-app-token@create-github-app-token-v1
+        id: app-token
         with:
-          node-version: lts/*
-          check-latest: true
+          client-id: ${{ vars.DELIVERY_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.DELIVERY_BOT_APP_PEM }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+
+      - name: Configure Git
+        run: |
+          git config user.name '${{ steps.app-token.outputs.user-name }}'
+          git config user.email '${{ steps.app-token.outputs.user-email }}'
 
       - name: Install deps
         run: npm ci
 
       - name: Update selected lib
-        #          VER="${{ inputs.version }}"
-        #          if [ -n "$VER" ]; then
-        #            npm i "$PKG@$VER"
-        #          else
         run: |
           PKG="${{ inputs.package }}"
           npm update "$PKG"
           npm ls "$PKG"
 
-      # Commit all changed files back to the repository
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Commit and push changes
+        run: |
+          PKG="${{ inputs.package }}"
+          git add package.json
+          if [ -f package-lock.json ]; then
+            git add package-lock.json
+          fi
+          
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(deps): update ${PKG}"
+          git push
