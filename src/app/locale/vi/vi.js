@@ -236,7 +236,6 @@ export default {
 	history: {
 		today: 'Hôm nay',
 		yesterday: 'Hôm qua',
-		openInHistory: 'Mở trong lịch sử',
 	},
 	transfer: {
 		selectAgent: 'Vui lòng chọn tác vụ',

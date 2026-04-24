@@ -238,7 +238,6 @@ export default {
 	history: {
 		today: 'Astăzi',
 		yesterday: 'Ieri',
-		openInHistory: 'Deschide în Istoric',
 	},
 	transfer: {
 		selectAgent: 'Vă rugăm să selectați un agent',

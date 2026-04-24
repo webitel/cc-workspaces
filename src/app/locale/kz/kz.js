@@ -236,7 +236,6 @@ export default {
 	history: {
 		today: 'Бүгін',
 		yesterday: 'Кеше',
-		openInHistory: 'Тарихта ашу',
 	},
 	transfer: {
 		selectAgent: 'Агентті таңдаңыз',

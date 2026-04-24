@@ -163,7 +163,7 @@ export default {
 		contextMenuOptions() {
 			return [
 				{
-					text: this.$t('history.openInHistory'),
+					text: this.$t('reusable.openInHistory'),
 					icon: 'link',
 					disabled: false,
 					handler: () => this.goToHistoryItem(),
