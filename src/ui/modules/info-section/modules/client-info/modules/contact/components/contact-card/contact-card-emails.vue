@@ -159,7 +159,7 @@ watch(
 			newEmail.value = {
 				email: '',
 				type: null,
-				primary: !!emails.value.length,
+				primary: emails.value.length === 0,
 			};
 		}
 	},
