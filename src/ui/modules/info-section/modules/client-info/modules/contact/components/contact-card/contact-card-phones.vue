@@ -3,34 +3,28 @@
     class="contact-card-phones"
     :class="[`contact-card-phones--${props.size}`]"
   >
-    <div
+    <wt-inline-add-panel
       v-if="isAdding"
       class="contact-card-phones__add-form"
+      :direction="props.size === ComponentSize.SM ? 'column' : 'row'"
+      :disabled-add-action="!newPhone.type?.id || !newPhone.number"
+      @reset="closeAdding"
+      @submit="savePhone"
     >
-      <wt-input-text
-        v-model:model-value="newPhone.number"
-        :label="t('reusable.phoneNumber')"
-        class="contact-card-phones__input"
-      />
-      <wt-select
-        v-model="newPhone.type"
-        :label="t('objects.communicationType', 1)"
-        :search-method="getCommunicationType"
-        class="contact-card-phones__select"
-      />
-      <div class="contact-card-phones__actions">
-        <wt-icon-btn
-          icon="tick"
-          size="md"
-          :disabled="!newPhone.type?.id || !newPhone.number"
-          @click="savePhone"
-        />
-        <wt-icon-btn
-          icon="close"
-          @click="closeAdding"
-        />
-      </div>
-    </div>
+      <template>
+          <wt-input-text
+            v-model:model-value="newPhone.number"
+            :placeholder="t('reusable.phoneNumber')"
+            class="contact-card-phones__input"
+          />
+          <wt-select
+            v-model="newPhone.type"
+            :placeholder="t('objects.communicationType', 1)"
+            :search-method="getCommunicationType"
+            class="contact-card-phones__select"
+          />
+      </template>
+    </wt-inline-add-panel>
 
     <ul
       v-if="phones.length"
@@ -59,6 +53,8 @@
 </template>
 
 <script setup>
+import { WtInlineAddPanel } from '@webitel/ui-sdk/components';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { CommunicationsAPI } from '@webitel/api-services/api';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -147,33 +143,6 @@ watch(
 
 <style lang="scss" scoped>
 .contact-card-phones {
-  &__add-form {
-    display: flex;
-    gap: var(--spacing-xs);
-    align-items: flex-end;
-  }
-
-  &__input {
-    flex: 1;
-  }
-
-  &__select {
-    flex: 1;
-  }
-
-  &__actions {
-    display: flex;
-    gap: var(--spacing-xs);
-
-    button {
-      background: var(--dp-16-surface-color);
-      padding: var(--spacing-xs);
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-  }
-
   &__item {
     display: flex;
     flex-direction: column;
@@ -192,30 +161,9 @@ watch(
     align-items: center;
   }
 
-  &__type {
-    display: flex;
-    align-items: center;
-
-    p {
-      margin: 0;
-      color: var(--color-text-secondary);
-      font-size: var(--font-size-sm);
-    }
-  }
-
-  &--sm {
-    .contact-card-phones__wrapper {
-      display: block;
-    }
-
-    .contact-card-phones__add-form {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .contact-card-phones__actions {
-      justify-content: center;
-    }
+  &__input,
+  &__select {
+    flex: 1;
   }
 }
 </style>

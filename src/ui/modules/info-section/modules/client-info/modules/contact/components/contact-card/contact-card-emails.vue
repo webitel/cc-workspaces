@@ -12,23 +12,18 @@
       @submit="saveEmail"
     >
       <template>
-        <div class="contact-card-emails__content">
           <wt-input-text
             v-model:model-value="newEmail.email"
             :v="v$?.newEmail?.email"
             class="contact-card-emails__input"
-            :label="t('vocabulary.emails')"
-            required
+            :placeholder="t('vocabulary.emails')"
           />
           <wt-select
             v-model="newEmail.type"
-            required
-            :v="v$?.newEmail?.type"
             class="contact-card-emails__select"
-            :label="t('objects.communicationType', 1)"
+            :placeholder="t('objects.communicationType', 1)"
             :search-method="getCommunicationType"
           />
-        </div>
       </template>
     </wt-inline-add-panel>
     <ul>
@@ -103,11 +98,7 @@ const v$ = useVuelidate(
 	computed(() => ({
 		newEmail: {
 			email: {
-				required,
 				email,
-			},
-			type: {
-				required,
 			},
 		},
 	})),
@@ -184,20 +175,6 @@ watch(
     display: flex;
     gap: var(--spacing-xs);
     align-items: center;
-  }
-
-  &--sm {
-    .contact-card-emails__content {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
-  }
-
-  &__content {
-    display: flex;
-    width: 100%;
-    gap: var(--spacing-xs);
   }
 
   &__input,
