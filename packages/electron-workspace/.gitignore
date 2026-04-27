@@ -1,0 +1,9 @@
+/dist
+/release-builds
+/wwwroot
+/node_modules
+/.idea
+/src/renderer/call-vue
+.DS_Store
+npm-debug.log*
+.env.local
