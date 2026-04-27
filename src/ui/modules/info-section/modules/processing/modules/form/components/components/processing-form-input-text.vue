@@ -2,6 +2,7 @@
   <wt-input-text
     v-bind="$attrs"
     :value="props.value"
+    prevent-trim
     @update:modelValue="emit('input', $event)"
   ></wt-input-text>
 </template>
