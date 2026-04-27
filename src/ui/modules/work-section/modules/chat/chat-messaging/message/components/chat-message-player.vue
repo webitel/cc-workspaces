@@ -8,9 +8,11 @@
       v-if="isVideo"
       :size="ComponentSize.SM"
       :src="mediaSrcObject"
+      :title="media.name"
       static
       hide-expand
       stretch
+      countdown-time-mode
       @initialized="handlePlayerInitialize"
     />
     <wt-player
@@ -19,6 +21,7 @@
       :autoplay="false"
       :closable="false"
       hide-volume-slider
+      hide-mute-button
       class="chat-message-player__player"
       @initialized="handlePlayerInitialize"
     />

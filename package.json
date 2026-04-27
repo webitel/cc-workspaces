@@ -27,7 +27,7 @@
 		"@vueuse/core": "^14.x",
 		"@webitel/api-services": "^0.1.32",
 		"@webitel/styleguide": "^26.2.5",
-		"@webitel/ui-chats": "^0.1.27",
+		"@webitel/ui-chats": "^0.1.29",
 		"@webitel/ui-sdk": "~26.4",
 		"autolinker": "^4.x",
 		"axios": "1.13.2",
@@ -53,7 +53,7 @@
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
 		"vuex": "^4.1.0",
-		"webitel-sdk": "^26.1.15"
+		"webitel-sdk": "^26.1.16"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.14",

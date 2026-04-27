@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+    ignore:
+      - dependency-name: "webitel/reusable-workflows"
+
+    open-pull-requests-limit: 5
+    commit-message: { prefix: ci }
+
+  # Enable version updates for npm
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: "weekly"
+
+    ignore:
+      - dependency-name: "@webitel/ui-sdk"
+      - dependency-name: "@webitel/api-services"
+      - dependency-name: "@webitel/flow-ui-sdk"
+      - dependency-name: "@webitel/styleguide"
+      - dependency-name: "@webitel/ui-datalist"
+
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        patterns: [ "*" ]
+        update-types: [ minor, patch ]
+
+    commit-message:
+      prefix: deps
+      prefix-development: deps-dev
+      include: scope

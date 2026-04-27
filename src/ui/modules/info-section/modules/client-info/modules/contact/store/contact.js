@@ -134,8 +134,11 @@ const actions = {
 		}
 
 		if (isCallWorkspace) {
-			if (task.contact?.id) {
-				return context.dispatch('LOAD_CONTACT', task.contact.id);
+			const callList = context.rootState.features?.call?.callList || [];
+			const contactId = resolveTaskContactId(task, callList);
+
+			if (contactId) {
+				return context.dispatch('LOAD_CONTACT', contactId);
 			} else {
 				context.commit('SET_CONTACT', null);
 
