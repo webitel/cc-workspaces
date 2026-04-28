@@ -7,3 +7,5 @@
 .DS_Store
 npm-debug.log*
 .env.local
+/src/electron/preload/workspace-preload.js
+/src/electron/preload/workspace-preload.js.map
