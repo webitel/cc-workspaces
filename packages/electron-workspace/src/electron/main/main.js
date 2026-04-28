@@ -4,14 +4,23 @@ const {
 	powerMonitor,
 	Notification,
 	dialog,
+	BrowserWindow,
 } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const conf = require('../shared/config').config();
 const WebitelWindows = require('./windows');
 const WebitelTray = require('./module/webitel_tray');
+const { createBaresipBridge } = require('./sip/baresip-bridge');
 
 const win = new WebitelWindows();
 let tray = {};
+const baresipBridge = createBaresipBridge({
+	sendToWindows: (channel, payload) => {
+		for (const window of BrowserWindow.getAllWindows()) {
+			window.webContents.send(channel, payload);
+		}
+	},
+});
 
 autoUpdater.autoDownload = false;
 
@@ -237,6 +246,14 @@ ipcMain.on('close-load-window', (event, args) => {
 ipcMain.handle('sip_checked', (event, args) => {
 	return tray.lStorage.getSIP();
 });
+ipcMain.handle('sip-worker:request', async (event, payload = {}) => {
+	try {
+		return await baresipBridge.request(payload.method, payload.args || []);
+	} catch (err) {
+		console.error('[sip] request failed', payload.method, err);
+		throw err;
+	}
+});
 ipcMain.handle('restart', (event, args) => {
 	console.error('restart');
 	app.relaunch({
@@ -245,6 +262,10 @@ ipcMain.handle('restart', (event, args) => {
 		]),
 	});
 	app.exit(0);
+});
+
+app.on('before-quit', () => {
+	baresipBridge.stop();
 });
 
 function createAndSubscribeTray() {
