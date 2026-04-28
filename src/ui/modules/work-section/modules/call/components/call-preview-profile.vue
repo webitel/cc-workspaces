@@ -1,9 +1,10 @@
 <template>
   <div class="preview-profile">
-      <wt-avatar
-        size="xl"
-        class="preview-profile__pic"
-      ></wt-avatar>
+    <wt-avatar
+      :username="displayName"
+      size="xl"
+      class="preview-profile__pic"
+    ></wt-avatar>
     <div class="preview-profile__name typo-subtitle-2">
       {{ displayName }}
     </div>
