@@ -17,7 +17,7 @@
       :icon="isVideoMuted ? 'video-cam-off' : 'video-cam'"
       class="call-footer-action"
       color="secondary"
-      variant="outlined"
+      :variant="isVideoMuted ? 'active' : 'outlined'"
       rounded
       wide
       @click="toggleVideo"
