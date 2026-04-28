@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version - major.minor only (e.g., "25.10")'
+        description: 'version, next_version - major.minor only (e.g., "26.4, 26.6")'
         required: true
         type: string
 
@@ -41,12 +41,14 @@ jobs:
       - name: Set version variables
         id: version
         run: |
-          VERSION="${{ inputs.version }}"
-          FULL_VERSION="${VERSION}.0"
+          INPUT="${{ inputs.version }}"
+          VERSION=$(echo $INPUT | cut -d',' -f1 | tr -d ' ') #splits versions from input by separator
+          NEXT_VERSION=$(echo $INPUT | cut -d',' -f2 | tr -d ' ') #splits versions from input by separator
           
           {
             echo "version=$VERSION"
-            echo "full_version=$FULL_VERSION"
+            echo "full_version=${VERSION}.0"
+            echo "next_full_version=${NEXT_VERSION}.0"
             echo "version_tag=v$VERSION"
             echo "version_git_tag=v${VERSION}-tagged"
           } >> "$GITHUB_OUTPUT"
@@ -54,28 +56,23 @@ jobs:
       - name: Create release branch
         run: |
           git checkout -b "${{ steps.version.outputs.version_tag }}"
+          git push -u origin ${{ steps.version.outputs.version_tag }}
 
-      - name: Update version in package.json
-        run: npm version "${{ steps.version.outputs.full_version }}" --no-git-tag-version
-
-      - name: Commit and push release branch
+      - name: Bump version in main to next version
         run: |
+          git checkout ${{ github.event.repository.default_branch }}
+          npm version "${{ steps.version.outputs.next_full_version }}" --no-git-tag-version --allow-same-version
           git add package.json
           if [ -f package-lock.json ]; then
             git add package-lock.json
           fi
-          
-          git commit -m "chore: bump version to ${{ steps.version.outputs.full_version }}"
-          git push -u origin "${{ steps.version.outputs.version_tag }}"
 
-      - name: Merge release branch to default branch
-        run: |
-          git checkout "${{ github.event.repository.default_branch }}"
-          git merge "${{ steps.version.outputs.version_tag }}" --no-ff
-          git push origin "${{ github.event.repository.default_branch }}"
+          git commit -m "chore: bump version to ${{ steps.version.outputs.next_full_version }}"
+          git push origin ${{ github.event.repository.default_branch }}
 
       - name: Create and push tag
         run: |
+          git checkout ${{ steps.version.outputs.version_tag }}
           git tag "${{ steps.version.outputs.version_git_tag }}"
           git push origin "${{ steps.version.outputs.version_git_tag }}"
 
