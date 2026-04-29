@@ -73,6 +73,10 @@ const props = defineProps({
 		type: String,
 		default: ComponentSize.MD,
 	},
+	formBodyIndex: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const emit = defineEmits([
@@ -124,8 +128,9 @@ const store = useStore();
 
 const activeChatViewTableInfo = computed(
 	() =>
-		store.getters['features/chat/CHAT_ON_WORKSPACE']?.task?.form?.body?.[0]
-			?.view?.table,
+		store.getters['features/chat/CHAT_ON_WORKSPACE']?.task?.form?.body?.[
+			props.formBodyIndex
+		]?.view?.table,
 );
 
 const catalogDataDefaultName = computed(
