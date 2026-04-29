@@ -13,6 +13,7 @@
         v-for="(el, key) of formBody"
         :key="el.id+key.toString()"
         v-model="el.value"
+				:form-body-index="key"
         :label-props="{ hint: el.view.hint }"
         :attempt-id="task.attempt.id"
         :component-id="el.id"
