@@ -59,15 +59,6 @@ const getValueWbtHideContactVariable = async () => {
 	return items?.[0]?.value;
 };
 
-const getValueExpandContactTabsVariable = async () => {
-	const { items } = await ConfigurationAPI.getList({
-		name: [
-			EngineSystemSettingName.ExpandContactTabs,
-		],
-	});
-	return items?.[0]?.value;
-};
-
 const isAllowedContacts = computed(() => {
 	if (isJob.value) return;
 	return (
@@ -80,7 +71,6 @@ const isAllowedContacts = computed(() => {
 
 onMounted(async () => {
 	isHideContact.value = await getValueWbtHideContactVariable();
-	await getValueExpandContactTabsVariable();
 });
 </script>
 
