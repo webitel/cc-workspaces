@@ -22,7 +22,7 @@ describe('client-info-chips.vue', () => {
 	beforeEach(() => {
 		task.attempt = {};
 	});
-	it('Should render component', () => {
+	it('renders component wrapper', () => {
 		const wrapper = shallowMount(ClientInfoChips, {
 			global: {
 				plugins: [
@@ -32,7 +32,8 @@ describe('client-info-chips.vue', () => {
 		});
 		expect(wrapper.exists()).toBe(true);
 	});
-	it('Should correctly display task QueueName', () => {
+
+	it('renders queue name chip from task attempt queue', () => {
 		const display = 'jest';
 		task.attempt = {
 			queue: {
@@ -61,7 +62,24 @@ describe('client-info-chips.vue', () => {
 				.text(),
 		).toBe(display);
 	});
-	it('if task has no queue, queue chip is absent', () => {
+
+	it('does not render queue chip when task has no queue', () => {
+		const wrapper = shallowMount(ClientInfoChips, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
+		expect(wrapper.find('.client-info-chips').exists()).toBe(false);
+	});
+
+	it('does not render queue chip when queue name is empty', () => {
+		task.attempt = {
+			queue: {
+				name: '',
+			},
+		};
 		const wrapper = shallowMount(ClientInfoChips, {
 			global: {
 				plugins: [

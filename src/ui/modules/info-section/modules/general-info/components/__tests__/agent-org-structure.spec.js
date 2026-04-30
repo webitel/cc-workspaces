@@ -3,7 +3,7 @@ import { mount, shallowMount } from '@vue/test-utils';
 import AgentOrgStructure from '../agent-org-structure.vue';
 
 describe('General Info: Agent Org Structure', () => {
-	it('renders a component', () => {
+	it('renders component root', () => {
 		const wrapper = shallowMount(AgentOrgStructure, {
 			props: {
 				agent: {},
@@ -11,6 +11,7 @@ describe('General Info: Agent Org Structure', () => {
 		});
 		expect(wrapper.exists()).toBe(true);
 	});
+
 	it('correctly renders agent supervisors', () => {
 		const sup1 = 'sup1';
 		const sup2 = 'sup2';
@@ -34,6 +35,7 @@ describe('General Info: Agent Org Structure', () => {
 			sup2,
 		]);
 	});
+
 	it('correctly renders agent auditors', () => {
 		const aud1 = 'aud1';
 		const aud2 = 'aud2';
@@ -56,5 +58,16 @@ describe('General Info: Agent Org Structure', () => {
 			aud1,
 			aud2,
 		]);
+	});
+
+	it('returns empty values when org fields are missing', () => {
+		const wrapper = shallowMount(AgentOrgStructure, {
+			props: {
+				agent: {},
+			},
+		});
+		expect(wrapper.vm.team).toBe('');
+		expect(wrapper.vm.supervisors).toBe('');
+		expect(wrapper.vm.auditors).toBe('');
 	});
 });

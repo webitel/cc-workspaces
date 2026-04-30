@@ -16,7 +16,7 @@ const buildStore = (taskOnWorkspace) =>
 	});
 
 describe('Client Info Member from Call', () => {
-	it('Correctly renders empty variables', () => {
+	it('does not render variable items when task variables are empty', () => {
 		const store = buildStore({
 			variables: {},
 			task: {
@@ -50,5 +50,29 @@ describe('Client Info Member from Call', () => {
 			},
 		});
 		expect(wrapper.vm.memberDescription).toBe('description');
+	});
+
+	it('maps task variables to computed variables list', () => {
+		const store = buildStore({
+			variables: {
+				crmId: '42',
+				tier: 'gold',
+			},
+			task: {
+				communication: {},
+			},
+		});
+		const wrapper = mount(ClientInfoMember, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
+		expect(wrapper.vm.variables).toHaveLength(2);
+		expect(wrapper.vm.variables.map((v) => v.key)).toEqual([
+			'crmId',
+			'tier',
+		]);
 	});
 });

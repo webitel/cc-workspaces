@@ -15,7 +15,7 @@ describe('disconnect popup', () => {
 		});
 	});
 
-	it('renders a component', () => {
+	it('renders popup root', () => {
 		const wrapper = shallowMount(DisconnectPopup, {
 			global: {
 				plugins: [
@@ -24,9 +24,10 @@ describe('disconnect popup', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.disconnect-popup').exists()).toBe(true);
 	});
 
-	it('renders a component when v-if is truthy', () => {
+	it('shows popup when disconnect flag is enabled', () => {
 		const wrapper = shallowMount(DisconnectPopup, {
 			global: {
 				plugins: [
@@ -40,9 +41,10 @@ describe('disconnect popup', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.disconnect-popup').isVisible()).toBe(true);
 	});
 
-	it('calls router go() method at "reload" btn', () => {
+	it('calls router go(0) on reload button click', () => {
 		const goMock = vi.fn();
 		const wrapper = mount(DisconnectPopup, {
 			global: {
@@ -68,5 +70,6 @@ describe('disconnect popup', () => {
 			})
 			.vm.$emit('click');
 		expect(goMock).toHaveBeenCalledWith(0);
+		expect(goMock).toHaveBeenCalledTimes(1);
 	});
 });

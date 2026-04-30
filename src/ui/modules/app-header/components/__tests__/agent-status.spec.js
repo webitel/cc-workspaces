@@ -1,24 +1,53 @@
 import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 
 import StatusSelect from '../agent-status-select.vue';
 
-const lastStatusChange = Date.now() - 12 * 60 * 60 * 10 ** 3; // '12:00:00'
+const now = 1_700_000_000_000;
+const lastStatusChange = now - 12 * 60 * 60 * 10 ** 3; // '12:00:00'
 
 describe('Agent Status Select', () => {
-	it('renders a component', () => {
-		const wrapper = shallowMount(StatusSelect, {
-			computed: {
-				now() {
-					return Date.now();
+	it('renders status select with computed status duration', () => {
+		const store = createStore({
+			modules: {
+				ui: {
+					namespaced: true,
+					modules: {
+						now: {
+							namespaced: true,
+							state: () => ({
+								now,
+							}),
+						},
+					},
 				},
-				agent() {
-					return {
-						lastStatusChange,
-					};
+				features: {
+					namespaced: true,
+					modules: {
+						status: {
+							namespaced: true,
+							state: () => ({
+								agent: {
+									agentId: 'agent-1',
+									status: 'online',
+									lastStatusChange,
+								},
+							}),
+						},
+					},
 				},
 			},
 		});
+		const wrapper = shallowMount(StatusSelect, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.agent-status-select').exists()).toBe(true);
+		expect(wrapper.vm.statusDuration).toBe('12:00:00');
 	});
 
 	// it('correctly computes statusDuration', () => {

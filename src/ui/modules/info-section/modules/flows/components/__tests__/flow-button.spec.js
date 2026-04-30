@@ -1,30 +1,33 @@
-import { config, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 import FlowsAPI from '../../api/flows';
 import FlowButton from '../flow-button.vue';
 
-const id = 12;
-
 describe('FlowButton', () => {
-	it('renders a component', () => {
+	const flowItem = {
+		id: 12,
+		name: 'test-flow',
+	};
+
+	it('renders run button', () => {
 		const wrapper = shallowMount(FlowButton, {
 			props: {
-				id,
+				item: flowItem,
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('run flow', async () => {
-		const mock = vi.fn();
-		vi.spyOn(FlowsAPI, 'run').mockImplementationOnce(mock);
+	it('calls FlowsAPI.run with item on click', async () => {
+		const runMock = vi.fn().mockResolvedValue(undefined);
+		vi.spyOn(FlowsAPI, 'run').mockImplementationOnce(runMock);
 		const wrapper = shallowMount(FlowButton, {
 			props: {
-				id,
+				item: flowItem,
 			},
 		});
 
 		await wrapper.find('wt-button-stub').trigger('click');
-		expect(mock).toHaveBeenCalled();
+		expect(runMock).toHaveBeenCalledWith(flowItem);
 	});
 });

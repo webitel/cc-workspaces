@@ -18,19 +18,22 @@ const computed = {
 };
 
 describe('Break timer popup', () => {
-	it('Correctly displays break duration', () => {
+	it('computes and renders break duration', () => {
+		agent.status = AgentStatus.Pause;
 		const wrapper = shallowMount(TimerPopup, {
 			computed,
 		});
 		expect(wrapper.vm.duration).toEqual('12:00:00');
+		expect(wrapper.vm.duration.split(':')).toHaveLength(3);
 	});
 
-	it("Doesn't show popup on Online status", () => {
+	it('hides popup on online status', () => {
 		agent.status = AgentStatus.Online;
 		const wrapper = shallowMount(TimerPopup, {
 			computed,
 			attachTo: document.body,
 		});
 		expect(wrapper.isVisible()).toBeFalsy();
+		expect(wrapper.find('.break-timer-popup').exists()).toBe(false);
 	});
 });

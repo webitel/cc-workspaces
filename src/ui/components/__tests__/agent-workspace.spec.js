@@ -25,14 +25,19 @@ vi.mock('../../modules/userinfo/userinfoStore', () => ({
 }));
 
 describe('Agent Workspace', () => {
-	it('renders workspace container', () => {
-		const store = createStore({
+	const buildStore = ({
+		openSession = vi.fn(),
+		closeSession = vi.fn(),
+		agentLogout = vi.fn(),
+		isDescTrackAuthAllowed = false,
+	} = {}) =>
+		createStore({
 			modules: {
 				workspace: {
 					namespaced: true,
 					actions: {
-						OPEN_SESSION: vi.fn(),
-						CLOSE_SESSION: vi.fn(),
+						OPEN_SESSION: openSession,
+						CLOSE_SESSION: closeSession,
 					},
 				},
 				ui: {
@@ -47,7 +52,8 @@ describe('Agent Workspace', () => {
 										agent: {},
 									},
 									getters: {
-										IS_DESC_TRACK_AUTH_POPUPS_ALLOW: () => false,
+										IS_DESC_TRACK_AUTH_POPUPS_ALLOW: () =>
+											isDescTrackAuthAllowed,
 									},
 								},
 							},
@@ -60,7 +66,7 @@ describe('Agent Workspace', () => {
 						status: {
 							namespaced: true,
 							actions: {
-								AGENT_LOGOUT: vi.fn(),
+								AGENT_LOGOUT: agentLogout,
 							},
 						},
 					},
@@ -68,6 +74,8 @@ describe('Agent Workspace', () => {
 			},
 		});
 
+	it('renders workspace container', () => {
+		const store = buildStore();
 		const wrapper = shallowMount(AgentWorkspace, {
 			global: {
 				plugins: [
@@ -79,5 +87,23 @@ describe('Agent Workspace', () => {
 		});
 
 		expect(wrapper.find('.main-agent-workspace').exists()).toBe(true);
+	});
+
+	it('dispatches CLOSE_SESSION on unmount', () => {
+		const closeSession = vi.fn();
+		const store = buildStore({
+			closeSession,
+		});
+		const wrapper = shallowMount(AgentWorkspace, {
+			global: {
+				plugins: [
+					store,
+					createPinia(),
+					BreakpointPlugin,
+				],
+			},
+		});
+		wrapper.unmount();
+		expect(closeSession).toHaveBeenCalled();
 	});
 });

@@ -27,6 +27,22 @@ describe('features/job store: mutations', () => {
 		expect(state.jobList).toEqual(jobList);
 	});
 
+	it('ADD_JOB appends item to existing list preserving order', () => {
+		const secondJob = {
+			id: '2',
+		};
+		const state = {
+			jobList: [
+				job,
+			],
+		};
+		jobModule.mutations.ADD_JOB(state, secondJob);
+		expect(state.jobList).toEqual([
+			job,
+			secondJob,
+		]);
+	});
+
 	it('REMOVE_JOB removes existing job from jobList', () => {
 		const jobList = [];
 		const state = {
@@ -36,5 +52,21 @@ describe('features/job store: mutations', () => {
 		};
 		jobModule.mutations.REMOVE_JOB(state, job);
 		expect(state.jobList).toEqual(jobList);
+	});
+
+	it('REMOVE_JOB removes only matching job reference', () => {
+		const secondJob = {
+			id: '2',
+		};
+		const state = {
+			jobList: [
+				job,
+				secondJob,
+			],
+		};
+		jobModule.mutations.REMOVE_JOB(state, secondJob);
+		expect(state.jobList).toEqual([
+			job,
+		]);
 	});
 });

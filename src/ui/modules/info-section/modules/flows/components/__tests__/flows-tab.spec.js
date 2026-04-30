@@ -14,43 +14,43 @@ const flowsData = [
 	},
 ];
 
-const store = createStore({
-	modules: {
-		ui: {
-			namespaced: true,
-			modules: {
-				infoSec: {
-					namespaced: true,
-					modules: {
-						flows: {
-							namespaced: true,
-							state: {
-								flows: flowsData,
+const buildStore = (flows = flowsData) =>
+	createStore({
+		modules: {
+			ui: {
+				namespaced: true,
+				modules: {
+					infoSec: {
+						namespaced: true,
+						modules: {
+							flows: {
+								namespaced: true,
+								state: {
+									flows,
+								},
 							},
 						},
 					},
 				},
 			},
 		},
-	},
-});
+	});
 
 describe('FlowsTab', () => {
-	it('renders a component', () => {
+	it('renders component root', () => {
+		const store = buildStore([]);
 		const wrapper = shallowMount(FlowsTab, {
 			global: {
 				plugins: [
 					store,
 				],
 			},
-			computed: {
-				flowsList: () => [],
-			},
 		});
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('renders flows list', async () => {
+	it('renders flows list from store state', async () => {
+		const store = buildStore(flowsData);
 		const wrapper = shallowMount(FlowsTab, {
 			global: {
 				plugins: [
@@ -63,7 +63,8 @@ describe('FlowsTab', () => {
 		expect(list.length).toBe(flowsData.length);
 	});
 
-	it('hide dummy', async () => {
+	it('does not render list when there are no flows', async () => {
+		const store = buildStore([]);
 		const wrapper = shallowMount(FlowsTab, {
 			global: {
 				plugins: [
@@ -71,8 +72,6 @@ describe('FlowsTab', () => {
 				],
 			},
 		});
-
-		const dummy = wrapper.find('.flows-tab__dummy');
-		expect(dummy.exists()).toBe(false);
+		expect(wrapper.find('.flows-tab-item-wrapper').exists()).toBe(false);
 	});
 });
