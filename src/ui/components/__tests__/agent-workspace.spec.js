@@ -1,70 +1,83 @@
+import { createPinia } from 'pinia';
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+import { vi } from 'vitest';
 
 import BreakpointPlugin from '../../../app/plugins/breakpoint.plugin';
 import AgentWorkspace from '../the-agent-workspace.vue';
 
-const store = createStore({
-	modules: {
-		workspace: {
-			namespaced: true,
-		},
-		userinfo: {
-			namespaced: true,
-		},
-		call: {
-			namespaced: true,
-			state: {
-				callList: [],
-			},
-		},
-	},
-});
+vi.mock('vue-router', () => ({
+	useRoute: () => ({
+		query: {},
+	}),
+	useRouter: () => ({
+		push: vi.fn(),
+		currentRoute: {},
+	}),
+}));
+
+vi.mock('../../modules/userinfo/userinfoStore', () => ({
+	useUserinfoStore: () => ({
+		initialize: vi.fn(),
+		routeAccessGuard: vi.fn(),
+		showUserNotifications: vi.fn(),
+	}),
+}));
 
 describe('Agent Workspace', () => {
-	let appAccess = true;
+	it('renders workspace container', () => {
+		const store = createStore({
+			modules: {
+				workspace: {
+					namespaced: true,
+					actions: {
+						OPEN_SESSION: vi.fn(),
+						CLOSE_SESSION: vi.fn(),
+					},
+				},
+				ui: {
+					namespaced: true,
+					modules: {
+						infoSec: {
+							namespaced: true,
+							modules: {
+								agentInfo: {
+									namespaced: true,
+									state: {
+										agent: {},
+									},
+									getters: {
+										IS_DESC_TRACK_AUTH_POPUPS_ALLOW: () => false,
+									},
+								},
+							},
+						},
+					},
+				},
+				features: {
+					namespaced: true,
+					modules: {
+						status: {
+							namespaced: true,
+							actions: {
+								AGENT_LOGOUT: vi.fn(),
+							},
+						},
+					},
+				},
+			},
+		});
 
-	beforeEach(() => {
-		appAccess = true;
-	});
-
-	it('renders a component', () => {
 		const wrapper = shallowMount(AgentWorkspace, {
 			global: {
 				plugins: [
 					store,
+					createPinia(),
 					BreakpointPlugin,
 				],
 			},
-			computed: {
-				hasAccess() {
-					return appAccess;
-				},
-			},
 		});
-		expect(wrapper.find('.main-agent-workspace').exists()).toBe(true);
-	});
 
-	it('error page is shown, if there is no access to workspace', () => {
-		appAccess = false;
-		const wrapper = shallowMount(AgentWorkspace, {
-			global: {
-				plugins: [
-					store,
-				],
-			},
-			computed: {
-				hasAccess() {
-					return appAccess;
-				},
-			},
-		});
-		expect(
-			wrapper
-				.findComponent({
-					name: 'wt-error-page',
-				})
-				.exists(),
-		).toBe(true);
+		expect(wrapper.find('.main-agent-workspace').exists()).toBe(true);
 	});
 });

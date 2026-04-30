@@ -60,7 +60,10 @@ describe('ContactLookupItem', () => {
 			})
 			.vm.$emit('click');
 
-		expect(wrapper.emitted().call[0][0]).toEqual(phone);
+		expect(wrapper.emitted().call[0][0]).toEqual({
+			number: phone.number,
+			contactId: item.id,
+		});
 	});
 
 	it('correctly emits call event with phone number from communication item', async () => {
@@ -108,6 +111,9 @@ describe('ContactLookupItem', () => {
 				name: 'ContactCommunicationItem',
 			})
 			.vm.$emit('call', phone);
-		expect(wrapper.emitted().call[0][0]).toEqual(phone);
+		expect(wrapper.emitted().call[0][0]).toEqual({
+			number: phone.number,
+			contactId: item.id,
+		});
 	});
 });

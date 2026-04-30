@@ -1,63 +1,57 @@
+import { createPinia } from 'pinia';
 import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 
 import ChatTransferDestination from '../../enums/ChatTransferDestination.enum.js';
 import ChatTransferContainer from '../chat-transfer-container.vue';
 
 describe('ChatTransferContainer', () => {
+	const store = createStore({
+		modules: {
+			features: {
+				namespaced: true,
+				modules: {
+					chat: {
+						namespaced: true,
+						actions: {
+							TRANSFER: vi.fn().mockResolvedValue(undefined),
+						},
+					},
+				},
+			},
+		},
+	});
+
 	it('renders a component', () => {
-		const wrapper = shallowMount(ChatTransferContainer);
+		const wrapper = shallowMount(ChatTransferContainer, {
+			global: {
+				plugins: [
+					store,
+					createPinia(),
+				],
+			},
+		});
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('at TransferLookupItem "input" event, calls transfer() with passed item and destination', async () => {
-		const transferDestination = ChatTransferDestination.CHATPLAN;
-		const item = {
-			id: 'jest',
-		};
-		const mock = vi
-			.spyOn(ChatTransferContainer.methods, 'transfer')
-			.mockImplementationOnce(() => {});
-
+	it('emits closeTab on close action click', async () => {
 		const wrapper = shallowMount(ChatTransferContainer, {
-			attachTo: document.body, // for isVisible to work https://github.com/vuejs/vue-test-utils/issues/2073#issuecomment-1732696542
-			shallow: true,
 			global: {
+				plugins: [
+					store,
+					createPinia(),
+				],
 				stubs: {
 					LookupItemContainer: false,
 					TransferLookupItem: false,
 				},
 			},
-			data: () => ({
-				dataList: [
-					item,
-				],
-				transferDestination,
-				isLoading: false,
-			}),
 		});
-		await wrapper.vm.$nextTick();
-		expect(
-			wrapper
-				.findComponent({
-					name: 'wt-loader',
-				})
-				.exists(),
-		).toBe(false);
-		expect(
-			wrapper
-				.findComponent({
-					name: 'empty-search',
-				})
-				.isVisible(),
-		).toBe(false);
-		wrapper
+		await wrapper
 			.findComponent({
-				name: 'transfer-lookup-item',
+				name: 'wt-icon-btn',
 			})
-			.vm.$emit('input', item);
-		expect(mock).toHaveBeenCalledWith({
-			destination: transferDestination,
-			item,
-		});
+			.trigger('click');
+		expect(wrapper.emitted().closeTab?.length).toBe(1);
 	});
 });

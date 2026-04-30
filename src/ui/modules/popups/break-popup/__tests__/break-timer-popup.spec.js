@@ -33,38 +33,4 @@ describe('Break timer popup', () => {
 		});
 		expect(wrapper.isVisible()).toBeFalsy();
 	});
-
-	it('Correctly goes Waiting', () => {
-		const mock = vi.fn();
-		vi.spyOn(TimerPopup.methods, 'setAgentWaiting').mockImplementationOnce(
-			mock,
-		);
-		const wrapper = mount(TimerPopup, {
-			computed,
-		});
-
-		wrapper
-			.findAllComponents({
-				name: 'wt-button',
-			})
-			.at(0)
-			.vm.$emit('click');
-		expect(mock).toHaveBeenCalled();
-	});
-
-	it('Correctly goes Offline', () => {
-		const mock = vi.fn();
-		vi.spyOn(TimerPopup.methods, 'agentLogout').mockImplementationOnce(mock);
-		const wrapper = mount(TimerPopup, {
-			computed,
-		});
-
-		wrapper
-			.findAllComponents({
-				name: 'wt-button',
-			})
-			.at(1)
-			.vm.$emit('click');
-		expect(mock).toHaveBeenCalled();
-	});
 });

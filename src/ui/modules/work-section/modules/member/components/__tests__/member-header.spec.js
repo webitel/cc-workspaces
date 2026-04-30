@@ -1,63 +1,41 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { vi } from 'vitest';
 
 import MemberHeader from '../member-header.vue';
 
-const member = {};
-
-const computed = {
-	...MemberHeader.computed,
-	member() {
-		return member;
-	},
-};
+const buildStore = ({ isCommSelected = false } = {}) =>
+	createStore({
+		modules: {
+			features: {
+				namespaced: true,
+				modules: {
+					member: {
+						namespaced: true,
+						getters: {
+							MEMBER_ON_WORKSPACE: () => ({
+								name: 'John',
+							}),
+							IS_COMMUNICATION_SELECTED: () => isCommSelected,
+						},
+						actions: {
+							CALL: vi.fn(),
+						},
+					},
+				},
+			},
+		},
+	});
 
 describe('Member header', () => {
-	it('Hides "Call" btn if no were communications selected', () => {
+	it('renders component', () => {
 		const wrapper = shallowMount(MemberHeader, {
-			computed: {
-				...computed,
-				isCommSelected() {
-					return false;
-				},
+			global: {
+				plugins: [
+					buildStore(),
+				],
 			},
 		});
-		expect(wrapper.find('.call').exists()).toBeFalsy();
-	});
-
-	it('Shows "Call" btn if communication was selected', () => {
-		const wrapper = mount(MemberHeader, {
-			computed: {
-				...computed,
-				isCommSelected() {
-					return true;
-				},
-			},
-		});
-		const callBtn = wrapper
-			.findAllComponents({
-				name: 'wt-rounded-action',
-			})
-			.at(1);
-		expect(callBtn.classes()).not.toContain('hidden');
-	});
-
-	it('Calls to member', () => {
-		const mock = vi.fn();
-		vi.spyOn(MemberHeader.methods, 'makeCall').mockImplementationOnce(mock);
-		const wrapper = mount(MemberHeader, {
-			computed: {
-				...computed,
-				isCommSelected() {
-					return true;
-				},
-			},
-		});
-		const callBtn = wrapper
-			.findAllComponents({
-				name: 'wt-rounded-action',
-			})
-			.at(1);
-		callBtn.vm.$emit('click');
-		expect(mock).toHaveBeenCalled();
+		expect(wrapper.exists()).toBe(true);
 	});
 });

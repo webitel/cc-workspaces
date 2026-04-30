@@ -36,8 +36,16 @@ describe('features/job store: actions', () => {
 		);
 	});
 
-	it('REMOVE_JOB dispatches RESET_WORKSPACE mutation if passed job is equal to job on workspace', () => {
-		jobModule.actions.REMOVE_JOB(context, job);
+	it('REMOVE_JOB dispatches RESET_WORKSPACE mutation if passed job is equal to job on workspace', async () => {
+		await jobModule.actions.REMOVE_JOB(context, job);
+		expect(context.commit).toHaveBeenCalledWith('REMOVE_JOB', job);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/jobNotifications/HANDLE_JOB_END',
+			job,
+			{
+				root: true,
+			},
+		);
 		expect(context.dispatch).toHaveBeenCalledWith('RESET_WORKSPACE');
 	});
 

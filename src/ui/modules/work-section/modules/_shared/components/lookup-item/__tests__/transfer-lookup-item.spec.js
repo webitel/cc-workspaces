@@ -1,18 +1,19 @@
 import { mount, shallowMount } from '@vue/test-utils';
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
+import { createStore } from 'vuex';
 
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
 import TransferLookupItem from '../transfer-lookup-item.vue';
 import UserLookupItem from '../user-lookup-item.vue';
 
-const computed = {
-	state() {
-		return 'chat';
-	},
-};
 describe('TransferLookupItem', () => {
 	const item = {};
 	const type = ChatTransferDestination.USER;
+	const store = createStore({
+		getters: {
+			'workspace/WORKSRACE_STATE': () => 'chat',
+		},
+	});
 
 	it('renders a component', () => {
 		const wrapper = shallowMount(TransferLookupItem, {
@@ -20,7 +21,11 @@ describe('TransferLookupItem', () => {
 				item,
 				type,
 			},
-			computed,
+			global: {
+				plugins: [
+					store,
+				],
+			},
 		});
 		expect(wrapper.exists()).toBe(true);
 	});
@@ -31,7 +36,11 @@ describe('TransferLookupItem', () => {
 				item,
 				type,
 			},
-			computed,
+			global: {
+				plugins: [
+					store,
+				],
+			},
 		});
 		wrapper
 			.findComponent({
