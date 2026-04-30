@@ -69,6 +69,7 @@ import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 
 const store = useStore();
 const route = useRoute();
@@ -94,6 +95,10 @@ const isDescTrackAuthSuccessPopup = ref(false);
 
 const userinfoStore = useUserinfoStore();
 
+const { subscribe } = useCachedInterval({
+  timeout: 5 * 1000,
+});
+
 const isDescTrackAuthPopupsAllow = computed(
 	() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW'],
 );
@@ -107,6 +112,7 @@ const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
 const initSession = async () => {
+  subscribe(loadFlowsList);
 	try {
 		isInitLoading.value = true;
 		await openSession();
@@ -138,6 +144,11 @@ const preventDrop = (event: DragEvent) => {
 	event.preventDefault();
 	event.stopPropagation();
 };
+
+const loadFlowsList = async () => {
+  await store.dispatch('ui/infoSec/flows/LOAD_FLOWS_LIST');
+};
+
 watch(isDescTrackAuthErrorPopup, () => {
 	if (isDescTrackAuthErrorPopup.value) {
 		agentLogout();
