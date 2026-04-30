@@ -42,13 +42,18 @@ describe('Reporting class', () => {
 
 		const nextDistributeAtNaive = toNaiveUtcTimestamp(nextDistributeAt);
 
-		const finalReporting = {
+		const expectedReporting = {
 			success: true,
 			description: '',
 			nextDistributeAt: nextDistributeAtNaive,
 		};
-		Object.assign(reporting, finalReporting);
+		Object.assign(reporting, {
+			success: true,
+			description: '',
+			nextDistributeAt,
+			isScheduleCall: true,
+		});
 		const result = reporting.generateReporting();
-		expect(result).toEqual(finalReporting);
+		expect(result).toEqual(expectedReporting);
 	});
 });

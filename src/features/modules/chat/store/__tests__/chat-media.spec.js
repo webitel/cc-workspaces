@@ -111,9 +111,11 @@ describe('features/chat/chatMedia store: actions', () => {
 
 	it('PAUSE_ALL_CHAT_PLAYERS_EXCEPT triggers player.pause() on all players in chatOnWorkspace (except the passed one)', () => {
 		const player = {
+			id: '1',
 			pause: vi.fn(),
 		};
 		const player2 = {
+			id: '2',
 			pause: vi.fn(),
 		};
 		chatOnWorkspace.players = [
