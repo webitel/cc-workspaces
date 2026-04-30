@@ -78,7 +78,13 @@ const galleriaActiveIndex = ref(0);
 const screenshotData = ref<ScreenshotFileItem[]>([]);
 const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
-const call = computed<any>(
+type WorkspaceCall = {
+	peerStreams?: MediaStream[];
+	localStreams?: MediaStream[];
+	[key: string]: unknown;
+};
+
+const call = computed<WorkspaceCall>(
 	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
 );
 const callIsOnHold = computed<boolean>(() => {
@@ -242,8 +248,9 @@ onBeforeUnmount(() => {
 	eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
 });
 
-const changeVideoContainerSize = (containerSize) =>
-	(videoContainerSize.value = containerSize);
+const changeVideoContainerSize = (containerSize) => {
+	videoContainerSize.value = containerSize;
+};
 
 watch(galleriaVisible, (visible) => {
 	if (visible && videoContainerSize.value === ComponentSize.LG)

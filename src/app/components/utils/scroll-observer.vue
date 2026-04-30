@@ -47,7 +47,7 @@ export default {
 				// if parent rendered and we can set root within options
 				this.observer = new IntersectionObserver(
 					([entry]) => {
-						if (entry && entry.isIntersecting) {
+						if (entry?.isIntersecting) {
 							this.$emit('intersect');
 						}
 					},

@@ -99,10 +99,8 @@ export const useHotkeys = (subscribers) => {
 					(cb) => cb !== callback,
 				);
 			};
-			return [
-				...unsubs,
-				unsubscribe,
-			];
+			unsubs.push(unsubscribe);
+			return unsubs;
 		},
 		[],
 	);

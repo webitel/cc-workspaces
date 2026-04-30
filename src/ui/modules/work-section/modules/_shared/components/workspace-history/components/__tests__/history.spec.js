@@ -1,7 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { CallDirection } from 'webitel-sdk';
 import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
+import { CallDirection } from 'webitel-sdk';
 
 import APIRepository from '../../../../../../../../../app/api/APIRepository';
 import HistoryLookupItem from '../../../lookup-item/history-lookup-item.vue';

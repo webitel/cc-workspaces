@@ -1,5 +1,4 @@
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { ConversationState } from 'webitel-sdk';
 
 import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
@@ -55,19 +54,11 @@ const actions = {
 	},
 
 	ACCEPT: async (context) => {
-		try {
-			await context.getters.CHAT_ON_WORKSPACE.join();
-		} catch (err) {
-			throw err;
-		}
+		await context.getters.CHAT_ON_WORKSPACE.join();
 	},
 
 	SEND: async (context, message) => {
-		try {
-			await context.getters.CHAT_ON_WORKSPACE.send(message);
-		} catch (err) {
-			throw err;
-		}
+		await context.getters.CHAT_ON_WORKSPACE.send(message);
 	},
 
 	SEND_FILE: async (context, files) => {
@@ -106,23 +97,19 @@ const actions = {
 
 	CLOSE: async (context) => {
 		const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
-		try {
-			if (chatOnWorkspace.allowLeave) {
-				await chatOnWorkspace.leave();
-			} else {
-				await chatOnWorkspace.decline();
-			}
-
-			await context.dispatch(
-				'features/chatNotifications/HANDLE_CHAT_END',
-				chatOnWorkspace,
-				{
-					root: true,
-				},
-			);
-		} catch (err) {
-			throw err;
+		if (chatOnWorkspace.allowLeave) {
+			await chatOnWorkspace.leave();
+		} else {
+			await chatOnWorkspace.decline();
 		}
+
+		await context.dispatch(
+			'features/chatNotifications/HANDLE_CHAT_END',
+			chatOnWorkspace,
+			{
+				root: true,
+			},
+		);
 	},
 
 	OPEN_CHAT: async (context, chat) => {

@@ -1,8 +1,8 @@
+import { shallowMount } from '@vue/test-utils';
 import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { createPinia } from 'pinia';
-import { shallowMount } from '@vue/test-utils';
-import { createStore } from 'vuex';
 import { vi } from 'vitest';
+import { createStore } from 'vuex';
 
 import ClientInfo from '../client-info-tab.vue';
 

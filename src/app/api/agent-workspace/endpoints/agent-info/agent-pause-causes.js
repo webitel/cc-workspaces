@@ -1,7 +1,4 @@
-import {
-	getDefaultGetListResponse,
-	getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults/index.js';
+import { getDefaultGetListResponse } from '@webitel/ui-sdk/src/api/defaults/index.js';
 import applyTransform, {
 	merge,
 	mergeEach,

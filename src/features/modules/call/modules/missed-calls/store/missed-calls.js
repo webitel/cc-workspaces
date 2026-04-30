@@ -51,25 +51,17 @@ const actions = {
 	},
 
 	REDIAL: async (context, missed) => {
-		try {
-			await missedAPI.redialToMissed({
-				callId: missed.id,
-			});
-			return context.dispatch('INITIALIZE_MISSED');
-		} catch (err) {
-			throw err;
-		}
+		await missedAPI.redialToMissed({
+			callId: missed.id,
+		});
+		return context.dispatch('INITIALIZE_MISSED');
 	},
 
 	HIDE_MISSED: async (context, missed) => {
-		try {
-			await missedAPI.hideMissedCall({
-				callId: missed.id,
-			});
-			return context.dispatch('INITIALIZE_MISSED');
-		} catch (err) {
-			throw err;
-		}
+		await missedAPI.hideMissedCall({
+			callId: missed.id,
+		});
+		return context.dispatch('INITIALIZE_MISSED');
 	},
 
 	RESET_MISSED_LIST: (context) => {
