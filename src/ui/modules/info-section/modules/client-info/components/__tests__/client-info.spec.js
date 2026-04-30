@@ -13,18 +13,19 @@ vi.mock('../../../../userinfo/userinfoStore', () => ({
 }));
 
 describe('Client Info Tab', () => {
-	it('renders component with chips', async () => {
-		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
-			items: [],
-		});
-
-		const store = createStore({
+	const buildStore = ({ isJob = false, isChatClosed = false } = {}) =>
+		createStore({
 			getters: {
-				'workspace/IS_JOB_WORKSPACE': () => false,
-				'features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED': () => false,
+				'workspace/IS_JOB_WORKSPACE': () => isJob,
+				'features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED': () => isChatClosed,
 			},
 		});
 
+	it('always renders client-info chips', async () => {
+		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
+			items: [],
+		});
+		const store = buildStore();
 		const wrapper = shallowMount(ClientInfo, {
 			props: {
 				task: {},
@@ -47,29 +48,49 @@ describe('Client Info Tab', () => {
 		).toBe(true);
 	});
 
-	//   it('Correctly renders key-value in call variables', () => {
-	//     state.callOnWorkspace.variables = {
-	//       key: 'value',
-	//     };
-	//     const wrapper = shallowMount(ClientInfo, {
-	//       store,
-	//       localVue,
-	//     });
-	//     // const md = wrapper.find('.md');
-	//     // expect(md.find('h3').text()).toBe('key:');
-	//     // expect(md.find('p').text()).toBe('value');
-	//   });
-	//
-	//   it('Correctly renders key-value with MD in call variables', () => {
-	//     state.callOnWorkspace.variables = {
-	//       md: '# h1 Heading',
-	//     };
-	//     const wrapper = shallowMount(ClientInfo, {
-	//       store,
-	//       localVue,
-	//     });
-	//     const md = wrapper.find('.md');
-	//     expect(md.find('h3').text()).toBe('md:');
-	//     expect(md.find('h1').text()).toBe('h1 Heading');
-	//   });
+	it('hides contact block in job workspace', async () => {
+		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
+			items: [],
+		});
+		const store = buildStore({
+			isJob: true,
+		});
+		const wrapper = shallowMount(ClientInfo, {
+			props: {
+				task: {},
+				size: 'md',
+			},
+			global: {
+				plugins: [
+					store,
+					createPinia(),
+				],
+			},
+		});
+		await Promise.resolve();
+		expect(wrapper.find('contact').exists()).toBe(false);
+	});
+
+	it('hides contact block when hideContact flag provided by task', async () => {
+		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
+			items: [],
+		});
+		const store = buildStore();
+		const wrapper = shallowMount(ClientInfo, {
+			props: {
+				task: {
+					hideContact: true,
+				},
+				size: 'md',
+			},
+			global: {
+				plugins: [
+					store,
+					createPinia(),
+				],
+			},
+		});
+		await Promise.resolve();
+		expect(wrapper.find('contact').exists()).toBe(false);
+	});
 });

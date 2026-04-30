@@ -1,10 +1,10 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 import store from '../../../../../app/store';
 import QueueSection from '../the-agent-queue-section.vue';
 
 describe('Queue Section', () => {
-	it('renders a component', () => {
+	it('renders queue section root', () => {
 		const wrapper = shallowMount(QueueSection, {
 			global: {
 				plugins: [
@@ -13,5 +13,7 @@ describe('Queue Section', () => {
 			},
 		});
 		expect(wrapper.exists()).toBeTruthy();
+		expect(wrapper.find('.queue-section').exists()).toBe(true);
+		expect(wrapper.classes()).toContain('workspace-section');
 	});
 });

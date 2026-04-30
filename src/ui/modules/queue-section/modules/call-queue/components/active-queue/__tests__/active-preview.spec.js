@@ -44,7 +44,7 @@ describe('Other UIs', () => {
 		};
 	});
 
-	it('if call has no queue, queue chip is absent', () => {
+	it('does not render queue chips when task queue is missing', () => {
 		task.task = {};
 		const wrapper = shallowMount(ActivePreview, {
 			props: {
@@ -57,6 +57,7 @@ describe('Other UIs', () => {
 			},
 		});
 		expect(wrapper.find('.queue-preview-chips').exists()).toBe(false);
+		expect(wrapper.vm.queueName).toBeUndefined();
 	});
 });
 
@@ -71,7 +72,7 @@ describe('Preview Actions', () => {
 		};
 	});
 
-	it('Shows preview actions on Inbound Ringing', () => {
+	it('shows preview actions on inbound ringing call', () => {
 		const wrapper = mount(ActivePreview, {
 			props: {
 				task,
@@ -95,9 +96,10 @@ describe('Preview Actions', () => {
 				})
 				.exists(),
 		).toBeTruthy();
+		expect(wrapper.vm.isRinging).toBe(true);
 	});
 
-	it('Shows preview actions on Preview Dialer', () => {
+	it('shows preview actions on outbound preview dialer call', () => {
 		task = {
 			state: CallActions.Ringing,
 			direction: CallDirection.Outbound,
@@ -128,9 +130,10 @@ describe('Preview Actions', () => {
 				})
 				.exists(),
 		).toBeTruthy();
+		expect(wrapper.vm.isRinging).toBe(true);
 	});
 
-	it('Hides preview actions on Outbound calls', () => {
+	it('hides preview actions on outbound non-preview calls', () => {
 		task = {
 			direction: CallDirection.Outbound,
 			isHold: false,

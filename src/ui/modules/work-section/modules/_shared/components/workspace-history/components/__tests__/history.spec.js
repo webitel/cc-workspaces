@@ -64,7 +64,7 @@ const buildStore = () =>
 	});
 
 describe('Agent History functionality', () => {
-	it('renders a component', async () => {
+	it('renders history container', async () => {
 		const wrapper = shallowMount(HistoryContainer, {
 			global: {
 				plugins: [
@@ -76,7 +76,7 @@ describe('Agent History functionality', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('Properly displays history item duration', async () => {
+	it('renders call duration in hh:mm:ss format', async () => {
 		const item = {
 			id: '1',
 			direction: CallDirection.Outbound,

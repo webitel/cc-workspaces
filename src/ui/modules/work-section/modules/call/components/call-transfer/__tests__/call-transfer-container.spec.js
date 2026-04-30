@@ -3,14 +3,16 @@ import { mount } from '@vue/test-utils';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 
 describe('CallTransferContainer', () => {
-	it('renders a component', () => {
+	const getData = vi.fn().mockResolvedValue({
+		items: [],
+		next: false,
+	});
+
+	it('renders transfer container root', () => {
 		const wrapper = mount(CallTransferContainer, {
 			props: {
 				type: 'user',
-				getData: vi.fn().mockResolvedValue({
-					items: [],
-					next: false,
-				}),
+				getData,
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
@@ -20,10 +22,7 @@ describe('CallTransferContainer', () => {
 		const wrapper = mount(CallTransferContainer, {
 			props: {
 				type: 'user',
-				getData: vi.fn().mockResolvedValue({
-					items: [],
-					next: false,
-				}),
+				getData,
 			},
 		});
 		wrapper
@@ -42,5 +41,20 @@ describe('CallTransferContainer', () => {
 				extension: '123',
 			},
 		]);
+	});
+
+	it('does not emit transfer when search input is empty', async () => {
+		const wrapper = mount(CallTransferContainer, {
+			props: {
+				type: 'user',
+				getData,
+			},
+		});
+		await wrapper
+			.findComponent({
+				name: 'wt-button',
+			})
+			.trigger('click');
+		expect(wrapper.emitted().transfer).toBeFalsy();
 	});
 });
