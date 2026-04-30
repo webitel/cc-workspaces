@@ -246,6 +246,8 @@ export default {
 	transfer: {
 		selectAgent: 'Оберіть оператора',
 		transfer: 'Перевести',
+		blindTransfer: 'Сліпий перевід',
+		consultTransfer: 'Консультативний перевід',
 	},
 	contacts: {
 		phones: 'Номер телефону | Номери телефонів',

@@ -1,4 +1,4 @@
-interface TransferParams {
+export interface TransferParams {
 	page?: number;
 	size?: number;
 	q?: string;

@@ -242,6 +242,8 @@ export default {
 	transfer: {
 		selectAgent: 'Iltimos, agentni tanlang',
 		transfer: 'Oʻtkazish',
+		blindTransfer: "Ko'r o'tkazma",
+		consultTransfer: "Maslahatli o'tkazma",
 	},
 	contacts: {
 		phones: 'Telefon | Telefonlar',
