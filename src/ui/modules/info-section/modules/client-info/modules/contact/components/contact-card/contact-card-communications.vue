@@ -1,7 +1,7 @@
 <template>
   <wt-expansion-panel
     :size="props.size"
-    collapsed>
+    :collapsed="props.collapsed">
     <template #title>{{ t('infoSec.contacts.communications') }}</template>
     <template #default>
       <div class="contact-card-communications">
@@ -52,6 +52,10 @@ const props = defineProps({
 	linked: {
 		type: Boolean,
 		default: false,
+	},
+	collapsed: {
+		type: Boolean,
+		default: true,
 	},
 });
 

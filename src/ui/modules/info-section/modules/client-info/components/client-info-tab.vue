@@ -18,7 +18,7 @@ import { WebitelLicense } from '@webitel/ui-sdk/modules/Userinfo';
 import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { EngineSystemSettingName } from 'webitel-sdk';
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { useUserAccessControl } from '../../../../../../app/composables/useUserAccessControl';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import Contact from '../modules/contact/components/the-contact.vue';
@@ -59,6 +59,15 @@ const getValueWbtHideContactVariable = async () => {
 	return items?.[0]?.value;
 };
 
+const getValueExpandContactTabsVariable = async () => {
+	const { items } = await ConfigurationAPI.getList({
+		name: [
+			EngineSystemSettingName.ExpandContactTabs,
+		],
+	});
+	return items?.[0]?.value;
+};
+
 const isAllowedContacts = computed(() => {
 	if (isJob.value) return;
 	return (
@@ -71,6 +80,7 @@ const isAllowedContacts = computed(() => {
 
 onMounted(async () => {
 	isHideContact.value = await getValueWbtHideContactVariable();
+	await getValueExpandContactTabsVariable();
 });
 </script>
 
