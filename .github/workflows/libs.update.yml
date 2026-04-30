@@ -13,6 +13,7 @@ on:
           - '@webitel/flow-ui-sdk'
           - '@webitel/styleguide'
           - '@webitel/ui-datalist'
+          - '@webitel/ui-chats'
 
 permissions:
   contents: write
@@ -51,11 +52,12 @@ jobs:
       - name: Commit and push changes
         run: |
           PKG="${{ inputs.package }}"
+          VERSION=$(npm ls "$PKG" --depth=0 --json | jq -r '.dependencies | to_entries[0].value.version')
           git add package.json
           if [ -f package-lock.json ]; then
             git add package-lock.json
           fi
           
           git diff --cached --quiet && exit 0
-          git commit -m "chore(deps): update ${PKG}"
+          git commit -m "chore(deps): update ${PKG} to v${VERSION} by ${{ github.actor }}"
           git push

@@ -238,7 +238,6 @@ export default {
 	history: {
 		today: 'Bugun',
 		yesterday: 'Kecha',
-		openInHistory: 'Tarixda ochish',
 	},
 	transfer: {
 		selectAgent: 'Iltimos, agentni tanlang',

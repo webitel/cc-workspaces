@@ -238,7 +238,6 @@ export default {
 	history: {
 		today: 'Hoy',
 		yesterday: 'Ayer',
-		openInHistory: 'Abrir en Historial',
 	},
 	transfer: {
 		selectAgent: 'Por favor seleccione un agente',

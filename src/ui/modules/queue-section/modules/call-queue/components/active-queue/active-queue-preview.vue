@@ -76,7 +76,7 @@
     v-else-if="size === 'sm'"
     :opened="opened"
     :queue-name="queueName"
-    :member-name="task.member?.name"
+    :member-name="task.displayName"
     @click="$emit('click', task)"
   >
     <template #icon>

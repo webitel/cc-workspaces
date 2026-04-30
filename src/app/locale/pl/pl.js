@@ -237,7 +237,6 @@ export default {
 	history: {
 		today: 'Dzisiaj',
 		yesterday: 'Wczoraj',
-		openInHistory: 'Otwórz w historii',
 	},
 	transfer: {
 		selectAgent: 'Wybierz agenta',

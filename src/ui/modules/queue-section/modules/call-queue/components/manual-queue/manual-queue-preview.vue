@@ -42,6 +42,7 @@
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
     :queue-name="task.queue.name"
+    :member-name="task.displayName"
   >
     <template #icon>
       <wt-icon
