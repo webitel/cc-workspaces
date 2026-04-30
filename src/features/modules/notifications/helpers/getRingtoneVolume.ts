@@ -16,6 +16,6 @@ export function getRingtoneVolume(type: RingtoneType) {
 		const oldVolume = parseFloat(
 			localStorage.getItem('settings/ringtone-volume'),
 		);
-		return isNaN(oldVolume) ? 1.0 : oldVolume;
+		return Number.isNaN(oldVolume) ? 1.0 : oldVolume;
 	}
 }

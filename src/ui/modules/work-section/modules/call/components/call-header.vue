@@ -188,7 +188,11 @@ const setupHotkeys = () => {
 };
 
 onMounted(() => setupHotkeys());
-onUnmounted(() => hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe()));
+onUnmounted(() =>
+	hotkeyUnsubscribers.forEach((unsubscribe) => {
+		unsubscribe();
+	}),
+);
 </script>
 
 <style lang="scss" scoped>

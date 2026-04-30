@@ -35,7 +35,7 @@ import { TransferParams } from '../types/transfer-tabs';
 interface APIResponse {
 	items: ApiUser[];
 	next: boolean;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 interface Props {

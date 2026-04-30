@@ -17,9 +17,7 @@ export function formattingFormBeforeSend(formBody) {
 		if (view.component === 'wt-datetimepicker') {
 			_value = toNaiveUtcTimestamp(value);
 		}
-		return {
-			...form,
-			[id]: _value,
-		};
+		form[id] = _value;
+		return form;
 	}, {});
 }

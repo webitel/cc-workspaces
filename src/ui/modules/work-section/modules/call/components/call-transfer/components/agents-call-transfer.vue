@@ -35,7 +35,7 @@ import { TransferParams } from '../types/transfer-tabs';
 interface APIResponse {
 	items: EngineAgent[];
 	next: boolean;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 const store = useStore();

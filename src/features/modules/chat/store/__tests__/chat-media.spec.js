@@ -1,5 +1,3 @@
-import WorkspaceStates from '../../../../../ui/enums/WorkspaceState.enum';
-import ChatTransferDestination from '../../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import chatModule from '../chat-media.js';
 
 const chatOnWorkspace = {

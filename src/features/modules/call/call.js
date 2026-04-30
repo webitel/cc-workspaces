@@ -1,7 +1,5 @@
 import { QueueTypeName } from '@webitel/ui-sdk/enums';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 
-import i18n from '../../../app/locale/i18n';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
@@ -23,14 +21,10 @@ const getters = {
 	GET_CALL_BY_ID: (state) => (callId) =>
 		state.callList.find((call) => call.id === callId),
 
-	IS_NEW_CALL: (state, getters) =>
-		getters.CALL_ON_WORKSPACE && getters.CALL_ON_WORKSPACE._isNew,
+	IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE?._isNew,
 
 	GET_CURRENT_CALL_DIGITS: (state, getters) => {
-		if (
-			getters.CALL_ON_WORKSPACE.digits &&
-			getters.CALL_ON_WORKSPACE.digits.length
-		) {
+		if (getters.CALL_ON_WORKSPACE.digits?.length) {
 			return getters.CALL_ON_WORKSPACE.digits;
 		}
 		return '';
@@ -93,14 +87,10 @@ const actions = {
 			...CALL_PARAMS,
 			video: context.state.isVideo,
 		};
-		try {
-			await client.call({
-				destination,
-				params,
-			});
-		} catch (err) {
-			throw err;
-		}
+		await client.call({
+			destination,
+			params,
+		});
 	},
 
 	ANSWER: async (context, { callId } = {}) => {

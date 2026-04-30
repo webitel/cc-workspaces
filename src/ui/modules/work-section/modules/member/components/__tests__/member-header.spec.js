@@ -1,4 +1,4 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { vi } from 'vitest';
 import { createStore } from 'vuex';
 

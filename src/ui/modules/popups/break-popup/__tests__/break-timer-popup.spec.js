@@ -1,4 +1,4 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
 
 import TimerPopup from '../break-timer-popup.vue';

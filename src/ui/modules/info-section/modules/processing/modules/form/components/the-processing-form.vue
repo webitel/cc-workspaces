@@ -122,29 +122,32 @@ export default {
 				if (!this.shouldInitComponent(component)) return;
 
 				if (component.view.component === 'wt-select') {
-					return (component.value = this.getSelectInitialValue(
+					component.value = this.getSelectInitialValue(
 						component.view.initialValue,
 						component.view.options,
-					));
+					);
+					return;
 				}
 
 				if (component.view.component === 'wt-datetimepicker') {
-					return (component.value = this.getDatetimepickerInitialValue(
+					component.value = this.getDatetimepickerInitialValue(
 						component.view.initialValue,
 						component.view,
-					));
+					);
+					return;
 				}
 
 				if (component.view.component === 'form-select-case-status') {
-					return (component.value = this.getCaseStatusInitialValue(
+					component.value = this.getCaseStatusInitialValue(
 						component.view.initialValue,
 						component.view.options,
-					));
+					);
+					return;
 				}
 
-				return (component.value = this.parseInitialValueToJson(
+				component.value = this.parseInitialValueToJson(
 					component.view.initialValue,
-				));
+				);
 			});
 
 			this.task.attempt.form.metadata.isInited = true;
@@ -242,7 +245,9 @@ export default {
 	},
 
 	unmounted() {
-		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => {
+			unsubscribe();
+		});
 	},
 };
 </script>

@@ -228,7 +228,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 
 //@author Oles Chorpita
@@ -256,7 +258,8 @@ watch(
 
 			// Detect new messages for non-active chats
 			if (messageLength > prevLength) {
-				return (hasNewChatMessages.value = true);
+				hasNewChatMessages.value = true;
+				return;
 			}
 		});
 	},

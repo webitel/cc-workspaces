@@ -14,7 +14,7 @@ const actions = {
 
 const getters = {
 	IS_VIDEO_CALL_ON_WORKSPACE: (state, getters, rootState, rootGetters) => {
-		return getters['IS_VIDEO_CALL'](
+		return getters.IS_VIDEO_CALL(
 			rootGetters['features/call/CALL_ON_WORKSPACE'],
 		);
 	},

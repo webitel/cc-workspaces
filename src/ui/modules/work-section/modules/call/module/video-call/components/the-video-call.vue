@@ -80,8 +80,9 @@ const openCall = () => {
 	currentTab.value = VideoCallTab.State;
 };
 
-const openTab = (tab) =>
-	(currentTab.value = currentTab.value === tab ? VideoCallTab.State : tab);
+const openTab = (tab) => {
+	currentTab.value = currentTab.value === tab ? VideoCallTab.State : tab;
+};
 
 watch(
 	[

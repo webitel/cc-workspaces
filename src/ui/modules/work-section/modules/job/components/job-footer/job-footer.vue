@@ -47,7 +47,9 @@ export default {
 		this.setupHotkeys();
 	},
 	unmounted() {
-		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => {
+			unsubscribe();
+		});
 	},
 	methods: {
 		setupHotkeys() {
