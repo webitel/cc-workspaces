@@ -70,13 +70,13 @@ const scroll = computed(
 );
 
 const emit = defineEmits([
-  'transfer-complete',
+	'transfer-complete',
 ]);
 
 const transfer = async (item: UserItem = {} as UserItem) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
-  await store.dispatch('features/call/BLIND_TRANSFER', number);
-  emit('transfer-complete');
+	await store.dispatch('features/call/BLIND_TRANSFER', number);
+	emit('transfer-complete');
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {

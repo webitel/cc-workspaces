@@ -77,10 +77,9 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { EngineCommunicationChannels } from 'webitel-sdk';
-import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
-
 import CommunicationsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/communications/CommunicationsAPIRepository';
 import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
+import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 import LabelsAPI from '../../api/LabelsAPI';
 import TimezonesAPI from '../../api/TimezonesAPI';
 

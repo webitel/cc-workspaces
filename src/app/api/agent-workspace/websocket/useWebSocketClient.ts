@@ -1,12 +1,11 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
 import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
-import { Client } from 'webitel-sdk';
 import type { RtpMetrics } from 'webitel-sdk';
+import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
-import websocketErrorEventHandler from './websocketErrorEventHandler';
-
 import { useWebSocketLatency } from './useWebSocketLatency';
+import websocketErrorEventHandler from './websocketErrorEventHandler';
 
 /* ============================================================================
  * Constants

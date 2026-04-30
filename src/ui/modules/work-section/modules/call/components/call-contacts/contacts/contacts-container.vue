@@ -38,10 +38,10 @@
 </template>
 
 <script setup>
+import { ContactsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
 import { configurations } from '@webitel/ui-sdk/api/clients';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
-import { ContactsAPI } from '@webitel/api-services/api';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';

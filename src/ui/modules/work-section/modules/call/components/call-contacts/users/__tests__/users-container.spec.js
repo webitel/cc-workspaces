@@ -1,7 +1,7 @@
-import { createPinia } from 'pinia';
 import { mount, shallowMount } from '@vue/test-utils';
-import { createStore } from 'vuex';
+import { createPinia } from 'pinia';
 import { vi } from 'vitest';
+import { createStore } from 'vuex';
 
 import UsersContainer from '../users-container.vue';
 

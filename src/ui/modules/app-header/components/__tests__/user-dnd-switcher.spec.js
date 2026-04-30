@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
-import { createStore } from 'vuex';
 import { vi } from 'vitest';
+import { createStore } from 'vuex';
 
 import UserStatus from '../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import UserDndSwitcher from '../user-dnd-switcher.vue';

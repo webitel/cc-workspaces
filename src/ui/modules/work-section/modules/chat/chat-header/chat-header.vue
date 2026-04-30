@@ -33,16 +33,14 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
-
+import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
-
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-import ChatHeaderCloseAction from './chat-header-close-action.vue';
 import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { ChatContact } from '../../_shared/types/ChatContact.types';
-import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
+import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
 const props = withDefaults(
 	defineProps<{

@@ -46,6 +46,7 @@ import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
+import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
 import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
@@ -56,7 +57,6 @@ import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
-import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
 
 export default {
 	name: 'TheProcessingForm',

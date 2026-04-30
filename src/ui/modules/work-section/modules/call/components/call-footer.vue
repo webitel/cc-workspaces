@@ -52,14 +52,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted, withDefaults } from 'vue';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed, onMounted, onUnmounted, ref, withDefaults } from 'vue';
 import { useStore } from 'vuex';
-
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 import { CallTab } from '../enums/CallTab.enum';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = withDefaults(
 	defineProps<{

@@ -1,4 +1,4 @@
-import { RingtoneType } from '@webitel/ui-sdk/enums';
+import type { RingtoneType } from '@webitel/ui-sdk/enums';
 
 export function getRingtoneVolume(type: RingtoneType) {
 	try {

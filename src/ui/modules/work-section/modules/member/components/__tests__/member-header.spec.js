@@ -1,6 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { createStore } from 'vuex';
 import { vi } from 'vitest';
+import { createStore } from 'vuex';
 
 import MemberHeader from '../member-header.vue';
 

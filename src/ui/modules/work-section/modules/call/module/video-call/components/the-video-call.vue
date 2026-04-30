@@ -39,9 +39,9 @@ import Contacts from '../../../../call/components/call-contacts/call-contacts-co
 import CallFooter from './../../../components/call-footer.vue';
 import CallHeader from './../../../components/call-header.vue';
 import CallPreview from '../../../components/call-preview.vue';
+import CallState from '../../../components/call-state.vue';
 import { VideoCallTab } from '../enums/VideoCallTab.enum';
 import VideoCallChat from '../module/chat/components/the-video-call-chat.vue';
-import CallState from '../../../components/call-state.vue';
 
 interface Props {
 	size?: ComponentSize;
