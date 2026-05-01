@@ -54,7 +54,7 @@
 		"vidstack": "^1.12.13",
 		"vue": "^3.5.x",
 		"vue-i18n": "^11.x",
-		"vue-router": "^4.x",
+		"vue-router": "^5.x",
 		"vuex": "^4.1.0",
 		"webitel-sdk": "^26.1.17"
 	},
