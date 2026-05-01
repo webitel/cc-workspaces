@@ -33,7 +33,7 @@
 		"@webitel/ui-chats": "^0.1.29",
 		"@webitel/ui-sdk": "~26.4",
 		"autolinker": "^4.x",
-		"axios": "1.13.2",
+		"axios": "1.15.0",
 		"deep-copy": "^1.x",
 		"deep-equal": "^2.x",
 		"deepmerge": "^4.x",
@@ -95,6 +95,6 @@
 	},
 	"overrides": {
 		"vite": "8.0.0-beta.15",
-		"axios": "1.13.2"
+		"axios": "1.15.0"
 	}
 }
