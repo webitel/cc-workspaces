@@ -1,6 +1,11 @@
 <template>
-  <div class="numpad">
-    <call-state />
+  <div
+    class="numpad"
+    :class="{
+        'numpad--new-call': isNewCall,
+      }"
+  >
+    <call-state v-if="!isNewCall" />
     <div class="numpad-numbers-wrapper">
       <wt-input-text
         v-if="isNewCall"
@@ -87,6 +92,10 @@ onActivated(() => {
   .numpad-numbers {
     align-self: flex-end;
   }
+}
+
+.numpad--new-call {
+  justify-content: center;
 }
 
 .numpad-numbers-wrapper {
