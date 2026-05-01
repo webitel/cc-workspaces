@@ -110,12 +110,14 @@ const resetHistoryNumber = () => {
 const groupAndSortByDate = (data) => {
 	const groupedData = {};
 	data.forEach((item) => {
-		const date = new Date(parseInt(item.createdAt));
+		const date = new Date(parseInt(item.createdAt, 10));
 		let dateKey;
 
-		isToday(date)
-			? (dateKey = t('history.today'))
-			: (dateKey = formatDate(item.createdAt));
+		if (isToday(date)) {
+			dateKey = t('history.today');
+		} else {
+			dateKey = formatDate(item.createdAt);
+		}
 
 		if (!groupedData[dateKey]) groupedData[dateKey] = [];
 		groupedData[dateKey].push(item);
@@ -141,8 +143,8 @@ const isToday = (date) => {
 };
 
 const formatDate = (timestamp) => {
-	const date = new Date(parseInt(timestamp));
-	return `${('0' + date.getDate()).slice(-2)}.${('0' + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+	const date = new Date(parseInt(timestamp, 10));
+	return `${(`0${date.getDate()}`).slice(-2)}.${(`0${date.getMonth() + 1}`).slice(-2)}.${date.getFullYear()}`;
 };
 
 const fetchFn = async (argParams) => {

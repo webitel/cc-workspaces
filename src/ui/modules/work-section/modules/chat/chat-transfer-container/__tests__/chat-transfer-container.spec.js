@@ -1,8 +1,7 @@
-import { createPinia } from 'pinia';
 import { shallowMount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
 
-import ChatTransferDestination from '../../enums/ChatTransferDestination.enum.js';
 import ChatTransferContainer from '../chat-transfer-container.vue';
 
 describe('ChatTransferContainer', () => {

@@ -58,18 +58,16 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, defineEmits, defineProps } from 'vue';
 import { storeToRefs } from 'pinia';
-
+import { computed, defineEmits, defineProps } from 'vue';
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
-import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
 import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
+import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
 import MessageText from './components/chat-message-text.vue';
 import MessageTime from './components/chat-message-time.vue';
-
-import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 
 const props = defineProps({
 	message: {

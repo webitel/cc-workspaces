@@ -56,7 +56,7 @@ import { transferParams } from '../../types/transfer-tabs';
 interface CallTransferContainerProps {
 	size?: string;
 	type: string;
-	getData: (params: transferParams) => Promise<any>;
+	getData: (params: transferParams) => Promise<unknown>;
 	showStatus?: boolean;
 	showTeamName?: boolean;
 	showUserNameAvatar?: boolean;
@@ -65,7 +65,7 @@ interface CallTransferContainerProps {
 	presenceStatusField?: string;
 }
 
-type CallTransferContainerEmits = (e: 'transfer', item: any) => void;
+type CallTransferContainerEmits = (e: 'transfer', item: unknown) => void;
 
 const props = withDefaults(defineProps<CallTransferContainerProps>(), {
 	size: ComponentSize.MD,

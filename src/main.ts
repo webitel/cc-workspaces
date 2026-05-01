@@ -110,6 +110,7 @@ const initApp = async () => {
 
 // init IIFE
 (async () => {
+	// biome-ignore lint/suspicious/noImplicitAnyLet: TODO: type config
 	let config;
 	try {
 		setTokenFromUrl();

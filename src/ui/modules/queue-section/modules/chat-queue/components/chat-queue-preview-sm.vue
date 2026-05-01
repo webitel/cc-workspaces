@@ -102,10 +102,9 @@
 <script setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-
+import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
-import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 
 const props = defineProps({
 	task: {

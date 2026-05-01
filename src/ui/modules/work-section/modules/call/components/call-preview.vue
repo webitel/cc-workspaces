@@ -75,7 +75,9 @@ export default {
 	},
 
 	unmounted() {
-		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => {
+			unsubscribe();
+		});
 	},
 };
 </script>

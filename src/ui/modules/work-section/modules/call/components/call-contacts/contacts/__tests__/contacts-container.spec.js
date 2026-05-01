@@ -1,7 +1,7 @@
+import { shallowMount } from '@vue/test-utils';
 import { createPinia } from 'pinia';
-import { mount, shallowMount } from '@vue/test-utils';
-import { createStore } from 'vuex';
 import { vi } from 'vitest';
+import { createStore } from 'vuex';
 
 import ContactsContainer from '../contacts-container.vue';
 

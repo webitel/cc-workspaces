@@ -1,6 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { CallActions, CallDirection } from 'webitel-sdk';
 import { createStore } from 'vuex';
+import { CallActions, CallDirection } from 'webitel-sdk';
 
 import ActivePreview from '../active-queue-preview.vue';
 

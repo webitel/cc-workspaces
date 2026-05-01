@@ -10,7 +10,7 @@ type ScreenshotResult = {
 };
 
 type VideoCallScreenshot = {
-	screenshot: () => Promise<ScreenshotResult | void>;
+	screenshot: () => Promise<ScreenshotResult | undefined>;
 	startRecord?: () => Promise<void> | void;
 	stopRecord?: () => Promise<void> | void;
 	close?: () => void;
@@ -84,10 +84,13 @@ export function useScreenShot() {
 			} else {
 				await call.startRecord?.();
 			}
-		} catch (err: any) {
+		} catch (err: unknown) {
+			const error = err as {
+				message?: string;
+			};
 			eventBus.$emit('notification', {
 				type: 'error',
-				text: err?.message || 'Record error',
+				text: error?.message || 'Record error',
 			});
 		}
 	};
