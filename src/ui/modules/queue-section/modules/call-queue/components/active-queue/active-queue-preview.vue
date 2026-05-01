@@ -187,7 +187,7 @@ export default {
 		},
 
 		displayNumber() {
-			if (this.task.hideNumber) this.task.destination;
+			if (this.task.hideNumber) return this.task.destination;
 
 			//https://webitel.atlassian.net/browse/WTEL-8215
 			return this.normalizePhoneNumber(this.task.displayNumber);
