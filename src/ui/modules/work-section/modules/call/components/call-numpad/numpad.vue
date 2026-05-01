@@ -2,15 +2,13 @@
   <div class="numpad">
     <call-state />
     <div class="numpad-numbers-wrapper">
-      <wt-input-text
-        v-if="isNewCall"
-        ref="number-input"
-        v-model:model-value="call.newNumber"
-        @keyup.enter.native="makeCall"
-      />
-      <dtmf-readonly-input
-        v-else-if="isCallActive"
-      />
+      <div @keydown="handleKeydown">
+        <wt-input-text
+          ref="number-input"
+          v-model:model-value="call.newNumber"
+          @keyup.enter.native="makeCall"
+        />
+      </div>
       <numpad-numbers
         ref="numpad-numbers"
         @input="handleNumpadInput"
@@ -59,6 +57,12 @@ const setInputFocus = () => {
 const handleNumpadInput = (value) => {
 	inputDigit(value);
 	setInputFocus();
+};
+
+const handleKeydown = (event) => {
+  if (!isNewCall.value && (event.key === 'Backspace' || event.key === 'Delete')) {
+    event.preventDefault();
+  }
 };
 
 onMounted(() => {
