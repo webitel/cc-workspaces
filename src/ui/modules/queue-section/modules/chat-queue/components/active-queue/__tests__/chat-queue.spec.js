@@ -16,7 +16,7 @@ const store = createStore({
 });
 
 describe('ChatQueue', () => {
-	it('renders a component', () => {
+	it('renders chat queue root with task queue class', () => {
 		const wrapper = shallowMount(ChatQueue, {
 			global: {
 				plugins: [

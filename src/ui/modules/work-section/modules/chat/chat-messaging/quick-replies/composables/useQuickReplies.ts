@@ -9,7 +9,7 @@ export function useQuickReplies({
 	variables = {},
 }: {
 	emit: EmitFunction;
-	variables?: Record<string, any>;
+	variables?: Record<string, unknown>;
 }) {
 	const search = ref('');
 

@@ -76,7 +76,7 @@
     v-else-if="size === 'sm'"
     :opened="opened"
     :queue-name="queueName"
-    :member-name="task.member?.name"
+    :member-name="task.displayName"
     @click="$emit('click', task)"
   >
     <template #icon>
@@ -187,6 +187,8 @@ export default {
 		},
 
 		displayNumber() {
+			if (this.task.hideNumber) return this.task.destination;
+
 			//https://webitel.atlassian.net/browse/WTEL-8215
 			return this.normalizePhoneNumber(this.task.displayNumber);
 		},

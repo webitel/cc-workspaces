@@ -194,11 +194,15 @@ export default {
 			saveAs(blob, this.label);
 		},
 		handleDrop(e) {
-			Array.from(e.dataTransfer.files).forEach((file) => this.uploadFile(file));
+			Array.from(e.dataTransfer.files).forEach((file) => {
+				this.uploadFile(file);
+			});
 			this.handleDragLeave();
 		},
 		async handleFileInput(event) {
-			Array.from(event.target.files).forEach((file) => this.uploadFile(file));
+			Array.from(event.target.files).forEach((file) => {
+				this.uploadFile(file);
+			});
 			this.$refs['file-input'].value = ''; // reset input value
 		},
 		async uploadFile(uploadedFile) {

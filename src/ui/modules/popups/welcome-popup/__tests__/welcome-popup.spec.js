@@ -3,17 +3,24 @@ import { shallowMount } from '@vue/test-utils';
 import WelcomePopup from '../welcome-popup.vue';
 
 describe('WelcomePopup', () => {
-	it('renders a component', () => {
+	it('renders popup root', () => {
 		const wrapper = shallowMount(WelcomePopup);
 		expect(wrapper.isVisible()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'wt-popup',
+				})
+				.exists(),
+		).toBe(true);
 	});
-	it('calls mic check method at component init', () => {
+	it('calls checkMic at component init', () => {
 		const mock = vi.fn();
 		vi.spyOn(WelcomePopup.methods, 'checkMic').mockImplementationOnce(mock);
 		shallowMount(WelcomePopup);
 		expect(mock).toHaveBeenCalled();
 	});
-	it('makes mic request at component init', () => {
+	it('requests microphone access at component init', () => {
 		const mock = vi.fn();
 		global.navigator.mediaDevices = {
 			getUserMedia: mock,
@@ -21,7 +28,7 @@ describe('WelcomePopup', () => {
 		shallowMount(WelcomePopup);
 		expect(mock).toHaveBeenCalled();
 	});
-	it('calls notifications check method at component init', () => {
+	it('calls checkNotifications at component init', () => {
 		const mock = vi.fn();
 		vi.spyOn(WelcomePopup.methods, 'checkNotifications').mockImplementationOnce(
 			mock,
@@ -29,7 +36,7 @@ describe('WelcomePopup', () => {
 		shallowMount(WelcomePopup);
 		expect(mock).toHaveBeenCalled();
 	});
-	it('makes notifications request at component init', () => {
+	it('requests notification permission at component init', () => {
 		const mock = vi.fn();
 		global.Notification = {
 			requestPermission: mock,
@@ -37,7 +44,7 @@ describe('WelcomePopup', () => {
 		shallowMount(WelcomePopup);
 		expect(mock).toHaveBeenCalled();
 	});
-	it('calls "handleKeypress" method at window keypress event', () => {
+	it('calls handleKeyPress on window keypress event', () => {
 		const mock = vi.fn();
 		vi.spyOn(WelcomePopup.methods, 'handleKeyPress').mockImplementationOnce(
 			mock,
@@ -50,7 +57,7 @@ describe('WelcomePopup', () => {
 		);
 		expect(mock).toHaveBeenCalled();
 	});
-	it('"input" is emitted at window keypress "space" (32) event', () => {
+	it('emits input on space keypress event', () => {
 		const wrapper = shallowMount(WelcomePopup);
 		window.dispatchEvent(
 			new Event('keypress', {

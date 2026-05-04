@@ -15,7 +15,10 @@
 		"utils:up-libs": "npm up @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk && npm run utils:ls-libs",
 		"utils:ln-libs": "npm ln @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk && npm run utils:ls-libs",
 		"utils:ls-libs": "npm ls @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk",
-		"prepare": "husky || true"
+		"prepare": "husky || true",
+		"biome:ci:gh": "biome ci ./src --reporter=github",
+		"test:unit:ci": "vitest run --coverage",
+		"typecheck:ci": "true"
 	},
 	"type": "module",
 	"dependencies": {
@@ -53,7 +56,7 @@
 		"vue-i18n": "^11.x",
 		"vue-router": "^4.x",
 		"vuex": "^4.1.0",
-		"webitel-sdk": "^26.1.16"
+		"webitel-sdk": "^26.1.17"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.14",

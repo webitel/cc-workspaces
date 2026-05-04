@@ -25,50 +25,46 @@ const getters = {
 
 const actions = {
 	OPEN_SESSION: async (context) => {
-		try {
-			// Userinfo is initialized in main.ts, so we don't need to call OPEN_SESSION here
-			await context.dispatch('features/status/SUBSCRIBE_STATUS', null, {
+		// Userinfo is initialized in main.ts, so we don't need to call OPEN_SESSION here
+		await context.dispatch('features/status/SUBSCRIBE_STATUS', null, {
+			root: true,
+		});
+		// then, async open workspace session
+		return Promise.allSettled([
+			context.dispatch('ui/now/SET_NOW_WATCHER', null, {
 				root: true,
-			});
-			// then, async open workspace session
-			return Promise.allSettled([
-				context.dispatch('ui/now/SET_NOW_WATCHER', null, {
-					root: true,
-				}),
-				context.dispatch('features/globals/INIT_GLOBAL_HANDLERS', null, {
-					root: true,
-				}),
-				context.dispatch('features/notifications/INITIALIZE', null, {
-					root: true,
-				}),
-				context.dispatch('features/swController/INITIALIZE', null, {
-					root: true,
-				}),
-				context.dispatch('features/call/SUBSCRIBE_CALLS', null, {
-					root: true,
-				}),
-				context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
-					root: true,
-				}),
-				context.dispatch('features/job/SUBSCRIBE_JOBS', null, {
-					root: true,
-				}),
-				context.dispatch('features/call/missed/LOAD_DATA_LIST', null, {
-					root: true,
-				}),
-				context.dispatch('features/call/manual/INITIALIZE_MANUAL_LIST', null, {
-					root: true,
-				}),
-				context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, {
-					root: true,
-				}),
-				context.dispatch('features/member/LOAD_DATA_LIST', null, {
-					root: true,
-				}),
-			]);
-		} catch (err) {
-			throw err;
-		}
+			}),
+			context.dispatch('features/globals/INIT_GLOBAL_HANDLERS', null, {
+				root: true,
+			}),
+			context.dispatch('features/notifications/INITIALIZE', null, {
+				root: true,
+			}),
+			context.dispatch('features/swController/INITIALIZE', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/SUBSCRIBE_CALLS', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
+				root: true,
+			}),
+			context.dispatch('features/job/SUBSCRIBE_JOBS', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/missed/LOAD_DATA_LIST', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+			context.dispatch('features/member/LOAD_DATA_LIST', null, {
+				root: true,
+			}),
+		]);
 	},
 
 	CLOSE_SESSION: (context) =>

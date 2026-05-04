@@ -3,60 +3,120 @@ import { createStore } from 'vuex';
 
 import ChatHeader from '../chat-header.vue';
 
-const store = createStore({
-	modules: {
-		chat: {
-			namespaced: true,
-			getters: {
-				ALLOW_CHAT_CLOSE: () => true,
-			},
-		},
-	},
-});
-
 describe('Chat Header', () => {
-	const mountOptions = {
+	const buildStore = ({ allowTransfer = true, allowClose = true } = {}) =>
+		createStore({
+			modules: {
+				ui: {
+					namespaced: true,
+					modules: {
+						infoSec: {
+							namespaced: true,
+							modules: {
+								client: {
+									namespaced: true,
+									modules: {
+										contact: {
+											namespaced: true,
+											getters: {
+												CONTACT_LINK: () => () => '#',
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				features: {
+					namespaced: true,
+					modules: {
+						chat: {
+							namespaced: true,
+							getters: {
+								ALLOW_CHAT_CLOSE: () => allowClose,
+								ALLOW_CHAT_TRANSFER: () => allowTransfer,
+								CHAT_ON_WORKSPACE: () => ({
+									members: [],
+									displayNumber: '123',
+								}),
+							},
+							actions: {
+								CLOSE: vi.fn(),
+							},
+						},
+					},
+				},
+			},
+		});
+
+	let store;
+
+	beforeEach(() => {
+		store = buildStore();
+		vi.spyOn(store, 'dispatch');
+	});
+
+	const getMountOptions = (customStore = store) => ({
 		global: {
 			plugins: [
-				store,
+				customStore,
 			],
 		},
-	};
+		props: {
+			currentTab: 'chat-messaging',
+		},
+	});
 	it('renders a component', () => {
-		const wrapper = shallowMount(ChatHeader, mountOptions);
+		const wrapper = shallowMount(ChatHeader, getMountOptions());
 		expect(wrapper.exists()).toBe(true);
 	});
 
 	it('$emits openTab event at transfer button click', () => {
-		const wrapper = mount(ChatHeader, {
-			...mountOptions,
-			computed: {
-				isTransferAction() {
-					return true;
-				},
-			},
-		});
+		const wrapper = mount(ChatHeader, getMountOptions());
 		wrapper
 			.findAllComponents({
-				name: 'wt-rounded-action',
+				name: 'wt-button',
 			})
-			.find((wrapper) => wrapper.props('icon') === 'chat-transfer--filled')
+			.find((w) => w.props('icon') === 'chat-transfer--filled')
 			.vm.$emit('click');
 		expect(wrapper.emitted().openTab[0]).toEqual([
 			'transfer',
 		]);
 	});
 
-	it('calls close() method at close chat button click', () => {
-		const closeMock = vi
-			.spyOn(ChatHeader.methods, 'close')
-			.mockImplementation(() => {});
-		const wrapper = mount(ChatHeader, mountOptions);
+	it('dispatches CLOSE at close action click', () => {
+		const wrapper = mount(ChatHeader, getMountOptions());
 		wrapper
 			.findComponent({
 				name: 'chat-header-close-action',
 			})
 			.vm.$emit('click');
-		expect(closeMock).toHaveBeenCalled();
+		expect(store.dispatch).toHaveBeenCalledWith('features/chat/CLOSE');
+	});
+
+	it('marks transfer action as active on transfer tab', () => {
+		const wrapper = mount(ChatHeader, {
+			...getMountOptions(),
+			props: {
+				currentTab: 'chat-transfer-container',
+			},
+		});
+		const transferBtn = wrapper
+			.findAllComponents({
+				name: 'wt-button',
+			})
+			.find((w) => w.props('icon') === 'chat-transfer--filled');
+		expect(transferBtn.props('variant')).toBe('active');
+	});
+
+	it('hides transfer button when ALLOW_CHAT_TRANSFER is false', () => {
+		const disabledTransferStore = buildStore({
+			allowTransfer: false,
+		});
+		const wrapper = mount(ChatHeader, {
+			...getMountOptions(disabledTransferStore),
+		});
+		expect(wrapper.vm.isTransferAction).toBe(false);
 	});
 });

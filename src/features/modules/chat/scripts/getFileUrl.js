@@ -3,7 +3,7 @@ export default function ({ id, type }) {
 
 	let link = `${import.meta.env.VITE_API_URL}/storage/file/${id}/download?access_token=${token}`;
 
-	if (type && type.includes('source')) {
+	if (type?.includes('source')) {
 		const source = type.match(/source=[^;]+/)[0];
 		link = `${link}&${source}`;
 	}

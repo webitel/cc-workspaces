@@ -40,14 +40,13 @@
 </template>
 
 <script setup lang="ts">
+import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
-import { useStore } from 'vuex';
-import { WtExpansionCard, WtAvatar } from '@webitel/ui-sdk/components';
-import { ChannelType, CallDirection } from 'webitel-sdk';
 import { useI18n } from 'vue-i18n';
-
-import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
+import { useStore } from 'vuex';
+import { CallDirection, ChannelType } from 'webitel-sdk';
 import type { ChatContact } from '../../types/ChatContact.types';
+import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
 const store = useStore();
 

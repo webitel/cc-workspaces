@@ -21,10 +21,10 @@ import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import { ChatAction, ChatContainer } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
-import { storeToRefs } from 'pinia';
 import { useUserinfoStore } from '../../../../../../../../userinfo/userinfoStore';
 
 const props = withDefaults(
