@@ -1,8 +1,9 @@
 import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
-import webSocketClientController from '../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import { useWebSocketClient } from '../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import globalsModule from '../global-handlers';
 
 const mockSocket = new MockSocket();
+const webSocketClientController = useWebSocketClient();
 
 vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(
 	() => mockSocket,

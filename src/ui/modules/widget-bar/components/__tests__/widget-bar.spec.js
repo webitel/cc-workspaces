@@ -15,7 +15,7 @@ const store = createStore({
 });
 
 describe('WidgetBar', () => {
-	it('renders a component', () => {
+	it('renders widget bar root and controls', () => {
 		const wrapper = shallowMount(WidgetBar, {
 			global: {
 				plugins: [
@@ -28,5 +28,7 @@ describe('WidgetBar', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.widget-bar').exists()).toBe(true);
+		expect(wrapper.find('.widgets-controls').exists()).toBe(true);
 	});
 });

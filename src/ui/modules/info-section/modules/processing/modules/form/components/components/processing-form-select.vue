@@ -32,9 +32,10 @@ const trackBy = computed(() => {
 
 onMounted(() => {
 	if (Array.isArray(props.value)) {
-		return (initialValue.value = (props.value as never[]).map((value) => {
+		initialValue.value = (props.value as never[]).map((value) => {
 			return props.options.find((option) => option.value === value) || value;
-		}));
+		});
+		return;
 	}
 	initialValue.value =
 		props.options.find((option) => option.value === props.value) || props.value;
@@ -47,14 +48,22 @@ const isPrimitiveArray = (
 ): value is (string | number | boolean)[] =>
 	Array.isArray(value) && value.some((item) => typeof item !== 'object');
 
+type SelectOption = {
+	value: unknown;
+	[key: string]: unknown;
+};
+
 // @author @stanislav-kozak
 // This function maps an array of primitive values to their corresponding options
-const mapToOptions = (value: (string | number | boolean)[], options: any[]) =>
+const mapToOptions = (
+	value: (string | number | boolean)[],
+	options: SelectOption[],
+) =>
 	value.map((item) => options.find((option) => option.value === item) || item);
 
 // @author @stanislav-kozak
 // This function finds the first option that matches the value
-const findMatchingOption = (value: unknown, options: any[]) =>
+const findMatchingOption = (value: unknown, options: SelectOption[]) =>
 	options.find((option) => option.value === value);
 
 watch(

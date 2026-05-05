@@ -1,10 +1,11 @@
 import { ChatActions } from 'webitel-sdk';
 
 import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
-import webSocketClientController from '../../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import { useWebSocketClient } from '../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import chatModule from '../chat';
 
 let mockSocket = new MockSocket();
+const webSocketClientController = useWebSocketClient();
 
 vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(
 	() => mockSocket,
@@ -12,6 +13,7 @@ vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(
 
 const chat = {
 	id: '1',
+	channelId: '1',
 	messages: [],
 };
 
@@ -28,6 +30,9 @@ describe('features/chat store client handlers: actions', () => {
 		actions: {},
 		getters: {
 			IS_MY_MESSAGE: () => false,
+			CHAT_ON_WORKSPACE: {
+				channelId: '1',
+			},
 		},
 	};
 

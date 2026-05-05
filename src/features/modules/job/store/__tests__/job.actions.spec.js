@@ -36,9 +36,36 @@ describe('features/job store: actions', () => {
 		);
 	});
 
-	it('REMOVE_JOB dispatches RESET_WORKSPACE mutation if passed job is equal to job on workspace', () => {
-		jobModule.actions.REMOVE_JOB(context, job);
+	it('REMOVE_JOB dispatches RESET_WORKSPACE mutation if passed job is equal to job on workspace', async () => {
+		await jobModule.actions.REMOVE_JOB(context, job);
+		expect(context.commit).toHaveBeenCalledWith('REMOVE_JOB', job);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/jobNotifications/HANDLE_JOB_END',
+			job,
+			{
+				root: true,
+			},
+		);
 		expect(context.dispatch).toHaveBeenCalledWith('RESET_WORKSPACE');
+		expect(context.dispatch.mock.calls[0]).toEqual([
+			'features/jobNotifications/HANDLE_JOB_END',
+			job,
+			{
+				root: true,
+			},
+		]);
+		expect(context.dispatch.mock.calls[1]).toEqual([
+			'RESET_WORKSPACE',
+		]);
+	});
+
+	it('REMOVE_JOB does not dispatch RESET_WORKSPACE if removed job is not on workspace', async () => {
+		const anotherJob = {
+			id: '2',
+		};
+		await jobModule.actions.REMOVE_JOB(context, anotherJob);
+		expect(context.commit).toHaveBeenCalledWith('REMOVE_JOB', anotherJob);
+		expect(context.dispatch).not.toHaveBeenCalledWith('RESET_WORKSPACE');
 	});
 
 	it('RESET_WORKSPACE dispatches RESET_WORKSPACE_STATE action with passed null as param', () => {

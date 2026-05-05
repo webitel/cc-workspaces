@@ -203,7 +203,7 @@ const headers = computed<WtTableHeader[]>(() => {
 		...column,
 		value: column.header,
 		text: column.name,
-		width: column.width ? column.width + 'px' : '',
+		width: column.width ? `${column.width}px` : '',
 	}));
 });
 

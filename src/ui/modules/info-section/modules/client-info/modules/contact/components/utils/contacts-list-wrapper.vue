@@ -81,12 +81,8 @@ const isEmptyContact = computed(
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
 function linkedContact() {
-	try {
-		emit('link', currentContact.value);
-		index.value = 0;
-	} catch (err) {
-		throw err;
-	}
+	emit('link', currentContact.value);
+	index.value = 0;
 }
 
 function next() {
@@ -103,7 +99,9 @@ function add() {
 
 watch(
 	() => props.list,
-	() => (index.value = 0),
+	() => {
+		index.value = 0;
+	},
 );
 </script>
 

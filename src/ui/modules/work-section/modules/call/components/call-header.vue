@@ -123,9 +123,9 @@ import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
-import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 
 const props = withDefaults(
 	defineProps<{
@@ -188,7 +188,11 @@ const setupHotkeys = () => {
 };
 
 onMounted(() => setupHotkeys());
-onUnmounted(() => hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe()));
+onUnmounted(() =>
+	hotkeyUnsubscribers.forEach((unsubscribe) => {
+		unsubscribe();
+	}),
+);
 </script>
 
 <style lang="scss" scoped>

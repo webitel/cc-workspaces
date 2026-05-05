@@ -2,7 +2,7 @@
   <task-footer>
     <wt-button
       v-if="!isVideoCall"
-      :variant="isOnNumpad ? 'active' : 'outlined'"
+      :variant="isOnNumpad ? ButtonVariant.ACTIVE : ButtonVariant.OUTLINED"
       :size="size"
       class="call-footer-action"
       color="secondary"
@@ -17,7 +17,7 @@
       :icon="isVideoMuted ? 'video-cam-off' : 'video-cam'"
       class="call-footer-action"
       color="secondary"
-      variant="outlined"
+      :variant="isVideoMuted ? ButtonVariant.ACTIVE : ButtonVariant.OUTLINED"
       rounded
       wide
       @click="toggleVideo"
@@ -26,7 +26,7 @@
       :class="{
           'hidden': !isHold,
         }"
-      :variant="isOnHold ? 'active' : 'outlined'"
+      :variant="isOnHold ? ButtonVariant.ACTIVE : ButtonVariant.OUTLINED"
       :size="size"
       class="call-action"
       color="secondary"
@@ -40,7 +40,7 @@
           'hidden': !isMuted,
         }"
       :icon="isOnMuted ? 'mic-muted' : 'mic'"
-      :variant="isOnMuted ? 'active' : 'outlined'"
+      :variant="isOnMuted ? ButtonVariant.ACTIVE : ButtonVariant.OUTLINED"
       :size="size"
       class="call-footer-action call-footer-action__mic"
       color="secondary"
@@ -52,14 +52,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted, withDefaults } from 'vue';
+import { ButtonVariant, ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed, onMounted, onUnmounted, ref, withDefaults } from 'vue';
 import { useStore } from 'vuex';
-
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import TaskFooter from '../../_shared/components/task-footer/task-footer.vue';
 import { CallTab } from '../enums/CallTab.enum';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = withDefaults(
 	defineProps<{
@@ -112,7 +111,9 @@ const setupHotkeys = () => {
 onMounted(setupHotkeys);
 
 onUnmounted(() => {
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 </script>
 

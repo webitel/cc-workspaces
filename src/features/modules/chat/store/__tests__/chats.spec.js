@@ -196,7 +196,7 @@ describe('features/chat store: actions', () => {
 			chat: chatOnWorkspace,
 		});
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'features/notifications/HANDLE_CHAT_EVENT',
+			'features/chatNotifications/HANDLE_CHAT_EVENT',
 			{
 				action,
 				chat: chatOnWorkspace,

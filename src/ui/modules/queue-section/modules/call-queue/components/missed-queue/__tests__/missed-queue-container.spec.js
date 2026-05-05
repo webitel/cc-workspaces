@@ -7,7 +7,7 @@ describe('MissedQueueContainer', () => {
 		.spyOn(MissedQueueContainer.methods, 'initializeMissed')
 		.mockImplementation(() => {});
 
-	it('renders a component', () => {
+	it('renders missed queue container root', () => {
 		const wrapper = shallowMount(MissedQueueContainer, {
 			computed: {
 				missedList: () => [
@@ -18,8 +18,15 @@ describe('MissedQueueContainer', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'task-queue-container',
+				})
+				.exists(),
+		).toBe(true);
 	});
-	it('calls initializeMissed on created', () => {
+	it('calls initializeMissed on created hook', () => {
 		initializeMissedMock.mockClear();
 		shallowMount(MissedQueueContainer, {
 			computed: {
@@ -60,6 +67,9 @@ describe('MissedQueueContainer', () => {
 			})
 			.vm.$emit('call');
 		expect(mock).toHaveBeenCalled();
+		expect(mock).toHaveBeenCalledWith({
+			id: 'jest',
+		});
 	});
 
 	it('calls hideMissed on hide preview event', () => {
@@ -89,5 +99,8 @@ describe('MissedQueueContainer', () => {
 			})
 			.vm.$emit('hide');
 		expect(mock).toHaveBeenCalled();
+		expect(mock).toHaveBeenCalledWith({
+			id: 'jest',
+		});
 	});
 });

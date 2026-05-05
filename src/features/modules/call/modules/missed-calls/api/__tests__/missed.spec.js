@@ -24,21 +24,22 @@ describe('missedAPI', () => {
 
 		const missedAPI = (await import('../missed.js')).default;
 
-		await missedAPI.redialToMissed({
+		const response = await missedAPI.redialToMissed({
 			callId,
 		});
 
 		expect(JSON.parse(request.mock.lastCall[0].data)).toEqual({
 			callId,
 		});
+		expect(response).toEqual({});
 	});
 
-	it('hideMissedCall sends request with passed callId and hide_missed: true param', async () => {
+	it('hideMissedCall sends callId and hide_missed flag and returns data', async () => {
 		const callId = '123';
 
 		const missedAPI = (await import('../missed.js')).default;
 
-		await missedAPI.hideMissedCall({
+		const response = await missedAPI.hideMissedCall({
 			callId,
 		});
 
@@ -46,5 +47,6 @@ describe('missedAPI', () => {
 			id: callId,
 			hide_missed: true,
 		});
+		expect(response).toEqual({});
 	});
 });

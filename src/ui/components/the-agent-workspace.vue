@@ -51,10 +51,10 @@
   setup
   lang="ts"
 >
+import { storeToRefs } from 'pinia';
 import { computed, onUnmounted, provide, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { storeToRefs } from 'pinia';
 
 import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
 import { usePanelSizeController } from '../composables/usePanelSizeController';
