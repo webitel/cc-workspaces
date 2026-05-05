@@ -112,10 +112,13 @@ const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
 const initSession = async () => {
-  subscribe(loadFlowsList);
-	try {
-		isInitLoading.value = true;
+  try {
+    isInitLoading.value = true;
 		await openSession();
+
+    // Periodically refresh flows list to keep it up-to-date during the session
+    subscribe(loadFlowsList);
+
 		if (route.query.failureRefresh) {
 			router.push({
 				...router.currentRoute,
