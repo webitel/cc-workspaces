@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index';
 import { WtPopover } from '@webitel/ui-sdk/components';
+import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
