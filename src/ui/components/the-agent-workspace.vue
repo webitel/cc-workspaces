@@ -51,11 +51,11 @@
   setup
   lang="ts"
 >
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 import { storeToRefs } from 'pinia';
 import { computed, onUnmounted, provide, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-
 import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
 import { usePanelSizeController } from '../composables/usePanelSizeController';
 import CcHeader from '../modules/app-header/components/app-header.vue';
@@ -69,7 +69,6 @@ import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
-import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 
 const store = useStore();
 const route = useRoute();
@@ -96,7 +95,7 @@ const isDescTrackAuthSuccessPopup = ref(false);
 const userinfoStore = useUserinfoStore();
 
 const { subscribe } = useCachedInterval({
-  timeout: 5 * 1000,
+	timeout: 5 * 1000,
 });
 
 const isDescTrackAuthPopupsAllow = computed(
@@ -112,12 +111,12 @@ const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
 const initSession = async () => {
-  try {
-    isInitLoading.value = true;
+	try {
+		isInitLoading.value = true;
 		await openSession();
 
-    // Periodically refresh flows list to keep it up-to-date during the session
-    subscribe(loadFlowsList);
+		// Periodically refresh flows list to keep it up-to-date during the session
+		subscribe(loadFlowsList);
 
 		if (route.query.failureRefresh) {
 			router.push({
@@ -149,7 +148,7 @@ const preventDrop = (event: DragEvent) => {
 };
 
 const loadFlowsList = async () => {
-  await store.dispatch('ui/infoSec/flows/LOAD_FLOWS_LIST');
+	await store.dispatch('ui/infoSec/flows/LOAD_FLOWS_LIST');
 };
 
 watch(isDescTrackAuthErrorPopup, () => {
