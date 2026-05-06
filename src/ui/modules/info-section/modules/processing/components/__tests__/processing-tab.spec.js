@@ -11,10 +11,18 @@ describe('ProcessingTab', () => {
 		task,
 	};
 
-	it('renders a component', () => {
+	it('renders reporting view when task form is absent', () => {
 		const wrapper = shallowMount(ProcessingTab, {
 			props,
 		});
 		expect(wrapper.isVisible()).toBe(true);
+		expect(wrapper.find('.processing').exists()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'the-reporting',
+				})
+				.exists(),
+		).toBe(true);
 	});
 });

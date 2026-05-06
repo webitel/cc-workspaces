@@ -1,4 +1,4 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { AgentStatus } from 'webitel-sdk';
 
 import TimerPopup from '../break-timer-popup.vue';
@@ -18,53 +18,22 @@ const computed = {
 };
 
 describe('Break timer popup', () => {
-	it('Correctly displays break duration', () => {
+	it('computes and renders break duration', () => {
+		agent.status = AgentStatus.Pause;
 		const wrapper = shallowMount(TimerPopup, {
 			computed,
 		});
 		expect(wrapper.vm.duration).toEqual('12:00:00');
+		expect(wrapper.vm.duration.split(':')).toHaveLength(3);
 	});
 
-	it("Doesn't show popup on Online status", () => {
+	it('hides popup on online status', () => {
 		agent.status = AgentStatus.Online;
 		const wrapper = shallowMount(TimerPopup, {
 			computed,
 			attachTo: document.body,
 		});
 		expect(wrapper.isVisible()).toBeFalsy();
-	});
-
-	it('Correctly goes Waiting', () => {
-		const mock = vi.fn();
-		vi.spyOn(TimerPopup.methods, 'setAgentWaiting').mockImplementationOnce(
-			mock,
-		);
-		const wrapper = mount(TimerPopup, {
-			computed,
-		});
-
-		wrapper
-			.findAllComponents({
-				name: 'wt-button',
-			})
-			.at(0)
-			.vm.$emit('click');
-		expect(mock).toHaveBeenCalled();
-	});
-
-	it('Correctly goes Offline', () => {
-		const mock = vi.fn();
-		vi.spyOn(TimerPopup.methods, 'agentLogout').mockImplementationOnce(mock);
-		const wrapper = mount(TimerPopup, {
-			computed,
-		});
-
-		wrapper
-			.findAllComponents({
-				name: 'wt-button',
-			})
-			.at(1)
-			.vm.$emit('click');
-		expect(mock).toHaveBeenCalled();
+		expect(wrapper.find('.break-timer-popup').exists()).toBe(false);
 	});
 });

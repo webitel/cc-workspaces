@@ -1,5 +1,3 @@
-import WorkspaceStates from '../../../../../ui/enums/WorkspaceState.enum';
-import ChatTransferDestination from '../../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import chatModule from '../chat-media.js';
 
 const chatOnWorkspace = {
@@ -111,9 +109,11 @@ describe('features/chat/chatMedia store: actions', () => {
 
 	it('PAUSE_ALL_CHAT_PLAYERS_EXCEPT triggers player.pause() on all players in chatOnWorkspace (except the passed one)', () => {
 		const player = {
+			id: '1',
 			pause: vi.fn(),
 		};
 		const player2 = {
+			id: '2',
 			pause: vi.fn(),
 		};
 		chatOnWorkspace.players = [

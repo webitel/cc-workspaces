@@ -192,7 +192,9 @@ async function loadMessagesList() {
 	await nextTick(() => {
 		scrollToBottom();
 	});
-	setTimeout(() => (showAllMessages.value = true), 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+	setTimeout(() => {
+		showAllMessages.value = true;
+	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
 
 onMounted(() => {

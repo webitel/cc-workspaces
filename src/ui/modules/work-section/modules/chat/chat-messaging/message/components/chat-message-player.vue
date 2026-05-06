@@ -30,19 +30,16 @@
 </template>
 
 <script setup lang="ts">
-import { WtVidstackPlayer, WtPlayer } from '@webitel/ui-sdk/components';
+import { type ChatMessageFile, useChatMessageFile } from '@webitel/ui-chats/ui';
+import { WtPlayer, WtVidstackPlayer } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
-
-import { type ChatMessageFile, useChatMessageFile } from '@webitel/ui-chats/ui';
 
 const props = defineProps<{
 	file: ChatMessageFile;
 }>();
 
-const emit = defineEmits<{
-	(e: 'initialized', player: unknown): void;
-}>();
+const emit = defineEmits<(e: 'initialized', player: unknown) => void>();
 
 const { media } = useChatMessageFile(props.file);
 

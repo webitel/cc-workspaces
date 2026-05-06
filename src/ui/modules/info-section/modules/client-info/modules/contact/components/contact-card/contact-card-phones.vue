@@ -53,9 +53,9 @@
 </template>
 
 <script setup>
+import { CommunicationsAPI } from '@webitel/api-services/api';
 import { WtInlineAddPanel } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { CommunicationsAPI } from '@webitel/api-services/api';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';

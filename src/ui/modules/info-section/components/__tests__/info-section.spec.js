@@ -32,5 +32,13 @@ describe('InfoSection', () => {
 			},
 		});
 		expect(wrapper.isVisible()).toBe(true);
+		expect(wrapper.find('.info-section').exists()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'the-agent-info-nav-panel',
+				})
+				.exists(),
+		).toBe(true);
 	});
 });

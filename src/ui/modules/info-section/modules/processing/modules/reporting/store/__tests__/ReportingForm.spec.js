@@ -23,7 +23,7 @@ describe('Reporting class', () => {
 		reporting = new ReportingForm(task);
 	});
 
-	it('generateReporting() correctly generates simple reporting', () => {
+	it('generateReporting returns base payload when schedule flag is disabled', () => {
 		reporting.isScheduleCall = false;
 		const form = {
 			success: true,
@@ -34,21 +34,29 @@ describe('Reporting class', () => {
 		expect(reportingResult).toEqual(form);
 	});
 
-	it(`if isScheduleCall state variable is true, generateReporting() includes
-   nextDistributeAt value in result`, () => {
+	it('generateReporting includes naive nextDistributeAt when schedule flag enabled', () => {
 		const nextDistributeAt = Date.now();
 
 		reporting.nextDistributeAt = nextDistributeAt;
 
 		const nextDistributeAtNaive = toNaiveUtcTimestamp(nextDistributeAt);
 
-		const finalReporting = {
+		const expectedReporting = {
 			success: true,
 			description: '',
 			nextDistributeAt: nextDistributeAtNaive,
 		};
-		Object.assign(reporting, finalReporting);
+		Object.assign(reporting, {
+			success: true,
+			description: '',
+			nextDistributeAt,
+			isScheduleCall: true,
+		});
 		const result = reporting.generateReporting();
-		expect(result).toEqual(finalReporting);
+		expect(result).toEqual(expectedReporting);
+	});
+
+	it('isScheduleCall is enabled by default', () => {
+		expect(reporting.isScheduleCall).toBe(true);
 	});
 });

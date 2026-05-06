@@ -52,17 +52,20 @@ const setItemRef = (el: HTMLElement | null, index: number) => {
 const moveDown = () => {
 	// If click on the arrow down we assign the value +1
 	if (activeIndex.value < props.list.length - 1) {
-		return (activeIndex.value += 1);
+		activeIndex.value += 1;
+		return;
 	}
 };
 
 const moveUp = () => {
 	// If no item is active, set the first one as active
 	if (activeIndex.value === -1) {
-		return (activeIndex.value = 0);
+		activeIndex.value = 0;
+		return;
 		// If click on the arrow up we assign the value -1
 	} else if (activeIndex.value > 0) {
-		return (activeIndex.value -= 1);
+		activeIndex.value -= 1;
+		return;
 	}
 };
 

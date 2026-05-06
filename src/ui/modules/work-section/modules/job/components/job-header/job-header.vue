@@ -11,10 +11,10 @@
 </template>
 
 <script setup lang="ts">
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed } from 'vue';
 import { getQueueName } from '../../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
-import { computed } from 'vue';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 import TaskHeaderExpansionCard from '../../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 
 const props = withDefaults(

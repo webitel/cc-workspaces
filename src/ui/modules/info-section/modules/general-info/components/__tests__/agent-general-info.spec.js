@@ -34,7 +34,7 @@ const store = createStore({
 });
 
 describe('General Info Tab', () => {
-	it('renders a component', () => {
+	it('renders general info container and score block', () => {
 		const wrapper = shallowMount(GeneralInfoTab, {
 			global: {
 				plugins: [
@@ -43,5 +43,13 @@ describe('General Info Tab', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.general-info').exists()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'agent-score',
+				})
+				.exists(),
+		).toBe(true);
 	});
 });

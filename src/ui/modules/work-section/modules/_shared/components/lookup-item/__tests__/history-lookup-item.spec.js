@@ -1,17 +1,38 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 
 import HistoryLookupItem from '../history-lookup-item.vue';
 
 describe('HistoryLookupItem', () => {
 	let item;
+	let callAction;
+	let store;
 
 	beforeEach(() => {
+		callAction = vi.fn();
+		store = createStore({
+			modules: {
+				features: {
+					namespaced: true,
+					modules: {
+						call: {
+							namespaced: true,
+							actions: {
+								CALL: callAction,
+							},
+						},
+					},
+				},
+			},
+		});
 		item = {
+			id: '1',
 			direction: CallDirection.Outbound,
 			to: {},
 			from: {},
 			duration: 60,
+			createdAt: Date.now(),
 		};
 	});
 
@@ -19,6 +40,11 @@ describe('HistoryLookupItem', () => {
 		const wrapper = shallowMount(HistoryLookupItem, {
 			props: {
 				item,
+			},
+			global: {
+				plugins: [
+					store,
+				],
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
@@ -29,6 +55,11 @@ describe('HistoryLookupItem', () => {
 			props: {
 				item,
 			},
+			global: {
+				plugins: [
+					store,
+				],
+			},
 		});
 		wrapper.trigger('click');
 		expect(wrapper.emitted().input[0]).toEqual([
@@ -37,17 +68,17 @@ describe('HistoryLookupItem', () => {
 	});
 
 	it('calls to inbound call number', () => {
-		const mock = vi.fn();
 		item.direction = CallDirection.Inbound;
 		item.from.number = 'true';
 		item.to.number = 'false';
-
-		vi.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(
-			mock,
-		);
 		const wrapper = mount(HistoryLookupItem, {
 			props: {
 				item,
+			},
+			global: {
+				plugins: [
+					store,
+				],
 			},
 		});
 		wrapper
@@ -55,23 +86,23 @@ describe('HistoryLookupItem', () => {
 				name: 'wt-rounded-action',
 			})
 			.vm.$emit('click');
-		expect(mock).toHaveBeenCalledWith({
+		expect(callAction).toHaveBeenCalledWith(expect.anything(), {
 			number: 'true',
 		});
 	});
 
 	it('calls to outbound call number', () => {
-		const mock = vi.fn();
 		item.direction = CallDirection.Outbound;
 		item.from.number = 'false';
 		item.to.number = 'true';
-
-		vi.spyOn(HistoryLookupItem.methods, 'makeCall').mockImplementationOnce(
-			mock,
-		);
 		const wrapper = mount(HistoryLookupItem, {
 			props: {
 				item,
+			},
+			global: {
+				plugins: [
+					store,
+				],
 			},
 		});
 		wrapper
@@ -79,7 +110,7 @@ describe('HistoryLookupItem', () => {
 				name: 'wt-rounded-action',
 			})
 			.vm.$emit('click');
-		expect(mock).toHaveBeenCalledWith({
+		expect(callAction).toHaveBeenCalledWith(expect.anything(), {
 			number: 'true',
 		});
 	});

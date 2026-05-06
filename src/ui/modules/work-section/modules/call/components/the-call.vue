@@ -94,8 +94,9 @@ const openNumpadTab = () => {
 
 //toggle for open numpad if you click on tab button that is already open
 // https://webitel.atlassian.net/browse/WTEL-7773
-const openTabs = (tab) =>
-	(currentTab.value = currentTab.value === tab ? CallTab.Numpad : tab);
+const openTabs = (tab) => {
+	currentTab.value = currentTab.value === tab ? CallTab.Numpad : tab;
+};
 
 const setupHotkeys = () => {
 	const subscribers = [
@@ -118,7 +119,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 </script>
 

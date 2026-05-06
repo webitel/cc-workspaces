@@ -27,8 +27,8 @@
     setup
     lang="ts"
 >
-import { WtSelect, WtIndicator } from '@webitel/ui-sdk/components';
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
+import { WtIndicator, WtSelect } from '@webitel/ui-sdk/components';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{

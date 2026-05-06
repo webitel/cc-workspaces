@@ -45,6 +45,7 @@
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
+    :member-name="displayName"
     class="missed-queue-preview"
   >
     <template #icon>

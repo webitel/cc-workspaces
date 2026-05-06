@@ -1,11 +1,11 @@
-import webSocketClientController from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
-import instance from '../../../app/api/instance';
+import { useWebSocketClient } from '../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import WorkspaceStates from '../../enums/WorkspaceState.enum';
 import workspaceModule from '../agent-workspace';
 
 const destroyCliInstanceMock = vi.fn();
+const webSocketClientController = useWebSocketClient();
 
-vi.spyOn(webSocketClientController, 'destroyCliInstance').mockImplementation(
+vi.spyOn(webSocketClientController, 'destroyClient').mockImplementation(
 	destroyCliInstanceMock,
 );
 
@@ -29,13 +29,11 @@ describe('workspace store: actions', () => {
 		context.commit.mockClear();
 	});
 
-	it('OPEN_SESSION dispatches userinfo/OPEN_SESSION (restores user data)', async () => {
+	it('OPEN_SESSION dispatches status subscription', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'ui/userinfo/OPEN_SESSION',
-			{
-				instance,
-			},
+			'features/status/SUBSCRIBE_STATUS',
+			null,
 			{
 				root: true,
 			},
@@ -68,6 +66,17 @@ describe('workspace store: actions', () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'features/chat/SUBSCRIBE_CHATS',
+			null,
+			{
+				root: true,
+			},
+		);
+	});
+
+	it('OPEN_SESSION dispatches job/SUBSCRIBE_JOBS (subscribes to jobs)', async () => {
+		await workspaceModule.actions.OPEN_SESSION(context);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/job/SUBSCRIBE_JOBS',
 			null,
 			{
 				root: true,

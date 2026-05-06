@@ -214,7 +214,7 @@ function accept() {
 }
 
 async function setDraftFocus() {
-	if (messageDraft.value && messageDraft.value.$el) {
+	if (messageDraft.value?.$el) {
 		textarea.value = messageDraft.value.$el.querySelector('textarea');
 	}
 	if (!messageDraft.value || !textarea.value) return;
@@ -350,7 +350,9 @@ onMounted(async () => {
 
 onUnmounted(() => {
 	eventBus?.$off('chat-input-focus', setDraftFocus);
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 </script>
 
