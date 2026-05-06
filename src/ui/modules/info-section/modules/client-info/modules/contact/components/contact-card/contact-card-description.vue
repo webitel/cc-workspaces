@@ -1,7 +1,7 @@
 <template>
   <wt-expansion-panel
     :size="props.size"
-    collapsed
+    :collapsed="props.collapsed"
     class="contact-card-description"
   >
     <template #title>{{ $t('vocabulary.description') }}</template>
@@ -32,6 +32,10 @@ const props = defineProps({
 	description: {
 		type: String,
 		default: '',
+	},
+	collapsed: {
+		type: Boolean,
+		default: false,
 	},
 });
 </script>
