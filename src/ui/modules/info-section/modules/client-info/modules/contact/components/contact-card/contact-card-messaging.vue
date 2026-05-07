@@ -38,8 +38,8 @@ class="contact-card-messaging"
 
 <script setup>
 import { ChatGatewayProvider } from '@webitel/api-services/enums';
-import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
 import { WtSendMessagePopup } from '@webitel/ui-sdk/components';
+import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
 import { computed, ref } from 'vue';
 import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 
