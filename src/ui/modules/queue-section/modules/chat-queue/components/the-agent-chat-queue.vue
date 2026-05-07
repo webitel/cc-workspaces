@@ -144,22 +144,20 @@ const expansions = computed(() => [
 		initiallyCollapsed: restoreExpansionState({
 			expansion: 'active',
 		}),
-		counters: !isActiveExpanded.value
-			? [
-					{
-						color: 'secondary',
-						count: allActiveChats.value,
-					},
-					{
-						color: 'warning',
-						count: activeChats.value.length,
-					},
-					{
-						color: 'success',
-						count: invitedChats.value.length,
-					},
-				].filter(({ count }) => count)
-			: [],
+		counters: [
+			{
+				color: 'secondary',
+				count: allActiveChats.value,
+			},
+			{
+				color: 'warning',
+				count: activeChats.value.length,
+			},
+			{
+				color: 'success',
+				count: invitedChats.value.length,
+			},
+		].filter(({ count }) => count),
 	},
 	{
 		value: 'manual',
