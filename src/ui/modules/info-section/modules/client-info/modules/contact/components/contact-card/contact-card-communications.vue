@@ -24,6 +24,7 @@
           :size="props.size"
           :contact="props.contact"
           :is-adding="isAdding"
+          :linked="props.linked"
           @close-adding="isAdding = false"
         ></component>
       </div>

@@ -25,6 +25,7 @@ class="contact-card-messaging"
           </div>
           <p>{{ item.app.name }}</p>
           <wt-icon-btn
+            v-if="linked"
             class="contact-card-messaging__chat-btn"
             icon="chat"
             :disabled="isDisabledChatAction(item)"
@@ -54,6 +55,10 @@ const props = defineProps({
 	},
 	contact: {
 		type: Object,
+	},
+	linked: {
+		type: Boolean,
+		default: false,
 	},
 });
 
