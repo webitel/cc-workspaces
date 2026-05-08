@@ -6,6 +6,7 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 export const useChatScroll = (element) => {
 	const store = useStore();
+	let chatSwitchScrollTimeout;
 
 	const { messages } = useChatMessages();
 	const { arrivedState } = useScroll(element);
@@ -18,16 +19,12 @@ export const useChatScroll = (element) => {
 	const isChatClosed = computed(
 		() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
 	);
-	const closedChatFirstMessageId = computed(
-		() => store.state.features.chat.closed.closedChatFirstMessageId,
-	);
 	const lastMessage = computed(
 		() => messages.value[messages.value?.length - 1],
 	);
 	const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
 
 	const scrollToBottom = (behavior = 'instant') => {
-		console.log('scrollToBottom');
 		element.value?.scrollTo({
 			top: element.value?.scrollHeight,
 			behavior,
@@ -95,13 +92,12 @@ export const useChatScroll = (element) => {
 	watch(
 		() => chat.value?.id,
 		async () => {
-			if (isChatClosed.value && closedChatFirstMessageId.value) {
-				console.log('NOT SCROLLING to botoom');
+			clearTimeout(chatSwitchScrollTimeout);
+			if (isChatClosed.value) {
 				return;
 			}
 			await nextTick();
-			setTimeout(() => {
-				console.log('watcher in useChatScroll scrollToBottom():');
+			chatSwitchScrollTimeout = setTimeout(() => {
 				scrollToBottom();
 			}, 500);
 		},

@@ -74,10 +74,12 @@ const actions = {
 			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
 			chat.messages = formatChatMessages(items);
 		} finally {
+			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
+				root: true,
+			});
 			context.commit('SET_IS_CLOSED_CHAT_LOADING', false);
 		}
 	},
-
 	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
 		const contactId = chat.contact.id;
 		const targetChatId = chat.id;
@@ -89,41 +91,34 @@ const actions = {
 			return chatHistoryMessages.find((message, index) => {
 				const prevMessage = chatHistoryMessages[index - 1];
 				const isChatStart =
-					((index === 0 && !next) || prevMessage) && // if noprevMessage - it must be end of chat history
+					((index === 0 && !next) || prevMessage) && // if no prevMessage - it must be end of chat history
 					message.chat?.id !== prevMessage?.chat?.id;
-				// if(message.chat?.id === targetChatId
-				// 	&& isChatStart) console.log('nextMessage.text:', chatHistoryMessages[index + 1].text)
+
 				return message.chat?.id === targetChatId && isChatStart;
 			});
 		};
-		const findTargetClosedChat = async () => {
+		const getTargetClosedChat = async () => {
 			const next = context.rootState.features.chat.chatHistory.next;
 			if (!next) return;
 
 			const closedChatFirstMessage = getTargetChatFirstMessage();
-			console.log(
-				'findTargetClosedChat: closedChatFirstMessage',
-				closedChatFirstMessage,
-			);
 
 			if (closedChatFirstMessage) {
 				context.commit(
 					'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
 					closedChatFirstMessage.id,
 				);
-				await context.dispatch('features/chat/SET_WORKSPACE', chat, {
-					root: true,
-				});
 				return;
 			}
 
 			await context.dispatch('features/chat/chatHistory/LOAD_NEXT', contactId, {
 				root: true,
 			});
-			await findTargetClosedChat();
+			await getTargetClosedChat();
 		};
 
 		try {
+			context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
 			context.commit('SET_IS_CLOSED_CHAT_LOADING', true);
 			await context.dispatch(
 				'features/chat/chatHistory/LOAD_CHAT_HISTORY',
@@ -133,22 +128,26 @@ const actions = {
 				},
 			);
 
-			await findTargetClosedChat();
+			await getTargetClosedChat();
 		} catch (err) {
 			throw err;
 		} finally {
 			context.commit('SET_IS_CLOSED_CHAT_LOADING', false);
 		}
 	},
-
 	OPEN_CLOSED_CHAT: async (context, chat) => {
-		let messagesList;
-
 		if (!chat.contact?.id) {
 			await context.dispatch('LOAD_CLOSED_CHAT', chat);
 		} else {
-			await context.dispatch('LOAD_CLOSED_CHAT_HISTORY', chat);
+			context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
+			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
+				root: true,
+			});
 		}
+	},
+	RESET_CLOSED_CHAT: async (context) => {
+		context.commit('SET_IS_CLOSED_CHAT_LOADING', false);
+		context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
 	},
 };
 

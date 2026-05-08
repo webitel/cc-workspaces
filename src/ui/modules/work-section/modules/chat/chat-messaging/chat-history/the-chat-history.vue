@@ -11,7 +11,7 @@
       :class="{'chat-history__messages--processing': !showAllMessages}"
       @scroll="handleChatScroll"
     >
-      <div v-if="next" class="chat-history__observer-wrapper">
+      <div v-if="next && !isInitialClosedChatPositioning" class="chat-history__observer-wrapper">
         <wt-intersection-observer
           :canLoadMore="next"
           :loading="isLoading"
@@ -104,7 +104,7 @@ const namespace = `${chatNamespace}/chatHistory`;
 const chatContainer = useTemplateRef('chat-container');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null); // message on top of the chat
-const closedChatFirstMessageEl = ref(null);
+const isInitialClosedChatPositioning = ref(false);
 const showAllMessages = ref(false);
 
 const {
@@ -133,12 +133,14 @@ const isChatClosed = computed(
 const closedChatFirstMessageId = computed(
 	() => store.state.features.chat.closed.closedChatFirstMessageId,
 );
-const chatHistoryState = computed(
-	() => store.state.features.chat.chatHistory.chatHistoryMessages,
-);
 
 const loadHistory = async () =>
 	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+const loadClosedChatHistory = async () =>
+	await store.dispatch(
+		`features/chat/closed/LOAD_CLOSED_CHAT_HISTORY`,
+		chat.value,
+	);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
 const attachPlayer = (player) =>
@@ -175,20 +177,15 @@ const getTopMessageEl = () => {
 		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
 };
 
-function getFirstClosedChatMessage() {
-	closedChatFirstMessageEl.value = null;
+function scrollToClosedChatFirstMessage(targetMessageEl) {
+	if (!chatContainer.value || !targetMessageEl) return;
 
-	if (isChatClosed.value && closedChatFirstMessageId.value) {
-		closedChatFirstMessageEl.value = document.getElementById(
-			`message-${closedChatFirstMessageId.value}`,
-		);
-	}
+	targetMessageEl.scrollIntoView(true);
 }
 
 const loadNextMessages = async () => {
 	if (isLoading.value || !next.value) return;
 	isLoading.value = true;
-
 	setTimeout(async () => {
 		// timeout to avoid loader blinking
 		await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
@@ -206,22 +203,29 @@ const loadNextMessages = async () => {
 };
 
 async function loadMessagesList() {
-	if (!chatHistoryState.value.length) await loadHistory(); // if store state is empty
-	await nextTick(() => {
-		if (closedChatFirstMessageEl.value) {
-			console.log(
-				'closedChatFirstMessageEl.value',
-				closedChatFirstMessageEl.value,
-			);
-			closedChatFirstMessageEl.value.scrollIntoView();
+	if (!isChatClosed.value) {
+		isInitialClosedChatPositioning.value = false;
+		await loadHistory(); // if store state is empty
+		await nextTick();
+		scrollToBottom();
+	} else {
+		isInitialClosedChatPositioning.value = true;
+		await loadClosedChatHistory();
+		await nextTick();
+
+		const closedChatFirstMessageEl = document.getElementById(
+			`message-${closedChatFirstMessageId.value}`,
+		);
+
+		if (closedChatFirstMessageEl) {
+			setTimeout(() => {
+				scrollToClosedChatFirstMessage(closedChatFirstMessageEl);
+				isInitialClosedChatPositioning.value = false;
+			}, 0);
 		} else {
-			console.log(
-				'else closedChatFirstMessageEl.value',
-				closedChatFirstMessageEl.value,
-			);
-			scrollToBottom();
+			isInitialClosedChatPositioning.value = false;
 		}
-	});
+	}
 
 	setTimeout(() => {
 		showAllMessages.value = true;
@@ -230,7 +234,6 @@ async function loadMessagesList() {
 
 onMounted(() => {
 	getTopMessageEl();
-	getFirstClosedChatMessage();
 });
 
 onUnmounted(() => {
@@ -238,29 +241,11 @@ onUnmounted(() => {
 });
 
 watch(
-	() => closedChatFirstMessageId.value,
-	async (id) => {
-		if (!isChatClosed.value || !id) {
-			closedChatFirstMessageEl.value = null;
-			return;
-		}
-
-		await nextTick();
-		getFirstClosedChatMessage();
-
-		if (closedChatFirstMessageEl.value) {
-			closedChatFirstMessageEl.value.scrollIntoView();
-		}
-	},
-);
-
-watch(
 	[
 		() => props.contact?.id,
 		() => chat.value?.id,
 	],
 	async () => {
-		getFirstClosedChatMessage();
 		await loadMessagesList();
 	},
 	{
