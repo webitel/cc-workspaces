@@ -83,10 +83,7 @@ const closeChat = () => {
 };
 
 const isDisabledChatAction = (item) => {
-	return (
-		!availableProviders.includes(item.protocol) &&
-		(!access.hasRbacEditAccess || isReadOnly)
-	);
+	return !availableProviders.includes(item.protocol);
 };
 </script>
 
