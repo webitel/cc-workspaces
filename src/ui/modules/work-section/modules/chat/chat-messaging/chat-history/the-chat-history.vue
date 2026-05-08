@@ -177,10 +177,16 @@ const getTopMessageEl = () => {
 		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
 };
 
-function scrollToClosedChatFirstMessage(targetMessageEl) {
-	if (!chatContainer.value || !targetMessageEl) return;
+function scrollToClosedChatFirstMessage() {
+	const closedChatFirstMessageEl = document.getElementById(
+		`message-${closedChatFirstMessageId.value}`,
+	);
 
-	targetMessageEl.scrollIntoView(true);
+	if (closedChatFirstMessageEl) {
+		closedChatFirstMessageEl.scrollIntoView(true);
+	} else {
+		scrollToBottom();
+	}
 }
 
 const loadNextMessages = async () => {
@@ -211,20 +217,11 @@ async function loadMessagesList() {
 	} else {
 		isInitialClosedChatPositioning.value = true;
 		await loadClosedChatHistory();
+
 		await nextTick();
 
-		const closedChatFirstMessageEl = document.getElementById(
-			`message-${closedChatFirstMessageId.value}`,
-		);
-
-		if (closedChatFirstMessageEl) {
-			setTimeout(() => {
-				scrollToClosedChatFirstMessage(closedChatFirstMessageEl);
-				isInitialClosedChatPositioning.value = false;
-			}, 0);
-		} else {
-			isInitialClosedChatPositioning.value = false;
-		}
+		scrollToClosedChatFirstMessage();
+		isInitialClosedChatPositioning.value = false;
 	}
 
 	setTimeout(() => {
