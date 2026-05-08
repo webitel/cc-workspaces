@@ -12,7 +12,7 @@
         :opened="task.id === taskOnWorkspace.id"
         :size="size"
         processed
-        @click="openTask(task)"
+        @click="openChat(task)"
       />
       <wt-divider v-if="taskList.length > index + 1"/>
     </div>
@@ -50,8 +50,8 @@ const loadClosedChatsList = () =>
 	store.dispatch(`${namespace}/LOAD_PROCESSED_CHATS`);
 const loadNextClosedChats = () =>
 	store.dispatch(`${namespace}/LOAD_NEXT_PROCESSED_CHATS`);
-const openTask = async (task) =>
-	await store.dispatch('features/chat/OPEN_CHAT', task);
+const openChat = async (task) =>
+	await store.dispatch('features/chat/closed/OPEN_CLOSED_CHAT', task);
 
 loadClosedChatsList();
 </script>

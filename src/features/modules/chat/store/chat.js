@@ -117,16 +117,6 @@ const actions = {
 			context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(
 				chat,
 			);
-
-		if (isChatClosed && !chat.contact?.id) {
-			// because closed chats don't have messages
-			const { items: messages } = await CatalogAPI.getChatMessagesList({
-				chatId: chat.id,
-			});
-			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			chat.messages = formatChatMessages(messages);
-		}
-
 		await context.dispatch('SET_WORKSPACE', chat);
 	},
 

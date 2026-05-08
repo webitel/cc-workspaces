@@ -15,12 +15,19 @@ export const useChatScroll = (element) => {
 	const threshold = ref(136); // the distance where the scrollToBottomBtn must be shown/hide. why 136px? because: https://webitel.atlassian.net/browse/WTEL-7136
 
 	const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+	const isChatClosed = computed(
+		() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
+	);
+	const closedChatFirstMessageId = computed(
+		() => store.state.features.chat.closed.closedChatFirstMessageId,
+	);
 	const lastMessage = computed(
 		() => messages.value[messages.value?.length - 1],
 	);
 	const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
 
 	const scrollToBottom = (behavior = 'instant') => {
+		console.log('scrollToBottom');
 		element.value?.scrollTo({
 			top: element.value?.scrollHeight,
 			behavior,
@@ -88,8 +95,15 @@ export const useChatScroll = (element) => {
 	watch(
 		() => chat.value?.id,
 		async () => {
+			if (isChatClosed.value && closedChatFirstMessageId.value) {
+				console.log('NOT SCROLLING to botoom');
+				return;
+			}
 			await nextTick();
-			setTimeout(() => scrollToBottom(), 500);
+			setTimeout(() => {
+				console.log('watcher in useChatScroll scrollToBottom():');
+				scrollToBottom();
+			}, 500);
 		},
 		{
 			immediate: true,

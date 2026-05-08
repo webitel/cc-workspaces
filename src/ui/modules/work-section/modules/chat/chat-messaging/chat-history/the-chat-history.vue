@@ -21,6 +21,7 @@
       <message
         v-for="(message, index) of messages"
         :key="message.id"
+        :id="`message-${message.id}`"
         :message="message"
         :size="props.size"
         :show-avatar="showAvatar(index) || isChatStarted(index)"
@@ -103,6 +104,7 @@ const namespace = `${chatNamespace}/chatHistory`;
 const chatContainer = useTemplateRef('chat-container');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null); // message on top of the chat
+const closedChatFirstMessageEl = ref(null);
 const showAllMessages = ref(false);
 
 const {
@@ -125,6 +127,15 @@ const {
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+const isChatClosed = computed(
+	() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
+);
+const closedChatFirstMessageId = computed(
+	() => store.state.features.chat.closed.closedChatFirstMessageId,
+);
+const chatHistoryState = computed(
+	() => store.state.features.chat.chatHistory.chatHistoryMessages,
+);
 
 const loadHistory = async () =>
 	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
@@ -164,6 +175,16 @@ const getTopMessageEl = () => {
 		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
 };
 
+function getFirstClosedChatMessage() {
+	closedChatFirstMessageEl.value = null;
+
+	if (isChatClosed.value && closedChatFirstMessageId.value) {
+		closedChatFirstMessageEl.value = document.getElementById(
+			`message-${closedChatFirstMessageId.value}`,
+		);
+	}
+}
+
 const loadNextMessages = async () => {
 	if (isLoading.value || !next.value) return;
 	isLoading.value = true;
@@ -175,10 +196,7 @@ const loadNextMessages = async () => {
 
 		if (lastVisibleMessageEl.value?.scrollIntoView) {
 			// fast return the scroll view on prev position
-			lastVisibleMessageEl.value.scrollIntoView({
-				block: 'start',
-				behavior: 'auto',
-			});
+			lastVisibleMessageEl.value.scrollIntoView();
 		}
 
 		isLoading.value = false;
@@ -188,10 +206,23 @@ const loadNextMessages = async () => {
 };
 
 async function loadMessagesList() {
-	await loadHistory();
+	if (!chatHistoryState.value.length) await loadHistory(); // if store state is empty
 	await nextTick(() => {
-		scrollToBottom();
+		if (closedChatFirstMessageEl.value) {
+			console.log(
+				'closedChatFirstMessageEl.value',
+				closedChatFirstMessageEl.value,
+			);
+			closedChatFirstMessageEl.value.scrollIntoView();
+		} else {
+			console.log(
+				'else closedChatFirstMessageEl.value',
+				closedChatFirstMessageEl.value,
+			);
+			scrollToBottom();
+		}
 	});
+
 	setTimeout(() => {
 		showAllMessages.value = true;
 	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
@@ -199,6 +230,7 @@ async function loadMessagesList() {
 
 onMounted(() => {
 	getTopMessageEl();
+	getFirstClosedChatMessage();
 });
 
 onUnmounted(() => {
@@ -206,11 +238,29 @@ onUnmounted(() => {
 });
 
 watch(
+	() => closedChatFirstMessageId.value,
+	async (id) => {
+		if (!isChatClosed.value || !id) {
+			closedChatFirstMessageEl.value = null;
+			return;
+		}
+
+		await nextTick();
+		getFirstClosedChatMessage();
+
+		if (closedChatFirstMessageEl.value) {
+			closedChatFirstMessageEl.value.scrollIntoView();
+		}
+	},
+);
+
+watch(
 	[
 		() => props.contact?.id,
 		() => chat.value?.id,
 	],
 	async () => {
+		getFirstClosedChatMessage();
 		await loadMessagesList();
 	},
 	{
