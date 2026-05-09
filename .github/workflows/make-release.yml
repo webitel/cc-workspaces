@@ -42,8 +42,8 @@ jobs:
         id: version
         run: |
           INPUT="${{ inputs.version }}"
-          VERSION=$(echo $INPUT | cut -d',' -f1 | tr -d ' ') #splits versions from input by separator
-          NEXT_VERSION=$(echo $INPUT | cut -d',' -f2 | tr -d ' ') #splits versions from input by separator
+          VERSION=$(echo $INPUT | cut -d',' -f1 | tr -d ' ') # splits versions from input by separator
+          NEXT_VERSION=$(echo $INPUT | cut -d',' -f2 | tr -d ' ') # splits versions from input by separator
           
           {
             echo "version=$VERSION"
@@ -59,15 +59,23 @@ jobs:
           git push -u origin ${{ steps.version.outputs.version_tag }}
 
       - name: Bump version in main to next version
+        env:
+          TRIGGERED_BY: ${{ github.actor }}
+          TRIGGERED_BY_ID: ${{ github.actor_id }}
+
         run: |
           git checkout ${{ github.event.repository.default_branch }}
           npm version "${{ steps.version.outputs.next_full_version }}" --no-git-tag-version --allow-same-version
+
           git add package.json
           if [ -f package-lock.json ]; then
             git add package-lock.json
           fi
 
-          git commit -m "chore: bump version to ${{ steps.version.outputs.next_full_version }}"
+          CO_AUTHOR_EMAIL="${TRIGGERED_BY_ID}+${TRIGGERED_BY}@users.noreply.github.com"
+          git commit -m "chore: bump version to ${{ steps.version.outputs.next_full_version }}" \
+                     -m "Co-authored-by: ${TRIGGERED_BY} <${CO_AUTHOR_EMAIL}>"
+
           git push origin ${{ github.event.repository.default_branch }}
 
       - name: Create and push tag
