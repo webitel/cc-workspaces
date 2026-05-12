@@ -9,23 +9,23 @@
     <labels
       :labels="labels"
       :size="props.size"
-      :collapsed="expandContactTabs"
+      :collapsed="!isContactTabsOpen"
     />
     <variables
       :variables="variables"
       :size="props.size"
-      :collapsed="expandContactTabs"
+      :collapsed="!isContactTabsOpen"
     />
     <description
       :description="description"
       :size="props.size"
-      :collapsed="expandContactTabs"
+      :collapsed="!isContactTabsOpen"
     />
     <communications
       :contact="props.contact"
       :size="props.size"
       :linked="props.linked"
-      :collapsed="expandContactTabs"
+      :collapsed="!isContactTabsOpen"
     />
   </div>
 </template>
@@ -58,7 +58,7 @@ const emit = defineEmits([
 	'link',
 ]);
 
-const expandContactTabs = ref(false);
+const isContactTabsOpen = ref(false);
 
 const labels = computed(() => props.contact?.labels);
 const variables = computed(() => props.contact?.variables);
@@ -74,7 +74,7 @@ const getValueExpandContactTabsVariable = async () => {
 };
 
 onMounted(async () => {
-	expandContactTabs.value =
+	isContactTabsOpen.value =
 		(await getValueExpandContactTabsVariable()) ?? false;
 });
 </script>
