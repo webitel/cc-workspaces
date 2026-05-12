@@ -36,7 +36,7 @@
 <script setup>
 import { WtPopover } from '@webitel/ui-sdk/components';
 import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import { getMessageMember } from '../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
@@ -64,12 +64,18 @@ const currentChat = computed(
 	() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`],
 );
 
+const isChatActive = computed(
+	() => store.getters[`${chatNamespace}/IS_CHAT_ACTIVE`],
+);
+
 const currentChatAgents = computed(() => {
 	return currentChat.value?.members?.length > 1
 		? getAgentsFromMembers(currentChat.value?.members)
-		: [
-				currentAgent.value,
-			];
+		: isChatActive.value
+			? [
+					currentAgent.value,
+				]
+			: [];
 });
 
 const getAgentsFromMembers = (array) => {
@@ -117,6 +123,13 @@ const setAgentsArray = async () => {
 onMounted(() => {
 	setAgentsArray();
 });
+
+watch(
+	() => isChatActive.value,
+	() => {
+		setAgentsArray();
+	},
+);
 </script>
 
 <style lang="scss" scoped>
