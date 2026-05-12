@@ -45,6 +45,7 @@
                 <p> {{ item[action.field] }} </p>
                 <wt-button
                   :color="action.color"
+                  :size="ComponentSize.SM"
                   @click="sendAction(action.action, item)"
                 >
                   {{ action.buttonName }}
@@ -92,6 +93,7 @@ import type {
 	TableFilter,
 	TableRow,
 } from './types/FormTable';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const { t } = useI18n();
 
@@ -322,7 +324,7 @@ onMounted(() => {
   }
 
   &__scroll-wrapper {
-    height: 600px;
+    height: 450px;
     overflow: auto;
   }
 
