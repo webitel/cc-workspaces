@@ -56,6 +56,7 @@ const actions = {
 		// have to check is call not manual or not from offline queue before send notification https://webitel.atlassian.net/browse/WTEL-4502
 		if (
 			call.allowAnswer &&
+			!call.isEavesdrop &&
 			!context.getters.IS_OFFLINE_CALL &&
 			!call.queue?.manual_distribution
 		) {
