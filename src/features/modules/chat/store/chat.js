@@ -1,13 +1,11 @@
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import { ConversationState } from 'webitel-sdk';
 
-import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import closed from '../modules/closed/store/closed.js';
 import manual from '../modules/manual/store/manual';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import chatHistory from './chat-history.js';
 import chatMedia from './chat-media.js';
 import clientHandlers from './client-handlers';

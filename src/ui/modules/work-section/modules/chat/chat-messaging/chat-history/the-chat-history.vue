@@ -11,7 +11,7 @@
       :class="{'chat-history__messages--processing': !showAllMessages}"
       @scroll="handleChatScroll"
     >
-      <div v-if="next && !isInitialClosedChatPositioning" class="chat-history__observer-wrapper">
+      <div v-if="next && !isInitialScrollInProgress" class="chat-history__observer-wrapper">
         <wt-intersection-observer
           :canLoadMore="next"
           :loading="isLoading"
@@ -104,7 +104,7 @@ const namespace = `${chatNamespace}/chatHistory`;
 const chatContainer = useTemplateRef('chat-container');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null); // message on top of the chat
-const isInitialClosedChatPositioning = ref(false);
+const isInitialScrollInProgress = ref(false);
 const showAllMessages = ref(false);
 
 const {
@@ -210,18 +210,17 @@ const loadNextMessages = async () => {
 
 async function loadMessagesList() {
 	if (!isChatClosed.value) {
-		isInitialClosedChatPositioning.value = false;
-		await loadHistory(); // if store state is empty
+		await loadHistory();
 		await nextTick();
 		scrollToBottom();
 	} else {
-		isInitialClosedChatPositioning.value = true;
+		isInitialScrollInProgress.value = true;
+
 		await loadClosedChatHistory();
-
 		await nextTick();
-
 		scrollToClosedChatFirstMessage();
-		isInitialClosedChatPositioning.value = false;
+
+		isInitialScrollInProgress.value = false;
 	}
 
 	setTimeout(() => {
