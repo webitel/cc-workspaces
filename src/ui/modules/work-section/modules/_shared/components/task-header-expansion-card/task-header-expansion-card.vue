@@ -84,10 +84,6 @@ const taskTitle = computed(() => {
 const avatarTitle = computed(() => props.username);
 
 const phoneNumberLabel = computed(() => {
-	if (props.hideNumber) {
-		return t('workspaceSec.taskHeaderExpansionCard.hiddenNumber');
-	}
-
 	return props.phoneNumber;
 });
 
