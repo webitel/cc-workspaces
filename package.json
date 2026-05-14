@@ -29,7 +29,7 @@
 		"@vueuse/components": "^14.x",
 		"@vueuse/core": "^14.x",
 		"@webitel/api-services": "^0.1.34",
-		"@webitel/styleguide": "^26.2.5",
+		"@webitel/styleguide": "^26.2.16",
 		"@webitel/ui-chats": "^0.1.29",
 		"@webitel/ui-sdk": "~26.4",
 		"autolinker": "^4.x",
