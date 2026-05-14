@@ -324,7 +324,7 @@ onMounted(() => {
   }
 
   &__scroll-wrapper {
-    height: 450px;
+    height: 418px;
     overflow: auto;
   }
 
