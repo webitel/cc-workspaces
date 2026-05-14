@@ -3,7 +3,7 @@ import applyTransform, {
 } from '@webitel/ui-sdk/src/api/transformers/index';
 
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats';
-import CatalogAPI from '../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
+import CatalogAPI from '../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository';
 import i18n from '../../../../../../app/locale/i18n';
 import { formatChatMessages } from '../../../scripts/formatChatMessages';
 import processed from '../modules/processed/store/processed';
@@ -96,7 +96,7 @@ const actions = {
 		const targetChatId = chat.id;
 
 		try {
-			context.commit('RESET_CLOSED_CHAT');
+			context.dispatch('RESET_CLOSED_CHAT');
 			await context.dispatch(
 				'features/chat/chatHistory/LOAD_CHAT_HISTORY',
 				contactId,
