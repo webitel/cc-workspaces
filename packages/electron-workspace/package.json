@@ -10,14 +10,18 @@
 	"homepage": "https://example.webitel.com/",
 	"keywords": [],
 	"scripts": {
-		"start": "npm run build:renderer && electron . --disable-http-cache",
+		"start": "npm run build:preload && npm run build:renderer && npm run start:watch",
+		"start:watch": "npm run build:preload:watch & npm run build:renderer:watch & electron . --disable-http-cache",
+		"build:preload": "vite build -c vite.electron.config.ts",
+		"build:preload:watch": "vite build -c vite.electron.config.ts --watch",
 		"build:renderer": "vite build -c vite.renderer.config.ts",
+		"build:renderer:watch": "vite build -c vite.renderer.config.ts --watch",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint": "npx @biomejs/biome check --colors=off .",
 		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
-		"dist": "npm run build:renderer && electron-builder -w",
-		"distl": "npm run build:renderer && electron-builder --linux",
-		"distm": "npm run build:renderer && electron-builder --mac"
+		"dist": "npm run build:preload && npm run build:renderer && electron-builder -w",
+		"distl": "npm run build:preload && npm run build:renderer && electron-builder --linux",
+		"distm": "npm run build:preload && npm run build:renderer && electron-builder --mac"
 	},
 	"build": {
 		"asar": false,
@@ -77,8 +81,8 @@
 	},
 	"dependencies": {
 		"axios": "^1.13.2",
+		"pjsip-node": "github:Siperb/node-pjsip",
 		"dotenv": "^17.2.3",
-		"electron_baresip": "file:./electron_baresip",
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",
 		"electron-updater": "^6.6.2",
