@@ -74,7 +74,10 @@ import {
 } from '@webitel/api-services/api/transformers';
 import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
-import { ProcessingTableColumnType } from '@webitel/ui-sdk/enums';
+import {
+	ComponentSize,
+	ProcessingTableColumnType,
+} from '@webitel/ui-sdk/enums';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -93,7 +96,6 @@ import type {
 	TableFilter,
 	TableRow,
 } from './types/FormTable';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const { t } = useI18n();
 

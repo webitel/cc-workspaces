@@ -14,11 +14,11 @@
 </template>
 
 <script setup>
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { WebitelLicense } from '@webitel/ui-sdk/modules/Userinfo';
 import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { useUserAccessControl } from '../../../../../../app/composables/useUserAccessControl';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import Contact from '../modules/contact/components/the-contact.vue';
