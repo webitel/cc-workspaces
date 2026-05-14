@@ -30,9 +30,9 @@
   </div>
 </template>
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
+import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import { computed, onMounted, ref } from 'vue';
 import Communications from './contact-card-communications.vue';
 import Description from './contact-card-description.vue';
 import General from './contact-card-general.vue';
