@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron');
-const BaresipClient = require('./baresip-client');
+const PjsipClient = require('./pjsip-client');
 
 import type { Client as WebitelClient } from 'webitel-sdk';
 import type { ClientDeviceConfig } from '../shared/types/ClientDeviceConfig.types';
@@ -114,7 +114,7 @@ const changeSIP = async (
 	if (!(isSIP && sipChecked === true)) return;
 
 	if (cli.phone) await unrg(cli);
-	const sipInstance = new BaresipClient({
+	const sipInstance = new PjsipClient({
 		debugMode,
 		timeoutSIP,
 		codecs,

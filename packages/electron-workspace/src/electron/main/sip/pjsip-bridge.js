@@ -1,19 +1,19 @@
 const { spawn } = require('node:child_process');
 const path = require('node:path');
 
-function createBaresipBridge({ sendToWindows }) {
+function createPjsipBridge({ sendToWindows }) {
 	let child = null;
 	const pending = new Map();
 	let reqId = 0;
 
 	function start() {
 		if (child) return;
-		const childPath = path.join(__dirname, 'baresip-worker.js');
-		const nodeBin = process.env.BARESIP_NODE_EXEC_PATH || 'node';
+		const childPath = path.join(__dirname, 'pjsip-worker.js');
+		const nodeBin = process.env.PJSIP_NODE_EXEC_PATH || 'node';
 		const childEnv = {
 			...process.env,
 		};
-		delete childEnv.BARESIP_NODE_NATIVE;
+		delete childEnv.PJSIP_NODE_NATIVE;
 
 		console.log('[sip] spawning worker', nodeBin, childPath);
 		child = spawn(
@@ -105,5 +105,5 @@ function createBaresipBridge({ sendToWindows }) {
 }
 
 module.exports = {
-	createBaresipBridge,
+	createPjsipBridge,
 };

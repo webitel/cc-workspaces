@@ -1,4 +1,4 @@
-const BaresipNativeClient = require('./baresip-native-client');
+const PjsipNativeClient = require('./pjsip-native-client');
 
 let client = null;
 
@@ -33,7 +33,7 @@ async function handle(method, args = []) {
 		case 'register': {
 			const [sipConf = {}, options = {}] = args;
 			if (!client) {
-				client = new BaresipNativeClient(options);
+				client = new PjsipNativeClient(options);
 				bindEvents();
 			}
 			await client.register(sipConf);

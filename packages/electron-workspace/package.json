@@ -81,7 +81,7 @@
 	},
 	"dependencies": {
 		"axios": "^1.13.2",
-		"baresip-node": "github:Siperb/baresip-node#prebuilt",
+		"pjsip-node": "github:Siperb/node-pjsip",
 		"dotenv": "^17.2.3",
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",

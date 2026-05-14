@@ -9,7 +9,7 @@ ipcRenderer.on('sip-worker:event', (_event, payload = {}) => {
 	}
 });
 
-class BaresipClient extends ExternalClient {
+class PjsipClient extends ExternalClient {
 	constructor(options = {}) {
 		super(options);
 		this._registered = false;
@@ -133,4 +133,4 @@ class BaresipClient extends ExternalClient {
 	}
 }
 
-module.exports = BaresipClient;
+module.exports = PjsipClient;

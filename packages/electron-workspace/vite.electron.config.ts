@@ -16,7 +16,7 @@ export default defineConfig({
 			external: [
 				'electron',
 				'webitel-sdk',
-				'baresip-node',
+				'pjsip-node',
 			],
 		},
 	},

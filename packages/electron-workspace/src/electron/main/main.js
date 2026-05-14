@@ -10,11 +10,11 @@ const { autoUpdater } = require('electron-updater');
 const conf = require('../shared/config').config();
 const WebitelWindows = require('./windows');
 const WebitelTray = require('./module/webitel_tray');
-const { createBaresipBridge } = require('./sip/baresip-bridge');
+const { createPjsipBridge } = require('./sip/pjsip-bridge');
 
 const win = new WebitelWindows();
 let tray = {};
-const baresipBridge = createBaresipBridge({
+const pjsipBridge = createPjsipBridge({
 	sendToWindows: (channel, payload) => {
 		for (const window of BrowserWindow.getAllWindows()) {
 			window.webContents.send(channel, payload);
@@ -248,7 +248,7 @@ ipcMain.handle('sip_checked', (event, args) => {
 });
 ipcMain.handle('sip-worker:request', async (event, payload = {}) => {
 	try {
-		return await baresipBridge.request(payload.method, payload.args || []);
+		return await pjsipBridge.request(payload.method, payload.args || []);
 	} catch (err) {
 		console.error('[sip] request failed', payload.method, err);
 		throw err;
@@ -265,7 +265,7 @@ ipcMain.handle('restart', (event, args) => {
 });
 
 app.on('before-quit', () => {
-	baresipBridge.stop();
+	pjsipBridge.stop();
 });
 
 function createAndSubscribeTray() {
