@@ -82,7 +82,7 @@ const initApp = async () => {
 		.use(store)
 		.use(BreakpointPlugin);
 
-	const { initialize, routeAccessGuard, showUserNotifications } =
+	const { initialize, routeAccessGuard, clearStorageNotifications } =
 		useUserinfoStore();
 	try {
 		await initialize();
@@ -91,9 +91,7 @@ const initApp = async () => {
 			beforeEach: [
 				routeAccessGuard,
 			],
-			afterEach: [
-				showUserNotifications,
-			],
+			onUnauthorized: clearStorageNotifications,
 		});
 	} catch (err) {
 		console.error('Error initializing app', err);

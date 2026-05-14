@@ -6,16 +6,21 @@
 <script>
 import { computed, provide } from 'vue';
 import { useStore } from 'vuex';
+import { useUserinfoStore } from '../ui/modules/userinfo/userinfoStore.ts';
 
 export default {
 	name: 'TheApp',
 
 	setup() {
 		const store = useStore();
+		const { showUserNotifications } = useUserinfoStore();
 		// @author o.chorpita
 		// Provide darkMode for ui-sdk components
 		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 		provide('darkMode', darkMode);
+		return {
+			showUserNotifications,
+		};
 	},
 
 	created() {
@@ -28,6 +33,9 @@ export default {
 		window.addEventListener('unload', () => {
 			this.$store.dispatch('workspace/CLOSE_SESSION');
 		});
+	},
+	mounted() {
+		this.showUserNotifications();
 	},
 
 	methods: {
