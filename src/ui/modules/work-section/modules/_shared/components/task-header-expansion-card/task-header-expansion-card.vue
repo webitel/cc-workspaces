@@ -9,16 +9,7 @@
           size="xs"
           :username="avatarTitle"
         />
-        <a
-          v-if="props.isTitleLinked && contactLink"
-          :href="contactLink"
-          class="task-header-expansion-card__title"
-          target="_blank"
-        >
-          {{ taskTitle }}
-        </a>
         <span
-          v-else
           class="task-header-expansion-card__title"
         >
           {{ taskTitle }}
@@ -44,7 +35,7 @@ import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { CallDirection, ChannelType } from 'webitel-sdk';
+import { CallDirection } from 'webitel-sdk';
 import type { ChatContact } from '../../types/ChatContact.types';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
@@ -90,10 +81,6 @@ const phoneNumberLabel = computed(() => {
 
 	return props.phoneNumber;
 });
-
-const contactLink = computed(() =>
-	store.getters['ui/infoSec/client/contact/CONTACT_LINK'](props.contactId),
-);
 </script>
 
 <style scoped>
