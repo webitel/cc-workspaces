@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webitel</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Ubuntu:300,400,500,600,700,800,900" rel="stylesheet">
+        <style>
+           
+            html { height:100%; }
+            body { 
+                margin: 0;
+                position:absolute; 
+                top:0; bottom:0; 
+                right:0; left:0; 
+                background: #F7F7F7;
+                -webkit-app-region: drag;
+            }
+            .app-icon {
+                width: 24px;
+                height: 24px;
+                margin: 10px 0 0 15px;
+                background-image: url('../../../img/app-icon.svg');
+            }
+            .content {
+                display: grid;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                transform: translate(0, -50%);
+                text-align-last: center;
+                margin-top: 15px;
+                width: -webkit-fill-available;
+            }
+            #selectFileBtn{
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-end;
+                padding: 12px 20px;
+
+                position: static;
+                height: 38px;
+                left: 0px;
+                top: 0px;
+                color: #F7F7F7;
+                border: none;
+
+                background: #FFC000;
+                opacity: 0.8;
+                border-radius: 5px;
+
+                flex: none;
+                order: 0;
+                flex-grow: 0;
+                justify-self: center;
+                margin-top: 30px;
+            }
+            #selectFileBtn:hover {
+                opacity: 1;
+            }
+            .text-lable {
+                font-family: Montserrat;
+                font-style: normal;
+                text-align:center;
+                white-space: pre-line;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 14px;
+                text-align: center;
+                color: #030302;
+            }
+            .collaps-btn, .expand-btn, .close-btn{
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+            }
+            .controls {
+                position: absolute;
+                right: 15px;
+                top: 10px;
+            }
+            .expand-btn, .close-btn {
+                margin-left: 10px;
+            }
+            .select-file-btn, .collaps-btn, .expand-btn, .close-btn{
+                -webkit-app-region: no-drag;
+                border: none;
+                outline: none;
+            }
+            input[id=collapsBtn]:hover {
+                background-image: url('../../../img/icon-collaps-hover-md.svg');
+            }
+            input[id=expandBtn]:hover {
+                background-image: url('../../../img/icon-expand-hover-md.svg');
+            }
+            input[id=closeBtn]:hover {
+                background-image: url('../../../img/icon-close-hover-md.svg');
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="app-icon"></div>
+            <div class="controls">
+                <input onclick="onCollaps()" id="collapsBtn" class="collaps-btn" type="image" src='../../../img/icon-collaps-md.svg' name='collapsBtn'  alt="collaps"/>
+                <input onclick="onExpand()" id="expandBtn" class="expand-btn" type="image" src='../../../img/icon-expand-md.svg' name='expandBtn'  alt="expand"/>
+                <input onclick="onClose()" id="closeBtn" class="close-btn" type="image" src='../../../img/icon-close-md.svg' name='closeBtn'  alt="close"/>
+            </div>
+        </div>
+        <div class="content">
+            <span id="text" class="text-lable"></span>
+            <button  id="selectFileBtn" class="select-file-btn" name="uploadBtn" onclick="uploadFile()" type="button"></button>
+        </div>
+        <script>
+            const i18n = new(require('../../electron/shared/i18n/i18n'))
+            const { ipcRenderer } = require("electron")
+
+            document.getElementById("text").textContent = i18n.__("config", "uploadConfigurationText")
+            document.getElementById("selectFileBtn").textContent = i18n.__("config", "UploadFile")
+
+            function uploadFile() {
+                ipcRenderer.send("file-open")
+            }
+
+            function onCollaps() {
+                ipcRenderer.send("collaps-load-window")
+            }
+
+            function onExpand() {
+                ipcRenderer.send("expand-load-window")
+            }
+
+            function onClose() {
+                ipcRenderer.send("close-load-window")
+            }
+
+            ipcRenderer.on('from-main', (event, err = '') => {
+                alert(err)
+                console.error(err)
+            })
+        </script>
+    </body>
+</html>
