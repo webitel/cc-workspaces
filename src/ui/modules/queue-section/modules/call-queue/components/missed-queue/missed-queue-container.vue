@@ -8,8 +8,9 @@
         :task="task"
         :index="key"
         :size="size"
+        :loading="isLoading(task.id)"
         @hide="hideMissed(task)"
-        @call="redial(task)"
+  			@call="handleRedial(task)"
       />
       <wt-divider v-if="missedList.length > key + 1"/>
     </div>
@@ -19,9 +20,9 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
+import { useLoadingState } from '../../../../../../composables/useLoadingState';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
@@ -35,12 +36,23 @@ export default {
 	mixins: [
 		sizeMixin,
 	],
-
+	data() {
+		return {
+			loadingId: null,
+		};
+	},
 	computed: {
 		...mapState('features/call/missed', {
 			missedList: (state) => state.missedList,
 			next: (state) => state.next,
 		}),
+	},
+	setup() {
+		const { isLoading, withLoading } = useLoadingState();
+		return {
+			isLoading,
+			withLoading,
+		};
 	},
 
 	methods: {
@@ -50,6 +62,10 @@ export default {
 			redial: 'REDIAL',
 			hideMissed: 'HIDE_MISSED',
 		}),
+
+		handleRedial(task) {
+			this.withLoading(task.id, () => this.redial(task));
+		},
 	},
 
 	created() {

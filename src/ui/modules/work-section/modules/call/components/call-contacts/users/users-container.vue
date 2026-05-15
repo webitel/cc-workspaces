@@ -16,6 +16,7 @@
         :key="item.id"
         :item="item"
         :size="size"
+        :loading="isLoadingState(item.extension)"
         @input="makeCall({ number: item.extension })"
       ></user-lookup-item>
     </template>
@@ -29,6 +30,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
+import { useLoadingState } from '../../../../../../../composables/useLoadingState';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
@@ -44,6 +46,8 @@ const props = defineProps({
 const store = useStore();
 
 const userinfoStore = useUserinfoStore();
+const { isLoading: isLoadingState, withLoading } = useLoadingState();
+
 const { userId } = storeToRefs(userinfoStore);
 
 const fetchFn = (params) => {
@@ -68,7 +72,7 @@ const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
 	});
 
 const makeCall = (item) => {
-	store.dispatch('features/call/CALL', item);
+	withLoading(item.number, () => store.dispatch('features/call/CALL', item));
 };
 </script>
 

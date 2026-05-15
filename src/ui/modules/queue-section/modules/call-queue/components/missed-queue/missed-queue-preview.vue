@@ -35,7 +35,7 @@
       <wt-rounded-action
         color="success"
         icon="call--filled"
-        :loading="showLoader"
+        :loading="loading"
         rounded
         size="md"
         @click.prevent="call"
@@ -85,7 +85,7 @@
       <wt-rounded-action
         color="success"
         icon="call--filled"
-        :loading="showLoader"
+        :loading="loading"
         rounded
         size="sm"
         @click.prevent="call"
@@ -119,10 +119,8 @@ export default {
 		'hide',
 		'call',
 	],
-	data() {
-		return {
-			showLoader: false,
-		};
+	props: {
+		loading: Boolean,
 	},
 	computed: {
 		displayName() {
@@ -137,11 +135,8 @@ export default {
 	},
 	methods: {
 		call() {
-			if (this.showLoader) return;
-
-			this.showLoader = true;
+			if (this.loading) return;
 			this.$emit('call');
-			this.showLoader = false;
 		},
 	},
 };

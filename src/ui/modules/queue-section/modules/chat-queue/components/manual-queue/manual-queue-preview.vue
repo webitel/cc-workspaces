@@ -33,7 +33,7 @@
         size="md"
         color="transfer"
         icon="chat-join"
-        :loading="showLoader"
+        :loading="loading"
         rounded
         @click="accept(task)"
       />
@@ -71,7 +71,7 @@
         size="md"
         color="transfer"
         icon="chat-join"
-        :loading="showLoader"
+        :loading="loading"
         rounded
         @click="accept(task)"
       />
@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
@@ -108,13 +108,13 @@ const props = defineProps({
 		type: String,
 		default: 'md',
 	},
+	loading: Boolean,
 });
 
 const emit = defineEmits([
 	'click',
 	'accept',
 ]);
-const showLoader = ref(false);
 
 const lastMessage = computed(() => {
 	return props.task.message;
@@ -140,11 +140,8 @@ const lastMessageSenderIcon = computed(() => {
 });
 
 function accept(task) {
-	if (showLoader.value) return;
-
-	showLoader.value = true;
+	if (props.loading) return;
 	emit('accept', task);
-	showLoader.value = false;
 }
 </script>
 

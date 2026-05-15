@@ -27,7 +27,7 @@
           <wt-rounded-action
             color="transfer"
             :icon="`${state}-transfer--filled`"
-            :loading="showLoader"
+            :loading="loadingTransfer"
             rounded
             @click="handleInput"
           />
@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
@@ -57,6 +57,7 @@ interface TransferLookupItemProps {
 	showTeamName?: boolean;
 	showUserNameAvatar?: boolean;
 	presenceStatusField?: string;
+	loadingTransfer?: boolean;
 }
 
 interface TransferLookupItemEmits {
@@ -73,12 +74,12 @@ const props = withDefaults(defineProps<TransferLookupItemProps>(), {
 	showTeamName: false,
 	showUserNameAvatar: false,
 	presenceStatusField: 'presence',
+	loadingTransfer: false,
 });
 
 const emit = defineEmits<TransferLookupItemEmits>();
 
 const store = useStore();
-const showLoader = ref(false);
 
 const state = computed<string>(
 	() => store.getters['workspace/WORKSRACE_STATE'],
@@ -118,10 +119,7 @@ const usernameAvatar = computed(() => {
 });
 
 const handleInput = () => {
-	if (showLoader.value) return;
-	showLoader.value = true;
 	emit('input', props.item);
-	showLoader.value = false;
 };
 </script>
 
