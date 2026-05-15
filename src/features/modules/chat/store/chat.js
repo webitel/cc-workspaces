@@ -1,13 +1,11 @@
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import { ConversationState } from 'webitel-sdk';
 
-import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import closed from '../modules/closed/store/closed.js';
 import manual from '../modules/manual/store/manual';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import chatHistory from './chat-history.js';
 import chatMedia from './chat-media.js';
 import clientHandlers from './client-handlers';
@@ -117,16 +115,6 @@ const actions = {
 			context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(
 				chat,
 			);
-
-		if (isChatClosed && !chat.contact?.id) {
-			// because closed chats don't have messages
-			const { items: messages } = await CatalogAPI.getChatMessagesList({
-				chatId: chat.id,
-			});
-			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			chat.messages = formatChatMessages(messages);
-		}
-
 		await context.dispatch('SET_WORKSPACE', chat);
 	},
 
