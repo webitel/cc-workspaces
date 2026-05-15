@@ -28,7 +28,7 @@
 
     <template #body>
       <div class="task-header-expansion-card__info-wrapper">
-        <p>{{ phoneNumberLabel }}</p>
+        <p>{{ props.phoneNumber }}</p>
 
         <queue-name-chip
           v-if="props.queueName"
@@ -82,14 +82,6 @@ const taskTitle = computed(() => {
 });
 
 const avatarTitle = computed(() => props.contact?.name || props.username);
-
-const phoneNumberLabel = computed(() => {
-	if (props.hideNumber) {
-		return t('workspaceSec.taskHeaderExpansionCard.hiddenNumber');
-	}
-
-	return props.phoneNumber;
-});
 
 const contactLink = computed(() =>
 	store.getters['ui/infoSec/client/contact/CONTACT_LINK'](props.contact?.id),
