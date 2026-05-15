@@ -7,6 +7,7 @@
     :data-filters="dataFilters"
     :get-data="getAgens"
     :presence-status-field="PresenceStatusField"
+		:transfer-loading="currentTransferNumber && isLoading(currentTransferNumber)"
     @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
@@ -14,6 +15,7 @@
         color="transfer"
         icon="consultative-transfer"
         rounded
+				:loading="isLoading(item.id)"
         @click="consultationTransfer(item)"
       />
     </template>
@@ -24,10 +26,11 @@
 import { AgentsAPI } from '@webitel/api-services/api';
 import { EngineAgent } from '@webitel/api-services/gen';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
+import { useLoadingState } from '../../../../../../../composables/useLoadingState';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
@@ -39,6 +42,8 @@ interface APIResponse {
 }
 
 const store = useStore();
+const { isLoading, withLoading } = useLoadingState();
+
 const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus';
 
@@ -52,6 +57,8 @@ const dataFields = [
 ];
 const dataFilters = 'user_presence_status.status=sip,!dnd';
 const dataSort = 'position';
+
+const currentTransferNumber = ref<string | null>(null);
 
 const scroll = computed(
 	() =>
@@ -69,10 +76,16 @@ const emit = defineEmits([
 	'transfer-complete',
 ]);
 
-const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
-	store.dispatch('features/call/TOGGLE_HOLD', item.id);
+const consultationTransfer = async (item: AgentItem = {} as AgentItem) => {
+	await withLoading(item.id, () =>
+		store.dispatch('features/call/TOGGLE_HOLD', item.id),
+	);
 	if (call.value) {
-		call.value.processTransferAgent(Number(item.id));
+		currentTransferNumber.value = item.extension;
+		await withLoading(item.extension, () =>
+			call.value.processTransferAgent(Number(item.id)),
+		);
+		currentTransferNumber.value = null;
 		emit('transfer-complete');
 	}
 };

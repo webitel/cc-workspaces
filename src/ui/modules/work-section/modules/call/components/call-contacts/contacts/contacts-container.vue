@@ -31,6 +31,7 @@
         :key="item.id"
         :item="item"
         :size="size"
+				:loading="isLoadingState(item.id)"
         @call="makeCall"
       />
     </template>
@@ -48,6 +49,7 @@ import { useStore } from 'vuex';
 
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
+import { useLoadingState } from '../../../../../../../composables/useLoadingState';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
@@ -63,6 +65,7 @@ const props = defineProps({
 const { t } = useI18n();
 const store = useStore();
 const userinfoStore = useUserinfoStore();
+const { isLoading: isLoadingState, withLoading } = useLoadingState();
 
 const filterQuery = ref(SearchMode.NAME);
 const contactsLabelsConfiguration = ref([]);
@@ -117,7 +120,7 @@ const fetchFn = async (params) => {
 };
 
 const makeCall = (item) => {
-	store.dispatch('features/call/CALL', item);
+	withLoading(item.contactId, () => store.dispatch('features/call/CALL', item));
 };
 
 const changeMode = ({ value }) => {

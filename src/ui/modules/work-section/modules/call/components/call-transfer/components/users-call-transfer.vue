@@ -8,12 +8,14 @@
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
+		:transfer-loading="currentTransferNumber && isLoading(currentTransferNumber)"
     @transfer="transfer"
   >
     <template #actions="{ item }">
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
+				:loading="isLoading(item.id)"
         rounded
         @click="transfer(item)"
       />
@@ -28,6 +30,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useLoadingState } from '../../../../../../../composables/useLoadingState';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
@@ -47,6 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useStore();
+const { isLoading, withLoading } = useLoadingState();
 
 const PresenceStatusField = 'presence';
 const dataSort = ref('position');
@@ -59,6 +63,7 @@ const dataFields = ref([
 
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
+const currentTransferNumber = ref<string | null>(null);
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const scroll = computed(
 	() =>
@@ -75,8 +80,13 @@ const emit = defineEmits([
 
 const transfer = async (item: UserItem = {} as UserItem) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
-	await store.dispatch('features/call/BLIND_TRANSFER', number);
+	const id = item.id || number;
+	currentTransferNumber.value = number;
+	await withLoading(id, () =>
+		store.dispatch('features/call/BLIND_TRANSFER', number),
+	);
 	emit('transfer-complete');
+	currentTransferNumber.value = null;
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {
