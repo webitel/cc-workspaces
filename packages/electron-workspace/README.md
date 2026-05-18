@@ -1,3 +1,11 @@
+### Prerequisites
+
+Native SIP module (`electron-sip`) links against [pjproject](https://www.pjsip.org/). Install before `npm install`:
+
+- **macOS**: `brew install pjproject`. Build picks up libs/headers from `brew --prefix pjproject` automatically.
+
+Build toolchain: Node ≥ 18, Python 3, plus the platform compiler (Xcode CLT).
+
 ### Project setup
 ```
 npm install

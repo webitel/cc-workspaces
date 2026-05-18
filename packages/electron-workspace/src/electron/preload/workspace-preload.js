@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
 const { SipPhone } = require('webitel-sdk');
 let conf;
-var sip = require('electron_baresip');
+var sip = require('electron-sip');
 let chatPayload;
 
 ipcRenderer.invoke('get-userData-path').then((result) => getConf(result));

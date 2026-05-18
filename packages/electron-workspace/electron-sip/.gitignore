@@ -1,0 +1,9 @@
+node_modules
+build
+thrid_party
+/thrid_party/opus/
+/thrid_party/pjproject/
+lib
+linux
+include
+package-lock.json
