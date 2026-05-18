@@ -12,7 +12,6 @@
       static
       hide-expand
       stretch
-      countdown-time-mode
       @initialized="handlePlayerInitialize"
     />
     <wt-player
