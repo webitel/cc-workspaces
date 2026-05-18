@@ -190,17 +190,12 @@ const actions = {
 
 	ADD_DIGIT: async (context, value) => {
 		const call = context.getters.CALL_ON_WORKSPACE;
-		if (call.allowDtmf) {
-			// if there's a call, send dtmf
-			context.dispatch('SEND_DTMF', value);
-		} else {
-			// else user types a number
-			const newNumber = call.newNumber + value;
+		
+		const newNumber = call.newNumber + value;
 
-			// cannot mutate newCall because its instance only on 'workspace' state
+		// cannot mutate newCall because its instance only on 'workspace' state
 
-			context.getters.CALL_ON_WORKSPACE.newNumber = newNumber;
-		}
+		context.getters.CALL_ON_WORKSPACE.newNumber = newNumber;
 	},
 
 	SET_NEW_NUMBER: (
