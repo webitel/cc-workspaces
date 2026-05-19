@@ -125,7 +125,7 @@ ipcRenderer.on(
 			console.error('TODO');
 			return;
 		}
-		const cli = await window.cliController.getCliInstance();
+		const cli = window.cli;
 		//console.error(debugMode);
 		await changeSIP(cli, {
 			isSIP,
@@ -193,16 +193,15 @@ function subscribeAction(store) {
 				break;
 
 			case 'features/status/SUBSCRIBE_STATUS':
-				window.cliController.getCliInstance().then(async (cli) => {
-					//if (cli.phone) {
-					//       await unrg(cli);
-					// }
-					await changeSIP(cli, {
-						isSIP: conf.useSIP,
-						timeoutSIP: conf.timeoutSIP,
-						codecs: conf.codecs,
-						debugMode: conf.debugMode,
-					});
+				// console.warn('SUBSCRIBE_STATUS', window.cli);
+				//if (cli.phone) {
+				//       await unrg(cli);
+				// }
+				changeSIP(cli, {
+					isSIP: conf.useSIP,
+					timeoutSIP: conf.timeoutSIP,
+					codecs: conf.codecs,
+					debugMode: conf.debugMode,
 				});
 				break;
 
@@ -398,10 +397,10 @@ ipcRenderer.on('send-reporting', (event, arg) => {
 });
 
 ipcRenderer.on('make-call', async (event, destination) => {
-	const cli = await window.cliController.getCliInstance();
+	const cli = window.cli;
 	if (cli) {
 		cli.call({
-			destination: '',
+			destination,
 		});
 	}
 });
