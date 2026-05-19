@@ -10,6 +10,7 @@
 	"homepage": "https://example.webitel.com/",
 	"keywords": [],
 	"scripts": {
+		"preinstall": "node scripts/check-native-deps.js",
 		"start": "npm run build:renderer && electron . --disable-http-cache",
 		"build:renderer": "vite build -c vite.renderer.config.ts",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
@@ -78,7 +79,7 @@
 	"dependencies": {
 		"axios": "^1.13.2",
 		"dotenv": "^17.2.3",
-		"electron_baresip": "file:./electron_baresip",
+		"electron-sip": "file:./electron-sip",
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",
 		"electron-updater": "^6.6.2",

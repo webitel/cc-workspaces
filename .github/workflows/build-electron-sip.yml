@@ -2,9 +2,6 @@ name: build electron-sip prebuilds
 
 on:
   workflow_dispatch:
-
-permissions:
-  contents: read
   # push:
   #   branches:
   #     - feat/electron-sip-pkg-for-electron-app
