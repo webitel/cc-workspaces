@@ -95,8 +95,9 @@ jobs:
           $prefix = "$env:RUNNER_TEMP\pjsip-prefix"
           New-Item -ItemType Directory -Force -Path "$prefix\lib", "$prefix\include" | Out-Null
           # Flatten libs, stripping the arch/config suffix so binding.gyp can reference stable names.
+          # Handles both Release and Release-Static configurations.
           Get-ChildItem -Path $env:PJ_SRC -Filter "*.lib" -Recurse | ForEach-Object {
-            $new = $_.Name -replace '-x86_64-x64-vc\d+-Release-Static\.lib$', '.lib'
+            $new = $_.Name -replace '-x86_64-x64-vc\d+-Release(-Static)?\.lib$', '.lib'
             Copy-Item $_.FullName -Destination "$prefix\lib\$new" -Force
           }
           # Each pj* subproject ships its own include/ tree; merge all into prefix\include.
