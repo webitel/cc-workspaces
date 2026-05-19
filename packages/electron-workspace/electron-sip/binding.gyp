@@ -13,7 +13,7 @@
          'MACOSX_DEPLOYMENT_TARGET': '11.0',
        },
        'msvs_settings': {
-         'VCCLCompilerTool': { 'ExceptionHandling': 1, 'RuntimeLibrary': 2 },
+         'VCCLCompilerTool': { 'ExceptionHandling': 1, 'RuntimeLibrary': 0 },
        },
        'conditions': [
          ['OS=="win"', {
@@ -35,6 +35,10 @@
                "<(pjsip_prefix)/lib/pjlib-util.lib",
                "<(pjsip_prefix)/lib/pjlib.lib",
                "<(pjsip_prefix)/lib/libresample.lib",
+               "<(pjsip_prefix)/lib/libgsmcodec.lib",
+               "<(pjsip_prefix)/lib/libilbccodec.lib",
+               "<(pjsip_prefix)/lib/libspeex.lib",
+               "<(pjsip_prefix)/lib/libsrtp.lib",
                "ws2_32.lib",
                "iphlpapi.lib",
                "dnsapi.lib",

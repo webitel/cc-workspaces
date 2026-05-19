@@ -84,11 +84,11 @@ jobs:
       - name: Empty config_site.h (no SSL, default build options)
         shell: cmd
         run: type nul > "%PJ_SRC%\pjlib\include\pj\config_site.h"
-      - name: Build pjproject (Release|x64) via VsDevCmd
+      - name: Build pjproject (Release-Static|x64) via VsDevCmd
         shell: cmd
         run: |
           call "%PROGRAMFILES%\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"
-          msbuild "%PJ_SRC%\pjproject-vs14.sln" /p:PlatformToolset=v143 /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
+          msbuild "%PJ_SRC%\pjproject-vs14.sln" /p:PlatformToolset=v143 /p:Configuration=Release-Static /p:Platform=x64 /m /verbosity:minimal
       - name: Stage pjproject prefix (flatten libs + headers)
         shell: pwsh
         run: |
