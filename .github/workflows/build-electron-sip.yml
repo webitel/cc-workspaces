@@ -72,17 +72,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Update bundled vcpkg
+      - name: Bootstrap fresh vcpkg
         shell: pwsh
         run: |
-          cd $env:VCPKG_INSTALLATION_ROOT
-          git pull --quiet
-          .\bootstrap-vcpkg.bat -disableMetrics
+          git clone --depth 1 https://github.com/microsoft/vcpkg.git "$env:RUNNER_TEMP\vcpkg"
+          & "$env:RUNNER_TEMP\vcpkg\bootstrap-vcpkg.bat" -disableMetrics
+          if (!(Test-Path "$env:RUNNER_TEMP\vcpkg\ports\pjproject")) {
+            Write-Error "pjproject port missing in fresh vcpkg clone"
+            exit 1
+          }
+          "VCPKG_ROOT=$env:RUNNER_TEMP\vcpkg" >> $env:GITHUB_ENV
       - name: Install pjproject via vcpkg
         shell: pwsh
         run: |
-          vcpkg install pjproject:x64-windows-static-md
-          "PJSIP_PREFIX=$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows-static-md" >> $env:GITHUB_ENV
+          & "$env:VCPKG_ROOT\vcpkg.exe" install pjproject:x64-windows-static-md
+          "PJSIP_PREFIX=$env:VCPKG_ROOT\installed\x64-windows-static-md" >> $env:GITHUB_ENV
       - name: Install deps (no native build)
         run: npm install --ignore-scripts
       - name: Prebuildify
