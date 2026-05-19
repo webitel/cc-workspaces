@@ -136,7 +136,7 @@
             "<!@(pkg-config --cflags libpjproject)"
           ],
           "libraries": [
-            "<!@(pkg-config --libs libpjproject)",
+            "<!@(pkg-config --libs --static libpjproject)",
             "-lasound",
             "-lstdc++",
             "-lm",

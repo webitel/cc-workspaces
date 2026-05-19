@@ -73,7 +73,7 @@ jobs:
         run: |
           curl -sSL https://github.com/pjsip/pjproject/archive/refs/tags/${PJSIP_VERSION}.tar.gz | tar xz
           cd pjproject-${PJSIP_VERSION}
-          ./configure --enable-shared --prefix=/usr/local CFLAGS=-fPIC CXXFLAGS=-fPIC
+          ./configure --disable-shared --enable-static --prefix=/usr/local CFLAGS=-fPIC CXXFLAGS=-fPIC
           make dep
           make
           sudo make install
