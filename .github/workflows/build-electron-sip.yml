@@ -1,5 +1,11 @@
 name: build electron-sip prebuilds
 
+# Builds the native electron-sip N-API addon on every supported OS and uploads
+# the resulting prebuilds as artifacts. Manually triggered (workflow_dispatch).
+# After a successful run, drop the merged prebuilds into
+# packages/electron-workspace/electron-sip/prebuilds/ and commit, so consumers
+# install zero-build.
+
 on:
   workflow_dispatch:
   # push:
@@ -9,11 +15,20 @@ on:
   #     - 'packages/electron-workspace/electron-sip/**'
   #     - '.github/workflows/build-electron-sip.yml'
 
+permissions:
+  contents: read
+
+env:
+  PJSIP_VERSION: '2.14'
+
 defaults:
   run:
     working-directory: packages/electron-workspace/electron-sip
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # macOS arm64 — pjproject installed via Homebrew, addon built with node-gyp.
+  # ---------------------------------------------------------------------------
   macos-arm64:
     runs-on: macos-14
     steps:
@@ -21,31 +36,39 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Install pjproject
+
+      - name: Install pjproject (brew)
         run: brew install pjproject
-      - name: Install deps (no native build)
+
+      - name: Install JS deps (skip native build)
         run: npm install --ignore-scripts
-      - name: Prebuildify
+
+      - name: Build prebuild
         run: npx prebuildify --napi --strip --arch=arm64
+
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-darwin-arm64
           path: packages/electron-workspace/electron-sip/prebuilds/
 
+  # ---------------------------------------------------------------------------
+  # Linux x64 — pjproject built from source (no reliable apt package), exposed
+  # to the addon via pkg-config.
+  # ---------------------------------------------------------------------------
   linux-x64:
     runs-on: ubuntu-latest
-    env:
-      PJSIP_VERSION: '2.14'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Install build deps
+
+      - name: Install build deps (apt)
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential pkg-config libasound2-dev libssl-dev
-      - name: Build + install pjproject
+
+      - name: Build and install pjproject
         working-directory: ${{ runner.temp }}
         run: |
           curl -sSL https://github.com/pjsip/pjproject/archive/refs/tags/${PJSIP_VERSION}.tar.gz | tar xz
@@ -56,24 +79,32 @@ jobs:
           sudo make install
           sudo ldconfig
           pkg-config --modversion libpjproject
-      - name: Install deps (no native build)
+
+      - name: Install JS deps (skip native build)
         run: npm install --ignore-scripts
-      - name: Prebuildify
+
+      - name: Build prebuild
         run: npx prebuildify --napi --strip --arch=x64
+
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-linux-x64
           path: packages/electron-workspace/electron-sip/prebuilds/
 
+  # ---------------------------------------------------------------------------
+  # Windows x64 — pjproject has no Homebrew/apt/vcpkg equivalent; download the
+  # source, build with msbuild (Release-Static = /MT, matches node-gyp's CRT),
+  # then flatten the per-subproject .lib outputs into a single prefix that
+  # binding.gyp can consume.
+  # ---------------------------------------------------------------------------
   windows-x64:
     runs-on: windows-latest
-    env:
-      PJSIP_VERSION: '2.14'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+
       - name: Download pjproject source
         shell: pwsh
         run: |
@@ -81,41 +112,63 @@ jobs:
           Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\pjproject.zip"
           Expand-Archive -Path "$env:RUNNER_TEMP\pjproject.zip" -DestinationPath $env:RUNNER_TEMP
           "PJ_SRC=$env:RUNNER_TEMP\pjproject-${env:PJSIP_VERSION}" >> $env:GITHUB_ENV
-      - name: Empty config_site.h (no SSL, default build options)
+
+      - name: Configure pjproject (empty config_site.h = defaults, no SSL)
         shell: cmd
         run: type nul > "%PJ_SRC%\pjlib\include\pj\config_site.h"
-      - name: Build pjproject (Release-Static|x64) via VsDevCmd
+
+      - name: Build pjproject (Release-Static, x64)
         shell: cmd
         run: |
           call "%PROGRAMFILES%\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"
-          msbuild "%PJ_SRC%\pjproject-vs14.sln" /p:PlatformToolset=v143 /p:Configuration=Release-Static /p:Platform=x64 /m /verbosity:minimal
-      - name: Stage pjproject prefix (flatten libs + headers)
+          msbuild "%PJ_SRC%\pjproject-vs14.sln" ^
+            /p:PlatformToolset=v143 ^
+            /p:Configuration=Release-Static ^
+            /p:Platform=x64 ^
+            /m ^
+            /verbosity:minimal
+
+      - name: Stage pjproject into a single prefix
         shell: pwsh
         run: |
           $prefix = "$env:RUNNER_TEMP\pjsip-prefix"
           New-Item -ItemType Directory -Force -Path "$prefix\lib", "$prefix\include" | Out-Null
-          # Flatten libs, stripping the arch/config suffix so binding.gyp can reference stable names.
-          # Handles both Release and Release-Static configurations.
+
+          # Flatten every produced .lib into $prefix\lib, stripping the
+          # arch/config suffix so binding.gyp can reference stable names.
+          # e.g. pjsua2-lib-x86_64-x64-vc14-Release-Static.lib -> pjsua2-lib.lib
           Get-ChildItem -Path $env:PJ_SRC -Filter "*.lib" -Recurse | ForEach-Object {
-            $new = $_.Name -replace '-x86_64-x64-vc\d+-Release(-Static)?\.lib$', '.lib'
-            Copy-Item $_.FullName -Destination "$prefix\lib\$new" -Force
+            $renamed = $_.Name -replace '-x86_64-x64-vc\d+-Release(-Static)?\.lib$', '.lib'
+            Copy-Item $_.FullName -Destination "$prefix\lib\$renamed" -Force
           }
-          # Each pj* subproject ships its own include/ tree; merge all into prefix\include.
-          Get-ChildItem -Path $env:PJ_SRC -Directory | Where-Object { Test-Path "$($_.FullName)\include" } | ForEach-Object {
+
+          # Each pj* subproject ships its own include/ tree; merge them all
+          # into $prefix\include so binding.gyp only needs one include dir.
+          Get-ChildItem -Path $env:PJ_SRC -Directory | Where-Object {
+            Test-Path "$($_.FullName)\include"
+          } | ForEach-Object {
             Copy-Item "$($_.FullName)\include\*" -Destination "$prefix\include" -Recurse -Force
           }
+
           Write-Host "=== staged libs ==="
           Get-ChildItem "$prefix\lib" | Select-Object Name | Format-Table -AutoSize
+
           "PJSIP_PREFIX=$prefix" >> $env:GITHUB_ENV
-      - name: Install deps (no native build)
+
+      - name: Install JS deps (skip native build)
         run: npm install --ignore-scripts
-      - name: Prebuildify
+
+      - name: Build prebuild
         run: npx prebuildify --napi --arch=x64
+
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-win32-x64
           path: packages/electron-workspace/electron-sip/prebuilds/
 
+  # ---------------------------------------------------------------------------
+  # Merge per-platform artifacts into one combined artifact for download.
+  # ---------------------------------------------------------------------------
   collect:
     needs: [macos-arm64, linux-x64, windows-x64]
     runs-on: ubuntu-latest
@@ -125,6 +178,7 @@ jobs:
           path: prebuilds-merged
           pattern: prebuild-*
           merge-multiple: true
+
       - uses: actions/upload-artifact@v4
         with:
           name: electron-sip-prebuilds-all
