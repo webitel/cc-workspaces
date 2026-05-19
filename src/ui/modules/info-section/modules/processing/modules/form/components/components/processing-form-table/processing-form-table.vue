@@ -45,6 +45,7 @@
                 <p> {{ item[action.field] }} </p>
                 <wt-button
                   :color="action.color"
+                  :size="ComponentSize.SM"
                   @click="sendAction(action.action, item)"
                 >
                   {{ action.buttonName }}
@@ -73,7 +74,10 @@ import {
 } from '@webitel/api-services/api/transformers';
 import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
 import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
-import { ProcessingTableColumnType } from '@webitel/ui-sdk/enums';
+import {
+	ComponentSize,
+	ProcessingTableColumnType,
+} from '@webitel/ui-sdk/enums';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -322,7 +326,7 @@ onMounted(() => {
   }
 
   &__scroll-wrapper {
-    height: 600px;
+    height: 418px;
     overflow: auto;
   }
 

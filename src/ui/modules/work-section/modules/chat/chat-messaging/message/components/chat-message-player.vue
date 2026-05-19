@@ -12,7 +12,6 @@
       static
       hide-expand
       stretch
-      countdown-time-mode
       @initialized="handlePlayerInitialize"
     />
     <wt-player
@@ -62,6 +61,11 @@ function handlePlayerInitialize(player: unknown) {
 
   .chat-message-player__player {
     width: 100%;
+  }
+
+  :deep(.wt-vidstack-player) {
+    height: var(--chat-video-player-height);
+    width: var(--chat-video-player-width);
   }
 }
 </style>

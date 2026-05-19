@@ -109,9 +109,13 @@ const name = computed(
 	() => props.item?.name || props.item?.username || props.item?.queue?.name,
 );
 const teamName = computed(() => props.showTeamName && props.item?.team?.name);
-const usernameAvatar = computed(
-	() => (props.showUserNameAvatar && props.item?.name) || props.item?.username,
-);
+const usernameAvatar = computed(() => {
+	if (props.showUserNameAvatar) {
+		return props.item?.name || props.item?.username;
+	}
+
+	return props.item?.username || props.item?.name;
+});
 
 const handleInput = () => {
 	if (showLoader.value) return;

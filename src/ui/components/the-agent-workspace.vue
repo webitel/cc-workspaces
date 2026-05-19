@@ -51,11 +51,11 @@
   setup
   lang="ts"
 >
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 import { storeToRefs } from 'pinia';
 import { computed, onUnmounted, provide, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-
 import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
 import { usePanelSizeController } from '../composables/usePanelSizeController';
 import CcHeader from '../modules/app-header/components/app-header.vue';
@@ -94,6 +94,10 @@ const isDescTrackAuthSuccessPopup = ref(false);
 
 const userinfoStore = useUserinfoStore();
 
+const { subscribe } = useCachedInterval({
+	timeout: 5 * 1000,
+});
+
 const isDescTrackAuthPopupsAllow = computed(
 	() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW'],
 );
@@ -110,6 +114,10 @@ const initSession = async () => {
 	try {
 		isInitLoading.value = true;
 		await openSession();
+
+		// Periodically refresh flows list to keep it up-to-date during the session
+		subscribe(loadFlowsList);
+
 		if (route.query.failureRefresh) {
 			router.push({
 				...router.currentRoute,
@@ -138,6 +146,11 @@ const preventDrop = (event: DragEvent) => {
 	event.preventDefault();
 	event.stopPropagation();
 };
+
+const loadFlowsList = async () => {
+	await store.dispatch('ui/infoSec/flows/LOAD_FLOWS_LIST');
+};
+
 watch(isDescTrackAuthErrorPopup, () => {
 	if (isDescTrackAuthErrorPopup.value) {
 		agentLogout();
@@ -173,7 +186,7 @@ onUnmounted(() => {
 
 .workspace {
   flex-grow: 1;
-  min-height: 0;
+  min-height: 600px; // https://webitel.atlassian.net/browse/WTEL-9051?focusedCommentId=752494
   margin-top: var(--spacing-sm);
   display: flex;
   gap: var(--spacing-sm);

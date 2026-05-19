@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
@@ -83,14 +82,6 @@ export default {
 		},
 	},
 
-	setup() {
-		const { subscribe } = useCachedInterval({
-			timeout: 5 * 1000,
-		});
-		return {
-			subscribe,
-		};
-	},
 	data: () => ({
 		currentTab: null,
 		pin: false,
@@ -230,14 +221,6 @@ export default {
 	},
 	created() {
 		this.currentTab = this.tabsObject.generalInfo;
-	},
-	mounted() {
-		this.subscribe(this.loadFlowsList);
-	},
-	methods: {
-		async loadFlowsList() {
-			await this.$store.dispatch(`${this.flowsNamespace}/LOAD_FLOWS_LIST`);
-		},
 	},
 };
 </script>

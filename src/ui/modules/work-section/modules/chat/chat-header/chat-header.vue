@@ -22,7 +22,7 @@
         :username="displayChatName"
         :phone-number="displayNumber"
         :is-title-linked="!isChatTransferred"
-        :contact-id="props.contact?.id"
+        :contact="props.contact"
         :queue-name="displayQueueName"
       />
     </template>

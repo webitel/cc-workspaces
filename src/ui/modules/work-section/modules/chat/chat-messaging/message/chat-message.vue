@@ -100,8 +100,16 @@ const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
 );
 
+const isInternalMember = computed(
+	() => props.message.member?.type === 'webitel',
+);
+
 const isAgent = computed(
-	() => props.message.member?.self || props.message.member?.type === 'webitel',
+	() => props.message.member?.self || isInternalMember.value,
+);
+
+const isTransferAgent = computed(
+	() => !props.message.member?.self && isInternalMember.value,
 );
 
 const isBot = computed(
@@ -113,6 +121,7 @@ const isBot = computed(
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 const getClientUsername = computed(() => {
+	if (isTransferAgent.value) return props.message.member?.name;
 	if (isAgent.value) return agentName?.value;
 
 	return props.username || props.message.member?.name;
