@@ -67,26 +67,45 @@ jobs:
 
   windows-x64:
     runs-on: windows-latest
+    env:
+      PJSIP_VERSION: '2.14'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Bootstrap fresh vcpkg
+      - name: Download pjproject source
         shell: pwsh
         run: |
-          git clone --depth 1 https://github.com/microsoft/vcpkg.git "$env:RUNNER_TEMP\vcpkg"
-          & "$env:RUNNER_TEMP\vcpkg\bootstrap-vcpkg.bat" -disableMetrics
-          if (!(Test-Path "$env:RUNNER_TEMP\vcpkg\ports\pjproject")) {
-            Write-Error "pjproject port missing in fresh vcpkg clone"
-            exit 1
+          $url = "https://github.com/pjsip/pjproject/archive/refs/tags/${env:PJSIP_VERSION}.zip"
+          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\pjproject.zip"
+          Expand-Archive -Path "$env:RUNNER_TEMP\pjproject.zip" -DestinationPath $env:RUNNER_TEMP
+          "PJ_SRC=$env:RUNNER_TEMP\pjproject-${env:PJSIP_VERSION}" >> $env:GITHUB_ENV
+      - name: Empty config_site.h (no SSL, default build options)
+        shell: cmd
+        run: type nul > "%PJ_SRC%\pjlib\include\pj\config_site.h"
+      - name: Build pjproject (Release|x64) via VsDevCmd
+        shell: cmd
+        run: |
+          call "%PROGRAMFILES%\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"
+          msbuild "%PJ_SRC%\pjproject-vs14.sln" /p:PlatformToolset=v143 /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
+      - name: Stage pjproject prefix (flatten libs + headers)
+        shell: pwsh
+        run: |
+          $prefix = "$env:RUNNER_TEMP\pjsip-prefix"
+          New-Item -ItemType Directory -Force -Path "$prefix\lib", "$prefix\include" | Out-Null
+          # Flatten libs, stripping the arch/config suffix so binding.gyp can reference stable names.
+          Get-ChildItem -Path $env:PJ_SRC -Filter "*.lib" -Recurse | ForEach-Object {
+            $new = $_.Name -replace '-x86_64-x64-vc\d+-Release-Static\.lib$', '.lib'
+            Copy-Item $_.FullName -Destination "$prefix\lib\$new" -Force
           }
-          "VCPKG_ROOT=$env:RUNNER_TEMP\vcpkg" >> $env:GITHUB_ENV
-      - name: Install pjproject via vcpkg
-        shell: pwsh
-        run: |
-          & "$env:VCPKG_ROOT\vcpkg.exe" install pjproject:x64-windows-static-md
-          "PJSIP_PREFIX=$env:VCPKG_ROOT\installed\x64-windows-static-md" >> $env:GITHUB_ENV
+          # Each pj* subproject ships its own include/ tree; merge all into prefix\include.
+          Get-ChildItem -Path $env:PJ_SRC -Directory | Where-Object { Test-Path "$($_.FullName)\include" } | ForEach-Object {
+            Copy-Item "$($_.FullName)\include\*" -Destination "$prefix\include" -Recurse -Force
+          }
+          Write-Host "=== staged libs ==="
+          Get-ChildItem "$prefix\lib" | Select-Object Name | Format-Table -AutoSize
+          "PJSIP_PREFIX=$prefix" >> $env:GITHUB_ENV
       - name: Install deps (no native build)
         run: npm install --ignore-scripts
       - name: Prebuildify

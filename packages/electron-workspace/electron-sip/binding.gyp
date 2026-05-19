@@ -17,14 +17,14 @@
        },
        'conditions': [
          ['OS=="win"', {
-           'defines': [ '_HAS_EXCEPTIONS=1', 'WIN32', '_WIN32', '_ITERATOR_DEBUG_LEVEL=0', '_HAS_ITERATOR_DEBUGGING=0', 'PJMEDIA_HAS_GSM_CODEC=0', 'PJMEDIA_HAS_SPEEX_CODEC=0' ],
+           'defines': [ '_HAS_EXCEPTIONS=1', 'WIN32', '_WIN32', '_ITERATOR_DEBUG_LEVEL=0', '_HAS_ITERATOR_DEBUGGING=0', 'PJMEDIA_HAS_GSM_CODEC=0', 'PJMEDIA_HAS_SPEEX_CODEC=0', 'PJMEDIA_HAS_SRTP=0' ],
            "include_dirs": [
              "<(pjsip_prefix)/include"
            ],
            "link_settings": {
              "libraries": [
-               "<(pjsip_prefix)/lib/pjsua2.lib",
-               "<(pjsip_prefix)/lib/pjsua.lib",
+               "<(pjsip_prefix)/lib/pjsua2-lib.lib",
+               "<(pjsip_prefix)/lib/pjsua-lib.lib",
                "<(pjsip_prefix)/lib/pjsip-ua.lib",
                "<(pjsip_prefix)/lib/pjsip-simple.lib",
                "<(pjsip_prefix)/lib/pjsip.lib",
@@ -35,17 +35,13 @@
                "<(pjsip_prefix)/lib/pjnath.lib",
                "<(pjsip_prefix)/lib/pjlib-util.lib",
                "<(pjsip_prefix)/lib/pjlib.lib",
-               "<(pjsip_prefix)/lib/libsrtp.lib",
-               "<(pjsip_prefix)/lib/libssl.lib",
-               "<(pjsip_prefix)/lib/libcrypto.lib",
+               "<(pjsip_prefix)/lib/libresample.lib",
                "ws2_32.lib",
                "iphlpapi.lib",
                "dnsapi.lib",
                "winmm.lib",
                "ole32.lib",
-               "oleaut32.lib",
-               "crypt32.lib",
-               "bcrypt.lib"
+               "oleaut32.lib"
              ]
            }
          }],
