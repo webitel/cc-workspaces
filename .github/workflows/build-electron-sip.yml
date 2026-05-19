@@ -72,6 +72,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+      - name: Update bundled vcpkg
+        shell: pwsh
+        run: |
+          cd $env:VCPKG_INSTALLATION_ROOT
+          git pull --quiet
+          .\bootstrap-vcpkg.bat -disableMetrics
       - name: Install pjproject via vcpkg
         shell: pwsh
         run: |
@@ -80,7 +86,7 @@ jobs:
       - name: Install deps (no native build)
         run: npm install --ignore-scripts
       - name: Prebuildify
-        run: npx prebuildify --napi --strip --arch=x64
+        run: npx prebuildify --napi --arch=x64
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-win32-x64

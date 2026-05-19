@@ -23,13 +23,29 @@
            ],
            "link_settings": {
              "libraries": [
-               "<(pjsip_prefix)/lib/libpjproject.lib",
-               "<(pjsip_prefix)/lib/pjsua2-lib.lib",
-               "<(pjsip_prefix)/lib/pjnath.lib",
-               "<(pjsip_prefix)/lib/pjmedia.lib",
-               "<(pjsip_prefix)/lib/pjlib-util.lib",
+               "<(pjsip_prefix)/lib/pjsua2.lib",
+               "<(pjsip_prefix)/lib/pjsua.lib",
                "<(pjsip_prefix)/lib/pjsip-ua.lib",
-               "<(pjsip_prefix)/lib/pjlib.lib"
+               "<(pjsip_prefix)/lib/pjsip-simple.lib",
+               "<(pjsip_prefix)/lib/pjsip.lib",
+               "<(pjsip_prefix)/lib/pjmedia-codec.lib",
+               "<(pjsip_prefix)/lib/pjmedia-videodev.lib",
+               "<(pjsip_prefix)/lib/pjmedia-audiodev.lib",
+               "<(pjsip_prefix)/lib/pjmedia.lib",
+               "<(pjsip_prefix)/lib/pjnath.lib",
+               "<(pjsip_prefix)/lib/pjlib-util.lib",
+               "<(pjsip_prefix)/lib/pjlib.lib",
+               "<(pjsip_prefix)/lib/libsrtp.lib",
+               "<(pjsip_prefix)/lib/libssl.lib",
+               "<(pjsip_prefix)/lib/libcrypto.lib",
+               "ws2_32.lib",
+               "iphlpapi.lib",
+               "dnsapi.lib",
+               "winmm.lib",
+               "ole32.lib",
+               "oleaut32.lib",
+               "crypt32.lib",
+               "bcrypt.lib"
              ]
            }
          }],
