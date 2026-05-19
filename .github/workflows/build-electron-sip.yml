@@ -1,0 +1,104 @@
+name: build electron-sip prebuilds
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # push:
+  #   branches:
+  #     - feat/electron-sip-pkg-for-electron-app
+  #   paths:
+  #     - 'packages/electron-workspace/electron-sip/**'
+  #     - '.github/workflows/build-electron-sip.yml'
+
+defaults:
+  run:
+    working-directory: packages/electron-workspace/electron-sip
+
+jobs:
+  macos-arm64:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install pjproject
+        run: brew install pjproject
+      - name: Install deps (no native build)
+        run: npm install --ignore-scripts
+      - name: Prebuildify
+        run: npx prebuildify --napi --strip --arch=arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prebuild-darwin-arm64
+          path: packages/electron-workspace/electron-sip/prebuilds/
+
+  linux-x64:
+    runs-on: ubuntu-latest
+    env:
+      PJSIP_VERSION: '2.14'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libasound2-dev libssl-dev
+      - name: Build + install pjproject
+        working-directory: ${{ runner.temp }}
+        run: |
+          curl -sSL https://github.com/pjsip/pjproject/archive/refs/tags/${PJSIP_VERSION}.tar.gz | tar xz
+          cd pjproject-${PJSIP_VERSION}
+          ./configure --enable-shared --prefix=/usr/local CFLAGS=-fPIC CXXFLAGS=-fPIC
+          make dep
+          make
+          sudo make install
+          sudo ldconfig
+          pkg-config --modversion libpjproject
+      - name: Install deps (no native build)
+        run: npm install --ignore-scripts
+      - name: Prebuildify
+        run: npx prebuildify --napi --strip --arch=x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prebuild-linux-x64
+          path: packages/electron-workspace/electron-sip/prebuilds/
+
+  windows-x64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install pjsip via vcpkg
+        shell: pwsh
+        run: |
+          vcpkg install pjsip:x64-windows-static
+          "PJSIP_PREFIX=$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows-static" >> $env:GITHUB_ENV
+      - name: Install deps (no native build)
+        run: npm install --ignore-scripts
+      - name: Prebuildify
+        run: npx prebuildify --napi --strip --arch=x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prebuild-win32-x64
+          path: packages/electron-workspace/electron-sip/prebuilds/
+
+  collect:
+    needs: [macos-arm64, linux-x64, windows-x64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: prebuilds-merged
+          pattern: prebuild-*
+          merge-multiple: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: electron-sip-prebuilds-all
+          path: prebuilds-merged/
