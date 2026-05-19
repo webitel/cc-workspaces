@@ -5,6 +5,7 @@ node_modules
 /docs/.vitepress/dist
 /docs/.vitepress/cache
 .cursor
+/packages/electron-workspace/src/renderer/call-vue
 
 # local env files
 .env.local

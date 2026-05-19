@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webitel</title>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Ubuntu:300,400,500,600,700,800,900" rel="stylesheet">
+        <style >
+            html {
+                border-radius: 25px;
+            }
+            p {
+                margin: 5px 0px 0px 0px;
+            }
+            body {
+                overflow: hidden;
+                background: #F7F7F7;         
+                margin: 0;
+            }
+            .main, .main-processing {
+                width: max-content;
+                height: max-content;
+                background: #F7F7F7;
+                -webkit-app-region: drag;
+                border-radius: 5px;
+            }
+            .call-name {
+                margin-bottom: 5px;
+                font-size: 14px;
+                line-height: 18px;
+            }
+            .call-name, .call-time, .title, .base-timer__label, #queueName {
+                font-family: Montserrat;
+                font-style: normal;
+                font-weight: 600;
+                align-items: center;
+                display: flex;
+            }
+            .call-name, .call-number, .call-controls, 
+                .down-Arrow-button, .up-Arrow-button, .text-info, .reset-time-btn {
+                -webkit-app-region: no-drag;
+            }
+            .call-number {
+                font-family: Montserrat;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 14px;
+                display: flex;
+                align-items: center;
+                color: #808080;
+            }
+            .new-call-controls, .answered-call-controls {
+                width: 100%;
+                display: flex;
+            }
+            .center-border {
+                margin-top: 12px;
+                margin-left: 10px;
+                margin-right: 10px;
+                width: 108.5px;
+                border-top: 1px solid #E0E7EB;
+            }
+            .up-Arrow-button {
+                margin-left: 118.5px;
+                height: 24px;
+                width: 24px;
+                padding-bottom: 15px;
+            }
+            .contact-info {
+                width: 153px;
+                overflow-wrap: anywhere;
+                margin: 10px 0px 0px 10px;
+            }
+            .additional-info-close {
+                margin: 10px 0px 10px 0px;
+                height: 24px;
+            }
+            .additional-info-open {
+                box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.05), 
+                    inset -1px -1px 1px #FFFFFF, 
+                    inset 0px 0px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+                margin: 10px 10px 10px 10px;
+                width: 261px;
+            }
+            .text-info {
+                font-family: Montserrat;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 18px;
+                word-break: break-all;
+                color: #030302;
+                width: 231px;
+                padding: 10px 15px 10px 15px;
+                word-break: break-word;
+            }
+            .header-info, .additional-info-close {
+                display: flex;
+            }
+            .call-time {
+                margin-top: 10px;
+                margin-left: 10px;
+                font-size: 12px;
+                line-height: 14px;
+                text-align: right;
+                color: #000000;
+                width: 30px;
+                height: 14px; 
+                right: 40px;
+                top: 10px;
+            }
+            .img-active-hold {
+                width: 24px;
+                height: 24px;
+                margin: 10px 0px 0px 10px;
+            }
+            .control-button {
+                border-radius: 20px;
+                border: none;
+                outline: none;
+                -webkit-app-region: no-drag; 
+            }
+            input[class="control-button"] {
+                border-radius: 20px;
+                border: none;
+                outline: none;
+                -webkit-app-region: no-drag;  
+            }
+            input[class="buttons"] {
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                -webkit-app-region: no-drag;  
+            }
+            .buttons {
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                -webkit-app-region: no-drag;  
+            }
+            input[id=collapsBtn] {
+                opacity: 0.8;
+                box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
+                margin-left: 10px;
+                margin-top: 10px;
+            }
+            .arrow-button {
+                background: #F7F7F7;
+                box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.5), 
+                    inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+                border-radius: 5px;
+                border: none;
+                outline: none;
+            }
+            input[id=downArrowBtn]:hover {
+                background-image: url('../../../img/icon-arrow-down-hover-md.svg');
+            }
+            input[id=upArrowBtn]:hover {
+                background-image: url('../../../img/icon-arrow-up-hover-md.svg');
+            }
+            input[id=collapsBtn]:hover {
+                background-image: url('../../../img/icon-collaps-hover-md.svg');
+            }
+            input[id=holdPressedBtn]:hover {
+                background-image: url('../../../img/hold-pressed-hover-bttn.svg');
+            }
+            input[id=mutePressedBtn]:hover {
+                background-image: url('../../../img/mic-off-pressed-hover-bttn.svg');
+            }
+            input[id=muteBtn]:hover {
+                background-image: url('../../../img/mic-hover-bttn.svg');
+            }
+            input[id=holdBtn]:hover {
+                background-image: url('../../../img/hold-hover-bttn.svg');
+            }
+            input[id=declineBtn]:hover {
+                background-image: url('../../../img/decline-hover-bttn.svg');
+            }
+            input[id=resetTimeBtn]:hover {
+                background-image: url('../../../img/icon-plus-hover-md.svg');
+            }
+            #rejectBtn:hover, #answerBtn:hover, #successBtn:hover, #failBtn:hover, #saveBtn:hover, #closeBtn:hover {
+                opacity: 1;
+            }
+            #answerBtn {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+                margin: 0px 10px 10px 48px;
+                color: #F7F7F7;
+
+                position: relative;
+                width: 87px;
+                height: 38px;
+                border: none;
+
+                background: #2BA329;
+                opacity: 0.8;
+
+                box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.05), inset -1px -1px 1px rgba(255, 255, 255, 0.5), inset 0px 0px 1px 2px rgba(0, 0, 0, 0.05), inset 0px 0px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 20px;
+            }
+            #rejectBtn {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+
+                position: static;
+                color: #F7F7F7;
+                width: 88px;
+                height: 38px;
+                left: 135px;
+                top: 0px;
+
+                background: #E63E1A;
+                opacity: 0.8;
+
+                box-shadow: inset 1px 1px 2px #FFFFFF, inset -2px -2px 2px rgba(0, 0, 0, 0.15);
+                border-radius: 20px;
+
+                flex: none;
+                order: 1;
+                flex-grow: 0;
+                margin: 0px 48px 10px 0px;
+            }
+            #failBtn {
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+
+                position: relative;
+                width: 92px;
+                height: 38px;
+                
+                color: #F7F7F7;
+                border: none;
+
+                background: #E63E1A;
+                opacity: 0.8;
+
+                box-shadow: inset 1px 1px 2px #FFFFFF, inset -2px -2px 2px rgba(0, 0, 0, 0.15);
+                border-radius: 20px;
+            }
+            #successBtn {
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+
+                position: relative;
+                width: 92px;
+                height: 38px;
+                color: #F7F7F7;
+                border: none;
+
+                background: #2BA329;
+                opacity: 0.8;
+
+                box-shadow: inset 1px 1px 2px #FFFFFF, inset -2px -2px 2px rgba(0, 0, 0, 0.15);
+                border-radius: 20px;
+                margin-right: 15px;
+            }
+            #closeBtn {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+
+                position: static;
+                width: 74px;
+                height: 38px;
+                left: 93px;
+                top: 116px;
+                color: #F7F7F7;
+                border: none;
+
+                background: #FFC000;
+                opacity: 0.8;
+                border-radius: 5px;
+
+                flex: none;
+                order: 2;
+                flex-grow: 0;
+                margin-top: 10px;
+                margin-left: 93px;
+            }
+            input[id=declineBtn] {  
+                margin: 0px 64.5px 10px 0px;
+            }
+            input[id=holdBtn] {  
+                margin: 0px 10px 10px 10px;
+            }
+            input[id=muteBtn] {  
+                margin: 0px 0px 10px 64.5px;
+            }
+            input[id=mutePressedBtn] {  
+                margin: 0px 0px 10px 64.5px;
+            }
+            input[id=holdPressedBtn] {  
+                margin: 0px 10px 10px 10px;
+            }
+            .title {
+                margin-top: 30px;
+                justify-content: center;
+                font-size: 14px;
+                line-height: 18px;
+                color: #030302;
+                mix-blend-mode: normal;
+                -webkit-app-region: drag;
+            }
+            .timer {
+                margin-top: 30px;
+                text-align: -webkit-center;
+                -webkit-app-region: drag;
+            }
+            .base-timer {
+                display: inline-grid;
+                box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.05), 
+                    inset -1px -1px 1px rgba(255, 255, 255, 0.5), 
+                    inset 0px 0px 8px rgba(0, 0, 0, 0.1);
+                position: relative;
+                border-radius: 50%;
+                width: 120px;
+                height: 120px;
+            }
+            .base-timer__svg {
+                transform: scaleX(1);
+            }
+            .base-timer__circle {
+                fill: none;
+                stroke: none;
+            }
+            .base-timer__path-elapsed {
+                stroke-width: 10px;
+            }
+            .base-timer__path-remaining {
+                box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05), 
+                    -1px -1px 10px #FFFFFF, 
+                    inset 1px 1px 2px rgba(255, 255, 255, 0.5), 
+                    inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+                stroke-width: 10px;
+                stroke-linecap: round;
+                transform: rotate(90deg);
+                transform-origin: center;
+                transition: 1s linear all;
+                fill-rule: nonzero;
+                stroke: currentColor;
+            }
+            .base-timer__path-remaining.green {
+                color: #2BA329;
+            }
+            .base-timer__path-remaining.orange {
+                color: #FFC000;
+            }
+            .base-timer__path-remaining.red {
+                color: #E63E1A;
+            }
+            .base-timer__label {
+                position: absolute;
+                bottom: 34.17%;
+                font-size: 30px;
+                line-height: 37px;
+                color: #030302;
+                width: 120px;
+                justify-content: center;
+            }
+            .processing-controls{
+                -webkit-app-region: drag;
+                text-align: center;
+                height: 38px;
+                width: 260px;
+                margin: 30px 0px 30px;
+            }
+            #saveBtn {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+
+                position: static;
+                width: 85px;
+                height: 38px;
+                left: 95.5px;
+                top: 236px;
+
+                background: #FFC000;
+                opacity: 0.8;
+                border-radius: 5px;
+                color: #F7F7F7;
+                border: none;
+
+                flex: none;
+                order: 3;
+                flex-grow: 0;
+                margin: 20px 0px 17px;
+            }
+            input[type='radio'],
+                label {
+                cursor: pointer;
+            }
+            label{
+                font-family: Montserrat;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 18px;
+                color: #030302;
+            }
+            input[type='radio'] {
+                position: relative;
+                height: 12px;
+                width: 13px;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                outline: none;
+            }
+            input[type='radio']::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                border: 2px solid #00314D;
+            }
+            input[type='radio']:checked::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: #00314D;
+                transform: translate(-50%, -50%);
+                visibility: visible;
+            }
+            .queue {
+                word-break: break-word;
+                max-width: fit-content;
+                margin: 10px 10px 0 10px;
+                align-items: center;
+                padding: 5px 10px;
+                background: #E0E7EB;
+                border-radius: 20px;
+                width: fit-content;
+            }
+            #queueName {
+                font-size: 10px;
+                line-height: 12px;
+                color: #030302;
+            }
+        </style>
+        <link rel="stylesheet" href="../../components/calendar/date_pick.css">
+        <script src="../../electron/preload/call-preload.js"></script>
+        <script src="../../components/calendar/date_pick.js"></script>
+    </head>
+    <body>
+        <div class="head" style="display: inline-flex;">
+            <div class="main" id="mainCall">
+                <div class="header-info">
+                    <div class="img-active-hold" id="imgActiveHold"></div>
+                    <div class="contact-info">
+                        <span id="callName" class="call-name"></span>
+                        <span id="callNumber" class="call-number" ></span>
+                    </div>
+                    <div class="call-time">
+                        <span id="idMin">00</span>:<span id="idSec">00</span>
+                    </div>
+                    <div>
+                        <input id="collapsBtn" class="buttons" onclick="collaps()" type="image" src='../../../img/icon-collaps-md.svg'  name='collapsBtn' alt="collaps"/>
+                    </div>
+                </div>
+
+                <div id="queue" class="queue">
+                    <span id="queueName"></span>
+                </div>
+
+                <div class="additional-info-open" id="infoOpen">
+                    <div class="text-info" id="textInfo"></div>
+                    <div class="up-Arrow-button">
+                        <input id="upArrowBtn" class="arrow-button" onclick="arrow()" type="image" src='../../../img/icon-arrow-up--md.svg'  name='upArrowBtn' alt="up"/>
+                    </div>
+                </div>
+
+                <div class="additional-info-close" id="infoClose">
+                    <div class="center-border"></div>
+                    <div class="down-Arrow-button">
+                        <input id="downArrowBtn" class="arrow-button" onclick="arrow()" type="image" src='../../../img/icon-arrow-down--md.svg'  name='downArrowBtn' alt="down"/>
+                    </div>
+                    <div class="center-border"></div>
+                </div>
+    
+                <div class="controls">
+                    <div class="answered-call-controls">
+                        <input id="muteBtn"  onclick="mute()" class="control-button" type="image" src='../../../img/mic-default-bttn.svg'  name='muteBtn' alt="mic"/>
+                        <input id="mutePressedBtn" onclick="mute()" class="control-button" type="image" src='../../../img/mic-off-pressed-bttn.svg'  name='mutePressedBtn' alt="mic-off"/>
+                        <input id="holdBtn" onclick="hold()" class="control-button" type="image" src='../../../img/hold-default-bttn.svg' name='holdBtn'  alt="hold"/>
+                        <input id="holdPressedBtn" onclick="hold()" class="control-button" type="image" src='../../../img/hold-pressed-bttn.svg' name='holdPressedBtn'  alt="hold-on"/>
+                        <input id="declineBtn" onclick="reject()" class="control-button" type="image" src='../../../img/decline-default-bttn.svg'  name='declineBtn' alt="decline"/>
+                    </div>
+                    <div class="new-call-controls">
+                        <button  id="answerBtn" class="control-button" name="answer" onclick="answer()" type="button">Answer</button>
+                        <button  id="rejectBtn" class="control-button" name="reject" onclick="reject()" type="button">Reject</button>
+                    </div>
+                </div>
+            </div>
+    
+            <div id="mainProcessing" class="main-processing">
+                <div id="timer" class="timer"></div>
+                <span class="title" id="titleInfo"></span>
+                <div class="processing-controls" id="controls">
+                    <button  id="successBtn" class="control-button" name="Yes" onclick="success()" type="button">Yes</button>
+                    <button  id="failBtn" class="control-button" name="No" onclick="fail()" type="button">No</button>
+                </div>
+                <div id="failControls"  style="min-width:260px">
+                    <div style = "text-align: center; margin-top: 20px;">
+                        <input type="radio" id="choiceYes" onclick="choiceYes()" class="control-button" 
+                            name="choiceYes" value="Yes">
+                        <label id="choiceYesLabel" for="choiceYes" style="padding-left: 13px;"></label>
+
+                        <input type="radio" id="choiceNo" onclick="choiceNo()" class="control-button" style = "margin-left: 33px;"
+                            name="choiceNo" value="no">
+                        <label id="choiceNoLabel" for="choiceNo" style="padding-left: 13px;"></label>
+                    </div>
+                    <div id="date-pick-container" style="margin: 30px 30px 0 30px; -webkit-app-region: no-drag;"></div>
+                    <div style = "text-align: center;">
+                        <button  id="saveBtn" class="buttons" name="save" onclick="save()" type="button"></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="success-message" id="successMessage" style="width: 260px; height: 184px; background: #F7F7F7; -webkit-app-region: drag;">
+                <div style="background-image: url('../../../img/dane-default-bttn.svg'); margin-top: 49px; margin-left: 121px; height: 12px; width: 18px;"></div>
+                <div id="titleSaved" class="title"  style="margin-top: 29.67px;"></div>
+                <button  id="closeBtn" class="control-button" name="close" onclick="closeWindow()" type="button"></button>
+            </div>
+        </div>
+    </body>
+</html>

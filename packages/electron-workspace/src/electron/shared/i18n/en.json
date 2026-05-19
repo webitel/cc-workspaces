@@ -1,0 +1,52 @@
+{
+	"tray": {
+		"Settings": "Settings",
+		"Exit": "Exit",
+		"Online": "Online",
+		"Offline": "Offline",
+		"Pause": "Pause",
+		"UploadConfig": "Upload configuration",
+		"Language": "Language",
+		"SIP": "Use SIP"
+	},
+	"notificationCall": {
+		"Reject": "Reject",
+		"Answer": "Answer",
+		"Yes": "Yes",
+		"No": "No",
+		"callSuccessfulText": "Was this call successful?",
+		"scheduleCallText": "Schedule next call?",
+		"Close": "Close",
+		"Saved": "Saved",
+		"Save": "Save"
+	},
+	"calendar": {
+		"January": "January",
+		"February": "February",
+		"March": "March",
+		"April": "April",
+		"May": "May",
+		"June": "June",
+		"July": "July",
+		"August": "August",
+		"September": "September",
+		"October": "October",
+		"November": "November",
+		"December": "December",
+		"Mo": "Mo",
+		"Tu": "Tu",
+		"We": "We",
+		"Th": "Th",
+		"Fr": "Fr",
+		"Sa": "Sa",
+		"Su": "Su"
+	},
+	"config": {
+		"uploadConfigurationText": "Choose the file to upload the configuration",
+		"UploadFile": "Upload file"
+	},
+	"disconnect": {
+		"Text": "Connection was accidenttally interrupted",
+		"Connect": "Connect"
+	}
+}
