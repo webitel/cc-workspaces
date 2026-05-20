@@ -21,6 +21,7 @@
 	},
 	"build": {
 		"asar": false,
+		"npmRebuild": false,
 		"win": {
 			"target": [
 				"nsis",
