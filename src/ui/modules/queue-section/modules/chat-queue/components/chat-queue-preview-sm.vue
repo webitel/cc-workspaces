@@ -100,9 +100,11 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
+import { useUserinfoStore } from '../../../../userinfo/userinfoStore.ts';
 import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
 
@@ -126,6 +128,9 @@ const emit = defineEmits([
 
 const store = useStore();
 
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
+
 const queueName = computed(() => props.task?.queue?.name || '');
 
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
@@ -134,6 +139,7 @@ const displayChatName = computed(() =>
 	getDisplayChatName({
 		chat: chat.value,
 		contact: props.contact,
+		userId: userId.value,
 	}),
 );
 </script>
