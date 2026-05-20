@@ -34,7 +34,7 @@
         :size="size"
         :src="botAvatar"
         :type="transferDestination"
-				:loading-transfer="isLoadingState(item.id)"
+				:loading-transfer="showLoader(item.id)"
         @input="handleTransfer"
       >
         <template #before>
@@ -79,7 +79,7 @@ const emit = defineEmits([
 ]);
 
 const store = useStore();
-const { isLoading: isLoadingState, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const transferDestination = ref(TransferDestination.CHATPLAN);
 const hotkeyUnsubscribers = ref([]);

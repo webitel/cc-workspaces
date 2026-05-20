@@ -31,7 +31,7 @@
         :key="item.id"
         :item="item"
         :size="size"
-				:loading="isLoadingState(item.id)"
+				:loading="showLoader(item.id)"
         @call="makeCall"
       />
     </template>
@@ -65,7 +65,7 @@ const props = defineProps({
 const { t } = useI18n();
 const store = useStore();
 const userinfoStore = useUserinfoStore();
-const { isLoading: isLoadingState, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const filterQuery = ref(SearchMode.NAME);
 const contactsLabelsConfiguration = ref([]);

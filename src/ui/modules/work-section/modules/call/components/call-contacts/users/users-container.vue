@@ -16,7 +16,7 @@
         :key="item.id"
         :item="item"
         :size="size"
-        :loading="isLoadingState(item.extension)"
+        :loading="showLoader(item.extension)"
         @input="makeCall({ number: item.extension })"
       ></user-lookup-item>
     </template>
@@ -46,7 +46,7 @@ const props = defineProps({
 const store = useStore();
 
 const userinfoStore = useUserinfoStore();
-const { isLoading: isLoadingState, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const { userId } = storeToRefs(userinfoStore);
 

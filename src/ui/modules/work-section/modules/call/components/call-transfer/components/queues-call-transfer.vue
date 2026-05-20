@@ -15,14 +15,14 @@
         color="transfer"
         rounded
         :icon="`${state}-transfer--filled`"
-				:loading="isLoading(`transfer${item.id}`)"
+				:loading="showLoader(`transfer${item.id}`)"
         @click="transfer(item)"
       />
       <wt-rounded-action
         color="transfer"
         icon="consultative-transfer"
         rounded
-        :loading="isLoading(`consultationTransfer${item.id}`)"
+        :loading="showLoader(`consultationTransfer${item.id}`)"
         @click="consultationTransfer(item)"
       />
     </template>
@@ -41,7 +41,7 @@ import CallTransferContainer from '../_shared/components/call-transfer-container
 import { TransferParams } from '../types/transfer-tabs';
 
 const store = useStore();
-const { isLoading, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const queuesAPI = APIRepository.queues;
 
@@ -65,7 +65,7 @@ const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
 		const id = `consultationTransfer${item.id}`;
 		await withLoading(id, () =>
-			call.value.consultationTransferQueue(Number(item.id)),
+			call.value.processTransferQueue(Number(item.id)),
 		);
 		emit('transfer-complete');
 	}

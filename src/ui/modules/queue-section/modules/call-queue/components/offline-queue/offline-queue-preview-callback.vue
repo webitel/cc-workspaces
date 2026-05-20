@@ -10,7 +10,7 @@
         :size="size"
         color="success"
         icon="call--filled"
-        :loading="isLoading(task.id)"
+        :loading="showLoader(task.id)"
         rounded
         @click.stop="call(task.id, task.communications[0].id)"
       />
@@ -26,7 +26,7 @@
             :size="size"
             color="success"
             icon="call--filled"
-            :loading="isLoading(task.id)"
+            :loading="showLoader(task.id)"
             rounded
             @click="toggle"
           />
@@ -64,9 +64,9 @@ export default {
 		},
 	},
 	setup() {
-		const { isLoading, withLoading } = useLoadingState();
+		const { showLoader, withLoading } = useLoadingState();
 		return {
-			isLoading,
+			showLoader,
 			withLoading,
 		};
 	},

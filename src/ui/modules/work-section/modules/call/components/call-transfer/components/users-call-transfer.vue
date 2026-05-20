@@ -8,14 +8,14 @@
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
-		:transfer-loading="currentTransferNumber && isLoading(currentTransferNumber)"
+		:loading="currentTransferNumber && showLoader(currentTransferNumber)"
     @transfer="transfer"
   >
     <template #actions="{ item }">
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
-				:loading="isLoading(item.id)"
+				:loading="showLoader(item.id)"
         rounded
         @click="transfer(item)"
       />
@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useStore();
-const { isLoading, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const PresenceStatusField = 'presence';
 const dataSort = ref('position');

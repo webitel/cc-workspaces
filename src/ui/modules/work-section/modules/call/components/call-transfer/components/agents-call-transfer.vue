@@ -7,7 +7,7 @@
     :data-filters="dataFilters"
     :get-data="getAgens"
     :presence-status-field="PresenceStatusField"
-		:transfer-loading="currentTransferNumber && isLoading(currentTransferNumber)"
+		:transfer-loading="currentTransferNumber && showLoader(currentTransferNumber)"
     @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
@@ -15,7 +15,7 @@
         color="transfer"
         icon="consultative-transfer"
         rounded
-				:loading="isLoading(item.id)"
+				:loading="showLoader(item.id)"
         @click="consultationTransfer(item)"
       />
     </template>
@@ -42,7 +42,7 @@ interface APIResponse {
 }
 
 const store = useStore();
-const { isLoading, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus';

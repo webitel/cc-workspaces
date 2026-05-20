@@ -6,7 +6,7 @@
         :task="task"
         :index="key"
         :size="size"
-        :loading="isLoading(task.id)"
+        :loading="showLoader(task.id)"
         @click="openTask"
         @accept="acceptTask"
       />
@@ -32,7 +32,7 @@ const props = defineProps({
 
 const store = useStore();
 
-const { isLoading, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 console.info(store.state.features.chat.manual.manualList);
 

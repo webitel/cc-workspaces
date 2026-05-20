@@ -36,7 +36,7 @@
           color="success"
           rounded
           :size="size"
-          :loading="isLoading(item.id)"
+          :loading="showLoader(item.id)"
           wide
           @click="call"
         />
@@ -101,9 +101,9 @@ export default {
 		};
 	},
 	setup() {
-		const { isLoading, withLoading } = useLoadingState();
+		const { showLoader, withLoading } = useLoadingState();
 		return {
-			isLoading,
+			showLoader,
 			withLoading,
 		};
 	},

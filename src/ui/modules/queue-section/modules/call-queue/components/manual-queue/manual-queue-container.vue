@@ -8,7 +8,7 @@
         :task="task"
         :index="key"
         :size="size"
-        :loading="isLoading(task.id)"
+        :loading="showLoader(task.id)"
         @click="openTask"
         @accept="acceptTask"
       />
@@ -34,7 +34,7 @@ const props = defineProps({
 
 const store = useStore();
 
-const { isLoading, withLoading } = useLoadingState();
+const { showLoader, withLoading } = useLoadingState();
 
 const manualList = computed(() => store.state.features.call.manual.manualList);
 
