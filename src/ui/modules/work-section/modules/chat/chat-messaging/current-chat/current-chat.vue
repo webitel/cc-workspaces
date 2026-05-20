@@ -53,6 +53,7 @@ import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatDate from '../components/chat-date.vue';
 import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
 import { useChatScroll } from '../composables/useChatScroll.js';
+import { useMediaScroll } from '@webitel/ui-chats/ui';
 import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages.js';
 
@@ -89,9 +90,12 @@ const {
 	updateThreshold,
 } = useChatScroll(el);
 
-onUnmounted(() => {
-	cleanChatPlayers();
-});
+const { startObserving } = useMediaScroll(
+  el,
+  () => {
+     scrollToBottom('smooth', 'useMediaScroll')
+  },
+);
 
 const openMedia = (message) =>
 	store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
@@ -109,6 +113,10 @@ watch(
 		immediate: true,
 	},
 );
+
+onMounted(() => {
+  startObserving();
+});
 
 onUnmounted(() => {
 	cleanChatPlayers();
