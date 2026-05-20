@@ -90,7 +90,7 @@ const {
 } = useChatScroll(el);
 
 const { startObserving } = useMediaScroll(el, () => {
-	scrollToBottom('smooth', 'useMediaScroll');
+	scrollToBottom('smooth');
 });
 
 const openMedia = (message) =>
