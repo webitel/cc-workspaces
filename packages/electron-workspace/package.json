@@ -10,7 +10,6 @@
 	"homepage": "https://example.webitel.com/",
 	"keywords": [],
 	"scripts": {
-		"preinstall": "node scripts/check-native-deps.js",
 		"start": "npm run build:renderer && electron . --disable-http-cache",
 		"build:renderer": "vite build -c vite.renderer.config.ts",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
