@@ -27,6 +27,12 @@
         {{ digit }}
       </span>
     </div>
+    <div
+      v-if="dtmf"
+      class="call-state__secondary-text typo-subtitle-1"
+    >
+      {{ dtmf.join('') }}
+    </div>
   </div>
 </template>
 
@@ -39,7 +45,7 @@ import { useCallState } from '../../../../../composables/useCallState';
 defineOptions({
 	name: 'CallState',
 });
-const { callState, showTimer, displayTime, sonarIcon } = useCallState();
+const { dtmf, callState, showTimer, displayTime, sonarIcon } = useCallState();
 </script>
 
 <style
