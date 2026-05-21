@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webitel</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400|Ubuntu:400" rel="stylesheet">
+        <style>
+            html { 
+                height:100%; 
+            }
+            body { 
+                margin: 0;
+                position:absolute; 
+                top:0; bottom:0; 
+                right:0; left:0; 
+                background: #F7F7F7;
+                -webkit-app-region: drag;
+            }
+            .content {
+                text-align: -webkit-center;
+            }
+            .app-icon {
+                width: 122px;
+                height: 126px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                background-image: url('../../../img/disconnect-img.svg');
+            }
+            .connect-btn {
+                margin-top: 10px;
+                -webkit-app-region: no-drag;
+                border: none;
+                outline: none;
+            }
+            .text-lable {
+                font-family: Montserrat;
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 18px;
+                appearance: auto;
+                color: #030302;
+                width: 200px;
+            }
+            #connectBtn {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px;
+
+                position: static;
+                height: 38px;
+                left: 84px;
+                top: 0px;
+                color: #F7F7F7;
+                border: none;
+                opacity: 0.8;
+
+                background: #2BA329;
+
+                box-shadow: inset 1px 1px 2px #FFFFFF, inset -2px -2px 2px rgba(0, 0, 0, 0.15);
+                border-radius: 20px;
+
+                flex: none;
+                order: 0;
+                flex-grow: 0;
+                margin: 10px 10px;
+            }
+            #connectBtn:hover {
+                opacity: 1;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="app-icon"></div>
+            <span id="text" class="text-lable"></span>
+            <button  id="connectBtn" class="connect-btn" name="connectBtn" onclick="connect()" type="button"></button>
+        </div>
+        <script>
+            const { ipcRenderer } = require("electron")
+            const i18n = new(require('../../electron/shared/i18n/i18n'))
+
+            document.getElementById("text").textContent = i18n.__("disconnect", "Text")
+            document.getElementById("connectBtn").textContent = i18n.__("disconnect", "Connect")
+
+            function connect() {
+                ipcRenderer.send("reload-page")
+                ipcRenderer.send("hide-disconnect-popup")
+            }
+        </script>
+    </body>
+</html>
