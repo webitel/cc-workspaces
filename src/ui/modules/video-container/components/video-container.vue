@@ -23,6 +23,7 @@
     :overlay="false"
     :call:onHold="callIsOnHold"
     :hide-controls-panel="callIsOnHold"
+    is-pip-mode
     position="left-bottom"
     hide-avatar
     @action:screenshot="onScreenshot"
