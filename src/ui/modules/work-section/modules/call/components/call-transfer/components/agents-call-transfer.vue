@@ -30,7 +30,7 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
-import { useLoadingState } from '../../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
@@ -42,7 +42,7 @@ interface APIResponse {
 }
 
 const store = useStore();
-const { showLoader, withLoading } = useLoadingState();
+const { showLoader, runWithLoader } = useLoader();
 
 const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus';
@@ -77,12 +77,12 @@ const emit = defineEmits([
 ]);
 
 const consultationTransfer = async (item: AgentItem = {} as AgentItem) => {
-	await withLoading(item.id, () =>
+	await runWithLoader(item.id, () =>
 		store.dispatch('features/call/TOGGLE_HOLD', item.id),
 	);
 	if (call.value) {
 		currentTransferNumber.value = item.extension;
-		await withLoading(item.extension, () =>
+		await runWithLoader(item.extension, () =>
 			call.value.processTransferAgent(Number(item.id)),
 		);
 		currentTransferNumber.value = null;

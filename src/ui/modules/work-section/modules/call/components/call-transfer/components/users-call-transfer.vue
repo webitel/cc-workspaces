@@ -30,7 +30,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import { useLoadingState } from '../../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useStore();
-const { showLoader, withLoading } = useLoadingState();
+const { showLoader, runWithLoader } = useLoader();
 
 const PresenceStatusField = 'presence';
 const dataSort = ref('position');
@@ -82,7 +82,7 @@ const transfer = async (item: UserItem = {} as UserItem) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
 	const id = item.id || number;
 	currentTransferNumber.value = number;
-	await withLoading(id, () =>
+	await runWithLoader(id, () =>
 		store.dispatch('features/call/BLIND_TRANSFER', number),
 	);
 	emit('transfer-complete');

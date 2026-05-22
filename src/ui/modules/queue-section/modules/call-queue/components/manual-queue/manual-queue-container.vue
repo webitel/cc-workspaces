@@ -21,7 +21,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
-import { useLoadingState } from '../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../composables/useLoader';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ManualPreview from './manual-queue-preview.vue';
 
@@ -34,12 +34,12 @@ const props = defineProps({
 
 const store = useStore();
 
-const { showLoader, withLoading } = useLoadingState();
+const { showLoader, runWithLoader } = useLoader();
 
 const manualList = computed(() => store.state.features.call.manual.manualList);
 
 function acceptTask(task) {
-	return withLoading(task.id, () =>
+	return runWithLoader(task.id, () =>
 		store.dispatch('features/call/manual/ACCEPT_TASK', task),
 	);
 }

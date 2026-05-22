@@ -53,7 +53,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../app/api/APIRepository.js';
 import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll';
-import { useLoadingState } from '../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
@@ -79,7 +79,7 @@ const emit = defineEmits([
 ]);
 
 const store = useStore();
-const { showLoader, withLoading } = useLoadingState();
+const { showLoader, runWithLoader } = useLoader();
 
 const transferDestination = ref(TransferDestination.CHATPLAN);
 const hotkeyUnsubscribers = ref([]);
@@ -128,7 +128,7 @@ const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
 	});
 
 const handleTransfer = async (item) => {
-	await withLoading(item.id, () =>
+	await runWithLoader(item.id, () =>
 		store.dispatch('features/chat/TRANSFER', {
 			destination: transferDestination.value,
 			item,

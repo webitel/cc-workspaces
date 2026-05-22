@@ -22,7 +22,7 @@
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
-import { useLoadingState } from '../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../composables/useLoader';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
 
@@ -45,10 +45,10 @@ const redial = (task) => store.dispatch('features/call/missed/REDIAL', task);
 const hideMissed = (task) =>
 	store.dispatch('features/call/missed/HIDE_MISSED', task);
 
-const { showLoader, withLoading } = useLoadingState();
+const { showLoader, runWithLoader } = useLoader();
 
 const handleRedial = (task) => {
-	withLoading(task.id, () => redial(task));
+	runWithLoader(task.id, () => redial(task));
 };
 
 onMounted(() => {

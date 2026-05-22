@@ -36,12 +36,12 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
-import { useLoadingState } from '../../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
 
 const store = useStore();
-const { showLoader, withLoading } = useLoadingState();
+const { showLoader, runWithLoader } = useLoader();
 
 const queuesAPI = APIRepository.queues;
 
@@ -56,7 +56,9 @@ const emit = defineEmits([
 const transfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
 		const id = `transfer${item.id}`;
-		await withLoading(id, () => call.value.blindTransferQueue(Number(item.id)));
+		await runWithLoader(id, () =>
+			call.value.blindTransferQueue(Number(item.id)),
+		);
 		emit('transfer-complete');
 	}
 };
@@ -64,7 +66,7 @@ const transfer = async (item: QueueItem = {} as QueueItem) => {
 const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
 		const id = `consultationTransfer${item.id}`;
-		await withLoading(id, () =>
+		await runWithLoader(id, () =>
 			call.value.processTransferQueue(Number(item.id)),
 		);
 		emit('transfer-complete');

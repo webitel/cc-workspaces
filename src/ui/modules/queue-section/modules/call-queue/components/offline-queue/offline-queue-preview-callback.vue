@@ -45,7 +45,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import { useLoadingState } from '../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../composables/useLoader';
 
 export default {
 	name: 'OfflineQueuePreviewCallback',
@@ -64,10 +64,10 @@ export default {
 		},
 	},
 	setup() {
-		const { showLoader, withLoading } = useLoadingState();
+		const { showLoader, runWithLoader } = useLoader();
 		return {
 			showLoader,
-			withLoading,
+			runWithLoader,
 		};
 	},
 	computed: {
@@ -83,7 +83,7 @@ export default {
 			makeCall: 'CALL',
 		}),
 		call(id, communicationId) {
-			this.withLoading(id, () =>
+			this.runWithLoader(id, () =>
 				this.makeCall({
 					id,
 					communicationId,

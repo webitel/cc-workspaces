@@ -80,7 +80,7 @@ import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import { useLoadingState } from '../../../../../../composables/useLoadingState';
+import { useLoader } from '../../../../../../composables/useLoader';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
@@ -101,10 +101,10 @@ export default {
 		};
 	},
 	setup() {
-		const { showLoader, withLoading } = useLoadingState();
+		const { showLoader, runWithLoader } = useLoader();
 		return {
 			showLoader,
-			withLoading,
+			runWithLoader,
 		};
 	},
 
@@ -189,7 +189,7 @@ export default {
 				number = this.item.to.number || this.item.destination;
 			}
 
-			return this.withLoading(this.item.id, () =>
+			return this.runWithLoader(this.item.id, () =>
 				this.makeCall({
 					number,
 				}),
