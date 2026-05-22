@@ -1,27 +1,55 @@
-export default function getDisplayChatName({ chat, contact, userId }) {
-	// @author @Lera24
-	// https://webitel.atlassian.net/browse/WTEL-9570?focusedCommentId=755185
-	// we don't show the current user
-	const filteredMembers =
-		chat?.members?.filter(
-			(member) => Number(member?.user_id) !== Number(userId),
-		) ?? [];
+// @author @Lera24
+// https://webitel.atlassian.net/browse/WTEL-9570?focusedCommentId=755185
 
-	const memberNames = filteredMembers.map((member) => member?.name);
+const getMembersWithoutAgent = ({ chat, userId }) => {
+	// we don't show the current user
+	const filteredMembers = chat?.members
+		? [
+				...chat.members,
+			]
+		: [];
+	const firstMatchIndex = filteredMembers.findIndex(
+		(member) => Number(member?.user_id) === Number(userId),
+	);
+	if (firstMatchIndex > -1) filteredMembers.splice(firstMatchIndex, 1);
+	return filteredMembers.map((member) => member?.name);
+};
+
+const getExtraNames = ({ chat, contact, userId }) => {
+	const value = getMembersWithoutAgent({
+		chat,
+		userId,
+	});
+	// If a contact is identified, but you need to exclude his name coming from the messenger
+	return contact?.id ? value.slice(1) : value;
+};
+
+export default function getDisplayChatName({ chat, contact, userId }) {
+	let fullName;
+
+	const extraNames = getExtraNames({
+		chat,
+		contact,
+		userId,
+	});
 
 	if (contact?.id) {
-		if (filteredMembers.length <= 1) return contact.name;
-
-		return [
+		if (!extraNames.length) {
+			fullName = contact?.name;
+		}
+		fullName = [
 			contact.name,
-			// contact identified - we display the contact, not the client's name from the members
-			...memberNames.slice(1),
+			...extraNames,
 		].join(', ');
-	}
+	} else if (!contact?.id && extraNames.length) {
+		fullName = extraNames.join(', ');
+	} else if (chat?.title) {
+		fullName = chat.title;
+	} else fullName = 'unknown';
 
-	if (memberNames.length) return memberNames.join(', ');
-
-	if (chat?.title) return chat.title;
-
-	return 'unknown';
+	return {
+		contactName: contact?.name ?? null,
+		extraNames: extraNames.join(', '),
+		fullName,
+	};
 }
