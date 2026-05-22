@@ -48,7 +48,7 @@ const actions = {
 		});
 
 		const text = i18n.global.t('notification.callEnded', {
-			name: call.displayName,
+			name: call.displayName || call.displayNumber,
 		});
 
 		// @author @stanislav-kozak
