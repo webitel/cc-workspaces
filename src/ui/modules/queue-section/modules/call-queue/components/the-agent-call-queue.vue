@@ -129,7 +129,7 @@ const expansions = computed(() => [
 		counters: [
 			{
 				color: 'secondary',
-				count: !isActiveExpanded.value ? allActiveCalls.value : 0,
+				count: allActiveCalls.value,
 			},
 			{
 				color: 'main',
