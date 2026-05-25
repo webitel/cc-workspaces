@@ -63,3 +63,15 @@ ELECTRON_USE_VUE_CALL_UI=1
 ```
 WEBITEL_WORKSPACE_URL=https://your-real-domain.example/workspace/
 ```
+
+### macOS: "app is damaged" after download
+CI builds are ad-hoc signed (no Apple Developer ID), so macOS Gatekeeper
+blocks them with a misleading "damaged" message once the quarantine
+attribute is applied on download. The app is not damaged. Clear the
+quarantine attribute after installing:
+```
+xattr -cr /Applications/Webitel.app
+```
+Then launch normally. This is only needed once per install. Real fix
+(Developer ID signing + notarization) requires an Apple Developer
+account and is not configured.
