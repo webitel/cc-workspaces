@@ -28,7 +28,7 @@
 
     <template #body>
       <div class="task-header-expansion-card__info-wrapper">
-        <p>{{ phoneNumberLabel }}</p>
+        <p>{{ props.phoneNumber }}</p>
 
         <queue-name-chip
           v-if="props.queueName"
@@ -56,7 +56,7 @@ const props = withDefaults(
 		phoneNumber?: string;
 		queueName?: string;
 		isTitleLinked?: boolean;
-		contactId?: ChatContact['id'];
+		contact?: ChatContact;
 		direction?: CallDirection;
 		collapsed?: boolean;
 		hideNumber?: boolean;
@@ -65,7 +65,7 @@ const props = withDefaults(
 		queueName: '',
 		phoneNumber: '',
 		isTitleLinked: false,
-		contactId: '',
+		contact: null,
 		collapsed: false,
 		hideNumber: false,
 	},
@@ -81,18 +81,10 @@ const taskTitle = computed(() => {
 	return props.username;
 });
 
-const avatarTitle = computed(() => props.username);
-
-const phoneNumberLabel = computed(() => {
-	if (props.hideNumber) {
-		return t('workspaceSec.taskHeaderExpansionCard.hiddenNumber');
-	}
-
-	return props.phoneNumber;
-});
+const avatarTitle = computed(() => props.contact?.name || props.username);
 
 const contactLink = computed(() =>
-	store.getters['ui/infoSec/client/contact/CONTACT_LINK'](props.contactId),
+	store.getters['ui/infoSec/client/contact/CONTACT_LINK'](props.contact?.id),
 );
 </script>
 

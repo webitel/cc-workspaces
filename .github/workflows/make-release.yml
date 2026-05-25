@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'version, next_version - major.minor only (e.g., "26.4, 26.6")'
+        description: 'version, next_version - major.minor only (e.g., "26.04, 26.06")'
         required: true
         type: string
 

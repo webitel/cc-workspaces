@@ -1,0 +1,173 @@
+#date-pick-container * {
+	box-sizing: border-box;
+}
+#date-pick-container .date-pick {
+	height: 300px;
+	width: 273px;
+	color: #273238;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#date-pick-next {
+	background-image: url("../../../img/date-pick-next-month.svg");
+	width: 6px;
+	height: 10px;
+	display: inline-flex;
+}
+#date-pick-prev {
+	background-image: url("../../../img/date-pick-next-month.svg");
+	width: 6px;
+	height: 10px;
+	display: inline-flex;
+	transform: rotate(-180deg);
+}
+#date-pick-container .date-pick .date-pick-body {
+	font-size: 0;
+	height: 100%;
+}
+#date-pick-container .date-pick .date-pick-body .date-pick-month {
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 18px;
+	align-items: center;
+	color: #030302;
+	margin: 0px 0 8px 0;
+	position: relative;
+}
+#date-pick-container
+	.date-pick
+	.date-pick-body
+	.date-pick-month
+	.date-pick-month-select {
+	cursor: pointer;
+}
+#date-pick-container
+	.date-pick
+	.date-pick-body
+	.date-pick-month
+	.date-pick-controls {
+	color: #030302;
+	cursor: pointer;
+}
+#date-pick-container
+	.date-pick
+	.date-pick-body
+	.date-pick-month
+	.date-pick-prev-month,
+.date-pick-next-month {
+	position: relative;
+}
+#date-pick-container .date-pick .date-pick-body .date-pick-week-day {
+	margin: 0.5px;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 8px;
+	line-height: 12px;
+	height: 38px;
+	width: 38px;
+	display: inline-block;
+	padding-top: 16px;
+	color: #030302;
+}
+#date-pick-container .date-pick .date-pick-body .date-pick-day {
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 18px;
+	align-items: center;
+	text-align: center;
+	color: #030302;
+	mix-blend-mode: normal;
+	height: 38px;
+	width: 38px;
+	display: inline-block;
+	margin: 0.5px;
+	padding-top: 9.61px;
+	cursor: pointer;
+}
+#date-pick-container
+	.date-pick
+	.date-pick-body
+	.date-pick-day.date-pick-selected-day {
+	background: #ffc000;
+	border-radius: 5px;
+	color: #fdfaf7;
+}
+#date-pick-container
+	.date-pick
+	.date-pick-body
+	.date-pick-day.date-pick-extra-box {
+	font-size: 14px;
+	opacity: 0;
+	cursor: default;
+}
+#date-pick-container .show-date-pick {
+	display: block;
+}
+#date-pick-month-current {
+	padding-left: 9px;
+	padding-right: 9px;
+}
+#date-time-pick {
+	text-align: -webkit-center;
+}
+.time-picker {
+	display: flex;
+	margin-bottom: 10px;
+}
+input[type="number"] {
+	background-color: #f7f7f7;
+	padding-left: 10px;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 18px;
+	display: flex;
+	color: #030302;
+	height: 38px;
+	position: relative;
+	width: 132.5px;
+	border-radius: 4px;
+	border: 1px solid #030302;
+	background-image: url("../../../img/FVE-image2.svg");
+	background-position: center right;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+.separator {
+	align-self: center;
+	padding-bottom: 2px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none !important;
+	background-color: #f7f7f7;
+	background: transparent !important;
+	border-width: 0px;
+	margin: 0;
+	border: none !important;
+	height: 34px;
+	width: 23px;
+	cursor: pointer;
+}
+
+.date-pick-selectatble:hover {
+	background-color: #eeee;
+	border-radius: 5px;
+}
+
+.date-pick-unselectable {
+	font-size: 14px;
+	color: #ddd !important;
+	cursor: default !important;
+}

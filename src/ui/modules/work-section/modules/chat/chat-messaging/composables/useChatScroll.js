@@ -6,6 +6,7 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 
 export const useChatScroll = (element) => {
 	const store = useStore();
+	let chatSwitchScrollTimeout;
 
 	const { messages } = useChatMessages();
 	const { arrivedState } = useScroll(element);
@@ -15,6 +16,9 @@ export const useChatScroll = (element) => {
 	const threshold = ref(136); // the distance where the scrollToBottomBtn must be shown/hide. why 136px? because: https://webitel.atlassian.net/browse/WTEL-7136
 
 	const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+	const isChatClosed = computed(
+		() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
+	);
 	const lastMessage = computed(
 		() => messages.value[messages.value?.length - 1],
 	);
@@ -88,8 +92,14 @@ export const useChatScroll = (element) => {
 	watch(
 		() => chat.value?.id,
 		async () => {
+			clearTimeout(chatSwitchScrollTimeout);
+			if (isChatClosed.value) {
+				return;
+			}
 			await nextTick();
-			setTimeout(() => scrollToBottom(), 500);
+			chatSwitchScrollTimeout = setTimeout(() => {
+				scrollToBottom();
+			}, 500);
 		},
 		{
 			immediate: true,

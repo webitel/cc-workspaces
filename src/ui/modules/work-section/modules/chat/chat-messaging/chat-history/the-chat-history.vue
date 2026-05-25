@@ -11,7 +11,7 @@
       :class="{'chat-history__messages--processing': !showAllMessages}"
       @scroll="handleChatScroll"
     >
-      <div v-if="next" class="chat-history__observer-wrapper">
+      <div v-if="next && !isInitialScrollInProgress" class="chat-history__observer-wrapper">
         <wt-intersection-observer
           :canLoadMore="next"
           :loading="isLoading"
@@ -21,6 +21,7 @@
       <message
         v-for="(message, index) of messages"
         :key="message.id"
+        :id="`message-${message.id}`"
         :message="message"
         :size="props.size"
         :show-avatar="showAvatar(index) || isChatStarted(index)"
@@ -103,6 +104,7 @@ const namespace = `${chatNamespace}/chatHistory`;
 const chatContainer = useTemplateRef('chat-container');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null); // message on top of the chat
+const isInitialScrollInProgress = ref(false);
 const showAllMessages = ref(false);
 
 const {
@@ -125,9 +127,20 @@ const {
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+const isChatClosed = computed(
+	() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
+);
+const closedChatFirstMessageId = computed(
+	() => store.state.features.chat.closed.closedChatFirstMessageId,
+);
 
 const loadHistory = async () =>
 	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
+const loadClosedChatHistory = async () =>
+	await store.dispatch(
+		`features/chat/closed/LOAD_CLOSED_CHAT_HISTORY`,
+		chat.value,
+	);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
 const attachPlayer = (player) =>
@@ -164,10 +177,21 @@ const getTopMessageEl = () => {
 		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
 };
 
+function scrollToClosedChatFirstMessage() {
+	const closedChatFirstMessageEl = document.getElementById(
+		`message-${closedChatFirstMessageId.value}`,
+	);
+
+	if (closedChatFirstMessageEl) {
+		closedChatFirstMessageEl.scrollIntoView(true);
+	} else {
+		scrollToBottom();
+	}
+}
+
 const loadNextMessages = async () => {
 	if (isLoading.value || !next.value) return;
 	isLoading.value = true;
-
 	setTimeout(async () => {
 		// timeout to avoid loader blinking
 		await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
@@ -175,10 +199,7 @@ const loadNextMessages = async () => {
 
 		if (lastVisibleMessageEl.value?.scrollIntoView) {
 			// fast return the scroll view on prev position
-			lastVisibleMessageEl.value.scrollIntoView({
-				block: 'start',
-				behavior: 'auto',
-			});
+			lastVisibleMessageEl.value.scrollIntoView();
 		}
 
 		isLoading.value = false;
@@ -188,10 +209,20 @@ const loadNextMessages = async () => {
 };
 
 async function loadMessagesList() {
-	await loadHistory();
-	await nextTick(() => {
+	if (!isChatClosed.value) {
+		await loadHistory();
+		await nextTick();
 		scrollToBottom();
-	});
+	} else {
+		isInitialScrollInProgress.value = true;
+
+		await loadClosedChatHistory();
+		await nextTick();
+		scrollToClosedChatFirstMessage();
+
+		isInitialScrollInProgress.value = false;
+	}
+
 	setTimeout(() => {
 		showAllMessages.value = true;
 	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
