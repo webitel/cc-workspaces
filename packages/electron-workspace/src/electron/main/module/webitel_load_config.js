@@ -32,7 +32,7 @@ class LoadConfig {
 			url.format({
 				pathname: path.join(
 					__dirname,
-					'../../renderer/configuration/load_config.html',
+					'../../../renderer/configuration/load_config.html',
 				),
 				protocol: 'file:',
 			}),

@@ -17,7 +17,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 		checkActiveTask();
 	}
 	window.ipcRenderer = ipcRenderer;
-	localStorage.setItem('auto-refresh', 5000);
+	try {
+		localStorage.setItem('auto-refresh', 5000);
+	} catch (e) {
+		console.warn('[workspace-preload] localStorage unavailable on', location.href, e);
+	}
 	ipcRenderer.send('hide-disconnect-popup');
 });
 
