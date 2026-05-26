@@ -45,7 +45,7 @@ class DisconnectNotification {
 			url.format({
 				pathname: path.join(
 					__dirname,
-					'../../renderer/error/disconnect_notification.html',
+					'../../../renderer/error/disconnect_notification.html',
 				),
 				protocol: 'file:',
 			}),

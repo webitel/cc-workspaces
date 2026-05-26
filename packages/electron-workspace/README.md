@@ -16,6 +16,11 @@ Build toolchain: Node ≥ 18, Python 3, plus the platform compiler (Xcode CLT / 
 npm install
 ```
 
+On Windows, if `npm run start` fails with *"Electron failed to install correctly"*, run:
+```
+npm run install:clean
+```
+
 ### Development start
 ```
 npm run start
@@ -62,6 +67,13 @@ ELECTRON_USE_VUE_CALL_UI=1
 ### Local env example
 ```
 WEBITEL_WORKSPACE_URL=https://your-real-domain.example/workspace/
+```
+
+### Windows: `SecurityError` on `npm run start`
+Dev mode and the installed app share `%APPDATA%\webitel\`. Close the
+installed app (and any stray `electron.exe`) before launching dev:
+```
+Stop-Process -Name Webitel -Force
 ```
 
 ### macOS: "app is damaged" after download

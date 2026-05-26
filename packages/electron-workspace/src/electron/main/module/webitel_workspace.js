@@ -43,7 +43,7 @@ class Workspace {
 				url.format({
 					pathname: path.join(
 						__dirname,
-						'../../renderer/error/err_message.html',
+						'../../../renderer/error/err_message.html',
 					),
 					protocol: 'file:',
 				}),

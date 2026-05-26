@@ -380,4 +380,7 @@ export default {
 		quickRepliesDescription:
 			'Opens a menu of pre-set quick replies for chat responses',
 	},
+	postprocessing: {
+		retriesLeft: 'Retries left',
+	},
 };
