@@ -373,4 +373,7 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat',
 	},
+	postprocessing: {
+		retriesLeft: 'Încercări rămase',
+	},
 };

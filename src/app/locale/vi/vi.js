@@ -371,4 +371,7 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Mở menu trả lời nhanh trong chat',
 	},
+	postprocessing: {
+		retriesLeft: 'Số lần thử còn lại',
+	},
 };
