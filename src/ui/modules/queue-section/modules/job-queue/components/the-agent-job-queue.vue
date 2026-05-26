@@ -87,9 +87,6 @@ const expansionStates = ref({
 	}),
 });
 
-// Computed properties to track which chat queue sections are currently expanded
-const isActiveExpanded = computed(() => expansionStates.value.active);
-
 // Updates expansion state and saves it to localStorage
 const handleExpansionChange = (expansion, state) => {
 	expansionStates.value[expansion] = state;
@@ -108,7 +105,7 @@ const expansions = computed(() => [
 		counters: [
 			{
 				color: 'secondary',
-				count: !isActiveExpanded.value ? allActiveTasks.value : 0,
+				count: allActiveTasks.value,
 			},
 			{
 				color: 'main',
