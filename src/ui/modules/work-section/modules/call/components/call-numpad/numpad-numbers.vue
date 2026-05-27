@@ -3,39 +3,46 @@
     <wt-button
       v-for="(value) of ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#', '+']"
       :key="value"
-      :size="ComponentSize.MD"
-      class="numpad-numbers__number"
+      :size="size"
+      class="numpad-numbers__num"
       color="secondary"
       outline
       rounded
-      @click="inputNumber(value)"
+      @click="input(value)"
     >{{ value }}
     </wt-button>
   </div>
 </template>
 
-<script setup>
-import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { WtButton } from '@webitel/ui-sdk/src/components';
+<script>
+import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 
-const emit = defineEmits([
-	'input',
-]);
-
-function inputNumber(value) {
-	emit('input', value);
-}
+export default {
+	name: 'NumpadNumbers',
+	mixins: [
+		sizeMixin,
+	],
+	methods: {
+		input(value) {
+			this.$emit('input', value);
+		},
+	},
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .numpad-numbers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: var(--spacing-2xs);
+  grid-gap: var(--spacing-xs) var(--spacing-sm);
   width: auto;
-}
 
-.numpad-numbers__number:last-child {
-  grid-column-start: 2;
+  :last-child {
+    grid-column-start: 2;
+  }
+
+  @media screen and (max-height: 900px) {
+    grid-gap: var(--spacing-xs);
+  }
 }
 </style>
