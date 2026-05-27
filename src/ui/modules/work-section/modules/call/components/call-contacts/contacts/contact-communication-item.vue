@@ -38,10 +38,10 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
-  loading: {
-    type: Boolean,
-    default: false,
-  },
+	loading: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
@@ -51,15 +51,18 @@ const emit = defineEmits([
 // sinhronizetion with loader on wt-rounded-action
 const showDisabled = ref(false);
 
-watch(() => props.loading, (value) => {
-    if (value) {
-        showDisabled.value = true;
-    } else {
-        setTimeout(() => {
-            showDisabled.value = false;
-        }, 1000);
-    }
-});
+watch(
+	() => props.loading,
+	(value) => {
+		if (value) {
+			showDisabled.value = true;
+		} else {
+			setTimeout(() => {
+				showDisabled.value = false;
+			}, 1000);
+		}
+	},
+);
 </script>
 
 <style lang="scss" scoped>

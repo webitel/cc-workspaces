@@ -109,9 +109,9 @@ const props = defineProps({
 		default: 'md',
 	},
 	loading: {
-    type: Boolean,
-    default: false,
-  },
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([

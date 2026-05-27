@@ -71,9 +71,9 @@ export default {
 	],
 	props: {
 		loading: {
-      type: Boolean,
-      default: false,
-    },
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		...mapGetters('ui/infoSec/client/contact', {
