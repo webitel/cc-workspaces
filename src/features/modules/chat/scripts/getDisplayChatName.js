@@ -19,6 +19,14 @@ const getExtraNames = ({ chat, contact, userId }) => {
 		chat,
 		userId,
 	});
+
+	if (!value.length) {
+		return chat?.title
+			? [
+					chat.title,
+				]
+			: [];
+	}
 	// when contact is identified in other chat participants, then we should output everyone except contact.
 	// if the contact is not identified, then output everyone
 	return contact?.id ? value.slice(1) : value;
