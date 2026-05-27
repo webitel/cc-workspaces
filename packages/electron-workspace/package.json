@@ -8,6 +8,10 @@
 	},
 	"main": "./src/electron/main/main.js",
 	"homepage": "https://example.webitel.com/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Webitel/cc-workspaces.git"
+	},
 	"keywords": [],
 	"scripts": {
 		"install:clean": "npm ci && node node_modules/electron/install.js && echo 'windows err: https://github.com/electron/electron/issues/20731'",
