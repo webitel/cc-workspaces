@@ -17,7 +17,10 @@
             target="_blank"
             class="task-header-expansion-card__link">
             {{ username?.contactName }}</a>
-          <span v-if="username?.extraNames">{{ taskTitle }}</span>
+          <span
+            v-if="username?.extraNames"
+            class="task-header-expansion-card__extra"
+          >{{ taskTitle }}</span>
         </div>
 
       </div>
@@ -123,6 +126,10 @@ const contactLink = computed(() =>
   justify-content: center;
   flex-direction: column;
   gap: var(--content-wrapper-gap);
+}
+
+.task-header-expansion-card__extra{
+  cursor: default;
 }
 </style>
 
