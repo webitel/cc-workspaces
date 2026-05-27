@@ -26,37 +26,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .numpad-expansion-btn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.numpad-expansion-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
+  .numpad-expansion-btn__arrow {
+    transition: var(--transition);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(6px, 2px) rotate(0);
+  }
+
+  &:hover .numpad-expansion-btn__arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &--opened {
     .numpad-expansion-btn__arrow {
-      transition: var(--transition);
-      opacity: 0;
-      pointer-events: none;
-      transform: translate(6px, 2px) rotate(0);
-    }
-
-    &:hover .numpad-expansion-btn__arrow {
+      transform: translate(-6px, 2px) rotate(180deg);
       opacity: 1;
       pointer-events: auto;
     }
-
-    &--opened {
-      .numpad-expansion-btn__arrow {
-        transform: translate(-6px, 2px) rotate(180deg);
-        opacity: 1;
-        pointer-events: auto;
-      }
-    }
-
-    .numpad-expansion-btn__toggle-btn {
-      position: relative;
-      padding: 0 6px;
-      bottom: 0;
-      box-shadow: var(--box-shadow);
-    }
   }
+
+  .numpad-expansion-btn__toggle-btn {
+    position: relative;
+    padding: 0 6px;
+    bottom: 0;
+    box-shadow: var(--box-shadow);
+  }
+}
 </style>
