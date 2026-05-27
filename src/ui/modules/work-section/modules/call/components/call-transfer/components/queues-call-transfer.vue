@@ -55,8 +55,8 @@ const emit = defineEmits([
 
 const transfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-		const id = `transfer${item.id}`;
-		await runWithLoader(id, () =>
+		const loaderId = `transfer${item.id}`;
+		await runWithLoader(loaderId, () =>
 			call.value.blindTransferQueue(Number(item.id)),
 		);
 		emit('transfer-complete');
@@ -65,8 +65,8 @@ const transfer = async (item: QueueItem = {} as QueueItem) => {
 
 const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-		const id = `consultationTransfer${item.id}`;
-		await runWithLoader(id, () =>
+		const loaderId = `consultationTransfer${item.id}`;
+		await runWithLoader(loaderId, () =>
 			call.value.processTransferQueue(Number(item.id)),
 		);
 		emit('transfer-complete');

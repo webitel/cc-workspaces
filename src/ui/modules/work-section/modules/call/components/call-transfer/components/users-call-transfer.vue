@@ -8,7 +8,7 @@
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
-		:loading="currentTransferNumber && showLoader(currentTransferNumber)"
+		:loading="currentTransferId && showLoader(currentTransferId)"
     @transfer="transfer"
   >
     <template #actions="{ item }">
@@ -63,7 +63,7 @@ const dataFields = ref([
 
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
-const currentTransferNumber = ref<string | null>(null);
+const currentTransferId = ref<string | null>(null);
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const scroll = computed(
 	() =>
@@ -80,13 +80,13 @@ const emit = defineEmits([
 
 const transfer = async (item: UserItem = {} as UserItem) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
-	const id = item.id || number;
-	currentTransferNumber.value = number;
-	await runWithLoader(id, () =>
+	const loaderId = item.id || number;
+	currentTransferId.value = number;
+	await runWithLoader(loaderId, () =>
 		store.dispatch('features/call/BLIND_TRANSFER', number),
 	);
 	emit('transfer-complete');
-	currentTransferNumber.value = null;
+	currentTransferId.value = null;
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {

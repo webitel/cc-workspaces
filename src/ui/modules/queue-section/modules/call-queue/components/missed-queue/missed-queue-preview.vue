@@ -120,7 +120,10 @@ export default {
 		'call',
 	],
 	props: {
-		loading: Boolean,
+		loading: {
+      type: Boolean,
+      default: false,
+    },
 	},
 	computed: {
 		displayName() {

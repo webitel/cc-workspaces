@@ -49,7 +49,10 @@ export default {
 		'input',
 	],
 	props: {
-		loading: Boolean,
+		loading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		// NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798

@@ -43,6 +43,7 @@
         :key="phone.id"
         :phone="phone"
         :size="size"
+        :loading="loading"
         @call="call(phone)"
       ></contact-communication-item>
     </template>
@@ -69,7 +70,10 @@ export default {
 		'call',
 	],
 	props: {
-		loading: Boolean,
+		loading: {
+      type: Boolean,
+      default: false,
+    },
 	},
 	computed: {
 		...mapGetters('ui/infoSec/client/contact', {
@@ -81,7 +85,6 @@ export default {
 	},
 	methods: {
 		call({ number } = {}) {
-			if (this.loading) return;
 			this.$emit('call', {
 				number: number || this.primaryPhoneNumber,
 				contactId: this.item.id,
