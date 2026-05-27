@@ -47,6 +47,7 @@ export const useChatMessages = () => {
 		return (
 			index === 0 ||
 			message.member?.type !== prevMessage.member?.type ||
+			message.member?.name !== prevMessage.member?.name ||
 			isBot(message) !== isBot(prevMessage)
 		);
 	};
