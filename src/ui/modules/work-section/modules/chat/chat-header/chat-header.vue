@@ -21,7 +21,6 @@
       <task-header-expansion-card
         :username="displayChatName"
         :phone-number="displayNumber"
-        :is-title-linked="!isChatTransferred"
         :contact="props.contact"
         :queue-name="displayQueueName"
       />
@@ -87,8 +86,6 @@ const displayChatName = computed(() =>
 		userId: userId.value,
 	}),
 );
-
-const isChatTransferred = computed(() => chat.value?.members?.length);
 
 const displayNumber = computed(() => chat.value?.displayNumber);
 const displayQueueName = computed(() => getQueueName(chat.value));

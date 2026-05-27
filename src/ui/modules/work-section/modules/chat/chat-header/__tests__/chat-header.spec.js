@@ -1,4 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
 
 import ChatHeader from '../chat-header.vue';
@@ -61,6 +62,7 @@ describe('Chat Header', () => {
 		global: {
 			plugins: [
 				customStore,
+				createPinia(),
 			],
 		},
 		props: {

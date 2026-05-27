@@ -380,4 +380,7 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Открывает меню быстрых ответов в чате',
 	},
+	postprocessing: {
+		retriesLeft: 'Оставшихся попыток',
+	},
 };

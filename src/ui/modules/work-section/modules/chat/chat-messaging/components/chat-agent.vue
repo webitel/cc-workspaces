@@ -36,10 +36,8 @@
 <script setup>
 import { WtPopover } from '@webitel/ui-sdk/components';
 import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-
-import { getMessageMember } from '../../../../../../../features/modules/chat/scripts/formatChatMessages.js';
 
 const props = defineProps({
 	chatId: {
@@ -54,80 +52,49 @@ const props = defineProps({
 
 const store = useStore();
 const chatNamespace = 'features/chat';
-const agents = ref([]);
 
-const firstAgentName = computed(() => agents.value[0]?.name);
-const hiddenAgents = computed(() => agents.value.slice(1));
-const currentAgent = computed(() => store.state.ui.infoSec.agentInfo.agent);
+const isAgent = (member) =>
+	member?.type === 'webitel' || member?.type === 'user';
 
 const currentChat = computed(
 	() => store.getters[`${chatNamespace}/CHAT_ON_WORKSPACE`],
 );
 
-const isChatActive = computed(
-	() => store.getters[`${chatNamespace}/IS_CHAT_ACTIVE`],
+const liveAgents = computed(() =>
+	(currentChat.value?.members ?? []).filter(isAgent),
 );
 
-const currentChatAgents = computed(() => {
-	return currentChat.value?.members?.length > 1
-		? getAgentsFromMembers(currentChat.value?.members)
-		: isChatActive.value
-			? [
-					currentAgent.value,
-				]
-			: [];
-});
+const historyAgents = ref([]);
 
-const getAgentsFromMembers = (array) => {
-	return array.filter(
-		(item) => item.type === 'webitel' || item.type === 'user',
-	);
-};
-
-const getPeersFromAPI = async (chatId) => {
-	// get all chat participants
-	try {
-		const { peers } = await contactChatMessagesHistory.getChat({
-			contactId: props.contactId,
-			chatId,
-		});
-		return peers;
-	} catch (error) {
-		console.log('Can`t get peers from chat. Error:', error);
-	}
-};
-
-const getChatHistoryAgents = async (chatId) => {
-	let agents = [];
-	const peers = await getPeersFromAPI(chatId);
-
-	if (peers) {
-		const members = peers.map((item) => getMessageMember(item)); // formatting objects from API
-		agents = getAgentsFromMembers(members); // get only agents
-	}
-
-	return {
-		chatHistoryAgents: agents,
-	};
-};
-
-const setAgentsArray = async () => {
-	if (props.chatId) {
-		const { chatHistoryAgents } = await getChatHistoryAgents(props.chatId);
-		agents.value = chatHistoryAgents;
-	} else {
-		agents.value = currentChatAgents.value;
-	}
-};
-
-onMounted(() => {
-	setAgentsArray();
-});
+const agents = computed(() =>
+	props.chatId ? historyAgents.value : liveAgents.value,
+);
+const firstAgentName = computed(() => agents.value[0]?.name);
+const hiddenAgents = computed(() => agents.value.slice(1));
 
 watch(
-	() => isChatActive.value,
-	() => {
-		setAgentsArray();
+	() => [
+		props.chatId,
+		props.contactId,
+	],
+	async ([chatId, contactId]) => {
+		if (!chatId || !contactId) {
+			historyAgents.value = [];
+			return;
+		}
+		try {
+			const { peers } = await contactChatMessagesHistory.getChat({
+				contactId,
+				chatId,
+			});
+			historyAgents.value = (peers ?? []).filter(isAgent);
+		} catch (err) {
+			console.error("Can't get peers from chat. Error:", err);
+			historyAgents.value = [];
+		}
+	},
+	{
+		immediate: true,
 	},
 );
 </script>
