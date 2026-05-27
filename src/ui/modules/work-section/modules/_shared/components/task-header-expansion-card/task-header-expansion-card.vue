@@ -113,7 +113,7 @@ const contactLink = computed(() =>
   color: var(--text-main-color);
 }
 
-.task-header-expansion-card__title:hover {
+.task-header-expansion-card__link:hover {
   text-decoration: underline;
 }
 
