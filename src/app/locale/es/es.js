@@ -375,4 +375,7 @@ export default {
 		quickRepliesDescription:
 			'Abre un menú de respuestas rápidas preestablecidas para respuestas de chat',
 	},
+	postprocessing: {
+		retriesLeft: 'Reintentos restantes',
+	},
 };

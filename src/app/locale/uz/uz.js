@@ -371,4 +371,7 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Chatda tezkor javoblar menyusini ochadi',
 	},
+	postprocessing: {
+		retriesLeft: 'Qolgan urinishlar',
+	},
 };

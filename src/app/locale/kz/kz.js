@@ -371,4 +371,7 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады',
 	},
+	postprocessing: {
+		retriesLeft: 'Қалған әрекеттер',
+	},
 };

@@ -369,4 +369,7 @@ export default {
 	confirmationPopup: {
 		title: 'Potwierdź akcję',
 	},
+	postprocessing: {
+		retriesLeft: 'Pozostałe próby',
+	},
 };

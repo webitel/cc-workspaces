@@ -186,7 +186,7 @@ onUnmounted(() => {
 
 .workspace {
   flex-grow: 1;
-  min-height: 600px; // https://webitel.atlassian.net/browse/WTEL-9051?focusedCommentId=752494
+  min-height: 0;
   margin-top: var(--spacing-sm);
   display: flex;
   gap: var(--spacing-sm);
