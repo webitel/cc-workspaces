@@ -17,7 +17,7 @@
             target="_blank"
             class="task-header-expansion-card__link">
             {{ username?.contactName }}</a>
-          <span v-else>{{ taskTitle }}</span>
+          <span v-if="username?.extraNames">{{ taskTitle }}</span>
         </div>
 
       </div>
@@ -69,8 +69,10 @@ const props = withDefaults(
 const { t } = useI18n();
 
 const taskTitle = computed(() => {
-	if (username?.extraNames) {
-		return (props.username?.contactName ? ', ' : '') + username.extraNames;
+	if (props.username?.extraNames) {
+		return (
+			(props.username?.contactName ? ', ' : '') + props.username.extraNames
+		);
 	} else if (props.username?.fullName === 'unknown') {
 		return t('workspaceSec.taskHeaderExpansionCard.unknownContact');
 	}

@@ -1,8 +1,7 @@
 // @author @Lera24
 // https://webitel.atlassian.net/browse/WTEL-9570?focusedCommentId=755185
 
-const getMembersWithoutAgent = ({ chat, userId }) => {
-	// we don't show the current user
+const getMembersWithoutCurrentAgent = ({ chat, userId }) => {
 	const filteredMembers = chat?.members
 		? [
 				...chat.members,
@@ -16,11 +15,12 @@ const getMembersWithoutAgent = ({ chat, userId }) => {
 };
 
 const getExtraNames = ({ chat, contact, userId }) => {
-	const value = getMembersWithoutAgent({
+	const value = getMembersWithoutCurrentAgent({
 		chat,
 		userId,
 	});
-	// If a contact is identified, but you need to exclude his name coming from the messenger
+	// when contact is identified in other chat participants, then we should output everyone except contact.
+	// if the contact is not identified, then output everyone
 	return contact?.id ? value.slice(1) : value;
 };
 
