@@ -120,11 +120,6 @@ const changeSIP = async (cli, { isSIP, timeoutSIP, codecs, debugMode }) => {
 ipcRenderer.on(
 	'change-SIP',
 	async (event, { isSIP, timeoutSIP, codecs, debugMode }) => {
-		//console.error("change-SIP", isSIP, timeoutSIP, codecs, debugMode)
-		if (!window.cliController) {
-			console.error('TODO');
-			return;
-		}
 		const cli = window.cli;
 		//console.error(debugMode);
 		await changeSIP(cli, {
@@ -165,7 +160,7 @@ ipcRenderer.on('call-action', (event, call) => {
 
 function subscribeAction(store) {
 	store.subscribeAction((action, state) => {
-		console.log(action.type); //features/chat/ACCEPT
+		// console.log(action.type); //features/chat/ACCEPT
 		switch (action.type) {
 			case 'features/call/HOLD_OTHER_CALLS':
 				setActiveCall(
@@ -194,9 +189,6 @@ function subscribeAction(store) {
 
 			case 'features/status/SUBSCRIBE_STATUS':
 				// console.warn('SUBSCRIBE_STATUS', window.cli);
-				//if (cli.phone) {
-				//       await unrg(cli);
-				// }
 				changeSIP(cli, {
 					isSIP: conf.useSIP,
 					timeoutSIP: conf.timeoutSIP,
@@ -398,11 +390,9 @@ ipcRenderer.on('send-reporting', (event, arg) => {
 
 ipcRenderer.on('make-call', async (event, destination) => {
 	const cli = window.cli;
-	if (cli) {
-		cli.call({
-			destination,
-		});
-	}
+	cli.call({
+		destination,
+	});
 });
 
 ipcRenderer.on('chack-info', (event, arg) => {
