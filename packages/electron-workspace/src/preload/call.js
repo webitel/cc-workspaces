@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
 const MarkdownIt = require('markdown-it');
-const ProcessingTimer = require('../../renderer/call/progress_timer');
-const Timer = require('../../renderer/call/timer');
+const ProcessingTimer = require('../renderer/call/progress_timer');
+const Timer = require('../renderer/call/timer');
 const i18n = new (require('../shared/i18n/i18n'))();
 
 let processingTimer,

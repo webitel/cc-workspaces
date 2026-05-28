@@ -13,13 +13,13 @@ class Workspace {
 			autoHideMenuBar: true,
 			title: 'Webitel',
 			name: 'workspace',
-			icon: path.join(__dirname, '../../../../img/app-icon.png'),
+			icon: path.join(app.getAppPath(), 'img/app-icon.png'),
 			webPreferences: {
 				webSecurity: false,
 				contextIsolation: false, // protect against prototype pollution
 				enableRemoteModule: true,
 				nodeIntegration: true,
-				preload: path.join(__dirname, '../../preload/workspace-preload.js'),
+				preload: path.join(__dirname, '../preload/workspace.js'),
 			},
 		});
 
@@ -42,8 +42,8 @@ class Workspace {
 			this.window.loadURL(
 				url.format({
 					pathname: path.join(
-						__dirname,
-						'../../../renderer/error/err_message.html',
+						app.getAppPath(),
+						'src/renderer/error/err_message.html',
 					),
 					protocol: 'file:',
 				}),

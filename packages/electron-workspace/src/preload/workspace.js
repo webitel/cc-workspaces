@@ -20,7 +20,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 	try {
 		localStorage.setItem('auto-refresh', 5000);
 	} catch (e) {
-		console.warn('[workspace-preload] localStorage unavailable on', location.href, e);
+		console.warn(
+			'[workspace-preload] localStorage unavailable on',
+			location.href,
+			e,
+		);
 	}
 	ipcRenderer.send('hide-disconnect-popup');
 });

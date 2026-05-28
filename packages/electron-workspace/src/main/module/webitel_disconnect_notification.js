@@ -25,7 +25,7 @@ class DisconnectNotification {
 			title: 'Webitel',
 			name: 'disconnectNotification',
 			frame: false,
-			icon: path.join(__dirname, '../../../../img/app-icon.png'),
+			icon: path.join(app.getAppPath(), 'img/app-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
 				enableRemoteModule: true,
@@ -44,8 +44,8 @@ class DisconnectNotification {
 		this.window.loadURL(
 			url.format({
 				pathname: path.join(
-					__dirname,
-					'../../../renderer/error/disconnect_notification.html',
+					app.getAppPath(),
+					'src/renderer/error/disconnect_notification.html',
 				),
 				protocol: 'file:',
 			}),

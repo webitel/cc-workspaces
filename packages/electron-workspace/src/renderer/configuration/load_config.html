@@ -111,7 +111,7 @@
             <button  id="selectFileBtn" class="select-file-btn" name="uploadBtn" onclick="uploadFile()" type="button"></button>
         </div>
         <script>
-            const i18n = new(require('../../electron/shared/i18n/i18n'))
+            const i18n = new(require('../../shared/i18n/i18n'))
             const { ipcRenderer } = require("electron")
 
             document.getElementById("text").textContent = i18n.__("config", "uploadConfigurationText")

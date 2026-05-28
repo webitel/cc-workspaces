@@ -1,6 +1,6 @@
 //const ipcRenderer = require('electron').ipcRenderer
 window.addEventListener('DOMContentLoaded', () => {
-	const i18n = new (require('../../electron/shared/i18n/i18n'))();
+	const i18n = new (require('../../shared/i18n/i18n'))();
 
 	var html =
 		"<div id='date-pick-modal' class='modal-bg'></div>" +

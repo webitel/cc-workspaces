@@ -13,7 +13,7 @@ class LoadConfig {
 			title: 'Webitel',
 			name: 'loadConfig',
 			frame: false,
-			icon: path.join(__dirname, '../../../../img/app-icon.png'),
+			icon: path.join(app.getAppPath(), 'img/app-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
 				enableRemoteModule: true,
@@ -31,8 +31,8 @@ class LoadConfig {
 		this.window.loadURL(
 			url.format({
 				pathname: path.join(
-					__dirname,
-					'../../../renderer/configuration/load_config.html',
+					app.getAppPath(),
+					'src/renderer/configuration/load_config.html',
 				),
 				protocol: 'file:',
 			}),

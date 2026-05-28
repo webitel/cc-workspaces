@@ -4,10 +4,10 @@ const LStorage = require('../../shared/localStore');
 
 const path = require('path');
 const { AgentPauseCauseServiceApiAxiosParamCreator } = require('webitel-sdk');
-const greenIcon = path.join(__dirname, '../../../../img/app-online-icon.png'),
-	yelloIcon = path.join(__dirname, '../../../../img/app-pause-icon.png'),
-	greyIcon = path.join(__dirname, '../../../../img/app-offline-icon.png'),
-	redIcon = path.join(__dirname, '../../../../img/app-busy-icon.png');
+const greenIcon = path.join(app.getAppPath(), 'img/app-online-icon.png'),
+	yelloIcon = path.join(app.getAppPath(), 'img/app-pause-icon.png'),
+	greyIcon = path.join(app.getAppPath(), 'img/app-offline-icon.png'),
+	redIcon = path.join(app.getAppPath(), 'img/app-busy-icon.png');
 
 class WebitelTray extends Tray {
 	isStatus = false;

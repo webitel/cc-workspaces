@@ -81,7 +81,7 @@
         </div>
         <script>
             const { ipcRenderer } = require("electron")
-            const i18n = new(require('../../electron/shared/i18n/i18n'))
+            const i18n = new(require('../../shared/i18n/i18n'))
 
             document.getElementById("text").textContent = i18n.__("disconnect", "Text")
             document.getElementById("connectBtn").textContent = i18n.__("disconnect", "Connect")

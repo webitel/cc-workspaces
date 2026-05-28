@@ -1,8 +1,7 @@
-const { BrowserWindow, shell, screen } = require('electron');
+const { app, BrowserWindow, shell, screen } = require('electron');
 const { isDev, isOSX, isWindows, isLinux } = require('../../shared/is');
 const path = require('path'),
 	url = require('url');
-const fs = require('fs');
 const conf = require('../../shared/config').config();
 
 class CallNotification {
@@ -35,34 +34,37 @@ class CallNotification {
 			useContentSize: true,
 			name: 'callNotification',
 			titleBarStyle: 'hidden',
-			icon: path.join(__dirname, '../../../../img/app-active-call-icon.png'),
+			icon: path.join(app.getAppPath(), 'img/app-active-call-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
 				enableRemoteModule: true,
 				nodeIntegration: true,
-				// preload: path.join(__dirname, '../../preload/call-preload.js')
+				// preload: path.join(__dirname, '../preload/call.js')
 			},
 		});
 		this.window.flashFrame(false);
-		const vueCallPath = path.join(
-			__dirname,
-			'../../../renderer/call-vue/index.html',
-		);
-		const legacyCallPath = path.join(
-			__dirname,
-			'../../../renderer/call/notification_call.html',
-		);
-		const useVueCallUi = process.env.ELECTRON_USE_VUE_CALL_UI === '1';
-		const callWindowPath =
-			useVueCallUi && fs.existsSync(vueCallPath) ? vueCallPath : legacyCallPath;
+		const devUrl = process.env.ELECTRON_RENDERER_URL;
+		const useVueCallUi =
+			!!devUrl || process.env.ELECTRON_USE_VUE_CALL_UI === '1';
 
-		this.window.loadURL(
-			url.format({
-				pathname: callWindowPath,
-				protocol: 'file:',
-				slashes: true,
-			}),
-		);
+		if (devUrl) {
+			this.window.loadURL(devUrl);
+		} else if (useVueCallUi) {
+			this.window.loadFile(
+				path.join(__dirname, '../renderer/call-vue/index.html'),
+			);
+		} else {
+			this.window.loadURL(
+				url.format({
+					pathname: path.join(
+						app.getAppPath(),
+						'src/renderer/call/notification_call.html',
+					),
+					protocol: 'file:',
+					slashes: true,
+				}),
+			);
+		}
 		//this.window.webContents.openDevTools()
 
 		this.window.setAlwaysOnTop(true, 'screen');
@@ -195,7 +197,7 @@ class CallNotification {
 	_setIcon(isHold) {
 		if (isHold)
 			this.window.setOverlayIcon(
-				path.join(__dirname, '../../../../img/icon-pause.png'),
+				path.join(app.getAppPath(), 'img/icon-pause.png'),
 				'pause',
 			);
 		else this.window.setOverlayIcon(null, 'active');
