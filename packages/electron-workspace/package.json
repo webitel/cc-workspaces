@@ -10,7 +10,7 @@
 	"homepage": "https://example.webitel.com/",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Webitel/cc-workspaces.git"
+		"url": "https://github.com/webitel/cc-workspaces.git"
 	},
 	"keywords": [],
 	"scripts": {
