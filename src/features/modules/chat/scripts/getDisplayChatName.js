@@ -7,10 +7,10 @@ const getMembersWithoutCurrentAgent = ({ chat, userId }) => {
 				...chat.members,
 			]
 		: [];
-	const firstMatchIndex = filteredMembers.findIndex(
+	const lastMatchIndex = filteredMembers.findLastIndex(
 		(member) => Number(member?.user_id) === Number(userId),
 	);
-	if (firstMatchIndex > -1) filteredMembers.splice(firstMatchIndex, 1);
+	if (lastMatchIndex > -1) filteredMembers.splice(lastMatchIndex, 1);
 	return filteredMembers.map((member) => member?.name);
 };
 
