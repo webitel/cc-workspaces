@@ -220,10 +220,8 @@ async function createCommunication() {
 
 async function save() {
 	await createCommunication();
-	console.log('draft: ', draft.value);
 	if (!draft.value.phones[0]?.number) delete draft.value.phones;
 	if (!draft.value.emails[0]?.email) delete draft.value.emails;
-	console.log('draft2: ', draft.value);
 	await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
 	close();
 }
