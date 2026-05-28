@@ -24,7 +24,7 @@ const actions = {
 		stop = watch(
 			() => context.rootState.client.state,
 			(value) => {
-				console.log('[WS connection state]:', value);
+				if (import.meta.env.DEV) console.log('[WS connection state]:', value);
 				if (
 					value === WebSocketConnectionState.Reconnecting ||
 					value === WebSocketConnectionState.Disconnected

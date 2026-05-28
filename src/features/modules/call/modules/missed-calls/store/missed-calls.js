@@ -15,7 +15,8 @@ const getters = {
 	REQUEST_PARAMS: (state, g, rootState) => {
 		const userinfoStore = useUserinfoStore();
 		const { userId } = userinfoStore; // NOTE! its not reactive!
-		console.info('userId got from userinfoStore: ', userId);
+		if (import.meta.env.DEV)
+			console.info('userId got from userinfoStore: ', userId);
 		return {
 			userId,
 			size: 10,

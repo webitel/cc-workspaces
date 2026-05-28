@@ -182,7 +182,7 @@ export default {
 				await new Promise((resolve, reject) => {
 					jszipUtils.getBinaryContent(url, (err, file) => {
 						if (err) reject(err);
-						console.info(file);
+						if (import.meta.env.DEV) console.info(file);
 						zip.file(name, file);
 						resolve();
 					});

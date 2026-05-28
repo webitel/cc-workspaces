@@ -26,7 +26,7 @@ self.addEventListener('message', async (event) => {
 			await showNotification(payload);
 			break;
 		default:
-			console.info('Unknown message type', type);
+			if (import.meta.env.DEV) console.info('Unknown message type', type);
 	}
 });
 

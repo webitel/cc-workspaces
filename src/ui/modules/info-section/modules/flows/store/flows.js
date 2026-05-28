@@ -11,10 +11,12 @@ const getters = {
 		const { hasReadAccess: hasFlowsReadAccess } = useUserAccessControl(
 			WtObject.Flow,
 		);
-		console.log(
-			'trying to get access info from useUserAccessControl composable inside vuex getter: ',
-			hasFlowsReadAccess.value,
-		);
+		if (import.meta.env.DEV) {
+			console.log(
+				'trying to get access info from useUserAccessControl composable inside vuex getter: ',
+				hasFlowsReadAccess.value,
+			);
+		}
 		return rootGetters['features/status/IS_AGENT'] && hasFlowsReadAccess.value;
 	},
 };
