@@ -14,6 +14,7 @@
 
         <a
           target="_blank"
+          rel="noopener noreferrer"
           :href="contactLink(contactId)"
           class="contact-card-general__link typo-heading-2"
         >{{ name }}

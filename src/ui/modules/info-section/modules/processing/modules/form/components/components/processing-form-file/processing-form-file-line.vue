@@ -16,6 +16,7 @@
       :href="href"
       class="processing-form-file-line__name"
       target="_blank"
+      rel="noopener noreferrer"
     >{{ file.name }}</a>
     <p class="processing-form-file-line__size">{{ readableSize }}</p>
     <div
