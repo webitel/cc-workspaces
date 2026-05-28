@@ -94,7 +94,9 @@ const emit = defineEmits([
 
 const userinfoStore = useUserinfoStore();
 const { userInfo } = storeToRefs(userinfoStore);
-const agentName = computed(() => userInfo.value.name);
+const agentName = computed(
+	() => userInfo.value.chatName || userInfo.value.name,
+);
 
 const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
