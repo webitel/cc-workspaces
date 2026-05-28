@@ -133,11 +133,24 @@ describe('features/chat store: actions', () => {
 		expect(chatOnWorkspace.decline).toHaveBeenCalled();
 	});
 
-	it('OPEN_CHAT dispatches SET_WORKSPACE action with passed chat as param', () => {
+	it('OPEN_CHAT dispatches LOAD_CLOSED_CHAT when contact is not identified', () => {
 		chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'SET_WORKSPACE',
+			'features/chat/closed/LOAD_CLOSED_CHAT',
 			chatOnWorkspace,
+			{ root: true },
+		);
+	});
+
+	it('OPEN_CHAT dispatches SET_WORKSPACE when contact is identified', () => {
+		const chatWithContact = {
+			...chatOnWorkspace,
+			contact: { id: 'contact-1' },
+		};
+		chatModule.actions.OPEN_CHAT(context, chatWithContact);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'SET_WORKSPACE',
+			chatWithContact,
 		);
 	});
 
