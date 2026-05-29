@@ -9,20 +9,20 @@
           size="xs"
           :username="avatarTitle"
         />
-        <a
-          v-if="props.isTitleLinked && contactLink"
-          :href="contactLink"
-          class="task-header-expansion-card__title"
-          target="_blank"
-        >
-          {{ taskTitle }}
-        </a>
-        <span
-          v-else
-          class="task-header-expansion-card__title"
-        >
-          {{ taskTitle }}
-        </span>
+
+        <div class="task-header-expansion-card__title">
+          <a
+            v-if="username?.contactName && contactLink"
+            :href="contactLink"
+            target="_blank"
+            class="task-header-expansion-card__link">
+            {{ username?.contactName }}</a>
+          <span
+            v-if="username?.extraNames"
+            class="task-header-expansion-card__extra"
+          >{{ taskTitle }}</span>
+        </div>
+
       </div>
     </template>
 
@@ -44,7 +44,7 @@ import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { CallDirection, ChannelType } from 'webitel-sdk';
+import { CallDirection } from 'webitel-sdk';
 import type { ChatContact } from '../../types/ChatContact.types';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
@@ -55,7 +55,6 @@ const props = withDefaults(
 		username: string;
 		phoneNumber?: string;
 		queueName?: string;
-		isTitleLinked?: boolean;
 		contact?: ChatContact;
 		direction?: CallDirection;
 		collapsed?: boolean;
@@ -64,7 +63,6 @@ const props = withDefaults(
 	{
 		queueName: '',
 		phoneNumber: '',
-		isTitleLinked: false,
 		contact: null,
 		collapsed: false,
 		hideNumber: false,
@@ -74,14 +72,19 @@ const props = withDefaults(
 const { t } = useI18n();
 
 const taskTitle = computed(() => {
-	if (!props.username) {
+	if (props.username?.extraNames) {
+		return (
+			(props.username?.contactName ? ', ' : '') + props.username.extraNames
+		);
+	} else if (props.username?.fullName === 'unknown') {
 		return t('workspaceSec.taskHeaderExpansionCard.unknownContact');
 	}
-
-	return props.username;
+	return props.username?.fullName;
 });
 
-const avatarTitle = computed(() => props.contact?.name || props.username);
+const avatarTitle = computed(
+	() => props.contact?.name || props.username?.fullName,
+);
 
 const contactLink = computed(() =>
 	store.getters['ui/infoSec/client/contact/CONTACT_LINK'](props.contact?.id),
@@ -113,7 +116,7 @@ const contactLink = computed(() =>
   color: var(--text-main-color);
 }
 
-.task-header-expansion-card__title:hover {
+.task-header-expansion-card__link:hover {
   text-decoration: underline;
 }
 
@@ -124,5 +127,8 @@ const contactLink = computed(() =>
   flex-direction: column;
   gap: var(--content-wrapper-gap);
 }
-</style>
 
+.task-header-expansion-card__extra{
+  cursor: default;
+}
+</style>
