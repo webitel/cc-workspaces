@@ -150,14 +150,18 @@ describe('features/chat store: actions', () => {
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'features/chat/closed/LOAD_CLOSED_CHAT',
 			closedChat,
-			{ root: true },
+			{
+				root: true,
+			},
 		);
 	});
 
 	it('OPEN_CHAT dispatches SET_WORKSPACE when contact is identified', () => {
 		const chatWithContact = {
 			...chatOnWorkspace,
-			contact: { id: 'contact-1' },
+			contact: {
+				id: 'contact-1',
+			},
 		};
 		chatModule.actions.OPEN_CHAT(context, chatWithContact);
 		expect(context.dispatch).toHaveBeenCalledWith(
