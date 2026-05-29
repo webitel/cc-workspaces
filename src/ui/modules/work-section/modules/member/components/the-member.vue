@@ -49,9 +49,9 @@ export default {
 
 	computed: {
 		currentComponent() {
-			return this.currentTab === ''
-				? memberTabComponents[MemberTab.Communications]
-				: memberTabComponents[this.currentTab];
+			return this.currentTab
+				? memberTabComponents[this.currentTab]
+				: memberTabComponents[MemberTab.Communications];
 		},
 	},
 
