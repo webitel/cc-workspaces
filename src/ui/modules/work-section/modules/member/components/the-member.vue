@@ -21,7 +21,7 @@ import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import TaskContainer from '../../_shared/components/task-container/task-container.vue';
 import History from '../../_shared/components/workspace-history/components/history-container.vue';
 import Contacts from '../../call/components/call-contacts/call-contacts-container.vue';
-import MemberTab from '../enums/MemberTab.enum';
+import { MemberTab } from '../enums/MemberTab.enum';
 import MemberCommunications from './member-communications.vue';
 import MemberHeader from './member-header.vue';
 
