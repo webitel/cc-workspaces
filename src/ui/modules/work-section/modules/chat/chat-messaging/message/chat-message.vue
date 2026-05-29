@@ -123,9 +123,8 @@ const isBot = computed(
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 const getClientUsername = computed(() => {
-	if (isTransferAgent.value) return props.message.member?.name;
 	if (isAgent.value) return agentName?.value;
-
+	if (isTransferAgent.value) return props.message.member?.name;
 	return props.username || props.message.member?.name;
 });
 
