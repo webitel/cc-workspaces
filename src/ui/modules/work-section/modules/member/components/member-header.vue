@@ -1,16 +1,6 @@
 <template>
   <task-header :size="size">
     <template #start-section>
-			<wt-button
-				class="call-action"
-				:variant="isOnContacts ? 'active' : 'outlined'"
-				:size="size"
-				icon="contacts"
-				color="secondary"
-				rounded
-				wide
-				@click="$emit('openTab', 'contacts')"
-			/>
       <wt-button
 				:variant="isOnHistory ? 'active' : 'outlined'"
         :size="size"
@@ -71,10 +61,6 @@ export default {
 		...mapGetters('features/member', {
 			isCommSelected: 'IS_COMMUNICATION_SELECTED',
 		}),
-
-		isOnContacts() {
-			return this.currentTab === 'contacts';
-		},
 
 		isOnHistory() {
 			return this.currentTab === 'history';
