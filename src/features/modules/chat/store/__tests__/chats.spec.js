@@ -149,7 +149,7 @@ describe('features/chat store: actions', () => {
 		chatModule.actions.OPEN_CHAT(context, closedChat);
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'features/chat/closed/LOAD_CLOSED_CHAT',
-			chatOnWorkspace,
+			closedChat,
 			{
 				root: true,
 			},
