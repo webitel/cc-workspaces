@@ -14,7 +14,7 @@
       />
     </template>
     <template #title>
-      {{ displayChatName }}
+      {{ clientName }}
     </template>
 
     <template #subtitle>
@@ -54,7 +54,7 @@
     </template>
 
     <template #title>
-      {{ displayChatName }}
+      {{ clientName }}
     </template>
 
     <template #subtitle>
@@ -117,6 +117,22 @@ export default {
 			return this.task.state === ConversationState.Invite
 				? ChatStatus.New
 				: ChatStatus.Active;
+		},
+		clientName() {
+			//need to display only the name of the client (task https://webitel.atlassian.net/browse/WTEL-9616)
+			const agentTypes = [
+				'webitel',
+				'user',
+				'bot',
+			];
+			const members = this.task?.members;
+			if (members) {
+				const client = members?.find(
+					(member) => !agentTypes.includes(member?.type),
+				);
+				return client?.name || members[0]?.name;
+			}
+			return '';
 		},
 	},
 };
