@@ -31,7 +31,6 @@
 		"files": [
 			"out/**/*",
 			"src/renderer/**/*",
-			"src/components/**/*",
 			"img/**/*",
 			"package.json",
 			"!node_modules/**/*.d.ts",

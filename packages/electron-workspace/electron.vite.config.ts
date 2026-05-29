@@ -21,20 +21,43 @@ export default defineConfig({
 			rollupOptions: {
 				input: {
 					workspace: resolve(__dirname, 'src/preload/workspace.js'),
-					call: resolve(__dirname, 'src/preload/call.js'),
 				},
 			},
 		},
 	},
 	renderer: {
 		root: resolve(__dirname, 'src/renderer'),
+		base: './',
+		resolve: {
+			alias: {
+				'@img': resolve(__dirname, 'img'),
+			},
+		},
+		server: {
+			fs: {
+				allow: [
+					resolve(__dirname),
+				],
+			},
+		},
 		plugins: [
-			vue(),
+			vue({
+				template: {
+					transformAssetUrls: {
+						includeAbsolute: false,
+						tags: {
+							input: [
+								'src',
+							],
+						},
+					},
+				},
+			}),
 		],
 		build: {
 			rollupOptions: {
 				input: {
-					'call-vue': resolve(__dirname, 'src/renderer/call-vue/index.html'),
+					call: resolve(__dirname, 'src/renderer/call/index.html'),
 				},
 			},
 		},

@@ -1,7 +1,6 @@
 const { app, BrowserWindow, shell, screen } = require('electron');
 const { isDev, isOSX, isWindows, isLinux } = require('../../shared/is');
-const path = require('path'),
-	url = require('url');
+const path = require('path');
 const conf = require('../../shared/config').config();
 
 class CallNotification {
@@ -26,6 +25,8 @@ class CallNotification {
 			hasShadow: true,
 			alwaysOnTop: true,
 			show: false,
+			// width: '1280' || this.widtNotification,
+			// height: '720' || this.heightNotification,
 			width: this.widtNotification,
 			height: this.heightNotification,
 			x: this.x,
@@ -44,26 +45,11 @@ class CallNotification {
 		});
 		this.window.flashFrame(false);
 		const devUrl = process.env.ELECTRON_RENDERER_URL;
-		const useVueCallUi =
-			!!devUrl || process.env.ELECTRON_USE_VUE_CALL_UI === '1';
 
 		if (devUrl) {
-			this.window.loadURL(devUrl);
-		} else if (useVueCallUi) {
-			this.window.loadFile(
-				path.join(__dirname, '../renderer/call-vue/index.html'),
-			);
+			this.window.loadURL(`${devUrl}/call/index.html`);
 		} else {
-			this.window.loadURL(
-				url.format({
-					pathname: path.join(
-						app.getAppPath(),
-						'src/renderer/call/notification_call.html',
-					),
-					protocol: 'file:',
-					slashes: true,
-				}),
-			);
+			this.window.loadFile(path.join(__dirname, '../renderer/call/index.html'));
 		}
 		//this.window.webContents.openDevTools()
 
