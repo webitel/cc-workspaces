@@ -3,7 +3,7 @@
     <template #end-section>
       <wt-button
         v-show="isTransferAction"
-				:variant="isOnTransfer ? 'active' : 'outlined'"
+        :variant="isOnTransfer ? 'active' : 'outlined'"
         :size="size"
         color="transfer"
         icon="chat-transfer--filled"
@@ -21,7 +21,6 @@
       <task-header-expansion-card
         :username="displayChatName"
         :phone-number="displayNumber"
-        :is-title-linked="!isChatTransferred"
         :contact="props.contact"
         :queue-name="displayQueueName"
       />
@@ -31,12 +30,14 @@
 
 <script lang="ts" setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
+import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { ChatContact } from '../../_shared/types/ChatContact.types';
@@ -74,14 +75,17 @@ const isCloseAction = computed(
 const isTransferAction = computed(
 	() => store.getters['features/chat/ALLOW_CHAT_TRANSFER'],
 );
+
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
+
 const displayChatName = computed(() =>
 	getDisplayChatName({
 		chat: chat.value,
 		contact: props.contact,
+		userId: userId.value,
 	}),
 );
-
-const isChatTransferred = computed(() => chat.value?.members?.length);
 
 const displayNumber = computed(() => chat.value?.displayNumber);
 const displayQueueName = computed(() => getQueueName(chat.value));
