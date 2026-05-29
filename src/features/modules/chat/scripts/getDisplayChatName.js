@@ -1,16 +1,21 @@
 // @author @Lera24
 // https://webitel.atlassian.net/browse/WTEL-9570?focusedCommentId=755185
 
+import { ConversationState } from 'webitel-sdk';
+
 const getMembersWithoutCurrentAgent = ({ chat, userId }) => {
 	const filteredMembers = chat?.members
 		? [
 				...chat.members,
 			]
 		: [];
-	const firstMatchIndex = filteredMembers.findIndex(
+	if (chat.state === ConversationState.Invite)
+		return chat.members.map((member) => member?.name);
+
+	const lastMatchIndex = filteredMembers.findLastIndex(
 		(member) => Number(member?.user_id) === Number(userId),
 	);
-	if (firstMatchIndex > -1) filteredMembers.splice(firstMatchIndex, 1);
+	if (lastMatchIndex > -1) filteredMembers.splice(lastMatchIndex, 1);
 	return filteredMembers.map((member) => member?.name);
 };
 
