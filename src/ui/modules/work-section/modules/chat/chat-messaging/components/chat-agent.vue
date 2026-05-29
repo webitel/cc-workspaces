@@ -36,8 +36,10 @@
 <script setup>
 import { WtPopover } from '@webitel/ui-sdk/components';
 import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index';
+import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 
 const props = defineProps({
 	chatId: {
@@ -52,6 +54,8 @@ const props = defineProps({
 
 const store = useStore();
 const chatNamespace = 'features/chat';
+const userinfoStore = useUserinfoStore();
+const { userInfo } = storeToRefs(userinfoStore);
 
 const isAgent = (member) =>
 	member?.type === 'webitel' || member?.type === 'user';
@@ -69,7 +73,9 @@ const historyAgents = ref([]);
 const agents = computed(() =>
 	props.chatId ? historyAgents.value : liveAgents.value,
 );
-const firstAgentName = computed(() => agents.value[0]?.name);
+const firstAgentName = computed(
+	() => userInfo.value.chatName || agents.value[0]?.name,
+);
 const hiddenAgents = computed(() => agents.value.slice(1));
 
 watch(
