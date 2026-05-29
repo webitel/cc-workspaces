@@ -49,14 +49,15 @@ export default {
 
 	computed: {
 		currentComponent() {
-			return memberTabComponents[this.currentTab];
+			return this.currentTab === ''
+				? memberTabComponents[MemberTab.Communications]
+				: memberTabComponents[this.currentTab];
 		},
 	},
 
 	methods: {
 		openTab(tab) {
-			this.currentTab =
-				this.currentTab === tab ? MemberTab.Communications : tab;
+			this.currentTab = this.currentTab === tab ? '' : tab;
 		},
 	},
 };
