@@ -111,7 +111,9 @@ const actions = {
 	},
 
 	OPEN_CHAT: async (context, chat) => {
-		if (!chat.contact?.id) {
+		const isUnidentifiedClosedChat = !chat.contact?.id && chat.closedAt;
+
+		if (isUnidentifiedClosedChat) {
 			await context.dispatch('features/chat/closed/LOAD_CLOSED_CHAT', chat, {
 				root: true,
 			});
