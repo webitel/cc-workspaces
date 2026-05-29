@@ -25,7 +25,7 @@ const getExtraNames = ({ chat, contact, userId }) => {
 		userId,
 	});
 
-	if (!value.length && !chat.closeReason) {
+	if (!value.length && !contact?.id) {
 		return chat?.title
 			? [
 					chat.title,
