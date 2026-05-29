@@ -165,6 +165,8 @@ function updateEmail(email) {
 			primary: true,
 			type: {},
 		};
+	} else {
+		draft.value.emails[0].email = email;
 	}
 }
 
