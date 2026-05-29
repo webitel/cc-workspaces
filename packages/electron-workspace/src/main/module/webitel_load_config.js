@@ -32,7 +32,7 @@ class LoadConfig {
 			url.format({
 				pathname: path.join(
 					app.getAppPath(),
-					'src/renderer/configuration/load_config.html',
+					'src/renderer/load-config/index.html',
 				),
 				protocol: 'file:',
 			}),

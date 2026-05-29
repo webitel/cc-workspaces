@@ -43,7 +43,7 @@ class Workspace {
 				url.format({
 					pathname: path.join(
 						app.getAppPath(),
-						'src/renderer/error/err_message.html',
+						'src/renderer/err-message/index.html',
 					),
 					protocol: 'file:',
 				}),

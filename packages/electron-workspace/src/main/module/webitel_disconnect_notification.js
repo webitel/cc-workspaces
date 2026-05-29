@@ -45,7 +45,7 @@ class DisconnectNotification {
 			url.format({
 				pathname: path.join(
 					app.getAppPath(),
-					'src/renderer/error/disconnect_notification.html',
+					'src/renderer/disconnect/index.html',
 				),
 				protocol: 'file:',
 			}),
