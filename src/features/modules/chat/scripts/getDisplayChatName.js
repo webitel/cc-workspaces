@@ -39,7 +39,6 @@ const getExtraNames = ({ chat, contact, userId }) => {
 
 export default function getDisplayChatName({ chat, contact, userId }) {
 	let fullName;
-	console.log('chat', chat);
 
 	const extraNames = getExtraNames({
 		chat,
