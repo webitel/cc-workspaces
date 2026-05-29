@@ -46,11 +46,11 @@ class WebitelTray extends Tray {
 								checked: 'en' === this.lStorage.getLang(),
 							},
 							{
-								id: 'ua',
+								id: 'uk',
 								label: 'Українська',
 								click: this._handleLangClick,
 								type: 'radio',
-								checked: 'ua' === this.lStorage.getLang(),
+								checked: 'uk' === this.lStorage.getLang(),
 							},
 							{
 								id: 'ru',

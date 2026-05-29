@@ -1,23 +1,16 @@
-const path = require('path');
 const LStorage = require('../localStore');
-const fs = require('fs');
+const langs = {
+	en: require('./en.json'),
+	ru: require('./ru.json'),
+	uk: require('./uk.json'),
+};
 let loadedLanguage;
 
 module.exports = i18n;
 
 function i18n() {
-	if (fs.existsSync(path.join(__dirname, new LStorage().getLang() + '.json'))) {
-		loadedLanguage = JSON.parse(
-			fs.readFileSync(
-				path.join(__dirname, new LStorage().getLang() + '.json'),
-				'utf8',
-			),
-		);
-	} else {
-		loadedLanguage = JSON.parse(
-			fs.readFileSync(path.join(__dirname, 'en.json'), 'utf8'),
-		);
-	}
+	const lang = new LStorage().getLang();
+	loadedLanguage = langs[lang] || langs.en;
 }
 
 i18n.prototype.__ = (ob, phrase) => {
