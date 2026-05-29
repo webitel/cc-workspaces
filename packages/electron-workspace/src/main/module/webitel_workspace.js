@@ -1,6 +1,5 @@
 const { app, BrowserWindow, shell } = require('electron');
-const path = require('path'),
-	url = require('url');
+const path = require('path');
 
 class Workspace {
 	window = null;
@@ -39,15 +38,14 @@ class Workspace {
 		});
 
 		this.window.loadURL(URL).catch((err) => {
-			this.window.loadURL(
-				url.format({
-					pathname: path.join(
-						app.getAppPath(),
-						'src/renderer/err-message/index.html',
-					),
-					protocol: 'file:',
-				}),
-			);
+			const devUrl = process.env.ELECTRON_RENDERER_URL;
+			if (devUrl) {
+				this.window.loadURL(`${devUrl}/err-message/index.html`);
+			} else {
+				this.window.loadFile(
+					path.join(__dirname, '../renderer/err-message/index.html'),
+				);
+			}
 		});
 
 		this.window.on('close', (event) => {

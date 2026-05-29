@@ -58,6 +58,15 @@ export default defineConfig({
 			rollupOptions: {
 				input: {
 					call: resolve(__dirname, 'src/renderer/call/index.html'),
+					'load-config': resolve(
+						__dirname,
+						'src/renderer/load-config/index.html',
+					),
+					disconnect: resolve(__dirname, 'src/renderer/disconnect/index.html'),
+					'err-message': resolve(
+						__dirname,
+						'src/renderer/err-message/index.html',
+					),
 				},
 			},
 		},

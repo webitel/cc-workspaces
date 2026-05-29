@@ -1,6 +1,5 @@
 const { BrowserWindow, app, screen } = require('electron');
-const path = require('path'),
-	url = require('url');
+const path = require('path');
 
 class DisconnectNotification {
 	window = null;
@@ -41,15 +40,14 @@ class DisconnectNotification {
 			evt.preventDefault();
 		});
 
-		this.window.loadURL(
-			url.format({
-				pathname: path.join(
-					app.getAppPath(),
-					'src/renderer/disconnect/index.html',
-				),
-				protocol: 'file:',
-			}),
-		);
+		const devUrl = process.env.ELECTRON_RENDERER_URL;
+		if (devUrl) {
+			this.window.loadURL(`${devUrl}/disconnect/index.html`);
+		} else {
+			this.window.loadFile(
+				path.join(__dirname, '../renderer/disconnect/index.html'),
+			);
+		}
 
 		this.window.on('close', (event) => {
 			app.exit();

@@ -1,6 +1,5 @@
 const { app, BrowserWindow } = require('electron');
-const path = require('path'),
-	url = require('url');
+const path = require('path');
 
 class LoadConfig {
 	window = null;
@@ -28,15 +27,14 @@ class LoadConfig {
 			evt.preventDefault();
 		});
 
-		this.window.loadURL(
-			url.format({
-				pathname: path.join(
-					app.getAppPath(),
-					'src/renderer/load-config/index.html',
-				),
-				protocol: 'file:',
-			}),
-		);
+		const devUrl = process.env.ELECTRON_RENDERER_URL;
+		if (devUrl) {
+			this.window.loadURL(`${devUrl}/load-config/index.html`);
+		} else {
+			this.window.loadFile(
+				path.join(__dirname, '../renderer/load-config/index.html'),
+			);
+		}
 
 		this.window.on('close', (event) => {
 			app.exit();
