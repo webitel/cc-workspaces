@@ -133,8 +133,20 @@ describe('features/chat store: actions', () => {
 		expect(chatOnWorkspace.decline).toHaveBeenCalled();
 	});
 
-	it('OPEN_CHAT dispatches LOAD_CLOSED_CHAT when contact is not identified', () => {
+	it('OPEN_CHAT dispatches SET_WORKSPACE for active chat without contact', () => {
 		chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'SET_WORKSPACE',
+			chatOnWorkspace,
+		);
+	});
+
+	it('OPEN_CHAT dispatches LOAD_CLOSED_CHAT for closed chat without contact', () => {
+		const closedChat = {
+			...chatOnWorkspace,
+			closedAt: Date.now(),
+		};
+		chatModule.actions.OPEN_CHAT(context, closedChat);
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'features/chat/closed/LOAD_CLOSED_CHAT',
 			chatOnWorkspace,
