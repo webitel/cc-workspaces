@@ -65,3 +65,19 @@ onUnmounted(() => {
 	/>
 	<SuccessView v-else-if="view === 'success'" />
 </template>
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Ubuntu:300,400,500,600,700,800,900");
+
+html {
+	border-radius: 25px;
+}
+p {
+	margin: 5px 0 0 0;
+}
+body {
+	overflow: hidden;
+	background: #f7f7f7;
+	margin: 0;
+}
+</style>

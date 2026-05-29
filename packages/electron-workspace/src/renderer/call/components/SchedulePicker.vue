@@ -35,3 +35,18 @@ const localValue = computed({
 		class="schedule-input"
 	/>
 </template>
+
+<style scoped>
+.schedule-input {
+	margin: 20px 30px 0;
+	padding: 8px 10px;
+	font-family: Montserrat;
+	font-size: 14px;
+	border: 1px solid #e0e7eb;
+	border-radius: 5px;
+	outline: none;
+	background: #ffffff;
+	color: #030302;
+	-webkit-app-region: no-drag;
+}
+</style>

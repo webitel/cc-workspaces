@@ -114,3 +114,74 @@ onUnmounted(clearTimer);
 		</div>
 	</div>
 </template>
+
+<style>
+.timer {
+	margin-top: 30px;
+	text-align: -webkit-center;
+	-webkit-app-region: drag;
+}
+.base-timer {
+	display: inline-grid;
+	box-shadow:
+		inset 1px 1px 1px rgba(0, 0, 0, 0.05),
+		inset -1px -1px 1px rgba(255, 255, 255, 0.5),
+		inset 0 0 8px rgba(0, 0, 0, 0.1);
+	position: relative;
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+}
+.base-timer__svg {
+	transform: scaleX(1);
+}
+.base-timer__circle {
+	fill: none;
+	stroke: none;
+}
+.base-timer__path-elapsed {
+	stroke-width: 10px;
+}
+.base-timer__path-remaining {
+	box-shadow:
+		1px 1px 5px rgba(0, 0, 0, 0.05),
+		-1px -1px 10px #ffffff,
+		inset 1px 1px 2px rgba(255, 255, 255, 0.5),
+		inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+	stroke-width: 10px;
+	stroke-linecap: round;
+	transform: rotate(90deg);
+	transform-origin: center;
+	transition: 1s linear all;
+	fill-rule: nonzero;
+	stroke: currentColor;
+}
+.base-timer__path-remaining.green {
+	color: #2ba329;
+}
+.base-timer__path-remaining.orange {
+	color: #ffc000;
+}
+.base-timer__path-remaining.red {
+	color: #e63e1a;
+}
+.base-timer__label {
+	position: absolute;
+	bottom: 34.17%;
+	font-family: Montserrat;
+	font-weight: 600;
+	align-items: center;
+	display: flex;
+	font-size: 30px;
+	line-height: 37px;
+	color: #030302;
+	width: 120px;
+	justify-content: center;
+}
+.reset-time-btn {
+	-webkit-app-region: no-drag;
+}
+input[id="resetTimeBtn"]:hover {
+	background-image: url("../../../../img/icon-plus-hover-md.svg");
+}
+</style>
