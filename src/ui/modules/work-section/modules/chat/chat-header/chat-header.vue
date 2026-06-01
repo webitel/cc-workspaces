@@ -23,6 +23,7 @@
         :phone-number="displayNumber"
         :contact="props.contact"
         :queue-name="displayQueueName"
+        is-chat
       />
     </template>
   </task-header>
