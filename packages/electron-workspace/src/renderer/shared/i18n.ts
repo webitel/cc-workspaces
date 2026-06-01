@@ -1,9 +1,6 @@
-import { createApp } from 'vue';
 import { createI18n } from 'vue-i18n';
-import App from './App.vue';
-import en from './i18n/en.json';
-import ru from './i18n/ru.json';
-import uk from './i18n/uk.json';
+
+export type Locale = 'en' | 'ru' | 'uk';
 
 declare global {
 	interface Window {
@@ -13,7 +10,7 @@ declare global {
 	}
 }
 
-function detectLocale(): 'en' | 'ru' | 'uk' {
+function detectLocale(): Locale {
 	const stored =
 		window.electronStorage?.getItem?.('lang') ||
 		(typeof require === 'function'
@@ -23,15 +20,13 @@ function detectLocale(): 'en' | 'ru' | 'uk' {
 	return 'en';
 }
 
-const i18n = createI18n({
-	legacy: false,
-	locale: detectLocale(),
-	fallbackLocale: 'en',
-	messages: {
-		en,
-		ru,
-		uk,
-	},
-});
-
-createApp(App).use(i18n).mount('#app');
+export function createWindowI18n<
+	M extends Record<Locale, Record<string, string>>,
+>(messages: M) {
+	return createI18n({
+		legacy: false,
+		locale: detectLocale(),
+		fallbackLocale: 'en',
+		messages,
+	});
+}

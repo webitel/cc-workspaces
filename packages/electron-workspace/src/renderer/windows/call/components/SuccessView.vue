@@ -64,7 +64,7 @@ function onCloseClick() {
 	-webkit-app-region: drag;
 }
 .success-message__dane {
-	background-image: url("../../../../img/dane-default-bttn.svg");
+	background-image: url("@img/dane-default-bttn.svg");
 	margin-top: 49px;
 	margin-left: 121px;
 	height: 12px;

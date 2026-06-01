@@ -42,10 +42,10 @@ class DisconnectNotification {
 
 		const devUrl = process.env.ELECTRON_RENDERER_URL;
 		if (devUrl) {
-			this.window.loadURL(`${devUrl}/disconnect/index.html`);
+			this.window.loadURL(`${devUrl}/windows/disconnect/index.html`);
 		} else {
 			this.window.loadFile(
-				path.join(__dirname, '../renderer/disconnect/index.html'),
+				path.join(__dirname, '../renderer/windows/disconnect/index.html'),
 			);
 		}
 

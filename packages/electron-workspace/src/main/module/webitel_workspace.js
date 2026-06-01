@@ -40,10 +40,10 @@ class Workspace {
 		this.window.loadURL(URL).catch((err) => {
 			const devUrl = process.env.ELECTRON_RENDERER_URL;
 			if (devUrl) {
-				this.window.loadURL(`${devUrl}/err-message/index.html`);
+				this.window.loadURL(`${devUrl}/windows/err-message/index.html`);
 			} else {
 				this.window.loadFile(
-					path.join(__dirname, '../renderer/err-message/index.html'),
+					path.join(__dirname, '../renderer/windows/err-message/index.html'),
 				);
 			}
 		});

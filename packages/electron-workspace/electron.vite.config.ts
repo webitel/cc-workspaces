@@ -57,15 +57,18 @@ export default defineConfig({
 		build: {
 			rollupOptions: {
 				input: {
-					call: resolve(__dirname, 'src/renderer/call/index.html'),
+					call: resolve(__dirname, 'src/renderer/windows/call/index.html'),
 					'load-config': resolve(
 						__dirname,
-						'src/renderer/load-config/index.html',
+						'src/renderer/windows/load-config/index.html',
 					),
-					disconnect: resolve(__dirname, 'src/renderer/disconnect/index.html'),
+					disconnect: resolve(
+						__dirname,
+						'src/renderer/windows/disconnect/index.html',
+					),
 					'err-message': resolve(
 						__dirname,
-						'src/renderer/err-message/index.html',
+						'src/renderer/windows/err-message/index.html',
 					),
 				},
 			},

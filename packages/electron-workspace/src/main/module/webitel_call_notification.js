@@ -47,9 +47,11 @@ class CallNotification {
 		const devUrl = process.env.ELECTRON_RENDERER_URL;
 
 		if (devUrl) {
-			this.window.loadURL(`${devUrl}/call/index.html`);
+			this.window.loadURL(`${devUrl}/windows/call/index.html`);
 		} else {
-			this.window.loadFile(path.join(__dirname, '../renderer/call/index.html'));
+			this.window.loadFile(
+				path.join(__dirname, '../renderer/windows/call/index.html'),
+			);
 		}
 		//this.window.webContents.openDevTools()
 

@@ -29,10 +29,10 @@ class LoadConfig {
 
 		const devUrl = process.env.ELECTRON_RENDERER_URL;
 		if (devUrl) {
-			this.window.loadURL(`${devUrl}/load-config/index.html`);
+			this.window.loadURL(`${devUrl}/windows/load-config/index.html`);
 		} else {
 			this.window.loadFile(
-				path.join(__dirname, '../renderer/load-config/index.html'),
+				path.join(__dirname, '../renderer/windows/load-config/index.html'),
 			);
 		}
 

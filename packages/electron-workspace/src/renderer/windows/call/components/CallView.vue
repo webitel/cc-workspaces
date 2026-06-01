@@ -386,28 +386,28 @@ input[id="collapsBtn"] {
 	outline: none;
 }
 input[id="downArrowBtn"]:hover {
-	background-image: url("../../../../img/icon-arrow-down-hover-md.svg");
+	background-image: url("@img/icon-arrow-down-hover-md.svg");
 }
 input[id="upArrowBtn"]:hover {
-	background-image: url("../../../../img/icon-arrow-up-hover-md.svg");
+	background-image: url("@img/icon-arrow-up-hover-md.svg");
 }
 input[id="collapsBtn"]:hover {
-	background-image: url("../../../../img/icon-collaps-hover-md.svg");
+	background-image: url("@img/icon-collaps-hover-md.svg");
 }
 input[id="holdPressedBtn"]:hover {
-	background-image: url("../../../../img/hold-pressed-hover-bttn.svg");
+	background-image: url("@img/hold-pressed-hover-bttn.svg");
 }
 input[id="mutePressedBtn"]:hover {
-	background-image: url("../../../../img/mic-off-pressed-hover-bttn.svg");
+	background-image: url("@img/mic-off-pressed-hover-bttn.svg");
 }
 input[id="muteBtn"]:hover {
-	background-image: url("../../../../img/mic-hover-bttn.svg");
+	background-image: url("@img/mic-hover-bttn.svg");
 }
 input[id="holdBtn"]:hover {
-	background-image: url("../../../../img/hold-hover-bttn.svg");
+	background-image: url("@img/hold-hover-bttn.svg");
 }
 input[id="declineBtn"]:hover {
-	background-image: url("../../../../img/decline-hover-bttn.svg");
+	background-image: url("@img/decline-hover-bttn.svg");
 }
 #rejectBtn:hover,
 #answerBtn:hover {

@@ -171,12 +171,12 @@ body {
 	outline: none;
 }
 input[id="collapsBtn"]:hover {
-	background-image: url("../../../img/icon-collaps-hover-md.svg");
+	background-image: url("@img/icon-collaps-hover-md.svg");
 }
 input[id="expandBtn"]:hover {
-	background-image: url("../../../img/icon-expand-hover-md.svg");
+	background-image: url("@img/icon-expand-hover-md.svg");
 }
 input[id="closeBtn"]:hover {
-	background-image: url("../../../img/icon-close-hover-md.svg");
+	background-image: url("@img/icon-close-hover-md.svg");
 }
 </style>

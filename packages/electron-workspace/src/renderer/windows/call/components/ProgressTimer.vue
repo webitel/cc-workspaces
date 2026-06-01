@@ -182,6 +182,6 @@ onUnmounted(clearTimer);
 	-webkit-app-region: no-drag;
 }
 input[id="resetTimeBtn"]:hover {
-	background-image: url("../../../../img/icon-plus-hover-md.svg");
+	background-image: url("@img/icon-plus-hover-md.svg");
 }
 </style>
