@@ -18,7 +18,7 @@
             class="task-header-expansion-card__link">
             {{ username?.contactName }}</a>
           <span
-            v-if="username?.extraNames"
+            v-if="!isChat || username?.extraNames"
             class="task-header-expansion-card__extra"
           >{{ taskTitle }}</span>
         </div>
@@ -59,6 +59,7 @@ const props = withDefaults(
 		direction?: CallDirection;
 		collapsed?: boolean;
 		hideNumber?: boolean;
+		isChat?: boolean;
 	}>(),
 	{
 		queueName: '',
@@ -66,12 +67,13 @@ const props = withDefaults(
 		contact: null,
 		collapsed: false,
 		hideNumber: false,
+		isChat: false,
 	},
 );
 
 const { t } = useI18n();
 
-const taskTitle = computed(() => {
+const chatTitle = computed(() => {
 	if (props.username?.extraNames) {
 		return (
 			(props.username?.contactName ? ', ' : '') + props.username.extraNames
@@ -82,8 +84,16 @@ const taskTitle = computed(() => {
 	return props.username?.fullName;
 });
 
+const taskTitle = computed(() => {
+	if (props.isChat) return chatTitle.value;
+	if (!props.username) {
+		return t('workspaceSec.taskHeaderExpansionCard.unknownContact');
+	}
+	return props.username;
+});
+
 const avatarTitle = computed(
-	() => props.contact?.name || props.username?.fullName,
+	() => props.contact?.name || props.username?.fullName || props.username,
 );
 
 const contactLink = computed(() =>
