@@ -6,7 +6,7 @@
 		"name": "Webitel Team",
 		"email": "support@webitel.com"
 	},
-	"main": "./src/electron/main/main.js",
+	"main": "./out/main/index.js",
 	"homepage": "https://example.webitel.com/",
 	"repository": {
 		"type": "git",
@@ -15,20 +15,24 @@
 	"keywords": [],
 	"scripts": {
 		"install:clean": "npm ci && node node_modules/electron/install.js && echo 'windows err: https://github.com/electron/electron/issues/20731'",
-		"start": "npm run build:renderer && electron . --disable-http-cache",
-		"build:renderer": "vite build -c vite.renderer.config.ts",
+		"dev": "electron-vite dev",
+		"build": "electron-vite build",
+		"start": "electron-vite preview",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint": "npx @biomejs/biome check --colors=off .",
 		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
-		"dist": "npm run build:renderer && electron-builder -w",
-		"distl": "npm run build:renderer && electron-builder --linux",
-		"distm": "npm run build:renderer && electron-builder --mac"
+		"dist": "npm run build && electron-builder -w",
+		"distl": "npm run build && electron-builder --linux",
+		"distm": "npm run build && electron-builder --mac"
 	},
 	"build": {
 		"asar": false,
 		"npmRebuild": false,
 		"files": [
-			"**/*",
+			"out/**/*",
+			"src/renderer/**/*",
+			"img/**/*",
+			"package.json",
 			"!node_modules/**/*.d.ts",
 			"!node_modules/**/*.d.ts.map",
 			"!node_modules/**/*.js.map"
@@ -103,6 +107,7 @@
 		"electron": "^35.7.5",
 		"electron-builder": "26.0.12",
 		"electron-packager": "^17.1.2",
+		"electron-vite": "^6.0.0-beta.1",
 		"http-server": "^14.1.1",
 		"ora": "^6.1.2",
 		"typescript": "^5.9.2",
