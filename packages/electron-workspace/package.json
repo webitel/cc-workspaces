@@ -115,7 +115,7 @@
 		"vue-tsc": "^3.1.1"
 	},
 	"dependencies": {
-		"axios": "^1.13.2",
+		"axios": "^1.16.0",
 		"dotenv": "^17.2.3",
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",
