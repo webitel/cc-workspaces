@@ -1,6 +1,6 @@
 <template>
   <task-header :size="size">
-    <template #before-avatar>
+    <template #start-section>
       <wt-button
 				:variant="isOnHistory ? 'active' : 'outlined'"
         :size="size"
@@ -12,7 +12,7 @@
         @click="$emit('openTab', 'history')"
       />
     </template>
-    <template #after-avatar>
+    <template #end-section>
       <wt-button
         v-show="isCall"
 				variant="outlined"
