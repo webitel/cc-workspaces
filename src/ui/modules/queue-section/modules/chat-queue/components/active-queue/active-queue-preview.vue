@@ -72,6 +72,7 @@ import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
+import { AgentTypes } from '../../enums/AgentTypes.enum';
 
 import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
@@ -119,12 +120,7 @@ export default {
 				: ChatStatus.Active;
 		},
 		clientName() {
-			//need to display only the name of the client (task https://webitel.atlassian.net/browse/WTEL-9616)
-			const agentTypes = [
-				'webitel',
-				'user',
-				'bot',
-			];
+			const agentTypes = Object.values(AgentTypes);
 			const members = this.task?.members;
 			if (members) {
 				const client = members?.find(
