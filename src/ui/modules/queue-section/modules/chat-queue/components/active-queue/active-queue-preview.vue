@@ -14,7 +14,7 @@
       />
     </template>
     <template #title>
-      {{ displayChatName }}
+      {{ clientName }}
     </template>
 
     <template #subtitle>
@@ -54,7 +54,7 @@
     </template>
 
     <template #title>
-      {{ displayChatName }}
+      {{ clientName }}
     </template>
 
     <template #subtitle>
@@ -71,6 +71,7 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import { AgentTypes } from '../../enums/AgentTypes.enum';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 import LastMessageContainer from '../_shared/last-message-container.vue';
@@ -117,6 +118,17 @@ export default {
 			return this.task.state === ConversationState.Invite
 				? ChatStatus.New
 				: ChatStatus.Active;
+		},
+		clientName() {
+			const agentTypes = Object.values(AgentTypes);
+			const members = this.task?.members;
+			if (members) {
+				const client = members?.find(
+					(member) => !agentTypes.includes(member?.type),
+				);
+				return client?.name || members[0]?.name;
+			}
+			return '';
 		},
 	},
 };
