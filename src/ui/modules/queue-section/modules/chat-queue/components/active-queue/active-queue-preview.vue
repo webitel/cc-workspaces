@@ -71,8 +71,8 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
-import { ChatStatus } from '../../enums/ChatStatus.enum';
 import { AgentTypes } from '../../enums/AgentTypes.enum';
+import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
