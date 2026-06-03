@@ -104,8 +104,8 @@
     <template #info>
       <task-header-expansion-card
         v-if="call?.contact"
-        :username="call?.displayName"
-        :phone-number="call?.displayNumber"
+        :username="displayName"
+        :phone-number="displayNumber"
         :queue-name="queueName"
         :direction="call?.direction"
         :hide-number="call?.hideNumber"
@@ -172,6 +172,16 @@ const isCallChatExist = computed(
 );
 
 const queueName = computed(() => getQueueName(call.value));
+
+const displayName = computed(() => {
+  if (call.value?.isConsultToQueue) return call.value?.destination;
+  return call.value?.displayName;
+});
+
+const displayNumber = computed(() => {
+  if (call.value?.isConsultToQueue) return '';
+  return call.value?.displayNumber;
+});
 
 const makeCall = () => store.dispatch('features/call/CALL');
 const hangup = () => store.dispatch('features/call/HANGUP');
