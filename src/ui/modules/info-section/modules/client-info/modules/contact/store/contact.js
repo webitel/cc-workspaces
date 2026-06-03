@@ -48,6 +48,7 @@ const actions = {
 	LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
 		const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
 		const number = task.displayNumber; // for CALLS
+		if (!number) return; // no destination number, then skip contacts loading https://webitel.atlassian.net/browse/DEV-6576?focusedCommentId=759329
 		const qin = isCallWorkspace ? 'phones' : 'emails,phones'; // for calls search contacts just by phones https://webitel.atlassian.net/browse/WTEL-7041
 		const searchParams = {
 			q: number,
@@ -121,23 +122,46 @@ const actions = {
 		}
 	},
 	INITIALIZE_CONTACT: async (context) => {
+		const alreadyLoaded = ({ contactId, userId }) => {
+			// see https://webitel.atlassian.net/browse/DEV-6576?focusedCommentId=759329
+			if (contactId) {
+				return state.contact?.id === contactId;
+			}
+			if (userId) {
+				return state.contact?.user?.id === userId;
+			}
+			return false;
+		};
+
 		const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
 		const isChatWorkspace = context.rootGetters['workspace/IS_CHAT_WORKSPACE'];
 		const task = context.rootGetters['workspace/TASK_ON_WORKSPACE'];
 
 		if (isChatWorkspace) {
-			if (state.contactsByDestination)
+			if (state.contactsByDestination) {
 				context.commit('SET_CONTACTS_BY_DESTINATION', []);
-			return context.dispatch('LOAD_CHAT_CONTACT', {
-				id: task.members[0].user_id,
-			});
+			}
+			if (
+				!alreadyLoaded({
+					userId: task.members[0].user_id,
+				})
+			) {
+				return context.dispatch('LOAD_CHAT_CONTACT', {
+					id: task.members[0].user_id,
+				});
+			}
 		}
 
 		if (isCallWorkspace) {
 			const callList = context.rootState.features?.call?.callList || [];
 			const contactId = resolveTaskContactId(task, callList);
 
-			if (contactId) {
+			if (
+				contactId &&
+				!alreadyLoaded({
+					contactId,
+				})
+			) {
 				return context.dispatch('LOAD_CONTACT', contactId);
 			} else {
 				context.commit('SET_CONTACT', null);
