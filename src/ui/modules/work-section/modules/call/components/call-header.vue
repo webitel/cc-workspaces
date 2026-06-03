@@ -174,13 +174,13 @@ const isCallChatExist = computed(
 const queueName = computed(() => getQueueName(call.value));
 
 const displayName = computed(() => {
-  if (call.value?.isConsultToQueue) return call.value?.destination;
-  return call.value?.displayName;
+	if (call.value?.isConsultToQueue) return call.value?.destination;
+	return call.value?.displayName;
 });
 
 const displayNumber = computed(() => {
-  if (call.value?.isConsultToQueue) return '';
-  return call.value?.displayNumber;
+	if (call.value?.isConsultToQueue) return '';
+	return call.value?.displayNumber;
 });
 
 const makeCall = () => store.dispatch('features/call/CALL');
