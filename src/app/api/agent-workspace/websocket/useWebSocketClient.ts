@@ -74,6 +74,9 @@ function emit<K extends keyof EventMap>(
 type CliConfig = {
 	registerWebDevice?: boolean;
 	debug?: boolean;
+	echoCancellation?: boolean;
+	noiseSuppression?: boolean;
+	autoGainControl?: boolean;
 };
 
 function getCliConfig(): CliConfig {
@@ -174,6 +177,9 @@ async function createClient(): Promise<Client> {
 			token,
 			registerWebDevice: cliConfig.registerWebDevice ?? true,
 			debug: cliConfig.debug,
+			echoCancellation: cliConfig.echoCancellation,
+			noiseSuppression: cliConfig.noiseSuppression,
+			autoGainControl: cliConfig.autoGainControl,
 		}),
 	);
 
