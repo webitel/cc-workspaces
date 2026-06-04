@@ -97,7 +97,9 @@ const avatarTitle = computed(
 );
 
 const contactLink = computed(() =>
-	store.getters['ui/infoSec/client/contact/CONTACT_LINK'](props.contact?.id),
+	store.getters['ui/infoSec/client/contact/READ_ONLY_CONTACT_LINK'](
+		props.contact?.etag,
+	),
 );
 </script>
 

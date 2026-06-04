@@ -30,6 +30,7 @@
         />
       </template>
     </task-container>
+	<wt-loader v-else />
   </article>
 </template>
 
