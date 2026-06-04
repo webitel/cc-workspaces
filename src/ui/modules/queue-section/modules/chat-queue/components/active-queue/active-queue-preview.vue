@@ -120,7 +120,7 @@ export default {
 				: ChatStatus.Active;
 		},
 		clientName() {
-			return getClientName(this.task?.members);
+			return getClientName(this.task?.members) || '';
 		},
 	},
 };

@@ -6,5 +6,5 @@ export const getClientName = (members) => {
 	const agentTypes = Object.values(AgentTypes);
 	const client = members.find((member) => !agentTypes.includes(member?.type));
 
-	return client?.name || '';
+	return client?.name;
 };

@@ -13,7 +13,7 @@ import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
 // Function for display chat name
 const displayChatName = (chat) => {
 	if (chat?.members?.length) {
-		return getClientName(chat?.members);
+		return getClientName(chat?.members) || 'unknown';
 	}
 
 	if (chat?.title) {
