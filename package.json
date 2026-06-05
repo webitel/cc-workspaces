@@ -50,7 +50,7 @@
 		"markdown-it": "^14.x",
 		"pinia": "^3.x",
 		"prepend-http": "^4.0.0",
-		"tinymce": "^6.8.3",
+		"tinymce": "^8.6.0",
 		"vidstack": "^1.12.13",
 		"vue": "^3.5.x",
 		"vue-i18n": "^11.x",
