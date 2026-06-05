@@ -104,8 +104,8 @@
     <template #info>
       <task-header-expansion-card
         v-if="call?.contact"
-        :username="call?.displayName"
-        :phone-number="call?.displayNumber"
+        :username="displayName"
+        :phone-number="displayNumber"
         :queue-name="queueName"
         :direction="call?.direction"
         :hide-number="call?.hideNumber"
@@ -172,6 +172,18 @@ const isCallChatExist = computed(
 );
 
 const queueName = computed(() => getQueueName(call.value));
+
+//@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
+const displayName = computed(() => {
+	if (call.value?.isConsultToQueue) return call.value?.destination;
+	return call.value?.displayName;
+});
+
+//@author PolinaSukhorukova-webitel don'tdisplay phone number while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
+const displayNumber = computed(() => {
+	if (call.value?.isConsultToQueue) return '';
+	return call.value?.displayNumber;
+});
 
 const makeCall = () => store.dispatch('features/call/CALL');
 const hangup = () => store.dispatch('features/call/HANGUP');
