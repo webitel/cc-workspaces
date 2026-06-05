@@ -203,9 +203,7 @@ function add() {
 
 async function linkContact(contact) {
 	await store.dispatch(`${props.namespace}/LINK_CONTACT`, contact);
-	await await store.dispatch(
-		'features/chat/closed/processed/LOAD_PROCESSED_CHATS',
-	);
+	await store.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS');
 	close();
 }
 
