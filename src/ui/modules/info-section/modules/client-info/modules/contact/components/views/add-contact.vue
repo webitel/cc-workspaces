@@ -12,25 +12,25 @@
         prevent-trim
       />
       <wt-input-text
-        :model-value="draft.phones[0]?.number || ''"
+        :model-value="draft.phones?.[0]?.number || ''"
         :label="t('reusable.phoneNumber')"
         prevent-trim
         @update:model-value="updatePhoneNumber"
       />
       <wt-input-text
-        :model-value="draft.emails[0]?.email || ''"
+        :model-value="draft.emails?.[0]?.email || ''"
         :label="t('vocabulary.emails')"
         prevent-trim
         @update:model-value="updateEmail"
       />
       <wt-select
-        :value="draft.timezones[0]?.timezone"
+        :value="draft.timezones?.[0]?.timezone"
         :label="t('date.timezone', 1)"
         :search-method="TimezonesAPI.getLookup"
         @input="draft.timezones[0] = { timezone: $event }"
       ></wt-select>
       <wt-select
-        :value="draft.managers[0]?.user"
+        :value="draft.managers?.[0]?.user"
         :label="t('infoSec.contacts.manager')"
         :search-method="UsersAPI.getLookup"
         @input="draft.managers[0] = { user: $event }"
@@ -223,6 +223,8 @@ async function save() {
 	if (!draft.value.phones[0]?.number) delete draft.value.phones;
 	if (!draft.value.emails[0]?.email) delete draft.value.emails;
 	await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+	store.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS');
+
 	close();
 }
 
