@@ -55,17 +55,27 @@ const actions = {
 			qin,
 			size: 100,
 		}; // load only 100 (should be enough) // https://webitel.atlassian.net/browse/WTEL-7906
+		let linkedContact = false;
 		try {
 			context.commit('SET_IS_LOADING', true);
 			const { items: contacts } = await ContactsAPI.getList(searchParams);
 
 			if (contacts.length === 1) {
-				return context.dispatch('LINK_CONTACT', contacts[0]);
+				//@author PolinaSukhorukova-webitel
+				//isLoading is intentionally not reset here —
+				//responsibility is passed to LOAD_CONTACT, which is triggered
+				//by the watcher in the-contact.vue after contactId updated.
+				//LOAD_CONTACT will reset isLoading in its own finally block.
+				linkedContact = true;
+				context.dispatch('LINK_CONTACT', contacts[0]);
+				return;
 			}
 
 			context.commit('SET_CONTACTS_BY_DESTINATION', contacts);
 		} finally {
-			context.commit('SET_IS_LOADING', false);
+			if (!linkedContact) {
+				context.commit('SET_IS_LOADING', false);
+			}
 		}
 	},
 	SEARCH_CONTACTS: async (context, searchParams) => {
