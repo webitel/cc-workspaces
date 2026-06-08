@@ -23,27 +23,27 @@
         prevent-trim
         @update:model-value="updateEmail"
       />
-      <wt-select
-        :value="draft.timezones?.[0]?.timezone"
+      <wt-single-select
+        :model-value="draft.timezones?.[0]?.timezone"
         :label="t('date.timezone', 1)"
         :search-method="TimezonesAPI.getLookup"
-        @input="draft.timezones[0] = { timezone: $event }"
-      ></wt-select>
-      <wt-select
-        :value="draft.managers?.[0]?.user"
+        @update:model-value="draft.timezones[0] = { timezone: $event }"
+      />
+      <wt-single-select
+        :model-value="draft.managers?.[0]?.user"
         :label="t('infoSec.contacts.manager')"
         :search-method="UsersAPI.getLookup"
-        @input="draft.managers[0] = { user: $event }"
-      ></wt-select>
-      <wt-tags-input
-        :value="draft.labels"
+        @update:model-value="draft.managers[0] = { user: $event }"
+      />
+      <wt-multi-select
+        v-model:model-value="draft.labels"
         :label="t('vocabulary.labels', 2)"
         :search-method="LabelsAPI.getList"
         option-label="label"
-        track-by="label"
-        taggable
-        @input="draft.labels = $event"
-      ></wt-tags-input>
+        data-key="label"
+        allow-custom-values
+				chips-view
+      />
       <wt-textarea
         v-model:model-value="draft.about"
         :label="t('vocabulary.description')"
