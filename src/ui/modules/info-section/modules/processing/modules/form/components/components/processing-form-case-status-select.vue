@@ -1,16 +1,16 @@
 <template>
-    <wt-select
-        :value="value"
+    <wt-single-select
+        :model-value="value"
         :placeholder="t('cases.status')"
         :options="options"
-        :clearable="false"
-        use-value-from-options-by-prop="id"
-        @input="emit('input', $event)"
+        :show-clear="false"
+        option-value="id"
+        @update:model-value="emit('input', $event)"
     >
-        <template #singleLabel="{ option }">
+        <template #value="{ value }">
             <wt-indicator
-                :color="getIndicatorColor(option)"
-                :text="option.name"
+                :color="getIndicatorColor(value)"
+                :text="value.name"
             />
         </template>
 
@@ -20,7 +20,7 @@
                 :text="option.name"
             />
         </template>
-    </wt-select>
+    </wt-single-select>
 </template>
 
 <script
@@ -28,7 +28,7 @@
     lang="ts"
 >
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
-import { WtIndicator, WtSelect } from '@webitel/ui-sdk/components';
+import { WtIndicator, WtSingleSelect } from '@webitel/ui-sdk/components';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
