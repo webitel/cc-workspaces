@@ -67,5 +67,14 @@ function handlePlayerInitialize(player: unknown) {
     height: var(--chat-video-player-height);
     width: var(--chat-video-player-width);
   }
+
+  //@author PolinaSukhorukova-webitel if in small view it is centered, the top pannel is to big
+  :deep(video) {
+    object-position: center 32px;
+  }
+
+  :deep(.wt-vidstack-player--fullscreen video) {
+    object-position: center;
+  }
 }
 </style>
