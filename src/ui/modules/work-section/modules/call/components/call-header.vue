@@ -175,7 +175,8 @@ const queueName = computed(() => getQueueName(call.value));
 
 //@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
 const displayName = computed(() => {
-	if (call.value?.isConsultToQueue && !call.value?.to) return call.value?.destination;
+	if (call.value?.isConsultToQueue && !call.value?.to)
+		return call.value?.destination;
 	return call.value?.displayName;
 });
 
