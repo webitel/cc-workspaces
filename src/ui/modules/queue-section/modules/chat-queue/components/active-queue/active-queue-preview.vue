@@ -14,7 +14,7 @@
       />
     </template>
     <template #title>
-      {{ displayChatName }}
+      {{ clientName }}
     </template>
 
     <template #subtitle>
@@ -54,7 +54,7 @@
     </template>
 
     <template #title>
-      {{ displayChatName }}
+      {{ clientName }}
     </template>
 
     <template #subtitle>
@@ -68,6 +68,7 @@
 <script>
 import { ConversationState } from 'webitel-sdk';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import { getClientName } from '../../../../../../../features/modules/chat/scripts/getClientName';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
@@ -117,6 +118,9 @@ export default {
 			return this.task.state === ConversationState.Invite
 				? ChatStatus.New
 				: ChatStatus.Active;
+		},
+		clientName() {
+			return getClientName(this.task?.members) || '';
 		},
 	},
 };

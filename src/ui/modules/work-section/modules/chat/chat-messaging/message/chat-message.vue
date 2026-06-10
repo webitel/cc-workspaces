@@ -94,7 +94,9 @@ const emit = defineEmits([
 
 const userinfoStore = useUserinfoStore();
 const { userInfo } = storeToRefs(userinfoStore);
-const agentName = computed(() => userInfo.value.name);
+const agentName = computed(
+	() => userInfo.value.chatName || userInfo.value.name,
+);
 
 const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
@@ -123,7 +125,6 @@ const isAgentSide = computed(() => isAgent.value || isBot.value);
 const getClientUsername = computed(() => {
 	if (isTransferAgent.value) return props.message.member?.name;
 	if (isAgent.value) return agentName?.value;
-
 	return props.username || props.message.member?.name;
 });
 

@@ -78,7 +78,7 @@
       <slot name="avatar">
         <wt-avatar
           size="sm"
-          :username="displayChatName"
+          :username="displayChatName.fullName"
         ></wt-avatar>
       </slot>
     </section>

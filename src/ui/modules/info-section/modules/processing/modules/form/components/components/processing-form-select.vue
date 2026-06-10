@@ -1,12 +1,12 @@
 <template>
-  <wt-select
+  <wt-single-select
     v-bind="$attrs"
-    :value="value"
+    :model-value="value"
     :options="options"
-    :track-by="trackBy"
+    :data-key="trackBy"
     @reset="resetValue"
-    @input="emit('input', $event)"
-  ></wt-select>
+    @update:model-value="emit('input', $event)"
+  />
 </template>
 
 <script setup lang="ts">

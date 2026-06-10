@@ -111,11 +111,15 @@ const actions = {
 	},
 
 	OPEN_CHAT: async (context, chat) => {
-		const isChatClosed =
-			context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(
-				chat,
-			);
-		await context.dispatch('SET_WORKSPACE', chat);
+		const isUnidentifiedClosedChat = !chat.contact?.id && chat.closedAt;
+
+		if (isUnidentifiedClosedChat) {
+			await context.dispatch('features/chat/closed/LOAD_CLOSED_CHAT', chat, {
+				root: true,
+			});
+		} else {
+			await context.dispatch('SET_WORKSPACE', chat);
+		}
 	},
 
 	CHAT_INSERT_TO_START: (context, chat) => {

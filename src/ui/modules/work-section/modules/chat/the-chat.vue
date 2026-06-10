@@ -30,6 +30,7 @@
         />
       </template>
     </task-container>
+	<wt-loader v-else />
   </article>
 </template>
 
@@ -102,7 +103,9 @@ export default {
 		},
 		contact: {
 			// TODO: need to be removed after chat backend refactoring https://webitel.atlassian.net/browse/WTEL-6271
-			async handler() {
+			async handler(newContact) {
+				if (newContact?.id === this.chatContact?.id) return;
+
 				this.chatContactIsLoaded = false;
 				this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
 				this.chatContactIsLoaded = true;

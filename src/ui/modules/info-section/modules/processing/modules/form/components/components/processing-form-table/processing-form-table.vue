@@ -15,7 +15,7 @@
       </template>
       <template #default>
         <div
-          class="processing-form-table__scroll-wrapper wt-scrollbar"
+          class="processing-form-table__wrapper wt-scrollbar"
         >
           <wt-table
             class="processing-form-table__table"
@@ -325,9 +325,8 @@ onMounted(() => {
     padding: var(--spacing-xs);
   }
 
-  &__scroll-wrapper {
+  &__wrapper {
     height: 418px;
-    overflow: auto;
   }
 
   &__title {

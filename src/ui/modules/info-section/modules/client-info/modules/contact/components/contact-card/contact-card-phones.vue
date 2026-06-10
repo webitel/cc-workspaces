@@ -17,8 +17,8 @@
             :placeholder="t('reusable.phoneNumber')"
             class="contact-card-phones__input"
           />
-          <wt-select
-            v-model="newPhone.type"
+          <wt-single-select
+            v-model:model-value="newPhone.type"
             :placeholder="t('objects.communicationType', 1)"
             :search-method="getCommunicationType"
             class="contact-card-phones__select"

@@ -9,7 +9,7 @@
 	},
 	"include": [
 		"src/**/*",
-		"vite.renderer.config.ts",
+		"electron.vite.config.ts",
 		"env.d.ts"
 	]
 }
