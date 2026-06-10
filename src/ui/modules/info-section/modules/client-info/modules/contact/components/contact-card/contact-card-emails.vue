@@ -18,8 +18,8 @@
             class="contact-card-emails__input"
             :placeholder="t('vocabulary.emails')"
           />
-          <wt-select
-            v-model="newEmail.type"
+          <wt-single-select
+            v-model:model-value="newEmail.type"
             class="contact-card-emails__select"
             :placeholder="t('objects.communicationType', 1)"
             :search-method="getCommunicationType"
