@@ -1,6 +1,6 @@
 import {
-	type UserSettingsBroadcastMessage,
 	BroadcastChannelName,
+	type UserSettingsBroadcastMessage,
 } from '@webitel/ui-sdk/enums';
 import { onMounted, onUnmounted } from 'vue';
 import { useWebSocketClient } from '../api/agent-workspace/websocket/useWebSocketClient';
