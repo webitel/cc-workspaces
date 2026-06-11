@@ -7,6 +7,7 @@
 import { computed, provide } from 'vue';
 import { useStore } from 'vuex';
 import { useUserinfoStore } from '../ui/modules/userinfo/userinfoStore.ts';
+import { useAudioProcessingSync } from './composables/useAudioProcessingSync';
 
 export default {
 	name: 'TheApp',
@@ -18,6 +19,9 @@ export default {
 		// Provide darkMode for ui-sdk components
 		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 		provide('darkMode', darkMode);
+
+		useAudioProcessingSync();
+
 		return {
 			showUserNotifications,
 		};
