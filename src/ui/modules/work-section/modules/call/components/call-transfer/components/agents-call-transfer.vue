@@ -7,7 +7,7 @@
     :data-filters="dataFilters"
     :get-data="getAgens"
     :presence-status-field="PresenceStatusField"
-		:transfer-loading="currentTransferNumber && showLoader(currentTransferNumber)"
+    :transfer-loading="currentTranferLoaderId && showLoader(currentTranferLoaderId)"
     @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
@@ -15,7 +15,7 @@
         color="transfer"
         icon="consultative-transfer"
         rounded
-				:loading="showLoader(item.id)"
+        :loading="showLoader(item.id)"
         @click="consultationTransfer(item)"
       />
     </template>
@@ -58,7 +58,7 @@ const dataFields = [
 const dataFilters = 'user_presence_status.status=sip,!dnd';
 const dataSort = 'position';
 
-const currentTransferNumber = ref<string | null>(null);
+const currentTranferLoaderId = ref<string | null>(null);
 
 const scroll = computed(
 	() =>
@@ -81,11 +81,11 @@ const consultationTransfer = async (item: AgentItem = {} as AgentItem) => {
 		store.dispatch('features/call/TOGGLE_HOLD', item.id),
 	);
 	if (call.value) {
-		currentTransferNumber.value = item.extension;
+		currentTranferLoaderId.value = item.extension;
 		await runWithLoader(item.extension, () =>
 			call.value.processTransferAgent(Number(item.id)),
 		);
-		currentTransferNumber.value = null;
+		currentTranferLoaderId.value = null;
 		emit('transfer-complete');
 	}
 };
