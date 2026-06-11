@@ -36,6 +36,9 @@ export default ({ mode }) => {
 			],
 		},
 		optimizeDeps: {
+			entries: [
+				'index.html',
+			], // avoid vite deps scanning for packages/electron-workspace
 			include: [
 				'clipboard-copy',
 				'deep-equal',
