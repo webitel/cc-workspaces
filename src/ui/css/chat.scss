@@ -10,6 +10,14 @@
   --chat-video-player-width: 256px;
 }
 
+#app {
+  //@author PolinaSukhorukova-webitel 
+  //in @webitel/ui-sdk/src/css/main we have variable --chat-video-player-height, 
+  //they are set in #app, so we need to override them to avoid bottom bar overlaps the video in chat
+  //https://webitel.atlassian.net/browse/WTEL-9530
+  --chat-video-player-height: 217px !important;
+}
+
 .chat-messages-container {
   position: relative;
   display: flex;
