@@ -38,6 +38,7 @@
 </template>
 
 <script setup>
+import { useMediaScroll } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
 import {
 	computed,
@@ -48,7 +49,6 @@ import {
 	watch,
 } from 'vue';
 import { useStore } from 'vuex';
-
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatDate from '../components/chat-date.vue';
 import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
@@ -89,8 +89,8 @@ const {
 	updateThreshold,
 } = useChatScroll(el);
 
-onUnmounted(() => {
-	cleanChatPlayers();
+const { startObserving } = useMediaScroll(el, () => {
+	scrollToBottom('smooth');
 });
 
 const openMedia = (message) =>
@@ -109,6 +109,10 @@ watch(
 		immediate: true,
 	},
 );
+
+onMounted(() => {
+	startObserving();
+});
 
 onUnmounted(() => {
 	cleanChatPlayers();
