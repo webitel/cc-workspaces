@@ -10,6 +10,7 @@
     <template #after-search>
       <wt-button
         color="transfer"
+        :loading="loading"
         :disabled="isTransferToNumberDisabled"
         @click="emit('transfer', { extension: dataSearch })"
       >{{ $t('transfer.transfer') }}
@@ -63,6 +64,7 @@ interface CallTransferContainerProps {
 	dataFilters?: string;
 	dataFields?: string[];
 	presenceStatusField?: string;
+	loading?: boolean;
 }
 
 type CallTransferContainerEmits = (e: 'transfer', item: unknown) => void;

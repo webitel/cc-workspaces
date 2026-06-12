@@ -10,7 +10,7 @@
         :size="size"
         color="success"
         icon="call--filled"
-        :loading="showLoader"
+        :loading="showLoader(task.id)"
         rounded
         @click.stop="call(task.id, task.communications[0].id)"
       />
@@ -26,7 +26,7 @@
             :size="size"
             color="success"
             icon="call--filled"
-            :loading="showLoader"
+            :loading="showLoader(task.id)"
             rounded
             @click="toggle"
           />
@@ -45,6 +45,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import { useLoader } from '../../../../../../composables/useLoader';
 
 export default {
 	name: 'OfflineQueuePreviewCallback',
@@ -62,9 +63,11 @@ export default {
 			default: false,
 		},
 	},
-	data() {
+	setup() {
+		const { showLoader, runWithLoader } = useLoader();
 		return {
-			showLoader: false,
+			showLoader,
+			runWithLoader,
 		};
 	},
 	computed: {
@@ -80,14 +83,12 @@ export default {
 			makeCall: 'CALL',
 		}),
 		call(id, communicationId) {
-			if (this.showLoader) return;
-
-			this.showLoader = true;
-			this.makeCall({
-				id,
-				communicationId,
-			});
-			this.showLoader = false;
+			this.runWithLoader(id, () =>
+				this.makeCall({
+					id,
+					communicationId,
+				}),
+			);
 		},
 	},
 };
