@@ -41,6 +41,8 @@
 
 <script>
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
+import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -86,17 +88,12 @@ export default {
 		currentTab: null,
 		pin: false,
 		flowsNamespace: 'ui/infoSec/flows',
+		defaultWorkspaceTab: null,
 	}),
 
 	watch: {
 		taskId() {
-			if (this.showProcessing) {
-				this.currentTab = this.tabsObject.processing;
-			} else if (this.showClientInfo) {
-				this.currentTab = this.tabsObject.clientInfo;
-			} else {
-				this.currentTab = this.tabsObject.generalInfo;
-			}
+			this.currentTab = this.resolveDefaultTab();
 		},
 		taskState() {
 			if (
@@ -109,12 +106,7 @@ export default {
 			}
 		},
 		showProcessing(value) {
-			if (value) {
-				this.currentTab = this.tabsObject.processing;
-			} else {
-				if (this.showClientInfo) this.currentTab = this.tabsObject.clientInfo;
-				else this.currentTab = this.tabsObject.generalInfo;
-			}
+			this.currentTab = this.resolveDefaultTab();
 		},
 	},
 
@@ -180,34 +172,40 @@ export default {
 				value: 'general-info',
 				icon: 'general-info',
 				iconPrefix: 'ws',
+				settingValue: 'general_info',
 			};
 			const clientInfo = {
 				text: this.$t('infoSec.clientInfo'),
 				value: 'client-info',
 				icon: 'client-info',
 				iconPrefix: 'ws',
+				settingValue: 'client_info',
 			};
 			const knowledgeBase = {
 				text: this.$t('infoSec.knowledgeBase'),
 				value: 'knowledge-base',
 				icon: 'knowledge-base',
 				iconPrefix: 'ws',
+				settingValue: 'knowledge_base',
 			};
 			const processing = {
 				text: this.$t('infoSec.processing.title'),
 				value: 'processing',
 				icon: 'processing',
 				iconPrefix: 'ws',
+				settingValue: 'task_processing',
 			};
 			const flows = {
 				text: this.$t('objects.flow.name', 2),
 				value: 'flows',
 				icon: 'flows',
+				settingValue: 'flows',
 			};
 			const screenshots = {
 				text: this.$t('objects.screenshots', 2),
 				value: 'screenshots',
 				icon: 'preview-tag-image',
+				settingValue: 'screenshots',
 			};
 			return {
 				generalInfo,
@@ -219,8 +217,40 @@ export default {
 			};
 		},
 	},
+	methods: {
+		resolveDefaultTab() {
+				if (this.showProcessing && this.isTabAllowedBySettings(this.tabsObject.processing.settingValue)) {
+						return this.tabsObject.processing;
+				}
+				if (this.showClientInfo && this.isTabAllowedBySettings(this.tabsObject.clientInfo.settingValue)) {
+						return this.tabsObject.clientInfo;
+				}
+				if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
+						return this.tabsObject.clientInfo;
+				}
+				return this.tabsObject.generalInfo;
+		},
+
+		isTabAllowedBySettings(tabKey) {
+				if (!this.defaultWorkspaceTab) return true;
+				return this.defaultWorkspaceTab === tabKey;
+		},
+
+		async loadDefaultWorkspaceTab() {
+				const { items } = await ConfigurationAPI.getList({
+						name: [EngineSystemSettingName.DefaultWorkspaceTab],
+				});
+				this.defaultWorkspaceTab = items?.[0]?.value ?? null;
+		},
+
+		async initialize() {
+				await this.loadDefaultWorkspaceTab();
+				this.currentTab = this.resolveDefaultTab();
+		},
+	},
 	created() {
 		this.currentTab = this.tabsObject.generalInfo;
+  this.initialize();
 	},
 };
 </script>
