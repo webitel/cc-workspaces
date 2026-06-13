@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -219,38 +219,46 @@ export default {
 	},
 	methods: {
 		resolveDefaultTab() {
-				if (this.showProcessing && this.isTabAllowedBySettings(this.tabsObject.processing.settingValue)) {
-						return this.tabsObject.processing;
-				}
-				if (this.showClientInfo && this.isTabAllowedBySettings(this.tabsObject.clientInfo.settingValue)) {
-						return this.tabsObject.clientInfo;
-				}
-				if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
-						return this.tabsObject.clientInfo;
-				}
-				return this.tabsObject.generalInfo;
+			if (
+				this.showProcessing &&
+				this.isTabAllowedBySettings(this.tabsObject.processing.settingValue)
+			) {
+				return this.tabsObject.processing;
+			}
+			if (
+				this.showClientInfo &&
+				this.isTabAllowedBySettings(this.tabsObject.clientInfo.settingValue)
+			) {
+				return this.tabsObject.clientInfo;
+			}
+			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
+				return this.tabsObject.clientInfo;
+			}
+			return this.tabsObject.generalInfo;
 		},
 
 		isTabAllowedBySettings(tabKey) {
-				if (!this.defaultWorkspaceTab) return true;
-				return this.defaultWorkspaceTab === tabKey;
+			if (!this.defaultWorkspaceTab) return true;
+			return this.defaultWorkspaceTab === tabKey;
 		},
 
 		async loadDefaultWorkspaceTab() {
-				const { items } = await ConfigurationAPI.getList({
-						name: [EngineSystemSettingName.DefaultWorkspaceTab],
-				});
-				this.defaultWorkspaceTab = items?.[0]?.value ?? null;
+			const { items } = await ConfigurationAPI.getList({
+				name: [
+					EngineSystemSettingName.DefaultWorkspaceTab,
+				],
+			});
+			this.defaultWorkspaceTab = items?.[0]?.value ?? null;
 		},
 
 		async initialize() {
-				await this.loadDefaultWorkspaceTab();
-				this.currentTab = this.resolveDefaultTab();
+			await this.loadDefaultWorkspaceTab();
+			this.currentTab = this.resolveDefaultTab();
 		},
 	},
 	created() {
 		this.currentTab = this.tabsObject.generalInfo;
-  this.initialize();
+		this.initialize();
 	},
 };
 </script>
