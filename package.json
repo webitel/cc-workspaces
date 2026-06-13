@@ -71,7 +71,7 @@
 		"date-fns": "^4.1.0",
 		"glob-to-regexp": "^0.4.1",
 		"globals": "^17.x",
-		"happy-dom": "^15.7.3",
+		"happy-dom": "^20.0.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.x",
 		"prismjs": "^1.29.0",

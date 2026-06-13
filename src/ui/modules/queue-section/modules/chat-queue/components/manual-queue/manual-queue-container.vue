@@ -30,7 +30,8 @@ const props = defineProps({
 
 const store = useStore();
 
-console.info(store.state.features.chat.manual.manualList);
+if (import.meta.env.DEV)
+	console.info(store.state.features.chat.manual.manualList);
 
 const manualList = computed(() => store.state.features.chat.manual.manualList);
 
@@ -39,7 +40,7 @@ function acceptTask(task) {
 }
 
 function openTask(task) {
-	console.info('implement me');
+	if (import.meta.env.DEV) console.info('implement me');
 }
 </script>
 

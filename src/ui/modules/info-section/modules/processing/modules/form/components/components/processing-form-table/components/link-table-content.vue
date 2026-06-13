@@ -6,6 +6,7 @@
       >
         <a :href="link"
            target="_blank"
+           rel="noopener noreferrer"
            class="link-table-content__link"
         >
           {{ link }}

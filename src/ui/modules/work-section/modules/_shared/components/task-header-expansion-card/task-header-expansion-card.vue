@@ -15,6 +15,7 @@
             v-if="username?.contactName && contactLink"
             :href="contactLink"
             target="_blank"
+            rel="noopener noreferrer"
             class="task-header-expansion-card__link">
             {{ username?.contactName }}</a>
           <span

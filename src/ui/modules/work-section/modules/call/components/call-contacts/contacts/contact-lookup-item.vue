@@ -1,7 +1,7 @@
 <template>
   <lookup-item>
     <template #before>
-      <a :href="contactLink(item.etag)" target="_blank">
+      <a :href="contactLink(item.etag)" target="_blank" rel="noopener noreferrer">
         <wt-avatar
           :size="size"
           :username="item.name"
@@ -13,7 +13,8 @@
       <a
         class="contact-lookup-item__title"
         :href="contactLink(item.etag)"
-        target="_blank">
+        target="_blank"
+        rel="noopener noreferrer">
         {{ item.name }}
       </a>
     </template>

@@ -126,10 +126,18 @@ function attachCoreHandlers(cli: Client, generation: number) {
 			url?: string;
 		};
 		if (!event.url) return;
-		const url = event.url.startsWith('https://')
-			? event.url
-			: `https://${event.url}`;
-		window.open(url, '_blank');
+		const raw =
+			event.url.startsWith('http://') || event.url.startsWith('https://')
+				? event.url
+				: `https://${event.url}`;
+		let parsed: URL;
+		try {
+			parsed = new URL(raw);
+		} catch {
+			return;
+		}
+		if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return;
+		window.open(parsed.toString(), '_blank', 'noopener,noreferrer');
 	});
 }
 

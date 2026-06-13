@@ -13,7 +13,7 @@ import { CallServiceApiFactory } from 'webitel-sdk';
 import instance from '../../../../../../app/api/instance';
 import configuration from '../../../../../../app/api/openAPIConfig';
 
-console.info(instance);
+if (import.meta.env.DEV) console.info(instance);
 
 const callService = new CallServiceApiFactory(configuration, '', instance);
 

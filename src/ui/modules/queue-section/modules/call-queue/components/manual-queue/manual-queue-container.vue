@@ -39,7 +39,7 @@ function acceptTask(task) {
 }
 
 function openTask(task) {
-	console.info('implement me');
+	if (import.meta.env.DEV) console.info('implement me');
 }
 </script>
 
