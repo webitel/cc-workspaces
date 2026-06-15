@@ -247,10 +247,6 @@ const displayChatName = computed(() =>
     display: flex;
     align-items: center;
     justify-content: center;
-
-    :deep(svg) {
-      height: 100%;
-    }
   }
 
   .chat-queue-preview-sm__footer {
