@@ -74,15 +74,6 @@
       <slot name="subtitle"></slot>
     </div>
 
-    <section class="chat-queue-preview-sm__avatar">
-      <slot name="avatar">
-        <wt-avatar
-          size="sm"
-          :username="displayChatName.fullName"
-        ></wt-avatar>
-      </slot>
-    </section>
-
     <div
       v-if="$slots.actions"
       class="chat-queue-preview-sm__actions"
@@ -197,10 +188,6 @@ const displayChatName = computed(() =>
     justify-content: center;
   }
 
-  .chat-queue-preview-sm__avatar {
-    margin: auto;
-  }
-
   .chat-queue-preview-sm__title,
   .chat-queue-preview-sm__subtitle {
     text-align: center;
@@ -260,6 +247,10 @@ const displayChatName = computed(() =>
     display: flex;
     align-items: center;
     justify-content: center;
+
+    :deep(svg) {
+      height: 100%;
+    }
   }
 
   .chat-queue-preview-sm__footer {

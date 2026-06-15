@@ -69,7 +69,7 @@
     <template #icon>
       <wt-icon
         :icon="displayIcon"
-        :size="size"
+        size="lg"
         class="closed-queue-preview__provider"
       />
     </template>
