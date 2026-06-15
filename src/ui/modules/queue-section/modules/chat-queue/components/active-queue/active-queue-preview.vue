@@ -41,7 +41,7 @@
     <template #icon>
       <wt-icon
         :icon="displayIcon"
-        size="sm"
+        size="lg"
       />
     </template>
 
