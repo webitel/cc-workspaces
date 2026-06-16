@@ -7,7 +7,7 @@
     :data-filters="dataFilters"
     :get-data="getAgens"
     :presence-status-field="PresenceStatusField"
-    @transfer="consultationTransfer"
+    @transfer="blindTransfer"
   >
     <template #actions="{ item }">
       <wt-rounded-action
@@ -75,6 +75,12 @@ const consultationTransfer = (item: AgentItem = {} as AgentItem) => {
 		call.value.processTransferAgent(Number(item.id));
 		emit('transfer-complete');
 	}
+};
+
+const blindTransfer = async (item: AgentItem = {} as AgentItem) => {
+	const number = item.extension || scroll.value.dataSearch?.value;
+	await store.dispatch('features/call/BLIND_TRANSFER', number);
+	emit('transfer-complete');
 };
 
 const getAgens = (params: TransferParams): Promise<APIResponse> => {

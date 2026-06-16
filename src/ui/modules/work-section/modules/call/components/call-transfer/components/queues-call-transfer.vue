@@ -3,6 +3,7 @@
     :get-data="getQueues"
     :size
     type="queue"
+    @transfer="blindTransfer"
   >
     <template #avatar>
       <wt-icon
@@ -43,6 +44,14 @@ const queuesAPI = APIRepository.queues;
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const agentId = computed(() => store.state?.features?.status?.agent?.agentId);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+const scroll = computed(
+	() =>
+		store.state.scroll || {
+			dataSearch: {
+				value: '',
+			},
+		},
+);
 
 const emit = defineEmits([
 	'transfer-complete',
@@ -53,6 +62,12 @@ const transfer = async (item: QueueItem = {} as QueueItem) => {
 		await call.value.blindTransferQueue(Number(item.id));
 		emit('transfer-complete');
 	}
+};
+
+const blindTransfer = async (item: QueueItem = {} as QueueItem) => {
+	const number = item.extension || scroll.value.dataSearch?.value;
+	await store.dispatch('features/call/BLIND_TRANSFER', number);
+	emit('transfer-complete');
 };
 
 const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
