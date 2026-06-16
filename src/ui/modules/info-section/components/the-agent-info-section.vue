@@ -23,12 +23,12 @@
         v-model:current-tab="currentTab"
         :tabs="tabs"
         :size="infoSecSize"
-				@input="currentTab = $event"
+        @input="currentTab = $event"
       />
       <keep-alive>
         <component
-          :is="currentTab.value"
-          :key="currentTab.value"
+          :is="currentTab?.value"
+          :key="currentTab?.value"
           class="info-tab wt-scrollbar"
           :task="taskOnWorkspace"
           :size="infoSecSize"
@@ -40,8 +40,9 @@
 </template>
 
 <script>
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import { DefaultWorkspaceTabSettings } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
@@ -172,40 +173,40 @@ export default {
 				value: 'general-info',
 				icon: 'general-info',
 				iconPrefix: 'ws',
-				settingValue: 'general_info',
+				settingValue: DefaultWorkspaceTabSettings.GeneralInfo,
 			};
 			const clientInfo = {
 				text: this.$t('infoSec.clientInfo'),
 				value: 'client-info',
 				icon: 'client-info',
 				iconPrefix: 'ws',
-				settingValue: 'client_info',
+				settingValue: DefaultWorkspaceTabSettings.ClientInfo,
 			};
 			const knowledgeBase = {
 				text: this.$t('infoSec.knowledgeBase'),
 				value: 'knowledge-base',
 				icon: 'knowledge-base',
 				iconPrefix: 'ws',
-				settingValue: 'knowledge_base',
+				settingValue: DefaultWorkspaceTabSettings.KnowledgeBase,
 			};
 			const processing = {
 				text: this.$t('infoSec.processing.title'),
 				value: 'processing',
 				icon: 'processing',
 				iconPrefix: 'ws',
-				settingValue: 'task_processing',
+				settingValue: DefaultWorkspaceTabSettings.TaskProcessing,
 			};
 			const flows = {
 				text: this.$t('objects.flow.name', 2),
 				value: 'flows',
 				icon: 'flows',
-				settingValue: 'flows',
+				settingValue: DefaultWorkspaceTabSettings.Flows,
 			};
 			const screenshots = {
 				text: this.$t('objects.screenshots', 2),
 				value: 'screenshots',
 				icon: 'preview-tag-image',
-				settingValue: 'screenshots',
+				settingValue: DefaultWorkspaceTabSettings.Screenshots,
 			};
 			return {
 				generalInfo,
@@ -219,31 +220,37 @@ export default {
 	},
 	methods: {
 		resolveDefaultTab() {
-			if (
-				this.showProcessing &&
-				this.isTabAllowedBySettings(this.tabsObject.processing.settingValue)
-			) {
-				return this.tabsObject.processing;
+			const tabsByPriority = [
+				{
+					tab: this.tabsObject.processing,
+					available: this.showProcessing,
+				},
+				{
+					tab: this.tabsObject.clientInfo,
+					available: this.showClientInfo,
+				},
+			];
+
+			const tabBySetting = tabsByPriority.find(
+				({ tab, available }) =>
+					available && this.defaultWorkspaceTab === tab.settingValue,
+			);
+			if (tabBySetting) return tabBySetting.tab;
+
+			if (!this.defaultWorkspaceTab) {
+				const tabByDefault = tabsByPriority.find(({ available }) => available);
+				if (tabByDefault) return tabByDefault.tab;
 			}
-			if (
-				this.showClientInfo &&
-				this.isTabAllowedBySettings(this.tabsObject.clientInfo.settingValue)
-			) {
-				return this.tabsObject.clientInfo;
-			}
+
 			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
 				return this.tabsObject.clientInfo;
 			}
+
 			return this.tabsObject.generalInfo;
 		},
 
-		isTabAllowedBySettings(tabKey) {
-			if (!this.defaultWorkspaceTab) return true;
-			return this.defaultWorkspaceTab === tabKey;
-		},
-
 		async loadDefaultWorkspaceTab() {
-			const { items } = await ConfigurationAPI.getList({
+			const { items } = await ConfigurationsAPI.getList({
 				name: [
 					EngineSystemSettingName.DefaultWorkspaceTab,
 				],
@@ -257,7 +264,6 @@ export default {
 		},
 	},
 	created() {
-		this.currentTab = this.tabsObject.generalInfo;
 		this.initialize();
 	},
 };
