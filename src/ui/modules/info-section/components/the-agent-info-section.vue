@@ -222,10 +222,16 @@ export default {
 		resolveDefaultTab() {
 			const { processing, clientInfo, generalInfo } = this.tabsObject;
 
-			if (this.showProcessing && this.defaultWorkspaceTab === processing.settingValue) {
+			if (
+				this.showProcessing &&
+				this.defaultWorkspaceTab === processing.settingValue
+			) {
 				return processing;
 			}
-			if (this.showClientInfo && this.defaultWorkspaceTab === clientInfo.settingValue) {
+			if (
+				this.showClientInfo &&
+				this.defaultWorkspaceTab === clientInfo.settingValue
+			) {
 				return clientInfo;
 			}
 
