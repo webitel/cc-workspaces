@@ -220,33 +220,25 @@ export default {
 	},
 	methods: {
 		resolveDefaultTab() {
-			const tabsByPriority = [
-				{
-					tab: this.tabsObject.processing,
-					available: this.showProcessing,
-				},
-				{
-					tab: this.tabsObject.clientInfo,
-					available: this.showClientInfo,
-				},
-			];
+			const { processing, clientInfo, generalInfo } = this.tabsObject;
 
-			const tabBySetting = tabsByPriority.find(
-				({ tab, available }) =>
-					available && this.defaultWorkspaceTab === tab.settingValue,
-			);
-			if (tabBySetting) return tabBySetting.tab;
+			if (this.showProcessing && this.defaultWorkspaceTab === processing.settingValue) {
+				return processing;
+			}
+			if (this.showClientInfo && this.defaultWorkspaceTab === clientInfo.settingValue) {
+				return clientInfo;
+			}
 
 			if (!this.defaultWorkspaceTab) {
-				const tabByDefault = tabsByPriority.find(({ available }) => available);
-				if (tabByDefault) return tabByDefault.tab;
+				if (this.showProcessing) return processing;
+				if (this.showClientInfo) return clientInfo;
 			}
 
 			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
-				return this.tabsObject.clientInfo;
+				return clientInfo;
 			}
 
-			return this.tabsObject.generalInfo;
+			return generalInfo;
 		},
 
 		async loadDefaultWorkspaceTab() {
