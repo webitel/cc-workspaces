@@ -22,7 +22,14 @@
     </template>
 
     <template #info-title>
+     <div class="history-lookup-item-info-title">
+      <call-media-metric
+       v-if="item.qualityMetrics"
+       :quality="connectionQuality"
+       size="sm"
+      />
       {{ date }}
+     </div>
     </template>
 
     <template #info-subtitle>
@@ -82,9 +89,14 @@ import { CallDirection } from 'webitel-sdk';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import lookupItemMixin from './mixins/lookupItemMixin';
+import CallMediaMetric from '../../../../../app-header/components/call-media-metric.vue';
+import { ConnectionQualityLevels } from '../../../../../../../features/types/ConnectionQualityLevel.enum';
 
 export default {
 	name: 'HistoryLookupItem',
+	components: {
+		CallMediaMetric,
+	},
 	mixins: [
 		lookupItemMixin,
 		sizeMixin,
@@ -170,6 +182,12 @@ export default {
 				},
 			];
 		},
+
+		connectionQuality() {
+			if (this.item.qualityMetrics?.mosAvg >= 4) return ConnectionQualityLevels.High;
+			if (this.item.qualityMetrics?.mosAvg >= 3.5) return ConnectionQualityLevels.Medium;
+			return ConnectionQualityLevels.Low;
+		}
 	},
 	methods: {
 		...mapActions('features/call', {
@@ -209,6 +227,14 @@ export default {
     display: flex;
     align-items: center;
     gap: var(--spacing-2xs);
+  }
+
+  &-info-title {
+   display: flex;
+   justify-content: end;
+   align-items: center;
+   gap: var(--spacing-xs);
+   padding-block: var(--spacing-2xs);
   }
 
   &-after{
