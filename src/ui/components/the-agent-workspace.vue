@@ -14,7 +14,6 @@
     <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
     <desc-track-auth-success-popup v-model:shown="isDescTrackAuthSuccessPopup" />
 
-    <wt-notifications-bar />
     <cc-header />
     <div class="workspace-wrap">
       <widget-bar />
