@@ -88,9 +88,9 @@ import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import lookupItemMixin from './mixins/lookupItemMixin';
-import CallMediaMetric from '../../../../../app-header/components/call-media-metric.vue';
 import { ConnectionQualityLevels } from '../../../../../../../features/types/ConnectionQualityLevel.enum';
+import CallMediaMetric from '../../../../../app-header/components/call-media-metric.vue';
+import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
 	name: 'HistoryLookupItem',
@@ -184,10 +184,12 @@ export default {
 		},
 
 		connectionQuality() {
-			if (this.item.qualityMetrics?.mosAvg >= 4) return ConnectionQualityLevels.High;
-			if (this.item.qualityMetrics?.mosAvg >= 3.5) return ConnectionQualityLevels.Medium;
+			if (this.item.qualityMetrics?.mosAvg >= 4)
+				return ConnectionQualityLevels.High;
+			if (this.item.qualityMetrics?.mosAvg >= 3.5)
+				return ConnectionQualityLevels.Medium;
 			return ConnectionQualityLevels.Low;
-		}
+		},
 	},
 	methods: {
 		...mapActions('features/call', {
