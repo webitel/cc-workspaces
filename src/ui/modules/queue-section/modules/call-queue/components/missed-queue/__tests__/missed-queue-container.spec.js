@@ -1,5 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils';
-
+import { WebSocketConnectionState } from '../../../../../../../../ui/enums/WebSocketConnectionState.enum';
 import MissedQueueContainer from '../missed-queue-container.vue';
 
 describe('MissedQueueContainer', () => {
@@ -26,9 +26,10 @@ describe('MissedQueueContainer', () => {
 				.exists(),
 		).toBe(true);
 	});
-	it('calls initializeMissed on created hook', () => {
+	it('calls initializeMissed when websocket becomes connected', () => {
 		initializeMissedMock.mockClear();
-		shallowMount(MissedQueueContainer, {
+
+		const wrapper = shallowMount(MissedQueueContainer, {
 			computed: {
 				missedList: () => [
 					{
@@ -37,6 +38,11 @@ describe('MissedQueueContainer', () => {
 				],
 			},
 		});
+
+		const watcher = MissedQueueContainer.watch.wsConnectionState.handler;
+
+		watcher.call(wrapper.vm, WebSocketConnectionState.Connected);
+
 		expect(initializeMissedMock).toHaveBeenCalled();
 	});
 

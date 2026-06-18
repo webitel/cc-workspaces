@@ -103,7 +103,9 @@ export default {
 		close() {
 			if (!this.loading) {
 				this.playSilence();
-				this.$emit('input');
+				const allGranted =
+					this.mic.status && this.notification.status && this.camera.status;
+				this.$emit('input', allGranted);
 			}
 		},
 		async checkMic() {
