@@ -1,12 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { WebSocketConnectionState } from '../../../../../../../../ui/enums/WebSocketConnectionState.enum';
 import MissedQueueContainer from '../missed-queue-container.vue';
 
 describe('MissedQueueContainer', () => {
-	const initializeMissedMock = vi
-		.spyOn(MissedQueueContainer.methods, 'initializeMissed')
-		.mockImplementation(() => {});
-
 	it('renders missed queue container root', () => {
 		const wrapper = shallowMount(MissedQueueContainer, {
 			computed: {
@@ -25,25 +20,6 @@ describe('MissedQueueContainer', () => {
 				})
 				.exists(),
 		).toBe(true);
-	});
-	it('calls initializeMissed when websocket becomes connected', () => {
-		initializeMissedMock.mockClear();
-
-		const wrapper = shallowMount(MissedQueueContainer, {
-			computed: {
-				missedList: () => [
-					{
-						id: 'jest',
-					},
-				],
-			},
-		});
-
-		const watcher = MissedQueueContainer.watch.wsConnectionState.handler;
-
-		watcher.call(wrapper.vm, WebSocketConnectionState.Connected);
-
-		expect(initializeMissedMock).toHaveBeenCalled();
 	});
 
 	it('calls redial on call preview event', () => {

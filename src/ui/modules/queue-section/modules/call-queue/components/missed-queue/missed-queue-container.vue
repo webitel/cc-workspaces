@@ -18,17 +18,12 @@
 </template>
 
 <script>
-import { watch } from 'vue';
 import { mapActions, mapState, useStore } from 'vuex';
 
-import { useWebSocketClient } from '../../../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import { WebSocketConnectionState } from '../../../../../../../ui/enums/WebSocketConnectionState.enum';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import MissedPreview from './missed-queue-preview.vue';
-
-const { state } = useWebSocketClient();
 
 export default {
 	name: 'MissedQueueContainer',
@@ -46,29 +41,14 @@ export default {
 			missedList: (state) => state.missedList,
 			next: (state) => state.next,
 		}),
-		wsConnectionState() {
-			return state.value;
-		},
 	},
 
 	methods: {
 		...mapActions('features/call/missed', {
-			initializeMissed: 'INITIALIZE_MISSED',
 			loadMore: 'LOAD_NEXT_PAGE',
 			redial: 'REDIAL',
 			hideMissed: 'HIDE_MISSED',
 		}),
-	},
-
-	watch: {
-		wsConnectionState: {
-			handler(s) {
-				if (s === WebSocketConnectionState.Connected) {
-					this.initializeMissed();
-				}
-			},
-			once: true,
-		},
 	},
 };
 </script>
