@@ -8,7 +8,7 @@
     <welcome-popup
       v-if="isWelcomePopup"
       :loading="isInitLoading"
-      @input="handleWelcomeClose"
+      @input="initSession"
     ></welcome-popup>
 
     <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
@@ -109,14 +109,6 @@ const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
-const handleWelcomeClose = async (allGranted: boolean) => {
-	isWelcomePopup.value = false;
-
-	if (allGranted) {
-		await initSession();
-	}
-};
-
 const initSession = async () => {
 	try {
 		isInitLoading.value = true;
@@ -145,6 +137,7 @@ const initSession = async () => {
 		}
 	} finally {
 		isInitLoading.value = false;
+		isWelcomePopup.value = false;
 	}
 };
 
