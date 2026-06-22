@@ -24,7 +24,7 @@
         :agent="isAgentSide"
         @click.stop
       />
-      <div @click.stop v-else>
+      <div class="chat-message__body" v-else @click.stop>
         <message-player
           v-if="props.message.file"
           :file="props.message.file"
@@ -49,14 +49,14 @@
           <message-text
             :text="props.message.text"
             :with-timestamp-spacer="true"
+            :agent="isAgentSide"
           />
           <message-time :date="props.message.createdAt" />
         </div>
-        <message-time
-          v-else
-          :date="props.message.createdAt"
-        />
       </div>
+      <message-time
+        :date="props.message.createdAt"
+      />
     </div>
     <message-time
       v-if="props.message.file?.malware || isFileSizeExceeded"
