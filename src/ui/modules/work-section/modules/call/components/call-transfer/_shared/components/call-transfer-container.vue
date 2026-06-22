@@ -9,7 +9,7 @@
   >
     <template #after-search>
       <wt-button
-        v-if="withBlindTransfer"
+        v-if="allowBlindTransfer"
         color="transfer"
         v-tooltip="buttonTooltip"
         :disabled="isTransferToNumberDisabled"
@@ -62,7 +62,7 @@ interface CallTransferContainerProps {
 	showStatus?: boolean;
 	showTeamName?: boolean;
 	showUserNameAvatar?: boolean;
-	withBlindTransfer?: boolean;
+	allowBlindTransfer?: boolean;
 	dataFilters?: string;
 	dataFields?: string[];
 	presenceStatusField?: string;
@@ -77,7 +77,7 @@ const props = withDefaults(defineProps<CallTransferContainerProps>(), {
 	showStatus: false,
 	showTeamName: false,
 	showUserNameAvatar: false,
-	withBlindTransfer: false,
+	allowBlindTransfer: false,
 	dataFilters: '',
 	dataFields: () => [],
 	presenceStatusField: 'presence',

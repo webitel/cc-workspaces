@@ -3,7 +3,7 @@
     show-status
     show-user-name-avatar
     type="user"
-    with-blind-transfer
+    allow-blind-transfer
     :size="size"
     :data-filters="dataFilters"
     :data-fields="dataFields"
