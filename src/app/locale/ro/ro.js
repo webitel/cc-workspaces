@@ -99,6 +99,7 @@ export default {
 					manual: 'Auto-atribuite',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chat-uri',

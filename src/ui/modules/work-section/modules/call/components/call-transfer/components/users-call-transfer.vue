@@ -3,11 +3,13 @@
     show-status
     show-user-name-avatar
     type="user"
+    with-transfer
     :size="size"
     :data-filters="dataFilters"
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
+    :button-tooltip="$t('queueSec.call.blindTransfer')"
     @transfer="transfer"
   >
     <template #actions="{ item }">

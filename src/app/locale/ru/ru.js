@@ -99,6 +99,7 @@ export default {
 					manual: 'Самостоятельно назначенные',
 				},
 			},
+			blindTransfer: 'Слепой перевод',
 		},
 		chat: {
 			chats: 'Звонки | Чаты',

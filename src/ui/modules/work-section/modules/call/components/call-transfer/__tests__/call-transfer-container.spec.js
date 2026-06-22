@@ -23,6 +23,7 @@ describe('CallTransferContainer', () => {
 			props: {
 				type: 'user',
 				getData,
+				withTransfer: true,
 			},
 		});
 		wrapper
@@ -48,6 +49,7 @@ describe('CallTransferContainer', () => {
 			props: {
 				type: 'user',
 				getData,
+				withTransfer: true,
 			},
 		});
 		await wrapper
