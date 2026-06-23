@@ -77,6 +77,7 @@ type CliConfig = {
 	echoCancellation?: boolean;
 	noiseSuppression?: boolean;
 	autoGainControl?: boolean;
+	micGranted?: boolean;
 };
 
 function getCliConfig(): CliConfig {
@@ -175,7 +176,9 @@ async function createClient(): Promise<Client> {
 		new Client({
 			endpoint,
 			token,
-			registerWebDevice: cliConfig.registerWebDevice ?? true,
+			registerWebDevice:
+				(cliConfig.registerWebDevice ?? true) &&
+				(cliConfig.micGranted ?? false),
 			debug: cliConfig.debug,
 			echoCancellation: cliConfig.echoCancellation,
 			noiseSuppression: cliConfig.noiseSuppression,

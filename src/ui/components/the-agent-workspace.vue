@@ -109,12 +109,23 @@ const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
-const handleWelcomeClose = async (allGranted: boolean) => {
+const setMicrophoneGranted = (micGranted: boolean) => {
+	try {
+		const config = JSON.parse(localStorage.getItem('CONFIG') || '{}');
+		config.CLI = {
+			...config.CLI,
+			micGranted,
+		};
+		localStorage.setItem('CONFIG', JSON.stringify(config));
+	} catch {}
+};
+
+const handleWelcomeClose = async (micGranted: boolean) => {
 	isWelcomePopup.value = false;
 
-	if (allGranted) {
-		await initSession();
-	}
+	setMicrophoneGranted(micGranted);
+
+	await initSession();
 };
 
 const initSession = async () => {
