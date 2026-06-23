@@ -52,11 +52,16 @@
           />
           <message-time :date="props.message.createdAt" />
         </div>
+        <message-time
+          v-else
+          :date="props.message.createdAt"
+        />
       </div>
-      <message-time
-        :date="props.message.createdAt"
-      />
     </div>
+    <message-time
+      v-if="props.message.file?.malware || isFileSizeExceeded"
+      :date="props.message.createdAt"
+    />
 
     <slot name="after-message" />
   </div>
