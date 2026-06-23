@@ -5,8 +5,14 @@
     :class="{
       'chat-message-text--right': agent,
      }"
-    v-html="text"
-  />
+  >
+    <span v-html="text" />
+    <span
+      v-if="withTimestampSpacer"
+      class="chat-message-text__timestamp-spacer"
+      aria-hidden="true"
+    />
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -38,14 +44,6 @@ const text = computed(() => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-text {
-  overflow-wrap: anywhere;
-  white-space: pre-line; // read \n as "new line"
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius);
-  background: var(--primary-light-color);
-  color: var(--primary-on-color);
-  place-self: flex-start;
-
   // reset links inside text
   :deep(.chat-message-text__link) {
     color: revert;
