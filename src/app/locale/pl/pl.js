@@ -99,6 +99,7 @@ export default {
 					manual: 'Ręcznie przypisane',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Czat | Czaty',
