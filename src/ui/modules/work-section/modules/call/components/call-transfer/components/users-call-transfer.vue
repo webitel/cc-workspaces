@@ -3,12 +3,14 @@
     show-status
     show-user-name-avatar
     type="user"
+    allow-blind-transfer
     :size="size"
     :data-filters="dataFilters"
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
     :loading="currentTranferLoaderId && showLoader(currentTranferLoaderId)"
+    :button-tooltip="$t('queueSec.call.blindTransfer')"
     @transfer="transfer"
   >
     <template #actions="{ item }">

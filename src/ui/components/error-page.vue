@@ -1,6 +1,5 @@
 <template>
   <main class="main-error-page">
-    <wt-notifications-bar />
     <app-header />
     <wt-error-page :type="errorType" @back="handleBack" />
   </main>

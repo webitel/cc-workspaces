@@ -3,6 +3,13 @@ import { createStore } from 'vuex';
 
 import VideoContainer from '../video-container.vue';
 
+vi.mock('@webitel/ui-sdk/components', () => ({
+	WtGalleria: {
+		name: 'wt-galleria',
+		template: '<div />',
+	},
+}));
+
 describe('VideoContainer', () => {
 	const createVideoStream = () => ({
 		getVideoTracks: () => [

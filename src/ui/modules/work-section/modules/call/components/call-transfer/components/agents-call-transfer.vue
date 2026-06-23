@@ -7,8 +7,6 @@
     :data-filters="dataFilters"
     :get-data="getAgens"
     :presence-status-field="PresenceStatusField"
-    :transfer-loading="currentTranferLoaderId && showLoader(currentTranferLoaderId)"
-    @transfer="consultationTransfer"
   >
     <template #actions="{ item }">
       <wt-rounded-action

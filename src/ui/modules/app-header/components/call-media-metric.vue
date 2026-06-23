@@ -1,24 +1,25 @@
 <template>
   <wt-icon
-    v-tooltip.bottom="connectionQualityTooltip"
-    :icon="`ws-signal-${connectionQuality}`"
+    v-tooltip.bottom="showTooltip ? connectionQualityTooltip : undefined"
+    :icon="`ws-signal-${quality}`"
+    :size="size"
   />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 
-const store = useStore();
+const props = defineProps<{
+	quality: string;
+	size?: string;
+	showTooltip?: boolean;
+}>();
+
 const { t } = useI18n();
 
-const connectionQuality = computed(
-	() => store.getters['features/connectionQuality/LATENCY_LEVEL'],
-);
-
 const connectionQualityTooltip = computed(() =>
-	t(`header.connectionQuality.${connectionQuality.value}`),
+	t(`header.connectionQuality.${props.quality}`),
 );
 </script>
 

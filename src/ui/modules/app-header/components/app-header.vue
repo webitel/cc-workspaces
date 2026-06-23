@@ -22,7 +22,10 @@
 
     <agent-status-select v-if="isAgent"></agent-status-select>
 
-    <call-media-metric />
+    <call-media-metric
+      :quality="connectionQuality"
+      show-tooltip
+    />
 
     <wt-app-navigator
       :current-app="currentApp"
@@ -69,6 +72,10 @@ const isCcenterOn = computed(
 	() => store.getters['features/status/IS_CCENTER_ON'],
 );
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
+
+const connectionQuality = computed(
+	() => store.getters['features/connectionQuality/LATENCY_LEVEL'],
+);
 
 const startPageHref = computed(() => import.meta.env.VITE_START_PAGE_URL);
 

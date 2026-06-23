@@ -100,6 +100,7 @@ export default {
 					manual: 'Qo‘lda tayinlangan',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chatlar',

@@ -23,12 +23,12 @@
         v-model:current-tab="currentTab"
         :tabs="tabs"
         :size="infoSecSize"
-				@input="currentTab = $event"
+        @input="currentTab = $event"
       />
       <keep-alive>
         <component
-          :is="currentTab.value"
-          :key="currentTab.value"
+          :is="currentTab?.value"
+          :key="currentTab?.value"
           class="info-tab wt-scrollbar"
           :task="taskOnWorkspace"
           :size="infoSecSize"
@@ -40,6 +40,9 @@
 </template>
 
 <script>
+import { ConfigurationsAPI } from '@webitel/api-services/api';
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
+import { DefaultWorkspaceTabSettings } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { mapGetters, mapState } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
@@ -86,17 +89,12 @@ export default {
 		currentTab: null,
 		pin: false,
 		flowsNamespace: 'ui/infoSec/flows',
+		defaultWorkspaceTab: null,
 	}),
 
 	watch: {
 		taskId() {
-			if (this.showProcessing) {
-				this.currentTab = this.tabsObject.processing;
-			} else if (this.showClientInfo) {
-				this.currentTab = this.tabsObject.clientInfo;
-			} else {
-				this.currentTab = this.tabsObject.generalInfo;
-			}
+			this.currentTab = this.resolveDefaultTab();
 		},
 		taskState() {
 			if (
@@ -109,12 +107,7 @@ export default {
 			}
 		},
 		showProcessing(value) {
-			if (value) {
-				this.currentTab = this.tabsObject.processing;
-			} else {
-				if (this.showClientInfo) this.currentTab = this.tabsObject.clientInfo;
-				else this.currentTab = this.tabsObject.generalInfo;
-			}
+			this.currentTab = this.resolveDefaultTab();
 		},
 	},
 
@@ -180,34 +173,40 @@ export default {
 				value: 'general-info',
 				icon: 'general-info',
 				iconPrefix: 'ws',
+				settingValue: DefaultWorkspaceTabSettings.GeneralInfo,
 			};
 			const clientInfo = {
 				text: this.$t('infoSec.clientInfo'),
 				value: 'client-info',
 				icon: 'client-info',
 				iconPrefix: 'ws',
+				settingValue: DefaultWorkspaceTabSettings.ClientInfo,
 			};
 			const knowledgeBase = {
 				text: this.$t('infoSec.knowledgeBase'),
 				value: 'knowledge-base',
 				icon: 'knowledge-base',
 				iconPrefix: 'ws',
+				settingValue: DefaultWorkspaceTabSettings.KnowledgeBase,
 			};
 			const processing = {
 				text: this.$t('infoSec.processing.title'),
 				value: 'processing',
 				icon: 'processing',
 				iconPrefix: 'ws',
+				settingValue: DefaultWorkspaceTabSettings.TaskProcessing,
 			};
 			const flows = {
 				text: this.$t('objects.flow.name', 2),
 				value: 'flows',
 				icon: 'flows',
+				settingValue: DefaultWorkspaceTabSettings.Flows,
 			};
 			const screenshots = {
 				text: this.$t('objects.screenshots', 2),
 				value: 'screenshots',
 				icon: 'preview-tag-image',
+				settingValue: DefaultWorkspaceTabSettings.Screenshots,
 			};
 			return {
 				generalInfo,
@@ -219,8 +218,51 @@ export default {
 			};
 		},
 	},
+	methods: {
+		resolveDefaultTab() {
+			const { processing, clientInfo, generalInfo } = this.tabsObject;
+
+			if (
+				this.showProcessing &&
+				this.defaultWorkspaceTab === processing.settingValue
+			) {
+				return processing;
+			}
+			if (
+				this.showClientInfo &&
+				this.defaultWorkspaceTab === clientInfo.settingValue
+			) {
+				return clientInfo;
+			}
+
+			if (!this.defaultWorkspaceTab) {
+				if (this.showProcessing) return processing;
+				if (this.showClientInfo) return clientInfo;
+			}
+
+			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
+				return clientInfo;
+			}
+
+			return generalInfo;
+		},
+
+		async loadDefaultWorkspaceTab() {
+			const { items } = await ConfigurationsAPI.getList({
+				name: [
+					EngineSystemSettingName.DefaultWorkspaceTab,
+				],
+			});
+			this.defaultWorkspaceTab = items?.[0]?.value ?? null;
+		},
+
+		async initialize() {
+			await this.loadDefaultWorkspaceTab();
+			this.currentTab = this.resolveDefaultTab();
+		},
+	},
 	created() {
-		this.currentTab = this.tabsObject.generalInfo;
+		this.initialize();
 	},
 };
 </script>
