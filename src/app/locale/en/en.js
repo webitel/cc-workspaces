@@ -99,6 +99,7 @@ export default {
 					manual: 'Self-assigned',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chats',
