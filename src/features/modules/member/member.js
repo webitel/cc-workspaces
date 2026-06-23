@@ -1,4 +1,3 @@
-import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 
 const state = {
@@ -73,16 +72,6 @@ const actions = {
 				root: true,
 			},
 		);
-	},
-
-	SUBSRIBE_MEMBER_LIST: (context) => {
-		const { subscribe } = useCachedInterval({
-			timeout: 15 * 1000,
-		});
-
-		subscribe(async () => {
-			const response = await context.dispatch('LOAD_DATA_LIST');
-		});
 	},
 };
 

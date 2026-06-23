@@ -8,7 +8,7 @@
     <welcome-popup
       v-if="isWelcomePopup"
       :loading="isInitLoading"
-      @input="handleWelcomeClose"
+      @input="initSession"
     ></welcome-popup>
 
     <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
@@ -156,6 +156,7 @@ const initSession = async () => {
 		}
 	} finally {
 		isInitLoading.value = false;
+		isWelcomePopup.value = false;
 	}
 };
 

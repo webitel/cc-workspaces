@@ -19,10 +19,11 @@ updates:
 
     ignore:
       - dependency-name: "@webitel/ui-sdk"
+      - dependency-name: "@webitel/ui-chats"
+      - dependency-name: "@webitel/ui-datalist"
       - dependency-name: "@webitel/api-services"
       - dependency-name: "@webitel/flow-ui-sdk"
       - dependency-name: "@webitel/styleguide"
-      - dependency-name: "@webitel/ui-datalist"
 
     open-pull-requests-limit: 10
     groups:

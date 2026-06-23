@@ -99,6 +99,7 @@ export default {
 					manual: 'Tự gán',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Các chat',

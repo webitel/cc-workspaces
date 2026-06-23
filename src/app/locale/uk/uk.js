@@ -99,6 +99,7 @@ export default {
 					manual: 'Самостійно призначені',
 				},
 			},
+			blindTransfer: 'Сліпий перевід',
 		},
 		chat: {
 			chats: 'Чат | Чати',

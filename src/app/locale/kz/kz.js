@@ -99,6 +99,7 @@ export default {
 					manual: 'Өзіне тағайындалған',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Чат | Чаттар',

@@ -23,7 +23,7 @@ jobs:
           private-key: ${{ secrets.DELIVERY_BOT_APP_PEM }}
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
@@ -97,7 +97,7 @@ jobs:
           toTag: ${{ steps.prev-tag.outputs.tag }}
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           token: ${{ steps.app-token.outputs.token }}
           tag_name: ${{ steps.version.outputs.version_git_tag }}
