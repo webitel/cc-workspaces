@@ -51,10 +51,20 @@
             :with-timestamp-spacer="true"
             :agent="isAgentSide"
           />
-          <message-time :date="props.message.createdAt" />
+
+          <message-time
+            :date="props.message.createdAt"
+          />
         </div>
+
+        <message-time
+          v-else
+          :date="props.message.createdAt"
+        />
       </div>
+
       <message-time
+        v-if="message.file?.malware || isFileSizeExceeded"
         :date="props.message.createdAt"
       />
     </div>
