@@ -55,7 +55,7 @@
     </template>
 
     <template #actions>
-      <wt-button wide :loading="loading" @click="close">
+      <wt-button wide :loading="loading || checkingPermissions" @click="close">
         {{ $t('reusable.ok') }}
       </wt-button>
     </template>
@@ -74,6 +74,7 @@ export default {
 		},
 	},
 	data: () => ({
+		checkingPermissions: true,
 		mic: {
 			status: false,
 			message: '',
@@ -101,10 +102,10 @@ export default {
 			silence.play();
 		},
 		close() {
-			if (!this.loading) {
-				this.playSilence();
-				this.$emit('input');
-			}
+			if (this.loading || this.checkingPermissions) return;
+
+			this.playSilence();
+			this.$emit('input');
 		},
 		async checkMic() {
 			try {
@@ -149,10 +150,18 @@ export default {
 				this.notification.message = err;
 			}
 		},
-		checkPermissions() {
-			this.checkMic();
-			this.checkNotifications();
-			this.requestCameraAccess();
+		async checkPermissions() {
+			this.checkingPermissions = true;
+
+			try {
+				await Promise.allSettled([
+					this.checkMic(),
+					this.checkNotifications(),
+					this.requestCameraAccess(),
+				]);
+			} finally {
+				this.checkingPermissions = false;
+			}
 		},
 
 		getPermissionErrorMessage(err) {
