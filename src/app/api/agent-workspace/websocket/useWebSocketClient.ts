@@ -133,6 +133,13 @@ function attachCoreHandlers(cli: Client, generation: number) {
 	});
 }
 
+/**
+ * @author PolinaSukhorukova-webitel
+ *
+ * [WTEL-9282](https://webitel.atlassian.net/browse/WTEL-9282?focusedCommentId=764636)
+ * This microphone check is required for the task: 
+	* SIP must be registered only when the microphone is granted.
+ */
 async function getBrowserPermissions() {
 	const micGranted = await getMicPermission();
 
