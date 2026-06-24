@@ -7,10 +7,10 @@
         option-value="id"
         @update:model-value="emit('input', $event)"
     >
-        <template #value="{ value }">
+        <template #value>
             <wt-indicator
-                :color="getIndicatorColor(value)"
-                :text="value.name"
+                :color="getIndicatorColor(selectedOption)"
+                :text="selectedOption.name"
             />
         </template>
 
@@ -29,6 +29,7 @@
 >
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
 import { WtIndicator, WtSingleSelect } from '@webitel/ui-sdk/components';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
@@ -43,6 +44,10 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+
+const selectedOption = computed(() =>
+	props.options.find((option) => option.id === props.value),
+);
 
 const getIndicatorColor = (option) => {
 	if (option?.final) return 'final-status';
