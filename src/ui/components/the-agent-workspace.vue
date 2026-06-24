@@ -68,6 +68,7 @@ import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
+import type { BrowserPermissions } from '../types/BrowserPermissions';
 
 const store = useStore();
 const route = useRoute();

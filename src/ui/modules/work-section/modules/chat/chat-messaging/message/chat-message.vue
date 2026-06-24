@@ -24,7 +24,7 @@
         :agent="isAgentSide"
         @click.stop
       />
-      <div @click.stop v-else>
+      <div class="chat-message__body" v-else @click.stop>
         <message-player
           v-if="props.message.file"
           :file="props.message.file"
@@ -42,15 +42,36 @@
           :type="props.message.file?.mime"
           :agent="isAgentSide"
         />
-        <message-text
-          :text="props.message.text"
-          :agent="isAgentSide"
+        <div
+          v-if="props.message?.text"
+          class="chat-message-text-wrapper"
+        >
+          <message-text
+            :text="props.message.text"
+            :with-timestamp-spacer="true"
+            :agent="isAgentSide"
+          />
+
+          <message-time
+            :date="props.message.createdAt"
+          />
+        </div>
+
+        <message-time
+          v-else
+          :date="props.message.createdAt"
         />
       </div>
+
       <message-time
+        v-if="message.file?.malware || isFileSizeExceeded"
         :date="props.message.createdAt"
       />
     </div>
+    <message-time
+      v-if="props.message.file?.malware || isFileSizeExceeded"
+      :date="props.message.createdAt"
+    />
 
     <slot name="after-message" />
   </div>
@@ -170,9 +191,41 @@ $chat-info-gap: var(--spacing-2xs);
     pointer-events: none; // prevents dragging to upload file area
   }
 
+  &__body {
+    position: relative;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    background: var(--primary-light-color);
+    color: var(--primary-on-color);
+    place-self: flex-start;
+  }
+
+  .chat-message-time {
+    margin-top: var(--p-player-chat-message-gap);
+  }
+
+  &-text-wrapper {
+    .chat-message-time {
+      position: absolute;
+      right: var(--spacing-xs);
+      bottom: var(--chat-message-timestamp-bottom-offset);
+      pointer-events: none;
+    }
+  }
+
   &--right .chat-message__content {
     flex-direction: row-reverse;
     margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
+  }
+
+  &--right {
+    .chat-message__body {
+      background: var(--secondary-light-color);
+      color: var(--secondary-on-color);
+      place-self: flex-end;
+    }
   }
 }
 </style>
