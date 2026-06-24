@@ -38,8 +38,6 @@ const store = useStore();
 const missedList = computed(() => store.state.features.call.missed.missedList);
 const next = computed(() => store.state.features.call.missed.next);
 
-const initializeMissed = () =>
-	store.dispatch('features/call/missed/INITIALIZE_MISSED');
 const loadMore = () => store.dispatch('features/call/missed/LOAD_NEXT_PAGE');
 const redial = (task) => store.dispatch('features/call/missed/REDIAL', task);
 const hideMissed = (task) =>
@@ -50,10 +48,6 @@ const { showLoader, runWithLoader } = useLoader();
 const handleRedial = (task) => {
 	runWithLoader(task.id, () => redial(task));
 };
-
-onMounted(() => {
-	initializeMissed();
-});
 </script>
 
 <style lang="scss" scoped>

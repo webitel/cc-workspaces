@@ -92,14 +92,6 @@ describe('MissedQueueContainer', () => {
 		).toBe(true);
 	});
 
-	it('calls initializeMissed on onMounted', () => {
-		const { store } = createWrapper();
-
-		expect(store.dispatch).toHaveBeenCalledWith(
-			'features/call/missed/INITIALIZE_MISSED',
-		);
-	});
-
 	it('calls redial on call preview event', async () => {
 		const task = {
 			id: 'jest',
