@@ -87,8 +87,8 @@ import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import { useLoader } from '../../../../../../composables/useLoader';
 import { ConnectionQualityLevels } from '../../../../../../../features/types/ConnectionQualityLevel.enum';
+import { useLoader } from '../../../../../../composables/useLoader';
 import CallMediaMetric from '../../../../../app-header/components/call-media-metric.vue';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
