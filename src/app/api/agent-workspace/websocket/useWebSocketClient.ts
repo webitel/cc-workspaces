@@ -78,7 +78,6 @@ type CliConfig = {
 	echoCancellation?: boolean;
 	noiseSuppression?: boolean;
 	autoGainControl?: boolean;
-	micGranted?: boolean;
 };
 
 function getCliConfig(): CliConfig {
