@@ -26,7 +26,7 @@
       <wt-call-media-metric
        v-if="item.qualityMetrics"
        :mos-avg="item.qualityMetrics.mosAvg"
-       size="sm"
+       :size="ComponentSize.SM"
       />
       {{ date }}
      </div>
@@ -82,7 +82,7 @@
 
 <script>
 import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
-import { FormatDateMode } from '@webitel/ui-sdk/enums';
+import { ComponentSize, FormatDateMode } from '@webitel/ui-sdk/enums';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
@@ -107,6 +107,7 @@ export default {
 	},
 	data() {
 		return {
+			ComponentSize,
 			isContextMenuVisible: false,
 			showLoader: false,
 		};
