@@ -105,7 +105,9 @@ export default {
 			if (this.loading || this.checkingPermissions) return;
 
 			this.playSilence();
-			this.$emit('input', this.mic.status);
+			this.$emit('input', {
+				micGranted: this.mic.status,
+			});
 		},
 		async checkMic() {
 			try {
@@ -152,12 +154,16 @@ export default {
 		},
 		async checkPermissions() {
 			this.checkingPermissions = true;
-			await Promise.allSettled([
-				this.checkMic(),
-				this.checkNotifications(),
-				this.requestCameraAccess(),
-			]);
-			this.checkingPermissions = false;
+
+			try {
+				await Promise.allSettled([
+					this.checkMic(),
+					this.checkNotifications(),
+					this.requestCameraAccess(),
+				]);
+			} finally {
+				this.checkingPermissions = false;
+			}
 		},
 
 		getPermissionErrorMessage(err) {

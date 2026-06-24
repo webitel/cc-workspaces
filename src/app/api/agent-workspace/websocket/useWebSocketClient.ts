@@ -4,6 +4,7 @@ import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
+import type { BrowserPermissions } from '../../../../ui/types/BrowserPermissions';
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -134,6 +135,16 @@ function attachCoreHandlers(cli: Client, generation: number) {
 	});
 }
 
+function getBrowserPermissions(): BrowserPermissions {
+	try {
+		return JSON.parse(localStorage.getItem('browserPermissions') ?? '{}');
+	} catch {
+		return {
+			micGranted: false,
+		};
+	}
+}
+
 /**
  * Mark the asynchronously created phone UA instance as raw.
  *
@@ -169,6 +180,7 @@ async function createClient(): Promise<Client> {
 	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
+	const browserPermissions: BrowserPermissions = getBrowserPermissions();
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
 	// const cli = new Client(config);
@@ -178,7 +190,7 @@ async function createClient(): Promise<Client> {
 			token,
 			registerWebDevice:
 				(cliConfig.registerWebDevice ?? true) &&
-				(cliConfig.micGranted ?? false),
+				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
 			echoCancellation: cliConfig.echoCancellation,
 			noiseSuppression: cliConfig.noiseSuppression,

@@ -8,7 +8,7 @@
     <welcome-popup
       v-if="isWelcomePopup"
       :loading="isInitLoading"
-      @input="initSession"
+      @input="handleWelcomeClose"
     ></welcome-popup>
 
     <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
@@ -68,6 +68,7 @@ import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
+import type { BrowserPermissions } from '../types/BrowserPermissions';
 
 const store = useStore();
 const route = useRoute();
@@ -109,21 +110,14 @@ const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
 
-const setMicrophoneGranted = (micGranted: boolean) => {
-	try {
-		const config = JSON.parse(localStorage.getItem('CONFIG') || '{}');
-		config.CLI = {
-			...config.CLI,
-			micGranted,
-		};
-		localStorage.setItem('CONFIG', JSON.stringify(config));
-	} catch {}
+const setMicrophoneGranted = (permissions: BrowserPermissions) => {
+	localStorage.setItem('browserPermissions', JSON.stringify(permissions));
 };
 
-const handleWelcomeClose = async (micGranted: boolean) => {
+const handleWelcomeClose = async (permissions: BrowserPermissions) => {
 	isWelcomePopup.value = false;
 
-	setMicrophoneGranted(micGranted);
+	setMicrophoneGranted(permissions);
 
 	await initSession();
 };

@@ -95,10 +95,10 @@ describe('workspace store: actions', () => {
 		);
 	});
 
-	it('OPEN_SESSION dispatches call/missed/LOAD_DATA_LIST (loads missed calls list)', async () => {
+	it('OPEN_SESSION dispatches call/missed/INITIALIZE_MISSED (init loads missed calls list)', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'features/call/missed/LOAD_DATA_LIST',
+			'features/call/missed/INITIALIZE_MISSED',
 			null,
 			{
 				root: true,
@@ -106,10 +106,10 @@ describe('workspace store: actions', () => {
 		);
 	});
 
-	it('OPEN_SESSION dispatches member/LOAD_DATA_LIST (loads offline queue members)', async () => {
+	it('OPEN_SESSION dispatches member/SUBSRIBE_MEMBER_LIST (subscribes to loading offline queue members)', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'features/member/LOAD_DATA_LIST',
+			'features/member/SUBSRIBE_MEMBER_LIST',
 			null,
 			{
 				root: true,

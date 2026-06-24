@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, useStore } from 'vuex';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
@@ -45,15 +45,10 @@ export default {
 
 	methods: {
 		...mapActions('features/call/missed', {
-			initializeMissed: 'INITIALIZE_MISSED',
 			loadMore: 'LOAD_NEXT_PAGE',
 			redial: 'REDIAL',
 			hideMissed: 'HIDE_MISSED',
 		}),
-	},
-
-	created() {
-		this.initializeMissed();
 	},
 };
 </script>
