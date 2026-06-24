@@ -22,10 +22,12 @@ import { computed } from 'vue';
 interface IChatMessageTextProps {
 	text: string;
 	agent?: boolean;
+	withTimestampSpacer?: boolean;
 }
 
 const props = withDefaults(defineProps<IChatMessageTextProps>(), {
 	agent: false,
+	withTimestampSpacer: false,
 });
 
 const text = computed(() => {
