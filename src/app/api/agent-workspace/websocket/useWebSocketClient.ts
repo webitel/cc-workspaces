@@ -4,7 +4,6 @@ import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
-import type { BrowserPermissions } from '../../../../ui/types/BrowserPermissions';
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -134,13 +133,25 @@ function attachCoreHandlers(cli: Client, generation: number) {
 	});
 }
 
-function getBrowserPermissions(): BrowserPermissions {
+async function getBrowserPermissions() {
+	const micGranted = await getMicPermission();
+
+	return {
+		micGranted,
+	};
+}
+
+async function getMicPermission() {
 	try {
-		return JSON.parse(localStorage.getItem('browserPermissions') ?? '{}');
-	} catch {
-		return {
-			micGranted: false,
-		};
+		const stream = await navigator.mediaDevices.getUserMedia({
+			audio: true,
+		});
+		stream.getTracks().forEach((track) => {
+			track.stop();
+		});
+		return true;
+	} catch (err) {
+		return false;
 	}
 }
 
@@ -179,7 +190,7 @@ async function createClient(): Promise<Client> {
 	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
-	const browserPermissions: BrowserPermissions = getBrowserPermissions();
+	const browserPermissions = await getBrowserPermissions();
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
 	// const cli = new Client(config);

@@ -105,9 +105,7 @@ export default {
 			if (this.loading || this.checkingPermissions) return;
 
 			this.playSilence();
-			this.$emit('input', {
-				micGranted: this.mic.status,
-			});
+			this.$emit('input');
 		},
 		async checkMic() {
 			try {

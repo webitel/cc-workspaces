@@ -8,7 +8,7 @@
     <welcome-popup
       v-if="isWelcomePopup"
       :loading="isInitLoading"
-      @input="handleWelcomeClose"
+      @input="initSession"
     ></welcome-popup>
 
     <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
@@ -109,18 +109,6 @@ const isDescTrackAuthErrorPopup = computed(
 const openSession = () => store.dispatch('workspace/OPEN_SESSION');
 const closeSession = () => store.dispatch('workspace/CLOSE_SESSION');
 const agentLogout = () => store.dispatch('features/status/AGENT_LOGOUT');
-
-const setMicrophoneGranted = (permissions: BrowserPermissions) => {
-	localStorage.setItem('browserPermissions', JSON.stringify(permissions));
-};
-
-const handleWelcomeClose = async (permissions: BrowserPermissions) => {
-	isWelcomePopup.value = false;
-
-	setMicrophoneGranted(permissions);
-
-	await initSession();
-};
 
 const initSession = async () => {
 	try {

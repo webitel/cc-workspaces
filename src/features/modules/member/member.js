@@ -1,4 +1,4 @@
-import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval';
+import { useCachedInterval } from '@webitel/ui-sdk/composables';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 
 const state = {
