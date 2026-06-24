@@ -81,14 +81,13 @@
 </template>
 
 <script>
+import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {

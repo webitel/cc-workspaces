@@ -42,8 +42,8 @@
 </template>
 
 <script setup>
-import { WtApplication } from '@webitel/ui-sdk/enums';
 import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
+import { WtApplication } from '@webitel/ui-sdk/enums';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import { storeToRefs } from 'pinia';
 import { computed, inject, onMounted } from 'vue';

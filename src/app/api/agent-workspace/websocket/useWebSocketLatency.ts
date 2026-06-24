@@ -1,10 +1,10 @@
-import { eventBus, getConnectionQuality } from '@webitel/ui-sdk/scripts';
-import { useStore } from 'vuex';
-import type { Client, RtpMetrics } from 'webitel-sdk';
 import {
 	ConnectionQualityLevels,
 	type ConnectionQualityLevelsType,
 } from '@webitel/ui-sdk/enums';
+import { eventBus, getConnectionQuality } from '@webitel/ui-sdk/scripts';
+import { useStore } from 'vuex';
+import type { Client, RtpMetrics } from 'webitel-sdk';
 import i18n from '../../../locale/i18n';
 
 const LATENCY_REFRESH_DELAY = 5000;
