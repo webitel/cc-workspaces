@@ -23,9 +23,9 @@
 
     <template #info-title>
      <div class="history-lookup-item-info-title">
-      <call-media-metric
+      <wt-call-media-metric
        v-if="item.qualityMetrics"
-       :quality="connectionQuality"
+       :mos-avg="item.qualityMetrics.mosAvg"
        size="sm"
       />
       {{ date }}
@@ -88,14 +88,13 @@ import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import { ConnectionQualityLevels } from '../../../../../../../features/types/ConnectionQualityLevel.enum';
-import CallMediaMetric from '../../../../../app-header/components/call-media-metric.vue';
+import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
 	name: 'HistoryLookupItem',
 	components: {
-		CallMediaMetric,
+		WtCallMediaMetric,
 	},
 	mixins: [
 		lookupItemMixin,
@@ -181,14 +180,6 @@ export default {
 					handler: () => this.goToHistoryItem(),
 				},
 			];
-		},
-
-		connectionQuality() {
-			if (this.item.qualityMetrics?.mosAvg >= 4)
-				return ConnectionQualityLevels.High;
-			if (this.item.qualityMetrics?.mosAvg >= 3.5)
-				return ConnectionQualityLevels.Medium;
-			return ConnectionQualityLevels.Low;
 		},
 	},
 	methods: {

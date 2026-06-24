@@ -1,10 +1,10 @@
-import { eventBus } from '@webitel/ui-sdk/scripts';
+import { eventBus, getConnectionQuality } from '@webitel/ui-sdk/scripts';
 import { useStore } from 'vuex';
 import type { Client, RtpMetrics } from 'webitel-sdk';
 import {
 	ConnectionQualityLevels,
 	type ConnectionQualityLevelsType,
-} from '../../../../features/types/ConnectionQualityLevel.enum';
+} from '@webitel/ui-sdk/enums';
 import i18n from '../../../locale/i18n';
 
 const LATENCY_REFRESH_DELAY = 5000;
@@ -99,10 +99,12 @@ export const useWebSocketLatency = () => {
 			reasons.push(`packet loss ${packetLossAvg.toFixed(1)} % (1–3%)`);
 		}
 
-		if (mosAvg < 3.5) {
+		const mosLevel = getConnectionQuality(mosAvg);
+
+		if (mosLevel === ConnectionQualityLevels.Low) {
 			setLevel(ConnectionQualityLevels.Low);
 			reasons.push(`MOS ${mosAvg.toFixed(2)} (< 3.5)`);
-		} else if (mosAvg < 4.0) {
+		} else if (mosLevel === ConnectionQualityLevels.Medium) {
 			setLevel(ConnectionQualityLevels.Medium);
 			reasons.push(`MOS ${mosAvg.toFixed(2)} (3.5–4.0)`);
 		}

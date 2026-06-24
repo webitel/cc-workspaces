@@ -22,7 +22,7 @@
 
     <agent-status-select v-if="isAgent"></agent-status-select>
 
-    <call-media-metric
+    <wt-call-media-metric
       :quality="connectionQuality"
       show-tooltip
     />
@@ -43,6 +43,7 @@
 
 <script setup>
 import { WtApplication } from '@webitel/ui-sdk/enums';
+import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
 import WtDarkModeSwitcher from '@webitel/ui-sdk/src/modules/Appearance/components/wt-dark-mode-switcher.vue';
 import { storeToRefs } from 'pinia';
 import { computed, inject, onMounted } from 'vue';
@@ -53,7 +54,6 @@ import packageJson from '../../../../../package.json' with { type: 'json' };
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
 import { useUserinfoStore } from '../../userinfo/userinfoStore';
 import AgentStatusSelect from './agent-status-select.vue';
-import CallMediaMetric from './call-media-metric.vue';
 import UserDndSwitcher from './user-dnd-switcher.vue';
 
 const store = useStore();
