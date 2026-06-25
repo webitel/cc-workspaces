@@ -8,6 +8,7 @@
         :task="task"
         :index="key"
         :size="size"
+        :loading="showLoader(task.id)"
         @click="openTask"
         @accept="acceptTask"
       />
@@ -20,6 +21,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
+import { useLoader } from '../../../../../../composables/useLoader';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ManualPreview from './manual-queue-preview.vue';
 
@@ -32,10 +34,14 @@ const props = defineProps({
 
 const store = useStore();
 
+const { showLoader, runWithLoader } = useLoader();
+
 const manualList = computed(() => store.state.features.call.manual.manualList);
 
 function acceptTask(task) {
-	return store.dispatch('features/call/manual/ACCEPT_TASK', task);
+	return runWithLoader(task.id, () =>
+		store.dispatch('features/call/manual/ACCEPT_TASK', task),
+	);
 }
 
 function openTask(task) {

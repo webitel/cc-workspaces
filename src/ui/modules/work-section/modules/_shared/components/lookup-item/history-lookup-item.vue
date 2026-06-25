@@ -43,7 +43,7 @@
           color="success"
           rounded
           :size="size"
-          :loading="showLoader"
+          :loading="showLoader(item.id)"
           wide
           @click="call"
         />
@@ -88,6 +88,7 @@ import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import { useLoader } from '../../../../../../composables/useLoader';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
@@ -109,7 +110,13 @@ export default {
 		return {
 			ComponentSize,
 			isContextMenuVisible: false,
-			showLoader: false,
+		};
+	},
+	setup() {
+		const { showLoader, runWithLoader } = useLoader();
+		return {
+			showLoader,
+			runWithLoader,
 		};
 	},
 
@@ -187,21 +194,18 @@ export default {
 			makeCall: 'CALL',
 		}),
 		call() {
-			if (this.showLoader) return;
-			this.showLoader = true;
 			let number;
-
 			if (this.item.direction === CallDirection.Inbound) {
 				number = this.item.from.number;
 			} else {
 				number = this.item.to.number || this.item.destination;
 			}
 
-			this.makeCall({
-				number,
-			});
-
-			this.showLoader = false;
+			return this.runWithLoader(this.item.id, () =>
+				this.makeCall({
+					number,
+				}),
+			);
 		},
 		goToHistoryItem() {
 			window.open(this.historyIdLink, '_blank');

@@ -19,6 +19,7 @@
         icon="call--filled"
         color="success"
         :size="size"
+        :disabled="showDisabled"
         @click="emit('call', phone)"
       ></wt-icon-btn>
     </div>
@@ -26,6 +27,8 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
+
 const props = defineProps({
 	size: {
 		type: String,
@@ -35,11 +38,32 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
+	loading: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
 	'call',
 ]);
+
+// sinhronizetion with loader on wt-rounded-action
+// TODO: change disable to loading in task https://webitel.atlassian.net/browse/WTEL-9803
+const showDisabled = ref(false);
+
+watch(
+	() => props.loading,
+	(value) => {
+		if (value) {
+			showDisabled.value = true;
+		} else {
+			setTimeout(() => {
+				showDisabled.value = false;
+			}, 1000);
+		}
+	},
+);
 </script>
 
 <style lang="scss" scoped>

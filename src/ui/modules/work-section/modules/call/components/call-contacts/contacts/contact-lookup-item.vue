@@ -26,6 +26,7 @@
       <wt-rounded-action
         :disabled="!item.phones.length"
         :size="size"
+        :loading="loading"
         color="success"
         icon="call--filled"
         rounded
@@ -42,6 +43,7 @@
         :key="phone.id"
         :phone="phone"
         :size="size"
+        :loading="loading"
         @call="call(phone)"
       ></contact-communication-item>
     </template>
@@ -67,10 +69,11 @@ export default {
 	emits: [
 		'call',
 	],
-	data() {
-		return {
-			showLoader: false,
-		};
+	props: {
+		loading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		...mapGetters('ui/infoSec/client/contact', {
@@ -82,14 +85,10 @@ export default {
 	},
 	methods: {
 		call({ number } = {}) {
-			if (this.showLoader) return;
-
-			this.showLoader = true;
 			this.$emit('call', {
 				number: number || this.primaryPhoneNumber,
 				contactId: this.item.id,
 			});
-			this.showLoader = false;
 		},
 	},
 };
