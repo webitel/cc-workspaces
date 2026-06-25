@@ -134,6 +134,35 @@ function attachCoreHandlers(cli: Client, generation: number) {
 }
 
 /**
+ * @author PolinaSukhorukova-webitel
+ *
+ * [WTEL-9282](https://webitel.atlassian.net/browse/WTEL-9282?focusedCommentId=764636)
+ * This microphone check is required for the task:
+ * SIP must be registered only when the microphone is granted.
+ */
+async function getBrowserPermissions() {
+	const micGranted = await getMicPermission();
+
+	return {
+		micGranted,
+	};
+}
+
+async function getMicPermission() {
+	try {
+		const stream = await navigator.mediaDevices.getUserMedia({
+			audio: true,
+		});
+		stream.getTracks().forEach((track) => {
+			track.stop();
+		});
+		return true;
+	} catch (err) {
+		return false;
+	}
+}
+
+/**
  * Mark the asynchronously created phone UA instance as raw.
  *
  * The phone instance is created after auth, so we wait for it to appear
@@ -168,6 +197,7 @@ async function createClient(): Promise<Client> {
 	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
+	const browserPermissions = await getBrowserPermissions();
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
 	// const cli = new Client(config);
@@ -175,7 +205,9 @@ async function createClient(): Promise<Client> {
 		new Client({
 			endpoint,
 			token,
-			registerWebDevice: cliConfig.registerWebDevice ?? true,
+			registerWebDevice:
+				(cliConfig.registerWebDevice ?? true) &&
+				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
 			echoCancellation: cliConfig.echoCancellation,
 			noiseSuppression: cliConfig.noiseSuppression,

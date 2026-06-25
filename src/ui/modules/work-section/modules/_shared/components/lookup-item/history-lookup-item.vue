@@ -23,10 +23,10 @@
 
     <template #info-title>
      <div class="history-lookup-item-info-title">
-      <call-media-metric
+      <wt-call-media-metric
        v-if="item.qualityMetrics"
-       :quality="connectionQuality"
-       size="sm"
+       :mos-avg="item.qualityMetrics.mosAvg"
+       :size="ComponentSize.SM"
       />
       {{ date }}
      </div>
@@ -81,21 +81,19 @@
 </template>
 
 <script>
-import { FormatDateMode } from '@webitel/ui-sdk/enums';
+import { WtCallMediaMetric } from '@webitel/ui-sdk/components';
+import { ComponentSize, FormatDateMode } from '@webitel/ui-sdk/enums';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
-
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import { ConnectionQualityLevels } from '../../../../../../../features/types/ConnectionQualityLevel.enum';
-import CallMediaMetric from '../../../../../app-header/components/call-media-metric.vue';
 import lookupItemMixin from './mixins/lookupItemMixin';
 
 export default {
 	name: 'HistoryLookupItem',
 	components: {
-		CallMediaMetric,
+		WtCallMediaMetric,
 	},
 	mixins: [
 		lookupItemMixin,
@@ -109,6 +107,7 @@ export default {
 	},
 	data() {
 		return {
+			ComponentSize,
 			isContextMenuVisible: false,
 			showLoader: false,
 		};
@@ -181,14 +180,6 @@ export default {
 					handler: () => this.goToHistoryItem(),
 				},
 			];
-		},
-
-		connectionQuality() {
-			if (this.item.qualityMetrics?.mosAvg >= 4)
-				return ConnectionQualityLevels.High;
-			if (this.item.qualityMetrics?.mosAvg >= 3.5)
-				return ConnectionQualityLevels.Medium;
-			return ConnectionQualityLevels.Low;
 		},
 	},
 	methods: {

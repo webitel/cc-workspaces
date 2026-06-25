@@ -9,6 +9,7 @@
       :size="ComponentSize.SM"
       :src="mediaSrcObject"
       :title="media.name"
+      countdown-time-mode
       static
       hide-expand
       stretch
@@ -19,6 +20,7 @@
       :src="mediaSrcObject"
       :autoplay="false"
       :closable="false"
+      countdown-time-mode
       hide-volume-slider
       hide-mute-button
       class="chat-message-player__player"
