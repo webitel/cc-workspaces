@@ -49,6 +49,7 @@ const emit = defineEmits([
 ]);
 
 // sinhronizetion with loader on wt-rounded-action
+// TODO: change disable to loading in task https://webitel.atlassian.net/browse/WTEL-9803
 const showDisabled = ref(false);
 
 watch(
