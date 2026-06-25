@@ -11,7 +11,7 @@
       <wt-button
         v-if="allowBlindTransfer"
         color="transfer"
-        v-tooltip="buttonTooltip"
+        v-tooltip.top="buttonTooltip"
         :disabled="isTransferToNumberDisabled"
         @click="emit('transfer', { extension: dataSearch })"
       >{{ $t('transfer.transfer') }}
