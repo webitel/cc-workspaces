@@ -22,7 +22,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tinymce/tinymce-vue": "^5.1.1",
+		"@tinymce/tinymce-vue": "^6.3.0",
 		"@vue/compat": "^3.5.x",
 		"@vuelidate/core": "^2.0.3",
 		"@vuelidate/validators": "^2.0.4",
@@ -33,7 +33,7 @@
 		"@webitel/ui-chats": "^0.1.29",
 		"@webitel/ui-sdk": "~26.6",
 		"autolinker": "^4.x",
-		"axios": "1.13.2",
+		"axios": "1.18.1",
 		"deep-copy": "^1.x",
 		"deep-equal": "^2.x",
 		"deepmerge": "^4.x",
@@ -50,7 +50,7 @@
 		"markdown-it": "^14.x",
 		"pinia": "^3.x",
 		"prepend-http": "^4.0.0",
-		"tinymce": "^6.8.3",
+		"tinymce": "^8.6.0",
 		"vidstack": "^1.12.13",
 		"vue": "^3.5.x",
 		"vue-i18n": "^11.x",
@@ -71,7 +71,7 @@
 		"date-fns": "^4.1.0",
 		"glob-to-regexp": "^0.4.1",
 		"globals": "^17.x",
-		"happy-dom": "^15.7.3",
+		"happy-dom": "^20.10.6",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.x",
 		"prismjs": "^1.29.0",
@@ -79,7 +79,7 @@
 		"tslib": "^2.7.0",
 		"typescript": "^5.9.x",
 		"vite": "8.0.0-beta.15",
-		"vite-plugin-node-polyfills": "^0.x",
+		"vite-plugin-node-polyfills": "^0.28.0",
 		"vite-plugin-pwa": "^1.2.0",
 		"vite-plugin-vue-devtools": "^8.x",
 		"vite-plugin-vue-docgen": "^0.3.4",
@@ -94,7 +94,6 @@
 		"@rollup/rollup-linux-x64-gnu": "^4"
 	},
 	"overrides": {
-		"vite": "8.0.0-beta.15",
-		"axios": "1.13.2"
+		"vite": "8.0.0-beta.15"
 	}
 }
