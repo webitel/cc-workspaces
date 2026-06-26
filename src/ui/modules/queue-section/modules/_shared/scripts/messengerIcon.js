@@ -1,4 +1,4 @@
-import MessengerType from 'webitel-sdk/enums/messenger-type.enum';
+import { MessengerType } from 'webitel-sdk/enums';
 export default function (messengerType) {
 	switch (messengerType) {
 		case MessengerType.TELEGRAM:
