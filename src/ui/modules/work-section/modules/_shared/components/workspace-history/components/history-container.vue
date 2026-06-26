@@ -198,6 +198,7 @@ const {
 		'direction',
 		'answered_at',
 		'contact',
+		'quality_metrics',
 	],
 });
 

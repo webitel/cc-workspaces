@@ -10,9 +10,6 @@ import wsGeneralInfo from './ws-general-info.svg?raw';
 import wsKnowledgeBase from './ws-knowledge-base.svg?raw';
 import wsPause from './ws-pause.svg?raw';
 import wsProcessing from './ws-processing.svg?raw';
-import wsSignalHigh from './ws-signal-high.svg?raw';
-import wsSignalLow from './ws-signal-low.svg?raw';
-import wsSignalMedium from './ws-signal-medium.svg?raw';
 import wsTimeoutDisconnection from './ws-timeout-disconnection.svg?raw';
 import wsUserDescription from './ws-user-description.svg?raw';
 import wsWidgetAllCallMissed from './ws-widget-all-call-missed.svg?raw';
@@ -55,9 +52,6 @@ const icons = {
 	'ws-widget-processing': wsWidgetProcessing,
 	'ws-widget-queue-talk': wsWidgetQueueTalk,
 	'ws-widget-sum-talk': wsWidgetSumTalk,
-	'ws-signal-high': wsSignalHigh,
-	'ws-signal-medium': wsSignalMedium,
-	'ws-signal-low': wsSignalLow,
 	'ws-widget-task-accepts': wsWidgetTaskAccepts,
 	'ws-widget-voice-mail': wsWidgetVoiceMail,
 	'ws-client-info': wsClientInfo,

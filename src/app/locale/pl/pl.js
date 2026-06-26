@@ -53,11 +53,6 @@ export default {
 			label: 'Nie przeszkadzać',
 			tooltip: 'Będziesz otrzymywać połączenia tylko z kolejek',
 		},
-		connectionQuality: {
-			high: 'Doskonała jakość sieci.',
-			medium: 'Może występować opóźnienie, sprawdź swoją sieć.',
-			low: 'Jakość sieci jest słaba, sprawdź swoją sieć.',
-		},
 	},
 	widgets: {
 		callInbound: 'Połączenia przychodzące',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Ręcznie przypisane',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Czat | Czaty',

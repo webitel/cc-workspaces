@@ -53,11 +53,6 @@ export default {
 			label: 'Мазаламаңыз',
 			tooltip: 'Сіз тек кезектердегі қоңырауларды қабылдайсыз',
 		},
-		connectionQuality: {
-			high: 'Желі сапасы өте жақсы.',
-			medium: 'Кішігірім кідіріс болуы мүмкін, желіні тексеріңіз.',
-			low: 'Желі сапасы нашар, желіні тексеріңіз.',
-		},
 	},
 	widgets: {
 		callInbound: 'Кіріс қоңыраулар',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Өзіне тағайындалған',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Чат | Чаттар',
