@@ -13,14 +13,16 @@
     <template #actions="{ item }">
       <wt-rounded-action
         color="transfer"
-        :icon="`${state}-transfer--filled`"
         rounded
+        :icon="`${state}-transfer--filled`"
+				:loading="showLoader(`transfer${item.id}`)"
         @click="transfer(item)"
       />
       <wt-rounded-action
         color="transfer"
         icon="consultative-transfer"
         rounded
+        :loading="showLoader(`consultationTransfer${item.id}`)"
         @click="consultationTransfer(item)"
       />
     </template>
@@ -34,10 +36,13 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import APIRepository from '../../../../../../../../app/api/APIRepository';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
 
 const store = useStore();
+const { showLoader, runWithLoader } = useLoader();
+
 const queuesAPI = APIRepository.queues;
 
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
@@ -50,14 +55,20 @@ const emit = defineEmits([
 
 const transfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-		await call.value.blindTransferQueue(Number(item.id));
+		const loaderId = `transfer${item.id}`;
+		await runWithLoader(loaderId, () =>
+			call.value.blindTransferQueue(Number(item.id)),
+		);
 		emit('transfer-complete');
 	}
 };
 
 const consultationTransfer = async (item: QueueItem = {} as QueueItem) => {
 	if (call) {
-		await call.value.processTransferQueue(Number(item.id));
+		const loaderId = `consultationTransfer${item.id}`;
+		await runWithLoader(loaderId, () =>
+			call.value.processTransferQueue(Number(item.id)),
+		);
 		emit('transfer-complete');
 	}
 };

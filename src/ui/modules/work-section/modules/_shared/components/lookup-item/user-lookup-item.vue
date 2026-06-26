@@ -20,7 +20,7 @@
     <template #after>
       <wt-rounded-action
         :size="size"
-        :loading="showLoader"
+        :loading="loading"
         icon="call--filled"
         color="success"
         rounded
@@ -48,9 +48,12 @@ export default {
 	emits: [
 		'input',
 	],
-	data: () => ({
-		showLoader: false,
-	}),
+	props: {
+		loading: {
+			type: Boolean,
+			default: false,
+		},
+	},
 	computed: {
 		// NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
 		userStatus() {
@@ -72,11 +75,9 @@ export default {
 	},
 	methods: {
 		handleInput() {
-			if (this.showLoader) return;
+			if (this.loading) return;
 
-			this.showLoader = true;
 			this.$emit('input', this.item);
-			this.showLoader = false;
 		},
 	},
 };

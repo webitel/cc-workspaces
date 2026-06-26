@@ -16,6 +16,7 @@
         :key="item.id"
         :item="item"
         :size="size"
+        :loading="showLoader(item.extension)"
         @input="makeCall({ number: item.extension })"
       ></user-lookup-item>
     </template>
@@ -29,6 +30,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import UserLookupItem from '../../../../_shared/components/lookup-item/user-lookup-item.vue';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
@@ -44,6 +46,8 @@ const props = defineProps({
 const store = useStore();
 
 const userinfoStore = useUserinfoStore();
+const { showLoader, runWithLoader } = useLoader();
+
 const { userId } = storeToRefs(userinfoStore);
 
 const fetchFn = (params) => {
@@ -68,7 +72,7 @@ const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
 	});
 
 const makeCall = (item) => {
-	store.dispatch('features/call/CALL', item);
+	runWithLoader(item.number, () => store.dispatch('features/call/CALL', item));
 };
 </script>
 
