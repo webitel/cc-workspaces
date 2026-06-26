@@ -39,6 +39,7 @@ export default ({ mode }) => {
 				),
 			},
 			dedupe: [
+				'@vue/compat',
 				'vidstack',
 			],
 		},
