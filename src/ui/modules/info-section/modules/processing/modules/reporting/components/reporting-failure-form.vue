@@ -25,11 +25,11 @@
       class="processing-form__input"
     >
       <wt-datepicker
-        v-model="reporting.nextDistributeAt"
-        :disabled-dates="(d) => d.getTime() < new Date().setDate(new Date().getDate() - 1)"
+        v-model:model-value="reporting.nextDistributeAt"
+        :min-date="new Date(new Date().setDate(new Date().getDate() - 1))"
         :label="$t('infoSec.processing.reporting.nextDistributeAt')"
         :timezone="timezone"
-        mode="datetime"
+        show-time
       ></wt-datepicker>
     </div>
   </section>
