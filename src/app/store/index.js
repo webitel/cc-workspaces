@@ -35,6 +35,8 @@ const store = createStore({
 	},
 });
 
+wsClient.setStore(store);
+
 window.$store = store;
 
 export default store;

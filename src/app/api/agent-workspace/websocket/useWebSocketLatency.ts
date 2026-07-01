@@ -3,19 +3,32 @@ import {
 	type ConnectionQualityLevelsType,
 } from '@webitel/ui-sdk/enums';
 import { eventBus, getConnectionQuality } from '@webitel/ui-sdk/scripts';
-import { useStore } from 'vuex';
+import type { Store } from 'vuex';
 import type { Client, RtpMetrics } from 'webitel-sdk';
 import i18n from '../../../locale/i18n';
 
 const LATENCY_REFRESH_DELAY = 5000;
 
-let storeRef: ReturnType<typeof useStore> | null = null;
+let storeRef: Store<unknown> | null = null;
 let latencyIntervalId: number | null = null;
 
 export const useWebSocketLatency = () => {
-	const startLatencyTracking = (cli: Client) => {
-		const store = useStore();
+	/**
+	 * @author @OleksandrPalonnyi
+	 *
+	 * [WTEL-9842](https://webitel.atlassian.net/browse/WTEL-9842)
+	 *
+	 * @description The store isn't available yet when this composable is
+	 * instantiated (it's created at module scope, before the Vuex store
+	 * exists), and `useStore()` can't be called later from `startLatencyTracking`
+	 * since that always runs outside a component's `setup()`. So the store
+	 * instance is injected once via `setStore` after it's created.
+	 */
+	const setStore = (store: Store<unknown>) => {
 		storeRef = store;
+	};
+
+	const startLatencyTracking = (cli: Client) => {
 		if (latencyIntervalId) {
 			console.warn('[WS]: latency tracking already started');
 			return;
@@ -25,7 +38,9 @@ export const useWebSocketLatency = () => {
 			try {
 				const latency = await cli.latency();
 
-				await store.commit('features/connectionQuality/SET', {
+				if (!storeRef) return;
+
+				await storeRef.commit('features/connectionQuality/SET', {
 					path: 'latency',
 					value: latency,
 				});
@@ -61,7 +76,7 @@ export const useWebSocketLatency = () => {
 		 * [WTEL-8733](https://webitel.atlassian.net/browse/WTEL-8733)
 		 *
 		 * @description We can't call useStore() here (no Vue instance in ws callback),
-		 * so we reuse the store captured in startLatencyTracking via storeRef to avoid errors.
+		 * so we rely on the store injected via setStore to avoid errors.
 		 */
 
 		if (storeRef) {
@@ -134,6 +149,7 @@ export const useWebSocketLatency = () => {
 	};
 
 	return {
+		setStore,
 		startLatencyTracking,
 		stopLatencyTracking,
 		websocketRtpConnectionLevelHandler,
