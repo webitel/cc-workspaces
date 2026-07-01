@@ -41,6 +41,7 @@ const listeners: { [K in keyof EventMap]: EventMap[K][] } = {
 };
 
 const {
+	setStore: setLatencyStore,
 	startLatencyTracking,
 	stopLatencyTracking,
 	websocketRtpConnectionLevelHandler,
@@ -340,6 +341,7 @@ export function useWebSocketClient() {
 
 		getCliInstance,
 		destroyClient,
+		setStore: setLatencyStore,
 
 		on,
 		Event: WebSocketClientEvent,
