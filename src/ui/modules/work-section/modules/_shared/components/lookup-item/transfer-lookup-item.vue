@@ -86,20 +86,20 @@ const state = computed<string>(
 );
 // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
 const userStatus = computed(() => {
-  if (!props.showStatus) return undefined;
-  const statusMap = parseUserStatus(props.item[props.presenceStatusField]);
-  if (statusMap[UserStatus.DND]) return AbstractUserStatus.DND;
-  if (statusMap[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
-  if (
-      (props.item?.status === AgentStatus.OFFLINE || !props.item?.status) &&
-      (statusMap[UserStatus.SIP] || statusMap[UserStatus.WEB])
-  ) {
-    return AbstractUserStatus.ACTIVE;
-  }
-  if (props.item?.status === AgentStatus.ONLINE)
-    return AbstractUserStatus.ONLINE;
-  if (props.item?.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
-  return AbstractUserStatus.OFFLINE;
+	if (!props.showStatus) return undefined;
+	const statusMap = parseUserStatus(props.item[props.presenceStatusField]);
+	if (statusMap[UserStatus.DND]) return AbstractUserStatus.DND;
+	if (statusMap[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
+	if (
+		(props.item?.status === AgentStatus.OFFLINE || !props.item?.status) &&
+		(statusMap[UserStatus.SIP] || statusMap[UserStatus.WEB])
+	) {
+		return AbstractUserStatus.ACTIVE;
+	}
+	if (props.item?.status === AgentStatus.ONLINE)
+		return AbstractUserStatus.ONLINE;
+	if (props.item?.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
+	return AbstractUserStatus.OFFLINE;
 });
 
 const badge = computed(
