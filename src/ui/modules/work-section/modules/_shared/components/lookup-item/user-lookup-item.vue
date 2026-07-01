@@ -2,7 +2,7 @@
   <lookup-item>
     <template #before>
       <wt-avatar
-          :status="userStatus"
+          :status="status"
           :size="size"
           :username="item.name"
           badge
@@ -41,16 +41,6 @@ import UserStatus from '../../../../../../../features/modules/agent-status/statu
 import { UserLookupItem } from './types/UserLookupItem'
 import LookupItem from './lookup-item.vue';
 
-interface UserLookupItemProps {
-  item: any;
-  loading?: boolean;
-  size?: string;
-}
-
-interface UserLookupItemEmits {
-
-}
-
 const props = withDefaults(
     defineProps<{
       item: UserLookupItem;
@@ -68,31 +58,31 @@ const emit = defineEmits<{
   ];
 }>();
 
-const isOnline = computed(() =>
-    props.item.status === AgentStatus.ONLINE
-);
-
-const isOffline = computed(() =>
-      props.item.status === AgentStatus.OFFLINE ||
-      !parseUserStatus(props.item.presence)[UserStatus.SIP]
-);
+const presence = computed(() => parseUserStatus(props.item.presence)); // because workspase can use users without agent permissions
+const agentStatus = computed(() => props.item.status);
+const isAgent = computed(() => !!agentStatus.value)
+const hasSip = computed(() => presence[UserStatus.SIP])
 
 const isPaused = computed(() =>
-      props.item.status === AgentStatus.PAUSE ||
-      props.item.status === AgentStatus.BREAK_OUT
+    agentStatus.value === AgentStatus.PAUSE ||
+    agentStatus.value === AgentStatus.BREAK_OUT
 );
 
 // NOTE: this computed is needed to return user status(presence) by priority
 // See this task https://my.webitel.com/browse/WTEL-3798
-const userStatus = computed(() => {
-  const status = parseUserStatus(props.item.presence);
+const status = computed(() => {
+  if (presence.value[UserStatus.DND]) return AbstractUserStatus.DND;
+  if (presence.value[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
 
-  if (status[UserStatus.DND]) return AbstractUserStatus.DND;
-  if (status[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
-  if (isOnline.value) return AbstractUserStatus.ONLINE;
-  if (isOffline.value) return AbstractUserStatus.OFFLINE;
-  if (isPaused.value) return AbstractUserStatus.PAUSE;
-  if (status[UserStatus.WEB]) return AbstractUserStatus.ACTIVE;
+  if (hasSip) {
+    if (!isAgent.value) return AbstractUserStatus.ACTIVE;
+    if (isAgent.value && agentStatus.value === AgentStatus.ONLINE) return AbstractUserStatus.ONLINE;
+  }
+  if (agentStatus.value === AgentStatus.OFFLINE) return AbstractUserStatus.OFFLINE;
+
+  if (isPaused.value) {
+    return AbstractUserStatus.PAUSE;
+  }
 
   return AbstractUserStatus.OFFLINE;
 });
