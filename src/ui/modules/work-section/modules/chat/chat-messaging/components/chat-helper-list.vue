@@ -20,6 +20,11 @@
         <p class="chat-helper__text">{{ item.text }}</p>
       </div>
     </li>
+    <wt-intersection-observer
+     :canLoadMore="next"
+     :loading="loading"
+     @next="emit('handleNext')"
+    />
   </ul>
 
 </template>
@@ -29,6 +34,8 @@ import { ChatHelperItem } from '../types/ChatHelperItem.types';
 
 const props = defineProps<{
 	list: ChatHelperItem[];
+	next?: boolean;
+	loading?: boolean;
 }>();
 
 const activeIndex = ref(-1);
@@ -39,6 +46,7 @@ const emit = defineEmits<{
 	select: [
 		item: ChatHelperItem,
 	];
+	handleNext?: [];
 }>();
 
 const select = (item) => {
