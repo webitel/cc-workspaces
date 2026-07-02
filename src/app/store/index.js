@@ -3,7 +3,10 @@ import { createStore } from 'vuex';
 import features from '../../features/store/features';
 import workspace from '../../ui/store/agent-workspace';
 import ui from '../../ui/store/ui';
-import { useWebSocketClient } from '../api/agent-workspace/websocket/useWebSocketClient';
+import {
+	registerWebSocketStore,
+	useWebSocketClient,
+} from '../api/agent-workspace/websocket/useWebSocketClient';
 import instance from '../api/instance';
 import OpenAPIConfig from '../api/openAPIConfig';
 
@@ -35,7 +38,7 @@ const store = createStore({
 	},
 });
 
-wsClient.setStore(store);
+registerWebSocketStore(store);
 
 window.$store = store;
 

@@ -7,6 +7,8 @@ import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnecti
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
+export { registerWebSocketStore } from './useWebSocketLatency';
+
 /* ============================================================================
  * Constants
  * ========================================================================== */
@@ -41,7 +43,6 @@ const listeners: { [K in keyof EventMap]: EventMap[K][] } = {
 };
 
 const {
-	setStore: setLatencyStore,
 	startLatencyTracking,
 	stopLatencyTracking,
 	websocketRtpConnectionLevelHandler,
@@ -341,7 +342,6 @@ export function useWebSocketClient() {
 
 		getCliInstance,
 		destroyClient,
-		setStore: setLatencyStore,
 
 		on,
 		Event: WebSocketClientEvent,

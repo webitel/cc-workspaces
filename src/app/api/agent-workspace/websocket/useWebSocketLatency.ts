@@ -9,25 +9,38 @@ import i18n from '../../../locale/i18n';
 
 const LATENCY_REFRESH_DELAY = 5000;
 
-let storeRef: Store<unknown> | null = null;
 let latencyIntervalId: number | null = null;
 
-export const useWebSocketLatency = () => {
-	/**
-	 * @author @OleksandrPalonnyi
-	 *
-	 * [WTEL-9842](https://webitel.atlassian.net/browse/WTEL-9842)
-	 *
-	 * @description The store isn't available yet when this composable is
-	 * instantiated (it's created at module scope, before the Vuex store
-	 * exists), and `useStore()` can't be called later from `startLatencyTracking`
-	 * since that always runs outside a component's `setup()`. So the store
-	 * instance is injected once via `setStore` after it's created.
-	 */
-	const setStore = (store: Store<unknown>) => {
-		storeRef = store;
-	};
+/**
+ * @author @OleksandrPalonnyi
+ *
+ * [WTEL-8733](https://webitel.atlassian.net/browse/WTEL-8733), [WTEL-9842](https://webitel.atlassian.net/browse/WTEL-9842)
+ *
+ * @description `useStore()` needs a component `setup()` context, which these
+ * callbacks don't have. `store/index.js` registers the store once instead.
+ */
+let storeRef: Store<unknown> | null = null;
 
+export function registerWebSocketStore(store: Store<unknown>): void {
+	storeRef = store;
+}
+
+function commitConnectionQuality(path: 'latency' | 'rtp', value: unknown) {
+	if (!storeRef) {
+		console.error(
+			'[WS] connection quality store is not initialized — ' +
+				'registerWebSocketStore() must be called before the websocket client connects',
+		);
+		return;
+	}
+
+	storeRef.commit('features/connectionQuality/SET', {
+		path,
+		value,
+	});
+}
+
+export const useWebSocketLatency = () => {
 	const startLatencyTracking = (cli: Client) => {
 		if (latencyIntervalId) {
 			console.warn('[WS]: latency tracking already started');
@@ -38,12 +51,7 @@ export const useWebSocketLatency = () => {
 			try {
 				const latency = await cli.latency();
 
-				if (!storeRef) return;
-
-				await storeRef.commit('features/connectionQuality/SET', {
-					path: 'latency',
-					value: latency,
-				});
+				commitConnectionQuality('latency', latency);
 			} catch (e) {
 				console.warn('[WS] latency error', e);
 			}
@@ -70,21 +78,7 @@ export const useWebSocketLatency = () => {
 			};
 		}
 
-		/**
-		 * @author @OleksandrPalonnyi
-		 *
-		 * [WTEL-8733](https://webitel.atlassian.net/browse/WTEL-8733)
-		 *
-		 * @description We can't call useStore() here (no Vue instance in ws callback),
-		 * so we rely on the store injected via setStore to avoid errors.
-		 */
-
-		if (storeRef) {
-			storeRef.commit('features/connectionQuality/SET', {
-				path: 'rtp',
-				value: rtp,
-			});
-		}
+		commitConnectionQuality('rtp', rtp);
 
 		const jitterAvg = rtp.jitter?.average ?? 0;
 		const packetLossAvg = rtp.packetloss?.average ?? 0;
@@ -149,7 +143,6 @@ export const useWebSocketLatency = () => {
 	};
 
 	return {
-		setStore,
 		startLatencyTracking,
 		stopLatencyTracking,
 		websocketRtpConnectionLevelHandler,
