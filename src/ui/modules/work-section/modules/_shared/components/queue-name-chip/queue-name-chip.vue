@@ -1,6 +1,6 @@
 <template>
   <wt-chip
-    :class="['queue-name-chip', { clamped }]"
+    :class="['queue-name-chip', { 'queue-name-chip--clamped': clamped }]"
     :color="color"
   >
     <p>{{ name }}</p>
@@ -27,7 +27,7 @@ withDefaults(
   white-space: break-spaces;
   word-break: break-word;
 
-  &.clamped p {
+  &--clamped p {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
