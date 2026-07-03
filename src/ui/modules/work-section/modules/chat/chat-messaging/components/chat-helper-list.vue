@@ -61,6 +61,10 @@ const moveDown = () => {
 	// If click on the arrow down we assign the value +1
 	if (activeIndex.value < props.list.length - 1) {
 		activeIndex.value += 1;
+
+		if (activeIndex.value === props.list.length - 1) {
+			emit('handleNext');
+		}
 		return;
 	}
 };
