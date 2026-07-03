@@ -39,6 +39,7 @@ import parseUserStatus from '../../../../../../../features/modules/agent-status/
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import LookupItem from './lookup-item.vue';
 import { UserLookupItem } from './types/UserLookupItem';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = withDefaults(
 	defineProps<{
@@ -48,7 +49,7 @@ const props = withDefaults(
 	}>(),
 	{
 		loading: false,
-		size: '',
+		size: ComponentSize.MD,
 	},
 );
 
