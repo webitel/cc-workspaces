@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { AgentIconType } from '../../enums/AgentIconType.enum'
+import { AgentIconType } from '../../enums/AgentIconType.enum';
 
 const props = withDefaults(
 	defineProps<{
@@ -22,7 +22,11 @@ const props = withDefaults(
 	},
 );
 
-const iconClass = computed(() => props.icon !== AgentIconType.Bot ? `last-message-container__${props.icon}` : null);
+const iconClass = computed(() =>
+	props.icon !== AgentIconType.Bot
+		? `last-message-container__${props.icon}`
+		: null,
+);
 </script>
 
 <style scoped>
