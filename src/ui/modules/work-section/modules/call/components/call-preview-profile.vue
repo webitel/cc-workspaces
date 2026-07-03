@@ -38,9 +38,9 @@ export default {
 			task: 'TASK_ON_WORKSPACE',
 		}),
 	},
-  components: {
-    QueueNameChip,
-  },
+	components: {
+		QueueNameChip,
+	},
 };
 </script>
 
