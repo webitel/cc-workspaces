@@ -146,6 +146,7 @@ const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
@@ -175,6 +176,7 @@ const queueName = computed(() => getQueueName(call.value));
 
 //@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
 const displayName = computed(() => {
+	if (isVideoCall.value && contact.value) return contact.value.name;
 	if (call.value?.isConsultToQueue && !call.value?.to)
 		return call.value?.destination;
 	return call.value?.displayName;

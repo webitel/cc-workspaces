@@ -1,10 +1,10 @@
 <template>
   <wt-datepicker
     v-bind="$attrs"
-    :value="date"
+    :model-value="date"
     :timezone="timezone"
-    mode="datetime"
-    @input="$emit('input', $event)"
+    show-time
+    @update:model-value="$emit('input', $event)"
   />
 </template>
 
