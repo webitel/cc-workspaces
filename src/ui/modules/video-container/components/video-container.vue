@@ -92,6 +92,8 @@ const callIsOnHold = computed<boolean>(() => {
 	return store.getters['features/call/CALL_ON_WORKSPACE']?.isHold || false;
 });
 
+const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
+
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(
 	() => call.value.localStreams || [],
@@ -126,7 +128,9 @@ const isReceiverVideo = computed(() =>
 );
 
 const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
-const userName = computed(() => call.value.displayName || '');
+const userName = computed(
+	() => contact.value?.name || call.value.displayName || '',
+);
 const mutedVideo = computed(() => call.value.mutedVideo);
 
 const remoteVideoMuted = computed(() => {
