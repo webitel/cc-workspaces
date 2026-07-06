@@ -96,6 +96,7 @@
           color="success"
           rounded
           wide
+          :loading="showLoader(call?.newNumber)"
           @click="makeCall"
         />
       </slot>
@@ -118,7 +119,7 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-
+import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
@@ -141,6 +142,7 @@ const props = withDefaults(
 const emit = defineEmits<(e: 'openTab', value: string) => void>();
 
 const store = useStore();
+const { showLoader, runWithLoader } = useLoader();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
@@ -188,7 +190,11 @@ const displayNumber = computed(() => {
 	return call.value?.displayNumber;
 });
 
-const makeCall = () => store.dispatch('features/call/CALL');
+const makeCall = () => {
+	return runWithLoader(call.value?.newNumber, () =>
+		store.dispatch('features/call/CALL'),
+	);
+};
 const hangup = () => store.dispatch('features/call/HANGUP');
 
 let hotkeyUnsubscribers: Array<() => void> = [];
