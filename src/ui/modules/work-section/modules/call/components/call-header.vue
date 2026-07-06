@@ -96,7 +96,7 @@
           color="success"
           rounded
           wide
-          :loading="showLoader(call?.newNumber)"
+          :loading="loading"
           @click="makeCall"
         />
       </slot>
@@ -189,6 +189,8 @@ const displayNumber = computed(() => {
 	if (call.value?.isConsultToQueue && !call.value?.to) return '';
 	return call.value?.displayNumber;
 });
+
+const loading = computed(() => showLoader(call.value?.newNumber));
 
 const makeCall = () => {
 	return runWithLoader(call.value?.newNumber, () =>
