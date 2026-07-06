@@ -24,7 +24,7 @@ const props = withDefaults(
 
 const iconClass = computed(() =>
 	props.icon !== AgentIconType.Bot
-		? `last-message-container__${props.icon}`
+		? `last-message-container--${props.icon}`
 		: null,
 );
 </script>
@@ -37,11 +37,11 @@ const iconClass = computed(() =>
   border-radius: var(--spacing-xs);
 }
 
-.last-message-container__contacts {
+.last-message-container--contacts {
   background-color: var(--p-primary-highlight-color);
 }
 
-.last-message-container__agent {
+.last-message-container--agent {
   background-color: var(--p-secondary-hover-color);
 }
 </style>
