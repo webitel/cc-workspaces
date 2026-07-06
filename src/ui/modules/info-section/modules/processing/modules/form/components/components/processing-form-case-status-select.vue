@@ -1,6 +1,6 @@
 <template>
     <wt-single-select
-        :model-value="value"
+        :model-value="formattedValue"
         :placeholder="t('cases.status')"
         :options="options"
         :show-clear="false"
@@ -45,8 +45,10 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
+const formattedValue = computed(() => props.value?.id || props.value);
+
 const selectedOption = computed(() =>
-	props.options.find((option) => option.id === props.value),
+	props.options.find((option) => option.id === formattedValue.value),
 );
 
 const getIndicatorColor = (option) => {

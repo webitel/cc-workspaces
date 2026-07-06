@@ -7,6 +7,8 @@ import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnecti
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
+export { registerWebSocketStore } from './useWebSocketLatency';
+
 /* ============================================================================
  * Constants
  * ========================================================================== */

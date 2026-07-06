@@ -1,5 +1,9 @@
 <template>
-  <wt-popup size="sm" @close="close">
+  <wt-popup 
+			size="sm" 
+			:closable="!checkingPermissions" 
+			@close="close"
+		>
     <template #title>
       {{ $t('welcomePopup.title') }}
     </template>

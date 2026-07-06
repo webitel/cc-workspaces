@@ -51,7 +51,11 @@
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
           <div class="chat-queue-preview-md-body__queue">
-            <queue-name-chip v-if="queueName" :name="queueName" />
+            <queue-name-chip
+              v-if="queueName"
+              :name="queueName"
+              clamped
+            />
           </div>
         </div>
 

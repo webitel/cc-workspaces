@@ -12,7 +12,7 @@
         v-if="allowBlindTransfer"
         color="transfer"
         :loading="loading"
-        v-tooltip="buttonTooltip"
+        v-tooltip.top="buttonTooltip"
         :disabled="isTransferToNumberDisabled"
         @click="emit('transfer', { extension: dataSearch })"
       >{{ $t('transfer.transfer') }}
