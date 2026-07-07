@@ -33,7 +33,9 @@
     </template>
 
     <template #info-subtitle>
-      ({{ duration }})
+      <span class="history-lookup-item-info-subtitle">
+        ({{ duration }})
+      </span>
     </template>
 
     <template #after>
@@ -227,11 +229,16 @@ export default {
   }
 
   &-info-title {
-   display: flex;
-   justify-content: end;
-   align-items: center;
-   gap: var(--spacing-xs);
-   padding-block: var(--spacing-2xs);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding-block: var(--spacing-2xs);
+    white-space: nowrap;
+  }
+
+  &-info-subtitle {
+    white-space: nowrap;
   }
 
   &-after{
