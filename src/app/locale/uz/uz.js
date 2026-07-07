@@ -53,12 +53,6 @@ export default {
 			label: 'Bezovta qilmaslik',
 			tooltip: 'Siz faqat navbatlardan qo‘ng‘iroqlarni qabul qilasiz',
 		},
-		connectionQuality: {
-			high: 'Tarmoq sifati a’lo.',
-			medium:
-				'Kichik kechikish bo‘lishi mumkin, iltimos tarmog‘ingizni tekshiring.',
-			low: 'Tarmoq sifati past, iltimos tarmog‘ingizni tekshiring.',
-		},
 	},
 	widgets: {
 		callInbound: 'Kirish qo‘ng‘iroqlari',
@@ -100,6 +94,7 @@ export default {
 					manual: 'Qo‘lda tayinlangan',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chatlar',
@@ -191,6 +186,10 @@ export default {
 			onHold: 'Kutish',
 			hangup: 'Tugatish',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: "Noma'lum kontakt",
+			hiddenNumber: 'Yashirin raqam',
+		},
 		chat: {
 			acceptPreviewText:
 				'Agar javob berishga tayyor boʻlsangiz, avval "Qabul qilish" tugmasini bosing',
@@ -207,6 +206,7 @@ export default {
 			chatsAgent: '{ agentName } chatga qoʻshildi',
 			chatsAgentsList: '{ agentName } chatda ishtirok etdi',
 			chatsFileBlocked: 'Fayl karantinda yoki bloklangan',
+			chatsIncorrectFileSize: 'Fayl hajmi notoʻgʻri', // TODO: Translate
 			errors: {
 				uploadFileLimitSize: 'Fayl hajmi limiti oshib ketdi',
 			},
@@ -233,7 +233,6 @@ export default {
 	history: {
 		today: 'Bugun',
 		yesterday: 'Kecha',
-		openInHistory: 'Tarixda ochish',
 	},
 	transfer: {
 		selectAgent: 'Iltimos, agentni tanlang',
@@ -368,5 +367,8 @@ export default {
 		quickReplies: ({ linked }) =>
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Chatda tezkor javoblar menyusini ochadi',
+	},
+	postprocessing: {
+		retriesLeft: 'Qolgan urinishlar',
 	},
 };

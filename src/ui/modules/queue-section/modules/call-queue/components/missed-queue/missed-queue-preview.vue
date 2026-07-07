@@ -35,7 +35,7 @@
       <wt-rounded-action
         color="success"
         icon="call--filled"
-        :loading="showLoader"
+        :loading="loading"
         rounded
         size="md"
         @click.prevent="call"
@@ -45,6 +45,7 @@
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
+    :member-name="displayName"
     class="missed-queue-preview"
   >
     <template #icon>
@@ -84,7 +85,7 @@
       <wt-rounded-action
         color="success"
         icon="call--filled"
-        :loading="showLoader"
+        :loading="loading"
         rounded
         size="sm"
         @click.prevent="call"
@@ -118,10 +119,11 @@ export default {
 		'hide',
 		'call',
 	],
-	data() {
-		return {
-			showLoader: false,
-		};
+	props: {
+		loading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		displayName() {
@@ -136,11 +138,8 @@ export default {
 	},
 	methods: {
 		call() {
-			if (this.showLoader) return;
-
-			this.showLoader = true;
+			if (this.loading) return;
 			this.$emit('call');
-			this.showLoader = false;
 		},
 	},
 };

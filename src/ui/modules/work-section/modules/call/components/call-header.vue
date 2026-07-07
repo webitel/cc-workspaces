@@ -96,6 +96,7 @@
           color="success"
           rounded
           wide
+          :loading="loading"
           @click="makeCall"
         />
       </slot>
@@ -103,11 +104,12 @@
 
     <template #info>
       <task-header-expansion-card
-        v-if="call?.displayName"
-        :username="call?.displayName"
-        :phone-number="call?.displayNumber"
+        v-if="call?.contact"
+        :username="displayName"
+        :phone-number="displayNumber"
         :queue-name="queueName"
         :direction="call?.direction"
+        :hide-number="call?.hideNumber"
       />
     </template>
   </task-header>
@@ -117,14 +119,14 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-
+import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
-import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 
 const props = withDefaults(
 	defineProps<{
@@ -140,10 +142,13 @@ const props = withDefaults(
 const emit = defineEmits<(e: 'openTab', value: string) => void>();
 
 const store = useStore();
+const { showLoader, runWithLoader } = useLoader();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
+
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
+const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
@@ -171,7 +176,27 @@ const isCallChatExist = computed(
 
 const queueName = computed(() => getQueueName(call.value));
 
-const makeCall = () => store.dispatch('features/call/CALL');
+//@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
+const displayName = computed(() => {
+	if (isVideoCall.value && contact.value) return contact.value.name;
+	if (call.value?.isConsultToQueue && !call.value?.to)
+		return call.value?.destination;
+	return call.value?.displayName;
+});
+
+//@author PolinaSukhorukova-webitel don't display phone number while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
+const displayNumber = computed(() => {
+	if (call.value?.isConsultToQueue && !call.value?.to) return '';
+	return call.value?.displayNumber;
+});
+
+const loading = computed(() => showLoader(call.value?.newNumber));
+
+const makeCall = () => {
+	return runWithLoader(call.value?.newNumber, () =>
+		store.dispatch('features/call/CALL'),
+	);
+};
 const hangup = () => store.dispatch('features/call/HANGUP');
 
 let hotkeyUnsubscribers: Array<() => void> = [];
@@ -186,7 +211,11 @@ const setupHotkeys = () => {
 };
 
 onMounted(() => setupHotkeys());
-onUnmounted(() => hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe()));
+onUnmounted(() =>
+	hotkeyUnsubscribers.forEach((unsubscribe) => {
+		unsubscribe();
+	}),
+);
 </script>
 
 <style lang="scss" scoped>

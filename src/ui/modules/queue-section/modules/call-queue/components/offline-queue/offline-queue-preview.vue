@@ -27,6 +27,7 @@
 
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
+    :member-name="displayName"
     :queue-name="displayQueueName"
     @click="$emit('click')"
   >

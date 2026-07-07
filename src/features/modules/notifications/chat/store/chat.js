@@ -6,13 +6,14 @@ import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { ChatActions } from 'webitel-sdk';
 
 import i18n from '../../../../../app/locale/i18n.js';
+import { getClientName } from '../../../chat/scripts/getClientName.js';
 import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
 
 // @author @stanislav-kozak
 // Function for display chat name
 const displayChatName = (chat) => {
 	if (chat?.members?.length) {
-		return chat?.members?.map((member) => member.name).join(', ');
+		return getClientName(chat?.members) || 'unknown';
 	}
 
 	if (chat?.title) {

@@ -1,7 +1,7 @@
 <template>
   <wt-expansion-panel
     :size="props.size"
-    collapsed
+    :collapsed="props.collapsed"
   >
     <template #title>{{ t('vocabulary.labels', 2) }}</template>
     <template #default>
@@ -37,6 +37,10 @@ const props = defineProps({
 	},
 	labels: {
 		type: Array,
+	},
+	collapsed: {
+		type: Boolean,
+		default: false,
 	},
 });
 

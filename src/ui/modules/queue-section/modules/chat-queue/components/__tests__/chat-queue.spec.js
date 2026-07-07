@@ -31,7 +31,7 @@ describe('ChatQueue', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('show counter badges on md size', async () => {
+	it('applies md size class', async () => {
 		const wrapper = mount(ChatQueue, {
 			shallow: true,
 			global: {
@@ -39,45 +39,54 @@ describe('ChatQueue', () => {
 					store,
 				],
 				stubs: {
-					WtExpansionPanel: false,
+					WtExpansionPanel: {
+						template:
+							'<div><slot name="title" /><slot name="actions" /><slot /></div>',
+					},
 					WtExpandTransition: true,
 				},
 			},
 		});
 		store.state.features.chat.chatList = [
-			{},
-			{},
+			{
+				state: 'conversation',
+			},
+			{
+				state: 'invite',
+			},
 		];
 		await wrapper.vm.$nextTick();
-		expect(
-			wrapper.findComponent({
-				name: 'WtChip',
-			}),
-		).toBeTruthy();
+		expect(wrapper.classes()).toContain('chat-queue--md');
 	});
 
 	it('hides counter badges on sm size', async () => {
 		const wrapper = mount(ChatQueue, {
+			props: {
+				size: 'sm',
+			},
 			shallow: true,
 			global: {
 				plugins: [
 					store,
 				],
 				stubs: {
-					WtExpansionPanel: false,
+					WtExpansionPanel: {
+						template:
+							'<div><slot name="title" /><slot name="actions" /><slot /></div>',
+					},
 					WtExpandTransition: true,
 				},
 			},
 		});
 		store.state.features.chat.chatList = [
-			{},
-			{},
+			{
+				state: 'conversation',
+			},
+			{
+				state: 'invite',
+			},
 		];
 		await wrapper.vm.$nextTick();
-		expect(
-			wrapper.findComponent({
-				name: 'WtChip',
-			}),
-		).toBeTruthy();
+		expect(wrapper.find('wt-chip-stub').exists()).toBe(false);
 	});
 });

@@ -16,7 +16,7 @@ const store = createStore({
 });
 
 describe('JobQueueContainer', () => {
-	it('renders a component', () => {
+	it('renders job queue container root', () => {
 		const wrapper = shallowMount(JobQueueContainer, {
 			global: {
 				plugins: [
@@ -25,5 +25,12 @@ describe('JobQueueContainer', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'task-queue-container',
+				})
+				.exists(),
+		).toBe(true);
 	});
 });

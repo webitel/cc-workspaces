@@ -133,11 +133,40 @@ describe('features/chat store: actions', () => {
 		expect(chatOnWorkspace.decline).toHaveBeenCalled();
 	});
 
-	it('OPEN_CHAT dispatches SET_WORKSPACE action with passed chat as param', () => {
+	it('OPEN_CHAT dispatches SET_WORKSPACE for active chat without contact', () => {
 		chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'SET_WORKSPACE',
 			chatOnWorkspace,
+		);
+	});
+
+	it('OPEN_CHAT dispatches LOAD_CLOSED_CHAT for closed chat without contact', () => {
+		const closedChat = {
+			...chatOnWorkspace,
+			closedAt: Date.now(),
+		};
+		chatModule.actions.OPEN_CHAT(context, closedChat);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/chat/closed/LOAD_CLOSED_CHAT',
+			closedChat,
+			{
+				root: true,
+			},
+		);
+	});
+
+	it('OPEN_CHAT dispatches SET_WORKSPACE when contact is identified', () => {
+		const chatWithContact = {
+			...chatOnWorkspace,
+			contact: {
+				id: 'contact-1',
+			},
+		};
+		chatModule.actions.OPEN_CHAT(context, chatWithContact);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'SET_WORKSPACE',
+			chatWithContact,
 		);
 	});
 
@@ -196,7 +225,7 @@ describe('features/chat store: actions', () => {
 			chat: chatOnWorkspace,
 		});
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'features/notifications/HANDLE_CHAT_EVENT',
+			'features/chatNotifications/HANDLE_CHAT_EVENT',
 			{
 				action,
 				chat: chatOnWorkspace,

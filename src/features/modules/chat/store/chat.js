@@ -1,14 +1,11 @@
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus.js';
 import { ConversationState } from 'webitel-sdk';
 
-import CatalogAPI from '../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository.js';
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
 import closed from '../modules/closed/store/closed.js';
 import manual from '../modules/manual/store/manual';
-import { formatChatMessages } from '../scripts/formatChatMessages.js';
 import chatHistory from './chat-history.js';
 import chatMedia from './chat-media.js';
 import clientHandlers from './client-handlers';
@@ -55,19 +52,11 @@ const actions = {
 	},
 
 	ACCEPT: async (context) => {
-		try {
-			await context.getters.CHAT_ON_WORKSPACE.join();
-		} catch (err) {
-			throw err;
-		}
+		await context.getters.CHAT_ON_WORKSPACE.join();
 	},
 
 	SEND: async (context, message) => {
-		try {
-			await context.getters.CHAT_ON_WORKSPACE.send(message);
-		} catch (err) {
-			throw err;
-		}
+		await context.getters.CHAT_ON_WORKSPACE.send(message);
 	},
 
 	SEND_FILE: async (context, files) => {
@@ -106,41 +95,31 @@ const actions = {
 
 	CLOSE: async (context) => {
 		const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
-		try {
-			if (chatOnWorkspace.allowLeave) {
-				await chatOnWorkspace.leave();
-			} else {
-				await chatOnWorkspace.decline();
-			}
-
-			await context.dispatch(
-				'features/chatNotifications/HANDLE_CHAT_END',
-				chatOnWorkspace,
-				{
-					root: true,
-				},
-			);
-		} catch (err) {
-			throw err;
+		if (chatOnWorkspace.allowLeave) {
+			await chatOnWorkspace.leave();
+		} else {
+			await chatOnWorkspace.decline();
 		}
+
+		await context.dispatch(
+			'features/chatNotifications/HANDLE_CHAT_END',
+			chatOnWorkspace,
+			{
+				root: true,
+			},
+		);
 	},
 
 	OPEN_CHAT: async (context, chat) => {
-		const isChatClosed =
-			context.rootGetters['features/chat/closed/ALL_CLOSED_CHATS'].includes(
-				chat,
-			);
+		const isUnidentifiedClosedChat = !chat.contact?.id && chat.closedAt;
 
-		if (isChatClosed && !chat.contact?.id) {
-			// because closed chats don't have messages
-			const { items: messages } = await CatalogAPI.getChatMessagesList({
-				chatId: chat.id,
+		if (isUnidentifiedClosedChat) {
+			await context.dispatch('features/chat/closed/LOAD_CLOSED_CHAT', chat, {
+				root: true,
 			});
-			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			chat.messages = formatChatMessages(messages);
+		} else {
+			await context.dispatch('SET_WORKSPACE', chat);
 		}
-
-		await context.dispatch('SET_WORKSPACE', chat);
 	},
 
 	CHAT_INSERT_TO_START: (context, chat) => {

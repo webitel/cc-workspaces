@@ -1,10 +1,11 @@
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
-import webSocketClientController from '../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import { useWebSocketClient } from '../../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import statusModule from '../agent-status';
 import UserStatus from '../statusUtils/UserStatus';
 
 let mockSocket = new MockSocket();
+const webSocketClientController = useWebSocketClient();
 vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(
 	() => mockSocket,
 );
@@ -35,18 +36,21 @@ describe('features/status store client handlers: actions', () => {
 		context.commit.mockClear();
 	});
 
-	it('SET_AGENT_WAITING_STATUS calls agent.online() method', () => {
-		statusModule.actions.SET_AGENT_WAITING_STATUS(context);
+	it('SET_AGENT_WAITING_STATUS calls agent.online() method', async () => {
+		context.dispatch = vi.fn().mockResolvedValue(agent);
+		await statusModule.actions.SET_AGENT_WAITING_STATUS(context);
 		expect(agent.online).toHaveBeenCalled();
 	});
 
-	it('SET_AGENT_PAUSE_STATUS calls agent.pause() method', () => {
-		statusModule.actions.SET_AGENT_PAUSE_STATUS(context);
+	it('SET_AGENT_PAUSE_STATUS calls agent.pause() method', async () => {
+		context.dispatch = vi.fn().mockResolvedValue(agent);
+		await statusModule.actions.SET_AGENT_PAUSE_STATUS(context);
 		expect(agent.pause).toHaveBeenCalled();
 	});
 
-	it('AGENT_LOGOUT calls agent.offline() method', () => {
-		statusModule.actions.AGENT_LOGOUT(context);
+	it('AGENT_LOGOUT calls agent.offline() method', async () => {
+		context.dispatch = vi.fn().mockResolvedValue(agent);
+		await statusModule.actions.AGENT_LOGOUT(context);
 		expect(agent.offline).toHaveBeenCalled();
 	});
 

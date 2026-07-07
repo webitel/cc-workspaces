@@ -4,7 +4,7 @@ import store from '../../../../../../../../app/store';
 import ManualQueueContainer from '../manual-queue-container.vue';
 
 describe('Chats: ManualQueueContainer', () => {
-	it('renders a component', () => {
+	it('renders manual chat queue container root', () => {
 		const wrapper = shallowMount(ManualQueueContainer, {
 			global: {
 				plugins: [
@@ -13,5 +13,12 @@ describe('Chats: ManualQueueContainer', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(
+			wrapper
+				.findComponent({
+					name: 'task-queue-container',
+				})
+				.exists(),
+		).toBe(true);
 	});
 });

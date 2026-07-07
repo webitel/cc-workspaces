@@ -85,12 +85,17 @@ const loadScreenshots = async () => {
 	data.value = items;
 };
 
-const openScreenshotInGalleria = (item: any) => {
-	if (!call.value?.id || !item?.id) return;
+type ScreenshotItem = {
+	id?: string | number;
+};
 
-	const index = data.value.findIndex((screenshot) => screenshot.id === item.id);
+const openScreenshotInGalleria = (item: unknown) => {
+	const screenshot = (item ?? {}) as ScreenshotItem;
+	if (!call.value?.id || !screenshot.id) return;
+
+	const index = data.value.findIndex((entry) => entry.id === screenshot.id);
 	eventBus.$emit('screenshots:open-galleria', {
-		screenshotId: item.id,
+		screenshotId: screenshot.id,
 		index: index >= 0 ? index : 0,
 	});
 };

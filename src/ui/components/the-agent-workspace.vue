@@ -14,7 +14,6 @@
     <desc-track-auth-error-popup v-if="isDescTrackAuthErrorPopup" />
     <desc-track-auth-success-popup v-model:shown="isDescTrackAuthSuccessPopup" />
 
-    <wt-notifications-bar />
     <cc-header />
     <div class="workspace-wrap">
       <widget-bar />
@@ -51,10 +50,11 @@
   setup
   lang="ts"
 >
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
+import { storeToRefs } from 'pinia';
+import { computed, onUnmounted, provide, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-
 import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
 import { usePanelSizeController } from '../composables/usePanelSizeController';
 import CcHeader from '../modules/app-header/components/app-header.vue';
@@ -68,6 +68,7 @@ import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
+import type { BrowserPermissions } from '../types/BrowserPermissions';
 
 const store = useStore();
 const route = useRoute();
@@ -92,7 +93,11 @@ const isWelcomePopup = ref(true);
 const isDescTrackAuthSuccessPopup = ref(false);
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility } = userinfoStore;
+
+const { subscribe } = useCachedInterval({
+	timeout: 5 * 1000,
+});
+
 const isDescTrackAuthPopupsAllow = computed(
 	() => store.getters['ui/infoSec/agentInfo/IS_DESC_TRACK_AUTH_POPUPS_ALLOW'],
 );
@@ -109,6 +114,10 @@ const initSession = async () => {
 	try {
 		isInitLoading.value = true;
 		await openSession();
+
+		// Periodically refresh flows list to keep it up-to-date during the session
+		subscribe(loadFlowsList);
+
 		if (route.query.failureRefresh) {
 			router.push({
 				...router.currentRoute,
@@ -137,6 +146,11 @@ const preventDrop = (event: DragEvent) => {
 	event.preventDefault();
 	event.stopPropagation();
 };
+
+const loadFlowsList = async () => {
+	await store.dispatch('ui/infoSec/flows/LOAD_FLOWS_LIST');
+};
+
 watch(isDescTrackAuthErrorPopup, () => {
 	if (isDescTrackAuthErrorPopup.value) {
 		agentLogout();

@@ -12,32 +12,38 @@
         prevent-trim
       />
       <wt-input-text
-        :model-value="draft.phones[0]?.number || ''"
+        :model-value="draft.phones?.[0]?.number || ''"
         :label="t('reusable.phoneNumber')"
         prevent-trim
         @update:model-value="updatePhoneNumber"
       />
-      <wt-select
-        :value="draft.timezones[0]?.timezone"
+      <wt-input-text
+        :model-value="draft.emails?.[0]?.email || ''"
+        :label="t('vocabulary.emails')"
+        prevent-trim
+        @update:model-value="updateEmail"
+      />
+      <wt-single-select
+        :model-value="draft.timezones?.[0]?.timezone"
         :label="t('date.timezone', 1)"
         :search-method="TimezonesAPI.getLookup"
-        @input="draft.timezones[0] = { timezone: $event }"
-      ></wt-select>
-      <wt-select
-        :value="draft.managers[0]?.user"
+        @update:model-value="draft.timezones[0] = { timezone: $event }"
+      />
+      <wt-single-select
+        :model-value="draft.managers?.[0]?.user"
         :label="t('infoSec.contacts.manager')"
         :search-method="UsersAPI.getLookup"
-        @input="draft.managers[0] = { user: $event }"
-      ></wt-select>
-      <wt-tags-input
-        :value="draft.labels"
+        @update:model-value="draft.managers[0] = { user: $event }"
+      />
+      <wt-multi-select
+        v-model:model-value="draft.labels"
         :label="t('vocabulary.labels', 2)"
         :search-method="LabelsAPI.getList"
         option-label="label"
-        track-by="label"
-        taggable
-        @input="draft.labels = $event"
-      ></wt-tags-input>
+        data-key="label"
+        allow-custom-values
+				chips-view
+      />
       <wt-textarea
         v-model:model-value="draft.about"
         :label="t('vocabulary.description')"
@@ -71,10 +77,9 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { EngineCommunicationChannels } from 'webitel-sdk';
-import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
-
 import CommunicationsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/communications/CommunicationsAPIRepository';
 import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
+import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 import LabelsAPI from '../../api/LabelsAPI';
 import TimezonesAPI from '../../api/TimezonesAPI';
 
@@ -104,7 +109,10 @@ const draft = ref({
 	labels: [],
 	about: '',
 	createdBy: '',
+	emails: [],
 });
+
+const defaultCommunications = ref([]);
 
 const v$ = useVuelidate(
 	computed(() => ({
@@ -126,6 +134,7 @@ v$.value.$touch();
 
 const userinfoStore = useUserinfoStore();
 const { userInfo, userId } = storeToRefs(userinfoStore);
+
 const isLoading = computed(
 	() => getNamespacedState(store.state, props.namespace).isLoading,
 );
@@ -149,29 +158,73 @@ function updatePhoneNumber(phoneNumber) {
 	}
 }
 
-async function createCommunication() {
+function updateEmail(email) {
+	if (!draft.value.emails[0]) {
+		draft.value.emails[0] = {
+			email,
+			primary: true,
+			type: {},
+		};
+	} else {
+		draft.value.emails[0].email = email;
+	}
+}
+
+async function getDefaultCommunication() {
 	const { items } = await CommunicationsAPI.getList({
-		channel: EngineCommunicationChannels.Phone,
+		channel: [
+			EngineCommunicationChannels.Phone,
+			EngineCommunicationChannels.Email,
+		],
 		defaultValue: true,
 	});
-	if ((!displayNumber.value || !draft.value.phones[0]?.number) && !items.length)
-		return;
+	defaultCommunications.value = items;
+}
 
-	draft.value.phones = [
-		{
-			number: draft.value.phones[0]?.number,
-			primary: true,
-			type: {
-				...items[0],
-			},
-		},
-	];
+async function createCommunication() {
+	if (defaultCommunications.value.length) {
+		defaultCommunications.value.forEach((communication) => {
+			const { id, name, channel, code } = communication;
+			if (channel === EngineCommunicationChannels.Phone) {
+				if (!draft.value.phones[0]?.number) return;
+				draft.value.phones = [
+					{
+						number: draft.value.phones[0]?.number,
+						primary: true,
+						type: {
+							id,
+							name,
+							channel,
+							code,
+						},
+					},
+				];
+			} else if (channel === EngineCommunicationChannels.Email) {
+				if (!draft.value.emails[0]?.email) return;
+				draft.value.emails = [
+					{
+						email: draft.value.emails[0]?.email,
+						primary: true,
+						type: {
+							id,
+							name,
+							channel,
+							code,
+						},
+					},
+				];
+			}
+		});
+	}
 }
 
 async function save() {
 	await createCommunication();
 	if (!draft.value.phones[0]?.number) delete draft.value.phones;
+	if (!draft.value.emails[0]?.email) delete draft.value.emails;
 	await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+	store.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS');
+
 	close();
 }
 
@@ -184,7 +237,10 @@ function setDefaultManager() {
 	};
 }
 
-onMounted(() => setDefaultManager());
+onMounted(() => {
+	setDefaultManager();
+	getDefaultCommunication();
+});
 </script>
 
 <style lang="scss" scoped>

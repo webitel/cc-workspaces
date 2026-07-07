@@ -20,12 +20,15 @@ const task = {
 };
 
 describe('TaskQueuePreviewSm', () => {
-	it('renders a component', () => {
+	it('renders compact preview root in opened mode', () => {
 		const wrapper = shallowMount(TaskQueuePreviewSm, {
 			props: {
-				task,
+				opened: true,
+				memberName: task.members[0].name,
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.queue-preview-sm').exists()).toBe(true);
+		expect(wrapper.classes()).toContain('queue-preview--opened');
 	});
 });

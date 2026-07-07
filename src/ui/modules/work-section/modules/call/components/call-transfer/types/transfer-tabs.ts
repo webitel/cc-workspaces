@@ -6,5 +6,5 @@ export interface TransferParams {
 	fields?: string[];
 	notId?: string[];
 	staus?: string;
-	[key: string]: any;
+	[key: string]: unknown;
 }

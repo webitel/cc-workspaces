@@ -3,11 +3,13 @@
     <chat-container
       :messages="messages"
       :size="props.size"
+      :agent-name="agentName"
       :chat-actions="[
         ChatAction.AttachFiles,
         ChatAction.EmojiPicker,
         ChatAction.SendMessage,
       ]"
+      :contact="contact"
       :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
@@ -20,9 +22,11 @@ import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import { ChatAction, ChatContainer } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import type { ResultCallbacks } from '@webitel/ui-sdk/src/types';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
+import { useUserinfoStore } from '../../../../../../../../userinfo/userinfoStore';
 
 const props = withDefaults(
 	defineProps<{
@@ -35,6 +39,10 @@ const props = withDefaults(
 
 const store = useStore();
 
+const userinfoStore = useUserinfoStore();
+const { userInfo } = storeToRefs(userinfoStore);
+const agentName = computed(() => userInfo.value.name);
+
 const chat = computed(
 	() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
 );
@@ -44,6 +52,8 @@ const messages = computed(
 const isChatClosed = computed(
 	() => chat?.value.state === ConversationState.Closed,
 );
+
+const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
 	try {

@@ -1,93 +1,161 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
+import { createStore } from 'vuex';
+
+vi.mock('../../../../../../composables/useLoader', () => ({
+	useLoader: () => ({
+		showLoader: vi.fn(() => false),
+		runWithLoader: vi.fn((id, fn) => fn()),
+	}),
+}));
 
 import MissedQueueContainer from '../missed-queue-container.vue';
 
+const createVuexStore = ({ missedList = [] } = {}) => {
+	return createStore({
+		modules: {
+			features: {
+				namespaced: true,
+				modules: {
+					call: {
+						namespaced: true,
+						modules: {
+							missed: {
+								namespaced: true,
+								state: {
+									missedList,
+								},
+								actions: {
+									INITIALIZE_MISSED: vi.fn(),
+									LOAD_NEXT_PAGE: vi.fn(),
+									REDIAL: vi.fn(),
+									HIDE_MISSED: vi.fn(),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	});
+};
+
+const createWrapper = ({
+	missedList = [
+		{
+			id: 'jest',
+		},
+	],
+	shallow = true,
+	stubs = {},
+} = {}) => {
+	const store = createVuexStore({
+		missedList,
+	});
+
+	vi.spyOn(store, 'dispatch');
+
+	const mountFn = shallow ? shallowMount : mount;
+
+	const wrapper = mountFn(MissedQueueContainer, {
+		global: {
+			plugins: [
+				store,
+			],
+			stubs: {
+				TaskQueueContainer: shallow,
+				MissedPreview: shallow,
+				LoadMoreButton: shallow,
+				WtDivider: true,
+				...stubs,
+			},
+		},
+	});
+
+	return {
+		wrapper,
+		store,
+	};
+};
+
 describe('MissedQueueContainer', () => {
-	const initializeMissedMock = vi
-		.spyOn(MissedQueueContainer.methods, 'initializeMissed')
-		.mockImplementation(() => {});
+	it('renders missed queue container root', () => {
+		const { wrapper } = createWrapper();
 
-	it('renders a component', () => {
-		const wrapper = shallowMount(MissedQueueContainer, {
-			computed: {
-				missedList: () => [
-					{
-						id: 'jest',
-					},
-				],
-			},
-		});
 		expect(wrapper.exists()).toBe(true);
-	});
-	it('calls initializeMissed on created', () => {
-		initializeMissedMock.mockClear();
-		shallowMount(MissedQueueContainer, {
-			computed: {
-				missedList: () => [
-					{
-						id: 'jest',
-					},
-				],
-			},
-		});
-		expect(initializeMissedMock).toHaveBeenCalled();
+		expect(
+			wrapper
+				.findComponent({
+					name: 'task-queue-container',
+				})
+				.exists(),
+		).toBe(true);
 	});
 
-	it('calls redial on call preview event', () => {
-		const mock = vi
-			.spyOn(MissedQueueContainer.methods, 'redial')
-			.mockImplementationOnce(() => {});
-		const wrapper = mount(MissedQueueContainer, {
-			shallow: true,
-			global: {
-				stubs: {
-					TaskQueueContainer: false,
-					MissedQueuePreview: false,
+	it('calls redial on call preview event', async () => {
+		const task = {
+			id: 'jest',
+		};
+		const { wrapper, store } = createWrapper({
+			missedList: [
+				task,
+			],
+			shallow: false,
+			stubs: {
+				TaskQueueContainer: {
+					template: '<div><slot /></div>',
+				},
+				LoadMoreButton: true,
+				WtDivider: true,
+				MissedPreview: {
+					name: 'missed-preview',
+					template: '<div @click="$emit(\'call\')"></div>',
 				},
 			},
-			computed: {
-				missedList: () => [
-					{
-						id: 'jest',
-					},
-				],
-				next: () => false,
-			},
 		});
-		wrapper
-			.findComponent({
-				name: 'missed-queue-preview',
-			})
-			.vm.$emit('call');
-		expect(mock).toHaveBeenCalled();
+
+		const preview = wrapper.findComponent({
+			name: 'missed-preview',
+		});
+
+		await preview.trigger('click');
+
+		expect(store.dispatch).toHaveBeenCalledWith(
+			'features/call/missed/REDIAL',
+			task,
+		);
 	});
 
-	it('calls hideMissed on hide preview event', () => {
-		const mock = vi
-			.spyOn(MissedQueueContainer.methods, 'hideMissed')
-			.mockImplementationOnce(() => {});
-		const wrapper = mount(MissedQueueContainer, {
-			shallow: true,
-			global: {
-				stubs: {
-					TaskQueueContainer: false,
-					MissedQueuePreview: false,
+	it('calls hideMissed on hide preview event', async () => {
+		const task = {
+			id: 'jest',
+		};
+		const { wrapper, store } = createWrapper({
+			missedList: [
+				task,
+			],
+			shallow: false,
+			stubs: {
+				TaskQueueContainer: {
+					template: '<div><slot /></div>',
+				},
+				LoadMoreButton: true,
+				WtDivider: true,
+				MissedPreview: {
+					name: 'missed-preview',
+					template: '<div @click="$emit(\'hide\')"></div>',
 				},
 			},
-			computed: {
-				missedList: () => [
-					{
-						id: 'jest',
-					},
-				],
-				next: () => false,
-			},
 		});
-		wrapper
-			.findComponent({
-				name: 'missed-queue-preview',
-			})
-			.vm.$emit('hide');
-		expect(mock).toHaveBeenCalled();
+
+		const preview = wrapper.findComponent({
+			name: 'missed-preview',
+		});
+		await preview.trigger('click');
+
+		expect(store.dispatch).toHaveBeenCalledWith(
+			'features/call/missed/HIDE_MISSED',
+			task,
+		);
 	});
 });

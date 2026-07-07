@@ -53,11 +53,6 @@ export default {
 			label: 'Не турбувати',
 			tooltip: 'Ви будете отримувати дзвінки тільки з черг',
 		},
-		connectionQuality: {
-			high: 'Відмінна якість мережі.',
-			medium: 'Може бути затримка, будь ласка, перевірте мережу.',
-			low: 'Якість мережі низька, будь ласка, перевірте мережу.',
-		},
 	},
 	widgets: {
 		callInbound: 'Вхідних дзвінків',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Самостійно призначені',
 				},
 			},
+			blindTransfer: 'Сліпий перевід',
 		},
 		chat: {
 			chats: 'Чат | Чати',
@@ -195,6 +191,10 @@ export default {
 			onHold: 'На утриманні',
 			hangup: 'Кінець',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Невідомий контакт',
+			hiddenNumber: 'Прихований номер',
+		},
 		chat: {
 			acceptPreviewText:
 				'Якщо Ви готові відповісти, натисніть кнопку "Прийняти"',
@@ -211,6 +211,7 @@ export default {
 			chatsAgent: '{ agentName } долучився до чату',
 			chatsAgentsList: '{ agentName } брали участь в чаті',
 			chatsFileBlocked: 'Файл в карантині чи заблокований',
+			chatsIncorrectFileSize: 'Неправильний розмір файлу',
 			errors: {
 				uploadFileLimitSize: 'Перевищено ліміт розміру файлу',
 			},
@@ -237,7 +238,6 @@ export default {
 	history: {
 		today: 'Сьогодні',
 		yesterday: 'Вчора',
-		openInHistory: 'Відкрити в History',
 	},
 	transfer: {
 		selectAgent: 'Оберіть оператора',
@@ -377,5 +377,8 @@ export default {
 		quickReplies: ({ linked }) =>
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Відкриває меню швидких відповідей в чаті',
+	},
+	postprocessing: {
+		retriesLeft: 'Залишених спроб',
 	},
 };

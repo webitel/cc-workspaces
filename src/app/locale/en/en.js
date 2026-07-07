@@ -53,11 +53,6 @@ export default {
 			label: 'DnD',
 			tooltip: 'You will receive calls from queues only',
 		},
-		connectionQuality: {
-			high: 'Excellent network quality.',
-			medium: 'There might be some delay, please check your network.',
-			low: 'Network quality is poor, please check your network.',
-		},
 	},
 	widgets: {
 		callInbound: 'Inbound calls',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Self-assigned',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chats',
@@ -194,6 +190,10 @@ export default {
 			onHold: 'On hold',
 			hangup: 'Hangup',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Unknown contact',
+			hiddenNumber: 'Hidden number',
+		},
 		chat: {
 			acceptPreviewText:
 				'If you are ready to answer, click "Accept" button first',
@@ -210,6 +210,7 @@ export default {
 			chatsAgent: '{ agentName } has joined the chat',
 			chatsAgentsList: '{ agentName } participated in the chat',
 			chatsFileBlocked: 'File quarantined or blocked',
+			chatsIncorrectFileSize: 'Incorrect file size',
 			errors: {
 				uploadFileLimitSize: 'File size limit exceeded',
 			},
@@ -236,7 +237,6 @@ export default {
 	history: {
 		today: 'Today',
 		yesterday: 'Yesterday',
-		openInHistory: 'Open in History',
 	},
 	transfer: {
 		selectAgent: 'Please select an agent',
@@ -377,5 +377,8 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription:
 			'Opens a menu of pre-set quick replies for chat responses',
+	},
+	postprocessing: {
+		retriesLeft: 'Retries left',
 	},
 };

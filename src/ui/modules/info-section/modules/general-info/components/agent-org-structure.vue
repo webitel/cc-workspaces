@@ -20,7 +20,7 @@
               <div
                 v-for="(sup, key) of supervisors"
                 :key="key"
-                :class="['agent-org-structure-item__value', size === 'sm' ? 'typo-body-2' : 'typo-subtitle-2']"
+                :class="['agent-org-structure-item__value', size === 'sm' ? 'typo-body-2' : 'typo-body-1']"
               >{{ sup }}
               </div>
             </div>

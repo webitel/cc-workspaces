@@ -1,5 +1,5 @@
+import { ConnectionQualityLevels } from '@webitel/ui-sdk/enums';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store';
-import { ConnectionQualityLevels } from '../../../types/ConnectionQualityLevel.enum.ts';
 
 const state = {
 	latency: 0,

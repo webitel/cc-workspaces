@@ -1,11 +1,11 @@
-import webSocketClientController from '../../../app/api/agent-workspace/websocket/WebSocketClientController';
-import instance from '../../../app/api/instance';
+import { useWebSocketClient } from '../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import WorkspaceStates from '../../enums/WorkspaceState.enum';
 import workspaceModule from '../agent-workspace';
 
 const destroyCliInstanceMock = vi.fn();
+const webSocketClientController = useWebSocketClient();
 
-vi.spyOn(webSocketClientController, 'destroyCliInstance').mockImplementation(
+vi.spyOn(webSocketClientController, 'destroyClient').mockImplementation(
 	destroyCliInstanceMock,
 );
 
@@ -29,13 +29,11 @@ describe('workspace store: actions', () => {
 		context.commit.mockClear();
 	});
 
-	it('OPEN_SESSION dispatches userinfo/OPEN_SESSION (restores user data)', async () => {
+	it('OPEN_SESSION dispatches status subscription', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'ui/userinfo/OPEN_SESSION',
-			{
-				instance,
-			},
+			'features/status/SUBSCRIBE_STATUS',
+			null,
 			{
 				root: true,
 			},
@@ -75,6 +73,17 @@ describe('workspace store: actions', () => {
 		);
 	});
 
+	it('OPEN_SESSION dispatches job/SUBSCRIBE_JOBS (subscribes to jobs)', async () => {
+		await workspaceModule.actions.OPEN_SESSION(context);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/job/SUBSCRIBE_JOBS',
+			null,
+			{
+				root: true,
+			},
+		);
+	});
+
 	it('OPEN_SESSION dispatches status/SUBSCRIBE_STATUS (subscribes to agent status)', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
@@ -86,10 +95,10 @@ describe('workspace store: actions', () => {
 		);
 	});
 
-	it('OPEN_SESSION dispatches call/missed/LOAD_DATA_LIST (loads missed calls list)', async () => {
+	it('OPEN_SESSION dispatches call/missed/INITIALIZE_MISSED (init loads missed calls list)', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'features/call/missed/LOAD_DATA_LIST',
+			'features/call/missed/INITIALIZE_MISSED',
 			null,
 			{
 				root: true,
@@ -97,10 +106,10 @@ describe('workspace store: actions', () => {
 		);
 	});
 
-	it('OPEN_SESSION dispatches member/LOAD_DATA_LIST (loads offline queue members)', async () => {
+	it('OPEN_SESSION dispatches member/SUBSRIBE_MEMBER_LIST (subscribes to loading offline queue members)', async () => {
 		await workspaceModule.actions.OPEN_SESSION(context);
 		expect(context.dispatch).toHaveBeenCalledWith(
-			'features/member/LOAD_DATA_LIST',
+			'features/member/SUBSRIBE_MEMBER_LIST',
 			null,
 			{
 				root: true,

@@ -3,6 +3,29 @@
     class="contact-card-emails"
     :class="[`contact-card-emails--${props.size}`]"
   >
+    <wt-inline-add-panel
+      v-if="isAdding"
+      class="contact-card-emails__add-form"
+      :direction="props.size === ComponentSize.SM ? 'column' : 'row'"
+      :disabled-add-action="!newEmail.type?.id || !newEmail.email || v$.$invalid"
+      @reset="closeAdding"
+      @submit="saveEmail"
+    >
+      <template>
+          <wt-input-text
+            v-model:model-value="newEmail.email"
+            :v="v$?.newEmail?.email"
+            class="contact-card-emails__input"
+            :placeholder="t('vocabulary.emails')"
+          />
+          <wt-single-select
+            v-model:model-value="newEmail.type"
+            class="contact-card-emails__select"
+            :placeholder="t('objects.communicationType', 1)"
+            :search-method="getCommunicationType"
+          />
+      </template>
+    </wt-inline-add-panel>
     <ul>
       <li
         v-for="({ id, email, type, primary }, idx) of emails"
@@ -27,7 +50,18 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { email, required } from '@vuelidate/validators';
+import { CommunicationsAPI } from '@webitel/api-services/api';
+import { WtInlineAddPanel } from '@webitel/ui-sdk/components';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
+import { EngineCommunicationChannels } from 'webitel-sdk';
+
+const { t } = useI18n();
+const store = useStore();
 
 const props = defineProps({
 	size: {
@@ -41,9 +75,86 @@ const props = defineProps({
 	contact: {
 		type: Object,
 	},
+	isAdding: {
+		type: Boolean,
+		default: false,
+	},
 });
 
+const emit = defineEmits([
+	'close-adding',
+	'phone-added',
+]);
+
 const emails = computed(() => props.contact?.emails);
+
+const newEmail = ref({
+	email: '',
+	type: null,
+	primary: false,
+});
+
+const v$ = useVuelidate(
+	computed(() => ({
+		newEmail: {
+			email: {
+				email,
+			},
+		},
+	})),
+	{
+		newEmail,
+	},
+	{
+		$autoDirty: true,
+	},
+);
+
+v$.value.$touch();
+
+const closeAdding = () => {
+	newEmail.value = {
+		email: '',
+		type: null,
+		primary: false,
+	};
+	emit('close-adding');
+};
+
+const saveEmail = async () => {
+	if (!newEmail.value.email || !newEmail.value.type) return;
+
+	const newEmailData = {
+		email: newEmail.value.email,
+		primary: newEmail.value.primary,
+		type: newEmail.value.type,
+	};
+
+	await store.dispatch(
+		'ui/infoSec/client/contact/ADD_EMAIL_TO_CONTACT',
+		newEmailData,
+	);
+	closeAdding();
+};
+
+const getCommunicationType = async (params) =>
+	CommunicationsAPI.getLookup({
+		...params,
+		channel: EngineCommunicationChannels.Email,
+	});
+
+watch(
+	() => props.isAdding,
+	(isAdding) => {
+		if (isAdding) {
+			newEmail.value = {
+				email: '',
+				type: null,
+				primary: emails.value.length === 0,
+			};
+		}
+	},
+);
 </script>
 
 <style lang="scss" scoped>
@@ -63,12 +174,12 @@ const emails = computed(() => props.contact?.emails);
   &__inner {
     display: flex;
     gap: var(--spacing-xs);
+    align-items: center;
   }
 
-  &--sm {
-    .contact-card-emails__wrapper {
-      display: block;
-    }
+  &__input,
+  &__select {
+    flex: 1;
   }
 }
 </style>

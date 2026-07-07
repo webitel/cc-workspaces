@@ -20,6 +20,11 @@
         <p class="chat-helper__text">{{ item.text }}</p>
       </div>
     </li>
+    <wt-intersection-observer
+     :canLoadMore="next"
+     :loading="loading"
+     @next="emit('handleNext')"
+    />
   </ul>
 
 </template>
@@ -29,6 +34,8 @@ import { ChatHelperItem } from '../types/ChatHelperItem.types';
 
 const props = defineProps<{
 	list: ChatHelperItem[];
+	next?: boolean;
+	loading?: boolean;
 }>();
 
 const activeIndex = ref(-1);
@@ -39,6 +46,7 @@ const emit = defineEmits<{
 	select: [
 		item: ChatHelperItem,
 	];
+	handleNext?: [];
 }>();
 
 const select = (item) => {
@@ -52,17 +60,24 @@ const setItemRef = (el: HTMLElement | null, index: number) => {
 const moveDown = () => {
 	// If click on the arrow down we assign the value +1
 	if (activeIndex.value < props.list.length - 1) {
-		return (activeIndex.value += 1);
+		activeIndex.value += 1;
+
+		if (activeIndex.value === props.list.length - 1) {
+			emit('handleNext');
+		}
+		return;
 	}
 };
 
 const moveUp = () => {
 	// If no item is active, set the first one as active
 	if (activeIndex.value === -1) {
-		return (activeIndex.value = 0);
+		activeIndex.value = 0;
+		return;
 		// If click on the arrow up we assign the value -1
 	} else if (activeIndex.value > 0) {
-		return (activeIndex.value -= 1);
+		activeIndex.value -= 1;
+		return;
 	}
 };
 

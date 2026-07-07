@@ -1,12 +1,13 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
 import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
-import { Client } from 'webitel-sdk';
 import type { RtpMetrics } from 'webitel-sdk';
+import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
+import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
-import { useWebSocketLatency } from './useWebSocketLatency';
+export { registerWebSocketStore } from './useWebSocketLatency';
 
 /* ============================================================================
  * Constants
@@ -67,13 +68,27 @@ function emit<K extends keyof EventMap>(
 	event: K,
 	payload: Parameters<EventMap[K]>[0],
 ) {
-	listeners[event].forEach((cb) => cb(payload));
+	listeners[event].forEach((cb) => {
+		cb(payload);
+	});
 }
 
-function getCliConfig(): Record<string, any> {
+type CliConfig = {
+	registerWebDevice?: boolean;
+	debug?: boolean;
+	echoCancellation?: boolean;
+	noiseSuppression?: boolean;
+	autoGainControl?: boolean;
+};
+
+function getCliConfig(): CliConfig {
 	try {
 		const configStr = localStorage.getItem('CONFIG');
-		return configStr ? (JSON.parse(configStr).CLI ?? {}) : {};
+		if (!configStr) return {};
+		const parsedConfig = JSON.parse(configStr) as {
+			CLI?: CliConfig;
+		};
+		return parsedConfig.CLI ?? {};
 	} catch {
 		return {};
 	}
@@ -90,12 +105,17 @@ function attachCoreHandlers(cli: Client, generation: number) {
 		handleDisconnect();
 	});
 
-	cli.on('show_message', (e: any) => {
+	cli.on('show_message', (e: unknown) => {
 		if (generation !== clientGenerationCount) return;
+		const event = (e ?? {}) as {
+			type?: string;
+			message?: string;
+			timeout?: number;
+		};
 		eventBus.$emit('notification', {
-			type: e.type,
-			text: e.message,
-			timeout: e.timeout,
+			type: event.type,
+			text: event.message,
+			timeout: event.timeout,
 		});
 	});
 
@@ -103,10 +123,45 @@ function attachCoreHandlers(cli: Client, generation: number) {
 		websocketRtpConnectionLevelHandler(e);
 	});
 
-	cli.on('open_link', (e: any) => {
-		const url = e.url.startsWith('https://') ? e.url : `https://${e.url}`;
+	cli.on('open_link', (e: unknown) => {
+		const event = (e ?? {}) as {
+			url?: string;
+		};
+		if (!event.url) return;
+		const url = event.url.startsWith('https://')
+			? event.url
+			: `https://${event.url}`;
 		window.open(url, '_blank');
 	});
+}
+
+/**
+ * @author PolinaSukhorukova-webitel
+ *
+ * [WTEL-9282](https://webitel.atlassian.net/browse/WTEL-9282?focusedCommentId=764636)
+ * This microphone check is required for the task:
+ * SIP must be registered only when the microphone is granted.
+ */
+async function getBrowserPermissions() {
+	const micGranted = await getMicPermission();
+
+	return {
+		micGranted,
+	};
+}
+
+async function getMicPermission() {
+	try {
+		const stream = await navigator.mediaDevices.getUserMedia({
+			audio: true,
+		});
+		stream.getTracks().forEach((track) => {
+			track.stop();
+		});
+		return true;
+	} catch (err) {
+		return false;
+	}
 }
 
 /**
@@ -144,6 +199,7 @@ async function createClient(): Promise<Client> {
 	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
+	const browserPermissions = await getBrowserPermissions();
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
 	// const cli = new Client(config);
@@ -151,8 +207,13 @@ async function createClient(): Promise<Client> {
 		new Client({
 			endpoint,
 			token,
-			registerWebDevice: cliConfig.registerWebDevice ?? true,
+			registerWebDevice:
+				(cliConfig.registerWebDevice ?? true) &&
+				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
+			echoCancellation: cliConfig.echoCancellation,
+			noiseSuppression: cliConfig.noiseSuppression,
+			autoGainControl: cliConfig.autoGainControl,
 		}),
 	);
 
@@ -170,7 +231,11 @@ async function createClient(): Promise<Client> {
 	emit(WebSocketClientEvent.AfterAuth, cli);
 	await markAsyncPhoneRaw(cli);
 
-	(window as any).cli = cli;
+	(
+		window as unknown as {
+			cli?: Client | null;
+		}
+	).cli = cli;
 	return cli;
 }
 
@@ -185,7 +250,11 @@ async function destroyClient() {
 	} finally {
 		client = null;
 		state.value = WebSocketConnectionState.Disconnected;
-		(window as any).cli = null;
+		(
+			window as unknown as {
+				cli?: Client | null;
+			}
+		).cli = null;
 	}
 }
 

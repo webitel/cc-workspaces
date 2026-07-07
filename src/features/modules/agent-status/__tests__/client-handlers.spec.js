@@ -1,9 +1,10 @@
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
-import webSocketClientController from '../../../../app/api/agent-workspace/websocket/WebSocketClientController';
+import { useWebSocketClient } from '../../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import clientHandlers from '../client-handlers';
 
 let mockSocket = new MockSocket();
+const webSocketClientController = useWebSocketClient();
 
 vi.spyOn(webSocketClientController, 'getCliInstance').mockImplementation(
 	() => mockSocket,

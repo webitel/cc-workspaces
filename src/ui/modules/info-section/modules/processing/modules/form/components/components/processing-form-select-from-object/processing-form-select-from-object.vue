@@ -1,14 +1,22 @@
 <template>
-  <wt-select
+  <wt-multi-select
+		v-if="multiple"
     v-bind="$attrs"
     :label="label || object.source?.name"
     :search-method="loadObjectList"
-    :value="value"
-    clearable
+    :model-value="value"
     :multiple="multiple"
-    @input="emit('input', $event)"
-  >
-  </wt-select>
+    @update:model-value="emit('input', $event)"
+  />
+
+	<wt-single-select
+		v-else
+    v-bind="$attrs"
+    :label="label || object.source?.name"
+    :search-method="loadObjectList"
+    :model-value="value"
+    @update:model-value="emit('input', $event)"
+  />
 </template>
 
 <script setup>

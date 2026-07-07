@@ -53,11 +53,6 @@ export default {
 			label: 'No molestar',
 			tooltip: 'Solo recibirá llamadas de colas',
 		},
-		connectionQuality: {
-			high: 'Excelente calidad de red.',
-			medium: 'Puede haber algo de demora, por favor revise su red.',
-			low: 'La calidad de la red es deficiente, por favor revise su red.',
-		},
 	},
 	widgets: {
 		callInbound: 'Llamadas entrantes',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Autoasignadas',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chats',
@@ -191,6 +187,10 @@ export default {
 			onHold: 'En espera',
 			hangup: 'Colgar',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Contacto desconocido',
+			hiddenNumber: 'Número oculto',
+		},
 		chat: {
 			acceptPreviewText:
 				'Si está listo para responder, haga clic primero en el botón "Aceptar"',
@@ -207,6 +207,7 @@ export default {
 			chatsAgent: '{ agentName } se ha unido al chat',
 			chatsAgentsList: '{ agentName } participó en el chat',
 			chatsFileBlocked: 'Archivo en cuarentena o bloqueado',
+			chatsIncorrectFileSize: 'Tamaño de archivo incorrecto',
 			errors: {
 				uploadFileLimitSize: 'Se superó el límite de tamaño de archivo',
 			},
@@ -233,7 +234,6 @@ export default {
 	history: {
 		today: 'Hoy',
 		yesterday: 'Ayer',
-		openInHistory: 'Abrir en Historial',
 	},
 	transfer: {
 		selectAgent: 'Por favor seleccione un agente',
@@ -372,5 +372,8 @@ export default {
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription:
 			'Abre un menú de respuestas rápidas preestablecidas para respuestas de chat',
+	},
+	postprocessing: {
+		retriesLeft: 'Reintentos restantes',
 	},
 };

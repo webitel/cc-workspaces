@@ -2,8 +2,8 @@ import '../../../../../../tests/unit/mocks/broadcastChannelMock';
 
 import { ChatActions } from 'webitel-sdk';
 
-import callNotificationsModule from '../../call/store/call';
-import chatNotificationsModule from '../../chat/store/chat';
+import callNotificationsModule from '../../call/store/call.js';
+import chatNotificationsModule from '../../chat/store/chat.js';
 
 const state = {
 	thisTabId: null,
@@ -56,7 +56,8 @@ describe('features/notifications store: actions', () => {
 			action: ChatActions.Message,
 			chat,
 		});
-		expect(context.dispatch.mock.calls[0][0]).toContain('PLAY_SOUND');
+		expect(context.dispatch.mock.calls[0][0]).toContain('STOP_SOUND');
+		expect(context.dispatch.mock.calls[1][0]).toContain('PLAY_SOUND');
 	});
 
 	it('HANDLE_CHAT_EVENT action dispatches SEND_NOTIFICATION action if chat is not open as TASK_ON_WORKSPACE', () => {
@@ -64,7 +65,11 @@ describe('features/notifications store: actions', () => {
 			action: ChatActions.Message,
 			chat,
 		});
-		expect(context.dispatch.mock.calls[1][0]).toContain('SEND_NOTIFICATION');
+		expect(
+			context.dispatch.mock.calls.some(([type]) =>
+				type.includes('SEND_NOTIFICATION'),
+			),
+		).toBe(true);
 	});
 
 	it('HANDLE_CHAT_EVENT action does not dispatch SEND_NOTIFICATION action if chat is open as TASK_ON_WORKSPACE', () => {

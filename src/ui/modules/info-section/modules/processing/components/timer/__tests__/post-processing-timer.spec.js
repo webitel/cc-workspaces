@@ -1,43 +1,38 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import ReactiveNowStoreModule from '@webitel/ui-sdk/src/store/ReactiveNowStoreModule/ReactiveNowStoreModule';
 import { createStore } from 'vuex';
 
 import ProcessingTimer from '../processing-timer.vue';
 
-const store = createStore({
-	modules: {
-		now: new ReactiveNowStoreModule().getModule(),
-	},
-});
-
 describe('Post Processing Timer', () => {
+	const now = Date.now();
+	const store = createStore({
+		state: {
+			ui: {
+				now: {
+					now: now + 20 * 1000,
+				},
+			},
+		},
+	});
 	const mountOptions = {
 		global: {
 			plugins: [
 				store,
 			],
 		},
-		props: {},
-		computed: {},
-	};
-	let now;
-	beforeEach(() => {
-		now = store.state.now.now;
-		mountOptions.props = {
+		props: {
 			startProcessingAt: now,
 			processingTimeoutAt: now + 30 * 1000,
 			renewalSec: 15,
 			processingSec: 30,
-		};
-
-		const localNow = now + 20 * 1000;
-		mountOptions.computed = {
-			...ProcessingTimer.computed,
-			now() {
-				return localNow;
+			processing: {
+				processingProlongation: {
+					remainingProlongations: 1,
+					prolongationSec: 30,
+				},
 			},
-		};
-	});
+		},
+	};
 	it('renders a component', () => {
 		const wrapper = shallowMount(ProcessingTimer, mountOptions);
 		expect(wrapper.exists()).toBe(true);
@@ -56,11 +51,7 @@ describe('Post Processing Timer', () => {
 	});
 	it('correctly computes showRenewalButton with truthy value', () => {
 		const wrapper = shallowMount(ProcessingTimer, mountOptions);
-		expect(wrapper.vm.showRenewalButton).toBe(true);
-	});
-	it('correctly computes showRenewalButton with truthy value', () => {
-		const wrapper = shallowMount(ProcessingTimer, mountOptions);
-		expect(wrapper.vm.showRenewalButton).toBe(true);
+		expect(wrapper.vm.showRenewalButton).toBeTruthy();
 	});
 	it('at plus click emits "click" event', () => {
 		const wrapper = mount(ProcessingTimer, mountOptions);
@@ -69,6 +60,8 @@ describe('Post Processing Timer', () => {
 				name: 'wt-icon-btn',
 			})
 			.vm.$emit('click');
-		expect(wrapper.emitted().click.length).toBe(1);
+		expect(wrapper.emitted().click[0]).toEqual([
+			30,
+		]);
 	});
 });

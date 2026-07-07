@@ -1,70 +1,109 @@
 import { shallowMount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
+import { vi } from 'vitest';
 import { createStore } from 'vuex';
 
 import BreakpointPlugin from '../../../app/plugins/breakpoint.plugin';
 import AgentWorkspace from '../the-agent-workspace.vue';
 
-const store = createStore({
-	modules: {
-		workspace: {
-			namespaced: true,
-		},
-		userinfo: {
-			namespaced: true,
-		},
-		call: {
-			namespaced: true,
-			state: {
-				callList: [],
-			},
-		},
-	},
-});
+vi.mock('vue-router', () => ({
+	useRoute: () => ({
+		query: {},
+	}),
+	useRouter: () => ({
+		push: vi.fn(),
+		currentRoute: {},
+	}),
+}));
+
+vi.mock('../../modules/userinfo/userinfoStore', () => ({
+	useUserinfoStore: () => ({
+		initialize: vi.fn(),
+		routeAccessGuard: vi.fn(),
+		showUserNotifications: vi.fn(),
+	}),
+}));
 
 describe('Agent Workspace', () => {
-	let appAccess = true;
+	const buildStore = ({
+		openSession = vi.fn(),
+		closeSession = vi.fn(),
+		agentLogout = vi.fn(),
+		isDescTrackAuthAllowed = false,
+	} = {}) =>
+		createStore({
+			modules: {
+				workspace: {
+					namespaced: true,
+					actions: {
+						OPEN_SESSION: openSession,
+						CLOSE_SESSION: closeSession,
+					},
+				},
+				ui: {
+					namespaced: true,
+					modules: {
+						infoSec: {
+							namespaced: true,
+							modules: {
+								agentInfo: {
+									namespaced: true,
+									state: {
+										agent: {},
+									},
+									getters: {
+										IS_DESC_TRACK_AUTH_POPUPS_ALLOW: () =>
+											isDescTrackAuthAllowed,
+									},
+								},
+							},
+						},
+					},
+				},
+				features: {
+					namespaced: true,
+					modules: {
+						status: {
+							namespaced: true,
+							actions: {
+								AGENT_LOGOUT: agentLogout,
+							},
+						},
+					},
+				},
+			},
+		});
 
-	beforeEach(() => {
-		appAccess = true;
-	});
-
-	it('renders a component', () => {
+	it('renders workspace container', () => {
+		const store = buildStore();
 		const wrapper = shallowMount(AgentWorkspace, {
 			global: {
 				plugins: [
 					store,
+					createPinia(),
 					BreakpointPlugin,
 				],
 			},
-			computed: {
-				hasAccess() {
-					return appAccess;
-				},
-			},
 		});
+
 		expect(wrapper.find('.main-agent-workspace').exists()).toBe(true);
 	});
 
-	it('error page is shown, if there is no access to workspace', () => {
-		appAccess = false;
+	it('dispatches CLOSE_SESSION on unmount', () => {
+		const closeSession = vi.fn();
+		const store = buildStore({
+			closeSession,
+		});
 		const wrapper = shallowMount(AgentWorkspace, {
 			global: {
 				plugins: [
 					store,
+					createPinia(),
+					BreakpointPlugin,
 				],
 			},
-			computed: {
-				hasAccess() {
-					return appAccess;
-				},
-			},
 		});
-		expect(
-			wrapper
-				.findComponent({
-					name: 'wt-error-page',
-				})
-				.exists(),
-		).toBe(true);
+		wrapper.unmount();
+		expect(closeSession).toHaveBeenCalled();
 	});
 });

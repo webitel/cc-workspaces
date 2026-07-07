@@ -1,8 +1,11 @@
 import { WtApplication } from '@webitel/ui-sdk/enums';
 import { createRouter, createWebHistory } from 'vue-router';
-import ErrorPage from '../../ui/components/error-page.vue';
-import AgentWorkspace from '../../ui/components/the-agent-workspace.vue';
-import FeedbackPage from '../../ui/modules/feedback-page/components/feedback-page.vue';
+
+const AgentWorkspace = () =>
+	import('../../ui/components/the-agent-workspace.vue');
+const FeedbackPage = () =>
+	import('../../ui/modules/feedback-page/components/feedback-page.vue');
+const ErrorPage = () => import('../../ui/components/error-page.vue');
 
 const routes = [
 	{
@@ -27,7 +30,10 @@ const routes = [
 
 export let router = null;
 
-export const initRouter = async ({ beforeEach = [] } = {}) => {
+export const initRouter = async ({
+	beforeEach = [],
+	onUnauthorized = () => {},
+} = {}) => {
 	router = createRouter({
 		history: createWebHistory(import.meta.env.BASE_URL),
 
@@ -52,6 +58,9 @@ export const initRouter = async ({ beforeEach = [] } = {}) => {
 		}
 
 		if (!localStorage.getItem('access-token') && !to.query.accessToken) {
+			// @author @Lear24
+			// remove flag about shown notifications from localStorage
+			onUnauthorized();
 			const desiredUrl = encodeURIComponent(window.location.href);
 			const authUrl = import.meta.env.VITE_AUTH_URL;
 			window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;

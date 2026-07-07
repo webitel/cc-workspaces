@@ -2,7 +2,7 @@
   <div class="form-select-service">
     <wt-expansion-panel
       :size="props.size"
-      collapsed
+      :collapsed="activeChatViewTableInfo.defaultCollapsed"
     >
       <template #title>
         <div class="form-select-service__title">
@@ -22,6 +22,7 @@
           <wt-search-bar
             :value="search"
             class="form-select-service__search-bar"
+            full-width
             @input="search = $event"
             @search="loadCatalogs"
           />
@@ -60,8 +61,9 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
 import deepCopy from 'deep-copy';
-import { computed, defineEmits, onMounted, ref, watch } from 'vue';
+import { computed, defineEmits, onMounted, ref, useAttrs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 
 const props = defineProps({
 	value: {
@@ -79,6 +81,8 @@ const emit = defineEmits([
 ]);
 
 const { t } = useI18n();
+
+const attrs = useAttrs();
 
 const selectedElement = ref(props.value?.id ?? null);
 const search = ref('');
@@ -119,11 +123,19 @@ onMounted(() => {
 	loadCatalogs();
 });
 
+const store = useStore();
+
+const activeChatViewTableInfo = computed(() => attrs?.table);
+
+const catalogDataDefaultName = computed(
+	() => activeChatViewTableInfo.value?.headerTitle || t('cases.selectAService'),
+);
+
 const catalogDataNames = ref([]);
 const catalogDataPatch = computed(() =>
 	selectedElement.value
 		? catalogDataNames.value.join(' / ')
-		: t('cases.selectAService'),
+		: catalogDataDefaultName.value,
 );
 
 // Author @Lera24

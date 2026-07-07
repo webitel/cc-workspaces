@@ -4,6 +4,8 @@ node_modules
 /coverage
 /docs/.vitepress/dist
 /docs/.vitepress/cache
+.cursor
+/packages/electron-workspace/out
 
 # local env files
 .env.local
@@ -22,3 +24,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+.cursor

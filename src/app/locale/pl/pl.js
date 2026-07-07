@@ -53,11 +53,6 @@ export default {
 			label: 'Nie przeszkadzać',
 			tooltip: 'Będziesz otrzymywać połączenia tylko z kolejek',
 		},
-		connectionQuality: {
-			high: 'Doskonała jakość sieci.',
-			medium: 'Może występować opóźnienie, sprawdź swoją sieć.',
-			low: 'Jakość sieci jest słaba, sprawdź swoją sieć.',
-		},
 	},
 	widgets: {
 		callInbound: 'Połączenia przychodzące',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Ręcznie przypisane',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Czat | Czaty',
@@ -190,6 +186,10 @@ export default {
 			onHold: 'Wstrzymane',
 			hangup: 'Zakończ',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Nieznany kontakt',
+			hiddenNumber: 'Ukryty numer',
+		},
 		chat: {
 			acceptPreviewText:
 				'Jeśli jesteś gotowy odpowiedzieć, kliknij najpierw przycisk "Akceptuj"',
@@ -206,6 +206,7 @@ export default {
 			chatsAgent: '{ agentName } dołączył do czatu', // TODO: Translate
 			chatsAgentsList: '{ agentName } uczestniczył w czacie', // TODO: Translate
 			chatsFileBlocked: 'Plik w kwarantannie lub zablokowany',
+			chatsIncorrectFileSize: 'Nieprawidłowy rozmiar pliku',
 			errors: {
 				uploadFileLimitSize: 'Przekroczono limit rozmiaru pliku',
 			},
@@ -232,7 +233,6 @@ export default {
 	history: {
 		today: 'Dzisiaj',
 		yesterday: 'Wczoraj',
-		openInHistory: 'Otwórz w historii',
 	},
 	transfer: {
 		selectAgent: 'Wybierz agenta',
@@ -366,5 +366,8 @@ export default {
 	},
 	confirmationPopup: {
 		title: 'Potwierdź akcję',
+	},
+	postprocessing: {
+		retriesLeft: 'Pozostałe próby',
 	},
 };

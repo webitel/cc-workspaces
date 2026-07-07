@@ -1,6 +1,8 @@
 import { createUserAccessControlComposable } from '@webitel/ui-sdk/modules/Userinfo';
 
-export let useUserAccessControl = (): any => {
+export let useUserAccessControl: ReturnType<
+	typeof createUserAccessControlComposable
+> = () => {
 	throw new Error('useUserAccessControl is not created');
 };
 

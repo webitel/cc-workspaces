@@ -5,8 +5,14 @@
     :class="{
       'chat-message-text--right': agent,
      }"
-    v-html="text"
-  />
+  >
+    <span v-html="text" />
+    <span
+      v-if="withTimestampSpacer"
+      class="chat-message-text__timestamp-spacer"
+      aria-hidden="true"
+    />
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -16,10 +22,12 @@ import { computed } from 'vue';
 interface IChatMessageTextProps {
 	text: string;
 	agent?: boolean;
+	withTimestampSpacer?: boolean;
 }
 
 const props = withDefaults(defineProps<IChatMessageTextProps>(), {
 	agent: false,
+	withTimestampSpacer: false,
 });
 
 const text = computed(() => {
@@ -38,14 +46,6 @@ const text = computed(() => {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-text {
-  overflow-wrap: anywhere;
-  white-space: pre-line; // read \n as "new line"
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius);
-  background: var(--primary-light-color);
-  color: var(--primary-on-color);
-  place-self: flex-start;
-
   // reset links inside text
   :deep(.chat-message-text__link) {
     color: revert;
@@ -56,6 +56,16 @@ const text = computed(() => {
     background: var(--secondary-light-color);
     color: var(--secondary-on-color);
     place-self: flex-end;
+  }
+
+  /* @author @Oleksandr Palonnyi */
+  /* https://webitel.atlassian.net/browse/WTEL-9588?focusedCommentId=763440 */
+  /* [WTEL-9588](https://webitel.atlassian.net/browse/WTEL-9588) */
+  :deep(.chat-message-text__timestamp-spacer) {
+    display: inline-block;
+    width: var(--chat-message-timestamp-spacer-width);
+    height: var(--chat-message-timestamp-spacer-height);
+    vertical-align: bottom;
   }
 }
 

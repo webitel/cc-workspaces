@@ -57,6 +57,9 @@ const fetchConfig = async () => {
 				CLI: {
 					registerWebDevice: body.webrtc,
 					stun: body.stun,
+					autoGainControl: body.auto_gain_control,
+					echoCancellation: body.echo_cancellation,
+					noiseSuppression: body.noise_suppression,
 				},
 			};
 		} catch (error) {
@@ -82,7 +85,8 @@ const initApp = async () => {
 		.use(store)
 		.use(BreakpointPlugin);
 
-	const { initialize, routeAccessGuard } = useUserinfoStore();
+	const { initialize, routeAccessGuard, clearStorageNotifications } =
+		useUserinfoStore();
 	try {
 		await initialize();
 		createUserAccessControl(useUserinfoStore);
@@ -90,6 +94,7 @@ const initApp = async () => {
 			beforeEach: [
 				routeAccessGuard,
 			],
+			onUnauthorized: clearStorageNotifications,
 		});
 	} catch (err) {
 		console.error('Error initializing app', err);
@@ -106,6 +111,7 @@ const initApp = async () => {
 
 // init IIFE
 (async () => {
+	// biome-ignore lint/suspicious/noImplicitAnyLet: TODO: type config
 	let config;
 	try {
 		setTokenFromUrl();

@@ -62,7 +62,15 @@
 </template>
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, markRaw, onMounted, onUnmounted, ref, watch, PropType } from 'vue';
+import {
+	computed,
+	markRaw,
+	onMounted,
+	onUnmounted,
+	PropType,
+	ref,
+	watch,
+} from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -75,16 +83,16 @@ import ChatQueue from '../modules/chat-queue/components/the-agent-chat-queue.vue
 import JobQueue from '../modules/job-queue/components/the-agent-job-queue.vue';
 
 const props = withDefaults(
-  defineProps<{
-    collapsed?: boolean;
-    collapsible?: boolean;
-    size?: ComponentSize;
-  }>(),
-  {
-    collapsed: false,
-    collapsible: false,
-    size: ComponentSize.MD,
-  },
+	defineProps<{
+		collapsed?: boolean;
+		collapsible?: boolean;
+		size?: ComponentSize;
+	}>(),
+	{
+		collapsed: false,
+		collapsible: false,
+		size: ComponentSize.MD,
+	},
 );
 
 const emit = defineEmits([
@@ -170,9 +178,9 @@ const tabs = computed(() => [
 		icon: 'call',
 		iconColor: 'success',
 		countActive: activeCallCount.value,
-    // author o.chorpita
-    // markRaw is used to prevent Vue from making the component reactive,
-    // because computed wraps values in Proxy which causes performance warnings for components
+		// author o.chorpita
+		// markRaw is used to prevent Vue from making the component reactive,
+		// because computed wraps values in Proxy which causes performance warnings for components
 		component: markRaw(CallQueue),
 		showIndicator: !!incomingCallCount.value,
 	},
@@ -220,7 +228,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 
 //@author Oles Chorpita
@@ -248,7 +258,8 @@ watch(
 
 			// Detect new messages for non-active chats
 			if (messageLength > prevLength) {
-				return (hasNewChatMessages.value = true);
+				hasNewChatMessages.value = true;
+				return;
 			}
 		});
 	},

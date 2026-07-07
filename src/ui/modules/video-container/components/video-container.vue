@@ -8,10 +8,11 @@
   />
   <video-call
     v-if="isVideo"
-    :sender:stream=senderStream
+    :sender:stream="senderStream"
     :receiver:stream="receiverStream"
     :sender:video:enabled="!mutedVideo"
     :receiver:video:enabled="!remoteVideoMuted"
+    :receiver:mic:enabled="!remoteAudioMuted"
     :screenshot:status="screenshotStatus"
     :screenshot:loading="screenshotIsLoading"
     :screenshot:src="screenshotPreviewUrl"
@@ -22,7 +23,9 @@
     :overlay="false"
     :call:onHold="callIsOnHold"
     :hide-controls-panel="callIsOnHold"
+    is-pip-mode
     position="left-bottom"
+    hide-avatar
     @action:screenshot="onScreenshot"
     @action:recordings="onToggleRecordings"
     @action:zoom-screenshot="onZoomScreenshot"
@@ -76,12 +79,20 @@ const galleriaActiveIndex = ref(0);
 const screenshotData = ref<ScreenshotFileItem[]>([]);
 const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
-const call = computed<any>(
+type WorkspaceCall = {
+	peerStreams?: MediaStream[];
+	localStreams?: MediaStream[];
+	[key: string]: unknown;
+};
+
+const call = computed<WorkspaceCall>(
 	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
 );
 const callIsOnHold = computed<boolean>(() => {
 	return store.getters['features/call/CALL_ON_WORKSPACE']?.isHold || false;
 });
+
+const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(
@@ -117,7 +128,9 @@ const isReceiverVideo = computed(() =>
 );
 
 const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
-const userName = computed(() => call.value.displayName || '');
+const userName = computed(
+	() => contact.value?.name || call.value.displayName || '',
+);
 const mutedVideo = computed(() => call.value.mutedVideo);
 
 const remoteVideoMuted = computed(() => {
@@ -125,6 +138,12 @@ const remoteVideoMuted = computed(() => {
 
 	const callInfo = store.state.features.call.callInfo.get(call.value.id);
 	return !!callInfo?.remoteVideoMuted || !!callInfo?.sip?.remoteVideoMuted;
+});
+
+const remoteAudioMuted = computed(() => {
+	if (!call.value?.id) return false;
+	const callInfo = store.state.features.call.callInfo.get(call.value.id);
+	return callInfo.remoteAudioMuted || call.value?.remoteAudioMuted;
 });
 
 const recordings = computed<boolean>(() => !!call.value.recordings);
@@ -234,8 +253,9 @@ onBeforeUnmount(() => {
 	eventBus.$off('screenshots:open-galleria', handleOpenGalleria);
 });
 
-const changeVideoContainerSize = (containerSize) =>
-	(videoContainerSize.value = containerSize);
+const changeVideoContainerSize = (containerSize) => {
+	videoContainerSize.value = containerSize;
+};
 
 watch(galleriaVisible, (visible) => {
 	if (visible && videoContainerSize.value === ComponentSize.LG)

@@ -1,5 +1,9 @@
 <template>
-  <wt-popup size="sm" @close="close">
+  <wt-popup 
+			size="sm" 
+			:closable="!checkingPermissions" 
+			@close="close"
+		>
     <template #title>
       {{ $t('welcomePopup.title') }}
     </template>
@@ -55,7 +59,7 @@
     </template>
 
     <template #actions>
-      <wt-button wide :loading="loading" @click="close">
+      <wt-button wide :loading="loading || checkingPermissions" @click="close">
         {{ $t('reusable.ok') }}
       </wt-button>
     </template>
@@ -74,6 +78,7 @@ export default {
 		},
 	},
 	data: () => ({
+		checkingPermissions: true,
 		mic: {
 			status: false,
 			message: '',
@@ -101,17 +106,19 @@ export default {
 			silence.play();
 		},
 		close() {
-			if (!this.loading) {
-				this.playSilence();
-				this.$emit('input');
-			}
+			if (this.loading || this.checkingPermissions) return;
+
+			this.playSilence();
+			this.$emit('input');
 		},
 		async checkMic() {
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					audio: true,
 				});
-				stream.getTracks().forEach((track) => track.stop());
+				stream.getTracks().forEach((track) => {
+					track.stop();
+				});
 				this.mic.status = true;
 			} catch (err) {
 				this.mic.status = false;
@@ -123,7 +130,9 @@ export default {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					video: true,
 				});
-				stream.getTracks().forEach((track) => track.stop());
+				stream.getTracks().forEach((track) => {
+					track.stop();
+				});
 				this.camera.status = true;
 			} catch (err) {
 				this.camera.status = false;
@@ -145,10 +154,18 @@ export default {
 				this.notification.message = err;
 			}
 		},
-		checkPermissions() {
-			this.checkMic();
-			this.checkNotifications();
-			this.requestCameraAccess();
+		async checkPermissions() {
+			this.checkingPermissions = true;
+
+			try {
+				await Promise.allSettled([
+					this.checkMic(),
+					this.checkNotifications(),
+					this.requestCameraAccess(),
+				]);
+			} finally {
+				this.checkingPermissions = false;
+			}
 		},
 
 		getPermissionErrorMessage(err) {

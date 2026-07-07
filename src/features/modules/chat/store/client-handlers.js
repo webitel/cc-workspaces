@@ -78,10 +78,23 @@ const actions = {
 
 	RESET_CHAT: (context, chat) => {
 		context.commit('REMOVE_CHAT', chat);
-		context.dispatch('RESET_WORKSPACE');
 		context.dispatch('_RESET_UNREAD_COUNT');
-		context.dispatch('RESET_CHAT_HISTORY');
 		context.dispatch('LOAD_CLOSED_CHATS');
+
+		/**
+		 * @author @OleksandrPalonnyi
+		 *
+		 * [WTEL-9263](https://webitel.atlassian.net/browse/WTEL-9263)
+		 *
+		 * The backend sends Destroy/Close events asynchronously — by the time this
+		 * fires, the user may have already opened a new chat. Only reset workspace
+		 * and history if the closed chat is still the one currently displayed.
+		 */
+
+		if (context.getters.CHAT_ON_WORKSPACE.channelId === chat.channelId) {
+			context.dispatch('RESET_WORKSPACE');
+			context.dispatch('RESET_CHAT_HISTORY');
+		}
 	},
 
 	HANDLE_DESTROY_ACTION: (context, { chat }) => {

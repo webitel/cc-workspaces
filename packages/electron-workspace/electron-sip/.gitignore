@@ -1,0 +1,4 @@
+node_modules
+build
+thrid_party
+package-lock.json

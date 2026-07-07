@@ -1,9 +1,6 @@
-import eventBus from '@webitel/ui-sdk/src/scripts/eventBus';
 import { reactive } from 'vue';
-import { RolePermissionError } from 'webitel-sdk';
 
 import APIRepository from '../../../app/api/APIRepository';
-import i18n from '../../../app/locale/i18n';
 import parseUserStatus from './statusUtils/parseUserStatus';
 
 const usersAPI = APIRepository.users;
@@ -31,49 +28,36 @@ const actions = {
 		} catch (err) {
 			return; // abort action, if no agent
 		}
+		await client.subscribeAgentsStatus(
+			async (state, agent) => {
+				context.commit('SET_AGENT_INSTANCE', agent);
+			},
+			{
+				agent_id: agent.agentId,
+			},
+		);
 
-		try {
-			await client.subscribeAgentsStatus(
-				async (state, agent) => {
-					context.commit('SET_AGENT_INSTANCE', agent);
-				},
-				{
-					agent_id: agent.agentId,
-				},
-			);
+		context.commit('SET_AGENT_INSTANCE', agent);
 
-			context.commit('SET_AGENT_INSTANCE', agent);
-
-			window.agent = agent;
-		} catch (err) {
-			throw err;
-		}
+		window.agent = agent;
 	},
 
 	// main user subscribe action
 	SUBSCRIBE_USER_STATUS: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
-		try {
-			await client.subscribeUsersStatus((presence) => {
-				const user = userStatusHandler(presence);
-				context.commit('SET_USER_INSTANCE', user);
-			});
+		await client.subscribeUsersStatus((presence) => {
+			const user = userStatusHandler(presence);
+			context.commit('SET_USER_INSTANCE', user);
+		});
 
-			await context.dispatch('GET_CURRENT_USER_STATUS');
-		} catch (err) {
-			throw err;
-		}
+		await context.dispatch('GET_CURRENT_USER_STATUS');
 	},
 
 	// helper action to get initial user status from HTTP request
 	GET_CURRENT_USER_STATUS: async (context) => {
-		try {
-			const presence = await usersAPI.getUserStatus();
-			const user = userStatusHandler(presence);
-			context.commit('SET_USER_INSTANCE', user);
-		} catch (err) {
-			throw err;
-		}
+		const presence = await usersAPI.getUserStatus();
+		const user = userStatusHandler(presence);
+		context.commit('SET_USER_INSTANCE', user);
 	},
 };
 

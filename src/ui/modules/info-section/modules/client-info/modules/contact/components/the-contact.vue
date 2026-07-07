@@ -123,7 +123,11 @@ watch(
 		[taskId, contactId, bridgedId],
 		[prevTaskId, prevContactId, prevBridgedId],
 	) => {
-		if (taskId !== prevTaskId || !taskId || bridgedId !== prevBridgedId) {
+		// Check if bridgedId has changed from one defined value to another defined value
+		const bridgedIdChanged =
+			bridgedId !== prevBridgedId && bridgedId && prevBridgedId;
+
+		if (taskId !== prevTaskId || !taskId || bridgedIdChanged) {
 			changeMode(ContactMode.VIEW);
 			initializeContact();
 			return;

@@ -20,12 +20,18 @@ describe('Other UIs', () => {
 		};
 	});
 
-	it('Correctly displays member name', () => {
+	it('computes display name and queue name from task', () => {
 		const wrapper = shallowMount(OfflinePreview, {
 			props: {
-				task: member,
+				task: {
+					...member,
+					queue: {
+						name: 'Support',
+					},
+				},
 			},
 		});
 		expect(wrapper.vm.displayName).toBe(name);
+		expect(wrapper.vm.displayQueueName).toBe('Support');
 	});
 });

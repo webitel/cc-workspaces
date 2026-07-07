@@ -3,44 +3,51 @@ import { shallowMount } from '@vue/test-utils';
 import Widget from '../widget.vue';
 
 describe('Widget', () => {
-	it('renders a component', () => {
+	const widget = {
+		icon: 'ws-widget-call-inbound',
+		text: vi.fn(),
+		locale: 'widget.locale',
+	};
+
+	it('renders widget root', () => {
 		const wrapper = shallowMount(Widget, {
 			props: {
-				widget: {
-					icon: '',
-					text: vi.fn(),
-					locale: '',
-				},
+				widget,
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
 	});
-	it('widget emits "select" event at click, if selectionMode is true', () => {
+
+	it('emits "select" on click when selectionMode is enabled', () => {
 		const wrapper = shallowMount(Widget, {
 			props: {
-				widget: {
-					icon: '',
-					text: vi.fn(),
-					locale: '',
-				},
+				widget,
 				selectionMode: true,
 			},
 		});
 		wrapper.find('.widget').trigger('click');
 		expect(wrapper.emitted().select).toBeTruthy();
 	});
-	it('widget does not emit "select" event at click, if selectionMode is true', () => {
+
+	it('does not emit "select" on click when selectionMode is disabled', () => {
 		const wrapper = shallowMount(Widget, {
 			props: {
-				widget: {
-					icon: '',
-					text: vi.fn(),
-					locale: '',
-				},
+				widget,
 				selectionMode: false,
 			},
 		});
 		wrapper.find('.widget').trigger('click');
 		expect(wrapper.emitted().select).toBeFalsy();
+	});
+
+	it('applies icon suffix to wt-icon', () => {
+		const wrapper = shallowMount(Widget, {
+			props: {
+				widget,
+			},
+		});
+		expect(wrapper.find('.widget-icon').attributes('icon')).toBe(
+			'widget-call-inbound',
+		);
 	});
 });

@@ -1,4 +1,4 @@
-const getDefaultGetListResponse = ({} = {}) => ({
+const getDefaultGetListResponse = () => ({
 	data: [],
 	next: false,
 });

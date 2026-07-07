@@ -7,7 +7,9 @@ describe('MissedQueuePreview', () => {
 		const wrapper = shallowMount(MissedQueuePreview, {
 			props: {
 				index: 1,
-				task: {},
+				task: {
+					createdAt: Date.now(),
+				},
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
@@ -16,7 +18,9 @@ describe('MissedQueuePreview', () => {
 	it('emits call event on call button click: MD size', () => {
 		const wrapper = mount(MissedQueuePreview, {
 			props: {
-				task: {},
+				task: {
+					createdAt: Date.now(),
+				},
 				size: 'md',
 			},
 		});
@@ -33,7 +37,9 @@ describe('MissedQueuePreview', () => {
 	it('emits call event on call button click: SM size', () => {
 		const wrapper = mount(MissedQueuePreview, {
 			props: {
-				task: {},
+				task: {
+					createdAt: Date.now(),
+				},
 				size: 'sm',
 			},
 		});
@@ -50,30 +56,26 @@ describe('MissedQueuePreview', () => {
 	it('emits hide event on close icon-button click: MD size', () => {
 		const wrapper = mount(MissedQueuePreview, {
 			props: {
-				task: {},
+				task: {
+					createdAt: Date.now(),
+				},
 				size: 'md',
 			},
 		});
-		wrapper
-			.findComponent('.missed-queue-preview-hide-action')
-			.vm.$emit('click', {
-				preventDefault: () => {}, // .prevent event handler
-			});
+		wrapper.find('.missed-queue-preview-hide-action').trigger('click');
 		expect(wrapper.emitted().hide).toBeTruthy();
 	});
 
 	it('emits hide event on close icon-button click: SM size', () => {
 		const wrapper = mount(MissedQueuePreview, {
 			props: {
-				task: {},
+				task: {
+					createdAt: Date.now(),
+				},
 				size: 'sm',
 			},
 		});
-		wrapper
-			.findComponent('.missed-queue-preview-hide-action')
-			.vm.$emit('click', {
-				preventDefault: () => {}, // .prevent event handler
-			});
+		wrapper.find('.missed-queue-preview-hide-action').trigger('click');
 		expect(wrapper.emitted().hide).toBeTruthy();
 	});
 });

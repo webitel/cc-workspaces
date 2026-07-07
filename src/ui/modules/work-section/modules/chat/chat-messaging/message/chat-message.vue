@@ -9,14 +9,22 @@
     <slot name="before-message" />
 
     <div class="chat-message__content">
-      <message-avatar
-        :bot="isBot"
-        :show-avatar="props.showAvatar"
-        :username="getClientUsername"
-      />
+      <div class="chat-message-avatar">
+        <wt-avatar
+          v-if="props.showAvatar"
+          :size="ComponentSize.SM"
+          :bot="isBot"
+          :username="getClientUsername"
+        />
+      </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <message-blocked-error @click.stop v-if="message.file?.malware" />
-      <div @click.stop v-else>
+      <message-size-exceeded-error
+        v-else-if="isFileSizeExceeded"
+        :agent="isAgentSide"
+        @click.stop
+      />
+      <div class="chat-message__body" v-else @click.stop>
         <message-player
           v-if="props.message.file"
           :file="props.message.file"
@@ -34,15 +42,36 @@
           :type="props.message.file?.mime"
           :agent="isAgentSide"
         />
-        <message-text
-          :text="props.message.text"
-          :agent="isAgentSide"
+        <div
+          v-if="props.message?.text"
+          class="chat-message-text-wrapper"
+        >
+          <message-text
+            :text="props.message.text"
+            :with-timestamp-spacer="true"
+            :agent="isAgentSide"
+          />
+
+          <message-time
+            :date="props.message.createdAt"
+          />
+        </div>
+
+        <message-time
+          v-else
+          :date="props.message.createdAt"
         />
       </div>
+
       <message-time
+        v-if="message.file?.malware || isFileSizeExceeded"
         :date="props.message.createdAt"
       />
     </div>
+    <message-time
+      v-if="props.message.file?.malware || isFileSizeExceeded"
+      :date="props.message.createdAt"
+    />
 
     <slot name="after-message" />
   </div>
@@ -50,13 +79,14 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { computed, defineEmits, defineProps } from 'vue';
-
-import MessageAvatar from './components/chat-message-avatar.vue';
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
 import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
+import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
 import MessageText from './components/chat-message-text.vue';
 import MessageTime from './components/chat-message-time.vue';
 
@@ -83,8 +113,26 @@ const emit = defineEmits([
 	'initialized-player',
 ]);
 
+const userinfoStore = useUserinfoStore();
+const { userInfo } = storeToRefs(userinfoStore);
+const agentName = computed(
+	() => userInfo.value.chatName || userInfo.value.name,
+);
+
+const isFileSizeExceeded = computed(
+	() => props.message.file && !props.message.file?.size,
+);
+
+const isInternalMember = computed(
+	() => props.message.member?.type === 'webitel',
+);
+
 const isAgent = computed(
-	() => props.message.member?.self || props.message.member?.type === 'webitel',
+	() => props.message.member?.self || isInternalMember.value,
+);
+
+const isTransferAgent = computed(
+	() => !props.message.member?.self && isInternalMember.value,
 );
 
 const isBot = computed(
@@ -96,7 +144,9 @@ const isBot = computed(
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
 const getClientUsername = computed(() => {
-	return !isAgentSide.value ? props.username : ''; // need to show username avatar only for client
+	if (isTransferAgent.value) return props.message.member?.name;
+	if (isAgent.value) return agentName?.value;
+	return props.username || props.message.member?.name;
 });
 
 function handlePlayerInitialize(player) {
@@ -138,6 +188,31 @@ $chat-info-gap: var(--spacing-2xs);
 
   .chat-message-avatar {
     flex: 0 0 var(--spacing-lg);
+    pointer-events: none; // prevents dragging to upload file area
+  }
+
+  &__body {
+    position: relative;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    background: var(--primary-light-color);
+    color: var(--primary-on-color);
+    place-self: flex-start;
+  }
+
+  .chat-message-time {
+    margin-top: var(--p-player-chat-message-gap);
+  }
+
+  &-text-wrapper {
+    .chat-message-time {
+      position: absolute;
+      right: var(--spacing-xs);
+      bottom: var(--chat-message-timestamp-bottom-offset);
+      pointer-events: none;
+    }
   }
 
   &--right .chat-message__content {
@@ -145,8 +220,12 @@ $chat-info-gap: var(--spacing-2xs);
     margin: 0 var(--spacing-2xs) 0 var(--spacing-md);
   }
 
-  .chat-message-avatar {
-    flex: 0 0 var(--icon-lg-size);
+  &--right {
+    .chat-message__body {
+      background: var(--secondary-light-color);
+      color: var(--secondary-on-color);
+      place-self: flex-end;
+    }
   }
 }
 </style>

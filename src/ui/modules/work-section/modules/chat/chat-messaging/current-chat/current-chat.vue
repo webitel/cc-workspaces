@@ -17,7 +17,7 @@
       >
         <template #before-message>
           <chat-date
-            v-if="showChatDate(index)"
+            v-if="showChatDate(index) || index === 0"
             :date="message.createdAt"
           />
         </template>

@@ -76,6 +76,7 @@
     v-else-if="size === 'sm'"
     :opened="opened"
     :queue-name="queueName"
+    :member-name="task.displayName"
     @click="$emit('click', task)"
   >
     <template #icon>
@@ -186,6 +187,10 @@ export default {
 		},
 
 		displayNumber() {
+			//@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
+			if (this.task.hideNumber || (this.task.isConsultToQueue && !this.task.to))
+				return this.task.destination;
+
 			//https://webitel.atlassian.net/browse/WTEL-8215
 			return this.normalizePhoneNumber(this.task.displayNumber);
 		},

@@ -1,6 +1,6 @@
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import vue from '@vitejs/plugin-vue';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import vueDevtools from 'vite-plugin-vue-devtools';
@@ -8,8 +8,15 @@ import { resolve } from 'path';
 import { vite as vidstack } from 'vidstack/plugins';
 
 export default ({ mode }) => {
+	const env = loadEnv(mode, process.cwd(), '');
+	const isStagingEnv = !!env.VITE_STAGING_ENV;
+
 	return defineConfig({
 		base: '/workspace',
+		build: {
+			sourcemap: isStagingEnv,
+			minify: !isStagingEnv, // Disable minification for readable debugging
+		},
 		server: {
 			// host: true,  // uncomment me to enable localhost access by IP (including from other devices in the network)
 		},
@@ -32,10 +39,14 @@ export default ({ mode }) => {
 				),
 			},
 			dedupe: [
+				'@vue/compat',
 				'vidstack',
 			],
 		},
 		optimizeDeps: {
+			entries: [
+				'index.html',
+			], // avoid vite deps scanning for packages/electron-workspace
 			include: [
 				'clipboard-copy',
 				'deep-equal',

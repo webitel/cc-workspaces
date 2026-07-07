@@ -9,7 +9,10 @@
   >
     <template #after-search>
       <wt-button
+        v-if="allowBlindTransfer"
         color="transfer"
+        :loading="loading"
+        v-tooltip.top="buttonTooltip"
         :disabled="isTransferToNumberDisabled"
         @click="emit('transfer', { extension: dataSearch })"
       >{{ $t('transfer.transfer') }}
@@ -56,16 +59,19 @@ import { TransferParams } from '../../types/transfer-tabs';
 interface CallTransferContainerProps {
 	size?: string;
 	type: string;
-	getData: (params: TransferParams) => Promise<any>;
+	getData: (params: TransferParams) => Promise<unknown>;
 	showStatus?: boolean;
 	showTeamName?: boolean;
 	showUserNameAvatar?: boolean;
+	allowBlindTransfer?: boolean;
 	dataFilters?: string;
 	dataFields?: string[];
 	presenceStatusField?: string;
+	loading?: boolean;
+	buttonTooltip?: string;
 }
 
-type CallTransferContainerEmits = (e: 'transfer', item: any) => void;
+type CallTransferContainerEmits = (e: 'transfer', item: unknown) => void;
 
 const props = withDefaults(defineProps<CallTransferContainerProps>(), {
 	size: ComponentSize.MD,
@@ -73,6 +79,7 @@ const props = withDefaults(defineProps<CallTransferContainerProps>(), {
 	showStatus: false,
 	showTeamName: false,
 	showUserNameAvatar: false,
+	allowBlindTransfer: false,
 	dataFilters: '',
 	dataFields: () => [],
 	presenceStatusField: 'presence',

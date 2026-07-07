@@ -23,7 +23,7 @@
 
     <template #quick-action>
       <wt-rounded-action
-        :loading="showLoader"
+        :loading="loading"
         color="success"
         icon="call--filled"
         rounded
@@ -42,6 +42,7 @@
   <task-queue-preview-sm
     v-else-if="size === 'sm'"
     :queue-name="task.queue.name"
+    :member-name="task.displayName"
   >
     <template #icon>
       <wt-icon
@@ -68,7 +69,7 @@
 
     <template #actions>
       <wt-rounded-action
-        :loading="showLoader"
+        :loading="loading"
         color="success"
         icon="call--filled"
         rounded
@@ -94,7 +95,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import TaskQueuePreviewMd from '../../../_shared/components/task-preview/task-queue-preview-md.vue';
@@ -113,13 +114,16 @@ const props = defineProps({
 		type: String,
 		default: 'md',
 	},
+	loading: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
 	'click',
 	'accept',
 ]);
-const showLoader = ref(false);
 
 const wait = computed(() => {
 	const waitTime = props.task.wait;
@@ -132,11 +136,9 @@ const wait = computed(() => {
 });
 
 function accept() {
-	if (showLoader.value) return;
+	if (props.loading) return;
 
-	showLoader.value = true;
 	emit('accept', props.task);
-	showLoader.value = false;
 }
 </script>
 

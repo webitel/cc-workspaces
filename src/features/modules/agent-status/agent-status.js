@@ -28,30 +28,18 @@ const actions = {
 	},
 
 	SET_AGENT_WAITING_STATUS: async (context) => {
-		try {
-			const agent = await context.dispatch('GET_AGENT_INSTANCE');
-			agent.online();
-		} catch (err) {
-			throw err;
-		}
+		const agent = await context.dispatch('GET_AGENT_INSTANCE');
+		agent.online();
 	},
 
 	SET_AGENT_PAUSE_STATUS: async (context, note = '') => {
-		try {
-			const agent = await context.dispatch('GET_AGENT_INSTANCE');
-			await agent.pause(note);
-		} catch (err) {
-			throw err;
-		}
+		const agent = await context.dispatch('GET_AGENT_INSTANCE');
+		await agent.pause(note);
 	},
 
 	AGENT_LOGOUT: async (context) => {
-		try {
-			const agent = await context.dispatch('GET_AGENT_INSTANCE');
-			agent.offline();
-		} catch (err) {
-			throw err;
-		}
+		const agent = await context.dispatch('GET_AGENT_INSTANCE');
+		agent.offline();
 	},
 
 	TOGGLE_USER_DND: async (context) => {
@@ -62,14 +50,10 @@ const actions = {
 	},
 
 	TOGGLE_CONTACT_CENTER_MODE: async (context) => {
-		try {
-			if (context.getters.IS_CCENTER_ON) {
-				await context.dispatch('AGENT_LOGOUT');
-			} else {
-				await context.dispatch('SET_AGENT_WAITING_STATUS');
-			}
-		} catch (err) {
-			throw err;
+		if (context.getters.IS_CCENTER_ON) {
+			await context.dispatch('AGENT_LOGOUT');
+		} else {
+			await context.dispatch('SET_AGENT_WAITING_STATUS');
 		}
 	},
 };

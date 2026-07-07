@@ -46,6 +46,7 @@ import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
+import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
 import FormDatetimepicker from './components/processing-form-datetimepicker.vue';
 import FormFile from './components/processing-form-file/processing-form-file.vue';
 import FormIFrame from './components/processing-form-i-frame.vue';
@@ -56,7 +57,6 @@ import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
-import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
 
 export default {
 	name: 'TheProcessingForm',
@@ -122,29 +122,32 @@ export default {
 				if (!this.shouldInitComponent(component)) return;
 
 				if (component.view.component === 'wt-select') {
-					return (component.value = this.getSelectInitialValue(
+					component.value = this.getSelectInitialValue(
 						component.view.initialValue,
 						component.view.options,
-					));
+					);
+					return;
 				}
 
 				if (component.view.component === 'wt-datetimepicker') {
-					return (component.value = this.getDatetimepickerInitialValue(
+					component.value = this.getDatetimepickerInitialValue(
 						component.view.initialValue,
 						component.view,
-					));
+					);
+					return;
 				}
 
 				if (component.view.component === 'form-select-case-status') {
-					return (component.value = this.getCaseStatusInitialValue(
+					component.value = this.getCaseStatusInitialValue(
 						component.view.initialValue,
 						component.view.options,
-					));
+					);
+					return;
 				}
 
-				return (component.value = this.parseInitialValueToJson(
+				component.value = this.parseInitialValueToJson(
 					component.view.initialValue,
-				));
+				);
 			});
 
 			this.task.attempt.form.metadata.isInited = true;
@@ -242,7 +245,9 @@ export default {
 	},
 
 	unmounted() {
-		this.hotkeyUnsubscribers.forEach((unsubscribe) => unsubscribe());
+		this.hotkeyUnsubscribers.forEach((unsubscribe) => {
+			unsubscribe();
+		});
 	},
 };
 </script>

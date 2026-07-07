@@ -31,7 +31,7 @@ describe('JobQueue', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('show counter badges on md size', async () => {
+	it('applies md size class', async () => {
 		const wrapper = mount(JobQueue, {
 			shallow: true,
 			global: {
@@ -39,7 +39,10 @@ describe('JobQueue', () => {
 					store,
 				],
 				stubs: {
-					WtExpansionPanel: false,
+					WtExpansionPanel: {
+						template:
+							'<div><slot name="title" /><slot name="actions" /><slot /></div>',
+					},
 					WtExpandTransition: true,
 				},
 			},
@@ -49,22 +52,24 @@ describe('JobQueue', () => {
 			{},
 		];
 		await wrapper.vm.$nextTick();
-		expect(
-			wrapper.findComponent({
-				name: 'WtChip',
-			}),
-		).toBeTruthy();
+		expect(wrapper.classes()).toContain('job-queue--md');
 	});
 
 	it('hides counter badges on sm size', async () => {
 		const wrapper = mount(JobQueue, {
+			props: {
+				size: 'sm',
+			},
 			shallow: true,
 			global: {
 				plugins: [
 					store,
 				],
 				stubs: {
-					WtExpansionPanel: false,
+					WtExpansionPanel: {
+						template:
+							'<div><slot name="title" /><slot name="actions" /><slot /></div>',
+					},
 					WtExpandTransition: true,
 				},
 			},
@@ -74,10 +79,6 @@ describe('JobQueue', () => {
 			{},
 		];
 		await wrapper.vm.$nextTick();
-		expect(
-			wrapper.findComponent({
-				name: 'WtChip',
-			}),
-		).toBeTruthy();
+		expect(wrapper.find('wt-chip-stub').exists()).toBe(false);
 	});
 });

@@ -1,16 +1,16 @@
 <template>
-    <wt-select
-        :value="value"
+    <wt-single-select
+        :model-value="formattedValue"
         :placeholder="t('cases.status')"
         :options="options"
-        :clearable="false"
-        use-value-from-options-by-prop="id"
-        @input="emit('input', $event)"
+        :show-clear="false"
+        option-value="id"
+        @update:model-value="emit('input', $event)"
     >
-        <template #singleLabel="{ option }">
+        <template #value>
             <wt-indicator
-                :color="getIndicatorColor(option)"
-                :text="option.name"
+                :color="getIndicatorColor(selectedOption)"
+                :text="selectedOption.name"
             />
         </template>
 
@@ -20,15 +20,16 @@
                 :text="option.name"
             />
         </template>
-    </wt-select>
+    </wt-single-select>
 </template>
 
 <script
     setup
     lang="ts"
 >
-import { WtSelect, WtIndicator } from '@webitel/ui-sdk/components';
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
+import { WtIndicator, WtSingleSelect } from '@webitel/ui-sdk/components';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
@@ -43,6 +44,12 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+
+const formattedValue = computed(() => props.value?.id || props.value);
+
+const selectedOption = computed(() =>
+	props.options.find((option) => option.id === formattedValue.value),
+);
 
 const getIndicatorColor = (option) => {
 	if (option?.final) return 'final-status';

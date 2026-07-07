@@ -53,11 +53,6 @@ export default {
 			label: 'Nu deranja',
 			tooltip: 'Veți primi apeluri doar din cozi',
 		},
-		connectionQuality: {
-			high: 'Calitate excelentă a rețelei.',
-			medium: 'Pot apărea întârzieri, verificați rețeaua.',
-			low: 'Calitatea rețelei este slabă, verificați rețeaua.',
-		},
 	},
 	widgets: {
 		callInbound: 'Apeluri primite',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Auto-atribuite',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Chat-uri',
@@ -190,6 +186,10 @@ export default {
 			onHold: 'În așteptare',
 			hangup: 'Închide',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Contact necunoscut',
+			hiddenNumber: 'Număr ascuns',
+		},
 		chat: {
 			acceptPreviewText:
 				'Dacă sunteți gata să răspundeți, faceți clic mai întâi pe butonul "Acceptă"',
@@ -206,6 +206,7 @@ export default {
 			chatsAgent: '{ agentName } s-a alăturat chat-ului',
 			chatsAgentsList: '{ agentName } a participat la chat',
 			chatsFileBlocked: 'Fișier în carantină sau blocat',
+			chatsIncorrectFileSize: 'Dimensiune fișier incorectă',
 			errors: {
 				uploadFileLimitSize:
 					'Limita de dimensiune a fișierului a fost depășită',
@@ -233,7 +234,6 @@ export default {
 	history: {
 		today: 'Astăzi',
 		yesterday: 'Ieri',
-		openInHistory: 'Deschide în Istoric',
 	},
 	transfer: {
 		selectAgent: 'Vă rugăm să selectați un agent',
@@ -370,5 +370,8 @@ export default {
 		quickReplies: ({ linked }) =>
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Deschide meniul de răspunsuri rapide în chat',
+	},
+	postprocessing: {
+		retriesLeft: 'Încercări rămase',
 	},
 };

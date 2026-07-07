@@ -1,5 +1,3 @@
-import dompurify from 'dompurify';
-
 const patchLinkOpenRule = (defaultRule) => {
 	return (tokens, index, options, env, self) => {
 		const attrIndex = tokens[index].attrIndex('target');

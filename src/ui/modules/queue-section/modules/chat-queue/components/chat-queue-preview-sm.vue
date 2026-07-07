@@ -74,14 +74,6 @@
       <slot name="subtitle"></slot>
     </div>
 
-    <section class="chat-queue-preview-sm__avatar">
-      <slot name="avatar">
-        <wt-avatar
-          size="sm"
-        ></wt-avatar>
-      </slot>
-    </section>
-
     <div
       v-if="$slots.actions"
       class="chat-queue-preview-sm__actions"
@@ -99,8 +91,11 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
-
+import { useStore } from 'vuex';
+import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
+import { useUserinfoStore } from '../../../../userinfo/userinfoStore.ts';
 import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
 
@@ -116,17 +111,28 @@ const props = defineProps({
 	status: {
 		type: String,
 	},
-	opened: {
-		type: Boolean,
-		default: false,
-	},
 });
 
 const emit = defineEmits([
 	'click',
 ]);
 
+const store = useStore();
+
+const userinfoStore = useUserinfoStore();
+const { userId } = storeToRefs(userinfoStore);
+
 const queueName = computed(() => props.task?.queue?.name || '');
+
+const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
+
+const displayChatName = computed(() =>
+	getDisplayChatName({
+		chat: chat.value,
+		contact: props.contact,
+		userId: userId.value,
+	}),
+);
 </script>
 
 <style lang="scss" scoped>
@@ -180,10 +186,6 @@ const queueName = computed(() => props.task?.queue?.name || '');
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .chat-queue-preview-sm__avatar {
-    margin: auto;
   }
 
   .chat-queue-preview-sm__title,

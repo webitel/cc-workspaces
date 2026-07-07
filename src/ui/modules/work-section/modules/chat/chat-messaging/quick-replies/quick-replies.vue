@@ -17,7 +17,7 @@
       </wt-icon-btn>
     </div>
 
-    <wt-loader v-if="isLoading" />
+    <wt-loader v-if="isLoading && !replies.length" />
 
     <wt-empty
       v-if="!isLoading && !replies.length"
@@ -28,9 +28,12 @@
     </wt-empty>
 
     <chat-helper-list
-      v-if="!isLoading && replies.length"
+      v-if="replies.length"
       :list="replies"
+      :next="hasNextReplies"
+      :loading="isLoading"
       @select="select"
+      @handle-next="loadNextReplies"
     />
   </div>
 </template>
@@ -61,6 +64,8 @@ const emit = defineEmits<{
 
 const replies = ref<ChatHelperItem[]>([]);
 const isLoading = ref(false);
+const hasNextReplies = ref(false);
+const page = ref(1);
 
 const store = useStore();
 
@@ -72,13 +77,18 @@ const emptyPic = computed(() =>
 const callQuickReply = async (params = {}): Promise<void> => {
 	const repliesParams = {
 		...params,
+		page: page.value,
 		restrictToAgent: true,
 		sort: '+agent_priority',
 	};
 	try {
 		isLoading.value = true;
-		const { items } = await QuickRepliesAPI.getList(repliesParams);
-		replies.value = items;
+		const { items, next } = await QuickRepliesAPI.getList(repliesParams);
+		replies.value = [
+			...replies.value,
+			...items,
+		];
+		hasNextReplies.value = next;
 	} catch (error) {
 		throw new Error('Error fetching quick replies:', error);
 	} finally {
@@ -94,11 +104,29 @@ const select = (item) => {
 	emit('select', item);
 };
 
+const loadNextReplies = async () => {
+	if (isLoading.value || !hasNextReplies.value) return;
+	page.value++;
+	isLoading.value = true;
+	setTimeout(async () => {
+		// timeout to avoid loader blinking
+		await callQuickReply(
+			props.search
+				? {
+						search: props.search,
+					}
+				: {},
+		);
+	}, 500);
+};
+
 onMounted(() => callQuickReply());
 
 watch(
 	() => props.search,
 	(search: string | undefined) => {
+		replies.value = [];
+		page.value = 1;
 		callQuickReply(
 			search
 				? {

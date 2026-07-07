@@ -55,7 +55,9 @@ const actions = {
 				: undefined,
 		);
 
-		list.forEach((n) => n.close());
+		list.forEach((n) => {
+			n.close();
+		});
 
 		return sw.controller;
 	},

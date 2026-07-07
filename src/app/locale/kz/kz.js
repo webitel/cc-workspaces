@@ -53,11 +53,6 @@ export default {
 			label: 'Мазаламаңыз',
 			tooltip: 'Сіз тек кезектердегі қоңырауларды қабылдайсыз',
 		},
-		connectionQuality: {
-			high: 'Желі сапасы өте жақсы.',
-			medium: 'Кішігірім кідіріс болуы мүмкін, желіні тексеріңіз.',
-			low: 'Желі сапасы нашар, желіні тексеріңіз.',
-		},
 	},
 	widgets: {
 		callInbound: 'Кіріс қоңыраулар',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Өзіне тағайындалған',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Чат | Чаттар',
@@ -189,6 +185,10 @@ export default {
 			onHold: 'Ұстап тұру',
 			hangup: 'Соңы',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Белгісіз контакт',
+			hiddenNumber: 'Жасырын нөмір',
+		},
 		chat: {
 			acceptPreviewText:
 				'Жауап беруге дайын болсаңыз, «Қабылдау» батырмасын басыңыз',
@@ -205,6 +205,7 @@ export default {
 			chatsAgent: '{ agentName } чатқа қосылды', // TODO: Translate
 			chatsAgentsList: '{ agentName } чатқа қатысты', // TODO: Translate
 			chatsFileBlocked: 'Файл карантинде немесе бұғатталған',
+			chatsIncorrectFileSize: 'Файл өлшемі қате',
 			errors: {
 				uploadFileLimitSize: 'Файл өлшемі шегінен асты',
 			},
@@ -231,7 +232,6 @@ export default {
 	history: {
 		today: 'Бүгін',
 		yesterday: 'Кеше',
-		openInHistory: 'Тарихта ашу',
 	},
 	transfer: {
 		selectAgent: 'Агентті таңдаңыз',
@@ -368,5 +368,8 @@ export default {
 		quickReplies: ({ linked }) =>
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Чаттағы жылдам жауаптар мәзірін ашады',
+	},
+	postprocessing: {
+		retriesLeft: 'Қалған әрекеттер',
 	},
 };

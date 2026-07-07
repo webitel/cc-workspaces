@@ -1,0 +1,183 @@
+# Test Usefulness Categories
+
+Balanced rubric used: reliability + coverage depth + maintenance cost.
+
+## Good
+
+- `src/app/components/utils/__tests__/collapse-action.spec.js`
+- `src/app/components/utils/__tests__/confirmation-popup.spec.js`
+- `src/app/components/utils/__tests__/dropzone.spec.js`
+- `src/app/components/utils/__tests__/pin-action.spec.js`
+- `src/app/components/utils/__tests__/radial-progress.spec.js`
+- `src/features/modules/agent-status/__tests__/agent-status.spec.js`
+- `src/features/modules/agent-status/__tests__/client-handlers.spec.js`
+- `src/features/modules/call/__tests__/calls.spec.js`
+- `src/features/modules/call/modules/manual/components/__tests__/manual-deadline-progress-bar.spec.js`
+- `src/features/modules/call/modules/missed-calls/api/__tests__/missed.spec.js`
+- `src/features/modules/call/modules/missed-calls/store/__tests__/missed-call.spec.js`
+- `src/features/modules/chat/store/__tests__/chat-media.spec.js`
+- `src/features/modules/chat/store/__tests__/chats.spec.js`
+- `src/features/modules/chat/store/__tests__/client-handlers.spec.js`
+- `src/features/modules/global-handlers/store/__tests__/global-handlers.spec.js`
+- `src/features/modules/job/store/__tests__/job.actions.spec.js`
+- `src/features/modules/job/store/__tests__/job.mutations.spec.js`
+- `src/features/modules/notifications/store/__tests__/notifications.spec.js`
+- `src/ui/components/__tests__/agent-workspace.spec.js`
+- `src/ui/modules/app-header/components/__tests__/user-dnd-switcher.spec.js`
+- `src/ui/modules/app-header/components/__tests__/agent-status.spec.js`
+- `src/ui/modules/info-section/modules/client-info/components/__tests__/client-info.spec.js`
+- `src/ui/modules/info-section/modules/client-info/components/client-info-member/__tests__/client-info-member.spec.js`
+- `src/ui/modules/info-section/modules/client-info/components/queue-name/__tests__/client-info-chips.spec.js`
+- `src/ui/modules/info-section/modules/knowledge-base/__tests__/knowledge-base.spec.js`
+- `src/ui/modules/info-section/components/__tests__/info-section.spec.js`
+- `src/ui/modules/info-section/components/agent-info-nav-panel/__tests__/the-agent-info-nav-panel.spec.js`
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-pause-causes.spec.js`
+- `src/ui/modules/info-section/modules/flows/components/__tests__/flow-button.spec.js`
+- `src/ui/modules/info-section/modules/flows/components/__tests__/flows-tab.spec.js`
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-org-structure.spec.js`
+- `src/ui/modules/info-section/modules/general-info/store/__tests__/agent-info.spec.js`
+- `src/ui/modules/info-section/modules/processing/components/__tests__/processing-tab.spec.js`
+- `src/ui/modules/info-section/modules/processing/components/timer/__tests__/post-processing-timer.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/reporting/store/__tests__/ReportingForm.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/reporting/store/__tests__/reporting.spec.js`
+- `src/ui/modules/queue-section/modules/_shared/components/task-preview/__tests__/task-queue-preview-md.spec.js`
+- `src/ui/modules/queue-section/modules/_shared/components/task-preview/__tests__/task-queue-preview-sm.spec.js`
+- `src/ui/modules/queue-section/modules/_shared/components/__tests__/queue-preview-timer.spec.js`
+- `src/ui/modules/queue-section/modules/_shared/components/__tests__/task-queue-container.spec.js`
+- `src/ui/modules/popups/break-popup/__tests__/break-timer-popup.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/missed-queue/__tests__/missed-queue-preview.spec.js`
+- `src/ui/modules/queue-section/modules/chat-queue/components/__tests__/chat-queue.spec.js`
+- `src/ui/modules/queue-section/modules/chat-queue/components/active-queue/__tests__/chat-queue-preview.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/__tests__/call-queue.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/active-queue/__tests__/active-preview.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/active-queue/__tests__/active-queue.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/manual-queue/__tests__/manual-queue-container.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/manual-queue/__tests__/manual-queue-preview.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/missed-queue/__tests__/missed-queue-container.spec.js`
+- `src/ui/modules/queue-section/modules/call-queue/components/offline-queue/__tests__/offline-preview.spec.js`
+- `src/ui/modules/queue-section/modules/chat-queue/components/active-queue/__tests__/chat-queue.spec.js`
+- `src/ui/modules/queue-section/modules/chat-queue/components/manual-queue/__tests__/manual-queue-container.spec.js`
+- `src/ui/modules/queue-section/modules/chat-queue/components/manual-queue/__tests__/manual-queue-preview.spec.js`
+- `src/ui/modules/queue-section/modules/job-queue/components/active/__tests__/job-queue-container.spec.js`
+- `src/ui/modules/queue-section/modules/job-queue/components/active/__tests__/job-queue-preview.spec.js`
+- `src/ui/modules/queue-section/modules/job-queue/components/__tests__/job-queue.spec.js`
+- `src/ui/modules/video-container/components/__tests__/video-container.spec.js`
+- `src/ui/modules/widget-bar/components/__tests__/widget.spec.js`
+- `src/ui/modules/widget-bar/components/__tests__/widget-bar.spec.js`
+- `src/ui/modules/queue-section/components/__tests__/queue-section.spec.js`
+- `src/ui/modules/popups/welcome-popup/__tests__/welcome-popup.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item/__tests__/transfer-lookup-item.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item/__tests__/user-lookup-item.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/workspace-history/components/__tests__/history.spec.js`
+- `src/ui/modules/work-section/modules/call/components/call-contacts/contacts/__tests__/contact-lookup-item.spec.js`
+- `src/ui/modules/work-section/modules/call/components/call-transfer/__tests__/call-transfer-container.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-header/__tests__/chat-header.spec.js`
+- `src/ui/modules/work-section/modules/chat/mixins/__tests__/chatMessageDetailMixin.spec.js`
+- `src/ui/store/__tests__/agent-workspace.spec.js`
+
+## Low
+
+After refactor pass, no files remain in low category.
+
+## Medium
+
+All remaining test files are medium category:
+
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-general-info.spec.js`
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-queues.spec.js`
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-score.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/__tests__/the-processing-form.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/components/__tests__/processing-form-datetimepicker.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/components/__tests__/processing-form-select.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/components/__tests__/processing-form-text.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/components/__tests__/rich-text-editor.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/components/processing-form-file/__tests__/processing-form-file-line.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/components/components/processing-form-file/__tests__/processing-form-file.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/form/store/__tests__/form.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/reporting/components/__tests__/failure-form.spec.js`
+- `src/ui/modules/info-section/modules/processing/modules/reporting/components/__tests__/the-reporting.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item-container/__tests__/lookup-item-container.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item/__tests__/history-lookup-item.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item/__tests__/lookup-item-wrapper.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item/__tests__/lookup-item.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/lookup-item/__tests__/merge-lookup-item.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/task-container/__tests__/task-container.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/task-footer/__tests__/task-footer.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/task-header/__tests__/task-header.spec.js`
+- `src/ui/modules/work-section/modules/_shared/components/workspace-empty-search/components/__tests__/empty-search.spec.js`
+- `src/ui/modules/work-section/modules/call/components/__tests__/call-preview-profile.spec.js`
+- `src/ui/modules/work-section/modules/call/components/call-contacts/contacts/__tests__/contact-communication-item.spec.js`
+- `src/ui/modules/work-section/modules/call/components/call-contacts/contacts/__tests__/contacts-container.spec.js`
+- `src/ui/modules/work-section/modules/call/components/call-contacts/users/__tests__/users-container.spec.js`
+- `src/ui/modules/work-section/modules/call/components/call-merge/__tests__/bridge.spec.js`
+- `src/ui/modules/work-section/modules/chat/__tests__/the-chat.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-footer/__tests__/chat-messaging-footer.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-header/__tests__/chat-header-close-action.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-messaging/current-chat/__tests__/current-chat.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-messaging/message/__tests__/chat-message.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-messaging/message/components/__tests__/chat-message-document.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-messaging/message/components/__tests__/chat-message-image.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-messaging/message/components/__tests__/chat-message-text.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-messaging/message/components/__tests__/chat-message-time.spec.js`
+- `src/ui/modules/work-section/modules/chat/chat-transfer-container/__tests__/chat-transfer-container.spec.js`
+- `src/ui/modules/work-section/modules/chat/image-viewer/__tests__/media-viewer.spec.js`
+- `src/ui/modules/work-section/modules/empty-workspace/components/__tests__/empty-workspace-empty.spec.js`
+- `src/ui/modules/work-section/modules/empty-workspace/components/__tests__/empty-workspace.spec.js`
+- `src/ui/modules/work-section/modules/member/components/__tests__/member-communications.spec.js`
+- `src/ui/modules/work-section/modules/member/components/__tests__/member-header.spec.js`
+
+## Refactored Medium -> Good (short reason)
+
+- `src/ui/components/__tests__/agent-workspace.spec.js` — medium before because it was mostly one render smoke check with heavy scaffolding and no lifecycle/event assertions.
+- `src/features/modules/job/store/__tests__/job.actions.spec.js` — medium before because it covered happy paths only and missed negative branch (`REMOVE_JOB` when task is not on workspace).
+- `src/features/modules/job/store/__tests__/job.mutations.spec.js` — medium before because mutation checks were minimal and did not verify ordering/selective removal behavior.
+- `src/ui/modules/work-section/modules/chat/chat-header/__tests__/chat-header.spec.js` — medium before because it asserted basic interactions but missed tab-state behavior (`transfer` active variant contract).
+- `src/ui/modules/info-section/modules/client-info/components/client-info-member/__tests__/client-info-member.spec.js` — medium before because it checked only empty state + description, but not variable mapping behavior from workspace task data.
+- `src/ui/modules/info-section/modules/processing/modules/reporting/store/__tests__/reporting.spec.js` — medium before because it validated init paths only when processing allowed, without negative gate coverage.
+- `src/ui/modules/video-container/components/__tests__/video-container.spec.js` — medium before because it was a pure mount smoke test, without asserting video stream visibility logic.
+- `src/ui/modules/info-section/modules/client-info/components/__tests__/client-info.spec.js` — medium before because it mostly checked mount/chips and lacked explicit behavior checks for contact visibility gates.
+- `src/ui/modules/work-section/modules/_shared/components/workspace-history/components/__tests__/history.spec.js` — medium before because assertions were broad and names unclear, reducing diagnostic value when tests fail.
+- `src/ui/modules/queue-section/modules/_shared/components/task-preview/__tests__/task-queue-preview-md.spec.js` — medium before because it had only mount + one prop rendering check, without interaction/empty-state assertions.
+- `src/ui/modules/queue-section/modules/job-queue/components/__tests__/job-queue.spec.js` — medium before because assertions were inconsistent with test names and did not reliably validate size-driven behavior.
+- `src/ui/modules/queue-section/modules/chat-queue/components/__tests__/chat-queue.spec.js` — medium before because it repeated brittle queue-count assumptions and had weak verification of size-mode behavior.
+- `src/ui/modules/widget-bar/components/__tests__/widget.spec.js` — medium before because logic checks were basic and naming had contradiction (`does not emit ... if selectionMode is true`), reducing clarity.
+- `src/ui/modules/info-section/modules/flows/components/__tests__/flow-button.spec.js` — medium before because it used outdated props (`id` instead of `item`) and only checked invocation, not payload contract.
+- `src/ui/modules/info-section/modules/flows/components/__tests__/flows-tab.spec.js` — medium before because it overrode computed state and had vague test naming/expectations (`hide dummy`) instead of explicit list-state behavior.
+- `src/ui/modules/info-section/modules/processing/modules/reporting/store/__tests__/ReportingForm.spec.js` — medium before because it covered core behavior but missed explicit default-flag contract and had vague naming.
+- `src/ui/modules/work-section/modules/call/components/call-transfer/__tests__/call-transfer-container.spec.js` — medium before because it checked only happy-path transfer and lacked empty-input guard behavior.
+- `src/ui/modules/work-section/modules/call/components/call-contacts/contacts/__tests__/contact-lookup-item.spec.js` — medium before because it relied on computed overrides and missed fallback behavior for primary number selection.
+- `src/ui/modules/info-section/modules/client-info/components/queue-name/__tests__/client-info-chips.spec.js` — medium before because it validated basic queue case only and missed empty-name edge condition.
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-org-structure.spec.js` — medium before because it covered happy paths but did not verify behavior when org data is absent.
+- `src/ui/modules/info-section/modules/processing/modules/reporting/store/__tests__/reporting.spec.js` — medium before because it did not validate default argument behavior that reads task from root getters.
+- `src/features/modules/call/modules/missed-calls/api/__tests__/missed.spec.js` — medium before because it verified request payloads but did not assert returned API data contract.
+- `src/features/modules/job/store/__tests__/job.actions.spec.js` — medium before because dispatch checks were broad; sequence of cleanup actions was not asserted.
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-general-info.spec.js` — medium before because it was mostly root render smoke with no explicit section-level assertions.
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-score.spec.js` — medium before because it only checked mount and did not validate score getter mapping/formatting contract.
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-queues.spec.js` — medium before because it only checked mount and did not verify queue members display logic.
+- `src/ui/modules/info-section/components/__tests__/info-section.spec.js` — medium before because it asserted only visibility and relied on computed overrides without checking key section structure.
+- `src/ui/modules/info-section/components/agent-info-nav-panel/__tests__/the-agent-info-nav-panel.spec.js` — medium before because it was pure mount smoke without verifying tab rendering or active-state contract.
+- `src/ui/modules/info-section/modules/knowledge-base/__tests__/knowledge-base.spec.js` — medium before because it checked only component mount and missed iframe source mapping from workspace data.
+- `src/ui/modules/info-section/modules/general-info/components/__tests__/agent-pause-causes.spec.js` — medium before because it only asserted mount and did not verify size-based rendering contract on root classes.
+- `src/ui/modules/info-section/modules/processing/components/__tests__/processing-tab.spec.js` — medium before because it was visibility smoke only and did not assert which processing subview is selected by task shape.
+- `src/ui/modules/popups/disconnect-popup/__tests__/disconnect-popup.spec.js` — medium before because checks were generic mount assertions with weak naming and incomplete interaction expectation detail.
+- `src/ui/modules/popups/welcome-popup/__tests__/welcome-popup.spec.js` — medium before because event assertion was overly broad/unclear and test names were generic, reducing failure diagnostics.
+- `src/ui/modules/queue-section/components/__tests__/queue-section.spec.js` — medium before because it was near-smoke-only and did not verify concrete root-structure contract.
+- `src/ui/modules/widget-bar/components/__tests__/widget-bar.spec.js` — medium before because it only asserted mount without checking key structural controls expected from widget bar container.
+- `src/features/modules/call/modules/missed-calls/store/__tests__/missed-call.spec.js` — medium before because it validated action side effects but did not assert request-params contract passed into API calls.
+- `src/ui/modules/app-header/components/__tests__/agent-status.spec.js` — medium before because it was pure mount smoke and did not validate duration mapping contract from Vuex state.
+- `src/ui/modules/queue-section/modules/_shared/components/__tests__/queue-preview-timer.spec.js` — medium before because it only asserted mount and missed timer rendering contract (root and digit segments).
+- `src/ui/modules/popups/break-popup/__tests__/break-timer-popup.spec.js` — medium before because assertions mixed generic visibility checks and weak naming without explicit behavior contract.
+- `src/ui/modules/queue-section/modules/_shared/components/__tests__/task-queue-container.spec.js` — medium before because it was mount-only and did not verify empty-state class contract on root container.
+- `src/ui/modules/queue-section/modules/_shared/components/task-preview/__tests__/task-queue-preview-sm.spec.js` — medium before because it was pure smoke and did not verify opened-state class contract for compact preview mode.
+- `src/ui/modules/queue-section/modules/call-queue/components/__tests__/call-queue.spec.js` — medium before because it was mount-only and did not verify root class contract for call queue container.
+- `src/ui/modules/queue-section/modules/call-queue/components/active-queue/__tests__/active-preview.spec.js` — medium before because expectations were partly generic and did not assert explicit computed behavior contracts for ringing/queue-name branches.
+- `src/ui/modules/queue-section/modules/call-queue/components/active-queue/__tests__/active-queue.spec.js` — medium before because it covered event side effect only, with limited diagnostic assertions around resulting rendered state.
+- `src/ui/modules/queue-section/modules/call-queue/components/manual-queue/__tests__/manual-queue-container.spec.js` — medium before because it was mount-only and did not verify rendered queue-container contract.
+- `src/ui/modules/queue-section/modules/call-queue/components/manual-queue/__tests__/manual-queue-preview.spec.js` — medium before because it asserted existence only and did not validate wait-label computation contract.
+- `src/ui/modules/queue-section/modules/call-queue/components/missed-queue/__tests__/missed-queue-container.spec.js` — medium before because event-handler tests asserted calls broadly without validating payload passed from preview events.
+- `src/ui/modules/queue-section/modules/call-queue/components/offline-queue/__tests__/offline-preview.spec.js` — medium before because it validated one computed field only and missed queue-name mapping contract.
+- `src/ui/modules/queue-section/modules/chat-queue/components/active-queue/__tests__/chat-queue.spec.js` — medium before because it remained close to smoke-level rendering check with limited structural assertions.
+- `src/ui/modules/queue-section/modules/chat-queue/components/manual-queue/__tests__/manual-queue-container.spec.js` — medium before because it was mount-only and did not validate queue-container composition.
+- `src/ui/modules/queue-section/modules/chat-queue/components/manual-queue/__tests__/manual-queue-preview.spec.js` — medium before because it asserted mount only and missed wait-time formatting contract.
+- `src/ui/modules/queue-section/modules/job-queue/components/active/__tests__/job-queue-container.spec.js` — medium before because it was smoke-only and did not verify container composition with queue wrapper.
+- `src/ui/modules/queue-section/modules/job-queue/components/active/__tests__/job-queue-preview.spec.js` — medium before because fixture/assertions were too minimal and did not verify distribute-derived queue contract.

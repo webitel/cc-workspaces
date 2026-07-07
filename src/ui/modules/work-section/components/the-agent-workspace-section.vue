@@ -91,7 +91,6 @@ export default {
   flex-direction: column;
   min-width: 0;
   will-change: width;
-  gap: var(--spacing-2xs);
   transition: var(--transition);
 
   &--md {
@@ -110,5 +109,6 @@ export default {
 .work-section__main-content {
   flex-grow: 1;
   min-height: 0;
+  margin-bottom: var(--spacing-2xs);
 }
 </style>

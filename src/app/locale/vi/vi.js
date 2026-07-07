@@ -53,11 +53,6 @@ export default {
 			label: 'Không làm phiền',
 			tooltip: 'Bạn sẽ chỉ nhận cuộc gọi từ các hàng đợi',
 		},
-		connectionQuality: {
-			high: 'Chất lượng mạng rất tốt.',
-			medium: 'Có thể có độ trễ, vui lòng kiểm tra mạng của bạn.',
-			low: 'Chất lượng mạng kém, vui lòng kiểm tra mạng của bạn.',
-		},
 	},
 	widgets: {
 		callInbound: 'Cuộc gọi đến',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Tự gán',
 				},
 			},
+			blindTransfer: 'Blind transfer',
 		},
 		chat: {
 			chats: 'Chat | Các chat',
@@ -189,6 +185,10 @@ export default {
 			onHold: 'Giữ máy',
 			hangup: 'Kết thúc',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Liên hệ không xác định',
+			hiddenNumber: 'Số ẩn',
+		},
 		chat: {
 			acceptPreviewText:
 				'Nếu bạn sẵn sàng trả lời, hãy nhấn nút "Chấp nhận" trước',
@@ -205,6 +205,7 @@ export default {
 			chatsAgent: '{ agentName } đã tham gia chat', // TODO: Translate
 			chatsAgentsList: '{ agentName } đã tham gia chat', // TODO: Translate
 			chatsFileBlocked: 'Tệp bị cách ly hoặc bị chặn',
+			chatsIncorrectFileSize: 'Kích thước tệp không hợp lệ',
 			errors: {
 				uploadFileLimitSize: 'Vượt quá giới hạn dung lượng tệp',
 			},
@@ -231,7 +232,6 @@ export default {
 	history: {
 		today: 'Hôm nay',
 		yesterday: 'Hôm qua',
-		openInHistory: 'Mở trong lịch sử',
 	},
 	transfer: {
 		selectAgent: 'Vui lòng chọn tác vụ',
@@ -368,5 +368,8 @@ export default {
 		quickReplies: ({ linked }) =>
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Mở menu trả lời nhanh trong chat',
+	},
+	postprocessing: {
+		retriesLeft: 'Số lần thử còn lại',
 	},
 };

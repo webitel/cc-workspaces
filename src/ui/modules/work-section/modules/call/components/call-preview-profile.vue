@@ -1,20 +1,22 @@
 <template>
   <div class="preview-profile">
-      <wt-avatar
-        size="xl"
-        class="preview-profile__pic"
-      ></wt-avatar>
+    <wt-avatar
+      :username="displayName"
+      size="xl"
+      class="preview-profile__avatar"
+    ></wt-avatar>
     <div class="preview-profile__name typo-subtitle-2">
       {{ displayName }}
     </div>
     <div class="preview-profile__number typo-body-2">
       {{ displayNumber }}
     </div>
-    <wt-chip
+    <queue-name-chip
       v-if="displayQueueName"
-      color="secondary">
-      {{ displayQueueName }}
-    </wt-chip>
+      :name="displayQueueName"
+      color="secondary"
+      clamped
+    />
   </div>
 </template>
 
@@ -23,6 +25,7 @@ import { mapGetters } from 'vuex';
 
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import displayInfoMixin from '../../../../../mixins/displayInfoMixin';
+import QueueNameChip from '../../_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
 	name: 'CallPreviewProfile',
@@ -34,6 +37,9 @@ export default {
 		...mapGetters('workspace', {
 			task: 'TASK_ON_WORKSPACE',
 		}),
+	},
+	components: {
+		QueueNameChip,
 	},
 };
 </script>
@@ -47,7 +53,7 @@ export default {
   align-items: center;
   margin-bottom: var(--spacing-sm);
 
-  &__pic {
+  &__avatar {
     margin-bottom: var(--spacing-sm);
   }
 

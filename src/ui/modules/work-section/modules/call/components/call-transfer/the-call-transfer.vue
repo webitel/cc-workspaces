@@ -35,9 +35,8 @@ interface CallTransferTabsProps {
 defineProps<CallTransferTabsProps>();
 
 const emit = defineEmits([
-  'transfer-complete',
+	'transfer-complete',
 ]);
-
 
 const userinfoStore = useUserinfoStore();
 const { hasLicense } = userinfoStore;

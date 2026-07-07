@@ -1,6 +1,5 @@
 <template>
   <main class="main-error-page">
-    <wt-notifications-bar />
     <app-header />
     <wt-error-page :type="errorType" @back="handleBack" />
   </main>
@@ -18,7 +17,8 @@ const errorType = computed(() => route.query.type || '404');
 
 const handleBack = () => {
 	if (errorType.value === '403') {
-		return (window.location.href = import.meta.env.VITE_APPLICATION_HUB_URL);
+		window.location.href = import.meta.env.VITE_APPLICATION_HUB_URL;
+		return;
 	}
 	router.push('/');
 };

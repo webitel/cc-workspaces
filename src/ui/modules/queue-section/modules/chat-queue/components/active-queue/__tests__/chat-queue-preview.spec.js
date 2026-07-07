@@ -37,7 +37,7 @@ describe('ChatQueuePreview', () => {
 				task,
 			},
 		});
-		expect(wrapper.vm.lastMessage).toBe(lastMessage);
+		expect(wrapper.vm.textLastMessage).toBe(lastMessage);
 	});
 
 	it('correctly computes last message text, if last message is file', () => {
@@ -57,7 +57,7 @@ describe('ChatQueuePreview', () => {
 				task: testTask,
 			},
 		});
-		expect(wrapper.vm.lastMessage).toBe(filename);
+		expect(wrapper.vm.textLastMessage).toBe(filename);
 	});
 
 	it('correctly computes chat participants name to display', () => {

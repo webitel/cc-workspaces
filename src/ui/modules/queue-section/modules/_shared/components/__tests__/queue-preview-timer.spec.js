@@ -14,7 +14,7 @@ const task = {
 };
 
 describe('QueuePreviewTimer', () => {
-	it('renders a component', () => {
+	it('renders timer root and split digits', () => {
 		const wrapper = shallowMount(QueuePreviewTimer, {
 			global: {
 				plugins: [
@@ -26,5 +26,9 @@ describe('QueuePreviewTimer', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find('.queue-preview-timer').exists()).toBe(true);
+		expect(
+			wrapper.findAll('.queue-preview-timer__digit').length,
+		).toBeGreaterThan(0);
 	});
 });

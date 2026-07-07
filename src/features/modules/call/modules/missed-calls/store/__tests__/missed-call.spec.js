@@ -24,8 +24,16 @@ describe('missed call store', () => {
 					next,
 				}),
 			);
+		context.getters = {
+			REQUEST_PARAMS: {
+				userId: 10,
+				size: 10,
+				page: 1,
+			},
+		};
 		await missed.actions.LOAD_DATA_LIST(context);
 		expect(mock).toHaveBeenCalled();
+		expect(mock).toHaveBeenCalledWith(context.getters.REQUEST_PARAMS);
 		expect(context.commit).toHaveBeenCalledWith('SET_DATA_LIST', items);
 		expect(context.commit).toHaveBeenCalledWith('SET_NEXT', next);
 	});
@@ -47,6 +55,13 @@ describe('missed call store', () => {
 			page,
 			missedList,
 		};
+		context.getters = {
+			REQUEST_PARAMS: {
+				userId: 10,
+				size: 10,
+				page,
+			},
+		};
 		const mock = vi
 			.spyOn(missedAPI, 'getMissedCalls')
 			.mockImplementationOnce(() =>
@@ -58,6 +73,7 @@ describe('missed call store', () => {
 		await missed.actions.LOAD_NEXT_PAGE(context);
 		expect(context.commit).toHaveBeenCalledWith('SET_PAGE', page + 1);
 		expect(mock).toHaveBeenCalled();
+		expect(mock).toHaveBeenCalledWith(context.getters.REQUEST_PARAMS);
 		expect(context.commit).toHaveBeenCalledWith('SET_DATA_LIST', [
 			...missedList,
 			...items,

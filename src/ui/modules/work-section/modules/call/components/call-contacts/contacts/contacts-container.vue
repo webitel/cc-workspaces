@@ -31,6 +31,7 @@
         :key="item.id"
         :item="item"
         :size="size"
+				:loading="showLoader(item.id)"
         @call="makeCall"
       />
     </template>
@@ -38,6 +39,7 @@
 </template>
 
 <script setup>
+import { ContactsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
 import { configurations } from '@webitel/ui-sdk/api/clients';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
@@ -45,9 +47,9 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
-import contactsAPI from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI';
 import SearchMode from '../../../../../../../../app/api/agent-workspace/endpoints/contacts/enums/SearchMode.enum';
 import useInfiniteScroll from '../../../../../../../../app/composables/useInfiniteScroll';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import LookupItemContainer from '../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
@@ -63,6 +65,7 @@ const props = defineProps({
 const { t } = useI18n();
 const store = useStore();
 const userinfoStore = useUserinfoStore();
+const { showLoader, runWithLoader } = useLoader();
 
 const filterQuery = ref(SearchMode.NAME);
 const contactsLabelsConfiguration = ref([]);
@@ -106,18 +109,20 @@ const fetchFn = async (params) => {
 
 	if (isLimitContactsGranted.value) {
 		await checkLabelsToLimitContacts();
-		return await contactsAPI.getList({
+		return await ContactsAPI.getList({
 			...defaultParams,
 			label: contactsLabelsConfiguration.value,
 		});
 	}
-	return await contactsAPI.getList({
+	return await ContactsAPI.getList({
 		...defaultParams,
 	});
 };
 
 const makeCall = (item) => {
-	store.dispatch('features/call/CALL', item);
+	runWithLoader(item.contactId, () =>
+		store.dispatch('features/call/CALL', item),
+	);
 };
 
 const changeMode = ({ value }) => {

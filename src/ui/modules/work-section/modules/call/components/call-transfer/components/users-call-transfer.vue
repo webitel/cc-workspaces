@@ -3,10 +3,13 @@
     show-status
     show-user-name-avatar
     type="user"
+    allow-blind-transfer
     :size="size"
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
+    :loading="currentTranferLoaderId && showLoader(currentTranferLoaderId)"
+    :button-tooltip="$t('queueSec.call.blindTransfer')"
     @transfer="transfer"
   >
     <template #actions="{ item }">
@@ -14,6 +17,7 @@
         color="transfer"
         :icon="`${state}-transfer--filled`"
         :tooltip="$t('transfer.blindTransfer')"
+        :loading="showLoader(item.id)"
         rounded
         @click="transfer(item)"
       />
@@ -28,6 +32,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useLoader } from '../../../../../../../composables/useLoader';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
 import { TransferParams } from '../types/transfer-tabs';
@@ -35,7 +40,7 @@ import { TransferParams } from '../types/transfer-tabs';
 interface APIResponse {
 	items: ApiUser[];
 	next: boolean;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 interface Props {
@@ -47,6 +52,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useStore();
+const { showLoader, runWithLoader } = useLoader();
 
 const PresenceStatusField = 'presence';
 const dataSort = ref('position');
@@ -59,6 +65,7 @@ const dataFields = ref([
 
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
+const currentTranferLoaderId = ref<string | null>(null);
 const state = computed(() => store.getters['workspace/WORKSRACE_STATE']);
 const scroll = computed(
 	() =>
@@ -75,8 +82,13 @@ const emit = defineEmits([
 
 const transfer = async (item) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
-	await store.dispatch('features/call/BLIND_TRANSFER', number);
+	const loaderId = item.id || number;
+	currentTranferLoaderId.value = number;
+	await runWithLoader(loaderId, () =>
+		store.dispatch('features/call/BLIND_TRANSFER', number),
+	);
 	emit('transfer-complete');
+	currentTranferLoaderId.value = null;
 };
 
 const getUsers = (params: TransferParams): Promise<APIResponse> => {

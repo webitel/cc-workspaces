@@ -34,6 +34,7 @@
         :size="size"
         :src="botAvatar"
         :type="transferDestination"
+				:loading-transfer="showLoader(item.id)"
         @input="handleTransfer"
       >
         <template #before>
@@ -52,6 +53,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import APIRepository from '../../../../../../app/api/APIRepository.js';
 import useInfiniteScroll from '../../../../../../app/composables/useInfiniteScroll';
+import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum.js';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys.js';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
@@ -77,6 +79,7 @@ const emit = defineEmits([
 ]);
 
 const store = useStore();
+const { showLoader, runWithLoader } = useLoader();
 
 const transferDestination = ref(TransferDestination.CHATPLAN);
 const hotkeyUnsubscribers = ref([]);
@@ -125,10 +128,12 @@ const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
 	});
 
 const handleTransfer = async (item) => {
-	await store.dispatch('features/chat/TRANSFER', {
-		destination: transferDestination.value,
-		item,
-	});
+	await runWithLoader(item.id, () =>
+		store.dispatch('features/chat/TRANSFER', {
+			destination: transferDestination.value,
+			item,
+		}),
+	);
 	emit('openTab', 'successful-transfer');
 };
 
@@ -155,7 +160,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 </script>
 

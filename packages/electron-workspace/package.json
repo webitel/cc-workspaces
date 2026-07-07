@@ -1,0 +1,131 @@
+{
+	"name": "webitel",
+	"version": "1.4.0",
+	"description": "Webitel Agent Workspace",
+	"author": {
+		"name": "Webitel Team",
+		"email": "support@webitel.com"
+	},
+	"main": "./out/main/index.js",
+	"homepage": "https://example.webitel.com/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/webitel/cc-workspaces.git"
+	},
+	"keywords": [],
+	"scripts": {
+		"install:clean": "npm ci && node node_modules/electron/install.js && echo 'windows err: https://github.com/electron/electron/issues/20731'",
+		"dev": "electron-vite dev",
+		"build": "electron-vite build",
+		"start": "electron-vite preview",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint": "npx @biomejs/biome check --colors=off .",
+		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
+		"dist": "npm run build && electron-builder -w",
+		"distl": "npm run build && electron-builder --linux",
+		"distm": "npm run build && electron-builder --mac"
+	},
+	"build": {
+		"asar": false,
+		"npmRebuild": false,
+		"files": [
+			"out/**/*",
+			"src/renderer/**/*",
+			"img/**/*",
+			"package.json",
+			"!node_modules/**/*.d.ts",
+			"!node_modules/**/*.d.ts.map",
+			"!node_modules/**/*.js.map"
+		],
+		"win": {
+			"target": [
+				"nsis",
+				"zip",
+				"msi"
+			],
+			"icon": "./img/app-icon.png"
+		},
+		"nsis": {
+			"perMachine": true,
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		},
+		"linux": {
+			"asar": false,
+			"target": [
+				"AppImage"
+			],
+			"icon": "./img/app-icon.png",
+			"category": "Office",
+			"maintainer": "Webitel",
+			"vendor": "Webitel"
+		},
+		"mac": {
+			"target": [
+				{
+					"target": "dmg",
+					"arch": [
+						"x64",
+						"arm64"
+					]
+				},
+				{
+					"target": "zip",
+					"arch": [
+						"x64",
+						"arm64"
+					]
+				}
+			],
+			"category": "public.app-category.business",
+			"icon": "./img/app-icon.icns",
+			"hardenedRuntime": true,
+			"gatekeeperAssess": false,
+			"entitlements": "build/entitlements.mac.plist",
+			"entitlementsInherit": "build/entitlements.mac.plist",
+			"extendInfo": {
+				"NSMicrophoneUsageDescription": "Webitel needs access to the microphone to make voice calls.",
+				"NSCameraUsageDescription": "Webitel needs access to the camera for video calls.",
+				"NSLocalNetworkUsageDescription": "Webitel communicates with devices on the local network to establish connections."
+			},
+			"notarize": true
+		},
+		"productName": "Webitel",
+		"appId": "org.webitel",
+		"protocols": {
+			"name": "wtel",
+			"schemes": [
+				"wtel"
+			]
+		}
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.10",
+		"@electron/remote": "^0.0.1",
+		"@types/node": "^24.5.2",
+		"@vitejs/plugin-vue": "^6.0.1",
+		"electron": "^35.7.5",
+		"electron-builder": "26.0.12",
+		"electron-packager": "^17.1.2",
+		"electron-vite": "^6.0.0-beta.1",
+		"http-server": "^14.1.1",
+		"ora": "^6.1.2",
+		"typescript": "^5.9.2",
+		"vite": "^8.0.8",
+		"vue-tsc": "^3.1.1"
+	},
+	"dependencies": {
+		"axios": "^1.13.2",
+		"dotenv": "^17.2.3",
+		"electron-localstorage": "^1.0.5",
+		"electron-positioner": "^4.1.0",
+		"electron-sip": "file:./electron-sip",
+		"electron-updater": "^6.6.2",
+		"markdown-it": "^12.0.6",
+		"rimraf": "^6.0.1",
+		"tslib": "^2.3.1",
+		"vue": "^3.5.22",
+		"vue-i18n": "^11.1.12",
+		"webitel-sdk": "^26.1.16"
+	}
+}

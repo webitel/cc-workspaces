@@ -1,4 +1,4 @@
-import ContactsAPI from '../../../../../../app/api/agent-workspace/endpoints/contacts/ContactsAPI.js';
+import { ContactsAPI } from '@webitel/api-services/api';
 
 async function getContactByUserId(task) {
 	try {

@@ -1,0 +1,52 @@
+{
+	"tray": {
+		"Settings": "Налаштування",
+		"Exit": "Вийти",
+		"Online": "Онлайн",
+		"Offline": "Офлайн",
+		"Pause": "Пауза",
+		"UploadConfig": "Завантажити конфігурацію",
+		"Language": "Мова",
+		"SIP": "Використовувати SIP"
+	},
+	"notificationCall": {
+		"Reject": "Скинути",
+		"Answer": "Відповісти",
+		"Yes": "Так",
+		"No": "Ні",
+		"callSuccessfulText": "Дзвінок був успішним?",
+		"scheduleCallText": "Запланувати дзвінок?",
+		"Close": "Закрити",
+		"Saved": "Збережено",
+		"Save": "Зберегти"
+	},
+	"calendar": {
+		"January": "Січень",
+		"February": "Лютий",
+		"March": "Березень",
+		"April": "Квітень",
+		"May": "Травень",
+		"June": "Червень",
+		"July": "Липень",
+		"August": "Серпень",
+		"September": "Вересень",
+		"October": "Жовтень",
+		"November": "Листопад",
+		"December": "Грудень",
+		"Mo": "Пн",
+		"Tu": "Вт",
+		"We": "Ср",
+		"Th": "Чт",
+		"Fr": "Пт",
+		"Sa": "Сб",
+		"Su": "Нд"
+	},
+	"config": {
+		"uploadConfigurationText": "Оберіть файл для завантаження конфігурації",
+		"UploadFile": "Завантажити файл"
+	},
+	"disconnect": {
+		"Text": "Зв'язок було втрачено.",
+		"Connect": "Підключити"
+	}
+}

@@ -53,11 +53,6 @@ export default {
 			label: 'Не беспокоить',
 			tooltip: 'Вы будете получать звонки только из очередей',
 		},
-		connectionQuality: {
-			high: 'Отличное качество сети.',
-			medium: 'Может быть задержка, пожалуйста, проверьте сеть.',
-			low: 'Качество сети плохое, пожалуйста, проверьте сеть.',
-		},
 	},
 	widgets: {
 		callInbound: 'Входящих звонков',
@@ -99,6 +94,7 @@ export default {
 					manual: 'Самостоятельно назначенные',
 				},
 			},
+			blindTransfer: 'Слепой перевод',
 		},
 		chat: {
 			chats: 'Звонки | Чаты',
@@ -195,6 +191,10 @@ export default {
 			onHold: 'В удержании',
 			hangup: 'Конец',
 		},
+		taskHeaderExpansionCard: {
+			unknownContact: 'Неизвестный контакт',
+			hiddenNumber: 'Скрытый номер',
+		},
 		chat: {
 			acceptPreviewText: 'Если вы готовы ответить, нажмите кнопку "Принять"',
 			draftPlaceholder: 'Напишите сообщение...',
@@ -210,6 +210,7 @@ export default {
 			chatsAgent: '{ agentName } присоединился к чату',
 			chatsAgentsList: '{ agentName } принимали участие в чате',
 			chatsFileBlocked: 'Файл в карантине или заблокирован',
+			chatsIncorrectFileSize: 'Неверный размер файла',
 			errors: {
 				uploadFileLimitSize: 'Превышен лимит размера файла',
 			},
@@ -236,7 +237,6 @@ export default {
 	history: {
 		today: 'Сегодня',
 		yesterday: 'Вчера',
-		openInHistory: 'Открыть в History',
 	},
 	transfer: {
 		selectAgent: 'Выберите агента',
@@ -377,5 +377,8 @@ export default {
 		quickReplies: ({ linked }) =>
 			`/${linked('objects.quickReplies.quickReplies', 1).toLowerCase()}`,
 		quickRepliesDescription: 'Открывает меню быстрых ответов в чате',
+	},
+	postprocessing: {
+		retriesLeft: 'Оставшихся попыток',
 	},
 };

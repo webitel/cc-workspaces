@@ -8,6 +8,8 @@
       v-if="isVideo"
       :size="ComponentSize.SM"
       :src="mediaSrcObject"
+      :title="media.name"
+      countdown-time-mode
       static
       hide-expand
       stretch
@@ -18,7 +20,9 @@
       :src="mediaSrcObject"
       :autoplay="false"
       :closable="false"
+      countdown-time-mode
       hide-volume-slider
+      hide-mute-button
       class="chat-message-player__player"
       @initialized="handlePlayerInitialize"
     />
@@ -27,19 +31,16 @@
 </template>
 
 <script setup lang="ts">
-import { WtVidstackPlayer, WtPlayer } from '@webitel/ui-sdk/components';
+import { type ChatMessageFile, useChatMessageFile } from '@webitel/ui-chats/ui';
+import { WtPlayer, WtVidstackPlayer } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
-
-import { type ChatMessageFile, useChatMessageFile } from '@webitel/ui-chats/ui';
 
 const props = defineProps<{
 	file: ChatMessageFile;
 }>();
 
-const emit = defineEmits<{
-	(e: 'initialized', player: unknown): void;
-}>();
+const emit = defineEmits<(e: 'initialized', player: unknown) => void>();
 
 const { media } = useChatMessageFile(props.file);
 
@@ -62,6 +63,11 @@ function handlePlayerInitialize(player: unknown) {
 
   .chat-message-player__player {
     width: 100%;
+  }
+
+  :deep(.wt-vidstack-player) {
+    height: var(--chat-video-player-height);
+    width: var(--chat-video-player-width);
   }
 }
 </style>

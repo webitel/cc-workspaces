@@ -20,7 +20,7 @@
     </div>
 
     <div class="processing-timer__retries" v-show="processing?.processingProlongation">
-      <span>Retries left</span>
+      <span>{{ t('postprocessing.retriesLeft') }}</span>
       <wt-chip>{{ remainingProlongations }}</wt-chip>
     </div>
   </div>

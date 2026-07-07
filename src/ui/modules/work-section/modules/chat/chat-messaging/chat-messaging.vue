@@ -79,6 +79,7 @@
         <wt-chat-emoji
           class="chat-messaging__emoji"
           :size="size"
+          popup-teleport-to=".chat-messaging-text-entry__actions"
           @insert-emoji="insertEmoji"
         />
         <wt-button
@@ -213,7 +214,7 @@ function accept() {
 }
 
 async function setDraftFocus() {
-	if (messageDraft.value && messageDraft.value.$el) {
+	if (messageDraft.value?.$el) {
 		textarea.value = messageDraft.value.$el.querySelector('textarea');
 	}
 	if (!messageDraft.value || !textarea.value) return;
@@ -234,6 +235,8 @@ async function insertEmoji(unicode: string) {
 }
 
 async function sendMessage() {
+	if (isOpenAutocomplete.value || props.showQuickReplies) return;
+
 	const draft = chat.value.draft;
 	try {
 		chat.value.draft = '';
@@ -347,7 +350,9 @@ onMounted(async () => {
 
 onUnmounted(() => {
 	eventBus?.$off('chat-input-focus', setDraftFocus);
-	hotkeyUnsubscribers.value.forEach((unsubscribe) => unsubscribe());
+	hotkeyUnsubscribers.value.forEach((unsubscribe) => {
+		unsubscribe();
+	});
 });
 </script>
 
@@ -386,6 +391,10 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
   }
 }
 
+.chat-messaging__textarea {
+  margin-bottom: $chatGap;
+}
+
 .chat-messaging__textarea :deep(textarea) {
   max-height: 100%;
   min-height: auto;
@@ -404,7 +413,6 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
 .chat-messaging-text-entry {
   display: flex;
   flex-direction: column;
-  gap: $chatGap;
   max-height: 50%;
   position: relative;
 
