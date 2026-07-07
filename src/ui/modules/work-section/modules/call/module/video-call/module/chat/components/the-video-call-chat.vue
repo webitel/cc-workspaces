@@ -9,6 +9,7 @@
         ChatAction.EmojiPicker,
         ChatAction.SendMessage,
       ]"
+      :contact="contact"
       :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
@@ -51,6 +52,8 @@ const messages = computed(
 const isChatClosed = computed(
 	() => chat?.value.state === ConversationState.Closed,
 );
+
+const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
 	try {

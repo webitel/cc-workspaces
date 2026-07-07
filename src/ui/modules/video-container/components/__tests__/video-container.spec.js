@@ -27,6 +27,15 @@ describe('VideoContainer', () => {
 	const buildStore = (callOnWorkspace = {}) =>
 		createStore({
 			state: {
+				ui: {
+					infoSec: {
+						client: {
+							contact: {
+								contact: null,
+							},
+						},
+					},
+				},
 				features: {
 					call: {
 						callInfo: new Map(),

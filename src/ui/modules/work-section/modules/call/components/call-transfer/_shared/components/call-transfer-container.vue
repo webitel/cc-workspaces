@@ -11,7 +11,8 @@
       <wt-button
         v-if="allowBlindTransfer"
         color="transfer"
-        v-tooltip="buttonTooltip"
+        :loading="loading"
+        v-tooltip.top="buttonTooltip"
         :disabled="isTransferToNumberDisabled"
         @click="emit('transfer', { extension: dataSearch })"
       >{{ $t('transfer.transfer') }}
@@ -66,6 +67,7 @@ interface CallTransferContainerProps {
 	dataFilters?: string;
 	dataFields?: string[];
 	presenceStatusField?: string;
+	loading?: boolean;
 	buttonTooltip?: string;
 }
 

@@ -1,5 +1,16 @@
 <template>
   <wt-single-select
+		v-if="!multiple"
+    v-bind="$attrs"
+    :model-value="value"
+    :options="options"
+    :data-key="trackBy"
+    @reset="resetValue"
+    @update:model-value="emit('input', $event)"
+  />
+
+	<wt-multi-select
+		v-else
     v-bind="$attrs"
     :model-value="value"
     :options="options"
@@ -17,6 +28,7 @@ const props = withDefaults(
 	defineProps<{
 		value: never;
 		options?: never[];
+		multiple?: boolean;
 	}>(),
 	{
 		options: () => [],

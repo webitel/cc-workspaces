@@ -1,5 +1,5 @@
 <template>
-  <div class="last-message-container">
+  <div :class="['last-message-container', iconClass]">
     <div>
       <wt-icon :icon="icon" />
     </div>
@@ -8,15 +8,22 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import { AgentIcon } from '../../enums/AgentIcon.enum';
+
 const props = withDefaults(
 	defineProps<{
-		icon: string;
+		icon: AgentIcon | string;
 		message: string;
 	}>(),
 	{
 		icon: '',
 		message: '',
 	},
+);
+
+const iconClass = computed(() =>
+	props.icon !== AgentIcon.Bot ? `last-message-container--${props.icon}` : null,
 );
 </script>
 
@@ -25,5 +32,14 @@ const props = withDefaults(
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
+  border-radius: var(--spacing-xs);
+}
+
+.last-message-container--contacts {
+  background-color: var(--p-primary-highlight-color);
+}
+
+.last-message-container--agent {
+  background-color: var(--p-secondary-hover-color);
 }
 </style>
