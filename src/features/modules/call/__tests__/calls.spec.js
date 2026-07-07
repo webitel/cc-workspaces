@@ -30,6 +30,7 @@ describe('features/call store: actions', () => {
 			callOnWorkspace: call,
 			callList: [],
 		};
+		callModule.actions.OPEN_NEW_CALL(context, {});
 		context.dispatch.mockClear();
 		context.commit.mockClear();
 	});
@@ -79,5 +80,24 @@ describe('features/call store: actions', () => {
 
 		await callModule.actions.CALL(context, {});
 		expect(call.mock.calls[0][0].destination).toBe('newNumber');
+	});
+	it('CALL action ignores repeated invocation until a new call is opened (double-dial guard)', async () => {
+		const call = vi.fn().mockResolvedValue(undefined);
+		context.rootState.client = {
+			getCliInstance: () => ({
+				call,
+			}),
+		};
+		context.rootGetters['workspace/TASK_ON_WORKSPACE'] = {
+			newNumber: 'number',
+		};
+
+		await callModule.actions.CALL(context, {});
+		await callModule.actions.CALL(context, {});
+		expect(call).toHaveBeenCalledTimes(1);
+
+		callModule.actions.OPEN_NEW_CALL(context, {});
+		await callModule.actions.CALL(context, {});
+		expect(call).toHaveBeenCalledTimes(2);
 	});
 });
