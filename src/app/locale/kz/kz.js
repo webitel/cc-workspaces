@@ -308,6 +308,8 @@ export default {
 				'Микрофон қосылмаған. Әрекетті орындау мүмкін емес.',
 			[DeviceNotAllowPermissionError.id]:
 				'Микрофонды қосу мүмкін емес. Әрекетті орындау мүмкін емес.',
+			cameraNotAllowPermission:
+				'Камераны қосу мүмкін емес. Әрекетті орындау мүмкін емес.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
 		},
