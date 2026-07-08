@@ -24,14 +24,22 @@ export const useChatScroll = (element) => {
 	);
 	const isLastMessageIsMy = computed(() => !!lastMessage.value?.member?.self);
 
+	const markAsSeen = () => {
+		newUnseenMessages.value = 0;
+		showScrollToBottomBtn.value = false;
+		// report to the store: the queue panel unseen dot follows scroll state
+		if (chat.value?.id) {
+			store.dispatch('features/chat/unseen/MARK_CHAT_SEEN', chat.value);
+		}
+	};
+
 	const scrollToBottom = (behavior = 'instant') => {
 		element.value?.scrollTo({
 			top: element.value?.scrollHeight,
 			behavior,
 		});
 
-		newUnseenMessages.value = 0;
-		showScrollToBottomBtn.value = false;
+		markAsSeen();
 	};
 
 	const scrollAfterNewMessage = () => {
@@ -48,8 +56,7 @@ export const useChatScroll = (element) => {
 	const handleShowScrollToBottom = (el) => {
 		if (arrivedState.bottom && newUnseenMessages.value) {
 			// hide the btn and reset new messages count, when we arrived the bottom
-			newUnseenMessages.value = 0;
-			showScrollToBottomBtn.value = false;
+			markAsSeen();
 			return; // quit the function because we are already at the bottom
 		}
 

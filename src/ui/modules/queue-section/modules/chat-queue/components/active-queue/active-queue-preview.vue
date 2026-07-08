@@ -4,6 +4,7 @@
     :task="task"
     :status="chatStatus"
     :opened="opened"
+    :unseen="unseen"
     @click="$emit('click', task)"
   >
     <template #icon="{ iconColor }">
@@ -35,6 +36,7 @@
     :task="task"
     :opened="opened"
     :status="chatStatus"
+    :unseen="unseen"
     @click="$emit('click', task)"
   >
 
@@ -91,6 +93,11 @@ export default {
 		displayInfoMixin,
 	],
 	computed: {
+		unseen() {
+			return this.$store.getters['features/chat/unseen/IS_CHAT_UNSEEN'](
+				this.task,
+			);
+		},
 		lastMessage() {
 			return this.task.messages[this.task.messages.length - 1] || {};
 		},

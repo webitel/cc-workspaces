@@ -9,6 +9,7 @@ import manual from '../modules/manual/store/manual';
 import chatHistory from './chat-history.js';
 import chatMedia from './chat-media.js';
 import clientHandlers from './client-handlers';
+import unseen from './unseen.js';
 
 const { t } = i18n.global;
 
@@ -177,5 +178,6 @@ export default {
 		closed,
 		chatHistory,
 		chatMedia,
+		unseen,
 	},
 };
