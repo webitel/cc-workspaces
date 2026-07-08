@@ -3,7 +3,9 @@ export async function isMicrophoneAllowed() {
 		const stream = await navigator.mediaDevices.getUserMedia({
 			audio: true,
 		});
-		stream.getTracks().forEach((track) => track.stop());
+		stream.getTracks().forEach((track) => {
+			track.stop();
+		});
 		return true;
 	} catch {
 		return false;
@@ -15,7 +17,9 @@ export async function isCameraAllowed() {
 		const stream = await navigator.mediaDevices.getUserMedia({
 			video: true,
 		});
-		stream.getTracks().forEach((track) => track.stop());
+		stream.getTracks().forEach((track) => {
+			track.stop();
+		});
 		return true;
 	} catch {
 		return false;
