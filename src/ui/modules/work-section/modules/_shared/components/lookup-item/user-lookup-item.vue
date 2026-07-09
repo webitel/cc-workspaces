@@ -31,15 +31,14 @@
 </template>
 
 <script setup lang="ts">
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import { computed, defineEmits, defineProps, withDefaults } from 'vue';
-
 import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
 import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import LookupItem from './lookup-item.vue';
 import { UserLookupItem } from './types/UserLookupItem';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 
 const props = withDefaults(
 	defineProps<{
