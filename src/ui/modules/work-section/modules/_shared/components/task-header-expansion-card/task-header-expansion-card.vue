@@ -33,6 +33,7 @@
         <queue-name-chip
           v-if="props.queueName"
           :name="props.queueName"
+          clamped
         />
       </div>
     </template>

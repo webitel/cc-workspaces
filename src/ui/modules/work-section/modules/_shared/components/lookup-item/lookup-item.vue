@@ -94,7 +94,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 0;
     flex-grow: 1;
   }
 

@@ -5,13 +5,14 @@
     show-status
     :data-fields="dataFields"
     :data-filters="dataFilters"
-    :get-data="getAgens"
+    :get-data="getAgents"
     :presence-status-field="PresenceStatusField"
   >
     <template #actions="{ item }">
       <wt-rounded-action
         color="transfer"
         icon="consultative-transfer"
+        :tooltip="$t('transfer.consultTransfer')"
         rounded
         :loading="showLoader(item.id)"
         @click="consultationTransfer(item)"
@@ -74,7 +75,7 @@ const emit = defineEmits([
 	'transfer-complete',
 ]);
 
-const consultationTransfer = async (item: AgentItem = {} as AgentItem) => {
+const consultationTransfer = async (item) => {
 	await runWithLoader(item.id, () =>
 		store.dispatch('features/call/TOGGLE_HOLD', item.id),
 	);
@@ -88,7 +89,7 @@ const consultationTransfer = async (item: AgentItem = {} as AgentItem) => {
 	}
 };
 
-const getAgens = (params: TransferParams): Promise<APIResponse> => {
+const getAgents = (params: TransferParams): Promise<APIResponse> => {
 	return AgentsAPI.getList({
 		...params,
 		enabled: true,
