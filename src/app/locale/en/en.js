@@ -241,6 +241,8 @@ export default {
 	transfer: {
 		selectAgent: 'Please select an agent',
 		transfer: 'Transfer',
+		blindTransfer: 'Blind transfer',
+		consultTransfer: 'Consult transfer',
 	},
 	contacts: {
 		phones: 'Phone | Phones',

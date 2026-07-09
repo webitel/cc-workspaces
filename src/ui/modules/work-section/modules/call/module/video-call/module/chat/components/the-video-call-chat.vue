@@ -9,7 +9,7 @@
         ChatAction.EmojiPicker,
         ChatAction.SendMessage,
       ]"
-      :contact="props.contact"
+      :contact="contact"
       :readonly="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"

@@ -6,6 +6,7 @@
     >{{ label }}</wt-label>
     <editor
       id="editor"
+      license-key="gpl"
       :model-value="strValue"
       :initial-value="strValue"
       :init="config"

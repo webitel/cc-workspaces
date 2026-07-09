@@ -5,7 +5,6 @@
     type="user"
     allow-blind-transfer
     :size="size"
-    :data-filters="dataFilters"
     :data-fields="dataFields"
     :get-data="getUsers"
     :presence-status-field="PresenceStatusField"
@@ -17,7 +16,8 @@
       <wt-rounded-action
         color="transfer"
         :icon="`${state}-transfer--filled`"
-				:loading="showLoader(item.id)"
+        :tooltip="$t('transfer.blindTransfer')"
+        :loading="showLoader(item.id)"
         rounded
         @click="transfer(item)"
       />
@@ -80,7 +80,7 @@ const emit = defineEmits([
 	'transfer-complete',
 ]);
 
-const transfer = async (item: UserItem = {} as UserItem) => {
+const transfer = async (item) => {
 	const number = item.extension || scroll.value.dataSearch?.value;
 	const loaderId = item.id || number;
 	currentTranferLoaderId.value = number;
