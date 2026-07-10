@@ -309,6 +309,8 @@ export default {
 			[DeviceNotFoundError.id]: 'Mikrofon ulanmagan. Amalni bajarib boʻlmaydi.',
 			[DeviceNotAllowPermissionError.id]:
 				'Mikrofonga ruxsat yoʻq. Amalni bajarib boʻlmaydi.',
+			cameraNotAllowPermission:
+				'Kameraga ruxsat yoʻq. Amalni bajarib boʻlmaydi.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace ishlamaydi. Litsenziya muddati tugagan.',
 		},

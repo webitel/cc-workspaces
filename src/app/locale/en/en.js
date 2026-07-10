@@ -313,6 +313,8 @@ export default {
 				"Microphone is'nt connected. Cannot perform action.",
 			[DeviceNotAllowPermissionError.id]:
 				'Microphone access is denied. Cannot perform action.',
+			cameraNotAllowPermission:
+				'Camera access is denied. Cannot perform action.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'You can not work in Workspace because your license has expired.',
 		},

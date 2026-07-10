@@ -311,6 +311,8 @@ export default {
 				'Mikrofon nie jest podłączony. Nie można wykonać akcji.',
 			[DeviceNotAllowPermissionError.id]:
 				'Odmowa dostępu do mikrofonu. Nie można wykonać akcji.',
+			cameraNotAllowPermission:
+				'Odmowa dostępu do kamery. Nie można wykonać akcji.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nie możesz pracować w Workspace, ponieważ Twoja licencja wygasła.',
 		},

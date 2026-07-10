@@ -312,6 +312,8 @@ export default {
 				'El micrófono no está conectado. No se puede realizar la acción.',
 			[DeviceNotAllowPermissionError.id]:
 				'El acceso al micrófono está denegado. No se puede realizar la acción.',
+			cameraNotAllowPermission:
+				'El acceso a la cámara está denegado. No se puede realizar la acción.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
 		},
