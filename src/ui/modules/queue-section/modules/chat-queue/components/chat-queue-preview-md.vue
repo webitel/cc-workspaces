@@ -228,7 +228,7 @@ const iconColor = computed(() => {
   &__content {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2xs);
+    gap: var(--spacing-xs);
     flex: 1;
     min-width: 0;
   }
