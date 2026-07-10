@@ -68,6 +68,7 @@ const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
 			'extension',
 			'presence',
 			'username',
+			'status',
 		],
 	});
 
