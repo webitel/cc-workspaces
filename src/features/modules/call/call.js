@@ -14,11 +14,10 @@ import {
 } from './scripts/mediaPermissions';
 import videoCall from './video-call/video-call';
 
-let isCalling = false;
-
 const state = {
 	callList: [],
 	isVideo: false,
+	isDialing: false,
 	callInfo: new Map(),
 };
 
@@ -31,6 +30,8 @@ const getters = {
 		state.callList.find((call) => call.id === callId),
 
 	IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE?._isNew,
+
+	IS_DIALING: (state) => state.isDialing,
 
 	GET_CURRENT_CALL_DIGITS: (state, getters) => {
 		if (getters.CALL_ON_WORKSPACE.digits?.length) {
@@ -69,9 +70,9 @@ const actions = {
 		// deprecated from 20.02.2024. remove me in 6 months
 		if (user) throw new Error('{ user } param for CALL is deprecated');
 
-		// @author Roman Zaritskyi guard against double-dial on rapid Enter/click before the call is placed
-		if (isCalling) return;
-		isCalling = true;
+		// @author Roman Zaritskyi [WTEL-9905] guard against double-dial
+		if (context.state.isDialing) return;
+		context.commit('SET_IS_DIALING', true);
 
 		try {
 			const CALL_PARAMS = {
@@ -106,10 +107,12 @@ const actions = {
 				params,
 			});
 		} catch (err) {
-			isCalling = false;
+			context.commit('SET_IS_DIALING', false);
 			throw err;
 		}
 	},
+
+	STOP_DIALING: (context) => context.commit('SET_IS_DIALING', false),
 
 	ANSWER: async (context, { callId } = {}) => {
 		const ANSWER_PARAMS = {
@@ -225,7 +228,7 @@ const actions = {
 	// new number destructuring to prevent mouse event
 	OPEN_NEW_CALL: (context, { newNumber } = {}) => {
 		// reset the dial lock for each fresh new-call session
-		isCalling = false;
+		context.commit('SET_IS_DIALING', false);
 		return context.dispatch('SET_WORKSPACE', {
 			_isNew: true,
 			newNumber: newNumber || '',
@@ -300,6 +303,10 @@ const mutations = {
 
 	SET_VIDEO: (state, value) => {
 		state.isVideo = value;
+	},
+
+	SET_IS_DIALING: (state, value) => {
+		state.isDialing = value;
 	},
 
 	SET_CALL_LIST: (state, callList) => {

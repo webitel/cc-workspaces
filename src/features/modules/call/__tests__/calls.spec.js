@@ -1,3 +1,5 @@
+import { CallDirection } from 'webitel-sdk';
+
 import callModule from '../call';
 
 const call = {
@@ -9,9 +11,9 @@ describe('features/call store: actions', () => {
 		state: {
 			callOnWorkspace: call,
 			callList: [],
+			isDialing: false,
 		},
 		dispatch: vi.fn(),
-		commit: vi.fn(),
 		rootGetters: {
 			'workspace/IS_EMPTY_WORKSPACE': null,
 		},
@@ -24,11 +26,15 @@ describe('features/call store: actions', () => {
 			},
 		},
 	};
+	context.commit = vi.fn((type, payload) => {
+		callModule.mutations[type]?.(context.state, payload);
+	});
 
 	beforeEach(() => {
 		context.state = {
 			callOnWorkspace: call,
 			callList: [],
+			isDialing: false,
 		};
 		callModule.actions.OPEN_NEW_CALL(context, {});
 		context.dispatch.mockClear();
@@ -81,7 +87,7 @@ describe('features/call store: actions', () => {
 		await callModule.actions.CALL(context, {});
 		expect(call.mock.calls[0][0].destination).toBe('newNumber');
 	});
-	it('CALL action ignores repeated invocation until a new call is opened (double-dial guard)', async () => {
+	it('CALL action ignores repeated invocation while dialing (double-dial guard)', async () => {
 		const call = vi.fn().mockResolvedValue(undefined);
 		context.rootState.client = {
 			getCliInstance: () => ({
@@ -96,8 +102,38 @@ describe('features/call store: actions', () => {
 		await callModule.actions.CALL(context, {});
 		expect(call).toHaveBeenCalledTimes(1);
 
-		callModule.actions.OPEN_NEW_CALL(context, {});
+		callModule.actions.STOP_DIALING(context);
 		await callModule.actions.CALL(context, {});
 		expect(call).toHaveBeenCalledTimes(2);
+	});
+	it('CALL action releases the dialing guard when client.call rejects', async () => {
+		const call = vi.fn().mockRejectedValue(new Error('fail'));
+		context.rootState.client = {
+			getCliInstance: () => ({
+				call,
+			}),
+		};
+		context.rootGetters['workspace/TASK_ON_WORKSPACE'] = {
+			newNumber: 'number',
+		};
+
+		await expect(callModule.actions.CALL(context, {})).rejects.toThrow('fail');
+		expect(context.state.isDialing).toBe(false);
+	});
+	it('HANDLE_RINGING_ACTION releases the dialing guard for outbound call', async () => {
+		context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = false;
+		await callModule.actions.HANDLE_RINGING_ACTION(context, {
+			id: '2',
+			direction: CallDirection.Outbound,
+		});
+		expect(context.dispatch).toHaveBeenCalledWith('STOP_DIALING');
+	});
+	it('HANDLE_RINGING_ACTION does not touch the dialing guard for inbound call', async () => {
+		context.rootGetters['workspace/IS_EMPTY_WORKSPACE'] = false;
+		await callModule.actions.HANDLE_RINGING_ACTION(context, {
+			id: '2',
+			direction: CallDirection.Inbound,
+		});
+		expect(context.dispatch).not.toHaveBeenCalledWith('STOP_DIALING');
 	});
 });

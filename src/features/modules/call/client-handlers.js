@@ -42,6 +42,12 @@ const actions = {
 	},
 
 	HANDLE_RINGING_ACTION: async (context, call) => {
+		// @author Roman Zaritskyi [WTEL-9905]
+		// Initiation of an outbound call by the agent unlocks the CALL action
+		if (call.direction === CallDirection.Outbound) {
+			context.dispatch('STOP_DIALING');
+		}
+
 		await context.dispatch('ADD_CALL', call);
 
 		if (
