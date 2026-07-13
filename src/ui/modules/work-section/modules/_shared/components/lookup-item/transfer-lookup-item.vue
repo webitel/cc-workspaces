@@ -38,12 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import parseUserStatus from '../../../../../../../features/modules/agent-status/statusUtils/parseUserStatus';
-import UserStatus from '../../../../../../../features/modules/agent-status/statusUtils/UserStatus';
+import getUserStatusByPriority from '../../../../../../../features/modules/agent-status/statusUtils/getUserStatusByPriority';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import LookupItem from './lookup-item.vue';
 import { TransferItem } from './types/transfer-lookup-item';
@@ -84,22 +81,12 @@ const store = useStore();
 const state = computed<string>(
 	() => store.getters['workspace/WORKSRACE_STATE'],
 );
-// NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
 const userStatus = computed(() => {
 	if (!props.showStatus) return undefined;
-	const statusMap = parseUserStatus(props.item[props.presenceStatusField]);
-	if (statusMap[UserStatus.DND]) return AbstractUserStatus.DND;
-	if (statusMap[UserStatus.BUSY]) return AbstractUserStatus.BUSY;
-	if (
-		(props.item?.status === AgentStatus.OFFLINE || !props.item?.status) &&
-		(statusMap[UserStatus.SIP] || statusMap[UserStatus.WEB])
-	) {
-		return AbstractUserStatus.ACTIVE;
-	}
-	if (props.item?.status === AgentStatus.ONLINE)
-		return AbstractUserStatus.ONLINE;
-	if (props.item?.status === AgentStatus.PAUSE) return AbstractUserStatus.PAUSE;
-	return AbstractUserStatus.OFFLINE;
+	return getUserStatusByPriority({
+		presence: props.item[props.presenceStatusField],
+		agentStatus: props.item?.status,
+	});
 });
 
 const badge = computed(
