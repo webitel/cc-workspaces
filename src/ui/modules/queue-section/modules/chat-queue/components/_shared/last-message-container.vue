@@ -33,6 +33,9 @@ const iconClass = computed(() =>
   align-items: center;
   gap: var(--spacing-xs);
   border-radius: var(--spacing-xs);
+  padding: 0 var(--spacing-2xs);
+  max-width: 100%;
+  width: fit-content;
 }
 
 .last-message-container--contacts {
