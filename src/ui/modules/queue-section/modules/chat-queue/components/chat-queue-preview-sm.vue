@@ -184,10 +184,8 @@ const displayChatName = computed(() =>
   }
 
   .chat-queue-preview-sm__icon {
-    position: relative;
     flex: 0 0 var(--icon-sm-size);
     display: flex;
-    align-items: center;
     justify-content: center;
   }
 

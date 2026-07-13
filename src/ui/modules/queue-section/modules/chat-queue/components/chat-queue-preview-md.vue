@@ -215,7 +215,7 @@ const iconColor = computed(() => {
   }
 
   .queue-preview-icon {
-    position: relative;
+    align-items: flex-start;
   }
 
   &__title {
