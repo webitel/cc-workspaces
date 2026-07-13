@@ -53,7 +53,7 @@ const text = computed(() => {
   }
 
   &--right {
-    background: var(--secondary-light-color);
+    background: var(--p-secondary-hover-color);
     color: var(--secondary-on-color);
     place-self: flex-end;
   }

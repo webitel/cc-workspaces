@@ -197,7 +197,7 @@ $chat-info-gap: var(--spacing-2xs);
     white-space: pre-line;
     padding: var(--spacing-xs);
     border-radius: var(--border-radius);
-    background: var(--primary-light-color);
+    background: var(--p-primary-highlight-color);
     color: var(--primary-on-color);
     place-self: flex-start;
   }
@@ -222,7 +222,7 @@ $chat-info-gap: var(--spacing-2xs);
 
   &--right {
     .chat-message__body {
-      background: var(--secondary-light-color);
+      background: var(--p-secondary-hover-color);
       color: var(--secondary-on-color);
       place-self: flex-end;
     }

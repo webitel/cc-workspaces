@@ -64,7 +64,7 @@ export default {
   align-items: flex-start;
   cursor: pointer;
   padding: var(--spacing-xs);
-  background: var(--primary-light-color);
+  background: var(--p-primary-highlight-color);
   border-radius: var(--border-radius);
 
   &__icon-wrapper {
@@ -93,7 +93,7 @@ export default {
 
   &--right {
     flex-direction: row-reverse;
-    background: var(--secondary-light-color);
+    background: var(--p-secondary-hover-color);
 
     .chat-message-document__icon-wrapper {
       margin-right: 0;

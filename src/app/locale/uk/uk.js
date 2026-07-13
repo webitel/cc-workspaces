@@ -315,6 +315,8 @@ export default {
 				"Мікрофон не під'єднаний. Неможливо виконати дію.",
 			[DeviceNotAllowPermissionError.id]:
 				'Немає доступу до мікрофона. Неможливо виконати дію.',
+			cameraNotAllowPermission:
+				'Немає доступу до камери. Неможливо виконати дію.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
 		},

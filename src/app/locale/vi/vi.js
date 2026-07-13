@@ -309,6 +309,8 @@ export default {
 				'Micro không được kết nối. Không thể thực hiện hành động.',
 			[DeviceNotAllowPermissionError.id]:
 				'Từ chối truy cập micro. Không thể thực hiện hành động.',
+			cameraNotAllowPermission:
+				'Từ chối truy cập camera. Không thể thực hiện hành động.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',
 		},

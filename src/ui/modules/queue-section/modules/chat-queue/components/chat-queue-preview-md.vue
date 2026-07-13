@@ -13,11 +13,13 @@
   >
     <div class="chat-queue-preview-md-content">
       <div class="chat-queue-preview-md-header">
-        <div class="chat-queue-preview-md-header__icon">
+        <div
+          v-if="showIcon"
+          class="chat-queue-preview-md-header__icon"
+        >
           <div class="queue-preview-icon">
             <slot name="close-icon"></slot>
             <wt-icon
-              v-if="showIcon"
               :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
               :icon="opened ? 'chat--filled' : 'chat'"
               size="md"
@@ -240,7 +242,7 @@ const iconColor = computed(() => {
   &__content {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2xs);
+    gap: var(--spacing-xs);
     flex: 1;
     min-width: 0;
   }
