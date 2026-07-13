@@ -6,11 +6,13 @@ import UserStatus from './UserStatus';
 
 interface GetUserStatusByPriorityParams {
 	presence?: {
+		// because users without agent permissions can use workspase too
 		status?: string | string[];
 	} | null;
 	agentStatus?: string | null;
 }
 
+// NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
 const getUserStatusByPriority = ({
 	presence,
 	agentStatus,
