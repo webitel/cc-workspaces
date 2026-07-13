@@ -1,7 +1,7 @@
 <template>
   <wt-popup 
 			size="sm" 
-			:closable="!checkingPermissions" 
+			:disabled-close="checkingPermissions"
 			@close="close"
 		>
     <template #title>

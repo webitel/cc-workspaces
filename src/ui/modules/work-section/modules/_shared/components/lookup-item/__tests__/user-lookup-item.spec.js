@@ -38,7 +38,7 @@ describe('UserLookupItem', () => {
 				item,
 			},
 		});
-		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.PAUSE);
+		expect(wrapper.vm.status).toBe(AbstractUserStatus.PAUSE);
 	});
 
 	it('correctly comoputes user ONLINE status: online', () => {
@@ -48,7 +48,7 @@ describe('UserLookupItem', () => {
 				item,
 			},
 		});
-		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.ONLINE);
+		expect(wrapper.vm.status).toBe(AbstractUserStatus.ONLINE);
 	});
 
 	it('correctly comoputes user OFFLINE status: offline', () => {
@@ -58,7 +58,7 @@ describe('UserLookupItem', () => {
 				item,
 			},
 		});
-		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.OFFLINE);
+		expect(wrapper.vm.status).toBe(AbstractUserStatus.OFFLINE);
 	});
 
 	it('correctly comoputes user BUSY status: dlg', () => {
@@ -70,7 +70,7 @@ describe('UserLookupItem', () => {
 				item,
 			},
 		});
-		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.BUSY);
+		expect(wrapper.vm.status).toBe(AbstractUserStatus.BUSY);
 	});
 
 	it('correctly comoputes user DND status: dnd', () => {
@@ -82,6 +82,6 @@ describe('UserLookupItem', () => {
 				item,
 			},
 		});
-		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.DND);
+		expect(wrapper.vm.status).toBe(AbstractUserStatus.DND);
 	});
 });

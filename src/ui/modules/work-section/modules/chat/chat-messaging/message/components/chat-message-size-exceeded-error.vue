@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<IChatMessageSizeExceededErrorProps>(), {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-size-exceeded-error {
-  background: var(--primary-light-color);
+  background: var(--p-primary-highlight-color);
   border-radius: var(--spacing-xs);
   padding: var(--spacing-xs);
   display: flex;
@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<IChatMessageSizeExceededErrorProps>(), {
   text-align: center;
 
   &--right {
-    background: var(--secondary-light-color);
+    background: var(--p-secondary-hover-color);
     color: var(--secondary-on-color);
     place-self: flex-end;
   }

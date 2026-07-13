@@ -311,6 +311,8 @@ export default {
 				'Microfonul nu este conectat. Nu se poate efectua acțiunea.',
 			[DeviceNotAllowPermissionError.id]:
 				'Accesul la microfon este refuzat. Nu se poate efectua acțiunea.',
+			cameraNotAllowPermission:
+				'Accesul la cameră este refuzat. Nu se poate efectua acțiunea.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
 		},

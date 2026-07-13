@@ -1,10 +1,17 @@
 import { QueueTypeName } from '@webitel/ui-sdk/enums';
+import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
+import { DeviceNotAllowPermissionError } from 'webitel-sdk';
 
+import i18n from '../../../app/locale/i18n.js';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
 import manual from './modules/manual/store/manual';
 import missed from './modules/missed-calls/store/missed-calls';
 import isIncomingRinging from './scripts/isIncomingRinging';
+import {
+	isCameraAllowed,
+	isMicrophoneAllowed,
+} from './scripts/mediaPermissions';
 import videoCall from './video-call/video-call';
 
 let isCalling = false;
@@ -112,11 +119,36 @@ const actions = {
 		const call = callId
 			? context.getters.GET_CALL_BY_ID(callId)
 			: context.getters.CALL_ON_WORKSPACE;
+
+		const isMicAllowed = await isMicrophoneAllowed();
+		if (!isMicAllowed) {
+			eventBus.$emit('notification', {
+				type: 'error',
+				text: i18n.global.t(
+					`error.websocket.${DeviceNotAllowPermissionError.id}`,
+				),
+			});
+			return;
+		}
+
+		const isVideoCall =
+			context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'](call);
+
+		if (isVideoCall) {
+			const isCameraAllowedResult = await isCameraAllowed();
+			if (!isCameraAllowedResult) {
+				eventBus.$emit('notification', {
+					type: 'error',
+					text: i18n.global.t('error.websocket.cameraNotAllowPermission'),
+				});
+				return;
+			}
+		}
+
 		if (call.allowAnswer) {
 			const params = {
 				...ANSWER_PARAMS,
-				video:
-					context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'](call),
+				video: isVideoCall,
 			};
 			await call.answer(params);
 			await context.dispatch('SET_WORKSPACE', call);
