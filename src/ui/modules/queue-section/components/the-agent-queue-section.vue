@@ -67,7 +67,7 @@ import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
-import isIncomingRinging from '../../../../features/modules/call/scripts/isIncomingRinging.js';
+import isIncomingRinging from '../../../../features/modules/call/scripts/isIncomingRinging';
 import HotkeyAction from '../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../hotkeys/useHotkeys';
 import CallQueue from '../modules/call-queue/components/the-agent-call-queue.vue';
@@ -157,7 +157,9 @@ const incomingJobCount = computed(() =>
 );
 
 const hasUnseenChats = computed(
-	() => !!store.state.features?.chat?.unseen?.unseenChatIds?.length,
+	() =>
+		!!Object.keys(store.state.features?.chat?.unseen?.unseenChatIds || {})
+			.length,
 );
 
 const tabs = computed(() => [

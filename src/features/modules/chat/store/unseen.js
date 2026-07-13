@@ -5,12 +5,13 @@
 const getUnseenChatId = (chat) => chat.conversationId || chat.id;
 
 const state = {
-	unseenChatIds: [], // conversation ids with activity the agent hasn't seen yet
+	// { [conversationId]: true } — conversation ids with activity the agent hasn't seen yet
+	unseenChatIds: {},
 };
 
 const getters = {
 	IS_CHAT_UNSEEN: (state) => (chat) =>
-		state.unseenChatIds.includes(getUnseenChatId(chat)),
+		!!state.unseenChatIds[getUnseenChatId(chat)],
 };
 
 const actions = {
@@ -23,12 +24,10 @@ const actions = {
 
 const mutations = {
 	ADD_UNSEEN_CHAT: (state, chat) => {
-		const id = getUnseenChatId(chat);
-		if (!state.unseenChatIds.includes(id)) state.unseenChatIds.push(id);
+		state.unseenChatIds[getUnseenChatId(chat)] = true;
 	},
 	REMOVE_UNSEEN_CHAT: (state, chat) => {
-		const id = getUnseenChatId(chat);
-		state.unseenChatIds = state.unseenChatIds.filter((item) => item !== id);
+		delete state.unseenChatIds[getUnseenChatId(chat)];
 	},
 };
 
