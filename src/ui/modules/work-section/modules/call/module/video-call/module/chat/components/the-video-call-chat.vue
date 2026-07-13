@@ -11,6 +11,8 @@
       ]"
       :contact="contact"
       :readonly="isChatClosed"
+						:chat-id="chatId"
+						:is-chat-closed="isChatClosed"
       @[`action:${ChatAction.SendMessage}`]="sendMessage"
       @[`action:${ChatAction.AttachFiles}`]="sendFiles"
     />
@@ -54,6 +56,8 @@ const isChatClosed = computed(
 );
 
 const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
+
+const chatId = computed(() => chat?.value?.id);
 
 async function sendMessage(text: string, options?: ResultCallbacks) {
 	try {
