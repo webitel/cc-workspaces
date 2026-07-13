@@ -5,7 +5,6 @@
 const getUnseenChatId = (chat) => chat.conversationId || chat.id;
 
 const state = {
-	// { [conversationId]: true } — conversation ids with activity the agent hasn't seen yet
 	unseenChatIds: {},
 };
 
