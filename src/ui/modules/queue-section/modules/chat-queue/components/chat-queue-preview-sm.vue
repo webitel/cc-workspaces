@@ -20,6 +20,10 @@
           :color="ChatColorsMap[status]"
         />
 
+        <wt-badge
+          v-if="unseen"
+          color-variable="error-color"
+        />
       </div>
 
       <div class="chat-queue-preview-sm__icon-status">
@@ -111,6 +115,10 @@ const props = defineProps({
 	status: {
 		type: String,
 	},
+	unseen: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([
@@ -178,7 +186,6 @@ const displayChatName = computed(() =>
   .chat-queue-preview-sm__icon {
     flex: 0 0 var(--icon-sm-size);
     display: flex;
-    align-items: center;
     justify-content: center;
   }
 

@@ -25,6 +25,10 @@
               size="md"
               :color="ChatColorsMap[status] || 'secondary'"
             />
+            <wt-badge
+              v-if="unseen"
+              color-variable="error-color"
+            />
           </div>
         </div>
 
@@ -101,6 +105,10 @@ const props = defineProps({
 		default: 'chat',
 	},
 	opened: {
+		type: Boolean,
+		default: false,
+	},
+	unseen: {
 		type: Boolean,
 		default: false,
 	},
@@ -206,6 +214,10 @@ const iconColor = computed(() => {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+  }
+
+  .queue-preview-icon {
+    align-items: flex-start;
   }
 
   &__title {
