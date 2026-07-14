@@ -1,88 +1,63 @@
 <template>
   <article
-    v-element-size="handleChatResize"
     class="chat-history chat-messages-container"
     @click="focusOnInput"
   >
-      <wt-loader v-show="!showAllMessages" class="chat-history__loader"/>
-    <div
-      ref="chat-container"
-      class="chat-history__messages chat-messages-items wt-scrollbar"
+    <wt-loader v-show="!showAllMessages" class="chat-history__loader" />
+    <chat-container
+      :readonly="isChatClosed"
+      :messages="messages"
+      :size="props.size"
+      :can-load-next-messages="next"
+      :is-next-messages-loading="isLoading"
+      :contact="chatContact"
+      :chat-id="chatId"
+      :is-chat-closed="isChatClosed"
+      :closed-chat-first-message-id="closedChatFirstMessageId"
       :class="{'chat-history__messages--processing': !showAllMessages}"
-      @scroll="handleChatScroll"
+      :agent-name="agentName"
+      @load-next-messages="loadNextMessages"
     >
-      <div v-if="next && !isInitialScrollInProgress" class="chat-history__observer-wrapper">
-        <wt-intersection-observer
-          :canLoadMore="next"
-          :loading="isLoading"
-          @next="loadNextMessages"
-        />
-      </div>
-      <message
-        v-for="(message, index) of messages"
-        :key="message.id"
-        :id="`message-${message.id}`"
-        :message="message"
-        :size="props.size"
-        :show-avatar="showAvatar(index) || isChatStarted(index)"
-        :username="props.contact?.name"
-        @open-image="openMedia(message)"
-        @initialized-player="attachPlayer"
-      >
-        <template #before-message>
-          <chat-date
-            v-if="showChatDate(index) || isHistoryStart(index)"
-            :date="message.createdAt"
-          />
-          <chat-activity-info
-            v-if="isChatStarted(index) || isHistoryStart(index)"
-            :provider="getChatProvider(message)?.type"
-            :gateway="getChatProvider(message)?.name"
-          />
-          <chat-agent
-            v-if="isChatStarted(index)"
-            :chat-id="message.chat?.id"
-            :contact-id="props.contact.id"
-          />
-        </template>
+      <template #footer />
 
-        <template #after-message>
-          <chat-activity-info
-            v-if="isChatStarted(index + 1) || isLastMessage(index)"
-            ended
-          />
-        </template>
-      </message>
-      </div>
-    <scroll-to-bottom-btn
-      v-if="showScrollToBottomBtn"
-      :new-message-count="newUnseenMessages"
-      @scroll="scrollToBottom('smooth')"
-    />
+      <template #before-message="{ message, index }">
+        <chat-date
+          v-if="showChatDate(index) || isHistoryStart(index)"
+          :date="message.createdAt"
+        />
+        <chat-activity-info
+          v-if="isChatStarted(index) || isHistoryStart(index)"
+          :provider="getChatProvider(message)?.type"
+          :gateway="getChatProvider(message)?.name"
+        />
+        <chat-agent
+          v-if="isChatStarted(index)"
+          :chat-id="message.chat?.id"
+          :contact-id="props.contact.id"
+        />
+      </template>
+
+      <template #after-message="{ message, index }">
+        <chat-activity-info
+          v-if="isChatStarted(index + 1) || isLastMessage(index)"
+          ended
+        />
+      </template>
+    </chat-container>
   </article>
 </template>
 
 <script setup>
-import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
+import { ChatContainer } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import {
-	computed,
-	nextTick,
-	onMounted,
-	onUnmounted,
-	ref,
-	useTemplateRef,
-	watch,
-} from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
-import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
-import { useChatScroll } from '../composables/useChatScroll';
-import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages';
 
 const props = defineProps({
@@ -97,33 +72,17 @@ const props = defineProps({
 });
 
 const store = useStore();
+const userinfoStore = useUserinfoStore();
 
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
-const chatContainer = useTemplateRef('chat-container');
+const { userInfo } = storeToRefs(userinfoStore);
 const isLoading = ref(false);
-const lastVisibleMessageEl = ref(null); // message on top of the chat
-const isInitialScrollInProgress = ref(false);
 const showAllMessages = ref(false);
 
-const {
-	messages,
-
-	getMessage,
-	isLastMessage,
-	showChatDate,
-	showAvatar,
-	focusOnInput,
-} = useChatMessages();
-
-const {
-	showScrollToBottomBtn,
-	newUnseenMessages,
-	scrollToBottom,
-	handleChatScroll,
-	handleChatResize,
-} = useChatScroll(chatContainer);
+const { messages, getMessage, isLastMessage, showChatDate, focusOnInput } =
+	useChatMessages();
 
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
@@ -133,6 +92,16 @@ const isChatClosed = computed(
 const closedChatFirstMessageId = computed(
 	() => store.state.features.chat.closed.closedChatFirstMessageId,
 );
+const chatId = computed(() => chat.value?.id);
+const agentName = computed(
+	() => userInfo.value.chatName || userInfo.value.name,
+);
+const chatContact = computed(() => ({
+	...props.contact,
+	name: {
+		commonName: props.contact?.name,
+	},
+}));
 
 const loadHistory = async () =>
 	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
@@ -142,11 +111,6 @@ const loadClosedChatHistory = async () =>
 		chat.value,
 	);
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
-
-const attachPlayer = (player) =>
-	store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
-const openMedia = (message) =>
-	store.dispatch(`${chatNamespace}/chatMedia/OPEN_MEDIA`, message);
 
 function isChatStarted(index) {
 	const { prevMessage, message } = getMessage(index);
@@ -169,26 +133,6 @@ function getChatProvider(message) {
 		: {};
 }
 
-const getTopMessageEl = () => {
-	// help to fix chat viewing position when new messages was loaded
-	if (!chatContainer.value.children) return;
-
-	lastVisibleMessageEl.value =
-		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
-};
-
-function scrollToClosedChatFirstMessage() {
-	const closedChatFirstMessageEl = document.getElementById(
-		`message-${closedChatFirstMessageId.value}`,
-	);
-
-	if (closedChatFirstMessageEl) {
-		closedChatFirstMessageEl.scrollIntoView(true);
-	} else {
-		scrollToBottom();
-	}
-}
-
 const loadNextMessages = async () => {
 	if (isLoading.value || !next.value) return;
 	isLoading.value = true;
@@ -197,40 +141,23 @@ const loadNextMessages = async () => {
 		await store.dispatch(`${namespace}/LOAD_NEXT`, props.contact?.id);
 		await nextTick();
 
-		if (lastVisibleMessageEl.value?.scrollIntoView) {
-			// fast return the scroll view on prev position
-			lastVisibleMessageEl.value.scrollIntoView();
-		}
-
 		isLoading.value = false;
 	}, 200);
-
-	getTopMessageEl();
 };
 
 async function loadMessagesList() {
 	if (!isChatClosed.value) {
 		await loadHistory();
 		await nextTick();
-		scrollToBottom();
 	} else {
-		isInitialScrollInProgress.value = true;
-
 		await loadClosedChatHistory();
 		await nextTick();
-		scrollToClosedChatFirstMessage();
-
-		isInitialScrollInProgress.value = false;
 	}
 
 	setTimeout(() => {
 		showAllMessages.value = true;
 	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
-
-onMounted(() => {
-	getTopMessageEl();
-});
 
 onUnmounted(() => {
 	resetHistory();
@@ -257,14 +184,6 @@ watch(
   // to place observer at the bottom of observer wrapper (closer to messages)
   display: flex;
   align-items: flex-end;
-}
-.chat-history__messages {
-  opacity: 100%;
-  transition: all var(--transition-fast);
-
-  &--processing {
-    opacity: 0;
-  }
 }
 
 .chat-history {
