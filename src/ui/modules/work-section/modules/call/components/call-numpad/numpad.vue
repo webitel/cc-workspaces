@@ -25,6 +25,7 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { throttle } from 'lodash-es';
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
@@ -53,7 +54,11 @@ const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const input = (value) => store.dispatch('features/call/ADD_DIGIT', value);
-const makeCall = () => store.dispatch('features/call/CALL');
+
+// @author Roman Zaritskyi [WTEL-9905] guard against double-dial on rapid Enter
+const makeCall = throttle(() => store.dispatch('features/call/CALL'), 1000, {
+	trailing: false,
+});
 
 const setNumberFocus = () => {
 	const input = numberInput.value?.$el?.querySelector('input');

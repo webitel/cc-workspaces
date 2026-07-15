@@ -17,7 +17,6 @@ import videoCall from './video-call/video-call';
 const state = {
 	callList: [],
 	isVideo: false,
-	isDialing: false,
 	callInfo: new Map(),
 };
 
@@ -30,8 +29,6 @@ const getters = {
 		state.callList.find((call) => call.id === callId),
 
 	IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE?._isNew,
-
-	IS_DIALING: (state) => state.isDialing,
 
 	GET_CURRENT_CALL_DIGITS: (state, getters) => {
 		if (getters.CALL_ON_WORKSPACE.digits?.length) {
@@ -70,49 +67,38 @@ const actions = {
 		// deprecated from 20.02.2024. remove me in 6 months
 		if (user) throw new Error('{ user } param for CALL is deprecated');
 
-		// @author Roman Zaritskyi [WTEL-9905] guard against double-dial
-		if (context.state.isDialing) return;
-		context.commit('SET_IS_DIALING', true);
+		const CALL_PARAMS = {
+			disableStun: !context.rootState.config.CLI.stun,
+			contactId,
+		};
+		let destination;
 
-		try {
-			const CALL_PARAMS = {
-				disableStun: !context.rootState.config.CLI.stun,
-				contactId,
-			};
-			let destination;
-
-			const isActiveCall = context.state.callList.find((call) => call.active);
-			//@author Oles Chorpita
-			//If there's an active call, or call was active but cleared from TASK_ON_WORKSPACE,
-			if (isActiveCall) {
-				context.dispatch('SET_HOLD', isActiveCall);
-			}
-
-			if (number) {
-				destination = number;
-			} else {
-				destination =
-					context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
-			}
-
-			// eslint-disable-next-line no-useless-escape
-			destination = destination.replace(/[^0-9a-zA-z+*#]/g, '');
-			const client = await context.rootState.client.getCliInstance();
-			const params = {
-				...CALL_PARAMS,
-				video: context.state.isVideo,
-			};
-			await client.call({
-				destination,
-				params,
-			});
-		} catch (err) {
-			context.commit('SET_IS_DIALING', false);
-			throw err;
+		const isActiveCall = context.state.callList.find((call) => call.active);
+		//@author Oles Chorpita
+		//If there's an active call, or call was active but cleared from TASK_ON_WORKSPACE,
+		if (isActiveCall) {
+			context.dispatch('SET_HOLD', isActiveCall);
 		}
-	},
 
-	STOP_DIALING: (context) => context.commit('SET_IS_DIALING', false),
+		if (number) {
+			destination = number;
+		} else {
+			destination =
+				context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
+		}
+
+		// eslint-disable-next-line no-useless-escape
+		destination = destination.replace(/[^0-9a-zA-z+*#]/g, '');
+		const client = await context.rootState.client.getCliInstance();
+		const params = {
+			...CALL_PARAMS,
+			video: context.state.isVideo,
+		};
+		await client.call({
+			destination,
+			params,
+		});
+	},
 
 	ANSWER: async (context, { callId } = {}) => {
 		const ANSWER_PARAMS = {
@@ -226,14 +212,11 @@ const actions = {
 	},
 
 	// new number destructuring to prevent mouse event
-	OPEN_NEW_CALL: (context, { newNumber } = {}) => {
-		// reset the dial lock for each fresh new-call session
-		context.commit('SET_IS_DIALING', false);
-		return context.dispatch('SET_WORKSPACE', {
+	OPEN_NEW_CALL: (context, { newNumber } = {}) =>
+		context.dispatch('SET_WORKSPACE', {
 			_isNew: true,
 			newNumber: newNumber || '',
-		});
-	},
+		}),
 
 	CLOSE_NEW_CALL: (context) => context.dispatch('RESET_WORKSPACE'),
 
@@ -303,10 +286,6 @@ const mutations = {
 
 	SET_VIDEO: (state, value) => {
 		state.isVideo = value;
-	},
-
-	SET_IS_DIALING: (state, value) => {
-		state.isDialing = value;
 	},
 
 	SET_CALL_LIST: (state, callList) => {
