@@ -1,69 +1,72 @@
 <template>
   <article
-    v-element-size="handleChatResize"
-    class="chat-history chat-messages-container"
+    class="chat-history"
     @click="focusOnInput"
   >
-      <wt-loader v-show="!showAllMessages" class="chat-history__loader"/>
+    <wt-loader v-show="!showAllMessages" class="chat-history__loader" />
     <div
       ref="chat-container"
-      class="chat-history__messages chat-messages-items wt-scrollbar"
-      :class="{'chat-history__messages--processing': !showAllMessages}"
+      class="chat-history__messages wt-scrollbar"
+      :class="{ 'chat-history__messages--processing': !showAllMessages }"
       @scroll="handleChatScroll"
     >
-      <div v-if="next && !isInitialScrollInProgress" class="chat-history__observer-wrapper">
-        <wt-intersection-observer
-          :canLoadMore="next"
-          :loading="isLoading"
-          @next="loadNextMessages"
-        />
-      </div>
-      <message
-        v-for="(message, index) of messages"
-        :key="message.id"
-        :id="`message-${message.id}`"
-        :message="message"
-        :size="props.size"
-        :show-avatar="showAvatar(index) || isChatStarted(index)"
-        :username="props.contact?.name"
-        @open-image="openMedia(message)"
-        @initialized-player="attachPlayer"
+      <div
+        ref="chat-content"
+        class="chat-history__content"
       >
-        <template #before-message>
-          <chat-date
-            v-if="showChatDate(index) || isHistoryStart(index)"
-            :date="message.createdAt"
+        <div v-if="next && !isInitialScrollInProgress" class="chat-history__observer-wrapper">
+          <wt-intersection-observer
+            :canLoadMore="next"
+            :loading="isLoading"
+            @next="loadNextMessages"
           />
-          <chat-activity-info
-            v-if="isChatStarted(index) || isHistoryStart(index)"
-            :provider="getChatProvider(message)?.type"
-            :gateway="getChatProvider(message)?.name"
-          />
-          <chat-agent
-            v-if="isChatStarted(index)"
-            :chat-id="message.chat?.id"
-            :contact-id="props.contact.id"
-          />
-        </template>
+        </div>
+        <message
+          v-for="(message, index) of messages"
+          :key="message.id"
+          :id="`message-${message.id}`"
+          :message="message"
+          :size="props.size"
+          :show-avatar="showAvatar(index) || isChatStarted(index)"
+          :username="props.contact?.name"
+          @open-image="openMedia(message)"
+          @initialized-player="attachPlayer"
+        >
+          <template #before-message>
+            <chat-date
+              v-if="showChatDate(index) || isHistoryStart(index)"
+              :date="message.createdAt"
+            />
+            <chat-activity-info
+              v-if="isChatStarted(index) || isHistoryStart(index)"
+              :provider="getChatProvider(message)?.type"
+              :gateway="getChatProvider(message)?.name"
+            />
+            <chat-agent
+              v-if="isChatStarted(index)"
+              :chat-id="message.chat?.id"
+              :contact-id="props.contact.id"
+            />
+          </template>
 
-        <template #after-message>
-          <chat-activity-info
-            v-if="isChatStarted(index + 1) || isLastMessage(index)"
-            ended
-          />
-        </template>
-      </message>
+          <template #after-message>
+            <chat-activity-info
+              v-if="isChatStarted(index + 1) || isLastMessage(index)"
+              ended
+            />
+          </template>
+        </message>
       </div>
+    </div>
     <scroll-to-bottom-btn
       v-if="showScrollToBottomBtn"
-      :new-message-count="newUnseenMessages"
+      :new-message-count="newUnseenMessagesCount"
       @scroll="scrollToBottom('smooth')"
     />
   </article>
 </template>
 
 <script setup>
-import { vElementSize } from '@vueuse/components'; // for chat resize observer, when chat-messages-container size changes
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import {
@@ -77,11 +80,14 @@ import {
 } from 'vue';
 import { useStore } from 'vuex';
 
+import {
+	useChatScroll,
+	useObserveHeightUntilStable,
+} from '@webitel/ui-chats/ui';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';
 import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
-import { useChatScroll } from '../composables/useChatScroll';
 import Message from '../message/chat-message.vue';
 import { useChatMessages } from '../message/composables/useChatMessages';
 
@@ -102,6 +108,7 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const chatContainer = useTemplateRef('chat-container');
+const chatContent = useTemplateRef('chat-content');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null); // message on top of the chat
 const isInitialScrollInProgress = ref(false);
@@ -117,14 +124,6 @@ const {
 	focusOnInput,
 } = useChatMessages();
 
-const {
-	showScrollToBottomBtn,
-	newUnseenMessages,
-	scrollToBottom,
-	handleChatScroll,
-	handleChatResize,
-} = useChatScroll(chatContainer);
-
 const next = computed(() => getNamespacedState(store.state, namespace).next);
 const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 const isChatClosed = computed(
@@ -132,6 +131,27 @@ const isChatClosed = computed(
 );
 const closedChatFirstMessageId = computed(
 	() => store.state.features.chat.closed.closedChatFirstMessageId,
+);
+
+const {
+	showScrollToBottomBtn,
+	newUnseenMessagesCount,
+	scrollToBottom,
+	handleChatScroll,
+} = useChatScroll({
+	chatContainer,
+	chatContent,
+	messages,
+	chatId: computed(() => chat.value?.id),
+	isChatClosed,
+	onBeforeStart: ({ scrollToBottom }) => {
+		scrollToBottom();
+		startObserve();
+	},
+});
+
+const { startObserve } = useObserveHeightUntilStable(chatContainer, () =>
+	scrollToBottom('instant'),
 );
 
 const loadHistory = async () =>
@@ -171,7 +191,7 @@ function getChatProvider(message) {
 
 const getTopMessageEl = () => {
 	// help to fix chat viewing position when new messages was loaded
-	if (!chatContainer.value.children) return;
+	if (!chatContainer.value?.children) return;
 
 	lastVisibleMessageEl.value =
 		chatContainer.value.getElementsByClassName('chat-message')[0]; // to remember last visible message before load more
@@ -251,24 +271,13 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-// reserve height for the loader to avoid unnecessary chat height changes https://webitel.atlassian.net/browse/WTEL-5366
-.chat-history__observer-wrapper {
-  min-height: calc(var(--spacing-lg)*2 + var(--icon-md-size)); // observer loader height
-  // to place observer at the bottom of observer wrapper (closer to messages)
-  display: flex;
-  align-items: flex-end;
-}
-.chat-history__messages {
-  opacity: 100%;
-  transition: all var(--transition-fast);
-
-  &--processing {
-    opacity: 0;
-  }
-}
-
 .chat-history {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 
   &__loader {
     position: absolute;
@@ -278,6 +287,33 @@ watch(
     bottom: 0;
     margin: auto;
     width: fit-content;
+  }
+
+  &__messages {
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    opacity: 100%;
+    transition: all var(--transition-fast);
+
+    &--processing {
+      opacity: 0;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+				gap: var(--spacing-xs);
+  }
+
+  // reserve height for the loader to avoid unnecessary chat height changes https://webitel.atlassian.net/browse/WTEL-5366
+  &__observer-wrapper {
+    min-height: calc(var(--spacing-lg) * 2 + var(--icon-md-size)); // observer loader height
+    // to place observer at the bottom of observer wrapper (closer to messages)
+    display: flex;
+    align-items: flex-end;
   }
 }
 </style>
