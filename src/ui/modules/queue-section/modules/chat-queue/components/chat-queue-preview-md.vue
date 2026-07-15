@@ -13,15 +13,21 @@
   >
     <div class="chat-queue-preview-md-content">
       <div class="chat-queue-preview-md-header">
-        <div class="chat-queue-preview-md-header__icon">
+        <div
+          v-if="showIcon"
+          class="chat-queue-preview-md-header__icon"
+        >
           <div class="queue-preview-icon">
             <slot name="close-icon"></slot>
             <wt-icon
-              v-if="showIcon"
               :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
               :icon="opened ? 'chat--filled' : 'chat'"
               size="md"
               :color="ChatColorsMap[status] || 'secondary'"
+            />
+            <wt-badge
+              v-if="unseen"
+              color-variable="error-color"
             />
           </div>
         </div>
@@ -99,6 +105,10 @@ const props = defineProps({
 		default: 'chat',
 	},
 	opened: {
+		type: Boolean,
+		default: false,
+	},
+	unseen: {
 		type: Boolean,
 		default: false,
 	},
@@ -204,6 +214,10 @@ const iconColor = computed(() => {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+  }
+
+  .queue-preview-icon {
+    align-items: flex-start;
   }
 
   &__title {

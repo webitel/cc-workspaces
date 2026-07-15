@@ -82,6 +82,10 @@ const actions = {
 		}
 	},
 	OPEN_CLOSED_CHAT: async (context, chat) => {
+		context.commit('features/chat/unseen/REMOVE_UNSEEN_CHAT', chat, {
+			root: true,
+		});
+
 		if (!chat.contact?.id) {
 			await context.dispatch('LOAD_CLOSED_CHAT', chat);
 		} else {

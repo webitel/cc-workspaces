@@ -5,6 +5,7 @@
     :task="task"
     :status="ChatStatus.Closed"
     :opened="opened"
+    :unseen="unseen"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
@@ -53,6 +54,7 @@
     :task="task"
     :opened="opened"
     :status="ChatStatus.Closed"
+    :unseen="unseen"
     class="closed-queue-preview"
     @click="$emit('click', task)"
   >
@@ -137,6 +139,10 @@ const props = defineProps({
 });
 
 const store = useStore();
+
+const unseen = computed(() =>
+	store.getters['features/chat/unseen/IS_CHAT_UNSEEN'](props.task),
+);
 
 const displayIcon = computed(() => messengerIcon(props.task.gateway?.type));
 const displayTaskName = computed(() => props.task.title);

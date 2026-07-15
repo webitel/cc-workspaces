@@ -72,6 +72,7 @@ const actions = {
 				action,
 				chat,
 			});
+			context.commit('unseen/ADD_UNSEEN_CHAT', chat);
 		}
 		context.dispatch('CHAT_INSERT_TO_START', chat);
 	},
@@ -99,6 +100,7 @@ const actions = {
 
 	HANDLE_DESTROY_ACTION: (context, { chat }) => {
 		// action after processing or when chat was closed by agent
+		context.commit('unseen/ADD_UNSEEN_CHAT', chat);
 		context.dispatch('RESET_CHAT', chat);
 	},
 
@@ -108,6 +110,10 @@ const actions = {
 			action,
 			chat,
 		});
+
+		// close by client/timeout must always be flagged,
+		// with or without reporting
+		context.commit('unseen/ADD_UNSEEN_CHAT', chat);
 
 		if (!chat.allowReporting) {
 			// https://webitel.atlassian.net/browse/WTEL-5631
