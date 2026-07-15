@@ -67,6 +67,10 @@
 </template>
 
 <script setup>
+import {
+	useChatScroll,
+	useObserveHeightUntilStable,
+} from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
 import {
@@ -79,11 +83,6 @@ import {
 	watch,
 } from 'vue';
 import { useStore } from 'vuex';
-
-import {
-	useChatScroll,
-	useObserveHeightUntilStable,
-} from '@webitel/ui-chats/ui';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
 import ChatDate from '../components/chat-date.vue';

@@ -42,14 +42,13 @@
 </template>
 
 <script setup>
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { computed, onUnmounted, useTemplateRef } from 'vue';
-import { useStore } from 'vuex';
-
 import {
 	useChatScroll,
 	useObserveHeightUntilStable,
 } from '@webitel/ui-chats/ui';
+import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
+import { computed, onUnmounted, useTemplateRef } from 'vue';
+import { useStore } from 'vuex';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatDate from '../components/chat-date.vue';
 import ScrollToBottomBtn from '../components/scroll-to-bottom-btn.vue';
