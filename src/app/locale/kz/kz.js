@@ -313,6 +313,10 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
 		},
+		chat: {
+			portalNoDeviceConnection:
+				'Клиент желіде жоқ. Хабарлама кейінірек жеткізіледі.',
+		},
 		endpoint: {
 			noLicense:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',

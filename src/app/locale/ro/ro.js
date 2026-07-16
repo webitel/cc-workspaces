@@ -316,6 +316,10 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
 		},
+		chat: {
+			portalNoDeviceConnection:
+				'Clientul este offline. Mesajul va fi livrat mai târziu.',
+		},
 		endpoint: {
 			noLicense:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',

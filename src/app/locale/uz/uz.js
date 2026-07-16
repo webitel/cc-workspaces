@@ -314,6 +314,9 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace ishlamaydi. Litsenziya muddati tugagan.',
 		},
+		chat: {
+			portalNoDeviceConnection: 'Mijoz oflayn. Xabar keyinroq yetkaziladi.',
+		},
 		endpoint: {
 			noLicense: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
 		},

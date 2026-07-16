@@ -314,6 +314,10 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',
 		},
+		chat: {
+			portalNoDeviceConnection:
+				'Khách hàng đang ngoại tuyến. Tin nhắn sẽ được gửi sau.',
+		},
 		endpoint: {
 			noLicense:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',

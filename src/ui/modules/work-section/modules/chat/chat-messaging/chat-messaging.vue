@@ -126,6 +126,7 @@ import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import { useDropzoneHandlers } from '../../../../../composibles/useDropzoneHandlers';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { ChatSendMessageErrors } from '../enums/ChatSendMessageErrors.enum';
 import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
 import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 import ChatHistory from './chat-history/the-chat-history.vue';
@@ -241,7 +242,14 @@ async function sendMessage() {
 	try {
 		chat.value.draft = '';
 		await send(draft);
-	} catch {
+	} catch (error) {
+		if (error?.detail === ChatSendMessageErrors.PortalNoDeviceConnection) {
+			eventBus?.$emit('notification', {
+				type: 'warning',
+				text: t('error.chat.portalNoDeviceConnection'),
+			});
+			return;
+		}
 		chat.value.draft = draft;
 		eventBus?.$emit('notification', {
 			type: 'error',

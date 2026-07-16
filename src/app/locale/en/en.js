@@ -318,6 +318,10 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'You can not work in Workspace because your license has expired.',
 		},
+		chat: {
+			portalNoDeviceConnection:
+				'The client is offline. The message will be delivered later.',
+		},
 		endpoint: {
 			noLicense:
 				'You can not work in Workspace because your license has expired.',
