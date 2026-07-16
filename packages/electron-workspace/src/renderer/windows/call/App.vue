@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import CallView from './components/CallView/CallView.vue';
 import ProcessingView from './components/ProcessingView/ProcessingView.vue';
-import SuccessView from './components/SuccessView.vue';
+import SuccessView from './components/SuccessView/SuccessView.vue';
 import {
 	type CallPayload,
 	onDestroyNotification,
