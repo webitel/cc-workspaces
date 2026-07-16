@@ -15,6 +15,8 @@ export default function (messengerType) {
 			return 'messenger-facebook';
 		case 'custom':
 			return 'messenger-custom';
+		case 'gotd':
+			return 'messenger-telegram';
 		default:
 			return messengerType;
 	}
