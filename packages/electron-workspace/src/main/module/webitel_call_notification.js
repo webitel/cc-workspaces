@@ -143,7 +143,7 @@ class CallNotification {
 	setActiveCall(arg) {
 		if (!this.isNawProcesing) {
 			this.call = arg;
-			this.window.show();
+			// this.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
 			this._showCall(arg);
 		}
 	}
@@ -192,7 +192,7 @@ class CallNotification {
 	}
 
 	show() {
-		this.window.show();
+		// this.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
 	}
 
 	hide() {
@@ -208,7 +208,7 @@ class CallNotification {
 			this.window.webContents.send('set-processing-info', arg);
 		}
 		if (needShow && !conf.hidePostProcessing) {
-			this.show();
+			// this.show();// https://webitel.atlassian.net/browse/WTEL-9965
 		} else if (conf.hidePostProcessing) {
 			this.destroyNotification();
 		}
