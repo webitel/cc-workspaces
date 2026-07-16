@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import CallView from './components/CallView/CallView.vue';
-import ProcessingView from './components/ProcessingView.vue';
+import ProcessingView from './components/ProcessingView/ProcessingView.vue';
 import SuccessView from './components/SuccessView.vue';
 import {
 	type CallPayload,

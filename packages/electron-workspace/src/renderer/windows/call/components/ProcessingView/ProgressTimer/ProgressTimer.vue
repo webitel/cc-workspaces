@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue';
 import iconPlus from '@img/icon-plus-md.svg';
-import { type ProcessingPayload, resetTimer } from '../composables/useCallIPC';
+import {
+	type ProcessingPayload,
+	resetTimer,
+} from '../../../composables/useCallIPC';
 
 const props = defineProps<{
 	payload: ProcessingPayload | null;
