@@ -4,7 +4,6 @@ import { createStore } from 'vuex';
 
 import ChatTransferDestination from '../../../../chat/enums/ChatTransferDestination.enum';
 import TransferLookupItem from '../transfer-lookup-item.vue';
-import UserLookupItem from '../user-lookup-item.vue';
 
 describe('TransferLookupItem', () => {
 	const item = {};
@@ -52,57 +51,66 @@ describe('TransferLookupItem', () => {
 		]);
 	});
 
-	it('correctly comoputes user PAUSE status: pause', () => {
-		item.status = 'pause';
-		const wrapper = shallowMount(UserLookupItem, {
+	// status priority matrix is covered in statusUtils/__tests__/getUserStatusByPriority.spec.ts
+	it('computes userStatus from item presence and agent status', () => {
+		const wrapper = shallowMount(TransferLookupItem, {
 			props: {
-				item,
+				item: {
+					status: 'offline',
+					presence: {
+						status: 'sip',
+					},
+				},
+				type,
+				showStatus: true,
+			},
+			global: {
+				plugins: [
+					store,
+				],
 			},
 		});
-		expect(wrapper.vm.status).toBe(AbstractUserStatus.PAUSE);
+		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.OFFLINE);
 	});
 
-	it('correctly comoputes user ONLINE status: online', () => {
-		item.status = 'online';
-		const wrapper = shallowMount(UserLookupItem, {
+	it('reads presence from custom presenceStatusField', () => {
+		const wrapper = shallowMount(TransferLookupItem, {
 			props: {
-				item,
+				item: {
+					userPresenceStatus: {
+						status: 'dlg',
+					},
+				},
+				type,
+				showStatus: true,
+				presenceStatusField: 'userPresenceStatus',
+			},
+			global: {
+				plugins: [
+					store,
+				],
 			},
 		});
-		expect(wrapper.vm.status).toBe(AbstractUserStatus.ONLINE);
+		expect(wrapper.vm.userStatus).toBe(AbstractUserStatus.BUSY);
 	});
 
-	it('correctly comoputes user OFFLINE status: offline', () => {
-		item.status = 'offline';
-		const wrapper = shallowMount(UserLookupItem, {
+	it('does not compute userStatus when showStatus is false', () => {
+		const wrapper = shallowMount(TransferLookupItem, {
 			props: {
-				item,
+				item: {
+					presence: {
+						status: 'sip',
+					},
+				},
+				type,
+				showStatus: false,
+			},
+			global: {
+				plugins: [
+					store,
+				],
 			},
 		});
-		expect(wrapper.vm.status).toBe(AbstractUserStatus.OFFLINE);
-	});
-
-	it('correctly comoputes user BUSY status: dlg', () => {
-		item.presence = {
-			status: 'dlg',
-		};
-		const wrapper = shallowMount(UserLookupItem, {
-			props: {
-				item,
-			},
-		});
-		expect(wrapper.vm.status).toBe(AbstractUserStatus.BUSY);
-	});
-
-	it('correctly comoputes user DND status: dnd', () => {
-		item.presence = {
-			status: 'dnd',
-		};
-		const wrapper = shallowMount(UserLookupItem, {
-			props: {
-				item,
-			},
-		});
-		expect(wrapper.vm.status).toBe(AbstractUserStatus.DND);
+		expect(wrapper.vm.userStatus).toBe(undefined);
 	});
 });
