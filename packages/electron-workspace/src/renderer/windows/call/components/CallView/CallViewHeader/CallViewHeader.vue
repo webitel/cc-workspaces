@@ -12,6 +12,7 @@
         <span class="call-view-header__duration">
             {{ duration }}
         </span>
+        <wt-button color="secondary" icon="close" @click="emit('close')" />
     </header>
 </template>
 
@@ -27,6 +28,10 @@ const props = defineProps<{
 	duration: string;
 	answered: boolean;
 	isHold: boolean;
+}>();
+
+const emit = defineEmits<{
+	close: [];
 }>();
 
 const icon = computed(() => {
