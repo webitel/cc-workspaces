@@ -3,7 +3,7 @@
         <wt-icon :icon="icon" />
         <div class="call-view-header__text">
             <h3 class="call-view-header__title">
-                {{ title }}
+                {{ title || subtitle }}
             </h3>
             <p class="call-view-header__subtitle">
                 {{ subtitle }}
@@ -44,6 +44,7 @@ const icon = computed(() => {
 }
 
 .call-view-header__text {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 5px;

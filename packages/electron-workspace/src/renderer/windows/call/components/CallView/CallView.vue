@@ -74,7 +74,7 @@ watch(
 );
 </script>
 
-<style>
+<style scoped>
 .call-view {
     display: flex;
     flex-direction: column;
@@ -84,5 +84,9 @@ watch(
     background: #f7f7f7;
     border-radius: 5px;
     overflow: auto;
+}
+
+.call-view-footer {
+	margin-top: auto;
 }
 </style>

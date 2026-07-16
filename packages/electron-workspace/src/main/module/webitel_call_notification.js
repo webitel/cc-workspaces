@@ -34,7 +34,7 @@ class CallNotification {
 			title: 'Webitel',
 			useContentSize: true,
 			name: 'callNotification',
-			titleBarStyle: 'hidden',
+			titleBarStyle: 'default',
 			icon: path.join(app.getAppPath(), 'img/app-active-call-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
