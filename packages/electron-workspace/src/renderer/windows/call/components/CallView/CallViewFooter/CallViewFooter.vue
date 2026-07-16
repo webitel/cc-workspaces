@@ -4,30 +4,28 @@
             v-if="active"
             :is-muted="isMuted"
             :is-hold="isHold"
-            @ringing:accept="emit('ringing:accept')"
-            @ringing:reject="emit('ringing:reject')"
-            @active:mute="emit('active:mute')"
-            @active:unmute="emit('active:unmute')"
-            @active:hold="emit('active:hold')"
-            @active:unhold="emit('active:unhold')"
-            @active:hangup="emit('active:hangup')"
+            @mute="emit('active:mute')"
+            @unmute="emit('active:unmute')"
+            @hold="emit('active:hold')"
+            @unhold="emit('active:unhold')"
+            @hangup="emit('active:hangup')"
         />
         <CallViewRingingFooter
             v-else
-            @ringing:accept="emit('ringing:accept')"
-            @ringing:reject="emit('ringing:reject')"
+            @accept="emit('ringing:accept')"
+            @reject="emit('ringing:reject')"
         />
     </footer>
 </template>
 
 <script
-    setup
-    lang="ts"
+	setup
+	lang="ts"
 >
 import CallViewActiveFooter from './CallViewActiveFooter.vue';
 import CallViewRingingFooter from './CallViewRingingFooter.vue';
 
-const props = defineProps<{
+defineProps<{
 	active: boolean;
 	isMuted: boolean;
 	isHold: boolean;

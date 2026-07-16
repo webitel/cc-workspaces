@@ -1,11 +1,21 @@
 <template>
-    <wt-button @click="emit('accept')">{{ t('Accept') }}</wt-button>
-    <wt-button @click="emit('reject')">{{ t('Reject') }}</wt-button>
+    <wt-button
+        color="success"
+        @click="emit('accept')"
+    >
+        {{ t('Answer') }}
+    </wt-button>
+    <wt-button
+        color="error"
+        @click="emit('reject')"
+    >
+        {{ t('Reject') }}
+    </wt-button>
 </template>
 
 <script
-    setup
-    lang="ts"
+	setup
+	lang="ts"
 >
 import { useI18n } from 'vue-i18n';
 

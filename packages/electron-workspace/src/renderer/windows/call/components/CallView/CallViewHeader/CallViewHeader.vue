@@ -1,6 +1,6 @@
 <template>
     <header class="call-view-header">
-        <wt-icon :icon="isHold ? 'hold' : 'call'" />
+        <wt-icon :icon="icon" />
         <div class="call-view-header__text">
             <h3 class="call-view-header__title">
                 {{ title }}
@@ -16,15 +16,23 @@
 </template>
 
 <script
-    setup
-    lang="ts"
+	setup
+	lang="ts"
 >
+import { computed } from 'vue';
+
 const props = defineProps<{
 	title: string;
 	subtitle: string;
 	duration: string;
+	answered: boolean;
 	isHold: boolean;
 }>();
+
+const icon = computed(() => {
+	if (!props.answered) return 'call-ringing';
+	return props.isHold ? 'hold' : 'call';
+});
 </script>
 
 <style scoped>
