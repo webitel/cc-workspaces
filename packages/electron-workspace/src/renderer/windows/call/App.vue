@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import CallView from './components/CallView.vue';
+import CallView from './components/CallView/CallView.vue';
 import ProcessingView from './components/ProcessingView.vue';
 import SuccessView from './components/SuccessView.vue';
 import {
@@ -78,12 +78,10 @@ body,
 html {
 	border-radius: 25px;
 }
-p {
-	margin: 5px 0 0 0;
-}
 body {
 	overflow: hidden;
 	background: #f7f7f7;
 	margin: 0;
+	padding: 10px;
 }
 </style>
