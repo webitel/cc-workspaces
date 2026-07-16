@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import getUserStatusByPriority from '../../../../../../../features/modules/agent-status/statusUtils/getUserStatusByPriority';
+import { getUserStatusByPriority } from '../../../../../../../features/modules/agent-status/statusUtils/getUserStatusByPriority';
 import TransferDestination from '../../../chat/enums/ChatTransferDestination.enum';
 import LookupItem from './lookup-item.vue';
 import { TransferItem } from './types/transfer-lookup-item';

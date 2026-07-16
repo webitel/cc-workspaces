@@ -13,7 +13,7 @@ interface GetUserStatusByPriorityParams {
 }
 
 // NOTE: this computed is needed to return user status by priority because user can have several statuses. See this task https://my.webitel.com/browse/WTEL-3798
-const getUserStatusByPriority = ({
+export const getUserStatusByPriority = ({
 	presence,
 	agentStatus,
 }: GetUserStatusByPriorityParams) => {
@@ -39,5 +39,3 @@ const getUserStatusByPriority = ({
 	// agent OFFLINE — gray regardless of SIP/WEB presence
 	return AbstractUserStatus.OFFLINE;
 };
-
-export default getUserStatusByPriority;

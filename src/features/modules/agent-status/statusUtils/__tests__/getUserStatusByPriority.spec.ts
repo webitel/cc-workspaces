@@ -1,6 +1,6 @@
 import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
 
-import getUserStatusByPriority from '../getUserStatusByPriority';
+import { getUserStatusByPriority } from '../getUserStatusByPriority';
 
 describe('getUserStatusByPriority', () => {
 	it('returns DND for dnd presence regardless of agent status', () => {
