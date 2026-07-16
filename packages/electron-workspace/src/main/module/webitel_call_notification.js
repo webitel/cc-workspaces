@@ -85,7 +85,7 @@ class CallNotification {
 
 		this.window.on('will-resize', (e) => {
 			//prevent resizing even if resizable property is true.
-			e.preventDefault();
+			// e.preventDefault();
 		});
 	}
 
@@ -143,7 +143,7 @@ class CallNotification {
 	setActiveCall(arg) {
 		if (!this.isNawProcesing) {
 			this.call = arg;
-			// this.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
+			this.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
 			this._showCall(arg);
 		}
 	}

@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createWindowApp } from '../../shared/createWindowApp';
 import App from './App.vue';
 
-createApp(App).mount('#app');
+createWindowApp(App).mount('#app');

@@ -69,6 +69,12 @@ onUnmounted(() => {
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Ubuntu:300,400,500,600,700,800,900");
 
+html,
+body,
+#app {
+	width: 100%;
+	height: 100%;
+}
 html {
 	border-radius: 25px;
 }

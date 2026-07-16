@@ -20,9 +20,9 @@ function detectLocale(): Locale {
 	return 'en';
 }
 
-export function createWindowI18n<
-	M extends Record<Locale, Record<string, string>>,
->(messages: M) {
+export function createWindowI18n(
+	messages: Partial<Record<Locale, Record<string, string>>> = {},
+) {
 	return createI18n({
 		legacy: false,
 		locale: detectLocale(),

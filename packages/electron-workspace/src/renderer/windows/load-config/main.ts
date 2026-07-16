@@ -1,8 +1,7 @@
-import { createApp } from 'vue';
-import { createWindowI18n } from '../../shared/i18n';
+import { createWindowApp } from '../../shared/createWindowApp';
 import App from './App.vue';
 
-const i18n = createWindowI18n({
+createWindowApp(App, {
 	en: {
 		uploadConfigurationText: 'Choose the file to upload the configuration',
 		UploadFile: 'Upload file',
@@ -15,6 +14,4 @@ const i18n = createWindowI18n({
 		uploadConfigurationText: 'Оберіть файл для завантаження конфігурації',
 		UploadFile: 'Завантажити файл',
 	},
-});
-
-createApp(App).use(i18n).mount('#app');
+}).mount('#app');

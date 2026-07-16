@@ -93,7 +93,7 @@ watch(
 		ref="root"
 		class="main"
 	>
-		<div class="head" style="display: inline-flex;">
+		<div class="head" style="display:inline-flex;">
 			<div class="header-info">
 				<div
 					class="img-active-hold"
@@ -257,11 +257,14 @@ watch(
 
 <style>
 .main {
-	width: max-content;
-	height: max-content;
+	width: 100%;
+	height: 100%;
 	background: #f7f7f7;
-	-webkit-app-region: drag;
 	border-radius: 5px;
+	overflow: auto;
+}
+.head {
+	-webkit-app-region: drag;
 }
 .call-name {
 	margin-bottom: 5px;
