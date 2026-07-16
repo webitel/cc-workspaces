@@ -56,7 +56,7 @@ function save() {
     <div
         v-if="payload"
         ref="root"
-        class="main-processing"
+        class="processing-view"
     >
         <ProgressTimer :payload="payload" />
 
@@ -77,7 +77,7 @@ function save() {
 </template>
 
 <style scoped>
-.main-processing {
+.processing-view {
     display: flex;
     flex-direction: column;
     align-items: center;

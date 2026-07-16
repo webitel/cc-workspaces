@@ -15,7 +15,7 @@
             <template #title>
                 {{ t('additionalInfo') }}
             </template>
-            <CallViewVariables :variables="variables!" />
+            <CallViewVariables :variables="variables" />
         </wt-expansion-panel>
     </div>
 </template>
@@ -48,5 +48,9 @@ const hasVariables = computed(
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.wt-chip {
+    width: fit-content;
 }
 </style>
