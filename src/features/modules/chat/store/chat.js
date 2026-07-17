@@ -57,6 +57,7 @@ const actions = {
 	},
 
 	SEND: async (context, message) => {
+		if (!message.trim().length) return;
 		await context.getters.CHAT_ON_WORKSPACE.send(message);
 	},
 
