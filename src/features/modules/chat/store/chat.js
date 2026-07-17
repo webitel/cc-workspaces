@@ -57,7 +57,9 @@ const actions = {
 	},
 
 	SEND: async (context, message) => {
-		await context.getters.CHAT_ON_WORKSPACE.send(message);
+		const trimmedMessage = message.trim();
+		if (!trimmedMessage.length) return;
+		await context.getters.CHAT_ON_WORKSPACE.send(trimmedMessage);
 	},
 
 	SEND_FILE: async (context, files) => {
