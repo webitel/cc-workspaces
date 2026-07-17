@@ -25,6 +25,7 @@
      <div class="history-lookup-item-info-title">
       <wt-call-media-metric
        v-if="item.qualityMetrics"
+       show-tooltip
        :mos-avg="item.qualityMetrics.mosAvg"
        :size="ComponentSize.SM"
       />
