@@ -78,7 +78,6 @@
 <script setup>
 import { computed } from 'vue';
 
-import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum';
 
 const props = defineProps({

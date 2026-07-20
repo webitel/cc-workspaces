@@ -71,13 +71,9 @@
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
 	name: 'TaskQueuePreview',
-	components: {
-		QueueNameChip,
-	},
 	mixins: [
 		sizeMixin,
 	],
