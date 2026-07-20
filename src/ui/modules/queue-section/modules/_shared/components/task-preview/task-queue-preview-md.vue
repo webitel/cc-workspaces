@@ -40,8 +40,8 @@
     <section
       class="queue-preview-main-section"
     >
-      <article class="queue-preview-text">
-        <p v-if="queueName" class="typo-body-2">
+      <article class="queue-preview-name">
+        <p v-if="queueName" class="queue-preview-name-text typo-body-2">
           <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ queueName }}
         </p>
       </article>
@@ -116,9 +116,9 @@ export default {
     gap: var(--spacing-xs);
   }
 
-  .queue-preview-text {
+  .queue-preview-name {
     min-width: 0;
-    p {
+    &-text {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
