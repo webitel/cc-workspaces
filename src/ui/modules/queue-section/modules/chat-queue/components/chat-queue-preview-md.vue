@@ -57,11 +57,9 @@
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
           <div class="chat-queue-preview-md-body__queue">
-            <queue-name-chip
-              v-if="queueName"
-              :name="queueName"
-              clamped
-            />
+            <p v-if="queueName" class="typo-body-2">
+              <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ queueName }}
+            </p>
           </div>
         </div>
 
@@ -262,8 +260,12 @@ const iconColor = computed(() => {
   }
 
   &__queue {
-    display: flex;
-    align-items: center;
+    min-width: 0;
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 

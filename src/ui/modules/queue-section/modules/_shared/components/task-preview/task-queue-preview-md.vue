@@ -40,12 +40,10 @@
     <section
       class="queue-preview-main-section"
     >
-      <article class="queue-preview-chips">
-        <queue-name-chip
-          v-if="queueName"
-          :name="queueName"
-          clamped
-        />
+      <article class="queue-preview-text">
+        <p v-if="queueName" class="typo-body-2">
+          <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ queueName }}
+        </p>
       </article>
       <div
         v-if="$slots['icon-status']"
@@ -120,6 +118,15 @@ export default {
     display: grid;
     grid-template-columns: 1fr var(--icon-md-size);
     gap: var(--spacing-xs);
+  }
+
+  .queue-preview-text {
+    min-width: 0;
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .queue-preview-actions {
