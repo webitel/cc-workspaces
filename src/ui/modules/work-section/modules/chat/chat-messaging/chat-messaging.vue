@@ -126,6 +126,7 @@ import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import { useDropzoneHandlers } from '../../../../../composibles/useDropzoneHandlers';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { ChatSendMessageErrors } from '../enums/ChatSendMessageErrors.enum';
 import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
 import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 import ChatHistory from './chat-history/the-chat-history.vue';
@@ -241,7 +242,15 @@ async function sendMessage() {
 	try {
 		chat.value.draft = '';
 		await send(draft);
-	} catch {
+	} catch (error) {
+		/**
+		 * @author PolinaSukhorukova-webitel
+		 * no error message for this error - message was sent and will be delivered
+		 * [https://webitel.atlassian.net/browse/WTEL-9952]
+		 */
+		if (error?.detail === ChatSendMessageErrors.PortalNoDeviceConnection) {
+			return;
+		}
 		chat.value.draft = draft;
 		eventBus?.$emit('notification', {
 			type: 'error',
