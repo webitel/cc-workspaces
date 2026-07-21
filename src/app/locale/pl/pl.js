@@ -316,10 +316,6 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nie możesz pracować w Workspace, ponieważ Twoja licencja wygasła.',
 		},
-		chat: {
-			portalNoDeviceConnection:
-				'Klient jest offline. Wiadomość zostanie dostarczona później.',
-		},
 		endpoint: {
 			noLicense:
 				'Nie możesz pracować w Workspace, ponieważ Twoja licencja wygasła.',

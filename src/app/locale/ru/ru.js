@@ -319,10 +319,6 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Невозможно работать в Workspace. Истёк срок действия лицензии.',
 		},
-		chat: {
-			portalNoDeviceConnection:
-				'Клиент офлайн. Сообщение будет доставлено позже.',
-		},
 		endpoint: {
 			noLicense:
 				'Невозможно работать в Workspace. Истёк срок действия лицензии.',

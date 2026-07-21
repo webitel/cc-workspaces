@@ -320,10 +320,6 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
 		},
-		chat: {
-			portalNoDeviceConnection:
-				'Клієнт офлайн. Повідомлення буде доставлено пізніше.',
-		},
 		endpoint: {
 			noLicense: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
 		},

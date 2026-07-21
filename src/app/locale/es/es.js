@@ -317,10 +317,6 @@ export default {
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
 		},
-		chat: {
-			portalNoDeviceConnection:
-				'El cliente está sin conexión. El mensaje se entregará más tarde.',
-		},
 		endpoint: {
 			noLicense:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',

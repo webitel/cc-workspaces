@@ -244,10 +244,6 @@ async function sendMessage() {
 		await send(draft);
 	} catch (error) {
 		if (error?.detail === ChatSendMessageErrors.PortalNoDeviceConnection) {
-			eventBus?.$emit('notification', {
-				type: 'warning',
-				text: t('error.chat.portalNoDeviceConnection'),
-			});
 			return;
 		}
 		chat.value.draft = draft;
