@@ -28,6 +28,7 @@
        show-tooltip
        :mos-avg="item.qualityMetrics.mosAvg"
        :size="ComponentSize.SM"
+       tooltip-text-prefix="calls.connectionQuality"
       />
       {{ date }}
      </div>
