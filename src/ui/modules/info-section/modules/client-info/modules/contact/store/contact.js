@@ -48,7 +48,7 @@ const actions = {
 	LOAD_CONTACTS_BY_DESTINATION: async (context, task) => {
 		const isCallWorkspace = context.rootGetters['workspace/IS_CALL_WORKSPACE'];
 		const number = task.displayNumber; // for CALLS
-		if (!number) return; // no destination number, then skip contacts loading https://webitel.atlassian.net/browse/DEV-6576?focusedCommentId=759329
+		if (!number || task.hideNumber) return; // no destination number, then skip contacts loading https://webitel.atlassian.net/browse/DEV-6576?focusedCommentId=759329
 		const qin = isCallWorkspace ? 'phones' : 'emails,phones'; // for calls search contacts just by phones https://webitel.atlassian.net/browse/WTEL-7041
 		const searchParams = {
 			q: number,
