@@ -243,11 +243,11 @@ async function sendMessage() {
 		chat.value.draft = '';
 		await send(draft);
 	} catch (error) {
-    /**
-     * @author PolinaSukhorukova-webitel
-     * no error message for this error - message was sent and will be delivered
-     * [https://webitel.atlassian.net/browse/WTEL-9952]
-     */
+		/**
+		 * @author PolinaSukhorukova-webitel
+		 * no error message for this error - message was sent and will be delivered
+		 * [https://webitel.atlassian.net/browse/WTEL-9952]
+		 */
 		if (error?.detail === ChatSendMessageErrors.PortalNoDeviceConnection) {
 			return;
 		}
