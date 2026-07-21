@@ -72,6 +72,9 @@ const chatContent = useTemplateRef('chat-content');
 const currentChat = computed(
 	() => store.getters[`features/chat/CHAT_ON_WORKSPACE`],
 );
+const isUnseen = computed(
+	() => store.getters['features/chat/unseen/IS_CHAT_UNSEEN'],
+);
 
 const {
 	messages,
@@ -96,6 +99,11 @@ const {
 	onBeforeStart: ({ scrollToBottom }) => {
 		scrollToBottom();
 		startObserve();
+	},
+	onSeen: () => {
+		if (currentChat.value?.id && isUnseen.value(currentChat.value)) {
+			store.dispatch('features/chat/unseen/MARK_CHAT_SEEN', currentChat.value);
+		}
 	},
 });
 
