@@ -5,7 +5,14 @@
       ref="number-input"
       v-model:model-value="call.newNumber"
       @keyup.enter="makeCall"
-    />
+    >
+      <template
+        v-if="isLoading"
+        #suffix
+      >
+        <wt-loader size="sm" />
+      </template>
+    </wt-input-text>
     <call-state />
     <div class="numpad-wrapper">
       <numpad-numbers
@@ -25,8 +32,11 @@
 
 <script setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { throttle } from 'lodash-es';
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
+
+import { useLoader } from '../../../../../../composables/useLoader';
 
 import CallState from '../call-state.vue';
 import NumpadExpansionBtn from './numpad-expansion-btn.vue';
@@ -53,7 +63,27 @@ const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
 
 const input = (value) => store.dispatch('features/call/ADD_DIGIT', value);
-const makeCall = () => store.dispatch('features/call/CALL');
+
+const { showLoader, runWithLoader } = useLoader();
+
+const isLoading = computed(() => showLoader(call.value?.newNumber));
+
+// @author Roman Zaritskyi [WTEL-9905] guard against double-dial on rapid Enter;
+const CALL_THROTTLE_TIMEOUT = 1000;
+
+const makeCall = throttle(
+	() =>
+		runWithLoader(call.value?.newNumber, () =>
+			Promise.all([
+				store.dispatch('features/call/CALL'),
+				new Promise((resolve) => setTimeout(resolve, CALL_THROTTLE_TIMEOUT)),
+			]),
+		),
+	CALL_THROTTLE_TIMEOUT,
+	{
+		trailing: false,
+	},
+);
 
 const setNumberFocus = () => {
 	const input = numberInput.value?.$el?.querySelector('input');

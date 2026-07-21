@@ -61,6 +61,7 @@ const dataFields = ref([
 	'id',
 	'extension',
 	'presence',
+	'status',
 ]);
 
 const userinfoStore = useUserinfoStore();
