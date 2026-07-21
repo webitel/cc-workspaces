@@ -40,12 +40,10 @@
     <section
       class="queue-preview-main-section"
     >
-      <article class="queue-preview-chips">
-        <queue-name-chip
-          v-if="queueName"
-          :name="queueName"
-          clamped
-        />
+      <article class="queue-preview-name">
+        <p v-if="queueName" class="queue-preview-name-text typo-body-2">
+          <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ queueName }}
+        </p>
       </article>
       <div
         v-if="$slots['icon-status']"
@@ -73,13 +71,9 @@
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
 
 export default {
 	name: 'TaskQueuePreview',
-	components: {
-		QueueNameChip,
-	},
 	mixins: [
 		sizeMixin,
 	],
@@ -120,6 +114,15 @@ export default {
     display: grid;
     grid-template-columns: 1fr var(--icon-md-size);
     gap: var(--spacing-xs);
+  }
+
+  .queue-preview-name {
+    min-width: 0;
+    &-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .queue-preview-actions {
