@@ -211,6 +211,19 @@ function scrollToClosedChatFirstMessage() {
 
 	if (closedChatFirstMessageEl) {
 		closedChatFirstMessageEl.scrollIntoView(true);
+
+		/**
+		 * @author PolinaSukhorukova-webitel
+		 *
+		 * [WTEL-9997](https://webitel.atlassian.net/browse/WTEL-9997)
+		 * Content grows asynchronously after the first scroll — re-align on resize.
+		 */
+		const OBSERVER_TIMEOUT_MS = 1500;
+		const observer = new ResizeObserver(() => {
+			closedChatFirstMessageEl.scrollIntoView(true);
+		});
+		observer.observe(chatContent.value);
+		setTimeout(() => observer.disconnect(), OBSERVER_TIMEOUT_MS);
 	} else {
 		scrollToBottom();
 	}
