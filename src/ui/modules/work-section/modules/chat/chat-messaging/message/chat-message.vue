@@ -20,11 +20,11 @@
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <div
         class="chat-message__body"
-        :class="{ 'chat-message__body--malware': isMalware }"
+        :class="{ 'chat-message__body--malware': isFileMalware }"
         @click.stop
       >
         <template v-if="hasFileError">
-          <message-blocked-error v-if="isMalware" />
+          <message-blocked-error v-if="isFileMalware" />
           <message-size-exceeded-error
             v-else-if="isFileSizeExceeded"
             :agent="isAgentSide"
@@ -129,10 +129,10 @@ const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
 );
 
-const isMalware = computed(() => !!props.message.file?.malware);
+const isFileMalware = computed(() => !!props.message.file?.malware);
 
 const hasFileError = computed(
-	() => isMalware.value || isFileSizeExceeded.value,
+	() => isFileMalware.value || isFileSizeExceeded.value,
 );
 
 const {
