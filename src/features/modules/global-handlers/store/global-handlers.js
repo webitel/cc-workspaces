@@ -1,5 +1,6 @@
 import { watch } from 'vue';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
+import { autosaveProcessingForms } from '../scripts/processingAutosave.js';
 
 const state = {
 	isDisconnectPopup: false,
@@ -14,6 +15,7 @@ const actions = {
 		context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED');
+		context.dispatch('SUBSCRIBE_TO_PROCESSING_AUTOSAVE');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
@@ -56,6 +58,25 @@ const actions = {
 		client.on('close', () => {
 			context.dispatch('CLEAR_ALL_TASKS');
 		});
+	},
+	SUBSCRIBE_TO_PROCESSING_AUTOSAVE: (context) => {
+		const saved = new Map();
+
+		return watch(
+			() => context.rootState.ui.now.now,
+			(now) => {
+				const tasks = [
+					...context.rootState.features.call.callList,
+					...context.rootState.features.chat.chatList,
+					...context.rootState.features.job.jobList,
+				];
+				autosaveProcessingForms({
+					tasks,
+					now,
+					saved,
+				});
+			},
+		);
 	},
 	SUBSCRIBE_TO_PHONE_REGISTRATION: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
