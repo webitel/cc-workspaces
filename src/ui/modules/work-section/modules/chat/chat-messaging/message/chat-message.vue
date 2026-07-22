@@ -18,66 +18,72 @@
         />
       </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
-      <message-blocked-error @click.stop v-if="message.file?.malware" />
-      <message-size-exceeded-error
-        v-else-if="isFileSizeExceeded"
-        :agent="isAgentSide"
+      <div
+        class="chat-message__body"
+        :class="{ 'chat-message__body--malware': isFileMalware }"
         @click.stop
-      />
-      <div class="chat-message__body" v-else @click.stop>
-        <message-player
-          v-if="props.message.file"
-          :file="props.message.file"
-          :type="props.message.file?.mime"
-          :size="props.size"
-          @initialized="handlePlayerInitialize"
-        />
-        <message-image
-          :file="props.message.file"
-          :type="props.message.file?.mime"
-          @open="emit('open-image')"
-        />
-        <message-document
-          :file="props.message.file"
-          :type="props.message.file?.mime"
-          :agent="isAgentSide"
-        />
-        <div
-          v-if="props.message?.text"
-          class="chat-message-text-wrapper"
-        >
-          <message-text
-            :text="props.message.text"
-            :with-timestamp-spacer="true"
+      >
+        <template v-if="hasFileError">
+          <message-blocked-error v-if="isFileMalware" />
+          <message-size-exceeded-error
+            v-else-if="isFileSizeExceeded"
             :agent="isAgentSide"
           />
 
           <message-time
             :date="props.message.createdAt"
           />
-        </div>
+        </template>
 
-        <message-time
-          v-else
-          :date="props.message.createdAt"
-        />
+        <template v-else>
+          <message-player
+            v-if="media"
+            :file="props.message.file"
+            :type="props.message.file?.mime"
+            :size="props.size"
+            @initialized="handlePlayerInitialize"
+          />
+          <message-image
+            v-else-if="image"
+            :file="props.message.file"
+            :type="props.message.file?.mime"
+            @open="emit('open-image')"
+          />
+          <message-document
+            v-else-if="documentFile"
+            :file="props.message.file"
+            :type="props.message.file?.mime"
+            :agent="isAgentSide"
+          />
+          <div
+            v-if="props.message?.text"
+            class="chat-message-text-wrapper"
+          >
+            <message-text
+              :text="props.message.text"
+              :with-timestamp-spacer="true"
+              :agent="isAgentSide"
+            />
+
+            <message-time
+              :date="props.message.createdAt"
+            />
+          </div>
+
+          <message-time
+            v-else
+            :date="props.message.createdAt"
+          />
+        </template>
       </div>
-
-      <message-time
-        v-if="message.file?.malware || isFileSizeExceeded"
-        :date="props.message.createdAt"
-      />
     </div>
-    <message-time
-      v-if="props.message.file?.malware || isFileSizeExceeded"
-      :date="props.message.createdAt"
-    />
 
     <slot name="after-message" />
   </div>
 </template>
 
 <script setup>
+import { useChatMessageFile } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, defineEmits, defineProps } from 'vue';
@@ -122,6 +128,18 @@ const agentName = computed(
 const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
 );
+
+const isFileMalware = computed(() => !!props.message.file?.malware);
+
+const hasFileError = computed(
+	() => isFileMalware.value || isFileSizeExceeded.value,
+);
+
+const {
+	image,
+	media,
+	document: documentFile,
+} = useChatMessageFile(props.message.file);
 
 const isInternalMember = computed(
 	() => props.message.member?.type === 'webitel',
@@ -226,6 +244,11 @@ $chat-info-gap: var(--spacing-2xs);
       color: var(--secondary-on-color);
       place-self: flex-end;
     }
+  }
+
+  &__body--malware,
+  &--right &__body--malware {
+    background: var(--p-error-highlight-color);
   }
 }
 </style>

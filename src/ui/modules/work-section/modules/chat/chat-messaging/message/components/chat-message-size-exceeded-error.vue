@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     class="chat-message-size-exceeded-error typo-body-1"
     :class="{
       'chat-message-size-exceeded-error--right': agent,
@@ -33,9 +33,6 @@ const props = withDefaults(defineProps<IChatMessageSizeExceededErrorProps>(), {
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-size-exceeded-error {
-  background: var(--p-primary-highlight-color);
-  border-radius: var(--spacing-xs);
-  padding: var(--spacing-xs);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,7 +41,6 @@ const props = withDefaults(defineProps<IChatMessageSizeExceededErrorProps>(), {
   text-align: center;
 
   &--right {
-    background: var(--p-secondary-hover-color);
     color: var(--secondary-on-color);
     place-self: flex-end;
   }
