@@ -99,6 +99,7 @@ const actions = {
 
 	CLOSE: async (context) => {
 		const chatOnWorkspace = context.getters.CHAT_ON_WORKSPACE;
+		context.commit('unseen/REMOVE_UNSEEN_CHAT', chatOnWorkspace);
 		if (chatOnWorkspace.allowLeave) {
 			await chatOnWorkspace.leave();
 		} else {
