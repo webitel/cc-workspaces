@@ -128,6 +128,9 @@ const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 const isChatClosed = computed(
 	() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
 );
+const isUnseen = computed(
+	() => store.getters['features/chat/unseen/IS_CHAT_UNSEEN'],
+);
 const closedChatFirstMessageId = computed(
 	() => store.state.features.chat.closed.closedChatFirstMessageId,
 );
@@ -146,6 +149,11 @@ const {
 	onBeforeStart: ({ scrollToBottom }) => {
 		scrollToBottom();
 		startObserve();
+	},
+	onSeen: () => {
+		if (chat.value?.id && isUnseen.value(chat.value)) {
+			store.dispatch('features/chat/unseen/MARK_CHAT_SEEN', chat.value);
+		}
 	},
 });
 
