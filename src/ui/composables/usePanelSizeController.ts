@@ -1,4 +1,4 @@
-import { ComponentSize } from '@webitel/ui-sdk/src/enums/ComponentSize/ComponentSize.ts';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, getCurrentInstance, ref } from 'vue';
 
 export function usePanelSizeController() {

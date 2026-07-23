@@ -28,7 +28,6 @@ import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
-import APIRepository from '../../../../../../../../app/api/APIRepository';
 import { useLoader } from '../../../../../../../composables/useLoader';
 import { useUserinfoStore } from '../../../../../../userinfo/userinfoStore';
 import CallTransferContainer from '../_shared/components/call-transfer-container.vue';
@@ -43,7 +42,6 @@ interface APIResponse {
 const store = useStore();
 const { showLoader, runWithLoader } = useLoader();
 
-const agentsAPI = APIRepository.agents;
 const PresenceStatusField = 'userPresenceStatus';
 
 const dataFields = [
@@ -59,14 +57,6 @@ const dataSort = 'position';
 
 const currentTranferLoaderId = ref<string | null>(null);
 
-const scroll = computed(
-	() =>
-		store.state.scroll || {
-			dataSearch: {
-				value: '',
-			},
-		},
-);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);

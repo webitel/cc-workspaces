@@ -28,12 +28,20 @@
     lang="ts"
 >
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
-import { WtIndicator, WtSingleSelect } from '@webitel/ui-sdk/components';
+import {
+	WtIndicator,
+	WtSingleSelect as WtSingleSelectBase,
+} from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+// Barrel types components without slots; re-type via the component's declaration
+// (type-only `import(...)`, erased at runtime) for <template #value/#option>.
+const WtSingleSelect =
+	WtSingleSelectBase as unknown as typeof import('@webitel/ui-sdk/components/wt-single-select/wt-single-select.vue.js').default;
+
 const props = defineProps<{
-	value: WebitelCasesStatusCondition['id'];
+	value: WebitelCasesStatusCondition['id'] | WebitelCasesStatusCondition;
 	options: WebitelCasesStatusCondition[];
 }>();
 
@@ -45,7 +53,11 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const formattedValue = computed(() => props.value?.id || props.value);
+const formattedValue = computed(
+	() =>
+		(typeof props.value === 'object' ? props.value?.id : undefined) ||
+		props.value,
+);
 
 const selectedOption = computed(() =>
 	props.options.find((option) => option.id === formattedValue.value),

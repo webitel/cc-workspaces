@@ -73,13 +73,13 @@ import {
 	snakeToCamel,
 } from '@webitel/api-services/api/transformers';
 import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
-import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
+import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable.d.ts';
 import {
 	ComponentSize,
 	ProcessingTableColumnType,
 } from '@webitel/ui-sdk/enums';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
-import { computed, defineProps, onMounted, ref, useTemplateRef } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import TableApi from './api/table';
 import BooleanTableContent from './components/boolean-table-content.vue';
@@ -98,6 +98,12 @@ import type {
 } from './types/FormTable';
 
 const { t } = useI18n();
+
+// Table headers carry the column `type` (used to pick the cell component)
+// on top of the base WtTableHeader shape.
+type TableHeader = WtTableHeader & {
+	type: string;
+};
 
 const cellTableComponents = {
 	// components for each cell in table depending on type of value @author @liza-pohranichna
@@ -132,7 +138,6 @@ const nextAllowed = ref(false);
 const nextLoading = ref(false);
 const currentTablePage = ref(1);
 const dataList = ref<TableRow[]>([]);
-const infiniteScrollWrap = useTemplateRef('infiniteScrollWrap');
 
 const isSystemSource = computed<boolean>(() => props.table?.isSystemSource);
 const systemSourcePath = computed<string>(
@@ -161,7 +166,7 @@ const tableFields = computed<string[]>(() => {
 	]); // convert to snake case for API request before return
 });
 
-function isShowTypeComponent(item: TableRow, header: WtTableHeader): boolean {
+function isShowTypeComponent(item: TableRow, header: TableHeader): boolean {
 	return (
 		!!item[header.value] ||
 		item[header.value] === 0 || // we show type component, because 0 is valid value @author @liza-pohranichna
@@ -201,7 +206,7 @@ const tableColumns = computed<TableColumn[]>(() => {
 	});
 });
 
-const headers = computed<WtTableHeader[]>(() => {
+const headers = computed<TableHeader[]>(() => {
 	// headers for wt-table prop
 	return tableColumns.value.map((column) => ({
 		...column,

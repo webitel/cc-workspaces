@@ -37,7 +37,7 @@ export const initRouter = async ({
 	router = createRouter({
 		history: createWebHistory(import.meta.env.BASE_URL),
 
-		scrollBehavior(to, from, savedPosition) {
+		scrollBehavior() {
 			return {
 				left: 0,
 				top: 0,
@@ -51,7 +51,7 @@ export const initRouter = async ({
 		'error-page',
 	];
 
-	router.beforeEach((to, from, next) => {
+	router.beforeEach((to, _from, next) => {
 		if (excludeRouteAuth.includes(to.name)) {
 			next();
 			return;

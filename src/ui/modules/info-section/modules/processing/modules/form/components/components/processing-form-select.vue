@@ -22,12 +22,12 @@
 
 <script setup lang="ts">
 import deepEqual from 'deep-equal';
-import { computed, onMounted, ref, watch, withDefaults } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const props = withDefaults(
 	defineProps<{
-		value: never;
-		options?: never[];
+		value: unknown;
+		options?: SelectOption[];
 		multiple?: boolean;
 	}>(),
 	{
@@ -35,7 +35,7 @@ const props = withDefaults(
 	},
 );
 
-const emit = defineEmits<(e: 'input', value: never) => void>();
+const emit = defineEmits<(e: 'input', value: unknown) => void>();
 
 const initialValue = ref(null);
 const trackBy = computed(() => {

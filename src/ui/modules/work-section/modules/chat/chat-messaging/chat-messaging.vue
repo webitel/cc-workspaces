@@ -109,16 +109,9 @@
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { eventBus } from '@webitel/ui-sdk/scripts';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import {
-	computed,
-	inject,
-	nextTick,
-	onMounted,
-	onUnmounted,
-	ref,
-	watch,
-} from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
@@ -134,6 +127,7 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { useQuickReplies } from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
+import type { ChatHelperItem } from './types/ChatHelperItem.types';
 
 const props = withDefaults(
 	defineProps<{
@@ -155,7 +149,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const eventBus = inject('$eventBus');
 const store = useStore();
 
 const messageDraft = ref();
@@ -285,7 +278,7 @@ function handleFilePaste(event: ClipboardEvent) {
 }
 
 async function handleAttachments(event: Event) {
-	const files = Array.from(event.target.files);
+	const files = Array.from((event.target as HTMLInputElement).files ?? []);
 	await sendFile(files);
 }
 
@@ -303,7 +296,7 @@ function applyQuickReply({ text }) {
 	setDraftFocus();
 }
 
-function selectAutocompleteOption({ id }: { id: string }) {
+function selectAutocompleteOption({ id }: ChatHelperItem) {
 	switch (id) {
 		case AutocompleteOptions.QUICK_REPLIES:
 			showQuickRepliesPanel();

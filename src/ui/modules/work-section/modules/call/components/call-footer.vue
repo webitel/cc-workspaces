@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
 import { ButtonVariant, ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, onMounted, onUnmounted, ref, withDefaults } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';

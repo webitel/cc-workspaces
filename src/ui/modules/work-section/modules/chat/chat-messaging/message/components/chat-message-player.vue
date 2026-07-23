@@ -40,7 +40,10 @@ const props = defineProps<{
 	file: ChatMessageFile;
 }>();
 
-const emit = defineEmits<(e: 'initialized', player: unknown) => void>();
+const emit = defineEmits<{
+	(e: 'initialized', player: unknown): void;
+	(e: 'open', media: unknown): void;
+}>();
 
 const { media } = useChatMessageFile(props.file);
 

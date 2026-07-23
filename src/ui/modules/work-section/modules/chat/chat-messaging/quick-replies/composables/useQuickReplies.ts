@@ -29,7 +29,7 @@ export function useQuickReplies({
 
 	function replaceVariables(text: string): string {
 		return text.replace(VARIABLES_REGEX, (match, varName) => {
-			return variables[varName] ?? match;
+			return String(variables[varName] ?? match);
 		});
 	}
 

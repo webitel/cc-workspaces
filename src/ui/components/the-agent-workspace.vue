@@ -51,8 +51,7 @@
   lang="ts"
 >
 import { useCachedInterval } from '@webitel/ui-sdk/src/composables/useCachedInterval/useCachedInterval.js';
-import { storeToRefs } from 'pinia';
-import { computed, onUnmounted, provide, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useAppNotification } from '../../features/modules/notifications/composables/useAppNotification';
@@ -64,11 +63,9 @@ import DescTrackAuthSuccessPopup from '../modules/popups/desc-track-auth-popup/c
 import DisconnectPopup from '../modules/popups/disconnect-popup/components/disconnect-popup.vue';
 import WelcomePopup from '../modules/popups/welcome-popup/welcome-popup.vue';
 import QueueSection from '../modules/queue-section/components/the-agent-queue-section.vue';
-import { useUserinfoStore } from '../modules/userinfo/userinfoStore';
 import VideoContainer from '../modules/video-container/components/video-container.vue';
 import WidgetBar from '../modules/widget-bar/components/widget-bar.vue';
 import WorkspaceSection from '../modules/work-section/components/the-agent-workspace-section.vue';
-import type { BrowserPermissions } from '../types/BrowserPermissions';
 
 const store = useStore();
 const route = useRoute();
@@ -91,8 +88,6 @@ const {
 const isInitLoading = ref(false);
 const isWelcomePopup = ref(true);
 const isDescTrackAuthSuccessPopup = ref(false);
-
-const userinfoStore = useUserinfoStore();
 
 const { subscribe } = useCachedInterval({
 	timeout: 5 * 1000,
