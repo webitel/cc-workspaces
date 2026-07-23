@@ -1,6 +1,7 @@
 {
 	"Reject": "Reject",
 	"Answer": "Answer",
+	"additionalInfo": "Additional information",
 	"Yes": "Yes",
 	"No": "No",
 	"callSuccessfulText": "Was this call successful?",

@@ -31,7 +31,17 @@ export default defineConfig({
 		resolve: {
 			alias: {
 				'@img': resolve(__dirname, 'img'),
+				// @webitel/ui-sdk components are authored for Vue 2 compat mode
+				vue: '@vue/compat',
+				// ui-sdk dist expects the consumer to provide the axios instance
+				'@aliasedDeps/api-services/axios': resolve(
+					__dirname,
+					'src/renderer/shared/api/instance',
+				),
 			},
+			dedupe: [
+				'@vue/compat',
+			],
 		},
 		server: {
 			fs: {
@@ -43,6 +53,16 @@ export default defineConfig({
 		plugins: [
 			vue({
 				template: {
+					compilerOptions: {
+						compatConfig: {
+							MODE: 2,
+							// avoid Vue2 compat v-model warnings
+							COMPONENT_V_MODEL: false,
+							// avoid warnings when using boolean attributes
+							ATTR_FALSE_VALUE: false,
+						},
+						isCustomElement: (tag) => tag.startsWith('media-'),
+					},
 					transformAssetUrls: {
 						includeAbsolute: false,
 						tags: {

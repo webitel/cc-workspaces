@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import CallView from './components/CallView.vue';
-import ProcessingView from './components/ProcessingView.vue';
-import SuccessView from './components/SuccessView.vue';
+import CallView from './components/CallView/CallView.vue';
+import ProcessingView from './components/ProcessingView/ProcessingView.vue';
+import SuccessView from './components/SuccessView/SuccessView.vue';
 import {
 	type CallPayload,
 	onDestroyNotification,
@@ -69,15 +69,19 @@ onUnmounted(() => {
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Ubuntu:300,400,500,600,700,800,900");
 
+html,
+body,
+#app {
+	width: 100%;
+	height: 100%;
+}
 html {
 	border-radius: 25px;
-}
-p {
-	margin: 5px 0 0 0;
 }
 body {
 	overflow: hidden;
 	background: #f7f7f7;
 	margin: 0;
+	padding: 10px;
 }
 </style>

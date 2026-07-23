@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import iconPlus from '@img/icon-plus-md.svg';
-import { type ProcessingPayload, resetTimer } from '../composables/useCallIPC';
+import {
+	type ProcessingPayload,
+	resetTimer,
+} from '../../../composables/useCallIPC';
 
 const props = defineProps<{
 	payload: ProcessingPayload | null;
@@ -11,7 +14,6 @@ const FULL_DASH_ARRAY = 283;
 const timeLeft = ref(0);
 const timeLimit = ref(0);
 const renewalSec = ref(0);
-let intervalId: ReturnType<typeof setInterval> | null = null;
 
 const showRenewalButton = computed(
 	() => timeLeft.value <= renewalSec.value && timeLeft.value > 0,
@@ -33,42 +35,30 @@ const dashArray = computed(() => {
 	return `${(adjusted * FULL_DASH_ARRAY).toFixed(0)} 283`;
 });
 
-function clearTimer() {
-	if (intervalId) {
-		clearInterval(intervalId);
-		intervalId = null;
-	}
-}
-
-function startAutoReload() {
-	clearTimer();
-	intervalId = setInterval(() => {
-		if (timeLeft.value > 0) timeLeft.value -= 1;
-		else clearTimer();
-	}, 1000);
-}
-
+// Single clock: payload carries store `now` (polled ~80ms). Local
+// setInterval raced that reset and jumped the label each second.
 watch(
 	() => props.payload,
 	(p) => {
 		if (!p) {
-			clearTimer();
 			timeLeft.value = 0;
+			timeLimit.value = 0;
+			renewalSec.value = 0;
 			return;
 		}
-		timeLeft.value = Math.floor((p.processingTimeoutAt - p.now) / 1000);
+		timeLeft.value = Math.max(
+			0,
+			Math.floor((p.processingTimeoutAt - p.now) / 1000),
+		);
 		timeLimit.value = Math.ceil(
 			(p.processingTimeoutAt - p.startProcessingAt) / 1000,
 		);
 		renewalSec.value = p.renewalSec;
-		if (!intervalId && timeLeft.value > 0) startAutoReload();
 	},
 	{
 		immediate: true,
 	},
 );
-
-onUnmounted(clearTimer);
 </script>
 
 <template>
@@ -152,7 +142,7 @@ onUnmounted(clearTimer);
 	stroke-linecap: round;
 	transform: rotate(90deg);
 	transform-origin: center;
-	transition: 1s linear all;
+	transition: stroke-dasharray 1s linear;
 	fill-rule: nonzero;
 	stroke: currentColor;
 }
@@ -177,6 +167,7 @@ onUnmounted(clearTimer);
 	color: #030302;
 	width: 120px;
 	justify-content: center;
+	font-variant-numeric: tabular-nums;
 }
 .reset-time-btn {
 	-webkit-app-region: no-drag;
