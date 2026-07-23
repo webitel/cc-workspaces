@@ -1,6 +1,6 @@
 {
 	"name": "@webitel/workspace",
-	"version": "26.6.0",
+	"version": "26.8.0",
 	"private": true,
 	"scripts": {
 		"dev": "vite --force",
