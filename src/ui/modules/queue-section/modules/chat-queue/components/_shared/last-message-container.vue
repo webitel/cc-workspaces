@@ -3,7 +3,7 @@
     <div>
       <wt-icon :icon="icon" />
     </div>
-    <p>{{ message }}</p>
+    <p class="last-message-container--text">{{ message }}</p>
   </div>
 </template>
 
@@ -36,6 +36,13 @@ const iconClass = computed(() =>
   padding: 0 var(--spacing-2xs);
   width: fit-content;
   max-width: 100%;
+}
+
+.last-message-container--text {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .last-message-container--contacts {
