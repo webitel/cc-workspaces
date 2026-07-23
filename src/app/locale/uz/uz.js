@@ -209,6 +209,7 @@ export default {
 			chatsIncorrectFileSize: 'Fayl hajmi notoʻgʻri', // TODO: Translate
 			errors: {
 				uploadFileLimitSize: 'Fayl hajmi limiti oshib ketdi',
+				filePolicyFail: 'Taqiqlangan fayl formati',
 			},
 		},
 	},

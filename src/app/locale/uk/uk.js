@@ -214,6 +214,7 @@ export default {
 			chatsIncorrectFileSize: 'Неправильний розмір файлу',
 			errors: {
 				uploadFileLimitSize: 'Перевищено ліміт розміру файлу',
+				filePolicyFail: 'Заборонений формат файлу',
 			},
 		},
 	},

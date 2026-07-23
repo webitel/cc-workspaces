@@ -20,7 +20,7 @@
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <div
         class="chat-message__body"
-        :class="{ 'chat-message__body--malware': isFileMalware }"
+        :class="{ 'chat-message__body--malware': isFileMalware || isFilePolicyFailed }"
         @click.stop
       >
         <template v-if="hasFileError">
@@ -28,6 +28,10 @@
           <message-size-exceeded-error
             v-else-if="isFileSizeExceeded"
             :agent="isAgentSide"
+          />
+          <message-file-policy-error
+            v-else-if="isFilePolicyFailed"
+            @click.stop
           />
 
           <message-time
@@ -87,9 +91,11 @@ import { useChatMessageFile } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, defineEmits, defineProps } from 'vue';
+import { AgentTypes } from '../../../../../../../features/modules/chat/enums/AgentTypes.enum';
 import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
+import MessageFilePolicyError from './components/chat-message-file-police-error.vue';
 import MessageImage from './components/chat-message-image.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
@@ -119,6 +125,8 @@ const emit = defineEmits([
 	'initialized-player',
 ]);
 
+const filePolicyError = 'file_policy_fail';
+
 const userinfoStore = useUserinfoStore();
 const { userInfo } = storeToRefs(userinfoStore);
 const agentName = computed(
@@ -131,8 +139,15 @@ const isFileSizeExceeded = computed(
 
 const isFileMalware = computed(() => !!props.message.file?.malware);
 
+const isFilePolicyFailed = computed(
+	() =>
+		props.message?.variables?.template === filePolicyError ||
+		props.message?.context?.template === filePolicyError,
+);
+
 const hasFileError = computed(
-	() => isFileMalware.value || isFileSizeExceeded.value,
+	() =>
+		isFileMalware.value || isFileSizeExceeded.value || isFilePolicyFailed.value,
 );
 
 const {
@@ -142,7 +157,7 @@ const {
 } = useChatMessageFile(props.message.file);
 
 const isInternalMember = computed(
-	() => props.message.member?.type === 'webitel',
+	() => props.message.member?.type === AgentTypes.WEBITEL,
 );
 
 const isAgent = computed(
@@ -153,11 +168,13 @@ const isTransferAgent = computed(
 	() => !props.message.member?.self && isInternalMember.value,
 );
 
-const isBot = computed(
-	() =>
-		props.message.member?.type === 'bot' ||
-		(!props.message.member?.type && !props.message.channelId),
-);
+const isBot = computed(() => {
+	const byMemberType = props.message.member?.type === AgentTypes.BOT;
+	const byMissingMeta = !props.message.member?.type && !props.message.channelId;
+	const byVariables = props.message.variables?.from === AgentTypes.BOT;
+
+	return byMemberType || byMissingMeta || byVariables;
+});
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
