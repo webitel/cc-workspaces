@@ -9,7 +9,6 @@
     @click="emit('click')"
     @keydown.enter="emit('click')"
   >
-
     <header class="chat-queue-preview-sm__header">
       <div class="chat-queue-preview-sm__icon">
         <slot name="close-icon"></slot>
@@ -55,7 +54,7 @@
           <div
             v-if="queueName"
           >
-            <queue-name-chip :name="queueName" />
+            <queue-name-text :name="queueName" />
           </div>
         </div>
       </wt-popover>
@@ -100,7 +99,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 import getDisplayChatName from '../../../../../../features/modules/chat/scripts/getDisplayChatName';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore.ts';
-import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
+import QueueNameText from '../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 import { ChatColorsMap } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
