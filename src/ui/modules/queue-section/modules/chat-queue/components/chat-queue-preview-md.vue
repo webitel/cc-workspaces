@@ -76,9 +76,8 @@
 
 <script setup>
 import { computed } from 'vue';
-
+import QueueNameText from '../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum';
-import QueueNameText from "../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue";
 
 const props = defineProps({
 	task: {

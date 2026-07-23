@@ -99,7 +99,7 @@ import QueueNameText from '../../../../../work-section/modules/_shared/component
 export default {
 	name: 'TaskQueuePreviewSm',
 	components: {
-    QueueNameText,
+		QueueNameText,
 	},
 	mixins: [
 		sizeMixin,

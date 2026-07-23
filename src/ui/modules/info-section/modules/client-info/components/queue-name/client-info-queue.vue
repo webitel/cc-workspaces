@@ -13,7 +13,7 @@ import QueueNameText from '../../../../../work-section/modules/_shared/component
 export default {
 	name: 'ClientInfoQueue',
 	components: {
-    QueueNameText,
+		QueueNameText,
 	},
 	computed: {
 		...mapGetters('workspace', {
