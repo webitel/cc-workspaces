@@ -47,16 +47,8 @@ describe('client-info-queue.vue', () => {
 				],
 			},
 		});
-		expect(
-			wrapper
-				.find('.queue-name__text')
-				.exists(),
-		).toBe(true);
-		expect(
-			wrapper
-				.find('.queue-name__text')
-				.text(),
-		).toBe(`Queue: ${display}`);
+		expect(wrapper.find('.queue-name__text').exists()).toBe(true);
+		expect(wrapper.find('.queue-name__text').text()).toBe(`Queue: ${display}`);
 	});
 
 	it('does not render queue text when task has no queue', () => {

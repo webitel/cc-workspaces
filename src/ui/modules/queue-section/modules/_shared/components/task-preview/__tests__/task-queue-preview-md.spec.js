@@ -15,9 +15,7 @@ describe('TaskQueuePreviewMd', () => {
 				queueName,
 			},
 		});
-		expect(wrapper.find('.queue-name').text()).toContain(
-			queueName,
-		);
+		expect(wrapper.find('.queue-name').text()).toContain(queueName);
 	});
 
 	it('does not render queue text when queueName is empty', () => {
