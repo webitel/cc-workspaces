@@ -1,7 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 
-import ClientInfoChips from '../client-info-chips.vue';
+import ClientInfoQueue from '../client-info-queue.vue';
 
 const task = {
 	task: {},
@@ -18,12 +18,12 @@ const store = createStore({
 	},
 });
 
-describe('client-info-chips.vue', () => {
+describe('client-info-queue.vue', () => {
 	beforeEach(() => {
 		task.attempt = {};
 	});
 	it('renders component wrapper', () => {
-		const wrapper = shallowMount(ClientInfoChips, {
+		const wrapper = shallowMount(ClientInfoQueue, {
 			global: {
 				plugins: [
 					store,
@@ -33,14 +33,14 @@ describe('client-info-chips.vue', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('renders queue name chip from task attempt queue', () => {
+	it('renders queue name text from task attempt queue', () => {
 		const display = 'jest';
 		task.attempt = {
 			queue: {
 				name: display,
 			},
 		};
-		const wrapper = mount(ClientInfoChips, {
+		const wrapper = mount(ClientInfoQueue, {
 			global: {
 				plugins: [
 					store,
@@ -49,44 +49,40 @@ describe('client-info-chips.vue', () => {
 		});
 		expect(
 			wrapper
-				.findComponent({
-					name: 'wt-chip',
-				})
+				.find('.queue-name__text')
 				.exists(),
 		).toBe(true);
 		expect(
 			wrapper
-				.findComponent({
-					name: 'wt-chip',
-				})
+				.find('.queue-name__text')
 				.text(),
-		).toBe(display);
+		).toBe(`Queue: ${display}`);
 	});
 
-	it('does not render queue chip when task has no queue', () => {
-		const wrapper = shallowMount(ClientInfoChips, {
+	it('does not render queue text when task has no queue', () => {
+		const wrapper = shallowMount(ClientInfoQueue, {
 			global: {
 				plugins: [
 					store,
 				],
 			},
 		});
-		expect(wrapper.find('.client-info-chips').exists()).toBe(false);
+		expect(wrapper.find('.client-info-queue').exists()).toBe(false);
 	});
 
-	it('does not render queue chip when queue name is empty', () => {
+	it('does not render queue text when queue name is empty', () => {
 		task.attempt = {
 			queue: {
 				name: '',
 			},
 		};
-		const wrapper = shallowMount(ClientInfoChips, {
+		const wrapper = shallowMount(ClientInfoQueue, {
 			global: {
 				plugins: [
 					store,
 				],
 			},
 		});
-		expect(wrapper.find('.client-info-chips').exists()).toBe(false);
+		expect(wrapper.find('.client-info-queue').exists()).toBe(false);
 	});
 });
