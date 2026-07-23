@@ -67,16 +67,16 @@
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
-import QueueNameText from "../../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue";
+import QueueNameText from '../../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 
 export default {
 	name: 'TaskQueuePreview',
 	mixins: [
 		sizeMixin,
 	],
-  components: {
-    QueueNameText
-  },
+	components: {
+		QueueNameText,
+	},
 	props: {
 		opened: {
 			type: Boolean,
