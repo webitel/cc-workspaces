@@ -29,7 +29,13 @@
 
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import {
+	type ComponentPublicInstance,
+	onMounted,
+	onUnmounted,
+	ref,
+	watch,
+} from 'vue';
 import { ChatHelperItem } from '../types/ChatHelperItem.types';
 
 const props = defineProps<{
@@ -53,8 +59,11 @@ const select = (item) => {
 	emit('select', item);
 };
 
-const setItemRef = (el: HTMLElement | null, index: number) => {
-	if (el) itemRefs.value[index] = el;
+const setItemRef = (
+	el: Element | ComponentPublicInstance | null,
+	index: number,
+) => {
+	if (el instanceof HTMLElement) itemRefs.value[index] = el;
 };
 
 const moveDown = () => {

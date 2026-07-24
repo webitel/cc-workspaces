@@ -18,7 +18,8 @@
 		"prepare": "husky || true",
 		"biome:ci:gh": "biome ci ./src --reporter=github",
 		"test:unit:ci": "vitest run --coverage",
-		"typecheck:ci": "true"
+		"typecheck": "vue-tsc --noEmit -p ./tsconfig.json",
+		"typecheck:ci": "npm run typecheck"
 	},
 	"type": "module",
 	"dependencies": {
@@ -30,7 +31,8 @@
 		"@vueuse/core": "^14.x",
 		"@webitel/api-services": "^0.1.46",
 		"@webitel/styleguide": "^26.2.16",
-		"@webitel/ui-chats": "^0.1.41",
+		"@webitel/ui-chats": "^0.1.47",
+		"@webitel/ui-datalist": "^1.1.56",
 		"@webitel/ui-sdk": "~26.8",
 		"autolinker": "^4.x",
 		"axios": "1.18.1",

@@ -1,26 +1,53 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "lib": ["esnext", "DOM"],
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"lib": [
+			"esnext",
+			"DOM"
+		],
+		"plugins": [
+			{
+				"name": "typescript-plugin-css-modules"
+			}
+		],
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
 
-    "allowJs": false,
-    "skipLibCheck": true,
+		"allowJs": false,
+		"skipLibCheck": true,
 
-    "moduleResolution": "Bundler",
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "noEmitOnError": false,
+		"moduleResolution": "Bundler",
+		"baseUrl": ".",
+		"paths": {
+			// ui-sdk components ship source `.vue` (which vue-tsc would typecheck)
+			// alongside compiled `.vue.d.ts` under `types/`. A deep component
+			// import resolves to the source and leaks the SDK's own type errors,
+			// so map deep component paths to the shipped declarations first,
+			// falling back to source only when no `.d.ts` exists. Runtime is
+			// unaffected — Vite resolves via the package `exports`, not tsconfig.
+			"@webitel/ui-sdk/components/*": [
+				"./node_modules/@webitel/ui-sdk/types/components/*",
+				"./node_modules/@webitel/ui-sdk/src/components/*"
+			]
+		},
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+		"noEmitOnError": false,
 
-    "strict": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
-  },
-  "include": ["src", "declarations.d.ts"]
+		"strict": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true
+	},
+	"include": [
+		"src",
+		"declarations.d.ts"
+	],
+	"exclude": [
+		"**/*.spec.ts",
+		"**/*.test.ts"
+	]
 }

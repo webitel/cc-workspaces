@@ -51,6 +51,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
 import useInfiniteScroll from '../../../../../../../../../app/composables/useInfiniteScroll';
 import TransferLookupItem from '../../../../../_shared/components/lookup-item/transfer-lookup-item.vue';
+import type { TransferItem } from '../../../../../_shared/components/lookup-item/types/transfer-lookup-item';
 import LookupItemContainer from '../../../../../_shared/components/lookup-item-container/lookup-item-container.vue';
 import EmptySearch from '../../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import TransferDestination from '../../../../../chat/enums/ChatTransferDestination.enum.js';
@@ -87,10 +88,16 @@ const props = withDefaults(defineProps<CallTransferContainerProps>(), {
 
 const emit = defineEmits<CallTransferContainerEmits>();
 
-const scroll = useInfiniteScroll({
+const scroll = useInfiniteScroll<TransferItem>({
 	filters: props.dataFilters,
 	fields: props.dataFields,
-	fetchFn: (params) => props.getData(params),
+	// useInfiniteScroll builds a generic param bag; getData wants the
+	// tab-specific TransferParams shape. They are structurally different bags,
+	// so bridge explicitly.
+	fetchFn: (params) =>
+		props.getData(params as unknown as TransferParams) as Promise<{
+			items?: TransferItem[];
+		}>,
 });
 
 const isTransferToNumberDisabled = computed(() => !scroll.dataSearch.value);

@@ -10,7 +10,7 @@ type ScreenshotResult = {
 };
 
 type VideoCallScreenshot = {
-	screenshot: () => Promise<ScreenshotResult | undefined>;
+	screenshot?: () => Promise<ScreenshotResult | undefined>;
 	startRecord?: () => Promise<void> | void;
 	stopRecord?: () => Promise<void> | void;
 	close?: () => void;

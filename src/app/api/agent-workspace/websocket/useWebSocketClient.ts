@@ -69,7 +69,7 @@ function emit<K extends keyof EventMap>(
 	payload: Parameters<EventMap[K]>[0],
 ) {
 	listeners[event].forEach((cb) => {
-		cb(payload);
+		(cb as EventCallback)(payload);
 	});
 }
 
@@ -218,8 +218,11 @@ async function createClient(): Promise<Client> {
 	);
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
-	cli.conversationStore = reactive(cli.conversationStore);
-	cli.callStore = reactive(cli.callStore);
+	// Bracket access: conversationStore/callStore are declared private on the
+	// webitel-sdk Client class, but this reactive-wrapping is an intentional
+	// documented pattern that must touch them from outside.
+	cli['conversationStore'] = reactive(cli['conversationStore']);
+	cli['callStore'] = reactive(cli['callStore']);
 
 	attachCoreHandlers(cli, generation);
 

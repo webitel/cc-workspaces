@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { FormatDateMode } from '@webitel/ui-sdk/enums';
 import { formatDate } from '@webitel/ui-sdk/utils';
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
 	value: {
