@@ -108,8 +108,8 @@
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
-import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { useEventBus } from '@webitel/ui-sdk/composables';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
