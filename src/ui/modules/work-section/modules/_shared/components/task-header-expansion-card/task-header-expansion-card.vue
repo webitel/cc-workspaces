@@ -41,22 +41,14 @@
 </template>
 
 <script setup lang="ts">
-import {
-	WtAvatar,
-	WtExpansionCard as WtExpansionCardBase,
-} from '@webitel/ui-sdk/components';
+import { WtAvatar } from '@webitel/ui-sdk/components';
+import WtExpansionCard from '@webitel/ui-sdk/components/wt-expansion-card/wt-expansion-card.vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 import type { ChatContact } from '../../types/ChatContact.types';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
-
-// The barrel types every component as a generic WtComponent with no slots.
-// Re-type via the component's own declaration (a type-only `import(...)`, erased
-// at runtime) so <template #header/#body> typecheck; runtime value is the barrel's.
-const WtExpansionCard =
-	WtExpansionCardBase as unknown as typeof import('@webitel/ui-sdk/components/wt-expansion-card/wt-expansion-card.vue.js').default;
 
 const store = useStore();
 

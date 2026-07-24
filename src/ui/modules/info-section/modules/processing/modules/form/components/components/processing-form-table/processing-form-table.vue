@@ -73,7 +73,7 @@ import {
 	snakeToCamel,
 } from '@webitel/api-services/api/transformers';
 import WtIntersectionObserver from '@webitel/ui-sdk/components/wt-intersection-observer/wt-intersection-observer.vue';
-import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable.d.ts';
+import type { WtTableHeader } from '@webitel/ui-sdk/components/wt-table/types/WtTable';
 import {
 	ComponentSize,
 	ProcessingTableColumnType,

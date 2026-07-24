@@ -18,6 +18,19 @@
 		"skipLibCheck": true,
 
 		"moduleResolution": "Bundler",
+		"baseUrl": ".",
+		"paths": {
+			// ui-sdk components ship source `.vue` (which vue-tsc would typecheck)
+			// alongside compiled `.vue.d.ts` under `types/`. A deep component
+			// import resolves to the source and leaks the SDK's own type errors,
+			// so map deep component paths to the shipped declarations first,
+			// falling back to source only when no `.d.ts` exists. Runtime is
+			// unaffected — Vite resolves via the package `exports`, not tsconfig.
+			"@webitel/ui-sdk/components/*": [
+				"./node_modules/@webitel/ui-sdk/types/components/*",
+				"./node_modules/@webitel/ui-sdk/src/components/*"
+			]
+		},
 		"isolatedModules": true,
 		"moduleDetection": "force",
 		"noEmit": true,
