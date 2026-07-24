@@ -41,8 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { WtAvatar } from '@webitel/ui-sdk/components';
-import WtExpansionCard from '@webitel/ui-sdk/components/wt-expansion-card/wt-expansion-card.vue';
+import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';

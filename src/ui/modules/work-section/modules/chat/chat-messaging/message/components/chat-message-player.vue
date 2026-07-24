@@ -34,6 +34,7 @@
 import { type ChatMessageFile, useChatMessageFile } from '@webitel/ui-chats/ui';
 import { WtPlayer, WtVidstackPlayer } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import type { MediaSrc } from 'vidstack';
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -51,14 +52,19 @@ const emit = defineEmits<{
 
 const { media } = useChatMessageFile(props.file);
 
-const mediaSrcObject = computed(() => ({
-	src: media.value?.streamUrl || media.value?.url,
-	type: media.value?.mime,
-}));
+// vidstack's MediaSrc unions require a specific MimeType literal for `type`;
+// the mime here is a dynamic server string, which vidstack accepts at runtime.
+const mediaSrcObject = computed(
+	() =>
+		({
+			src: media.value?.streamUrl || media.value?.url,
+			type: media.value?.mime,
+		}) as MediaSrc,
+);
 
 const isVideo = computed(() => media.value?.mime?.includes('video'));
 
-function handlePlayerInitialize(player: unknown) {
+function handlePlayerInitialize(player?: unknown) {
 	emit('initialized', player);
 }
 </script>

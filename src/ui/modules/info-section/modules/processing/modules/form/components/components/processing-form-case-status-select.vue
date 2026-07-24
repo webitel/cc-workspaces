@@ -28,8 +28,7 @@
     lang="ts"
 >
 import { WebitelCasesStatusCondition } from '@webitel/api-services/gen/models';
-import { WtIndicator } from '@webitel/ui-sdk/components';
-import WtSingleSelect from '@webitel/ui-sdk/components/wt-single-select/wt-single-select.vue';
+import { WtIndicator, WtSingleSelect } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
