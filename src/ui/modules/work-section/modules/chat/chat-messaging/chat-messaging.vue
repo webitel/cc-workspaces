@@ -109,7 +109,7 @@
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { eventBus } from '@webitel/ui-sdk/scripts';
+import { useEventBus } from '@webitel/ui-sdk/composables';
 import insertTextAtCursor from 'insert-text-at-cursor';
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -150,6 +150,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const store = useStore();
+const eventBus = useEventBus();
 
 const messageDraft = ref();
 const attachmentInput = ref();
