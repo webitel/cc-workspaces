@@ -1,6 +1,6 @@
 <template>
   <section class="client-info wt-scrollbar">
-    <client-info-chips />
+    <client-info-queue />
     <contact
       v-if="isAllowedContacts"
       :size="props.size"
@@ -23,7 +23,7 @@ import { useUserAccessControl } from '../../../../../../app/composables/useUserA
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import Contact from '../modules/contact/components/the-contact.vue';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
-import ClientInfoChips from './queue-name/client-info-chips.vue';
+import ClientInfoQueue from './queue-name/client-info-queue.vue';
 
 const props = defineProps({
 	task: {
