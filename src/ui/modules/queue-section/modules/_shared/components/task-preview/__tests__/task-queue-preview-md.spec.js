@@ -15,17 +15,15 @@ describe('TaskQueuePreviewMd', () => {
 				queueName,
 			},
 		});
-		expect(wrapper.find('.queue-preview-name-text').text()).toContain(
-			queueName,
-		);
+		expect(wrapper.find('.queue-name').text()).toContain(queueName);
 	});
 
-	it('does not render queue chip when queueName is empty', () => {
+	it('does not render queue text when queueName is empty', () => {
 		const wrapper = shallowMount(TaskQueuePreviewMd);
 		expect(
 			wrapper
 				.findComponent({
-					name: 'queue-name-chip',
+					name: 'queue-name-text',
 				})
 				.exists(),
 		).toBe(false);

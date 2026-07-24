@@ -65,12 +65,7 @@
       </div>
 
       <div class="chat-queue-preview-md-footer">
-        <div class="chat-queue-preview-md-footer__queue">
-          <p v-if="queueName" class="chat-queue-preview-md-footer__queue-name typo-body-2">
-            <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ queueName }}
-          </p>
-        </div>
-
+        <queue-name-text v-if="queueName"  :name="queueName" />
         <div v-if="$slots['icon-status']" class="chat-queue-preview-md-footer__icons">
           <slot name="icon-status"></slot>
         </div>
@@ -81,7 +76,7 @@
 
 <script setup>
 import { computed } from 'vue';
-
+import QueueNameText from '../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
@@ -260,15 +255,6 @@ const iconColor = computed(() => {
   justify-content: space-between;
   align-items: center;
   gap: var(--spacing-2xs);
-
-  &__queue {
-    min-width: 0;
-    &-name {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
 
   &__icons {
     display: flex;

@@ -1,6 +1,6 @@
 <template>
-  <article v-if="queueName" class="client-info-chips">
-    <queue-name-chip :name="queueName"/>
+  <article v-if="queueName" class="client-info-queue">
+    <queue-name-text :name="queueName"/>
   </article>
 </template>
 
@@ -8,12 +8,12 @@
 import { mapGetters } from 'vuex';
 
 import { getQueueName } from '../../../../../queue-section/modules/_shared/scripts/getQueueName';
-import QueueNameChip from '../../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
+import QueueNameText from '../../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 
 export default {
-	name: 'ClientInfoChips',
+	name: 'ClientInfoQueue',
 	components: {
-		QueueNameChip,
+		QueueNameText,
 	},
 	computed: {
 		...mapGetters('workspace', {
@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.client-info-chips {
+.client-info-queue {
   display: flex;
   justify-content: space-between;
   align-items: center;
