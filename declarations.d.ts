@@ -1,8 +1,7 @@
 import type { Breakpoint } from '@webitel/ui-sdk/plugins/breakpoint/breakpoint.plugin.js';
 
-// The breakpoint plugin injects `$breakpoint` as a Vue global property.
-// Re-declared here so it resolves without relying on the plugin's own
-// declaration file being pulled into the type graph.
+// Re-declared so `$breakpoint` resolves without pulling the plugin's own
+// declaration file into the type graph.
 declare module 'vue' {
 	interface ComponentCustomProperties {
 		$breakpoint: Breakpoint;
@@ -19,7 +18,6 @@ declare module 'webitel-sdk' {
 
 declare global {
 	interface Window {
-		// Electron injects runtime config onto window before app init.
 		_config?: Record<string, unknown>;
 	}
 }

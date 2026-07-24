@@ -99,8 +99,6 @@ import type {
 
 const { t } = useI18n();
 
-// Table headers carry the column `type` (used to pick the cell component)
-// on top of the base WtTableHeader shape.
 type TableHeader = WtTableHeader & {
 	type: string;
 };
