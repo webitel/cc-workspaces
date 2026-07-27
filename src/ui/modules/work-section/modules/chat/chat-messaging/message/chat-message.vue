@@ -169,10 +169,8 @@ const isTransferAgent = computed(
 );
 
 const isBot = computed(() => {
-	const byMemberType =
-		props.message.member?.type === AgentTypes.BOT ||
-		!props.message.member?.type;
-	const byMissingChannelId = !props.message.channelId;
+	const byMemberType = props.message.member?.type === AgentTypes.BOT;
+	const byMissingChannelId =!props.message.member?.type && !props.message.channelId;
 	const byBotVariables = props.message.variables?.from === AgentTypes.BOT;
 
 	return byMemberType || byMissingChannelId || byBotVariables;
