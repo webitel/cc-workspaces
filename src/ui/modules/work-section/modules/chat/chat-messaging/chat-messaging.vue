@@ -12,15 +12,12 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-      <quick-replies
-        v-if="showQuickReplies"
-        :search="searchReply"
-        @close="closeQuickRepliesPanel"
-        @select="applyQuickReply"
-      />
+
+    <div class="chat-messaging__panes">
       <div
-        v-if="!showQuickReplies"
         class="chat-messaging__messaging chat-messages-container"
+        :class="{ 'chat-messaging__messaging--covered': showQuickReplies }"
+        :aria-hidden="showQuickReplies"
       >
         <chat-history
           v-if="contact?.id"
@@ -32,11 +29,22 @@
           :size="size"
         />
       </div>
+
+      <transition name="quick-replies-fade">
+        <quick-replies
+          v-if="showQuickReplies"
+          class="chat-messaging__quick-replies"
+          :search="searchReply"
+          @close="closeQuickRepliesPanel"
+          @select="applyQuickReply"
+        />
+      </transition>
+    </div>
+
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
-
       <chat-helper-list
         v-if="isOpenAutocomplete"
         :list="autocompleteList"
@@ -58,6 +66,7 @@
         @update:model-value="inputMessage"
         @blur="showQuickReplies && onBlur()"
       />
+
       <div class="chat-messaging-text-entry__actions">
         <wt-button
             variant="outlined"
@@ -392,12 +401,40 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     }
   }
 
+  &__panes {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
   &__messaging {
     flex-direction: column;
     width: 100%;
     max-width: 100%;
+    height: 100%;
     box-sizing: border-box;
   }
+
+  &__messaging--covered {
+    pointer-events: none;
+  }
+
+  &__quick-replies {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    background-color: var(--content-wrapper-color);
+  }
+}
+
+.quick-replies-fade-enter-active,
+.quick-replies-fade-leave-active {
+  transition: opacity var(--transition);
+}
+
+.quick-replies-fade-enter-from,
+.quick-replies-fade-leave-to {
+  opacity: 0;
 }
 
 .chat-messaging__textarea {
