@@ -213,6 +213,7 @@ export default {
 			chatsIncorrectFileSize: 'Incorrect file size',
 			errors: {
 				uploadFileLimitSize: 'File size limit exceeded',
+				filePolicyFail: 'Forbidden file format',
 			},
 		},
 	},
