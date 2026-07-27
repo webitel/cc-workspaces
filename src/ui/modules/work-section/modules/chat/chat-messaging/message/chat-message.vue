@@ -20,7 +20,7 @@
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
       <div
         class="chat-message__body"
-        :class="{ 'chat-message__body--malware': isFileMalware || isFilePolicyFailed }"
+        :class="{ 'chat-message__body--error': isFileMalware || isFilePolicyFailed }"
         @click.stop
       >
         <template v-if="hasFileError">
@@ -169,11 +169,13 @@ const isTransferAgent = computed(
 );
 
 const isBot = computed(() => {
-	const byMemberType = props.message.member?.type === AgentTypes.BOT;
-	const byMissingMeta = !props.message.member?.type && !props.message.channelId;
-	const byVariables = props.message.variables?.from === AgentTypes.BOT;
+	const byMemberType =
+		props.message.member?.type === AgentTypes.BOT ||
+		!props.message.member?.type;
+	const byMissingChannelId = !props.message.channelId;
+	const byBotVariables = props.message.variables?.from === AgentTypes.BOT;
 
-	return byMemberType || byMissingMeta || byVariables;
+	return byMemberType || byMissingChannelId || byBotVariables;
 });
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
@@ -263,8 +265,8 @@ $chat-info-gap: var(--spacing-2xs);
     }
   }
 
-  &__body--malware,
-  &--right &__body--malware {
+  &__body--error,
+  &--right &__body--error {
     background: var(--p-error-highlight-color);
   }
 }
