@@ -4,6 +4,7 @@ import { ConversationState } from 'webitel-sdk';
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
+import active from '../modules/active/store/active';
 import closed from '../modules/closed/store/closed';
 import manual from '../modules/manual/store/manual';
 import chatHistory from './chat-history';
@@ -178,6 +179,7 @@ export default {
 	actions,
 	mutations,
 	modules: {
+		active,
 		manual,
 		closed,
 		chatHistory,
