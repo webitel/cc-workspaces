@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
+import type { Task } from 'webitel-sdk';
 import { getQueueName } from '../../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
 import TaskHeaderExpansionCard from '../../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
@@ -20,7 +21,7 @@ import TaskHeaderExpansionCard from '../../../_shared/components/task-header-exp
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
-		task: object;
+		task: Task;
 	}>(),
 	{
 		size: ComponentSize.MD,

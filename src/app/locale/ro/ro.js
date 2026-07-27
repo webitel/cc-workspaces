@@ -210,6 +210,7 @@ export default {
 			errors: {
 				uploadFileLimitSize:
 					'Limita de dimensiune a fișierului a fost depășită',
+				filePolicyFail: 'Format de fișier interzis',
 			},
 		},
 	},

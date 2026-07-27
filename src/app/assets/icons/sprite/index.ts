@@ -1,4 +1,3 @@
-// @ts-expect-error він там є!
 import { fillIconsRepository } from '@webitel/ui-sdk';
 import protectionError from './protection-error.svg?raw';
 import wsAgent from './ws-agent.svg?raw';
