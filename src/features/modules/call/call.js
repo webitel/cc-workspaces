@@ -28,6 +28,13 @@ const getters = {
 	GET_CALL_BY_ID: (state) => (callId) =>
 		state.callList.find((call) => call.id === callId),
 
+	ACTIVE_VIDEO_CALL: (state, getters, rootState, rootGetters) =>
+		state.callList.find(
+			(call) =>
+				rootGetters['features/call/videoCall/IS_VIDEO_CALL'](call) &&
+				!isIncomingRinging(call),
+		),
+
 	IS_NEW_CALL: (state, getters) => getters.CALL_ON_WORKSPACE?._isNew,
 
 	GET_CURRENT_CALL_DIGITS: (state, getters) => {
