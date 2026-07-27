@@ -208,6 +208,7 @@ export default {
 			chatsIncorrectFileSize: 'Файл өлшемі қате',
 			errors: {
 				uploadFileLimitSize: 'Файл өлшемі шегінен асты',
+				filePolicyFail: 'Тыйым салынған файл пішімі',
 			},
 		},
 	},
