@@ -40,11 +40,7 @@
     <section
       class="queue-preview-main-section"
     >
-      <article class="queue-preview-name">
-        <p v-if="queueName" class="queue-preview-name-text typo-body-2">
-          <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ queueName }}
-        </p>
-      </article>
+      <queue-name-text v-if="queueName"  :name="queueName" />
       <div
         v-if="$slots['icon-status']"
         class="queue-preview-icon-status"
@@ -71,12 +67,16 @@
 
 <script>
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
+import QueueNameText from '../../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 
 export default {
 	name: 'TaskQueuePreview',
 	mixins: [
 		sizeMixin,
 	],
+	components: {
+		QueueNameText,
+	},
 	props: {
 		opened: {
 			type: Boolean,
@@ -92,8 +92,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../css/queue-preview';
-
-
 
 .queue-preview-md {
   position: relative;
@@ -111,18 +109,18 @@ export default {
   }
 
   .queue-preview-main-section {
-    display: grid;
-    grid-template-columns: 1fr var(--icon-md-size);
-    gap: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xs);
+
+    & > :first-child {
+      flex-grow: 1;
+      min-width: 0;
+    }
   }
 
-  .queue-preview-name {
-    min-width: 0;
-    &-text {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .queue-preview-icon-status {
+    flex: 0 0 var(--icon-md-size)
   }
 
   .queue-preview-actions {

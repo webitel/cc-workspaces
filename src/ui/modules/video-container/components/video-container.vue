@@ -80,9 +80,22 @@ const screenshotData = ref<ScreenshotFileItem[]>([]);
 const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
 type WorkspaceCall = {
+	id?: string;
+	displayName?: string;
 	peerStreams?: MediaStream[];
 	localStreams?: MediaStream[];
-	[key: string]: unknown;
+	mutedVideo?: boolean;
+	recordings?: boolean;
+	remoteAudioMuted?: boolean;
+	screenshot?: () => Promise<
+		| {
+				blob: Blob;
+				file?: File;
+		  }
+		| undefined
+	>;
+	startRecord?: () => Promise<void> | void;
+	stopRecord?: () => Promise<void> | void;
 };
 
 const call = computed<WorkspaceCall>(

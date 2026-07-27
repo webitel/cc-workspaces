@@ -1,5 +1,4 @@
-import AbstractUserStatus from '@webitel/ui-sdk/src/enums/AbstractUserStatus/AbstractUserStatus.enum';
-import AgentStatus from '@webitel/ui-sdk/src/enums/AgentStatus/AgentStatus.enum';
+import { AbstractUserStatus, AgentStatus } from '@webitel/ui-sdk/enums';
 
 import parseUserStatus from './parseUserStatus';
 import UserStatus from './UserStatus';

@@ -1,6 +1,7 @@
-import { computed, ref } from 'vue';
+import { computed, type Ref, ref } from 'vue';
+import type { ChatHelperItem } from '../../types/ChatHelperItem.types';
 
-export function useAutocomplete(options = []) {
+export function useAutocomplete(options: Ref<ChatHelperItem[]> = ref([])) {
 	const isOpenAutocomplete = ref(false);
 	const search = ref('');
 

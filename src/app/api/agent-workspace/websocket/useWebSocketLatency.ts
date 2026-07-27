@@ -88,33 +88,29 @@ export const useWebSocketLatency = () => {
 			ConnectionQualityLevels.High;
 		const reasons: string[] = [];
 
-		const setLevel = (next: ConnectionQualityLevelsType) => {
-			level = next;
-		};
-
 		if (jitterAvg > 50) {
-			setLevel(ConnectionQualityLevels.Low);
+			level = ConnectionQualityLevels.Low;
 			reasons.push(`jitter ${Math.round(jitterAvg)} ms (> 50)`);
 		} else if (jitterAvg >= 30) {
-			setLevel(ConnectionQualityLevels.Medium);
+			level = ConnectionQualityLevels.Medium;
 			reasons.push(`jitter ${Math.round(jitterAvg)} ms (30–50)`);
 		}
 
 		if (packetLossAvg > 3) {
-			setLevel(ConnectionQualityLevels.Low);
+			level = ConnectionQualityLevels.Low;
 			reasons.push(`packet loss ${packetLossAvg.toFixed(1)} % (> 3%)`);
 		} else if (packetLossAvg > 1) {
-			setLevel(ConnectionQualityLevels.Medium);
+			level = ConnectionQualityLevels.Medium;
 			reasons.push(`packet loss ${packetLossAvg.toFixed(1)} % (1–3%)`);
 		}
 
 		const mosLevel = getConnectionQuality(mosAvg);
 
 		if (mosLevel === ConnectionQualityLevels.Low) {
-			setLevel(ConnectionQualityLevels.Low);
+			level = ConnectionQualityLevels.Low;
 			reasons.push(`MOS ${mosAvg.toFixed(2)} (< 3.5)`);
 		} else if (mosLevel === ConnectionQualityLevels.Medium) {
-			setLevel(ConnectionQualityLevels.Medium);
+			level = ConnectionQualityLevels.Medium;
 			reasons.push(`MOS ${mosAvg.toFixed(2)} (3.5–4.0)`);
 		}
 
