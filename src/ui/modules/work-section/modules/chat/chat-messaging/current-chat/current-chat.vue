@@ -58,6 +58,14 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 const store = useStore();
 
 const chatMediaNamespace = 'features/chat/chatMedia';
+/**
+ * @author PolinaSukhorukova-webitel
+ *
+ * [WTEL-10003](https://webitel.atlassian.net/browse/WTEL-10003)
+ * Allows the auto scroll only for an already-closed chat on open, not when a
+ * viewed chat closes into post-processing.
+ */
+let wasClosedOnOpen = false;
 
 const props = defineProps({
 	size: {
@@ -97,6 +105,7 @@ const {
 	chatId: computed(() => currentChat.value?.id),
 	isChatClosed: computed(() => false),
 	onBeforeStart: ({ scrollToBottom }) => {
+		wasClosedOnOpen = !!currentChat.value?.closedAt;
 		scrollToBottom();
 		startObserve();
 	},
@@ -107,9 +116,10 @@ const {
 	},
 });
 
-const { startObserve } = useObserveHeightUntilStable(chatContainer, () =>
-	scrollToBottom('instant'),
-);
+const { startObserve } = useObserveHeightUntilStable(chatContainer, () => {
+	if (currentChat.value?.closedAt && !wasClosedOnOpen) return;
+	scrollToBottom('instant');
+});
 
 const openMedia = (message) =>
 	store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
