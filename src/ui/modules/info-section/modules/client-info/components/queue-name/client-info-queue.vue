@@ -1,6 +1,6 @@
 <template>
   <article v-if="queueName" class="client-info-queue">
-    <queue-name-text :name="queueName"/>
+    <queue-name-text :name="queueName" expanded/>
   </article>
 </template>
 
