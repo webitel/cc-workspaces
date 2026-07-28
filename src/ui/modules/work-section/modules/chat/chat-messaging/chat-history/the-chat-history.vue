@@ -160,8 +160,13 @@ const {
 	},
 });
 
-const { startObserve } = useObserveHeightUntilStable(chatContainer, () =>
-	scrollToBottom('instant'),
+const { startObserve } = useObserveHeightUntilStable(
+	chatContainer,
+	() => {
+		if (isChatClosed.value) return;
+		scrollToBottom('instant');
+	},
+	OBSERVER_TIMEOUT_MS,
 );
 
 /**
