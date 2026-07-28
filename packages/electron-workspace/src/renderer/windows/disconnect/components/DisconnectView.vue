@@ -41,7 +41,9 @@ function connect() {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	text-align: center;
 	gap: 10px;
+	padding: 10px;
 }
 
 .disconnect-image {

@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 			e,
 		);
 	}
-	ipcRenderer.send('hide-disconnect-popup');
+	closeDisconnectPopup();
 });
 
 window.addEventListener(
@@ -167,7 +167,7 @@ ipcRenderer.on('call-action', (event, call) => {
 
 function subscribeAction(store) {
 	store.subscribeAction((action, state) => {
-		// console.log(action.type); //features/chat/ACCEPT
+		// console.log(action.type);
 		switch (action.type) {
 			case 'features/call/HOLD_OTHER_CALLS':
 				setActiveCall(
@@ -189,11 +189,13 @@ function subscribeAction(store) {
 			case 'workspace/CLOSE_SESSION':
 				destroyNotification();
 				break;
-			case 'globals/OPEN_DISCONNECT_POPUP':
+			case 'features/globals/OPEN_DISCONNECT_POPUP':
 				destroyNotification();
 				openDisconnectPopup();
 				break;
-
+			case 'features/globals/CLOSE_DISCONNECT_POPUP':
+				closeDisconnectPopup();
+				break;
 			case 'features/status/SUBSCRIBE_STATUS':
 				// console.warn('SUBSCRIBE_STATUS', window.cli);
 				changeSIP(cli, {
@@ -211,7 +213,7 @@ function subscribeAction(store) {
 
 function subscribeMutation(store) {
 	store.subscribe((mutation, state) => {
-		console.log(mutation.type);
+		// console.log(mutation.type);
 		switch (
 			mutation.type //features/chat/ADD_CHAT
 		) {
@@ -266,6 +268,9 @@ function openDisconnectPopup() {
 	ipcRenderer.send('open-disconnect-popup');
 }
 
+function closeDisconnectPopup() {
+	ipcRenderer.send('hide-disconnect-popup');
+}
 function restoreNotification(callList) {
 	const call = getActiveCall(callList);
 	if (call) setActiveCall(call);
