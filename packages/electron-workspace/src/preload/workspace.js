@@ -14,7 +14,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 	if (window.$store) {
 		subscribeMutation(window.$store);
 		subscribeAction(window.$store);
-		checkActiveTask();
 	}
 	window.ipcRenderer = ipcRenderer;
 	try {
@@ -354,47 +353,6 @@ function createChatObject(payload) {
 function setUserStatus(status) {
 	ipcRenderer.send('update-tray', status);
 }
-////////
-
-//todo fixme
-ipcRenderer.on('reset-timer', (event, arg) => {
-	const tasks = $store.state.features.status?.agent?.task;
-	if (tasks) {
-		const task = tasks.get(arg);
-		task.renew();
-	}
-});
-
-////////////
-
-ipcRenderer.on('set-processing-property', (event, arg = '') => {
-	const call = fetCallById(arg.id);
-	if (call) {
-		switch (arg.prop) {
-			case 'isScheduleCall':
-				call.postProcessData.isScheduleCall = arg.value;
-				break;
-
-			case 'nextDistributeAt':
-				call.postProcessData.nextDistributeAt = arg.value;
-				break;
-
-			case 'success':
-				call.postProcessData.success = arg.value;
-				break;
-
-			default:
-		}
-		$store.dispatch('reporting/SET_PROPERTY', arg);
-	}
-});
-
-ipcRenderer.on('send-reporting', (event, arg) => {
-	const call = fetCallById(arg);
-	if (call && call.postProcessData) {
-		call.reporting(call.postProcessData);
-	}
-});
 
 ipcRenderer.on('make-call', async (event, destination) => {
 	const cli = window.cli;
@@ -402,54 +360,3 @@ ipcRenderer.on('make-call', async (event, destination) => {
 		destination,
 	});
 });
-
-ipcRenderer.on('chack-info', (event, arg) => {
-	getActiveTask();
-});
-
-//setInterval(getActiveTask, 80)
-function checkActiveTask() {
-	setInterval(getActiveTask, 80);
-}
-
-function getActiveTask() {
-	if (!$store) return;
-	const list = $store.state.features.call.callList;
-	if (list) {
-		const call = list.find(
-			(call) => call.hangupAt !== 0 && call.allowReporting,
-		);
-		if (call) {
-			setProcessing(call);
-		} else {
-			ipcRenderer.send('clear-processing');
-		}
-	}
-}
-
-function fetCallById(callId) {
-	return $store.state?.features?.call?.callList?.find(
-		(call) => call.id === callId,
-	);
-}
-
-function setProcessing(call) {
-	const ob = {
-		id: call.id,
-		taskId: call.task.id,
-		state: call.task.state,
-		startProcessingAt: call.task.startProcessingAt,
-		renewalSec: call.task.renewalSec,
-		processingTimeoutAt: call.task.processingTimeoutAt,
-		processingSec: call.task.processingSec,
-		memberId: call.task.distribute.member_id,
-		now: $store.state?.ui?.now.now,
-		reporting: {
-			isSuccess: call.postProcessData?.success,
-			nextDistributeAt: call.postProcessData?.nextDistributeAt,
-			isScheduleCall: call.postProcessData?.isScheduleCall,
-		},
-	};
-
-	ipcRenderer.send('update-procesing', ob);
-}

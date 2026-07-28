@@ -1,23 +1,17 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import CallView from './components/CallView/CallView.vue';
-import ProcessingView from './components/ProcessingView/ProcessingView.vue';
-import SuccessView from './components/SuccessView/SuccessView.vue';
 import {
 	type CallPayload,
 	onDestroyNotification,
-	onSetProcessingInfo,
 	onShowCall,
-	onShowSuccessMessage,
-	type ProcessingPayload,
 	toggleDevTools,
 } from './composables/useCallIPC';
 
-type View = 'call' | 'processing' | 'success' | 'idle';
+type View = 'call' | 'idle';
 
 const view = ref<View>('idle');
 const call = ref<CallPayload | null>(null);
-const processing = ref<ProcessingPayload | null>(null);
 
 const unsubscribers: Array<() => void> = [];
 
@@ -33,15 +27,7 @@ onMounted(() => {
 		}),
 		onDestroyNotification(() => {
 			call.value = null;
-			processing.value = null;
 			view.value = 'idle';
-		}),
-		onShowSuccessMessage(() => {
-			view.value = 'success';
-		}),
-		onSetProcessingInfo((_event, payload) => {
-			processing.value = payload;
-			view.value = 'processing';
 		}),
 	);
 	window.addEventListener('keyup', onKeyup, true);
@@ -59,11 +45,6 @@ onUnmounted(() => {
 		v-if="view === 'call'"
 		:call="call"
 	/>
-	<ProcessingView
-		v-else-if="view === 'processing'"
-		:payload="processing"
-	/>
-	<SuccessView v-else-if="view === 'success'" />
 </template>
 
 <style>

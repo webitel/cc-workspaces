@@ -213,40 +213,9 @@ class WebitelWindows {
 		}
 	}
 
-	updateProcessing(arg) {
-		this.callNotification.updateProcessing(arg);
-	}
-
-	setProcessingProperty(arg) {
-		arg.id = this.callNotification.getCallId();
-		this.workspace.window.webContents.send('set-processing-property', arg);
-	}
-
-	sendReporting() {
-		this.workspace.window.webContents.send(
-			'send-reporting',
-			this.callNotification.getCallId(),
-		);
-	}
-
 	makeCall(destination = null) {
 		if (!destination) return;
 		this.workspace.window.webContents.send('make-call', destination);
-	}
-
-	clearProcessing() {
-		this.callNotification.clearProcessing();
-	}
-
-	closeSuccessMessage() {
-		this.callNotification.hide();
-	}
-
-	resetTime() {
-		this.workspace.window.webContents.send(
-			'reset-timer',
-			this.callNotification.getTaskId(),
-		);
 	}
 
 	collapsWindow() {

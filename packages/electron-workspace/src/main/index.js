@@ -194,34 +194,6 @@ ipcMain.on('open-close-DevTools', (event, args) => {
 	win.openDevTools();
 });
 
-ipcMain.on('resize-popap-win', (event, args) => {
-	win.callNotification.resize(args);
-});
-
-ipcMain.on('update-procesing', (event, args) => {
-	win.updateProcessing(args);
-});
-
-ipcMain.on('set-processing-property', (event, args) => {
-	win.setProcessingProperty(args);
-});
-
-ipcMain.on('send-reporting', (event, args) => {
-	win.sendReporting();
-});
-
-ipcMain.on('clear-processing', (event, args) => {
-	win.clearProcessing();
-});
-
-ipcMain.on('close-success-message', (event, args) => {
-	win.closeSuccessMessage();
-});
-
-ipcMain.on('reset-timer', (event, args) => {
-	win.resetTime();
-});
-
 ipcMain.on('collaps-load-window', (event, args) => {
 	win.collapsWindow();
 });

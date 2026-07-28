@@ -26,7 +26,6 @@ const DEFAULT_CONFIG = JSON.stringify({
 		'PCMU/8000/1',
 	],
 	timeoutSIP: '90',
-	hidePostProcessing: false,
 	debugMode: false,
 	showNumber: true,
 });
