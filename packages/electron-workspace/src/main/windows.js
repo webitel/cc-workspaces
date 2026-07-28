@@ -18,7 +18,7 @@ class WebitelWindows {
 	openUrlOnAnswer = conf.openUrlOnAnswer;
 
 	start(URL = conf.URL, useSIP = conf.useSIP) {
-		if (false) {
+		if (URL) {
 			this.workspace.createWindow(URL, useSIP);
 			this.callNotification.createWindow();
 		} else {

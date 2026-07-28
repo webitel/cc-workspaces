@@ -16,7 +16,7 @@ const DEFAULT_WORKSPACE_URL =
 let _conf = null;
 
 const DEFAULT_CONFIG = JSON.stringify({
-	URL: DEFAULT_WORKSPACE_URL,
+	// URL: DEFAULT_WORKSPACE_URL, // note! should not be present in the default config
 	openUrlOnAnswer: 'link',
 	useSIP: true,
 	codecs: [
