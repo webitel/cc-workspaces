@@ -115,7 +115,10 @@
 		"vue-tsc": "^3.1.1"
 	},
 	"dependencies": {
+		"@vue/compat": "^3.5.40",
+		"@webitel/ui-sdk": "^26.6.99",
 		"axios": "^1.13.2",
+		"clipboard-copy": "^4.0.1",
 		"dotenv": "^17.2.3",
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",
