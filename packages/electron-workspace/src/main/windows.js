@@ -232,7 +232,7 @@ class WebitelWindows {
 
 	showDisconnectNotification() {
 		this.disconnectNotification.setBounds();
-		// this.disconnectNotification.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
+		this.disconnectNotification.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
 	}
 
 	hideDisconnectNotification() {
