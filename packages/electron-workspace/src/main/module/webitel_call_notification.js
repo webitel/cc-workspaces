@@ -84,7 +84,7 @@ class CallNotification {
 
 		this.window.on('will-resize', (e) => {
 			//prevent resizing even if resizable property is true.
-			// e.preventDefault();
+			process.env.NODE_ENV !== 'development' && e.preventDefault();
 		});
 	}
 
