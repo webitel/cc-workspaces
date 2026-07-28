@@ -11,7 +11,8 @@ class LoadConfig {
 			autoHideMenuBar: true,
 			title: 'Webitel',
 			name: 'loadConfig',
-			frame: false,
+			frame: true,
+			titleBarStyle: 'default',
 			icon: path.join(app.getAppPath(), 'img/app-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
