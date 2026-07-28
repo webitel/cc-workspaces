@@ -21,7 +21,7 @@ describe('Client Info Tab', () => {
 			},
 		});
 
-	it('always renders client-info chips', async () => {
+	it('always renders client-info queue', async () => {
 		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
 			items: [],
 		});
@@ -42,7 +42,7 @@ describe('Client Info Tab', () => {
 		expect(
 			wrapper
 				.findComponent({
-					name: 'client-info-chips',
+					name: 'client-info-queue',
 				})
 				.exists(),
 		).toBe(true);
