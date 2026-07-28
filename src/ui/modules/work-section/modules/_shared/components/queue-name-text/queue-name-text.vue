@@ -1,6 +1,9 @@
 <template>
   <div class="queue-name">
-    <p class="queue-name__text typo-body-2">
+    <p
+      class="queue-name__text typo-body-2"
+      :class="{ 'queue-name__text--expanded': expanded }"
+    >
       <span class="typo-body-2-bold">{{ $t('infoSec.generalInfo.queue') }}: </span>{{ name }}
     </p>
   </div>
@@ -9,6 +12,7 @@
 <script lang="ts" setup>
 defineProps<{
 	name: string;
+	expanded?: boolean;
 }>();
 </script>
 
@@ -23,6 +27,10 @@ defineProps<{
     -webkit-box-orient: vertical;
     overflow: hidden;
     word-break: break-all;
+    &--expanded {
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
   }
 }
 </style>
