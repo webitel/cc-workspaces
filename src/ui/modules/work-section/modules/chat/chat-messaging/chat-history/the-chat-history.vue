@@ -160,10 +160,14 @@ const {
 	},
 });
 
-const { startObserve } = useObserveHeightUntilStable(chatContainer, () => {
-	if (isChatClosed.value) return;
-	scrollToBottom('instant');
-});
+const { startObserve } = useObserveHeightUntilStable(
+	chatContainer,
+	() => {
+		if (isChatClosed.value) return;
+		scrollToBottom('instant');
+	},
+	OBSERVER_TIMEOUT_MS,
+);
 
 /**
  * @author PolinaSukhorukova-webitel
