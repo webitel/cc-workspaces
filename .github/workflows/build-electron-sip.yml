@@ -52,6 +52,33 @@ jobs:
           path: packages/electron-workspace/electron-sip/prebuilds/
 
   # ---------------------------------------------------------------------------
+  # macOS x64 — Intel runner (or Rosetta). Required for Webitel-*.dmg (non-arm64).
+  # Without this prebuild, packaging x64 on an arm64 host ships the host's
+  # arm64 build/Release/.node and preload fails with "incompatible architecture".
+  # ---------------------------------------------------------------------------
+  macos-x64:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install pjproject (brew)
+        run: brew install pjproject
+
+      - name: Install JS deps (skip native build)
+        run: npm install --ignore-scripts
+
+      - name: Build prebuild
+        run: npx prebuildify --napi --strip --arch=x64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prebuild-darwin-x64
+          path: packages/electron-workspace/electron-sip/prebuilds/
+
+  # ---------------------------------------------------------------------------
   # Linux x64 — pjproject built from source (no reliable apt package), exposed
   # to the addon via pkg-config.
   # ---------------------------------------------------------------------------
@@ -170,7 +197,7 @@ jobs:
   # Merge per-platform artifacts into one combined artifact for download.
   # ---------------------------------------------------------------------------
   collect:
-    needs: [macos-arm64, linux-x64, windows-x64]
+    needs: [macos-arm64, macos-x64, linux-x64, windows-x64]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

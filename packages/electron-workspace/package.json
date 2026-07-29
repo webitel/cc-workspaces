@@ -28,6 +28,7 @@
 	"build": {
 		"asar": false,
 		"npmRebuild": false,
+		"beforePack": "./build/ensureElectronSipPrebuild.js",
 		"files": [
 			"out/**/*",
 			"src/renderer/**/*",
@@ -35,7 +36,9 @@
 			"package.json",
 			"!node_modules/**/*.d.ts",
 			"!node_modules/**/*.d.ts.map",
-			"!node_modules/**/*.js.map"
+			"!node_modules/**/*.js.map",
+			"!node_modules/electron-sip/build/**",
+			"!electron-sip/build/**"
 		],
 		"win": {
 			"target": [
@@ -65,14 +68,12 @@
 				{
 					"target": "dmg",
 					"arch": [
-						"x64",
 						"arm64"
 					]
 				},
 				{
 					"target": "zip",
 					"arch": [
-						"x64",
 						"arm64"
 					]
 				}
