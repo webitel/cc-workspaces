@@ -23,6 +23,8 @@ class Workspace {
 		});
 
 		this.window.maximize();
+		this.window.show();
+		this.window.focus();
 		//this.window.webContents.openDevTools()
 
 		this.window.on('page-title-updated', (evt) => {

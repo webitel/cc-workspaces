@@ -3,5 +3,6 @@
 	"openUrlOnAnswer": "link",
 	"useSIP": true,
 	"timeoutSIP": "80",
-	"debugMode": true
+	"debugMode": true,
+	"openAtLogin": false
 }

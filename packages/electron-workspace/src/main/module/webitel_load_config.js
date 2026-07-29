@@ -23,6 +23,8 @@ class LoadConfig {
 
 		//this.window.webContents.openDevTools()
 		this.window.center();
+		this.window.show();
+		this.window.focus();
 
 		this.window.on('page-title-updated', (evt) => {
 			evt.preventDefault();
