@@ -117,6 +117,8 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 app.on('ready', () => {
+	require('./module/webitel_login_item').syncFromConfig();
+
 	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
 		autoUpdater.setFeedURL(conf.updateEndpoint);
 		autoUpdater.checkForUpdatesAndNotify().then(() => {
