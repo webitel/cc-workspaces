@@ -69,6 +69,8 @@ const props = defineProps({
 const chatContainer = useTemplateRef('chat-container');
 const chatContent = useTemplateRef('chat-content');
 
+const OBSERVER_TIMEOUT_MS = 1500;
+
 const currentChat = computed(
 	() => store.getters[`features/chat/CHAT_ON_WORKSPACE`],
 );
@@ -107,8 +109,13 @@ const {
 	},
 });
 
-const { startObserve } = useObserveHeightUntilStable(chatContainer, () =>
-	scrollToBottom('instant'),
+const { startObserve } = useObserveHeightUntilStable(
+	chatContainer,
+	() => {
+		if (currentChat.value?.closedAt && !wasClosedOnOpen) return;
+		scrollToBottom('instant');
+	},
+	OBSERVER_TIMEOUT_MS,
 );
 
 const openMedia = (message) =>
