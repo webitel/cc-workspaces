@@ -34,6 +34,7 @@ const DEFAULT_CONFIG = JSON.stringify({
 	timeoutSIP: '90',
 	debugMode: false,
 	showNumber: true,
+	openAtLogin: false,
 });
 
 const config = () => {

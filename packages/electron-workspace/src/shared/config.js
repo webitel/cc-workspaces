@@ -15,7 +15,7 @@ const DEFAULT_WORKSPACE_URL =
 
 let _conf = null;
 
-const DEFAULT_CONFIG = JSON.stringify({
+const DEFAULT_CONFIG = {
 	// URL: DEFAULT_WORKSPACE_URL, // note! should not be present in the default config
 	openUrlOnAnswer: 'link',
 	useSIP: true,
@@ -28,7 +28,8 @@ const DEFAULT_CONFIG = JSON.stringify({
 	timeoutSIP: '90',
 	debugMode: false,
 	showNumber: true,
-});
+	openAtLogin: false,
+};
 
 const config = () => {
 	if (_conf) return _conf;
@@ -42,9 +43,22 @@ const config = () => {
 		_conf = require(configPath());
 		return _conf;
 	} else {
-		fs.writeFileSync(p, DEFAULT_CONFIG);
-		return DEFAULT_CONFIG;
+		_conf = {
+			...DEFAULT_CONFIG,
+		};
+		fs.writeFileSync(p, JSON.stringify(_conf, null, '\t'));
+		return _conf;
 	}
+};
+
+const updateConfig = (partial) => {
+	const current = config();
+	_conf = {
+		...current,
+		...partial,
+	};
+	fs.writeFileSync(configPath(), JSON.stringify(_conf, null, '\t'));
+	return _conf;
 };
 
 const configPath = () => {
@@ -57,6 +71,7 @@ const storagePath = () => {
 
 module.exports = {
 	config,
+	updateConfig,
 	configPath,
 	storagePath,
 };

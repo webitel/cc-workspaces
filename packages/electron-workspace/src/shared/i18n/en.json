@@ -7,7 +7,8 @@
 		"Pause": "Pause",
 		"UploadConfig": "Upload configuration",
 		"Language": "Language",
-		"SIP": "Use SIP"
+		"SIP": "Use SIP",
+		"OpenAtLogin": "Open at login"
 	},
 	"config": {
 		"uploadConfigurationText": "Choose the file to upload the configuration",
