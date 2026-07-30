@@ -106,7 +106,7 @@ const store = useStore();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
-const OBSERVER_TIMEOUT_MS = 1500;
+const OBSERVER_TIMEOUT_MS = 3000;
 
 const chatContainer = useTemplateRef('chat-container');
 const chatContent = useTemplateRef('chat-content');
@@ -142,6 +142,7 @@ const {
 	showScrollToBottomBtn,
 	newUnseenMessagesCount,
 	scrollToBottom,
+	markSeenIfAtBottom,
 	handleChatScroll,
 } = useChatScroll({
 	chatContainer,
@@ -177,7 +178,10 @@ const { startObserve } = useObserveHeightUntilStable(
  */
 const { startObserve: startObserveClosedChat } = useObserveHeightUntilStable(
 	chatContent,
-	() => closedChatAnchorEl.value?.scrollIntoView(true),
+	() => {
+		closedChatAnchorEl.value?.scrollIntoView(true);
+		markSeenIfAtBottom();
+	},
 	OBSERVER_TIMEOUT_MS,
 );
 
