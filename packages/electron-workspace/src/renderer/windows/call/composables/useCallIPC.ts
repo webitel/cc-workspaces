@@ -1,7 +1,6 @@
-import type { IpcRenderer } from 'electron';
+import { getIpcRenderer } from '../../../shared/ipc';
 
-const ipcRenderer: IpcRenderer | null =
-	typeof require === 'function' ? require('electron').ipcRenderer : null;
+const ipcRenderer = getIpcRenderer();
 
 export type CallPayload = {
 	id?: string | number;
