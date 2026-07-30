@@ -28,6 +28,7 @@ exports.default = async function ensureElectronSipPrebuild(context) {
 	const prebuildDir = path.join(
 		__dirname,
 		'..',
+		'..',
 		'electron-sip',
 		'prebuilds',
 		tag,
