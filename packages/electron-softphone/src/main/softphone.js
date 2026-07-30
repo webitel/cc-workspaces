@@ -36,10 +36,20 @@ class Softphone extends EventEmitter {
 	#reconnectAttempts = 0;
 	#generation = 0;
 	#answersInFlight = new Set();
+	// serializes teardown/start cycles: restart(), the reconnect timer and
+	// destroy() all funnel through this chain, so two #start() calls can never
+	// interleave and clobber #cli/#adapter
+	#lifecycleChain = Promise.resolve();
+	#destroyed = false;
 
 	constructor(config) {
 		super();
 		this.#config = config;
+	}
+
+	#enqueueLifecycle(fn) {
+		this.#lifecycleChain = this.#lifecycleChain.then(fn, fn);
+		return this.#lifecycleChain;
 	}
 
 	getState() {
@@ -81,12 +91,14 @@ class Softphone extends EventEmitter {
 	async restart() {
 		this.#clearReconnect();
 		this.#reconnectAttempts = 0;
-		await this.#teardown();
-		await this.#start();
+		await this.#enqueueLifecycle(async () => {
+			await this.#teardown();
+			await this.#start();
+		});
 	}
 
 	async #start() {
-		if (!this.#token || !this.#endpoint) return;
+		if (this.#destroyed || !this.#token || !this.#endpoint) return;
 		const generation = ++this.#generation;
 		this.#setState(STATES.CONNECTING);
 		try {
@@ -104,12 +116,16 @@ class Softphone extends EventEmitter {
 				logger.error('[softphone] sdk disconnected', code, err);
 				this.#scheduleReconnect();
 			});
+			// the SDK routes runtime failures (e.g. Call.answer swallows the
+			// rejection and still returns true) through handleError → 'error';
+			// without a listener they would vanish silently
+			cli.on('error', (err) => {
+				if (generation !== this.#generation) return;
+				logger.error('[softphone] sdk error', err);
+			});
 
 			await cli.connect();
 			await cli.auth();
-			// populates cli.callStore so cli.answer()/hangup() can find calls;
-			// also lets the SDK honor server-side autoAnswer
-			await cli.subscribeCall(() => this.emit('calls-changed', cli.allCall()));
 
 			const adapter = new SipAdapter({
 				debug: this.#config.debug,
@@ -117,20 +133,36 @@ class Softphone extends EventEmitter {
 			this.#adapter = adapter;
 			adapter.on('registered', () => {
 				if (generation !== this.#generation) return;
+				// pjsip may have recovered on its own — cancel a pending restart
+				this.#clearReconnect();
 				this.#setState(STATES.REGISTERED);
 			});
 			adapter.on('unregistered', () => {
 				if (generation !== this.#generation) return;
 				if (this.#state === STATES.REGISTERED) {
+					// lost an established registration; pjsip retries by itself,
+					// the reconnect is a fallback if it never comes back
 					this.#setState(STATES.REGISTERING);
+					this.#scheduleReconnect();
+				} else if (this.#state === STATES.REGISTERING) {
+					// the addon resolves register() when the account is created,
+					// not when the registrar responds — an initial REGISTER
+					// failure surfaces as this early 'unregistered' event
+					this.#setState(STATES.ERROR, 'register_failed');
+					this.#scheduleReconnect();
 				}
 			});
 
 			// manual registerCallClient(): the SDK helper passes only the raw
 			// user_default_device response to register(), while pjsip also needs
-			// register_sec/codecs/nat from local config
+			// register_sec/codecs/nat from local config. The phone must be
+			// attached BEFORE subscribeCall so the snapshot's Call objects get
+			// their sip sessions from the constructor.
 			cli.phone = adapter;
 			cli.subscribePhone(adapter);
+			// populates cli.callStore so cli.answer()/hangup() can find calls;
+			// ringing events after this point also honor server-side autoAnswer
+			await cli.subscribeCall(() => this.emit('calls-changed', cli.allCall()));
 			this.#setState(STATES.REGISTERING);
 			const device = await cli.deviceConfig('sip');
 			await adapter.register({
@@ -167,9 +199,11 @@ class Softphone extends EventEmitter {
 		);
 		this.#reconnectAttempts += 1;
 		logger.log(`[softphone] reconnect in ${delay}ms`);
-		this.#reconnectTimer = setTimeout(async () => {
-			await this.#teardown();
-			await this.#start();
+		this.#reconnectTimer = setTimeout(() => {
+			this.#enqueueLifecycle(async () => {
+				await this.#teardown();
+				await this.#start();
+			});
 		}, delay);
 	}
 
@@ -252,9 +286,20 @@ class Softphone extends EventEmitter {
 					},
 				};
 			}
-			await call.answer({
+			// note: the SDK resolves true once the answer was handed to the
+			// phone even if SIP later fails — those failures surface via the
+			// client 'error' listener. false means the guard (sip/phone) failed.
+			const accepted = await call.answer({
 				useAudio: true,
 			});
+			if (!accepted) {
+				return {
+					ok: false,
+					error: {
+						code: 'answer_rejected',
+					},
+				};
+			}
 			return {
 				ok: true,
 			};
@@ -343,8 +388,9 @@ class Softphone extends EventEmitter {
 	}
 
 	async destroy() {
+		this.#destroyed = true;
 		this.#clearReconnect();
-		await this.#teardown();
+		await this.#enqueueLifecycle(() => this.#teardown());
 	}
 }
 

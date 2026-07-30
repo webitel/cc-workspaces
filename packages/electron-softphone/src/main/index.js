@@ -12,7 +12,7 @@ if (!app.requestSingleInstanceLock()) {
 // tray-only utility: keep running with no windows
 app.on('window-all-closed', () => {});
 
-app.whenReady().then(() => {
+const main = () => {
 	const conf = config();
 	logger.init(logsPath());
 	logger.log('[main] starting webitel-softphone', app.getVersion());
@@ -97,8 +97,32 @@ app.whenReady().then(() => {
 		});
 	}
 
-	app.on('before-quit', () => {
-		server.stop();
-		softphone.destroy();
+	// graceful shutdown: unregister SIP and close the local server before the
+	// process dies. The tray's Quit item calls app.quit(), which lands here;
+	// the teardown is async, so hold the quit until it finishes.
+	let quitting = false;
+	app.on('before-quit', (event) => {
+		if (quitting) return;
+		event.preventDefault();
+		quitting = true;
+		(async () => {
+			try {
+				server.stop();
+				await softphone.destroy();
+			} catch (err) {
+				logger.error('[main] shutdown error', err);
+			} finally {
+				app.exit(0);
+			}
+		})();
 	});
-});
+};
+
+app
+	.whenReady()
+	.then(main)
+	.catch((err) => {
+		// a tray-only app failing during startup would otherwise die silently
+		console.error('[main] startup failed', err);
+		app.exit(1);
+	});

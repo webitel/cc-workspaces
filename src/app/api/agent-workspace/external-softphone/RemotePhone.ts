@@ -27,6 +27,9 @@ class RemoteSession implements CallSession {
 	callId: string;
 	incoming = false;
 	instanceId = 'external';
+	/** true when created via sipSessionBySipId — callId then holds a SIP leg
+	 * id, not a call id, and must never be sent to the utility as callId */
+	fromSipId = false;
 
 	constructor(
 		private readonly phone: RemotePhone,
@@ -99,9 +102,16 @@ export class RemotePhone
 	}
 
 	answerSession(session: RemoteSession): void {
-		const callId = this.#findCallIdBySession(session) ?? session.callId;
+		const foundId = this.#findCallIdBySession(session);
+		if (!foundId && session.fromSipId) {
+			console.warn(
+				'[external-softphone] cannot resolve call id for sip session',
+				session.callId,
+			);
+			return;
+		}
 		this.#send('answer', {
-			callId,
+			callId: foundId ?? session.callId,
 		});
 	}
 
@@ -125,6 +135,8 @@ export class RemotePhone
 	}
 
 	sipSessionBySipId(id: string): CallSession | null {
-		return new RemoteSession(this, id);
+		const session = new RemoteSession(this, id);
+		session.fromSipId = true;
+		return session;
 	}
 }

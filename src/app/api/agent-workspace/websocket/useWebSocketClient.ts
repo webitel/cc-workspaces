@@ -257,6 +257,9 @@ async function destroyClient() {
 
 	try {
 		stopLatencyTracking();
+		// drop the external-softphone reference so a later utility `state`
+		// message can't re-attach the phone onto this destroyed client
+		useExternalSoftphone().clearClient();
 		await client.destroy?.();
 	} catch (e) {
 		console.warn('[WS] destroy error', e);

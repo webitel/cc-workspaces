@@ -3,8 +3,19 @@ const fs = require('node:fs');
 
 let stream = null;
 
+const MAX_LOG_SIZE = 5 * 1024 * 1024;
+
 const init = (logsDir) => {
 	const file = path.join(logsDir, 'softphone.log');
+	// always-on tray utility: rotate once on start so the log can't grow
+	// unbounded across long uptimes/restarts
+	try {
+		if (fs.existsSync(file) && fs.statSync(file).size > MAX_LOG_SIZE) {
+			fs.renameSync(file, `${file}.old`);
+		}
+	} catch {
+		// rotation is best-effort
+	}
 	stream = fs.createWriteStream(file, {
 		flags: 'a',
 	});

@@ -95,7 +95,9 @@ class SoftphoneTray extends Tray {
 				},
 				{
 					label: 'Quit',
-					click: () => app.exit(0),
+					// app.quit() (not app.exit) so before-quit runs the graceful
+					// SIP unregister in index.js
+					click: () => app.quit(),
 				},
 			]),
 		);

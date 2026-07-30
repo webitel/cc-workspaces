@@ -213,6 +213,19 @@ export function useExternalSoftphone() {
 		}
 	}
 
+	/**
+	 * Forget the current SDK client without touching the utility connection.
+	 * Must be called when the web client is destroyed (disconnect/logout) so a
+	 * later `state` message can't re-attach the phone onto a dead client.
+	 */
+	function clearClient() {
+		if (currentCli && currentPhone && currentCli.phone === currentPhone) {
+			currentCli.phone = null;
+		}
+		currentPhone = null;
+		currentCli = null;
+	}
+
 	function stop() {
 		detach();
 		currentCli = null;
@@ -231,6 +244,7 @@ export function useExternalSoftphone() {
 	return {
 		start,
 		stop,
+		clearClient,
 		getLastState: () => lastState,
 	};
 }
