@@ -90,7 +90,7 @@ app.whenReady().then(() => {
 
 	// dev-only: allow standalone run without a workspace (config.dev.json)
 	const dev = devConfig();
-	if (dev && dev.token && dev.endpoint) {
+	if (dev?.token && dev.endpoint) {
 		logger.log('[main] dev credentials found, starting standalone');
 		softphone.handleHello(dev).catch((err) => {
 			logger.error('[main] dev bootstrap failed', err);

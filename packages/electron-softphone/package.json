@@ -21,6 +21,70 @@
 		"distl": "npm run build && electron-builder --linux",
 		"distm": "npm run build && electron-builder --mac"
 	},
+	"build": {
+		"asar": false,
+		"npmRebuild": false,
+		"beforePack": "./build/ensureElectronSipPrebuild.js",
+		"files": [
+			"out/**/*",
+			"img/**/*",
+			"package.json",
+			"!node_modules/**/*.d.ts",
+			"!node_modules/**/*.d.ts.map",
+			"!node_modules/**/*.js.map",
+			"!node_modules/electron-sip/build/**"
+		],
+		"win": {
+			"target": [
+				"nsis",
+				"zip"
+			],
+			"icon": "./img/app-icon.png"
+		},
+		"nsis": {
+			"perMachine": true,
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		},
+		"linux": {
+			"asar": false,
+			"target": [
+				"AppImage"
+			],
+			"icon": "./img/app-icon.png",
+			"category": "Office",
+			"maintainer": "Webitel",
+			"vendor": "Webitel"
+		},
+		"mac": {
+			"target": [
+				{
+					"target": "dmg",
+					"arch": [
+						"arm64"
+					]
+				},
+				{
+					"target": "zip",
+					"arch": [
+						"arm64"
+					]
+				}
+			],
+			"category": "public.app-category.business",
+			"icon": "./img/app-icon.icns",
+			"hardenedRuntime": true,
+			"gatekeeperAssess": false,
+			"entitlements": "build/entitlements.mac.plist",
+			"entitlementsInherit": "build/entitlements.mac.plist",
+			"extendInfo": {
+				"NSMicrophoneUsageDescription": "Webitel Softphone needs access to the microphone to make voice calls."
+			},
+			"notarize": true
+		},
+		"productName": "Webitel Softphone",
+		"appId": "org.webitel.softphone"
+	},
 	"dependencies": {
 		"electron-sip": "file:../electron-sip",
 		"webitel-sdk": "^26.1.16",

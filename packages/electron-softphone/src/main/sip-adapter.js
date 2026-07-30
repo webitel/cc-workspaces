@@ -20,7 +20,7 @@ class SipAdapter extends EventEmitter {
 		});
 
 		this.#client.on('newSession', (session) => {
-			logger.log('[sip] new session', session && session.id);
+			logger.log('[sip] new session', session?.id);
 			this.emit('newSession', session);
 		});
 		this.#client.on('registered', () => {

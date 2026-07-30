@@ -153,7 +153,7 @@ class Softphone extends EventEmitter {
 	}
 
 	#errorCode(err) {
-		const message = (err && err.message) || String(err);
+		const message = err?.message || String(err);
 		if (/device|not found/i.test(message)) return 'register_failed';
 		if (/auth|token|401/i.test(message)) return 'auth_failed';
 		return message;
