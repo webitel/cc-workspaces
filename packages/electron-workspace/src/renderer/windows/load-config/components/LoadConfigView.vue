@@ -23,11 +23,11 @@
 import { onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import iconApp from '@img/app-icon.svg';
+import { getIpcRenderer } from '../../../shared/ipc';
 
 const { t } = useI18n();
 
-const ipcRenderer =
-	typeof require === 'function' ? require('electron').ipcRenderer : null;
+const ipcRenderer = getIpcRenderer();
 
 function uploadFile() {
 	ipcRenderer?.send('file-open');

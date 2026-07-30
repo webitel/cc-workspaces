@@ -20,12 +20,12 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { getIpcRenderer } from '../../../shared/ipc';
 import iconDisconnect from '../assets/disconnect-img.svg';
 
 const { t } = useI18n();
 
-const ipcRenderer =
-	typeof require === 'function' ? require('electron').ipcRenderer : null;
+const ipcRenderer = getIpcRenderer();
 
 function connect() {
 	ipcRenderer?.send('reload-page');
