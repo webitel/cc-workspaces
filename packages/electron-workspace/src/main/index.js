@@ -119,18 +119,29 @@ autoUpdater.on('update-downloaded', () => {
 app.on('ready', () => {
 	require('./module/webitel_login_item').syncFromConfig();
 
-	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
-		autoUpdater.setFeedURL(conf.updateEndpoint);
-		autoUpdater.checkForUpdatesAndNotify().then(() => {
-			win.start();
-			createAndSubscribeTray();
-			subscribePowerMonitor();
-		});
-	} else {
+	const startApp = () => {
 		win.start();
 		createAndSubscribeTray();
 		subscribePowerMonitor();
+		// macOS login / TAL restore can leave windows hidden — force on-screen.
+		setTimeout(() => win.restoreWindow(), 300);
+	};
+
+	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
+		autoUpdater.setFeedURL(conf.updateEndpoint);
+		autoUpdater.checkForUpdatesAndNotify().then(startApp);
+	} else {
+		startApp();
 	}
+});
+
+app.on('activate', () => {
+	if (win.workspace?.window || win.loadConfig?.window) {
+		win.restoreWindow();
+		return;
+	}
+	win.start();
+	setTimeout(() => win.restoreWindow(), 100);
 });
 
 ipcMain.handle('get-userData-path', async (event) => {

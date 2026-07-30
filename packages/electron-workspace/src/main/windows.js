@@ -205,10 +205,13 @@ class WebitelWindows {
 	}
 
 	restoreWindow() {
+		const target = this.workspace.window || this.loadConfig?.window;
+		if (!target) return;
+
+		if (target.isMinimized()) target.restore();
+		if (!target.isVisible()) target.show();
+		target.focus();
 		if (this.workspace.window) {
-			if (this.workspace.window.isMinimized()) this.workspace.window.restore();
-			this.workspace.window.isVisible() ? null : this.workspace.window.show();
-			this.workspace.window.focus();
 			this.workspace.window.center();
 		}
 	}

@@ -12,8 +12,6 @@ const applyLoginItemSettings = (openAtLogin) => {
 
 	const settings = {
 		openAtLogin: Boolean(openAtLogin),
-		// Always open on screen — never start hidden to tray.
-		openAsHidden: false,
 	};
 
 	// path is Windows-only. NSIS/MSI: launch app exe (not Squirrel Update.exe).
