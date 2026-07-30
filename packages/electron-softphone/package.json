@@ -1,0 +1,35 @@
+{
+	"name": "webitel-softphone",
+	"version": "0.1.0",
+	"description": "Webitel Softphone Companion — native SIP endpoint controlled from the web workspace",
+	"author": {
+		"name": "Webitel Team",
+		"email": "support@webitel.com"
+	},
+	"main": "./out/main/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/webitel/cc-workspaces.git"
+	},
+	"scripts": {
+		"dev": "electron-vite dev",
+		"build": "electron-vite build",
+		"start": "electron-vite preview",
+		"lint": "npx @biomejs/biome check --colors=off .",
+		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
+		"dist": "npm run build && electron-builder -w",
+		"distl": "npm run build && electron-builder --linux",
+		"distm": "npm run build && electron-builder --mac"
+	},
+	"dependencies": {
+		"electron-sip": "file:../electron-sip",
+		"webitel-sdk": "^26.1.16",
+		"ws": "^8.18.0"
+	},
+	"devDependencies": {
+		"electron": "^35.7.5",
+		"electron-builder": "^26.0.12",
+		"electron-vite": "^6.0.0-beta.1",
+		"vite": "^8.2.0"
+	}
+}
