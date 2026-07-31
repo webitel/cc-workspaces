@@ -1,19 +1,38 @@
-const { EventEmitter } = require('node:events');
-const sip = require('electron-sip');
-const logger = require('./logger');
+import { EventEmitter } from 'node:events';
+import type { SipCallRequest, SipRegisterConfig } from 'electron-sip';
+import * as sip from 'electron-sip';
+import type { CallSession } from 'webitel-sdk';
+import * as logger from './logger';
+
+interface SipAdapterEvents {
+	newSession: [
+		session: CallSession,
+	];
+	registered: [];
+	unregistered: [];
+}
 
 // Adapts the electron-sip pjsip N-API addon to the webitel-sdk SipClient
 // interface. The addon holds exactly ONE handler per event name and silently
 // ignores unknown names, so this adapter is its sole subscriber and fans out
 // through a real EventEmitter (Client.subscribePhone attaches several
 // listeners, including events the addon never emits — harmless here).
-class SipAdapter extends EventEmitter {
-	type = 'sip';
-	extension = null;
-	#client;
+//
+// Not declared `implements SipClient`: the SDK types register() against the
+// webrtc-shaped SipConfiguration, while the 'sip' device config is a
+// different field set (auth/password/domain/proxy) — the caller casts at the
+// cli.phone attach point instead.
+class SipAdapter extends EventEmitter<SipAdapterEvents> {
+	readonly type = 'sip';
+	extension: string | null = null;
+	#client: sip.SipClient;
 	#registered = false;
 
-	constructor({ debug = false } = {}) {
+	constructor({
+		debug = false,
+	}: {
+		debug?: boolean;
+	} = {}) {
 		super();
 		this.#client = new sip.SipClient({
 			debug,
@@ -37,43 +56,43 @@ class SipAdapter extends EventEmitter {
 
 	// Call.answer() passes the resolved value to session.answer(); the addon
 	// echoes the request back, matching electron-workspace behavior.
-	async callOption(req) {
+	async callOption(req: object): Promise<object> {
 		return this.#client.callOption(req);
 	}
 
-	async register(sipConf) {
+	async register(sipConf: SipRegisterConfig): Promise<void> {
 		this.extension = sipConf.extension || null;
 		return this.#client.register(sipConf);
 	}
 
-	async unregister() {
+	async unregister(): Promise<void> {
 		this.#registered = false;
 		return this.#client.unregister();
 	}
 
-	async call(req) {
+	async call(req: SipCallRequest): Promise<void> {
 		return this.#client.call(req);
 	}
 
-	isRegistered() {
+	isRegistered(): boolean {
 		return this.#registered;
 	}
 
 	// pjsip handles echo cancellation natively; SDK calls this on web phones
-	setAudioProcessing() {}
+	setAudioProcessing(): void {}
 
-	sipSessionByCallId(id) {
+	sipSessionByCallId(id: string): CallSession | null {
 		return this.#client.sipSessionByCallId(id);
 	}
 
-	sipSessionBySipId(id) {
+	sipSessionBySipId(id: string): CallSession | null {
 		return this.#client.sipSessionBySipId(id);
 	}
 
-	destroy() {
+	destroy(): Promise<void> {
 		this.#registered = false;
 		return this.#client.destroy();
 	}
 }
 
-module.exports = SipAdapter;
+export default SipAdapter;

@@ -15,6 +15,7 @@
 		"dev": "electron-vite dev",
 		"build": "electron-vite build",
 		"start": "electron-vite preview",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint": "npx @biomejs/biome check --colors=off .",
 		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
 		"dist": "npm run build && electron-builder -w",
@@ -91,9 +92,12 @@
 		"ws": "^8.18.0"
 	},
 	"devDependencies": {
+		"@types/node": "^24.5.2",
+		"@types/ws": "^8.18.1",
 		"electron": "^35.7.5",
 		"electron-builder": "^26.0.12",
 		"electron-vite": "^6.0.0-beta.1",
+		"typescript": "^5.9.2",
 		"vite": "^8.2.0"
 	}
 }

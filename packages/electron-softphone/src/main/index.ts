@@ -1,9 +1,11 @@
-const { app } = require('electron');
-const { config, devConfig, logsPath } = require('./config');
-const logger = require('./logger');
-const LocalServer = require('./local-server');
-const { Softphone } = require('./softphone');
-const { MESSAGE_TYPES } = require('./protocol');
+import { app, powerSaveBlocker } from 'electron';
+import { config, devConfig, logsPath } from './config';
+import LocalServer from './local-server';
+import * as logger from './logger';
+import { MESSAGE_TYPES } from './protocol';
+import { Softphone } from './softphone';
+// safe pre-ready: only extends Tray, instantiated inside main() after ready
+import SoftphoneTray from './tray';
 
 if (!app.requestSingleInstanceLock()) {
 	app.exit(0);
@@ -12,13 +14,24 @@ if (!app.requestSingleInstanceLock()) {
 // tray-only utility: keep running with no windows
 app.on('window-all-closed', () => {});
 
+// no window to show Electron's default error dialog on — log and keep running
+process.on('uncaughtException', (err) => {
+	logger.error('[main] uncaught exception', err);
+});
+process.on('unhandledRejection', (reason) => {
+	logger.error('[main] unhandled rejection', reason);
+});
+
 const main = () => {
 	const conf = config();
 	logger.init(logsPath());
 	logger.log('[main] starting webitel-softphone', app.getVersion());
 
-	// require after ready: Tray needs the app to be initialized
-	const SoftphoneTray = require('./tray');
+	// tray-only background app (dock hidden, no windows): without this macOS
+	// App-Naps the process — the SIP registration and the local WS server
+	// freeze until the tray menu is opened
+	powerSaveBlocker.start('prevent-app-suspension');
+
 	const tray = new SoftphoneTray();
 	const softphone = new Softphone(conf);
 	const server = new LocalServer(conf);
@@ -39,7 +52,7 @@ const main = () => {
 			logger.error('[main] hello failed', err);
 			reply(false, {
 				code: 'hello_failed',
-				message: err.message,
+				message: (err as Error).message,
 			});
 		}
 		server.broadcastState(softphone.getState());
@@ -92,9 +105,14 @@ const main = () => {
 	const dev = devConfig();
 	if (dev?.token && dev.endpoint) {
 		logger.log('[main] dev credentials found, starting standalone');
-		softphone.handleHello(dev).catch((err) => {
-			logger.error('[main] dev bootstrap failed', err);
-		});
+		softphone
+			.handleHello({
+				token: dev.token,
+				endpoint: dev.endpoint,
+			})
+			.catch((err) => {
+				logger.error('[main] dev bootstrap failed', err);
+			});
 	}
 
 	// graceful shutdown: unregister SIP and close the local server before the

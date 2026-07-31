@@ -1,58 +1,117 @@
-const { EventEmitter } = require('node:events');
-const { app } = require('electron');
-const { Client } = require('webitel-sdk');
-const SipAdapter = require('./sip-adapter');
-const logger = require('./logger');
-const { PROTOCOL_VERSION } = require('./protocol');
+import { EventEmitter } from 'node:events';
+import { app } from 'electron';
+import type { SipRegisterConfig } from 'electron-sip';
+import type { Call, SipClient } from 'webitel-sdk';
+import { Client } from 'webitel-sdk';
+import type { SoftphoneAppConfig } from './config';
+import * as logger from './logger';
+import type { CommandError } from './protocol';
+import { PROTOCOL_VERSION } from './protocol';
+import SipAdapter from './sip-adapter';
 
-const STATES = {
+export const STATES = {
 	IDLE: 'idle', // waiting for a workspace hello
 	CONNECTING: 'connecting', // SDK socket connect + auth
 	REGISTERING: 'registering', // SIP REGISTER in flight
 	REGISTERED: 'registered',
 	ERROR: 'error',
-};
+} as const;
+
+export type SoftphoneStateName = (typeof STATES)[keyof typeof STATES];
+
+export interface SoftphoneStateSnapshot {
+	state: SoftphoneStateName;
+	sdkConnected: boolean;
+	sipRegistered: boolean;
+	extension: string | null;
+	appVersion: string;
+	protocolVersion: number;
+	platform: NodeJS.Platform;
+	lastError: string | null;
+}
+
+export interface CommandResult {
+	ok: boolean;
+	error?: CommandError;
+}
+
+interface HelloPayload {
+	token: string;
+	endpoint: string;
+}
+
+interface SoftphoneEvents {
+	state: [
+		state: SoftphoneStateSnapshot,
+	];
+	'calls-changed': [
+		calls: Call[],
+	];
+}
 
 const RECONNECT_BASE_DELAY = 1000;
 const MAX_RECONNECT_DELAY = 15000;
 const ANSWER_SIP_RETRY_INTERVAL = 150;
 const ANSWER_SIP_RETRY_TIMEOUT = 2000;
+const SETUP_STEP_TIMEOUT = 15000;
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// In the Electron main process the global WebSocket fires `onerror` but never
+// `onclose` when the endpoint is unreachable, and the SDK's Socket only wires
+// `onclose` — so cli.connect() can stay pending forever. Every setup step is
+// therefore raced against a timeout so the reconnect loop keeps working.
+const withTimeout = <T>(promise: Promise<T>, label: string): Promise<T> =>
+	new Promise<T>((resolve, reject) => {
+		const timer = setTimeout(
+			() => reject(new Error(`${label} timed out`)),
+			SETUP_STEP_TIMEOUT,
+		);
+		promise.then(
+			(value) => {
+				clearTimeout(timer);
+				resolve(value);
+			},
+			(err) => {
+				clearTimeout(timer);
+				reject(err);
+			},
+		);
+	});
 
 // Owns the webitel-sdk Client (own socket, control plane) and the native SIP
 // adapter (media plane). Web workspaces deliver credentials via `hello` and
 // drive answer/call; everything else (agent session, hold, transfer, ...)
 // stays on the web app's own socket.
-class Softphone extends EventEmitter {
-	#config;
-	#cli = null;
-	#adapter = null;
-	#token = null;
-	#endpoint = null;
-	#state = STATES.IDLE;
-	#lastError = null;
-	#reconnectTimer = null;
+export class Softphone extends EventEmitter<SoftphoneEvents> {
+	#config: SoftphoneAppConfig;
+	#cli: Client | null = null;
+	#adapter: SipAdapter | null = null;
+	#token: string | null = null;
+	#endpoint: string | null = null;
+	#state: SoftphoneStateName = STATES.IDLE;
+	#lastError: string | null = null;
+	#reconnectTimer: NodeJS.Timeout | null = null;
 	#reconnectAttempts = 0;
 	#generation = 0;
-	#answersInFlight = new Set();
+	#answersInFlight = new Set<string>();
 	// serializes teardown/start cycles: restart(), the reconnect timer and
 	// destroy() all funnel through this chain, so two #start() calls can never
 	// interleave and clobber #cli/#adapter
-	#lifecycleChain = Promise.resolve();
+	#lifecycleChain: Promise<unknown> = Promise.resolve();
 	#destroyed = false;
 
-	constructor(config) {
+	constructor(config: SoftphoneAppConfig) {
 		super();
 		this.#config = config;
 	}
 
-	#enqueueLifecycle(fn) {
+	#enqueueLifecycle(fn: () => Promise<void>): Promise<unknown> {
 		this.#lifecycleChain = this.#lifecycleChain.then(fn, fn);
 		return this.#lifecycleChain;
 	}
 
-	getState() {
+	getState(): SoftphoneStateSnapshot {
 		return {
 			state: this.#state,
 			sdkConnected:
@@ -66,7 +125,7 @@ class Softphone extends EventEmitter {
 		};
 	}
 
-	#setState(state, lastError = null) {
+	#setState(state: SoftphoneStateName, lastError: string | null = null): void {
 		this.#state = state;
 		this.#lastError = lastError;
 		this.emit('state', this.getState());
@@ -74,7 +133,7 @@ class Softphone extends EventEmitter {
 
 	// `hello {token, endpoint}` from a web client. Reconnect only when the
 	// credentials actually changed or nothing is running yet.
-	async handleHello({ token, endpoint }) {
+	async handleHello({ token, endpoint }: HelloPayload): Promise<void> {
 		const sameSession =
 			this.#cli && this.#token === token && this.#endpoint === endpoint;
 		this.#token = token;
@@ -84,11 +143,11 @@ class Softphone extends EventEmitter {
 	}
 
 	// token refresh: kept in memory only, used on the next (re)connect
-	updateToken(token) {
+	updateToken(token: string): void {
 		this.#token = token;
 	}
 
-	async restart() {
+	async restart(): Promise<void> {
 		this.#clearReconnect();
 		this.#reconnectAttempts = 0;
 		await this.#enqueueLifecycle(async () => {
@@ -97,7 +156,7 @@ class Softphone extends EventEmitter {
 		});
 	}
 
-	async #start() {
+	async #start(): Promise<void> {
 		if (this.#destroyed || !this.#token || !this.#endpoint) return;
 		const generation = ++this.#generation;
 		this.#setState(STATES.CONNECTING);
@@ -124,8 +183,8 @@ class Softphone extends EventEmitter {
 				logger.error('[softphone] sdk error', err);
 			});
 
-			await cli.connect();
-			await cli.auth();
+			await withTimeout(cli.connect(), 'connect');
+			await withTimeout(cli.auth(), 'auth');
 
 			const adapter = new SipAdapter({
 				debug: this.#config.debug,
@@ -157,14 +216,22 @@ class Softphone extends EventEmitter {
 			// user_default_device response to register(), while pjsip also needs
 			// register_sec/codecs/nat from local config. The phone must be
 			// attached BEFORE subscribeCall so the snapshot's Call objects get
-			// their sip sessions from the constructor.
-			cli.phone = adapter;
-			cli.subscribePhone(adapter);
+			// their sip sessions from the constructor. The cast is deliberate:
+			// the SDK types register() against the webrtc-shaped
+			// SipConfiguration while the 'sip' device uses another field set.
+			cli.phone = adapter as unknown as SipClient;
+			cli.subscribePhone(adapter as unknown as SipClient);
 			// populates cli.callStore so cli.answer()/hangup() can find calls;
 			// ringing events after this point also honor server-side autoAnswer
-			await cli.subscribeCall(() => this.emit('calls-changed', cli.allCall()));
+			await withTimeout(
+				cli.subscribeCall(() => this.emit('calls-changed', cli.allCall())),
+				'subscribeCall',
+			);
 			this.#setState(STATES.REGISTERING);
-			const device = await cli.deviceConfig('sip');
+			const device = (await withTimeout(
+				cli.deviceConfig('sip'),
+				'deviceConfig',
+			)) as unknown as SipRegisterConfig;
 			await adapter.register({
 				register_sec: this.#config.sipRegisterSec,
 				codecs: this.#config.codecs,
@@ -184,14 +251,14 @@ class Softphone extends EventEmitter {
 		}
 	}
 
-	#errorCode(err) {
-		const message = err?.message || String(err);
+	#errorCode(err: unknown): string {
+		const message = (err as Error)?.message || String(err);
 		if (/device|not found/i.test(message)) return 'register_failed';
 		if (/auth|token|401/i.test(message)) return 'auth_failed';
 		return message;
 	}
 
-	#scheduleReconnect() {
+	#scheduleReconnect(): void {
 		this.#clearReconnect();
 		const delay = Math.min(
 			RECONNECT_BASE_DELAY * 2 ** this.#reconnectAttempts,
@@ -207,12 +274,12 @@ class Softphone extends EventEmitter {
 		}, delay);
 	}
 
-	#clearReconnect() {
+	#clearReconnect(): void {
 		if (this.#reconnectTimer) clearTimeout(this.#reconnectTimer);
 		this.#reconnectTimer = null;
 	}
 
-	async #teardown() {
+	async #teardown(): Promise<void> {
 		this.#generation += 1;
 		this.#answersInFlight.clear();
 		const adapter = this.#adapter;
@@ -233,7 +300,7 @@ class Softphone extends EventEmitter {
 		}
 		if (cli) {
 			try {
-				cli.phone = null;
+				cli.phone = undefined;
 				await cli.destroy();
 			} catch (err) {
 				logger.error('[softphone] client destroy failed', err);
@@ -242,7 +309,7 @@ class Softphone extends EventEmitter {
 		if (this.#state !== STATES.IDLE) this.#setState(STATES.IDLE);
 	}
 
-	async answer(callId) {
+	async answer(callId: string): Promise<CommandResult> {
 		const cli = this.#cli;
 		if (!cli)
 			return {
@@ -290,7 +357,7 @@ class Softphone extends EventEmitter {
 			// phone even if SIP later fails — those failures surface via the
 			// client 'error' listener. false means the guard (sip/phone) failed.
 			const accepted = await call.answer({
-				useAudio: true,
+				audio: true,
 			});
 			if (!accepted) {
 				return {
@@ -309,7 +376,7 @@ class Softphone extends EventEmitter {
 				ok: false,
 				error: {
 					code: 'answer_failed',
-					message: err.message,
+					message: (err as Error).message,
 				},
 			};
 		} finally {
@@ -317,7 +384,7 @@ class Softphone extends EventEmitter {
 		}
 	}
 
-	async call(destination, params = {}) {
+	async call(destination: string, params: object = {}): Promise<CommandResult> {
 		const cli = this.#cli;
 		if (!cli)
 			return {
@@ -340,13 +407,13 @@ class Softphone extends EventEmitter {
 				ok: false,
 				error: {
 					code: 'call_failed',
-					message: err.message,
+					message: (err as Error).message,
 				},
 			};
 		}
 	}
 
-	async hangup(callId) {
+	async hangup(callId: string): Promise<CommandResult> {
 		const cli = this.#cli;
 		if (!cli)
 			return {
@@ -374,27 +441,22 @@ class Softphone extends EventEmitter {
 				ok: false,
 				error: {
 					code: 'hangup_failed',
-					message: err.message,
+					message: (err as Error).message,
 				},
 			};
 		}
 	}
 
-	activeCalls() {
+	activeCalls(): Call[] {
 		if (!this.#cli) return [];
 		return this.#cli
 			.allCall()
 			.filter((call) => call.answeredAt !== 0 && call.hangupAt === 0);
 	}
 
-	async destroy() {
+	async destroy(): Promise<void> {
 		this.#destroyed = true;
 		this.#clearReconnect();
 		await this.#enqueueLifecycle(() => this.#teardown());
 	}
 }
-
-module.exports = {
-	Softphone,
-	STATES,
-};

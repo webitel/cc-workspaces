@@ -1,11 +1,25 @@
-const path = require('node:path');
-const fs = require('node:fs');
-const { app } = require('electron');
+import fs from 'node:fs';
+import path from 'node:path';
+import { app } from 'electron';
 
 const CONFIG_FILE = 'config.json';
 const LOGS_FOLDER = 'logs';
 
-const DEFAULT_CONFIG = {
+export interface SoftphoneAppConfig {
+	port: number;
+	originAllowlist: string[];
+	sipRegisterSec: number;
+	codecs: string[];
+	nat: string;
+	debug: boolean;
+}
+
+export interface DevCredentials {
+	endpoint?: string;
+	token?: string;
+}
+
+const DEFAULT_CONFIG: SoftphoneAppConfig = {
 	port: 10029,
 	// non-empty list restricts which web origins may connect to the local
 	// WebSocket server; empty allows any origin (the hello token is still
@@ -23,12 +37,14 @@ const DEFAULT_CONFIG = {
 	debug: false,
 };
 
-let _conf = null;
+let _conf: SoftphoneAppConfig | null = null;
 
-const configPath = () => path.join(app.getPath('userData'), CONFIG_FILE);
-const logsPath = () => path.join(app.getPath('userData'), LOGS_FOLDER);
+export const configPath = (): string =>
+	path.join(app.getPath('userData'), CONFIG_FILE);
+export const logsPath = (): string =>
+	path.join(app.getPath('userData'), LOGS_FOLDER);
 
-const config = () => {
+export const config = (): SoftphoneAppConfig => {
 	if (_conf) return _conf;
 
 	if (!fs.existsSync(logsPath())) {
@@ -40,23 +56,27 @@ const config = () => {
 	const p = configPath();
 	if (fs.existsSync(p)) {
 		try {
-			_conf = {
+			const loaded: SoftphoneAppConfig = {
 				...DEFAULT_CONFIG,
 				...JSON.parse(fs.readFileSync(p, 'utf8')),
 			};
-			return _conf;
+			_conf = loaded;
+			return loaded;
 		} catch (err) {
 			console.error(`[config] failed to parse ${p}, using defaults`, err);
 		}
 	}
-	_conf = {
+	const fresh: SoftphoneAppConfig = {
 		...DEFAULT_CONFIG,
 	};
-	fs.writeFileSync(p, JSON.stringify(_conf, null, '\t'));
-	return _conf;
+	_conf = fresh;
+	fs.writeFileSync(p, JSON.stringify(fresh, null, '\t'));
+	return fresh;
 };
 
-const updateConfig = (partial) => {
+export const updateConfig = (
+	partial: Partial<SoftphoneAppConfig>,
+): SoftphoneAppConfig => {
 	_conf = {
 		...config(),
 		...partial,
@@ -67,7 +87,7 @@ const updateConfig = (partial) => {
 
 // dev-only credentials for running the softphone standalone, without a web
 // workspace sending `hello` (see config.dev.example.json)
-const devConfig = () => {
+export const devConfig = (): DevCredentials | null => {
 	if (app.isPackaged) return null;
 	const p = path.join(__dirname, '../../config.dev.json');
 	if (!fs.existsSync(p)) return null;
@@ -76,12 +96,4 @@ const devConfig = () => {
 	} catch {
 		return null;
 	}
-};
-
-module.exports = {
-	config,
-	updateConfig,
-	configPath,
-	logsPath,
-	devConfig,
 };
