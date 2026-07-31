@@ -1,8 +1,21 @@
 import { ChatActions } from 'webitel-sdk';
+// import { ChatDialogsAPI } from '@webitel/api-services/api';
+import ActiveChatsAPI from '../modules/active/api/activeChats.js';
 
 import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
+import { patchChatEventRouting } from '../modules/active/scripts/patchChatEventRouting.js';
 
 const chatHandler = (context) => async (action, chat) => {
+	// TODO: тимчасовий дебаг — чи доходять WS-події до чатів, засетаних з REST
+	console.log('[ws event]', action, {
+		origin: chat.data?.origin || 'ws',
+		conversationId: chat.conversationId,
+		channelId: chat.channelId,
+		state: chat.state,
+		storeKey: chat.id,
+		membersId: chat.membersId,
+	});
+
 	switch (action) {
 		case ChatActions.UserInvite:
 			context.dispatch('HANDLE_INVITE_ACTION', {
@@ -45,9 +58,18 @@ const chatHandler = (context) => async (action, chat) => {
 const actions = {
 	SUBSCRIBE_CHATS: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
+		// до підписки, щоб жоден екшен не пройшов мимо
+		patchChatEventRouting(client);
 		await client.subscribeChat(chatHandler(context), null);
-		const chatList = client.allConversations();
-		if (chatList.length) context.dispatch('SET_CHAT_LIST', chatList);
+
+		// спершу віддаємо в панель те, що прийшло по ws
+		const wsChatList = client.allConversations();
+		if (wsChatList.length) context.dispatch('SET_CHAT_LIST', wsChatList);
+
+		// далі добираємо решту з рест апішки — ws чати вже в сторі,
+		// тому дедуплікації є з чим порівнювати
+		await context.dispatch('active/RELOAD_CHAT_LIST');
+		context.dispatch('SET_CHAT_LIST', client.allConversations());
 	},
 
 	HANDLE_INVITE_ACTION: (context, { action, chat }) => {
@@ -65,8 +87,14 @@ const actions = {
 		openLinkFromVariable(chat);
 	},
 
-	HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
+	HANDLE_MESSAGE_ACTION: async (context, { action, chat }) => {
+		// if(chat.data?.origin === 'rest')
+		console.log('HANDLE_MESSAGE_ACTION chat:', chat, 'action:', action);
+
 		const message = chat.messages[chat.messages.length - 1];
+		console.log('HANDLE_MESSAGE_ACTION message:', message);
+		const activeChats = await ActiveChatsAPI.getList();
+		console.log('after message activeChats:', activeChats.filter);
 		if (!context.getters.IS_MY_MESSAGE(message)) {
 			context.dispatch('HANDLE_CHAT_EVENT', {
 				action,
