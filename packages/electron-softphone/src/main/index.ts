@@ -90,7 +90,39 @@ const main = () => {
 		}
 	});
 
-	server.on('clients-changed', (count) => tray.updateClients(count));
+	// dev-only: allow standalone run without a workspace (config.dev.json)
+	const dev = devConfig();
+
+	// when the last workspace connection drops, suspend the session (SIP
+	// unregister + SDK socket close) after a linger window — long enough for
+	// a page reload to reconnect without flapping the registration. An active
+	// call postpones the suspend until it ends.
+	let lingerTimer: NodeJS.Timeout | null = null;
+	const armLinger = () => {
+		// standalone dev session has no workspace connections by design
+		if (dev?.token) return;
+		if (lingerTimer) clearTimeout(lingerTimer);
+		lingerTimer = setTimeout(() => {
+			lingerTimer = null;
+			if (server.clientCount() > 0) return;
+			if (softphone.activeCalls().length > 0) {
+				armLinger();
+				return;
+			}
+			logger.log('[main] no workspace connections, suspending session');
+			softphone.suspend();
+		}, conf.workspaceLingerSec * 1000);
+	};
+
+	server.on('clients-changed', (count) => {
+		tray.updateClients(count);
+		if (count === 0) {
+			armLinger();
+		} else if (lingerTimer) {
+			clearTimeout(lingerTimer);
+			lingerTimer = null;
+		}
+	});
 	server.on('server-error', (err) => {
 		tray.updateState({
 			state: 'error',
@@ -100,9 +132,6 @@ const main = () => {
 	});
 
 	server.start();
-
-	// dev-only: allow standalone run without a workspace (config.dev.json)
-	const dev = devConfig();
 	if (dev?.token && dev.endpoint) {
 		logger.log('[main] dev credentials found, starting standalone');
 		softphone

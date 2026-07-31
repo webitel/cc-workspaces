@@ -156,6 +156,14 @@ export class Softphone extends EventEmitter<SoftphoneEvents> {
 		});
 	}
 
+	// the last workspace connection is gone: unregister SIP and close the SDK
+	// socket so calls stop being routed to an unattended device. Credentials
+	// stay in memory; the next hello brings the session back up.
+	async suspend(): Promise<void> {
+		this.#clearReconnect();
+		await this.#enqueueLifecycle(() => this.#teardown());
+	}
+
 	async #start(): Promise<void> {
 		if (this.#destroyed || !this.#token || !this.#endpoint) return;
 		const generation = ++this.#generation;

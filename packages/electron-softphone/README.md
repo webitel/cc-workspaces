@@ -73,6 +73,7 @@ utility appears. The answer button lights up only while the utility reports
 | `codecs` | opus, G722, PCMA, PCMU | codec priority list |
 | `nat` | `""` | pjsip NAT mode; `auto` enables STUN+ICE |
 | `debug` | `false` | verbose SDK + pjsip logging |
+| `workspaceLingerSec` | `30` | after the last workspace connection drops, the session (SIP registration + SDK socket) is suspended once this window passes with no reconnect and no active call; a page reload reconnects well within it |
 
 Logs: `userData/logs/softphone.log` (also "Open logs" in the tray menu).
 

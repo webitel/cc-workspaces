@@ -12,6 +12,7 @@ export interface SoftphoneAppConfig {
 	codecs: string[];
 	nat: string;
 	debug: boolean;
+	workspaceLingerSec: number;
 }
 
 export interface DevCredentials {
@@ -35,6 +36,10 @@ const DEFAULT_CONFIG: SoftphoneAppConfig = {
 	// pjsip NAT mode: 'auto' enables STUN+ICE, anything else disables both
 	nat: '',
 	debug: false,
+	// when the last workspace connection drops, keep the SIP registration and
+	// SDK session alive this long before suspending — a page reload reconnects
+	// well within the window, so registration doesn't flap
+	workspaceLingerSec: 30,
 };
 
 let _conf: SoftphoneAppConfig | null = null;
