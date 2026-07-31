@@ -11,6 +11,7 @@ import chatHistory from './chat-history';
 import chatMedia from './chat-media';
 import clientHandlers from './client-handlers';
 import unseen from './unseen';
+import { ChatDialogsAPI } from '@webitel/api-services/api';
 
 const { t } = i18n.global;
 
@@ -23,6 +24,7 @@ const getters = {
 		rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
 		rootGetters['workspace/TASK_ON_WORKSPACE'],
 	ALL_CHAT_MESSAGES: (state, getters, rootState) => {
+		console.log(getters.CHAT_ON_WORKSPACE.id);
 		const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
 		return [
 			...rootState.features.chat.chatHistory.chatHistoryMessages,
@@ -45,7 +47,8 @@ const getters = {
 const actions = {
 	...clientHandlers.actions,
 
-	SET_CHAT_LIST: (context, chatList) => {
+	SET_CHAT_LIST: async (context, chatList) => {
+		console.log('chatList', chatList);
 		context.commit('SET_CHAT_LIST', chatList);
 	},
 
@@ -128,6 +131,12 @@ const actions = {
 	},
 
 	CHAT_INSERT_TO_START: (context, chat) => {
+		console.log(
+			'CHAT_INSERT_TO_START chatList:',
+			context.state.chatList,
+			'chat:',
+			chat,
+		);
 		const chatPosition = context.state.chatList.indexOf(chat);
 		const chatList = context.state.chatList.slice();
 		chatList.splice(chatPosition, 1);
