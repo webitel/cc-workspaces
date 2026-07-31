@@ -205,48 +205,20 @@ class WebitelWindows {
 	}
 
 	restoreWindow() {
+		const target = this.workspace.window || this.loadConfig?.window;
+		if (!target) return;
+
+		if (target.isMinimized()) target.restore();
+		if (!target.isVisible()) target.show();
+		target.focus();
 		if (this.workspace.window) {
-			if (this.workspace.window.isMinimized()) this.workspace.window.restore();
-			this.workspace.window.isVisible() ? null : this.workspace.window.show();
-			this.workspace.window.focus();
 			this.workspace.window.center();
 		}
-	}
-
-	updateProcessing(arg) {
-		this.callNotification.updateProcessing(arg);
-	}
-
-	setProcessingProperty(arg) {
-		arg.id = this.callNotification.getCallId();
-		this.workspace.window.webContents.send('set-processing-property', arg);
-	}
-
-	sendReporting() {
-		this.workspace.window.webContents.send(
-			'send-reporting',
-			this.callNotification.getCallId(),
-		);
 	}
 
 	makeCall(destination = null) {
 		if (!destination) return;
 		this.workspace.window.webContents.send('make-call', destination);
-	}
-
-	clearProcessing() {
-		this.callNotification.clearProcessing();
-	}
-
-	closeSuccessMessage() {
-		this.callNotification.hide();
-	}
-
-	resetTime() {
-		this.workspace.window.webContents.send(
-			'reset-timer',
-			this.callNotification.getTaskId(),
-		);
 	}
 
 	collapsWindow() {
@@ -263,7 +235,7 @@ class WebitelWindows {
 
 	showDisconnectNotification() {
 		this.disconnectNotification.setBounds();
-		// this.disconnectNotification.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
+		this.disconnectNotification.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
 	}
 
 	hideDisconnectNotification() {

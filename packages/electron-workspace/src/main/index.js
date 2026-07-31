@@ -117,18 +117,31 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 app.on('ready', () => {
-	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
-		autoUpdater.setFeedURL(conf.updateEndpoint);
-		autoUpdater.checkForUpdatesAndNotify().then(() => {
-			win.start();
-			createAndSubscribeTray();
-			subscribePowerMonitor();
-		});
-	} else {
+	require('./module/webitel_login_item').syncFromConfig();
+
+	const startApp = () => {
 		win.start();
 		createAndSubscribeTray();
 		subscribePowerMonitor();
+		// macOS login / TAL restore can leave windows hidden — force on-screen.
+		setTimeout(() => win.restoreWindow(), 300);
+	};
+
+	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
+		autoUpdater.setFeedURL(conf.updateEndpoint);
+		autoUpdater.checkForUpdatesAndNotify().then(startApp);
+	} else {
+		startApp();
 	}
+});
+
+app.on('activate', () => {
+	if (win.workspace?.window || win.loadConfig?.window) {
+		win.restoreWindow();
+		return;
+	}
+	win.start();
+	setTimeout(() => win.restoreWindow(), 100);
 });
 
 ipcMain.handle('get-userData-path', async (event) => {
@@ -192,34 +205,6 @@ ipcMain.on('collaps-window', (event, args) => {
 
 ipcMain.on('open-close-DevTools', (event, args) => {
 	win.openDevTools();
-});
-
-ipcMain.on('resize-popap-win', (event, args) => {
-	win.callNotification.resize(args);
-});
-
-ipcMain.on('update-procesing', (event, args) => {
-	win.updateProcessing(args);
-});
-
-ipcMain.on('set-processing-property', (event, args) => {
-	win.setProcessingProperty(args);
-});
-
-ipcMain.on('send-reporting', (event, args) => {
-	win.sendReporting();
-});
-
-ipcMain.on('clear-processing', (event, args) => {
-	win.clearProcessing();
-});
-
-ipcMain.on('close-success-message', (event, args) => {
-	win.closeSuccessMessage();
-});
-
-ipcMain.on('reset-timer', (event, args) => {
-	win.resetTime();
 });
 
 ipcMain.on('collaps-load-window', (event, args) => {

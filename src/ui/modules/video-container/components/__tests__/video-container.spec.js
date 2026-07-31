@@ -24,7 +24,7 @@ describe('VideoContainer', () => {
 		],
 	});
 
-	const buildStore = (callOnWorkspace = {}) =>
+	const buildStore = (activeVideoCall = {}) =>
 		createStore({
 			state: {
 				ui: {
@@ -43,7 +43,7 @@ describe('VideoContainer', () => {
 				},
 			},
 			getters: {
-				'features/call/CALL_ON_WORKSPACE': () => callOnWorkspace,
+				'features/call/ACTIVE_VIDEO_CALL': () => activeVideoCall,
 			},
 		});
 
