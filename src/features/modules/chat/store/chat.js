@@ -29,11 +29,9 @@ const getters = {
 		 *
 		 * [WTEL-9263](https://webitel.atlassian.net/browse/WTEL-9263)
 		 *
-		 * A chat closed by the client but pending post-processing is still
-		 * rendered from the live conversation, while the backend has already
-		 * stored its messages in the contact chat history — so the first
-		 * history page (the newest messages) contains copies of the live ones.
-		 * Drop the archived copies to avoid duplicates.
+		 * A chat pending post-processing renders from the live conversation,
+		 * but the backend already archived those same messages to chat
+		 * history — drop the archived copies to avoid duplicates.
 		 */
 		const currentChatMessagesIds = new Set(
 			currentChatMessages
@@ -137,9 +135,6 @@ const actions = {
 	},
 
 	OPEN_CHAT: async (context, chat) => {
-		// A chat pending post-processing (allowReporting) is not archived to the
-		// catalog yet — LOAD_CLOSED_CHAT would fetch 0 messages. Its messages are
-		// still in the live conversation, so just set it on the workspace.
 		const isUnidentifiedClosedChat =
 			!chat.contact?.id && chat.closedAt && !chat.allowReporting;
 
@@ -148,11 +143,6 @@ const actions = {
 				root: true,
 			});
 		} else {
-			// An unidentified chat renders history + live messages
-			// (ALL_CHAT_MESSAGES), but has no contact archive to (re)load — so
-			// messages of a previously viewed closed chat, committed to
-			// chatHistory by LOAD_CLOSED_CHAT, would stay rendered above the
-			// live ones. Drop them.
 			if (!chat.contact?.id) {
 				await context.dispatch(
 					'features/chat/chatHistory/RESET_CHAT_HISTORY',

@@ -101,11 +101,13 @@ const actions = {
 			context.dispatch('RESET_CLOSED_CHAT');
 
 			/**
-			 * An unidentified chat has no contact archive to load. Its messages
-			 * were either already committed to chatHistory by LOAD_CLOSED_CHAT
-			 * (catalog), or belong to the still-live conversation pending
-			 * post-processing — then make sure another contact's history
-			 * isn't rendered above them.
+			 * @author @OleksandrPalonnyi
+			 *
+			 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+			 *
+			 * An unidentified chat has no contact archive to load — its
+			 * messages come from LOAD_CLOSED_CHAT (catalog) or the still-live
+			 * conversation, so just skip loading someone else's history.
 			 */
 			if (!contactId) {
 				if (chat.allowReporting) {
@@ -133,15 +135,11 @@ const actions = {
 			 *
 			 * [WTEL-9263](https://webitel.atlassian.net/browse/WTEL-9263)
 			 *
-			 * A chat pending post-processing (allowReporting) is still a live
-			 * conversation, and its `id` is the agent channel id
-			 * (`channelId || inviteId || conversationId` in webitel-sdk) — it
-			 * never matches `message.chat.id` in the contact archive, so
-			 * searching the archive for its first message would paginate the
-			 * whole history in vain. Its messages are rendered from the live
-			 * conversation instead (deduplicated against the archive in
-			 * ALL_CHAT_MESSAGES), and the null closedChatFirstMessageId makes
-			 * the chat scroll to the bottom, right to them.
+			 * A chat pending post-processing (allowReporting) is still live,
+			 * and its `id` (agent channel id) never matches `message.chat.id`
+			 * in the archive searching for it would paginate in vain. Its
+			 * messages render from the live conversation instead, so leave
+			 * closedChatFirstMessageId null to scroll straight to the bottom.
 			 */
 			if (!chat.allowReporting) {
 				await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {

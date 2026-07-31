@@ -99,13 +99,11 @@ const actions = {
 	},
 
 	HANDLE_DESTROY_ACTION: (context, { chat }) => {
-		// https://webitel.atlassian.net/browse/WTEL-5631
-		// The SDK emits Destroy for a chat with reporting enabled in two cases:
-		// - prematurely, right after Close, when the conversation has no attempt
-		//   linked (chat.task is null) — the agent is still meant to review it,
-		//   so don't kick them out;
-		// - once the attempt is finished (report sent or post-processing timed
-		//   out) — the attempt is linked, and Destroy must clean the chat up.
+		/**
+		 * The SDK also emits Destroy prematurely right after Close, before an
+		 * attempt is linked (chat.task is null) — ignore that one so the agent
+		 * can still review the chat; only clean up once the attempt is linked.
+		 */
 		const isPendingReporting = chat.allowReporting && !chat.task;
 
 		if (!isPendingReporting) {
