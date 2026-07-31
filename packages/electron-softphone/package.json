@@ -88,16 +88,16 @@
 	},
 	"dependencies": {
 		"electron-sip": "file:../electron-sip",
-		"webitel-sdk": "^26.1.16",
-		"ws": "^8.18.0"
+		"webitel-sdk": "^26.4.26",
+		"ws": "^8.21.1"
 	},
 	"devDependencies": {
-		"@types/node": "^24.5.2",
+		"@types/node": "^26.1.2",
 		"@types/ws": "^8.18.1",
-		"electron": "^35.7.5",
-		"electron-builder": "^26.0.12",
+		"electron": "^43.2.0",
+		"electron-builder": "^26.15.3",
 		"electron-vite": "^6.0.0-beta.1",
-		"typescript": "^5.9.2",
+		"typescript": "^7.0.2",
 		"vite": "^8.2.0"
 	}
 }
