@@ -6,6 +6,7 @@ import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
 import { getExternalSoftphoneConfig } from '../external-softphone/config';
 import { useExternalSoftphone } from '../external-softphone/useExternalSoftphone';
+import { endpoint } from './endpoint';
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -49,18 +50,6 @@ const {
 	stopLatencyTracking,
 	websocketRtpConnectionLevelHandler,
 } = useWebSocketLatency();
-
-/* ============================================================================
- * Environment
- * ========================================================================== */
-
-const { hostname, protocol } = window.location;
-const origin = `${protocol}//${hostname}`.replace(/^http/, 'ws');
-
-export const endpoint =
-	import.meta.env.MODE === 'production'
-		? `${origin}/ws`
-		: import.meta.env.VITE_WEB_SOCKET_URL;
 
 /* ============================================================================
  * Helpers

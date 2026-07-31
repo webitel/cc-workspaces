@@ -1,6 +1,6 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
 import type { CallSession, Client } from 'webitel-sdk';
-import { endpoint } from '../websocket/useWebSocketClient';
+import { endpoint } from '../websocket/endpoint';
 import { getExternalSoftphoneConfig } from './config';
 import { RemotePhone } from './RemotePhone';
 
