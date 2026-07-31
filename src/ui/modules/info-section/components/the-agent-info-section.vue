@@ -222,6 +222,14 @@ export default {
 		resolveDefaultTab() {
 			const { processing, clientInfo, generalInfo } = this.tabsObject;
 
+			// A closed chat pending post-processing stays on the workspace only so
+			// the agent can fill the report — opening it should land right on the
+			// processing tab, same as when the chat closes while displayed
+			// (see taskState watcher).
+			if (this.showProcessing && this.taskOnWorkspace?.closedAt) {
+				return processing;
+			}
+
 			if (
 				this.showProcessing &&
 				this.defaultWorkspaceTab === processing.settingValue

@@ -17,6 +17,8 @@ const state = {
 
 const actions = {
 	LOAD_CHAT_HISTORY: async (context, contactId) => {
+		context.commit('RESET_CHAT_HISTORY_STATE');
+
 		try {
 			const { items, next } = await contactChatMessagesHistory.getAllMessages({
 				contactId,

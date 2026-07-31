@@ -1,4 +1,4 @@
-import { ChatActions } from 'webitel-sdk';
+import { ChatActions, JobState } from 'webitel-sdk';
 
 import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
 import { useWebSocketClient } from '../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
@@ -137,6 +137,34 @@ describe('features/chat store client handlers: actions', () => {
 			chat,
 		});
 		expect(context.dispatch).toHaveBeenCalledWith('RESET_CHAT', chat);
+	});
+
+	it('HANDLE_DESTROY_ACTION does not dispatch RESET_CHAT for a reporting chat without a linked attempt (premature Destroy)', () => {
+		chatModule.actions.HANDLE_DESTROY_ACTION(context, {
+			chat: {
+				...chat,
+				allowReporting: true,
+				task: null,
+			},
+		});
+		expect(context.dispatch).not.toHaveBeenCalledWith(
+			'RESET_CHAT',
+			expect.anything(),
+		);
+	});
+
+	it('HANDLE_DESTROY_ACTION dispatches RESET_CHAT for a reporting chat with a linked attempt (report sent or post-processing timed out)', () => {
+		const reportedChat = {
+			...chat,
+			allowReporting: true,
+			task: {
+				state: JobState.Processing,
+			},
+		};
+		chatModule.actions.HANDLE_DESTROY_ACTION(context, {
+			chat: reportedChat,
+		});
+		expect(context.dispatch).toHaveBeenCalledWith('RESET_CHAT', reportedChat);
 	});
 
 	it('HANDLE_DESTROY_ACTION dispatches _RESET_UNREAD_COUNT', async () => {

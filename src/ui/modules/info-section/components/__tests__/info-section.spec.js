@@ -17,6 +17,47 @@ describe('InfoSection', () => {
 			...InfoSectionModule,
 		},
 	});
+	it('resolveDefaultTab returns processing tab for a closed chat pending post-processing', () => {
+		const wrapper = shallowMount(InfoSection, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+			computed: {
+				...InfoSection.computed,
+				showProcessing: () => true,
+				showFlows: () => false,
+				taskOnWorkspace: () => ({
+					id: '1',
+					closedAt: 1753600000000,
+					allowReporting: true,
+				}),
+			},
+		});
+		expect(wrapper.vm.resolveDefaultTab().value).toBe('processing');
+	});
+
+	it('resolveDefaultTab returns client info tab for a closed chat without post-processing', () => {
+		const wrapper = shallowMount(InfoSection, {
+			global: {
+				plugins: [
+					store,
+				],
+			},
+			computed: {
+				...InfoSection.computed,
+				showProcessing: () => false,
+				showFlows: () => false,
+				taskOnWorkspace: () => ({
+					id: '1',
+					closedAt: 1753600000000,
+				}),
+			},
+		});
+		expect(wrapper.vm.resolveDefaultTab().value).toBe('client-info');
+	});
+
 	it('renders a component', () => {
 		const wrapper = shallowMount(InfoSection, {
 			global: {

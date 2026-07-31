@@ -133,11 +133,22 @@ describe('features/chat store: actions', () => {
 		expect(chatOnWorkspace.decline).toHaveBeenCalled();
 	});
 
-	it('OPEN_CHAT dispatches SET_WORKSPACE for active chat without contact', () => {
-		chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
+	it('OPEN_CHAT dispatches SET_WORKSPACE for active chat without contact', async () => {
+		await chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'SET_WORKSPACE',
 			chatOnWorkspace,
+		);
+	});
+
+	it('OPEN_CHAT resets chat history for active chat without contact', async () => {
+		await chatModule.actions.OPEN_CHAT(context, chatOnWorkspace);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/chat/chatHistory/RESET_CHAT_HISTORY',
+			null,
+			{
+				root: true,
+			},
 		);
 	});
 
@@ -167,6 +178,23 @@ describe('features/chat store: actions', () => {
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'SET_WORKSPACE',
 			chatWithContact,
+		);
+	});
+
+	it('OPEN_CHAT does not reset chat history when contact is identified', async () => {
+		const chatWithContact = {
+			...chatOnWorkspace,
+			contact: {
+				id: 'contact-1',
+			},
+		};
+		await chatModule.actions.OPEN_CHAT(context, chatWithContact);
+		expect(context.dispatch).not.toHaveBeenCalledWith(
+			'features/chat/chatHistory/RESET_CHAT_HISTORY',
+			null,
+			{
+				root: true,
+			},
 		);
 	});
 
@@ -245,6 +273,76 @@ describe('features/chat store: actions', () => {
 				root: true,
 			},
 		);
+	});
+});
+
+describe('features/chat store: getters', () => {
+	const makeRootState = (chatHistoryMessages) => ({
+		features: {
+			chat: {
+				chatHistory: {
+					chatHistoryMessages,
+				},
+			},
+		},
+	});
+
+	it('ALL_CHAT_MESSAGES drops archived copies of live chat messages', () => {
+		const getters = {
+			CHAT_ON_WORKSPACE: {
+				messages: [
+					{
+						id: 2,
+						text: 'live-2',
+					},
+					{
+						id: 3,
+						text: 'live-3',
+					},
+				],
+			},
+		};
+		const rootState = makeRootState([
+			{
+				id: '1',
+				text: 'archived-1',
+			},
+			{
+				id: '2',
+				text: 'archived copy of live-2',
+			},
+		]);
+		expect(
+			chatModule.getters.ALL_CHAT_MESSAGES({}, getters, rootState),
+		).toEqual([
+			{
+				id: '1',
+				text: 'archived-1',
+			},
+			{
+				id: 2,
+				text: 'live-2',
+			},
+			{
+				id: 3,
+				text: 'live-3',
+			},
+		]);
+	});
+
+	it('ALL_CHAT_MESSAGES keeps whole history when live chat has no messages', () => {
+		const getters = {
+			CHAT_ON_WORKSPACE: {},
+		};
+		const history = [
+			{
+				id: '1',
+				text: 'archived-1',
+			},
+		];
+		expect(
+			chatModule.getters.ALL_CHAT_MESSAGES({}, getters, makeRootState(history)),
+		).toEqual(history);
 	});
 });
 

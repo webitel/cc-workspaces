@@ -68,8 +68,13 @@ const actions = {
 				chatId: chat.id,
 			});
 
-			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			chat.messages = formatChatMessages(items);
+			context.commit(
+				'features/chat/chatHistory/SET_CHAT_HISTORY',
+				formatChatMessages(items),
+				{
+					root: true,
+				},
+			);
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
@@ -91,12 +96,30 @@ const actions = {
 			});
 		}
 	},
-	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
-		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
-
+	LOAD_CLOSED_CHAT_HISTORY: async (context, { chat, contactId }) => {
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
+
+			/**
+			 * An unidentified chat has no contact archive to load. Its messages
+			 * were either already committed to chatHistory by LOAD_CLOSED_CHAT
+			 * (catalog), or belong to the still-live conversation pending
+			 * post-processing — then make sure another contact's history
+			 * isn't rendered above them.
+			 */
+			if (!contactId) {
+				if (chat.allowReporting) {
+					context.dispatch(
+						'features/chat/chatHistory/RESET_CHAT_HISTORY',
+						null,
+						{
+							root: true,
+						},
+					);
+				}
+				return;
+			}
+
 			await context.dispatch(
 				'features/chat/chatHistory/LOAD_CHAT_HISTORY',
 				contactId,
@@ -105,7 +128,27 @@ const actions = {
 				},
 			);
 
-			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
+			/**
+			 * @author @OleksandrPalonnyi
+			 *
+			 * [WTEL-9263](https://webitel.atlassian.net/browse/WTEL-9263)
+			 *
+			 * A chat pending post-processing (allowReporting) is still a live
+			 * conversation, and its `id` is the agent channel id
+			 * (`channelId || inviteId || conversationId` in webitel-sdk) — it
+			 * never matches `message.chat.id` in the contact archive, so
+			 * searching the archive for its first message would paginate the
+			 * whole history in vain. Its messages are rendered from the live
+			 * conversation instead (deduplicated against the archive in
+			 * ALL_CHAT_MESSAGES), and the null closedChatFirstMessageId makes
+			 * the chat scroll to the bottom, right to them.
+			 */
+			if (!chat.allowReporting) {
+				await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {
+					chat,
+					contactId,
+				});
+			}
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
@@ -115,9 +158,8 @@ const actions = {
 		}
 	},
 
-	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
+	FIND_TARGET_CHAT_IN_HISTORY: async (context, { chat, contactId }) => {
 		// recursive function
-		const contactId = chat.contact.id;
 		const targetChatId = chat.id;
 		const next = context.rootState.features.chat.chatHistory.next;
 
@@ -139,7 +181,10 @@ const actions = {
 		await context.dispatch('features/chat/chatHistory/LOAD_NEXT', contactId, {
 			root: true,
 		});
-		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat); // call itself until find target chat
+		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {
+			chat,
+			contactId,
+		}); // call itself until find target chat
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat

@@ -73,15 +73,7 @@ import {
 } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState.js';
-import {
-	computed,
-	nextTick,
-	onMounted,
-	onUnmounted,
-	ref,
-	useTemplateRef,
-	watch,
-} from 'vue';
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatAgent from '../components/chat-agent.vue';
@@ -188,12 +180,10 @@ const { startObserve: startObserveClosedChat } = useObserveHeightUntilStable(
 const loadHistory = async () =>
 	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const loadClosedChatHistory = async () =>
-	await store.dispatch(
-		`features/chat/closed/LOAD_CLOSED_CHAT_HISTORY`,
-		chat.value,
-	);
-const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
-
+	await store.dispatch(`features/chat/closed/LOAD_CLOSED_CHAT_HISTORY`, {
+		chat: chat.value,
+		contactId: props.contact?.id,
+	});
 const attachPlayer = (player) =>
 	store.dispatch(`${chatNamespace}/chatMedia/ATTACH_PLAYER_TO_CHAT`, player);
 const openMedia = (message) =>
@@ -283,10 +273,6 @@ async function loadMessagesList() {
 
 onMounted(() => {
 	getTopMessageEl();
-});
-
-onUnmounted(() => {
-	resetHistory();
 });
 
 watch(
