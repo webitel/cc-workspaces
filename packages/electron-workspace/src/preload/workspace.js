@@ -182,6 +182,10 @@ function subscribeAction(store) {
 				updateCall(action.payload.callId, state, action.type);
 				break;
 
+			case 'features/call/HANDLE_CALL_END':
+				updateCall(action.payload?.id, state, action.type);
+				break;
+
 			case 'features/chat/ACCEPT':
 				setActiveChat(action.payload);
 				break;

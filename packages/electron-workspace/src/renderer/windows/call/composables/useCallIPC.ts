@@ -14,6 +14,7 @@ export type CallPayload = {
 	allowAnswer?: boolean;
 	isHold?: boolean;
 	muted?: boolean;
+	state?: string;
 	action?: string;
 	variables?: Record<string, string>;
 };

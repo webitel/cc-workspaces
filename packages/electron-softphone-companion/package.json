@@ -1,20 +1,17 @@
 {
-	"name": "webitel",
-	"version": "1.4.3",
-	"description": "Webitel Agent Workspace",
+	"name": "webitel-softphone-companion",
+	"version": "0.1.0",
+	"description": "Webitel Softphone Companion — native SIP endpoint controlled from the web workspace",
 	"author": {
 		"name": "Webitel Team",
 		"email": "support@webitel.com"
 	},
 	"main": "./out/main/index.js",
-	"homepage": "https://example.webitel.com/",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/webitel/cc-workspaces.git"
 	},
-	"keywords": [],
 	"scripts": {
-		"install:clean": "npm ci && node node_modules/electron/install.js && echo 'windows err: https://github.com/electron/electron/issues/20731'",
 		"dev": "electron-vite dev",
 		"build": "electron-vite build",
 		"start": "electron-vite preview",
@@ -31,7 +28,6 @@
 		"beforePack": "./build/ensureElectronSipPrebuild.js",
 		"files": [
 			"out/**/*",
-			"src/renderer/**/*",
 			"img/**/*",
 			"package.json",
 			"!node_modules/**/*.d.ts",
@@ -42,8 +38,7 @@
 		"win": {
 			"target": [
 				"nsis",
-				"zip",
-				"msi"
+				"zip"
 			],
 			"icon": "./img/app-icon.png"
 		},
@@ -84,52 +79,26 @@
 			"entitlements": "build/entitlements.mac.plist",
 			"entitlementsInherit": "build/entitlements.mac.plist",
 			"extendInfo": {
-				"NSMicrophoneUsageDescription": "Webitel needs access to the microphone to make voice calls.",
-				"NSCameraUsageDescription": "Webitel needs access to the camera for video calls.",
-				"NSLocalNetworkUsageDescription": "Webitel communicates with devices on the local network to establish connections."
+				"NSMicrophoneUsageDescription": "Webitel Softphone needs access to the microphone to make voice calls."
 			},
 			"notarize": true
 		},
-		"productName": "Webitel",
-		"appId": "org.webitel",
-		"protocols": {
-			"name": "wtel",
-			"schemes": [
-				"wtel"
-			]
-		}
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.4.10",
-		"@electron/remote": "^0.0.1",
-		"@types/node": "^24.5.2",
-		"@vitejs/plugin-vue": "^6.0.1",
-		"electron": "^35.7.5",
-		"electron-builder": "^26.15.7",
-		"electron-packager": "^17.1.2",
-		"electron-vite": "^6.0.0-beta.1",
-		"http-server": "^14.1.1",
-		"ora": "^6.1.2",
-		"typescript": "^5.9.2",
-		"vite": "^8.0.8",
-		"vue-tsc": "^3.1.1"
+		"productName": "Webitel Softphone Companion",
+		"appId": "org.webitel.softphone-companion"
 	},
 	"dependencies": {
-		"@vue/compat": "^3.5.40",
-		"@webitel/ui-sdk": "^26.6.99",
-		"axios": "^1.13.2",
-		"clipboard-copy": "^4.0.1",
-		"dotenv": "^17.2.3",
-		"electron-localstorage": "^1.0.5",
-		"electron-positioner": "^4.1.0",
+		"axios": "^1.19.0",
 		"electron-sip": "file:../electron-sip",
-		"electron-updater": "^6.6.2",
-		"markdown-it": "^12.0.6",
-		"mitt": "^3.0.1",
-		"rimraf": "^6.0.1",
-		"tslib": "^2.3.1",
-		"vue": "^3.5.22",
-		"vue-i18n": "^11.1.12",
-		"webitel-sdk": "^26.1.16"
+		"webitel-sdk": "^26.4.26",
+		"ws": "^8.21.1"
+	},
+	"devDependencies": {
+		"@types/node": "^26.1.2",
+		"@types/ws": "^8.18.1",
+		"electron": "^43.2.0",
+		"electron-builder": "^26.15.3",
+		"electron-vite": "^6.0.0-beta.1",
+		"typescript": "^7.0.2",
+		"vite": "^8.2.0"
 	}
 }

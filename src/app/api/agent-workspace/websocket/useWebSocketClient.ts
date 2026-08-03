@@ -4,6 +4,9 @@ import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
+import { getExternalSoftphoneConfig } from '../external-softphone/config';
+import { useExternalSoftphone } from '../external-softphone/useExternalSoftphone';
+import { endpoint } from './endpoint';
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -47,18 +50,6 @@ const {
 	stopLatencyTracking,
 	websocketRtpConnectionLevelHandler,
 } = useWebSocketLatency();
-
-/* ============================================================================
- * Environment
- * ========================================================================== */
-
-const { hostname, protocol } = window.location;
-const origin = `${protocol}//${hostname}`.replace(/^http/, 'ws');
-
-const endpoint =
-	import.meta.env.MODE === 'production'
-		? `${origin}/ws`
-		: import.meta.env.VITE_WEB_SOCKET_URL;
 
 /* ============================================================================
  * Helpers
@@ -196,7 +187,14 @@ async function createClient(): Promise<Client> {
 	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
-	const browserPermissions = await getBrowserPermissions();
+	// external softphone mode: the local utility is the SIP endpoint, the
+	// browser is control-only — no web device, no microphone needed
+	const externalSoftphone = getExternalSoftphoneConfig();
+	const browserPermissions = externalSoftphone.enabled
+		? {
+				micGranted: false,
+			}
+		: await getBrowserPermissions();
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
 	// const cli = new Client(config);
@@ -205,6 +203,7 @@ async function createClient(): Promise<Client> {
 			endpoint,
 			token,
 			registerWebDevice:
+				!externalSoftphone.enabled &&
 				(cliConfig.registerWebDevice ?? true) &&
 				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
@@ -226,7 +225,13 @@ async function createClient(): Promise<Client> {
 	await cli.auth();
 
 	emit(WebSocketClientEvent.AfterAuth, cli);
-	await markAsyncPhoneRaw(cli);
+	if (externalSoftphone.enabled) {
+		// attaches the RemotePhone and hands the token to the local utility;
+		// no phone.ua will ever exist, so markAsyncPhoneRaw is skipped
+		useExternalSoftphone().start(cli);
+	} else {
+		await markAsyncPhoneRaw(cli);
+	}
 
 	(
 		window as unknown as {
@@ -241,6 +246,9 @@ async function destroyClient() {
 
 	try {
 		stopLatencyTracking();
+		// drop the external-softphone reference so a later utility `state`
+		// message can't re-attach the phone onto this destroyed client
+		useExternalSoftphone().clearClient();
 		await client.destroy?.();
 	} catch (e) {
 		console.warn('[WS] destroy error', e);

@@ -5,6 +5,7 @@ import {
 	plugin as WebitelUi,
 	registerUiSdkLocales,
 } from './plugins/webitel-ui';
+import './assets/icons';
 
 /**
  * Bootstraps a renderer window Vue app with vue-i18n and the

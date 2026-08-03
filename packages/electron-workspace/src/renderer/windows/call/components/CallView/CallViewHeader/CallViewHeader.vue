@@ -12,13 +12,17 @@
         <span class="call-view-header__duration">
             {{ duration }}
         </span>
-        <wt-button color="secondary" icon="close" @click="emit('close')" />
+        <wt-button
+            color="secondary"
+            icon="electron-workspace:hide-window"
+            @click="emit('close')"
+        />
     </header>
 </template>
 
 <script
-	setup
-	lang="ts"
+    setup
+    lang="ts"
 >
 import { computed } from 'vue';
 
@@ -28,6 +32,7 @@ const props = defineProps<{
 	duration: string;
 	answered: boolean;
 	isHold: boolean;
+	isHangup?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -35,6 +40,7 @@ const emit = defineEmits<{
 }>();
 
 const icon = computed(() => {
+	if (props.isHangup) return 'call-end';
 	if (!props.answered) return 'call-ringing';
 	return props.isHold ? 'hold' : 'call';
 });
