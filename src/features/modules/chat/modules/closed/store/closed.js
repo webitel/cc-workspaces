@@ -100,28 +100,6 @@ const actions = {
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
 
-			/**
-			 * @author @OleksandrPalonnyi
-			 *
-			 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
-			 *
-			 * An unidentified chat has no contact archive to load — its
-			 * messages come from LOAD_CLOSED_CHAT (catalog) or the still-live
-			 * conversation, so just skip loading someone else's history.
-			 */
-			if (!contactId) {
-				if (chat.allowReporting) {
-					context.dispatch(
-						'features/chat/chatHistory/RESET_CHAT_HISTORY',
-						null,
-						{
-							root: true,
-						},
-					);
-				}
-				return;
-			}
-
 			await context.dispatch(
 				'features/chat/chatHistory/LOAD_CHAT_HISTORY',
 				contactId,

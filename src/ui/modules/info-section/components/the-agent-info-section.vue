@@ -122,6 +122,9 @@ export default {
 		...mapGetters('features/call/videoCall', {
 			isVideoCall: 'IS_VIDEO_CALL_ON_WORKSPACE',
 		}),
+		...mapGetters('features/chat/closed', {
+			isChatClosed: 'IS_CHAT_ON_WORKSPACE_CLOSED',
+		}),
 		...mapState({
 			flowsList(state) {
 				return getNamespacedState(state, `${this.flowsNamespace}`).flows;
@@ -222,7 +225,7 @@ export default {
 		resolveDefaultTab() {
 			const { processing, clientInfo, generalInfo } = this.tabsObject;
 
-			if (this.showProcessing && this.taskOnWorkspace?.closedAt) {
+			if (this.showProcessing && this.isChatClosed) {
 				return processing;
 			}
 
@@ -244,7 +247,7 @@ export default {
 				if (this.showClientInfo) return clientInfo;
 			}
 
-			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
+			if (this.showClientInfo && this.isChatClosed) {
 				return clientInfo;
 			}
 
