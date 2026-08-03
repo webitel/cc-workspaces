@@ -9,6 +9,7 @@ const { autoUpdater } = require('electron-updater');
 const conf = require('../shared/config').config();
 const WebitelWindows = require('./windows');
 const WebitelTray = require('./module/webitel_tray');
+const { isAlive } = require('./module/window_utils');
 
 const win = new WebitelWindows();
 let tray = {};
@@ -136,7 +137,7 @@ app.on('ready', () => {
 });
 
 app.on('activate', () => {
-	if (win.workspace?.window || win.loadConfig?.window) {
+	if (isAlive(win.workspace?.window) || isAlive(win.loadConfig?.window)) {
 		win.restoreWindow();
 		return;
 	}
