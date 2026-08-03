@@ -12,13 +12,17 @@
         <span class="call-view-header__duration">
             {{ duration }}
         </span>
-        <wt-button color="secondary" icon="close" @click="emit('close')" />
+        <wt-button
+            color="secondary"
+            icon="electron-workspace:hide-window"
+            @click="emit('close')"
+        />
     </header>
 </template>
 
 <script
-	setup
-	lang="ts"
+    setup
+    lang="ts"
 >
 import { computed } from 'vue';
 
