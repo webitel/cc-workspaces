@@ -86,11 +86,9 @@ type WorkspaceCall = {
 };
 
 const call = computed<WorkspaceCall>(
-	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
+	() => store.getters['features/call/ACTIVE_VIDEO_CALL'] || {},
 );
-const callIsOnHold = computed<boolean>(() => {
-	return store.getters['features/call/CALL_ON_WORKSPACE']?.isHold || false;
-});
+const callIsOnHold = computed<boolean>(() => !!call.value.isHold);
 
 const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
