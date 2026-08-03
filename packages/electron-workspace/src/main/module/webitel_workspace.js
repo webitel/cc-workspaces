@@ -102,7 +102,10 @@ class Workspace {
 				});
 				app.exit(0);
 			})
-			.catch((err) => this.window.send('from-main', err));
+			.catch((err) => {
+				if (!isAlive(this.window)) return;
+				this.window.webContents.send('from-main', err);
+			});
 	}
 
 	sandCallAction(call) {

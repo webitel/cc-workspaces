@@ -172,14 +172,20 @@ class WebitelWindows {
 					});
 					app.exit(0);
 				})
-				.catch((err) => this.workspace.window.send('from-main', err));
+				.catch((err) => {
+					if (!isAlive(this.workspace.window)) return;
+					this.workspace.window.webContents.send('from-main', err);
+				});
 		} else {
 			if (this._isValidHttpUrl(ob.URL)) {
 				this.loadConfig.hide();
 				this.config.writeConfig();
 				this.start(ob.URL);
 			} else if (isAlive(this.loadConfig.window)) {
-				this.loadConfig.window.send('from-main', 'URL Is Not Valid');
+				this.loadConfig.window.webContents.send(
+					'from-main',
+					'URL Is Not Valid',
+				);
 			}
 		}
 	}
