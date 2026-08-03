@@ -25,7 +25,7 @@ process.on('unhandledRejection', (reason) => {
 const main = () => {
 	const conf = config();
 	logger.init(logsPath());
-	logger.log('[main] starting webitel-softphone', app.getVersion());
+	logger.log('[main] starting webitel-softphone-companion', app.getVersion());
 
 	// tray-only background app (dock hidden, no windows): without this macOS
 	// App-Naps the process — the SIP registration and the local WS server

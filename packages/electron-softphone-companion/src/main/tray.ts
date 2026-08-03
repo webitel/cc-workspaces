@@ -75,7 +75,9 @@ class SoftphoneTray {
 
 	#render(): void {
 		this.#tray.setImage(this.#image());
-		this.#tray.setToolTip(`Webitel Softphone — ${this.#statusLine()}`);
+		this.#tray.setToolTip(
+			`Webitel Softphone Companion — ${this.#statusLine()}`,
+		);
 		this.#tray.setContextMenu(
 			Menu.buildFromTemplate([
 				{
