@@ -32,6 +32,7 @@ const props = defineProps<{
 	duration: string;
 	answered: boolean;
 	isHold: boolean;
+	isHangup?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -39,6 +40,7 @@ const emit = defineEmits<{
 }>();
 
 const icon = computed(() => {
+	if (props.isHangup) return 'call-end';
 	if (!props.answered) return 'call-ringing';
 	return props.isHold ? 'hold' : 'call';
 });

@@ -6,9 +6,10 @@
 		<CallViewHeader
 			:title="callName"
 			:subtitle="callNumber"
-			:duration="`${min}:${sec}`"
+			:duration="headerDuration"
 			:answered="!!call.answered"
 			:is-hold="!!call.isHold"
+			:is-hangup="isCallHangup"
 			@close="collapseWindow"
 		/>
 
@@ -18,6 +19,7 @@
 		/>
 
 		<CallViewFooter
+			v-if="!isCallHangup"
 			:active="!!call.answered"
 			:is-muted="!!call.muted"
 			:is-hold="!!call.isHold"
@@ -37,6 +39,8 @@
 	lang="ts"
 >
 import { computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { CallActions } from 'webitel-sdk';
 import CallViewBody from './CallViewBody/CallViewBody.vue';
 import CallViewFooter from './CallViewFooter/CallViewFooter.vue';
 import CallViewHeader from './CallViewHeader/CallViewHeader.vue';
@@ -51,6 +55,7 @@ const props = defineProps<{
 	call: CallPayload | null;
 }>();
 
+const { t } = useI18n();
 const { min, sec, reset, startWithDate, startWithDuration } = useCallTimer();
 
 const callName = computed(() => props.call?.displayName || '');
@@ -58,6 +63,10 @@ const callNumber = computed(() =>
 	props.call?.showNumber ? props.call?.displayNumber || '' : '',
 );
 const queueName = computed(() => props.call?.queueName || '');
+const isCallHangup = computed(() => props.call?.state === CallActions.Hangup);
+const headerDuration = computed(() =>
+	isCallHangup.value ? t('Hangup') : `${min.value}:${sec.value}`,
+);
 
 watch(
 	() => props.call,
