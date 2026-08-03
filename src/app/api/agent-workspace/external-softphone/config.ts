@@ -7,7 +7,7 @@ export const EXTERNAL_SOFTPHONE_DEFAULT_PORT = 10029;
 
 /**
  * External softphone mode: the browser is control-only and a local Electron
- * utility (packages/electron-softphone) is the actual SIP endpoint.
+ * utility (packages/electron-softphone-companion) is the actual SIP endpoint.
  * Configured via CONFIG.CLI.externalSoftphone (public/config.json or the
  * per-user phone settings merge in main.ts).
  */

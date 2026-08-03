@@ -1,5 +1,5 @@
 {
-	"name": "webitel-softphone",
+	"name": "webitel-softphone-companion",
 	"version": "0.1.0",
 	"description": "Webitel Softphone Companion — native SIP endpoint controlled from the web workspace",
 	"author": {
@@ -83,8 +83,8 @@
 			},
 			"notarize": true
 		},
-		"productName": "Webitel Softphone",
-		"appId": "org.webitel.softphone"
+		"productName": "Webitel Softphone Companion",
+		"appId": "org.webitel.softphone-companion"
 	},
 	"dependencies": {
 		"electron-sip": "file:../electron-sip",

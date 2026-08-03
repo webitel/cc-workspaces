@@ -1,4 +1,4 @@
-# Webitel Softphone (companion utility)
+# Webitel Softphone Companion
 
 Tray-only Electron app that acts as the operator's **native SIP endpoint**
 (pjsip over UDP via the `electron-sip` addon) while the **web workspace stays
@@ -9,7 +9,7 @@ only the operations that require a local SIP device go through this utility.
 ## How it works
 
 ```
-┌─ Browser ──────────────────┐         ┌─ Webitel Softphone ───────────────┐
+┌─ Browser ──────────────────┐         ┌─ Webitel Softphone Companion ─────┐
 │ cc-workspaces (UI)         │         │ Electron main process:            │
 │  webitel-sdk Client #1     │  ws://  │  local WS server 127.0.0.1:10029  │
 │  registerWebDevice: false  │◄───────►│  webitel-sdk Client #2            │

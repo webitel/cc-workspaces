@@ -1,4 +1,4 @@
-name: build electron-softphone
+name: build electron-softphone-companion
 
 # Builds the Webitel Softphone companion utility for macOS, Linux and
 # Windows. Manually triggered.
@@ -21,7 +21,7 @@ env:
 
 defaults:
   run:
-    working-directory: packages/electron-softphone
+    working-directory: packages/electron-softphone-companion
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -76,12 +76,12 @@ jobs:
 
       - uses: actions/upload-artifact@v6
         with:
-          name: electron-softphone-mac
+          name: electron-softphone-companion-mac
           path: |
-            packages/electron-softphone/dist/*.dmg
-            packages/electron-softphone/dist/*.zip
-            packages/electron-softphone/dist/*.blockmap
-            packages/electron-softphone/dist/latest-mac.yml
+            packages/electron-softphone-companion/dist/*.dmg
+            packages/electron-softphone-companion/dist/*.zip
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest-mac.yml
 
   # ---------------------------------------------------------------------------
   # Linux x64 — AppImage.
@@ -109,11 +109,11 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: electron-softphone-linux
+          name: electron-softphone-companion-linux
           path: |
-            packages/electron-softphone/dist/*.AppImage
-            packages/electron-softphone/dist/*.blockmap
-            packages/electron-softphone/dist/latest-linux.yml
+            packages/electron-softphone-companion/dist/*.AppImage
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest-linux.yml
 
   # ---------------------------------------------------------------------------
   # Windows x64 — nsis/zip.
@@ -141,9 +141,9 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: electron-softphone-windows
+          name: electron-softphone-companion-windows
           path: |
-            packages/electron-softphone/dist/*.exe
-            packages/electron-softphone/dist/*.zip
-            packages/electron-softphone/dist/*.blockmap
-            packages/electron-softphone/dist/latest.yml
+            packages/electron-softphone-companion/dist/*.exe
+            packages/electron-softphone-companion/dist/*.zip
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest.yml
