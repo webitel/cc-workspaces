@@ -2,7 +2,7 @@ import { QueueTypeName } from '@webitel/ui-sdk/enums';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
 import { DeviceNotAllowPermissionError } from 'webitel-sdk';
 
-import { isExternalSoftphoneEnabled } from '../../../app/api/agent-workspace/external-softphone/config';
+import { isExternalPhoneActive } from '../../../app/api/agent-workspace/external-softphone/useExternalSoftphone';
 import i18n from '../../../app/locale/i18n.js';
 import WorkspaceStates from '../../../ui/enums/WorkspaceState.enum';
 import clientHandlers from './client-handlers';
@@ -101,7 +101,7 @@ const actions = {
 		const params = {
 			...CALL_PARAMS,
 			// the external softphone (pjsip) is audio-only
-			video: context.state.isVideo && !isExternalSoftphoneEnabled(),
+			video: context.state.isVideo && !isExternalPhoneActive(),
 		};
 		await client.call({
 			destination,
@@ -121,7 +121,7 @@ const actions = {
 		// in external softphone mode audio is captured by the local utility,
 		// not the browser — no local mic (or camera/video) involved
 		const isMicAllowed =
-			isExternalSoftphoneEnabled() || (await isMicrophoneAllowed());
+			isExternalPhoneActive() || (await isMicrophoneAllowed());
 		if (!isMicAllowed) {
 			eventBus.$emit('notification', {
 				type: 'error',
@@ -133,7 +133,7 @@ const actions = {
 		}
 
 		const isVideoCall =
-			!isExternalSoftphoneEnabled() &&
+			!isExternalPhoneActive() &&
 			context.rootGetters['features/call/videoCall/IS_VIDEO_CALL'](call);
 
 		if (isVideoCall) {

@@ -188,9 +188,21 @@ async function createClient(): Promise<Client> {
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
 	// external softphone mode: the local utility is the SIP endpoint, the
-	// browser is control-only — no web device, no microphone needed
+	// browser is control-only — no web device, no microphone needed. In auto
+	// mode the decision is a loopback probe for a running utility, re-taken on
+	// every client generation (reload/reconnect picks up a started/quit
+	// utility).
 	const externalSoftphone = getExternalSoftphoneConfig();
-	const browserPermissions = externalSoftphone.enabled
+	const softphoneManager = useExternalSoftphone();
+	const useExternalPhone =
+		externalSoftphone.mode === 'forced' ||
+		(externalSoftphone.mode === 'auto' && (await softphoneManager.probe()));
+	if (!useExternalPhone) {
+		// kill a manager left over from a previous external-mode generation so
+		// it can't attach a RemotePhone onto this web-phone client later
+		softphoneManager.stop();
+	}
+	const browserPermissions = useExternalPhone
 		? {
 				micGranted: false,
 			}
@@ -203,7 +215,7 @@ async function createClient(): Promise<Client> {
 			endpoint,
 			token,
 			registerWebDevice:
-				!externalSoftphone.enabled &&
+				!useExternalPhone &&
 				(cliConfig.registerWebDevice ?? true) &&
 				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
@@ -225,10 +237,10 @@ async function createClient(): Promise<Client> {
 	await cli.auth();
 
 	emit(WebSocketClientEvent.AfterAuth, cli);
-	if (externalSoftphone.enabled) {
+	if (useExternalPhone) {
 		// attaches the RemotePhone and hands the token to the local utility;
 		// no phone.ua will ever exist, so markAsyncPhoneRaw is skipped
-		useExternalSoftphone().start(cli);
+		softphoneManager.start(cli);
 	} else {
 		await markAsyncPhoneRaw(cli);
 	}
