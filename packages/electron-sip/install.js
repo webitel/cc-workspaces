@@ -25,6 +25,6 @@ console.error(
 	`[electron-sip] no prebuild for ${PLATFORM_TAG} at ${PREBUILD_DIR}\n` +
 		'Generate prebuilds via the build-electron-sip GitHub Actions workflow,\n' +
 		'download the electron-sip-prebuilds-all artifact, and commit its\n' +
-		'contents under packages/electron-workspace/electron-sip/prebuilds/.',
+		'contents under packages/electron-sip/prebuilds/.',
 );
 process.exit(1);

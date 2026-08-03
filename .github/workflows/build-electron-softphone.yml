@@ -1,6 +1,7 @@
-name: build electron-workspace
+name: build electron-softphone
 
-# Builds the Electron app for macOS, Linux and Windows. Manually triggered.
+# Builds the Webitel Softphone companion utility for macOS, Linux and
+# Windows. Manually triggered.
 #
 # Assumes electron-sip prebuilds are committed under
 # packages/electron-sip/prebuilds/<platform>-<arch>/ so
@@ -20,13 +21,13 @@ env:
 
 defaults:
   run:
-    working-directory: packages/electron-workspace
+    working-directory: packages/electron-softphone
 
 jobs:
   # ---------------------------------------------------------------------------
-  # macOS x64 + arm64. electron-builder's mac target rejects PNG < 512x512, and
-  # the repo only ships a 256x256 app-icon.png with no .icns, so we generate
-  # one. Signed with Developer ID cert + notarized via Apple notary service.
+  # macOS arm64. electron-builder's mac target rejects PNG < 512x512, and the
+  # repo only ships a 256x256 app-icon.png with no .icns, so we generate one.
+  # Signed with Developer ID cert + notarized via Apple notary service.
   # ---------------------------------------------------------------------------
   macos:
     runs-on: macos-latest
@@ -56,23 +57,6 @@ jobs:
           iconutil -c icns app-icon.iconset -o app-icon.icns
           rm -rf app-icon.iconset
 
-      # - name: Import signing cert to keychain
-      #   env:
-      #     CERT_BASE64: ${{ secrets.MAC_CERTIFICATE_P12_BASE64 }}
-      #     CERT_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
-      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-      #   run: |
-      #     CERT_PATH=$RUNNER_TEMP/cert.p12
-      #     KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain-db
-      #     echo -n "$CERT_BASE64" | base64 --decode -o $CERT_PATH
-      #     security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-      #     security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-      #     security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-      #     security import $CERT_PATH -P "$CERT_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-      #     security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-      #     security list-keychain -d user -s $KEYCHAIN_PATH $(security list-keychains -d user | tr -d '"')
-          # security find-identity -v -p codesigning $KEYCHAIN_PATH
-
       - name: Install electron-sip deps
         working-directory: packages/electron-sip
         run: npm ci
@@ -92,12 +76,12 @@ jobs:
 
       - uses: actions/upload-artifact@v6
         with:
-          name: electron-workspace-mac
+          name: electron-softphone-mac
           path: |
-            packages/electron-workspace/dist/*.dmg
-            packages/electron-workspace/dist/*.zip
-            packages/electron-workspace/dist/*.blockmap
-            packages/electron-workspace/dist/latest-mac.yml
+            packages/electron-softphone/dist/*.dmg
+            packages/electron-softphone/dist/*.zip
+            packages/electron-softphone/dist/*.blockmap
+            packages/electron-softphone/dist/latest-mac.yml
 
   # ---------------------------------------------------------------------------
   # Linux x64 — AppImage.
@@ -125,14 +109,14 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: electron-workspace-linux
+          name: electron-softphone-linux
           path: |
-            packages/electron-workspace/dist/*.AppImage
-            packages/electron-workspace/dist/*.blockmap
-            packages/electron-workspace/dist/latest-linux.yml
+            packages/electron-softphone/dist/*.AppImage
+            packages/electron-softphone/dist/*.blockmap
+            packages/electron-softphone/dist/latest-linux.yml
 
   # ---------------------------------------------------------------------------
-  # Windows x64 — nsis/zip/msi.
+  # Windows x64 — nsis/zip.
   # ---------------------------------------------------------------------------
   windows:
     runs-on: windows-latest
@@ -157,10 +141,9 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: electron-workspace-windows
+          name: electron-softphone-windows
           path: |
-            packages/electron-workspace/dist/*.exe
-            packages/electron-workspace/dist/*.msi
-            packages/electron-workspace/dist/*.zip
-            packages/electron-workspace/dist/*.blockmap
-            packages/electron-workspace/dist/latest.yml
+            packages/electron-softphone/dist/*.exe
+            packages/electron-softphone/dist/*.zip
+            packages/electron-softphone/dist/*.blockmap
+            packages/electron-softphone/dist/latest.yml
