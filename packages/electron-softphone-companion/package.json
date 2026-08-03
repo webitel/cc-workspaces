@@ -87,6 +87,7 @@
 		"appId": "org.webitel.softphone-companion"
 	},
 	"dependencies": {
+		"axios": "^1.19.0",
 		"electron-sip": "file:../electron-sip",
 		"webitel-sdk": "^26.4.26",
 		"ws": "^8.21.1"
