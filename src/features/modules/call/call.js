@@ -95,8 +95,7 @@ const actions = {
 				context.rootGetters['workspace/TASK_ON_WORKSPACE'].newNumber;
 		}
 
-		// eslint-disable-next-line no-useless-escape
-		destination = destination.replace(/[^0-9a-zA-z+*#]/g, '');
+		destination = destination.replace(/[^0-9a-zA-Z+*#]/g, '');
 		const client = await context.rootState.client.getCliInstance();
 		const params = {
 			...CALL_PARAMS,
