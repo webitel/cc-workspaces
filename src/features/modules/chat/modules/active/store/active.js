@@ -1,30 +1,32 @@
-import { getActiveChatListByIds } from '../../../scripts/resolveChatsByIds.js';
-import ActiveChatsAPI from '../api/activeChats.js';
-import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog.js';
-// TODO: тимчасовий дебаг мапінгу — видалити
-import { debugActiveChatsMapping } from '../scripts/debugActiveChatsMapping.js';
-import { getTasksByConversationId } from '../scripts/getTasksByConversationId.js';
-// import search from './search.js';
+import ActiveChatsAPI from '../api/activeChats';
+import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 
-const RELOAD_PAGE_SIZE = 100;
+// import { debugActiveChatsMapping } from '../scripts/debugActiveChatsMapping';
+// import search from './search';
 
 const state = {
-	chatIds: [], // порядок відображення (id), НЕ об'єкти
+	visibleChatIds: [],
 	page: 1,
 	size: 10,
 	next: false,
-	isLoaded: false,
+	isLoading: false,
 };
 
 const getters = {
-	// REQUEST_PARAMS: (state) => ({
-	// 	// TODO: page, size
-	// }),
-	// id[] -> Conversation[] з SDK
-	// ACTIVE_CHATS: (state, getters, rootState) => {
-	// 	// TODO: return getActiveChatListByIds(state.chatIds, rootState.client)
-	// 	return [];
-	// },
+	VISIBLE_CHAT_LIST: (state, getters, rootState, rootGetters) => {
+		const client = rootState.client.client;
+		console.log('VISIBLE_CHAT_LIST client:', client);
+		if (!client) return [];
+
+		const chats = state.visibleChatIds
+			.map((id) =>
+				client.allConversations().find((chat) => chat.conversationId === id),
+			)
+			.filter(Boolean);
+
+		console.log('VISIBLE_CHAT_LIST', chats);
+		return chats;
+	},
 };
 
 const actions = {
@@ -32,87 +34,122 @@ const actions = {
 	// get all chats from REST API and set to WS to provide all WS actions to all active chats
 	// by default WS server-part return only 40 chats after page reload
 	RELOAD_CHAT_LIST: async (context) => {
-		const client = await context.rootState.client.getCliInstance();
+		context.commit('SET_IS_LOADING', true);
+		context.commit('SET_VISIBLE_CHAT_IDS', []);
+		const reloadPageSize = 50;
+		let hasNext;
+		let localPage = 1;
 
-		// таски агента: єдине локальне джерело каналу, черги й післяобробки
-		const tasksByConversationId = getTasksByConversationId(client);
+		try {
+			while (hasNext || localPage === 1) {
+				const { items: dialogs, next } = await ActiveChatsAPI.getList({
+					page: localPage,
+					size: reloadPageSize,
+				});
 
-		const dialogs = [];
-		let page = 1;
-		let hasNext = true;
+				const newIds = dialogs.map((dialog) => dialog.id);
 
-		while (hasNext) {
-			const { items, next } = await ActiveChatsAPI.getList({
-				page,
-				size: 10,
-				fields: [
-					'id',
-					'via',
-					'from',
-					'message',
-					'members',
-					'queue',
-					'context',
-				],
-			});
+				context.commit('SET_VISIBLE_CHAT_IDS', [
+					...context.state.visibleChatIds,
+					...newIds,
+				]);
 
-			dialogs.push(...items);
-			hasNext = next;
-			page += 1;
+				await context.dispatch('ADD_CHAT_LIST_TO_CLIENT_STORE', dialogs);
+				hasNext = next;
+				localPage += 1;
+			}
+		} finally {
+			context.commit('SET_IS_LOADING', false);
 		}
-		// console.log('all rest dialogs:', dialogs);
+	},
 
-		// знімок стора робимо ПІСЛЯ запитів: поки тягнули сторінки, у стор могли
-		// доїхати ws чати. Ключ — conversationId, бо сам стор індексований по channelId
-		const existing = new Set(
-			client.allConversations().map((c) => c.conversationId),
-		);
+	ADD_CHAT_LIST_TO_CLIENT_STORE: async (context, chats) => {
+		const client = context.rootState.client.client;
+		const existingIds = client
+			.allConversations()
+			.map((chat) => chat.conversationId);
 
-		dialogs.forEach((dialog) => {
-			// чат уже є — або прийшов по ws, або ми його засетали раніше
-			if (existing.has(dialog.id)) return;
+		chats.forEach((dialog) => {
+			if (existingIds.includes(dialog.id)) return;
 
 			const conversation = buildConversationFromDialog({
 				client,
 				dialog,
-				// task: tasksByConversationId.get(dialog.id) || null,
 			});
 
-			// ключ саме conversation.id, як робить сам SDK у subscribeChat:
-			// після setAnswered це channelId, без нього — conversationId
+			if (!conversation) return;
+
 			client.conversationStore.set(conversation.id, conversation);
-			existing.add(dialog.id);
 		});
 
-		// TODO: тимчасовий дебаг — видалити разом із debugActiveChatsMapping.js
-		debugActiveChatsMapping({
-			client,
-			dialogs,
-		});
-
-		// context.commit(
-		// 	'SET_CHAT_IDS',
-		// 	dialogs.map(({ id }) => id),
-		// );
-		context.commit('SET_NEXT', false);
-		context.commit('SET_IS_LOADED', true);
+		// debugActiveChatsMapping({
+		// 	client,
+		// 	dialogs,
+		// 	skippedAsExisting,
+		// 	skippedAsNull,
+		// });
 	},
-	LOAD_ACTIVE_CHATS: async (context) => {},
-	LOAD_NEXT_ACTIVE_CHATS: async (context) => {}, // load more + dedupe по id
+	LOAD_ACTIVE_CHATS: async (context) => {
+		try {
+			context.commit('SET_IS_LOADING', true);
+			const { items: dialogs, next } = await ActiveChatsAPI.getList({
+				page: context.state.page,
+				size: context.state.size,
+			});
 
-	INSERT_CHAT_ID_TO_START: (context, chatId) => {
-		const without = context.state.chatIds.filter((id) => id !== chatId);
-		context.commit('SET_CHAT_IDS', [
+			const ids = dialogs.map((dialog) => dialog.id);
+
+			context.commit('SET_VISIBLE_CHAT_IDS', ids);
+			context.commit('SET_NEXT', next);
+		} finally {
+			context.commit('SET_IS_LOADING', false);
+		}
+	},
+	LOAD_NEXT_ACTIVE_CHATS: async (context) => {
+		if (!context.state.next || context.state.isLoading) return;
+
+		const nextPage = context.state.page + 1;
+		context.commit('SET_IS_LOADING', true);
+
+		try {
+			const { items: dialogs, next } = await ActiveChatsAPI.getList({
+				page: nextPage,
+				size: context.state.size,
+			});
+
+			const ids = dialogs.map((dialog) => dialog.id);
+
+			context.commit('SET_VISIBLE_CHAT_IDS', [
+				...context.state.visibleChatIds,
+				...ids.filter((id) => !context.state.visibleChatIds.includes(id)),
+			]);
+			context.commit('SET_PAGE', nextPage);
+			context.commit('SET_NEXT', next);
+		} finally {
+			context.commit('SET_IS_LOADING', false);
+		}
+	},
+
+	CHAT_INSERT_TO_START: (context, chat) => {
+		const chatId = chat.conversationId;
+		const idList = context.state.visibleChatIds.filter((id) => id !== chatId);
+		context.commit('SET_VISIBLE_CHAT_IDS', [
 			chatId,
-			...without,
+			...idList,
 		]);
 	},
-	REMOVE_CHAT: (context, chatId) => {}, // закриття -> прибрати, якщо є
+	REMOVE_CHAT: (context, chat) => {
+		const chatId = chat.conversationId;
+		const idList = context.state.visibleChatIds.filter((id) => id !== chatId);
+		context.commit('SET_VISIBLE_CHAT_IDS', [
+			...idList,
+		]);
+	},
 };
 
 const mutations = {
-	SET_CHAT_IDS: (state, ids) => {
-		state.chatIds = ids;
+	SET_VISIBLE_CHAT_IDS: (state, ids) => {
+		state.visibleChatIds = ids;
 	},
 	SET_PAGE: (state, page) => {
 		state.page = page;
@@ -120,8 +157,8 @@ const mutations = {
 	SET_NEXT: (state, next) => {
 		state.next = next;
 	},
-	SET_IS_LOADED: (state, value) => {
-		state.isLoaded = value;
+	SET_IS_LOADING: (state, value) => {
+		state.isLoading = value;
 	},
 };
 

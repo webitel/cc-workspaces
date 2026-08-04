@@ -1,9 +1,7 @@
 import { ChatActions } from 'webitel-sdk';
 // import { ChatDialogsAPI } from '@webitel/api-services/api';
-import ActiveChatsAPI from '../modules/active/api/activeChats.js';
 
 import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
-import { patchChatEventRouting } from '../modules/active/scripts/patchChatEventRouting.js';
 
 const chatHandler = (context) => async (action, chat) => {
 	// TODO: тимчасовий дебаг — чи доходять WS-події до чатів, засетаних з REST
@@ -58,22 +56,14 @@ const chatHandler = (context) => async (action, chat) => {
 const actions = {
 	SUBSCRIBE_CHATS: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
-		// до підписки, щоб жоден екшен не пройшов мимо
-		patchChatEventRouting(client);
+
 		await client.subscribeChat(chatHandler(context), null);
 
-		// спершу віддаємо в панель те, що прийшло по ws
-		const wsChatList = client.allConversations();
-		if (wsChatList.length) context.dispatch('SET_CHAT_LIST', wsChatList);
-
-		// далі добираємо решту з рест апішки — ws чати вже в сторі,
-		// тому дедуплікації є з чим порівнювати
 		await context.dispatch('active/RELOAD_CHAT_LIST');
-		context.dispatch('SET_CHAT_LIST', client.allConversations());
 	},
 
 	HANDLE_INVITE_ACTION: (context, { action, chat }) => {
-		context.dispatch('ADD_CHAT', chat);
+		context.dispatch('active/CHAT_INSERT_TO_START', chat);
 		if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
 			context.dispatch('SET_WORKSPACE', chat);
 		}
@@ -84,29 +74,26 @@ const actions = {
 	},
 
 	HANDLE_JOINED_ACTION: (context, { chat }) => {
+		context.dispatch('active/CHAT_INSERT_TO_START', chat);
 		openLinkFromVariable(chat);
 	},
 
 	HANDLE_MESSAGE_ACTION: async (context, { action, chat }) => {
-		// if(chat.data?.origin === 'rest')
-		console.log('HANDLE_MESSAGE_ACTION chat:', chat, 'action:', action);
-
 		const message = chat.messages[chat.messages.length - 1];
-		console.log('HANDLE_MESSAGE_ACTION message:', message);
-		const activeChats = await ActiveChatsAPI.getList();
-		console.log('after message activeChats:', activeChats.filter);
-		if (!context.getters.IS_MY_MESSAGE(message)) {
+		const isMine = context.getters.IS_MY_MESSAGE(message);
+
+		if (!isMine) {
 			context.dispatch('HANDLE_CHAT_EVENT', {
 				action,
 				chat,
 			});
 			context.commit('unseen/ADD_UNSEEN_CHAT', chat);
 		}
-		context.dispatch('CHAT_INSERT_TO_START', chat);
+		context.dispatch('active/CHAT_INSERT_TO_START', chat);
 	},
 
 	RESET_CHAT: (context, chat) => {
-		context.commit('REMOVE_CHAT', chat);
+		context.dispatch('active/REMOVE_CHAT', chat);
 		context.dispatch('_RESET_UNREAD_COUNT');
 		context.dispatch('LOAD_CLOSED_CHATS');
 
@@ -120,7 +107,9 @@ const actions = {
 		 * and history if the closed chat is still the one currently displayed.
 		 */
 
-		if (context.getters.CHAT_ON_WORKSPACE.channelId === chat.channelId) {
+		if (
+			context.getters.CHAT_ON_WORKSPACE.conversationId === chat.conversationId
+		) {
 			context.dispatch('RESET_WORKSPACE');
 			context.dispatch('RESET_CHAT_HISTORY');
 		}

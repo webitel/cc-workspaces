@@ -5,11 +5,11 @@
   >
     <div
       v-for="(task, index) of taskList"
+      :key="task.id"
       class="active-queue-container__wrapper"
     >
       <component
         :is="getComponent(task)"
-        :key="task.id"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :size="size"
@@ -44,7 +44,9 @@ const taskOnWorkspace = computed(
 	() => store.getters['workspace/TASK_ON_WORKSPACE'],
 );
 
-const activeChats = computed(() => store.state.features.chat.chatList);
+const activeChats = computed(
+	() => store.getters['features/chat/active/VISIBLE_CHAT_LIST'],
+);
 const unprocessedClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.chatsList,
 );
