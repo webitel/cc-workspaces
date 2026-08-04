@@ -30,7 +30,7 @@
         />
       </div>
 
-      <transition name="quick-replies-fade">
+      <quick-replies-transition>
         <quick-replies
           v-if="showQuickReplies"
           class="chat-messaging__quick-replies"
@@ -38,7 +38,7 @@
           @close="closeQuickRepliesPanel"
           @select="applyQuickReply"
         />
-      </transition>
+      </quick-replies-transition>
     </div>
 
     <div
@@ -143,6 +143,7 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { useQuickReplies } from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
+import QuickRepliesTransition from './quick-replies/quick-replies-transition.vue';
 
 const props = withDefaults(
 	defineProps<{
@@ -405,6 +406,7 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     position: relative;
     flex: 1;
     min-height: 0;
+    overflow: hidden;
   }
 
   &__messaging {
@@ -425,16 +427,6 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     inset: 0;
     background-color: var(--content-wrapper-color);
   }
-}
-
-.quick-replies-fade-enter-active,
-.quick-replies-fade-leave-active {
-  transition: opacity var(--transition);
-}
-
-.quick-replies-fade-enter-from,
-.quick-replies-fade-leave-to {
-  opacity: 0;
 }
 
 .chat-messaging__textarea {
