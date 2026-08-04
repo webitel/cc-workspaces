@@ -123,7 +123,7 @@
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",
 		"electron-sip": "file:../electron-sip",
-		"electron-updater": "^6.6.2",
+		"electron-updater": "^6.8.9",
 		"markdown-it": "^15.0.0",
 		"mitt": "^3.0.1",
 		"rimraf": "^6.0.1",
