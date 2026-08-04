@@ -124,7 +124,7 @@
 		"electron-positioner": "^4.1.0",
 		"electron-sip": "file:../electron-sip",
 		"electron-updater": "^6.6.2",
-		"markdown-it": "^12.0.6",
+		"markdown-it": "^15.0.0",
 		"mitt": "^3.0.1",
 		"rimraf": "^6.0.1",
 		"tslib": "^2.3.1",
