@@ -70,7 +70,9 @@ const { cacheExpansionState, restoreExpansionState } = useCachedExpansionState({
 	entity: 'chat',
 });
 
-const chatList = computed(() => store.state.features.chat.chatList);
+const chatList = computed(
+	() => store.getters['features/chat/active/VISIBLE_CHAT_LIST'],
+);
 
 const closedChat = computed(
 	() => store.state.features.chat.closed.processed.chatsList,
