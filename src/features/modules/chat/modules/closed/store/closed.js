@@ -69,12 +69,23 @@ const actions = {
 			});
 
 			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			chat.messages = formatChatMessages(items);
+			console.log(chat, ' chat');
+			console.log(chat.messages, ' chat.messages');
+			context.commit(
+				'features/chat/chatHistory/SET_CHAT_HISTORY',
+				formatChatMessages(items),
+				{
+					root: true,
+				},
+			);
+			console.log(chat.messages, ' chat.messages AFTER');
 		} catch (err) {
+			console.log('NU ERROR');
 			throw applyTransform(err, [
 				notify,
 			]);
 		} finally {
+			console.log('NU I FINALLY');
 			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
 				root: true,
 			});
