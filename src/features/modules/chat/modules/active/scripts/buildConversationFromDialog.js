@@ -1,4 +1,5 @@
 import { Conversation } from 'webitel-sdk';
+
 const normalizedMember = (member) => {
 	if (!member) return null;
 
