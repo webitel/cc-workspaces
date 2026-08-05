@@ -1,23 +1,17 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import CallView from './components/CallView.vue';
-import ProcessingView from './components/ProcessingView.vue';
-import SuccessView from './components/SuccessView.vue';
+import CallView from './components/CallView/CallView.vue';
 import {
 	type CallPayload,
 	onDestroyNotification,
-	onSetProcessingInfo,
 	onShowCall,
-	onShowSuccessMessage,
-	type ProcessingPayload,
 	toggleDevTools,
 } from './composables/useCallIPC';
 
-type View = 'call' | 'processing' | 'success' | 'idle';
+type View = 'call' | 'idle';
 
 const view = ref<View>('idle');
 const call = ref<CallPayload | null>(null);
-const processing = ref<ProcessingPayload | null>(null);
 
 const unsubscribers: Array<() => void> = [];
 
@@ -33,15 +27,7 @@ onMounted(() => {
 		}),
 		onDestroyNotification(() => {
 			call.value = null;
-			processing.value = null;
 			view.value = 'idle';
-		}),
-		onShowSuccessMessage(() => {
-			view.value = 'success';
-		}),
-		onSetProcessingInfo((_event, payload) => {
-			processing.value = payload;
-			view.value = 'processing';
 		}),
 	);
 	window.addEventListener('keyup', onKeyup, true);
@@ -59,25 +45,24 @@ onUnmounted(() => {
 		v-if="view === 'call'"
 		:call="call"
 	/>
-	<ProcessingView
-		v-else-if="view === 'processing'"
-		:payload="processing"
-	/>
-	<SuccessView v-else-if="view === 'success'" />
 </template>
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Ubuntu:300,400,500,600,700,800,900");
 
+html,
+body,
+#app {
+	width: 100%;
+	height: 100%;
+}
 html {
 	border-radius: 25px;
-}
-p {
-	margin: 5px 0 0 0;
 }
 body {
 	overflow: hidden;
 	background: #f7f7f7;
 	margin: 0;
+	padding: 10px;
 }
 </style>

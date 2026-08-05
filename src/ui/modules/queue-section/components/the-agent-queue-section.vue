@@ -17,8 +17,8 @@
       @change="currentTab = $event"
     >
       <template
-        v-for="(tab, key) of tabs"
-        :key="key"
+        v-for="tab of tabs"
+        :key="tab.value"
         #[tab.value]
       >
         <div
@@ -62,7 +62,14 @@
 </template>
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, markRaw, onMounted, onUnmounted, PropType, ref } from 'vue';
+import {
+	type Component,
+	computed,
+	markRaw,
+	onMounted,
+	onUnmounted,
+	ref,
+} from 'vue';
 import { useStore } from 'vuex';
 import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 
@@ -92,14 +99,25 @@ const emit = defineEmits([
 ]);
 
 const store = useStore();
-const currentTab = ref({});
+interface QueueTab {
+	value: string;
+	icon: string;
+	iconColor: string;
+	countActive: number;
+	component: Component;
+	showIndicator: boolean;
+}
+
+const currentTab = ref<Partial<QueueTab>>({});
 const hotkeyUnsubscribers = ref([]);
 
 const callList = computed(() => store.state.features?.call?.callList || []);
 const manualCallsList = computed(
 	() => store.state.features?.call?.manual?.manualList || [],
 );
-const chatList = computed(() => store.state.features?.chat?.chatList || []);
+const chatList = computed(
+	() => store.getters['features/chat/active/VISIBLE_CHAT_LIST'],
+);
 const manualChatList = computed(
 	() => store.state.features?.chat?.manual?.manualList || [],
 );

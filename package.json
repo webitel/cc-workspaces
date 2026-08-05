@@ -1,6 +1,6 @@
 {
 	"name": "@webitel/workspace",
-	"version": "26.6.0",
+	"version": "26.8.0",
 	"private": true,
 	"scripts": {
 		"dev": "vite --force",
@@ -15,10 +15,11 @@
 		"utils:up-libs": "npm up @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk && npm run utils:ls-libs",
 		"utils:ln-libs": "npm ln @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk && npm run utils:ls-libs",
 		"utils:ls-libs": "npm ls @webitel/api-services @webitel/styleguide @webitel/ui-chats @webitel/ui-sdk",
-		"prepare": "husky || true",
+		"prepare": "husky",
 		"biome:ci:gh": "biome ci ./src --reporter=github",
 		"test:unit:ci": "vitest run --coverage",
-		"typecheck:ci": "true"
+		"typecheck": "vue-tsc --noEmit -p ./tsconfig.json",
+		"typecheck:ci": "npm run typecheck"
 	},
 	"type": "module",
 	"dependencies": {
@@ -28,10 +29,11 @@
 		"@vuelidate/validators": "^2.0.4",
 		"@vueuse/components": "^14.x",
 		"@vueuse/core": "^14.x",
-		"@webitel/api-services": "^0.1.46",
-		"@webitel/styleguide": "^26.2.16",
-		"@webitel/ui-chats": "^0.1.41",
-		"@webitel/ui-sdk": "~26.6",
+		"@webitel/api-services": "^0.1.54",
+		"@webitel/styleguide": "^26.2.19",
+		"@webitel/ui-chats": "^0.1.47",
+		"@webitel/ui-datalist": "^1.1.56",
+		"@webitel/ui-sdk": "~26.8.13",
 		"autolinker": "^4.x",
 		"axios": "1.18.1",
 		"deep-copy": "^1.x",

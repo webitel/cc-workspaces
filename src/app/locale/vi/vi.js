@@ -208,6 +208,7 @@ export default {
 			chatsIncorrectFileSize: 'Kích thước tệp không hợp lệ',
 			errors: {
 				uploadFileLimitSize: 'Vượt quá giới hạn dung lượng tệp',
+				filePolicyFail: 'Định dạng tệp không được phép',
 			},
 		},
 	},

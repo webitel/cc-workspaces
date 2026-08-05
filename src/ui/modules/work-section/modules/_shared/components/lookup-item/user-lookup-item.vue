@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, defineEmits, defineProps, withDefaults } from 'vue';
+import { computed } from 'vue';
 import { getUserStatusByPriority } from '../../../../../../../features/modules/agent-status/statusUtils/getUserStatusByPriority';
 import LookupItem from './lookup-item.vue';
 import { UserLookupItem } from './types/UserLookupItem';

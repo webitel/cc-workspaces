@@ -80,17 +80,29 @@ const screenshotData = ref<ScreenshotFileItem[]>([]);
 const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
 type WorkspaceCall = {
+	id?: string;
+	displayName?: string;
 	peerStreams?: MediaStream[];
 	localStreams?: MediaStream[];
-	[key: string]: unknown;
+	mutedVideo?: boolean;
+	recordings?: boolean;
+	remoteAudioMuted?: boolean;
+	isHold?: boolean;
+	screenshot?: () => Promise<
+		| {
+				blob: Blob;
+				file?: File;
+		  }
+		| undefined
+	>;
+	startRecord?: () => Promise<void> | void;
+	stopRecord?: () => Promise<void> | void;
 };
 
 const call = computed<WorkspaceCall>(
-	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
+	() => store.getters['features/call/ACTIVE_VIDEO_CALL'] || {},
 );
-const callIsOnHold = computed<boolean>(() => {
-	return store.getters['features/call/CALL_ON_WORKSPACE']?.isHold || false;
-});
+const callIsOnHold = computed<boolean>(() => !!call.value.isHold);
 
 const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 

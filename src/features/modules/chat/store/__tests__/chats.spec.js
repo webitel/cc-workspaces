@@ -170,29 +170,6 @@ describe('features/chat store: actions', () => {
 		);
 	});
 
-	it('CHAT_INSERT_TO_START changes passed chat position to start in chatList array', () => {
-		const oldChat = {
-			id: '1',
-		};
-		const updatedChat = {
-			id: '2',
-		};
-		const oldChatList = [
-			oldChat,
-			updatedChat,
-		];
-		const updatedChatList = [
-			updatedChat,
-			oldChat,
-		];
-		context.state.chatList = oldChatList;
-		chatModule.actions.CHAT_INSERT_TO_START(context, updatedChat);
-		expect(context.commit).toHaveBeenCalledWith(
-			'SET_CHAT_LIST',
-			updatedChatList,
-		);
-	});
-
 	it('SET_WORKSPACE dispatches global SET_WORKSPACE_STATE action', () => {
 		chatModule.actions.SET_WORKSPACE(context, chatOnWorkspace);
 		expect(context.dispatch).toHaveBeenCalledWith(
@@ -249,39 +226,6 @@ describe('features/chat store: actions', () => {
 });
 
 describe('features/chat store: mutations', () => {
-	it('SET_CHAT_LIST sets chatList to state', () => {
-		const chatList = [
-			chatOnWorkspace,
-		];
-		const state = {
-			chatList: [],
-		};
-		chatModule.mutations.SET_CHAT_LIST(state, chatList);
-		expect(state.chatList).toEqual(chatList);
-	});
-
-	it('ADD_CHAT pushes new chat to chatList', () => {
-		const chatList = [
-			chatOnWorkspace,
-		];
-		const state = {
-			chatList: [],
-		};
-		chatModule.mutations.ADD_CHAT(state, chatOnWorkspace);
-		expect(state.chatList).toEqual(chatList);
-	});
-
-	it('REMOVE_CHAT removes existing chat from chatList', () => {
-		const chatList = [];
-		const state = {
-			chatList: [
-				chatOnWorkspace,
-			],
-		};
-		chatModule.mutations.REMOVE_CHAT(state, chatOnWorkspace);
-		expect(state.chatList).toEqual(chatList);
-	});
-
 	it('SET_MEDIA_VIEW sets passed message to mediaView state prop', () => {
 		const message = {
 			id: '1',

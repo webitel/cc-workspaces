@@ -32,7 +32,7 @@ import { useUserinfoStore } from '../../../../../../../../userinfo/userinfoStore
 
 const props = withDefaults(
 	defineProps<{
-		size?: string;
+		size?: ComponentSize;
 	}>(),
 	{
 		size: ComponentSize.MD,

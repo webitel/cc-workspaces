@@ -1,9 +1,19 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
-import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
+import {
+	markRaw,
+	reactive,
+	readonly,
+	ref,
+	shallowReactive,
+	shallowRef,
+} from 'vue';
 import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
+import { getExternalSoftphoneConfig } from '../external-softphone/config';
+import { useExternalSoftphone } from '../external-softphone/useExternalSoftphone';
+import { endpoint } from './endpoint';
 import { useWebSocketLatency } from './useWebSocketLatency';
 import websocketErrorEventHandler from './websocketErrorEventHandler';
 
@@ -27,7 +37,8 @@ type EventMap = {
 	[WebSocketClientEvent.Error]: EventCallback<unknown>;
 };
 
-let client: Client | null = null;
+// internal only: the instance must not get into root state (devtools snapshots it on every mutation)
+const client = shallowRef<Client | null>(null);
 const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 
 let clientInitPromise: Promise<Client> | null = null;
@@ -49,18 +60,6 @@ const {
 } = useWebSocketLatency();
 
 /* ============================================================================
- * Environment
- * ========================================================================== */
-
-const { hostname, protocol } = window.location;
-const origin = `${protocol}//${hostname}`.replace(/^http/, 'ws');
-
-const endpoint =
-	import.meta.env.MODE === 'production'
-		? `${origin}/ws`
-		: import.meta.env.VITE_WEB_SOCKET_URL;
-
-/* ============================================================================
  * Helpers
  * ========================================================================== */
 
@@ -69,16 +68,13 @@ function emit<K extends keyof EventMap>(
 	payload: Parameters<EventMap[K]>[0],
 ) {
 	listeners[event].forEach((cb) => {
-		cb(payload);
+		(cb as EventCallback)(payload);
 	});
 }
 
 type CliConfig = {
 	registerWebDevice?: boolean;
 	debug?: boolean;
-	echoCancellation?: boolean;
-	noiseSuppression?: boolean;
-	autoGainControl?: boolean;
 };
 
 function getCliConfig(): CliConfig {
@@ -199,7 +195,14 @@ async function createClient(): Promise<Client> {
 	const generation = ++clientGenerationCount;
 	const token = localStorage.getItem('access-token');
 	const cliConfig = getCliConfig();
-	const browserPermissions = await getBrowserPermissions();
+	// external softphone mode: the local utility is the SIP endpoint, the
+	// browser is control-only — no web device, no microphone needed
+	const externalSoftphone = getExternalSoftphoneConfig();
+	const browserPermissions = externalSoftphone.enabled
+		? {
+				micGranted: false,
+			}
+		: await getBrowserPermissions();
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
 	// const cli = new Client(config);
@@ -208,18 +211,19 @@ async function createClient(): Promise<Client> {
 			endpoint,
 			token,
 			registerWebDevice:
+				!externalSoftphone.enabled &&
 				(cliConfig.registerWebDevice ?? true) &&
 				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
-			echoCancellation: cliConfig.echoCancellation,
-			noiseSuppression: cliConfig.noiseSuppression,
-			autoGainControl: cliConfig.autoGainControl,
 		}),
 	);
 
 	// why reactive? https://github.com/vuejs/core/discussions/7811#discussioncomment-5181921
-	cli.conversationStore = reactive(cli.conversationStore);
-	cli.callStore = reactive(cli.callStore);
+	// Bracket access: conversationStore/callStore are declared private on the
+	// webitel-sdk Client class, but this reactive-wrapping is an intentional
+	// documented pattern that must touch them from outside.
+	cli['conversationStore'] = reactive(cli['conversationStore']);
+	cli['callStore'] = reactive(cli['callStore']);
 
 	attachCoreHandlers(cli, generation);
 
@@ -229,7 +233,13 @@ async function createClient(): Promise<Client> {
 	await cli.auth();
 
 	emit(WebSocketClientEvent.AfterAuth, cli);
-	await markAsyncPhoneRaw(cli);
+	if (externalSoftphone.enabled) {
+		// attaches the RemotePhone and hands the token to the local utility;
+		// no phone.ua will ever exist, so markAsyncPhoneRaw is skipped
+		useExternalSoftphone().start(cli);
+	} else {
+		await markAsyncPhoneRaw(cli);
+	}
 
 	(
 		window as unknown as {
@@ -240,15 +250,18 @@ async function createClient(): Promise<Client> {
 }
 
 async function destroyClient() {
-	if (!client) return;
+	if (!client.value) return;
 
 	try {
 		stopLatencyTracking();
-		await client.destroy?.();
+		// drop the external-softphone reference so a later utility `state`
+		// message can't re-attach the phone onto this destroyed client
+		useExternalSoftphone().clearClient();
+		await client.value.destroy?.();
 	} catch (e) {
 		console.warn('[WS] destroy error', e);
 	} finally {
-		client = null;
+		client.value = null;
 		state.value = WebSocketConnectionState.Disconnected;
 		(
 			window as unknown as {
@@ -296,22 +309,22 @@ async function getCliInstance({
 } = {}): Promise<Client> {
 	if (
 		!forceReconnect &&
-		client &&
+		client.value &&
 		state.value === WebSocketConnectionState.Connected
 	) {
-		return client;
+		return client.value;
 	}
 
 	if (clientInitPromise) return clientInitPromise;
 
-	state.value = client
+	state.value = client.value
 		? WebSocketConnectionState.Reconnecting
 		: WebSocketConnectionState.Connecting;
 
 	clientInitPromise = (async () => {
 		try {
 			const cli = await createClient();
-			client = cli;
+			client.value = cli;
 			state.value = WebSocketConnectionState.Connected;
 			return cli;
 		} finally {
@@ -337,7 +350,8 @@ export function useWebSocketClient() {
 	}
 
 	return {
-		client,
+		// sync accessor instead of the ref: keeps the instance out of root state
+		getClientSync: () => client.value,
 		state: readonly(state),
 
 		getCliInstance,

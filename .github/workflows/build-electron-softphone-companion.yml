@@ -1,0 +1,149 @@
+name: build electron-softphone-companion
+
+# Builds the Webitel Softphone companion utility for macOS, Linux and
+# Windows. Manually triggered.
+#
+# Assumes electron-sip prebuilds are committed under
+# packages/electron-sip/prebuilds/<platform>-<arch>/ so
+# install.js picks them up at `npm ci` time and skips the native compile.
+# If a prebuild is missing for a runner's platform, install.js falls back to
+# node-gyp + pjproject and the job will fail — produce prebuilds via the
+# build-electron-sip workflow and commit them first.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 'lts/*'
+
+defaults:
+  run:
+    working-directory: packages/electron-softphone-companion
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # macOS arm64. electron-builder's mac target rejects PNG < 512x512, and the
+  # repo only ships a 256x256 app-icon.png with no .icns, so we generate one.
+  # Signed with Developer ID cert + notarized via Apple notary service.
+  # ---------------------------------------------------------------------------
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Generate app-icon.icns
+        run: |
+          cd img
+          rm -rf app-icon.iconset
+          mkdir -p app-icon.iconset
+          sips -z 16 16     app-icon.png --out app-icon.iconset/icon_16x16.png
+          sips -z 32 32     app-icon.png --out app-icon.iconset/icon_16x16@2x.png
+          sips -z 32 32     app-icon.png --out app-icon.iconset/icon_32x32.png
+          sips -z 64 64     app-icon.png --out app-icon.iconset/icon_32x32@2x.png
+          sips -z 128 128   app-icon.png --out app-icon.iconset/icon_128x128.png
+          sips -z 256 256   app-icon.png --out app-icon.iconset/icon_128x128@2x.png
+          sips -z 256 256   app-icon.png --out app-icon.iconset/icon_256x256.png
+          sips -z 512 512   app-icon.png --out app-icon.iconset/icon_256x256@2x.png
+          sips -z 512 512   app-icon.png --out app-icon.iconset/icon_512x512.png
+          sips -z 1024 1024 app-icon.png --out app-icon.iconset/icon_512x512@2x.png
+          iconutil -c icns app-icon.iconset -o app-icon.icns
+          rm -rf app-icon.iconset
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Build, sign, notarize (mac)
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run distm
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: electron-softphone-companion-mac
+          path: |
+            packages/electron-softphone-companion/dist/*.dmg
+            packages/electron-softphone-companion/dist/*.zip
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest-mac.yml
+
+  # ---------------------------------------------------------------------------
+  # Linux x64 — AppImage.
+  # ---------------------------------------------------------------------------
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Build (linux)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run distl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: electron-softphone-companion-linux
+          path: |
+            packages/electron-softphone-companion/dist/*.AppImage
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest-linux.yml
+
+  # ---------------------------------------------------------------------------
+  # Windows x64 — nsis/zip.
+  # ---------------------------------------------------------------------------
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Build (windows)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: electron-softphone-companion-windows
+          path: |
+            packages/electron-softphone-companion/dist/*.exe
+            packages/electron-softphone-companion/dist/*.zip
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest.yml

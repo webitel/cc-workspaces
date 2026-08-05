@@ -1,6 +1,6 @@
 {
 	"name": "webitel",
-	"version": "1.4.0",
+	"version": "1.4.3",
 	"description": "Webitel Agent Workspace",
 	"author": {
 		"name": "Webitel Team",
@@ -28,6 +28,7 @@
 	"build": {
 		"asar": false,
 		"npmRebuild": false,
+		"beforePack": "./build/ensureElectronSipPrebuild.js",
 		"files": [
 			"out/**/*",
 			"src/renderer/**/*",
@@ -35,7 +36,8 @@
 			"package.json",
 			"!node_modules/**/*.d.ts",
 			"!node_modules/**/*.d.ts.map",
-			"!node_modules/**/*.js.map"
+			"!node_modules/**/*.js.map",
+			"!node_modules/electron-sip/build/**"
 		],
 		"win": {
 			"target": [
@@ -65,14 +67,12 @@
 				{
 					"target": "dmg",
 					"arch": [
-						"x64",
 						"arm64"
 					]
 				},
 				{
 					"target": "zip",
 					"arch": [
-						"x64",
 						"arm64"
 					]
 				}
@@ -104,8 +104,8 @@
 		"@electron/remote": "^0.0.1",
 		"@types/node": "^24.5.2",
 		"@vitejs/plugin-vue": "^6.0.1",
-		"electron": "^35.7.5",
-		"electron-builder": "26.0.12",
+		"electron": "^43.2.0",
+		"electron-builder": "^26.15.7",
 		"electron-packager": "^17.1.2",
 		"electron-vite": "^6.0.0-beta.1",
 		"http-server": "^14.1.1",
@@ -115,13 +115,17 @@
 		"vue-tsc": "^3.1.1"
 	},
 	"dependencies": {
+		"@vue/compat": "^3.5.40",
+		"@webitel/ui-sdk": "^26.6.99",
 		"axios": "^1.13.2",
+		"clipboard-copy": "^4.0.1",
 		"dotenv": "^17.2.3",
 		"electron-localstorage": "^1.0.5",
 		"electron-positioner": "^4.1.0",
-		"electron-sip": "file:./electron-sip",
-		"electron-updater": "^6.6.2",
-		"markdown-it": "^12.0.6",
+		"electron-sip": "file:../electron-sip",
+		"electron-updater": "^6.8.9",
+		"markdown-it": "^15.0.0",
+		"mitt": "^3.0.1",
 		"rimraf": "^6.0.1",
 		"tslib": "^2.3.1",
 		"vue": "^3.5.22",
