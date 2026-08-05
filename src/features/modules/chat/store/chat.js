@@ -4,6 +4,7 @@ import { ConversationState } from 'webitel-sdk';
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
+import active from '../modules/active/store/active';
 import closed from '../modules/closed/store/closed';
 import manual from '../modules/manual/store/manual';
 import chatHistory from './chat-history';
@@ -12,10 +13,6 @@ import clientHandlers from './client-handlers';
 import unseen from './unseen';
 
 const { t } = i18n.global;
-
-const state = {
-	chatList: [],
-};
 
 const getters = {
 	CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) =>
@@ -43,14 +40,6 @@ const getters = {
 
 const actions = {
 	...clientHandlers.actions,
-
-	SET_CHAT_LIST: (context, chatList) => {
-		context.commit('SET_CHAT_LIST', chatList);
-	},
-
-	ADD_CHAT: (context, chat) => {
-		context.commit('ADD_CHAT', chat);
-	},
 
 	ACCEPT: async (context) => {
 		await context.getters.CHAT_ON_WORKSPACE.join();
@@ -126,14 +115,6 @@ const actions = {
 		}
 	},
 
-	CHAT_INSERT_TO_START: (context, chat) => {
-		const chatPosition = context.state.chatList.indexOf(chat);
-		const chatList = context.state.chatList.slice();
-		chatList.splice(chatPosition, 1);
-		chatList.unshift(chat);
-		context.commit('SET_CHAT_LIST', chatList);
-	},
-
 	SET_WORKSPACE: (context, chat) =>
 		context.dispatch(
 			'workspace/SET_WORKSPACE_STATE',
@@ -156,15 +137,6 @@ const actions = {
 };
 
 const mutations = {
-	SET_CHAT_LIST: (state, chatList) => {
-		state.chatList = chatList;
-	},
-	ADD_CHAT: (state, chat) => {
-		state.chatList.push(chat);
-	},
-	REMOVE_CHAT: (state, removedChat) => {
-		state.chatList = state.chatList.filter((chat) => chat !== removedChat);
-	},
 	SET_MEDIA_VIEW: (state, mediaView) => {
 		state.mediaView = mediaView;
 	},
@@ -172,11 +144,11 @@ const mutations = {
 
 export default {
 	namespaced: true,
-	state,
 	getters,
 	actions,
 	mutations,
 	modules: {
+		active,
 		manual,
 		closed,
 		chatHistory,

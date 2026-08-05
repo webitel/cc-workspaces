@@ -12,15 +12,12 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-      <quick-replies
-        v-if="showQuickReplies"
-        :search="searchReply"
-        @close="closeQuickRepliesPanel"
-        @select="applyQuickReply"
-      />
+
+    <div class="chat-messaging__panes">
       <div
-        v-if="!showQuickReplies"
         class="chat-messaging__messaging chat-messages-container"
+        :class="{ 'chat-messaging__messaging--covered': showQuickReplies }"
+        :aria-hidden="showQuickReplies"
       >
         <chat-history
           v-if="contact?.id"
@@ -32,11 +29,22 @@
           :size="size"
         />
       </div>
+
+      <quick-replies-transition>
+        <quick-replies
+          v-if="showQuickReplies"
+          class="chat-messaging__quick-replies"
+          :search="searchReply"
+          @close="closeQuickRepliesPanel"
+          @select="applyQuickReply"
+        />
+      </quick-replies-transition>
+    </div>
+
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
-
       <chat-helper-list
         v-if="isOpenAutocomplete"
         :list="autocompleteList"
@@ -58,6 +66,7 @@
         @update:model-value="inputMessage"
         @blur="showQuickReplies && onBlur()"
       />
+
       <div class="chat-messaging-text-entry__actions">
         <wt-button
             variant="outlined"
@@ -127,6 +136,7 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { useQuickReplies } from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
+import QuickRepliesTransition from './quick-replies/quick-replies-transition.vue';
 import type { ChatHelperItem } from './types/ChatHelperItem.types';
 
 const props = withDefaults(
@@ -386,11 +396,30 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     }
   }
 
+  &__panes {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   &__messaging {
     flex-direction: column;
     width: 100%;
     max-width: 100%;
+    height: 100%;
     box-sizing: border-box;
+  }
+
+  &__messaging--covered {
+    pointer-events: none;
+  }
+
+  &__quick-replies {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    background-color: var(--content-wrapper-color);
   }
 }
 

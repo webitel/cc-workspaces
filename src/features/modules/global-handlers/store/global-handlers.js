@@ -87,7 +87,7 @@ const actions = {
 		context.commit('features/call/CLEAR_CALL_INFO', null, {
 			root: true,
 		});
-		context.dispatch('features/chat/SET_CHAT_LIST', [], {
+		context.commit('features/chat/active/SET_VISIBLE_CHAT_IDS', [], {
 			root: true,
 		});
 		context.commit('features/job/SET_JOB_LIST', [], {

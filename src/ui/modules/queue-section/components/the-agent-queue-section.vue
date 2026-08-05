@@ -115,7 +115,9 @@ const callList = computed(() => store.state.features?.call?.callList || []);
 const manualCallsList = computed(
 	() => store.state.features?.call?.manual?.manualList || [],
 );
-const chatList = computed(() => store.state.features?.chat?.chatList || []);
+const chatList = computed(
+	() => store.getters['features/chat/active/VISIBLE_CHAT_LIST'],
+);
 const manualChatList = computed(
 	() => store.state.features?.chat?.manual?.manualList || [],
 );
