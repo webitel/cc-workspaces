@@ -17,7 +17,7 @@
       />
       <wt-divider v-if="taskList.length > index + 1"/>
     </div>
-    <load-more-button v-show="nextClosedChats" :load-more="loadNextClosedChats" />
+    <load-more-button v-show="next" :load-more="loadMore" />
   </task-queue-container>
 </template>
 
@@ -38,6 +38,7 @@ const props = defineProps({
 });
 
 const store = useStore();
+const activeChatsNamespace = 'features/chat/active';
 const closedChatsNamespace = 'features/chat/closed/unprocessed';
 
 const taskOnWorkspace = computed(
@@ -55,14 +56,22 @@ const taskList = computed(() => [
 	...unprocessedClosedChats.value,
 ]);
 
+const nextActiveChats = computed(() => store.state.features.chat.active.next);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
+const next = computed(() => nextActiveChats.value || nextClosedChats.value);
 
+const loadNextActiveChats = () =>
+	store.dispatch(`${activeChatsNamespace}/LOAD_NEXT_ACTIVE_CHATS`);
 const loadClosedChatsList = () =>
 	store.dispatch(`${closedChatsNamespace}/LOAD_UNPROCESSED_CHATS`);
 const loadNextClosedChats = () =>
 	store.dispatch(`${closedChatsNamespace}/LOAD_NEXT_UNPROCESSED_CHATS`);
+
+// active chats first, closed ones only after active pages run out
+const loadMore = () =>
+	nextActiveChats.value ? loadNextActiveChats() : loadNextClosedChats();
 
 const getComponent = (task) =>
 	task.closedAt && task.closeReason ? ClosedPreview : ActivePreview;

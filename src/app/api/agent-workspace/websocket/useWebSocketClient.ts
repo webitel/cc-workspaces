@@ -37,7 +37,7 @@ type EventMap = {
 	[WebSocketClientEvent.Error]: EventCallback<unknown>;
 };
 
-// shallowRef, so root state sees the live instance after reconnect
+// internal only: the instance must not get into root state (devtools snapshots it on every mutation)
 const client = shallowRef<Client | null>(null);
 const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 
@@ -350,7 +350,8 @@ export function useWebSocketClient() {
 	}
 
 	return {
-		client,
+		// sync accessor instead of the ref: keeps the instance out of root state
+		getClientSync: () => client.value,
 		state: readonly(state),
 
 		getCliInstance,

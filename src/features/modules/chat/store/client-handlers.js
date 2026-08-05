@@ -1,19 +1,8 @@
 import { ChatActions } from 'webitel-sdk';
-// import { ChatDialogsAPI } from '@webitel/api-services/api';
 
 import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
 const chatHandler = (context) => async (action, chat) => {
-	// TODO: тимчасовий дебаг — чи доходять WS-події до чатів, засетаних з REST
-	console.log('[ws event]', action, {
-		origin: chat.data?.origin || 'ws',
-		conversationId: chat.conversationId,
-		channelId: chat.channelId,
-		state: chat.state,
-		storeKey: chat.id,
-		membersId: chat.membersId,
-	});
-
 	switch (action) {
 		case ChatActions.UserInvite:
 			context.dispatch('HANDLE_INVITE_ACTION', {
