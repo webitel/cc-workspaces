@@ -63,25 +63,23 @@ const actions = {
 		),
 
 	LOAD_CLOSED_CHAT: async (context, chat) => {
+		let chatWithMessages = chat;
 		try {
 			const { items } = await CatalogAPI.getChatMessagesList({
-				chatId: chat.id,
+				chatId: chat.conversationId || chat.id,
 			});
 
-			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			context.commit(
-				'features/chat/chatHistory/SET_CHAT_HISTORY',
-				formatChatMessages(items),
-				{
-					root: true,
-				},
-			);
+			// chat.messages is read-only, so clone with messages instead of mutating it
+			chatWithMessages = {
+				...chat,
+				messages: formatChatMessages(items),
+			};
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
 			]);
 		} finally {
-			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
+			await context.dispatch('features/chat/SET_WORKSPACE', chatWithMessages, {
 				root: true,
 			});
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
