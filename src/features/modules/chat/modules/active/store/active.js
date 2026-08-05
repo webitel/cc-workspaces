@@ -1,8 +1,6 @@
+import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
-
-// import { debugActiveChatsMapping } from '../scripts/debugActiveChatsMapping';
-// import search from './search';
 
 const state = {
 	visibleChatIds: [],
@@ -14,18 +12,18 @@ const state = {
 
 const getters = {
 	VISIBLE_CHAT_LIST: (state, getters, rootState, rootGetters) => {
-		const client = rootState.client.client;
-		console.log('VISIBLE_CHAT_LIST client:', client);
+		// reactive dep: `state` changes exactly when the instance appears/disappears
+		if (rootState.client.state !== WebSocketConnectionState.Connected)
+			return [];
+
+		const client = rootState.client.getClientSync();
 		if (!client) return [];
 
-		const chats = state.visibleChatIds
+		return state.visibleChatIds
 			.map((id) =>
 				client.allConversations().find((chat) => chat.conversationId === id),
 			)
 			.filter(Boolean);
-
-		console.log('VISIBLE_CHAT_LIST', chats);
-		return chats;
 	},
 };
 
@@ -36,7 +34,8 @@ const actions = {
 	RELOAD_CHAT_LIST: async (context) => {
 		context.commit('SET_IS_LOADING', true);
 		context.commit('SET_VISIBLE_CHAT_IDS', []);
-		const reloadPageSize = 50;
+		context.commit('SET_PAGE', 1);
+		const reloadPageSize = 40;
 		let hasNext;
 		let localPage = 1;
 
@@ -47,14 +46,21 @@ const actions = {
 					size: reloadPageSize,
 				});
 
-				const newIds = dialogs.map((dialog) => dialog.id);
-
-				context.commit('SET_VISIBLE_CHAT_IDS', [
-					...context.state.visibleChatIds,
-					...newIds,
-				]);
-
 				await context.dispatch('ADD_CHAT_LIST_TO_CLIENT_STORE', dialogs);
+
+				// first batch already holds the visible page — no extra request for it
+				if (localPage === 1) {
+					const ids = dialogs
+						.slice(0, context.state.size)
+						.map((dialog) => dialog.id);
+
+					context.commit('SET_VISIBLE_CHAT_IDS', ids);
+					context.commit(
+						'SET_NEXT',
+						dialogs.length > context.state.size || next,
+					);
+				}
+
 				hasNext = next;
 				localPage += 1;
 			}
@@ -64,7 +70,9 @@ const actions = {
 	},
 
 	ADD_CHAT_LIST_TO_CLIENT_STORE: async (context, chats) => {
-		const client = context.rootState.client.client;
+		const client = context.rootState.client.getClientSync();
+		if (!client) return;
+
 		const existingIds = client
 			.allConversations()
 			.map((chat) => chat.conversationId);
@@ -81,29 +89,6 @@ const actions = {
 
 			client.conversationStore.set(conversation.id, conversation);
 		});
-
-		// debugActiveChatsMapping({
-		// 	client,
-		// 	dialogs,
-		// 	skippedAsExisting,
-		// 	skippedAsNull,
-		// });
-	},
-	LOAD_ACTIVE_CHATS: async (context) => {
-		try {
-			context.commit('SET_IS_LOADING', true);
-			const { items: dialogs, next } = await ActiveChatsAPI.getList({
-				page: context.state.page,
-				size: context.state.size,
-			});
-
-			const ids = dialogs.map((dialog) => dialog.id);
-
-			context.commit('SET_VISIBLE_CHAT_IDS', ids);
-			context.commit('SET_NEXT', next);
-		} finally {
-			context.commit('SET_IS_LOADING', false);
-		}
 	},
 	LOAD_NEXT_ACTIVE_CHATS: async (context) => {
 		if (!context.state.next || context.state.isLoading) return;
@@ -121,7 +106,7 @@ const actions = {
 
 			context.commit('SET_VISIBLE_CHAT_IDS', [
 				...context.state.visibleChatIds,
-				...ids.filter((id) => !context.state.visibleChatIds.includes(id)),
+				...ids,
 			]);
 			context.commit('SET_PAGE', nextPage);
 			context.commit('SET_NEXT', next);
@@ -149,7 +134,9 @@ const actions = {
 
 const mutations = {
 	SET_VISIBLE_CHAT_IDS: (state, ids) => {
-		state.visibleChatIds = ids;
+		state.visibleChatIds = [
+			...new Set(ids),
+		];
 	},
 	SET_PAGE: (state, page) => {
 		state.page = page;
@@ -168,7 +155,4 @@ export default {
 	getters,
 	actions,
 	mutations,
-	// modules: {
-	// 	search,
-	// },
 };

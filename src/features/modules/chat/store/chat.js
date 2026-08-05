@@ -11,7 +11,6 @@ import chatHistory from './chat-history';
 import chatMedia from './chat-media';
 import clientHandlers from './client-handlers';
 import unseen from './unseen';
-import { ChatDialogsAPI } from '@webitel/api-services/api';
 
 const { t } = i18n.global;
 
@@ -20,7 +19,6 @@ const getters = {
 		rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
 		rootGetters['workspace/TASK_ON_WORKSPACE'],
 	ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-		console.log(getters.CHAT_ON_WORKSPACE.id);
 		const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
 		return [
 			...rootState.features.chat.chatHistory.chatHistoryMessages,
