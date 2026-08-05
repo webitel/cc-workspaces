@@ -60,7 +60,7 @@ const nextActiveChats = computed(() => store.state.features.chat.active.next);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
-const next = computed(() => nextActiveChats.value || nextClosedChats.value);
+const next = computed(() => nextActiveChats.value);
 
 const loadNextActiveChats = () =>
 	store.dispatch(`${activeChatsNamespace}/LOAD_NEXT_ACTIVE_CHATS`);
