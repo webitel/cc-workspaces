@@ -127,12 +127,15 @@ const emit = defineEmits([
 
 const wait = computed(() => {
 	const waitTime = props.task.wait;
-	const minutes = Math.floor(waitTime / 60);
-	let seconds = waitTime % 60;
-	if (seconds < 10) {
-		seconds = `0${seconds}`;
-	}
-	return `${minutes}:${seconds}`;
+
+	const hours = Math.floor(waitTime / 3600);
+	const minutes = Math.floor((waitTime % 3600) / 60);
+	const seconds = Math.floor(waitTime % 60);
+
+	const mm = String(minutes).padStart(2, '0');
+	const ss = String(seconds).padStart(2, '0');
+
+	return `${hours}:${mm}:${ss}`;
 });
 
 function accept() {
