@@ -83,7 +83,10 @@ describe('features/chat store client handlers: actions', () => {
 			action: ChatActions.Message,
 			chat,
 		});
-		expect(context.dispatch).lastCalledWith('CHAT_INSERT_TO_START', chat);
+		expect(context.dispatch).lastCalledWith(
+			'active/CHAT_INSERT_TO_START',
+			chat,
+		);
 	});
 
 	it('HANDLE_MESSAGE_ACTION dispatches HANDLE_CHAT_EVENT action with action and chat params', async () => {
@@ -106,12 +109,15 @@ describe('features/chat store client handlers: actions', () => {
 		});
 	});
 
-	it('HANDLE_INVITE_ACTION commits ADD_CHAT mutation with invited chat', () => {
+	it('HANDLE_INVITE_ACTION dispatches active/CHAT_INSERT_TO_START with invited chat', () => {
 		chatModule.actions.HANDLE_INVITE_ACTION(context, {
 			action: ChatActions.Message,
 			chat,
 		});
-		expect(context.dispatch).toHaveBeenCalledWith('ADD_CHAT', chat);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'active/CHAT_INSERT_TO_START',
+			chat,
+		);
 	});
 
 	it('HANDLE_INVITE_ACTION calls SET_WORKSPACE with chat if no task on workspace', () => {
