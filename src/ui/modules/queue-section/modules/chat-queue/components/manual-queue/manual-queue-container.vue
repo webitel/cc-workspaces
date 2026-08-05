@@ -1,8 +1,7 @@
 <template>
   <task-queue-container :empty="!manualList.length">
-    <div v-for="(task, key) of manualList" class="manual-queue-container">
+    <div v-for="(task, key) of manualList" :key="task.id" class="manual-queue-container">
       <manual-preview
-        :key="task.id"
         :task="task"
         :index="key"
         :size="size"
