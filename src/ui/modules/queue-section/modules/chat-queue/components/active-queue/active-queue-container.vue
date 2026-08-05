@@ -3,6 +3,12 @@
     class="active-queue-container"
     :empty="!taskList.length"
   >
+    <wt-search-bar
+      :size="size"
+      :value="searchQuery"
+      debounce
+      @input="setSearchQuery"
+    />
     <div
       v-for="(task, index) of taskList"
       :key="task.id"
@@ -39,6 +45,7 @@ const props = defineProps({
 
 const store = useStore();
 const activeChatsNamespace = 'features/chat/active';
+const searchNamespace = 'features/chat/active/search';
 const closedChatsNamespace = 'features/chat/closed/unprocessed';
 
 const taskOnWorkspace = computed(
@@ -51,16 +58,32 @@ const activeChats = computed(
 const unprocessedClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.chatsList,
 );
-const taskList = computed(() => [
-	...activeChats.value,
-	...unprocessedClosedChats.value,
-]);
+const searchQuery = computed(
+	() => store.state.features.chat.active.search.query,
+);
+const isSearchActive = computed(
+	() => store.getters[`${searchNamespace}/IS_SEARCH_ACTIVE`],
+);
+const searchResults = computed(
+	() => store.getters[`${searchNamespace}/SEARCH_RESULTS`],
+);
+const setSearchQuery = (value) =>
+	store.dispatch(`${searchNamespace}/SET_QUERY`, value);
+
+const taskList = computed(() =>
+	isSearchActive.value
+		? searchResults.value
+		: [
+				...activeChats.value,
+				...unprocessedClosedChats.value,
+			],
+);
 
 const nextActiveChats = computed(() => store.state.features.chat.active.next);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
-const next = computed(() => nextActiveChats.value);
+const next = computed(() => !isSearchActive.value && nextActiveChats.value);
 
 const loadNextActiveChats = () =>
 	store.dispatch(`${activeChatsNamespace}/LOAD_NEXT_ACTIVE_CHATS`);
