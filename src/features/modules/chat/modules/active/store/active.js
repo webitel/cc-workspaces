@@ -1,6 +1,7 @@
 import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
+import search from './search';
 
 const state = {
 	visibleChatIds: [],
@@ -19,11 +20,13 @@ const getters = {
 		const client = rootState.client.getClientSync();
 		if (!client) return [];
 
-		return state.visibleChatIds
+		const chats = state.visibleChatIds
 			.map((id) =>
 				client.allConversations().find((chat) => chat.conversationId === id),
 			)
 			.filter(Boolean);
+		console.log('chats', chats);
+		return chats;
 	},
 };
 
@@ -155,4 +158,7 @@ export default {
 	getters,
 	actions,
 	mutations,
+	modules: {
+		search,
+	},
 };
