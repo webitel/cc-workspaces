@@ -118,7 +118,7 @@ const actions = {
 
 		while (stateHistory.length) {
 			const { type, task } = stateHistory.at(-1);
-			if (context.rootState.features[type][`${type}List`].includes(task)) {
+			if (context.rootState.features[type][`${type}List`]?.includes(task)) {
 				break;
 			}
 			stateHistory.pop();
