@@ -1,4 +1,5 @@
 import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
+import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 import search from './search';
@@ -41,12 +42,14 @@ const actions = {
 		const reloadPageSize = 40;
 		let hasNext;
 		let localPage = 1;
+		const { userId } = useUserinfoStore();
 
 		try {
 			while (hasNext || localPage === 1) {
 				const { items: dialogs, next } = await ActiveChatsAPI.getList({
 					page: localPage,
 					size: reloadPageSize,
+					peerId: userId,
 				});
 
 				await context.dispatch('ADD_CHAT_LIST_TO_CLIENT_STORE', dialogs);
@@ -98,11 +101,13 @@ const actions = {
 
 		const nextPage = context.state.page + 1;
 		context.commit('SET_IS_LOADING', true);
+		const { userId } = useUserinfoStore();
 
 		try {
 			const { items: dialogs, next } = await ActiveChatsAPI.getList({
 				page: nextPage,
 				size: context.state.size,
+				peerId: userId,
 			});
 
 			const ids = dialogs.map((dialog) => dialog.id);
