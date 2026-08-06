@@ -72,6 +72,7 @@ const getActiveChatsList = async (params = {}) => {
 			online: true,
 			...params,
 			q: params.search,
+			'peer.id': params.peerId,
 			fields: params.fields?.length ? params.fields : DEFAULT_FIELDS,
 		}),
 		starToSearch('q'),
