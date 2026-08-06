@@ -1,33 +1,34 @@
 <template>
-  <task-queue-container
-    class="active-queue-container"
-    :empty="!taskList.length && !isSearchLoading"
-  >
+  <section class="active-queue-container">
     <wt-search-bar
       :size="size"
       :value="searchQuery"
       debounce
       @input="setSearchQuery"
     />
-    <wt-loader v-if="isSearchLoading" />
-    <template v-else>
-      <div
-        v-for="(task, index) of taskList"
-        :key="task.id"
-        class="active-queue-container__wrapper"
-      >
-        <component
-          :is="getComponent(task)"
-          :task="task"
-          :opened="task.id === taskOnWorkspace.id"
-          :size="size"
-          @click="openTask(task)"
-        />
-        <wt-divider v-if="taskList.length > index + 1"/>
-      </div>
-    </template>
-    <load-more-button v-show="next" :load-more="loadMore" />
-  </task-queue-container>
+    <task-queue-container
+      :empty="!taskList.length && !isSearchLoading"
+    >
+      <wt-loader v-if="isSearchLoading" />
+      <template v-else>
+        <div
+          v-for="(task, index) of taskList"
+          :key="task.id"
+          class="active-queue-container__chat"
+        >
+          <component
+            :is="getComponent(task)"
+            :task="task"
+            :opened="task.id === taskOnWorkspace.id"
+            :size="size"
+            @click="openTask(task)"
+          />
+          <wt-divider v-if="taskList.length > index + 1"/>
+        </div>
+      </template>
+      <load-more-button v-show="next" :load-more="loadMore" />
+    </task-queue-container>
+  </section>
 </template>
 
 <script setup>
@@ -114,10 +115,15 @@ loadClosedChatsList();
 
 <style lang="scss" scoped>
   .active-queue-container {
-    &__wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: var(--spacing-xs);
+  }
+
+  .active-queue-container__chat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
   }
 </style>
