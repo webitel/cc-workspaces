@@ -6,18 +6,18 @@ const state = {
 };
 
 const getters = {
-	IS_SEARCH_ACTIVE: (state) => Boolean(state.query),
+	IS_SEARCH_ACTIVE: (state) => Boolean(state.query.trim()),
+	IS_SEARCH_LOADING: (state, getters, rootState) =>
+		getters.IS_SEARCH_ACTIVE && rootState.features.chat.active.isLoading,
 	SEARCH_RESULTS: (state, getters, rootState) => {
 		if (!state.query) return [];
 		if (rootState.client.state !== WebSocketConnectionState.Connected)
 			return [];
 
-		rootState.features.chat.active.visibleChatIds;
-
 		const client = rootState.client.getClientSync();
 		if (!client) return [];
 
-		const query = state.query.toLowerCase();
+		const query = state.query.trim().toLowerCase();
 		return client
 			.allConversations()
 			.filter((chat) => getChatPreviewName(chat).toLowerCase().includes(query));
