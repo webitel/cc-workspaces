@@ -1,7 +1,7 @@
 <template>
   <task-queue-container
     class="active-queue-container"
-    :empty="!taskList.length"
+    :empty="!taskList.length && !isSearchLoading"
   >
     <wt-search-bar
       :size="size"
@@ -9,26 +9,29 @@
       debounce
       @input="setSearchQuery"
     />
-    <div
-      v-for="(task, index) of taskList"
-      :key="task.id"
-      class="active-queue-container__wrapper"
-    >
-      <component
-        :is="getComponent(task)"
-        :task="task"
-        :opened="task.id === taskOnWorkspace.id"
-        :size="size"
-        @click="openTask(task)"
-      />
-      <wt-divider v-if="taskList.length > index + 1"/>
-    </div>
+    <wt-loader v-if="isSearchLoading" />
+    <template v-else>
+      <div
+        v-for="(task, index) of taskList"
+        :key="task.id"
+        class="active-queue-container__wrapper"
+      >
+        <component
+          :is="getComponent(task)"
+          :task="task"
+          :opened="task.id === taskOnWorkspace.id"
+          :size="size"
+          @click="openTask(task)"
+        />
+        <wt-divider v-if="taskList.length > index + 1"/>
+      </div>
+    </template>
     <load-more-button v-show="next" :load-more="loadMore" />
   </task-queue-container>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
@@ -64,11 +67,16 @@ const searchQuery = computed(
 const isSearchActive = computed(
 	() => store.getters[`${searchNamespace}/IS_SEARCH_ACTIVE`],
 );
+const isSearchLoading = computed(
+	() => store.getters[`${searchNamespace}/IS_SEARCH_LOADING`],
+);
 const searchResults = computed(
 	() => store.getters[`${searchNamespace}/SEARCH_RESULTS`],
 );
 const setSearchQuery = (value) =>
 	store.dispatch(`${searchNamespace}/SET_QUERY`, value);
+
+onUnmounted(() => store.dispatch(`${searchNamespace}/RESET_SEARCH`));
 
 const taskList = computed(() =>
 	isSearchActive.value

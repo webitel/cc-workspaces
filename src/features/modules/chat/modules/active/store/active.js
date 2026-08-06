@@ -21,13 +21,11 @@ const getters = {
 		const client = rootState.client.getClientSync();
 		if (!client) return [];
 
-		const chats = state.visibleChatIds
+		return state.visibleChatIds
 			.map((id) =>
 				client.allConversations().find((chat) => chat.conversationId === id),
 			)
 			.filter(Boolean);
-		console.log('chats', chats);
-		return chats;
 	},
 };
 
