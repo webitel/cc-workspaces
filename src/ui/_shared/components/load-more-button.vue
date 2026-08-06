@@ -6,7 +6,7 @@
     class="load-more-button"
     @click.prevent="loadMore"
   >
-    {{ $t('reusable.more') }}
+    <span class="typo-button--sm">{{ $t('reusable.more') }}</span>
   </wt-button>
 </template>
 
@@ -24,7 +24,7 @@ const props = defineProps({
   --load-more-min-width: 70px;
 
   min-width: var(--load-more-min-width);
-  margin: var(--spacing-xs) auto 0;
-  font-size: 10px;
+  margin: 0 auto;
 }
 </style>
+ 
