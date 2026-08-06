@@ -21,7 +21,9 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .load-more-button {
-  min-width: 70px;
+  --load-more-min-width: 70px;
+
+  min-width: var(--load-more-min-width);
   margin: var(--spacing-xs) auto 0;
   font-size: 10px;
 }
