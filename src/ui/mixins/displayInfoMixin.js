@@ -1,5 +1,5 @@
-import { getChatPreviewName } from '../../features/modules/chat/scripts/getChatPreviewName.js';
-import { getQueueName } from '../modules/queue-section/modules/_shared/scripts/getQueueName.js';
+import { getChatPreviewName } from '../../features/modules/chat/scripts/getChatPreviewName';
+import { getQueueName } from '../modules/queue-section/modules/_shared/scripts/getQueueName';
 
 export default {
 	computed: {

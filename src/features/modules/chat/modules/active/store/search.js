@@ -1,5 +1,5 @@
 import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
-import { getChatPreviewName } from '../../../scripts/getChatPreviewName.js';
+import { getChatPreviewName } from '../../../scripts/getChatPreviewName';
 
 const state = {
 	query: '',
