@@ -318,6 +318,9 @@ export default {
 			noLicense:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Хабарлама жіберілді, бірақ жеткізілмеді',
+		},
 	},
 	notifications: {
 		message: '{name} жіберген жаңа хабарлама',
