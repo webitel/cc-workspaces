@@ -247,6 +247,7 @@ async function sendMessage() {
 		chat.value.draft = '';
 		await send(draft);
 	} catch (error) {
+		// https://webitel.atlassian.net/browse/WTEL-10102
 		if (error.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
 			eventBus?.$emit('notification', {
 				type: 'error',
@@ -259,7 +260,7 @@ async function sendMessage() {
 		 * no error message for this error - message was sent and will be delivered
 		 * [https://webitel.atlassian.net/browse/WTEL-9952]
 		 */
-		if (error?.detail === ChatSendMessageErrors.PortalNoDeviceConnection) {
+		if (error?.id === ChatSendMessageErrors.PortalNoDeviceConnection) {
 			return;
 		}
 		chat.value.draft = draft;
