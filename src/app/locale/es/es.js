@@ -321,6 +321,9 @@ export default {
 			noLicense:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Mensaje enviado pero no entregado',
+		},
 	},
 	notifications: {
 		message: 'Nuevo mensaje de {name}',

@@ -318,6 +318,9 @@ export default {
 			noLicense:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Tin nhắn đã gửi nhưng không được gửi đến',
+		},
 	},
 	notifications: {
 		message: 'Tin nhắn mới từ {name}',

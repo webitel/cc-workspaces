@@ -323,6 +323,9 @@ export default {
 			noLicense:
 				'Невозможно работать в Workspace. Истёк срок действия лицензии.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Сообщение отправлено, но не получено',
+		},
 	},
 	notifications: {
 		message: 'Новое сообщение от {name}',

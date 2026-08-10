@@ -243,6 +243,13 @@ async function sendMessage() {
 		chat.value.draft = '';
 		await send(draft);
 	} catch (error) {
+		if (error.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
+			eventBus?.$emit('notification', {
+				type: 'error',
+				text: t('error.chat.webhookSiteClosedButMsgSent'),
+			});
+			return;
+		}
 		/**
 		 * @author PolinaSukhorukova-webitel
 		 * no error message for this error - message was sent and will be delivered

@@ -317,6 +317,9 @@ export default {
 		endpoint: {
 			noLicense: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Xabar yuborildi, lekin yetkazilmadi',
+		},
 	},
 	notifications: {
 		message: '{name} dan yangi xabar',

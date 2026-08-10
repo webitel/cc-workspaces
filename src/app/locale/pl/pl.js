@@ -320,6 +320,9 @@ export default {
 			noLicense:
 				'Nie możesz pracować w Workspace, ponieważ Twoja licencja wygasła.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Wiadomość wysłana, ale niedostarczona',
+		},
 	},
 	notifications: {
 		message: 'Nowa wiadomość od {name}',

@@ -323,6 +323,9 @@ export default {
 		endpoint: {
 			noLicense: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Повідомлення відправлене, але не отримане',
+		},
 	},
 	notifications: {
 		message: 'Нове повідомлення від {name}',
