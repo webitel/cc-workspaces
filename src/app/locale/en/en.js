@@ -323,6 +323,9 @@ export default {
 			noLicense:
 				'You can not work in Workspace because your license has expired.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Message sent but not delivered',
+		},
 	},
 	notifications: {
 		message: 'New message from {name}',

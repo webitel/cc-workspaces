@@ -321,6 +321,9 @@ export default {
 			noLicense:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
 		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Mesaj trimis, dar nelivrat',
+		},
 	},
 	notifications: {
 		message: 'Mesaj nou de la {name}',
