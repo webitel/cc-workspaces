@@ -248,7 +248,7 @@ async function sendMessage() {
 		await send(draft);
 	} catch (err) {
 		// https://webitel.atlassian.net/browse/WTEL-10102
-		if (err.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
+		if (err?.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
 			eventBus?.$emit('notification', {
 				type: 'error',
 				text: t('error.chat.webhookSiteClosedButMsgSent'),
