@@ -52,7 +52,7 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 		?.filter(
 			(member) => member.id !== dialog.id && member.id !== currentAgent.id,
 		)
-		.map((member) => normalizedMember(member));
+		?.map((member) => normalizedMember(member));
 
 	const conversation = new Conversation(
 		client,
@@ -70,6 +70,26 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 
 	conversation.createdAt = Number(dialog.started) || Number(dialog.date) || 0;
 	conversation.closedAt = Number(dialog.closed) || 0;
+
+	// agent channelId is his member.id; without it chat actions are disabled
+	if (currentAgent.join) {
+		conversation.setAnswered(
+			currentAgent.id,
+			Number(currentAgent.join) || conversation.createdAt,
+			currentAgent,
+		);
+	}
+
+	console.log(
+		'buildConversation' + 'dialog before:',
+		dialog,
+		'' + 'members:',
+		members,
+		'' + 'currentAgent:',
+		currentAgent,
+		'' + 'conversation:',
+		conversation,
+	);
 
 	return conversation;
 };
