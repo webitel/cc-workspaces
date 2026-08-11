@@ -8,7 +8,9 @@ import InfoSection from '../the-agent-info-section.vue';
 
 vi.mock('@webitel/api-services/api', () => ({
 	ConfigurationsAPI: {
-		getList: vi.fn(),
+		getList: vi.fn().mockResolvedValue({
+			items: [],
+		}),
 	},
 }));
 
@@ -93,11 +95,15 @@ describe('InfoSection', () => {
 	describe('bridgeInfo watcher', () => {
 		beforeEach(() => {
 			ConfigurationsAPI.getList.mockReset();
+			ConfigurationsAPI.getList.mockResolvedValue({
+				items: [],
+			});
 		});
 
 		it('does not force the clientInfo tab on bridge before defaultWorkspaceTab resolves', async () => {
 			let resolveSettings;
-			ConfigurationsAPI.getList.mockImplementation(
+			// only the mount-time call is delayed; any later call falls back to the default above
+			ConfigurationsAPI.getList.mockImplementationOnce(
 				() =>
 					new Promise((resolve) => {
 						resolveSettings = resolve;
@@ -121,7 +127,7 @@ describe('InfoSection', () => {
 			});
 			await flushPromises();
 
-			expect(wrapper.vm.currentTab).not.toBe(wrapper.vm.tabsObject.clientInfo);
+			expect(wrapper.vm.currentTab?.value).not.toBe('client-info');
 
 			resolveSettings({
 				items: [],
@@ -130,10 +136,6 @@ describe('InfoSection', () => {
 		});
 
 		it('reacts only to a new bridge, not to unrelated callInfo updates', async () => {
-			ConfigurationsAPI.getList.mockResolvedValue({
-				items: [],
-			});
-
 			const bridgeStore = createStore({
 				modules: {
 					...InfoSectionModule,
@@ -143,9 +145,7 @@ describe('InfoSection', () => {
 			const wrapper = mountInfoSection(bridgeStore);
 			await flushPromises();
 
-			const { clientInfo, generalInfo } = wrapper.vm.tabsObject;
-
-			wrapper.vm.currentTab = generalInfo;
+			wrapper.vm.currentTab = wrapper.vm.tabsObject.generalInfo;
 			bridgeStore.commit('features/call/UPDATE_CALL_INFO', {
 				callId: callOnWorkspace.id,
 				info: {
@@ -153,10 +153,10 @@ describe('InfoSection', () => {
 				},
 			});
 			await flushPromises();
-			expect(wrapper.vm.currentTab).toBe(clientInfo);
+			expect(wrapper.vm.currentTab?.value).toBe('client-info');
 
 			// operator navigates away manually
-			wrapper.vm.currentTab = generalInfo;
+			wrapper.vm.currentTab = wrapper.vm.tabsObject.generalInfo;
 
 			// unrelated update merges into the same callInfo entry, keeping the same bridgedId
 			bridgeStore.commit('features/call/UPDATE_CALL_INFO', {
@@ -167,7 +167,7 @@ describe('InfoSection', () => {
 			});
 			await flushPromises();
 
-			expect(wrapper.vm.currentTab).toBe(generalInfo);
+			expect(wrapper.vm.currentTab?.value).toBe('general-info');
 		});
 	});
 });
