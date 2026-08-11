@@ -90,6 +90,7 @@ export default {
 		pin: false,
 		flowsNamespace: 'ui/infoSec/flows',
 		defaultWorkspaceTab: null,
+		isDefaultWorkspaceTabLoaded: false,
 	}),
 
 	watch: {
@@ -109,9 +110,10 @@ export default {
 		showProcessing(value) {
 			this.currentTab = this.resolveDefaultTab();
 		},
-		// call gets bridged to the client leg on transfer, e.g. blind transfer to another agent
-		bridgeInfo(info) {
-			if (!info?.bridgedId || !this.showClientInfo) return;
+		bridgeInfo(info, oldInfo) {
+			const bridgedId = info?.bridgedId;
+			if (!bridgedId || bridgedId === oldInfo?.bridgedId) return;
+			if (!this.showClientInfo || !this.isDefaultWorkspaceTabLoaded) return;
 
 			const { clientInfo } = this.tabsObject;
 			const respectsDefaultTab =
@@ -273,6 +275,7 @@ export default {
 				],
 			});
 			this.defaultWorkspaceTab = items?.[0]?.value ?? null;
+			this.isDefaultWorkspaceTabLoaded = true;
 		},
 
 		async initialize() {
