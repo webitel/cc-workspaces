@@ -1,5 +1,6 @@
 import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
+import chat from '../../../store/chat.js';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 import search from './search';
@@ -37,7 +38,7 @@ const actions = {
 		context.commit('SET_IS_LOADING', true);
 		context.commit('SET_VISIBLE_CHAT_IDS', []);
 		context.commit('SET_PAGE', 1);
-		const reloadPageSize = 40;
+		const reloadPageSize = 50;
 		let hasNext;
 		let localPage = 1;
 		const { userId } = useUserinfoStore();
@@ -81,6 +82,13 @@ const actions = {
 			.allConversations()
 			.map((chat) => chat.conversationId);
 
+		console.log('dialogs:', chats);
+		console.log('existing chats:', client.allConversations());
+
+		// console.log('already existing (setted by sdk) dialogs:', chats.map((chat) => {
+		// 	if(existingIds.find(id => id === chat.id)) return chat;
+		// }));
+
 		chats.forEach((dialog) => {
 			if (existingIds.includes(dialog.id)) return;
 
@@ -88,10 +96,14 @@ const actions = {
 				client,
 				dialog,
 			});
+			// console.log('conversation:', conversation);
 
 			if (!conversation) return;
 
 			client.conversationStore.set(conversation.id, conversation);
+			// if(existingIds.find((id => id === conversation.id))) {
+			// 	console.log('existing conversation:', conversation);
+			// }
 		});
 	},
 	LOAD_NEXT_ACTIVE_CHATS: async (context) => {
