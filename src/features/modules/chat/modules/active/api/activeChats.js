@@ -8,7 +8,6 @@ import {
 	notify,
 	sanitize,
 	snakeToCamel,
-	starToSearch,
 	translateError,
 } from '@webitel/api-services/api/transformers';
 import {
@@ -71,11 +70,9 @@ const getActiveChatsList = async (params = {}) => {
 		(params) => ({
 			online: true,
 			...params,
-			q: params.search,
 			'peer.id': params.peerId,
 			fields: params.fields?.length ? params.fields : DEFAULT_FIELDS,
 		}),
-		starToSearch('q'),
 		sanitize(fieldsToSend),
 	]);
 
