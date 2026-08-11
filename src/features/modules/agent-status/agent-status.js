@@ -30,8 +30,8 @@ const actions = {
 	SET_AGENT_WAITING_STATUS: async (context, activityType) => {
 		const agent = await context.dispatch('GET_AGENT_INSTANCE');
 		const { channels, onDemand, onlineSkill } = {
-			onlineSkill: activityType
-		}
+			onlineSkill: activityType,
+		};
 		agent.online(channels, onDemand, onlineSkill);
 	},
 

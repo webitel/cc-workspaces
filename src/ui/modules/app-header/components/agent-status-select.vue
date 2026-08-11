@@ -13,11 +13,13 @@
 <script>
 import WtCcAgentStatusSelect from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/wt-cc-agent-status-select.vue';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import { mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
 	name: 'AgentStatusSelect',
-  emits: ['changed-call-center-mode'],
+	emits: [
+		'changed-call-center-mode',
+	],
 	components: {
 		WtCcAgentStatusSelect,
 	},
@@ -31,9 +33,9 @@ export default {
 			agent: (state) => state.agent,
 		}),
 
-    ...mapGetters('features/status', {
-      isCcenterOn: 'IS_CCENTER_ON'
-    }),
+		...mapGetters('features/status', {
+			isCcenterOn: 'IS_CCENTER_ON',
+		}),
 
 		statusDuration() {
 			let time = this.now - (this.agent.lastStatusChange || Date.now());
