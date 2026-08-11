@@ -3,6 +3,7 @@ import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfo
 import chat from '../../../store/chat.js';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
+import search from './search';
 
 const state = {
 	visibleChatIds: [],
@@ -172,4 +173,7 @@ export default {
 	getters,
 	actions,
 	mutations,
+	modules: {
+		search,
+	},
 };
