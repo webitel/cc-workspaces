@@ -173,7 +173,7 @@ jobs:
     needs: [macos-arm64, linux-x64, windows-x64]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: prebuilds-merged
           pattern: prebuild-*
