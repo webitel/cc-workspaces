@@ -154,13 +154,17 @@ describe('ChatMessaging: sendMessage', () => {
 		});
 	});
 
-	it('propagates a TypeError when the rejection value is nullish (pre-existing edge case: `err.id` is accessed without optional chaining)', async () => {
+	it('restores the draft and shows a general error notification when the rejection value is nullish', async () => {
 		sendAction.mockRejectedValueOnce(null);
 		const wrapper = getWrapper();
+		const draftToSend = chatState.draft;
 
-		await expect(wrapper.vm.sendMessage()).rejects.toThrow();
-		// draft is left cleared since the general-error path is never reached
-		expect(chatState.draft).toBe('');
-		expect(emitSpy).not.toHaveBeenCalled();
+		await wrapper.vm.sendMessage();
+
+		expect(chatState.draft).toBe(draftToSend);
+		expect(emitSpy).toHaveBeenCalledWith('notification', {
+			type: 'error',
+			text: 'An error occured. Please, try again.',
+		});
 	});
 });
