@@ -1,28 +1,38 @@
 <template>
-  <task-queue-container
-    class="active-queue-container"
-    :empty="!taskList.length"
-  >
-    <div
-      v-for="(task, index) of taskList"
-      :key="task.id"
-      class="active-queue-container__wrapper"
+  <section class="active-queue-container">
+    <wt-search-bar
+      :size="size"
+      :value="searchQuery"
+      debounce
+      @input="setSearchQuery"
+    />
+    <task-queue-container
+      :empty="!taskList.length && !isSearchLoading"
     >
-      <component
-        :is="getComponent(task)"
-        :task="task"
-        :opened="task.id === taskOnWorkspace.id"
-        :size="size"
-        @click="openTask(task)"
-      />
-      <wt-divider v-if="taskList.length > index + 1"/>
-    </div>
-    <load-more-button v-show="next" :load-more="loadMore" />
-  </task-queue-container>
+      <wt-loader v-if="isSearchLoading" />
+      <template v-else>
+        <div
+          v-for="(task, index) of taskList"
+          :key="task.id"
+          class="active-queue-container__chat"
+        >
+          <component
+            :is="getComponent(task)"
+            :task="task"
+            :opened="task.id === taskOnWorkspace.id"
+            :size="size"
+            @click="openTask(task)"
+          />
+          <wt-divider v-if="taskList.length > index + 1"/>
+        </div>
+      </template>
+      <load-more-button v-show="next" :load-more="loadMore" />
+    </task-queue-container>
+  </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
@@ -39,6 +49,7 @@ const props = defineProps({
 
 const store = useStore();
 const activeChatsNamespace = 'features/chat/active';
+const searchNamespace = 'features/chat/active/search';
 const closedChatsNamespace = 'features/chat/closed/unprocessed';
 
 const taskOnWorkspace = computed(
@@ -51,16 +62,37 @@ const activeChats = computed(
 const unprocessedClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.chatsList,
 );
-const taskList = computed(() => [
-	...activeChats.value,
-	...unprocessedClosedChats.value,
-]);
+const searchQuery = computed(
+	() => store.state.features.chat.active.search.query,
+);
+const isSearchActive = computed(
+	() => store.getters[`${searchNamespace}/IS_SEARCH_ACTIVE`],
+);
+const isSearchLoading = computed(
+	() => store.getters[`${searchNamespace}/IS_SEARCH_LOADING`],
+);
+const searchResults = computed(
+	() => store.getters[`${searchNamespace}/SEARCH_RESULTS`],
+);
+const setSearchQuery = (value) =>
+	store.dispatch(`${searchNamespace}/SET_QUERY`, value);
+
+onUnmounted(() => store.dispatch(`${searchNamespace}/RESET_SEARCH`));
+
+const taskList = computed(() =>
+	isSearchActive.value
+		? searchResults.value
+		: [
+				...activeChats.value,
+				...unprocessedClosedChats.value,
+			],
+);
 
 const nextActiveChats = computed(() => store.state.features.chat.active.next);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
-const next = computed(() => nextActiveChats.value);
+const next = computed(() => !isSearchActive.value && nextActiveChats.value);
 
 const loadNextActiveChats = () =>
 	store.dispatch(`${activeChatsNamespace}/LOAD_NEXT_ACTIVE_CHATS`);
@@ -83,10 +115,15 @@ loadClosedChatsList();
 
 <style lang="scss" scoped>
   .active-queue-container {
-    &__wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: var(--spacing-xs);
+  }
+
+  .active-queue-container__chat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
   }
 </style>

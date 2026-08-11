@@ -2,6 +2,7 @@ import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketCo
 import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
+import search from './search';
 
 const state = {
 	visibleChatIds: [],
@@ -160,4 +161,7 @@ export default {
 	getters,
 	actions,
 	mutations,
+	modules: {
+		search,
+	},
 };

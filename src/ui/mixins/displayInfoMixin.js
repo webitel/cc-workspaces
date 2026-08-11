@@ -1,19 +1,10 @@
-import { getQueueName } from '../modules/queue-section/modules/_shared/scripts/getQueueName.js';
+import { getChatPreviewName } from '../../features/modules/chat/scripts/getChatPreviewName';
+import { getQueueName } from '../modules/queue-section/modules/_shared/scripts/getQueueName';
 
 export default {
 	computed: {
 		displayChatName() {
-			const chat = this.chat || this.task;
-
-			if (chat?.members?.length) {
-				return chat?.members?.map((member) => member.name).join(', ');
-			}
-
-			if (chat?.title) {
-				return chat.title;
-			}
-
-			return 'unknown';
+			return getChatPreviewName(this.chat || this.task);
 		},
 		displayName() {
 			return (this.task || this.call)?.displayName;
