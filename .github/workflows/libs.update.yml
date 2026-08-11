@@ -15,57 +15,24 @@ on:
           - '@webitel/flow-ui-sdk'
           - '@webitel/styleguide'
 
-permissions:
-  contents: write
+      version:
+        description: 'Version to wait for, e.g. 26.8.34 (see the publish commit message). Leave empty to update to whatever is already published.'
+        required: false
+        type: string
+
+permissions: { contents: read }
 
 jobs:
-  publish:
-    runs-on: [ arc-frontend-runner-set ]
-    steps:
-      - name: Create GitHub App token
-        uses: webitel/reusable-workflows/actions/create-github-app-token@create-github-app-token-v1
-        id: app-token
-        with:
-          client-id: ${{ vars.DELIVERY_BOT_CLIENT_ID }}
-          private-key: ${{ secrets.DELIVERY_BOT_APP_PEM }}
+  update:
+    name: Update lib
+    uses: webitel/reusable-workflows/.github/workflows/frontend-npm-dep-update.yml@v2
+    permissions:
+      id-token: write
+      contents: write
 
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          persist-credentials: true
+    with:
+      package: ${{ inputs.package }}
+      version: ${{ inputs.version }}
 
-      - name: Configure Git
-        run: |
-          git config user.name '${{ steps.app-token.outputs.user-name }}'
-          git config user.email '${{ steps.app-token.outputs.user-email }}'
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Update selected lib
-        run: |
-          PKG="${{ inputs.package }}"
-          npm update "$PKG"
-          npm ls "$PKG"
-
-      - name: Commit and push changes
-        env:
-          TRIGGERED_BY: ${{ github.actor }}
-          TRIGGERED_BY_ID: ${{ github.actor_id }}
-
-        run: |
-          PKG="${{ inputs.package }}"
-          VERSION=$(npm ls "$PKG" --depth=0 --json | jq -r '.dependencies | to_entries[0].value.version')
-
-          git add package.json
-          if [ -f package-lock.json ]; then
-            git add package-lock.json
-          fi
-
-          git diff --cached --quiet && exit 0
-          CO_AUTHOR_EMAIL="${TRIGGERED_BY_ID}+${TRIGGERED_BY}@users.noreply.github.com"
-          git commit -m "chore(deps): update ${PKG} to v${VERSION}" \
-                     -m "Co-authored-by: ${TRIGGERED_BY} <${CO_AUTHOR_EMAIL}>"
-
-          git push
+    secrets:
+      app-pem: ${{ secrets.DELIVERY_BOT_APP_PEM }}
