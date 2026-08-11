@@ -1,5 +1,5 @@
-import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { flushPromises, shallowMount } from '@vue/test-utils';
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { createStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 
