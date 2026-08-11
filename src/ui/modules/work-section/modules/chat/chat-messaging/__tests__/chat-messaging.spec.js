@@ -124,7 +124,9 @@ describe('ChatMessaging: sendMessage', () => {
 	});
 
 	it('restores the draft and shows a general error notification for an unrecognized error id', async () => {
-		sendAction.mockRejectedValueOnce({ id: 'some.other.error' });
+		sendAction.mockRejectedValueOnce({
+			id: 'some.other.error',
+		});
 		const wrapper = getWrapper();
 		const draftToSend = chatState.draft;
 
