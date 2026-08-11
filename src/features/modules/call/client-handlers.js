@@ -10,6 +10,9 @@ const callHandler = (context) => (action, call) => {
 		case CallActions.Active:
 			context.dispatch('HANDLE_ACTIVE_ACTION', call);
 			break;
+		case CallActions.Bridge:
+			context.dispatch('HANDLE_BRIDGE_ACTION', call);
+			break;
 		case CallActions.Hangup:
 			context.dispatch('HANDLE_HANGUP_ACTION', call);
 			break;
@@ -111,6 +114,19 @@ const actions = {
 			call.workspaceAudio = audio;
 			context.dispatch('HANDLE_START_TALKING');
 		}
+	},
+
+	HANDLE_BRIDGE_ACTION: (context, call) => {
+		const callOnWorkspace = context.getters.CALL_ON_WORKSPACE;
+		if (!callOnWorkspace || callOnWorkspace.id !== call.id) return;
+
+		context.commit('UPDATE_CALL_INFO', {
+			callId: call.id,
+			info: {
+				bridgedId: call.bridgedId,
+				contactId: call.contactId,
+			},
+		});
 	},
 
 	HANDLE_INFO_ACTION: (context, call) => {

@@ -109,6 +109,19 @@ export default {
 		showProcessing(value) {
 			this.currentTab = this.resolveDefaultTab();
 		},
+		// call gets bridged to the client leg on transfer, e.g. blind transfer to another agent
+		bridgeInfo(info) {
+			if (!info?.bridgedId || !this.showClientInfo) return;
+
+			const { clientInfo } = this.tabsObject;
+			const respectsDefaultTab =
+				!this.defaultWorkspaceTab ||
+				this.defaultWorkspaceTab === clientInfo.settingValue;
+
+			if (respectsDefaultTab) {
+				this.currentTab = clientInfo;
+			}
+		},
 	},
 
 	computed: {
@@ -122,11 +135,17 @@ export default {
 		...mapGetters('features/call/videoCall', {
 			isVideoCall: 'IS_VIDEO_CALL_ON_WORKSPACE',
 		}),
+		...mapState('features/call', [
+			'callInfo',
+		]),
 		...mapState({
 			flowsList(state) {
 				return getNamespacedState(state, `${this.flowsNamespace}`).flows;
 			},
 		}),
+		bridgeInfo() {
+			return this.callInfo?.get(this.taskId);
+		},
 		infoSecSize() {
 			// should be always md if pinned
 			if (this.pin) return 'md';
