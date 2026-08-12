@@ -21,8 +21,8 @@ export const useChatMessages = () => {
 	);
 
 	const { messages: missingChatMessages } = useMissingChatMessages(
-		conversationId.value,
-		chatHasMissingMessages.value,
+		conversationId,
+		chatHasMissingMessages,
 	);
 
 	const messages = computed(() => {
