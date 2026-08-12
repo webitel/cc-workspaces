@@ -13,7 +13,6 @@ export const useMissingChatMessages = (chatId, hasMissingMessages: boolean) => {
 			});
 
 			messages.value = formatChatMessages(items);
-			console.log('useMissingChatMessages messages', items, messages.value);
 		} catch {
 			messages.value = [];
 		}
