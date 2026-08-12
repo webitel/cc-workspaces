@@ -1,7 +1,7 @@
 <template>
   <wt-cc-agent-status-select
     class="agent-status-select"
-    is-workspace
+    use-call-center-switcher
     :is-call-center-on="isCcenterOn"
     :agent-id="agent.agentId"
     :status="agent.status"
