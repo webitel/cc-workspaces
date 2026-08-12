@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Звонки | Чаты',
+			searchByUsername: 'Поиск по имени',
 			preview: {
 				md: {
 					active: 'Активные чаты',

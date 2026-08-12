@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Чат | Чаттар',
+			searchByUsername: 'Пайдаланушы аты бойынша іздеу',
 			preview: {
 				md: {
 					active: 'Белсенді чаттар',
