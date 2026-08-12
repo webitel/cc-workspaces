@@ -49,7 +49,7 @@
 		"jszip": "^3.10.1",
 		"jszip-utils": "^0.1.0",
 		"lodash-es": "^4.x",
-		"markdown-it": "^14.x",
+		"markdown-it": "^15.x",
 		"pinia": "^3.x",
 		"prepend-http": "^4.0.0",
 		"tinymce": "^8.6.0",
