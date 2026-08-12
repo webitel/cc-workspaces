@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Các chat',
+			searchByUsername: 'Tìm kiếm theo tên người dùng',
 			preview: {
 				md: {
 					active: 'Chat đang hoạt động',
