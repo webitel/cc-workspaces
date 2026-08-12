@@ -84,8 +84,18 @@ describe('features/status store client handlers: actions', () => {
 
 	it('TOGGLE_CONTACT_CENTER_MODE dispatches SET_AGENT_WAITING_STATUS if IS_CCENTER_ON getter == false', async () => {
 		context.getters.IS_CCENTER_ON = false;
-		await statusModule.actions.TOGGLE_CONTACT_CENTER_MODE(context);
-		expect(context.dispatch).toHaveBeenCalledWith('SET_AGENT_WAITING_STATUS');
+		const mockActivityType = {
+			id: 1,
+			name: 'test',
+		};
+		await statusModule.actions.TOGGLE_CONTACT_CENTER_MODE(
+			context,
+			mockActivityType,
+		);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'SET_AGENT_WAITING_STATUS',
+			mockActivityType,
+		);
 	});
 });
 
