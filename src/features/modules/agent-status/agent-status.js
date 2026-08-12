@@ -27,7 +27,7 @@ const actions = {
 		return client.agentSession();
 	},
 
-	SET_AGENT_WAITING_STATUS: async (context, activityType) => {
+	SET_AGENT_WAITING_STATUS: async (context, { activityType } = {}) => {
 		const agent = await context.dispatch('GET_AGENT_INSTANCE');
 		const { channels, onDemand, onlineSkill } = {
 			onlineSkill: activityType,
@@ -56,7 +56,7 @@ const actions = {
 		if (context.getters.IS_CCENTER_ON) {
 			await context.dispatch('AGENT_LOGOUT');
 		} else {
-			await context.dispatch('SET_AGENT_WAITING_STATUS', activityType);
+			await context.dispatch('SET_AGENT_WAITING_STATUS', { activityType });
 		}
 	},
 };

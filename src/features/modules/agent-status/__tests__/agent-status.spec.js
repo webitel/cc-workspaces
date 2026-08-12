@@ -47,7 +47,7 @@ describe('features/status store client handlers: actions', () => {
 		};
 		await statusModule.actions.SET_AGENT_WAITING_STATUS(
 			context,
-			mockActivityType,
+			{ activityType: mockActivityType },
 		);
 		expect(agent.online).toHaveBeenCalledWith(channels, onDemand, onlineSkill);
 	});
@@ -104,7 +104,7 @@ describe('features/status store client handlers: actions', () => {
 		);
 		expect(context.dispatch).toHaveBeenCalledWith(
 			'SET_AGENT_WAITING_STATUS',
-			mockActivityType,
+			{ activityType: mockActivityType },
 		);
 	});
 });
