@@ -1,28 +1,21 @@
 import { Conversation } from 'webitel-sdk';
+import { AgentTypes } from '../../../enums/AgentTypes.enum';
+import { formatChatMessages } from '../../../scripts/formatChatMessages.js';
 
 const normalizedMember = (member) => {
 	if (!member) return null;
 
+	const isAgent = member.peer?.type === AgentTypes.USER;
+
 	return {
-		...member,
-		// TODO: для клода: у нас є тайпскріпт тип мембера, а також метод в ui-chats, який перероблює мембера
 		id: member.id,
 		name: member.peer?.name,
-		type: member.peer?.type,
-		user_id: member.peer?.id,
-	};
-};
-const normalizedMessage = (message = {}) => {
-	return {
-		...message,
-		// TODO: для клода: у нас є тайпскріпт тип повідомлення, а також метод в ui-chats, який вірно його перероблює
-		id: Number(message.id),
-		channel_id: message.sender?.id || message.chat?.id,
-		type: message.kind || 'text',
-		text: message.text,
-		file: message.file,
-		created_at: Number(message.date),
-		conversation: message.chat?.id,
+		// ws agents come as 'webitel', rest as 'user'
+		type: isAgent ? AgentTypes.WEBITEL : member.peer?.type,
+		// client peer.id is the messenger external id, not user_id
+		user_id: isAgent ? Number(member.peer?.id) : undefined,
+		external_id: isAgent ? undefined : member.peer?.id,
+		via: member.via,
 	};
 };
 
@@ -35,13 +28,12 @@ const normalizedMessage = (message = {}) => {
 export const buildConversationFromDialog = ({ client, dialog }) => {
 	const { user_id: userId } = client.sessionInfo();
 
-	const currentAgent = normalizedMember(
-		dialog.members?.find(
-			(member) => Number(member.peer?.id) === Number(userId),
-		),
+	// raw rest member: join/id needed below, shape converted only for sdk
+	const currentAgent = dialog.members?.find(
+		(member) => Number(member.peer?.id) === Number(userId),
 	);
 
-	// avoid dialog without current agent in members
+	// sdk drops conversations without channelId/inviteId — skip them here too
 	if (!currentAgent) return null;
 
 	// the backend also returns the conversation itself among `members`
@@ -50,7 +42,10 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 	// icon (both read from members[0])
 	const members = dialog.members
 		?.filter(
-			(member) => member.id !== dialog.id && member.id !== currentAgent.id,
+			(member) =>
+				member.id !== dialog.id &&
+				member.id !== currentAgent.id &&
+				member.peer?.type !== 'bot',
 		)
 		?.map((member) => normalizedMember(member));
 
@@ -60,13 +55,17 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 		dialog.title,
 		members,
 		dialog.message // last message; the constructor expects an array
-			? [
-					normalizedMessage(dialog.message),
-				]
+			? formatChatMessages([
+					dialog.message,
+				])
 			: [],
 		dialog.context,
 	);
 	// conversation.id value takes from channelId (after setAnswered()) or conversationId (without setAnswered)
+
+	// rest dialogs seed only the last message — useMissingChatMessages fetches
+	// full history for chats with this flag, without touching the sdk instance
+	conversation.hasMissingMessages = true;
 
 	conversation.createdAt = Number(dialog.started) || Number(dialog.date) || 0;
 	conversation.closedAt = Number(dialog.closed) || 0;
@@ -76,20 +75,9 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 		conversation.setAnswered(
 			currentAgent.id,
 			Number(currentAgent.join) || conversation.createdAt,
-			currentAgent,
+			normalizedMember(currentAgent),
 		);
 	}
-
-	console.log(
-		'buildConversation' + 'dialog before:',
-		dialog,
-		'' + 'members:',
-		members,
-		'' + 'currentAgent:',
-		currentAgent,
-		'' + 'conversation:',
-		conversation,
-	);
 
 	return conversation;
 };
