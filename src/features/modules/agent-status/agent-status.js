@@ -56,7 +56,9 @@ const actions = {
 		if (context.getters.IS_CCENTER_ON) {
 			await context.dispatch('AGENT_LOGOUT');
 		} else {
-			await context.dispatch('SET_AGENT_WAITING_STATUS', { activityType });
+			await context.dispatch('SET_AGENT_WAITING_STATUS', {
+				activityType,
+			});
 		}
 	},
 };
