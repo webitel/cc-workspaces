@@ -3,6 +3,8 @@
     <wt-search-bar
       :size="size"
       :value="searchQuery"
+      :placeholder="searchPlaceholder"
+      full-width
       debounce
       @input="setSearchQuery"
     />
@@ -33,6 +35,7 @@
 
 <script setup>
 import { computed, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
@@ -47,7 +50,13 @@ const props = defineProps({
 	},
 });
 
+const { t } = useI18n();
 const store = useStore();
+
+// wt-search-bar falls back to default "Search" on falsy placeholder, so use a space for sm
+const searchPlaceholder = computed(() =>
+	props.size === 'sm' ? ' ' : t('queueSec.chat.searchByUsername'),
+);
 const activeChatsNamespace = 'features/chat/active';
 const searchNamespace = 'features/chat/active/search';
 const closedChatsNamespace = 'features/chat/closed/unprocessed';
