@@ -9,7 +9,7 @@
       full-width
       debounce
       @input="setSearchQuery"
-      @focus="$emit('expand')"
+      @focus="resizeQueuePanel(false)"
     />
     <task-queue-container
       :empty="isEmpty"
@@ -54,6 +54,7 @@ import { computed, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
+import { usePanelSizeController } from '../../../../../../composables/usePanelSizeController';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
@@ -66,9 +67,7 @@ const props = defineProps({
 	},
 });
 
-defineEmits([
-	'expand',
-]);
+const { resizeQueuePanel } = usePanelSizeController();
 
 const { t } = useI18n();
 const store = useStore();
