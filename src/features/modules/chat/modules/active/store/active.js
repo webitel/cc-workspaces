@@ -1,6 +1,5 @@
 import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
-import chat from '../../../store/chat.js';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 import search from './search';
@@ -38,7 +37,7 @@ const actions = {
 		context.commit('SET_IS_LOADING', true);
 		context.commit('SET_VISIBLE_CHAT_IDS', []);
 		context.commit('SET_PAGE', 1);
-		const reloadPageSize = 50;
+		const reloadPageSize = 40;
 		let hasNext;
 		let localPage = 1;
 		const { userId } = useUserinfoStore();

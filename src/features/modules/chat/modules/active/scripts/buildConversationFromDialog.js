@@ -33,7 +33,6 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 		(member) => Number(member.peer?.id) === Number(userId),
 	);
 
-	// sdk drops conversations without channelId/inviteId — skip them here too
 	if (!currentAgent) return null;
 
 	// the backend also returns the conversation itself among `members`
@@ -61,10 +60,8 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 			: [],
 		dialog.context,
 	);
-	// conversation.id value takes from channelId (after setAnswered()) or conversationId (without setAnswered)
 
-	// rest dialogs seed only the last message — useMissingChatMessages fetches
-	// full history for chats with this flag, without touching the sdk instance
+	// rest dialogs has only the last message^ so we need to use useMissingChatMessages
 	conversation.hasMissingMessages = true;
 
 	conversation.createdAt = Number(dialog.started) || Number(dialog.date) || 0;
