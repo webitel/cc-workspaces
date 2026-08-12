@@ -36,6 +36,12 @@ describe('features/status store client handlers: actions', () => {
 		context.commit.mockClear();
 	});
 
+	it('SET_AGENT_WAITING_STATUS calls agent.online() method', async () => {
+		context.dispatch = vi.fn().mockResolvedValue(agent);
+		await statusModule.actions.SET_AGENT_WAITING_STATUS(context);
+		expect(agent.online).toHaveBeenCalled();
+	});
+
 	it('SET_AGENT_WAITING_STATUS calls agent.online() method with activityType as the onlineSkill argument', async () => {
 		context.dispatch = vi.fn().mockResolvedValue(agent);
 		const mockActivityType = {
