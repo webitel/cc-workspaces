@@ -23,7 +23,6 @@
           :collapsed="queueSecCollapsed"
           :collapsible="collapsible"
           @resize="resizeQueuePanel"
-          @expand="expandQueuePanel"
         ></queue-section>
         <workspace-section
           :size="workspaceSecSize"
@@ -82,7 +81,6 @@ const {
 	infoSecSize,
 	collapsible,
 	resizeQueuePanel,
-	expandQueuePanel,
 	resizeWorkspacePanel,
 	resizeInfoPanel,
 } = usePanelSizeController();

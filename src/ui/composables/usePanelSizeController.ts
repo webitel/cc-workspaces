@@ -1,13 +1,13 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, getCurrentInstance, ref } from 'vue';
 
+const queueSecCollapsed = ref(false);
+const workspaceSecCollapsed = ref(true);
+const infoSecCollapsed = ref(false);
+
 export function usePanelSizeController() {
 	const instance = getCurrentInstance();
 	const breakpoint = instance?.proxy?.$breakpoint;
-
-	const queueSecCollapsed = ref(false);
-	const workspaceSecCollapsed = ref(true);
-	const infoSecCollapsed = ref(false);
 
 	const collapsible = computed(() => breakpoint.mdAndUp);
 
@@ -33,12 +33,8 @@ export function usePanelSizeController() {
 		return 'md';
 	});
 
-	const resizeQueuePanel = () => {
-		queueSecCollapsed.value = !queueSecCollapsed.value;
-	};
-
-	const expandQueuePanel = () => {
-		queueSecCollapsed.value = false;
+	const resizeQueuePanel = (collapsed = !queueSecCollapsed.value) => {
+		queueSecCollapsed.value = collapsed;
 	};
 
 	const resizeWorkspacePanel = () => {
@@ -60,7 +56,6 @@ export function usePanelSizeController() {
 		infoSecSize,
 		collapsible,
 		resizeQueuePanel,
-		expandQueuePanel,
 		resizeWorkspacePanel,
 		resizeInfoPanel,
 	};

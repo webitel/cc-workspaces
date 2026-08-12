@@ -1,13 +1,14 @@
 <template>
   <section class="active-queue-container">
     <wt-search-bar
+      class="active-queue-container__search-bar"
       :size="size"
       :value="searchQuery"
       :placeholder="searchPlaceholder"
       full-width
       debounce
       @input="setSearchQuery"
-      @focus="$emit('expand')"
+      @focus="resizeQueuePanel(false)"
     />
     <task-queue-container
       :empty="!taskList.length && !isSearchLoading"
@@ -39,6 +40,7 @@ import { computed, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
+import { usePanelSizeController } from '../../../../../../composables/usePanelSizeController';
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
@@ -51,9 +53,7 @@ const props = defineProps({
 	},
 });
 
-defineEmits([
-	'expand',
-]);
+const { resizeQueuePanel } = usePanelSizeController();
 
 const { t } = useI18n();
 const store = useStore();
@@ -133,10 +133,10 @@ loadClosedChatsList();
     flex-direction: column;
     min-height: 0;
     padding-top: var(--spacing-xs);
+  }
 
-    :deep(.wt-search-bar) {
-      max-width: 100%;
-    }
+  .active-queue-container__search-bar {
+    max-width: 100%;
   }
 
   .active-queue-container__chat {
