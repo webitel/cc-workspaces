@@ -75,10 +75,10 @@ import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import { getClientName } from '../../../../../../../features/modules/chat/scripts/getClientName';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
 import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
+import { useChatMessages } from '../../../../../work-section/modules/chat/chat-messaging/message/composables/useChatMessages';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
-import { useChatMessages } from '../../../../../work-section/modules/chat/chat-messaging/message/composables/useChatMessages';
 
 import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
