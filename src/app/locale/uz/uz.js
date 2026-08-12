@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chatlar',
+			searchByUsername: 'Foydalanuvchi nomi bo‘yicha qidirish',
 			preview: {
 				md: {
 					active: 'Faol chatlar',

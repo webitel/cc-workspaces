@@ -96,6 +96,7 @@ export default {
 			async handler() {
 				this.chatContactIsLoaded = false;
 				this.resetTab();
+				this.showQuickReplies = false;
 				this.chatContact = await getLinkedContact(this.chat, this.contact); // instead of this we must use this.chat.contact. This logic must be removed, when back-end will be able to return chat.contact: { id: fieldValue, name: fieldValue } (when contact was linked to chat)
 				this.chatContactIsLoaded = true;
 			},

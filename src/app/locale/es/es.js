@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chats',
+			searchByUsername: 'Buscar por nombre de usuario',
 			preview: {
 				md: {
 					active: 'Chats activos',
