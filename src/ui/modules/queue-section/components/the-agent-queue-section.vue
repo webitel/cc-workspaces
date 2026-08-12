@@ -49,6 +49,7 @@
         :is="currentTab.component"
         :size="size"
         class="queue-section__wrapper"
+        @expand="$emit('expand')"
       />
     </keep-alive>
     <wt-rounded-action
@@ -96,6 +97,7 @@ const props = withDefaults(
 
 const emit = defineEmits([
 	'resize',
+	'expand',
 ]);
 
 const store = useStore();

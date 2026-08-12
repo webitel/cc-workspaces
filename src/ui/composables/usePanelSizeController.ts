@@ -37,6 +37,10 @@ export function usePanelSizeController() {
 		queueSecCollapsed.value = !queueSecCollapsed.value;
 	};
 
+	const expandQueuePanel = () => {
+		queueSecCollapsed.value = false;
+	};
+
 	const resizeWorkspacePanel = () => {
 		workspaceSecCollapsed.value = !workspaceSecCollapsed.value;
 		infoSecCollapsed.value = !workspaceSecCollapsed.value;
@@ -56,6 +60,7 @@ export function usePanelSizeController() {
 		infoSecSize,
 		collapsible,
 		resizeQueuePanel,
+		expandQueuePanel,
 		resizeWorkspacePanel,
 		resizeInfoPanel,
 	};

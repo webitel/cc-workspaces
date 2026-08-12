@@ -7,6 +7,7 @@
       full-width
       debounce
       @input="setSearchQuery"
+      @focus="$emit('expand')"
     />
     <task-queue-container
       :empty="!taskList.length && !isSearchLoading"
@@ -49,6 +50,10 @@ const props = defineProps({
 		default: 'md',
 	},
 });
+
+defineEmits([
+	'expand',
+]);
 
 const { t } = useI18n();
 const store = useStore();
@@ -128,6 +133,10 @@ loadClosedChatsList();
     flex-direction: column;
     min-height: 0;
     padding-top: var(--spacing-xs);
+
+    :deep(.wt-search-bar) {
+      max-width: 100%;
+    }
   }
 
   .active-queue-container__chat {
