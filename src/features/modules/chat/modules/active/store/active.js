@@ -82,13 +82,6 @@ const actions = {
 			.allConversations()
 			.map((chat) => chat.conversationId);
 
-		console.log('dialogs:', chats);
-		console.log('existing chats:', client.allConversations());
-
-		// console.log('already existing (setted by sdk) dialogs:', chats.map((chat) => {
-		// 	if(existingIds.find(id => id === chat.id)) return chat;
-		// }));
-
 		chats.forEach((dialog) => {
 			if (existingIds.includes(dialog.id)) return;
 
@@ -96,14 +89,10 @@ const actions = {
 				client,
 				dialog,
 			});
-			// console.log('conversation:', conversation);
 
 			if (!conversation) return;
 
 			client.conversationStore.set(conversation.id, conversation);
-			// if(existingIds.find((id => id === conversation.id))) {
-			// 	console.log('existing conversation:', conversation);
-			// }
 		});
 	},
 	LOAD_NEXT_ACTIVE_CHATS: async (context) => {

@@ -105,10 +105,14 @@ const loadNextClosedChats = () =>
 const loadMore = () =>
 	nextActiveChats.value ? loadNextActiveChats() : loadNextClosedChats();
 
+const isClosedTask = (task) => Boolean(task.closedAt && task.closeReason);
+
 const getComponent = (task) =>
-	task.closedAt && task.closeReason ? ClosedPreview : ActivePreview;
+	isClosedTask(task) ? ClosedPreview : ActivePreview;
 const openTask = async (task) =>
-	await store.dispatch('features/chat/OPEN_CHAT', task);
+	isClosedTask(task)
+		? await store.dispatch('features/chat/closed/OPEN_CLOSED_CHAT', task)
+		: await store.dispatch('features/chat/OPEN_CHAT', task);
 
 loadClosedChatsList();
 </script>

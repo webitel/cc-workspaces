@@ -24,9 +24,11 @@ export const formatChatMessages = (messages) => {
 		.map((item) => {
 			return {
 				...item,
-				createdAt: item.date,
+				createdAt: item.date || {},
 				member: item.member || getMessageMember(item.peer),
 				file: formatMessageFile(item.file),
+				channelId: item.sender?.id || item.chat?.id,
+				type: item.type || {},
 			};
 		})
 		.reverse();
