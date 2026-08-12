@@ -9,6 +9,7 @@
       full-width
       debounce
       @input="setSearchQuery"
+      @focus="$emit('expand')"
     />
     <task-queue-container
       :empty="isEmpty"
@@ -64,6 +65,10 @@ const props = defineProps({
 		default: 'md',
 	},
 });
+
+defineEmits([
+	'expand',
+]);
 
 const { t } = useI18n();
 const store = useStore();
