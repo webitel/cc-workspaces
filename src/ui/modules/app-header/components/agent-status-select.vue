@@ -1,7 +1,7 @@
 <template>
   <wt-cc-agent-status-select
     class="agent-status-select"
-    use-call-center-switcher
+    show-call-center-switcher
     :is-call-center-on="isCcenterOn"
     :agent-id="agent.agentId"
     :status="agent.status"
