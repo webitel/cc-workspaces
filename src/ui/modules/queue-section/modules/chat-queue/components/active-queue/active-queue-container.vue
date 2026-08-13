@@ -1,6 +1,7 @@
 <template>
   <section class="active-queue-container">
     <wt-search-bar
+      v-if="isSearchVisible"
       class="active-queue-container__search-bar"
       :size="size"
       :value="searchQuery"
@@ -11,9 +12,20 @@
       @focus="resizeQueuePanel(false)"
     />
     <task-queue-container
-      :empty="!taskList.length && !isSearchLoading"
+      :empty="isEmpty"
     >
       <wt-loader v-if="isSearchLoading" />
+      <div
+        v-else-if="isSearchEmpty"
+        class="active-queue-container__empty-wrap"
+      >
+        <wt-empty
+          :size="size"
+          :image="emptySearchImage"
+          :text="t('emptySearch.text')"
+          class="active-queue-container__empty"
+        />
+      </div>
       <template v-else>
         <div
           v-for="(task, index) of taskList"
@@ -36,6 +48,8 @@
 </template>
 
 <script setup>
+import emptySearchDark from '@webitel/ui-sdk/src/modules/TableComponentModule/_internals/assets/empty-filters-dark.svg';
+import emptySearchLight from '@webitel/ui-sdk/src/modules/TableComponentModule/_internals/assets/empty-filters-light.svg';
 import { computed, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
@@ -57,6 +71,11 @@ const { resizeQueuePanel } = usePanelSizeController();
 
 const { t } = useI18n();
 const store = useStore();
+
+const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
+const emptySearchImage = computed(() =>
+	darkMode.value ? emptySearchDark : emptySearchLight,
+);
 
 // wt-search-bar falls back to default "Search" on falsy placeholder, so use a space for sm
 const searchPlaceholder = computed(() =>
@@ -102,6 +121,19 @@ const taskList = computed(() =>
 			],
 );
 
+const isSearchVisible = computed(
+	() => taskList.value.length > 0 || isSearchActive.value,
+);
+
+const isSearchEmpty = computed(
+	() =>
+		isSearchActive.value && !taskList.value.length && !isSearchLoading.value,
+);
+
+const isEmpty = computed(
+	() => !taskList.value.length && !isSearchLoading.value,
+);
+
 const nextActiveChats = computed(() => store.state.features.chat.active.next);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
@@ -131,21 +163,32 @@ const openTask = async (task) =>
 loadClosedChatsList();
 </script>
 
-<style lang="scss" scoped>
-  .active-queue-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    padding-top: var(--spacing-xs);
-  }
+<style scoped>
+.active-queue-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: var(--spacing-xs);
+}
 
-  .active-queue-container__search-bar {
-    max-width: 100%;
-  }
+.active-queue-container__search-bar {
+  max-width: 100%;
+}
 
-  .active-queue-container__chat {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
+.active-queue-container__chat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.active-queue-container__empty-wrap {
+  width: 100%;
+}
+
+.active-queue-container__empty-wrap .active-queue-container__empty {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--spacing-2xs);
+}
 </style>
