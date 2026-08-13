@@ -3,6 +3,8 @@ import { ContactsAPI } from '@webitel/api-services/api';
 async function getContactByUserId(task) {
 	try {
 		if (!task || !task?.members?.length) return null;
+		// without user_id the query loses its filter and returns a random contact
+		if (!task.members[0].user_id) return null;
 
 		const { items: contacts } = await ContactsAPI.getList({
 			q: task?.members[0].user_id,
