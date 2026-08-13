@@ -2,12 +2,14 @@
   <section class="active-queue-container">
     <wt-search-bar
       v-if="isSearchVisible"
+      class="active-queue-container__search-bar"
       :size="size"
       :value="searchQuery"
       :placeholder="searchPlaceholder"
       full-width
       debounce
       @input="setSearchQuery"
+      @focus="resizeQueuePanel(false)"
     />
     <task-queue-container
       :empty="isEmpty"
@@ -53,6 +55,7 @@ import emptySearchDark from '@webitel/ui-sdk/src/modules/TableComponentModule/_i
 import emptySearchLight from '@webitel/ui-sdk/src/modules/TableComponentModule/_internals/assets/empty-filters-light.svg';
 
 import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
+import { usePanelSizeController } from '../../../../../../composables/usePanelSizeController';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ClosedPreview from '../closed-queue/closed-queue-preview.vue';
 import ActivePreview from './active-queue-preview.vue';
@@ -63,6 +66,8 @@ const props = defineProps({
 		default: 'md',
 	},
 });
+
+const { resizeQueuePanel } = usePanelSizeController();
 
 const { t } = useI18n();
 const store = useStore();
@@ -146,10 +151,14 @@ const loadNextClosedChats = () =>
 const loadMore = () =>
 	nextActiveChats.value ? loadNextActiveChats() : loadNextClosedChats();
 
+const isClosedTask = (task) => Boolean(task.closedAt && task.closeReason);
+
 const getComponent = (task) =>
-	task.closedAt && task.closeReason ? ClosedPreview : ActivePreview;
+	isClosedTask(task) ? ClosedPreview : ActivePreview;
 const openTask = async (task) =>
-	await store.dispatch('features/chat/OPEN_CHAT', task);
+	isClosedTask(task)
+		? await store.dispatch('features/chat/closed/OPEN_CLOSED_CHAT', task)
+		: await store.dispatch('features/chat/OPEN_CHAT', task);
 
 loadClosedChatsList();
 </script>
@@ -160,6 +169,10 @@ loadClosedChatsList();
     flex-direction: column;
     min-height: 0;
     padding-top: var(--spacing-xs);
+  }
+
+  .active-queue-container__search-bar {
+    max-width: 100%;
   }
 
   .active-queue-container__chat {
