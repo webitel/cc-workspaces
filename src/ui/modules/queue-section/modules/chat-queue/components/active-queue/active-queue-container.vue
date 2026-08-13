@@ -17,12 +17,13 @@
       <wt-loader v-if="isSearchLoading" />
       <div
         v-else-if="isSearchEmpty"
-        class="active-queue-container__empty"
+        class="active-queue-container__empty-wrap"
       >
         <wt-empty
           :size="size"
           :image="emptySearchImage"
           :text="t('emptySearch.text')"
+          class="active-queue-container__empty"
         />
       </div>
       <template v-else>
@@ -162,32 +163,32 @@ const openTask = async (task) =>
 loadClosedChatsList();
 </script>
 
-<style lang="scss" scoped>
-  .active-queue-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    padding-top: var(--spacing-xs);
-  }
+<style scoped>
+.active-queue-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: var(--spacing-xs);
+}
 
-  .active-queue-container__search-bar {
-    max-width: 100%;
-  }
+.active-queue-container__search-bar {
+  max-width: 100%;
+}
 
-  .active-queue-container__chat {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
+.active-queue-container__chat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
 
-  .active-queue-container__empty {
-    width: 100%;
+.active-queue-container__empty-wrap {
+  width: 100%;
+}
 
-    :deep(.wt-empty) {
-      width: 100%;
-      min-width: 0;
-      max-width: 100%;
-      padding: var(--spacing-2xs);
-    }
-  }
+.active-queue-container__empty-wrap .active-queue-container__empty {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--spacing-2xs);
+}
 </style>
