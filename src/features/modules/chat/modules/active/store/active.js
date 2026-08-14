@@ -37,9 +37,11 @@ const actions = {
 		context.commit('SET_IS_LOADING', true);
 		context.commit('SET_VISIBLE_CHAT_IDS', []);
 		context.commit('SET_PAGE', 1);
+		context.commit('SET_NEXT', false);
 		const reloadPageSize = 40;
 		let hasNext;
 		let localPage = 1;
+		let totalLoaded = 0;
 		const { userId } = useUserinfoStore();
 
 		try {
@@ -51,6 +53,7 @@ const actions = {
 				});
 
 				await context.dispatch('ADD_CHAT_LIST_TO_CLIENT_STORE', dialogs);
+				totalLoaded += dialogs.length;
 
 				// first batch already holds the visible page — no extra request for it
 				if (localPage === 1) {
@@ -59,15 +62,19 @@ const actions = {
 						.map((dialog) => dialog.id);
 
 					context.commit('SET_VISIBLE_CHAT_IDS', ids);
-					context.commit(
-						'SET_NEXT',
-						dialogs.length > context.state.size || next,
-					);
 				}
 
-				hasNext = next;
+				// REST `next` may be truthy even when there are no more chats,
+				// so also stop once a page comes back empty
+				hasNext = next && dialogs.length > 0;
 				localPage += 1;
 			}
+
+			// rely on the actually loaded chats count, not the REST `next` flag
+			context.commit(
+				'SET_NEXT',
+				totalLoaded > context.state.visibleChatIds.length,
+			);
 		} finally {
 			context.commit('SET_IS_LOADING', false);
 		}
@@ -115,7 +122,8 @@ const actions = {
 				...ids,
 			]);
 			context.commit('SET_PAGE', nextPage);
-			context.commit('SET_NEXT', next);
+			// don't trust a truthy REST `next` if the page came back empty
+			context.commit('SET_NEXT', next && dialogs.length > 0);
 		} finally {
 			context.commit('SET_IS_LOADING', false);
 		}
