@@ -1,10 +1,14 @@
-import { getChatPreviewName } from '../../features/modules/chat/scripts/getChatPreviewName';
 import { getQueueName } from '../modules/queue-section/modules/_shared/scripts/getQueueName';
 
 export default {
 	computed: {
 		displayChatName() {
-			return getChatPreviewName(this.chat || this.task);
+			const chat = this.chat || this.task;
+			if (chat?.members?.length) {
+				return chat.members.map((member) => member.name).join(', ');
+			}
+
+			return chat?.title || 'unknown';
 		},
 		displayName() {
 			return (this.task || this.call)?.displayName;
