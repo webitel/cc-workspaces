@@ -18,10 +18,8 @@ const getters = {
 		if (!client) return [];
 
 		const query = state.query.trim().toLowerCase();
-		console.log('query', query);
 
 		return client.allConversations().filter((chat) => {
-			console.log('getClientName(chat.members):', getClientName(chat.members));
 			return getClientName(chat.members).toLowerCase().includes(query);
 		});
 	},
