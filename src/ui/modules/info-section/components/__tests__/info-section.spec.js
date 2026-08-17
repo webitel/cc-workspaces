@@ -1,5 +1,6 @@
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import { ConfigurationsAPI } from '@webitel/api-services/api';
+import { DefaultWorkspaceTabSettings } from '@webitel/ui-sdk/enums';
 import { createStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 
@@ -20,40 +21,19 @@ const callOnWorkspace = {
 	allowReporting: true,
 };
 
-// module providing a real, mutable `callInfo` map, mirroring features/call
-const createCallModule = () => ({
-	features: {
-		namespaced: true,
-		modules: {
-			call: {
-				namespaced: true,
-				state: () => ({
-					callInfo: new Map(),
-				}),
-				mutations: {
-					UPDATE_CALL_INFO(state, { callId, info }) {
-						const existing = state.callInfo.get(callId) || {};
-						state.callInfo.set(callId, {
-							...existing,
-							...info,
-						});
-					},
-				},
-			},
-		},
-	},
-});
-
-const mountInfoSection = (bridgeStore, overrides = {}) =>
+const mountInfoSection = (overrides = {}) =>
 	shallowMount(InfoSection, {
 		global: {
 			plugins: [
-				bridgeStore,
+				createStore({
+					modules: {
+						...InfoSectionModule,
+					},
+				}),
 			],
 		},
 		computed: {
 			...InfoSection.computed,
-			showProcessing: () => false,
 			showFlows: () => false,
 			taskOnWorkspace: () => callOnWorkspace,
 			...overrides,
@@ -92,7 +72,7 @@ describe('InfoSection', () => {
 		).toBe(true);
 	});
 
-	describe('bridgeInfo watcher', () => {
+	describe('default tab resolution', () => {
 		beforeEach(() => {
 			ConfigurationsAPI.getList.mockReset();
 			ConfigurationsAPI.getList.mockResolvedValue({
@@ -100,74 +80,47 @@ describe('InfoSection', () => {
 			});
 		});
 
-		it('does not force the clientInfo tab on bridge before defaultWorkspaceTab resolves', async () => {
-			let resolveSettings;
-			// only the mount-time call is delayed; any later call falls back to the default above
-			ConfigurationsAPI.getList.mockImplementationOnce(
-				() =>
-					new Promise((resolve) => {
-						resolveSettings = resolve;
-					}),
-			);
-
-			const bridgeStore = createStore({
-				modules: {
-					...InfoSectionModule,
-					...createCallModule(),
-				},
-			});
-			const wrapper = mountInfoSection(bridgeStore);
-
-			// bridge arrives while the DefaultWorkspaceTab request is still pending
-			bridgeStore.commit('features/call/UPDATE_CALL_INFO', {
-				callId: callOnWorkspace.id,
-				info: {
-					bridgedId: 'bridge-1',
-				},
+		it('defaults to the clientInfo tab on a call when no system default tab is configured, even if processing is available', async () => {
+			const wrapper = mountInfoSection({
+				showProcessing: () => true,
 			});
 			await flushPromises();
 
-			expect(wrapper.vm.currentTab?.value).not.toBe('client-info');
-
-			resolveSettings({
-				items: [],
-			});
-			await flushPromises();
+			expect(wrapper.vm.currentTab?.value).toBe('client-info');
 		});
 
-		it('reacts only to a new bridge, not to unrelated callInfo updates', async () => {
-			const bridgeStore = createStore({
-				modules: {
-					...InfoSectionModule,
-					...createCallModule(),
-				},
+		it('respects a system-configured default tab over clientInfo', async () => {
+			ConfigurationsAPI.getList.mockResolvedValue({
+				items: [
+					{
+						value: DefaultWorkspaceTabSettings.TaskProcessing,
+					},
+				],
 			});
-			const wrapper = mountInfoSection(bridgeStore);
+
+			const wrapper = mountInfoSection({
+				showProcessing: () => true,
+			});
 			await flushPromises();
 
-			wrapper.vm.currentTab = wrapper.vm.tabsObject.generalInfo;
-			bridgeStore.commit('features/call/UPDATE_CALL_INFO', {
-				callId: callOnWorkspace.id,
-				info: {
-					bridgedId: 'bridge-1',
-				},
+			expect(wrapper.vm.currentTab?.value).toBe('processing');
+		});
+
+		it('falls back to clientInfo when the system default tab (processing) is not available for this task, e.g. a transferred call', async () => {
+			ConfigurationsAPI.getList.mockResolvedValue({
+				items: [
+					{
+						value: DefaultWorkspaceTabSettings.TaskProcessing,
+					},
+				],
+			});
+
+			const wrapper = mountInfoSection({
+				showProcessing: () => false,
 			});
 			await flushPromises();
+
 			expect(wrapper.vm.currentTab?.value).toBe('client-info');
-
-			// operator navigates away manually
-			wrapper.vm.currentTab = wrapper.vm.tabsObject.generalInfo;
-
-			// unrelated update merges into the same callInfo entry, keeping the same bridgedId
-			bridgeStore.commit('features/call/UPDATE_CALL_INFO', {
-				callId: callOnWorkspace.id,
-				info: {
-					remoteHold: true,
-				},
-			});
-			await flushPromises();
-
-			expect(wrapper.vm.currentTab?.value).toBe('general-info');
 		});
 	});
 });
