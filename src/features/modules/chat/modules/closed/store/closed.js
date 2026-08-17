@@ -109,6 +109,10 @@ const actions = {
 				offsetDate: oldestMessage.createdAt,
 			});
 
+			const currentChat =
+				context.rootGetters['features/chat/CHAT_ON_WORKSPACE'];
+			if (currentChat?.id !== chat.id) return;
+
 			const olderMessages = formatChatMessages(items);
 
 			context.commit('SET_NEXT', next);
@@ -136,6 +140,7 @@ const actions = {
 			await context.dispatch('LOAD_CLOSED_CHAT', chat);
 		} else {
 			context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
+			context.commit('SET_NEXT', false);
 			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
 				root: true,
 			});

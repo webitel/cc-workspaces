@@ -110,7 +110,11 @@ const next = computed(() => store.state.features.chat.closed.next);
 const isChatClosed = computed(() => !!currentChat.value?.closedAt);
 
 const showLoadMoreObserver = computed(
-	() => isChatClosed.value && next.value && isReadyForPagination.value,
+	() =>
+		isChatClosed.value &&
+		!currentChat.value?.contact?.id &&
+		next.value &&
+		isReadyForPagination.value,
 );
 
 const {
