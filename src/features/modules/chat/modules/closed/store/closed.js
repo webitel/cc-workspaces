@@ -103,15 +103,16 @@ const actions = {
 		const oldestMessage = messages[0];
 		if (!oldestMessage) return;
 
+		const chatId = chat.conversationId || chat.id;
+
 		try {
 			const { items, next } = await CatalogAPI.getChatMessagesList({
-				chatId: chat.conversationId || chat.id,
+				chatId,
 				offsetDate: oldestMessage.createdAt,
 			});
 
-			const currentChat =
-				context.rootGetters['features/chat/CHAT_ON_WORKSPACE'];
-			if (currentChat?.id !== chat.id) return;
+			const currentChat = context.rootGetters['features/chat/CHAT_ON_WORKSPACE'];
+			if ((currentChat?.conversationId || currentChat?.id) !== chatId) return;
 
 			const olderMessages = formatChatMessages(items);
 
@@ -120,19 +121,12 @@ const actions = {
 				'features/chat/SET_WORKSPACE',
 				{
 					...chat,
-					messages: [
-						...olderMessages,
-						...messages,
-					],
+					messages: [...olderMessages, ...messages],
 				},
-				{
-					root: true,
-				},
+				{ root: true },
 			);
 		} catch (err) {
-			throw applyTransform(err, [
-				notify,
-			]);
+			throw applyTransform(err, [notify]);
 		}
 	},
 	OPEN_CLOSED_CHAT: async (context, chat) => {
