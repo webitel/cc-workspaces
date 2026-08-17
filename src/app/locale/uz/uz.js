@@ -211,6 +211,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Fayl hajmi limiti oshib ketdi',
 				filePolicyFail: 'Taqiqlangan fayl formati',
+				photoInvalidDimensions: "Rasm o'lchamlari noto'g'ri",
 			},
 		},
 	},

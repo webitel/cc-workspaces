@@ -25,11 +25,28 @@ export const useChatMessages = () => {
 		chatHasMissingMessages,
 	);
 
+	const failedFiles = computed(
+		() => store.getters[`${namespace}/FAILED_FILES`] || [],
+	);
+
 	const messages = computed(() => {
+		/**
+		 * @author @OleksandrPalonnyi
+		 *
+		 * [WTEL-6706](https://webitel.atlassian.net/browse/WTEL-6706)
+		 *
+		 * failedFiles are recorded at the moment the upload fails, so
+		 * chatOnWorkspace's real messages sent afterwards can already be newer
+		 * */
+		const currentMessages = [
+			...(chatOnWorkspace.value?.messages || []),
+			...failedFiles.value,
+		].sort((a, b) => a.createdAt - b.createdAt);
+
 		return [
 			...store.state.features.chat.chatHistory.chatHistoryMessages,
 			...missingChatMessages.value,
-			...(chatOnWorkspace.value?.messages || []),
+			...currentMessages,
 		];
 	});
 

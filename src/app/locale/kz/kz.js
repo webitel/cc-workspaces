@@ -210,6 +210,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Файл өлшемі шегінен асты',
 				filePolicyFail: 'Тыйым салынған файл пішімі',
+				photoInvalidDimensions: 'Суреттің өлшемдері дұрыс емес',
 			},
 		},
 	},

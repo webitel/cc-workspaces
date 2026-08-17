@@ -14,10 +14,16 @@ import unseen from './unseen';
 
 const { t } = i18n.global;
 
+// stable per-chat key: `.id` is `channelId || inviteId || conversationId` and
+// changes during a chat's lifetime, `conversationId` doesn't
+const pendingFileKey = (chat) => chat?.conversationId || chat?.id;
+
 const getters = {
 	CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) =>
 		rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
 		rootGetters['workspace/TASK_ON_WORKSPACE'],
+	FAILED_FILES: (state, getters) =>
+		state.failedFiles[pendingFileKey(getters.CHAT_ON_WORKSPACE)] || [],
 	ALLOW_CHAT_TRANSFER: (state, getters) =>
 		getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
 	ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
@@ -46,11 +52,42 @@ const actions = {
 	},
 
 	SEND_FILE: async (context, files) => {
+		const list = Array.isArray(files)
+			? files
+			: [
+					files,
+				];
+		await Promise.all(
+			list.map((file) => context.dispatch('SEND_SINGLE_FILE', file)),
+		);
+	},
+
+	SEND_SINGLE_FILE: async (context, file) => {
 		try {
-			Array.isArray(files)
-				? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
-				: await context.dispatch('SEND', files);
+			await context.dispatch('SEND', file);
 		} catch (err) {
+			/**
+			 * @author @OleksandrPalonnyi
+			 *
+			 * [WTEL-6706](https://webitel.atlassian.net/browse/WTEL-6706)
+			 *
+			 * description link - https://webitel.atlassian.net/browse/WTEL-6706?focusedCommentId=777623
+			 * */
+			const detail = err.detail || err.response?.data?.detail;
+			if (detail?.includes('PHOTO_INVALID_DIMENSIONS')) {
+				const chatMessages = context.getters.CHAT_ON_WORKSPACE.messages;
+				const lastMessageCreatedAt =
+					chatMessages[chatMessages.length - 1]?.createdAt || 0;
+				context.commit('ADD_FAILED_FILE', {
+					key: pendingFileKey(context.getters.CHAT_ON_WORKSPACE),
+					id: crypto.randomUUID(),
+					file,
+					createdAt: Math.max(Date.now(), lastMessageCreatedAt + 1),
+					channelId: context.getters.CHAT_ON_WORKSPACE.channelId,
+				});
+				return;
+			}
+
 			const errorMessage =
 				err.response?.data?.id === 'file.malware'
 					? t('workspaceSec.chat.chatsFileBlocked')
@@ -86,6 +123,8 @@ const actions = {
 		} else {
 			await chatOnWorkspace.decline();
 		}
+
+		context.commit('CLEAR_FAILED_FILES', pendingFileKey(chatOnWorkspace));
 
 		await context.dispatch(
 			'features/chatNotifications/HANDLE_CHAT_END',
@@ -133,10 +172,29 @@ const mutations = {
 	SET_MEDIA_VIEW: (state, mediaView) => {
 		state.mediaView = mediaView;
 	},
+	ADD_FAILED_FILE: (state, { key, id, file, createdAt, channelId }) => {
+		if (!state.failedFiles[key]) state.failedFiles[key] = [];
+		state.failedFiles[key].push({
+			id,
+			photoInvalidDimensions: true,
+			file,
+			member: {
+				self: true,
+			},
+			channelId,
+			createdAt,
+		});
+	},
+	CLEAR_FAILED_FILES: (state, key) => {
+		delete state.failedFiles[key];
+	},
 };
 
 export default {
 	namespaced: true,
+	state: () => ({
+		failedFiles: {},
+	}),
 	getters,
 	actions,
 	mutations,
