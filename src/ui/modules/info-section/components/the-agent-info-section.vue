@@ -90,7 +90,6 @@ export default {
 		pin: false,
 		flowsNamespace: 'ui/infoSec/flows',
 		defaultWorkspaceTab: null,
-		isDefaultWorkspaceTabLoaded: false,
 	}),
 
 	watch: {
@@ -110,20 +109,6 @@ export default {
 		showProcessing(value) {
 			this.currentTab = this.resolveDefaultTab();
 		},
-		bridgeInfo(info, oldInfo) {
-			const bridgedId = info?.bridgedId;
-			if (!bridgedId || bridgedId === oldInfo?.bridgedId) return;
-			if (!this.showClientInfo || !this.isDefaultWorkspaceTabLoaded) return;
-
-			const { clientInfo } = this.tabsObject;
-			const respectsDefaultTab =
-				!this.defaultWorkspaceTab ||
-				this.defaultWorkspaceTab === clientInfo.settingValue;
-
-			if (respectsDefaultTab) {
-				this.currentTab = clientInfo;
-			}
-		},
 	},
 
 	computed: {
@@ -137,17 +122,11 @@ export default {
 		...mapGetters('features/call/videoCall', {
 			isVideoCall: 'IS_VIDEO_CALL_ON_WORKSPACE',
 		}),
-		...mapState('features/call', [
-			'callInfo',
-		]),
 		...mapState({
 			flowsList(state) {
 				return getNamespacedState(state, `${this.flowsNamespace}`).flows;
 			},
 		}),
-		bridgeInfo() {
-			return this.callInfo?.get(this.taskId);
-		},
 		infoSecSize() {
 			// should be always md if pinned
 			if (this.pin) return 'md';
@@ -243,23 +222,25 @@ export default {
 		resolveDefaultTab() {
 			const { processing, clientInfo, generalInfo } = this.tabsObject;
 
+			const processingConfigured =
+				this.defaultWorkspaceTab === processing.settingValue;
+			const clientInfoConfigured =
+				this.defaultWorkspaceTab === clientInfo.settingValue;
+			const noConfig = !this.defaultWorkspaceTab;
+
+			if (processingConfigured && this.showProcessing) return processing;
+
+			// clientInfo is the fallback whenever there's nothing more specific
+			// configured, or the configured tab isn't available for this task
+			// (e.g. processing configured but not allowed for a transferred call)
 			if (
-				this.showProcessing &&
-				this.defaultWorkspaceTab === processing.settingValue
-			) {
-				return processing;
-			}
-			if (
-				this.showClientInfo &&
-				this.defaultWorkspaceTab === clientInfo.settingValue
+				(noConfig || clientInfoConfigured || processingConfigured) &&
+				this.showClientInfo
 			) {
 				return clientInfo;
 			}
 
-			if (!this.defaultWorkspaceTab) {
-				if (this.showProcessing) return processing;
-				if (this.showClientInfo) return clientInfo;
-			}
+			if (noConfig && this.showProcessing) return processing;
 
 			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
 				return clientInfo;
@@ -275,7 +256,6 @@ export default {
 				],
 			});
 			this.defaultWorkspaceTab = items?.[0]?.value ?? null;
-			this.isDefaultWorkspaceTabLoaded = true;
 		},
 
 		async initialize() {
