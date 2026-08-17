@@ -14,6 +14,7 @@ const { t } = i18n.global;
 const state = {
 	isClosedChatLoaded: false,
 	closedChatFirstMessageId: null,
+	next: false,
 };
 
 const getters = {
@@ -64,6 +65,7 @@ const actions = {
 
 	LOAD_CLOSED_CHAT: async (context, chat) => {
 		let chatWithMessages = chat;
+		context.commit('SET_NEXT', false);
 		try {
 			/**
 			 * @author @OleksandrPalonnyi
@@ -73,7 +75,7 @@ const actions = {
 			 * conversationId is needed when the chat is closed and post-processing is
 			 * in progress, because chat.id doesn't resolve a closed chat (backend specific) [WTEL-9955]
 			 */
-			const { items } = await CatalogAPI.getChatMessagesList({
+			const { items, next } = await CatalogAPI.getChatMessagesList({
 				chatId: chat.conversationId || chat.id,
 			});
 
@@ -82,6 +84,7 @@ const actions = {
 				...chat,
 				messages: formatChatMessages(items),
 			};
+			context.commit('SET_NEXT', next);
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
@@ -91,6 +94,41 @@ const actions = {
 				root: true,
 			});
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
+		}
+	},
+
+	LOAD_MORE_CLOSED_CHAT_MESSAGES: async (context) => {
+		const chat = context.rootGetters['features/chat/CHAT_ON_WORKSPACE'];
+		const messages = chat.messages || [];
+		const oldestMessage = messages[0];
+		if (!oldestMessage) return;
+
+		try {
+			const { items, next } = await CatalogAPI.getChatMessagesList({
+				chatId: chat.conversationId || chat.id,
+				offsetDate: oldestMessage.createdAt,
+			});
+
+			const olderMessages = formatChatMessages(items);
+
+			context.commit('SET_NEXT', next);
+			await context.dispatch(
+				'features/chat/SET_WORKSPACE',
+				{
+					...chat,
+					messages: [
+						...olderMessages,
+						...messages,
+					],
+				},
+				{
+					root: true,
+				},
+			);
+		} catch (err) {
+			throw applyTransform(err, [
+				notify,
+			]);
 		}
 	},
 	OPEN_CLOSED_CHAT: async (context, chat) => {
@@ -171,6 +209,7 @@ const actions = {
 	RESET_CLOSED_CHAT: async (context) => {
 		context.commit('SET_IS_CLOSED_CHAT_LOADED', false);
 		context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
+		context.commit('SET_NEXT', false);
 	},
 };
 
@@ -180,6 +219,9 @@ const mutations = {
 	},
 	SET_IS_CLOSED_CHAT_LOADED: (state, boolean) => {
 		state.isClosedChatLoaded = boolean;
+	},
+	SET_NEXT: (state, boolean) => {
+		state.next = boolean;
 	},
 };
 
