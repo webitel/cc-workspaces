@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Чат | Чати',
+			searchByUsername: 'Пошук за імʼям',
 			preview: {
 				md: {
 					active: 'Активні чати',

@@ -1,5 +1,5 @@
 import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
-import { getChatPreviewName } from '../../../scripts/getChatPreviewName';
+import { getClientName } from '../../../scripts/getClientName.js';
 
 const state = {
 	query: '',
@@ -18,9 +18,10 @@ const getters = {
 		if (!client) return [];
 
 		const query = state.query.trim().toLowerCase();
-		return client
-			.allConversations()
-			.filter((chat) => getChatPreviewName(chat).toLowerCase().includes(query));
+
+		return client.allConversations().filter((chat) => {
+			return getClientName(chat.members).toLowerCase().includes(query);
+		});
 	},
 };
 
