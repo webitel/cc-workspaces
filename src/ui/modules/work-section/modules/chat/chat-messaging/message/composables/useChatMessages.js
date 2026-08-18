@@ -55,10 +55,12 @@ export const useChatMessages = () => {
 
 	function showChatDate(index) {
 		const { prevMessage, message } = getMessage(index);
-		return (
-			prevMessage &&
-			prettifyDate(prevMessage?.createdAt) !== prettifyDate(message?.createdAt)
-		);
+		const hasDate = prevMessage?.createdAt && message?.createdAt;
+
+		return hasDate && prevMessage
+			? prettifyDate(prevMessage?.createdAt) !==
+					prettifyDate(message?.createdAt)
+			: '';
 	}
 
 	const showAvatar = (index) => {
