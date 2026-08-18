@@ -11,8 +11,7 @@ const MAX_RELOAD_PAGES = 50;
 
 // UI reads from the WS client; REST is only a one-time hydrator after page reload
 const getClientChats = (rootState) => {
-	if (rootState.client.state !== WebSocketConnectionState.Connected)
-		return [];
+	if (rootState.client.state !== WebSocketConnectionState.Connected) return [];
 
 	const client = rootState.client.getClientSync();
 	if (!client) return [];
@@ -38,9 +37,7 @@ const getters = {
 			]),
 		);
 
-		return state.visibleChatIds
-			.map((id) => chatsById.get(id))
-			.filter(Boolean);
+		return state.visibleChatIds.map((id) => chatsById.get(id)).filter(Boolean);
 	},
 
 	HAS_MORE: (state, getters, rootState) =>
@@ -86,10 +83,7 @@ const actions = {
 				(chat) => chat.conversationId,
 			);
 
-			context.commit(
-				'SET_VISIBLE_CHAT_IDS',
-				ids.slice(0, context.state.size),
-			);
+			context.commit('SET_VISIBLE_CHAT_IDS', ids.slice(0, context.state.size));
 		} finally {
 			context.commit('SET_IS_LOADING', false);
 		}
@@ -142,9 +136,7 @@ const actions = {
 	REMOVE_CHAT: (context, chat) => {
 		context.commit(
 			'SET_VISIBLE_CHAT_IDS',
-			context.state.visibleChatIds.filter(
-				(id) => id !== chat.conversationId,
-			),
+			context.state.visibleChatIds.filter((id) => id !== chat.conversationId),
 		);
 	},
 };
