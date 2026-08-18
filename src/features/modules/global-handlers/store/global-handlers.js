@@ -23,7 +23,7 @@ const actions = {
 
 		stop = watch(
 			() => context.rootState.client.state,
-			(value) => {
+			(value, prev) => {
 				console.log('[WS connection state]:', value);
 				if (
 					value === WebSocketConnectionState.Reconnecting ||
@@ -34,6 +34,18 @@ const actions = {
 
 				if (value === WebSocketConnectionState.Connected) {
 					context.dispatch('CLOSE_DISCONNECT_POPUP');
+
+					// first session is opened by OPEN_SESSION; here we only re-bind
+					// chats after the socket comes back
+					if (
+						(prev === WebSocketConnectionState.Reconnecting ||
+							prev === WebSocketConnectionState.Disconnected) &&
+						context.rootState.client.getClientSync()
+					) {
+						context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
+							root: true,
+						});
+					}
 				}
 			},
 			{

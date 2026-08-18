@@ -29,7 +29,7 @@ export const useChatMessages = () => {
 		return [
 			...store.state.features.chat.chatHistory.chatHistoryMessages,
 			...missingChatMessages.value,
-			...chatOnWorkspace.value.messages,
+			...(chatOnWorkspace.value?.messages || []),
 		];
 	});
 

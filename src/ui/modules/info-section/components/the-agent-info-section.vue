@@ -222,23 +222,24 @@ export default {
 		resolveDefaultTab() {
 			const { processing, clientInfo, generalInfo } = this.tabsObject;
 
+			const processingConfigured =
+				this.defaultWorkspaceTab === processing.settingValue;
+			const clientInfoConfigured =
+				this.defaultWorkspaceTab === clientInfo.settingValue;
+			const noDefaultWorkspaceTab = !this.defaultWorkspaceTab;
+
+			if (processingConfigured && this.showProcessing) return processing;
+
 			if (
-				this.showProcessing &&
-				this.defaultWorkspaceTab === processing.settingValue
-			) {
-				return processing;
-			}
-			if (
-				this.showClientInfo &&
-				this.defaultWorkspaceTab === clientInfo.settingValue
+				(noDefaultWorkspaceTab ||
+					clientInfoConfigured ||
+					processingConfigured) &&
+				this.showClientInfo
 			) {
 				return clientInfo;
 			}
 
-			if (!this.defaultWorkspaceTab) {
-				if (this.showProcessing) return processing;
-				if (this.showClientInfo) return clientInfo;
-			}
+			if (noDefaultWorkspaceTab && this.showProcessing) return processing;
 
 			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
 				return clientInfo;
