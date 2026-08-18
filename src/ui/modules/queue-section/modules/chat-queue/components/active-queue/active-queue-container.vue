@@ -134,7 +134,9 @@ const isEmpty = computed(
 	() => !taskList.value.length && !isSearchLoading.value,
 );
 
-const nextActiveChats = computed(() => store.state.features.chat.active.next);
+const nextActiveChats = computed(
+	() => store.getters['features/chat/active/HAS_MORE'],
+);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
