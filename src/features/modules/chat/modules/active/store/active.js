@@ -4,12 +4,10 @@ import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 import search from './search';
 
-const PAGE_SIZE = 10;
 const RELOAD_PAGE_SIZE = 40;
-// cap REST hydration: 50 pages × 40 items = up to 2000 chats loaded into the client
 const MAX_RELOAD_PAGES = 50;
 
-// UI reads from the WS client; REST is only a one-time hydrator after page reload
+// Chats the WS client currently holds. Empty until the socket is connected.
 const getClientChats = (rootState) => {
 	if (rootState.client.state !== WebSocketConnectionState.Connected) return [];
 
@@ -21,14 +19,14 @@ const getClientChats = (rootState) => {
 
 const state = {
 	visibleChatIds: [],
-	size: PAGE_SIZE,
+	size: 10,
 	isLoading: false,
 };
 
 const getters = {
-	// all non-closed chats in the client — used by counters and HAS_MORE
+	// full list for counters and More
 	ALL_CHAT_LIST: (state, getters, rootState) => getClientChats(rootState),
-	// paginated slice for the queue list (first 10, then +10 per More click)
+	// ids currently shown in the queue (see visibleChatIds)
 	VISIBLE_CHAT_LIST: (state, getters, rootState) => {
 		const chatsById = new Map(
 			getClientChats(rootState).map((chat) => [
@@ -45,14 +43,8 @@ const getters = {
 };
 
 const actions = {
-	// Bug we hit: REST returns the full active-chat list (and `next`) right away, but the
-	// queue renders from `client.allConversations()`. After reload WS knows only ~40 chats;
-	// the rest exist in REST but are not in the client yet — no chat item to render, while
-	// REST pagination already claims there are more pages. Driving More/visible ids from REST
-	// got out of sync with what WS actually had.
-	//
-	// Fix: on session start, walk REST pages and hydrate every dialog into the WS client first.
-	// Only then build visible ids / More / counters from the client — one source of truth for UI.
+	// subscribe_chat returns at most 40 conversations. Load the rest from REST
+	// into conversationStore so they get WS actions, then show the first page.
 	RELOAD_CHAT_LIST: async (context) => {
 		context.commit('SET_IS_LOADING', true);
 		context.commit('SET_VISIBLE_CHAT_IDS', []);
@@ -61,9 +53,8 @@ const actions = {
 		try {
 			let page = 1;
 
-			// Pull all REST pages into the client before showing the list. Stop on empty/short
-			// page, not on REST `next` — WS must catch up with REST before UI reads it.
-			// MAX_RELOAD_PAGES is a safety cap (50 × 40 = 2000 chats) if pages never shorten.
+			// page through REST until a short/empty response. MAX_RELOAD_PAGES
+			// stops the loop if every page comes back full (50 × 40 = 2000 chats).
 			while (page <= MAX_RELOAD_PAGES) {
 				const { items: dialogs } = await ActiveChatsAPI.getList({
 					page,
@@ -112,7 +103,7 @@ const actions = {
 		});
 	},
 
-	// no REST here — reveal the next page from chats already loaded into the client
+	// show the next `size` chats already sitting in the client
 	LOAD_NEXT_ACTIVE_CHATS: (context) => {
 		if (context.state.isLoading) return;
 
