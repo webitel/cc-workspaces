@@ -5,7 +5,7 @@
         :task="task"
         :index="key"
         :size="size"
-        :loading="showLoader(task.id)"
+        :loading="showLoader(task.attemptId)"
         @click="openTask"
         @accept="acceptTask"
       />
@@ -38,7 +38,7 @@ console.info(store.state.features.chat.manual.manualList);
 const manualList = computed(() => store.state.features.chat.manual.manualList);
 
 function acceptTask(task) {
-	return runWithLoader(task.id, () =>
+	return runWithLoader(task.attemptId, () =>
 		store.dispatch('features/chat/manual/ACCEPT_TASK', task),
 	);
 }
