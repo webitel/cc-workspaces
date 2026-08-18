@@ -66,6 +66,7 @@ export const buildConversationFromDialog = ({ client, dialog }) => {
 
 	conversation.createdAt = Number(dialog.started) || Number(dialog.date) || 0;
 	conversation.closedAt = Number(dialog.closed) || 0;
+	conversation.queue = dialog.queue;
 
 	// agent channelId is his member.id; without it chat actions are disabled
 	if (currentAgent.join) {
