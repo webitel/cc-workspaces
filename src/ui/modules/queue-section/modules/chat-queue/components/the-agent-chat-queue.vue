@@ -71,7 +71,7 @@ const { cacheExpansionState, restoreExpansionState } = useCachedExpansionState({
 });
 
 const chatList = computed(
-	() => store.getters['features/chat/active/VISIBLE_CHAT_LIST'],
+	() => store.getters['features/chat/active/ALL_CHAT_LIST'],
 );
 
 const closedChat = computed(
