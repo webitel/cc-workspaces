@@ -1,5 +1,12 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
-import { markRaw, reactive, readonly, ref, shallowReactive } from 'vue';
+import {
+	markRaw,
+	reactive,
+	readonly,
+	ref,
+	shallowReactive,
+	shallowRef,
+} from 'vue';
 import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
@@ -27,7 +34,8 @@ type EventMap = {
 	[WebSocketClientEvent.Error]: EventCallback<unknown>;
 };
 
-let client: Client | null = null;
+// internal only: the instance must not get into root state (devtools snapshots it on every mutation)
+const client = shallowRef<Client | null>(null);
 const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 
 let clientInitPromise: Promise<Client> | null = null;
@@ -234,15 +242,15 @@ async function createClient(): Promise<Client> {
 }
 
 async function destroyClient() {
-	if (!client) return;
+	if (!client.value) return;
 
 	try {
 		stopLatencyTracking();
-		await client.destroy?.();
+		await client.value.destroy?.();
 	} catch (e) {
 		console.warn('[WS] destroy error', e);
 	} finally {
-		client = null;
+		client.value = null;
 		state.value = WebSocketConnectionState.Disconnected;
 		(
 			window as unknown as {
@@ -290,22 +298,22 @@ async function getCliInstance({
 } = {}): Promise<Client> {
 	if (
 		!forceReconnect &&
-		client &&
+		client.value &&
 		state.value === WebSocketConnectionState.Connected
 	) {
-		return client;
+		return client.value;
 	}
 
 	if (clientInitPromise) return clientInitPromise;
 
-	state.value = client
+	state.value = client.value
 		? WebSocketConnectionState.Reconnecting
 		: WebSocketConnectionState.Connecting;
 
 	clientInitPromise = (async () => {
 		try {
 			const cli = await createClient();
-			client = cli;
+			client.value = cli;
 			state.value = WebSocketConnectionState.Connected;
 			return cli;
 		} finally {
@@ -331,7 +339,8 @@ export function useWebSocketClient() {
 	}
 
 	return {
-		client,
+		// sync accessor instead of the ref: keeps the instance out of root state
+		getClientSync: () => client.value,
 		state: readonly(state),
 
 		getCliInstance,

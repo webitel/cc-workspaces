@@ -37,6 +37,7 @@
         <component
           :is="getComponent(value)"
           :size="size"
+          @expand="$emit('expand')"
         />
       </template>
     </wt-expansion-panel>
@@ -64,13 +65,19 @@ const props = defineProps({
 	},
 });
 
+defineEmits([
+	'expand',
+]);
+
 const store = useStore();
 
 const { cacheExpansionState, restoreExpansionState } = useCachedExpansionState({
 	entity: 'chat',
 });
 
-const chatList = computed(() => store.state.features.chat.chatList);
+const chatList = computed(
+	() => store.getters['features/chat/active/VISIBLE_CHAT_LIST'],
+);
 
 const closedChat = computed(
 	() => store.state.features.chat.closed.processed.chatsList,
