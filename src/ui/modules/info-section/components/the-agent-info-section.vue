@@ -226,21 +226,20 @@ export default {
 				this.defaultWorkspaceTab === processing.settingValue;
 			const clientInfoConfigured =
 				this.defaultWorkspaceTab === clientInfo.settingValue;
-			const noConfig = !this.defaultWorkspaceTab;
+			const noDefaultWorkspaceTab = !this.defaultWorkspaceTab;
 
 			if (processingConfigured && this.showProcessing) return processing;
 
-			// clientInfo is the fallback whenever there's nothing more specific
-			// configured, or the configured tab isn't available for this task
-			// (e.g. processing configured but not allowed for a transferred call)
 			if (
-				(noConfig || clientInfoConfigured || processingConfigured) &&
+				(noDefaultWorkspaceTab ||
+					clientInfoConfigured ||
+					processingConfigured) &&
 				this.showClientInfo
 			) {
 				return clientInfo;
 			}
 
-			if (noConfig && this.showProcessing) return processing;
+			if (noDefaultWorkspaceTab && this.showProcessing) return processing;
 
 			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
 				return clientInfo;
