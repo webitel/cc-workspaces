@@ -25,7 +25,7 @@ export const useMissingChatMessages = (
 		// chat could have been switched while the request was in flight
 		if (chatId.value !== id) return;
 
-		messages.value = apiMessages;
+		messages.value = apiMessages.slice(0, 1);
 	};
 
 	watch(
