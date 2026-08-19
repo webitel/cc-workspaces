@@ -11,6 +11,16 @@
         ref="chat-content"
         class="current-chat__content"
       >
+        <div
+          v-if="showLoadMoreObserver"
+          class="current-chat__observer-wrapper"
+        >
+          <wt-intersection-observer
+            :canLoadMore="next"
+            :loading="isLoading"
+            @next="loadNextMessages"
+          />
+        </div>
         <message
           v-for="(message, index) of messages"
           :key="message.id"
@@ -49,7 +59,14 @@ import {
 	useObserveHeightUntilStable,
 } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { computed, onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import {
+	computed,
+	nextTick,
+	onUnmounted,
+	ref,
+	useTemplateRef,
+	watch,
+} from 'vue';
 import { useStore } from 'vuex';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatDate from '../components/chat-date.vue';
@@ -60,6 +77,14 @@ import { useChatMessages } from '../message/composables/useChatMessages.js';
 const store = useStore();
 
 const chatMediaNamespace = 'features/chat/chatMedia';
+/**
+ * @author PolinaSukhorukova-webitel
+ *
+ * [WTEL-10003](https://webitel.atlassian.net/browse/WTEL-10003)
+ * Allows the auto scroll only for an already-closed chat on open, not when a
+ * viewed chat closes into post-processing.
+ */
+let wasClosedOnOpen = false;
 
 const props = defineProps({
 	size: {
@@ -85,6 +110,16 @@ const currentChat = computed(
 const isUnseen = computed(
 	() => store.getters['features/chat/unseen/IS_CHAT_UNSEEN'],
 );
+const next = computed(() => store.state.features.chat.closed.next);
+const isChatClosed = computed(() => !!currentChat.value?.closedAt);
+
+const showLoadMoreObserver = computed(
+	() =>
+		isChatClosed.value &&
+		!currentChat.value?.contact?.id &&
+		next.value &&
+		isReadyForPagination.value,
+);
 
 const {
 	messages,
@@ -105,8 +140,9 @@ const {
 	chatContent,
 	messages,
 	chatId: computed(() => currentChat.value?.id),
-	isChatClosed: computed(() => false),
+	isChatClosed,
 	onBeforeStart: ({ scrollToBottom }) => {
+		wasClosedOnOpen = false;
 		scrollToBottom();
 		startObserve();
 	},
@@ -120,11 +156,31 @@ const {
 const { startObserve } = useObserveHeightUntilStable(
 	chatContainer,
 	() => {
+		if (isLoading.value) return;
 		if (currentChat.value?.closedAt && !wasClosedOnOpen) return;
 		scrollToBottom('instant');
 	},
 	OBSERVER_TIMEOUT_MS,
 );
+
+const getTopMessageEl = () => {
+	if (!chatContainer.value) return;
+	lastVisibleMessageEl.value =
+		chatContainer.value.getElementsByClassName('chat-message')[0];
+};
+
+const loadNextMessages = async () => {
+	if (isLoading.value || !next.value) return;
+	isLoading.value = true;
+	getTopMessageEl();
+	try {
+		await store.dispatch('features/chat/closed/LOAD_MORE_CLOSED_CHAT_MESSAGES');
+		await nextTick();
+		lastVisibleMessageEl.value?.scrollIntoView?.();
+	} finally {
+		isLoading.value = false;
+	}
+};
 
 const openMedia = (message) =>
 	store.dispatch(`${chatMediaNamespace}/OPEN_MEDIA`, message);
@@ -198,5 +254,11 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+}
+
+.current-chat__observer-wrapper {
+  min-height: calc(var(--spacing-lg) * 2 + var(--icon-md-size));
+  display: flex;
+  align-items: flex-end;
 }
 </style>
