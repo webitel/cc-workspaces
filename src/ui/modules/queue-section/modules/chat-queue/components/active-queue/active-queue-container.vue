@@ -20,7 +20,7 @@
         class="active-queue-container__empty-wrap"
       >
         <wt-empty
-          :size="size"
+          :size="'sm'"
           :image="emptySearchImage"
           :text="t('emptySearch.text')"
           class="active-queue-container__empty"
@@ -191,6 +191,7 @@ loadClosedChatsList();
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  padding: var(--spacing-2xs);
+  padding: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }
 </style>
