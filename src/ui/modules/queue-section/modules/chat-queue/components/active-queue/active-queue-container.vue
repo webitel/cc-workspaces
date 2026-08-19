@@ -170,11 +170,11 @@ loadClosedChatsList();
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding-top: var(--spacing-xs);
 }
 
 .active-queue-container__search-bar {
   max-width: 100%;
+  padding-top: var(--spacing-xs);
 }
 
 .active-queue-container__chat {
