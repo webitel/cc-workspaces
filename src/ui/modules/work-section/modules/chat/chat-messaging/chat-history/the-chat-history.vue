@@ -107,6 +107,7 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const OBSERVER_TIMEOUT_MS = 3000;
+let showAllMessagesTimer;
 
 const chatContainer = useTemplateRef('chat-container');
 const chatContent = useTemplateRef('chat-content');
@@ -262,6 +263,9 @@ const loadNextMessages = async () => {
 };
 
 async function loadMessagesList() {
+	showAllMessages.value = false;
+	clearTimeout(showAllMessagesTimer);
+
 	if (!isChatClosed.value) {
 		await loadHistory();
 		await nextTick();
@@ -276,7 +280,7 @@ async function loadMessagesList() {
 		isInitialScrollInProgress.value = false;
 	}
 
-	setTimeout(() => {
+	showAllMessagesTimer = setTimeout(() => {
 		showAllMessages.value = true;
 	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
 }
@@ -287,6 +291,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 	resetHistory();
+	clearTimeout(showAllMessagesTimer);
 });
 
 watch(
