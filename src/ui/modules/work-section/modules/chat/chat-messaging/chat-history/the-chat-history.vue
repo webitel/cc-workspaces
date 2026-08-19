@@ -266,23 +266,25 @@ async function loadMessagesList() {
 	showAllMessages.value = false;
 	clearTimeout(showAllMessagesTimer);
 
-	if (!isChatClosed.value) {
-		await loadHistory();
-		await nextTick();
-		scrollToBottom();
-	} else {
-		isInitialScrollInProgress.value = true;
+	try {
+		if (!isChatClosed.value) {
+			await loadHistory();
+			await nextTick();
+			scrollToBottom();
+		} else {
+			isInitialScrollInProgress.value = true;
 
-		await loadClosedChatHistory();
-		await nextTick();
-		scrollToClosedChatFirstMessage();
-
+			await loadClosedChatHistory();
+			await nextTick();
+			scrollToClosedChatFirstMessage();
+		}
+	} finally {
 		isInitialScrollInProgress.value = false;
-	}
 
-	showAllMessagesTimer = setTimeout(() => {
-		showAllMessages.value = true;
-	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+		showAllMessagesTimer = setTimeout(() => {
+			showAllMessages.value = true;
+		}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+	}
 }
 
 onMounted(() => {
