@@ -37,7 +37,6 @@
         <component
           :is="getComponent(value)"
           :size="size"
-          @expand="$emit('expand')"
         />
       </template>
     </wt-expansion-panel>
@@ -64,10 +63,6 @@ const props = defineProps({
 		default: 'md',
 	},
 });
-
-defineEmits([
-	'expand',
-]);
 
 const store = useStore();
 
