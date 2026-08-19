@@ -1,8 +1,10 @@
 <template>
   <section class="current-chat chat-messages-container" @click="focusOnInput">
+    <wt-loader v-show="!showAllMessages" class="current-chat__loader" />
     <div
       ref="chat-container"
       class="chat-messages-items wt-scrollbar"
+						:class="{ 'current-chat__messages--processing': !showAllMessages }"
       @scroll="handleChatScroll"
     >
       <div
@@ -99,6 +101,7 @@ const OBSERVER_TIMEOUT_MS = 1500;
 const isLoading = ref(false);
 const isReadyForPagination = ref(false);
 const lastVisibleMessageEl = ref(null);
+const showAllMessages = ref(false);
 
 const currentChat = computed(
 	() => store.getters[`features/chat/CHAT_ON_WORKSPACE`],
@@ -189,6 +192,9 @@ watch(
 	() => currentChat.value?.id,
 	async () => {
 		isReadyForPagination.value = false;
+		setTimeout(() => {
+			showAllMessages.value = true;
+		}, 700);
 		if (!isChatClosed.value) return;
 
 		wasClosedOnOpen = true;
@@ -208,6 +214,38 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.current-chat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.current-chat__loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: fit-content;
+}
+
+.current-chat__messages {
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  opacity: 100%;
+  transition: all var(--transition-fast);
+}
+
+.current-chat__messages--processing {
+  opacity: 0;
+}
+
 .current-chat__content {
   display: flex;
   flex-direction: column;
