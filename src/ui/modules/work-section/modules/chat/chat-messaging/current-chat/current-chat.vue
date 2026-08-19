@@ -3,7 +3,7 @@
     <wt-loader v-show="!showAllMessages" class="current-chat__loader" />
     <div
       ref="chat-container"
-      class="chat-messages-items wt-scrollbar"
+      class="current-chat__messages wt-scrollbar"
 						:class="{ 'current-chat__messages--processing': !showAllMessages }"
       @scroll="handleChatScroll"
     >
@@ -72,6 +72,11 @@ const chatContainer = useTemplateRef('chat-container');
 const chatContent = useTemplateRef('chat-content');
 
 const OBSERVER_TIMEOUT_MS = 1500;
+let showAllMessagesTimer;
+
+const isLoading = ref(false);
+const isReadyForPagination = ref(false);
+const lastVisibleMessageEl = ref(null);
 const showAllMessages = ref(false);
 
 const currentChat = computed(
@@ -132,7 +137,9 @@ watch(
 	() => currentChat.value?.id,
 	async () => {
 		isReadyForPagination.value = false;
-		setTimeout(() => {
+		showAllMessages.value = false;
+		clearTimeout(showAllMessagesTimer);
+		showAllMessagesTimer = setTimeout(() => {
 			showAllMessages.value = true;
 		}, 700);
 		if (!isChatClosed.value) return;
@@ -150,10 +157,11 @@ watch(
 
 onUnmounted(() => {
 	cleanChatPlayers();
+	clearTimeout(showAllMessagesTimer);
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .current-chat {
   position: relative;
   display: flex;
