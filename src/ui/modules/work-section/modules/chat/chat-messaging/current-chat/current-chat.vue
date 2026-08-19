@@ -49,7 +49,7 @@ import {
 	useObserveHeightUntilStable,
 } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/src/enums/index.js';
-import { computed, onUnmounted, useTemplateRef } from 'vue';
+import { computed, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { useStore } from 'vuex';
 import ChatActivityInfo from '../components/chat-activity-info.vue';
 import ChatDate from '../components/chat-date.vue';
