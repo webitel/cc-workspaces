@@ -108,17 +108,10 @@
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
+import { useEventBus } from '@webitel/ui-sdk/composables';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import {
-	computed,
-	inject,
-	nextTick,
-	onMounted,
-	onUnmounted,
-	ref,
-	watch,
-} from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
@@ -155,8 +148,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const eventBus = inject('$eventBus');
 const store = useStore();
+const eventBus = useEventBus();
 
 const messageDraft = ref();
 const attachmentInput = ref();
@@ -242,9 +235,9 @@ async function sendMessage() {
 	try {
 		chat.value.draft = '';
 		await send(draft);
-	} catch (error) {
+	} catch (err) {
 		// https://webitel.atlassian.net/browse/WTEL-10102
-		if (error.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
+		if (err?.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
 			eventBus?.$emit('notification', {
 				type: 'error',
 				text: t('error.chat.webhookSiteClosedButMsgSent'),
@@ -256,7 +249,7 @@ async function sendMessage() {
 		 * no error message for this error - message was sent and will be delivered
 		 * [https://webitel.atlassian.net/browse/WTEL-9952]
 		 */
-		if (error?.id === ChatSendMessageErrors.PortalNoDeviceConnection) {
+		if (err?.id === ChatSendMessageErrors.PortalNoDeviceConnection) {
 			return;
 		}
 		chat.value.draft = draft;
