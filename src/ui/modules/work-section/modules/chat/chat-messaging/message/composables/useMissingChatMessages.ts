@@ -1,5 +1,5 @@
-import { type Ref, ref, watch } from 'vue';
-
+import { computed, type Ref, ref, watch } from 'vue';
+import { useStore } from 'vuex';
 import CatalogAPI from '../../../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository';
 import { formatChatMessages } from '../../../../../../../../features/modules/chat/scripts/formatChatMessages';
 
@@ -9,7 +9,14 @@ export const useMissingChatMessages = (
 ) => {
 	const messages = ref([]);
 
+	const store = useStore();
+
+	const chatOnWorkspace = computed(
+		() => store.getters[`features/chat/CHAT_ON_WORKSPACE`],
+	);
+
 	const getMissingMessages = async (id: string) => {
+		const currentChatFirstMessageId = chatOnWorkspace.value?.messages[0].id;
 		let apiMessages = [];
 
 		try {
@@ -25,7 +32,9 @@ export const useMissingChatMessages = (
 		// chat could have been switched while the request was in flight
 		if (chatId.value !== id) return;
 
-		messages.value = apiMessages.slice(0, 1);
+		messages.value = apiMessages.filter(
+			(message) => message.id !== currentChatFirstMessageId,
+		);
 	};
 
 	watch(
