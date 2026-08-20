@@ -84,7 +84,7 @@
 		"vite-plugin-pwa": "^1.3.0",
 		"vite-plugin-vue-devtools": "^8.2.1",
 		"vite-plugin-vue-docgen": "^0.3.4",
-		"vitepress": "^1.x",
+		"vitepress": "^2.0.0-alpha.19",
 		"vitest": "^4.x",
 		"vue-tsc": "^3.x",
 		"workbox-core": "^7.0.0",
