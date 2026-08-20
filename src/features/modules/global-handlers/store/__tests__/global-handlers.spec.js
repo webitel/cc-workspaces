@@ -1,5 +1,8 @@
+import { nextTick, ref } from 'vue';
+
 import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
 import { useWebSocketClient } from '../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
+import { WebSocketConnectionState } from '../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import globalsModule from '../global-handlers';
 
 const mockSocket = new MockSocket();
@@ -31,6 +34,13 @@ describe('global handlers store: actions', () => {
 		);
 	});
 
+	it('INIT_GLOBAL_HANDLERS dispatches SUBSCRIBE_TO_PAGE_VISIBILITY', () => {
+		globalsModule.actions.INIT_GLOBAL_HANDLERS(context);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'SUBSCRIBE_TO_PAGE_VISIBILITY',
+		);
+	});
+
 	it(`SUBSCRIBE_TO_CLIENT_DISCONNECT subscription dispatches OPEN_DISCONNECT_POPUP
    on "disconnected" event`, async () => {
 		globalsModule.actions.SUBSCRIBE_TO_CLIENT_DISCONNECT(context);
@@ -56,6 +66,73 @@ describe('global handlers store: actions', () => {
 	it('CLOSE_DISCONNECT_POPUP commits SET_DISCONNECT_POPUP with "close" value', () => {
 		globalsModule.actions.CLOSE_DISCONNECT_POPUP(context);
 		expect(context.commit).toHaveBeenCalledWith('SET_DISCONNECT_POPUP', false);
+	});
+
+	it('SUBSCRIBE_TO_CONNECTION_STATE does not resubscribe chats on the first Connected', async () => {
+		const connectionState = ref(WebSocketConnectionState.Idle);
+		const watchContext = {
+			rootState: {
+				client: {
+					state: connectionState,
+					getClientSync: () => ({}),
+				},
+			},
+			dispatch: vi.fn(),
+		};
+
+		const stop =
+			globalsModule.actions.SUBSCRIBE_TO_CONNECTION_STATE(watchContext);
+		connectionState.value = WebSocketConnectionState.Connecting;
+		await nextTick();
+		connectionState.value = WebSocketConnectionState.Connected;
+		await nextTick();
+
+		expect(watchContext.dispatch).not.toHaveBeenCalledWith(
+			'features/chat/SUBSCRIBE_CHATS',
+			null,
+			{
+				root: true,
+			},
+		);
+		stop();
+	});
+
+	it('SUBSCRIBE_TO_CONNECTION_STATE resubscribes chats after reconnect', async () => {
+		const connectionState = ref(WebSocketConnectionState.Idle);
+		const watchContext = {
+			rootState: {
+				client: {
+					state: connectionState,
+					getClientSync: () => ({}),
+				},
+			},
+			dispatch: vi.fn(),
+		};
+
+		const stop =
+			globalsModule.actions.SUBSCRIBE_TO_CONNECTION_STATE(watchContext);
+		connectionState.value = WebSocketConnectionState.Connecting;
+		await nextTick();
+		connectionState.value = WebSocketConnectionState.Connected;
+		await nextTick();
+
+		watchContext.dispatch.mockClear();
+
+		connectionState.value = WebSocketConnectionState.Reconnecting;
+		await nextTick();
+		connectionState.value = WebSocketConnectionState.Connecting;
+		await nextTick();
+		connectionState.value = WebSocketConnectionState.Connected;
+		await nextTick();
+
+		expect(watchContext.dispatch).toHaveBeenCalledWith(
+			'features/chat/SUBSCRIBE_CHATS',
+			null,
+			{
+				root: true,
+			},
+		);
+		stop();
 	});
 });
 
