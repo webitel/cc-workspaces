@@ -1,8 +1,7 @@
 import { computed, type Ref, ref, watch } from 'vue';
-
+import { useStore } from 'vuex';
 import CatalogAPI from '../../../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository';
 import { formatChatMessages } from '../../../../../../../../features/modules/chat/scripts/formatChatMessages';
-import { useStore } from 'vuex';
 
 export const useMissingChatMessages = (
 	chatId: Ref<string | null>,
