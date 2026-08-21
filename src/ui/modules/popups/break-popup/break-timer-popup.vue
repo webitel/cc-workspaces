@@ -2,48 +2,30 @@
   <wt-popup
     v-if="isBreakPopup"
     class="break-timer-popup"
-    size="sm"
+    :size="isBreakTimerStep ? 'sm' : 'md'"
     @close="close"
   >
-    <template #title>
-      {{ $t('agentStatus.breakTimer.heading', { mode: $t(`agentStatus.breakTimer.mode.${agentStatus}`) }) }}
-    </template>
+    <template #title>{{ title }}</template>
     <template #main>
-      <div class="break-timer-popup__main-wrapper">
-        <div class="break-timer-popup__icon-wrapper">
-          <wt-icon
-            :icon="agentStatus === AgentStatus.Pause ? 'pause' : 'breakout'"
-            icon-prefix="ws"
-            size="3xl"
-          ></wt-icon>
-        </div>
-        <div class="break-timer-popup__timer-wrap">
-          <div class="break-timer-popup-timer">
-            <span
-              v-for="(digit, key) of duration.split('')"
-              :key="key"
-              class="break-timer-popup-timer__digit typo-timer-digits"
-            >
-              {{ digit }}
-            </span>
-          </div>
-          <div class="break-timer-popup-pause-cause typo-subtitle-2">
-            {{ breakInfo }}
-          </div>
-        </div>
-      </div>
-      <div
-        v-if="statusComment"
-        class="break-timer-popup__status-comment wt-scrollbar"
-      >
-        {{ statusComment }}
-      </div>
+      <break-timer
+        v-if="isBreakTimerStep"
+        :agent-status="agentStatus"
+        :duration="duration"
+        :break-info="breakInfo"
+        :status-comment="statusComment"
+      />
+      <wt-cc-activity-type-options
+        v-else
+        :model-value="selectedActivityType"
+        :options="activityTypes"
+        @update:model-value="selectedActivityType = $event"
+      />
     </template>
     <template #actions>
       <wt-button
         color="success"
         wide
-        @click="setAgentWaiting"
+        @click="handleContinueWork"
       >{{ $t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
@@ -57,16 +39,35 @@
 </template>
 
 <script>
+import WtCcActivityTypeOptions from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/_internals/wt-cc-activity-type-options.vue';
+import { useActivityTypesOptions } from '@webitel/ui-sdk/src/modules/AgentStatusSelect/composables/useActivityTypesOptions';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { mapActions, mapState } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 
+import BreakTimer from './components/break-timer.vue';
+
 export default {
 	name: 'BreakTimerPopup',
+	components: {
+		BreakTimer,
+		WtCcActivityTypeOptions,
+	},
+	setup() {
+		const { activityTypes, defaultActivityTypeOption, loadActivityTypes } =
+			useActivityTypesOptions();
+		return {
+			activityTypes,
+			defaultActivityTypeOption,
+			loadActivityTypes,
+		};
+	},
 	data: () => ({
 		AgentStatus,
 		duration: '00:00:00',
 		isBreakPopupValue: false,
+		isBreakTimerStep: true,
+		selectedActivityType: null,
 	}),
 	watch: {
 		now: {
@@ -80,8 +81,11 @@ export default {
 				if (
 					this.agentStatus === AgentStatus.Pause ||
 					this.agentStatus === AgentStatus.BreakOut
-				)
+				) {
 					this.isBreakPopupValue = true;
+					this.isBreakTimerStep = true;
+					this.selectedActivityType = null;
+				}
 			},
 			immediate: true,
 		},
@@ -104,6 +108,13 @@ export default {
 		...mapState('features/status', {
 			agent: (state) => state.agent,
 		}),
+		title() {
+			return this.isBreakTimerStep
+				? this.$t('agentStatus.breakTimer.heading', {
+						mode: this.$t(`agentStatus.breakTimer.mode.${this.agentStatus}`),
+					})
+				: this.$t('webitelUI.agentStatusSelect.activityTypePopup.title');
+		},
 		isBreakPopup() {
 			return (
 				this.isBreakPopupValue &&
@@ -129,6 +140,31 @@ export default {
 			setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
 			agentLogout: 'AGENT_LOGOUT',
 		}),
+		async handleContinueWork() {
+			if (this.isBreakTimerStep) {
+				await this.goToActivityTypeStep();
+			} else {
+				await this.confirmActivityType();
+			}
+		},
+		async goToActivityTypeStep() {
+			await this.loadActivityTypes();
+			if (this.activityTypes.length > 1) {
+				this.selectedActivityType = this.activityTypes[0];
+				this.isBreakTimerStep = false;
+			} else {
+				await this.setAgentWaiting();
+			}
+		},
+		async confirmActivityType() {
+			const activityType =
+				this.selectedActivityType.id === this.defaultActivityTypeOption?.id
+					? this.defaultActivityTypeOption
+					: this.selectedActivityType;
+			await this.setAgentWaiting({
+				activityType,
+			});
+		},
 		close() {
 			this.isBreakPopupValue = false;
 		},
@@ -138,58 +174,4 @@ export default {
 
 <style lang="scss" scoped>
 @use '@webitel/ui-sdk/src/css/main' as *;
-
-.typo-timer-digits {
-  font-family: 'Montserrat', monospace;
-  font-size: 64px;
-  line-height: 78px;
-  font-weight: 700;
-}
-
-.break-timer-popup__main-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  background: var(--warning-color);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-lg);
-}
-
-.break-timer-popup__icon-wrapper {
-  padding: var(--spacing-sm);
-  line-height: 0;
-  background: var(--content-wrapper-color);
-  border-radius: var(--border-radius);
-}
-
-.break-timer-popup-timer {
-  width: fit-content;
-  margin: auto;
-}
-
-.break-timer-popup-timer__digit {
-  text-align: center;
-  display: inline-block;
-  width: 40px;
-  color: var(--primary-on-color);
-
-  /*semicolons*/
-  &:nth-child(3), &:nth-child(6) {
-    width: 24px;
-  }
-}
-
-.break-timer-popup-pause-cause {
-  text-align: center;
-  color: var(--primary-on-color);
-}
-
-.break-timer-popup__status-comment {
-  margin-top: var(--spacing-sm);
-  max-height: 80px;
-  overflow: auto;
-  word-break: break-word;
-}
 </style>
