@@ -53,9 +53,11 @@ export default {
 		WtCcActivityTypeOptions,
 	},
 	setup() {
-		const { activityTypes, loadActivityTypes } = useActivityTypesOptions();
+		const { activityTypes, defaultActivityTypeOption, loadActivityTypes } =
+			useActivityTypesOptions();
 		return {
 			activityTypes,
+			defaultActivityTypeOption,
 			loadActivityTypes,
 		};
 	},
@@ -150,8 +152,12 @@ export default {
 			}
 		},
 		async confirmActivityType() {
+			const activityType =
+				this.selectedActivityType.id === this.defaultActivityTypeOption?.id
+					? this.defaultActivityTypeOption
+					: this.selectedActivityType;
 			await this.setAgentWaiting({
-				activityType: this.selectedActivityType,
+				activityType,
 			});
 		},
 		close() {
