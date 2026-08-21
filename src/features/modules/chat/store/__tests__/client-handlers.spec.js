@@ -49,6 +49,15 @@ describe('features/chat store client handlers: actions', () => {
 		expect(subscribeChatMock).toHaveBeenCalled();
 	});
 
+	it('SUBSCRIBE_CHATS does not stack subscribeChat on the same client', async () => {
+		const subscribeChatMock = vi.fn();
+		mockSocket.subscribeChat = subscribeChatMock;
+		await chatModule.actions.SUBSCRIBE_CHATS(context);
+		await chatModule.actions.SUBSCRIBE_CHATS(context);
+		expect(subscribeChatMock).toHaveBeenCalledTimes(1);
+		expect(context.dispatch).toHaveBeenCalledWith('active/RELOAD_CHAT_LIST');
+	});
+
 	it('HANDLE_INVITE_ACTION is called after Invite event', async () => {
 		await chatModule.actions.SUBSCRIBE_CHATS(context);
 		mockSocket.invite(chat);
