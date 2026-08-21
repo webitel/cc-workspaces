@@ -149,6 +149,7 @@ export default {
 		async goToActivityTypeStep() {
 			await this.loadActivityTypes();
 			if (this.activityTypes.length > 1) {
+				this.selectedActivityType = this.activityTypes[0];
 				this.isBreakTimerStep = false;
 			} else {
 				await this.setAgentWaiting();
