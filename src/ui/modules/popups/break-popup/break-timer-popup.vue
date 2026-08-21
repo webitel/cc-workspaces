@@ -39,7 +39,7 @@
 
 <script>
 import WtCcActivityTypeOptions from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/_internals/wt-cc-activity-type-options.vue';
-import { useActivityTypes } from '@webitel/ui-sdk/src/modules/AgentStatusSelect/composables/useActivityTypes';
+import { useActivityTypesOptions } from '@webitel/ui-sdk/src/modules/AgentStatusSelect/composables/useActivityTypesOptions';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { mapActions, mapState } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
@@ -53,7 +53,7 @@ export default {
 		WtCcActivityTypeOptions,
 	},
 	setup() {
-		const { activityTypes, loadActivityTypes } = useActivityTypes();
+		const { activityTypes, loadActivityTypes } = useActivityTypesOptions();
 		return {
 			activityTypes,
 			loadActivityTypes,
