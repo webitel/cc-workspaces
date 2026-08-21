@@ -20,7 +20,7 @@
         class="active-queue-container__empty-wrap"
       >
         <wt-empty
-          :size="size"
+          :size="'sm'"
           :image="emptySearchImage"
           :text="t('emptySearch.text')"
           class="active-queue-container__empty"
@@ -134,11 +134,15 @@ const isEmpty = computed(
 	() => !taskList.value.length && !isSearchLoading.value,
 );
 
-const nextActiveChats = computed(() => store.state.features.chat.active.next);
+const nextActiveChats = computed(
+	() => store.getters['features/chat/active/HAS_MORE'],
+);
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
-const next = computed(() => !isSearchActive.value && nextActiveChats.value);
+const next = computed(
+	() => !isSearchActive.value && !isEmpty.value && nextActiveChats.value,
+);
 
 const loadNextActiveChats = () =>
 	store.dispatch(`${activeChatsNamespace}/LOAD_NEXT_ACTIVE_CHATS`);
@@ -168,11 +172,11 @@ loadClosedChatsList();
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding-top: var(--spacing-xs);
 }
 
 .active-queue-container__search-bar {
   max-width: 100%;
+  padding-top: var(--spacing-xs);
 }
 
 .active-queue-container__chat {
@@ -189,6 +193,7 @@ loadClosedChatsList();
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  padding: var(--spacing-2xs);
+  padding: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }
 </style>
