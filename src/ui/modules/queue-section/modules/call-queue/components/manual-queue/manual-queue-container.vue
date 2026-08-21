@@ -49,9 +49,10 @@ function openTask(task) {
 }
 
 watch(
-	() => manualList.value.length,
-	(length, prevLength) => {
-		if (length > prevLength) {
+	() => manualList.value.map((task) => task.attemptId),
+	(attemptIds, prevAttemptIds) => {
+		const hasNewTask = attemptIds.some((id) => !prevAttemptIds.includes(id));
+		if (hasNewTask) {
 			store.dispatch(
 				'features/callNotifications/HANDLE_SELF_ASSIGNED_CALL_RINGING',
 			);
