@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import { useLoader } from '../../../../../../composables/useLoader';
@@ -47,6 +47,17 @@ function acceptTask(task) {
 function openTask(task) {
 	console.info('implement me');
 }
+
+watch(
+	() => manualList.value.length,
+	(length, prevLength) => {
+		if (length > prevLength) {
+			store.dispatch(
+				'features/callNotifications/HANDLE_SELF_ASSIGNED_CALL_RINGING',
+			);
+		}
+	},
+);
 </script>
 
 <style lang="scss" scoped>
