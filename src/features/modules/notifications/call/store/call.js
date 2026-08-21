@@ -1,6 +1,7 @@
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { RingtoneType } from '@webitel/ui-sdk/enums';
 import eventBus from '@webitel/ui-sdk/scripts/eventBus.js';
+import { SELF_ASSIGNED_CALL_ACTION } from '@webitel/ui-sdk/src/modules/Notifications/store/NotificationsStoreModule';
 import { createBaseStoreModule } from '@webitel/ui-sdk/store/new/index.js';
 import { CallActions } from 'webitel-sdk';
 
@@ -130,6 +131,26 @@ const actions = {
 						title: 'Decline',
 					},
 				],
+			},
+			{
+				root: true,
+			},
+		);
+	},
+
+	// is called on ringing event on call store to play sound for a self-assigned (manual distribution) call
+	HANDLE_SELF_ASSIGNED_CALL_RINGING: async (context) => {
+		const isSelfAssignedCallSoundNotification = context.rootGetters[
+			'features/notifications/GET_NOTIFICATION_SETTING'
+		](EngineSystemSettingName.SelfAssignedCallSoundNotification);
+
+		if (!isSelfAssignedCallSoundNotification) return;
+
+		await context.dispatch(
+			'features/notifications/PLAY_SOUND',
+			{
+				action: SELF_ASSIGNED_CALL_ACTION,
+				volume: getRingtoneVolume(RingtoneType.Call),
 			},
 			{
 				root: true,
