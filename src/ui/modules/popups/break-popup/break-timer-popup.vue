@@ -80,8 +80,11 @@ export default {
 				if (
 					this.agentStatus === AgentStatus.Pause ||
 					this.agentStatus === AgentStatus.BreakOut
-				)
+				) {
 					this.isBreakPopupValue = true;
+					this.isBreakTimerStep = true;
+					this.selectedActivityType = null;
+				}
 			},
 			immediate: true,
 		},
