@@ -16,8 +16,9 @@
       />
       <wt-cc-activity-type-options
         v-else
-        v-model="selectedActivityType"
+        :model-value="selectedActivityType"
         :options="activityTypes"
+        @update:model-value="selectedActivityType = $event"
       />
     </template>
     <template #actions>
