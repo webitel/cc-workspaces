@@ -1,10 +1,13 @@
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
 
-// All conversations the WS client currently holds, closed or not. Empty
-// until the socket is connected. A closed conversation stays here — and
-// keeps updating reactively — until the SDK actually destroys it, which can
-// lag well behind the close event while the agent's post-processing/reporting
-// task is still open.
+/**
+ * @author @OleksandrPalonnyi
+ *
+ * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+ *
+ *  All conversations the WS client holds, closed or not — a closed one stays
+ *  here until the SDK destroys it
+ * */
 export const getAllClientConversations = (rootState) => {
 	if (rootState.client.state !== WebSocketConnectionState.Connected) return [];
 
