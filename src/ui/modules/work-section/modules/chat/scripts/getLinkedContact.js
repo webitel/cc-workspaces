@@ -9,7 +9,15 @@ async function getContactByUserId(task) {
 			qin: 'imclients{user{id}}',
 		});
 
-		return contacts[0];
+		const contact = contacts[0];
+		if (!contact) return contact;
+
+		// consumers (e.g. ChatContact) expect a flat `name` string, while
+		// ContactsAPI now returns the raw `{ commonName }` shape
+		return {
+			...contact,
+			name: contact.name?.commonName,
+		};
 	} catch (error) {
 		throw Error(`Can't get contact by User Id. ${error}`);
 	}

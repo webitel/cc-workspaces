@@ -35,9 +35,11 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapState as mapPiniaState } from 'pinia';
+import { mapGetters } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
+import { useContactStore } from '../../../info-section/modules/client-info/modules/contact/store/contactStore';
 import TaskContainer from '../_shared/components/task-container/task-container.vue';
 import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';
@@ -73,8 +75,8 @@ export default {
 		showQuickReplies: false, // used to show/hide header when opened quick replies panel. Need only for ui components
 	}),
 	computed: {
-		...mapState('ui/infoSec/client/contact', {
-			contact: (state) => state.contact,
+		...mapPiniaState(useContactStore, {
+			contact: 'contact',
 		}),
 		...mapGetters('features/chat', {
 			chat: 'CHAT_ON_WORKSPACE',

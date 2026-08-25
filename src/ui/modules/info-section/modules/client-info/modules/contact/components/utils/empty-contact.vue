@@ -15,27 +15,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: ComponentSize.MD,
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		allowAddition?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		allowAddition: false,
 	},
-	allowAddition: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
-const emit = defineEmits([
-	'add',
-]);
+const emit = defineEmits<{
+	add: [];
+}>();
 
 function add() {
 	emit('add');

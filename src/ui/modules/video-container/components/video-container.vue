@@ -51,14 +51,18 @@ import { eventBus } from '@webitel/ui-sdk/scripts';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
+import { useContactStore } from '../../info-section/modules/client-info/modules/contact/store/contactStore';
 import { useScreenShot } from '../composable/useScreenshot';
 import {
 	ScreenshotFileItem,
 	ScreenshotsOpenGalleriaPayload,
 	VideoCallScreenshotHandler,
 } from '../types/videoCall.types';
+import { storeToRefs } from 'pinia';
 
 const store = useStore();
+const contactStore = useContactStore();
+const { contact } = storeToRefs(contactStore);
 
 const {
 	screenshotStatus,
@@ -104,8 +108,6 @@ const call = computed<WorkspaceCall>(
 );
 const callIsOnHold = computed<boolean>(() => !!call.value.isHold);
 
-const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
-
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(
 	() => call.value.localStreams || [],
@@ -141,7 +143,7 @@ const isReceiverVideo = computed(() =>
 
 const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
 const userName = computed(
-	() => contact.value?.name || call.value.displayName || '',
+	() => contact.value?.name?.commonName || call.value.displayName || '',
 );
 const mutedVideo = computed(() => call.value.mutedVideo);
 

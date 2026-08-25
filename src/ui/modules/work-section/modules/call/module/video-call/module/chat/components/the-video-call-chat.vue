@@ -28,6 +28,7 @@ import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
+import { useContactStore } from '../../../../../../../../info-section/modules/client-info/modules/contact/store/contactStore';
 import { useUserinfoStore } from '../../../../../../../../userinfo/userinfoStore';
 
 const props = withDefaults(
@@ -40,6 +41,8 @@ const props = withDefaults(
 );
 
 const store = useStore();
+const contactStore = useContactStore();
+const { contact } = storeToRefs(contactStore);
 
 const userinfoStore = useUserinfoStore();
 const { userInfo } = storeToRefs(userinfoStore);
@@ -54,8 +57,6 @@ const messages = computed(
 const isChatClosed = computed(
 	() => chat?.value.state === ConversationState.Closed,
 );
-
-const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 const chatId = computed(() => chat?.value?.id);
 

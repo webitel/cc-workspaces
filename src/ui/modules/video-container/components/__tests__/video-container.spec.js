@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
 
 import VideoContainer from '../video-container.vue';
@@ -27,15 +28,6 @@ describe('VideoContainer', () => {
 	const buildStore = (activeVideoCall = {}) =>
 		createStore({
 			state: {
-				ui: {
-					infoSec: {
-						client: {
-							contact: {
-								contact: null,
-							},
-						},
-					},
-				},
 				features: {
 					call: {
 						callInfo: new Map(),
@@ -60,6 +52,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
+					createPinia(),
 				],
 			},
 		});
@@ -83,6 +76,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
+					createPinia(),
 				],
 			},
 		});

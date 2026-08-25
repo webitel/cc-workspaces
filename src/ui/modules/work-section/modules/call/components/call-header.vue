@@ -119,6 +119,7 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+import { useContactStore } from '../../../../info-section/modules/client-info/modules/contact/store/contactStore';
 import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
@@ -127,6 +128,7 @@ import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
+import { storeToRefs } from 'pinia';
 
 const props = withDefaults(
 	defineProps<{
@@ -142,13 +144,14 @@ const props = withDefaults(
 const emit = defineEmits<(e: 'openTab', value: string) => void>();
 
 const store = useStore();
+const contactStore = useContactStore();
+const { contact } = storeToRefs(contactStore);
 const { showLoader, runWithLoader } = useLoader();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
-const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
@@ -178,7 +181,7 @@ const queueName = computed(() => getQueueName(call.value));
 
 //@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
 const displayName = computed(() => {
-	if (isVideoCall.value && contact.value) return contact.value.name;
+	if (isVideoCall.value && contact.value) return contact.value.name?.commonName;
 	if (call.value?.isConsultToQueue && !call.value?.to)
 		return call.value?.destination;
 	return call.value?.displayName;

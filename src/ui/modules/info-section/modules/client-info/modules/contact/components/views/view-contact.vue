@@ -7,46 +7,34 @@
         :size="props.size"
         :list="listedContacts"
         :linked-contact="contact"
-        :namespace="props.namespace"
         @link="linkContact"
         @add="add"
       />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
 import { computed } from 'vue';
-import { useStore } from 'vuex';
 
+import { useContactStore } from '../../store/contactStore';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
+import { storeToRefs } from 'pinia';
 
-const props = defineProps({
-	namespace: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		mode?: string;
+	}>(),
+	{
+		size: ComponentSize.MD,
 	},
-	size: {
-		type: String,
-		default: ComponentSize.MD,
-	},
-	mode: {
-		type: String,
-	},
-});
+);
 
-const store = useStore();
+const contactStore = useContactStore();
+const { contact, isLoading, contactsByDestination } = storeToRefs(contactStore);
+const { linkContact } = contactStore;
 
-const contact = computed(
-	() => getNamespacedState(store.state, props.namespace).contact,
-);
-const isLoading = computed(
-	() => getNamespacedState(store.state, props.namespace).isLoading,
-);
-const contactsByDestination = computed(
-	() => getNamespacedState(store.state, props.namespace).contactsByDestination,
-);
 const listedContacts = computed(() => {
 	return contact.value
 		? [
@@ -57,16 +45,12 @@ const listedContacts = computed(() => {
 			];
 });
 
-const emit = defineEmits([
-	'add',
-]);
+const emit = defineEmits<{
+	add: [];
+}>();
 
 function add() {
 	emit('add');
-}
-
-function linkContact(contact) {
-	store.dispatch(`${props.namespace}/LINK_CONTACT`, contact);
 }
 </script>
 
