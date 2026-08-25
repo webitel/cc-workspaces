@@ -1,28 +1,11 @@
-import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
+import { getClientChats } from '../../../scripts/getClientConversations';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 import search from './search';
 
 const RELOAD_PAGE_SIZE = 40;
 const MAX_RELOAD_PAGES = 50;
-
-// All conversations the WS client currently holds, closed or not. Empty
-// until the socket is connected. A closed conversation stays here — and
-// keeps updating reactively — until the SDK actually destroys it, which can
-// lag well behind the close event while the agent's post-processing/reporting
-// task is still open.
-const getAllClientConversations = (rootState) => {
-	if (rootState.client.state !== WebSocketConnectionState.Connected) return [];
-
-	const client = rootState.client.getClientSync();
-	if (!client) return [];
-
-	return client.allConversations();
-};
-
-const getClientChats = (rootState) =>
-	getAllClientConversations(rootState).filter((chat) => !chat.closedAt);
 
 const state = {
 	visibleChatIds: [],
@@ -49,21 +32,6 @@ const getters = {
 		const shownCount = getters.VISIBLE_CHAT_LIST.length;
 		return shownCount > 0 && getters.ALL_CHAT_LIST.length > shownCount;
 	},
-
-	/**
-	 * @author @OleksandrPalonnyi
-	 *
-	 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
-	 *
-	 * Chats closed on the client but not yet destroyed by the SDK. The
-	 * closed/unprocessed REST list only reflects a chat once the agent's
-	 * post-processing task actually ends, so relying on it alone leaves the
-	 * chat invisible in the queue for the whole post-processing window.
-	 *
-	 * comment [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955?focusedCommentId=779325)
-	 */
-	POST_PROCESSING_CHAT_LIST: (state, getters, rootState) =>
-		getAllClientConversations(rootState).filter((chat) => chat.closedAt),
 };
 
 const actions = {

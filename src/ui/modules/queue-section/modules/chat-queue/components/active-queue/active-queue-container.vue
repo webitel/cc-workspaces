@@ -98,7 +98,7 @@ const unprocessedClosedChats = computed(
 // chats closed on the client but not yet destroyed by the SDK — see
 // https://webitel.atlassian.net/browse/WTEL-9955
 const postProcessingChats = computed(
-	() => store.getters['features/chat/active/POST_PROCESSING_CHAT_LIST'],
+	() => store.getters['features/chat/postProcessing/LIST'],
 );
 const searchQuery = computed(
 	() => store.state.features.chat.active.search.query,
