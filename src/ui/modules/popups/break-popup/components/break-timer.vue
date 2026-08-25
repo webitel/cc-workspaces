@@ -35,7 +35,7 @@
 <script setup>
 import { AgentStatus } from 'webitel-sdk';
 
-defineProps({
+const props = defineProps({
 	agentStatus: {
 		type: String,
 		required: true,
