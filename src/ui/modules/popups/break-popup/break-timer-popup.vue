@@ -26,150 +26,159 @@
         color="success"
         wide
         @click="handleContinueWork"
-      >{{ $t('agentStatus.breakTimer.continueWork') }}
+      >{{ t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
         color="error"
         wide
         @click="agentLogout"
-      >{{ $t('reusable.logout') }}
+      >{{ t('reusable.logout') }}
       </wt-button>
     </template>
   </wt-popup>
 </template>
 
-<script>
+<script setup lang="ts">
 import WtCcActivityTypeOptions from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/_internals/wt-cc-activity-type-options.vue';
 import { useActivityTypesOptions } from '@webitel/ui-sdk/src/modules/AgentStatusSelect/composables/useActivityTypesOptions';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
-import { mapActions, mapState } from 'vuex';
+import type { LookupOption } from '@webitel/ui-sdk/src/types';
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useStore } from 'vuex';
 import { AgentStatus } from 'webitel-sdk';
 
 import BreakTimer from './components/break-timer.vue';
 
-export default {
-	name: 'BreakTimerPopup',
-	components: {
-		BreakTimer,
-		WtCcActivityTypeOptions,
-	},
-	setup() {
-		const { activityTypes, defaultActivityTypeOption, loadActivityTypes } =
-			useActivityTypesOptions();
-		return {
-			activityTypes,
-			defaultActivityTypeOption,
-			loadActivityTypes,
-		};
-	},
-	data: () => ({
-		AgentStatus,
-		duration: '00:00:00',
-		isBreakPopupValue: false,
-		isBreakTimerStep: true,
-		selectedActivityType: null,
-	}),
-	watch: {
-		now: {
-			handler() {
-				this.duration = convertDuration(this.agent?.stateDuration);
-			},
-			immediate: true,
-		},
-		agentStatus: {
-			handler() {
-				if (
-					this.agentStatus === AgentStatus.Pause ||
-					this.agentStatus === AgentStatus.BreakOut
-				) {
-					this.isBreakPopupValue = true;
-					this.isBreakTimerStep = true;
-					this.selectedActivityType = null;
-				}
-			},
-			immediate: true,
-		},
-		breakInfo: {
-			handler() {
-				if (
-					this.agentStatus === AgentStatus.Pause ||
-					this.agentStatus === AgentStatus.BreakOut
-				)
-					this.isBreakPopupValue = true;
-			},
-			immediate: true,
-		},
-	},
+interface Agent {
+	status: AgentStatus;
+	statusPayload?: string;
+	statusComment?: string;
+	stateDuration?: number;
+}
 
-	computed: {
-		...mapState('ui/now', {
-			now: (state) => state.now,
-		}),
-		...mapState('features/status', {
-			agent: (state) => state.agent,
-		}),
-		title() {
-			return this.isBreakTimerStep
-				? this.$t('agentStatus.breakTimer.heading', {
-						mode: this.$t(`agentStatus.breakTimer.mode.${this.agentStatus}`),
-					})
-				: this.$t('webitelUI.agentStatusSelect.activityTypePopup.title');
-		},
-		isBreakPopup() {
-			return (
-				this.isBreakPopupValue &&
-				(this.agentStatus === AgentStatus.Pause ||
-					this.agentStatus === AgentStatus.BreakOut)
-			);
-		},
-		agentStatus() {
-			return this.agent.status;
-		},
-		breakInfo() {
-			return this.agentStatus === AgentStatus.Pause
-				? this.agent.statusPayload
-				: this.$t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`);
-		},
-		statusComment() {
-			return this.agent?.statusComment;
-		},
-	},
+const store = useStore();
+const { t } = useI18n();
 
-	methods: {
-		...mapActions('features/status', {
-			setAgentWaiting: 'SET_AGENT_WAITING_STATUS',
-			agentLogout: 'AGENT_LOGOUT',
-		}),
-		async handleContinueWork() {
-			if (this.isBreakTimerStep) {
-				await this.goToActivityTypeStep();
-			} else {
-				await this.confirmActivityType();
-			}
-		},
-		async goToActivityTypeStep() {
-			await this.loadActivityTypes();
-			if (this.activityTypes.length > 1) {
-				this.selectedActivityType = this.activityTypes[0];
-				this.isBreakTimerStep = false;
-			} else {
-				await this.setAgentWaiting();
-			}
-		},
-		async confirmActivityType() {
-			const activityType =
-				this.selectedActivityType.id === this.defaultActivityTypeOption?.id
-					? this.defaultActivityTypeOption
-					: this.selectedActivityType;
-			await this.setAgentWaiting({
-				activityType,
-			});
-		},
-		close() {
-			this.isBreakPopupValue = false;
-		},
+const { activityTypes, defaultActivityTypeOption, loadActivityTypes } =
+	useActivityTypesOptions();
+
+const duration = ref('00:00:00');
+const isBreakPopupValue = ref(false);
+const isBreakTimerStep = ref(true);
+const selectedActivityType = ref<LookupOption | null>(null);
+
+const now = computed(() => store.state.ui.now.now);
+const agent = computed<Agent>(() => store.state.features.status.agent);
+
+const agentStatus = computed(() => agent.value.status);
+
+const breakInfo = computed(() =>
+	agentStatus.value === AgentStatus.Pause
+		? agent.value.statusPayload
+		: t(`agentStatus.breakTimer.${AgentStatus.BreakOut}`),
+);
+
+const statusComment = computed(() => agent.value?.statusComment);
+
+const title = computed(() =>
+	isBreakTimerStep.value
+		? t('agentStatus.breakTimer.heading', {
+				mode: t(`agentStatus.breakTimer.mode.${agentStatus.value}`),
+			})
+		: t('webitelUI.agentStatusSelect.activityTypePopup.title'),
+);
+
+const isBreakPopup = computed(
+	() =>
+		isBreakPopupValue.value &&
+		(agentStatus.value === AgentStatus.Pause ||
+			agentStatus.value === AgentStatus.BreakOut),
+);
+
+watch(
+	now,
+	() => {
+		duration.value = convertDuration(agent.value?.stateDuration);
 	},
-};
+	{
+		immediate: true,
+	},
+);
+
+watch(
+	agentStatus,
+	() => {
+		if (
+			agentStatus.value === AgentStatus.Pause ||
+			agentStatus.value === AgentStatus.BreakOut
+		) {
+			isBreakPopupValue.value = true;
+			isBreakTimerStep.value = true;
+			selectedActivityType.value = null;
+		}
+	},
+	{
+		immediate: true,
+	},
+);
+
+watch(
+	breakInfo,
+	() => {
+		if (
+			agentStatus.value === AgentStatus.Pause ||
+			agentStatus.value === AgentStatus.BreakOut
+		) {
+			isBreakPopupValue.value = true;
+		}
+	},
+	{
+		immediate: true,
+	},
+);
+
+async function setAgentWaiting(payload?: {
+	activityType: LookupOption | null;
+}) {
+	await store.dispatch('features/status/SET_AGENT_WAITING_STATUS', payload);
+}
+
+async function goToActivityTypeStep() {
+	await loadActivityTypes();
+	if (activityTypes.value.length > 1) {
+		selectedActivityType.value = activityTypes.value[0];
+		isBreakTimerStep.value = false;
+	} else {
+		await setAgentWaiting();
+	}
+}
+
+async function confirmActivityType() {
+	const activityType =
+		selectedActivityType.value?.id === defaultActivityTypeOption.value?.id
+			? defaultActivityTypeOption.value
+			: selectedActivityType.value;
+	await setAgentWaiting({
+		activityType,
+	});
+}
+
+async function handleContinueWork() {
+	if (isBreakTimerStep.value) {
+		await goToActivityTypeStep();
+	} else {
+		await confirmActivityType();
+	}
+}
+
+async function agentLogout() {
+	await store.dispatch('features/status/AGENT_LOGOUT');
+}
+
+function close() {
+	isBreakPopupValue.value = false;
+}
 </script>
 
 <style lang="scss" scoped>
