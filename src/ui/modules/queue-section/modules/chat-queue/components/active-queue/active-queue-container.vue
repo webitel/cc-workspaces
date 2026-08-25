@@ -95,8 +95,12 @@ const activeChats = computed(
 const unprocessedClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.chatsList,
 );
-// chats closed on the client but not yet destroyed by the SDK — see
-// https://webitel.atlassian.net/browse/WTEL-9955
+
+/**
+ * @author @OleksandrPalonnyi
+ * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+ * chats closed on the client but not yet destroyed by the SDK — see
+ * */
 const postProcessingChats = computed(
 	() => store.getters['features/chat/postProcessing/LIST'],
 );
@@ -119,9 +123,12 @@ onUnmounted(() => store.dispatch(`${searchNamespace}/RESET_SEARCH`));
 
 const taskList = computed(() => {
 	if (isSearchActive.value) return searchResults.value;
-
-	// once the backend's unprocessed list picks a chat up, drop the local
-	// stand-in so it doesn't render twice
+	/**
+	 * @author @OleksandrPalonnyi
+	 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+	 * once the backend's unprocessed list picks a chat up, drop the local
+	 * stand-in so it doesn't render twice
+	 * */
 	const unprocessedIds = new Set(
 		unprocessedClosedChats.value.map((chat) => chat.id),
 	);
