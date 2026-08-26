@@ -46,16 +46,9 @@ import type { LookupOption } from '@webitel/ui-sdk/src/types';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { AgentStatus } from 'webitel-sdk';
+import { type Agent, AgentStatus } from 'webitel-sdk';
 
 import BreakTimer from './components/break-timer.vue';
-
-interface Agent {
-	status: AgentStatus;
-	statusPayload?: string;
-	statusComment?: string;
-	stateDuration?: number;
-}
 
 const store = useStore();
 const { t } = useI18n();
