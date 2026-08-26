@@ -30,7 +30,7 @@
 		"@vueuse/components": "^14.x",
 		"@vueuse/core": "^14.x",
 		"@webitel/api-services": "^0.1.72",
-		"@webitel/styleguide": "^26.2.19",
+		"@webitel/styleguide": "~26.2",
 		"@webitel/ui-chats": "^0.1.47",
 		"@webitel/ui-datalist": "^1.1.56",
 		"@webitel/ui-sdk": "~26.8",
