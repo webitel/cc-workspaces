@@ -117,18 +117,18 @@
 
 <script lang="ts" setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-import { useContactStore } from '../../../../info-section/modules/client-info/modules/contact/store/contactStore';
 import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
+import { useContactStore } from '../../../../info-section/modules/client-info/modules/contact/store/contact';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
 import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
-import { storeToRefs } from 'pinia';
 
 const props = withDefaults(
 	defineProps<{

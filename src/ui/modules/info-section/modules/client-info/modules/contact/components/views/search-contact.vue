@@ -89,16 +89,13 @@ import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/cont
 import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
 import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
 import SearchOptions from '../../enums/SearchOptions.enum';
-import { useContactStore } from '../../store/contactStore';
+import { useContactStore } from '../../store/contact';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
 
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 	}>(),
-	{
-		size: ComponentSize.MD,
-	},
 );
 
 const emit = defineEmits<{

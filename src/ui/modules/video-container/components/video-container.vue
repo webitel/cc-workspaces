@@ -48,17 +48,16 @@ import {
 	VideoCallAction,
 } from '@webitel/ui-sdk/modules/CallSession';
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import { storeToRefs } from 'pinia';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-
-import { useContactStore } from '../../info-section/modules/client-info/modules/contact/store/contactStore';
+import { useContactStore } from '../../info-section/modules/client-info/modules/contact/store/contact';
 import { useScreenShot } from '../composable/useScreenshot';
 import {
 	ScreenshotFileItem,
 	ScreenshotsOpenGalleriaPayload,
 	VideoCallScreenshotHandler,
 } from '../types/videoCall.types';
-import { storeToRefs } from 'pinia';
 
 const store = useStore();
 const contactStore = useContactStore();

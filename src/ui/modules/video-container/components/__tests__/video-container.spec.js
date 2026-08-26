@@ -1,5 +1,5 @@
+import { createTestingPinia } from '@pinia/testing';
 import { shallowMount } from '@vue/test-utils';
-import { createPinia } from 'pinia';
 import { createStore } from 'vuex';
 
 import VideoContainer from '../video-container.vue';
@@ -52,7 +52,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
-					createPinia(),
+					createTestingPinia(),
 				],
 			},
 		});
@@ -76,7 +76,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
-					createPinia(),
+					createTestingPinia(),
 				],
 			},
 		});

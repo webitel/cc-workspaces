@@ -66,7 +66,7 @@ import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { EngineSystemSettingName } from 'webitel-sdk';
-import { useContactStore } from '../../store/contactStore';
+import { useContactStore } from '../../store/contact';
 
 const props = withDefaults(
 	defineProps<{

@@ -58,9 +58,8 @@ import type {
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
-
+import { useContactStore } from '../../../../../../info-section/modules/client-info/modules/contact/store/contact';
 import LookupItem from '../../../../_shared/components/lookup-item/lookup-item.vue';
-import { useContactStore } from '../../../../../../info-section/modules/client-info/modules/contact/store/contactStore';
 import ContactCommunicationItem from './contact-communication-item.vue';
 
 const props = withDefaults(
@@ -69,10 +68,6 @@ const props = withDefaults(
 		item: WebitelContactsContact;
 		loading?: boolean;
 	}>(),
-	{
-		size: ComponentSize.MD,
-		loading: false,
-	},
 );
 
 const emit = defineEmits<{

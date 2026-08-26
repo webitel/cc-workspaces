@@ -50,7 +50,7 @@ import { useStore } from 'vuex';
 
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
 import ContactMode from '../enums/ContactMode.enum';
-import { useContactStore } from '../store/contactStore';
+import { useContactStore } from '../store/contact';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
 import ViewContact from './views/view-contact.vue';
@@ -60,9 +60,6 @@ const props = withDefaults(
 		task: any;
 		size?: ComponentSize;
 	}>(),
-	{
-		size: ComponentSize.MD,
-	},
 );
 
 const store = useStore();

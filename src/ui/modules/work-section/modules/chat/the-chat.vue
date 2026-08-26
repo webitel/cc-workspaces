@@ -39,7 +39,7 @@ import { mapState as mapPiniaState } from 'pinia';
 import { mapGetters } from 'vuex';
 
 import sizeMixin from '../../../../../app/mixins/sizeMixin.js';
-import { useContactStore } from '../../../info-section/modules/client-info/modules/contact/store/contactStore';
+import { useContactStore } from '../../../info-section/modules/client-info/modules/contact/store/contact';
 import TaskContainer from '../_shared/components/task-container/task-container.vue';
 import EmptyWorkspace from '../empty-workspace/components/empty-workspace.vue';
 import ChatFooter from './chat-footer/chat-footer.vue';

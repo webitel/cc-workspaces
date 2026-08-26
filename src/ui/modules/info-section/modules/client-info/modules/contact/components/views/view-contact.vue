@@ -15,20 +15,16 @@
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed } from 'vue';
-
-import { useContactStore } from '../../store/contactStore';
-import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useContactStore } from '../../store/contact';
+import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
 
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 		mode?: string;
 	}>(),
-	{
-		size: ComponentSize.MD,
-	},
 );
 
 const contactStore = useContactStore();

@@ -45,7 +45,7 @@ import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { CallDirection } from 'webitel-sdk';
-import { useContactStore } from '../../../../../info-section/modules/client-info/modules/contact/store/contactStore';
+import { useContactStore } from '../../../../../info-section/modules/client-info/modules/contact/store/contact';
 import type { ChatContact } from '../../types/ChatContact.types';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 

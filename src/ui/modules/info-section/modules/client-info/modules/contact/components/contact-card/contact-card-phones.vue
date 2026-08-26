@@ -60,7 +60,7 @@ import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { EngineCommunicationChannels } from 'webitel-sdk';
-import { useContactStore } from '../../store/contactStore';
+import { useContactStore } from '../../store/contact';
 
 const { t } = useI18n();
 const contactStore = useContactStore();
@@ -72,10 +72,6 @@ const props = withDefaults(
 		contact: WebitelContactsContact;
 		isAdding?: boolean;
 	}>(),
-	{
-		size: ComponentSize.MD,
-		isAdding: false,
-	},
 );
 
 const emit = defineEmits<{

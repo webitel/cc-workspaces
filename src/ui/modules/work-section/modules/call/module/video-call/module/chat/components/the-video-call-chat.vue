@@ -28,16 +28,13 @@ import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
-import { useContactStore } from '../../../../../../../../info-section/modules/client-info/modules/contact/store/contactStore';
+import { useContactStore } from '../../../../../../../../info-section/modules/client-info/modules/contact/store/contact';
 import { useUserinfoStore } from '../../../../../../../../userinfo/userinfoStore';
 
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 	}>(),
-	{
-		size: ComponentSize.MD,
-	},
 );
 
 const store = useStore();

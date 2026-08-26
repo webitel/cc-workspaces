@@ -83,15 +83,12 @@ import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoin
 import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 import LabelsAPI from '../../api/LabelsAPI';
 import TimezonesAPI from '../../api/TimezonesAPI';
-import { useContactStore } from '../../store/contactStore';
+import { useContactStore } from '../../store/contact';
 
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 	}>(),
-	{
-		size: ComponentSize.MD,
-	},
 );
 
 const emit = defineEmits<{

@@ -33,7 +33,7 @@ import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import ContactMode from '../../enums/ContactMode.enum';
-import { useContactStore } from '../../store/contactStore';
+import { useContactStore } from '../../store/contact';
 import ContactCard from '../contact-card/the-contact-card.vue';
 import ContactHeader from './contact-header.vue';
 import EmptyContact from './empty-contact.vue';
@@ -45,10 +45,6 @@ const props = withDefaults(
 		size?: ComponentSize;
 		mode?: string;
 	}>(),
-	{
-		linkedContact: null,
-		size: ComponentSize.MD,
-	},
 );
 
 const emit = defineEmits<{
