@@ -1,4 +1,6 @@
+import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
 import { type Component, createApp } from 'vue';
+import instance from './api/instance';
 import { createWindowI18n, type Locale } from './i18n';
 import {
 	options as WebitelUiOptions,
@@ -6,6 +8,9 @@ import {
 	registerUiSdkLocales,
 } from './plugins/webitel-ui';
 import './assets/icons';
+
+// generated api-services clients call through this window's instance
+setDefaultAxiosInstance(instance);
 
 /**
  * Bootstraps a renderer window Vue app with vue-i18n and the

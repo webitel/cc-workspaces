@@ -10,11 +10,11 @@ import {
 	snakeToCamel,
 	translateError,
 } from '@webitel/api-services/api/transformers';
+import { getShallowFieldsToSendFromZodSchema } from '@webitel/api-services/gen/utils';
 import {
 	CatalogGetDialogsQueryParams,
 	getMessages,
-} from '@webitel/api-services/gen';
-import { getShallowFieldsToSendFromZodSchema } from '@webitel/api-services/gen/utils';
+} from '@webitel/api-services/gen-wire';
 
 const DEFAULT_FIELDS = [
 	'id',
