@@ -1,12 +1,14 @@
 import './app/css/main.scss';
 
 import { setConfig as setApiServicesConfig } from '@webitel/api-services';
+import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
 import { setConfig as setChatsServicesConfig } from '@webitel/ui-chats';
 import { eventBus } from '@webitel/ui-sdk/scripts';
 import deepmerge from 'deepmerge';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
+import instance from './app/api/instance';
 import { createUserAccessControl } from './app/composables/useUserAccessControl';
 import i18n from './app/locale/i18n';
 import BreakpointPlugin from './app/plugins/breakpoint.plugin';
@@ -72,6 +74,9 @@ setApiServicesConfig({
 setChatsServicesConfig({
 	i18n,
 });
+
+// generated api-services clients call through this app's instance
+setDefaultAxiosInstance(instance);
 
 const pinia = createPinia();
 
