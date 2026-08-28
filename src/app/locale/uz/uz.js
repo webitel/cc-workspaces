@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chatlar',
+			searchByUsername: 'Foydalanuvchi nomi bo‘yicha qidirish',
 			preview: {
 				md: {
 					active: 'Faol chatlar',
@@ -317,6 +318,9 @@ export default {
 		},
 		endpoint: {
 			noLicense: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Xabar yuborildi, lekin yetkazilmadi',
 		},
 	},
 	notifications: {

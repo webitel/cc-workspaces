@@ -1,0 +1,4 @@
+{
+	"endpoint": "wss://dev.webitel.com/ws",
+	"token": "<X-Webitel-Access token>"
+}

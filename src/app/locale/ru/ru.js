@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Звонки | Чаты',
+			searchByUsername: 'Поиск по имени',
 			preview: {
 				md: {
 					active: 'Активные чаты',
@@ -323,6 +324,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'Невозможно работать в Workspace. Истёк срок действия лицензии.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Сообщение отправлено, но не получено',
 		},
 	},
 	notifications: {

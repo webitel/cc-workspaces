@@ -5,7 +5,7 @@ export function useLoader() {
 	const loadingId = ref<string | null>(null);
 
 	function showLoader(id: string) {
-		return loadingId.value === id;
+		return loadingId.value && loadingId.value === id;
 	}
 
 	async function runWithLoader(id: string, callback: () => Promise<void>) {

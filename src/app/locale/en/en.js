@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chats',
+			searchByUsername: 'Search by username',
 			preview: {
 				md: {
 					active: 'Active chats',
@@ -322,6 +323,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'You can not work in Workspace because your license has expired.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Message sent but not delivered',
 		},
 	},
 	notifications: {

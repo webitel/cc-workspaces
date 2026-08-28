@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Чат | Чаттар',
+			searchByUsername: 'Пайдаланушы аты бойынша іздеу',
 			preview: {
 				md: {
 					active: 'Белсенді чаттар',
@@ -317,6 +318,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Хабарлама жіберілді, бірақ жеткізілмеді',
 		},
 	},
 	notifications: {

@@ -27,9 +27,12 @@ const actions = {
 		return client.agentSession();
 	},
 
-	SET_AGENT_WAITING_STATUS: async (context) => {
+	SET_AGENT_WAITING_STATUS: async (context, { activityType } = {}) => {
 		const agent = await context.dispatch('GET_AGENT_INSTANCE');
-		agent.online();
+		const { channels, onDemand, onlineSkill } = {
+			onlineSkill: activityType,
+		};
+		agent.online(channels, onDemand, onlineSkill);
 	},
 
 	SET_AGENT_PAUSE_STATUS: async (context, note = '') => {
@@ -49,11 +52,13 @@ const actions = {
 		await usersAPI.setUserStatus(status);
 	},
 
-	TOGGLE_CONTACT_CENTER_MODE: async (context) => {
+	TOGGLE_CONTACT_CENTER_MODE: async (context, activityType) => {
 		if (context.getters.IS_CCENTER_ON) {
 			await context.dispatch('AGENT_LOGOUT');
 		} else {
-			await context.dispatch('SET_AGENT_WAITING_STATUS');
+			await context.dispatch('SET_AGENT_WAITING_STATUS', {
+				activityType,
+			});
 		}
 	},
 };

@@ -9,6 +9,7 @@ const { autoUpdater } = require('electron-updater');
 const conf = require('../shared/config').config();
 const WebitelWindows = require('./windows');
 const WebitelTray = require('./module/webitel_tray');
+const { isAlive } = require('./module/window_utils');
 
 const win = new WebitelWindows();
 let tray = {};
@@ -117,18 +118,31 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 app.on('ready', () => {
-	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
-		autoUpdater.setFeedURL(conf.updateEndpoint);
-		autoUpdater.checkForUpdatesAndNotify().then(() => {
-			win.start();
-			createAndSubscribeTray();
-			subscribePowerMonitor();
-		});
-	} else {
+	require('./module/webitel_login_item').syncFromConfig();
+
+	const startApp = () => {
 		win.start();
 		createAndSubscribeTray();
 		subscribePowerMonitor();
+		// macOS login / TAL restore can leave windows hidden — force on-screen.
+		setTimeout(() => win.restoreWindow(), 300);
+	};
+
+	if (conf.updateEndpoint && isValidUrl(conf.updateEndpoint)) {
+		autoUpdater.setFeedURL(conf.updateEndpoint);
+		autoUpdater.checkForUpdatesAndNotify().then(startApp);
+	} else {
+		startApp();
 	}
+});
+
+app.on('activate', () => {
+	if (isAlive(win.workspace?.window) || isAlive(win.loadConfig?.window)) {
+		win.restoreWindow();
+		return;
+	}
+	win.start();
+	setTimeout(() => win.restoreWindow(), 100);
 });
 
 ipcMain.handle('get-userData-path', async (event) => {

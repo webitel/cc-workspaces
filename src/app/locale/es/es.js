@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chats',
+			searchByUsername: 'Buscar por nombre de usuario',
 			preview: {
 				md: {
 					active: 'Chats activos',
@@ -321,6 +322,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Mensaje enviado pero no entregado',
 		},
 	},
 	notifications: {

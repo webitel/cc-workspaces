@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Các chat',
+			searchByUsername: 'Tìm kiếm theo tên người dùng',
 			preview: {
 				md: {
 					active: 'Chat đang hoạt động',
@@ -318,6 +319,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Tin nhắn đã gửi nhưng không được gửi đến',
 		},
 	},
 	notifications: {

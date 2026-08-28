@@ -42,6 +42,21 @@ describe('features/status store client handlers: actions', () => {
 		expect(agent.online).toHaveBeenCalled();
 	});
 
+	it('SET_AGENT_WAITING_STATUS calls agent.online() method with activityType as the onlineSkill argument', async () => {
+		context.dispatch = vi.fn().mockResolvedValue(agent);
+		const mockActivityType = {
+			id: 1,
+			name: 'test',
+		};
+		const { channels, onDemand, onlineSkill } = {
+			onlineSkill: mockActivityType,
+		};
+		await statusModule.actions.SET_AGENT_WAITING_STATUS(context, {
+			activityType: mockActivityType,
+		});
+		expect(agent.online).toHaveBeenCalledWith(channels, onDemand, onlineSkill);
+	});
+
 	it('SET_AGENT_PAUSE_STATUS calls agent.pause() method', async () => {
 		context.dispatch = vi.fn().mockResolvedValue(agent);
 		await statusModule.actions.SET_AGENT_PAUSE_STATUS(context);
@@ -82,10 +97,19 @@ describe('features/status store client handlers: actions', () => {
 		expect(context.dispatch).toHaveBeenCalledWith('AGENT_LOGOUT');
 	});
 
-	it('TOGGLE_CONTACT_CENTER_MODE dispatches SET_AGENT_WAITING_STATUS if IS_CCENTER_ON getter == false', async () => {
+	it('TOGGLE_CONTACT_CENTER_MODE dispatches SET_AGENT_WAITING_STATUS with activityType payload if IS_CCENTER_ON getter == false', async () => {
 		context.getters.IS_CCENTER_ON = false;
-		await statusModule.actions.TOGGLE_CONTACT_CENTER_MODE(context);
-		expect(context.dispatch).toHaveBeenCalledWith('SET_AGENT_WAITING_STATUS');
+		const mockActivityType = {
+			id: 1,
+			name: 'test',
+		};
+		await statusModule.actions.TOGGLE_CONTACT_CENTER_MODE(
+			context,
+			mockActivityType,
+		);
+		expect(context.dispatch).toHaveBeenCalledWith('SET_AGENT_WAITING_STATUS', {
+			activityType: mockActivityType,
+		});
 	});
 });
 

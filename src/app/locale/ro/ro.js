@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chat-uri',
+			searchByUsername: 'Căutare după nume de utilizator',
 			preview: {
 				md: {
 					active: 'Chat-uri active',
@@ -320,6 +321,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Mesaj trimis, dar nelivrat',
 		},
 	},
 	notifications: {

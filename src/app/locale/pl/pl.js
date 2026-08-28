@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Czat | Czaty',
+			searchByUsername: 'Szukaj według nazwy użytkownika',
 			preview: {
 				md: {
 					active: 'Aktywne czaty',
@@ -320,6 +321,9 @@ export default {
 		endpoint: {
 			noLicense:
 				'Nie możesz pracować w Workspace, ponieważ Twoja licencja wygasła.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Wiadomość wysłana, ale niedostarczona',
 		},
 	},
 	notifications: {

@@ -2,15 +2,37 @@ import { computed, inject } from 'vue';
 import { useStore } from 'vuex';
 
 import prettifyDate from '../../scripts/prettifyDate.js';
+import { useMissingChatMessages } from './useMissingChatMessages';
 
 export const useChatMessages = () => {
 	const store = useStore();
 	const eventBus = inject('$eventBus');
 	const namespace = 'features/chat';
 
-	const messages = computed(
-		() => store.getters[`${namespace}/ALL_CHAT_MESSAGES`],
+	const chatOnWorkspace = computed(
+		() => store.getters[`${namespace}/CHAT_ON_WORKSPACE`],
 	);
+
+	const conversationId = computed(
+		() => chatOnWorkspace.value?.conversationId || null,
+	);
+	const chatHasMissingMessages = computed(
+		() => !!chatOnWorkspace.value?.hasMissingMessages,
+	);
+
+	const { messages: missingChatMessages } = useMissingChatMessages(
+		conversationId,
+		chatHasMissingMessages,
+	);
+
+	const messages = computed(() => {
+		return [
+			...store.state.features.chat.chatHistory.chatHistoryMessages,
+			...missingChatMessages.value,
+			...(chatOnWorkspace.value?.messages || []),
+		];
+	});
+
 	const isChatClosed = computed(
 		() => store.getters[`${namespace}/closed/IS_CHAT_ON_WORKSPACE_WAS_CLOSED`],
 	);
@@ -33,10 +55,12 @@ export const useChatMessages = () => {
 
 	function showChatDate(index) {
 		const { prevMessage, message } = getMessage(index);
-		return (
-			prevMessage &&
-			prettifyDate(prevMessage?.createdAt) !== prettifyDate(message?.createdAt)
-		);
+		const hasDate = prevMessage?.createdAt && message?.createdAt;
+
+		return hasDate && prevMessage
+			? prettifyDate(prevMessage?.createdAt) !==
+					prettifyDate(message?.createdAt)
+			: '';
 	}
 
 	const showAvatar = (index) => {
