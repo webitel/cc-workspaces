@@ -1,51 +1,34 @@
-import axiosMock from '@webitel/ui-sdk/src/tests/mocks/axiosMock';
+import { CallHistoryAPI } from '@webitel/api-services/api';
+
+import missedAPI from '../missed.js';
+
+vi.mock('@webitel/api-services/api');
 
 describe('missedAPI', () => {
-	const request = vi.fn(() =>
-		Promise.resolve({
-			data: {},
-		}),
-	);
-	const axios = axiosMock({
-		default: {
-			request,
-		},
-	});
-	vi.doMock('@webitel/ui-sdk/src/api/axios/generateInstance.js', () => ({
-		default: () => axios().default,
-	}));
-
-	beforeEach(() => {
-		request.mockClear();
-	});
-
-	it('redialToMissed sends request with passed callId param', async () => {
+	it('redialToMissed delegates to the shared client', async () => {
 		const callId = '123';
-
-		const missedAPI = (await import('../missed.js')).default;
+		CallHistoryAPI.redial = vi.fn(() => Promise.resolve({}));
 
 		const response = await missedAPI.redialToMissed({
 			callId,
 		});
 
-		expect(JSON.parse(request.mock.lastCall[0].data)).toEqual({
+		expect(CallHistoryAPI.redial).toHaveBeenCalledWith({
 			callId,
 		});
 		expect(response).toEqual({});
 	});
 
-	it('hideMissedCall sends callId and hide_missed flag and returns data', async () => {
+	it('hideMissedCall delegates to the shared client', async () => {
 		const callId = '123';
-
-		const missedAPI = (await import('../missed.js')).default;
+		CallHistoryAPI.hideMissed = vi.fn(() => Promise.resolve({}));
 
 		const response = await missedAPI.hideMissedCall({
 			callId,
 		});
 
-		expect(JSON.parse(request.mock.lastCall[0].data)).toEqual({
-			id: callId,
-			hide_missed: true,
+		expect(CallHistoryAPI.hideMissed).toHaveBeenCalledWith({
+			callId,
 		});
 		expect(response).toEqual({});
 	});
