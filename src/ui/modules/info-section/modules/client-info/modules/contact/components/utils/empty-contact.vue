@@ -4,19 +4,22 @@
     :class="[`empty-contact--${props.size}`]"
   >
     <wt-avatar size="2xl"/>
-    <p class="empty-contact__title typo-heading-2">{{ $t('infoSec.contacts.emptyContact') }}</p>
+    <p class="empty-contact__title typo-heading-2">{{ t('infoSec.contacts.emptyContact') }}</p>
 
     <wt-button
       v-if="allowAddition"
       class="empty-contact__button"
       @click="add"
-    > {{ $t('reusable.add') }}
+    > {{ t('reusable.add') }}
     </wt-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = withDefaults(
 	defineProps<{
