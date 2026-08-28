@@ -30,10 +30,10 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import ConfigurationAPI from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
 import { computed, onMounted, ref } from 'vue';
 import Communications from './contact-card-communications.vue';
 import Description from './contact-card-description.vue';
@@ -64,7 +64,7 @@ const variables = computed(() => props.contact?.variables?.data);
 const description = computed(() => props.contact?.about);
 
 const getValueExpandContactTabsVariable = async () => {
-	const { items } = await ConfigurationAPI.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: [
 			EngineSystemSettingName.ExpandContactTabs,
 		],

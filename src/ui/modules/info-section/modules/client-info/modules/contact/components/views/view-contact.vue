@@ -25,6 +25,9 @@ const props = withDefaults(
 		size?: ComponentSize;
 		mode?: string;
 	}>(),
+	{
+		size: ComponentSize.MD,
+	},
 );
 
 const contactStore = useContactStore();

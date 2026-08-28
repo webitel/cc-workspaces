@@ -60,6 +60,9 @@ const props = withDefaults(
 		task: any;
 		size?: ComponentSize;
 	}>(),
+	{
+		size: ComponentSize.MD,
+	},
 );
 
 const store = useStore();

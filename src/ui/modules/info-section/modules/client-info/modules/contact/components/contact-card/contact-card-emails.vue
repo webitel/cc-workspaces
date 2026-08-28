@@ -71,6 +71,10 @@ const props = withDefaults(
 		contact?: WebitelContactsContact;
 		isAdding?: boolean;
 	}>(),
+	{
+		size: ComponentSize.MD,
+		isAdding: false,
+	},
 );
 
 const emit = defineEmits<{

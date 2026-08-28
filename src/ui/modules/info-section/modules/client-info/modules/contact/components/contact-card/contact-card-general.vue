@@ -58,8 +58,8 @@
 </template>
 
 <script setup lang="ts">
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
-import ConfigurationAPI from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
@@ -102,7 +102,7 @@ const contactId = computed(() =>
 
 // to get access variable for contact card page in read only mode
 async function initShowContactState() {
-	const { items } = await ConfigurationAPI.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: [
 			EngineSystemSettingName.ShowFullContact,
 		],

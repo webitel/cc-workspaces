@@ -1,7 +1,7 @@
 <template>
   <wt-send-message-popup
     v-if="isOpenChatPopup"
-    :chat-item="selectItem"
+    :chat-item="selectItem as any"
     :user-id="userId"
     @close="closeChat"
   />

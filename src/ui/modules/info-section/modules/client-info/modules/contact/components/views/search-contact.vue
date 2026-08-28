@@ -96,6 +96,9 @@ const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 	}>(),
+	{
+		size: ComponentSize.MD,
+	},
 );
 
 const emit = defineEmits<{
@@ -106,7 +109,7 @@ const emit = defineEmits<{
 const store = useStore();
 const contactStore = useContactStore();
 const { isLoading, contactsBySearch } = storeToRefs(contactStore);
-const { searchContacts, cleanContactsBySearch } = contactStore;
+const { searchContacts, cleanContactsBySearch, linkContact } = contactStore;
 const { t } = useI18n();
 
 const search = ref('');

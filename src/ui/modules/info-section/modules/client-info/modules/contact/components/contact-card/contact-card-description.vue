@@ -26,6 +26,11 @@ const props = withDefaults(
 		description?: string;
 		collapsed?: boolean;
 	}>(),
+	{
+		size: ComponentSize.MD,
+		description: '',
+		collapsed: false,
+	},
 );
 </script>
 

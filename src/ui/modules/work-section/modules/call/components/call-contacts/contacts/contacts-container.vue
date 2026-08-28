@@ -39,10 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import { ContactsAPI } from '@webitel/api-services/api';
+import { ConfigurationsAPI, ContactsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
-import configurations from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
 import { computed, ref } from 'vue';
@@ -96,7 +95,7 @@ const searchModeOptions = computed(() => [
 ]);
 
 const checkLabelsToLimitContacts = async () => {
-	const { items } = await configurations.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: EngineSystemSettingName.LabelsToLimitContacts,
 	});
 

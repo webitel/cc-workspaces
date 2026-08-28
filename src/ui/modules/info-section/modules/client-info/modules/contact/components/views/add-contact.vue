@@ -89,6 +89,9 @@ const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 	}>(),
+	{
+		size: ComponentSize.MD,
+	},
 );
 
 const emit = defineEmits<{

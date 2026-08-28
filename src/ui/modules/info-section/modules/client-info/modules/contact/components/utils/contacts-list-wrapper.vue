@@ -45,6 +45,10 @@ const props = withDefaults(
 		size?: ComponentSize;
 		mode?: string;
 	}>(),
+	{
+		linkedContact: null,
+		size: ComponentSize.MD,
+	},
 );
 
 const emit = defineEmits<{
