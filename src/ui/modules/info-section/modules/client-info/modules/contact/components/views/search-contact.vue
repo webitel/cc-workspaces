@@ -48,13 +48,13 @@
 
     <div class="search-contact__content wt-scrollbar">
         <wt-loader v-if="isLoading"/>
-        <wt-dummy
-          v-else-if="!isLoading && !contactsBySearch.length"
-          :src="dummy.src"
-          :text="dummy.text"
+        <wt-empty
+          v-else-if="showEmpty"
+          :image="emptyImage"
+          :text="emptyText"
         />
         <contacts-list-wrapper
-          v-else-if="!isLoading && contactsBySearch.length"
+          v-else-if="contactsBySearch.length"
           :size="props.size"
           :list="contactsBySearch"
           @link="linkContactId"
@@ -78,7 +78,9 @@
 import { useVuelidate } from '@vuelidate/core';
 import { requiredIf } from '@vuelidate/validators';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { WtEmpty } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
 import { storeToRefs } from 'pinia';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -88,9 +90,23 @@ import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/conta
 import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
 import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
 import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
-import SearchOptions from '../../enums/SearchOptions.enum';
 import { useContactStore } from '../../store/contact';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
+
+const SearchOptions = [
+	{
+		label: 'reusable.name',
+		mode: 'name',
+	},
+	{
+		label: 'infoSec.contacts.destination',
+		mode: 'emails,phones',
+	},
+	{
+		label: 'infoSec.contacts.attributes',
+		mode: 'variables',
+	},
+] as const;
 
 const props = withDefaults(
 	defineProps<{
@@ -117,27 +133,50 @@ const keyVariable = ref('');
 const valueVariables = ref('');
 
 const alreadySearched = ref(false);
-const searchMode = ref(SearchOptions[0].mode);
+const searchMode = ref<string>(SearchOptions[0].mode);
 
 const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
-const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
 const searchValue = computed(() => {
 	if (isSearchNotByVariables.value) return search.value;
 	return `${keyVariable.value}=${valueVariables.value}`;
 });
 
-const dummy = computed(() => {
-	if (alreadySearched.value) {
-		return {
-			src: darkMode.value ? dummyPicAfterSearchDark : dummyPicAfterSearchLight,
-			text: t('infoSec.contacts.emptyContact'),
-		};
-	}
-	return {
-		src: darkMode.value ? dummyPicDark : dummyPicLight,
-	};
-});
+const {
+	showEmpty,
+	image: emptyImage,
+	text: emptyText,
+} = useTableEmpty(
+	{
+		dataList: contactsBySearch,
+		isLoading,
+		// searching is treated as a "filters applied" state: before the first
+		// search there's nothing to filter, so the plain empty picture is shown
+		filters: computed(() =>
+			alreadySearched.value
+				? {
+						search: true,
+					}
+				: undefined,
+		),
+	},
+	computed(() => ({
+		image: {
+			empty: {
+				dark: dummyPicDark,
+				light: dummyPicLight,
+			},
+			filters: {
+				dark: dummyPicAfterSearchDark,
+				light: dummyPicAfterSearchLight,
+			},
+		},
+		text: {
+			empty: '',
+			filters: t('infoSec.contacts.emptyContact'),
+		},
+	})),
+);
 
 const checkForStar = (value: string) => value !== '*';
 
@@ -252,7 +291,7 @@ onUnmounted(() => {
     flex: 1;
     flex-direction: column;
 
-    .wt-dummy {
+    .wt-empty {
       flex: 1;
     }
   }

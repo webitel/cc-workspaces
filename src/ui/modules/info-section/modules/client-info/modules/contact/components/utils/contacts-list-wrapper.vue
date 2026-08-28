@@ -32,7 +32,7 @@ import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import ContactMode from '../../enums/ContactMode.enum';
+import { ContactMode } from '../../enums/ContactMode';
 import { useContactStore } from '../../store/contact';
 import ContactCard from '../contact-card/the-contact-card.vue';
 import ContactHeader from './contact-header.vue';
@@ -69,7 +69,7 @@ const isPrev = computed(() => index.value > 0);
 const currentContact = computed(() => props.list[index.value]);
 const isEmptyContact = computed(
 	() =>
-		!props.list.length && props.mode === ContactMode.VIEW && !isLoading.value,
+		!props.list.length && props.mode === ContactMode.View && !isLoading.value,
 );
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 
