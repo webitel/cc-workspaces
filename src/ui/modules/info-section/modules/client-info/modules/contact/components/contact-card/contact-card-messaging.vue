@@ -1,9 +1,9 @@
 <template>
   <wt-send-message-popup
     v-if="isOpenChatPopup"
-    :chat-item="selectItem"
+    :chat-item="selectItem as any"
     :user-id="userId"
-    @close="closeChat" 
+    @close="closeChat"
   />
 
   <div
@@ -19,7 +19,7 @@ class="contact-card-messaging"
         <div class="contact-card-messaging__wrapper">
           <div class="contact-card-messaging-protocol">
             <wt-icon
-              :icon="iconType[item.protocol]"
+              :icon="ProviderIconType[item.protocol]"
             />
             <p> {{ $t(`objects.messengers.${item.protocol}`) }} </p>
           </div>
@@ -37,39 +37,37 @@ class="contact-card-messaging"
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ChatGatewayProvider } from '@webitel/api-services/enums';
+import type {
+	ContactsIMClient,
+	WebitelContactsContact,
+} from '@webitel/api-services/gen/models';
 import { WtSendMessagePopup } from '@webitel/ui-sdk/components';
-import iconType from '@webitel/ui-sdk/src/enums/ChatGatewayProvider/ProviderIconType.enum';
+import { ComponentSize, ProviderIconType } from '@webitel/ui-sdk/enums';
 import { computed, ref } from 'vue';
 import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		contact?: WebitelContactsContact;
+		linked?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		linked: false,
 	},
-	contact: {
-		type: Object,
-	},
-	linked: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
 const { userId } = useUserinfoStore();
 
 const chats = computed(() => props.contact?.imclients?.data);
 
 const isOpenChatPopup = ref(false);
-const selectItem = ref(null);
+const selectItem = ref<ContactsIMClient | null>(null);
 
-const availableProviders = [
+const availableProviders: ChatGatewayProvider[] = [
 	ChatGatewayProvider.TELEGRAM_BOT,
 	ChatGatewayProvider.VIBER,
 	ChatGatewayProvider.MESSENGER,
@@ -77,7 +75,7 @@ const availableProviders = [
 	ChatGatewayProvider.CUSTOM,
 ];
 
-const openChat = (item) => {
+const openChat = (item: ContactsIMClient) => {
 	isOpenChatPopup.value = true;
 	selectItem.value = item;
 };
@@ -87,8 +85,8 @@ const closeChat = () => {
 	selectItem.value = null;
 };
 
-const isDisabledChatAction = (item) => {
-	return !availableProviders.includes(item.protocol);
+const isDisabledChatAction = (item: ContactsIMClient) => {
+	return !availableProviders.includes(item.protocol as ChatGatewayProvider);
 };
 </script>
 

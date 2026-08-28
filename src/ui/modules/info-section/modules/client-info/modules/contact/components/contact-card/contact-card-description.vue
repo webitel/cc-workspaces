@@ -17,27 +17,21 @@
   </wt-expansion-panel>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: ComponentSize.MD,
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		description?: string;
+		collapsed?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		description: '',
+		collapsed: false,
 	},
-	description: {
-		type: String,
-		default: '',
-	},
-	collapsed: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 </script>
 
 <style lang="scss" scoped>

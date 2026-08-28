@@ -14,12 +14,11 @@
 </template>
 
 <script setup>
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { WebitelLicense } from '@webitel/ui-sdk/modules/Userinfo';
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { useUserAccessControl } from '../../../../../../app/composables/useUserAccessControl';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import Contact from '../modules/contact/components/the-contact.vue';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
@@ -51,7 +50,7 @@ const hasCallCenterLicense = computed(() =>
 );
 
 const getValueWbtHideContactVariable = async () => {
-	const { items } = await ConfigurationAPI.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: [
 			EngineSystemSettingName.WbtHideContact,
 		],

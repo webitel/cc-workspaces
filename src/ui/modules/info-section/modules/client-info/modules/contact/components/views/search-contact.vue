@@ -57,7 +57,7 @@
           v-else-if="!isLoading && contactsBySearch.length"
           :size="props.size"
           :list="contactsBySearch"
-          @link="linkContact"
+          @link="linkContactId"
         />
     </div>
     <div class="search-contact__actions">
@@ -74,10 +74,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
 import { requiredIf } from '@vuelidate/validators';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
@@ -87,25 +89,27 @@ import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/cont
 import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
 import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
 import SearchOptions from '../../enums/SearchOptions.enum';
+import { useContactStore } from '../../store/contact';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
 
-const props = defineProps({
-	namespace: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+	}>(),
+	{
+		size: ComponentSize.MD,
 	},
-	size: {
-		type: String,
-		default: 'md',
-	},
-});
+);
 
-const emit = defineEmits([
-	'close',
-	'add',
-]);
+const emit = defineEmits<{
+	close: [];
+	add: [];
+}>();
 
 const store = useStore();
+const contactStore = useContactStore();
+const { isLoading, contactsBySearch } = storeToRefs(contactStore);
+const { searchContacts, cleanContactsBySearch, linkContact } = contactStore;
 const { t } = useI18n();
 
 const search = ref('');
@@ -115,12 +119,6 @@ const valueVariables = ref('');
 const alreadySearched = ref(false);
 const searchMode = ref(SearchOptions[0].mode);
 
-const isLoading = computed(
-	() => getNamespacedState(store.state, props.namespace).isLoading,
-);
-const contactsBySearch = computed(
-	() => getNamespacedState(store.state, props.namespace).contactsBySearch,
-);
 const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
@@ -141,7 +139,7 @@ const dummy = computed(() => {
 	};
 });
 
-const checkForStar = (value) => value !== '*';
+const checkForStar = (value: string) => value !== '*';
 
 const v$ = useVuelidate(
 	computed(() => ({
@@ -167,16 +165,12 @@ const v$ = useVuelidate(
 v$.value.$touch();
 
 async function callSearch() {
-	await store.dispatch(`${props.namespace}/SEARCH_CONTACTS`, {
+	await searchContacts({
 		q: searchValue.value,
 		qin: searchMode.value,
 		size: 100, // coz 100 should be enough, if we dont have pagination atm https://webitel.atlassian.net/browse/WTEL-7906
 	});
 	alreadySearched.value = true;
-}
-
-async function cleanContactsBySearch() {
-	await store.dispatch(`${props.namespace}/CLEAN_CONTACTS_BY_SEARCH`);
 }
 
 function cleanSearchValue() {
@@ -185,7 +179,7 @@ function cleanSearchValue() {
 	valueVariables.value = '';
 }
 
-function changeSearchMode(event) {
+function changeSearchMode(event?: string) {
 	cleanContactsBySearch();
 	cleanSearchValue();
 	searchMode.value = event;
@@ -201,8 +195,8 @@ function add() {
 	emit('add');
 }
 
-async function linkContact(contact) {
-	await store.dispatch(`${props.namespace}/LINK_CONTACT`, contact);
+async function linkContactId(contact: WebitelContactsContact) {
+	await linkContact(contact);
 	await store.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS');
 	close();
 }

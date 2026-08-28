@@ -5,9 +5,9 @@
   >
     <div>
       <wt-input-text
-        v-model:model-value="draft.name"
+        v-model:model-value="draft.name.commonName"
         :label="t('reusable.name')"
-        :v="v$.draft.name"
+        :v="nameValidation"
         required
         prevent-trim
       />
@@ -27,13 +27,13 @@
         :model-value="draft.timezones?.[0]?.timezone"
         :label="t('date.timezone', 1)"
         :search-method="TimezonesAPI.getLookup"
-        @update:model-value="draft.timezones[0] = { timezone: $event }"
+        @update:model-value="draft.timezones[0] = { etag: '', timezone: $event }"
       />
       <wt-single-select
         :model-value="draft.managers?.[0]?.user"
         :label="t('infoSec.contacts.manager')"
         :search-method="UsersAPI.getLookup"
-        @update:model-value="draft.managers[0] = { user: $event }"
+        @update:model-value="draft.managers[0] = { etag: '', user: $event }"
       />
       <wt-multi-select
         v-model:model-value="draft.labels"
@@ -68,10 +68,11 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import type { ContactsInputContact } from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -82,43 +83,55 @@ import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoin
 import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 import LabelsAPI from '../../api/LabelsAPI';
 import TimezonesAPI from '../../api/TimezonesAPI';
+import { useContactStore } from '../../store/contact';
 
-const props = defineProps({
-	namespace: {
-		type: String,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+	}>(),
+	{
+		size: ComponentSize.MD,
 	},
-	size: {
-		type: String,
-		default: 'md',
-	},
-});
+);
 
-const emit = defineEmits([
-	'close',
-]);
+const emit = defineEmits<{
+	close: [];
+}>();
 
 const store = useStore();
+const contactStore = useContactStore();
+const { isLoading } = storeToRefs(contactStore);
+const { addContact } = contactStore;
 const { t } = useI18n();
 
-const draft = ref({
-	name: '',
+const draft = ref<ContactsInputContact>({
+	name: {
+		commonName: '',
+	},
 	timezones: [],
 	managers: [],
 	phones: [],
 	labels: [],
 	about: '',
-	createdBy: '',
 	emails: [],
 });
 
-const defaultCommunications = ref([]);
+const defaultCommunications = ref<
+	Array<{
+		id: string;
+		name: string;
+		channel: string;
+		code: string;
+	}>
+>([]);
 
 const v$ = useVuelidate(
 	computed(() => ({
 		draft: {
 			name: {
-				required,
+				commonName: {
+					required,
+				},
 			},
 		},
 	})),
@@ -132,21 +145,19 @@ const v$ = useVuelidate(
 
 v$.value.$touch();
 
+// vuelidate's generated validation-state type doesn't narrow cleanly here
+const nameValidation = computed(
+	() => (v$.value as any).draft?.name?.commonName,
+);
+
 const userinfoStore = useUserinfoStore();
 const { userInfo, userId } = storeToRefs(userinfoStore);
-
-const isLoading = computed(
-	() => getNamespacedState(store.state, props.namespace).isLoading,
-);
-const displayNumber = computed(
-	() => store.getters['workspace/TASK_ON_WORKSPACE'].displayNumber,
-);
 
 function close() {
 	emit('close');
 }
 
-function updatePhoneNumber(phoneNumber) {
+function updatePhoneNumber(phoneNumber: string) {
 	if (!draft.value.phones[0]) {
 		draft.value.phones[0] = {
 			number: phoneNumber,
@@ -158,7 +169,7 @@ function updatePhoneNumber(phoneNumber) {
 	}
 }
 
-function updateEmail(email) {
+function updateEmail(email: string) {
 	if (!draft.value.emails[0]) {
 		draft.value.emails[0] = {
 			email,
@@ -191,12 +202,14 @@ async function createCommunication() {
 					{
 						number: draft.value.phones[0]?.number,
 						primary: true,
+						// `channel`/`code` aren't part of the input model's lookup
+						// type, but the backend accepts them on this field
 						type: {
 							id,
 							name,
 							channel,
 							code,
-						},
+						} as any,
 					},
 				];
 			} else if (channel === EngineCommunicationChannels.Email) {
@@ -210,7 +223,7 @@ async function createCommunication() {
 							name,
 							channel,
 							code,
-						},
+						} as any,
 					},
 				];
 			}
@@ -222,7 +235,7 @@ async function save() {
 	await createCommunication();
 	if (!draft.value.phones[0]?.number) delete draft.value.phones;
 	if (!draft.value.emails[0]?.email) delete draft.value.emails;
-	await store.dispatch(`${props.namespace}/ADD_CONTACT`, draft.value);
+	await addContact(draft.value);
 	store.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS');
 
 	close();
@@ -230,6 +243,7 @@ async function save() {
 
 function setDefaultManager() {
 	draft.value.managers[0] = {
+		etag: '',
 		user: {
 			id: userId.value,
 			name: userInfo.value.name,
