@@ -1,6 +1,11 @@
 import generateInstance from '@webitel/ui-sdk/src/api/axios/generateInstance';
 import updateTokenInterceptor from '@webitel/ui-sdk/src/api/interceptors/request/updateToken.interceptor';
 import handleUnauthorizedInterceptor from '@webitel/ui-sdk/src/api/interceptors/response/handleUnauthorized.interceptor';
+import * as qs from 'qs-esm';
+
+const stringifyOptions = {
+	arrayFormat: 'repeat',
+};
 
 export default generateInstance({
 	interceptors: {
@@ -12,4 +17,7 @@ export default generateInstance({
 		],
 	},
 	baseURL: import.meta.env.VITE_API_URL,
+	paramsSerializer: (params) => {
+		return qs.stringify(params, stringifyOptions);
+	},
 });
