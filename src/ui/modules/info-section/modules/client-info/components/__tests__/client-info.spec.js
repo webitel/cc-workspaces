@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import { ConfigurationsAPI as ConfigurationAPI } from '@webitel/api-services/api';
 import { createPinia } from 'pinia';
 import { vi } from 'vitest';
 import { createStore } from 'vuex';

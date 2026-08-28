@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import ConfigurationAPI from '@webitel/ui-sdk/api/clients/configurations/configurations.js';
+import { ConfigurationsAPI as ConfigurationAPI } from '@webitel/api-services/api';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
