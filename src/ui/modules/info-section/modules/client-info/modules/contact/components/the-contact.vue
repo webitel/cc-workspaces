@@ -11,31 +11,31 @@
         >
           <wt-icon-btn
             icon="search"
-            @click.stop="openView(open, ContactMode.SEARCH)"
+            @click.stop="openView(open, ContactMode.Search)"
           />
           <wt-icon-btn
             icon="plus"
-            @click.stop="openView(open, ContactMode.ADD)"
+            @click.stop="openView(open, ContactMode.Add)"
           />
         </div>
       </template>
       <template #default>
           <add-contact
-            v-if="mode === ContactMode.ADD"
+            v-if="mode === ContactMode.Add"
             :size="props.size"
-            @close="changeMode(ContactMode.VIEW)"
+            @close="changeMode(ContactMode.View)"
           />
           <search-contact
-            v-if="mode === ContactMode.SEARCH"
+            v-if="mode === ContactMode.Search"
             :size="props.size"
-            @add="changeMode(ContactMode.ADD)"
-            @close="changeMode(ContactMode.VIEW)"
+            @add="changeMode(ContactMode.Add)"
+            @close="changeMode(ContactMode.View)"
           />
           <view-contact
-            v-if="mode === ContactMode.VIEW"
+            v-if="mode === ContactMode.View"
             :mode="mode"
             :size="props.size"
-            @add="changeMode(ContactMode.ADD)"
+            @add="changeMode(ContactMode.Add)"
           />
       </template>
     </wt-expansion-panel>
@@ -49,7 +49,7 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
-import ContactMode from '../enums/ContactMode.enum';
+import { ContactMode } from '../enums/ContactMode';
 import { useContactStore } from '../store/contact';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
@@ -69,7 +69,7 @@ const store = useStore();
 const contactStore = useContactStore();
 const { initializeContact, loadContact } = contactStore;
 const { t } = useI18n();
-const mode = ref(ContactMode.VIEW);
+const mode = ref<string>(ContactMode.View);
 const workspaceState = computed(
 	() => store.getters['workspace/WORKSRACE_STATE'],
 );
@@ -119,7 +119,7 @@ watch(
 			bridgedId !== prevBridgedId && bridgedId && prevBridgedId;
 
 		if (taskId !== prevTaskId || !taskId || bridgedIdChanged) {
-			changeMode(ContactMode.VIEW);
+			changeMode(ContactMode.View);
 			initializeContact();
 			return;
 		}
@@ -127,7 +127,7 @@ watch(
 		if (taskId === prevTaskId && contactId !== prevContactId) {
 			if (contactId) {
 				loadContact(contactId);
-				changeMode(ContactMode.VIEW);
+				changeMode(ContactMode.View);
 			}
 		}
 	},

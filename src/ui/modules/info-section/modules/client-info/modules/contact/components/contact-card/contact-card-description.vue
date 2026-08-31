@@ -4,13 +4,13 @@
     :collapsed="props.collapsed"
     class="contact-card-description"
   >
-    <template #title>{{ $t('vocabulary.description') }}</template>
+    <template #title>{{ t('vocabulary.description') }}</template>
     <template #default>
       <div class="contact-card-description__text">
         <p v-if="props.description">
           {{ props.description }}
         </p>
-        <div v-else>{{ $t('infoSec.contacts.emptyDescription') }}
+        <div v-else>{{ t('infoSec.contacts.emptyDescription') }}
         </div>
       </div>
     </template>
@@ -19,6 +19,9 @@
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = withDefaults(
 	defineProps<{

@@ -26,7 +26,7 @@
       <wt-single-select
         :model-value="draft.timezones?.[0]?.timezone"
         :label="t('date.timezone', 1)"
-        :search-method="TimezonesAPI.getLookup"
+        :search-method="CalendarsAPI.getTimezonesLookup"
         @update:model-value="draft.timezones[0] = { etag: '', timezone: $event }"
       />
       <wt-single-select
@@ -71,6 +71,7 @@
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
+import { CalendarsAPI, LabelsAPI } from '@webitel/api-services/api';
 import type { ContactsInputContact } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
@@ -81,8 +82,6 @@ import { EngineCommunicationChannels } from 'webitel-sdk';
 import CommunicationsAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/communications/CommunicationsAPIRepository';
 import UsersAPI from '../../../../../../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
-import LabelsAPI from '../../api/LabelsAPI';
-import TimezonesAPI from '../../api/TimezonesAPI';
 import { useContactStore } from '../../store/contact';
 
 const props = withDefaults(

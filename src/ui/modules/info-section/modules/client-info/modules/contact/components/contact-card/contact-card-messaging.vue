@@ -21,7 +21,7 @@ class="contact-card-messaging"
             <wt-icon
               :icon="ProviderIconType[item.protocol]"
             />
-            <p> {{ $t(`objects.messengers.${item.protocol}`) }} </p>
+            <p> {{ t(`objects.messengers.${item.protocol}`) }} </p>
           </div>
           <p>{{ item.app.name }}</p>
           <wt-icon-btn
@@ -46,6 +46,7 @@ import type {
 import { WtSendMessagePopup } from '@webitel/ui-sdk/components';
 import { ComponentSize, ProviderIconType } from '@webitel/ui-sdk/enums';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useUserinfoStore } from '../../../../../../../userinfo/userinfoStore';
 
 const props = withDefaults(
@@ -60,6 +61,7 @@ const props = withDefaults(
 	},
 );
 
+const { t } = useI18n();
 const { userId } = useUserinfoStore();
 
 const chats = computed(() => props.contact?.imclients?.data);
