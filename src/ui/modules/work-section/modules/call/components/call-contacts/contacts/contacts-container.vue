@@ -10,7 +10,6 @@
 
     <template #search="{ search, inputHandler, searchHandler }">
       <wt-search-bar
-        :size="size"
         :value="search"
         debounce
         :search-mode="filterQuery"
