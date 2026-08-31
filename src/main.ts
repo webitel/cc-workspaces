@@ -8,7 +8,7 @@ import deepmerge from 'deepmerge';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
-import instance from './app/api/instance';
+import { instance } from './app/api/instance';
 import { createUserAccessControl } from './app/composables/useUserAccessControl';
 import i18n from './app/locale/i18n';
 import BreakpointPlugin from './app/plugins/breakpoint.plugin';

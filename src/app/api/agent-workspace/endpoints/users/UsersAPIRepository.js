@@ -3,7 +3,7 @@ import applyTransform, {
 	notify,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 
-import instance from '../../../instance';
+import { instance } from '../../../instance';
 
 const getUsers = async (params) => {
 	const defaultObject = {
