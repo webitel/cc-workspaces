@@ -20,13 +20,13 @@ export default ({ mode }) => {
 		server: {
 			// host: true,  // uncomment me to enable localhost access by IP (including from other devices in the network)
 		},
-		// css: {
-		// 	preprocessorOptions: {
-		// 		scss: {
-		// 			api: 'modern',
-		// 		},
-		// 	},
-		// },
+		css: {
+			preprocessorOptions: {
+				scss: {
+					api: 'modern',
+				},
+			},
+		},
 		resolve: {
 			alias: {
 				vue: '@vue/compat',
