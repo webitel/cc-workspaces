@@ -34,6 +34,13 @@ export default {
 		window.addEventListener('unload', () => {
 			this.$store.dispatch('workspace/CLOSE_SESSION');
 		});
+
+		window.addEventListener('beforeunload', (event) => {
+			if (this.$store.getters['features/status/IS_AGENT_ONLINE']) {
+				event.preventDefault();
+				event.returnValue = '';
+			}
+		});
 	},
 	mounted() {
 		this.showUserNotifications();

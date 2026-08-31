@@ -17,6 +17,8 @@ const getters = {
 	IS_AGENT: (state) => !!state.agent,
 	IS_CCENTER_ON: (state, getters) =>
 		getters.IS_AGENT && state.agent.status !== AgentStatus.Offline,
+	IS_AGENT_ONLINE: (state, getters) =>
+		getters.IS_AGENT && state.agent.status === AgentStatus.Online,
 };
 
 const actions = {
