@@ -9,7 +9,7 @@ import applyTransform, {
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { CallServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../instance';
+import { instance } from '../../../instance';
 import configuration from '../../../openAPIConfig';
 
 const callService = new CallServiceApiFactory(configuration, '', instance);

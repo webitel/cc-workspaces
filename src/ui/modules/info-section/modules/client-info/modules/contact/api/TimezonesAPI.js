@@ -10,7 +10,7 @@ import applyTransform, {
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { CalendarServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../../../../../../app/api/instance';
+import { instance } from '../../../../../../../../app/api/instance';
 import configuration from '../../../../../../../../app/api/openAPIConfig';
 
 const service = new CalendarServiceApiFactory(configuration, '', instance);

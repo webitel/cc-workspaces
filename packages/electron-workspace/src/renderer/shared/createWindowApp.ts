@@ -1,6 +1,6 @@
 import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
 import { type Component, createApp } from 'vue';
-import instance from './api/instance';
+import { instance } from './api/instance';
 import { createWindowI18n, type Locale } from './i18n';
 import {
 	options as WebitelUiOptions,

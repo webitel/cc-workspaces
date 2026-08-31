@@ -7,7 +7,7 @@ import applyTransform, {
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { AgentServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../instance';
+import { instance } from '../../../instance';
 import configuration from '../../../openAPIConfig';
 
 const agentService = new AgentServiceApiFactory(configuration, '', instance);

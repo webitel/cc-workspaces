@@ -6,7 +6,7 @@ import applyTransform, {
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { UserHelperServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../../app/api/instance';
+import { instance } from '../../../../app/api/instance';
 import configuration from '../../../../app/api/openAPIConfig';
 
 const userHelperService = new UserHelperServiceApiFactory(

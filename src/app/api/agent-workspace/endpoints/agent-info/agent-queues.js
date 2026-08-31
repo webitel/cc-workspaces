@@ -11,7 +11,7 @@ import applyTransform, {
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { AgentServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../instance';
+import { instance } from '../../../instance';
 import configuration from '../../../openAPIConfig';
 
 const service = new AgentServiceApiFactory(configuration, '', instance);

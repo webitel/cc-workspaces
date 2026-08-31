@@ -11,7 +11,7 @@ import applyTransform, {
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
 import { CommunicationTypeServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../instance';
+import { instance } from '../../../instance';
 import configuration from '../../../openAPIConfig';
 
 const communicationService = new CommunicationTypeServiceApiFactory(
