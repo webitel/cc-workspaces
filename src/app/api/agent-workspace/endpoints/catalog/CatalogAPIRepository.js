@@ -1,3 +1,3 @@
-import { catalog } from '@webitel/ui-sdk/src/api/clients/index.js';
+import { CatalogAPI as catalog } from '@webitel/api-services/api';
 
 export default catalog;

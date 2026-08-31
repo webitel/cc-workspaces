@@ -52,49 +52,48 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { CommunicationsAPI } from '@webitel/api-services/api';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { WtInlineAddPanel } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 import { EngineCommunicationChannels } from 'webitel-sdk';
+import { useContactStore } from '../../store/contact';
 
 const { t } = useI18n();
-const store = useStore();
+const contactStore = useContactStore();
+const { addNumberToContact } = contactStore;
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		contact: WebitelContactsContact;
+		isAdding?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		isAdding: false,
 	},
-	contact: {
-		type: Object,
-		required: true,
-	},
-	isAdding: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
-const emit = defineEmits([
-	'close-adding',
-	'phone-added',
-]);
+const emit = defineEmits<{
+	'close-adding': [];
+	'phone-added': [];
+}>();
 
-const newPhone = ref({
+const newPhone = ref<{
+	number: string;
+	type: any;
+	primary: boolean;
+}>({
 	number: '',
 	type: null,
 	primary: false,
 });
 
-const phones = computed(() => props.contact?.phones || []);
+const phones = computed(() => props.contact?.phones?.data || []);
 
 const closeAdding = () => {
 	newPhone.value = {
@@ -114,10 +113,7 @@ const savePhone = async () => {
 		type: newPhone.value.type,
 	};
 
-	await store.dispatch(
-		'ui/infoSec/client/contact/ADD_NUMBER_TO_CONTACT',
-		newPhoneData,
-	);
+	await addNumberToContact(newPhoneData);
 	closeAdding();
 };
 

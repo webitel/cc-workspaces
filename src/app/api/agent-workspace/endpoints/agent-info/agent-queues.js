@@ -1,20 +1,4 @@
-import {
-	getDefaultGetListResponse,
-	getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults/index.js';
-import applyTransform, {
-	merge,
-	mergeEach,
-	notify,
-	snakeToCamel,
-	starToSearch,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
-import { AgentServiceApiFactory } from 'webitel-sdk';
-
-import instance from '../../../instance';
-import configuration from '../../../openAPIConfig';
-
-const service = new AgentServiceApiFactory(configuration, '', instance);
+import { AgentsAPI } from '@webitel/api-services/api';
 
 const getList = async (params) => {
 	const defaultObject = {
@@ -24,52 +8,26 @@ const getList = async (params) => {
 		agents: {},
 	};
 
-	const listResponseHandler = (items) => {
-		return items.map((item) => ({
-			...item,
-			agents: {
-				busy: item.agents.busy || 0,
-				pause: item.agents.pause || 0,
-				online: item.agents.online || 0,
-				allowPause: item.agents.allowPause,
-			},
-		}));
+	const { items, next } = await AgentsAPI.getAgentQueues(params);
+
+	return {
+		items: items.map((item) => {
+			const merged = {
+				...defaultObject,
+				...item,
+			};
+			return {
+				...merged,
+				agents: {
+					busy: merged.agents.busy || 0,
+					pause: merged.agents.pause || 0,
+					online: merged.agents.online || 0,
+					allowPause: merged.agents.allowPause,
+				},
+			};
+		}),
+		next,
 	};
-
-	const { parentId, page, size, search, sort, fields, id } = applyTransform(
-		params,
-		[
-			merge(getDefaultGetParams()),
-			starToSearch('search'),
-		],
-	);
-
-	try {
-		const response = await service.searchAgentInQueue(
-			parentId,
-			page,
-			size,
-			search,
-			sort,
-			fields,
-			id,
-		);
-		const { items, next } = applyTransform(response.data, [
-			snakeToCamel(),
-			merge(getDefaultGetListResponse()),
-		]);
-		return {
-			items: applyTransform(items, [
-				mergeEach(defaultObject),
-				listResponseHandler,
-			]),
-			next,
-		};
-	} catch (err) {
-		throw applyTransform(err, [
-			notify,
-		]);
-	}
 };
 
 export default {
