@@ -14,7 +14,7 @@ const getters = {
 	 * it. Drop chats already present in the backend list so they don't render
 	 * twice.
 	 * */
-	VISIBLE_LIST: (state, getters, rootState) => {
+	CHATS_IN_POSTPROCESSING: (state, getters, rootState) => {
 		const unprocessedIds = new Set(
 			rootState.features.chat.closed.unprocessed.chatsList.map(
 				(chat) => chat.id,

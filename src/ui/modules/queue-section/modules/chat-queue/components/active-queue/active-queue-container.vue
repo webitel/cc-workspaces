@@ -100,10 +100,10 @@ const unprocessedClosedChats = computed(
  * @author @OleksandrPalonnyi
  * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
  * chats in the post-processing window already deduped against unprocessedClosedChats
- * see postProcessing/VISIBLE_LIST
+ * see postProcessing/CHATS_IN_POSTPROCESSING
  * */
 const postProcessingChats = computed(
-	() => store.getters['features/chat/postProcessing/VISIBLE_LIST'],
+	() => store.getters['features/chat/postProcessing/CHATS_IN_POSTPROCESSING'],
 );
 const searchQuery = computed(
 	() => store.state.features.chat.active.search.query,
