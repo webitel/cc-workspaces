@@ -1,64 +1,20 @@
-import { getDefaultGetListResponse } from '@webitel/ui-sdk/src/api/defaults/index.js';
+import { AgentTriggersAPI } from '@webitel/api-services/api';
 import applyTransform, {
-	merge,
-	mergeEach,
 	notify,
-	snakeToCamel,
-	starToSearch,
 } from '@webitel/ui-sdk/src/api/transformers/index.js';
-import { TeamTriggerServiceApiFactory } from 'webitel-sdk';
 
-import instance from '../../../../../../app/api/instance';
-import configuration from '../../../../../../app/api/openAPIConfig';
 import i18n from '../../../../../../app/locale/i18n.js';
 
 const { t } = i18n.global;
 
-const flowSchemaService = new TeamTriggerServiceApiFactory(
-	configuration,
-	'',
-	instance,
-);
-
-const getFlowSchemasList = async (params) => {
-	const defaultObject = {
-		enabled: false,
-	};
-
-	const { page, size, search, sort, fields, id, enabled } = applyTransform(
-		params,
-		[
-			starToSearch('search'),
-		],
-	);
-
-	const response = await flowSchemaService.searchAgentTrigger(
-		undefined,
-		page,
-		size,
-		search,
-		sort,
-		fields,
-		enabled,
-		id,
-	);
-	const { items, next } = applyTransform(response.data, [
-		snakeToCamel(),
-		merge(getDefaultGetListResponse()),
-	]);
-	return {
-		items: applyTransform(items, [
-			mergeEach(defaultObject),
-		]),
-		next,
-	};
-};
+const getFlowSchemasList = (params) => AgentTriggersAPI.getList(params);
 
 const runFlowSchema = async ({ id }) => {
 	try {
-		const response = await flowSchemaService.runTeamTrigger(id, {});
-		return applyTransform(response.data, [
-			snakeToCamel(),
+		const result = await AgentTriggersAPI.run({
+			id,
+		});
+		return applyTransform(result, [
 			notify(({ callback }) =>
 				callback({
 					type: 'success',
@@ -78,15 +34,7 @@ const runFlowSchema = async ({ id }) => {
 	}
 };
 
-const getFlowsLookup = (params) =>
-	getFlowSchemasList({
-		...params,
-		fields: params.fields || [
-			'id',
-			'name',
-			'enabled',
-		],
-	});
+const getFlowsLookup = (params) => AgentTriggersAPI.getLookup(params);
 
 const FlowsAPI = {
 	getList: getFlowSchemasList,
