@@ -25,50 +25,43 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import ContactMode from '../../enums/ContactMode.enum';
+import { ContactMode } from '../../enums/ContactMode';
+import { useContactStore } from '../../store/contact';
 import ContactCard from '../contact-card/the-contact-card.vue';
 import ContactHeader from './contact-header.vue';
 import EmptyContact from './empty-contact.vue';
 
-const props = defineProps({
-	list: {
-		type: Array,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		list: WebitelContactsContact[];
+		linkedContact?: WebitelContactsContact | null;
+		size?: ComponentSize;
+		mode?: string;
+	}>(),
+	{
+		linkedContact: null,
+		size: ComponentSize.MD,
 	},
-	linkedContact: {
-		type: Object,
-		default: null,
-	},
-	size: {
-		type: String,
-		default: ComponentSize.MD,
-	},
-	mode: {
-		type: String,
-	},
-	namespace: {
-		type: String,
-		required: true,
-	},
-});
+);
 
-const emit = defineEmits([
-	'link',
-	'add',
-]);
+const emit = defineEmits<{
+	link: [
+		contact: WebitelContactsContact,
+	];
+	add: [];
+}>();
 
 const index = ref(0);
 const store = useStore();
-
-const isLoading = computed(
-	() => getNamespacedState(store.state, props.namespace).isLoading,
-);
+const contactStore = useContactStore();
+const { isLoading } = storeToRefs(contactStore);
 
 const isNext = computed(() => index.value < props.list.length - 1);
 const isPrev = computed(() => index.value > 0);
@@ -76,7 +69,7 @@ const isPrev = computed(() => index.value > 0);
 const currentContact = computed(() => props.list[index.value]);
 const isEmptyContact = computed(
 	() =>
-		!props.list.length && props.mode === ContactMode.VIEW && !isLoading.value,
+		!props.list.length && props.mode === ContactMode.View && !isLoading.value,
 );
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
 

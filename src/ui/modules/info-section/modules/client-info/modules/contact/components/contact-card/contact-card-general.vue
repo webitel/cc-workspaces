@@ -57,65 +57,60 @@
   </div>
 </template>
 
-<script setup>
-import { ConfigurationsAPI as ConfigurationAPI } from '@webitel/api-services/api';
+<script setup lang="ts">
+import { ConfigurationsAPI } from '@webitel/api-services/api';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { EngineSystemSettingName } from 'webitel-sdk';
+import { useContactStore } from '../../store/contact';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		contact?: WebitelContactsContact;
+		linked?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		linked: false,
 	},
-	contact: {
-		type: Object,
-	},
-	linked: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
 const { t } = useI18n();
 const store = useStore();
+const contactStore = useContactStore();
+const { contactLink } = storeToRefs(contactStore);
+const { initShowFullContactState } = contactStore;
 
-const emit = defineEmits([
-	'link',
-]);
+const emit = defineEmits<{
+	link: [];
+}>();
 
 const isTaskActive = computed(() => store.getters['workspace/IS_TASK_ACTIVE']);
-const name = computed(() => props.contact.name);
-const contactLink = computed(
-	() => store.getters['ui/infoSec/client/contact/CONTACT_LINK'],
+const name = computed(() => props.contact.name?.commonName);
+const manager = computed(() => props.contact?.managers?.data?.[0]?.user?.name);
+const timezone = computed(
+	() => props.contact?.timezones?.data?.[0]?.timezone?.name,
 );
-const manager = computed(() => props.contact?.managers[0]?.user.name);
-const timezone = computed(() => props.contact?.timezones[0]?.timezone.name);
 const contactId = computed(() =>
-	store.state.ui.infoSec.client.contact.showFullContact
-		? props.contact?.id
-		: props.contact?.etag,
+	contactStore.showFullContact ? props.contact?.id : props.contact?.etag,
 );
 
 // to get access variable for contact card page in read only mode
-async function initShowFullContactState() {
-	const { items } = await ConfigurationAPI.getList({
+async function initShowContactState() {
+	const { items } = await ConfigurationsAPI.getList({
 		name: [
 			EngineSystemSettingName.ShowFullContact,
 		],
 	});
-	store.dispatch(
-		'ui/infoSec/client/contact/INIT_SHOW_FULL_CONTACT_STATE',
-		items?.[0]?.value,
-	);
+	initShowFullContactState(items?.[0]?.value);
 }
 
-onMounted(initShowFullContactState);
+onMounted(initShowContactState);
 </script>
 
 <style lang="scss" scoped>

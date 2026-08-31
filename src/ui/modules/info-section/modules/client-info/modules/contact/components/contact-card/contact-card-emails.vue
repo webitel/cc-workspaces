@@ -14,7 +14,7 @@
       <template>
           <wt-input-text
             v-model:model-value="newEmail.email"
-            :v="v$?.newEmail?.email"
+            :v="emailValidation"
             class="contact-card-emails__input"
             :placeholder="t('vocabulary.emails')"
           />
@@ -49,46 +49,46 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
-import { email, required } from '@vuelidate/validators';
+import { email } from '@vuelidate/validators';
 import { CommunicationsAPI } from '@webitel/api-services/api';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { WtInlineAddPanel } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 import { EngineCommunicationChannels } from 'webitel-sdk';
+import { useContactStore } from '../../store/contact';
 
 const { t } = useI18n();
-const store = useStore();
+const contactStore = useContactStore();
+const { addEmailToContact } = contactStore;
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		contact?: WebitelContactsContact;
+		isAdding?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		isAdding: false,
 	},
-	contact: {
-		type: Object,
-	},
-	isAdding: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
-const emit = defineEmits([
-	'close-adding',
-	'phone-added',
-]);
+const emit = defineEmits<{
+	'close-adding': [];
+	'phone-added': [];
+}>();
 
-const emails = computed(() => props.contact?.emails);
+const emails = computed(() => props.contact?.emails?.data || []);
 
-const newEmail = ref({
+const newEmail = ref<{
+	email: string;
+	type: any;
+	primary: boolean;
+}>({
 	email: '',
 	type: null,
 	primary: false,
@@ -112,6 +112,9 @@ const v$ = useVuelidate(
 
 v$.value.$touch();
 
+// vuelidate's generated validation-state type doesn't narrow cleanly here
+const emailValidation = computed(() => (v$.value as any).newEmail?.email);
+
 const closeAdding = () => {
 	newEmail.value = {
 		email: '',
@@ -130,10 +133,7 @@ const saveEmail = async () => {
 		type: newEmail.value.type,
 	};
 
-	await store.dispatch(
-		'ui/infoSec/client/contact/ADD_EMAIL_TO_CONTACT',
-		newEmailData,
-	);
+	await addEmailToContact(newEmailData);
 	closeAdding();
 };
 
