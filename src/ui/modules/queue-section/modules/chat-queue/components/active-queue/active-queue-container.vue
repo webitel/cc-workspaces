@@ -95,6 +95,16 @@ const activeChats = computed(
 const unprocessedClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.chatsList,
 );
+
+/**
+ * @author @OleksandrPalonnyi
+ * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+ * chats in the post-processing window already deduped against unprocessedClosedChats
+ * see postProcessing/CHATS_IN_POSTPROCESSING
+ * */
+const postProcessingChats = computed(
+	() => store.getters['features/chat/postProcessing/CHATS_IN_POSTPROCESSING'],
+);
 const searchQuery = computed(
 	() => store.state.features.chat.active.search.query,
 );
@@ -112,14 +122,15 @@ const setSearchQuery = (value) =>
 
 onUnmounted(() => store.dispatch(`${searchNamespace}/RESET_SEARCH`));
 
-const taskList = computed(() =>
-	isSearchActive.value
-		? searchResults.value
-		: [
-				...activeChats.value,
-				...unprocessedClosedChats.value,
-			],
-);
+const taskList = computed(() => {
+	if (isSearchActive.value) return searchResults.value;
+
+	return [
+		...activeChats.value,
+		...postProcessingChats.value,
+		...unprocessedClosedChats.value,
+	];
+});
 
 const isSearchVisible = computed(
 	() => taskList.value.length > 0 || isSearchActive.value,

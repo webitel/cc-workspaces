@@ -231,15 +231,15 @@ export default {
 			if (processingConfigured && this.showProcessing) return processing;
 
 			if (
-				(noDefaultWorkspaceTab ||
-					clientInfoConfigured ||
-					processingConfigured) &&
+				(clientInfoConfigured || processingConfigured) &&
 				this.showClientInfo
 			) {
 				return clientInfo;
 			}
 
 			if (noDefaultWorkspaceTab && this.showProcessing) return processing;
+
+			if (noDefaultWorkspaceTab && this.showClientInfo) return clientInfo;
 
 			if (this.showClientInfo && this.taskOnWorkspace?.closedAt) {
 				return clientInfo;

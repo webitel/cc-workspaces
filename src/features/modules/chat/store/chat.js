@@ -7,6 +7,7 @@ import ChatTransferDestination from '../../../../ui/modules/work-section/modules
 import active from '../modules/active/store/active';
 import closed from '../modules/closed/store/closed';
 import manual from '../modules/manual/store/manual';
+import postProcessing from '../modules/post-processing/store/post-processing';
 import chatHistory from './chat-history';
 import chatMedia from './chat-media';
 import clientHandlers from './client-handlers';
@@ -144,6 +145,7 @@ export default {
 		active,
 		manual,
 		closed,
+		postProcessing,
 		chatHistory,
 		chatMedia,
 		unseen,
