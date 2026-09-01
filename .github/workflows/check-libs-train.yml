@@ -1,0 +1,35 @@
+# Guards the release-train invariant: every @webitel/* dependency of this app has
+# to name the same YY.M train. A single `^` range is enough to let one library run
+# ahead of the train the rest of the app is frozen on, and that drift is invisible
+# until a release branch quietly builds against a months-newer library.
+#
+# Deliberately a standalone workflow rather than a step inside the shared
+# reusable-workflows checks: this is a repo-local invariant and needs no install.
+
+name: Check libs release train
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'scripts/check-webitel-train.mjs'
+      - '.github/workflows/check-libs-train.yml'
+
+permissions: { contents: read }
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check
+    runs-on: [ arc-frontend-runner-set ]
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - run: npm run check:libs-train
