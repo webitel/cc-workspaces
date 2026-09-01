@@ -35,6 +35,11 @@ export default {
 			this.$store.dispatch('workspace/CLOSE_SESSION');
 		});
 
+		/**
+		 * @author OleksandrPalonnyi
+		 *
+		 * comment link https://webitel.atlassian.net/browse/WTEL-10195?focusedCommentId=779123
+		 * */
 		window.addEventListener('beforeunload', (event) => {
 			if (this.$store.getters['features/status/IS_AGENT_ONLINE']) {
 				event.preventDefault();
