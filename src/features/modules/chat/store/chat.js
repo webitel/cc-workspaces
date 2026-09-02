@@ -17,14 +17,18 @@ const { t } = i18n.global;
 
 // stable per-chat key: `.id` is `channelId || inviteId || conversationId` and
 // changes during a chat's lifetime, `conversationId` doesn't
-const pendingFileKey = (chat) => chat?.conversationId || chat?.id;
+const failedFilesKey = (chat) => chat?.conversationId || chat?.id;
+
+const state = () => ({
+	failedFiles: {},
+});
 
 const getters = {
 	CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) =>
 		rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
 		rootGetters['workspace/TASK_ON_WORKSPACE'],
 	FAILED_FILES: (state, getters) =>
-		state.failedFiles[pendingFileKey(getters.CHAT_ON_WORKSPACE)] || [],
+		state.failedFiles[failedFilesKey(getters.CHAT_ON_WORKSPACE)] || [],
 	ALLOW_CHAT_TRANSFER: (state, getters) =>
 		getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
 	ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
@@ -76,16 +80,18 @@ const actions = {
 			 * */
 			const detail = err.detail || err.response?.data?.detail;
 			if (detail?.includes('PHOTO_INVALID_DIMENSIONS')) {
-				const chatMessages = context.getters.CHAT_ON_WORKSPACE.messages;
+				const chat = context.getters.CHAT_ON_WORKSPACE;
+				const chatMessages = chat.messages;
 				const lastMessageCreatedAt =
 					chatMessages[chatMessages.length - 1]?.createdAt || 0;
-				context.commit('ADD_FAILED_FILE', {
-					key: pendingFileKey(context.getters.CHAT_ON_WORKSPACE),
+				const failedFile = {
+					key: failedFilesKey(chat),
 					id: crypto.randomUUID(),
 					file,
 					createdAt: Math.max(Date.now(), lastMessageCreatedAt + 1),
-					channelId: context.getters.CHAT_ON_WORKSPACE.channelId,
-				});
+					channelId: chat.channelId,
+				};
+				context.commit('ADD_FAILED_FILE', failedFile);
 				return;
 			}
 
@@ -125,7 +131,7 @@ const actions = {
 			await chatOnWorkspace.decline();
 		}
 
-		context.commit('CLEAR_FAILED_FILES', pendingFileKey(chatOnWorkspace));
+		context.dispatch('CLEAR_FAILED_FILES', failedFilesKey(chatOnWorkspace));
 
 		await context.dispatch(
 			'features/chatNotifications/HANDLE_CHAT_END',
@@ -167,6 +173,13 @@ const actions = {
 		context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, {
 			root: true,
 		}),
+
+	CLEAR_FAILED_FILES: (context, key) => {
+		context.commit('SET_FAILED_FILES', {
+			key,
+			files: [],
+		});
+	},
 };
 
 const mutations = {
@@ -174,28 +187,28 @@ const mutations = {
 		state.mediaView = mediaView;
 	},
 	ADD_FAILED_FILE: (state, { key, id, file, createdAt, channelId }) => {
-		if (!state.failedFiles[key]) state.failedFiles[key] = [];
-		state.failedFiles[key].push({
-			id,
-			photoInvalidDimensions: true,
-			file,
-			member: {
-				self: true,
+		state.failedFiles[key] = [
+			...(state.failedFiles[key] || []),
+			{
+				id,
+				photoInvalidDimensions: true,
+				file,
+				member: {
+					self: true,
+				},
+				channelId,
+				createdAt,
 			},
-			channelId,
-			createdAt,
-		});
+		];
 	},
-	CLEAR_FAILED_FILES: (state, key) => {
-		delete state.failedFiles[key];
+	SET_FAILED_FILES: (state, { key, files }) => {
+		state.failedFiles[key] = files;
 	},
 };
 
 export default {
 	namespaced: true,
-	state: () => ({
-		failedFiles: {},
-	}),
+	state,
 	getters,
 	actions,
 	mutations,

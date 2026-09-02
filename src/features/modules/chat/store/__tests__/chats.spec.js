@@ -252,10 +252,18 @@ describe('features/chat store: actions', () => {
 
 	it('CLOSE action clears the failed-file entries for that chat', async () => {
 		await chatModule.actions.CLOSE(context);
-		expect(context.commit).toHaveBeenCalledWith(
+		expect(context.dispatch).toHaveBeenCalledWith(
 			'CLEAR_FAILED_FILES',
 			chatOnWorkspace.id,
 		);
+	});
+
+	it('CLEAR_FAILED_FILES action commits SET_FAILED_FILES with an empty bucket for that key', () => {
+		chatModule.actions.CLEAR_FAILED_FILES(context, '1');
+		expect(context.commit).toHaveBeenCalledWith('SET_FAILED_FILES', {
+			key: '1',
+			files: [],
+		});
 	});
 
 	it('OPEN_CHAT dispatches SET_WORKSPACE for active chat without contact', () => {
@@ -468,8 +476,8 @@ describe('features/chat store: mutations', () => {
 		});
 	});
 
-	describe('CLEAR_FAILED_FILES', () => {
-		it('deletes the whole bucket for that key', () => {
+	describe('SET_FAILED_FILES', () => {
+		it('sets the bucket for that key', () => {
 			const state = {
 				failedFiles: {
 					1: [
@@ -484,8 +492,12 @@ describe('features/chat store: mutations', () => {
 					],
 				},
 			};
-			chatModule.mutations.CLEAR_FAILED_FILES(state, '1');
+			chatModule.mutations.SET_FAILED_FILES(state, {
+				key: '1',
+				files: [],
+			});
 			expect(state.failedFiles).toEqual({
+				1: [],
 				2: [
 					{
 						id: 'b',
