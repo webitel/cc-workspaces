@@ -10,7 +10,6 @@
 
     <template #search="{ search, inputHandler, searchHandler }">
       <wt-search-bar
-        :size="size"
         :value="search"
         debounce
         :search-mode="filterQuery"
@@ -31,19 +30,20 @@
         :key="item.id"
         :item="item"
         :size="size"
-				:loading="showLoader(item.id)"
+				:loading="showLoader(item.id ?? '')"
         @call="makeCall"
       />
     </template>
   </lookup-item-container>
 </template>
 
-<script setup>
-import { ContactsAPI } from '@webitel/api-services/api';
+<script setup lang="ts">
+import { ConfigurationsAPI, ContactsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/api/clients';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { SpecialGlobalAction } from '@webitel/ui-sdk/modules/Userinfo';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
@@ -55,12 +55,14 @@ import LookupItemContainer from '../../../../_shared/components/lookup-item-cont
 import EmptySearch from '../../../../_shared/components/workspace-empty-search/components/empty-search.vue';
 import ContactLookupItem from './contact-lookup-item.vue';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+	}>(),
+	{
+		size: ComponentSize.MD,
 	},
-});
+);
 
 const { t } = useI18n();
 const store = useStore();
@@ -92,7 +94,7 @@ const searchModeOptions = computed(() => [
 ]);
 
 const checkLabelsToLimitContacts = async () => {
-	const { items } = await configurations.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: EngineSystemSettingName.LabelsToLimitContacts,
 	});
 
@@ -119,19 +121,20 @@ const fetchFn = async (params) => {
 	});
 };
 
-const makeCall = (item) => {
+const makeCall = (item: { contactId?: string }) => {
+	if (!item.contactId) return;
 	runWithLoader(item.contactId, () =>
 		store.dispatch('features/call/CALL', item),
 	);
 };
 
-const changeMode = ({ value }) => {
+const changeMode = ({ value }: { value: string }) => {
 	filterQuery.value = value;
 	resetData();
 };
 
 const { dataList, isLoading, dataSearch, handleIntersect, resetData } =
-	useInfiniteScroll({
+	useInfiniteScroll<WebitelContactsContact>({
 		fetchFn,
 		size: 20,
 	});

@@ -1,21 +1,11 @@
-import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
 import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
+import { getClientChats } from '../../../scripts/getClientConversations';
 import ActiveChatsAPI from '../api/activeChats';
 import { buildConversationFromDialog } from '../scripts/buildConversationFromDialog';
 import search from './search';
 
 const RELOAD_PAGE_SIZE = 40;
 const MAX_RELOAD_PAGES = 50;
-
-// Chats the WS client currently holds. Empty until the socket is connected.
-const getClientChats = (rootState) => {
-	if (rootState.client.state !== WebSocketConnectionState.Connected) return [];
-
-	const client = rootState.client.getClientSync();
-	if (!client) return [];
-
-	return client.allConversations().filter((chat) => !chat.closedAt);
-};
 
 const state = {
 	visibleChatIds: [],

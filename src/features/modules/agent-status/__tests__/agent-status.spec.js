@@ -1,3 +1,5 @@
+import { AgentStatus } from 'webitel-sdk';
+
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import { useWebSocketClient } from '../../../../app/api/agent-workspace/websocket/useWebSocketClient';
@@ -110,6 +112,36 @@ describe('features/status store client handlers: actions', () => {
 		expect(context.dispatch).toHaveBeenCalledWith('SET_AGENT_WAITING_STATUS', {
 			activityType: mockActivityType,
 		});
+	});
+});
+
+describe('features/status store: getters', () => {
+	it('IS_AGENT_ONLINE returns true if agent status is AgentStatus.Online', () => {
+		const state = {
+			agent: {
+				status: AgentStatus.Online,
+			},
+		};
+		const getters = statusModule.getters;
+		expect(
+			getters.IS_AGENT_ONLINE(state, {
+				IS_AGENT: true,
+			}),
+		).toBe(true);
+	});
+
+	it('IS_AGENT_ONLINE returns false if agent status is not AgentStatus.Online', () => {
+		const state = {
+			agent: {
+				status: AgentStatus.Pause,
+			},
+		};
+		const getters = statusModule.getters;
+		expect(
+			getters.IS_AGENT_ONLINE(state, {
+				IS_AGENT: true,
+			}),
+		).toBe(false);
 	});
 });
 

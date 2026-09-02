@@ -32,7 +32,8 @@
   </wt-expansion-panel>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -41,28 +42,29 @@ import ContactCardEmails from './contact-card-emails.vue';
 import ContactCardMessaging from './contact-card-messaging.vue';
 import ContactCardPhones from './contact-card-phones.vue';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: ComponentSize.MD,
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		contact: WebitelContactsContact;
+		linked?: boolean;
+		collapsed?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		linked: false,
+		collapsed: false,
 	},
-	contact: {
-		type: Object,
-		required: true,
-	},
-	linked: {
-		type: Boolean,
-		default: false,
-	},
-	collapsed: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
 const { t } = useI18n();
 
-const tabs = computed(() => [
+interface CommunicationsTab {
+	text: string;
+	value: string;
+	component: unknown;
+}
+
+const tabs = computed<CommunicationsTab[]>(() => [
 	{
 		text: t('vocabulary.phones', 2),
 		value: 'phones',
@@ -80,10 +82,10 @@ const tabs = computed(() => [
 	},
 ]);
 
-const currentTab = ref(tabs.value[0]);
+const currentTab = ref<CommunicationsTab>(tabs.value[0]);
 const isAdding = ref(false);
 
-function changeTab(tab) {
+function changeTab(tab: CommunicationsTab) {
 	currentTab.value = tab;
 	isAdding.value = false;
 }

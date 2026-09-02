@@ -4,7 +4,7 @@
       <a :href="contactLink(item.etag)" target="_blank">
         <wt-avatar
           :size="size"
-          :username="item.name"
+          :username="item.name?.commonName"
         ></wt-avatar>
       </a>
     </template>
@@ -14,7 +14,7 @@
         class="contact-lookup-item__title"
         :href="contactLink(item.etag)"
         target="_blank">
-        {{ item.name }}
+        {{ item.name?.commonName }}
       </a>
     </template>
 
@@ -24,22 +24,22 @@
 
     <template #after="{ toggle }">
       <wt-rounded-action
-        :disabled="!item.phones.length"
+        :disabled="!phones.length"
         :size="size"
         :loading="loading"
         color="success"
         icon="call--filled"
         rounded
-        @click="item.phones.length > 1 ? toggle() : call(item.phones[0])"
+        @click="handleCallAction(toggle)"
       ></wt-rounded-action>
     </template>
 
     <template
-      v-if="item.phones.length > 1"
+      v-if="phones.length > 1"
       #expansion
     >
       <contact-communication-item
-        v-for="phone in item.phones"
+        v-for="phone in phones"
         :key="phone.id"
         :phone="phone"
         :size="size"
@@ -50,48 +50,63 @@
   </lookup-item>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
-
-import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
-import lookupItemMixin from '../../../../_shared/components/lookup-item/mixins/lookupItemMixin';
+<script setup lang="ts">
+import type {
+	ContactsPhoneNumber,
+	WebitelContactsContact,
+} from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useContactStore } from '../../../../../../info-section/modules/client-info/modules/contact/store/contact';
+import LookupItem from '../../../../_shared/components/lookup-item/lookup-item.vue';
 import ContactCommunicationItem from './contact-communication-item.vue';
 
-export default {
-	name: 'ContactLookupItem',
-	components: {
-		ContactCommunicationItem,
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		item: WebitelContactsContact;
+		loading?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		loading: false,
 	},
-	mixins: [
-		lookupItemMixin,
-		sizeMixin,
-	],
-	emits: [
-		'call',
-	],
-	props: {
-		loading: {
-			type: Boolean,
-			default: false,
+);
+
+const emit = defineEmits<{
+	call: [
+		payload: {
+			number?: string;
+			contactId?: string;
 		},
-	},
-	computed: {
-		...mapGetters('ui/infoSec/client/contact', {
-			contactLink: 'READ_ONLY_CONTACT_LINK',
-		}),
-		primaryPhoneNumber() {
-			return this.item.phones?.find((phone) => phone.primary === true)?.number;
-		},
-	},
-	methods: {
-		call({ number } = {}) {
-			this.$emit('call', {
-				number: number || this.primaryPhoneNumber,
-				contactId: this.item.id,
-			});
-		},
-	},
-};
+	];
+}>();
+
+const contactStore = useContactStore();
+const { readOnlyContactLink: contactLink } = storeToRefs(contactStore);
+
+const phones = computed<ContactsPhoneNumber[]>(
+	() => props.item.phones?.data || [],
+);
+const primaryPhoneNumber = computed(
+	() => phones.value.find((phone) => phone.primary === true)?.number,
+);
+
+function call(phone?: ContactsPhoneNumber) {
+	emit('call', {
+		number: phone?.number || primaryPhoneNumber.value,
+		contactId: props.item.id,
+	});
+}
+
+function handleCallAction(toggle: () => void) {
+	if (phones.value.length > 1) {
+		toggle();
+	} else {
+		call(phones.value[0]);
+	}
+}
 </script>
 
 <style lang="scss" scoped>

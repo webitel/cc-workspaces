@@ -80,9 +80,18 @@ describe('InfoSection', () => {
 			});
 		});
 
-		it('defaults to the clientInfo tab on a call when no system default tab is configured, even if processing is available', async () => {
+		it('defaults to processing on a call when no system default tab is configured and processing is available', async () => {
 			const wrapper = mountInfoSection({
 				showProcessing: () => true,
+			});
+			await flushPromises();
+
+			expect(wrapper.vm.currentTab?.value).toBe('processing');
+		});
+
+		it('falls back to clientInfo when no system default tab is configured and processing is not available', async () => {
+			const wrapper = mountInfoSection({
+				showProcessing: () => false,
 			});
 			await flushPromises();
 
