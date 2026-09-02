@@ -146,6 +146,12 @@ const actions = {
 
 		if (!isSelfAssignedCallSoundNotification) return;
 
+		const hasCallInProgress = context.rootState.features.call.callList.some(
+			(call) => call.active || call.isHold,
+		);
+
+		if (hasCallInProgress) return;
+
 		await context.dispatch(
 			'features/notifications/PLAY_SOUND',
 			{
