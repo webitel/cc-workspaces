@@ -212,6 +212,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Se superó el límite de tamaño de archivo',
 				filePolicyFail: 'Formato de archivo no permitido',
+				photoInvalidDimensions: 'Dimensiones de imagen incorrectas',
 			},
 		},
 	},
