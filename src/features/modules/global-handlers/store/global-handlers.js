@@ -1,4 +1,4 @@
-import { watch } from 'vue';
+import { unref, watch } from 'vue';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
 
 const state = {
@@ -8,22 +8,26 @@ const state = {
 
 const getters = {};
 
+let removeVisibilityListener = null;
+
 const actions = {
 	INIT_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('SUBSCRIBE_TO_CONNECTION_STATE');
 		context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED');
+		context.dispatch('SUBSCRIBE_TO_PAGE_VISIBILITY');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
+		removeVisibilityListener?.();
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
 	},
 	SUBSCRIBE_TO_CONNECTION_STATE: (context) => {
-		let stop = null;
+		let hasConnectedBefore = false;
 
-		stop = watch(
-			() => context.rootState.client.state,
-			(value, prev) => {
+		return watch(
+			() => unref(context.rootState.client.state),
+			(value) => {
 				console.log('[WS connection state]:', value);
 				if (
 					value === WebSocketConnectionState.Reconnecting ||
@@ -35,25 +39,52 @@ const actions = {
 				if (value === WebSocketConnectionState.Connected) {
 					context.dispatch('CLOSE_DISCONNECT_POPUP');
 
-					// first session is opened by OPEN_SESSION; here we only re-bind
-					// chats after the socket comes back
-					if (
-						(prev === WebSocketConnectionState.Reconnecting ||
-							prev === WebSocketConnectionState.Disconnected) &&
-						context.rootState.client.getClientSync()
-					) {
+					// first session is opened by OPEN_SESSION; here we only
+					// re-subscribe after the socket comes back (incl.
+					// Connecting → Connected, which is the actual reconnect path)
+					if (hasConnectedBefore && context.rootState.client.getClientSync()) {
 						context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
 							root: true,
 						});
 					}
+					hasConnectedBefore = true;
 				}
 			},
 			{
 				immediate: true,
 			},
 		);
+	},
+	SUBSCRIBE_TO_PAGE_VISIBILITY: (context) => {
+		removeVisibilityListener?.();
 
-		return stop;
+		const onVisible = () => {
+			if (document.visibilityState !== 'visible') return;
+
+			const client = context.rootState.client.getClientSync();
+			const visibleChatIds =
+				context.rootState.features?.chat?.active?.visibleChatIds ?? [];
+
+			// already on screen — skip reload so the list doesn't flash empty
+			if (client && visibleChatIds.length) return;
+
+			if (client) {
+				context.dispatch('features/chat/active/RELOAD_CHAT_LIST', null, {
+					root: true,
+				});
+				return;
+			}
+
+			context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
+				root: true,
+			});
+		};
+
+		document.addEventListener('visibilitychange', onVisible);
+		removeVisibilityListener = () => {
+			document.removeEventListener('visibilitychange', onVisible);
+			removeVisibilityListener = null;
+		};
 	},
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();

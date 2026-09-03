@@ -2,6 +2,9 @@ import { ChatActions } from 'webitel-sdk';
 
 import openLinkFromVariable from '../../../../app/scripts/openLinkFromVariable';
 
+// subscribeChat stacks handlers; reconnect + visibility can both call SUBSCRIBE_CHATS
+const subscribedChatClients = new WeakSet();
+
 const chatHandler = (context) => async (action, chat) => {
 	switch (action) {
 		case ChatActions.UserInvite:
@@ -46,7 +49,15 @@ const actions = {
 	SUBSCRIBE_CHATS: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
 
-		await client.subscribeChat(chatHandler(context), null);
+		if (!subscribedChatClients.has(client)) {
+			subscribedChatClients.add(client);
+			try {
+				await client.subscribeChat(chatHandler(context), null);
+			} catch (error) {
+				subscribedChatClients.delete(client);
+				throw error;
+			}
+		}
 
 		await context.dispatch('active/RELOAD_CHAT_LIST');
 	},
