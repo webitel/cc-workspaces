@@ -4,7 +4,6 @@
 		"debug": false,
 		"registerWebDevice": true,
 		"externalSoftphone": {
-			"enabled": false,
 			"port": 10029
 		}
 	},
