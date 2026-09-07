@@ -6,7 +6,7 @@
     <div class="task-header-actions">
       <task-header-avatar
         v-if="withAvatar"
-        :username="props.avatarTitle"
+        :username="props.username"
       />
       <slot name="task-header-actions" />
     </div>
@@ -24,7 +24,7 @@ import TaskHeaderAvatar from './task-header-avatar.vue';
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
-		avatarTitle?: string;
+		username?: string;
 	}>(),
 	{
 		size: ComponentSize.MD,
@@ -32,7 +32,7 @@ const props = withDefaults(
 );
 
 const withAvatar = computed(
-	() => props.size === ComponentSize.SM && !!props.avatarTitle,
+	() => props.size === ComponentSize.SM && !!props.username,
 );
 </script>
 

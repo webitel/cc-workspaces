@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="props.size" :avatar-title="avatarTitle">
+  <task-header :size="props.size" :username="chatInfo.username">
     <template #task-header-actions>
       <wt-button
         v-show="isTransferAction"
@@ -21,11 +21,11 @@
     </template>
     <template #info>
     <task-header-info
-     :contact-name="contactName"
-     :contact-link="contactLink"
-     :title="extraTitle"
-     :queue-name="displayQueueName"
-     :avatar-title="avatarTitle"
+     :username="chatInfo.username"
+     :contact-name="chatInfo.contactName"
+     :contact-link="chatInfo.contactLink"
+     :title="chatInfo.title"
+     :queue-name="chatInfo.queueName"
      :size="size"
     />
     </template>
@@ -99,23 +99,22 @@ const displayChatName = computed(() =>
 	}),
 );
 
-const contactName = computed(() => displayChatName.value.contactName);
+const chatInfo = computed(() => {
+	const { contactName, extraNames, fullName } = displayChatName.value;
 
-const extraTitle = computed(() => {
-	const { contactName, extraNames } = displayChatName.value;
-	if (!extraNames) return '';
-	if (!contactName) return extraNames;
+	let title = '';
+	if (extraNames) {
+		title = contactName ? `, ${extraNames}` : extraNames;
+	}
 
-	return `, ${extraNames}`;
+	return {
+		username: props.contact?.name || fullName,
+		contactName,
+		contactLink: readOnlyContactLink(props.contact?.etag),
+		title,
+		queueName: getQueueName(chat.value),
+	};
 });
-
-const contactLink = computed(() => readOnlyContactLink(props.contact?.etag));
-
-const avatarTitle = computed(
-	() => props.contact?.name || displayChatName.value.fullName,
-);
-
-const displayQueueName = computed(() => getQueueName(chat.value));
 
 const close = () => store.dispatch('features/chat/CLOSE');
 const openTransferTab = () => {

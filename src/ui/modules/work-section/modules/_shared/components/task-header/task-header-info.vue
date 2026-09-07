@@ -1,11 +1,11 @@
 <template>
-	<div class="task-header-info info">
-		<div class="info__user">
-			<div class="info__user__name">
+	<div class="task-header-info">
+		<div class="task-header-info__user">
+			<div class="task-header-info__user-name">
 				<wt-avatar
 					v-if="withAvatar"
 					:size="ComponentSize.XS"
-					:username="avatarTitle"
+					:username="username"
 				/>
 				<div class="typo-body-2-bold">
 					<a
@@ -18,13 +18,13 @@
 					<span v-if="title">{{ title }}</span>
 				</div>
 			</div>
-			<div class="info__user__phone">
+			<div class="task-header-info__user-phone">
 				<span class="typo-body-2">{{ phoneNumber }}</span>
 			</div>
 		</div>
 		<p
 			v-if="queueName"
-			class="info__queue typo-caption-bold"
+			class="task-header-info__queue typo-caption-bold"
 		>
 			<span class="typo-caption-bold">Queue:</span>
 			<span class="typo-caption">{{ queueName }}</span>
@@ -42,7 +42,7 @@ const props = withDefaults(
 		contactName?: string | null;
 		contactLink?: string;
 		title?: string;
-		avatarTitle?: string;
+		username?: string;
 		phoneNumber?: string;
 		queueName?: string;
 		size?: ComponentSize;
@@ -56,7 +56,7 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 </script>
 
 <style scoped>
-	.info {
+	.task-header-info {
 		display: flex;
 		flex-direction: column;
 		gap: var(--spacing-2xs);
@@ -65,24 +65,24 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 		background-color: var(--light-blue-lighten-5);
 	}
 
-	.info__user {
+	.task-header-info__user {
 		display: flex;
 		gap: var(--spacing-2xs);
 		align-items: center;
 		justify-content: space-between;
 	}
 
-	.info__user__name {
+	.task-header-info__user-name {
 		display: flex;
 		gap: var(--spacing-xs);
 		align-items: center;
 	}
 
-	.info__user a:hover {
+	.task-header-info__user-name a:hover {
   text-decoration: underline;
 }
 
-	.info__queue {
+	.task-header-info__queue {
 		display: -webkit-box;
 		-webkit-line-clamp: 1;
 		line-clamp: 1;
@@ -91,7 +91,7 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 		word-break: break-all;
 	}
 
-	.info__queue span {
+	.task-header-info__queue span:first-child {
 		margin-right: var(--spacing-2xs);
 	}
 </style>

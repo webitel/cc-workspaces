@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="props.size" :avatar-title="call?.contact ? displayName : undefined">
+  <task-header :size="props.size" :username="call?.contact ? displayName : undefined">
     <template #task-header-actions>
       <slot :name="CallTab.Contacts">
         <wt-button
@@ -105,7 +105,7 @@
         v-if="call?.contact"
         :title="title"
         :queue-name="queueName"
-        :avatar-title="displayName"
+        :username="displayName"
         :size="size"
         :phone-number="displayNumber"
       />

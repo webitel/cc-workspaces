@@ -1,10 +1,10 @@
 <template>
-  <task-header :size="props.size" :avatar-title="task.displayName">
+  <task-header :size="props.size" :username="task.displayName">
     <template #info>
       <task-header-info
         :title="title"
         :queue-name="queueName"
-        :avatar-title="task.displayName"
+        :username="task.displayName"
         :size="size"
       />
     </template>
