@@ -4,12 +4,11 @@
     :class="[`task-header--${props.size}`]"
   >
     <div class="task-header-actions">
-      <div class="task-header-actions__action-section">
-        <slot name="start-section" />
-      </div>
-      <div class="task-header-actions__action-section">
-        <slot name="end-section" />
-      </div>
+      <task-header-avatar
+        v-if="withAvatar"
+        :username="props.avatarTitle"
+      />
+      <slot name="task-header-actions" />
     </div>
     <div class="task-header-info">
       <slot name="info" />
@@ -19,34 +18,35 @@
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { computed } from 'vue';
+import TaskHeaderAvatar from './task-header-avatar.vue';
 
 const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
+		avatarTitle?: string;
 	}>(),
 	{
 		size: ComponentSize.MD,
 	},
 );
+
+const withAvatar = computed(
+	() => props.size === ComponentSize.SM && !!props.avatarTitle,
+);
 </script>
 
 <style scoped>
 .task-header-actions {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-2xs);
-}
-
-.task-header-actions__action-section {
   display: flex;
+  justify-content: center;
   gap: var(--spacing-2xs);
+  padding-block: var(--spacing-2xs);
 }
 
 .task-header-info {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2xs);
-  margin: var(--spacing-2xs);
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <task-header :size="props.size">
+  <task-header :size="props.size" :avatar-title="task.displayName">
     <template #info>
-      <task-header-expansion-card
-        :username="task.displayName"
-        :phone-number="task.displayNumber"
+      <task-header-info
+        :title="title"
         :queue-name="queueName"
+        :avatar-title="task.displayName"
+        :size="size"
       />
     </template>
   </task-header>
@@ -13,10 +14,11 @@
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import type { Task } from 'webitel-sdk';
 import { getQueueName } from '../../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import TaskHeader from '../../../_shared/components/task-header/task-header.vue';
-import TaskHeaderExpansionCard from '../../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
+import TaskHeaderInfo from '../../../_shared/components/task-header/task-header-info.vue';
 
 const props = withDefaults(
 	defineProps<{
@@ -27,9 +29,14 @@ const props = withDefaults(
 		size: ComponentSize.MD,
 	},
 );
+
+const { t } = useI18n();
+
+const title = computed(
+	() =>
+		props.task.displayName ||
+		t('workspaceSec.taskHeaderExpansionCard.unknownContact'),
+);
+
 const queueName = computed(() => getQueueName(props.task));
 </script>
-
-<style lang="scss" scoped>
-
-</style>
