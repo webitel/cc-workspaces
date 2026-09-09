@@ -6,6 +6,7 @@
 					v-if="withAvatar"
 					:size="ComponentSize.XS"
 					:username="username"
+					class="task-header-info__user-avatar"
 				/>
 				<div class="typo-body-2-bold">
 					<a
@@ -70,6 +71,11 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 		gap: var(--spacing-2xs);
 		align-items: center;
 		justify-content: space-between;
+	}
+
+	.task-header-info__user-avatar {
+		flex-shrink: 0;
+		flex-grow: 0;
 	}
 
 	.task-header-info__user-name {
