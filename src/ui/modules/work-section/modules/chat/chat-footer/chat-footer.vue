@@ -3,7 +3,10 @@
     <div v-if="isChatPreview" class="chat-footer__chat-preview">
       <div class="chat-footer__chat-preview-wrapper">
         <p class="chat-footer__chat-preview__text typo-body-1">{{ $t('workspaceSec.chat.acceptPreviewText') }}</p>
-        <wt-button color="chat" @click="accept">{{ $t('reusable.accept') }}</wt-button>
+        <div class="chat-footer__chat-preview__buttons">
+          <wt-button color="chat" @click="accept">{{ $t('reusable.accept') }}</wt-button>
+          <wt-button color="secondary" @click="close">{{ $t('reusable.reject') }}</wt-button>
+        </div>
       </div>
     </div>
   </task-footer>
@@ -32,6 +35,7 @@ export default {
 	methods: {
 		...mapActions('features/chat', {
 			accept: 'ACCEPT',
+			close: 'CLOSE',
 		}),
 	},
 };
@@ -63,6 +67,12 @@ export default {
     margin-bottom: 20px;
     text-align: center;
     color: var(--text-main-color);
+  }
+
+  .chat-footer__chat-preview__buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xs);
   }
 }
 </style>

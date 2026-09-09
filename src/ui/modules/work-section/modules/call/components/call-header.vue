@@ -1,6 +1,6 @@
 <template>
-  <task-header :size="props.size">
-    <template #start-section>
+  <task-header :size="props.size" :username="call?.contact ? displayName : undefined">
+    <template #task-header-actions>
       <slot :name="CallTab.Contacts">
         <wt-button
           class="call-action"
@@ -26,9 +26,7 @@
           @click="emit('openTab', CallTab.History)"
         />
       </slot>
-    </template>
 
-    <template #end-section>
       <slot :name="CallTab.Bridge">
         <wt-button
           v-if="isBridgeButtonVisible"
@@ -103,13 +101,13 @@
     </template>
 
     <template #info>
-      <task-header-expansion-card
+      <task-header-info
         v-if="call?.contact"
-        :username="displayName"
-        :phone-number="displayNumber"
+        :title="title"
         :queue-name="queueName"
-        :direction="call?.direction"
-        :hide-number="call?.hideNumber"
+        :username="displayName"
+        :size="size"
+        :phone-number="displayNumber"
       />
     </template>
   </task-header>
@@ -119,6 +117,7 @@
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
@@ -126,7 +125,7 @@ import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
 import { useContactStore } from '../../../../info-section/modules/client-info/modules/contact/store/contact';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
+import TaskHeaderInfo from '../../_shared/components/task-header/task-header-info.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
 
@@ -147,6 +146,7 @@ const store = useStore();
 const contactStore = useContactStore();
 const { contact } = storeToRefs(contactStore);
 const { showLoader, runWithLoader } = useLoader();
+const { t } = useI18n();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
@@ -195,6 +195,12 @@ const displayNumber = computed(() => {
 
 const loading = computed(() => showLoader(call.value?.newNumber));
 
+const title = computed(
+	() =>
+		displayName.value ||
+		t('workspaceSec.taskHeaderExpansionCard.unknownContact'),
+);
+
 const makeCall = () => {
 	return runWithLoader(call.value?.newNumber, () =>
 		store.dispatch('features/call/CALL'),
@@ -220,6 +226,3 @@ onUnmounted(() =>
 	}),
 );
 </script>
-
-<style lang="scss" scoped>
-</style>

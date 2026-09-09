@@ -23,6 +23,7 @@ export default {
 .task-container {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-2xs);
 
   .task-container__body-wrapper {
     flex-grow: 1;
