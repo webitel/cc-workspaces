@@ -24,10 +24,10 @@
 		</div>
 		<p
 			v-if="queueName"
-			class="task-header-info__queue typo-caption-bold"
+			class="task-header-info__queue typo-caption"
 		>
 			<span class="typo-caption-bold">Queue:</span>
-			<span class="typo-caption">{{ queueName }}</span>
+			<span>{{ queueName }}</span>
 		</p>
 	</div>
 </template>
