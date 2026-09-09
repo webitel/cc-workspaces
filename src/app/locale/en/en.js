@@ -319,6 +319,8 @@ export default {
 				'Camera access is denied. Cannot perform action.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'You can not work in Workspace because your license has expired.',
+			store_sql_user_get_default_device_app_error:
+				"Device is missing. You can't work with calls.",
 		},
 		endpoint: {
 			noLicense:

@@ -318,6 +318,8 @@ export default {
 				'El acceso a la cámara está denegado. No se puede realizar la acción.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
+			store_sql_user_get_default_device_app_error:
+				'No tiene ningún dispositivo. No puede trabajar con llamadas.',
 		},
 		endpoint: {
 			noLicense:
