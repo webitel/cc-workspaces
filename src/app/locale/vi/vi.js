@@ -210,6 +210,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Vượt quá giới hạn dung lượng tệp',
 				filePolicyFail: 'Định dạng tệp không được phép',
+				photoInvalidDimensions: 'Kích thước hình ảnh không đúng',
 			},
 		},
 	},

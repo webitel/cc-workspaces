@@ -23,7 +23,15 @@
         :class="{ 'chat-message__body--error': isFileMalware || isFilePolicyFailed }"
         @click.stop
       >
-        <template v-if="hasFileError">
+        <template v-if="isPhotoInvalidDimensions">
+          <message-invalid-dimensions-error />
+
+          <message-time
+            :date="props.message.createdAt"
+          />
+        </template>
+
+        <template v-else-if="hasFileError">
           <message-blocked-error v-if="isFileMalware" />
           <message-size-exceeded-error
             v-else-if="isFileSizeExceeded"
@@ -97,6 +105,7 @@ import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
 import MessageFilePolicyError from './components/chat-message-file-police-error.vue';
 import MessageImage from './components/chat-message-image.vue';
+import MessageInvalidDimensionsError from './components/chat-message-invalid-dimensions-error.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
 import MessageText from './components/chat-message-text.vue';
@@ -148,6 +157,10 @@ const isFilePolicyFailed = computed(
 const hasFileError = computed(
 	() =>
 		isFileMalware.value || isFileSizeExceeded.value || isFilePolicyFailed.value,
+);
+
+const isPhotoInvalidDimensions = computed(
+	() => !!props.message.photoInvalidDimensions,
 );
 
 const {

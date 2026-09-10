@@ -216,6 +216,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Перевищено ліміт розміру файлу',
 				filePolicyFail: 'Заборонений формат файлу',
+				photoInvalidDimensions: 'Неправильні розміри зображення',
 			},
 		},
 	},

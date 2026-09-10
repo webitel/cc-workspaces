@@ -25,13 +25,18 @@ export const useChatMessages = () => {
 		chatHasMissingMessages,
 	);
 
-	const messages = computed(() => {
-		return [
+	const failedFiles = computed(
+		() => store.getters[`${namespace}/FAILED_FILES`] || [],
+	);
+
+	const messages = computed(() =>
+		[
 			...store.state.features.chat.chatHistory.chatHistoryMessages,
 			...missingChatMessages.value,
 			...(chatOnWorkspace.value?.messages || []),
-		];
-	});
+			...failedFiles.value,
+		].sort((a, b) => a.createdAt - b.createdAt),
+	);
 
 	const isChatClosed = computed(
 		() => store.getters[`${namespace}/closed/IS_CHAT_ON_WORKSPACE_WAS_CLOSED`],
