@@ -62,6 +62,9 @@
           :variant="isOnChat ? 'active' : 'outlined'"
           :disabled="!isCallChatExist"
           :size="size"
+          :badge="videoCallChatUnseenBadge"
+          badge-absolute-position
+          badge-severity="warn"
           icon="chat"
           color="secondary"
           rounded
@@ -116,7 +119,7 @@
 <script lang="ts" setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useLoader } from '../../../../../composables/useLoader';
@@ -173,9 +176,53 @@ const isHangupButtonVisible = computed(() => call.value?.allowHangup);
 const isCallButtonVisible = computed(
 	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
 );
-const isCallChatExist = computed(
-	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
+const videoCallChat = computed(
+	() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
 );
+const videoCallChatMessages = computed(
+	() => store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT_MESSAGES'],
+);
+const isCallChatExist = computed(() => !!videoCallChat.value);
+
+const videoCallChatUnseenCount = computed(() =>
+	store.getters['features/chat/unseen/UNSEEN_COUNT'](videoCallChat.value),
+);
+const videoCallChatUnseenBadge = computed(() =>
+	videoCallChatUnseenCount.value
+		? String(videoCallChatUnseenCount.value)
+		: undefined,
+);
+
+/**
+ * @author OleksandrPalonnyi
+ *
+ * the video-call chat's messages arrive by mutating the SDK Conversation
+ * instance directly — there's no WS event to hook, so new messages are
+ * detected the same way useChatScroll does: by watching message count
+ *
+ * [WTEL-8866](https://webitel.atlassian.net/browse/WTEL-8866)
+ * */
+watch(videoCallChatMessages, (messages, prevMessages) => {
+	const isNewMessage = messages?.length - (prevMessages?.length ?? 0) === 1;
+	if (!isNewMessage || isOnChat.value) return;
+
+	const lastMessage = messages.at(-1);
+	if (lastMessage?.member?.self) return;
+
+	store.commit('features/chat/unseen/ADD_UNSEEN_CHAT', videoCallChat.value);
+});
+
+watch(isOnChat, (isActive) => {
+	if (isActive) {
+		store.dispatch('features/chat/unseen/MARK_CHAT_SEEN', videoCallChat.value);
+	}
+});
+
+watch(videoCallChat, (chat, prevChat) => {
+	if (!chat && prevChat) {
+		store.commit('features/chat/unseen/REMOVE_UNSEEN_CHAT', prevChat);
+	}
+});
 
 const queueName = computed(() => getQueueName(call.value));
 
