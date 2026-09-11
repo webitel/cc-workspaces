@@ -8,6 +8,7 @@ import { ChatActions } from 'webitel-sdk';
 import i18n from '../../../../../app/locale/i18n.js';
 import { getClientName } from '../../../chat/scripts/getClientName.js';
 import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
+import { getLinkedContact } from '../../../../../ui/modules/work-section/modules/chat/scripts/getLinkedContact.js'
 
 // @author @stanislav-kozak
 // Function for display chat name
@@ -83,6 +84,13 @@ const actions = {
 					context.rootGetters[
 						'features/notifications/PUSH_NOTIFICATION_TIMEOUT'
 					],
+				onClick: async () => {
+						const linked = await getLinkedContact(chat, null);
+
+						chat.contact = linked;
+
+						await context.dispatch('features/chat/OPEN_CHAT', chat, { root: true });
+				},
 			});
 		}
 

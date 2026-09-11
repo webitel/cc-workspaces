@@ -175,7 +175,7 @@ const actions = {
 	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
 		// recursive function
 		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
+		const targetChatId = chat.conversationId || chat.id;
 		const next = context.rootState.features.chat.chatHistory.next;
 
 		if (!next) return;
