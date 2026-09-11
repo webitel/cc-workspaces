@@ -138,7 +138,16 @@ const actions = {
 		}
 	},
 	OPEN_CLOSED_CHAT: async (context, chat) => {
-		if (!chat.contact?.id) {
+		/**
+		 * @author @OleksandrPalonnyi
+		 *
+		 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+		 *
+		 * see OPEN_CHAT in features/chat/store/chat.js — same reasoning for
+		 * distinguishing a REST closed-chat stub from a live SDK instance.
+		 */
+		const isChatFromRestApi = chat.constructor === Object;
+		if (isChatFromRestApi && !chat.contact?.id) {
 			await context.dispatch('LOAD_CLOSED_CHAT', chat);
 		} else {
 			context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
@@ -148,10 +157,7 @@ const actions = {
 			});
 		}
 	},
-	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
-		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
-
+	LOAD_CLOSED_CHAT_HISTORY: async (context, { chat, contactId }) => {
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
 			await context.dispatch(
@@ -162,7 +168,10 @@ const actions = {
 				},
 			);
 
-			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
+			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {
+				chat,
+				contactId,
+			});
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
@@ -172,10 +181,17 @@ const actions = {
 		}
 	},
 
-	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
+	FIND_TARGET_CHAT_IN_HISTORY: async (context, { chat, contactId }) => {
 		// recursive function
-		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
+		/**
+		 * @author @OleksandrPalonnyi
+		 *
+		 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+		 *
+		 * chatHistory messages carry conversationId as message.chat.id, not chat.id
+		 * — otherwise the target is never found and pagination spins forever.
+		 */
+		const targetChatId = chat.conversationId || chat.id;
 		const next = context.rootState.features.chat.chatHistory.next;
 
 		if (!next) return;
@@ -196,7 +212,10 @@ const actions = {
 		await context.dispatch('features/chat/chatHistory/LOAD_NEXT', contactId, {
 			root: true,
 		});
-		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat); // call itself until find target chat
+		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {
+			chat,
+			contactId,
+		}); // call itself until find target chat
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat
