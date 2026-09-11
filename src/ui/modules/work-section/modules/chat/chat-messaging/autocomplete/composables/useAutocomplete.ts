@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 export function useAutocomplete(options = []) {
 	const isOpenAutocomplete = ref(false);
 	const search = ref('');
+	let triggerIndex = -1;
 
 	const autocompleteList = computed(() => {
 		return options.value.filter((option) => option.name.includes(search.value));
@@ -14,20 +15,32 @@ export function useAutocomplete(options = []) {
 
 	function close() {
 		isOpenAutocomplete.value = false;
+		triggerIndex = -1;
 	}
 
 	function onInput(value: string) {
-		const idx = value.lastIndexOf('/');
-		if (idx !== -1) {
-			search.value = value.slice(idx + 1);
-			open();
-		} else {
+		if (triggerIndex === -1 || value[triggerIndex] !== '/') {
 			close();
+			return;
 		}
+		const tail = value.slice(triggerIndex + 1);
+		if (/\s/.test(tail)) {
+			close();
+			return;
+		}
+		search.value = tail;
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
-		return event.key === '/' && open();
+		if (event.key !== '/') return;
+
+		const target = event.target as HTMLTextAreaElement;
+		const cursorIndex = target?.selectionStart ?? 0;
+		const precedingChar = target?.value?.[cursorIndex - 1];
+		if (cursorIndex !== 0 && precedingChar !== ' ') return;
+
+		triggerIndex = cursorIndex;
+		open();
 	}
 
 	function onBlur() {
