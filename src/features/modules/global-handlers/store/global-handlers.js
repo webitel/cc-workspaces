@@ -1,4 +1,6 @@
+import { eventBus } from '@webitel/ui-sdk/scripts';
 import { watch } from 'vue';
+import i18n from '../../../../app/locale/i18n';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
 
 const state = {
@@ -14,6 +16,7 @@ const actions = {
 		context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED');
+		context.dispatch('SUBSCRIBE_TO_PHONE_UNREGISTERED_NOTIFICATION');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
@@ -105,6 +108,21 @@ const actions = {
 		context.commit('features/job/SET_JOB_LIST', [], {
 			root: true,
 		});
+	},
+	SUBSCRIBE_TO_PHONE_UNREGISTERED_NOTIFICATION: (context) => {
+		watch(
+			() => context.state.isPhoneReg,
+			(value, prev) => {
+				if (prev === true && value === false) {
+					eventBus.$emit('notification', {
+						type: 'error',
+						text: i18n.global.t(
+							'error.websocket.store_sql_user_get_default_device_app_error',
+						),
+					});
+				}
+			},
+		);
 	},
 };
 
