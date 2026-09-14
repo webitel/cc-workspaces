@@ -62,7 +62,6 @@
         :rows="1"
         @enter="sendMessage"
         @paste="handleFilePaste"
-        @keydown="onKeyDown"
         @update:model-value="inputMessage"
         @blur="showQuickReplies && onBlur()"
       />
@@ -187,7 +186,6 @@ const {
 	autocompleteList,
 
 	onInput: onAutocompleteInput,
-	onKeyDown,
 	onBlur,
 	close: closeAutocomplete,
 } = useAutocomplete(autocompleteOptions);
