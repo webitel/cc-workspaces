@@ -11,7 +11,7 @@
   ></wt-cc-agent-status-select>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import WtCcAgentStatusSelect from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/wt-cc-agent-status-select.vue';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { computed } from 'vue';
