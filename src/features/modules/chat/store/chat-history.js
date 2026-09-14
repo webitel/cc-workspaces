@@ -18,6 +18,7 @@ const state = {
 const actions = {
 	LOAD_CHAT_HISTORY: async (context, contactId) => {
 		try {
+			context.commit('SET_PAGE_STATE', 1); // always loads the first page
 			const { items, next } = await contactChatMessagesHistory.getAllMessages({
 				contactId,
 			});
