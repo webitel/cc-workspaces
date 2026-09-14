@@ -318,6 +318,8 @@ export default {
 				'Odmowa dostępu do kamery. Nie można wykonać akcji.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nie możesz pracować w Workspace, ponieważ Twoja licencja wygasła.',
+			store_sql_user_get_default_device_app_error:
+				'Nie masz urządzenia. Nie możesz pracować z połączeniami.',
 		},
 		endpoint: {
 			noLicense:
