@@ -1,61 +1,7 @@
-import {
-	getDefaultGetListResponse,
-	getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults/index.js';
-import applyTransform, {
-	merge,
-	notify,
-	snakeToCamel,
-	starToSearch,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
-import { RoutingChatPlanServiceApiFactory } from 'webitel-sdk';
-
-import instance from '../../../instance';
-import configuration from '../../../openAPIConfig';
-
-const chatplanService = new RoutingChatPlanServiceApiFactory(
-	configuration,
-	'',
-	instance,
-);
-
-const getChatplans = async (params) => {
-	const { page, size, search, fields, sort, id, enabled } = applyTransform(
-		params,
-		[
-			merge(getDefaultGetParams()),
-			starToSearch('search'),
-		],
-	);
-
-	try {
-		const response = await chatplanService.searchChatPlan(
-			page,
-			size,
-			search,
-			sort,
-			fields,
-			id,
-			undefined,
-			enabled,
-		);
-		const { items, next } = applyTransform(response.data, [
-			snakeToCamel(),
-			merge(getDefaultGetListResponse()),
-		]);
-		return {
-			items,
-			next,
-		};
-	} catch (err) {
-		throw applyTransform(err, [
-			notify,
-		]);
-	}
-};
+import { ChatplansAPI } from '@webitel/api-services/api';
 
 const chatplanAPIRepository = {
-	getChatplans,
+	getChatplans: (params) => ChatplansAPI.getList(params),
 };
 
 export default chatplanAPIRepository;

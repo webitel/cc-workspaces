@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Чат | Чаттар',
+			searchByUsername: 'Пайдаланушы аты бойынша іздеу',
 			preview: {
 				md: {
 					active: 'Белсенді чаттар',
@@ -209,6 +210,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Файл өлшемі шегінен асты',
 				filePolicyFail: 'Тыйым салынған файл пішімі',
+				photoInvalidDimensions: 'Суреттің өлшемдері дұрыс емес',
 			},
 		},
 	},
@@ -313,10 +315,15 @@ export default {
 				'Камераны қосу мүмкін емес. Әрекетті орындау мүмкін емес.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
+			store_sql_user_get_default_device_app_error:
+				'Сізде құрылғы жоқ. Қоңыраулармен жұмыс істей алмайсыз.',
 		},
 		endpoint: {
 			noLicense:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Хабарлама жіберілді, бірақ жеткізілмеді',
 		},
 	},
 	notifications: {

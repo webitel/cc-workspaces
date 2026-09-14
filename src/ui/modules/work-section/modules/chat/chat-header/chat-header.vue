@@ -1,30 +1,33 @@
 <template>
-  <task-header :size="props.size">
-    <template #end-section>
+  <task-header :size="props.size" :username="chatInfo.username">
+    <template #task-header-actions>
       <wt-button
         v-show="isTransferAction"
-				:variant="isOnTransfer ? 'active' : 'outlined'"
+        :variant="isOnTransfer ? 'active' : 'outlined'"
         :size="size"
         color="transfer"
         icon="chat-transfer--filled"
         rounded
         wide
+        class="task-header__button"
         @click="openTransferTab"
       />
       <chat-header-close-action
-        v-show="isCloseAction"
+        v-show="isCloseAction && isChatActive"
         :size="size"
+        class="task-header__button"
         @click="close"
       />
     </template>
     <template #info>
-      <task-header-expansion-card
-        :username="displayChatName"
-        :phone-number="displayNumber"
-        :contact="props.contact"
-        :queue-name="displayQueueName"
-        is-chat
-      />
+    <task-header-info
+     :username="chatInfo.username"
+     :contact-name="chatInfo.contactName"
+     :contact-link="chatInfo.contactLink"
+     :title="chatInfo.title"
+     :queue-name="chatInfo.queueName"
+     :size="size"
+    />
     </template>
   </task-header>
 </template>
@@ -38,9 +41,10 @@ import getDisplayChatName from '../../../../../../features/modules/chat/scripts/
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
+import { useContactStore } from '../../../../info-section/modules/client-info/modules/contact/store/contact';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
+import TaskHeaderInfo from '../../_shared/components/task-header/task-header-info.vue';
 import { ChatContact } from '../../_shared/types/ChatContact.types';
 import ChatHeaderCloseAction from './chat-header-close-action.vue';
 
@@ -63,6 +67,9 @@ const emit = defineEmits<{
 }>();
 
 const store = useStore();
+const contactStore = useContactStore();
+
+const { readOnlyContactLink } = contactStore;
 
 const hotkeyUnsubscribers = ref([]);
 
@@ -77,6 +84,10 @@ const isTransferAction = computed(
 	() => store.getters['features/chat/ALLOW_CHAT_TRANSFER'],
 );
 
+const isChatActive = computed(
+	() => store.getters['features/chat/IS_CHAT_ACTIVE'],
+);
+
 const userinfoStore = useUserinfoStore();
 const { userId } = storeToRefs(userinfoStore);
 
@@ -88,8 +99,22 @@ const displayChatName = computed(() =>
 	}),
 );
 
-const displayNumber = computed(() => chat.value?.displayNumber);
-const displayQueueName = computed(() => getQueueName(chat.value));
+const chatInfo = computed(() => {
+	const { contactName, extraNames, fullName } = displayChatName.value;
+
+	let title = '';
+	if (extraNames) {
+		title = contactName ? `, ${extraNames}` : extraNames;
+	}
+
+	return {
+		username: props.contact?.name || fullName,
+		contactName,
+		contactLink: readOnlyContactLink(props.contact?.etag),
+		title,
+		queueName: getQueueName(chat.value),
+	};
+});
 
 const close = () => store.dispatch('features/chat/CLOSE');
 const openTransferTab = () => {
@@ -119,3 +144,9 @@ onUnmounted(() => {
 	});
 });
 </script>
+
+<style scoped>
+.task-header__button {
+	flex: 1 1 50%;
+}
+</style>

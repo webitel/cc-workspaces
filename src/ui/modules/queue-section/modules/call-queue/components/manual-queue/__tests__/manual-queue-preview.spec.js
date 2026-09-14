@@ -17,6 +17,6 @@ describe('Calls: ManualQueuePreview', () => {
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
-		expect(wrapper.vm.wait).toBe('2:05');
+		expect(wrapper.vm.wait).toBe('00:02:05');
 	});
 });

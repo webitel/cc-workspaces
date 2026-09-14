@@ -44,12 +44,13 @@
 import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
+import { useContactStore } from '../../../../../info-section/modules/client-info/modules/contact/store/contact';
 import type { ChatContact } from '../../types/ChatContact.types';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
-const store = useStore();
+const contactStore = useContactStore();
+const { readOnlyContactLink } = contactStore;
 
 interface DisplayChatName {
 	contactName?: string | null;
@@ -109,11 +110,7 @@ const avatarTitle = computed(
 		(typeof props.username === 'string' ? props.username : ''),
 );
 
-const contactLink = computed(() =>
-	store.getters['ui/infoSec/client/contact/READ_ONLY_CONTACT_LINK'](
-		props.contact?.etag,
-	),
-);
+const contactLink = computed(() => readOnlyContactLink(props.contact?.etag));
 </script>
 
 <style scoped>

@@ -1,5 +1,6 @@
 export const ChatSendMessageErrors = {
-	PortalNoDeviceConnection: 'portal: no device connection',
+	WebhookSiteClosedButMsgSent: 'custom.bot.send_notify.do_request.rejected',
+	PortalNoDeviceConnection: 'portal.customer.update.not_delivered',
 } as const;
 
 export type ChatSendMessageErrors =

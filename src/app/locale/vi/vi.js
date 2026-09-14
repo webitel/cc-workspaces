@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Các chat',
+			searchByUsername: 'Tìm kiếm theo tên người dùng',
 			preview: {
 				md: {
 					active: 'Chat đang hoạt động',
@@ -209,6 +210,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Vượt quá giới hạn dung lượng tệp',
 				filePolicyFail: 'Định dạng tệp không được phép',
+				photoInvalidDimensions: 'Kích thước hình ảnh không đúng',
 			},
 		},
 	},
@@ -314,10 +316,15 @@ export default {
 				'Từ chối truy cập camera. Không thể thực hiện hành động.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',
+			store_sql_user_get_default_device_app_error:
+				'Bạn không có thiết bị. Bạn không thể làm việc với cuộc gọi.',
 		},
 		endpoint: {
 			noLicense:
 				'Bạn không thể làm việc trong Workspace vì giấy phép đã hết hạn.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Tin nhắn đã gửi nhưng không được gửi đến',
 		},
 	},
 	notifications: {

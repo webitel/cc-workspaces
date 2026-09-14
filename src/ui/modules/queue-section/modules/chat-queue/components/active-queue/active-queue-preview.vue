@@ -68,10 +68,14 @@
 </template>
 
 <script>
+import { computed, provide } from 'vue';
+import { useStore } from 'vuex';
 import { ConversationState } from 'webitel-sdk';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import { getClientName } from '../../../../../../../features/modules/chat/scripts/getClientName';
 import displayInfoMixin from '../../../../../../mixins/displayInfoMixin';
+import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
+import { useChatMessages } from '../../../../../work-section/modules/chat/chat-messaging/message/composables/useChatMessages';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
 import { ChatStatus } from '../../enums/ChatStatus.enum';

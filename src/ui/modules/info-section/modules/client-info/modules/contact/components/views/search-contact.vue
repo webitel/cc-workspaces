@@ -48,16 +48,16 @@
 
     <div class="search-contact__content wt-scrollbar">
         <wt-loader v-if="isLoading"/>
-        <wt-dummy
-          v-else-if="!isLoading && !contactsBySearch.length"
-          :src="dummy.src"
-          :text="dummy.text"
+        <wt-empty
+          v-else-if="showEmpty"
+          :image="emptyImage"
+          :text="emptyText"
         />
         <contacts-list-wrapper
-          v-else-if="!isLoading && contactsBySearch.length"
+          v-else-if="contactsBySearch.length"
           :size="props.size"
           :list="contactsBySearch"
-          @link="linkContact"
+          @link="linkContactId"
         />
     </div>
     <div class="search-contact__actions">
@@ -74,10 +74,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
 import { requiredIf } from '@vuelidate/validators';
-import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { WtEmpty } from '@webitel/ui-sdk/components';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { useTableEmpty } from '@webitel/ui-sdk/src/modules/TableComponentModule/composables/useTableEmpty';
+import { storeToRefs } from 'pinia';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
@@ -86,26 +90,42 @@ import dummyPicAfterSearchDark from '../../../../../../../../../app/assets/conta
 import dummyPicAfterSearchLight from '../../../../../../../../../app/assets/contacts/dummyPicAfterSearchLight.svg';
 import dummyPicDark from '../../../../../../../../../app/assets/contacts/dummyPicDark.svg';
 import dummyPicLight from '../../../../../../../../../app/assets/contacts/dummyPicLight.svg';
-import SearchOptions from '../../enums/SearchOptions.enum';
+import { useContactStore } from '../../store/contact';
 import ContactsListWrapper from '../utils/contacts-list-wrapper.vue';
 
-const props = defineProps({
-	namespace: {
-		type: String,
-		required: true,
+const SearchOptions = [
+	{
+		label: 'reusable.name',
+		mode: 'name',
 	},
-	size: {
-		type: String,
-		default: 'md',
+	{
+		label: 'infoSec.contacts.destination',
+		mode: 'emails,phones',
 	},
-});
+	{
+		label: 'infoSec.contacts.attributes',
+		mode: 'variables',
+	},
+] as const;
 
-const emit = defineEmits([
-	'close',
-	'add',
-]);
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+	}>(),
+	{
+		size: ComponentSize.MD,
+	},
+);
+
+const emit = defineEmits<{
+	close: [];
+	add: [];
+}>();
 
 const store = useStore();
+const contactStore = useContactStore();
+const { isLoading, contactsBySearch } = storeToRefs(contactStore);
+const { searchContacts, cleanContactsBySearch, linkContact } = contactStore;
 const { t } = useI18n();
 
 const search = ref('');
@@ -113,35 +133,52 @@ const keyVariable = ref('');
 const valueVariables = ref('');
 
 const alreadySearched = ref(false);
-const searchMode = ref(SearchOptions[0].mode);
+const searchMode = ref<string>(SearchOptions[0].mode);
 
-const isLoading = computed(
-	() => getNamespacedState(store.state, props.namespace).isLoading,
-);
-const contactsBySearch = computed(
-	() => getNamespacedState(store.state, props.namespace).contactsBySearch,
-);
 const isSearchNotByVariables = computed(() => searchMode.value !== 'variables');
-const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
 const searchValue = computed(() => {
 	if (isSearchNotByVariables.value) return search.value;
 	return `${keyVariable.value}=${valueVariables.value}`;
 });
 
-const dummy = computed(() => {
-	if (alreadySearched.value) {
-		return {
-			src: darkMode.value ? dummyPicAfterSearchDark : dummyPicAfterSearchLight,
-			text: t('infoSec.contacts.emptyContact'),
-		};
-	}
-	return {
-		src: darkMode.value ? dummyPicDark : dummyPicLight,
-	};
-});
+const {
+	showEmpty,
+	image: emptyImage,
+	text: emptyText,
+} = useTableEmpty(
+	{
+		dataList: contactsBySearch,
+		isLoading,
+		// searching is treated as a "filters applied" state: before the first
+		// search there's nothing to filter, so the plain empty picture is shown
+		filters: computed(() =>
+			alreadySearched.value
+				? {
+						search: true,
+					}
+				: undefined,
+		),
+	},
+	computed(() => ({
+		image: {
+			empty: {
+				dark: dummyPicDark,
+				light: dummyPicLight,
+			},
+			filters: {
+				dark: dummyPicAfterSearchDark,
+				light: dummyPicAfterSearchLight,
+			},
+		},
+		text: {
+			empty: '',
+			filters: t('infoSec.contacts.emptyContact'),
+		},
+	})),
+);
 
-const checkForStar = (value) => value !== '*';
+const checkForStar = (value: string) => value !== '*';
 
 const v$ = useVuelidate(
 	computed(() => ({
@@ -167,16 +204,12 @@ const v$ = useVuelidate(
 v$.value.$touch();
 
 async function callSearch() {
-	await store.dispatch(`${props.namespace}/SEARCH_CONTACTS`, {
+	await searchContacts({
 		q: searchValue.value,
 		qin: searchMode.value,
 		size: 100, // coz 100 should be enough, if we dont have pagination atm https://webitel.atlassian.net/browse/WTEL-7906
 	});
 	alreadySearched.value = true;
-}
-
-async function cleanContactsBySearch() {
-	await store.dispatch(`${props.namespace}/CLEAN_CONTACTS_BY_SEARCH`);
 }
 
 function cleanSearchValue() {
@@ -185,7 +218,7 @@ function cleanSearchValue() {
 	valueVariables.value = '';
 }
 
-function changeSearchMode(event) {
+function changeSearchMode(event?: string) {
 	cleanContactsBySearch();
 	cleanSearchValue();
 	searchMode.value = event;
@@ -201,8 +234,8 @@ function add() {
 	emit('add');
 }
 
-async function linkContact(contact) {
-	await store.dispatch(`${props.namespace}/LINK_CONTACT`, contact);
+async function linkContactId(contact: WebitelContactsContact) {
+	await linkContact(contact);
 	await store.dispatch('features/chat/closed/processed/LOAD_PROCESSED_CHATS');
 	close();
 }
@@ -258,7 +291,7 @@ onUnmounted(() => {
     flex: 1;
     flex-direction: column;
 
-    .wt-dummy {
+    .wt-empty {
       flex: 1;
     }
   }

@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Чат | Чати',
+			searchByUsername: 'Пошук за імʼям',
 			preview: {
 				md: {
 					active: 'Активні чати',
@@ -215,6 +216,7 @@ export default {
 			errors: {
 				uploadFileLimitSize: 'Перевищено ліміт розміру файлу',
 				filePolicyFail: 'Заборонений формат файлу',
+				photoInvalidDimensions: 'Неправильні розміри зображення',
 			},
 		},
 	},
@@ -320,9 +322,14 @@ export default {
 				'Немає доступу до камери. Неможливо виконати дію.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
+			store_sql_user_get_default_device_app_error:
+				'У вас немає пристрою. Ви не можете працювати з дзвінками.',
 		},
 		endpoint: {
 			noLicense: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Повідомлення відправлене, але не отримане',
 		},
 	},
 	notifications: {

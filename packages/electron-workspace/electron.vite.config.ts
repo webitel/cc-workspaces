@@ -34,10 +34,6 @@ export default defineConfig({
 				// @webitel/ui-sdk components are authored for Vue 2 compat mode
 				vue: '@vue/compat',
 				// ui-sdk dist expects the consumer to provide the axios instance
-				'@aliasedDeps/api-services/axios': resolve(
-					__dirname,
-					'src/renderer/shared/api/instance',
-				),
 			},
 			dedupe: [
 				'@vue/compat',

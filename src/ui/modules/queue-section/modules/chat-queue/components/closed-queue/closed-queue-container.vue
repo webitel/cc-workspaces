@@ -4,10 +4,10 @@
     :empty="!taskList.length">
     <div
       v-for="(task, index) of taskList"
+      :key="task.id"
       class="closed-queue-container__wrapper"
     >
       <closed-preview
-        :key="task.id"
         :task="task"
         :opened="task.id === taskOnWorkspace.id"
         :size="size"

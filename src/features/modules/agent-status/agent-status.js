@@ -11,12 +11,16 @@ const state = {
 	user: {
 		status: {},
 	},
+	isAgentRemoved: false,
 };
 
 const getters = {
 	IS_AGENT: (state) => !!state.agent,
 	IS_CCENTER_ON: (state, getters) =>
 		getters.IS_AGENT && state.agent.status !== AgentStatus.Offline,
+	IS_AGENT_ONLINE: (state, getters) =>
+		getters.IS_AGENT && state.agent.status === AgentStatus.Online,
+	AGENT_REMOVED: (state) => state.isAgentRemoved,
 };
 
 const actions = {
@@ -27,9 +31,20 @@ const actions = {
 		return client.agentSession();
 	},
 
-	SET_AGENT_WAITING_STATUS: async (context) => {
+	SET_AGENT_WAITING_STATUS: async (context, { activityType } = {}) => {
 		const agent = await context.dispatch('GET_AGENT_INSTANCE');
-		agent.online();
+		const { channels, onDemand, onlineSkill } = {
+			onlineSkill: activityType,
+		};
+		try {
+			await agent.online(channels, onDemand, onlineSkill);
+		} catch (error) {
+			if (error?.id === 'app.agent.login.app_err') {
+				context.commit('SET_AGENT_REMOVED', true);
+			} else {
+				throw error;
+			}
+		}
 	},
 
 	SET_AGENT_PAUSE_STATUS: async (context, note = '') => {
@@ -49,11 +64,13 @@ const actions = {
 		await usersAPI.setUserStatus(status);
 	},
 
-	TOGGLE_CONTACT_CENTER_MODE: async (context) => {
+	TOGGLE_CONTACT_CENTER_MODE: async (context, activityType) => {
 		if (context.getters.IS_CCENTER_ON) {
 			await context.dispatch('AGENT_LOGOUT');
 		} else {
-			await context.dispatch('SET_AGENT_WAITING_STATUS');
+			await context.dispatch('SET_AGENT_WAITING_STATUS', {
+				activityType,
+			});
 		}
 	},
 };
@@ -65,6 +82,10 @@ const mutations = {
 
 	SET_USER_INSTANCE: (state, user) => {
 		state.user = user;
+	},
+
+	SET_AGENT_REMOVED: (state, value) => {
+		state.isAgentRemoved = value;
 	},
 };
 

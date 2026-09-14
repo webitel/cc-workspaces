@@ -18,7 +18,6 @@ class Workspace {
 			name: 'workspace',
 			icon: path.join(app.getAppPath(), 'img/app-icon.png'),
 			webPreferences: {
-				webSecurity: false,
 				contextIsolation: false, // protect against prototype pollution
 				enableRemoteModule: true,
 				nodeIntegration: true,

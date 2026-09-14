@@ -1,5 +1,7 @@
-import agentsAPIRepository from '@webitel/ui-sdk/api/clients/agents/agents';
-import queuesApiRepository from '@webitel/ui-sdk/api/clients/queues/queues';
+import {
+	AgentsAPI as agentsAPIRepository,
+	QueuesAPI as queuesApiRepository,
+} from '@webitel/api-services/api';
 import widgetsAPIRepository from '../../ui/modules/widget-bar/api/WidgetsAPIRepository';
 import chatplanAPIRepository from './agent-workspace/endpoints/chatplans/ChatplansAPIRepository';
 import communicationsAPIRepository from './agent-workspace/endpoints/communications/CommunicationsAPIRepository';

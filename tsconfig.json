@@ -29,6 +29,14 @@
 			"@webitel/ui-sdk/components/*": [
 				"./node_modules/@webitel/ui-sdk/types/components/*",
 				"./node_modules/@webitel/ui-sdk/src/components/*"
+			],
+			"@webitel/ui-sdk/src/modules/*": [
+				"./node_modules/@webitel/ui-sdk/types/modules/*",
+				"./node_modules/@webitel/ui-sdk/src/modules/*"
+			],
+			"@webitel/ui-sdk/src/scripts/*": [
+				"./node_modules/@webitel/ui-sdk/types/scripts/*",
+				"./node_modules/@webitel/ui-sdk/src/scripts/*"
 			]
 		},
 		"isolatedModules": true,

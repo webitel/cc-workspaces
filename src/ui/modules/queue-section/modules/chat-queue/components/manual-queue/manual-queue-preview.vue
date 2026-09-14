@@ -29,10 +29,11 @@
     </template>
 
     <template #actions>
-      <wt-rounded-action
+      <wt-button
         size="md"
-        color="transfer"
+        color="secondary"
         icon="chat-join"
+        variant="active"
         :loading="loading"
         rounded
         @click="accept(task)"
@@ -67,10 +68,11 @@
     </template>
 
     <template #actions>
-      <wt-rounded-action
+      <wt-button
         size="md"
-        color="transfer"
+        color="secondary"
         icon="chat-join"
+        variant="active"
         :loading="loading"
         rounded
         @click="accept(task)"

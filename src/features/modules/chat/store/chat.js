@@ -4,8 +4,10 @@ import { ConversationState } from 'webitel-sdk';
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
 import ChatTransferDestination from '../../../../ui/modules/work-section/modules/chat/enums/ChatTransferDestination.enum';
+import active from '../modules/active/store/active';
 import closed from '../modules/closed/store/closed';
 import manual from '../modules/manual/store/manual';
+import postProcessing from '../modules/post-processing/store/post-processing';
 import chatHistory from './chat-history';
 import chatMedia from './chat-media';
 import clientHandlers from './client-handlers';
@@ -13,21 +15,20 @@ import unseen from './unseen';
 
 const { t } = i18n.global;
 
-const state = {
-	chatList: [],
-};
+// stable per-chat key: `.id` is `channelId || inviteId || conversationId` and
+// changes during a chat's lifetime, `conversationId` doesn't
+const failedFilesKey = (chat) => chat?.conversationId || chat?.id;
+
+const state = () => ({
+	failedFiles: {},
+});
 
 const getters = {
 	CHAT_ON_WORKSPACE: (s, g, rS, rootGetters) =>
 		rootGetters['workspace/IS_CHAT_WORKSPACE'] &&
 		rootGetters['workspace/TASK_ON_WORKSPACE'],
-	ALL_CHAT_MESSAGES: (state, getters, rootState) => {
-		const currentChatMessages = getters.CHAT_ON_WORKSPACE.messages || []; // if chat object didn`t have messages
-		return [
-			...rootState.features.chat.chatHistory.chatHistoryMessages,
-			...currentChatMessages,
-		]; // chat-history messages + current-chat messages
-	},
+	FAILED_FILES: (state, getters) =>
+		state.failedFiles[failedFilesKey(getters.CHAT_ON_WORKSPACE)] || [],
 	ALLOW_CHAT_TRANSFER: (state, getters) =>
 		getters.CHAT_ON_WORKSPACE.allowLeave && !getters.CHAT_ON_WORKSPACE.closedAt,
 	ALLOW_CHAT_JOIN: (state, getters) => getters.CHAT_ON_WORKSPACE.allowJoin,
@@ -44,14 +45,6 @@ const getters = {
 const actions = {
 	...clientHandlers.actions,
 
-	SET_CHAT_LIST: (context, chatList) => {
-		context.commit('SET_CHAT_LIST', chatList);
-	},
-
-	ADD_CHAT: (context, chat) => {
-		context.commit('ADD_CHAT', chat);
-	},
-
 	ACCEPT: async (context) => {
 		await context.getters.CHAT_ON_WORKSPACE.join();
 	},
@@ -64,11 +57,44 @@ const actions = {
 	},
 
 	SEND_FILE: async (context, files) => {
+		const list = Array.isArray(files)
+			? files
+			: [
+					files,
+				];
+		await Promise.all(
+			list.map((file) => context.dispatch('SEND_SINGLE_FILE', file)),
+		);
+	},
+
+	SEND_SINGLE_FILE: async (context, file) => {
 		try {
-			Array.isArray(files)
-				? await Promise.all(files.map((file) => context.dispatch('SEND', file)))
-				: await context.dispatch('SEND', files);
+			await context.dispatch('SEND', file);
 		} catch (err) {
+			/**
+			 * @author @OleksandrPalonnyi
+			 *
+			 * [WTEL-6706](https://webitel.atlassian.net/browse/WTEL-6706)
+			 *
+			 * description link - https://webitel.atlassian.net/browse/WTEL-6706?focusedCommentId=777623
+			 * */
+			const detail = err.detail || err.response?.data?.detail;
+			if (detail?.includes('PHOTO_INVALID_DIMENSIONS')) {
+				const chat = context.getters.CHAT_ON_WORKSPACE;
+				const chatMessages = chat.messages;
+				const lastMessageCreatedAt =
+					chatMessages[chatMessages.length - 1]?.createdAt || 0;
+				const failedFile = {
+					key: failedFilesKey(chat),
+					id: crypto.randomUUID(),
+					file,
+					createdAt: Math.max(Date.now(), lastMessageCreatedAt + 1),
+					channelId: chat.channelId,
+				};
+				context.commit('ADD_FAILED_FILE', failedFile);
+				return;
+			}
+
 			const errorMessage =
 				err.response?.data?.id === 'file.malware'
 					? t('workspaceSec.chat.chatsFileBlocked')
@@ -105,6 +131,8 @@ const actions = {
 			await chatOnWorkspace.decline();
 		}
 
+		context.dispatch('CLEAR_FAILED_FILES', failedFilesKey(chatOnWorkspace));
+
 		await context.dispatch(
 			'features/chatNotifications/HANDLE_CHAT_END',
 			chatOnWorkspace,
@@ -126,14 +154,6 @@ const actions = {
 		}
 	},
 
-	CHAT_INSERT_TO_START: (context, chat) => {
-		const chatPosition = context.state.chatList.indexOf(chat);
-		const chatList = context.state.chatList.slice();
-		chatList.splice(chatPosition, 1);
-		chatList.unshift(chat);
-		context.commit('SET_CHAT_LIST', chatList);
-	},
-
 	SET_WORKSPACE: (context, chat) =>
 		context.dispatch(
 			'workspace/SET_WORKSPACE_STATE',
@@ -153,20 +173,36 @@ const actions = {
 		context.dispatch('features/notifications/_RESET_UNREAD_COUNT', null, {
 			root: true,
 		}),
+
+	CLEAR_FAILED_FILES: (context, key) => {
+		context.commit('SET_FAILED_FILES', {
+			key,
+			files: [],
+		});
+	},
 };
 
 const mutations = {
-	SET_CHAT_LIST: (state, chatList) => {
-		state.chatList = chatList;
-	},
-	ADD_CHAT: (state, chat) => {
-		state.chatList.push(chat);
-	},
-	REMOVE_CHAT: (state, removedChat) => {
-		state.chatList = state.chatList.filter((chat) => chat !== removedChat);
-	},
 	SET_MEDIA_VIEW: (state, mediaView) => {
 		state.mediaView = mediaView;
+	},
+	ADD_FAILED_FILE: (state, { key, id, file, createdAt, channelId }) => {
+		state.failedFiles[key] = [
+			...(state.failedFiles[key] || []),
+			{
+				id,
+				photoInvalidDimensions: true,
+				file,
+				member: {
+					self: true,
+				},
+				channelId,
+				createdAt,
+			},
+		];
+	},
+	SET_FAILED_FILES: (state, { key, files }) => {
+		state.failedFiles[key] = files;
 	},
 };
 
@@ -177,8 +213,10 @@ export default {
 	actions,
 	mutations,
 	modules: {
+		active,
 		manual,
 		closed,
+		postProcessing,
 		chatHistory,
 		chatMedia,
 		unseen,

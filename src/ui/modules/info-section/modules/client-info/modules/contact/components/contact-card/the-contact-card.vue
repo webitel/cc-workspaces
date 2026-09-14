@@ -29,9 +29,11 @@
     />
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
+import { ConfigurationsAPI } from '@webitel/api-services/api';
+import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, onMounted, ref } from 'vue';
 import Communications from './contact-card-communications.vue';
 import Description from './contact-card-description.vue';
@@ -39,33 +41,30 @@ import General from './contact-card-general.vue';
 import Labels from './contact-card-labels.vue';
 import Variables from './contact-card-variables.vue';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'sm',
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		contact: WebitelContactsContact;
+		linked?: boolean;
+	}>(),
+	{
+		size: ComponentSize.SM,
+		linked: false,
 	},
-	contact: {
-		type: Object,
-		required: true,
-	},
-	linked: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
-const emit = defineEmits([
-	'link',
-]);
+const emit = defineEmits<{
+	link: [];
+}>();
 
 const isContactTabsOpen = ref(false);
 
-const labels = computed(() => props.contact?.labels);
-const variables = computed(() => props.contact?.variables);
+const labels = computed(() => props.contact?.labels?.data);
+const variables = computed(() => props.contact?.variables?.data);
 const description = computed(() => props.contact?.about);
 
 const getValueExpandContactTabsVariable = async () => {
-	const { items } = await ConfigurationAPI.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: [
 			EngineSystemSettingName.ExpandContactTabs,
 		],

@@ -1,4 +1,4 @@
-import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/index';
+import { ContactChatMessagesAPI as contactChatMessagesHistory } from '@webitel/api-services/api';
 import applyTransform, {
 	notify,
 } from '@webitel/ui-sdk/src/api/transformers/index';

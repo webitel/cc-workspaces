@@ -45,13 +45,14 @@ const chatHandler = (context) => async (action, chat) => {
 const actions = {
 	SUBSCRIBE_CHATS: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
+
 		await client.subscribeChat(chatHandler(context), null);
-		const chatList = client.allConversations();
-		if (chatList.length) context.dispatch('SET_CHAT_LIST', chatList);
+
+		await context.dispatch('active/RELOAD_CHAT_LIST');
 	},
 
 	HANDLE_INVITE_ACTION: (context, { action, chat }) => {
-		context.dispatch('ADD_CHAT', chat);
+		context.dispatch('active/CHAT_INSERT_TO_START', chat);
 		if (context.rootGetters['workspace/IS_EMPTY_WORKSPACE']) {
 			context.dispatch('SET_WORKSPACE', chat);
 		}
@@ -62,23 +63,26 @@ const actions = {
 	},
 
 	HANDLE_JOINED_ACTION: (context, { chat }) => {
+		context.dispatch('active/CHAT_INSERT_TO_START', chat);
 		openLinkFromVariable(chat);
 	},
 
-	HANDLE_MESSAGE_ACTION: (context, { action, chat }) => {
+	HANDLE_MESSAGE_ACTION: async (context, { action, chat }) => {
 		const message = chat.messages[chat.messages.length - 1];
-		if (!context.getters.IS_MY_MESSAGE(message)) {
+		const isMine = context.getters.IS_MY_MESSAGE(message);
+
+		if (!isMine) {
 			context.dispatch('HANDLE_CHAT_EVENT', {
 				action,
 				chat,
 			});
 			context.commit('unseen/ADD_UNSEEN_CHAT', chat);
 		}
-		context.dispatch('CHAT_INSERT_TO_START', chat);
+		context.dispatch('active/CHAT_INSERT_TO_START', chat);
 	},
 
 	RESET_CHAT: (context, chat) => {
-		context.commit('REMOVE_CHAT', chat);
+		context.dispatch('active/REMOVE_CHAT', chat);
 		context.dispatch('_RESET_UNREAD_COUNT');
 		context.dispatch('LOAD_CLOSED_CHATS');
 
@@ -92,7 +96,9 @@ const actions = {
 		 * and history if the closed chat is still the one currently displayed.
 		 */
 
-		if (context.getters.CHAT_ON_WORKSPACE.channelId === chat.channelId) {
+		if (
+			context.getters.CHAT_ON_WORKSPACE.conversationId === chat.conversationId
+		) {
 			context.dispatch('RESET_WORKSPACE');
 			context.dispatch('RESET_CHAT_HISTORY');
 		}

@@ -33,10 +33,6 @@ export default ({ mode }) => {
 				'lodash/fp': 'lodash-es',
 				lodash: 'lodash-es',
 				'@': resolve(__dirname, 'src'),
-				'@aliasedDeps/api-services/axios': resolve(
-					__dirname,
-					'src/app/api/instance',
-				),
 			},
 			dedupe: [
 				'@vue/compat',

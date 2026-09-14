@@ -1,3 +1,4 @@
+import { createTestingPinia } from '@pinia/testing';
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 
@@ -27,15 +28,6 @@ describe('VideoContainer', () => {
 	const buildStore = (activeVideoCall = {}) =>
 		createStore({
 			state: {
-				ui: {
-					infoSec: {
-						client: {
-							contact: {
-								contact: null,
-							},
-						},
-					},
-				},
 				features: {
 					call: {
 						callInfo: new Map(),
@@ -60,6 +52,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
+					createTestingPinia(),
 				],
 			},
 		});
@@ -83,6 +76,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
+					createTestingPinia(),
 				],
 			},
 		});

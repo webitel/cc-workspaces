@@ -1,40 +1,19 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { createStore } from 'vuex';
+import { createPinia } from 'pinia';
 
 import ContactLookupItem from '../contact-lookup-item.vue';
 
-const buildStore = () =>
-	createStore({
-		modules: {
-			ui: {
-				namespaced: true,
-				modules: {
-					infoSec: {
-						namespaced: true,
-						modules: {
-							client: {
-								namespaced: true,
-								modules: {
-									contact: {
-										namespaced: true,
-										getters: {
-											READ_ONLY_CONTACT_LINK: () => () => 'link',
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-	});
+const getMountPlugins = () => [
+	createPinia(),
+];
 
 describe('ContactLookupItem', () => {
 	it('renders a component', () => {
 		const item = {
 			name: {},
-			phones: [],
+			phones: {
+				data: [],
+			},
 			id: 'vi',
 		};
 		const wrapper = shallowMount(ContactLookupItem, {
@@ -42,9 +21,7 @@ describe('ContactLookupItem', () => {
 				item,
 			},
 			global: {
-				plugins: [
-					buildStore(),
-				],
+				plugins: getMountPlugins(),
 			},
 		});
 		expect(wrapper.exists()).toBe(true);
@@ -56,9 +33,11 @@ describe('ContactLookupItem', () => {
 		};
 		const item = {
 			name: {},
-			phones: [
-				phone,
-			],
+			phones: {
+				data: [
+					phone,
+				],
+			},
 			id: 'vi',
 		};
 
@@ -73,9 +52,7 @@ describe('ContactLookupItem', () => {
 					LookupItemWrapper: false,
 					WtRoundedAction: false,
 				},
-				plugins: [
-					buildStore(),
-				],
+				plugins: getMountPlugins(),
 			},
 		});
 
@@ -97,10 +74,12 @@ describe('ContactLookupItem', () => {
 		};
 		const item = {
 			name: {},
-			phones: [
-				phone,
-				phone,
-			],
+			phones: {
+				data: [
+					phone,
+					phone,
+				],
+			},
 			id: 'vi',
 		};
 
@@ -118,9 +97,7 @@ describe('ContactLookupItem', () => {
 					WtExpandTransition: false,
 					TransitionExpand: false,
 				},
-				plugins: [
-					buildStore(),
-				],
+				plugins: getMountPlugins(),
 			},
 		});
 
@@ -144,16 +121,18 @@ describe('ContactLookupItem', () => {
 	it('falls back to primary phone when call() gets no explicit number', async () => {
 		const item = {
 			name: {},
-			phones: [
-				{
-					number: '111',
-					primary: true,
-				},
-				{
-					number: '222',
-					primary: false,
-				},
-			],
+			phones: {
+				data: [
+					{
+						number: '111',
+						primary: true,
+					},
+					{
+						number: '222',
+						primary: false,
+					},
+				],
+			},
 			id: 'contact-1',
 		};
 		const wrapper = mount(ContactLookupItem, {
@@ -167,9 +146,7 @@ describe('ContactLookupItem', () => {
 					LookupItemWrapper: false,
 					WtRoundedAction: false,
 				},
-				plugins: [
-					buildStore(),
-				],
+				plugins: getMountPlugins(),
 			},
 		});
 		wrapper.vm.call();

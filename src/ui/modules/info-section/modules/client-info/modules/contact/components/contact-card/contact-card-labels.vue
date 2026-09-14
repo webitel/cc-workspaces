@@ -23,26 +23,22 @@
   </wt-expansion-panel>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { WebitelContactsLabel } from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
-		options: [
-			'sm',
-			'md',
-		],
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		labels?: WebitelContactsLabel[];
+		collapsed?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		collapsed: false,
 	},
-	labels: {
-		type: Array,
-	},
-	collapsed: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
 const { t } = useI18n();
 </script>

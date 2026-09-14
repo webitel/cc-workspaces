@@ -107,6 +107,7 @@ const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
 const OBSERVER_TIMEOUT_MS = 3000;
+let showAllMessagesTimer;
 
 const chatContainer = useTemplateRef('chat-container');
 const chatContent = useTemplateRef('chat-content');
@@ -262,23 +263,28 @@ const loadNextMessages = async () => {
 };
 
 async function loadMessagesList() {
-	if (!isChatClosed.value) {
-		await loadHistory();
-		await nextTick();
-		scrollToBottom();
-	} else {
-		isInitialScrollInProgress.value = true;
+	showAllMessages.value = false;
+	clearTimeout(showAllMessagesTimer);
 
-		await loadClosedChatHistory();
-		await nextTick();
-		scrollToClosedChatFirstMessage();
+	try {
+		if (!isChatClosed.value) {
+			await loadHistory();
+			await nextTick();
+			scrollToBottom();
+		} else {
+			isInitialScrollInProgress.value = true;
 
+			await loadClosedChatHistory();
+			await nextTick();
+			scrollToClosedChatFirstMessage();
+		}
+	} finally {
 		isInitialScrollInProgress.value = false;
-	}
 
-	setTimeout(() => {
-		showAllMessages.value = true;
-	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+		showAllMessagesTimer = setTimeout(() => {
+			showAllMessages.value = true;
+		}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+	}
 }
 
 onMounted(() => {
@@ -287,6 +293,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 	resetHistory();
+	clearTimeout(showAllMessagesTimer);
 });
 
 watch(

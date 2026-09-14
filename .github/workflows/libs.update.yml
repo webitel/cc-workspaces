@@ -12,8 +12,12 @@ on:
           - '@webitel/ui-chats'
           - '@webitel/ui-datalist'
           - '@webitel/api-services'
-          - '@webitel/flow-ui-sdk'
           - '@webitel/styleguide'
+
+      version:
+        description: 'Version to wait for, e.g. 26.8.34 (see the publish commit message). Leave empty to update to whatever is already published.'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -40,13 +44,63 @@ jobs:
           git config user.name '${{ steps.app-token.outputs.user-name }}'
           git config user.email '${{ steps.app-token.outputs.user-email }}'
 
+      # npm scans freshly published packages for malware, so for a few minutes
+      # after `npm publish` returns the new version is not installable yet.
+      - name: Wait for version to become installable
+        if: inputs.version != ''
+        env:
+          PACKAGE: ${{ inputs.package }}
+          VERSION: ${{ inputs.version }}
+          TIMEOUT_MINUTES: 10
+          INTERVAL_SECONDS: 10
+
+        run: |
+          set -uo pipefail
+
+          requested_version="${VERSION#v}"            # tolerate "v26.8.34"
+
+          # Resolves the version *and* downloads its tarball without writing
+          # anything, which is what "installable" has to mean here: the registry
+          # can list a version before its tarball clears the scan, and the
+          # tarball is what `npm install` actually fetches.
+          #
+          # --prefer-online matters. Packuments are served with
+          # `cache-control: max-age=300`, so without it npm may answer from a
+          # cache up to five minutes old and never notice the publish.
+          #
+          # --fetch-timeout keeps one stalled attempt from outliving the deadline.
+          version_is_installable() {
+            npm pack --dry-run --prefer-online --fetch-timeout=30000 \
+              "${PACKAGE}@${requested_version}" >/dev/null 2>&1
+          }
+
+          give_up_at_seconds=$(( SECONDS + TIMEOUT_MINUTES * 60 ))
+
+          echo "Waiting up to ${TIMEOUT_MINUTES}m for ${PACKAGE}@${requested_version} to become installable"
+
+          until version_is_installable; do
+            seconds_left=$(( give_up_at_seconds - SECONDS ))
+
+            if [ "$seconds_left" -le 0 ]; then
+              echo "::error::${PACKAGE}@${requested_version} is still not installable after ${TIMEOUT_MINUTES}m. The npm malware scan may not have finished, or this version was never published."
+              exit 1
+            fi
+
+            echo "Not installable yet. ${seconds_left}s of budget left, checking again in ${INTERVAL_SECONDS}s."
+            sleep "$INTERVAL_SECONDS"
+          done
+
+          echo "::notice::${PACKAGE}@${requested_version} is installable"
+
       - name: Install deps
         run: npm ci
 
       - name: Update selected lib
         run: |
           PKG="${{ inputs.package }}"
-          npm update "$PKG"
+          # --prefer-online: npm's cached registry metadata is otherwise stale
+          # enough to miss a version published minutes ago.
+          npm update --prefer-online "$PKG"
           npm ls "$PKG"
 
       - name: Commit and push changes

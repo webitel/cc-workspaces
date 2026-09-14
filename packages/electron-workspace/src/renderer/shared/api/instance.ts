@@ -3,8 +3,8 @@ import handleUnauthorizedInterceptor from '@webitel/ui-sdk/src/api/interceptors/
 import updateTokenInterceptor from '@webitel/ui-sdk/src/api/interceptors/request/updateToken.interceptor';
 
 /**
- * Axios instance consumed by @webitel/ui-sdk via the
- * `@aliasedDeps/api-services/axios` alias (see electron.vite.config.ts).
+ * Axios instance for the renderer windows. Registered as the default for
+ * generated api-services clients in ../createWindowApp.ts.
  * Mirrors ../../src/app/api/instance.js.
  */
 export default generateInstance({

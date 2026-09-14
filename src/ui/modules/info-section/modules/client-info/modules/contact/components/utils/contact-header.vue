@@ -20,33 +20,29 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-	isNext: {
-		type: Boolean,
-		default: false,
+const props = withDefaults(
+	defineProps<{
+		isNext?: boolean;
+		isPrev?: boolean;
+		length?: number;
+		index?: number;
+	}>(),
+	{
+		isNext: false,
+		isPrev: false,
+		length: 0,
+		index: 0,
 	},
-	isPrev: {
-		type: Boolean,
-		default: false,
-	},
-	length: {
-		type: Number,
-		default: 0,
-	},
-	index: {
-		type: Number,
-		default: 0,
-	},
-});
+);
 
-const emit = defineEmits([
-	'next',
-	'prev',
-]);
+const emit = defineEmits<{
+	next: [];
+	prev: [];
+}>();
 
 const { t } = useI18n();
 

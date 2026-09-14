@@ -7,7 +7,7 @@ import {
 	registerWebSocketStore,
 	useWebSocketClient,
 } from '../api/agent-workspace/websocket/useWebSocketClient';
-import instance from '../api/instance';
+import { instance } from '../api/instance';
 import OpenAPIConfig from '../api/openAPIConfig';
 
 const wsClient = useWebSocketClient();

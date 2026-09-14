@@ -11,66 +11,65 @@
         >
           <wt-icon-btn
             icon="search"
-            @click.stop="openView(open, ContactMode.SEARCH)"
+            @click.stop="openView(open, ContactMode.Search)"
           />
           <wt-icon-btn
             icon="plus"
-            @click.stop="openView(open, ContactMode.ADD)"
+            @click.stop="openView(open, ContactMode.Add)"
           />
         </div>
       </template>
       <template #default>
           <add-contact
-            v-if="mode === ContactMode.ADD"
+            v-if="mode === ContactMode.Add"
             :size="props.size"
-            :namespace="namespace"
-            @close="changeMode(ContactMode.VIEW)"
+            @close="changeMode(ContactMode.View)"
           />
           <search-contact
-            v-if="mode === ContactMode.SEARCH"
+            v-if="mode === ContactMode.Search"
             :size="props.size"
-            :namespace="namespace"
-            @add="changeMode(ContactMode.ADD)"
-            @close="changeMode(ContactMode.VIEW)"
+            @add="changeMode(ContactMode.Add)"
+            @close="changeMode(ContactMode.View)"
           />
           <view-contact
-            v-if="mode === ContactMode.VIEW"
+            v-if="mode === ContactMode.View"
             :mode="mode"
             :size="props.size"
-            :namespace="namespace"
-            @add="changeMode(ContactMode.ADD)"
+            @add="changeMode(ContactMode.Add)"
           />
       </template>
     </wt-expansion-panel>
   </article>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 import WorkspaceStates from '../../../../../../../enums/WorkspaceState.enum.js';
-import ContactMode from '../enums/ContactMode.enum';
+import { ContactMode } from '../enums/ContactMode';
+import { useContactStore } from '../store/contact';
 import AddContact from './views/add-contact.vue';
 import SearchContact from './views/search-contact.vue';
 import ViewContact from './views/view-contact.vue';
 
-const props = defineProps({
-	task: {
-		type: Object,
-		required: true,
+const props = withDefaults(
+	defineProps<{
+		task: any;
+		size?: ComponentSize;
+	}>(),
+	{
+		size: ComponentSize.MD,
 	},
-	size: {
-		type: String,
-		default: 'md',
-	},
-});
+);
 
 const store = useStore();
+const contactStore = useContactStore();
+const { initializeContact, loadContact } = contactStore;
 const { t } = useI18n();
-const mode = ref(ContactMode.VIEW);
-const namespace = 'ui/infoSec/client/contact';
+const mode = ref<string>(ContactMode.View);
 const workspaceState = computed(
 	() => store.getters['workspace/WORKSRACE_STATE'],
 );
@@ -87,19 +86,11 @@ const taskId = computed(() => {
 	}
 });
 
-const changeMode = (newMode) => {
+const changeMode = (newMode: string) => {
 	mode.value = newMode;
 };
 
-function initializeContact() {
-	return store.dispatch(`${namespace}/INITIALIZE_CONTACT`);
-}
-
-function loadContact(contactId) {
-	return store.dispatch(`${namespace}/LOAD_CONTACT`, contactId);
-}
-
-function openView(open, mode) {
+function openView(open: () => void, mode: string) {
 	open();
 	changeMode(mode);
 }
@@ -128,7 +119,7 @@ watch(
 			bridgedId !== prevBridgedId && bridgedId && prevBridgedId;
 
 		if (taskId !== prevTaskId || !taskId || bridgedIdChanged) {
-			changeMode(ContactMode.VIEW);
+			changeMode(ContactMode.View);
 			initializeContact();
 			return;
 		}
@@ -136,7 +127,7 @@ watch(
 		if (taskId === prevTaskId && contactId !== prevContactId) {
 			if (contactId) {
 				loadContact(contactId);
-				changeMode(ContactMode.VIEW);
+				changeMode(ContactMode.View);
 			}
 		}
 	},

@@ -16,8 +16,8 @@
 </template>
 
 <script setup>
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen';
-import { configurations } from '@webitel/ui-sdk/api/clients';
 import { WtObject } from '@webitel/ui-sdk/enums';
 import {
 	SpecialGlobalAction,
@@ -54,7 +54,7 @@ const isLimitContactsGranted = hasSpecialGlobalActionAccess(
 const isLabelToLimitContactsGranted = ref(false);
 
 async function checkLabelToLimitContacts() {
-	const { items } = await configurations.getList({
+	const { items } = await ConfigurationsAPI.getList({
 		name: EngineSystemSettingName.LabelsToLimitContacts,
 	});
 
