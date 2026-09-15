@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Date** | 2026-09-15 |
-| **Reviewed at** | `0e7ebb34` (`main`) |
+| **Reviewed at** | `0e7ebb34` (`main`); re-based onto `main` after WTEL-10073 (#1481) made detection `auto` by default |
 | **Scope** | `packages/electron-softphone-companion` (all of `src/`, build and packaging config) and the workspace wiring in `src/app/api/agent-workspace/external-softphone/`, `src/app/api/agent-workspace/websocket/useWebSocketClient.ts`, `src/features/modules/call/call.js` |
 | **Out of scope** | the `electron-sip` addon's C++ internals beyond its call surface, the Webitel backend, `packages/electron-workspace` |
 | **Method** | source read of every file in scope; no dynamic testing against a live SIP deployment |
@@ -116,11 +116,14 @@ stack in its preload (`changeSIP`) and is an alternative to this utility rather
 than a host for it, so no deployment pairs the two. It would become viable only
 if the wrapper's embedded SIP were retired in favour of the companion.
 
-Until one of these lands, this is an accepted risk of the feature, and it is
-the reason the feature should stay opt-in per deployment rather than probing by
-default: auto-detection makes the probe itself a signal, telling any local
-listener that an agent has just authenticated, and hands over the token without
-the operator doing anything.
+Until one of these lands, this is an accepted risk of the feature — and one
+that WTEL-10073 widened after this review was written. Detection is now `auto`
+by default (`public/config.json` ships `externalSoftphone` with no `enabled`),
+so every deployment probes the loopback port at every login, reload and
+reconnect. That makes the probe itself a signal, telling any local listener
+that an agent has just authenticated, and hands over the token with no operator
+action. Deployments that cannot accept F3 should set
+`CLI.externalSoftphone.enabled: false` until one of the routes above lands.
 
 **Related, not changed.** The workspace retries the loopback connection forever
 (the backend socket caps at 10 attempts), and the port is read from
