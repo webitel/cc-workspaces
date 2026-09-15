@@ -1,5 +1,5 @@
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
-import { ConversationState } from 'webitel-sdk';
+import { Conversation, ConversationState } from 'webitel-sdk';
 
 import i18n from '../../../../app/locale/i18n';
 import WorkspaceStates from '../../../../ui/enums/WorkspaceState.enum';
@@ -143,7 +143,23 @@ const actions = {
 	},
 
 	OPEN_CHAT: async (context, chat) => {
-		const isUnidentifiedClosedChat = !chat.contact?.id && chat.closedAt;
+		/**
+		 * @author @OleksandrPalonnyi
+		 *
+		 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+		 *
+		 * A live SDK `Conversation` can have `contact.id` unset too (e.g. during
+		 * post-processing), so `!chat.contact?.id` alone can't tell a REST closed-chat
+		 * stub from a live instance. `chat instanceof Conversation` checks directly
+		 * against the only place a live instance is ever built
+		 * (buildConversationFromDialog.js) instead of inferring it from the shape of
+		 * a plain object. Only a REST stub needs the LOAD_CLOSED_CHAT reload —
+		 * spreading a live Conversation into a plain object drops its prototype
+		 * getters (`id`, `allowReporting`, …).
+		 */
+		const isChatFromRestApi = !(chat instanceof Conversation);
+		const isUnidentifiedClosedChat =
+			isChatFromRestApi && !chat.contact?.id && chat.closedAt;
 
 		if (isUnidentifiedClosedChat) {
 			await context.dispatch('features/chat/closed/LOAD_CLOSED_CHAT', chat, {
