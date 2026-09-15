@@ -64,6 +64,32 @@ In every external mode the answer button lights up only while the utility
 reports `sipRegistered: true` (existing `isPhoneReg` flow). In Safari the
 probe is blocked (mixed content) and auto mode falls back to the web phone.
 
+## Pairing
+
+The local WebSocket is the utility's whole trust boundary, and it is reachable
+by anything running on the machine — WebSocket connections are not subject to
+the same-origin policy, so any page in any tab can open one too. A `hello`
+names the backend this utility authenticates against and pulls SIP credentials
+from, so an unconstrained one would be enough to re-point the operator's SIP
+device at someone else's server.
+
+So the first endpoint that authenticates successfully is **pinned**: it is
+written to `pairedWorkspace` in `config.json` together with the browser origin
+it arrived from, and after that
+
+- a `hello` naming a different endpoint is refused with `endpoint_not_allowed`
+  and the connection is closed;
+- connections from a different origin are refused with `origin_not_allowed`.
+
+Tray → **Unpair workspace** clears the pairing and suspends the session; the
+next workspace to connect becomes the paired one. Deployments that prefer not
+to rely on first-use can set `endpointAllowlist` (and/or `originAllowlist`)
+explicitly instead — a non-empty list always wins over the pin.
+
+Note that pairing does not authenticate the *browser* to the utility, nor the
+utility to the browser: the workspace still hands its access token to whatever
+answers the loopback port. See `docs/security-review-2026-09.md`.
+
 ## Admin prerequisites
 
 - The user must have a **SIP device provisioned** in Webitel so that
@@ -80,7 +106,9 @@ probe is blocked (mixed content) and auto mode falls back to the web phone.
 | key | default | meaning |
 |---|---|---|
 | `port` | `10029` | loopback WebSocket port |
-| `originAllowlist` | `[]` | non-empty restricts allowed web origins; the hello token is always validated against the backend regardless |
+| `originAllowlist` | `[]` | non-empty restricts allowed web origins; when empty the allowed origin comes from `pairedWorkspace` instead (see [Pairing](#pairing)) |
+| `endpointAllowlist` | `[]` | non-empty restricts which webitel endpoints a `hello` may point this utility at; when empty the endpoint is pinned on first use |
+| `pairedWorkspace` | `null` | `{ endpoint, origin }`, written on the first successful pairing; clear it from the tray to move to another workspace |
 | `sipRegisterSec` | `90` | SIP registration expiry |
 | `codecs` | opus, G722, PCMA, PCMU | codec priority list |
 | `nat` | `""` | pjsip NAT mode; `auto` enables STUN+ICE |
@@ -94,6 +122,14 @@ Logs: `userData/logs/softphone.log` (also "Open logs" in the tray menu).
 JSON frames, envelope `{ v: 1, seq?, type, ... }`. First message must be
 `hello`, otherwise the socket closes with 4001. Commands are acked with
 `{ type: 'ack', seq, ok, error? }`.
+
+A connection gets command rights only once its `hello` is **accepted**: a
+refused one is acked with the reason and the socket is closed (4002
+`hello_failed`, or 4003 `origin_not_allowed` at connect time, or 4008
+`too_many_hellos`). `endpoint` must be a `wss:` URL — `ws:` is accepted only
+towards a loopback host, for dev proxies — and `call.destination` must match
+`[0-9A-Za-z+*#._-]{1,128}`, because it is concatenated into a SIP URI by the
+native addon. Frames are capped at 64 KiB.
 
 | dir | type | payload |
 |---|---|---|
