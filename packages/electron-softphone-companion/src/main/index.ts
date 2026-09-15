@@ -1,5 +1,5 @@
 import { app, powerSaveBlocker } from 'electron';
-import { config, devConfig, logsPath } from './config';
+import { config, devConfig, logsPath, updateConfig } from './config';
 import LocalServer from './local-server';
 import * as logger from './logger';
 import { MESSAGE_TYPES } from './protocol';
@@ -32,9 +32,19 @@ const main = () => {
 	// freeze until the tray menu is opened
 	powerSaveBlocker.start('prevent-app-suspension');
 
-	const tray = new SoftphoneTray();
 	const softphone = new Softphone(conf);
 	const server = new LocalServer(conf);
+	const tray = new SoftphoneTray({
+		// drop the workspace pairing and the session that belongs to it, so the
+		// utility can be paired with another workspace
+		onUnpair: () => {
+			updateConfig({
+				pairedWorkspace: null,
+			});
+			logger.log('[main] workspace pairing cleared');
+			void softphone.suspend();
+		},
+	});
 
 	softphone.on('state', (state) => {
 		server.broadcastState(state);
@@ -44,17 +54,10 @@ const main = () => {
 		tray.updateInCall(softphone.activeCalls().length > 0);
 	});
 
-	server.on('hello', async (message, reply) => {
-		try {
-			await softphone.handleHello(message);
-			reply(true);
-		} catch (err) {
-			logger.error('[main] hello failed', err);
-			reply(false, {
-				code: 'hello_failed',
-				message: (err as Error).message,
-			});
-		}
+	// rejecting here makes the server refuse the connection outright: the client
+	// is acked with the reason and closed before it can send any command
+	server.onHello = (message, origin) => softphone.handleHello(message, origin);
+	server.on('hello-accepted', () => {
 		server.broadcastState(softphone.getState());
 	});
 
@@ -110,7 +113,7 @@ const main = () => {
 				return;
 			}
 			logger.log('[main] no workspace connections, suspending session');
-			softphone.suspend();
+			void softphone.suspend();
 		}, conf.workspaceLingerSec * 1000);
 	};
 

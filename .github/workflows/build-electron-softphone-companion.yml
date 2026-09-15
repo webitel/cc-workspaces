@@ -64,14 +64,47 @@ jobs:
       - name: Install JS deps
         run: npm ci
 
-      - name: Build, sign, notarize (mac)
+      # electron-builder's createKeychain feeds CSC_KEY_PASSWORD to
+      # `set-key-partition-list -k`, which wants the keychain password it
+      # generated (macCodeSign.ts importCerts). Passed only while the keychain
+      # was still unlocked from create-keychain; image 20260907 (macOS 26.6.2)
+      # has it locked by then → SecKeychainUnlock rejects it. Image 20260728
+      # (26.5.2) signed fine on the same electron-builder, same secrets.
+      # Own the keychain instead: with CSC_LINK unset at build time macPackager
+      # takes CSC_KEYCHAIN as-is and never runs that command. Keep CSC_LINK and
+      # CSC_KEY_PASSWORD off the build step or the broken path returns.
+      - name: Import signing certificate
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASS="$(openssl rand -hex 32)"
+          CERT="$RUNNER_TEMP/cert.p12"
+          # -A: CSC_LINK is base64 and may arrive unwrapped
+          printf '%s' "$CSC_LINK" | openssl base64 -d -A > "$CERT"
+          security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN"
+          # no -l/-u: never lock — a re-lock mid-build is the bug being fixed
+          security set-keychain-settings "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN"
+          security import "$CERT" -k "$KEYCHAIN" -P "$CSC_KEY_PASSWORD" \
+            -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
+          # keychain password, unlike electron-builder's call above
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -s -k "$KEYCHAIN_PASS" "$KEYCHAIN"
+          # prepend, don't replace: system keychains carry the chain roots
+          EXISTING="$(security list-keychains -d user | sed -e 's/^[[:space:]]*"//' -e 's/"$//')"
+          security list-keychains -d user -s "$KEYCHAIN" $EXISTING
+          rm -f "$CERT"
+          echo "CSC_KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+
+      - name: Build, sign, notarize (mac)
+        env:
+          CSC_KEYCHAIN: ${{ env.CSC_KEYCHAIN }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run distm
 
       - uses: actions/upload-artifact@v6
@@ -103,8 +136,6 @@ jobs:
         run: npm ci
 
       - name: Build (linux)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run distl
 
       - uses: actions/upload-artifact@v4
@@ -135,8 +166,6 @@ jobs:
         run: npm ci
 
       - name: Build (windows)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run dist
 
       - uses: actions/upload-artifact@v4
