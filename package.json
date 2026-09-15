@@ -81,7 +81,7 @@
 		"prismjs": "^1.29.0",
 		"sass": "^1.57.1",
 		"tslib": "^2.7.0",
-		"typescript": "^5.9.x",
+		"typescript": "^7.0.x",
 		"vite": "8.0.0-beta.15",
 		"vite-plugin-node-polyfills": "^0.28.0",
 		"vite-plugin-pwa": "^1.2.0",
