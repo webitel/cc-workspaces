@@ -14,16 +14,14 @@ export function useAutocomplete(options = []) {
 
 	function close() {
 		isOpenAutocomplete.value = false;
+		search.value = '';
 	}
 
 	function onInput(value: string) {
-		const tail = value[0] === '/' ? value.slice(1) : null;
-		if (tail === null || /\s/.test(tail)) {
-			close();
-			return;
-		}
-		search.value = tail;
-		open();
+		const isCommand = value[0] === '/';
+		search.value = isCommand ? value.slice(1) : '';
+
+		isCommand && autocompleteList.value.length > 0 ? open() : close();
 	}
 
 	function onBlur() {
