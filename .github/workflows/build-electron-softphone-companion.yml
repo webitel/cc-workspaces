@@ -64,26 +64,15 @@ jobs:
       - name: Install JS deps
         run: npm ci
 
-      # Own the signing keychain instead of letting electron-builder create one.
-      #
-      # When CSC_LINK is set, app-builder-lib creates a temp keychain with a
-      # random password, then calls
-      #   security set-key-partition-list ... -k <CSC_KEY_PASSWORD> <keychain>
-      # passing the *certificate* password where the *keychain* password belongs
-      # (macCodeSign.ts, importCerts). That only ever worked because `security`
-      # skips the unlock while the keychain is still unlocked from the
-      # create-keychain two calls earlier. On the 20260907 runner image
-      # (macOS 26.6.2) it is locked by then, the wrong password is finally
-      # checked, and the build dies with
-      #   security: SecKeychainUnlock: The user name or passphrase you entered
-      #   is not correct
-      # Same electron-builder version signed fine on the 20260728 image
-      # (macOS 26.5.2), so this is an image change, not a credential change.
-      #
-      # With CSC_LINK absent from the build step, macPackager takes the keychain
-      # from CSC_KEYCHAIN as-is and never runs that command. Keep CSC_LINK and
-      # CSC_KEY_PASSWORD out of that step's env — putting them back silently
-      # restores the broken path.
+      # electron-builder's createKeychain feeds CSC_KEY_PASSWORD to
+      # `set-key-partition-list -k`, which wants the keychain password it
+      # generated (macCodeSign.ts importCerts). Passed only while the keychain
+      # was still unlocked from create-keychain; image 20260907 (macOS 26.6.2)
+      # has it locked by then → SecKeychainUnlock rejects it. Image 20260728
+      # (26.5.2) signed fine on the same electron-builder, same secrets.
+      # Own the keychain instead: with CSC_LINK unset at build time macPackager
+      # takes CSC_KEYCHAIN as-is and never runs that command. Keep CSC_LINK and
+      # CSC_KEY_PASSWORD off the build step or the broken path returns.
       - name: Import signing certificate
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
@@ -96,17 +85,15 @@ jobs:
           # -A: CSC_LINK is base64 and may arrive unwrapped
           printf '%s' "$CSC_LINK" | openssl base64 -d -A > "$CERT"
           security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN"
-          # no -l and no -u: never lock this keychain. The runner is ephemeral,
-          # and a re-lock mid-build is the failure this step exists to avoid.
+          # no -l/-u: never lock — a re-lock mid-build is the bug being fixed
           security set-keychain-settings "$KEYCHAIN"
           security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN"
           security import "$CERT" -k "$KEYCHAIN" -P "$CSC_KEY_PASSWORD" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-          # the keychain password here, which is what this command actually wants
+          # keychain password, unlike electron-builder's call above
           security set-key-partition-list -S apple-tool:,apple:,codesign: \
             -s -k "$KEYCHAIN_PASS" "$KEYCHAIN"
-          # prepend to the search list rather than replacing it, so the system
-          # keychains stay available for certificate chain validation
+          # prepend, don't replace: system keychains carry the chain roots
           EXISTING="$(security list-keychains -d user | sed -e 's/^[[:space:]]*"//' -e 's/"$//')"
           security list-keychains -d user -s "$KEYCHAIN" $EXISTING
           rm -f "$CERT"
