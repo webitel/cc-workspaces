@@ -128,8 +128,10 @@ backend the same client chose.
 
 **Fix.** When the allowlist is empty the allowed origin is derived from the
 pairing instead: once `pairedWorkspace.origin` is set, only that origin may
-connect. Before the first pairing the channel stays open — that window is what
-F1's endpoint check closes. Pinning the *observed* origin rather than deriving
+connect. Both the allowlist and the pairing are read from the live config on
+every connection, so unpairing from the tray takes effect without a restart.
+Before the first pairing the channel stays open — that window is what F1's
+endpoint check closes. Pinning the *observed* origin rather than deriving
 it from the endpoint host matters because they differ in dev
 (`VITE_WEB_SOCKET_URL`) even though production derives the endpoint from
 `window.location`.
@@ -165,23 +167,41 @@ as open — a rogue listener replies `{type:'state', sipRegistered:true}`, the
 browser attaches a `RemotePhone` and lights up the Answer button, and every
 `answer`/`call` the operator issues is silently black-holed.
 
-This **cannot be fixed on either side of the loopback socket alone**: two local
-peers with no shared secret and no trusted introducer cannot authenticate each
-other, and any secret shipped in the workspace bundle is readable by the same
-attacker. The real fixes need backend support, in rough order of preference:
+Two local peers with **no shared secret and no trusted introducer cannot
+authenticate each other**, and any secret shipped in the workspace bundle is
+readable by the same attacker. So every route below works by introducing one of
+those two things. In rough order of preference:
 
-1. **Backend-mediated presence.** The companion registers its session with the
-   Webitel engine (it already authenticates there); the browser asks the engine
-   whether a companion session is live for this user instead of trusting
-   whoever answers the port, and addresses it through the engine.
-2. **A scoped, short-lived handoff token** minted by the backend for the
+1. **Backend-mediated presence** *(needs backend work)*. The companion
+   registers its session with the Webitel engine (it already authenticates
+   there); the browser asks the engine whether a companion session is live for
+   this user instead of trusting whoever answers the port, and addresses it
+   through the engine. The loopback socket then carries nothing sensitive.
+2. **A pairing secret plus a mutual challenge** *(no backend work)*. The
+   companion generates a secret at first run and shows it in the tray; the
+   operator enters it once in the workspace settings. The browser then sends
+   `challenge {nonce}` as its first frame and only proceeds if the reply
+   carries `HMAC(secret, nonce)` — so a squatter that cannot produce the MAC
+   never receives the token, and the workspace falls back to the web phone.
+   Storing the secret on the workspace origin is not a weakening: anything with
+   script execution there already holds the token. Costs one manual pairing
+   step per workstation.
+3. **A scoped, short-lived handoff token** *(needs backend work)* minted for the
    companion — so a squatter gets a credential that can fetch SIP config and
-   nothing else, and only briefly.
-3. **OS-level peer verification** (`SO_PEERCRED`/`LOCAL_PEERCRED`, or matching
+   nothing else, and only briefly. Shrinks the blast radius from account
+   takeover to device impersonation; does not close the hole.
+4. **OS-level peer verification** (`SO_PEERCRED`/`LOCAL_PEERCRED`, or matching
    the connecting pid to a signed binary) before the browser sends anything —
    only possible if the handshake moves out of the browser.
 
-Until one of those lands, this is an accepted risk of the feature, and it is
+One route that looks appealing and does **not** apply: having an Electron
+wrapper read a `0600` handshake file (port + secret) written by the companion
+and hand it to the page. `packages/electron-workspace` embeds its own pjsip
+stack in its preload (`changeSIP`) and is an alternative to this utility rather
+than a host for it, so no deployment pairs the two. It would become viable only
+if the wrapper's embedded SIP were retired in favour of the companion.
+
+Until one of these lands, this is an accepted risk of the feature, and it is
 the reason the feature should stay opt-in per deployment rather than probing by
 default (see F10).
 
@@ -206,7 +226,8 @@ flag. A client whose token the backend refuses kept full `answer`/`call`/
 emitting an event. `helloReceived` is set only after it resolves; a rejection
 is acked with the `ProtocolError` code and the socket is closed with 4002
 `hello_failed`. Messages arriving while a hello is in flight are dropped
-(`helloPending`). `Softphone.handleHello` rethrows as `auth_failed` when the
+(`helloPending`), and `hello` is now dispatched ahead of the
+`helloReceived` gate rather than only as the first frame (F15). `Softphone.handleHello` rethrows as `auth_failed` when the
 session comes up in `ERROR` state with that cause, so a bad token now closes
 the connection — while transient network and registration failures keep their
 existing retry behaviour.
@@ -305,8 +326,10 @@ port source alone buys little.
 
 The server used `ws`'s 100 MiB default `maxPayload` and accepted unlimited
 `hello` frames, each of which triggers a full SIP teardown/register cycle.
-Now capped at 64 KiB per frame and 5 hello attempts per connection (close 4008
-`too_many_hellos`).
+Now capped at 64 KiB per frame, and at 5 hello frames per 60 s per connection
+(close 4008 `too_many_hellos`). The limit is a sliding window rather than a
+lifetime count because the workspace legitimately re-sends `hello` on every
+client generation as its token re-handoff — see F15.
 
 ### F12 — Validator table reachable through the prototype chain — **Low — fixed**
 
@@ -382,7 +405,18 @@ Verified absent across the package, so future reviews need not re-derive it:
 
 | | |
 |---|---|
-| Blocking wide rollout | F3 (backend work), F9 (signing + update path) |
+| Blocking wide rollout | F3 (route 1 or 2), F9 (signing + update path) |
 | Next packaging change | F8 |
 | Next `electron-sip` release | F13, F5's escaping half |
 | Housekeeping | F6, F14 |
+
+F3 route 2 (pairing secret + mutual challenge) is the only one that needs no
+backend work, so it is the cheapest way to unblock a wide rollout if route 1 is
+not scheduled.
+
+**Adjacent, not audited.** `packages/electron-workspace` — explicitly out of
+this review's scope — loads a remote URL into a `BrowserWindow` configured with
+`contextIsolation: false`, `nodeIntegration: true` and `enableRemoteModule:
+true`, with a preload that assigns `window.ipcRenderer = ipcRenderer`. Whatever
+the workspace origin serves therefore runs with full Node access in the
+renderer. Noted here only so it is not lost; it deserves its own review.
