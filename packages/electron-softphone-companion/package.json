@@ -18,9 +18,9 @@
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"lint": "npx @biomejs/biome check --colors=off .",
 		"lint:fix": "npx @biomejs/biome check --write --colors=off .",
-		"dist": "npm run build && electron-builder -w",
-		"distl": "npm run build && electron-builder --linux",
-		"distm": "npm run build && electron-builder --mac"
+		"dist": "npm run build && electron-builder -w --publish never",
+		"distl": "npm run build && electron-builder --linux --publish never",
+		"distm": "npm run build && electron-builder --mac --publish never"
 	},
 	"build": {
 		"asar": false,

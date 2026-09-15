@@ -55,11 +55,11 @@
 <script setup lang="ts">
 import { CommunicationsAPI } from '@webitel/api-services/api';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { EngineCommunicationChannels } from '@webitel/api-services/gen/models';
 import { WtInlineAddPanel } from '@webitel/ui-sdk/components';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { EngineCommunicationChannels } from 'webitel-sdk';
 import { useContactStore } from '../../store/contact';
 
 const { t } = useI18n();

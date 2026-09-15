@@ -318,6 +318,8 @@ export default {
 				'Accesul la cameră este refuzat. Nu se poate efectua acțiunea.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
+			store_sql_user_get_default_device_app_error:
+				'Nu aveți niciun dispozitiv. Nu puteți lucra cu apeluri.',
 		},
 		endpoint: {
 			noLicense:

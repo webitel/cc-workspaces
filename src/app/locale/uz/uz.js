@@ -316,6 +316,8 @@ export default {
 				'Kameraga ruxsat yoʻq. Amalni bajarib boʻlmaydi.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace ishlamaydi. Litsenziya muddati tugagan.',
+			store_sql_user_get_default_device_app_error:
+				'Sizda qurilma yoʻq. Qoʻngʻiroqlar bilan ishlay olmaysiz.',
 		},
 		endpoint: {
 			noLicense: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
