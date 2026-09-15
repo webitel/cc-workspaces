@@ -3,10 +3,10 @@ import { app } from 'electron';
 import type { SipRegisterConfig } from 'electron-sip';
 import type { Call, SipClient } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
-import type { SoftphoneAppConfig } from './config';
+import { config, type SoftphoneAppConfig, updateConfig } from './config';
 import * as logger from './logger';
 import type { CommandError } from './protocol';
-import { PROTOCOL_VERSION } from './protocol';
+import { PROTOCOL_VERSION, ProtocolError } from './protocol';
 import SipAdapter from './sip-adapter';
 
 export const STATES = {
@@ -39,6 +39,15 @@ interface HelloPayload {
 	token: string;
 	endpoint: string;
 }
+
+const originOf = (value: string | null): string | null => {
+	if (!value) return null;
+	try {
+		return new URL(value).origin;
+	} catch {
+		return null;
+	}
+};
 
 interface SoftphoneEvents {
 	state: [
@@ -89,6 +98,8 @@ export class Softphone extends EventEmitter<SoftphoneEvents> {
 	#adapter: SipAdapter | null = null;
 	#token: string | null = null;
 	#endpoint: string | null = null;
+	// origin of the hello currently being brought up, recorded on pairing
+	#pendingOrigin: string | null = null;
 	#state: SoftphoneStateName = STATES.IDLE;
 	#lastError: string | null = null;
 	#reconnectTimer: NodeJS.Timeout | null = null;
@@ -132,14 +143,71 @@ export class Softphone extends EventEmitter<SoftphoneEvents> {
 	}
 
 	// `hello {token, endpoint}` from a web client. Reconnect only when the
-	// credentials actually changed or nothing is running yet.
-	async handleHello({ token, endpoint }: HelloPayload): Promise<void> {
+	// credentials actually changed or nothing is running yet. Throws when the
+	// endpoint is not one this utility is allowed to be pointed at, or when the
+	// backend refuses the token — the caller then closes the connection.
+	async handleHello(
+		{ token, endpoint }: HelloPayload,
+		origin: string | null = null,
+	): Promise<void> {
+		this.#assertEndpointAllowed(endpoint);
 		const sameSession =
 			this.#cli && this.#token === token && this.#endpoint === endpoint;
 		this.#token = token;
 		this.#endpoint = endpoint;
+		this.#pendingOrigin = originOf(origin);
 		if (sameSession) return;
 		await this.restart();
+		if (this.#state === STATES.ERROR && this.#lastError === 'auth_failed') {
+			throw new ProtocolError('auth_failed', 'backend refused the token');
+		}
+	}
+
+	/**
+	 * A hello names the backend this utility authenticates against and pulls SIP
+	 * credentials from, so an unconstrained one is enough to re-point the
+	 * operator's SIP device at an attacker-run server. An explicit
+	 * `endpointAllowlist` wins; otherwise the first endpoint that authenticates
+	 * is pinned (see #pairWorkspace) and every later hello must match it.
+	 */
+	#assertEndpointAllowed(endpoint: string): void {
+		const conf = config();
+		const allowlist = conf.endpointAllowlist;
+		if (Array.isArray(allowlist) && allowlist.length) {
+			if (!allowlist.includes(endpoint)) {
+				throw new ProtocolError(
+					'endpoint_not_allowed',
+					`${endpoint} is not in endpointAllowlist`,
+				);
+			}
+			return;
+		}
+		const paired = conf.pairedWorkspace;
+		if (paired && paired.endpoint !== endpoint) {
+			throw new ProtocolError(
+				'endpoint_not_allowed',
+				`already paired with ${paired.endpoint}`,
+			);
+		}
+	}
+
+	/**
+	 * Trust on first use: record the endpoint (and the browser origin it came
+	 * from) that first authenticated successfully. Never re-pairs silently — the
+	 * operator clears the pairing from the tray to move to another workspace.
+	 */
+	#pairWorkspace(): void {
+		const conf = config();
+		if (conf.pairedWorkspace || !this.#endpoint) return;
+		this.#config = updateConfig({
+			pairedWorkspace: {
+				endpoint: this.#endpoint,
+				origin: this.#pendingOrigin,
+			},
+		});
+		logger.log(
+			`[softphone] paired with ${this.#endpoint} (origin ${this.#pendingOrigin ?? 'none'})`,
+		);
 	}
 
 	// token refresh: kept in memory only, used on the next (re)connect
@@ -193,6 +261,9 @@ export class Softphone extends EventEmitter<SoftphoneEvents> {
 
 			await withTimeout(cli.connect(), 'connect');
 			await withTimeout(cli.auth(), 'auth');
+			// the endpoint accepted the token: safe to remember it as the
+			// workspace this utility belongs to
+			this.#pairWorkspace();
 
 			const adapter = new SipAdapter({
 				debug: this.#config.debug,

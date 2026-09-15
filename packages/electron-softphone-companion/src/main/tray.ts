@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { app, Menu, shell, Tray } from 'electron';
-import { configPath, logsPath } from './config';
+import { config, configPath, logsPath } from './config';
 import { type SoftphoneStateSnapshot, STATES } from './softphone';
 
 const icon = (name: string): string => path.join(app.getAppPath(), 'img', name);
@@ -16,6 +16,11 @@ const STATUS_LABELS: Record<string, string> = {
 /** everything the tray renders; server-error handlers pass a partial */
 export type TrayState = Partial<SoftphoneStateSnapshot> &
 	Pick<SoftphoneStateSnapshot, 'state'>;
+
+export interface TrayOptions {
+	/** clear the workspace pairing (see config.pairedWorkspace) */
+	onUnpair: () => void;
+}
 
 // Composition, NOT `extends Tray`: Electron's Tray constructor returns a
 // native wrapper object that discards the subclass prototype, so methods
@@ -34,8 +39,10 @@ class SoftphoneTray {
 		state: STATES.IDLE,
 	};
 	#inCall = false;
+	#options: TrayOptions;
 
-	constructor() {
+	constructor(options: TrayOptions) {
+		this.#options = options;
 		this.#tray = new Tray(this.#icons.waiting);
 		if (process.platform === 'darwin' && app.dock) app.dock.hide();
 		this.#render();
@@ -73,6 +80,13 @@ class SoftphoneTray {
 		return STATUS_LABELS[state] || state;
 	}
 
+	#pairingLine(): string {
+		const paired = config().pairedWorkspace;
+		return paired
+			? `Paired: ${paired.origin ?? paired.endpoint}`
+			: 'Not paired';
+	}
+
 	#render(): void {
 		this.#tray.setImage(this.#image());
 		this.#tray.setToolTip(
@@ -89,7 +103,16 @@ class SoftphoneTray {
 					enabled: false,
 				},
 				{
+					label: this.#pairingLine(),
+					enabled: false,
+				},
+				{
 					type: 'separator',
+				},
+				{
+					label: 'Unpair workspace',
+					enabled: Boolean(config().pairedWorkspace),
+					click: () => this.#options.onUnpair(),
 				},
 				{
 					label: 'Open logs',
