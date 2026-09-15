@@ -109,8 +109,21 @@ function detach() {
  * Local WebSocket connection
  * ========================================================================== */
 
-function handleMessage(raw: string) {
-	let message: {
+// Anything able to listen on the loopback port can send these frames, so they
+// get the same treatment the utility gives ours: envelope checked, payload
+// shape checked, everything else dropped.
+function handleMessage(raw: unknown) {
+	if (typeof raw !== 'string') return;
+	let parsed: unknown;
+	try {
+		parsed = JSON.parse(raw);
+	} catch {
+		return;
+	}
+	if (typeof parsed !== 'object' || parsed === null) return;
+
+	const message = parsed as {
+		v?: number;
 		type?: string;
 		ok?: boolean;
 		error?: {
@@ -118,14 +131,12 @@ function handleMessage(raw: string) {
 			message?: string;
 		};
 	} & SoftphoneState;
-	try {
-		message = JSON.parse(raw);
-	} catch {
-		return;
-	}
+	if (message.v !== PROTOCOL_VERSION) return;
 
 	switch (message.type) {
 		case 'state': {
+			// the registration flag drives attach/detach and the answer button
+			if (typeof message.sipRegistered !== 'boolean') return;
 			lastState = message;
 			if (message.sipRegistered) {
 				attach();
@@ -163,7 +174,7 @@ function connect() {
 		reconnectAttempts = 0;
 		sendHello();
 	};
-	ws.onmessage = (event) => handleMessage(event.data);
+	ws.onmessage = (event: MessageEvent<unknown>) => handleMessage(event.data);
 	ws.onclose = () => {
 		ws = null;
 		detach();
