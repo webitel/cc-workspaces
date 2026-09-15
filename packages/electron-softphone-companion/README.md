@@ -32,25 +32,37 @@ only the operations that require a local SIP device go through this utility.
   Tokens are kept in memory only.
 - Audio is routed natively by pjsip to the OS default input/output devices.
 
-## Enabling in the web workspace
+## Detection in the web workspace
 
-In the workspace's `config.json` (or any layer of its config merge):
+**Auto by default**: at every client creation (login, reload, reconnect) the
+workspace probes `ws://127.0.0.1:<port>`. A running utility answers within
+milliseconds → the browser switches to external mode (skips the microphone
+probe, never registers the web SIP device, reuses the probe socket). No
+utility → instant connection-refused → the usual web phone. Start the utility
+and reload the page to switch modes.
+
+`CONFIG.CLI.externalSoftphone` (workspace `config.json` or any layer of its
+config merge) refines this:
 
 ```json
 {
 	"CLI": {
 		"externalSoftphone": {
-			"enabled": true,
-			"port": 10029
+			"port": 10029,
+			"enabled": true
 		}
 	}
 }
 ```
 
-With the flag on, the browser skips the microphone probe, never registers the
-web SIP device, and probes `ws://127.0.0.1:<port>` with backoff until the
-utility appears. The answer button lights up only while the utility reports
-`sipRegistered: true` (existing `isPhoneReg` flow).
+- `enabled` absent → **auto** (probe, default)
+- `enabled: true` → **forced**: always external, never a web device; the
+  manager keeps probing for the utility with backoff
+- `enabled: false` → **disabled**: never probe, always the web phone
+
+In every external mode the answer button lights up only while the utility
+reports `sipRegistered: true` (existing `isPhoneReg` flow). In Safari the
+probe is blocked (mixed content) and auto mode falls back to the web phone.
 
 ## Admin prerequisites
 
