@@ -1,3 +1,5 @@
+import { Conversation } from 'webitel-sdk';
+
 import closedModule from '../closed';
 
 describe('features/chat/closed store: actions', () => {
@@ -52,17 +54,14 @@ describe('features/chat/closed store: actions', () => {
 		});
 
 		it('dispatches SET_WORKSPACE for a live SDK Conversation even when contact.id is unset (post-processing) [WTEL-9955]', async () => {
-			// a live SDK Conversation instance, not a plain REST object
-			class Conversation {
-				get contact() {
-					return {
-						id: null,
-					};
-				}
-			}
+			// a live SDK Conversation instance, not a plain REST object;
+			// `id` is a getter derived from `channelId`, so set that instead
 			const chat = Object.assign(new Conversation(), {
-				id: 'channel-1',
+				channelId: 'channel-1',
 				closedAt: Date.now(),
+				contact: {
+					id: null,
+				},
 			});
 
 			await closedModule.actions.OPEN_CLOSED_CHAT(context, chat);

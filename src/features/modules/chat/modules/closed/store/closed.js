@@ -1,6 +1,7 @@
 import applyTransform, {
 	notify,
 } from '@webitel/ui-sdk/src/api/transformers/index';
+import { Conversation } from 'webitel-sdk';
 
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats';
 import CatalogAPI from '../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository';
@@ -146,7 +147,7 @@ const actions = {
 		 * see OPEN_CHAT in features/chat/store/chat.js — same reasoning for
 		 * distinguishing a REST closed-chat stub from a live SDK instance.
 		 */
-		const isChatFromRestApi = chat.constructor === Object;
+		const isChatFromRestApi = !(chat instanceof Conversation);
 		if (isChatFromRestApi && !chat.contact?.id) {
 			await context.dispatch('LOAD_CLOSED_CHAT', chat);
 		} else {
