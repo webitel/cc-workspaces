@@ -158,6 +158,17 @@ const actions = {
 			});
 		}
 	},
+	/**
+	 * @author @OleksandrPalonnyi
+	 *
+	 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+	 *
+	 * chat here comes from the CHAT_ON_WORKSPACE getter, which can hold either
+	 * a chat or a task during the closing/post-processing lifecycle, so its id
+	 * and contact are unreliable and can go missing between renders. contactId
+	 * is captured from the contact prop when history loading starts and passed
+	 * through explicitly instead of being re-read off chat later.
+	 */
 	LOAD_CLOSED_CHAT_HISTORY: async (context, { chat, contactId }) => {
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
@@ -184,14 +195,6 @@ const actions = {
 
 	FIND_TARGET_CHAT_IN_HISTORY: async (context, { chat, contactId }) => {
 		// recursive function
-		/**
-		 * @author @OleksandrPalonnyi
-		 *
-		 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
-		 *
-		 * chatHistory messages carry conversationId as message.chat.id, not chat.id
-		 * — otherwise the target is never found and pagination spins forever.
-		 */
 		const targetChatId = chat.conversationId || chat.id;
 		const next = context.rootState.features.chat.chatHistory.next;
 
