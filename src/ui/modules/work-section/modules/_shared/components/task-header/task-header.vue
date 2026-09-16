@@ -25,6 +25,7 @@ const props = withDefaults(
 	defineProps<{
 		size?: ComponentSize;
 		username?: string;
+		allowAvatar?: boolean;
 	}>(),
 	{
 		size: ComponentSize.MD,
@@ -32,7 +33,7 @@ const props = withDefaults(
 );
 
 const withAvatar = computed(
-	() => props.size === ComponentSize.SM && !!props.username,
+	() => props.size === ComponentSize.SM && props.allowAvatar,
 );
 </script>
 

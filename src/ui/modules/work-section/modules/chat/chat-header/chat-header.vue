@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="props.size" :username="chatInfo.username">
+  <task-header :size="props.size" :allow-avatar="!!chatInfo.username" :username="chatInfo.username">
     <template #task-header-actions>
       <wt-button
         v-show="isTransferAction"

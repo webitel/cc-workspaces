@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="props.size" :username="call?.contact ? title : undefined">
+  <task-header :size="props.size" :allow-avatar="!!call?.contact" :username="call?.contact ? displayName : undefined">
     <template #task-header-actions>
       <slot :name="CallTab.Contacts">
         <wt-button
