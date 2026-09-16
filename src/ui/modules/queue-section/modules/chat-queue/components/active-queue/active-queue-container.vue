@@ -140,7 +140,9 @@ const nextActiveChats = computed(
 const nextClosedChats = computed(
 	() => store.state.features.chat.closed.unprocessed.next,
 );
-const next = computed(() => !isSearchActive.value && nextActiveChats.value);
+const next = computed(
+	() => !isSearchActive.value && !isEmpty.value && nextActiveChats.value,
+);
 
 const loadNextActiveChats = () =>
 	store.dispatch(`${activeChatsNamespace}/LOAD_NEXT_ACTIVE_CHATS`);
