@@ -38,8 +38,10 @@ const getters = {
 		return state.visibleChatIds.map((id) => chatsById.get(id)).filter(Boolean);
 	},
 
-	HAS_MORE: (state, getters, rootState) =>
-		getters.ALL_CHAT_LIST.length > state.visibleChatIds.length,
+	HAS_MORE: (state, getters) => {
+		const shownCount = getters.VISIBLE_CHAT_LIST.length;
+		return shownCount > 0 && getters.ALL_CHAT_LIST.length > shownCount;
+	},
 };
 
 const actions = {
