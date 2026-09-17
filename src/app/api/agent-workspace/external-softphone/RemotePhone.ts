@@ -71,8 +71,6 @@ export class RemotePhone
 	implements SipClient
 {
 	readonly type = 'external';
-	// TS `private` (not #): callStore is Vue-reactive, so sessions/phone get
-	// Proxied; JS private fields throw on a Proxy receiver (inbound answer).
 	private send: SendCommand;
 	private findCallIdBySession: FindCallIdBySession;
 	private registered = false;
