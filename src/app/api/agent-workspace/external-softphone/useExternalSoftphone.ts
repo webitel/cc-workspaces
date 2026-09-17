@@ -1,4 +1,5 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import { markRaw } from 'vue';
 import type { CallSession, Client } from 'webitel-sdk';
 import { endpoint } from '../websocket/endpoint';
 import { getExternalSoftphoneConfig } from './config';
@@ -90,8 +91,9 @@ function attach() {
 
 	// a fresh RemotePhone per attach: subscribePhone() adds listeners on the
 	// phone, so reusing one instance across client generations would keep
-	// feeding events into destroyed clients
-	const phone = new RemotePhone(send, findCallIdBySession);
+	// feeding events into destroyed clients. markRaw: same reason as
+	// markAsyncPhoneRaw for phone.ua — callStore is deep-reactive.
+	const phone = markRaw(new RemotePhone(send, findCallIdBySession));
 	currentPhone = phone;
 	cli.phone = phone;
 	cli.subscribePhone(phone);
