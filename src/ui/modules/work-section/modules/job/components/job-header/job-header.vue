@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="props.size" :allow-avatar="!!task.displayName" :username="task.displayName">
+  <task-header :size="props.size" :username="task.displayName">
     <template #info>
       <task-header-info
         :title="title"

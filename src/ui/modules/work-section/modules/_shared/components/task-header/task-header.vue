@@ -33,7 +33,8 @@ const props = withDefaults(
 );
 
 const withAvatar = computed(
-	() => props.size === ComponentSize.SM && props.allowAvatar,
+	() =>
+		props.size === ComponentSize.SM && (props.allowAvatar || !!props.username),
 );
 </script>
 
