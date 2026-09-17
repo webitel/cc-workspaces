@@ -71,14 +71,14 @@ export class RemotePhone
 	implements SipClient
 {
 	readonly type = 'external';
-	#send: SendCommand;
-	#findCallIdBySession: FindCallIdBySession;
-	#registered = false;
+	private send: SendCommand;
+	private findCallIdBySession: FindCallIdBySession;
+	private registered = false;
 
 	constructor(send: SendCommand, findCallIdBySession: FindCallIdBySession) {
 		super();
-		this.#send = send;
-		this.#findCallIdBySession = findCallIdBySession;
+		this.send = send;
+		this.findCallIdBySession = findCallIdBySession;
 	}
 
 	async callOption(req: Answer): Promise<object | Error> {
@@ -95,14 +95,14 @@ export class RemotePhone
 
 	async call(req: Outbound): Promise<undefined | Error> {
 		if (!req.destination) return;
-		this.#send('call', {
+		this.send('call', {
 			destination: req.destination,
 			params: req.params,
 		});
 	}
 
 	answerSession(session: RemoteSession): void {
-		const foundId = this.#findCallIdBySession(session);
+		const foundId = this.findCallIdBySession(session);
 		if (!foundId && session.fromSipId) {
 			console.warn(
 				'[external-softphone] cannot resolve call id for sip session',
@@ -110,21 +110,21 @@ export class RemotePhone
 			);
 			return;
 		}
-		this.#send('answer', {
+		this.send('answer', {
 			callId: foundId ?? session.callId,
 		});
 	}
 
 	isRegistered(): boolean {
-		return this.#registered;
+		return this.registered;
 	}
 
 	/** Driven by `state` messages from the utility; emitting registered /
 	 * unregistered lets subscribePhone() feed the existing phone_registered →
 	 * isPhoneReg store flow untouched. */
 	setRegistered(registered: boolean): void {
-		if (this.#registered === registered) return;
-		this.#registered = registered;
+		if (this.registered === registered) return;
+		this.registered = registered;
 		registered ? this.emit('registered') : this.emit('unregistered');
 	}
 

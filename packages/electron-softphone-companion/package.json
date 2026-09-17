@@ -1,6 +1,6 @@
 {
 	"name": "webitel-softphone-companion",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Webitel Softphone Companion — native SIP endpoint controlled from the web workspace",
 	"author": {
 		"name": "Webitel Team",

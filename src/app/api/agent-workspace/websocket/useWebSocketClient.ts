@@ -246,8 +246,8 @@ async function createClient(): Promise<Client> {
 
 	emit(WebSocketClientEvent.AfterAuth, cli);
 	if (useExternalPhone) {
-		// attaches the RemotePhone and hands the token to the local utility;
-		// no phone.ua will ever exist, so markAsyncPhoneRaw is skipped
+		// attaches the RemotePhone (markRaw'd inside the manager) and hands the
+		// token to the local utility; no phone.ua will ever exist
 		softphoneManager.start(cli);
 	} else {
 		await markAsyncPhoneRaw(cli);
