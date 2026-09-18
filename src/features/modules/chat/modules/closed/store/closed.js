@@ -95,6 +95,8 @@ const actions = {
 			});
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
 		}
+
+		return chatWithMessages;
 	},
 
 	LOAD_MORE_CLOSED_CHAT_MESSAGES: async (context) => {
@@ -150,7 +152,6 @@ const actions = {
 	},
 	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
 		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
 
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
@@ -162,7 +163,27 @@ const actions = {
 				},
 			);
 
-			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
+			const isFoundInHistory = await context.dispatch(
+				'FIND_TARGET_CHAT_IN_HISTORY',
+				chat,
+			);
+
+			if (!isFoundInHistory) {
+				/**
+				 * [WTEL-10384](https://webitel.atlassian.net/browse/WTEL-10384)
+				 *
+				 * The contact archive holds finished dialogs only. A chat closed by
+				 * transfer stays open for the agent it was transferred to, so its
+				 * messages are missing from the contact history - read them from the
+				 * chat catalog instead.
+				 */
+				const loadedChat = await context.dispatch('LOAD_CLOSED_CHAT', chat);
+				const [firstMessage] = loadedChat?.messages || [];
+
+				if (firstMessage) {
+					context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', firstMessage.id);
+				}
+			}
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
@@ -173,12 +194,9 @@ const actions = {
 	},
 
 	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
-		// recursive function
+		// recursive function, resolves to true when the target chat is found
 		const contactId = chat.contact.id;
 		const targetChatId = chat.id;
-		const next = context.rootState.features.chat.chatHistory.next;
-
-		if (!next) return;
 
 		const closedChatFirstMessage = await context.dispatch(
 			'FIND_TARGET_CHAT_FIRST_MESSAGE',
@@ -190,13 +208,36 @@ const actions = {
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
 				closedChatFirstMessage.id,
 			);
-			return; // recursive function exit
+			return true; // recursive function exit
+		}
+
+		const { chatHistoryMessages, next } =
+			context.rootState.features.chat.chatHistory;
+
+		if (!next) return false;
+
+		/**
+		 * [WTEL-10384](https://webitel.atlassian.net/browse/WTEL-10384)
+		 *
+		 * Messages are loaded from the newest to the oldest one. Once the loaded
+		 * page is older than the target chat itself, the chat is not in the
+		 * contact archive at all - stop paging the whole history.
+		 */
+		const [oldestLoadedMessage] = chatHistoryMessages;
+
+		if (
+			chat.startedAt &&
+			oldestLoadedMessage &&
+			Number(oldestLoadedMessage.createdAt) < Number(chat.startedAt)
+		) {
+			return false;
 		}
 
 		await context.dispatch('features/chat/chatHistory/LOAD_NEXT', contactId, {
 			root: true,
 		});
-		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat); // call itself until find target chat
+
+		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat); // call itself until find target chat
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat
