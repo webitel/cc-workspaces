@@ -28,7 +28,7 @@ features/modules/chat/
 ├── store/client-handlers.js     ChatActions event routing
 ├── store/chat-history.js        contact history (separate from current chat)
 ├── store/chat-media.js          file preview / players
-├── store/unseen.js              unread dot
+├── store/unseen.js              unread counter (dot + badge)
 ├── modules/active/              visible chat ids, + local search submodule
 ├── modules/closed/              REST-backed, submodules: unprocessed, processed
 ├── modules/manual/              self-assigned
@@ -149,9 +149,26 @@ chat.
 
 ## 8. Unread indicator
 
-`store/unseen.js` keys by `conversationId || id` and is cleared by
-`MARK_CHAT_SEEN`, dispatched by `useChatScroll` from `@webitel/ui-chats` only
-once the agent has actually scrolled to the bottom.
+`store/unseen.js` keys `unseenChatIds` by `conversationId || id` (null-safe; a
+chat with neither key is ignored). The value is a **count**: `ADD_UNSEEN_CHAT`
+increments, `REMOVE_UNSEEN_CHAT` deletes the key outright. Two getters read it:
+
+| Getter | Used by |
+| --- | --- |
+| `IS_CHAT_UNSEEN` | the dot on `active-queue-preview.vue`, `closed-queue-preview.vue`, and the scroll-to-bottom affordance in `current-chat.vue` / `the-chat-history.vue` |
+| `UNSEEN_COUNT` | the numeric badge on the video call's `Chat` tab |
+
+The module is written to by **two** producers:
+
+- `store/client-handlers.js` — `HANDLE_MESSAGE_ACTION`, for every message the
+  agent did not send themselves (`IS_MY_MESSAGE`);
+- `video-call/.../useVideoCallChatUnseen.ts` — for in-call chat, by watching the
+  message array ([WTEL-8866](https://webitel.atlassian.net/browse/WTEL-8866); see
+  [`../video/delta.md`](../video/delta.md) V-13).
+
+`MARK_CHAT_SEEN` likewise has two callers: `useChatScroll` from
+`@webitel/ui-chats`, once the agent has actually scrolled to the bottom, and the
+video-call composable, as soon as the `Chat` tab is opened.
 
 ## 9. External dependency
 

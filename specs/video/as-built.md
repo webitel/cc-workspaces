@@ -135,13 +135,30 @@ A video call **swaps** `Numpad` → `State` and `Bridge` → `Chat`. Contacts,
 History and Transfer are shared.
 
 `call-header.vue` renders the `chat` icon only for video calls, emitting
-`VideoCallTab.Chat`.
+`VideoCallTab.Chat`. The button carries an absolute-positioned `warn` badge with
+the unseen-message count (`videoCallChatUnseenBadge`, `undefined` when zero).
 
 ## 7. In-call chat
 
 A dedicated store (`video-call/modules/chat/store/chat.js`) and a dedicated
 component (`the-video-call-chat.vue`), **separate from the `features/chat`
-domain**. In-video-call chat does not reuse the chat channel's machinery.
+domain**. In-video-call chat does not reuse the chat channel's machinery — with
+one exception.
+
+`video-call/modules/chat/composables/useVideoCallChatUnseen.ts`
+([WTEL-8866](https://webitel.atlassian.net/browse/WTEL-8866)) owns both the
+`isCallChatExist` flag and the unseen badge, and it stores the count in the
+**chat channel's** `features/chat/unseen` module:
+
+| Trigger | Effect |
+| --- | --- |
+| `VIDEO_CALL_CHAT_MESSAGES` grows by exactly 1, agent not on the `Chat` tab, last message not `member.self` | `ADD_UNSEEN_CHAT` |
+| agent switches onto the `Chat` tab | `MARK_CHAT_SEEN` |
+| `VIDEO_CALL_CHAT` becomes falsy (call ended) | `REMOVE_UNSEEN_CHAT` |
+
+There is no WS event for these messages — they arrive by mutation of the SDK
+`Conversation`, so arrival is inferred from array length. See
+[`delta.md`](./delta.md) V-13.
 
 ## 8. Types
 

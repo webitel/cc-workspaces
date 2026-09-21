@@ -1,9 +1,9 @@
 # Workspace — consolidated findings
 
 Reverse-engineering audit of **Webitel Agent Workspace** (`@webitel/workspace`
-26.8.0), 2026-09-17.
+26.8.0), 2026-09-17; re-checked against main at `6f725bc0`, 2026-09-21.
 
-**122 findings** across 10 sections, derived by comparing Jira + Confluence
+**123 findings** across 10 sections, derived by comparing Jira + Confluence
 ("what was specified") against the source tree ("what exists").
 
 | Section | Findings | Section | Findings |
@@ -12,7 +12,7 @@ Reverse-engineering audit of **Webitel Agent Workspace** (`@webitel/workspace`
 | `call` | 15 | `notifications` | 11 |
 | `chat` | 12 | `global-handlers` | 11 |
 | `job` | 12 | `connection-quality` | 11 |
-| `video` | 12 | `member` | 10 |
+| `video` | 13 | `member` | 10 |
 
 Full detail in each section's `delta.md`. Method and handover in
 [`STATUS.md`](./STATUS.md).

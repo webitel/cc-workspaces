@@ -135,18 +135,24 @@ code was not located** in this pass — `the-video-call-chat.vue` was not read.
 
 ---
 
-## V-09. In-call chat does not reuse the chat channel — architecture note
+## V-09. In-call chat reuses the chat channel only for unseen counts — architecture note
 
 Video-call chat has its own store (`video-call/modules/chat/store/chat.js`) and
 its own component, entirely separate from `features/chat`.
 
-Consequences: quick replies ([`../chat/delta.md`](../chat/delta.md) H-04),
-unseen-message tracking, contact history and the `@webitel/ui-chats` machinery
-are **presumably** not available in a video call — the two chat implementations
-share nothing.
+The one exception, added by
+[WTEL-8866](https://webitel.atlassian.net/browse/WTEL-8866): the unseen counter
+**is** shared. `video-call/modules/chat/composables/useVideoCallChatUnseen.ts`
+commits into `features/chat/unseen` and reads `UNSEEN_COUNT` back out, so the
+badge on the `Chat` tab of `call-header.vue` is driven by the chat channel's
+store. Confirmed in code.
 
-**Unverified** — stated as a structural observation, not a confirmed feature gap.
-If true, it is worth recording as a product decision rather than an accident.
+Everything else remains unshared: quick replies
+([`../chat/delta.md`](../chat/delta.md) H-04), contact history and the
+`@webitel/ui-chats` machinery have no video-call equivalent. **Still
+unverified** as a deliberate product decision rather than an accident.
+
+How the shared counter is fed is itself a defect — see V-13.
 
 ---
 
@@ -190,11 +196,37 @@ Recorded so nobody looks for it here and records it as missing.
 
 ---
 
+## V-13. Unseen counter for in-call chat is inferred from message-array length — DEFECT
+
+`useVideoCallChatUnseen.ts` has no event to listen to: messages arrive by
+mutating the SDK `Conversation` instance, so the composable watches
+`VIDEO_CALL_CHAT_MESSAGES` and decides a message is new when
+
+```js
+messages?.length - (prevMessages?.length ?? 0) === 1
+```
+
+Consequences, read from the code:
+
+- **Only a delta of exactly 1 counts.** Two messages landing in one tick, or a
+  page of history being appended, increment the counter by nothing.
+- Anything that shortens the array (a deletion, a reload) is silently ignored,
+  so the counter and the visible thread can drift apart.
+- The counter is never decremented per message — `MARK_CHAT_SEEN` wipes it whole
+  when the agent opens the `Chat` tab, and `REMOVE_UNSEEN_CHAT` when the call
+  ends.
+
+The comment in the file states the constraint honestly ("there's no WS event to
+hook"). The fix belongs on the SDK side; recorded here so the counter is not
+read as exact.
+
+---
+
 ## Open questions
 
 1. Can a video call be bridged / consultatively transferred at all? (V-04)
 2. What does the `State` tab show? (V-05)
 3. Where is the "chat until first client message" gate enforced? (V-08)
-4. Are quick replies and unseen-tracking genuinely absent from video-call chat?
-   (V-09)
+4. Are quick replies genuinely absent from video-call chat? (Unseen tracking is
+   no longer absent — V-09, V-13.)
 5. Does `Transfer` on video offer the same three targets as audio? (V-04)

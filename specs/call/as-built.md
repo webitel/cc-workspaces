@@ -174,6 +174,14 @@ preference (`features/call/isVideo`) and the in-call video mute
 - microphone and camera permission checks are skipped, since audio is captured
   by the local utility rather than the browser
 
+The `RemotePhone` instance is `markRaw`'d before it is handed to the SDK client,
+and its internals use TypeScript `private` fields rather than JS `#private`
+ones. Both are load-bearing, not style: the session object ends up nested under
+the deep-reactive `callStore` proxy, and a `#private` read through a `Proxy`
+receiver throws — which is what broke answering inbound calls
+([WTEL-10073](https://webitel.atlassian.net/browse/WTEL-10073)). Regression tests
+live in `external-softphone/__tests__/RemotePhone.spec.js`.
+
 ## 9. Other getters
 
 | Getter | Meaning |

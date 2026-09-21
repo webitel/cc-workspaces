@@ -19,6 +19,11 @@ neither exactly:
 The older product spec is stale on naming. Anyone reading WPR/44995944 today
 will look for buttons that do not exist.
 
+The code is now consistent across channels: the chat preview's reject button was
+switched from `reusable.reject` to `reusable.decline` in
+[WTEL-10462](https://webitel.atlassian.net/browse/WTEL-10462), so **Decline** is
+the single wording everywhere.
+
 ---
 
 ## J-02. Task actions bypass the store — DIVERGENT (architecture)

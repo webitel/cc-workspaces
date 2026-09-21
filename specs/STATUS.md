@@ -1,6 +1,7 @@
 # Status
 
-Last updated: **2026-09-17**, against `@webitel/workspace` **26.8.0**.
+Last updated: **2026-09-21**, against `@webitel/workspace` **26.8.0**
+(main merged in at `6f725bc0`).
 
 > Read this first when resuming work. It is the handover: what exists, how it was
 > built, what is unfinished, and what must not be repeated.
@@ -13,7 +14,7 @@ Last updated: **2026-09-17**, against `@webitel/workspace` **26.8.0**.
 | `call` | ✅ | ✅ | ✅ | 15 (C-01…C-15) |
 | `chat` | ✅ | ✅ | ✅ | 12 (H-01…H-12) |
 | `job` | ✅ | ✅ | ✅ | 12 (J-01…J-12) |
-| `video` | ✅ | ✅ | ✅ | 12 (V-01…V-12) |
+| `video` | ✅ | ✅ | ✅ | 13 (V-01…V-13) |
 | `agent-status` | ✅ | ✅ | ✅ | 13 (S-01…S-13) |
 | `notifications` | ✅ | ✅ | ✅ | 11 (N-01…N-11) |
 | `global-handlers` | ✅ | ✅ | ✅ | 11 (G-01…G-11) |
