@@ -27,7 +27,9 @@
 			v-if="queueName"
 			class="task-header-info__queue typo-caption"
 		>
-			<span class="typo-caption-bold">Queue:</span>
+			<span class="typo-caption-bold">
+				{{ $t('objects.queue.queue', 1) }}:
+			</span>
 			<span>{{ queueName }}</span>
 		</p>
 	</div>
@@ -63,13 +65,13 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 		gap: var(--spacing-2xs);
 		padding: var(--spacing-xs);
 		border-radius: var(--border-radius--md);
-		background-color: var(--light-blue-lighten-5);
+		background-color: var(--info-surface-color);
 	}
 
 	.task-header-info__user {
 		display: flex;
 		gap: var(--spacing-2xs);
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 	}
 
