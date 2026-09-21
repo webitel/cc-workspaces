@@ -24,4 +24,8 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-.claude
+/.claude/*
+!/.claude/skills/
+
+# Spec Kit: machine-local extension catalog cache
+/.specify/extensions/.cache/
