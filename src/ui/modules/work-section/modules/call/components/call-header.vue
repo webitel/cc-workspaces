@@ -1,5 +1,5 @@
 <template>
-  <task-header :size="props.size" :username="call?.contact ? title : undefined">
+  <task-header :size="props.size" :allow-avatar="!!call?.contact" :username="displayName">
     <template #task-header-actions>
       <slot :name="CallTab.Contacts">
         <wt-button
@@ -62,6 +62,9 @@
           :variant="isOnChat ? 'active' : 'outlined'"
           :disabled="!isCallChatExist"
           :size="size"
+          :badge="videoCallChatUnseenBadge"
+          badge-absolute-position
+          badge-severity="warn"
           icon="chat"
           color="secondary"
           rounded
@@ -119,6 +122,7 @@ import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useVideoCallChatUnseen } from '../../../../../../features/modules/call/video-call/modules/chat/composables/useVideoCallChatUnseen';
 import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
@@ -173,9 +177,8 @@ const isHangupButtonVisible = computed(() => call.value?.allowHangup);
 const isCallButtonVisible = computed(
 	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
 );
-const isCallChatExist = computed(
-	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
-);
+const { isCallChatExist, videoCallChatUnseenBadge } =
+	useVideoCallChatUnseen(isOnChat);
 
 const queueName = computed(() => getQueueName(call.value));
 
