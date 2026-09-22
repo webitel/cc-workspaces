@@ -18,9 +18,6 @@ const state = {
 const actions = {
 	LOAD_CHAT_HISTORY: async (context, contactId) => {
 		try {
-			// always requests page 1; left stale, LOAD_NEXT resumes mid-archive [WTEL-10384]
-			context.commit('SET_PAGE_STATE', 1);
-
 			const { items, next } = await contactChatMessagesHistory.getAllMessages({
 				contactId,
 			});
