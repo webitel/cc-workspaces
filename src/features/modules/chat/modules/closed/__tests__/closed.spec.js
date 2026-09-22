@@ -124,9 +124,7 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
-				chat,
-			});
+			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
 
 			expect(result).toBe(true);
 			expect(context.commit).toHaveBeenCalledWith(
@@ -147,9 +145,7 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
-				chat,
-			});
+			await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
 
 			expect(context.commit).toHaveBeenCalledWith(
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
@@ -188,9 +184,7 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
-				chat,
-			});
+			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
 
 			const loadNextCalls = context.dispatch.mock.calls.filter(
 				([type]) => type === 'features/chat/chatHistory/LOAD_NEXT',
@@ -222,9 +216,7 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
-				chat,
-			});
+			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
 
 			const loadNextCalls = context.dispatch.mock.calls.filter(
 				([type]) => type === 'features/chat/chatHistory/LOAD_NEXT',
@@ -236,44 +228,6 @@ describe('features/chat/closed store', () => {
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
 				expect.anything(),
 			);
-		});
-
-		it('gives up after the page cap instead of walking the whole archive', async () => {
-			const pages = Array.from(
-				{
-					length: 50,
-				},
-				(unused, index) => ({
-					messages: [
-						message(`m${index}`, 'chat-x', '200'),
-					],
-					next: true,
-				}),
-			);
-
-			const context = createContext({
-				pages,
-				chatHistory: {
-					next: true,
-					chatHistoryMessages: [
-						message('m1', 'chat-a', '200'),
-					],
-				},
-			});
-
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
-				chat: {
-					...chat,
-					startedAt: undefined,
-				},
-			});
-
-			const loadNextCalls = context.dispatch.mock.calls.filter(
-				([type]) => type === 'features/chat/chatHistory/LOAD_NEXT',
-			);
-
-			expect(result).toBe(false);
-			expect(loadNextCalls).toHaveLength(9);
 		});
 	});
 

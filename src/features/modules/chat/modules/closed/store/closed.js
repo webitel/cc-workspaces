@@ -11,9 +11,6 @@ import unprocessed from '../modules/unprocessed/store/unprocessed';
 
 const { t } = i18n.global;
 
-// a chat missing from the contact archive used to page it to the very beginning [WTEL-10384]
-const MAX_HISTORY_LOOKUP_PAGES = 10;
-
 const state = {
 	isClosedChatLoaded: false,
 	closedChatFirstMessageId: null,
@@ -170,9 +167,7 @@ const actions = {
 
 			const isFoundInHistory = await context.dispatch(
 				'FIND_TARGET_CHAT_IN_HISTORY',
-				{
-					chat,
-				},
+				chat,
 			);
 
 			if (!isFoundInHistory) {
@@ -193,9 +188,8 @@ const actions = {
 		}
 	},
 
-	FIND_TARGET_CHAT_IN_HISTORY: async (context, payload) => {
+	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
 		// recurses page by page; true once the target chat is found
-		const { chat, page = 1 } = payload;
 		const contactId = chat.contact.id;
 		const targetChatId = chat.id;
 
@@ -215,7 +209,7 @@ const actions = {
 		const { chatHistoryMessages, next } =
 			context.rootState.features.chat.chatHistory;
 
-		if (!next || page >= MAX_HISTORY_LOOKUP_PAGES) return false;
+		if (!next) return false;
 
 		// pages run newest to oldest: past the chat's own start it can no longer appear
 		const [oldestLoadedMessage] = chatHistoryMessages;
@@ -232,10 +226,7 @@ const actions = {
 			root: true,
 		});
 
-		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {
-			chat,
-			page: page + 1,
-		});
+		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat

@@ -93,11 +93,10 @@ exactly `cc_*` / `wbt_*`. Hence `snakeToCamel(['context'])` in our API client.
 - **`chatHistory`** — the conversation history for a contact via
   `contactChatMessagesHistory`, separate from the messages of the current chat.
   Opening a closed chat of an identified contact walks this archive page by page looking for
-  the chat's first message, which becomes the scroll anchor. The walk is capped at
-  `MAX_HISTORY_LOOKUP_PAGES` and stops once a page is older than `chat.startedAt`; a chat that
-  is not there at all (still open after a transfer) falls back to `LOAD_CLOSED_CHAT`
-  (WTEL-10384). A chat's first message is only recognised once an older message precedes it,
-  so the page where it first appears is never the one that matches.
+  the chat's first message, which becomes the scroll anchor. The walk stops once a page is
+  older than `chat.startedAt`; a chat that is not there at all (still open after a transfer)
+  falls back to `LOAD_CLOSED_CHAT` (WTEL-10384). A chat's first message is only recognised
+  once an older message precedes it, so the page where it first appears never matches.
 - **`chatMedia`** — `mediaView` for previewing files and controlling the players, which hang
   directly off the chat object (`chat.players`).
 - **`unseen`** — the unread dot. The key is `chat.conversationId || chat.id`, because active
