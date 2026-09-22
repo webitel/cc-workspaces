@@ -8,7 +8,7 @@
 					:username="username"
 					class="task-header-info__user-avatar"
 				/>
-				<div class="typo-body-2-bold">
+				<div class="task-header-info__user-title typo-body-2-bold">
 					<a
 						v-if="contactName && contactLink"
 						:href="contactLink"
@@ -83,7 +83,17 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 	.task-header-info__user-name {
 		display: flex;
 		gap: var(--spacing-xs);
-		align-items: center;
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.task-header-info__user-title {
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
+
+	.task-header-info__user-phone {
+		flex-shrink: 0;
 	}
 
 	.task-header-info__user-name a:hover {
