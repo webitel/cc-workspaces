@@ -19,8 +19,8 @@
 					<span v-if="title">{{ title }}</span>
 				</div>
 			</div>
-			<div class="task-header-info__user-phone">
-				<span class="typo-body-2">{{ phoneNumber }}</span>
+			<div class="task-header-info__user-phone typo-body-2">
+				{{ phoneNumber }}
 			</div>
 		</div>
 		<p
