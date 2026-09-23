@@ -127,9 +127,15 @@ const actions = {
 		]);
 	},
 	REMOVE_CHAT: (context, chat) => {
+		const chatId = chat.conversationId;
+		const stillActive = getClientChats(context.rootState).some(
+			(activeChat) => activeChat.conversationId === chatId,
+		);
+		if (stillActive) return;
+
 		context.commit(
 			'SET_VISIBLE_CHAT_IDS',
-			context.state.visibleChatIds.filter((id) => id !== chat.conversationId),
+			context.state.visibleChatIds.filter((id) => id !== chatId),
 		);
 	},
 };
