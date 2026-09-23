@@ -267,6 +267,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Majburiy tanaffus',
 			continueWork: 'Ishni davom ettirish',
+			goOffline: 'Oflayn rejimga o‘tish',
 		},
 	},
 	disconnectPopup: {
