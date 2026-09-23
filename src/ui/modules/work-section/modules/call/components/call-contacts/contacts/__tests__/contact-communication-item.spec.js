@@ -26,13 +26,13 @@ describe('ContactCommunicationItem', () => {
 			},
 			global: {
 				stubs: {
-					WtIconBtn: false,
+					WtButton: false,
 				},
 			},
 		});
 		wrapper
 			.findComponent({
-				name: 'WtIconBtn',
+				name: 'WtButton',
 			})
 			.vm.$emit('click');
 		expect(wrapper.emitted().call[0][0]).toEqual(phone);
