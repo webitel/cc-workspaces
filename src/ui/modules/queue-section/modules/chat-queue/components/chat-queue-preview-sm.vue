@@ -13,16 +13,15 @@
       <div class="chat-queue-preview-sm__icon">
         <slot name="close-icon"></slot>
 
-        <wt-icon
-          :icon="opened ? 'chat--filled': 'chat'"
-          size="sm"
-          :color="ChatColorsMap[status]"
-        />
-
         <wt-badge
-          v-if="unseen"
-          color-variable="error-color"
-        />
+          :hidden="!unseen"
+        >
+          <wt-icon
+            :icon="opened ? 'chat--filled': 'chat'"
+            size="sm"
+            :color="ChatColorsMap[status]"
+          />
+        </wt-badge>
       </div>
 
       <div class="chat-queue-preview-sm__icon-status">

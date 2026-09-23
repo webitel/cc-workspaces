@@ -56,21 +56,27 @@
       </slot>
 
       <slot name="chat">
-        <wt-button
-          v-if="isChatButtonVisible"
-          class="call-action"
-          :variant="isOnChat ? 'active' : 'outlined'"
-          :disabled="!isCallChatExist"
-          :size="size"
-          :badge="videoCallChatUnseenBadge"
-          badge-absolute-position
-          badge-severity="warn"
-          icon="chat"
-          color="secondary"
-          rounded
-          wide
-          @click="emit('openTab', VideoCallTab.Chat)"
-        />
+        <wt-badge 
+          v-if="isChatButtonVisible" 
+          :color="BadgeColor.WARN"
+          :size="ComponentSize.MD"
+        >
+          <template #badge-content>
+            {{ videoCallChatUnseenBadge }}
+          </template>
+
+          <wt-button
+            class="call-action"
+            :variant="isOnChat ? 'active' : 'outlined'"
+            :disabled="!isCallChatExist"
+            :size="size"
+            icon="chat"
+            color="secondary"
+            rounded
+            wide
+            @click="emit('openTab', VideoCallTab.Chat)"
+          />
+        </wt-badge>
       </slot>
 
       <slot name="hangup">
@@ -117,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { BadgeColor, ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';

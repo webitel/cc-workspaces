@@ -26,11 +26,11 @@
           :class="{ 'queue-section__tab-content--sm': size === ComponentSize.SM }"
         >
           <div class="queue-section_indicator">
-            <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
             <wt-badge
-              v-if="tab.showIndicator"
-              color-variable="error-color"
-            />
+              :hidden="!tab.showIndicator"
+            >
+              <wt-icon :color="tab.iconColor" :icon="tab.icon" :size="size" />
+            </wt-badge>
           </div>
           <!-- TODO: Replace with Badge component when it's refactored to primeVue and use same style for this chips-->
           <wt-chip

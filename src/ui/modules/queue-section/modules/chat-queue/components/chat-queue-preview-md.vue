@@ -21,16 +21,17 @@
             >
               <div class="queue-preview-icon">
                 <slot name="close-icon"></slot>
-                <wt-icon
-                  :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
-                  :icon="opened ? 'chat--filled' : 'chat'"
-                  size="md"
-                  :color="ChatColorsMap[status] || 'secondary'"
-                />
+                
                 <wt-badge
-                  v-if="unseen"
-                  color-variable="error-color"
-                />
+                  :hidden="!unseen"
+                >
+                  <wt-icon
+                    :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
+                    :icon="opened ? 'chat--filled' : 'chat'"
+                    size="md"
+                    :color="ChatColorsMap[status] || 'secondary'"
+                  />
+                </wt-badge>
               </div>
             </div>
 
