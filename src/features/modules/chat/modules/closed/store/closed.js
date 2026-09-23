@@ -75,8 +75,10 @@ const actions = {
 			 * conversationId is needed when the chat is closed and post-processing is
 			 * in progress, because chat.id doesn't resolve a closed chat (backend specific) [WTEL-9955]
 			 */
+			// the dialog lives on after a transfer: cut it where this agent left [WTEL-10384]
 			const { items, next } = await CatalogAPI.getChatMessagesList({
 				chatId: chat.conversationId || chat.id,
+				offsetDate: chat.closedAt,
 			});
 
 			// chat.messages is read-only, so clone with messages instead of mutating it
@@ -95,6 +97,8 @@ const actions = {
 			});
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
 		}
+
+		return chatWithMessages;
 	},
 
 	LOAD_MORE_CLOSED_CHAT_MESSAGES: async (context) => {
@@ -150,7 +154,6 @@ const actions = {
 	},
 	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
 		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
 
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
@@ -162,7 +165,20 @@ const actions = {
 				},
 			);
 
-			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
+			const isFoundInHistory = await context.dispatch(
+				'FIND_TARGET_CHAT_IN_HISTORY',
+				chat,
+			);
+
+			if (!isFoundInHistory) {
+				// archive holds finished dialogs only; a transferred one is still open [WTEL-10384]
+				const loadedChat = await context.dispatch('LOAD_CLOSED_CHAT', chat);
+				const [firstMessage] = loadedChat?.messages || [];
+
+				if (firstMessage) {
+					context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', firstMessage.id);
+				}
+			}
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
@@ -173,12 +189,9 @@ const actions = {
 	},
 
 	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
-		// recursive function
+		// recurses page by page; true once the target chat is found
 		const contactId = chat.contact.id;
 		const targetChatId = chat.id;
-		const next = context.rootState.features.chat.chatHistory.next;
-
-		if (!next) return;
 
 		const closedChatFirstMessage = await context.dispatch(
 			'FIND_TARGET_CHAT_FIRST_MESSAGE',
@@ -190,13 +203,30 @@ const actions = {
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
 				closedChatFirstMessage.id,
 			);
-			return; // recursive function exit
+			return true;
+		}
+
+		const { chatHistoryMessages, next } =
+			context.rootState.features.chat.chatHistory;
+
+		if (!next) return false;
+
+		// pages run newest to oldest: past the chat's own start it can no longer appear
+		const [oldestLoadedMessage] = chatHistoryMessages;
+
+		if (
+			chat.startedAt &&
+			oldestLoadedMessage &&
+			Number(oldestLoadedMessage.createdAt) < Number(chat.startedAt)
+		) {
+			return false;
 		}
 
 		await context.dispatch('features/chat/chatHistory/LOAD_NEXT', contactId, {
 			root: true,
 		});
-		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat); // call itself until find target chat
+
+		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat
