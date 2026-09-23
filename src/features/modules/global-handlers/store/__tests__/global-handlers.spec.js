@@ -1,5 +1,7 @@
+import { nextTick, reactive } from 'vue';
 import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
 import { useWebSocketClient } from '../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
+import { WebSocketConnectionState } from '../../../../../ui/enums/WebSocketConnectionState.enum';
 import globalsModule from '../global-handlers';
 
 const mockSocket = new MockSocket();
@@ -45,6 +47,57 @@ describe('global handlers store: actions', () => {
 		expect(context.commit).toHaveBeenCalledWith(
 			'SET_PHONE_REG',
 			'phone_registered',
+		);
+	});
+
+	it('SUBSCRIBE_TO_CONNECTION_STATE dispatches RESUBSCRIBE_AFTER_RECONNECT after reconnect cycle', async () => {
+		const rootState = reactive({
+			client: {
+				state: WebSocketConnectionState.Idle,
+				getClientSync: () => mockSocket,
+			},
+		});
+		const stateContext = {
+			...context,
+			rootState,
+		};
+		const stop =
+			globalsModule.actions.SUBSCRIBE_TO_CONNECTION_STATE(stateContext);
+		const setState = async (value) => {
+			rootState.client.state = value;
+			await nextTick();
+		};
+
+		await setState(WebSocketConnectionState.Connecting);
+		await setState(WebSocketConnectionState.Connected);
+		expect(context.dispatch).not.toHaveBeenCalledWith(
+			'RESUBSCRIBE_AFTER_RECONNECT',
+		);
+
+		await setState(WebSocketConnectionState.Reconnecting);
+		await setState(WebSocketConnectionState.Disconnected);
+		await setState(WebSocketConnectionState.Connecting);
+		await setState(WebSocketConnectionState.Connected);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'RESUBSCRIBE_AFTER_RECONNECT',
+		);
+
+		stop();
+	});
+
+	it('RESUBSCRIBE_AFTER_RECONNECT re-subscribes status before other client subscriptions', async () => {
+		await globalsModule.actions.RESUBSCRIBE_AFTER_RECONNECT(context);
+		const dispatched = context.dispatch.mock.calls.map(([action]) => action);
+		expect(dispatched[0]).toBe('features/status/SUBSCRIBE_STATUS');
+		expect(dispatched).toEqual(
+			expect.arrayContaining([
+				'SUBSCRIBE_TO_PHONE_REGISTRATION',
+				'SUBSCRIBE_TO_CLIENT_DISCONNECT',
+				'SUBSCRIBE_TO_CLIENT_CLOSED',
+				'features/call/SUBSCRIBE_CALLS',
+				'features/chat/SUBSCRIBE_CHATS',
+				'features/job/SUBSCRIBE_JOBS',
+			]),
 		);
 	});
 
