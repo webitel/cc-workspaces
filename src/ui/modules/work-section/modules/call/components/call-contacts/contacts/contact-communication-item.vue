@@ -15,13 +15,14 @@
       <span class="contact-communications-item__title typo-body-2">{{ phone.number }}</span>
     </div>
     <div class="contact-communications-item__after">
-      <wt-icon-btn
-        icon="call--filled"
+      <wt-button
+        variant="outlined"
+        icon="call"
         color="success"
         :size="size"
         :disabled="showDisabled"
         @click="emit('call', phone)"
-      ></wt-icon-btn>
+      ></wt-button>
     </div>
   </div>
 </template>
