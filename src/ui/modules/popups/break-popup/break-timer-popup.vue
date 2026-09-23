@@ -24,15 +24,15 @@
     <template #actions>
       <wt-button
         color="success"
-        wide
+        :wide="isBreakTimerStep"
         @click="handleContinueWork"
       >{{ t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
-        color="error"
-        wide
-        @click="agentLogout"
-      >{{ t('reusable.logout') }}
+        :color="isBreakTimerStep ? 'error' : 'secondary'"
+        :wide="isBreakTimerStep"
+        @click="handleSecondaryAction"
+      >{{ t(isBreakTimerStep ? 'agentStatus.breakTimer.goOffline' : 'reusable.back') }}
       </wt-button>
     </template>
   </wt-popup>
@@ -169,6 +169,19 @@ async function agentLogout() {
 	await store.dispatch('features/status/AGENT_LOGOUT');
 }
 
+function goToBreakTimerStep() {
+	isBreakTimerStep.value = true;
+	selectedActivityType.value = null;
+}
+
+async function handleSecondaryAction() {
+	if (isBreakTimerStep.value) {
+		await agentLogout();
+	} else {
+		goToBreakTimerStep();
+	}
+}
+
 function close() {
 	isBreakPopupValue.value = false;
 }
@@ -176,4 +189,7 @@ function close() {
 
 <style lang="scss" scoped>
 @use '@webitel/ui-sdk/src/css/main' as *;
+:deep(.wt-popup__main) {
+  padding-right: 0;
+}
 </style>
