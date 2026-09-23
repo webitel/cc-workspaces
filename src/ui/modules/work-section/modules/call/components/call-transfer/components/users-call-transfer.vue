@@ -13,10 +13,11 @@
     @transfer="transfer"
   >
     <template #actions="{ item }">
-      <wt-rounded-action
+      <wt-button
+        variant="outlined"
         color="transfer"
-        :icon="`${state}-transfer--filled`"
-        :tooltip="$t('transfer.blindTransfer')"
+        :icon="`${state}-transfer`"
+        v-tooltip="$t('transfer.blindTransfer')"
         :loading="showLoader(item.id)"
         rounded
         @click="transfer(item)"

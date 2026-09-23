@@ -50,7 +50,7 @@ describe('ContactLookupItem', () => {
 				stubs: {
 					LookupItem: false,
 					LookupItemWrapper: false,
-					WtRoundedAction: false,
+					WtButton: false,
 				},
 				plugins: getMountPlugins(),
 			},
@@ -58,7 +58,7 @@ describe('ContactLookupItem', () => {
 
 		wrapper
 			.findComponent({
-				name: 'WtRoundedAction',
+				name: 'WtButton',
 			})
 			.vm.$emit('click');
 
@@ -92,7 +92,7 @@ describe('ContactLookupItem', () => {
 				stubs: {
 					LookupItem: false,
 					LookupItemWrapper: false,
-					WtRoundedAction: false,
+					WtButton: false,
 					ContactCommunicationItem: false,
 					WtExpandTransition: false,
 					TransitionExpand: false,
@@ -103,7 +103,7 @@ describe('ContactLookupItem', () => {
 
 		wrapper
 			.findComponent({
-				name: 'WtRoundedAction',
+				name: 'WtButton',
 			})
 			.vm.$emit('click');
 		await wrapper.vm.$nextTick(); // render communication items
@@ -144,7 +144,7 @@ describe('ContactLookupItem', () => {
 				stubs: {
 					LookupItem: false,
 					LookupItemWrapper: false,
-					WtRoundedAction: false,
+					WtButton: false,
 				},
 				plugins: getMountPlugins(),
 			},

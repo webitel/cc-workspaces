@@ -15,7 +15,7 @@ describe('UserLookupItem', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('emits input event at wt-rounded-action click', () => {
+	it('emits input event at wt-button click', () => {
 		const wrapper = mount(UserLookupItem, {
 			props: {
 				item,
@@ -23,7 +23,7 @@ describe('UserLookupItem', () => {
 		});
 		wrapper
 			.findComponent({
-				name: 'wt-rounded-action',
+				name: 'wt-button',
 			})
 			.vm.$emit('click');
 		expect(wrapper.emitted().input[0]).toEqual([

@@ -13,12 +13,13 @@
     </template>
 
     <template #after>
-      <wt-rounded-action
-        icon="call-add-to"
+      <wt-button
+        variant="outlined"
+        icon="plus"
         color="secondary"
         rounded
         @click="handleInput"
-      ></wt-rounded-action>
+      />
     </template>
   </lookup-item>
 </template>

@@ -24,9 +24,10 @@
     <template #after>
       <div class="transfer-actions">
         <slot name="actions" :item="item">
-          <wt-rounded-action
+          <wt-button
+            variant="outlined"
             color="transfer"
-            :icon="`${state}-transfer--filled`"
+            :icon="`${state}-transfer`"
             :loading="loadingTransfer"
             rounded
             @click="handleInput"

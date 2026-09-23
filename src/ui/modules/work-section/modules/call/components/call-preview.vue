@@ -8,22 +8,24 @@
     <div class="call-preview-wrap">
       <preview-profile/>
       <div class="call-preview__actions">
-        <wt-rounded-action
+        <wt-button
+          variant="outlined"
           :size="size"
-          icon="call--filled"
+          icon="call"
           color="success"
           rounded
           wide
           @click="answer"
-        ></wt-rounded-action>
-        <wt-rounded-action
+        />
+        <wt-button
+          variant="outlined"
           :size="size"
-          icon="call-end--filled"
+          icon="call-end"
           color="error"
           rounded
           wide
           @click="hangup"
-        ></wt-rounded-action>
+        />
       </div>
     </div>
   </div>
