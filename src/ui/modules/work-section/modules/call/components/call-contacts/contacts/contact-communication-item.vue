@@ -22,7 +22,7 @@
         :size="size"
         :disabled="showDisabled"
         @click="emit('call', phone)"
-      ></wt-button>
+      />
     </div>
   </div>
 </template>
