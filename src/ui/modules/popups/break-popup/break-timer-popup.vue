@@ -29,10 +29,10 @@
       >{{ t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
-        :color="isBreakTimerStep ? 'error' : 'secondary'"
-        :wide="isBreakTimerStep"
-        @click="handleSecondaryAction"
-      >{{ t(isBreakTimerStep ? 'agentStatus.breakTimer.goOffline' : 'reusable.back') }}
+        :color="secondaryButtonSettings.color"
+        :wide="secondaryButtonSettings.wide"
+        @click="secondaryButtonSettings.handler"
+      >{{ secondaryButtonSettings.text }}
       </wt-button>
     </template>
   </wt-popup>
@@ -174,13 +174,21 @@ function goToBreakTimerStep() {
 	selectedActivityType.value = null;
 }
 
-async function handleSecondaryAction() {
-	if (isBreakTimerStep.value) {
-		await agentLogout();
-	} else {
-		goToBreakTimerStep();
-	}
-}
+const secondaryButtonSettings = computed(() =>
+	isBreakTimerStep.value
+		? {
+				color: 'error',
+				wide: true,
+				text: t('agentStatus.breakTimer.goOffline'),
+				handler: agentLogout,
+			}
+		: {
+				color: 'secondary',
+				wide: false,
+				text: t('reusable.back'),
+				handler: goToBreakTimerStep,
+			},
+);
 
 function close() {
 	isBreakPopupValue.value = false;
