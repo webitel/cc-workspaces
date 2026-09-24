@@ -271,6 +271,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Принудительная пауза',
 			continueWork: 'Продолжить работу',
+			goOffline: 'Выйти в оффлайн',
 		},
 	},
 	disconnectPopup: {

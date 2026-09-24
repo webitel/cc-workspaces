@@ -268,6 +268,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Descanso',
 			continueWork: 'Continuar trabajo',
+			goOffline: 'Pasar a fuera de línea',
 		},
 	},
 	disconnectPopup: {

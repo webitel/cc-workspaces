@@ -266,6 +266,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Tạm dừng bắt buộc',
 			continueWork: 'Tiếp tục làm việc',
+			goOffline: 'Chuyển sang ngoại tuyến',
 		},
 	},
 	disconnectPopup: {

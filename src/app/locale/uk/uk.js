@@ -272,6 +272,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Примусова пауза',
 			continueWork: 'Продовжити роботу',
+			goOffline: 'Вийти в офлайн',
 		},
 	},
 	disconnectPopup: {
