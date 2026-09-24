@@ -23,7 +23,7 @@
     </template>
     <template #actions>
       <wt-button
-        color="success"
+        :color="ButtonColor.SUCCESS"
         :wide="isBreakTimerStep"
         @click="handleContinueWork"
       >{{ t('agentStatus.breakTimer.continueWork') }}
@@ -39,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import { ButtonColor } from '@webitel/ui-sdk/enums';
 import WtCcActivityTypeOptions from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/_internals/wt-cc-activity-type-options.vue';
 import { useActivityTypesOptions } from '@webitel/ui-sdk/src/modules/AgentStatusSelect/composables/useActivityTypesOptions';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
@@ -177,13 +178,13 @@ function goToBreakTimerStep() {
 const secondaryButtonSettings = computed(() =>
 	isBreakTimerStep.value
 		? {
-				color: 'error',
+				color: ButtonColor.ERROR,
 				wide: true,
 				text: t('agentStatus.breakTimer.goOffline'),
 				handler: agentLogout,
 			}
 		: {
-				color: 'secondary',
+				color: ButtonColor.SECONDARY,
 				wide: false,
 				text: t('reusable.back'),
 				handler: goToBreakTimerStep,
