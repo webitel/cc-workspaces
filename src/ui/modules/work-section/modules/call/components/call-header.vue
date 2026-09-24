@@ -56,8 +56,9 @@
       </slot>
 
       <slot name="chat">
-        <wt-badge 
-          v-if="isChatButtonVisible" 
+        <wt-badge
+          v-if="isChatButtonVisible"
+          class="call-action-badge"
           :color="BadgeColor.WARN"
           :size="ComponentSize.MD"
         >
@@ -235,3 +236,9 @@ onUnmounted(() =>
 	}),
 );
 </script>
+
+<style scoped>
+.call-action-badge {
+  width: 100%;
+}
+</style>
