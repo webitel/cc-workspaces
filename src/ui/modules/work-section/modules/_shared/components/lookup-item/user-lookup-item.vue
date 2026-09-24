@@ -33,8 +33,8 @@
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { getUserStatusByPriority } from '@webitel/ui-sdk/scripts';
 import { computed } from 'vue';
-import { getUserStatusByPriority } from '../../../../../../../features/modules/agent-status/statusUtils/getUserStatusByPriority';
 import LookupItem from './lookup-item.vue';
 import { UserLookupItem } from './types/UserLookupItem';
 

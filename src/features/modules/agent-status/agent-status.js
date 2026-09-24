@@ -1,8 +1,8 @@
+import { UserPresenceStatus } from '@webitel/ui-sdk/enums';
 import { AgentStatus } from 'webitel-sdk';
 
 import APIRepository from '../../../app/api/APIRepository';
 import clientHandlers from './client-handlers';
-import UserStatus from './statusUtils/UserStatus';
 
 const usersAPI = APIRepository.users;
 
@@ -58,9 +58,9 @@ const actions = {
 	},
 
 	TOGGLE_USER_DND: async (context) => {
-		const status = context.state.user.status?.[UserStatus.DND]
+		const status = context.state.user.status?.[UserPresenceStatus.Dnd]
 			? ''
-			: UserStatus.DND;
+			: UserPresenceStatus.Dnd;
 		await usersAPI.setUserStatus(status);
 	},
 
