@@ -7,10 +7,11 @@
       <wt-icon icon="bot" />
     </template>
     <template #actions="{ item }">
-      <wt-rounded-action
+      <wt-button
+        variant="outlined"
         color="transfer"
-        icon="call-transfer--filled"
-        :tooltip="$t('transfer.blindTransfer')"
+        icon="call-transfer"
+        v-tooltip="$t('transfer.blindTransfer')"
         rounded
         :loading="showLoader(item.id)"
         @click="transfer(item)"
