@@ -5,9 +5,18 @@ import { app } from 'electron';
 const CONFIG_FILE = 'config.json';
 const LOGS_FOLDER = 'logs';
 
+export interface PairedWorkspace {
+	/** webitel backend endpoint of the workspace this utility is paired with */
+	endpoint: string;
+	/** browser origin the pairing hello arrived from, null for non-browser clients */
+	origin: string | null;
+}
+
 export interface SoftphoneAppConfig {
 	port: number;
 	originAllowlist: string[];
+	endpointAllowlist: string[];
+	pairedWorkspace: PairedWorkspace | null;
 	sipRegisterSec: number;
 	codecs: string[];
 	nat: string;
@@ -23,9 +32,19 @@ export interface DevCredentials {
 const DEFAULT_CONFIG: SoftphoneAppConfig = {
 	port: 10029,
 	// non-empty list restricts which web origins may connect to the local
-	// WebSocket server; empty allows any origin (the hello token is still
-	// validated against the Webitel backend before anything executes)
+	// WebSocket server. When empty the allowed origin is derived instead from
+	// `pairedWorkspace` (see below) — an empty list is NOT "allow anything":
+	// validating the hello token proves nothing on its own, because the client
+	// also supplies the backend the token is validated against.
 	originAllowlist: [],
+	// non-empty list restricts which webitel endpoints a `hello` may point this
+	// utility at. Empty means trust-on-first-use: the first endpoint that
+	// authenticates successfully is written to `pairedWorkspace` and every later
+	// hello must match it.
+	endpointAllowlist: [],
+	// set on first successful pairing; clear it (tray → "Unpair workspace", or
+	// by deleting the key here) when the operator moves to another workspace
+	pairedWorkspace: null,
 	sipRegisterSec: 90,
 	codecs: [
 		'opus/48000/2',

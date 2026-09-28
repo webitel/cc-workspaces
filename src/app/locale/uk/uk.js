@@ -272,6 +272,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Примусова пауза',
 			continueWork: 'Продовжити роботу',
+			goOffline: 'Вийти в офлайн',
 		},
 	},
 	disconnectPopup: {
@@ -322,6 +323,8 @@ export default {
 				'Немає доступу до камери. Неможливо виконати дію.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Неможливо працювати у Workspace. Закінчився термін ліцензії.',
+			store_sql_user_get_default_device_app_error:
+				'У вас немає пристрою. Ви не можете працювати з дзвінками.',
 		},
 		endpoint: {
 			noLicense: 'Неможливо працювати у Workspace. Закінчився термін ліцензії.',

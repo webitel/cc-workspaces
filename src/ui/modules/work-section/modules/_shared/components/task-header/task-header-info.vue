@@ -8,7 +8,7 @@
 					:username="username"
 					class="task-header-info__user-avatar"
 				/>
-				<div class="typo-body-2-bold">
+				<div class="task-header-info__user-title typo-body-2-bold">
 					<a
 						v-if="contactName && contactLink"
 						:href="contactLink"
@@ -19,15 +19,17 @@
 					<span v-if="title">{{ title }}</span>
 				</div>
 			</div>
-			<div class="task-header-info__user-phone">
-				<span class="typo-body-2">{{ phoneNumber }}</span>
+			<div class="task-header-info__user-phone typo-body-2">
+				{{ phoneNumber }}
 			</div>
 		</div>
 		<p
 			v-if="queueName"
 			class="task-header-info__queue typo-caption"
 		>
-			<span class="typo-caption-bold">Queue:</span>
+			<span class="typo-caption-bold">
+				{{ $t('objects.queue.queue', 1) }}:
+			</span>
 			<span>{{ queueName }}</span>
 		</p>
 	</div>
@@ -63,13 +65,13 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 		gap: var(--spacing-2xs);
 		padding: var(--spacing-xs);
 		border-radius: var(--border-radius--md);
-		background-color: var(--light-blue-lighten-5);
+		background-color: var(--info-surface-color);
 	}
 
 	.task-header-info__user {
 		display: flex;
 		gap: var(--spacing-2xs);
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 	}
 
@@ -81,7 +83,17 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 	.task-header-info__user-name {
 		display: flex;
 		gap: var(--spacing-xs);
-		align-items: center;
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.task-header-info__user-title {
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
+
+	.task-header-info__user-phone {
+		flex-shrink: 0;
 	}
 
 	.task-header-info__user-name a:hover {

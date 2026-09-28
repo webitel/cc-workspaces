@@ -3,7 +3,7 @@
     v-model:visible="galleriaVisible"
     v-model:active-index="galleriaActiveIndex"
     :value="galleriaData"
-    @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
+    @download="downloadFile(screenshotData[galleriaActiveIndex].id, screenshotData[galleriaActiveIndex].view_name)"
     @delete="handleDeleteFromGalleria"
   />
   <video-call

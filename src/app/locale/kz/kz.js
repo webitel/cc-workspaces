@@ -266,6 +266,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'мәжбүрлі үзіліс',
 			continueWork: 'Жұмысты жалғастыру',
+			goOffline: 'Офлайнға шығу',
 		},
 	},
 	disconnectPopup: {
@@ -315,6 +316,8 @@ export default {
 				'Камераны қосу мүмкін емес. Әрекетті орындау мүмкін емес.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace жұмыс істеу мүмкін емес. Лицензияның мерзімі аяқталды.',
+			store_sql_user_get_default_device_app_error:
+				'Сізде құрылғы жоқ. Қоңыраулармен жұмыс істей алмайсыз.',
 		},
 		endpoint: {
 			noLicense:

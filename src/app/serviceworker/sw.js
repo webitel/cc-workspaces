@@ -17,6 +17,7 @@ const showNotification = ({ title, body, actions }) =>
 	self.registration.showNotification(title, {
 		body,
 		actions,
+		icon: '/workspace/pwa-192x192.png',
 	});
 
 self.addEventListener('message', async (event) => {

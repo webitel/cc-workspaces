@@ -11,6 +11,7 @@ const state = {
 	user: {
 		status: {},
 	},
+	isAgentRemoved: false,
 };
 
 const getters = {
@@ -19,6 +20,7 @@ const getters = {
 		getters.IS_AGENT && state.agent.status !== AgentStatus.Offline,
 	IS_AGENT_ONLINE: (state, getters) =>
 		getters.IS_AGENT && state.agent.status === AgentStatus.Online,
+	AGENT_REMOVED: (state) => state.isAgentRemoved,
 };
 
 const actions = {
@@ -34,7 +36,15 @@ const actions = {
 		const { channels, onDemand, onlineSkill } = {
 			onlineSkill: activityType,
 		};
-		agent.online(channels, onDemand, onlineSkill);
+		try {
+			await agent.online(channels, onDemand, onlineSkill);
+		} catch (error) {
+			if (error?.id === 'app.agent.login.app_err') {
+				context.commit('SET_AGENT_REMOVED', true);
+			} else {
+				throw error;
+			}
+		}
 	},
 
 	SET_AGENT_PAUSE_STATUS: async (context, note = '') => {
@@ -72,6 +82,10 @@ const mutations = {
 
 	SET_USER_INSTANCE: (state, user) => {
 		state.user = user;
+	},
+
+	SET_AGENT_REMOVED: (state, value) => {
+		state.isAgentRemoved = value;
 	},
 };
 

@@ -83,7 +83,7 @@ describe('HistoryLookupItem', () => {
 		});
 		wrapper
 			.findComponent({
-				name: 'wt-rounded-action',
+				name: 'wt-button',
 			})
 			.vm.$emit('click');
 		expect(callAction).toHaveBeenCalledWith(expect.anything(), {
@@ -107,7 +107,7 @@ describe('HistoryLookupItem', () => {
 		});
 		wrapper
 			.findComponent({
-				name: 'wt-rounded-action',
+				name: 'wt-button',
 			})
 			.vm.$emit('click');
 		expect(callAction).toHaveBeenCalledWith(expect.anything(), {

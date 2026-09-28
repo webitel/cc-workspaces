@@ -60,12 +60,12 @@
 <script setup lang="ts">
 import { ConfigurationsAPI } from '@webitel/api-services/api';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { EngineSystemSettingName } from 'webitel-sdk';
 import { useContactStore } from '../../store/contact';
 
 const props = withDefaults(

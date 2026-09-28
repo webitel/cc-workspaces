@@ -23,22 +23,23 @@
     </template>
     <template #actions>
       <wt-button
-        color="success"
-        wide
+        :color="ButtonColor.SUCCESS"
+        :wide="isBreakTimerStep"
         @click="handleContinueWork"
       >{{ t('agentStatus.breakTimer.continueWork') }}
       </wt-button>
       <wt-button
-        color="error"
-        wide
-        @click="agentLogout"
-      >{{ t('reusable.logout') }}
+        :color="secondaryButtonSettings.color"
+        :wide="secondaryButtonSettings.wide"
+        @click="secondaryButtonSettings.handler"
+      >{{ secondaryButtonSettings.text }}
       </wt-button>
     </template>
   </wt-popup>
 </template>
 
 <script setup lang="ts">
+import { ButtonColor } from '@webitel/ui-sdk/enums';
 import WtCcActivityTypeOptions from '@webitel/ui-sdk/src/modules/AgentStatusSelect/components/_internals/wt-cc-activity-type-options.vue';
 import { useActivityTypesOptions } from '@webitel/ui-sdk/src/modules/AgentStatusSelect/composables/useActivityTypesOptions';
 import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
@@ -169,6 +170,27 @@ async function agentLogout() {
 	await store.dispatch('features/status/AGENT_LOGOUT');
 }
 
+function goToBreakTimerStep() {
+	isBreakTimerStep.value = true;
+	selectedActivityType.value = null;
+}
+
+const secondaryButtonSettings = computed(() =>
+	isBreakTimerStep.value
+		? {
+				color: ButtonColor.ERROR,
+				wide: true,
+				text: t('agentStatus.breakTimer.goOffline'),
+				handler: agentLogout,
+			}
+		: {
+				color: ButtonColor.SECONDARY,
+				wide: false,
+				text: t('reusable.back'),
+				handler: goToBreakTimerStep,
+			},
+);
+
 function close() {
 	isBreakPopupValue.value = false;
 }
@@ -176,4 +198,7 @@ function close() {
 
 <style lang="scss" scoped>
 @use '@webitel/ui-sdk/src/css/main' as *;
+:deep(.wt-popup__main) {
+  padding-right: 0;
+}
 </style>
