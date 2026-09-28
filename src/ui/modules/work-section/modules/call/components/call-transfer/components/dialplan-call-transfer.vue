@@ -41,7 +41,7 @@ const emit = defineEmits([
 const transfer = async (item) => {
 	if (call.value) {
 		await runWithLoader(item.id, () =>
-			blindTransferDialplan(call.value, Number(item.schema.id)),
+			blindTransferDialplan(call.value, Number(item.id)),
 		);
 		emit('transfer-complete');
 	}

@@ -4,14 +4,14 @@ import { useWebSocketClient } from '../../../../../../../../../app/api/agent-wor
 
 const blindTransferDialplan = async (
 	call: Call,
-	schemaId: number,
+	dialplanId: number,
 ): Promise<void> => {
 	const { getClientSync } = useWebSocketClient();
 	const client = getClientSync();
 
 	await client.request('call_bt_dialplan', {
 		id: call.id,
-		schema_id: schemaId,
+		dialplan_id: dialplanId,
 	});
 };
 
