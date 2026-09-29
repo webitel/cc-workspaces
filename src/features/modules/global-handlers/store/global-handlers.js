@@ -72,6 +72,15 @@ const actions = {
 			context.dispatch('features/job/SUBSCRIBE_JOBS', null, {
 				root: true,
 			}),
+			context.dispatch('features/call/missed/INITIALIZE_MISSED', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
 		]),
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
