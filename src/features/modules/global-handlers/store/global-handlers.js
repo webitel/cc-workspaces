@@ -55,14 +55,14 @@ const actions = {
 
 		return stop;
 	},
-	RESTORE_CLIENT_SUBSCRIPTIONS: (context) =>
-		Promise.allSettled([
+	RESTORE_CLIENT_SUBSCRIPTIONS: async (context) => {
+		await context.dispatch('features/status/SUBSCRIBE_STATUS', null, {
+			root: true,
+		});
+		return Promise.allSettled([
 			context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION'),
 			context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT'),
 			context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED'),
-			context.dispatch('features/status/SUBSCRIBE_STATUS', null, {
-				root: true,
-			}),
 			context.dispatch('features/call/SUBSCRIBE_CALLS', null, {
 				root: true,
 			}),
@@ -81,7 +81,8 @@ const actions = {
 			context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, {
 				root: true,
 			}),
-		]),
+		]);
+	},
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
 		client.on('disconnected', () => {
