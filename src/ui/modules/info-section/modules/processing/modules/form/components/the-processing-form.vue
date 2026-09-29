@@ -55,8 +55,8 @@ import FormSelect from './components/processing-form-select.vue';
 import FormSelectFromObject from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
-import RichTextEditor from './components/rich-text-editor.vue';
 import FormText from './components/processing-form-text.vue';
+import RichTextEditor from './components/rich-text-editor.vue';
 
 export default {
 	name: 'TheProcessingForm',
