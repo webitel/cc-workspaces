@@ -55,8 +55,8 @@ import FormSelect from './components/processing-form-select.vue';
 import FormSelectFromObject from './components/processing-form-select-from-object/processing-form-select-from-object.vue';
 import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
+import RichTextEditor from './components/rich-text-editor.vue';
 import FormText from './components/processing-form-text.vue';
-import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
 
 export default {
 	name: 'TheProcessingForm',
@@ -71,10 +71,8 @@ export default {
 		FormSelectFromObject,
 		FormTable,
 		FormCaseStatusSelect,
-		RichTextEditor: () => ({
-			component: import('./components/rich-text-editor.vue'),
-			loading: RichTextEditorSkeleton,
-		}),
+		// light wrapper: ui-sdk's wt-rich-text-editor loads TinyMCE on demand
+		RichTextEditor,
 	},
 	mixins: [
 		processingModuleMixin,
