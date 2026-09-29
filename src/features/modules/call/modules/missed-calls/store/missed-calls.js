@@ -3,7 +3,7 @@ import { CallDirection } from 'webitel-sdk';
 import { useUserinfoStore } from '../../../../../../ui/modules/userinfo/userinfoStore';
 import missedAPI from '../api/missed';
 
-let subscribedToRefresh = false;
+let subscribedClient = null;
 
 const state = {
 	missedList: [],
@@ -70,10 +70,10 @@ const actions = {
 	},
 
 	INITIALIZE_MISSED: async (context) => {
-		if (!subscribedToRefresh) {
-			const client = await context.rootState.client.getCliInstance();
+		const client = await context.rootState.client.getCliInstance();
+		if (client !== subscribedClient) {
 			client.on('refresh_missed', () => context.dispatch('INITIALIZE_MISSED'));
-			subscribedToRefresh = true;
+			subscribedClient = client;
 		}
 
 		await context.dispatch('RESET_MISSED_LIST');
