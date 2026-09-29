@@ -60,7 +60,7 @@ const normalizeIds = (dialog) => ({
 	},
 });
 
-const getActiveChatsList = async (params = {}) => {
+const getActiveChatsList = async ({ peerId, ...params } = {}) => {
 	const fieldsToSend = getShallowFieldsToSendFromZodSchema(
 		CatalogGetDialogsQueryParams,
 	);
@@ -70,10 +70,13 @@ const getActiveChatsList = async (params = {}) => {
 		(params) => ({
 			online: true,
 			...params,
-			'peer.id': params.peerId,
 			fields: params.fields?.length ? params.fields : DEFAULT_FIELDS,
 		}),
 		sanitize(fieldsToSend),
+		(params) => ({
+			...params,
+			'peer.id': peerId,
+		}),
 	]);
 
 	try {
