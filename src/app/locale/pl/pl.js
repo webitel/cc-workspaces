@@ -267,6 +267,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Przerwa wymuszona',
 			continueWork: 'Kontynuuj pracę',
+			goOffline: 'Przejdź w tryb offline',
 		},
 	},
 	disconnectPopup: {

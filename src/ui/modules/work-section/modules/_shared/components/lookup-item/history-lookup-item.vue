@@ -42,8 +42,9 @@
 
     <template #after>
       <div class="history-lookup-item-after">
-        <wt-rounded-action
-          icon="call--filled"
+        <wt-button
+          variant="outlined"
+          icon="call"
           color="success"
           rounded
           :size="size"

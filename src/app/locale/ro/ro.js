@@ -268,6 +268,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Pauză externă',
 			continueWork: 'Continuă lucrul',
+			goOffline: 'Treci offline',
 		},
 	},
 	disconnectPopup: {

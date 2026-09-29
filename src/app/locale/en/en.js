@@ -271,6 +271,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Break out',
 			continueWork: 'Continue work',
+			goOffline: 'Go offline',
 		},
 	},
 	disconnectPopup: {

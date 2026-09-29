@@ -9,18 +9,20 @@
       ></wt-icon>
     </template>
     <template #actions="{ item }">
-      <wt-rounded-action
+      <wt-button
+        variant="outlined"
         color="transfer"
-        :icon="`${state}-transfer--filled`"
-        :tooltip="$t('transfer.blindTransfer')"
+        :icon="`${state}-transfer`"
+        v-tooltip="$t('transfer.blindTransfer')"
         rounded
         :loading="showLoader(`transfer${item.id}`)"
         @click="transfer(item)"
       />
-      <wt-rounded-action
-        color="transfer"
+      <wt-button
+        variant="outlined"
+        color="success"
         icon="consultative-transfer"
-        :tooltip="$t('transfer.consultTransfer')"
+        v-tooltip="$t('transfer.consultTransfer')"
         rounded
         :loading="showLoader(`consultationTransfer${item.id}`)"
         @click="consultationTransfer(item)"

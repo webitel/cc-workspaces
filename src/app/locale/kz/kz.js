@@ -266,6 +266,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'мәжбүрлі үзіліс',
 			continueWork: 'Жұмысты жалғастыру',
+			goOffline: 'Офлайнға шығу',
 		},
 	},
 	disconnectPopup: {

@@ -18,13 +18,14 @@
     </template>
 
     <template #after>
-      <wt-rounded-action
-          :size="props.size"
-          :loading="props.loading"
-          icon="call--filled"
-          color="success"
-          rounded
-          @click="handleInput"
+      <wt-button
+        variant="outlined"
+        :size="props.size"
+        :loading="props.loading"
+        icon="call"
+        color="success"
+        rounded
+        @click="handleInput"
       />
     </template>
   </lookup-item>

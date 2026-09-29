@@ -23,15 +23,16 @@
     </template>
 
     <template #after="{ toggle }">
-      <wt-rounded-action
+      <wt-button
+        variant="outlined"
         :disabled="!phones.length"
         :size="size"
         :loading="loading"
         color="success"
-        icon="call--filled"
+        icon="call"
         rounded
         @click="handleCallAction(toggle)"
-      ></wt-rounded-action>
+      />
     </template>
 
     <template
