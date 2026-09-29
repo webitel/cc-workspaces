@@ -163,10 +163,7 @@ const actions = {
 			);
 
 			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
-		} catch (err) {
-			throw applyTransform(err, [
-				notify,
-			]);
+			// no catch here: every dispatched action notifies on its own, a second one would duplicate it
 		} finally {
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
 		}
