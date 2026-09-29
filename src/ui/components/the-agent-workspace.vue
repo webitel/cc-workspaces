@@ -174,6 +174,7 @@ onUnmounted(() => {
   flex-direction: column;
   flex-grow: 1;
   box-sizing: border-box;
+  min-width: 0;
   min-height: 0;
   padding: var(--spacing-sm);
   background: var(--wt-page-wrapper-background-color);
