@@ -2,7 +2,7 @@
   <task-header :size="size" :username="member.name">
     <template #task-header-actions>
       <wt-button
-				:variant="isOnHistory ? 'active' : 'outlined'"
+		:variant="isOnHistory ? 'active' : 'outlined'"
         :size="size"
         class="call-action"
         color="secondary"
@@ -13,7 +13,7 @@
       />
       <wt-button
         v-show="isCall"
-				variant="outlined"
+		variant="outlined"
         :size="size"
         color="success"
         icon="call-ringing"
