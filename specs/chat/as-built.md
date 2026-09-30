@@ -37,7 +37,7 @@ features/modules/chat/
 └── scripts/                     name / message / file helpers
 ```
 
-Total ≈1620 lines across the JS/TS files.
+Total ≈1650 lines across the JS/TS files.
 
 ## 2. Left panel (`chat-queue`)
 
