@@ -1,10 +1,10 @@
+import { UserPresenceStatus } from '@webitel/ui-sdk/enums';
 import { AgentStatus } from 'webitel-sdk';
 
 import MockSocket from '../../../../../tests/unit/mocks/MockSocket';
 import usersAPIRepository from '../../../../app/api/agent-workspace/endpoints/users/UsersAPIRepository';
 import { useWebSocketClient } from '../../../../app/api/agent-workspace/websocket/useWebSocketClient';
 import statusModule from '../agent-status';
-import UserStatus from '../statusUtils/UserStatus';
 
 let mockSocket = new MockSocket();
 const webSocketClientController = useWebSocketClient();
@@ -76,7 +76,7 @@ describe('features/status store client handlers: actions', () => {
 		usersAPIRepository.setUserStatus = setUserStatusMock;
 		context.state.user = {
 			status: {
-				[UserStatus.DND]: true,
+				[UserPresenceStatus.Dnd]: true,
 			},
 		};
 		statusModule.actions.TOGGLE_USER_DND(context);
@@ -87,10 +87,12 @@ describe('features/status store client handlers: actions', () => {
 		const setUserStatusMock = vi.fn();
 		usersAPIRepository.setUserStatus = setUserStatusMock;
 		context.state.user = {
-			status: UserStatus.ACTIVE,
+			status: {
+				[UserPresenceStatus.Dnd]: false,
+			},
 		};
 		statusModule.actions.TOGGLE_USER_DND(context);
-		expect(setUserStatusMock).toHaveBeenCalledWith(UserStatus.DND);
+		expect(setUserStatusMock).toHaveBeenCalledWith(UserPresenceStatus.Dnd);
 	});
 
 	it('TOGGLE_CONTACT_CENTER_MODE dispatches AGENT_LOGOUT if IS_CCENTER_ON getter == true', async () => {
