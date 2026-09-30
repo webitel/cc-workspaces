@@ -115,8 +115,10 @@ Entries carry `attemptId`, `channel`, `communication`, `deadline`, `position`,
 `hideMissedCall`.
 
 - Page size is hardcoded to **10**; `LOAD_NEXT_PAGE` appends.
-- `INITIALIZE_MISSED` subscribes once to the SDK `refresh_missed` event and
-  reloads the list on every occurrence.
+- `INITIALIZE_MISSED` subscribes to the SDK `refresh_missed` event once **per
+  client instance** (module-level `subscribedClient`), and reloads the list on
+  every occurrence. A reconnect creates a new client, so the listener is
+  re-attached ([WTEL-10495](https://webitel.atlassian.net/browse/WTEL-10495)).
 - `REDIAL` and `HIDE_MISSED` both re-initialise the whole list afterwards.
 - `userId` is read from the Pinia `userinfoStore` **non-reactively** — the source
   comments this explicitly (`NOTE! its not reactive!`) and leaves a
@@ -140,11 +142,21 @@ Hold and mute are bound to `HotkeyAction.HOLD` / `HotkeyAction.MUTE`.
 
 ### 6.1. Transfer
 
-`call-transfer/` offers **three** target types:
+`call-transfer/` offers **four** target tabs (`the-call-transfer.vue`, grid of
+4 columns):
 
 - `agents-call-transfer.vue`
 - `users-call-transfer.vue`
 - `queues-call-transfer.vue`
+- `dialplan-call-transfer.vue` — lists schemas from `DialplansAPI.getList({
+  allowTransfer: true })`; one blind-transfer button per row, which sends
+  `call_bt_dialplan { id, dialplan_id }` over the socket
+  (`_shared/utils/blindTransferDialplan.ts`). Added by
+  [WTEL-10264](https://webitel.atlassian.net/browse/WTEL-10264).
+
+Row actions are outlined `wt-button`s (was `wt-rounded-action`,
+[WTEL-10247](https://webitel.atlassian.net/browse/WTEL-10247)). Blind transfer
+uses `color="transfer"`, consultative transfer `color="success"`.
 
 ### 6.2. Bridge
 

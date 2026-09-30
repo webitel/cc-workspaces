@@ -7,7 +7,7 @@
 
 ```
 features/modules/global-handlers/
-├── store/global-handlers.js       144 lines — the whole module
+├── store/global-handlers.js       169 lines — the whole module
 └── assets/
     ├── disconnect-sound.wav       used
     └── disconnect-sound.mp3       not referenced anywhere
@@ -58,17 +58,39 @@ with `immediate: true`:
 
 | Transition | Effect |
 | --- | --- |
-| → `Reconnecting` or `Disconnected` | `OPEN_DISCONNECT_POPUP` |
+| → `Reconnecting` or `Disconnected` | `OPEN_DISCONNECT_POPUP`; sets a local `isConnectionLost = true` |
 | → `Connected` | `CLOSE_DISCONNECT_POPUP` |
-| `Reconnecting`/`Disconnected` → `Connected`, and `getClientSync()` is truthy | **re-subscribe chats**: `features/chat/SUBSCRIBE_CHATS` |
+| → `Connected` while `isConnectionLost`, and `getClientSync()` is truthy | resets the flag, dispatches **`RESTORE_CLIENT_SUBSCRIPTIONS`** |
 
-The chat re-binding carries an explanatory comment:
+The flag replaces the earlier `prev`-state check, so the restore still fires when
+the state passes through `Connecting` on the way back.
 
-> *"first session is opened by OPEN_SESSION; here we only re-bind chats after the
-> socket comes back"*
+The comment:
 
-Calls and jobs get **no** equivalent re-subscription — they are re-seeded by the
-SDK's own reconnect path.
+> *"first session is opened by OPEN_SESSION; here we only re-bind subscriptions to
+> the new client after the socket comes back"*
+
+A reconnect destroys the old SDK `Client` and creates a new one
+(`useWebSocketClient.ts` → `handleDisconnect` → `destroyClient` →
+`getCliInstance({ forceReconnect: true })`), so every `client.on(…)` /
+`subscribe*` has to be repeated.
+
+`RESTORE_CLIENT_SUBSCRIPTIONS` first **awaits** `features/status/SUBSCRIBE_STATUS`
+(agent session), then runs the rest through `Promise.allSettled`:
+
+- `SUBSCRIBE_TO_PHONE_REGISTRATION`, `SUBSCRIBE_TO_CLIENT_DISCONNECT`,
+  `SUBSCRIBE_TO_CLIENT_CLOSED` (this module)
+- `features/call/SUBSCRIBE_CALLS` — re-seeds `callList` from `client.allCall()`
+- `features/chat/SUBSCRIBE_CHATS` — reloads the active chat list
+- `features/job/SUBSCRIBE_JOBS` — re-seeds `jobList` from `client.allJob()`
+- `features/call/missed/INITIALIZE_MISSED`
+- `features/call/manual/INITIALIZE_MANUAL_LIST`,
+  `features/chat/manual/INITIALIZE_MANUAL_LIST`
+
+Not restored: `SUBSCRIBE_TO_PHONE_UNREGISTERED_NOTIFICATION` (a Vue `watch`, not
+bound to the client) and the notifications module.
+
+Source: [WTEL-10495](https://webitel.atlassian.net/browse/WTEL-10495).
 
 The watcher logs every transition to the console:
 

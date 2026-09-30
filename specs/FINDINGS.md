@@ -147,7 +147,7 @@ has no documentation at all.
 ### 2.2. Connection loss — nothing
 
 `global-handlers` implements a full policy: popup, sound, destruction of all
-client-side activity state, chat re-binding on recovery, SIP warnings. **Not one
+client-side activity state, re-subscription on recovery, SIP warnings. **Not one
 line is documented.**
 
 An agent whose socket drops mid-call sees a popup with a sound, the call
@@ -388,10 +388,11 @@ makes task behaviour testable at the store level, which it currently is not.
 handles, add `client.off()`, make `RESET_GLOBAL_HANDLERS` actually reset.
 `sw-controller` already shows the shape.
 
-**Decide what happens on reconnect.** Today calls and jobs are cleared and only
-chats are re-subscribed. Either re-seed all three, or state openly that reload is
-the recovery path — the popup's "Reload page" button suggests the latter is
-already the de-facto answer.
+**Decide what happens on reconnect.** Done in main by
+[WTEL-10495](https://webitel.atlassian.net/browse/WTEL-10495): calls, chats,
+jobs, missed and manual lists are all re-subscribed on the new client (G-03).
+What remains is documenting it, and checking that the new client actually
+returns the tasks that were active before the drop.
 
 ### 7.3. Documentation — the highest-leverage change
 

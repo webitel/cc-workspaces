@@ -8,7 +8,7 @@
 ## G-01. Connection loss is entirely undocumented — UNDOCUMENTED
 
 The module implements a complete connection-loss policy: a popup, a sound, the
-destruction of all client-side activity state, chat re-binding on recovery, and
+destruction of all client-side activity state, re-subscription on recovery, and
 SIP-registration warnings.
 
 **Not one line of it is in the user documentation.** The User Guide's only
@@ -37,13 +37,20 @@ on the server is a separate question the client no longer reflects.
 Specifically unverified, and worth checking:
 
 - if post-processing is open with unsaved data when the socket drops, is it lost?
-- does the task reappear after reconnect, or must the agent reload?
+- does the task reappear after reconnect, or must the agent reload? Calls and
+  jobs are now re-seeded from the new client (G-03); whether the new client
+  actually knows about the call that was active was **not checked**.
 
 The popup offering **Reload page** suggests reload is the expected recovery.
 
 ---
 
-## G-03. Only chats are re-subscribed on reconnect — asymmetry
+## G-03. Only chats are re-subscribed on reconnect — asymmetry — FIXED
+
+> **Fixed in main** by [WTEL-10495](https://webitel.atlassian.net/browse/WTEL-10495)
+> (merged into this branch at `83694b73`). Kept for the record.
+
+Originally:
 
 ```js
 if (prev === Reconnecting || prev === Disconnected) {
@@ -51,16 +58,17 @@ if (prev === Reconnecting || prev === Disconnected) {
 }
 ```
 
-Chats get an explicit re-bind. Calls and jobs get none.
+Chats got an explicit re-bind; calls, jobs, status, missed and manual lists got
+none, although a reconnect creates a **new** SDK `Client` and `CLEAR_ALL_TASKS`
+had just emptied `callList` and `jobList`.
 
-The comment says the first session is opened by `OPEN_SESSION` and this only
-re-binds chats — implying calls and jobs recover through the SDK's own path.
-**Not verified.** Given `CLEAR_ALL_TASKS` has just emptied `callList` and
-`jobList`, something must re-seed them, and it is not this module.
+Now the watcher dispatches `RESTORE_CLIENT_SUBSCRIPTIONS`, which awaits the
+agent session and then re-subscribes calls, chats, jobs, missed and manual lists
+and this module's own client listeners
+([`as-built.md`](as-built.md) §4).
 
-If the SDK does not re-push them, the agent's call and task lists stay empty
-until reload — which would make **Reload page** the only real recovery, not a
-convenience.
+Still open: whether the new client's `allCall()` / `allJob()` contain the tasks
+that were active before the drop. That is SDK/server behaviour, **not checked**.
 
 ---
 
@@ -103,6 +111,10 @@ The `let stop = null; stop = watch(…)` pattern is also redundant — a plain
 
 Same class as G-04, and the same open question: harmless if init runs once,
 compounding if it does not.
+
+Reconnect does not compound them: `RESTORE_CLIENT_SUBSCRIPTIONS` (G-03) calls
+the same three actions again, but on a **new** client — the old one is destroyed
+by `useWebSocketClient.handleDisconnect`.
 
 Compare `sw-controller`, which does implement a `DESTROY`
 ([`../notifications/as-built.md`](../notifications/as-built.md) §7) — the pattern
@@ -200,7 +212,8 @@ situation.
 ## Open questions
 
 1. Can `INIT_GLOBAL_HANDLERS` run more than once per page? (G-04, G-05)
-2. Are calls and jobs re-seeded after reconnect, or is reload required? (G-03)
+2. After reconnect, do the new client's `allCall()` / `allJob()` include the
+   tasks active before the drop? (G-03 — re-seeding itself is now in place)
 3. Is open post-processing data lost when the socket drops? (G-02)
 4. Does the disconnect sound respect ringtone volume? (G-08)
 5. What does `store_sql_user_get_default_device_app_error` actually render as in

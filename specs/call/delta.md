@@ -43,17 +43,28 @@ The agent sees an icon whose meaning is documented nowhere.
 ## C-03. Transfer to a **Queue** — UNDOCUMENTED
 
 The user guide describes transfer targets as "a list of agents" only.
-`call-transfer/components/` implements three:
+`call-transfer/components/` implements four:
 
 - `agents-call-transfer.vue`
 - `users-call-transfer.vue`
 - `queues-call-transfer.vue`
+- `dialplan-call-transfer.vue`
 
 Transfer to a queue is fully implemented and entirely undocumented.
 
-Note this is *not* the same as
+Transfer to a **Dialplan** is now implemented too
+([WTEL-10264](https://webitel.atlassian.net/browse/WTEL-10264), merged from
+main), while its page
 [WPR/1113292812 "Transfer to Dialplan"](https://webitel.atlassian.net/wiki/spaces/WPR/pages/1113292812/todo.+Workspace+Dialplan)
-(still `todo`) or
+still says `todo` — another unreliable status field (see `STATUS.md`, method
+note 6). The page itself was not re-read against the implementation.
+
+Unlike the store-level transfers (C-06), the Dialplan transfer has **no catch at
+all**: a rejected `call_bt_dialplan` request propagates out of the click handler
+as an unhandled rejection, and `transfer-complete` is not emitted. Read, not
+reproduced.
+
+The queue transfer is still *not* the same as
 [WPR/200933385 "Transfer to Contact"](https://webitel.atlassian.net/wiki/spaces/WPR/pages/200933385/Workspace)
 (still questioned).
 

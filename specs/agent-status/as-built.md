@@ -169,7 +169,19 @@ UI SDK, not in this repository.**
 `BreakOut`, branching on `agentStatus` for its title
 (`agentStatus.breakTimer.{pause|break_out}`) and showing `break-timer.vue`.
 
-Buttons: `handleContinueWork` and `agentLogout`.
+Two steps, switched by `isBreakTimerStep`:
+
+| Step | Primary (`success`) | Secondary |
+| --- | --- | --- |
+| break timer | **Continue work** → activity-type step if there is more than one type, otherwise `setAgentWaiting()` | **Go offline** (`error`) → `AGENT_LOGOUT` → `agent.offline()` |
+| activity type | **Continue work** → `confirmActivityType()` | **Back** (`secondary`) → returns to the timer step |
+
+The secondary button used to be **Logout** on both steps; the label changed to
+`agentStatus.breakTimer.goOffline` and the activity step got **Back**
+([WTEL-10255](https://webitel.atlassian.net/browse/WTEL-10255)). The User Guide
+([`spec.md`](spec.md) §2.1–2.2) still calls it **Logout**; the action behind it
+was always `agent.offline()`, so the new label matches the behaviour better than
+the guide does.
 
 It imports from the UI SDK:
 
