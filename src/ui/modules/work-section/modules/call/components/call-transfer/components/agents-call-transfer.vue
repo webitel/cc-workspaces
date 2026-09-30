@@ -9,10 +9,11 @@
     :presence-status-field="PresenceStatusField"
   >
     <template #actions="{ item }">
-      <wt-rounded-action
-        color="transfer"
+      <wt-button
+        variant="outlined"
+        color="success"
         icon="consultative-transfer"
-        :tooltip="$t('transfer.consultTransfer')"
+        v-tooltip="$t('transfer.consultTransfer')"
         rounded
         :loading="showLoader(item.id)"
         @click="consultationTransfer(item)"
