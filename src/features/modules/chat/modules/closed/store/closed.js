@@ -179,10 +179,7 @@ const actions = {
 					context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', firstMessage.id);
 				}
 			}
-		} catch (err) {
-			throw applyTransform(err, [
-				notify,
-			]);
+			// no catch here: every dispatched action notifies on its own, a second one would duplicate it
 		} finally {
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
 		}

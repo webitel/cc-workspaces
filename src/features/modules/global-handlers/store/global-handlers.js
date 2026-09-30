@@ -23,15 +23,17 @@ const actions = {
 	},
 	SUBSCRIBE_TO_CONNECTION_STATE: (context) => {
 		let stop = null;
+		let isConnectionLost = false;
 
 		stop = watch(
 			() => context.rootState.client.state,
-			(value, prev) => {
+			(value) => {
 				console.log('[WS connection state]:', value);
 				if (
 					value === WebSocketConnectionState.Reconnecting ||
 					value === WebSocketConnectionState.Disconnected
 				) {
+					isConnectionLost = true;
 					context.dispatch('OPEN_DISCONNECT_POPUP');
 				}
 
@@ -39,15 +41,10 @@ const actions = {
 					context.dispatch('CLOSE_DISCONNECT_POPUP');
 
 					// first session is opened by OPEN_SESSION; here we only re-bind
-					// chats after the socket comes back
-					if (
-						(prev === WebSocketConnectionState.Reconnecting ||
-							prev === WebSocketConnectionState.Disconnected) &&
-						context.rootState.client.getClientSync()
-					) {
-						context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
-							root: true,
-						});
+					// subscriptions to the new client after the socket comes back
+					if (isConnectionLost && context.rootState.client.getClientSync()) {
+						isConnectionLost = false;
+						context.dispatch('RESTORE_CLIENT_SUBSCRIPTIONS');
 					}
 				}
 			},
@@ -57,6 +54,34 @@ const actions = {
 		);
 
 		return stop;
+	},
+	RESTORE_CLIENT_SUBSCRIPTIONS: async (context) => {
+		await context.dispatch('features/status/SUBSCRIBE_STATUS', null, {
+			root: true,
+		});
+		return Promise.allSettled([
+			context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION'),
+			context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT'),
+			context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED'),
+			context.dispatch('features/call/SUBSCRIBE_CALLS', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
+				root: true,
+			}),
+			context.dispatch('features/job/SUBSCRIBE_JOBS', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/missed/INITIALIZE_MISSED', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+		]);
 	},
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
