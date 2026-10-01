@@ -1,4 +1,4 @@
-import { WebSocketConnectionState } from '../../../../../../ui/enums/WebSocketConnectionState.enum.ts';
+import { getAllClientConversations } from '../../../scripts/getClientConversations';
 import { getClientName } from '../../../scripts/getClientName.js';
 
 const state = {
@@ -11,15 +11,10 @@ const getters = {
 		getters.IS_SEARCH_ACTIVE && rootState.features.chat.active.isLoading,
 	SEARCH_RESULTS: (state, getters, rootState) => {
 		if (!state.query) return [];
-		if (rootState.client.state !== WebSocketConnectionState.Connected)
-			return [];
-
-		const client = rootState.client.getClientSync();
-		if (!client) return [];
 
 		const query = state.query.trim().toLowerCase();
 
-		return client.allConversations().filter((chat) => {
+		return getAllClientConversations(rootState).filter((chat) => {
 			return getClientName(chat.members).toLowerCase().includes(query);
 		});
 	},

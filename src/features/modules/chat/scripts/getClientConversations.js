@@ -14,7 +14,11 @@ export const getAllClientConversations = (rootState) => {
 	const client = rootState.client.getClientSync();
 	if (!client) return [];
 
-	return client.allConversations();
+	/**  @author r.zaritskyi
+	 *
+	 *  [WTEL-10532] video call chats (meetingId) live only inside their call
+	 * */
+	return client.allConversations().filter((chat) => !chat.meetingId);
 };
 
 export const getClientChats = (rootState) =>
