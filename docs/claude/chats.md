@@ -47,6 +47,11 @@ field, off the shared `getClientChats()` helper: `client.allConversations()` (wh
 `Array.from(conversationStore.values())` — the SDK store itself, nothing copied), filtered by
 `!chat.closedAt`, and empty until the socket state is `Connected`.
 
+Video call chats (`chat.meetingId`, from `wbt_meeting_id`) are dropped in
+`getAllClientConversations()`. The SDK keeps them in `conversationStore` but never emits
+their chat events or destroys them. They are shown only inside the call, via
+`call.conversation` (WTEL-10532).
+
 ## What `/chat/dialogs` returns
 
 Verified against the generated zod schemas in `@webitel/api-services/gen-wire`:
@@ -77,7 +82,7 @@ exactly `cc_*` / `wbt_*`. Hence `snakeToCamel(['context'])` in our API client.
   `client-handlers` actions spread in. It holds no `state` of its own.
 - **`active`** — `visibleChatIds` + `size` + `isLoading`; `ALL_CHAT_LIST` is everything the
   client holds (counters, "has more"), `VISIBLE_CHAT_LIST` is only what the panel shows.
-- **`active/search`** — a **local** filter over `client.allConversations()` by
+- **`active/search`** — a **local** filter over `getAllClientConversations()` by
   `getClientName`, not a REST search: it sees every chat already in the SDK store, including
   ones outside `visibleChatIds`. `IS_SEARCH_LOADING` only mirrors `active.isLoading`.
 - **`closed`** with submodules `unprocessed` and `processed` — REST `AgentChatsAPI`,
