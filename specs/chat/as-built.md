@@ -44,6 +44,11 @@ Total ≈1650 lines across the JS/TS files.
 Containers: `active-queue`, `manual-queue`, `closed-queue` — matching the three
 documented lists.
 
+Video call chats (`chat.meetingId`) never reach the active list, the local
+search or post-processing: `getAllClientConversations()` drops them
+([WTEL-10532](https://webitel.atlassian.net/browse/WTEL-10532)). They are shown
+only inside their call — see [`../video/as-built.md`](../video/as-built.md) §7.
+
 Two preview densities: `chat-queue-preview-md.vue` and
 `chat-queue-preview-sm.vue`, plus a shared `last-message-container.vue`
 (implements [WPR/1207042065](https://webitel.atlassian.net/wiki/spaces/WPR/pages/1207042065/26.02+Chats+Workspace),

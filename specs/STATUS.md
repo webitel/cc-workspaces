@@ -1,8 +1,8 @@
 # Status
 
-Last updated: **2026-09-30**, against `@webitel/workspace` **26.8.0**
-(main merged in at `83694b73`; specs re-checked against the 28 commits from
-`6f725bc0`).
+Last updated: **2026-10-02**, against `@webitel/workspace` **26.8.0**
+(main merged in at `e3412b5d`, main at `4e74e4b6`; specs re-checked against
+WTEL-10532, the only change since `83694b73`).
 
 > Read this first when resuming work. It is the handover: what exists, how it was
 > built, what is unfinished, and what must not be repeated.

@@ -147,6 +147,12 @@ commits into `features/chat/unseen` and reads `UNSEEN_COUNT` back out, so the
 badge on the `Chat` tab of `call-header.vue` is driven by the chat channel's
 store. Confirmed in code.
 
+The two also share a data source: the call's `Conversation` sits in the SDK
+`conversationStore` next to ordinary chats. Before
+[WTEL-10532](https://webitel.atlassian.net/browse/WTEL-10532) it leaked into the
+chat list and search; `getAllClientConversations()` now drops chats with a
+`meetingId`. Separation is enforced by that filter, not by structure.
+
 Everything else remains unshared: quick replies
 ([`../chat/delta.md`](../chat/delta.md) H-04), contact history and the
 `@webitel/ui-chats` machinery have no video-call equivalent. **Still

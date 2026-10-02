@@ -145,6 +145,12 @@ component (`the-video-call-chat.vue`), **separate from the `features/chat`
 domain**. In-video-call chat does not reuse the chat channel's machinery — with
 one exception.
 
+The data source, however, is shared: the SDK keeps the call's `Conversation` in
+the same `conversationStore` as ordinary chats. `features/chat` filters it out by
+`meetingId` in `getAllClientConversations()`, so it does not appear in the chat
+list, search or post-processing
+([WTEL-10532](https://webitel.atlassian.net/browse/WTEL-10532)).
+
 `video-call/modules/chat/composables/useVideoCallChatUnseen.ts`
 ([WTEL-8866](https://webitel.atlassian.net/browse/WTEL-8866)) owns both the
 `isCallChatExist` flag and the unseen badge, and it stores the count in the
