@@ -20,6 +20,7 @@ jobs:
       id-token: write
 
     with:
+      versioning: calver
       development-branch: ${{ github.event.repository.default_branch }}
       triggered-branch: ${{ github.ref_name }}
       arch: ${{ vars.BUILD_ARCH }}
@@ -50,9 +51,9 @@ jobs:
     with:
       arch: ${{ matrix.arch }}
       version: ${{ needs.prepare.outputs.version }}
-      version-build: ${{ github.run_number }}
+      version-build: ${{ needs.prepare.outputs.version-build }}
       build-timestamp: ${{ needs.prepare.outputs.build-timestamp }}
-      prerelease: ${{ github.event.repository.default_branch == github.ref_name && 'dev' || '' }}
+      prerelease: ${{ needs.prepare.outputs.prerelease }}
       package-name: webitel-agent-workspace-app
       package-description: ${{ github.event.repository.description }}
       app-root: /opt/www/workspaces
@@ -74,7 +75,7 @@ jobs:
     secrets: inherit
     with:
       arch: ${{ fromJSON(needs.prepare.outputs.arch-matrix)[0] }}
-      repository-environment: ${{ github.event.repository.default_branch == github.ref_name && 'acceptance' || format('{0}-releases', needs.prepare.outputs.version) }}
+      repository-environment: ${{ needs.prepare.outputs.repository-environment }}
       deb-package-pattern: "webitel-agent-workspace-app*.deb"
 
   publish:
@@ -90,9 +91,9 @@ jobs:
     secrets: inherit
     with:
       arch: ${{ matrix.arch }}
-      repository-environment: ${{ github.event.repository.default_branch == github.ref_name && 'acceptance' || format('{0}-releases', needs.prepare.outputs.version) }}
+      repository-environment: ${{ needs.prepare.outputs.repository-environment }}
       deb-package-pattern: "webitel-agent-workspace-app*.deb"
-      deb-component: ${{ github.event.repository.default_branch == github.ref_name && 'dev' || format('{0}-releases', needs.prepare.outputs.version) }}
+      deb-component: ${{ needs.prepare.outputs.deb-component }}
       deb-codename: ${{ matrix.codename }}
       deb-s3-bucket-name: ${{ vars.DEB_S3_BUCKET_NAME }}
       deb-s3-bucket-region: ${{ vars.DEB_S3_DEFAULT_REGION }}

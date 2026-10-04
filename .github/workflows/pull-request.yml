@@ -19,6 +19,7 @@ jobs:
       id-token: write
 
     with:
+      versioning: calver
       development-branch: ${{ github.event.repository.default_branch }}
       triggered-branch: ${{ github.event.pull_request.base.ref }}
 
@@ -43,9 +44,9 @@ jobs:
     with:
       arch: all
       version: ${{ needs.prepare.outputs.version }}
-      version-build: ${{ github.run_number }}
+      version-build: ${{ needs.prepare.outputs.version-build }}
       build-timestamp: ${{ needs.prepare.outputs.build-timestamp }}
-      prerelease: dev~pr${{ github.event.pull_request.number }}
+      prerelease: ${{ needs.prepare.outputs.prerelease }}
       package-name: webitel-agent-workspace-app
       package-description: ${{ github.event.repository.description }}
       app-root: /opt/www/workspaces
