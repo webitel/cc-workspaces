@@ -38,13 +38,13 @@
 
 <script>
 import isEmpty from '@webitel/ui-sdk/src/scripts/isEmpty';
-import { debounce } from 'lodash-es';
 import { nextTick } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
+import { useProcessingAutosave } from '../../../composables/useProcessingAutosave';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
 import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
@@ -58,9 +58,6 @@ import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
 import RichTextEditor from './components/rich-text-editor.vue';
-
-const AUTOSAVE_DEBOUNCE_MS = 1500;
-const AUTOSAVE_BEFORE_TIMEOUT_MS = 1000;
 
 export default {
 	name: 'TheProcessingForm',
@@ -82,6 +79,15 @@ export default {
 		processingModuleMixin,
 		sizeMixin,
 	],
+	setup(props) {
+		const autosave = useProcessingAutosave({
+			attempt: () => props.task.attempt,
+			save: (attempt, fields) => attempt.saveForm(null, fields),
+		});
+		return {
+			autosave,
+		};
+	},
 	data: () => ({
 		namespace: 'ui/infoSec/processing/form',
 		processingComponent: {
@@ -92,15 +98,11 @@ export default {
 			'form-select-case-status': 'form-case-status-select',
 		},
 		hotkeyUnsubscribers: [],
-		debouncedAutosave: null,
 	}),
 	computed: {
 		...mapGetters('workspace', {
 			isCall: 'IS_CALL_WORKSPACE',
 		}),
-		now() {
-			return this.$store.state.ui.now.now;
-		},
 		formTitle() {
 			return this.task.attempt.form?.title || '';
 		},
@@ -117,6 +119,8 @@ export default {
 	methods: {
 		...mapActions({
 			sendForm(dispatch, payload) {
+				// a pending autosave must not reach the next step of a multi-step form
+				this.autosave.cancel();
 				return dispatch(`${this.namespace}/SEND_FORM`, payload);
 			},
 			sendReporting(dispatch, payload) {
@@ -219,28 +223,11 @@ export default {
 		change({ el, value }) {
 			el.value = value;
 			nextTick(() => {
+				const fields = formattingFormBeforeSend(this.formBody);
 				// we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
-				if (this.isCall)
-					this.task.attempt.form.fields = formattingFormBeforeSend(
-						this.formBody,
-					);
-				// pass the attempt so debounce.flush() re-invokes with the last one,
-				// saving the right task even after keep-alive reuse for another task
-				this.debouncedAutosave(this.task.attempt);
+				if (this.isCall) this.task.attempt.form.fields = fields;
+				this.autosave.schedule(this.task.attempt, fields);
 			});
-		},
-		autosaveForm(attempt) {
-			if (!attempt?.form || !attempt.processingAutosave) return;
-			const fields =
-				attempt.form.fields ||
-				formattingFormBeforeSend(attempt.form.body || []);
-			attempt.saveForm(null, fields);
-		},
-		flushAutosave() {
-			this.debouncedAutosave.flush();
-		},
-		handleVisibilityChange() {
-			if (document.visibilityState === 'hidden') this.flushAutosave();
 		},
 		sendTableAction({ action, componentId, row }) {
 			const vars = {
@@ -260,43 +247,16 @@ export default {
 			},
 			immediate: true,
 		},
-		// друга лінія: активний таск близько таймауту, а debounce міг не спрацювати
-		// (оператор друкує без пауз) → форсуємо збереження, поки attempt живий
-		now(currentNow) {
-			const attempt = this.task.attempt;
-			if (!attempt?.processingTimeoutAt) return;
-			const msLeft = attempt.processingTimeoutAt - currentNow;
-			if (msLeft > AUTOSAVE_BEFORE_TIMEOUT_MS || msLeft <= 0) return;
-			this.flushAutosave();
-		},
-		// перемикання на інший таск: зберігаємо незбережені зміни попереднього,
-		// поки спільний debounce-таймер не скасувався введенням у новий таск
-		'task.attempt.id'() {
-			this.flushAutosave();
-		},
 	},
-	created() {
-		this.debouncedAutosave = debounce(this.autosaveForm, AUTOSAVE_DEBOUNCE_MS);
-	},
-
 	mounted() {
 		this.setupAutofocus();
 		this.setupHotkeys();
-		document.addEventListener('visibilitychange', this.handleVisibilityChange);
-		window.addEventListener('pagehide', this.flushAutosave);
 	},
 
 	unmounted() {
 		this.hotkeyUnsubscribers.forEach((unsubscribe) => {
 			unsubscribe();
 		});
-		document.removeEventListener(
-			'visibilitychange',
-			this.handleVisibilityChange,
-		);
-		window.removeEventListener('pagehide', this.flushAutosave);
-		this.flushAutosave();
-		this.debouncedAutosave.cancel();
 	},
 };
 </script>
