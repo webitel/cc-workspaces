@@ -14,6 +14,7 @@ const { t } = i18n.global;
 const state = {
 	isClosedChatLoaded: false,
 	closedChatFirstMessageId: null,
+	next: false,
 };
 
 const getters = {
@@ -63,33 +64,89 @@ const actions = {
 		),
 
 	LOAD_CLOSED_CHAT: async (context, chat) => {
+		let chatWithMessages = chat;
+		context.commit('SET_NEXT', false);
 		try {
-			const { items } = await CatalogAPI.getChatMessagesList({
-				chatId: chat.id,
+			/**
+			 * @author @OleksandrPalonnyi
+			 *
+			 * [WTEL-9955](https://webitel.atlassian.net/browse/WTEL-9955)
+			 *
+			 * conversationId is needed when the chat is closed and post-processing is
+			 * in progress, because chat.id doesn't resolve a closed chat (backend specific) [WTEL-9955]
+			 */
+			// the dialog lives on after a transfer: cut it where this agent left [WTEL-10384]
+			const { items, next } = await CatalogAPI.getChatMessagesList({
+				chatId: chat.conversationId || chat.id,
+				offsetDate: chat.closedAt,
 			});
 
-			// wtf? – https://webitel.atlassian.net/browse/WTEL-5515?focusedCommentId=641895
-			chat.messages = formatChatMessages(items);
+			// chat.messages is read-only, so clone with messages instead of mutating it
+			chatWithMessages = {
+				...chat,
+				messages: formatChatMessages(items),
+			};
+			context.commit('SET_NEXT', next);
 		} catch (err) {
 			throw applyTransform(err, [
 				notify,
 			]);
 		} finally {
-			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
+			await context.dispatch('features/chat/SET_WORKSPACE', chatWithMessages, {
 				root: true,
 			});
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
 		}
+
+		return chatWithMessages;
+	},
+
+	LOAD_MORE_CLOSED_CHAT_MESSAGES: async (context) => {
+		const chat = context.rootGetters['features/chat/CHAT_ON_WORKSPACE'];
+		const messages = chat.messages || [];
+		const oldestMessage = messages[0];
+		if (!oldestMessage) return;
+
+		const chatId = chat.conversationId || chat.id;
+
+		try {
+			const { items, next } = await CatalogAPI.getChatMessagesList({
+				chatId,
+				offsetDate: oldestMessage.createdAt,
+			});
+
+			const currentChat =
+				context.rootGetters['features/chat/CHAT_ON_WORKSPACE'];
+			if ((currentChat?.conversationId || currentChat?.id) !== chatId) return;
+
+			const olderMessages = formatChatMessages(items);
+
+			context.commit('SET_NEXT', next);
+			await context.dispatch(
+				'features/chat/SET_WORKSPACE',
+				{
+					...chat,
+					messages: [
+						...olderMessages,
+						...messages,
+					],
+				},
+				{
+					root: true,
+				},
+			);
+		} catch (err) {
+			throw applyTransform(err, [
+				notify,
+			]);
+		}
 	},
 	OPEN_CLOSED_CHAT: async (context, chat) => {
-		context.commit('features/chat/unseen/REMOVE_UNSEEN_CHAT', chat, {
-			root: true,
-		});
-
 		if (!chat.contact?.id) {
 			await context.dispatch('LOAD_CLOSED_CHAT', chat);
 		} else {
 			context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
+			context.commit('SET_NEXT', false);
 			await context.dispatch('features/chat/SET_WORKSPACE', chat, {
 				root: true,
 			});
@@ -97,7 +154,6 @@ const actions = {
 	},
 	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
 		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
 
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
@@ -109,23 +165,30 @@ const actions = {
 				},
 			);
 
-			await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
-		} catch (err) {
-			throw applyTransform(err, [
-				notify,
-			]);
+			const isFoundInHistory = await context.dispatch(
+				'FIND_TARGET_CHAT_IN_HISTORY',
+				chat,
+			);
+
+			if (!isFoundInHistory) {
+				// archive holds finished dialogs only; a transferred one is still open [WTEL-10384]
+				const loadedChat = await context.dispatch('LOAD_CLOSED_CHAT', chat);
+				const [firstMessage] = loadedChat?.messages || [];
+
+				if (firstMessage) {
+					context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', firstMessage.id);
+				}
+			}
+			// no catch here: every dispatched action notifies on its own, a second one would duplicate it
 		} finally {
 			context.commit('SET_IS_CLOSED_CHAT_LOADED', true);
 		}
 	},
 
 	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
-		// recursive function
+		// recurses page by page; true once the target chat is found
 		const contactId = chat.contact.id;
 		const targetChatId = chat.id;
-		const next = context.rootState.features.chat.chatHistory.next;
-
-		if (!next) return;
 
 		const closedChatFirstMessage = await context.dispatch(
 			'FIND_TARGET_CHAT_FIRST_MESSAGE',
@@ -137,13 +200,30 @@ const actions = {
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
 				closedChatFirstMessage.id,
 			);
-			return; // recursive function exit
+			return true;
+		}
+
+		const { chatHistoryMessages, next } =
+			context.rootState.features.chat.chatHistory;
+
+		if (!next) return false;
+
+		// pages run newest to oldest: past the chat's own start it can no longer appear
+		const [oldestLoadedMessage] = chatHistoryMessages;
+
+		if (
+			chat.startedAt &&
+			oldestLoadedMessage &&
+			Number(oldestLoadedMessage.createdAt) < Number(chat.startedAt)
+		) {
+			return false;
 		}
 
 		await context.dispatch('features/chat/chatHistory/LOAD_NEXT', contactId, {
 			root: true,
 		});
-		await context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat); // call itself until find target chat
+
+		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat
@@ -163,6 +243,7 @@ const actions = {
 	RESET_CLOSED_CHAT: async (context) => {
 		context.commit('SET_IS_CLOSED_CHAT_LOADED', false);
 		context.commit('SET_CLOSED_CHAT_FIRST_MESSAGE_ID', null);
+		context.commit('SET_NEXT', false);
 	},
 };
 
@@ -172,6 +253,9 @@ const mutations = {
 	},
 	SET_IS_CLOSED_CHAT_LOADED: (state, boolean) => {
 		state.isClosedChatLoaded = boolean;
+	},
+	SET_NEXT: (state, boolean) => {
+		state.next = boolean;
 	},
 };
 

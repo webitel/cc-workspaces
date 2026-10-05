@@ -3,7 +3,7 @@ name: build electron-workspace
 # Builds the Electron app for macOS, Linux and Windows. Manually triggered.
 #
 # Assumes electron-sip prebuilds are committed under
-# packages/electron-workspace/electron-sip/prebuilds/<platform>-<arch>/ so
+# packages/electron-sip/prebuilds/<platform>-<arch>/ so
 # install.js picks them up at `npm ci` time and skips the native compile.
 # If a prebuild is missing for a runner's platform, install.js falls back to
 # node-gyp + pjproject and the job will fail — produce prebuilds via the
@@ -73,6 +73,10 @@ jobs:
       #     security list-keychain -d user -s $KEYCHAIN_PATH $(security list-keychains -d user | tr -d '"')
           # security find-identity -v -p codesigning $KEYCHAIN_PATH
 
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
       - name: Install JS deps
         run: npm ci
 
@@ -107,6 +111,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
       - name: Install JS deps
         run: npm ci
 
@@ -134,6 +142,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
 
       - name: Install JS deps
         run: npm ci

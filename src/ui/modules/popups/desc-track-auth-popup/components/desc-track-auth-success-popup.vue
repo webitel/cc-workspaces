@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineModel, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import DescTrackAuthSuccess from '../assets/desc-track-auth-success.svg';
 import DescTrackAuthSuccessDark from '../assets/desc-track-auth-success-dark.svg';

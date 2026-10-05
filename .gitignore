@@ -24,4 +24,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-.cursor
+.claude

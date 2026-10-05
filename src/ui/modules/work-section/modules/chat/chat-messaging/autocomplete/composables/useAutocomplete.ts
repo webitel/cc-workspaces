@@ -1,6 +1,7 @@
-import { computed, ref } from 'vue';
+import { computed, type Ref, ref } from 'vue';
+import type { ChatHelperItem } from '../../types/ChatHelperItem.types';
 
-export function useAutocomplete(options = []) {
+export function useAutocomplete(options: Ref<ChatHelperItem[]> = ref([])) {
 	const isOpenAutocomplete = ref(false);
 	const search = ref('');
 
@@ -14,20 +15,14 @@ export function useAutocomplete(options = []) {
 
 	function close() {
 		isOpenAutocomplete.value = false;
+		search.value = '';
 	}
 
 	function onInput(value: string) {
-		const idx = value.lastIndexOf('/');
-		if (idx !== -1) {
-			search.value = value.slice(idx + 1);
-			open();
-		} else {
-			close();
-		}
-	}
+		const isCommand = value[0] === '/';
+		search.value = isCommand ? value.slice(1) : '';
 
-	function onKeyDown(event: KeyboardEvent) {
-		return event.key === '/' && open();
+		isCommand && autocompleteList.value.length > 0 ? open() : close();
 	}
 
 	function onBlur() {
@@ -42,7 +37,6 @@ export function useAutocomplete(options = []) {
 		open,
 		close,
 		onInput,
-		onKeyDown,
 		onBlur,
 	};
 }

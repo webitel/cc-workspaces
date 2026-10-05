@@ -18,73 +18,94 @@
         />
       </div>
       <!--    click.stop prevents focus on textarea and allows to select the message text -->
-      <message-blocked-error @click.stop v-if="message.file?.malware" />
-      <message-size-exceeded-error
-        v-else-if="isFileSizeExceeded"
-        :agent="isAgentSide"
+      <div
+        class="chat-message__body"
+        :class="{ 'chat-message__body--error': isFileMalware || isFilePolicyFailed }"
         @click.stop
-      />
-      <div class="chat-message__body" v-else @click.stop>
-        <message-player
-          v-if="props.message.file"
-          :file="props.message.file"
-          :type="props.message.file?.mime"
-          :size="props.size"
-          @initialized="handlePlayerInitialize"
-        />
-        <message-image
-          :file="props.message.file"
-          :type="props.message.file?.mime"
-          @open="emit('open-image')"
-        />
-        <message-document
-          :file="props.message.file"
-          :type="props.message.file?.mime"
-          :agent="isAgentSide"
-        />
-        <div
-          v-if="props.message?.text"
-          class="chat-message-text-wrapper"
-        >
-          <message-text
-            :text="props.message.text"
-            :with-timestamp-spacer="true"
+      >
+        <template v-if="isPhotoInvalidDimensions">
+          <message-invalid-dimensions-error />
+
+          <message-time
+            :date="props.message.createdAt"
+          />
+        </template>
+
+        <template v-else-if="hasFileError">
+          <message-blocked-error v-if="isFileMalware" />
+          <message-size-exceeded-error
+            v-else-if="isFileSizeExceeded"
             :agent="isAgentSide"
+          />
+          <message-file-policy-error
+            v-else-if="isFilePolicyFailed"
+            @click.stop
           />
 
           <message-time
             :date="props.message.createdAt"
           />
-        </div>
+        </template>
 
-        <message-time
-          v-else
-          :date="props.message.createdAt"
-        />
+        <template v-else>
+          <message-player
+            v-if="media"
+            :file="props.message.file"
+            :type="props.message.file?.mime"
+            :size="props.size"
+            @initialized="handlePlayerInitialize"
+          />
+          <message-image
+            v-else-if="image"
+            :file="props.message.file"
+            :type="props.message.file?.mime"
+            @open="emit('open-image')"
+          />
+          <message-document
+            v-else-if="documentFile"
+            :file="props.message.file"
+            :type="props.message.file?.mime"
+            :agent="isAgentSide"
+          />
+          <div
+            v-if="props.message?.text"
+            class="chat-message-text-wrapper"
+          >
+            <message-text
+              :text="props.message.text"
+              :with-timestamp-spacer="true"
+              :agent="isAgentSide"
+            />
+
+            <message-time
+              :date="props.message.createdAt"
+            />
+          </div>
+
+          <message-time
+            v-else
+            :date="props.message.createdAt"
+          />
+        </template>
       </div>
-
-      <message-time
-        v-if="message.file?.malware || isFileSizeExceeded"
-        :date="props.message.createdAt"
-      />
     </div>
-    <message-time
-      v-if="props.message.file?.malware || isFileSizeExceeded"
-      :date="props.message.createdAt"
-    />
 
     <slot name="after-message" />
   </div>
 </template>
 
 <script setup>
+import { useChatMessageFile } from '@webitel/ui-chats/ui';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
 import { computed, defineEmits, defineProps } from 'vue';
+import { AgentTypes } from '../../../../../../../features/modules/chat/enums/AgentTypes.enum';
 import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 import MessageBlockedError from './components/chat-message-blocked-error.vue';
 import MessageDocument from './components/chat-message-document.vue';
+import MessageFilePolicyError from './components/chat-message-file-police-error.vue';
 import MessageImage from './components/chat-message-image.vue';
+import MessageInvalidDimensionsError from './components/chat-message-invalid-dimensions-error.vue';
 import MessagePlayer from './components/chat-message-player.vue';
 import MessageSizeExceededError from './components/chat-message-size-exceeded-error.vue';
 import MessageText from './components/chat-message-text.vue';
@@ -113,6 +134,8 @@ const emit = defineEmits([
 	'initialized-player',
 ]);
 
+const filePolicyError = 'file_policy_fail';
+
 const userinfoStore = useUserinfoStore();
 const { userInfo } = storeToRefs(userinfoStore);
 const agentName = computed(
@@ -123,8 +146,31 @@ const isFileSizeExceeded = computed(
 	() => props.message.file && !props.message.file?.size,
 );
 
+const isFileMalware = computed(() => !!props.message.file?.malware);
+
+const isFilePolicyFailed = computed(
+	() =>
+		props.message?.variables?.template === filePolicyError ||
+		props.message?.context?.template === filePolicyError,
+);
+
+const hasFileError = computed(
+	() =>
+		isFileMalware.value || isFileSizeExceeded.value || isFilePolicyFailed.value,
+);
+
+const isPhotoInvalidDimensions = computed(
+	() => !!props.message.photoInvalidDimensions,
+);
+
+const {
+	image,
+	media,
+	document: documentFile,
+} = useChatMessageFile(props.message.file);
+
 const isInternalMember = computed(
-	() => props.message.member?.type === 'webitel',
+	() => props.message.member?.type === AgentTypes.WEBITEL,
 );
 
 const isAgent = computed(
@@ -135,11 +181,14 @@ const isTransferAgent = computed(
 	() => !props.message.member?.self && isInternalMember.value,
 );
 
-const isBot = computed(
-	() =>
-		props.message.member?.type === 'bot' ||
-		(!props.message.member?.type && !props.message.channelId),
-);
+const isBot = computed(() => {
+	const byMemberType = props.message.member?.type === AgentTypes.BOT;
+	const byMissingChannelId =
+		!props.message.member?.type && !props.message.channelId;
+	const byBotVariables = props.message.variables?.from === AgentTypes.BOT;
+
+	return byMemberType || byMissingChannelId || byBotVariables;
+});
 
 const isAgentSide = computed(() => isAgent.value || isBot.value);
 
@@ -226,6 +275,11 @@ $chat-info-gap: var(--spacing-2xs);
       color: var(--secondary-on-color);
       place-self: flex-end;
     }
+  }
+
+  &__body--error,
+  &--right &__body--error {
+    background: var(--p-error-highlight-color);
   }
 }
 </style>

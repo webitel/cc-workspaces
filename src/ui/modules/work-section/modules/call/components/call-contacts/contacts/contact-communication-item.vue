@@ -15,38 +15,40 @@
       <span class="contact-communications-item__title typo-body-2">{{ phone.number }}</span>
     </div>
     <div class="contact-communications-item__after">
-      <wt-icon-btn
-        icon="call--filled"
+      <wt-button
+        variant="outlined"
+        icon="call"
         color="success"
         :size="size"
         :disabled="showDisabled"
         @click="emit('call', phone)"
-      ></wt-icon-btn>
+      />
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { ContactsPhoneNumber } from '@webitel/api-services/gen/models';
+import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { ref, watch } from 'vue';
 
-const props = defineProps({
-	size: {
-		type: String,
-		default: 'md',
+const props = withDefaults(
+	defineProps<{
+		size?: ComponentSize;
+		phone: ContactsPhoneNumber;
+		loading?: boolean;
+	}>(),
+	{
+		size: ComponentSize.MD,
+		loading: false,
 	},
-	phone: {
-		type: Object,
-		required: true,
-	},
-	loading: {
-		type: Boolean,
-		default: false,
-	},
-});
+);
 
-const emit = defineEmits([
-	'call',
-]);
+const emit = defineEmits<{
+	call: [
+		phone: ContactsPhoneNumber,
+	];
+}>();
 
 // sinhronizetion with loader on wt-rounded-action
 // TODO: change disable to loading in task https://webitel.atlassian.net/browse/WTEL-9803

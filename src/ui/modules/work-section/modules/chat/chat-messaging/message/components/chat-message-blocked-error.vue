@@ -19,9 +19,6 @@ const { t } = useI18n();
 @use '@webitel/ui-sdk/src/css/main' as *;
 
 .chat-message-blocked-error {
-  background: var(--p-error-highlight-color);
-  border-radius: var(--spacing-xs);
-  padding: var(--spacing-xs);
   display: flex;
   flex-direction: column;
   align-items: center;

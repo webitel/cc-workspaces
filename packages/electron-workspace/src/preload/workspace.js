@@ -14,7 +14,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 	if (window.$store) {
 		subscribeMutation(window.$store);
 		subscribeAction(window.$store);
-		checkActiveTask();
 	}
 	window.ipcRenderer = ipcRenderer;
 	try {
@@ -26,7 +25,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 			e,
 		);
 	}
-	ipcRenderer.send('hide-disconnect-popup');
+	closeDisconnectPopup();
 });
 
 window.addEventListener(
@@ -168,7 +167,7 @@ ipcRenderer.on('call-action', (event, call) => {
 
 function subscribeAction(store) {
 	store.subscribeAction((action, state) => {
-		// console.log(action.type); //features/chat/ACCEPT
+		// console.log(action.type);
 		switch (action.type) {
 			case 'features/call/HOLD_OTHER_CALLS':
 				setActiveCall(
@@ -183,6 +182,10 @@ function subscribeAction(store) {
 				updateCall(action.payload.callId, state, action.type);
 				break;
 
+			case 'features/call/HANDLE_CALL_END':
+				updateCall(action.payload?.id, state, action.type);
+				break;
+
 			case 'features/chat/ACCEPT':
 				setActiveChat(action.payload);
 				break;
@@ -190,11 +193,13 @@ function subscribeAction(store) {
 			case 'workspace/CLOSE_SESSION':
 				destroyNotification();
 				break;
-			case 'globals/OPEN_DISCONNECT_POPUP':
+			case 'features/globals/OPEN_DISCONNECT_POPUP':
 				destroyNotification();
 				openDisconnectPopup();
 				break;
-
+			case 'features/globals/CLOSE_DISCONNECT_POPUP':
+				closeDisconnectPopup();
+				break;
 			case 'features/status/SUBSCRIBE_STATUS':
 				// console.warn('SUBSCRIBE_STATUS', window.cli);
 				changeSIP(cli, {
@@ -212,7 +217,7 @@ function subscribeAction(store) {
 
 function subscribeMutation(store) {
 	store.subscribe((mutation, state) => {
-		console.log(mutation.type);
+		// console.log(mutation.type);
 		switch (
 			mutation.type //features/chat/ADD_CHAT
 		) {
@@ -267,6 +272,9 @@ function openDisconnectPopup() {
 	ipcRenderer.send('open-disconnect-popup');
 }
 
+function closeDisconnectPopup() {
+	ipcRenderer.send('hide-disconnect-popup');
+}
 function restoreNotification(callList) {
 	const call = getActiveCall(callList);
 	if (call) setActiveCall(call);
@@ -354,47 +362,6 @@ function createChatObject(payload) {
 function setUserStatus(status) {
 	ipcRenderer.send('update-tray', status);
 }
-////////
-
-//todo fixme
-ipcRenderer.on('reset-timer', (event, arg) => {
-	const tasks = $store.state.features.status?.agent?.task;
-	if (tasks) {
-		const task = tasks.get(arg);
-		task.renew();
-	}
-});
-
-////////////
-
-ipcRenderer.on('set-processing-property', (event, arg = '') => {
-	const call = fetCallById(arg.id);
-	if (call) {
-		switch (arg.prop) {
-			case 'isScheduleCall':
-				call.postProcessData.isScheduleCall = arg.value;
-				break;
-
-			case 'nextDistributeAt':
-				call.postProcessData.nextDistributeAt = arg.value;
-				break;
-
-			case 'success':
-				call.postProcessData.success = arg.value;
-				break;
-
-			default:
-		}
-		$store.dispatch('reporting/SET_PROPERTY', arg);
-	}
-});
-
-ipcRenderer.on('send-reporting', (event, arg) => {
-	const call = fetCallById(arg);
-	if (call && call.postProcessData) {
-		call.reporting(call.postProcessData);
-	}
-});
 
 ipcRenderer.on('make-call', async (event, destination) => {
 	const cli = window.cli;
@@ -402,54 +369,3 @@ ipcRenderer.on('make-call', async (event, destination) => {
 		destination,
 	});
 });
-
-ipcRenderer.on('chack-info', (event, arg) => {
-	getActiveTask();
-});
-
-//setInterval(getActiveTask, 80)
-function checkActiveTask() {
-	setInterval(getActiveTask, 80);
-}
-
-function getActiveTask() {
-	if (!$store) return;
-	const list = $store.state.features.call.callList;
-	if (list) {
-		const call = list.find(
-			(call) => call.hangupAt !== 0 && call.allowReporting,
-		);
-		if (call) {
-			setProcessing(call);
-		} else {
-			ipcRenderer.send('clear-processing');
-		}
-	}
-}
-
-function fetCallById(callId) {
-	return $store.state?.features?.call?.callList?.find(
-		(call) => call.id === callId,
-	);
-}
-
-function setProcessing(call) {
-	const ob = {
-		id: call.id,
-		taskId: call.task.id,
-		state: call.task.state,
-		startProcessingAt: call.task.startProcessingAt,
-		renewalSec: call.task.renewalSec,
-		processingTimeoutAt: call.task.processingTimeoutAt,
-		processingSec: call.task.processingSec,
-		memberId: call.task.distribute.member_id,
-		now: $store.state?.ui?.now.now,
-		reporting: {
-			isSuccess: call.postProcessData?.success,
-			nextDistributeAt: call.postProcessData?.nextDistributeAt,
-			isScheduleCall: call.postProcessData?.isScheduleCall,
-		},
-	};
-
-	ipcRenderer.send('update-procesing', ob);
-}

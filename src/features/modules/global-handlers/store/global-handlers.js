@@ -1,4 +1,6 @@
+import { eventBus } from '@webitel/ui-sdk/scripts';
 import { watch } from 'vue';
+import i18n from '../../../../app/locale/i18n';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
 
 const state = {
@@ -14,12 +16,14 @@ const actions = {
 		context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED');
+		context.dispatch('SUBSCRIBE_TO_PHONE_UNREGISTERED_NOTIFICATION');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
 	},
 	SUBSCRIBE_TO_CONNECTION_STATE: (context) => {
 		let stop = null;
+		let isConnectionLost = false;
 
 		stop = watch(
 			() => context.rootState.client.state,
@@ -29,11 +33,19 @@ const actions = {
 					value === WebSocketConnectionState.Reconnecting ||
 					value === WebSocketConnectionState.Disconnected
 				) {
+					isConnectionLost = true;
 					context.dispatch('OPEN_DISCONNECT_POPUP');
 				}
 
 				if (value === WebSocketConnectionState.Connected) {
 					context.dispatch('CLOSE_DISCONNECT_POPUP');
+
+					// first session is opened by OPEN_SESSION; here we only re-bind
+					// subscriptions to the new client after the socket comes back
+					if (isConnectionLost && context.rootState.client.getClientSync()) {
+						isConnectionLost = false;
+						context.dispatch('RESTORE_CLIENT_SUBSCRIPTIONS');
+					}
 				}
 			},
 			{
@@ -42,6 +54,34 @@ const actions = {
 		);
 
 		return stop;
+	},
+	RESTORE_CLIENT_SUBSCRIPTIONS: async (context) => {
+		await context.dispatch('features/status/SUBSCRIBE_STATUS', null, {
+			root: true,
+		});
+		return Promise.allSettled([
+			context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION'),
+			context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT'),
+			context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED'),
+			context.dispatch('features/call/SUBSCRIBE_CALLS', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/SUBSCRIBE_CHATS', null, {
+				root: true,
+			}),
+			context.dispatch('features/job/SUBSCRIBE_JOBS', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/missed/INITIALIZE_MISSED', null, {
+				root: true,
+			}),
+			context.dispatch('features/call/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+			context.dispatch('features/chat/manual/INITIALIZE_MANUAL_LIST', null, {
+				root: true,
+			}),
+		]);
 	},
 	SUBSCRIBE_TO_CLIENT_DISCONNECT: async (context) => {
 		const client = await context.rootState.client.getCliInstance();
@@ -87,12 +127,27 @@ const actions = {
 		context.commit('features/call/CLEAR_CALL_INFO', null, {
 			root: true,
 		});
-		context.dispatch('features/chat/SET_CHAT_LIST', [], {
+		context.commit('features/chat/active/SET_VISIBLE_CHAT_IDS', [], {
 			root: true,
 		});
 		context.commit('features/job/SET_JOB_LIST', [], {
 			root: true,
 		});
+	},
+	SUBSCRIBE_TO_PHONE_UNREGISTERED_NOTIFICATION: (context) => {
+		watch(
+			() => context.state.isPhoneReg,
+			(value, prev) => {
+				if (prev === true && value === false) {
+					eventBus.$emit('notification', {
+						type: 'error',
+						text: i18n.global.t(
+							'error.websocket.store_sql_user_get_default_device_app_error',
+						),
+					});
+				}
+			},
+		);
 	},
 };
 

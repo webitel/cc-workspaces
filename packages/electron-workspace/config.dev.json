@@ -4,5 +4,5 @@
 	"useSIP": true,
 	"timeoutSIP": "80",
 	"debugMode": true,
-	"hidePostProcessing": false
+	"openAtLogin": false
 }

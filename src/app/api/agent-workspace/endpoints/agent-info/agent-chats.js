@@ -1,3 +1,3 @@
-import { agentChats } from '@webitel/ui-sdk/src/api/clients/index.js';
+import { AgentChatsAPI } from '@webitel/api-services/api';
 
-export default agentChats;
+export default AgentChatsAPI;

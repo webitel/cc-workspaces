@@ -58,8 +58,8 @@
 </template>
 
 <script setup>
+import { ServiceCatalogsAPI as caseServiceCatalogs } from '@webitel/api-services/api';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { caseServiceCatalogs } from '@webitel/ui-sdk/src/api/clients/index.js';
 import deepCopy from 'deep-copy';
 import { computed, defineEmits, onMounted, ref, useAttrs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';

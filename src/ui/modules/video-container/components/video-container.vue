@@ -3,7 +3,7 @@
     v-model:visible="galleriaVisible"
     v-model:active-index="galleriaActiveIndex"
     :value="galleriaData"
-    @download="downloadFile(screenshotData[galleriaActiveIndex].id)"
+    @download="downloadFile(screenshotData[galleriaActiveIndex].id, screenshotData[galleriaActiveIndex].view_name)"
     @delete="handleDeleteFromGalleria"
   />
   <video-call
@@ -48,9 +48,10 @@ import {
 	VideoCallAction,
 } from '@webitel/ui-sdk/modules/CallSession';
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import { storeToRefs } from 'pinia';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-
+import { useContactStore } from '../../info-section/modules/client-info/modules/contact/store/contact';
 import { useScreenShot } from '../composable/useScreenshot';
 import {
 	ScreenshotFileItem,
@@ -59,6 +60,8 @@ import {
 } from '../types/videoCall.types';
 
 const store = useStore();
+const contactStore = useContactStore();
+const { contact } = storeToRefs(contactStore);
 
 const {
 	screenshotStatus,
@@ -80,19 +83,29 @@ const screenshotData = ref<ScreenshotFileItem[]>([]);
 const videoContainerSize = ref<ComponentSize>(ComponentSize.SM);
 
 type WorkspaceCall = {
+	id?: string;
+	displayName?: string;
 	peerStreams?: MediaStream[];
 	localStreams?: MediaStream[];
-	[key: string]: unknown;
+	mutedVideo?: boolean;
+	recordings?: boolean;
+	remoteAudioMuted?: boolean;
+	isHold?: boolean;
+	screenshot?: () => Promise<
+		| {
+				blob: Blob;
+				file?: File;
+		  }
+		| undefined
+	>;
+	startRecord?: () => Promise<void> | void;
+	stopRecord?: () => Promise<void> | void;
 };
 
 const call = computed<WorkspaceCall>(
-	() => store.getters['features/call/CALL_ON_WORKSPACE'] || {},
+	() => store.getters['features/call/ACTIVE_VIDEO_CALL'] || {},
 );
-const callIsOnHold = computed<boolean>(() => {
-	return store.getters['features/call/CALL_ON_WORKSPACE']?.isHold || false;
-});
-
-const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
+const callIsOnHold = computed<boolean>(() => !!call.value.isHold);
 
 const peerStreams = computed<MediaStream[]>(() => call.value.peerStreams || []);
 const localStreams = computed<MediaStream[]>(
@@ -129,7 +142,7 @@ const isReceiverVideo = computed(() =>
 
 const isVideo = computed(() => isSenderVideo.value && isReceiverVideo.value);
 const userName = computed(
-	() => contact.value?.name || call.value.displayName || '',
+	() => contact.value?.name?.commonName || call.value.displayName || '',
 );
 const mutedVideo = computed(() => call.value.mutedVideo);
 

@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chatlar',
+			searchByUsername: 'Foydalanuvchi nomi bo‘yicha qidirish',
 			preview: {
 				md: {
 					active: 'Faol chatlar',
@@ -209,6 +210,8 @@ export default {
 			chatsIncorrectFileSize: 'Fayl hajmi notoʻgʻri', // TODO: Translate
 			errors: {
 				uploadFileLimitSize: 'Fayl hajmi limiti oshib ketdi',
+				filePolicyFail: 'Taqiqlangan fayl formati',
+				photoInvalidDimensions: "Rasm o'lchamlari noto'g'ri",
 			},
 		},
 	},
@@ -264,6 +267,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Majburiy tanaffus',
 			continueWork: 'Ishni davom ettirish',
+			goOffline: 'Oflayn rejimga o‘tish',
 		},
 	},
 	disconnectPopup: {
@@ -313,9 +317,14 @@ export default {
 				'Kameraga ruxsat yoʻq. Amalni bajarib boʻlmaydi.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Workspace ishlamaydi. Litsenziya muddati tugagan.',
+			store_sql_user_get_default_device_app_error:
+				'Sizda qurilma yoʻq. Qoʻngʻiroqlar bilan ishlay olmaysiz.',
 		},
 		endpoint: {
 			noLicense: 'Workspace ishlamaydi. Litsenziya muddati tugagan.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Xabar yuborildi, lekin yetkazilmadi',
 		},
 	},
 	notifications: {

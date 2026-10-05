@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import ConfigurationAPI from '@webitel/ui-sdk/src/api/clients/configurations/configurations';
+import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { createPinia } from 'pinia';
 import { vi } from 'vitest';
 import { createStore } from 'vuex';
@@ -21,8 +21,8 @@ describe('Client Info Tab', () => {
 			},
 		});
 
-	it('always renders client-info chips', async () => {
-		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
+	it('always renders client-info queue', async () => {
+		vi.spyOn(ConfigurationsAPI, 'getList').mockResolvedValue({
 			items: [],
 		});
 		const store = buildStore();
@@ -42,14 +42,14 @@ describe('Client Info Tab', () => {
 		expect(
 			wrapper
 				.findComponent({
-					name: 'client-info-chips',
+					name: 'client-info-queue',
 				})
 				.exists(),
 		).toBe(true);
 	});
 
 	it('hides contact block in job workspace', async () => {
-		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
+		vi.spyOn(ConfigurationsAPI, 'getList').mockResolvedValue({
 			items: [],
 		});
 		const store = buildStore({
@@ -72,7 +72,7 @@ describe('Client Info Tab', () => {
 	});
 
 	it('hides contact block when hideContact flag provided by task', async () => {
-		vi.spyOn(ConfigurationAPI, 'getList').mockResolvedValue({
+		vi.spyOn(ConfigurationsAPI, 'getList').mockResolvedValue({
 			items: [],
 		});
 		const store = buildStore();

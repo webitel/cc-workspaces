@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chat-uri',
+			searchByUsername: 'Căutare după nume de utilizator',
 			preview: {
 				md: {
 					active: 'Chat-uri active',
@@ -210,6 +211,8 @@ export default {
 			errors: {
 				uploadFileLimitSize:
 					'Limita de dimensiune a fișierului a fost depășită',
+				filePolicyFail: 'Format de fișier interzis',
+				photoInvalidDimensions: 'Dimensiuni incorecte ale imaginii',
 			},
 		},
 	},
@@ -265,6 +268,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Pauză externă',
 			continueWork: 'Continuă lucrul',
+			goOffline: 'Treci offline',
 		},
 	},
 	disconnectPopup: {
@@ -315,10 +319,15 @@ export default {
 				'Accesul la cameră este refuzat. Nu se poate efectua acțiunea.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
+			store_sql_user_get_default_device_app_error:
+				'Nu aveți niciun dispozitiv. Nu puteți lucra cu apeluri.',
 		},
 		endpoint: {
 			noLicense:
 				'Nu puteți lucra în Spațiul de lucru deoarece licența dvs. a expirat.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Mesaj trimis, dar nelivrat',
 		},
 	},
 	notifications: {

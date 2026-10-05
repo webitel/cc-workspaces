@@ -18,13 +18,14 @@
     </template>
 
     <template #after>
-      <wt-rounded-action
-          :size="props.size"
-          :loading="props.loading"
-          icon="call--filled"
-          color="success"
-          rounded
-          @click="handleInput"
+      <wt-button
+        variant="outlined"
+        :size="props.size"
+        :loading="props.loading"
+        icon="call"
+        color="success"
+        rounded
+        @click="handleInput"
       />
     </template>
   </lookup-item>
@@ -32,7 +33,7 @@
 
 <script setup lang="ts">
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, defineEmits, defineProps, withDefaults } from 'vue';
+import { computed } from 'vue';
 import { getUserStatusByPriority } from '../../../../../../../features/modules/agent-status/statusUtils/getUserStatusByPriority';
 import LookupItem from './lookup-item.vue';
 import { UserLookupItem } from './types/UserLookupItem';

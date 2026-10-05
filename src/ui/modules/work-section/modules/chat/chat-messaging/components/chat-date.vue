@@ -14,6 +14,7 @@ const props = defineProps({
 	date: {
 		type: String,
 		required: true,
+		default: '',
 	},
 });
 

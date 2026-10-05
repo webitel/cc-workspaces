@@ -1,0 +1,178 @@
+name: build electron-softphone-companion
+
+# Builds the Webitel Softphone companion utility for macOS, Linux and
+# Windows. Manually triggered.
+#
+# Assumes electron-sip prebuilds are committed under
+# packages/electron-sip/prebuilds/<platform>-<arch>/ so
+# install.js picks them up at `npm ci` time and skips the native compile.
+# If a prebuild is missing for a runner's platform, install.js falls back to
+# node-gyp + pjproject and the job will fail — produce prebuilds via the
+# build-electron-sip workflow and commit them first.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 'lts/*'
+
+defaults:
+  run:
+    working-directory: packages/electron-softphone-companion
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # macOS arm64. electron-builder's mac target rejects PNG < 512x512, and the
+  # repo only ships a 256x256 app-icon.png with no .icns, so we generate one.
+  # Signed with Developer ID cert + notarized via Apple notary service.
+  # ---------------------------------------------------------------------------
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Generate app-icon.icns
+        run: |
+          cd img
+          rm -rf app-icon.iconset
+          mkdir -p app-icon.iconset
+          sips -z 16 16     app-icon.png --out app-icon.iconset/icon_16x16.png
+          sips -z 32 32     app-icon.png --out app-icon.iconset/icon_16x16@2x.png
+          sips -z 32 32     app-icon.png --out app-icon.iconset/icon_32x32.png
+          sips -z 64 64     app-icon.png --out app-icon.iconset/icon_32x32@2x.png
+          sips -z 128 128   app-icon.png --out app-icon.iconset/icon_128x128.png
+          sips -z 256 256   app-icon.png --out app-icon.iconset/icon_128x128@2x.png
+          sips -z 256 256   app-icon.png --out app-icon.iconset/icon_256x256.png
+          sips -z 512 512   app-icon.png --out app-icon.iconset/icon_256x256@2x.png
+          sips -z 512 512   app-icon.png --out app-icon.iconset/icon_512x512.png
+          sips -z 1024 1024 app-icon.png --out app-icon.iconset/icon_512x512@2x.png
+          iconutil -c icns app-icon.iconset -o app-icon.icns
+          rm -rf app-icon.iconset
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
+      - name: Install JS deps
+        run: npm ci
+
+      # electron-builder's createKeychain feeds CSC_KEY_PASSWORD to
+      # `set-key-partition-list -k`, which wants the keychain password it
+      # generated (macCodeSign.ts importCerts). Passed only while the keychain
+      # was still unlocked from create-keychain; image 20260907 (macOS 26.6.2)
+      # has it locked by then → SecKeychainUnlock rejects it. Image 20260728
+      # (26.5.2) signed fine on the same electron-builder, same secrets.
+      # Own the keychain instead: with CSC_LINK unset at build time macPackager
+      # takes CSC_KEYCHAIN as-is and never runs that command. Keep CSC_LINK and
+      # CSC_KEY_PASSWORD off the build step or the broken path returns.
+      - name: Import signing certificate
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASS="$(openssl rand -hex 32)"
+          CERT="$RUNNER_TEMP/cert.p12"
+          # -A: CSC_LINK is base64 and may arrive unwrapped
+          printf '%s' "$CSC_LINK" | openssl base64 -d -A > "$CERT"
+          security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN"
+          # no -l/-u: never lock — a re-lock mid-build is the bug being fixed
+          security set-keychain-settings "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN"
+          security import "$CERT" -k "$KEYCHAIN" -P "$CSC_KEY_PASSWORD" \
+            -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
+          # keychain password, unlike electron-builder's call above
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -s -k "$KEYCHAIN_PASS" "$KEYCHAIN"
+          # prepend, don't replace: system keychains carry the chain roots
+          EXISTING="$(security list-keychains -d user | sed -e 's/^[[:space:]]*"//' -e 's/"$//')"
+          security list-keychains -d user -s "$KEYCHAIN" $EXISTING
+          rm -f "$CERT"
+          echo "CSC_KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+
+      - name: Build, sign, notarize (mac)
+        env:
+          CSC_KEYCHAIN: ${{ env.CSC_KEYCHAIN }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: npm run distm
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: electron-softphone-companion-mac
+          path: |
+            packages/electron-softphone-companion/dist/*.dmg
+            packages/electron-softphone-companion/dist/*.zip
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest-mac.yml
+
+  # ---------------------------------------------------------------------------
+  # Linux x64 — AppImage.
+  # ---------------------------------------------------------------------------
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Build (linux)
+        run: npm run distl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: electron-softphone-companion-linux
+          path: |
+            packages/electron-softphone-companion/dist/*.AppImage
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest-linux.yml
+
+  # ---------------------------------------------------------------------------
+  # Windows x64 — nsis/zip.
+  # ---------------------------------------------------------------------------
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install electron-sip deps
+        working-directory: packages/electron-sip
+        run: npm ci
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Build (windows)
+        run: npm run dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: electron-softphone-companion-windows
+          path: |
+            packages/electron-softphone-companion/dist/*.exe
+            packages/electron-softphone-companion/dist/*.zip
+            packages/electron-softphone-companion/dist/*.blockmap
+            packages/electron-softphone-companion/dist/latest.yml

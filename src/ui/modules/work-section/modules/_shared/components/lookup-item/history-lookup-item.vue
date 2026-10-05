@@ -28,6 +28,7 @@
        show-tooltip
        :mos-avg="item.qualityMetrics.mosAvg"
        :size="ComponentSize.SM"
+       tooltip-text-prefix="calls.connectionQuality"
       />
       {{ date }}
      </div>
@@ -41,8 +42,9 @@
 
     <template #after>
       <div class="history-lookup-item-after">
-        <wt-rounded-action
-          icon="call--filled"
+        <wt-button
+          variant="outlined"
+          icon="call"
           color="success"
           rounded
           :size="size"

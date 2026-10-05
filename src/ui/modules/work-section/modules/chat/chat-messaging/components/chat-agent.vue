@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
+import { ContactChatMessagesAPI as contactChatMessagesHistory } from '@webitel/api-services/api';
 import { WtPopover } from '@webitel/ui-sdk/components';
-import { contactChatMessagesHistory } from '@webitel/ui-sdk/src/api/clients/сontacts/index';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';

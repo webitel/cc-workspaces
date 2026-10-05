@@ -7,7 +7,23 @@ const chat = {
 	messages: [],
 };
 
-const store = createStore();
+const store = createStore({
+	state: {
+		features: {
+			chat: {
+				chatHistory: {
+					chatHistoryMessages: [],
+				},
+			},
+		},
+	},
+	getters: {
+		'features/chat/CHAT_ON_WORKSPACE': () => chat,
+		'features/chat/unseen/IS_CHAT_UNSEEN': () => () => false,
+		'features/chat/closed/IS_CHAT_ON_WORKSPACE_WAS_CLOSED': () => false,
+	},
+});
+
 describe('Chat Messages Container', () => {
 	it('renders a component', () => {
 		const wrapper = shallowMount(CurrentChat, {
@@ -15,11 +31,6 @@ describe('Chat Messages Container', () => {
 				plugins: [
 					store,
 				],
-			},
-			computed: {
-				chat() {
-					return chat;
-				},
 			},
 		});
 		expect(wrapper.exists()).toBe(true);

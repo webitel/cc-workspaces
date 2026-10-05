@@ -19,7 +19,7 @@
     </template>
 
     <template #title>
-      {{ task.displayName }}
+      {{ displayName }}
     </template>
 
     <template #subtitle>
@@ -104,7 +104,7 @@
     </template>
 
     <template #tooltip-title>
-      {{ task.displayName }}
+      {{ displayName }}
     </template>
 
     <template #tooltip-subtitle>
@@ -186,9 +186,16 @@ export default {
 			return isIncomingRinging(this.task);
 		},
 
+		displayName() {
+			return (
+				this.task.displayName ||
+				this.$t('workspaceSec.taskHeaderExpansionCard.unknownContact')
+			);
+		},
+
 		displayNumber() {
-			//@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
-			if (this.task.hideNumber || (this.task.isConsultToQueue && !this.task.to))
+			//@author PolinaSukhorukova-webitel display queue name while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
+			if (this.task.isConsultToQueue && !this.task.to)
 				return this.task.destination;
 
 			//https://webitel.atlassian.net/browse/WTEL-8215

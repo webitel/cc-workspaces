@@ -1,3 +1,4 @@
+import { createTestingPinia } from '@pinia/testing';
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 
@@ -24,18 +25,9 @@ describe('VideoContainer', () => {
 		],
 	});
 
-	const buildStore = (callOnWorkspace = {}) =>
+	const buildStore = (activeVideoCall = {}) =>
 		createStore({
 			state: {
-				ui: {
-					infoSec: {
-						client: {
-							contact: {
-								contact: null,
-							},
-						},
-					},
-				},
 				features: {
 					call: {
 						callInfo: new Map(),
@@ -43,7 +35,7 @@ describe('VideoContainer', () => {
 				},
 			},
 			getters: {
-				'features/call/CALL_ON_WORKSPACE': () => callOnWorkspace,
+				'features/call/ACTIVE_VIDEO_CALL': () => activeVideoCall,
 			},
 		});
 
@@ -60,6 +52,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
+					createTestingPinia(),
 				],
 			},
 		});
@@ -83,6 +76,7 @@ describe('VideoContainer', () => {
 			global: {
 				plugins: [
 					store,
+					createTestingPinia(),
 				],
 			},
 		});

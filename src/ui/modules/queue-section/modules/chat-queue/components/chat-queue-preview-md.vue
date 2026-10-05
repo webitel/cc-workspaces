@@ -12,75 +12,71 @@
     @keydown.enter="emit('click', task)"
   >
     <div class="chat-queue-preview-md-content">
-      <div class="chat-queue-preview-md-header">
-        <div
-          v-if="showIcon"
-          class="chat-queue-preview-md-header__icon"
-        >
-          <div class="queue-preview-icon">
-            <slot name="close-icon"></slot>
-            <wt-icon
-              :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
-              :icon="opened ? 'chat--filled' : 'chat'"
-              size="md"
-              :color="ChatColorsMap[status] || 'secondary'"
-            />
-            <wt-badge
-              v-if="unseen"
-              color-variable="error-color"
-            />
+      <div class="chat-queue-preview-md-main">
+        <div class="chat-queue-preview-md-details">
+          <div class="chat-queue-preview-md-header">
+            <div
+              v-if="showIcon"
+              class="chat-queue-preview-md-header__icon"
+            >
+              <div class="queue-preview-icon">
+                <slot name="close-icon"></slot>
+                <wt-icon
+                  :class="{ 'chat-queue-preview-md__icon--hidden': $slots?.['close-icon'] }"
+                  :icon="opened ? 'chat--filled' : 'chat'"
+                  size="md"
+                  :color="ChatColorsMap[status] || 'secondary'"
+                />
+                <wt-badge
+                  v-if="unseen"
+                  color-variable="error-color"
+                />
+              </div>
+            </div>
+
+            <div class="chat-queue-preview-md-header__icon--messenger">
+              <slot name="icon" :iconColor="iconColor">
+                <wt-icon
+                  :icon="icon"
+                  :color="iconColor"
+                  size="md"
+                />
+              </slot>
+            </div>
+
+            <h3 class="chat-queue-preview-md-header__title typo-subtitle-2">
+              <slot name="title">{{ title }}</slot>
+            </h3>
+
+            <div class="chat-queue-preview-md-header__timer typo-body-2">
+              <slot name="timer"></slot>
+            </div>
+          </div>
+
+          <div class="chat-queue-preview-md-body">
+            <p class="chat-queue-preview-md-body__subtitle typo-body-2">
+              <slot name="subtitle">{{ subtitle }}</slot>
+            </p>
           </div>
         </div>
-
-        <div class="chat-queue-preview-md-header__icon--messenger">
-          <slot name="icon" :iconColor="iconColor">
-            <wt-icon
-              :icon="icon"
-              :color="iconColor"
-              size="md"
-            />
-          </slot>
-        </div>
-
-        <h3 class="chat-queue-preview-md-header__title typo-subtitle-2">
-          <slot name="title">{{ title }}</slot>
-        </h3>
-
-        <div class="chat-queue-preview-md-header__timer typo-body-2">
-          <slot name="timer"></slot>
+        <div v-if="$slots.actions" class="chat-queue-preview-md-actions">
+          <slot name="actions"></slot>
         </div>
       </div>
 
-      <div class="chat-queue-preview-md-body">
-        <div class="chat-queue-preview-md-body__content">
-          <p class="chat-queue-preview-md-body__subtitle typo-body-2">
-            <slot name="subtitle">{{ subtitle }}</slot>
-          </p>
-          <div class="chat-queue-preview-md-body__queue">
-            <queue-name-chip
-              v-if="queueName"
-              :name="queueName"
-              clamped
-            />
-          </div>
-        </div>
-
-        <div class="chat-queue-preview-md-body__icons">
+      <div class="chat-queue-preview-md-footer">
+        <queue-name-text v-if="queueName"  :name="queueName" />
+        <div v-if="$slots['icon-status']" class="chat-queue-preview-md-footer__icons">
           <slot name="icon-status"></slot>
         </div>
       </div>
-    </div>
-
-    <div class="chat-queue-preview-md-actions">
-      <slot name="actions"></slot>
     </div>
   </article>
 </template>
 
 <script setup>
 import { computed } from 'vue';
-
-import QueueNameChip from '../../../../work-section/modules/_shared/components/queue-name-chip/queue-name-chip.vue';
+import QueueNameText from '../../../../work-section/modules/_shared/components/queue-name-text/queue-name-text.vue';
 import { ChatColorsMap, ChatTypes } from '../enums/ChatStatus.enum';
 
 const props = defineProps({
@@ -233,37 +229,38 @@ const iconColor = computed(() => {
   }
 }
 
+.chat-queue-preview-md-main {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.chat-queue-preview-md-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: var(--spacing-2xs);
+}
+
 .chat-queue-preview-md-body {
+  &__subtitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.chat-queue-preview-md-footer {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--spacing-sm);
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    flex: 1;
-    min-width: 0;
-  }
+  align-items: center;
+  gap: var(--spacing-2xs);
 
   &__icons {
     display: flex;
     align-items: center;
     gap: var(--spacing-2xs);
     flex-shrink: 0;
-  }
-
-  &__subtitle {
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  &__queue {
-    display: flex;
-    align-items: center;
   }
 }
 
@@ -272,12 +269,12 @@ const iconColor = computed(() => {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2xs);
+  gap: var(--spacing-xs);
 }
 
 .chat-queue-preview-md-actions {
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: var(--spacing-2xs);
   flex-shrink: 0;
 }

@@ -3,7 +3,7 @@ name: build electron-sip prebuilds
 # Builds the native electron-sip N-API addon on every supported OS and uploads
 # the resulting prebuilds as artifacts. Manually triggered (workflow_dispatch).
 # After a successful run, drop the merged prebuilds into
-# packages/electron-workspace/electron-sip/prebuilds/ and commit, so consumers
+# packages/electron-sip/prebuilds/ and commit, so consumers
 # install zero-build.
 
 on:
@@ -12,7 +12,7 @@ on:
   #   branches:
   #     - feat/electron-sip-pkg-for-electron-app
   #   paths:
-  #     - 'packages/electron-workspace/electron-sip/**'
+  #     - 'packages/electron-sip/**'
   #     - '.github/workflows/build-electron-sip.yml'
 
 permissions:
@@ -23,7 +23,7 @@ env:
 
 defaults:
   run:
-    working-directory: packages/electron-workspace/electron-sip
+    working-directory: packages/electron-sip
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-darwin-arm64
-          path: packages/electron-workspace/electron-sip/prebuilds/
+          path: packages/electron-sip/prebuilds/
 
   # ---------------------------------------------------------------------------
   # Linux x64 — pjproject built from source (no reliable apt package), exposed
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-linux-x64
-          path: packages/electron-workspace/electron-sip/prebuilds/
+          path: packages/electron-sip/prebuilds/
 
   # ---------------------------------------------------------------------------
   # Windows x64 — pjproject has no Homebrew/apt/vcpkg equivalent; download the
@@ -164,7 +164,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: prebuild-win32-x64
-          path: packages/electron-workspace/electron-sip/prebuilds/
+          path: packages/electron-sip/prebuilds/
 
   # ---------------------------------------------------------------------------
   # Merge per-platform artifacts into one combined artifact for download.

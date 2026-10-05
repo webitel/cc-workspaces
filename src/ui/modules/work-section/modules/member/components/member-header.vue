@@ -1,8 +1,8 @@
 <template>
-  <task-header :size="size">
-    <template #start-section>
+  <task-header :size="size" :username="member.name">
+    <template #task-header-actions>
       <wt-button
-				:variant="isOnHistory ? 'active' : 'outlined'"
+		:variant="isOnHistory ? 'active' : 'outlined'"
         :size="size"
         class="call-action"
         color="secondary"
@@ -11,11 +11,9 @@
         wide
         @click="$emit('openTab', 'history')"
       />
-    </template>
-    <template #end-section>
       <wt-button
         v-show="isCall"
-				variant="outlined"
+		variant="outlined"
         :size="size"
         color="success"
         icon="call-ringing"
@@ -24,10 +22,13 @@
         @click="makeCall"
       />
     </template>
-    <template #title>{{ member.name }}</template>
-
-    <template v-if="queueName" #queue>
-      <queue-name-chip :name="queueName" />
+    <template #info>
+      <task-header-info
+        :title="member.name"
+        :queue-name="queueName"
+        :username="member.name"
+        :size="size"
+      />
     </template>
   </task-header>
 </template>
@@ -37,14 +38,14 @@ import { mapActions, mapGetters } from 'vuex';
 
 import sizeMixin from '../../../../../../app/mixins/sizeMixin';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
-import QueueNameChip from '../../_shared/components/queue-name-chip/queue-name-chip.vue';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
+import TaskHeaderInfo from '../../_shared/components/task-header/task-header-info.vue';
 
 export default {
 	name: 'WorkspaceMemberHeader',
 	components: {
-		QueueNameChip,
 		TaskHeader,
+		TaskHeaderInfo,
 	},
 	mixins: [
 		sizeMixin,

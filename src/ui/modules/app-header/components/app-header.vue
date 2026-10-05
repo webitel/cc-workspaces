@@ -13,15 +13,10 @@
     <!--      :label="$t('header.enableVideo')"-->
     <!--      @update:model-value="toggleVideo"-->
     <!--    ></wt-switcher>-->
-    <wt-switcher
+    <agent-status-select
       v-if="isAgent"
-      :model-value="isCcenterOn"
-      :label="t('agentStatus.callCenter')"
-      @update:model-value="toggleCCenterMode"
-    ></wt-switcher>
-
-    <agent-status-select v-if="isAgent"></agent-status-select>
-
+      @changed-call-center-mode="toggleCCenterMode"
+    />
     <wt-call-media-metric
       :quality="connectionQuality"
       show-tooltip
@@ -68,9 +63,6 @@ const currentApp = computed(() => WtApplication.Agent);
 const isVideo = computed(() => store.state.features?.call?.isVideo);
 const isPhoneReg = computed(() => store.state.features?.globals?.isPhoneReg);
 const isAgent = computed(() => store.getters['features/status/IS_AGENT']);
-const isCcenterOn = computed(
-	() => store.getters['features/status/IS_CCENTER_ON'],
-);
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
 
 const connectionQuality = computed(
@@ -125,8 +117,8 @@ const apps = computed(() => {
 	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
 
-function toggleCCenterMode() {
-	store.dispatch('features/status/TOGGLE_CONTACT_CENTER_MODE');
+function toggleCCenterMode(activityType) {
+	store.dispatch('features/status/TOGGLE_CONTACT_CENTER_MODE', activityType);
 }
 
 function restoreVideoParam() {
@@ -156,12 +148,6 @@ onMounted(() => {
 
   .wt-switcher,
   .user-dnd-switcher {
-    margin-left: var(--spacing-sm);
-  }
-
-  .agent-status-select {
-    max-width: 200px;
-    width: 150px;
     margin-left: var(--spacing-sm);
   }
 }

@@ -1,21 +1,4 @@
-import {
-	getDefaultGetListResponse,
-	getDefaultGetParams,
-} from '@webitel/ui-sdk/src/api/defaults/index.js';
-import applyTransform, {
-	merge,
-	notify,
-	snakeToCamel,
-	starToSearch,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
-import { CallServiceApiFactory } from 'webitel-sdk';
-
-import instance from '../../../../../../app/api/instance';
-import configuration from '../../../../../../app/api/openAPIConfig';
-
-console.info(instance);
-
-const callService = new CallServiceApiFactory(configuration, '', instance);
+import { CallHistoryAPI } from '@webitel/api-services/api';
 
 const getMissedCalls = async (params) => {
 	const defaultParams = {
@@ -32,8 +15,8 @@ const getMissedCalls = async (params) => {
 	};
 
 	const {
-		page,
-		size,
+		page = 1,
+		size = 10,
 		search,
 		sort,
 		fields,
@@ -46,14 +29,13 @@ const getMissedCalls = async (params) => {
 		cause,
 		direction,
 		isMissed,
-	} = applyTransform(params, [
-		merge(getDefaultGetParams()),
-		merge(defaultParams),
-		starToSearch('search'),
-	]);
+	} = {
+		...defaultParams,
+		...params,
+	};
 
-	try {
-		const response = await callService.searchHistoryCallPost({
+	return CallHistoryAPI.getListPost({
+		data: {
 			page,
 			size,
 			q: search,
@@ -74,54 +56,14 @@ const getMissedCalls = async (params) => {
 			cause,
 			direction,
 			missed: isMissed,
-		});
-
-		const { items, next } = applyTransform(response.data, [
-			snakeToCamel(),
-			merge(getDefaultGetListResponse()),
-		]);
-		return {
-			items,
-			next,
-		};
-	} catch (err) {
-		throw applyTransform(err, [
-			notify,
-		]);
-	}
-};
-
-const redialToMissed = async ({ callId }) => {
-	try {
-		const response = await callService.redialCall(callId, {
-			callId,
-		});
-		return response.data;
-	} catch (err) {
-		throw applyTransform(err, [
-			notify,
-		]);
-	}
-};
-
-const hideMissedCall = async ({ callId }) => {
-	try {
-		const response = await callService.patchHistoryCall(callId, {
-			id: callId,
-			hide_missed: true,
-		});
-		return response.data;
-	} catch (err) {
-		throw applyTransform(err, [
-			notify,
-		]);
-	}
+		},
+	});
 };
 
 const missedAPI = {
 	getMissedCalls,
-	redialToMissed,
-	hideMissedCall,
+	redialToMissed: (params) => CallHistoryAPI.redial(params),
+	hideMissedCall: (params) => CallHistoryAPI.hideMissed(params),
 };
 
 export default missedAPI;

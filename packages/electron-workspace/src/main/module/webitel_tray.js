@@ -1,9 +1,9 @@
 const { app, Tray, Menu, MenuItem } = require('electron');
 const { isLinux, isOSX } = require('../../shared/is');
 const LStorage = require('../../shared/localStore');
+const loginItem = require('./webitel_login_item');
 
 const path = require('path');
-const { AgentPauseCauseServiceApiAxiosParamCreator } = require('webitel-sdk');
 const greenIcon = path.join(app.getAppPath(), 'img/app-online-icon.png'),
 	yelloIcon = path.join(app.getAppPath(), 'img/app-pause-icon.png'),
 	greyIcon = path.join(app.getAppPath(), 'img/app-offline-icon.png'),
@@ -68,6 +68,17 @@ class WebitelTray extends Tray {
 						type: 'checkbox',
 						checked: true === this.lStorage.getSIP(),
 					},
+					...(loginItem.isSupported()
+						? [
+								{
+									id: 'openAtLogin',
+									label: i18n.__('tray', 'OpenAtLogin'),
+									click: this._handleOpenAtLoginClick,
+									type: 'checkbox',
+									checked: loginItem.getOpenAtLogin(),
+								},
+							]
+						: []),
 				],
 			},
 			{
@@ -190,6 +201,10 @@ class WebitelTray extends Tray {
 	_handleSIPClick = (isSip) => {
 		this.lStorage.setSIP(isSip.checked);
 		this.emit('on-change-SIP', isSip.checked);
+	};
+
+	_handleOpenAtLoginClick = (menuItem) => {
+		loginItem.setOpenAtLogin(menuItem.checked);
 	};
 
 	_setChecked = (status) => {

@@ -1,6 +1,6 @@
 <template>
-  <task-header :size="props.size">
-    <template #start-section>
+  <task-header :size="props.size" :allow-avatar="!!call?.contact" :username="displayName">
+    <template #task-header-actions>
       <slot :name="CallTab.Contacts">
         <wt-button
           class="call-action"
@@ -26,9 +26,7 @@
           @click="emit('openTab', CallTab.History)"
         />
       </slot>
-    </template>
 
-    <template #end-section>
       <slot :name="CallTab.Bridge">
         <wt-button
           v-if="isBridgeButtonVisible"
@@ -64,6 +62,9 @@
           :variant="isOnChat ? 'active' : 'outlined'"
           :disabled="!isCallChatExist"
           :size="size"
+          :badge="videoCallChatUnseenBadge"
+          badge-absolute-position
+          badge-severity="warn"
           icon="chat"
           color="secondary"
           rounded
@@ -103,13 +104,13 @@
     </template>
 
     <template #info>
-      <task-header-expansion-card
+      <task-header-info
         v-if="call?.contact"
-        :username="displayName"
-        :phone-number="displayNumber"
+        :title="title"
         :queue-name="queueName"
-        :direction="call?.direction"
-        :hide-number="call?.hideNumber"
+        :username="displayName"
+        :size="size"
+        :phone-number="displayNumber"
       />
     </template>
   </task-header>
@@ -117,14 +118,18 @@
 
 <script lang="ts" setup>
 import { ComponentSize } from '@webitel/ui-sdk/enums';
+import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useVideoCallChatUnseen } from '../../../../../../features/modules/call/video-call/modules/chat/composables/useVideoCallChatUnseen';
 import { useLoader } from '../../../../../composables/useLoader';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
 import { getQueueName } from '../../../../../modules/queue-section/modules/_shared/scripts/getQueueName';
+import { useContactStore } from '../../../../info-section/modules/client-info/modules/contact/store/contact';
 import TaskHeader from '../../_shared/components/task-header/task-header.vue';
-import TaskHeaderExpansionCard from '../../_shared/components/task-header-expansion-card/task-header-expansion-card.vue';
+import TaskHeaderInfo from '../../_shared/components/task-header/task-header-info.vue';
 import { CallTab } from '../enums/CallTab.enum';
 import { VideoCallTab } from '../module/video-call/enums/VideoCallTab.enum';
 
@@ -142,13 +147,15 @@ const props = withDefaults(
 const emit = defineEmits<(e: 'openTab', value: string) => void>();
 
 const store = useStore();
+const contactStore = useContactStore();
+const { contact } = storeToRefs(contactStore);
 const { showLoader, runWithLoader } = useLoader();
+const { t } = useI18n();
 
 const callList = computed(() => store.state.features.call?.callList);
 const call = computed(() => store.getters['features/call/CALL_ON_WORKSPACE']);
 
 const isNewCall = computed(() => store.getters['features/call/IS_NEW_CALL']);
-const contact = computed(() => store.state.ui.infoSec.client.contact.contact);
 
 const isOnContacts = computed(() => props.currentTab === CallTab.Contacts);
 const isOnHistory = computed(() => props.currentTab === CallTab.History);
@@ -170,15 +177,14 @@ const isHangupButtonVisible = computed(() => call.value?.allowHangup);
 const isCallButtonVisible = computed(
 	() => (isOnNumpad.value || isOnBridge.value) && isCall.value,
 );
-const isCallChatExist = computed(
-	() => !!store.getters['features/call/videoCall/chat/VIDEO_CALL_CHAT'],
-);
+const { isCallChatExist, videoCallChatUnseenBadge } =
+	useVideoCallChatUnseen(isOnChat);
 
 const queueName = computed(() => getQueueName(call.value));
 
 //@author PolinaSukhorukova-webitel display queue nqme while consult call (https://webitel.atlassian.net/browse/WTEL-9399)
 const displayName = computed(() => {
-	if (isVideoCall.value && contact.value) return contact.value.name;
+	if (isVideoCall.value && contact.value) return contact.value.name?.commonName;
 	if (call.value?.isConsultToQueue && !call.value?.to)
 		return call.value?.destination;
 	return call.value?.displayName;
@@ -191,6 +197,12 @@ const displayNumber = computed(() => {
 });
 
 const loading = computed(() => showLoader(call.value?.newNumber));
+
+const title = computed(
+	() =>
+		displayName.value ||
+		t('workspaceSec.taskHeaderExpansionCard.unknownContact'),
+);
 
 const makeCall = () => {
 	return runWithLoader(call.value?.newNumber, () =>
@@ -217,6 +229,3 @@ onUnmounted(() =>
 	}),
 );
 </script>
-
-<style lang="scss" scoped>
-</style>

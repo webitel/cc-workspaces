@@ -6,11 +6,37 @@ const DEFAULT_PAGE = 1;
 // 200px means it will start loading when the target element is 200px away from being visible
 const DEFAULT_LOAD_TRIGGER_DISTANCE = '200px';
 
+interface InfiniteScrollParams {
+	page: number;
+	size: number;
+	search: string;
+	fields?: unknown;
+	sort?: unknown;
+	filters?: unknown;
+}
+
+interface UseInfiniteScrollOptions<TItem> {
+	initialList?: TItem[];
+	size?: number;
+	initialSearch?: string;
+	loadTriggerDistance?: string;
+	fields?: unknown;
+	sort?: unknown;
+	filters?: unknown;
+	fetchFn: (params: InfiniteScrollParams) => Promise<{
+		items?: TItem[];
+		data?: TItem[];
+		next?: boolean;
+	}>;
+}
+
 /**
  * Composable that mirrors behavior of infiniteScrollMixin without modifying it.
  * Consumer must pass a fetchFn that returns { items?, data?, next }
  */
-export default function useInfiniteScroll(options = {}) {
+export default function useInfiniteScroll<TItem = unknown>(
+	options: UseInfiniteScrollOptions<TItem>,
+) {
 	const state = reactive({
 		dataList: options.initialList || [],
 		dataPage: DEFAULT_PAGE,
@@ -38,7 +64,7 @@ export default function useInfiniteScroll(options = {}) {
 	};
 
 	const collectParams = () => {
-		const params = {
+		const params: InfiniteScrollParams = {
 			page: state.dataPage,
 			size: state.dataSize,
 			search: state.dataSearch,

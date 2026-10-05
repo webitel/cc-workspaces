@@ -6,7 +6,8 @@ const { app, BrowserWindow, dialog, shell } = require('electron'),
 	conf = require('../shared/config').config(),
 	LoadConfig = require('./module/webitel_load_config'),
 	CallNotification = require('./module/webitel_call_notification'),
-	DisconnectNotification = require('./module/webitel_disconnect_notification');
+	DisconnectNotification = require('./module/webitel_disconnect_notification'),
+	{ isAlive } = require('./module/window_utils');
 
 class WebitelWindows {
 	lStorage = new LStorage();
@@ -16,6 +17,7 @@ class WebitelWindows {
 	workspace = new Workspace();
 	disconnectNotification = new DisconnectNotification();
 	openUrlOnAnswer = conf.openUrlOnAnswer;
+	_resumeTimer = null;
 
 	start(URL = conf.URL, useSIP = conf.useSIP) {
 		if (URL) {
@@ -28,14 +30,16 @@ class WebitelWindows {
 	}
 
 	sleep() {
-		if (this.workspace.window) {
-			this.workspace.window.doDestroy = true;
-			this.workspace.window.close();
-		}
+		// already gone == already asleep
+		if (!isAlive(this.workspace.window)) return;
+		this.workspace.window.doDestroy = true;
+		this.workspace.window.close();
 	}
 
 	resume() {
-		setTimeout(() => {
+		// macOS fires both 'resume' and 'unlock-screen' on wake — keep one timer
+		clearTimeout(this._resumeTimer);
+		this._resumeTimer = setTimeout(() => {
 			this.workspace.createWindow(conf.URL, conf.useSIP);
 		}, 5000);
 	}
@@ -56,6 +60,7 @@ class WebitelWindows {
 	}
 
 	onChangeSIP(value) {
+		if (!isAlive(this.workspace.window)) return;
 		this.workspace.window.webContents.send('change-SIP', {
 			isSIP: value,
 			timeoutSIP: conf.timeoutSIP,
@@ -70,15 +75,16 @@ class WebitelWindows {
 	}
 
 	sendMessage(event, message) {
-		if (this.loadConfig?.window)
-			this.loadConfig?.window.webContents.send(event, message);
+		if (isAlive(this.loadConfig?.window))
+			this.loadConfig.window.webContents.send(event, message);
 
-		if (this.workspace?.window)
+		if (isAlive(this.workspace?.window))
 			this.workspace.window.webContents.send(event, message);
 	}
 
 	openDevTools() {
 		const w = BrowserWindow.getFocusedWindow();
+		if (!w) return;
 		w.webContents.isDevToolsOpened()
 			? w.webContents.closeDevTools()
 			: w.webContents.openDevTools();
@@ -151,7 +157,7 @@ class WebitelWindows {
 	}
 
 	restartWorkspace(ob) {
-		if (this.workspace.window) {
+		if (isAlive(this.workspace.window)) {
 			this.workspace.window
 				.loadURL(ob.URL)
 				.then(() => {
@@ -166,14 +172,20 @@ class WebitelWindows {
 					});
 					app.exit(0);
 				})
-				.catch((err) => this.workspace.window.send('from-main', err));
+				.catch((err) => {
+					if (!isAlive(this.workspace.window)) return;
+					this.workspace.window.webContents.send('from-main', err);
+				});
 		} else {
 			if (this._isValidHttpUrl(ob.URL)) {
 				this.loadConfig.hide();
 				this.config.writeConfig();
 				this.start(ob.URL);
-			} else {
-				this.loadConfig.window.send('from-main', 'URL Is Not Valid');
+			} else if (isAlive(this.loadConfig.window)) {
+				this.loadConfig.window.webContents.send(
+					'from-main',
+					'URL Is Not Valid',
+				);
 			}
 		}
 	}
@@ -190,13 +202,14 @@ class WebitelWindows {
 	}
 
 	setWorkspaceVisible() {
-		if (this.workspace.window)
+		if (isAlive(this.workspace.window))
 			this.workspace.window.isVisible()
 				? this.workspace.window.hide()
 				: this.workspace.window.show();
 	}
 
 	changeUserStatus(status) {
+		if (!isAlive(this.workspace.window)) return;
 		this.workspace.window.webContents.send('change-status', status);
 	}
 
@@ -205,48 +218,26 @@ class WebitelWindows {
 	}
 
 	restoreWindow() {
-		if (this.workspace.window) {
-			if (this.workspace.window.isMinimized()) this.workspace.window.restore();
-			this.workspace.window.isVisible() ? null : this.workspace.window.show();
-			this.workspace.window.focus();
-			this.workspace.window.center();
+		const workspaceWin = isAlive(this.workspace.window)
+			? this.workspace.window
+			: null;
+		const target =
+			workspaceWin ||
+			(isAlive(this.loadConfig?.window) ? this.loadConfig.window : null);
+		if (!target) return;
+
+		if (target.isMinimized()) target.restore();
+		if (!target.isVisible()) target.show();
+		target.focus();
+		if (workspaceWin) {
+			workspaceWin.center();
 		}
-	}
-
-	updateProcessing(arg) {
-		this.callNotification.updateProcessing(arg);
-	}
-
-	setProcessingProperty(arg) {
-		arg.id = this.callNotification.getCallId();
-		this.workspace.window.webContents.send('set-processing-property', arg);
-	}
-
-	sendReporting() {
-		this.workspace.window.webContents.send(
-			'send-reporting',
-			this.callNotification.getCallId(),
-		);
 	}
 
 	makeCall(destination = null) {
 		if (!destination) return;
+		if (!isAlive(this.workspace.window)) return;
 		this.workspace.window.webContents.send('make-call', destination);
-	}
-
-	clearProcessing() {
-		this.callNotification.clearProcessing();
-	}
-
-	closeSuccessMessage() {
-		this.callNotification.hide();
-	}
-
-	resetTime() {
-		this.workspace.window.webContents.send(
-			'reset-timer',
-			this.callNotification.getTaskId(),
-		);
 	}
 
 	collapsWindow() {
@@ -262,11 +253,13 @@ class WebitelWindows {
 	}
 
 	showDisconnectNotification() {
+		if (!isAlive(this.disconnectNotification.window)) return;
 		this.disconnectNotification.setBounds();
-		// this.disconnectNotification.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
+		this.disconnectNotification.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
 	}
 
 	hideDisconnectNotification() {
+		if (!isAlive(this.disconnectNotification.window)) return;
 		this.disconnectNotification.window.hide();
 	}
 }

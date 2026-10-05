@@ -33,7 +33,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
-	value: WebitelCasesStatusCondition['id'];
+	value: WebitelCasesStatusCondition['id'] | WebitelCasesStatusCondition;
 	options: WebitelCasesStatusCondition[];
 }>();
 
@@ -45,7 +45,11 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const formattedValue = computed(() => props.value?.id || props.value);
+const formattedValue = computed(
+	() =>
+		(typeof props.value === 'object' ? props.value?.id : undefined) ||
+		props.value,
+);
 
 const selectedOption = computed(() =>
 	props.options.find((option) => option.id === formattedValue.value),

@@ -98,6 +98,7 @@ export default {
 		},
 		chat: {
 			chats: 'Chat | Chats',
+			searchByUsername: 'Buscar por nombre de usuario',
 			preview: {
 				md: {
 					active: 'Chats activos',
@@ -210,6 +211,8 @@ export default {
 			chatsIncorrectFileSize: 'Tamaño de archivo incorrecto',
 			errors: {
 				uploadFileLimitSize: 'Se superó el límite de tamaño de archivo',
+				filePolicyFail: 'Formato de archivo no permitido',
+				photoInvalidDimensions: 'Dimensiones de imagen incorrectas',
 			},
 		},
 	},
@@ -265,6 +268,7 @@ export default {
 			},
 			[AgentStatus.BreakOut]: 'Descanso',
 			continueWork: 'Continuar trabajo',
+			goOffline: 'Pasar a fuera de línea',
 		},
 	},
 	disconnectPopup: {
@@ -316,10 +320,15 @@ export default {
 				'El acceso a la cámara está denegado. No se puede realizar la acción.',
 			[LicencePermissionError.id.replaceAll('.', '_')]:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
+			store_sql_user_get_default_device_app_error:
+				'No tiene ningún dispositivo. No puede trabajar con llamadas.',
 		},
 		endpoint: {
 			noLicense:
 				'No puede trabajar en el Espacio de trabajo porque su licencia ha expirado.',
+		},
+		chat: {
+			webhookSiteClosedButMsgSent: 'Mensaje enviado pero no entregado',
 		},
 	},
 	notifications: {

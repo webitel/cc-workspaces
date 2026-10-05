@@ -1,10 +1,13 @@
 <template>
-  <a
+  <wt-button
+    color="secondary"
+    variant="text"
+    size="sm"
     class="load-more-button"
     @click.prevent="loadMore"
   >
-    {{ $t('reusable.more') }}
-  </a>
+    <span class="typo-button--sm">{{ $t('reusable.more') }}</span>
+  </wt-button>
 </template>
 
 <script setup>
@@ -17,14 +20,11 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-
 .load-more-button {
-    margin: 0 auto;
-    color: var(--text-link-color);
-    cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-}
+  --load-more-min-width: 70px;
 
+  min-width: var(--load-more-min-width);
+  margin: 0 auto;
+}
 </style>
+ 

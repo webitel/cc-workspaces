@@ -12,13 +12,13 @@
 
         <div class="task-header-expansion-card__title">
           <a
-            v-if="username?.contactName && contactLink"
+            v-if="displayName?.contactName && contactLink"
             :href="contactLink"
             target="_blank"
             class="task-header-expansion-card__link">
-            {{ username?.contactName }}</a>
+            {{ displayName?.contactName }}</a>
           <span
-            v-if="!isChat || username?.extraNames"
+            v-if="!isChat || displayName?.extraNames"
             class="task-header-expansion-card__extra"
           >{{ taskTitle }}</span>
         </div>
@@ -44,16 +44,23 @@
 import { WtAvatar, WtExpansionCard } from '@webitel/ui-sdk/components';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
+import { useContactStore } from '../../../../../info-section/modules/client-info/modules/contact/store/contact';
 import type { ChatContact } from '../../types/ChatContact.types';
 import QueueNameChip from '../queue-name-chip/queue-name-chip.vue';
 
-const store = useStore();
+const contactStore = useContactStore();
+const { readOnlyContactLink } = contactStore;
+
+interface DisplayChatName {
+	contactName?: string | null;
+	extraNames?: string;
+	fullName?: string;
+}
 
 const props = withDefaults(
 	defineProps<{
-		username: string;
+		username: string | DisplayChatName;
 		phoneNumber?: string;
 		queueName?: string;
 		contact?: ChatContact;
@@ -74,15 +81,18 @@ const props = withDefaults(
 
 const { t } = useI18n();
 
+const displayName = computed<DisplayChatName | null>(() =>
+	typeof props.username === 'object' && props.username ? props.username : null,
+);
+
 const chatTitle = computed(() => {
-	if (props.username?.extraNames) {
-		return (
-			(props.username?.contactName ? ', ' : '') + props.username.extraNames
-		);
-	} else if (props.username?.fullName === 'unknown') {
+	const name = displayName.value;
+	if (name?.extraNames) {
+		return (name.contactName ? ', ' : '') + name.extraNames;
+	} else if (name?.fullName === 'unknown') {
 		return t('workspaceSec.taskHeaderExpansionCard.unknownContact');
 	}
-	return props.username?.fullName;
+	return name?.fullName;
 });
 
 const taskTitle = computed(() => {
@@ -94,14 +104,13 @@ const taskTitle = computed(() => {
 });
 
 const avatarTitle = computed(
-	() => props.contact?.name || props.username?.fullName || props.username,
+	() =>
+		props.contact?.name ||
+		displayName.value?.fullName ||
+		(typeof props.username === 'string' ? props.username : ''),
 );
 
-const contactLink = computed(() =>
-	store.getters['ui/infoSec/client/contact/READ_ONLY_CONTACT_LINK'](
-		props.contact?.etag,
-	),
-);
+const contactLink = computed(() => readOnlyContactLink(props.contact?.etag));
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
 // channelId || inviteId || conversationId. Closed chats come from the API
 // and are identified by conversation id only. conversationId is the one
 // key shared by both worlds — deriving it is this module's private concern.
-const getUnseenChatId = (chat) => chat.conversationId || chat.id;
+const getUnseenChatId = (chat) => chat?.conversationId || chat?.id;
 
 const state = {
 	unseenChatIds: {},
@@ -11,6 +11,8 @@ const state = {
 const getters = {
 	IS_CHAT_UNSEEN: (state) => (chat) =>
 		!!state.unseenChatIds[getUnseenChatId(chat)],
+	UNSEEN_COUNT: (state) => (chat) =>
+		state.unseenChatIds[getUnseenChatId(chat)] || 0,
 };
 
 const actions = {
@@ -23,10 +25,14 @@ const actions = {
 
 const mutations = {
 	ADD_UNSEEN_CHAT: (state, chat) => {
-		state.unseenChatIds[getUnseenChatId(chat)] = true;
+		const id = getUnseenChatId(chat);
+		if (!id) return;
+		state.unseenChatIds[id] = (state.unseenChatIds[id] || 0) + 1;
 	},
 	REMOVE_UNSEEN_CHAT: (state, chat) => {
-		delete state.unseenChatIds[getUnseenChatId(chat)];
+		const id = getUnseenChatId(chat);
+		if (!id) return;
+		delete state.unseenChatIds[id];
 	},
 };
 

@@ -8,24 +8,22 @@ describe('TaskQueuePreviewMd', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it('displays queue name chip when queueName prop is passed', () => {
+	it('displays queue name when queueName prop is passed', () => {
 		const queueName = 'queue name';
 		const wrapper = mount(TaskQueuePreviewMd, {
 			props: {
 				queueName,
 			},
 		});
-		expect(wrapper.find('.queue-preview-chips .wt-chip').text()).toBe(
-			queueName,
-		);
+		expect(wrapper.find('.queue-name').text()).toContain(queueName);
 	});
 
-	it('does not render queue chip when queueName is empty', () => {
+	it('does not render queue text when queueName is empty', () => {
 		const wrapper = shallowMount(TaskQueuePreviewMd);
 		expect(
 			wrapper
 				.findComponent({
-					name: 'queue-name-chip',
+					name: 'queue-name-text',
 				})
 				.exists(),
 		).toBe(false);

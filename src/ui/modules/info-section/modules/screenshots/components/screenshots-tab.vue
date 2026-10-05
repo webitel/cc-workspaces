@@ -27,7 +27,7 @@
       <template #actions="{ item }">
         <wt-icon-btn
           icon="download"
-          @click="downloadFile(item.id)"
+          @click="downloadFile(item.id, item.view_name)"
         />
         <wt-icon-btn
           icon="bucket"

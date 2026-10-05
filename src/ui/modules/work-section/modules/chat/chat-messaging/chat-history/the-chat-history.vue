@@ -106,12 +106,16 @@ const store = useStore();
 const chatNamespace = 'features/chat';
 const namespace = `${chatNamespace}/chatHistory`;
 
+const OBSERVER_TIMEOUT_MS = 3000;
+let showAllMessagesTimer;
+
 const chatContainer = useTemplateRef('chat-container');
 const chatContent = useTemplateRef('chat-content');
 const isLoading = ref(false);
 const lastVisibleMessageEl = ref(null); // message on top of the chat
 const isInitialScrollInProgress = ref(false);
 const showAllMessages = ref(false);
+const closedChatAnchorEl = ref(null); // first message of the opened closed chat, kept as scroll anchor
 
 const {
 	messages,
@@ -128,6 +132,9 @@ const chat = computed(() => store.getters['features/chat/CHAT_ON_WORKSPACE']);
 const isChatClosed = computed(
 	() => store.getters['features/chat/closed/IS_CHAT_ON_WORKSPACE_CLOSED'],
 );
+const isUnseen = computed(
+	() => store.getters['features/chat/unseen/IS_CHAT_UNSEEN'],
+);
 const closedChatFirstMessageId = computed(
 	() => store.state.features.chat.closed.closedChatFirstMessageId,
 );
@@ -136,6 +143,7 @@ const {
 	showScrollToBottomBtn,
 	newUnseenMessagesCount,
 	scrollToBottom,
+	markSeenIfAtBottom,
 	handleChatScroll,
 } = useChatScroll({
 	chatContainer,
@@ -147,10 +155,35 @@ const {
 		scrollToBottom();
 		startObserve();
 	},
+	onSeen: () => {
+		if (chat.value?.id && isUnseen.value(chat.value)) {
+			store.dispatch('features/chat/unseen/MARK_CHAT_SEEN', chat.value);
+		}
+	},
 });
 
-const { startObserve } = useObserveHeightUntilStable(chatContainer, () =>
-	scrollToBottom('instant'),
+const { startObserve } = useObserveHeightUntilStable(
+	chatContainer,
+	() => {
+		if (isChatClosed.value) return;
+		scrollToBottom('instant');
+	},
+	OBSERVER_TIMEOUT_MS,
+);
+
+/**
+ * @author PolinaSukhorukova-webitel
+ *
+ * [WTEL-9997](https://webitel.atlassian.net/browse/WTEL-9997)
+ * Content grows asynchronously after the first scroll — re-align the anchor on resize.
+ */
+const { startObserve: startObserveClosedChat } = useObserveHeightUntilStable(
+	chatContent,
+	() => {
+		closedChatAnchorEl.value?.scrollIntoView(true);
+		markSeenIfAtBottom();
+	},
+	OBSERVER_TIMEOUT_MS,
 );
 
 const loadHistory = async () =>
@@ -202,7 +235,9 @@ function scrollToClosedChatFirstMessage() {
 	);
 
 	if (closedChatFirstMessageEl) {
+		closedChatAnchorEl.value = closedChatFirstMessageEl;
 		closedChatFirstMessageEl.scrollIntoView(true);
+		startObserveClosedChat();
 	} else {
 		scrollToBottom();
 	}
@@ -228,23 +263,28 @@ const loadNextMessages = async () => {
 };
 
 async function loadMessagesList() {
-	if (!isChatClosed.value) {
-		await loadHistory();
-		await nextTick();
-		scrollToBottom();
-	} else {
-		isInitialScrollInProgress.value = true;
+	showAllMessages.value = false;
+	clearTimeout(showAllMessagesTimer);
 
-		await loadClosedChatHistory();
-		await nextTick();
-		scrollToClosedChatFirstMessage();
+	try {
+		if (!isChatClosed.value) {
+			await loadHistory();
+			await nextTick();
+			scrollToBottom();
+		} else {
+			isInitialScrollInProgress.value = true;
 
+			await loadClosedChatHistory();
+			await nextTick();
+			scrollToClosedChatFirstMessage();
+		}
+	} finally {
 		isInitialScrollInProgress.value = false;
-	}
 
-	setTimeout(() => {
-		showAllMessages.value = true;
-	}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+		showAllMessagesTimer = setTimeout(() => {
+			showAllMessages.value = true;
+		}, 700); // wait for all media to load TODO: setTimeout can be removed after images/videos loading in chat will fixed
+	}
 }
 
 onMounted(() => {
@@ -253,6 +293,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 	resetHistory();
+	clearTimeout(showAllMessagesTimer);
 });
 
 watch(

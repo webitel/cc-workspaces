@@ -57,7 +57,7 @@ import FormSelectFromObject from './components/processing-form-select-from-objec
 import FormSelectService from './components/processing-form-select-service.vue';
 import FormTable from './components/processing-form-table/processing-form-table.vue';
 import FormText from './components/processing-form-text.vue';
-import RichTextEditorSkeleton from './components/skeletons/rich-text-editor-skeleton.vue';
+import RichTextEditor from './components/rich-text-editor.vue';
 
 const AUTOSAVE_DEBOUNCE_MS = 1500;
 const AUTOSAVE_BEFORE_TIMEOUT_MS = 1000;
@@ -75,10 +75,8 @@ export default {
 		FormSelectFromObject,
 		FormTable,
 		FormCaseStatusSelect,
-		RichTextEditor: () => ({
-			component: import('./components/rich-text-editor.vue'),
-			loading: RichTextEditorSkeleton,
-		}),
+		// light wrapper: ui-sdk's wt-rich-text-editor loads TinyMCE on demand
+		RichTextEditor,
 	},
 	mixins: [
 		processingModuleMixin,

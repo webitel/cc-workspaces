@@ -12,15 +12,12 @@
       @dragleave.prevent="handleDragLeave"
       @drop="handleDrop"
     />
-      <quick-replies
-        v-if="showQuickReplies"
-        :search="searchReply"
-        @close="closeQuickRepliesPanel"
-        @select="applyQuickReply"
-      />
+
+    <div class="chat-messaging__panes">
       <div
-        v-if="!showQuickReplies"
         class="chat-messaging__messaging chat-messages-container"
+        :class="{ 'chat-messaging__messaging--covered': showQuickReplies }"
+        :aria-hidden="showQuickReplies"
       >
         <chat-history
           v-if="contact?.id"
@@ -32,11 +29,22 @@
           :size="size"
         />
       </div>
+
+      <quick-replies-transition>
+        <quick-replies
+          v-if="showQuickReplies"
+          class="chat-messaging__quick-replies"
+          :search="searchReply"
+          @close="closeQuickRepliesPanel"
+          @select="applyQuickReply"
+        />
+      </quick-replies-transition>
+    </div>
+
     <div
       v-if="isChatActive"
       class="chat-messaging-text-entry"
     >
-
       <chat-helper-list
         v-if="isOpenAutocomplete"
         :list="autocompleteList"
@@ -54,10 +62,10 @@
         :rows="1"
         @enter="sendMessage"
         @paste="handleFilePaste"
-        @keydown="onKeyDown"
         @update:model-value="inputMessage"
         @blur="showQuickReplies && onBlur()"
       />
+
       <div class="chat-messaging-text-entry__actions">
         <wt-button
             variant="outlined"
@@ -108,17 +116,10 @@
 <script setup lang="ts">
 import { WebitelContactsContact } from '@webitel/api-services/gen';
 import { WtChatEmoji } from '@webitel/ui-sdk/components';
+import { useEventBus } from '@webitel/ui-sdk/composables';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import insertTextAtCursor from 'insert-text-at-cursor';
-import {
-	computed,
-	inject,
-	nextTick,
-	onMounted,
-	onUnmounted,
-	ref,
-	watch,
-} from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
@@ -126,6 +127,7 @@ import Dropzone from '../../../../../../app/components/utils/dropzone.vue';
 import { useDropzoneHandlers } from '../../../../../composibles/useDropzoneHandlers';
 import HotkeyAction from '../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../hotkeys/useHotkeys';
+import { ChatSendMessageErrors } from '../enums/ChatSendMessageErrors.enum';
 import { useAutocomplete } from './autocomplete/composables/useAutocomplete';
 import { AutocompleteOptions } from './autocomplete/enums/AutocompleteOptions';
 import ChatHistory from './chat-history/the-chat-history.vue';
@@ -133,6 +135,8 @@ import ChatHelperList from './components/chat-helper-list.vue';
 import CurrentChat from './current-chat/current-chat.vue';
 import { useQuickReplies } from './quick-replies/composables/useQuickReplies';
 import QuickReplies from './quick-replies/quick-replies.vue';
+import QuickRepliesTransition from './quick-replies/quick-replies-transition.vue';
+import type { ChatHelperItem } from './types/ChatHelperItem.types';
 
 const props = withDefaults(
 	defineProps<{
@@ -154,8 +158,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const eventBus = inject('$eventBus');
 const store = useStore();
+const eventBus = useEventBus();
 
 const messageDraft = ref();
 const attachmentInput = ref();
@@ -182,7 +186,6 @@ const {
 	autocompleteList,
 
 	onInput: onAutocompleteInput,
-	onKeyDown,
 	onBlur,
 	close: closeAutocomplete,
 } = useAutocomplete(autocompleteOptions);
@@ -241,7 +244,23 @@ async function sendMessage() {
 	try {
 		chat.value.draft = '';
 		await send(draft);
-	} catch {
+	} catch (err) {
+		// https://webitel.atlassian.net/browse/WTEL-10102
+		if (err?.id === ChatSendMessageErrors.WebhookSiteClosedButMsgSent) {
+			eventBus?.$emit('notification', {
+				type: 'error',
+				text: t('error.chat.webhookSiteClosedButMsgSent'),
+			});
+			return;
+		}
+		/**
+		 * @author PolinaSukhorukova-webitel
+		 * no error message for this error - message was sent and will be delivered
+		 * [https://webitel.atlassian.net/browse/WTEL-9952]
+		 */
+		if (err?.id === ChatSendMessageErrors.PortalNoDeviceConnection) {
+			return;
+		}
 		chat.value.draft = draft;
 		eventBus?.$emit('notification', {
 			type: 'error',
@@ -276,7 +295,7 @@ function handleFilePaste(event: ClipboardEvent) {
 }
 
 async function handleAttachments(event: Event) {
-	const files = Array.from(event.target.files);
+	const files = Array.from((event.target as HTMLInputElement).files ?? []);
 	await sendFile(files);
 }
 
@@ -294,7 +313,7 @@ function applyQuickReply({ text }) {
 	setDraftFocus();
 }
 
-function selectAutocompleteOption({ id }: { id: string }) {
+function selectAutocompleteOption({ id }: ChatHelperItem) {
 	switch (id) {
 		case AutocompleteOptions.QUICK_REPLIES:
 			showQuickRepliesPanel();
@@ -306,10 +325,7 @@ function selectAutocompleteOption({ id }: { id: string }) {
 
 function showQuickRepliesPanel() {
 	closeAutocomplete();
-	if (chat.value.draft?.length > 0) {
-		// delete last space only if there any symbol in draft
-		chat.value.draft = chat.value.draft.slice(0, -1);
-	}
+	chat.value.draft = '';
 	openQuickReplies();
 }
 
@@ -383,11 +399,30 @@ $input-height: 48px; // https://webitel.atlassian.net/browse/WTEL-6149 (comments
     }
   }
 
+  &__panes {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   &__messaging {
     flex-direction: column;
     width: 100%;
     max-width: 100%;
+    height: 100%;
     box-sizing: border-box;
+  }
+
+  &__messaging--covered {
+    pointer-events: none;
+  }
+
+  &__quick-replies {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    background-color: var(--content-wrapper-color);
   }
 }
 

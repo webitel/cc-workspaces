@@ -6,7 +6,6 @@ const conf = require('../../shared/config').config();
 class CallNotification {
 	window = {};
 	call = null;
-	//isNawProcesing = false
 	widtNotification = 281;
 	heightNotification = 186;
 	x = 0;
@@ -34,7 +33,7 @@ class CallNotification {
 			title: 'Webitel',
 			useContentSize: true,
 			name: 'callNotification',
-			titleBarStyle: 'hidden',
+			titleBarStyle: 'default',
 			icon: path.join(app.getAppPath(), 'img/app-active-call-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
@@ -85,14 +84,14 @@ class CallNotification {
 
 		this.window.on('will-resize', (e) => {
 			//prevent resizing even if resizable property is true.
-			e.preventDefault();
+			process.env.NODE_ENV !== 'development' && e.preventDefault();
 		});
 	}
 
 	removeCall(arg) {
 		if (this.call && this.call.id === arg.removeId) {
 			if (arg.reserveCall) this.setActiveCall(arg.reserveCall);
-			else if (!this.isNawProcesing) this.destroyNotification();
+			else this.destroyNotification();
 		}
 	}
 
@@ -103,7 +102,6 @@ class CallNotification {
 
 	destroyNotification() {
 		this.call = null;
-		this.isNawProcesing = false;
 		this.window.hide();
 		if (this.window && this.window.webContents) {
 			this.window.webContents.send('destroy-notification');
@@ -127,25 +125,10 @@ class CallNotification {
 		}
 	}
 
-	resize(arg) {
-		if (
-			arg[0] !== this.widtNotification ||
-			arg[1] !== this.heightNotification
-		) {
-			this.widtNotification = arg[0];
-			this.heightNotification = arg[1];
-			this.window.setResizable(true);
-			this.window.setSize(arg[0], arg[1], false);
-			this.window.setResizable(false);
-		}
-	}
-
 	setActiveCall(arg) {
-		if (!this.isNawProcesing) {
-			this.call = arg;
-			// this.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
-			this._showCall(arg);
-		}
+		this.call = arg;
+		this.window.show(); // https://webitel.atlassian.net/browse/WTEL-9965
+		this._showCall(arg);
 	}
 
 	_showCall(ob) {
@@ -199,45 +182,8 @@ class CallNotification {
 		this.window.hide();
 	}
 
-	updateProcessing(arg) {
-		const needShow = !this.isNawProcesing;
-		this.call = arg;
-		this.isNawProcesing = true;
-		// todo
-		if (!(this.call && this.call.task && this.call.task.hasForm)) {
-			this.window.webContents.send('set-processing-info', arg);
-		}
-		if (needShow && !conf.hidePostProcessing) {
-			// this.show();// https://webitel.atlassian.net/browse/WTEL-9965
-		} else if (conf.hidePostProcessing) {
-			this.destroyNotification();
-		}
-	}
-
-	clearProcessing() {
-		if (this.isNawProcesing) {
-			this.isNawProcesing = false;
-			const left = Math.round(
-				(this.call.processingTimeoutAt - this.call.now) / 1000,
-			); // to do ...
-			if (left > 0 && !conf.hidePostProcessing) {
-				this.window.webContents.send('show-success-message');
-			} else {
-				this.destroyNotification();
-			}
-		}
-	}
-
 	changeLang(lang) {
 		this.window?.webContents?.reloadIgnoringCache();
-	}
-
-	getCallId() {
-		return this.call.id;
-	}
-
-	getTaskId() {
-		return this.call.taskId;
 	}
 }
 

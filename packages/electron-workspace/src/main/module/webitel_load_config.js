@@ -11,7 +11,8 @@ class LoadConfig {
 			autoHideMenuBar: true,
 			title: 'Webitel',
 			name: 'loadConfig',
-			frame: false,
+			frame: true,
+			titleBarStyle: 'default',
 			icon: path.join(app.getAppPath(), 'img/app-icon.png'),
 			webPreferences: {
 				contextIsolation: false,
@@ -22,6 +23,8 @@ class LoadConfig {
 
 		//this.window.webContents.openDevTools()
 		this.window.center();
+		this.window.show();
+		this.window.focus();
 
 		this.window.on('page-title-updated', (evt) => {
 			evt.preventDefault();
