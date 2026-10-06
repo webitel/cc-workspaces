@@ -91,7 +91,10 @@ exactly `cc_*` / `wbt_*`. Hence `snakeToCamel(['context'])` in our API client.
   are pulled from `CatalogAPI` by `chat.conversationId || chat.id` — `chat.id` alone does not
   resolve a closed chat while post-processing is running (WTEL-9955).
 - **`manual`** — `cli.agent.waitingListChats`, accepted through
-  `interceptAttempt(task.attemptId)`.
+  `interceptAttempt(task.attemptId)`. The SDK trims the list to `maxWaitingListChats`
+  (10 by default); the counter shows `waitingChatsSize` and "More" adds 10 via
+  `limitWaitingListChats`, applied on the next waiting list event. The limit resets on
+  reconnect with the new agent object (WTEL-7634).
 - **`chatHistory`** — the conversation history for a contact via
   `contactChatMessagesHistory`, separate from the messages of the current chat.
 - **`chatMedia`** — `mediaView` for previewing files and controlling the players, which hang
