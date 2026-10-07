@@ -11,13 +11,15 @@
       />
       <wt-divider v-if="manualList.length > key + 1" />
     </div>
+    <load-more-button v-show="hasMore" :load-more="loadMore" :loading="isLoadingMore" />
   </task-queue-container>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
+import LoadMoreButton from '../../../../../../_shared/components/load-more-button.vue';
 import { useLoader } from '../../../../../../composables/useLoader';
 import TaskQueueContainer from '../../../_shared/components/task-queue-container.vue';
 import ManualPreview from './manual-queue-preview.vue';
@@ -36,6 +38,24 @@ const { showLoader, runWithLoader } = useLoader();
 console.info(store.state.features.chat.manual.manualList);
 
 const manualList = computed(() => store.state.features.chat.manual.manualList);
+const hasMore = computed(() => store.getters['features/chat/manual/HAS_MORE']);
+
+const isLoadingMore = ref(false);
+
+watch(
+	[
+		() => manualList.value.length,
+		hasMore,
+	],
+	() => {
+		isLoadingMore.value = false;
+	},
+);
+
+function loadMore() {
+	isLoadingMore.value = true;
+	return store.dispatch('features/chat/manual/LOAD_MORE');
+}
 
 function acceptTask(task) {
 	return runWithLoader(task.attemptId, () =>
