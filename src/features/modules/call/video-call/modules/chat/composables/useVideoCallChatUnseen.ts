@@ -1,4 +1,4 @@
-import { computed, type Ref, watch } from 'vue';
+import { computed, type Ref, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export function useVideoCallChatUnseen(isOnChat: Ref<boolean>) {
@@ -13,9 +13,7 @@ export function useVideoCallChatUnseen(isOnChat: Ref<boolean>) {
 	);
 	const isCallChatExist = computed(() => !!videoCallChat.value);
 
-	const videoCallChatUnseenCount = computed(() =>
-		store.getters['features/chat/unseen/UNSEEN_COUNT'](videoCallChat.value),
-	);
+	const videoCallChatUnseenCount = ref(0);
 	const videoCallChatUnseenBadge = computed(() =>
 		videoCallChatUnseenCount.value
 			? String(videoCallChatUnseenCount.value)
@@ -38,21 +36,16 @@ export function useVideoCallChatUnseen(isOnChat: Ref<boolean>) {
 		const lastMessage = messages.at(-1);
 		if (lastMessage?.member?.self) return;
 
-		store.commit('features/chat/unseen/ADD_UNSEEN_CHAT', videoCallChat.value);
+		videoCallChatUnseenCount.value += 1;
 	});
 
 	watch(isOnChat, (isActive) => {
-		if (isActive) {
-			store.dispatch(
-				'features/chat/unseen/MARK_CHAT_SEEN',
-				videoCallChat.value,
-			);
-		}
+		if (isActive) videoCallChatUnseenCount.value = 0;
 	});
 
 	watch(videoCallChat, (chat, prevChat) => {
-		if (!chat && prevChat) {
-			store.commit('features/chat/unseen/REMOVE_UNSEEN_CHAT', prevChat);
+		if (prevChat && chat?.conversationId !== prevChat.conversationId) {
+			videoCallChatUnseenCount.value = 0;
 		}
 	});
 
