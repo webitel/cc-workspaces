@@ -3,7 +3,7 @@ import { nextTick } from 'vue';
 import { createStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
-import { formattingFormBeforeSend } from '../../../../script/formattingFormBeforeSend.js';
+import { formattingFormBeforeSend } from '../../../../script/formattingFormBeforeSend';
 import {
 	AUTOSAVE_BEFORE_TIMEOUT_MS,
 	AUTOSAVE_DEBOUNCE_MS,

@@ -235,17 +235,47 @@ describe('createProcessingAutosave', () => {
 		const autosave = createProcessingAutosave({
 			save,
 		});
-		const attempt = createAttempt({
-			processingTimeoutAt: NOW + 1000,
-		});
+		const attempt = createAttempt();
 
 		autosave.schedule(attempt, 'payload');
+		attempt.processingTimeoutAt = NOW + 1000;
 		vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
 
 		expect(save).not.toHaveBeenCalled();
 	});
 
-	it('swallows save errors', async () => {
+	it('saves at once when the deadline is closer than the debounce pause', () => {
+		const save = vi.fn();
+		const autosave = createProcessingAutosave({
+			save,
+		});
+		const attempt = createAttempt({
+			processingTimeoutAt: NOW + AUTOSAVE_DEBOUNCE_MS,
+		});
+
+		autosave.schedule(attempt, 'payload');
+
+		expect(save).toHaveBeenCalledWith(attempt, 'payload');
+	});
+
+	it('keeps the debounce while the deadline is further than the pause', () => {
+		const save = vi.fn();
+		const autosave = createProcessingAutosave({
+			save,
+		});
+
+		autosave.schedule(
+			createAttempt({
+				processingTimeoutAt: NOW + AUTOSAVE_DEBOUNCE_MS + 1,
+			}),
+			'payload',
+		);
+
+		expect(save).not.toHaveBeenCalled();
+	});
+
+	it('swallows and logs save errors', async () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 		const autosave = createProcessingAutosave({
 			save: () => Promise.reject(new Error('network')),
 		});
@@ -261,6 +291,8 @@ describe('createProcessingAutosave', () => {
 		expect(() => autosave.flush()).not.toThrow();
 		expect(() => throwingAutosave.flush()).not.toThrow();
 		await vi.runAllTimersAsync();
+		expect(warn).toHaveBeenCalledTimes(2);
+		warn.mockRestore();
 	});
 
 	it('cancel drops the pending save', () => {

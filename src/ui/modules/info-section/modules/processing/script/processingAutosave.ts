@@ -36,11 +36,12 @@ export const isBeforeProcessing = (attempt?: AutosaveAttempt | null): boolean =>
 export const isNearTimeout = (
 	attempt: AutosaveAttempt | null | undefined,
 	now: number,
+	windowMs = AUTOSAVE_BEFORE_TIMEOUT_MS,
 ): boolean => {
 	const timeoutAt = attempt?.processingTimeoutAt;
 	if (!timeoutAt) return false;
 	const msLeft = timeoutAt - now;
-	return msLeft > 0 && msLeft <= AUTOSAVE_BEFORE_TIMEOUT_MS;
+	return msLeft > 0 && msLeft <= windowMs;
 };
 
 export const createProcessingAutosave = <
@@ -58,15 +59,17 @@ export const createProcessingAutosave = <
 		// checked at send time: the task may have left processing while waiting
 		if (!canAutosave(attempt)) return;
 		try {
-			Promise.resolve(save(attempt, payload)).catch(() => {});
-		} catch {
-			// autosave must never disturb the agent
+			Promise.resolve(save(attempt, payload)).catch((err) => {
+				console.warn('Processing autosave failed', err);
+			});
+		} catch (err) {
+			console.warn('Processing autosave failed', err);
 		}
 	};
 
 	// attempt goes as an argument, so flush() saves the task that was edited,
 	// even if the component has switched to another task since then
-	const schedule = debounce(
+	const debounced = debounce(
 		(attempt: Attempt, payload: Payload) => {
 			if (isBeforeProcessing(attempt)) {
 				defer?.(attempt, payload);
@@ -80,10 +83,17 @@ export const createProcessingAutosave = <
 		},
 	);
 
+	const schedule = (attempt: Attempt, payload: Payload) => {
+		debounced(attempt, payload);
+		if (isNearTimeout(attempt, Date.now(), AUTOSAVE_DEBOUNCE_MS)) {
+			debounced.flush();
+		}
+	};
+
 	return {
 		schedule,
 		send,
-		flush: schedule.flush,
-		cancel: schedule.cancel,
+		flush: debounced.flush,
+		cancel: debounced.cancel,
 	};
 };
