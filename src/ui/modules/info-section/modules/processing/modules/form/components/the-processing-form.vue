@@ -44,6 +44,7 @@ import { mapActions, mapGetters } from 'vuex';
 import sizeMixin from '../../../../../../../../app/mixins/sizeMixin';
 import HotkeyAction from '../../../../../../../hotkeys/HotkeysActiom.enum';
 import { useHotkeys } from '../../../../../../../hotkeys/useHotkeys';
+import { useProcessingAutosave } from '../../../composables/useProcessingAutosave';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import { formattingFormBeforeSend } from '../../../script/formattingFormBeforeSend.js';
 import FormCaseStatusSelect from './components/processing-form-case-status-select.vue';
@@ -78,6 +79,15 @@ export default {
 		processingModuleMixin,
 		sizeMixin,
 	],
+	setup(props) {
+		const autosave = useProcessingAutosave({
+			attempt: () => props.task.attempt,
+			save: (attempt, fields) => attempt.saveForm(null, fields),
+		});
+		return {
+			autosave,
+		};
+	},
 	data: () => ({
 		namespace: 'ui/infoSec/processing/form',
 		processingComponent: {
@@ -109,6 +119,8 @@ export default {
 	methods: {
 		...mapActions({
 			sendForm(dispatch, payload) {
+				// a pending autosave must not reach the next step of a multi-step form
+				this.autosave.cancel();
 				return dispatch(`${this.namespace}/SEND_FORM`, payload);
 			},
 			sendReporting(dispatch, payload) {
@@ -211,11 +223,10 @@ export default {
 		change({ el, value }) {
 			el.value = value;
 			nextTick(() => {
+				const fields = formattingFormBeforeSend(this.formBody);
 				// we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
-				if (this.isCall)
-					this.task.attempt.form.fields = formattingFormBeforeSend(
-						this.formBody,
-					);
+				if (this.isCall) this.task.attempt.form.fields = fields;
+				this.autosave.schedule(this.task.attempt, fields);
 			});
 		},
 		sendTableAction({ action, componentId, row }) {
