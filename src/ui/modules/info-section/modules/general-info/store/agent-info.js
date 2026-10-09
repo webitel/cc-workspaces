@@ -28,10 +28,19 @@ const actions = {
 			context.dispatch('LOAD_QUEUES'),
 		]),
 	LOAD_STATUS: async (context) => {
-		const agent = await AgentStatusAPI.get({
-			itemId: context.getters.AGENT_ID,
-		});
-		context.commit('SET_AGENT', agent);
+		try {
+			const agent = await AgentStatusAPI.get({
+				itemId: context.getters.AGENT_ID,
+			});
+			context.commit('SET_AGENT', agent);
+		} catch (error) {
+			if (error?.response?.status === 404) {
+				context.commit('features/status/SET_AGENT_REMOVED', true, {
+					root: true,
+				});
+			}
+			throw error;
+		}
 	},
 	LOAD_PAUSE_CAUSES: async (context) => {
 		const { items } = await AgentPauseCausesAPI.getList({
