@@ -119,8 +119,8 @@ export default {
 	methods: {
 		...mapActions({
 			sendForm(dispatch, payload) {
-				// a pending autosave must not reach the next step of a multi-step form
-				this.autosave.cancel();
+				// a late draft must not land on the next form step
+				this.autosave.discardPending();
 				return dispatch(`${this.namespace}/SEND_FORM`, payload);
 			},
 			sendReporting(dispatch, payload) {
@@ -226,7 +226,7 @@ export default {
 				const fields = formattingFormBeforeSend(this.formBody);
 				// we have to save any changes from formBody in task (for back-end) https://webitel.atlassian.net/browse/WTEL-6153
 				if (this.isCall) this.task.attempt.form.fields = fields;
-				this.autosave.schedule(this.task.attempt, fields);
+				this.autosave.saveLater(this.task.attempt, fields);
 			});
 		},
 		sendTableAction({ action, componentId, row }) {

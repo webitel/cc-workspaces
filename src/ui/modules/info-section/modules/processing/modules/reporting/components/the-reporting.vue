@@ -99,8 +99,7 @@ export default {
 			initReportingForm: 'INIT_REPORTING_FORM',
 		}),
 		sendReporting() {
-			// the real report supersedes any pending draft
-			this.autosave.cancel();
+			this.autosave.discardPending();
 			const reporting = this.taskReporting.generateReporting();
 			this.task.reporting(reporting);
 		},
@@ -117,11 +116,11 @@ export default {
 		},
 		taskReporting: {
 			handler(value, oldValue) {
-				// a new form object means another task or a fresh form, not an agent edit
+				// a new object is another task or a fresh form, not an edit
 				if (!value || value !== oldValue) return;
-				// drafts are calls only; after a real report the agent resends via Edit
+				// calls only; after reporting, changes go via Edit
 				if (this.isCall && !this.task.attempt?.reportedAt) {
-					this.autosave.schedule(this.task.attempt, value.generateReporting());
+					this.autosave.saveLater(this.task.attempt, value.generateReporting());
 				}
 			},
 			deep: true,

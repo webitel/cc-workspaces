@@ -3,9 +3,10 @@ import { useStore } from 'vuex';
 
 import {
 	type AutosaveAttempt,
+	AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
 	createProcessingAutosave,
 	isBeforeProcessing,
-	isNearTimeout,
+	isDeadlineWithin,
 } from '../script/processingAutosave';
 
 export function useProcessingAutosave<
@@ -21,61 +22,62 @@ export function useProcessingAutosave<
 	save: (attempt: Attempt, payload: Payload) => unknown;
 }) {
 	const store = useStore();
-	// latest changes per task made before its postprocessing, e.g. during the call
-	const deferred = new Map<Attempt, Payload>();
+	const changesBeforeProcessing = new Map<Attempt, Payload>();
 	const autosave = createProcessingAutosave<Attempt, Payload>({
 		save,
-		defer: (deferredAttempt, payload) => {
-			deferred.set(deferredAttempt, payload);
+		keepUntilProcessing: (heldAttempt, payload) => {
+			changesBeforeProcessing.set(heldAttempt, payload);
 		},
 	});
 
-	// polled on the clock tick: SDK changes the task state outside Vue reactivity
-	const sendDeferred = () => {
-		deferred.forEach((payload, deferredAttempt) => {
-			if (isBeforeProcessing(deferredAttempt)) return;
-			deferred.delete(deferredAttempt);
-			// direct send: schedule() would replace the pending save of another task
-			autosave.send(deferredAttempt, payload);
+	// polled on tick: SDK changes task state outside Vue reactivity
+	const sendChangesOnProcessingStart = () => {
+		changesBeforeProcessing.forEach((payload, heldAttempt) => {
+			if (isBeforeProcessing(heldAttempt)) return;
+			changesBeforeProcessing.delete(heldAttempt);
+			// saveLater() would replace another task's pending save
+			autosave.saveNow(heldAttempt, payload);
 		});
 	};
-	const flush = () => {
-		autosave.flush();
+	const savePendingNow = () => {
+		autosave.savePendingNow();
 	};
-	const cancel = () => {
-		autosave.cancel();
+	// also forgets changes kept from the call
+	const discardPending = () => {
+		autosave.discardPending();
 		const currentAttempt = attempt();
-		if (currentAttempt) deferred.delete(currentAttempt);
+		if (currentAttempt) changesBeforeProcessing.delete(currentAttempt);
 	};
-	const handleVisibilityChange = () => {
-		if (document.visibilityState === 'hidden') flush();
+	const saveWhenPageHidden = () => {
+		if (document.visibilityState === 'hidden') savePendingNow();
 	};
 
-	watch(
-		() => store.state.ui.now.now,
-		(now) => {
-			sendDeferred();
-			if (isNearTimeout(attempt(), now)) flush();
-		},
-	);
-	// the component is reused for another task: save the previous task's input first
-	watch(() => attempt()?.id, flush);
+	const onClockTick = (now: number) => {
+		sendChangesOnProcessingStart();
+		if (isDeadlineWithin(attempt(), now, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS)) {
+			savePendingNow();
+		}
+	};
+
+	watch(() => store.state.ui.now.now, onClockTick);
+	// the form is reused for the next task
+	watch(() => attempt()?.id, savePendingNow);
 
 	onMounted(() => {
-		document.addEventListener('visibilitychange', handleVisibilityChange);
-		window.addEventListener('pagehide', flush);
+		document.addEventListener('visibilitychange', saveWhenPageHidden);
+		window.addEventListener('pagehide', savePendingNow);
 	});
-	// the info section is kept alive, so switching its tab does not unmount the form
-	onDeactivated(flush);
+	// kept alive: switching tabs does not unmount the form
+	onDeactivated(savePendingNow);
 	onUnmounted(() => {
-		document.removeEventListener('visibilitychange', handleVisibilityChange);
-		window.removeEventListener('pagehide', flush);
-		flush();
+		document.removeEventListener('visibilitychange', saveWhenPageHidden);
+		window.removeEventListener('pagehide', savePendingNow);
+		savePendingNow();
 	});
 
 	return {
-		schedule: autosave.schedule,
-		flush,
-		cancel,
+		saveLater: autosave.saveLater,
+		savePendingNow,
+		discardPending,
 	};
 }

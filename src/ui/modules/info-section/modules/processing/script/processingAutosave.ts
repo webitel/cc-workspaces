@@ -1,10 +1,10 @@
 import { debounce } from 'lodash-es';
 import { JobState } from 'webitel-sdk';
 
-export const AUTOSAVE_DEBOUNCE_MS = 1500;
-export const AUTOSAVE_MAX_WAIT_MS = 5000;
-// "now" ticks once per second, so the window must hold at least one tick before the deadline
-export const AUTOSAVE_BEFORE_TIMEOUT_MS = 2000;
+export const AUTOSAVE_IDLE_DELAY_MS = 1500;
+export const AUTOSAVE_MAX_DELAY_MS = 5000;
+// longer than the 1 s "now" tick, so one tick always lands in it
+export const AUTOSAVE_FORCE_BEFORE_DEADLINE_MS = 2000;
 
 export interface AutosaveAttempt {
 	state?: string;
@@ -12,7 +12,7 @@ export interface AutosaveAttempt {
 	processingTimeoutAt?: number | null;
 }
 
-export const canAutosave = (
+export const isAutosaveAllowed = (
 	attempt?: AutosaveAttempt | null,
 	now = Date.now(),
 ): boolean =>
@@ -27,16 +27,15 @@ const FINISHED_STATES: string[] = [
 	JobState.Destroy,
 ];
 
-// the form can be open during an active call: postprocessing starts only when it ends
 export const isBeforeProcessing = (attempt?: AutosaveAttempt | null): boolean =>
 	!!attempt?.state &&
 	attempt.state !== JobState.Processing &&
 	!FINISHED_STATES.includes(attempt.state);
 
-export const isNearTimeout = (
+export const isDeadlineWithin = (
 	attempt: AutosaveAttempt | null | undefined,
 	now: number,
-	windowMs = AUTOSAVE_BEFORE_TIMEOUT_MS,
+	windowMs: number,
 ): boolean => {
 	const timeoutAt = attempt?.processingTimeoutAt;
 	if (!timeoutAt) return false;
@@ -49,15 +48,14 @@ export const createProcessingAutosave = <
 	Payload,
 >({
 	save,
-	defer,
+	keepUntilProcessing,
 }: {
 	save: (attempt: Attempt, payload: Payload) => unknown;
-	// receives changes made before postprocessing, which cannot be saved yet
-	defer?: (attempt: Attempt, payload: Payload) => void;
+	keepUntilProcessing?: (attempt: Attempt, payload: Payload) => void;
 }) => {
-	const send = (attempt: Attempt, payload: Payload) => {
-		// checked at send time: the task may have left processing while waiting
-		if (!canAutosave(attempt)) return;
+	const saveNow = (attempt: Attempt, payload: Payload) => {
+		// the task may have changed while waiting
+		if (!isAutosaveAllowed(attempt)) return;
 		try {
 			Promise.resolve(save(attempt, payload)).catch((err) => {
 				console.warn('Processing autosave failed', err);
@@ -67,33 +65,32 @@ export const createProcessingAutosave = <
 		}
 	};
 
-	// attempt goes as an argument, so flush() saves the task that was edited,
-	// even if the component has switched to another task since then
-	const debounced = debounce(
+	// attempt is passed in, so a pending save stays with its own task
+	const delayedSave = debounce(
 		(attempt: Attempt, payload: Payload) => {
 			if (isBeforeProcessing(attempt)) {
-				defer?.(attempt, payload);
+				keepUntilProcessing?.(attempt, payload);
 				return;
 			}
-			send(attempt, payload);
+			saveNow(attempt, payload);
 		},
-		AUTOSAVE_DEBOUNCE_MS,
+		AUTOSAVE_IDLE_DELAY_MS,
 		{
-			maxWait: AUTOSAVE_MAX_WAIT_MS,
+			maxWait: AUTOSAVE_MAX_DELAY_MS,
 		},
 	);
 
-	const schedule = (attempt: Attempt, payload: Payload) => {
-		debounced(attempt, payload);
-		if (isNearTimeout(attempt, Date.now(), AUTOSAVE_DEBOUNCE_MS)) {
-			debounced.flush();
+	const saveLater = (attempt: Attempt, payload: Payload) => {
+		delayedSave(attempt, payload);
+		if (isDeadlineWithin(attempt, Date.now(), AUTOSAVE_IDLE_DELAY_MS)) {
+			delayedSave.flush();
 		}
 	};
 
 	return {
-		schedule,
-		send,
-		flush: debounced.flush,
-		cancel: debounced.cancel,
+		saveLater,
+		saveNow,
+		savePendingNow: delayedSave.flush,
+		discardPending: delayedSave.cancel,
 	};
 };

@@ -5,8 +5,8 @@ import { JobState } from 'webitel-sdk';
 
 import { formattingFormBeforeSend } from '../../../../script/formattingFormBeforeSend';
 import {
-	AUTOSAVE_BEFORE_TIMEOUT_MS,
-	AUTOSAVE_DEBOUNCE_MS,
+	AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
+	AUTOSAVE_IDLE_DELAY_MS,
 } from '../../../../script/processingAutosave';
 import TheProcessingForm from '../the-processing-form.vue';
 
@@ -138,7 +138,7 @@ describe('TheProcessingForm', () => {
 			await typeInto(wrapper, el, 'hello');
 			expect(task.attempt.saveForm).not.toHaveBeenCalled();
 
-			vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 			expect(task.attempt.saveForm).toHaveBeenCalledWith(
 				null,
 				formattingFormBeforeSend(task.attempt.form.body),
@@ -152,7 +152,7 @@ describe('TheProcessingForm', () => {
 			const wrapper = mountForm();
 
 			await typeInto(wrapper, el, 'hello');
-			vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 
 			expect(task.attempt.saveForm).toHaveBeenCalledTimes(1);
 		});
@@ -164,7 +164,7 @@ describe('TheProcessingForm', () => {
 			const wrapper = mountForm();
 
 			await typeInto(wrapper, el, 'hello');
-			vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 			wrapper.unmount();
 
 			expect(task.attempt.saveForm).not.toHaveBeenCalled();
@@ -177,12 +177,14 @@ describe('TheProcessingForm', () => {
 
 			await typeInto(wrapper, el, 'hello');
 			store.state.ui.now.now =
-				task.attempt.processingTimeoutAt - AUTOSAVE_BEFORE_TIMEOUT_MS - 1;
+				task.attempt.processingTimeoutAt -
+				AUTOSAVE_FORCE_BEFORE_DEADLINE_MS -
+				1;
 			await nextTick();
 			expect(task.attempt.saveForm).not.toHaveBeenCalled();
 
 			store.state.ui.now.now =
-				task.attempt.processingTimeoutAt - AUTOSAVE_BEFORE_TIMEOUT_MS;
+				task.attempt.processingTimeoutAt - AUTOSAVE_FORCE_BEFORE_DEADLINE_MS;
 			await nextTick();
 			expect(task.attempt.saveForm).toHaveBeenCalledTimes(1);
 		});
@@ -200,7 +202,7 @@ describe('TheProcessingForm', () => {
 				action,
 				task,
 			});
-			vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 
 			expect(sendFormAction).toHaveBeenCalledWith(expect.anything(), {
 				action,
@@ -242,7 +244,7 @@ describe('TheProcessingForm', () => {
 			const wrapper = mountForm();
 
 			await typeInto(wrapper, el, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 			expect(task.attempt.saveForm).not.toHaveBeenCalled();
 
 			Object.assign(task.attempt, {

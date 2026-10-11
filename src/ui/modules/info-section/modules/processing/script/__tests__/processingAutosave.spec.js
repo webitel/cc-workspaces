@@ -1,13 +1,13 @@
 import { JobState } from 'webitel-sdk';
 
 import {
-	AUTOSAVE_BEFORE_TIMEOUT_MS,
-	AUTOSAVE_DEBOUNCE_MS,
-	AUTOSAVE_MAX_WAIT_MS,
-	canAutosave,
+	AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
+	AUTOSAVE_IDLE_DELAY_MS,
+	AUTOSAVE_MAX_DELAY_MS,
+	isAutosaveAllowed,
 	createProcessingAutosave,
 	isBeforeProcessing,
-	isNearTimeout,
+	isDeadlineWithin,
 } from '../processingAutosave';
 
 const NOW = 1_000_000;
@@ -20,14 +20,14 @@ const createAttempt = (overrides = {}) => ({
 	...overrides,
 });
 
-describe('canAutosave', () => {
+describe('isAutosaveAllowed', () => {
 	it('allows an attempt in processing with autosave on and a future deadline', () => {
-		expect(canAutosave(createAttempt(), NOW)).toBe(true);
+		expect(isAutosaveAllowed(createAttempt(), NOW)).toBe(true);
 	});
 
 	it('rejects when queue autosave is off', () => {
 		expect(
-			canAutosave(
+			isAutosaveAllowed(
 				createAttempt({
 					processingAutosave: false,
 				}),
@@ -38,7 +38,7 @@ describe('canAutosave', () => {
 
 	it('rejects when the attempt is not in processing', () => {
 		expect(
-			canAutosave(
+			isAutosaveAllowed(
 				createAttempt({
 					state: JobState.Bridged,
 				}),
@@ -49,7 +49,7 @@ describe('canAutosave', () => {
 
 	it('rejects when the deadline has passed', () => {
 		expect(
-			canAutosave(
+			isAutosaveAllowed(
 				createAttempt({
 					processingTimeoutAt: NOW,
 				}),
@@ -60,14 +60,14 @@ describe('canAutosave', () => {
 
 	it('rejects when there is no deadline or no attempt', () => {
 		expect(
-			canAutosave(
+			isAutosaveAllowed(
 				createAttempt({
 					processingTimeoutAt: null,
 				}),
 				NOW,
 			),
 		).toBe(false);
-		expect(canAutosave(null, NOW)).toBe(false);
+		expect(isAutosaveAllowed(null, NOW)).toBe(false);
 	});
 });
 
@@ -114,30 +114,44 @@ describe('isBeforeProcessing', () => {
 	});
 });
 
-describe('isNearTimeout', () => {
+describe('isDeadlineWithin', () => {
 	it('is true inside the pre-timeout window', () => {
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_BEFORE_TIMEOUT_MS,
+			processingTimeoutAt: NOW + AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
 		});
-		expect(isNearTimeout(attempt, NOW)).toBe(true);
+		expect(
+			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+		).toBe(true);
 	});
 
 	it('is false before the window and after the deadline', () => {
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_BEFORE_TIMEOUT_MS + 1,
+			processingTimeoutAt: NOW + AUTOSAVE_FORCE_BEFORE_DEADLINE_MS + 1,
 		});
-		expect(isNearTimeout(attempt, NOW)).toBe(false);
-		expect(isNearTimeout(attempt, attempt.processingTimeoutAt)).toBe(false);
+		expect(
+			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+		).toBe(false);
+		expect(
+			isDeadlineWithin(
+				attempt,
+				attempt.processingTimeoutAt,
+				AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
+			),
+		).toBe(false);
 	});
 
 	it('follows the current deadline after a renewal', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + 1000,
 		});
-		expect(isNearTimeout(attempt, NOW)).toBe(true);
+		expect(
+			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+		).toBe(true);
 
 		attempt.processingTimeoutAt = NOW + 30_000;
-		expect(isNearTimeout(attempt, NOW)).toBe(false);
+		expect(
+			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+		).toBe(false);
 	});
 });
 
@@ -151,16 +165,16 @@ describe('createProcessingAutosave', () => {
 		vi.useRealTimers();
 	});
 
-	it('saves once after the debounce pause with the last payload', () => {
+	it('saves once after the idle delay with the last payload', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 		const attempt = createAttempt();
 
-		autosave.schedule(attempt, 'first');
-		autosave.schedule(attempt, 'second');
-		vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS - 1);
+		autosave.saveLater(attempt, 'first');
+		autosave.saveLater(attempt, 'second');
+		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS - 1);
 		expect(save).not.toHaveBeenCalled();
 
 		vi.advanceTimersByTime(1);
@@ -168,40 +182,40 @@ describe('createProcessingAutosave', () => {
 		expect(save).toHaveBeenCalledWith(attempt, 'second');
 	});
 
-	it('saves during continuous input no later than the max wait', () => {
+	it('saves during continuous input no later than the max delay', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 		const attempt = createAttempt();
 
-		for (let elapsed = 0; elapsed < AUTOSAVE_MAX_WAIT_MS; elapsed += 500) {
-			autosave.schedule(attempt, elapsed);
+		for (let elapsed = 0; elapsed < AUTOSAVE_MAX_DELAY_MS; elapsed += 500) {
+			autosave.saveLater(attempt, elapsed);
 			vi.advanceTimersByTime(500);
 		}
 
 		expect(save).toHaveBeenCalledTimes(1);
 	});
 
-	it('flush sends the pending save immediately and nothing when idle', () => {
+	it('savePendingNow sends the pending save immediately and nothing when idle', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 		const attempt = createAttempt();
 
-		autosave.flush();
+		autosave.savePendingNow();
 		expect(save).not.toHaveBeenCalled();
 
-		autosave.schedule(attempt, 'payload');
-		autosave.flush();
+		autosave.saveLater(attempt, 'payload');
+		autosave.savePendingNow();
 		expect(save).toHaveBeenCalledWith(attempt, 'payload');
 
-		autosave.flush();
+		autosave.savePendingNow();
 		expect(save).toHaveBeenCalledTimes(1);
 	});
 
-	it('saves to the attempt passed to schedule', () => {
+	it('saves to the attempt passed to saveLater', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
@@ -210,8 +224,8 @@ describe('createProcessingAutosave', () => {
 			id: 'A',
 		});
 
-		autosave.schedule(attemptA, 'payloadA');
-		autosave.flush();
+		autosave.saveLater(attemptA, 'payloadA');
+		autosave.savePendingNow();
 
 		expect(save).toHaveBeenCalledWith(attemptA, 'payloadA');
 	});
@@ -223,9 +237,9 @@ describe('createProcessingAutosave', () => {
 		});
 		const attempt = createAttempt();
 
-		autosave.schedule(attempt, 'payload');
+		autosave.saveLater(attempt, 'payload');
 		attempt.state = JobState.Closed;
-		vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
 	});
@@ -237,36 +251,36 @@ describe('createProcessingAutosave', () => {
 		});
 		const attempt = createAttempt();
 
-		autosave.schedule(attempt, 'payload');
+		autosave.saveLater(attempt, 'payload');
 		attempt.processingTimeoutAt = NOW + 1000;
-		vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
 	});
 
-	it('saves at once when the deadline is closer than the debounce pause', () => {
+	it('saves at once when the deadline is closer than the idle delay', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_DEBOUNCE_MS,
+			processingTimeoutAt: NOW + AUTOSAVE_IDLE_DELAY_MS,
 		});
 
-		autosave.schedule(attempt, 'payload');
+		autosave.saveLater(attempt, 'payload');
 
 		expect(save).toHaveBeenCalledWith(attempt, 'payload');
 	});
 
-	it('keeps the debounce while the deadline is further than the pause', () => {
+	it('keeps the delay while the deadline is further than the pause', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 
-		autosave.schedule(
+		autosave.saveLater(
 			createAttempt({
-				processingTimeoutAt: NOW + AUTOSAVE_DEBOUNCE_MS + 1,
+				processingTimeoutAt: NOW + AUTOSAVE_IDLE_DELAY_MS + 1,
 			}),
 			'payload',
 		);
@@ -285,35 +299,35 @@ describe('createProcessingAutosave', () => {
 			},
 		});
 
-		autosave.schedule(createAttempt(), 'payload');
-		throwingAutosave.schedule(createAttempt(), 'payload');
+		autosave.saveLater(createAttempt(), 'payload');
+		throwingAutosave.saveLater(createAttempt(), 'payload');
 
-		expect(() => autosave.flush()).not.toThrow();
-		expect(() => throwingAutosave.flush()).not.toThrow();
+		expect(() => autosave.savePendingNow()).not.toThrow();
+		expect(() => throwingAutosave.savePendingNow()).not.toThrow();
 		await vi.runAllTimersAsync();
 		expect(warn).toHaveBeenCalledTimes(2);
 		warn.mockRestore();
 	});
 
-	it('cancel drops the pending save', () => {
+	it('discardPending drops the pending save', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 
-		autosave.schedule(createAttempt(), 'payload');
-		autosave.cancel();
-		vi.advanceTimersByTime(AUTOSAVE_MAX_WAIT_MS);
+		autosave.saveLater(createAttempt(), 'payload');
+		autosave.discardPending();
+		vi.advanceTimersByTime(AUTOSAVE_MAX_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
 	});
 
 	it('keeps the latest payload of a task that is not in postprocessing yet', () => {
 		const save = vi.fn();
-		const defer = vi.fn();
+		const keepUntilProcessing = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
-			defer,
+			keepUntilProcessing,
 		});
 		const attempt = createAttempt({
 			state: JobState.Bridged,
@@ -321,44 +335,44 @@ describe('createProcessingAutosave', () => {
 			processingTimeoutAt: null,
 		});
 
-		autosave.schedule(attempt, 'first');
-		autosave.schedule(attempt, 'second');
-		vi.advanceTimersByTime(AUTOSAVE_DEBOUNCE_MS);
+		autosave.saveLater(attempt, 'first');
+		autosave.saveLater(attempt, 'second');
+		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
-		expect(defer).toHaveBeenCalledTimes(1);
-		expect(defer).toHaveBeenCalledWith(attempt, 'second');
+		expect(keepUntilProcessing).toHaveBeenCalledTimes(1);
+		expect(keepUntilProcessing).toHaveBeenCalledWith(attempt, 'second');
 	});
 
-	it('drops, not defers, a save of a task that has ended', () => {
-		const defer = vi.fn();
+	it('drops, not keeps, a save of a task that has ended', () => {
+		const keepUntilProcessing = vi.fn();
 		const autosave = createProcessingAutosave({
 			save: vi.fn(),
-			defer,
+			keepUntilProcessing,
 		});
 
-		autosave.schedule(
+		autosave.saveLater(
 			createAttempt({
 				state: JobState.Closed,
 			}),
 			'payload',
 		);
-		autosave.flush();
+		autosave.savePendingNow();
 
-		expect(defer).not.toHaveBeenCalled();
+		expect(keepUntilProcessing).not.toHaveBeenCalled();
 	});
 
-	it('send saves at once through the same guard', () => {
+	it('saveNow saves at once through the same guard', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 		const attempt = createAttempt();
 
-		autosave.send(attempt, 'payload');
+		autosave.saveNow(attempt, 'payload');
 		expect(save).toHaveBeenCalledWith(attempt, 'payload');
 
-		autosave.send(
+		autosave.saveNow(
 			createAttempt({
 				processingAutosave: false,
 			}),
