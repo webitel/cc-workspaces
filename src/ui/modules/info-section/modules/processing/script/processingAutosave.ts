@@ -28,12 +28,11 @@ export const isBeforeProcessing = (attempt?: Task | null): boolean =>
 export const isDeadlineWithin = (
 	attempt: Task | null | undefined,
 	now: number,
-	windowMs: number,
 ): boolean => {
 	const timeoutAt = attempt?.processingTimeoutAt;
 	if (!timeoutAt) return false;
 	const msLeft = timeoutAt - now;
-	return msLeft > 0 && msLeft <= windowMs;
+	return msLeft > 0 && msLeft <= FORCE_AUTOSAVE_BEFORE_DEADLINE_MS;
 };
 
 export const createProcessingAutosave = <Payload>({
@@ -70,7 +69,7 @@ export const createProcessingAutosave = <Payload>({
 
 	const saveLater = (attempt: Task, payload: Payload) => {
 		delayedSave(attempt, payload);
-		if (isDeadlineWithin(attempt, Date.now(), AUTOSAVE_DELAY_MS)) {
+		if (isDeadlineWithin(attempt, Date.now())) {
 			delayedSave.flush();
 		}
 	};

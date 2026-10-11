@@ -3,7 +3,6 @@ import { useStore } from 'vuex';
 import type { Task } from 'webitel-sdk';
 
 import {
-	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 	createProcessingAutosave,
 	isBeforeProcessing,
 	isDeadlineWithin,
@@ -48,7 +47,7 @@ export function useProcessingAutosave<Payload>({
 
 	const onClockTick = (now: number) => {
 		sendChangesOnProcessingStart();
-		if (isDeadlineWithin(attempt(), now, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS)) {
+		if (isDeadlineWithin(attempt(), now)) {
 			savePendingNow();
 		}
 	};

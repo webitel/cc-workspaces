@@ -119,39 +119,25 @@ describe('isDeadlineWithin', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 		});
-		expect(
-			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
-		).toBe(true);
+		expect(isDeadlineWithin(attempt, NOW)).toBe(true);
 	});
 
 	it('is false before the window and after the deadline', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
 		});
-		expect(
-			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
-		).toBe(false);
-		expect(
-			isDeadlineWithin(
-				attempt,
-				attempt.processingTimeoutAt,
-				FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
-			),
-		).toBe(false);
+		expect(isDeadlineWithin(attempt, NOW)).toBe(false);
+		expect(isDeadlineWithin(attempt, attempt.processingTimeoutAt)).toBe(false);
 	});
 
 	it('follows the current deadline after a renewal', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + 1000,
 		});
-		expect(
-			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
-		).toBe(true);
+		expect(isDeadlineWithin(attempt, NOW)).toBe(true);
 
 		attempt.processingTimeoutAt = NOW + 30_000;
-		expect(
-			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
-		).toBe(false);
+		expect(isDeadlineWithin(attempt, NOW)).toBe(false);
 	});
 });
 
@@ -258,13 +244,13 @@ describe('createProcessingAutosave', () => {
 		expect(save).not.toHaveBeenCalled();
 	});
 
-	it('saves at once when the deadline is closer than the idle delay', () => {
+	it('saves at once inside the pre-deadline window', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
 		});
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_DELAY_MS,
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 		});
 
 		autosave.saveLater(attempt, 'payload');
@@ -272,7 +258,7 @@ describe('createProcessingAutosave', () => {
 		expect(save).toHaveBeenCalledWith(attempt, 'payload');
 	});
 
-	it('keeps the delay while the deadline is further than the pause', () => {
+	it('keeps the delay before the pre-deadline window', () => {
 		const save = vi.fn();
 		const autosave = createProcessingAutosave({
 			save,
@@ -280,7 +266,7 @@ describe('createProcessingAutosave', () => {
 
 		autosave.saveLater(
 			createAttempt({
-				processingTimeoutAt: NOW + AUTOSAVE_DELAY_MS + 1,
+				processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
 			}),
 			'payload',
 		);
