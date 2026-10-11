@@ -54,7 +54,15 @@ const actions = {
 
 	AGENT_LOGOUT: async (context) => {
 		const agent = await context.dispatch('GET_AGENT_INSTANCE');
-		agent.offline();
+		try {
+			await agent.offline();
+		} catch (error) {
+			if (error?.id === 'app.agent.logout.app_err') {
+				context.commit('SET_AGENT_REMOVED', true);
+			} else {
+				throw error;
+			}
+		}
 	},
 
 	TOGGLE_USER_DND: async (context) => {
