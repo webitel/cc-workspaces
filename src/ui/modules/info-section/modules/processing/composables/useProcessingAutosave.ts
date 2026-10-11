@@ -5,7 +5,7 @@ import type { Task } from 'webitel-sdk';
 import {
 	createProcessingAutosave,
 	isBeforeProcessing,
-	isDeadlineWithin,
+	isNearDeadline,
 } from '../script/processingAutosave';
 
 export function useProcessingAutosave<Payload>({
@@ -47,7 +47,7 @@ export function useProcessingAutosave<Payload>({
 
 	const onClockTick = (now: number) => {
 		sendChangesOnProcessingStart();
-		if (isDeadlineWithin(attempt(), now)) {
+		if (isNearDeadline(attempt(), now)) {
 			savePendingNow();
 		}
 	};

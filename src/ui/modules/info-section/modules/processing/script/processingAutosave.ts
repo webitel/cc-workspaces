@@ -25,7 +25,7 @@ export const isBeforeProcessing = (attempt?: Task | null): boolean =>
 	attempt.state !== JobState.Processing &&
 	!FINISHED_STATES.includes(attempt.state);
 
-export const isDeadlineWithin = (
+export const isNearDeadline = (
 	attempt: Task | null | undefined,
 	now: number,
 ): boolean => {
@@ -69,7 +69,7 @@ export const createProcessingAutosave = <Payload>({
 
 	const saveLater = (attempt: Task, payload: Payload) => {
 		delayedSave(attempt, payload);
-		if (isDeadlineWithin(attempt, Date.now())) {
+		if (isNearDeadline(attempt, Date.now())) {
 			delayedSave.flush();
 		}
 	};

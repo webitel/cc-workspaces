@@ -7,7 +7,7 @@ import {
 	isAutosaveAllowed,
 	createProcessingAutosave,
 	isBeforeProcessing,
-	isDeadlineWithin,
+	isNearDeadline,
 } from '../processingAutosave';
 
 const NOW = 1_000_000;
@@ -114,30 +114,30 @@ describe('isBeforeProcessing', () => {
 	});
 });
 
-describe('isDeadlineWithin', () => {
+describe('isNearDeadline', () => {
 	it('is true inside the pre-timeout window', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 		});
-		expect(isDeadlineWithin(attempt, NOW)).toBe(true);
+		expect(isNearDeadline(attempt, NOW)).toBe(true);
 	});
 
 	it('is false before the window and after the deadline', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
 		});
-		expect(isDeadlineWithin(attempt, NOW)).toBe(false);
-		expect(isDeadlineWithin(attempt, attempt.processingTimeoutAt)).toBe(false);
+		expect(isNearDeadline(attempt, NOW)).toBe(false);
+		expect(isNearDeadline(attempt, attempt.processingTimeoutAt)).toBe(false);
 	});
 
 	it('follows the current deadline after a renewal', () => {
 		const attempt = createAttempt({
 			processingTimeoutAt: NOW + 1000,
 		});
-		expect(isDeadlineWithin(attempt, NOW)).toBe(true);
+		expect(isNearDeadline(attempt, NOW)).toBe(true);
 
 		attempt.processingTimeoutAt = NOW + 30_000;
-		expect(isDeadlineWithin(attempt, NOW)).toBe(false);
+		expect(isNearDeadline(attempt, NOW)).toBe(false);
 	});
 });
 
