@@ -11,8 +11,8 @@ import { createStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
 import {
-	AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
-	AUTOSAVE_IDLE_DELAY_MS,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+	AUTOSAVE_DELAY_MS,
 } from '../../script/processingAutosave';
 import { useProcessingAutosave } from '../useProcessingAutosave';
 
@@ -94,7 +94,7 @@ describe('useProcessingAutosave', () => {
 		mountHost();
 
 		autosave.saveLater(state.attempt, 'payload');
-		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 
 		expect(save).toHaveBeenCalledWith(state.attempt, 'payload');
 	});
@@ -104,12 +104,12 @@ describe('useProcessingAutosave', () => {
 
 		autosave.saveLater(state.attempt, 'payload');
 		store.state.ui.now.now =
-			state.attempt.processingTimeoutAt - AUTOSAVE_FORCE_BEFORE_DEADLINE_MS - 1;
+			state.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE_MS - 1;
 		await nextTick();
 		expect(save).not.toHaveBeenCalled();
 
 		store.state.ui.now.now =
-			state.attempt.processingTimeoutAt - AUTOSAVE_FORCE_BEFORE_DEADLINE_MS;
+			state.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE_MS;
 		await nextTick();
 		expect(save).toHaveBeenCalledTimes(1);
 	});
@@ -220,7 +220,7 @@ describe('useProcessingAutosave', () => {
 			mountHost();
 
 			autosave.saveLater(state.attempt, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 			await tick();
 			expect(save).not.toHaveBeenCalled();
 
@@ -237,7 +237,7 @@ describe('useProcessingAutosave', () => {
 			mountHost();
 
 			autosave.saveLater(state.attempt, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 			state.attempt.state = JobState.Closed;
 			await tick();
 			enterProcessing(state.attempt);
@@ -251,7 +251,7 @@ describe('useProcessingAutosave', () => {
 			mountHost();
 
 			autosave.saveLater(state.attempt, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 			autosave.discardPending();
 			enterProcessing(state.attempt);
 			await tick();
@@ -265,7 +265,7 @@ describe('useProcessingAutosave', () => {
 			mountHost();
 
 			autosave.saveLater(attemptA, 'payload A');
-			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 			const attemptB = createAttempt({
 				id: 2,
 			});
@@ -276,7 +276,7 @@ describe('useProcessingAutosave', () => {
 			await tick();
 			expect(save).toHaveBeenCalledWith(attemptA, 'payload A');
 
-			vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 			expect(save).toHaveBeenCalledWith(attemptB, 'payload B');
 			expect(save).toHaveBeenCalledTimes(2);
 		});

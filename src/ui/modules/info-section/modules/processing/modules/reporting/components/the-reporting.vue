@@ -116,10 +116,9 @@ export default {
 		},
 		taskReporting: {
 			handler(value, oldValue) {
-				// a new object is another task or a fresh form, not an edit
-				if (!value || value !== oldValue) return;
-				// calls only; after reporting, changes go via Edit
-				if (this.isCall && !this.task.attempt?.reportedAt) {
+				const isEditOfSameForm = !!value && value === oldValue;
+				const isNotReportedYet = !this.task.attempt?.reportedAt;
+				if (isEditOfSameForm && this.isCall && isNotReportedYet) {
 					this.autosave.saveLater(this.task.attempt, value.generateReporting());
 				}
 			},

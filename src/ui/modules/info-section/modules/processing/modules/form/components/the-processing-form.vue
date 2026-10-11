@@ -119,7 +119,6 @@ export default {
 	methods: {
 		...mapActions({
 			sendForm(dispatch, payload) {
-				// a late draft must not land on the next form step
 				this.autosave.discardPending();
 				return dispatch(`${this.namespace}/SEND_FORM`, payload);
 			},

@@ -1,29 +1,24 @@
 import { onDeactivated, onMounted, onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
+import type { Task } from 'webitel-sdk';
 
 import {
-	type AutosaveAttempt,
-	AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 	createProcessingAutosave,
 	isBeforeProcessing,
 	isDeadlineWithin,
 } from '../script/processingAutosave';
 
-export function useProcessingAutosave<
-	Attempt extends AutosaveAttempt & {
-		id?: number | string;
-	},
-	Payload,
->({
+export function useProcessingAutosave<Payload>({
 	attempt,
 	save,
 }: {
-	attempt: () => Attempt | null | undefined;
-	save: (attempt: Attempt, payload: Payload) => unknown;
+	attempt: () => Task | null | undefined;
+	save: (attempt: Task, payload: Payload) => unknown;
 }) {
 	const store = useStore();
-	const changesBeforeProcessing = new Map<Attempt, Payload>();
-	const autosave = createProcessingAutosave<Attempt, Payload>({
+	const changesBeforeProcessing = new Map<Task, Payload>();
+	const autosave = createProcessingAutosave<Payload>({
 		save,
 		keepUntilProcessing: (heldAttempt, payload) => {
 			changesBeforeProcessing.set(heldAttempt, payload);
@@ -42,7 +37,6 @@ export function useProcessingAutosave<
 	const savePendingNow = () => {
 		autosave.savePendingNow();
 	};
-	// also forgets changes kept from the call
 	const discardPending = () => {
 		autosave.discardPending();
 		const currentAttempt = attempt();
@@ -54,20 +48,18 @@ export function useProcessingAutosave<
 
 	const onClockTick = (now: number) => {
 		sendChangesOnProcessingStart();
-		if (isDeadlineWithin(attempt(), now, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS)) {
+		if (isDeadlineWithin(attempt(), now, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS)) {
 			savePendingNow();
 		}
 	};
 
 	watch(() => store.state.ui.now.now, onClockTick);
-	// the form is reused for the next task
 	watch(() => attempt()?.id, savePendingNow);
 
 	onMounted(() => {
 		document.addEventListener('visibilitychange', saveWhenPageHidden);
 		window.addEventListener('pagehide', savePendingNow);
 	});
-	// kept alive: switching tabs does not unmount the form
 	onDeactivated(savePendingNow);
 	onUnmounted(() => {
 		document.removeEventListener('visibilitychange', saveWhenPageHidden);

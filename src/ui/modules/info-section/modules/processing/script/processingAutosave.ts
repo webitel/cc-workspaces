@@ -1,19 +1,12 @@
 import { debounce } from 'lodash-es';
-import { JobState } from 'webitel-sdk';
+import { JobState, type Task } from 'webitel-sdk';
 
-export const AUTOSAVE_IDLE_DELAY_MS = 1500;
+export const AUTOSAVE_DELAY_MS = 1500;
 export const AUTOSAVE_MAX_DELAY_MS = 5000;
-// longer than the 1 s "now" tick, so one tick always lands in it
-export const AUTOSAVE_FORCE_BEFORE_DEADLINE_MS = 2000;
-
-export interface AutosaveAttempt {
-	state?: string;
-	processingAutosave?: boolean;
-	processingTimeoutAt?: number | null;
-}
+export const FORCE_AUTOSAVE_BEFORE_DEADLINE_MS = 2000;
 
 export const isAutosaveAllowed = (
-	attempt?: AutosaveAttempt | null,
+	attempt?: Task | null,
 	now = Date.now(),
 ): boolean =>
 	!!attempt?.processingAutosave &&
@@ -27,13 +20,13 @@ const FINISHED_STATES: string[] = [
 	JobState.Destroy,
 ];
 
-export const isBeforeProcessing = (attempt?: AutosaveAttempt | null): boolean =>
+export const isBeforeProcessing = (attempt?: Task | null): boolean =>
 	!!attempt?.state &&
 	attempt.state !== JobState.Processing &&
 	!FINISHED_STATES.includes(attempt.state);
 
 export const isDeadlineWithin = (
-	attempt: AutosaveAttempt | null | undefined,
+	attempt: Task | null | undefined,
 	now: number,
 	windowMs: number,
 ): boolean => {
@@ -43,18 +36,14 @@ export const isDeadlineWithin = (
 	return msLeft > 0 && msLeft <= windowMs;
 };
 
-export const createProcessingAutosave = <
-	Attempt extends AutosaveAttempt,
-	Payload,
->({
+export const createProcessingAutosave = <Payload>({
 	save,
 	keepUntilProcessing,
 }: {
-	save: (attempt: Attempt, payload: Payload) => unknown;
-	keepUntilProcessing?: (attempt: Attempt, payload: Payload) => void;
+	save: (attempt: Task, payload: Payload) => unknown;
+	keepUntilProcessing?: (attempt: Task, payload: Payload) => void;
 }) => {
-	const saveNow = (attempt: Attempt, payload: Payload) => {
-		// the task may have changed while waiting
+	const saveNow = (attempt: Task, payload: Payload) => {
 		if (!isAutosaveAllowed(attempt)) return;
 		try {
 			Promise.resolve(save(attempt, payload)).catch((err) => {
@@ -65,24 +54,23 @@ export const createProcessingAutosave = <
 		}
 	};
 
-	// attempt is passed in, so a pending save stays with its own task
 	const delayedSave = debounce(
-		(attempt: Attempt, payload: Payload) => {
+		(attempt: Task, payload: Payload) => {
 			if (isBeforeProcessing(attempt)) {
 				keepUntilProcessing?.(attempt, payload);
 				return;
 			}
 			saveNow(attempt, payload);
 		},
-		AUTOSAVE_IDLE_DELAY_MS,
+		AUTOSAVE_DELAY_MS,
 		{
 			maxWait: AUTOSAVE_MAX_DELAY_MS,
 		},
 	);
 
-	const saveLater = (attempt: Attempt, payload: Payload) => {
+	const saveLater = (attempt: Task, payload: Payload) => {
 		delayedSave(attempt, payload);
-		if (isDeadlineWithin(attempt, Date.now(), AUTOSAVE_IDLE_DELAY_MS)) {
+		if (isDeadlineWithin(attempt, Date.now(), AUTOSAVE_DELAY_MS)) {
 			delayedSave.flush();
 		}
 	};

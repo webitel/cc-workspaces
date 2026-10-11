@@ -1,8 +1,8 @@
 import { JobState } from 'webitel-sdk';
 
 import {
-	AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
-	AUTOSAVE_IDLE_DELAY_MS,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+	AUTOSAVE_DELAY_MS,
 	AUTOSAVE_MAX_DELAY_MS,
 	isAutosaveAllowed,
 	createProcessingAutosave,
@@ -117,25 +117,25 @@ describe('isBeforeProcessing', () => {
 describe('isDeadlineWithin', () => {
 	it('is true inside the pre-timeout window', () => {
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 		});
 		expect(
-			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
 		).toBe(true);
 	});
 
 	it('is false before the window and after the deadline', () => {
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_FORCE_BEFORE_DEADLINE_MS + 1,
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
 		});
 		expect(
-			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
 		).toBe(false);
 		expect(
 			isDeadlineWithin(
 				attempt,
 				attempt.processingTimeoutAt,
-				AUTOSAVE_FORCE_BEFORE_DEADLINE_MS,
+				FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 			),
 		).toBe(false);
 	});
@@ -145,12 +145,12 @@ describe('isDeadlineWithin', () => {
 			processingTimeoutAt: NOW + 1000,
 		});
 		expect(
-			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
 		).toBe(true);
 
 		attempt.processingTimeoutAt = NOW + 30_000;
 		expect(
-			isDeadlineWithin(attempt, NOW, AUTOSAVE_FORCE_BEFORE_DEADLINE_MS),
+			isDeadlineWithin(attempt, NOW, FORCE_AUTOSAVE_BEFORE_DEADLINE_MS),
 		).toBe(false);
 	});
 });
@@ -174,7 +174,7 @@ describe('createProcessingAutosave', () => {
 
 		autosave.saveLater(attempt, 'first');
 		autosave.saveLater(attempt, 'second');
-		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS - 1);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS - 1);
 		expect(save).not.toHaveBeenCalled();
 
 		vi.advanceTimersByTime(1);
@@ -239,7 +239,7 @@ describe('createProcessingAutosave', () => {
 
 		autosave.saveLater(attempt, 'payload');
 		attempt.state = JobState.Closed;
-		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
 	});
@@ -253,7 +253,7 @@ describe('createProcessingAutosave', () => {
 
 		autosave.saveLater(attempt, 'payload');
 		attempt.processingTimeoutAt = NOW + 1000;
-		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
 	});
@@ -264,7 +264,7 @@ describe('createProcessingAutosave', () => {
 			save,
 		});
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + AUTOSAVE_IDLE_DELAY_MS,
+			processingTimeoutAt: NOW + AUTOSAVE_DELAY_MS,
 		});
 
 		autosave.saveLater(attempt, 'payload');
@@ -280,7 +280,7 @@ describe('createProcessingAutosave', () => {
 
 		autosave.saveLater(
 			createAttempt({
-				processingTimeoutAt: NOW + AUTOSAVE_IDLE_DELAY_MS + 1,
+				processingTimeoutAt: NOW + AUTOSAVE_DELAY_MS + 1,
 			}),
 			'payload',
 		);
@@ -337,7 +337,7 @@ describe('createProcessingAutosave', () => {
 
 		autosave.saveLater(attempt, 'first');
 		autosave.saveLater(attempt, 'second');
-		vi.advanceTimersByTime(AUTOSAVE_IDLE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 
 		expect(save).not.toHaveBeenCalled();
 		expect(keepUntilProcessing).toHaveBeenCalledTimes(1);
