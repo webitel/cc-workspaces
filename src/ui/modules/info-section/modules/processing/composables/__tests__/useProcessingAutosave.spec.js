@@ -11,8 +11,9 @@ import { createStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
 import {
-	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 	AUTOSAVE_DELAY_MS,
+	AUTOSAVE_MAX_DELAY_MS,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
 } from '../../script/processingAutosave';
 import { useProcessingAutosave } from '../useProcessingAutosave';
 
@@ -51,7 +52,6 @@ describe('useProcessingAutosave', () => {
 		},
 	});
 	const mountHost = () => mount(Host, mountOptions());
-	// KeepAlive lets the test deactivate the host without unmounting it
 	const mountKeptAliveHost = () =>
 		mount(
 			defineComponent({
@@ -90,13 +90,108 @@ describe('useProcessingAutosave', () => {
 		vi.useRealTimers();
 	});
 
-	it('saves after the idle delay', () => {
+	it('saves once after the idle delay with the last payload', () => {
 		mountHost();
 
+		autosave.saveLater(state.attempt, 'first');
+		autosave.saveLater(state.attempt, 'second');
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS - 1);
+		expect(save).not.toHaveBeenCalled();
+
+		vi.advanceTimersByTime(1);
+		expect(save).toHaveBeenCalledTimes(1);
+		expect(save).toHaveBeenCalledWith(state.attempt, 'second');
+	});
+
+	it('saves during continuous input no later than the max delay', () => {
+		mountHost();
+
+		for (let elapsed = 0; elapsed < AUTOSAVE_MAX_DELAY_MS; elapsed += 500) {
+			autosave.saveLater(state.attempt, elapsed);
+			vi.advanceTimersByTime(500);
+		}
+
+		expect(save).toHaveBeenCalledTimes(1);
+	});
+
+	it('savePendingNow sends the pending save immediately and nothing when idle', () => {
+		mountHost();
+
+		autosave.savePendingNow();
+		expect(save).not.toHaveBeenCalled();
+
 		autosave.saveLater(state.attempt, 'payload');
+		autosave.savePendingNow();
+		expect(save).toHaveBeenCalledWith(state.attempt, 'payload');
+
+		autosave.savePendingNow();
+		expect(save).toHaveBeenCalledTimes(1);
+	});
+
+	it('drops the save when the attempt left processing before it fires', () => {
+		mountHost();
+		const attempt = createAttempt();
+
+		autosave.saveLater(attempt, 'payload');
+		attempt.state = JobState.Closed;
 		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
 
-		expect(save).toHaveBeenCalledWith(state.attempt, 'payload');
+		expect(save).not.toHaveBeenCalled();
+	});
+
+	it('drops the save when the deadline passed before it fires', () => {
+		mountHost();
+		const attempt = createAttempt();
+
+		autosave.saveLater(attempt, 'payload');
+		attempt.processingTimeoutAt = NOW + 1000;
+		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+
+		expect(save).not.toHaveBeenCalled();
+	});
+
+	it('saves at once inside the pre-deadline window', () => {
+		mountHost();
+		const attempt = createAttempt({
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+		});
+
+		autosave.saveLater(attempt, 'payload');
+
+		expect(save).toHaveBeenCalledWith(attempt, 'payload');
+	});
+
+	it('keeps the delay before the pre-deadline window', () => {
+		mountHost();
+
+		autosave.saveLater(
+			createAttempt({
+				processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
+			}),
+			'payload',
+		);
+
+		expect(save).not.toHaveBeenCalled();
+	});
+
+	it('swallows and logs save errors', async () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		save = vi
+			.fn()
+			.mockRejectedValueOnce(new Error('network'))
+			.mockImplementationOnce(() => {
+				throw new Error('sync');
+			});
+		mountHost();
+
+		autosave.saveLater(createAttempt(), 'payload');
+		expect(() => autosave.savePendingNow()).not.toThrow();
+		autosave.saveLater(createAttempt(), 'payload');
+		expect(() => autosave.savePendingNow()).not.toThrow();
+		await vi.runAllTimersAsync();
+
+		expect(warn).toHaveBeenCalledTimes(2);
+		warn.mockRestore();
 	});
 
 	it('saves the pending change when the deadline is near', async () => {
@@ -230,6 +325,34 @@ describe('useProcessingAutosave', () => {
 
 			await tick();
 			expect(save).toHaveBeenCalledTimes(1);
+		});
+
+		it('keep only the latest payload of the task', async () => {
+			state.attempt = createActiveCallAttempt();
+			mountHost();
+
+			autosave.saveLater(state.attempt, 'first');
+			autosave.saveLater(state.attempt, 'second');
+			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+			enterProcessing(state.attempt);
+			await tick();
+
+			expect(save).toHaveBeenCalledTimes(1);
+			expect(save).toHaveBeenCalledWith(state.attempt, 'second');
+		});
+
+		it('are not kept for a task that has already ended', async () => {
+			state.attempt = createActiveCallAttempt({
+				state: JobState.Closed,
+			});
+			mountHost();
+
+			autosave.saveLater(state.attempt, 'payload');
+			autosave.savePendingNow();
+			enterProcessing(state.attempt);
+			await tick();
+
+			expect(save).not.toHaveBeenCalled();
 		});
 
 		it('are dropped when the task ends without postprocessing', async () => {
