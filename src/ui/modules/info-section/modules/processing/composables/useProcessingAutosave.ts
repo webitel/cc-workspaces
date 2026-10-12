@@ -69,7 +69,6 @@ export function useProcessingAutosave<Payload>({
 
 	return {
 		saveLater,
-		savePendingNow,
 		discardPending,
 	};
 }

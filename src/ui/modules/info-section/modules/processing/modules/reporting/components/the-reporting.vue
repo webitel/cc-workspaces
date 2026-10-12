@@ -63,7 +63,7 @@ export default {
 	],
 	setup(props) {
 		const autosave = useProcessingAutosave({
-			attempt: () => props.task.attempt,
+			attempt: () => props.task?.attempt,
 			save: (attempt, reporting) => attempt.reportingDraft(reporting),
 		});
 		return {
@@ -115,11 +115,14 @@ export default {
 			immediate: true,
 		},
 		taskReporting: {
-			handler(value, oldValue) {
-				const isEditOfSameForm = !!value && value === oldValue;
+			handler(reporting, oldReporting) {
+				const isSameForm = !!reporting && reporting === oldReporting;
 				const isNotReportedYet = !this.task.attempt?.reportedAt;
-				if (isEditOfSameForm && this.isCall && isNotReportedYet) {
-					this.autosave.saveLater(this.task.attempt, value.generateReporting());
+				if (isSameForm && this.isCall && isNotReportedYet) {
+					this.autosave.saveLater(
+						this.task.attempt,
+						reporting.generateReporting(),
+					);
 				}
 			},
 			deep: true,
