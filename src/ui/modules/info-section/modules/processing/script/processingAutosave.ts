@@ -1,8 +1,8 @@
 import { JobState, type Task } from 'webitel-sdk';
 
-export const AUTOSAVE_DELAY_MS = 1500;
-export const AUTOSAVE_MAX_DELAY_MS = 5000;
-export const FORCE_AUTOSAVE_BEFORE_DEADLINE_MS = 2000;
+export const AUTOSAVE_DELAY = 1500;
+export const AUTOSAVE_MAX_DELAY = 5000;
+export const FORCE_AUTOSAVE_BEFORE_DEADLINE = 2000;
 
 export const isAutosaveAllowed = (
 	attempt?: Task | null,
@@ -13,17 +13,6 @@ export const isAutosaveAllowed = (
 	!!attempt.processingTimeoutAt &&
 	attempt.processingTimeoutAt > now;
 
-const FINISHED_STATES: string[] = [
-	JobState.Missed,
-	JobState.Closed,
-	JobState.Destroy,
-];
-
-export const isBeforeProcessing = (attempt?: Task | null): boolean =>
-	!!attempt?.state &&
-	attempt.state !== JobState.Processing &&
-	!FINISHED_STATES.includes(attempt.state);
-
 export const isNearDeadline = (
 	attempt: Task | null | undefined,
 	now: number,
@@ -31,5 +20,5 @@ export const isNearDeadline = (
 	const timeoutAt = attempt?.processingTimeoutAt;
 	if (!timeoutAt) return false;
 	const msLeft = timeoutAt - now;
-	return msLeft > 0 && msLeft <= FORCE_AUTOSAVE_BEFORE_DEADLINE_MS;
+	return msLeft > 0 && msLeft <= FORCE_AUTOSAVE_BEFORE_DEADLINE;
 };

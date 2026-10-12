@@ -5,8 +5,8 @@ import { createStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
 import {
-	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
-	AUTOSAVE_DELAY_MS,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE,
+	AUTOSAVE_DELAY,
 } from '../../../../script/processingAutosave';
 import ReportingForm from '../../store/ReportingForm';
 import FailureForm from '../reporting-failure-form.vue';
@@ -245,7 +245,7 @@ describe('Default form draft autosave', () => {
 		await nextTick();
 		expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
 
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 		expect(task.attempt.reportingDraft).toHaveBeenCalledTimes(1);
 		expect(task.attempt.reportingDraft).toHaveBeenCalledWith(
 			task.postProcessData.generateReporting(),
@@ -258,9 +258,9 @@ describe('Default form draft autosave', () => {
 		mountReporting();
 
 		store.state.ui.now.now =
-			task.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE_MS;
+			task.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE;
 		await nextTick();
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
 		expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
 	});
@@ -271,7 +271,7 @@ describe('Default form draft autosave', () => {
 		task.postProcessData.description = 'note';
 		await nextTick();
 		store.state.ui.now.now =
-			task.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE_MS;
+			task.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE;
 		await nextTick();
 
 		expect(task.attempt.reportingDraft).toHaveBeenCalledTimes(1);
@@ -283,7 +283,7 @@ describe('Default form draft autosave', () => {
 
 		task.postProcessData.description = 'note';
 		await nextTick();
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 		wrapper.unmount();
 
 		expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
@@ -295,7 +295,7 @@ describe('Default form draft autosave', () => {
 
 		task.postProcessData.description = 'edited after send';
 		await nextTick();
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 		wrapper.unmount();
 
 		expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
@@ -307,7 +307,7 @@ describe('Default form draft autosave', () => {
 		task.postProcessData.description = 'final';
 		await nextTick();
 		wrapper.vm.sendReporting();
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
 		expect(task.reporting).toHaveBeenCalledWith(
 			task.postProcessData.generateReporting(),
@@ -333,57 +333,22 @@ describe('Default form draft autosave', () => {
 				description: 'value A',
 			}),
 		);
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 		expect(taskB.attempt.reportingDraft).not.toHaveBeenCalled();
 	});
 
-	describe('when the report is filled during the call', () => {
-		const startCall = () => {
-			Object.assign(task.attempt, {
-				state: JobState.Bridged,
-				processingAutosave: false,
-				processingTimeoutAt: null,
-			});
-		};
-		const endCall = async () => {
-			Object.assign(task.attempt, {
-				state: JobState.Processing,
-				processingAutosave: true,
-				processingTimeoutAt: NOW + 60_000,
-			});
-			store.state.ui.now.now += 1000;
-			await nextTick();
-		};
-
-		it('sends the draft once postprocessing starts', async () => {
-			startCall();
-			mountReporting();
-
-			task.postProcessData.description = 'during call';
-			await nextTick();
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
-
-			await endCall();
-			expect(task.attempt.reportingDraft).toHaveBeenCalledWith(
-				expect.objectContaining({
-					description: 'during call',
-				}),
-			);
+	it('does not send a draft during the call', async () => {
+		Object.assign(task.attempt, {
+			state: JobState.Bridged,
+			processingAutosave: false,
+			processingTimeoutAt: null,
 		});
+		mountReporting();
 
-		it('sends no draft after Send during the call', async () => {
-			startCall();
-			const wrapper = mountReporting();
+		task.postProcessData.description = 'during call';
+		await nextTick();
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
-			task.postProcessData.description = 'during call';
-			await nextTick();
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			wrapper.vm.sendReporting();
-			await endCall();
-
-			expect(task.reporting).toHaveBeenCalledTimes(1);
-			expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
-		});
+		expect(task.attempt.reportingDraft).not.toHaveBeenCalled();
 	});
 });

@@ -1,19 +1,12 @@
 import { mount } from '@vue/test-utils';
-import {
-	defineComponent,
-	h,
-	KeepAlive,
-	markRaw,
-	nextTick,
-	reactive,
-} from 'vue';
+import { defineComponent, h, KeepAlive, nextTick, reactive } from 'vue';
 import { createStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
 import {
-	AUTOSAVE_DELAY_MS,
-	AUTOSAVE_MAX_DELAY_MS,
-	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+	AUTOSAVE_DELAY,
+	AUTOSAVE_MAX_DELAY,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE,
 } from '../../script/processingAutosave';
 import { useProcessingAutosave } from '../useProcessingAutosave';
 
@@ -95,7 +88,7 @@ describe('useProcessingAutosave', () => {
 
 		autosave.saveLater(state.attempt, 'first');
 		autosave.saveLater(state.attempt, 'second');
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS - 1);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY - 1);
 		expect(save).not.toHaveBeenCalled();
 
 		vi.advanceTimersByTime(1);
@@ -106,7 +99,7 @@ describe('useProcessingAutosave', () => {
 	it('saves during continuous input no later than the max delay', () => {
 		mountHost();
 
-		for (let elapsed = 0; elapsed < AUTOSAVE_MAX_DELAY_MS; elapsed += 500) {
+		for (let elapsed = 0; elapsed < AUTOSAVE_MAX_DELAY; elapsed += 500) {
 			autosave.saveLater(state.attempt, elapsed);
 			vi.advanceTimersByTime(500);
 		}
@@ -134,7 +127,7 @@ describe('useProcessingAutosave', () => {
 
 		autosave.saveLater(attempt, 'payload');
 		attempt.state = JobState.Closed;
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
 		expect(save).not.toHaveBeenCalled();
 	});
@@ -145,7 +138,7 @@ describe('useProcessingAutosave', () => {
 
 		autosave.saveLater(attempt, 'payload');
 		attempt.processingTimeoutAt = NOW + 1000;
-		vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
 		expect(save).not.toHaveBeenCalled();
 	});
@@ -153,7 +146,7 @@ describe('useProcessingAutosave', () => {
 	it('saves at once inside the pre-deadline window', () => {
 		mountHost();
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE,
 		});
 
 		autosave.saveLater(attempt, 'payload');
@@ -166,7 +159,7 @@ describe('useProcessingAutosave', () => {
 
 		autosave.saveLater(
 			createAttempt({
-				processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
+				processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE + 1,
 			}),
 			'payload',
 		);
@@ -199,12 +192,12 @@ describe('useProcessingAutosave', () => {
 
 		autosave.saveLater(state.attempt, 'payload');
 		store.state.ui.now.now =
-			state.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE_MS - 1;
+			state.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE - 1;
 		await nextTick();
 		expect(save).not.toHaveBeenCalled();
 
 		store.state.ui.now.now =
-			state.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE_MS;
+			state.attempt.processingTimeoutAt - FORCE_AUTOSAVE_BEFORE_DEADLINE;
 		await nextTick();
 		expect(save).toHaveBeenCalledTimes(1);
 	});
@@ -289,119 +282,17 @@ describe('useProcessingAutosave', () => {
 		expect(save).not.toHaveBeenCalled();
 	});
 
-	describe('changes made before postprocessing', () => {
-		// raw like an SDK task: its state changes are invisible to Vue watchers
-		const createActiveCallAttempt = (overrides = {}) =>
-			markRaw(
-				createAttempt({
-					state: JobState.Bridged,
-					processingAutosave: false,
-					processingTimeoutAt: null,
-					...overrides,
-				}),
-			);
-		const enterProcessing = (attempt) => {
-			attempt.state = JobState.Processing;
-			attempt.processingAutosave = true;
-			attempt.processingTimeoutAt = Date.now() + 60_000;
-		};
-		const tick = async () => {
-			store.state.ui.now.now += 1000;
-			await nextTick();
-		};
-
-		it('are saved on the first tick after the task enters postprocessing', async () => {
-			state.attempt = createActiveCallAttempt();
-			mountHost();
-
-			autosave.saveLater(state.attempt, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			await tick();
-			expect(save).not.toHaveBeenCalled();
-
-			enterProcessing(state.attempt);
-			await tick();
-			expect(save).toHaveBeenCalledWith(state.attempt, 'during call');
-
-			await tick();
-			expect(save).toHaveBeenCalledTimes(1);
+	it('does not save changes made during the call', () => {
+		mountHost();
+		const attempt = createAttempt({
+			state: JobState.Bridged,
+			processingAutosave: false,
+			processingTimeoutAt: null,
 		});
 
-		it('keep only the latest payload of the task', async () => {
-			state.attempt = createActiveCallAttempt();
-			mountHost();
+		autosave.saveLater(attempt, 'during call');
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
-			autosave.saveLater(state.attempt, 'first');
-			autosave.saveLater(state.attempt, 'second');
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			enterProcessing(state.attempt);
-			await tick();
-
-			expect(save).toHaveBeenCalledTimes(1);
-			expect(save).toHaveBeenCalledWith(state.attempt, 'second');
-		});
-
-		it('are not kept for a task that has already ended', async () => {
-			state.attempt = createActiveCallAttempt({
-				state: JobState.Closed,
-			});
-			mountHost();
-
-			autosave.saveLater(state.attempt, 'payload');
-			autosave.savePendingNow();
-			enterProcessing(state.attempt);
-			await tick();
-
-			expect(save).not.toHaveBeenCalled();
-		});
-
-		it('are dropped when the task ends without postprocessing', async () => {
-			state.attempt = createActiveCallAttempt();
-			mountHost();
-
-			autosave.saveLater(state.attempt, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			state.attempt.state = JobState.Closed;
-			await tick();
-			enterProcessing(state.attempt);
-			await tick();
-
-			expect(save).not.toHaveBeenCalled();
-		});
-
-		it('are dropped by discardPending (manual submit during the call)', async () => {
-			state.attempt = createActiveCallAttempt();
-			mountHost();
-
-			autosave.saveLater(state.attempt, 'during call');
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			autosave.discardPending();
-			enterProcessing(state.attempt);
-			await tick();
-
-			expect(save).not.toHaveBeenCalled();
-		});
-
-		it('of a previous task do not replace the pending save of the current one', async () => {
-			const attemptA = createActiveCallAttempt();
-			state.attempt = attemptA;
-			mountHost();
-
-			autosave.saveLater(attemptA, 'payload A');
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			const attemptB = createAttempt({
-				id: 2,
-			});
-			state.attempt = attemptB;
-			await nextTick();
-			autosave.saveLater(attemptB, 'payload B');
-			enterProcessing(attemptA);
-			await tick();
-			expect(save).toHaveBeenCalledWith(attemptA, 'payload A');
-
-			vi.advanceTimersByTime(AUTOSAVE_DELAY_MS);
-			expect(save).toHaveBeenCalledWith(attemptB, 'payload B');
-			expect(save).toHaveBeenCalledTimes(2);
-		});
+		expect(save).not.toHaveBeenCalled();
 	});
 });

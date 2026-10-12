@@ -1,9 +1,8 @@
 import { JobState } from 'webitel-sdk';
 
 import {
-	FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE,
 	isAutosaveAllowed,
-	isBeforeProcessing,
 	isNearDeadline,
 } from '../processingAutosave';
 
@@ -33,15 +32,24 @@ describe('isAutosaveAllowed', () => {
 		).toBe(false);
 	});
 
-	it('rejects when the attempt is not in processing', () => {
-		expect(
-			isAutosaveAllowed(
-				createAttempt({
-					state: JobState.Bridged,
-				}),
-				NOW,
-			),
-		).toBe(false);
+	it('rejects an attempt that is not in processing', () => {
+		[
+			JobState.Distribute,
+			JobState.Offering,
+			JobState.Bridged,
+			JobState.Missed,
+			JobState.Closed,
+			JobState.Destroy,
+		].forEach((state) => {
+			expect(
+				isAutosaveAllowed(
+					createAttempt({
+						state,
+					}),
+					NOW,
+				),
+			).toBe(false);
+		});
 	});
 
 	it('rejects when the deadline has passed', () => {
@@ -68,60 +76,17 @@ describe('isAutosaveAllowed', () => {
 	});
 });
 
-describe('isBeforeProcessing', () => {
-	it('is true while the task has not reached postprocessing yet', () => {
-		[
-			JobState.Distribute,
-			JobState.Offering,
-			JobState.Bridged,
-		].forEach((state) => {
-			expect(
-				isBeforeProcessing(
-					createAttempt({
-						state,
-					}),
-				),
-			).toBe(true);
-		});
-	});
-
-	it('is false in postprocessing, after the task ended, and without a state', () => {
-		[
-			JobState.Processing,
-			JobState.Missed,
-			JobState.Closed,
-			JobState.Destroy,
-		].forEach((state) => {
-			expect(
-				isBeforeProcessing(
-					createAttempt({
-						state,
-					}),
-				),
-			).toBe(false);
-		});
-		expect(
-			isBeforeProcessing(
-				createAttempt({
-					state: undefined,
-				}),
-			),
-		).toBe(false);
-		expect(isBeforeProcessing(null)).toBe(false);
-	});
-});
-
 describe('isNearDeadline', () => {
 	it('is true inside the pre-timeout window', () => {
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS,
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE,
 		});
 		expect(isNearDeadline(attempt, NOW)).toBe(true);
 	});
 
 	it('is false before the window and after the deadline', () => {
 		const attempt = createAttempt({
-			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE_MS + 1,
+			processingTimeoutAt: NOW + FORCE_AUTOSAVE_BEFORE_DEADLINE + 1,
 		});
 		expect(isNearDeadline(attempt, NOW)).toBe(false);
 		expect(isNearDeadline(attempt, attempt.processingTimeoutAt)).toBe(false);

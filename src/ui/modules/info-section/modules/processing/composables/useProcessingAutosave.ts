@@ -4,10 +4,9 @@ import { useStore } from 'vuex';
 import type { Task } from 'webitel-sdk';
 
 import {
-	AUTOSAVE_DELAY_MS,
-	AUTOSAVE_MAX_DELAY_MS,
+	AUTOSAVE_DELAY,
+	AUTOSAVE_MAX_DELAY,
 	isAutosaveAllowed,
-	isBeforeProcessing,
 	isNearDeadline,
 } from '../script/processingAutosave';
 
@@ -19,7 +18,6 @@ export function useProcessingAutosave<Payload>({
 	save: (attempt: Task, payload: Payload) => unknown;
 }) {
 	const store = useStore();
-	const changesBeforeProcessing = new Map<Task, Payload>();
 
 	const saveNow = (editedAttempt: Task, payload: Payload) => {
 		if (!isAutosaveAllowed(editedAttempt)) return;
@@ -32,19 +30,9 @@ export function useProcessingAutosave<Payload>({
 		}
 	};
 
-	const delayedSave = debounce(
-		(editedAttempt: Task, payload: Payload) => {
-			if (isBeforeProcessing(editedAttempt)) {
-				changesBeforeProcessing.set(editedAttempt, payload);
-				return;
-			}
-			saveNow(editedAttempt, payload);
-		},
-		AUTOSAVE_DELAY_MS,
-		{
-			maxWait: AUTOSAVE_MAX_DELAY_MS,
-		},
-	);
+	const delayedSave = debounce(saveNow, AUTOSAVE_DELAY, {
+		maxWait: AUTOSAVE_MAX_DELAY,
+	});
 
 	const saveLater = (editedAttempt: Task, payload: Payload) => {
 		delayedSave(editedAttempt, payload);
@@ -55,25 +43,13 @@ export function useProcessingAutosave<Payload>({
 	};
 	const discardPending = () => {
 		delayedSave.cancel();
-		const currentAttempt = attempt();
-		if (currentAttempt) changesBeforeProcessing.delete(currentAttempt);
 	};
 
-	// polled on tick: SDK changes task state outside Vue reactivity
-	const sendChangesOnProcessingStart = () => {
-		changesBeforeProcessing.forEach((payload, heldAttempt) => {
-			if (isBeforeProcessing(heldAttempt)) return;
-			changesBeforeProcessing.delete(heldAttempt);
-			// saveLater() would replace another task's pending save
-			saveNow(heldAttempt, payload);
-		});
-	};
 	const saveWhenPageHidden = () => {
 		if (document.visibilityState === 'hidden') savePendingNow();
 	};
 
 	const onClockTick = (now: number) => {
-		sendChangesOnProcessingStart();
 		if (isNearDeadline(attempt(), now)) savePendingNow();
 	};
 
