@@ -99,6 +99,19 @@ const actions = {
 		if (
 			context.getters.CHAT_ON_WORKSPACE.conversationId === chat.conversationId
 		) {
+			// [Claude] WTEL-10437: after a re-transfer to the same agent the old leg is
+			// destroyed while a new invite of the same conversation is still active —
+			// move the workspace onto it instead of clearing it
+			const activeChat = context.getters['active/ALL_CHAT_LIST'].find(
+				(clientChat) => clientChat.conversationId === chat.conversationId,
+			);
+			if (activeChat) {
+				if (context.getters.CHAT_ON_WORKSPACE !== activeChat) {
+					context.dispatch('SET_WORKSPACE', activeChat);
+				}
+				return;
+			}
+
 			context.dispatch('RESET_WORKSPACE');
 			context.dispatch('RESET_CHAT_HISTORY');
 		}

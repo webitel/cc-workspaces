@@ -30,6 +30,7 @@ describe('features/chat store client handlers: actions', () => {
 		actions: {},
 		getters: {
 			IS_MY_MESSAGE: () => false,
+			'active/ALL_CHAT_LIST': [],
 			CHAT_ON_WORKSPACE: {
 				channelId: '1',
 			},
@@ -148,6 +149,65 @@ describe('features/chat store client handlers: actions', () => {
 	it('HANDLE_DESTROY_ACTION dispatches _RESET_UNREAD_COUNT', async () => {
 		await chatModule.actions.RESET_CHAT(context, chat);
 		expect(context.dispatch).toHaveBeenCalledWith('_RESET_UNREAD_COUNT');
+	});
+
+	describe('RESET_CHAT on re-transfer to the same agent', () => {
+		const oldLeg = {
+			conversationId: 'conv-1',
+			channelId: 'channel-old',
+			closedAt: 1,
+		};
+		const newInvite = {
+			conversationId: 'conv-1',
+			inviteId: 'invite-new',
+			closedAt: 0,
+		};
+		const makeContext = ({ activeChats, chatOnWorkspace }) => ({
+			...context,
+			getters: {
+				...context.getters,
+				'active/ALL_CHAT_LIST': activeChats,
+				CHAT_ON_WORKSPACE: chatOnWorkspace,
+			},
+		});
+
+		it('moves the workspace onto the still active invite', () => {
+			const ctx = makeContext({
+				activeChats: [
+					newInvite,
+				],
+				chatOnWorkspace: oldLeg,
+			});
+			chatModule.actions.RESET_CHAT(ctx, oldLeg);
+			expect(context.dispatch).toHaveBeenCalledWith('SET_WORKSPACE', newInvite);
+			expect(context.dispatch).not.toHaveBeenCalledWith('RESET_WORKSPACE');
+			expect(context.dispatch).not.toHaveBeenCalledWith('RESET_CHAT_HISTORY');
+		});
+
+		it('keeps the workspace when it already shows the invite', () => {
+			const ctx = makeContext({
+				activeChats: [
+					newInvite,
+				],
+				chatOnWorkspace: newInvite,
+			});
+			chatModule.actions.RESET_CHAT(ctx, oldLeg);
+			expect(context.dispatch).not.toHaveBeenCalledWith(
+				'SET_WORKSPACE',
+				expect.anything(),
+			);
+			expect(context.dispatch).not.toHaveBeenCalledWith('RESET_WORKSPACE');
+		});
+
+		it('resets the workspace when no active chat of the conversation is left', () => {
+			const ctx = makeContext({
+				activeChats: [],
+				chatOnWorkspace: oldLeg,
+			});
+			chatModule.actions.RESET_CHAT(ctx, oldLeg);
+			expect(context.dispatch).toHaveBeenCalledWith('RESET_WORKSPACE');
+			expect(context.dispatch).toHaveBeenCalledWith('RESET_CHAT_HISTORY');
+		});
 	});
 
 	it('HANDLE_CLOSE_ACTION dispatches HANDLE_CHAT_EVENT action with action and chat params', async () => {
