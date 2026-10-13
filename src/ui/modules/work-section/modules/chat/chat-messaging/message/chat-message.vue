@@ -150,6 +150,7 @@ const isFileMalware = computed(() => !!props.message.file?.malware);
 
 const isFilePolicyFailed = computed(
 	() =>
+		!props.message?.text &&
 		props.message?.variables?.template === filePolicyError ||
 		props.message?.context?.template === filePolicyError,
 );
@@ -185,7 +186,7 @@ const isBot = computed(() => {
 	const byMemberType = props.message.member?.type === AgentTypes.BOT;
 	const byMissingChannelId =
 		!props.message.member?.type && !props.message.channelId;
-	const byBotVariables = props.message.variables?.from === AgentTypes.BOT;
+	const byBotVariables = props.message.variables?.from === AgentTypes.BOT && !props.message.channelId;
 
 	return byMemberType || byMissingChannelId || byBotVariables;
 });
