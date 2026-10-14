@@ -31,6 +31,32 @@ describe('Agent Info Module: Actions', () => {
 		expect(getMock).toHaveBeenCalled();
 		expect(context.commit).toHaveBeenCalledWith('SET_AGENT', response);
 	});
+	it('LOAD_STATUS marks the agent removed when the agent is not found', async () => {
+		const error = {
+			response: {
+				status: 404,
+			},
+		};
+		AgentStatusAPI.get = vi.fn().mockRejectedValue(error);
+		await expect(agentInfo.actions.LOAD_STATUS(context)).rejects.toBe(error);
+		expect(context.commit).toHaveBeenCalledWith(
+			'features/status/SET_AGENT_REMOVED',
+			true,
+			{
+				root: true,
+			},
+		);
+	});
+	it('LOAD_STATUS keeps the agent when the request fails for another reason', async () => {
+		const error = {
+			response: {
+				status: 500,
+			},
+		};
+		AgentStatusAPI.get = vi.fn().mockRejectedValue(error);
+		await expect(agentInfo.actions.LOAD_STATUS(context)).rejects.toBe(error);
+		expect(context.commit).not.toHaveBeenCalled();
+	});
 	it('LOAD_PAUSE_CAUSES calls AgentPauseCause API and commits response to SET_PAUSE_CAUSES', async () => {
 		const response = {
 			items: [],

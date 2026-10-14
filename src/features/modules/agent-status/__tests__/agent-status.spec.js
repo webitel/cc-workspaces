@@ -71,6 +71,32 @@ describe('features/status store client handlers: actions', () => {
 		expect(agent.offline).toHaveBeenCalled();
 	});
 
+	it('AGENT_LOGOUT marks the agent removed on app.agent.logout.app_err', async () => {
+		const offline = vi.fn().mockRejectedValue({
+			id: 'app.agent.logout.app_err',
+		});
+		context.dispatch = vi.fn().mockResolvedValue({
+			...agent,
+			offline,
+		});
+		await statusModule.actions.AGENT_LOGOUT(context);
+		expect(context.commit).toHaveBeenCalledWith('SET_AGENT_REMOVED', true);
+	});
+
+	it('AGENT_LOGOUT rethrows other offline errors', async () => {
+		const error = {
+			id: 'other.error',
+		};
+		context.dispatch = vi.fn().mockResolvedValue({
+			...agent,
+			offline: vi.fn().mockRejectedValue(error),
+		});
+		await expect(statusModule.actions.AGENT_LOGOUT(context)).rejects.toBe(
+			error,
+		);
+		expect(context.commit).not.toHaveBeenCalled();
+	});
+
 	it("TOGGLE_USER_DND calls setUserStatus API method with '', if current status is dnd", () => {
 		const setUserStatusMock = vi.fn();
 		usersAPIRepository.setUserStatus = setUserStatusMock;
