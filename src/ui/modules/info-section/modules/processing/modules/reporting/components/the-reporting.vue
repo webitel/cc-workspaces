@@ -47,8 +47,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
+import { useProcessingAutosave } from '../../../composables/useProcessingAutosave';
 import processingModuleMixin from '../../../mixins/processingModuleMixin';
 import FailureForm from './reporting-failure-form.vue';
 
@@ -60,7 +61,19 @@ export default {
 	mixins: [
 		processingModuleMixin,
 	],
+	setup(props) {
+		const autosave = useProcessingAutosave({
+			attempt: () => props.task?.attempt,
+			save: (attempt, reporting) => attempt.reportingDraft(reporting),
+		});
+		return {
+			autosave,
+		};
+	},
 	computed: {
+		...mapGetters('workspace', {
+			isCall: 'IS_CALL_WORKSPACE',
+		}),
 		// is needed for watcher
 		isTaskReporting() {
 			return !!this.taskReporting;
@@ -86,6 +99,7 @@ export default {
 			initReportingForm: 'INIT_REPORTING_FORM',
 		}),
 		sendReporting() {
+			this.autosave.discardPending();
 			const reporting = this.taskReporting.generateReporting();
 			this.task.reporting(reporting);
 		},
@@ -99,6 +113,19 @@ export default {
 				this.initReportingForm();
 			},
 			immediate: true,
+		},
+		taskReporting: {
+			handler(reporting, oldReporting) {
+				const isSameForm = !!reporting && reporting === oldReporting;
+				const isNotReportedYet = !this.task.attempt?.reportedAt;
+				if (isSameForm && this.isCall && isNotReportedYet) {
+					this.autosave.saveLater(
+						this.task.attempt,
+						reporting.generateReporting(),
+					);
+				}
+			},
+			deep: true,
 		},
 	},
 };
