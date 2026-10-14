@@ -3,6 +3,7 @@
     color="secondary"
     variant="text"
     size="sm"
+    :loading="loading"
     class="load-more-button"
     @click.prevent="loadMore"
   >
@@ -15,6 +16,10 @@ const props = defineProps({
 	loadMore: {
 		type: Function,
 		required: true,
+	},
+	loading: {
+		type: Boolean,
+		default: false,
 	},
 });
 </script>

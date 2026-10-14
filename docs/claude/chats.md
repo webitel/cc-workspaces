@@ -50,7 +50,8 @@ field, off the shared `getClientChats()` helper: `client.allConversations()` (wh
 Video call chats (`chat.meetingId`, from `wbt_meeting_id`) are dropped in
 `getAllClientConversations()`. The SDK keeps them in `conversationStore` but never emits
 their chat events or destroys them. They are shown only inside the call, via
-`call.conversation` (WTEL-10532).
+`call.conversation` (WTEL-10532). Their unread badge in the call header is kept out of
+`unseen` too (see below).
 
 ## What `/chat/dialogs` returns
 
@@ -91,7 +92,10 @@ exactly `cc_*` / `wbt_*`. Hence `snakeToCamel(['context'])` in our API client.
   are pulled from `CatalogAPI` by `chat.conversationId || chat.id` — `chat.id` alone does not
   resolve a closed chat while post-processing is running (WTEL-9955).
 - **`manual`** — `cli.agent.waitingListChats`, accepted through
-  `interceptAttempt(task.attemptId)`.
+  `interceptAttempt(task.attemptId)`. The SDK trims the list to `maxWaitingListChats`
+  (10 by default); the counter shows `waitingChatsSize` and "More" adds 10 via
+  `limitWaitingListChats`, applied on the next waiting list event. The limit resets on
+  reconnect with the new agent object (WTEL-7634).
 - **`chatHistory`** — the conversation history for a contact via
   `contactChatMessagesHistory`, separate from the messages of the current chat.
 - **`chatMedia`** — `mediaView` for previewing files and controlling the players, which hang
@@ -99,7 +103,8 @@ exactly `cc_*` / `wbt_*`. Hence `snakeToCamel(['context'])` in our API client.
 - **`unseen`** — the unread dot. The key is `chat.conversationId || chat.id`, because active
   chats come from the SDK and closed ones from the API. The dot is cleared by
   `MARK_CHAT_SEEN`, dispatched by `useChatScroll` from `@webitel/ui-chats` once the agent has
-  actually scrolled to the bottom.
+  actually scrolled to the bottom. Any key in this map lights the Chats tab indicator, so the
+  video call chat badge is counted locally in `useVideoCallChatUnseen` and never written here.
 
 ## Lifecycle, and who updates the panel
 

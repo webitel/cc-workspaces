@@ -78,7 +78,9 @@ const closedChat = computed(
 	() => store.state.features.chat.closed.processed.chatsList,
 );
 
-const manualList = computed(() => store.state.features.chat.manual.manualList);
+const manualTotalCount = computed(
+	() => store.getters['features/chat/manual/TOTAL_COUNT'],
+);
 
 const invitedChats = computed(() =>
 	chatList.value.filter((chat) => chat.state === ConversationState.Invite),
@@ -169,7 +171,7 @@ const expansions = computed(() => [
 		counters: [
 			{
 				color: 'secondary',
-				count: manualList.value.length,
+				count: manualTotalCount.value,
 			},
 		].filter(({ count }) => count),
 	},
