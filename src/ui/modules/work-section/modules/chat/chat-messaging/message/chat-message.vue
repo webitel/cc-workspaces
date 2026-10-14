@@ -152,7 +152,7 @@ const isFilePolicyFailed = computed(
 	() =>
 		!props.message?.text &&
 		(props.message?.variables?.template === filePolicyError ||
-			props.message?.context?.template === filePolicyError),
+		props.message?.context?.template === filePolicyError),
 );
 
 const hasFileError = computed(
