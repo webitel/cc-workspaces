@@ -31,8 +31,17 @@
       :user="userInfo"
       :build-info="buildInfo"
       @settings="settings"
-      @logout="logoutUser"
+      @logout="requestLogout"
     />
+    <confirmation-popup
+      v-if="isLogoutConfirmOpen"
+      @confirm="confirmLogout"
+      @close="cancelLogout"
+    >
+      <template #text>
+        {{ $t('reusable.logout') }}
+      </template>
+    </confirmation-popup>
   </wt-app-header>
 </template>
 
@@ -46,6 +55,8 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 import packageJson from '../../../../../package.json' with { type: 'json' };
+import ConfirmationPopup from '../../../../app/components/utils/confirmation-popup.vue';
+import { useLeaveGuardStore } from '../../../../features/modules/leave-guard/store/leave-guard';
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
 import { useUserinfoStore } from '../../userinfo/userinfoStore';
 import AgentStatusSelect from './agent-status-select.vue';
@@ -56,7 +67,10 @@ const config = inject('$config');
 const { t } = useI18n();
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser } = userinfoStore;
+const { hasApplicationVisibility } = userinfoStore;
+const leaveGuardStore = useLeaveGuardStore();
+const { requestLogout, confirmLogout, cancelLogout } = leaveGuardStore;
+const { isLogoutConfirmOpen } = storeToRefs(leaveGuardStore);
 const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Agent);
 

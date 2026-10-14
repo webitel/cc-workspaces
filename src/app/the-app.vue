@@ -6,6 +6,7 @@
 <script>
 import { computed, provide } from 'vue';
 import { useStore } from 'vuex';
+import { useLeaveGuardStore } from '../features/modules/leave-guard/store/leave-guard';
 import { useUserinfoStore } from '../ui/modules/userinfo/userinfoStore.ts';
 
 export default {
@@ -14,6 +15,7 @@ export default {
 	setup() {
 		const store = useStore();
 		const { showUserNotifications } = useUserinfoStore();
+		const { handleLeaveAttempt } = useLeaveGuardStore();
 		// @author o.chorpita
 		// Provide darkMode for ui-sdk components
 		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
@@ -21,6 +23,7 @@ export default {
 
 		return {
 			showUserNotifications,
+			handleLeaveAttempt,
 		};
 	},
 
@@ -35,17 +38,7 @@ export default {
 			this.$store.dispatch('workspace/CLOSE_SESSION');
 		});
 
-		/**
-		 * @author OleksandrPalonnyi
-		 *
-		 * comment link https://webitel.atlassian.net/browse/WTEL-10195?focusedCommentId=779123
-		 * */
-		window.addEventListener('beforeunload', (event) => {
-			if (this.$store.getters['features/status/IS_AGENT_ONLINE']) {
-				event.preventDefault();
-				event.returnValue = '';
-			}
-		});
+		window.addEventListener('beforeunload', this.handleLeaveAttempt);
 	},
 	mounted() {
 		this.showUserNotifications();
