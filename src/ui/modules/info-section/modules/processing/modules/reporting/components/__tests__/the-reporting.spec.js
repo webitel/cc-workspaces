@@ -5,8 +5,8 @@ import { createStore } from 'vuex';
 import { JobState } from 'webitel-sdk';
 
 import {
-	FORCE_AUTOSAVE_BEFORE_DEADLINE,
 	AUTOSAVE_DELAY,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE,
 } from '../../../../script/processingAutosave';
 import ReportingForm from '../../store/ReportingForm';
 import FailureForm from '../reporting-failure-form.vue';

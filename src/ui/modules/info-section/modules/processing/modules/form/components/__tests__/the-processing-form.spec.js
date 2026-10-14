@@ -5,8 +5,8 @@ import { JobState } from 'webitel-sdk';
 
 import { formattingFormBeforeSend } from '../../../../script/formattingFormBeforeSend';
 import {
-	FORCE_AUTOSAVE_BEFORE_DEADLINE,
 	AUTOSAVE_DELAY,
+	FORCE_AUTOSAVE_BEFORE_DEADLINE,
 } from '../../../../script/processingAutosave';
 import TheProcessingForm from '../the-processing-form.vue';
 

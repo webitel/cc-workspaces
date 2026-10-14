@@ -107,20 +107,6 @@ describe('useProcessingAutosave', () => {
 		expect(save).toHaveBeenCalledTimes(1);
 	});
 
-	it('savePendingNow sends the pending save immediately and nothing when idle', () => {
-		mountHost();
-
-		autosave.savePendingNow();
-		expect(save).not.toHaveBeenCalled();
-
-		autosave.saveLater(state.attempt, 'payload');
-		autosave.savePendingNow();
-		expect(save).toHaveBeenCalledWith(state.attempt, 'payload');
-
-		autosave.savePendingNow();
-		expect(save).toHaveBeenCalledTimes(1);
-	});
-
 	it('drops the save when the attempt left processing before it fires', () => {
 		mountHost();
 		const attempt = createAttempt();
@@ -178,9 +164,9 @@ describe('useProcessingAutosave', () => {
 		mountHost();
 
 		autosave.saveLater(createAttempt(), 'payload');
-		expect(() => autosave.savePendingNow()).not.toThrow();
+		expect(() => vi.advanceTimersByTime(AUTOSAVE_DELAY)).not.toThrow();
 		autosave.saveLater(createAttempt(), 'payload');
-		expect(() => autosave.savePendingNow()).not.toThrow();
+		expect(() => vi.advanceTimersByTime(AUTOSAVE_DELAY)).not.toThrow();
 		await vi.runAllTimersAsync();
 
 		expect(warn).toHaveBeenCalledTimes(2);
