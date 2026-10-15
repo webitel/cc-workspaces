@@ -169,10 +169,12 @@ function handleMessage(raw: unknown) {
 		}
 		case 'ack': {
 			if (!message.ok) {
+				const code = message.error?.code;
 				console.warn('[external-softphone] command failed', message.error);
 				eventBus.$emit('notification', {
-					type: 'error',
-					text: `Softphone: ${message.error?.code || 'command failed'}`,
+					// utility not connected is an expected state, not an app fault
+					type: code === 'not_connected' ? 'warning' : 'error',
+					text: `Softphone: ${code || 'command failed'}`,
 				});
 			}
 			break;

@@ -107,6 +107,11 @@ class SoftphoneTray {
 					enabled: false,
 				},
 				{
+					// version from package.json, so a support report shows which build runs
+					label: `Version ${app.getVersion()}`,
+					enabled: false,
+				},
+				{
 					type: 'separator',
 				},
 				{
