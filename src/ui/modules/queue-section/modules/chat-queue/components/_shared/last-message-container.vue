@@ -22,9 +22,12 @@ const props = withDefaults(
 	},
 );
 
-const iconClass = computed(() =>
-	props.icon !== AgentIcon.Bot ? `last-message-container--${props.icon}` : null,
-);
+const senderClass = {
+	[AgentIcon.Contact]: 'last-message-container--contacts',
+	[AgentIcon.Agent]: 'last-message-container--agent',
+};
+
+const iconClass = computed(() => senderClass[props.icon] ?? null);
 </script>
 
 <style scoped>

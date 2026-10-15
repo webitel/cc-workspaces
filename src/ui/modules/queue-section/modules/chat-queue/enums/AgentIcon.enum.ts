@@ -1,6 +1,6 @@
 export const AgentIcon = {
 	Bot: 'bot',
-	Contact: 'contacts',
+	Contact: 'user',
 	Agent: 'agent',
 } as const;
 

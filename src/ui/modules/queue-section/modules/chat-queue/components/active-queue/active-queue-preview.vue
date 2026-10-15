@@ -78,6 +78,7 @@ import { useUserinfoStore } from '../../../../../userinfo/userinfoStore';
 import { useChatMessages } from '../../../../../work-section/modules/chat/chat-messaging/message/composables/useChatMessages';
 import taskPreviewMixin from '../../../_shared/mixins/task-preview-mixin';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import { AgentIcon } from '../../enums/AgentIcon.enum';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
 
 import LastMessageContainer from '../_shared/last-message-container.vue';
@@ -113,7 +114,7 @@ export default {
 		lastMessageSenderIcon() {
 			if (!this.lastMessage.member) return 'bot';
 			if (this.lastMessage.member?.self) return 'agent';
-			if (this.lastMessage.member?.type) return 'contacts';
+			if (this.lastMessage.member?.type) return AgentIcon.Contact;
 		},
 		displayIcon() {
 			const member = this.task.members[0];
