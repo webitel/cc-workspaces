@@ -9,7 +9,6 @@ export const useLeaveGuardStore = defineStore('leaveGuard', () => {
 	const userinfoStore = useUserinfoStore();
 
 	const isLeaving = ref(false);
-	const isLogoutConfirmOpen = ref(false);
 
 	const isOnline = computed(
 		() => vuexStore.getters['features/status/IS_AGENT_ONLINE'],
@@ -50,33 +49,13 @@ export const useLeaveGuardStore = defineStore('leaveGuard', () => {
 		}
 	};
 
-	const requestLogout = async () => {
-		if (!shouldConfirmLeave.value) {
-			await logout();
-			return;
-		}
-		isLogoutConfirmOpen.value = true;
-	};
-
-	const confirmLogout = async () => {
-		isLogoutConfirmOpen.value = false;
-		await logout();
-	};
-
-	const cancelLogout = () => {
-		isLogoutConfirmOpen.value = false;
-	};
-
 	return {
 		isLeaving,
-		isLogoutConfirmOpen,
 		isOnline,
 		hasActiveTask,
 		hasPostProcessing,
 		shouldConfirmLeave,
 		handleLeaveAttempt,
-		requestLogout,
-		confirmLogout,
-		cancelLogout,
+		logout,
 	};
 });

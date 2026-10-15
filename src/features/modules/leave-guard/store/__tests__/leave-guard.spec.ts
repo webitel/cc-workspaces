@@ -122,47 +122,14 @@ describe('leave-guard store', () => {
 		expect(event.preventDefault).toHaveBeenCalled();
 	});
 
-	it('logs out without confirm when there is nothing to guard', async () => {
-		const store = useLeaveGuardStore();
-
-		await store.requestLogout();
-
-		expect(store.isLogoutConfirmOpen).toBe(false);
-		expect(logoutUser).toHaveBeenCalled();
-	});
-
-	it('opens logout confirm instead of logging out when leave is guarded', async () => {
+	it('logs out and skips beforeunload prompt even when leave is guarded', async () => {
 		vuexStore.getters['features/status/IS_AGENT_ONLINE'] = true;
 		const store = useLeaveGuardStore();
 
-		await store.requestLogout();
-
-		expect(store.isLogoutConfirmOpen).toBe(true);
-		expect(logoutUser).not.toHaveBeenCalled();
-	});
-
-	it('does not log out when user cancels confirm', async () => {
-		vuexStore.getters['features/status/IS_AGENT_ONLINE'] = true;
-		const store = useLeaveGuardStore();
-
-		await store.requestLogout();
-		store.cancelLogout();
-
-		expect(store.isLogoutConfirmOpen).toBe(false);
-		expect(logoutUser).not.toHaveBeenCalled();
-		expect(store.isLeaving).toBe(false);
-	});
-
-	it('logs out and skips beforeunload prompt after user confirms', async () => {
-		vuexStore.getters['features/status/IS_AGENT_ONLINE'] = true;
-		const store = useLeaveGuardStore();
-
-		await store.requestLogout();
-		await store.confirmLogout();
+		await store.logout();
 		const event = makeEvent();
 		store.handleLeaveAttempt(event);
 
-		expect(store.isLogoutConfirmOpen).toBe(false);
 		expect(logoutUser).toHaveBeenCalled();
 		expect(event.preventDefault).not.toHaveBeenCalled();
 	});
@@ -171,7 +138,7 @@ describe('leave-guard store', () => {
 		logoutUser.mockRejectedValue(new Error('fail'));
 		const store = useLeaveGuardStore();
 
-		await expect(store.confirmLogout()).rejects.toThrow('fail');
+		await expect(store.logout()).rejects.toThrow('fail');
 
 		expect(store.isLeaving).toBe(false);
 	});
