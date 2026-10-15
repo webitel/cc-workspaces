@@ -4,12 +4,13 @@ import { JobState } from 'webitel-sdk';
 import { useLeaveGuardStore } from '../leave-guard';
 
 const clientMock = {
-	allTask: vi.fn(() => []),
+	allConversations: vi.fn(() => []),
 };
 
 const vuexStore = {
 	state: {
 		client: {
+			state: 'connected',
 			getClientSync: vi.fn(() => clientMock),
 		},
 		features: {
@@ -45,7 +46,8 @@ const resetVuex = () => {
 	vuexStore.getters['features/status/IS_AGENT_ONLINE'] = false;
 	vuexStore.getters['features/chat/active/ALL_CHAT_LIST'] = [];
 	vuexStore.state.client.getClientSync.mockImplementation(() => clientMock);
-	clientMock.allTask.mockImplementation(() => []);
+	vuexStore.state.client.state = 'connected';
+	clientMock.allConversations.mockImplementation(() => []);
 };
 
 const makeEvent = () =>
@@ -66,7 +68,7 @@ describe('leave-guard store', () => {
 
 		store.handleLeaveAttempt(event);
 
-		expect(store.shouldConfirmLeave()).toBe(false);
+		expect(store.shouldConfirmLeave).toBe(false);
 		expect(event.preventDefault).not.toHaveBeenCalled();
 	});
 
@@ -108,11 +110,14 @@ describe('leave-guard store', () => {
 			},
 		],
 		[
-			'there is a task in post-processing',
+			'there is a closed chat in post-processing',
 			() => {
-				clientMock.allTask.mockImplementation(() => [
+				clientMock.allConversations.mockImplementation(() => [
 					{
-						state: JobState.Processing,
+						closedAt: 1,
+						task: {
+							state: JobState.Processing,
+						},
 					},
 				]);
 			},
@@ -129,26 +134,99 @@ describe('leave-guard store', () => {
 
 	it.each([
 		[
-			'there is no WS client',
+			'call',
 			() => {
-				vuexStore.state.client.getClientSync.mockImplementation(() => null);
+				vuexStore.state.features.call.callList = [
+					{
+						task: {
+							state: JobState.Processing,
+						},
+					},
+				];
 			},
 		],
 		[
-			'tasks are not in post-processing',
+			'job',
 			() => {
-				clientMock.allTask.mockImplementation(() => [
+				vuexStore.state.features.job.jobList = [
 					{
-						state: JobState.Bridged,
+						state: JobState.Processing,
+					},
+				];
+			},
+		],
+		[
+			'chat',
+			() => {
+				clientMock.allConversations.mockImplementation(() => [
+					{
+						task: {
+							state: JobState.Processing,
+						},
 					},
 				]);
 			},
 		],
-	])('does not treat it as post-processing when %s', (_, arrange) => {
+	])('detects post-processing of a %s', (_, arrange) => {
 		arrange();
 		const store = useLeaveGuardStore();
 
-		expect(store.hasPostProcessing()).toBe(false);
+		expect(store.hasPostProcessing).toBe(true);
+	});
+
+	it.each([
+		[
+			'WS client is not connected',
+			() => {
+				vuexStore.state.client.state = 'disconnected';
+				clientMock.allConversations.mockImplementation(() => [
+					{
+						task: {
+							state: JobState.Processing,
+						},
+					},
+				]);
+			},
+		],
+		[
+			'tasks are in another state',
+			() => {
+				vuexStore.state.features.call.callList = [
+					{
+						task: {
+							state: JobState.Bridged,
+						},
+					},
+				];
+				vuexStore.state.features.job.jobList = [
+					{
+						state: JobState.Bridged,
+					},
+				];
+				clientMock.allConversations.mockImplementation(() => [
+					{
+						task: {
+							state: JobState.Bridged,
+						},
+					},
+				]);
+			},
+		],
+		[
+			'call has no queue task',
+			() => {
+				vuexStore.state.features.call.callList = [
+					{
+						task: null,
+					},
+				];
+			},
+		],
+	])('does not detect post-processing when %s', (_, arrange) => {
+		arrange();
+		const store = useLeaveGuardStore();
+
+		expect(store.hasPostProcessing).toBe(false);
 	});
 
 	it('logs out and skips beforeunload prompt even when leave is guarded', async () => {

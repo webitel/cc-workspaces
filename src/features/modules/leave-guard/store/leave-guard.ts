@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import { JobState } from 'webitel-sdk';
+import { JobState, type Task } from 'webitel-sdk';
 
 import { useUserinfoStore } from '../../../../ui/modules/userinfo/userinfoStore';
+import { getAllClientConversations } from '../../chat/scripts/getClientConversations';
 
-export const useLeaveGuardStore = defineStore('leaveGuard', () => {
+export const useLeaveGuardStore = defineStore('features/leaveGuard', () => {
 	const vuexStore = useStore();
 	const userinfoStore = useUserinfoStore();
 
@@ -22,18 +23,28 @@ export const useLeaveGuardStore = defineStore('leaveGuard', () => {
 			vuexStore.getters['features/chat/active/ALL_CHAT_LIST'].length > 0,
 	);
 
-	const hasPostProcessing = () => {
-		const client = vuexStore.state.client.getClientSync();
-		if (!client) return false;
-		return client.allTask().some((task) => task.state === JobState.Processing);
-	};
+	const isInPostProcessing = (task?: Task | null) =>
+		task?.state === JobState.Processing;
 
-	const shouldConfirmLeave = () =>
-		!isLeaving.value &&
-		(isOnline.value || hasActiveTask.value || hasPostProcessing());
+	const hasPostProcessing = computed(
+		() =>
+			vuexStore.state.features.call.callList.some((call) =>
+				isInPostProcessing(call.task),
+			) ||
+			vuexStore.state.features.job.jobList.some(isInPostProcessing) ||
+			getAllClientConversations(vuexStore.state).some((chat) =>
+				isInPostProcessing(chat.task),
+			),
+	);
+
+	const shouldConfirmLeave = computed(
+		() =>
+			!isLeaving.value &&
+			(isOnline.value || hasActiveTask.value || hasPostProcessing.value),
+	);
 
 	const handleLeaveAttempt = (event: BeforeUnloadEvent) => {
-		if (!shouldConfirmLeave()) return;
+		if (!shouldConfirmLeave.value) return;
 		event.preventDefault();
 	};
 
