@@ -31,7 +31,7 @@
       :user="userInfo"
       :build-info="buildInfo"
       @settings="settings"
-      @logout="logoutUser"
+      @logout="logout"
     />
   </wt-app-header>
 </template>
@@ -46,6 +46,7 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 import packageJson from '../../../../../package.json' with { type: 'json' };
+import { useLeaveGuardStore } from '../../../../features/modules/leave-guard/store/leave-guard';
 import BreakTimerPopup from '../../popups/break-popup/break-timer-popup.vue';
 import { useUserinfoStore } from '../../userinfo/userinfoStore';
 import AgentStatusSelect from './agent-status-select.vue';
@@ -56,7 +57,8 @@ const config = inject('$config');
 const { t } = useI18n();
 
 const userinfoStore = useUserinfoStore();
-const { hasApplicationVisibility, logoutUser } = userinfoStore;
+const { hasApplicationVisibility } = userinfoStore;
+const { logout } = useLeaveGuardStore();
 const { userInfo } = storeToRefs(userinfoStore);
 const currentApp = computed(() => WtApplication.Agent);
 
