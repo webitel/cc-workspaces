@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { JobState } from 'webitel-sdk';
 
 import { useUserinfoStore } from '../../../../ui/modules/userinfo/userinfoStore';
 
@@ -21,22 +22,19 @@ export const useLeaveGuardStore = defineStore('leaveGuard', () => {
 			vuexStore.getters['features/chat/active/ALL_CHAT_LIST'].length > 0,
 	);
 
-	const hasPostProcessing = computed(
-		() =>
-			vuexStore.getters['features/chat/postProcessing/CHATS_IN_POSTPROCESSING']
-				.length > 0,
-	);
+	const hasPostProcessing = () => {
+		const client = vuexStore.state.client.getClientSync();
+		if (!client) return false;
+		return client.allTask().some((task) => task.state === JobState.Processing);
+	};
 
-	const shouldConfirmLeave = computed(
-		() =>
-			!isLeaving.value &&
-			(isOnline.value || hasActiveTask.value || hasPostProcessing.value),
-	);
+	const shouldConfirmLeave = () =>
+		!isLeaving.value &&
+		(isOnline.value || hasActiveTask.value || hasPostProcessing());
 
 	const handleLeaveAttempt = (event: BeforeUnloadEvent) => {
-		if (!shouldConfirmLeave.value) return;
+		if (!shouldConfirmLeave()) return;
 		event.preventDefault();
-		event.returnValue = '';
 	};
 
 	const logout = async () => {

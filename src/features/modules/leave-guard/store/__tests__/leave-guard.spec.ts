@@ -1,9 +1,17 @@
 import { createPinia, setActivePinia } from 'pinia';
+import { JobState } from 'webitel-sdk';
 
 import { useLeaveGuardStore } from '../leave-guard';
 
+const clientMock = {
+	allTask: vi.fn(() => []),
+};
+
 const vuexStore = {
 	state: {
+		client: {
+			getClientSync: vi.fn(() => clientMock),
+		},
 		features: {
 			call: {
 				callList: [],
@@ -16,7 +24,6 @@ const vuexStore = {
 	getters: {
 		'features/status/IS_AGENT_ONLINE': false,
 		'features/chat/active/ALL_CHAT_LIST': [],
-		'features/chat/postProcessing/CHATS_IN_POSTPROCESSING': [],
 	},
 };
 
@@ -37,8 +44,8 @@ const resetVuex = () => {
 	vuexStore.state.features.job.jobList = [];
 	vuexStore.getters['features/status/IS_AGENT_ONLINE'] = false;
 	vuexStore.getters['features/chat/active/ALL_CHAT_LIST'] = [];
-	vuexStore.getters['features/chat/postProcessing/CHATS_IN_POSTPROCESSING'] =
-		[];
+	vuexStore.state.client.getClientSync.mockImplementation(() => clientMock);
+	clientMock.allTask.mockImplementation(() => []);
 };
 
 const makeEvent = () =>
@@ -59,7 +66,7 @@ describe('leave-guard store', () => {
 
 		store.handleLeaveAttempt(event);
 
-		expect(store.shouldConfirmLeave).toBe(false);
+		expect(store.shouldConfirmLeave()).toBe(false);
 		expect(event.preventDefault).not.toHaveBeenCalled();
 	});
 
@@ -101,15 +108,13 @@ describe('leave-guard store', () => {
 			},
 		],
 		[
-			'there is a chat in post-processing',
+			'there is a task in post-processing',
 			() => {
-				vuexStore.getters[
-					'features/chat/postProcessing/CHATS_IN_POSTPROCESSING'
-				] = [
+				clientMock.allTask.mockImplementation(() => [
 					{
-						id: '1',
+						state: JobState.Processing,
 					},
-				];
+				]);
 			},
 		],
 	])('asks to confirm leave when %s', (_, arrange) => {
@@ -120,6 +125,30 @@ describe('leave-guard store', () => {
 		store.handleLeaveAttempt(event);
 
 		expect(event.preventDefault).toHaveBeenCalled();
+	});
+
+	it.each([
+		[
+			'there is no WS client',
+			() => {
+				vuexStore.state.client.getClientSync.mockImplementation(() => null);
+			},
+		],
+		[
+			'tasks are not in post-processing',
+			() => {
+				clientMock.allTask.mockImplementation(() => [
+					{
+						state: JobState.Bridged,
+					},
+				]);
+			},
+		],
+	])('does not treat it as post-processing when %s', (_, arrange) => {
+		arrange();
+		const store = useLeaveGuardStore();
+
+		expect(store.hasPostProcessing()).toBe(false);
 	});
 
 	it('logs out and skips beforeunload prompt even when leave is guarded', async () => {
