@@ -113,6 +113,7 @@ import { useStore } from 'vuex';
 
 import ChatCloseReason from '../../../../../../../features/modules/chat/modules/closed/enums/ChatCloseReason.enum.js';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import { AgentIcon } from '../../enums/AgentIcon.enum';
 import { ChatStatus } from '../../enums/ChatStatus.enum';
 import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
@@ -167,7 +168,7 @@ const lastMessageSenderIcon = computed(() => {
 			'client',
 		].includes(lastMessage.value.from.type)
 	) {
-		return 'contacts';
+		return AgentIcon.Contact;
 	}
 	return lastMessage.value.from.type;
 });
