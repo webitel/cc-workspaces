@@ -4,7 +4,7 @@ version: 1
 source:
   repository: webitel/reusable-configs
   config: node/sync.yml
-  sha: ef4e42032ca6d3cd02a819e6978ed645e2e227b3
+  sha: 2e99e2f2f50917905951522fbad9ab2b690dd8d7
 files:
   .github/dependabot.yml:
     source: node/configs/dependabot.yml
@@ -18,15 +18,15 @@ files:
   .github/workflows/cleanup-artifacts.yml:
     source: common/workflows/cleanup-artifacts.yml.njk
     sha256: c23ab5c2fec1713ce637e0c697b94aee74e41c408411dd3413ff8297b8c58d2b
+  .github/workflows/codeql-scheduled.yml:
+    source: common/workflows/codeql-scheduled.yml.njk
+    sha256: 66fd57a96ec467214ae29ed6a1f5bbd0eb1290cc7e127febd56c7e63d263dc69
   .github/workflows/libs.update.yml:
     source: node/workflows/libs.update.yml
     sha256: 3a28a8bd66b5222de3bc41e3e914fb98a76b7a66d0bd93eb7e45da8ccfbb8fce
   .github/workflows/make-release.yml:
     source: node/workflows/make-release.yml
     sha256: 75535b41cb6ec3de455531f8fa5b08b098d57df8b6645c93da52b972884f923e
-  .github/workflows/pull-request-deliver.yml:
-    source: common/workflows/pull-request-deliver.yml.njk
-    sha256: e30d986d588d675d8cfef6a9dd356c197051214a9a9edb00afae283fc6ae4d03
   .github/workflows/pull-request.yml:
     source: node/workflows/pull-request.yml.njk
     sha256: 9e2c930624fe810d808503e240e560314c109b0cf4b60b5f41560459fcf1096c
