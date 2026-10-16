@@ -46,7 +46,7 @@ jobs:
       - name: Build prebuild
         run: npx prebuildify --napi --strip --arch=arm64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: prebuild-darwin-arm64
           path: packages/electron-sip/prebuilds/
@@ -86,7 +86,7 @@ jobs:
       - name: Build prebuild
         run: npx prebuildify --napi --strip --arch=x64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: prebuild-linux-x64
           path: packages/electron-sip/prebuilds/
@@ -161,7 +161,7 @@ jobs:
       - name: Build prebuild
         run: npx prebuildify --napi --arch=x64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: prebuild-win32-x64
           path: packages/electron-sip/prebuilds/
@@ -179,7 +179,7 @@ jobs:
           pattern: prebuild-*
           merge-multiple: true
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: electron-sip-prebuilds-all
           path: prebuilds-merged/

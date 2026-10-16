@@ -107,7 +107,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: npm run distm
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: electron-softphone-companion-mac
           path: |
@@ -138,7 +138,7 @@ jobs:
       - name: Build (linux)
         run: npm run distl
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: electron-softphone-companion-linux
           path: |
@@ -168,7 +168,7 @@ jobs:
       - name: Build (windows)
         run: npm run dist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: electron-softphone-companion-windows
           path: |
