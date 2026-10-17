@@ -5,15 +5,26 @@ How `cc-workspaces` is built: stack, structure, code style, APIs, tests, commits
 ## Stack
 
 Vue 3 running in `@vue/compat` mode (`MODE: 2`), Vuex 4, vue-router 4, vue-i18n 11,
-vite 8 (beta), vitest 4. Pinia is a dependency but unused — there is not a single
-`defineStore` in `src`; all state lives in Vuex.
+vite 8 (beta), vitest 4. Vuex is where state lives; Pinia is installed but has a single
+store so far (`src/ui/modules/info-section/modules/client-info/modules/contact/store/contact.ts`).
 
 Webitel packages: `webitel-sdk` (the WS client), `@webitel/api-services`,
 `@webitel/ui-sdk`, `@webitel/ui-chats`, `@webitel/styleguide`. Bump them all with
 `npm run utils:up-libs`, link local checkouts with `npm run utils:ln-libs`.
 
-`packages/electron-workspace` is a separate app with its own `package.json` and
-`biome.jsonc` — nothing in this file applies to it.
+`packages/electron-workspace` is a separate app with its own `package.json`, `biome.jsonc`
+and `electron.vite.config.ts` — nothing in this file applies to it; read those instead.
+
+## Commands
+
+```
+npm run dev            # vite --force (default vite port, nothing is pinned)
+npm run build
+npm run test:unit      # vitest, watch mode
+npx vitest run src/path/__tests__/name.spec.js   # one spec file
+npm run typecheck      # vue-tsc --noEmit
+npm run lint:fix       # biome check --write ./src
+```
 
 ## Layout of `src/`
 
@@ -47,13 +58,13 @@ in `.vue` files.
 
 Comments are rare, short, single-line, and only for the non-obvious.
 
-Do not write file extensions in new import paths (`./foo`, not `./foo.js`). About 90 legacy
+Do not write file extensions in new import paths (`./foo`, not `./foo.js`). A few dozen legacy
 imports still carry `.js` — leave them alone, but do not add new ones.
 
 ## APIs
 
 - Write everything new through `@webitel/api-services`. `@webitel/ui-sdk/src/api` is
-  **deprecated**; roughly 30 files still use it, do not add more.
+  **deprecated**; a handful of files still use it, do not add more.
 - Import only from the package entry-points (`/gen`, `/gen/models`, `/gen-wire`, `/api`,
   `/api/transformers`, `/validations`, `/enums`, …) — never from the root and never by a
   direct path to a service file.
@@ -71,16 +82,17 @@ imports still carry `.js` — leave them alone, but do not add new ones.
 
 - vitest 4, `happy-dom` environment, setup file `tests/config/config.js`, shared mocks in
   `tests/unit/mocks/` (`MockSocket`, `localStorageMock`, `contextMock`, …).
-- Specs sit next to the code they cover: `__tests__/<name>.spec.js`. There are 116 of them.
+- Specs sit next to the code they cover: `__tests__/<name>.spec.js`.
 - `npm run test:unit` locally; CI runs `npm run test:unit:ci` (with coverage) and
   `npm run biome:ci:gh`.
-- `typecheck:ci` is a no-op (`true`), so `vue-tsc` does not gate anything — TypeScript
-  errors will not be caught for you.
+- `typecheck:ci` runs `vue-tsc --noEmit`, so TypeScript errors do gate CI. Run
+  `npm run typecheck` before pushing.
 - What counts as a useful test here: `docs/test-usefulness-categories.md`.
 
 ## Commits and branches
 
 - Message: `fix: short description [WTEL-XXXX](https://webitel.atlassian.net/browse/WTEL-XXXX)`.
   The ticket is mandatory and the link is spelled out in full.
-- Prefixes in use: `fix:`, `feat:`, `hotfix:`.
+- Prefixes in use: `fix:`, `feat:`, `hotfix:`. `chore(deps): …` commits are produced by the
+  `libs.update.yml` workflow and carry no ticket — do not write them by hand.
 - Branches: `fix/*`, `feat/*`, `hotfix/*`; release branches look like `v26.06`.
