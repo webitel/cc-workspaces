@@ -129,6 +129,20 @@ describe('useProcessingAutosave', () => {
 		expect(save).not.toHaveBeenCalled();
 	});
 
+	it('saves a change made right before hangup once processing started', () => {
+		mountHost();
+		const attempt = createAttempt({
+			state: JobState.Bridged,
+			autosave: true,
+		});
+
+		autosave.saveLater(attempt, 'payload');
+		attempt.state = JobState.Processing;
+		vi.advanceTimersByTime(AUTOSAVE_DELAY);
+
+		expect(save).toHaveBeenCalledWith(attempt, 'payload');
+	});
+
 	it('saves at once inside the pre-deadline window', () => {
 		mountHost();
 		const attempt = createAttempt({
@@ -264,20 +278,6 @@ describe('useProcessingAutosave', () => {
 		autosave.saveLater(state.attempt, 'payload');
 		autosave.discardPending();
 		wrapper.unmount();
-
-		expect(save).not.toHaveBeenCalled();
-	});
-
-	it('does not save changes made during the call', () => {
-		mountHost();
-		const attempt = createAttempt({
-			state: JobState.Bridged,
-			processingAutosave: false,
-			processingTimeoutAt: null,
-		});
-
-		autosave.saveLater(attempt, 'during call');
-		vi.advanceTimersByTime(AUTOSAVE_DELAY);
 
 		expect(save).not.toHaveBeenCalled();
 	});
