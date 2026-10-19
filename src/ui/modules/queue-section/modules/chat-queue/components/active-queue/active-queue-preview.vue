@@ -112,8 +112,8 @@ export default {
 				: this.lastMessage.text;
 		},
 		lastMessageSenderIcon() {
-			if (!this.lastMessage.member) return 'bot';
-			if (this.lastMessage.member?.self) return 'agent';
+			if (!this.lastMessage.member) return AgentIcon.Bot;
+			if (this.lastMessage.member?.self) return AgentIcon.Agent;
 			if (this.lastMessage.member?.type) return AgentIcon.Contact;
 		},
 		displayIcon() {
