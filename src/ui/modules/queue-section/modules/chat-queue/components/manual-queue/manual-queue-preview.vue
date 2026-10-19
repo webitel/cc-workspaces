@@ -92,6 +92,7 @@ import { computed } from 'vue';
 
 import ManualDeadlineProgressBar from '../../../../../../../features/modules/call/modules/manual/components/manual-deadline-progress-bar.vue';
 import messengerIcon from '../../../_shared/scripts/messengerIcon.js';
+import { AgentIcon } from '../../enums/AgentIcon.enum';
 import { ChatTypes } from '../../enums/ChatStatus.enum';
 import LastMessageContainer from '../_shared/last-message-container.vue';
 import ChatQueuePreviewMd from '../chat-queue-preview-md.vue';
@@ -140,7 +141,7 @@ const wait = computed(() => {
 });
 
 const lastMessageSenderIcon = computed(() => {
-	if (props.task.member.type === 'contact') return 'contacts';
+	if (props.task.member.type === 'contact') return AgentIcon.Contact;
 	return props.task.member.type;
 });
 

@@ -4,7 +4,7 @@ version: 1
 source:
   repository: webitel/reusable-configs
   config: node/sync.yml
-  sha: 2e99e2f2f50917905951522fbad9ab2b690dd8d7
+  sha: dfbdf1fa6ebaa294eb5501ec8fa7de630ce029eb
 files:
   .github/dependabot.yml:
     source: node/configs/dependabot.yml
@@ -20,7 +20,7 @@ files:
     sha256: c23ab5c2fec1713ce637e0c697b94aee74e41c408411dd3413ff8297b8c58d2b
   .github/workflows/codeql-scheduled.yml:
     source: common/workflows/codeql-scheduled.yml.njk
-    sha256: 66fd57a96ec467214ae29ed6a1f5bbd0eb1290cc7e127febd56c7e63d263dc69
+    sha256: 45d7a2632f8356049a385e06fdd45aba778d58bd9a0c0604cd323fc3b6871f6e
   .github/workflows/libs.update.yml:
     source: node/workflows/libs.update.yml
     sha256: 3a28a8bd66b5222de3bc41e3e914fb98a76b7a66d0bd93eb7e45da8ccfbb8fce
