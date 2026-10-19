@@ -74,6 +74,51 @@ describe('isAutosaveAllowed', () => {
 		).toBe(false);
 		expect(isAutosaveAllowed(null, NOW)).toBe(false);
 	});
+
+	describe('during the call', () => {
+		const createCallAttempt = (overrides = {}) =>
+			createAttempt({
+				state: JobState.Bridged,
+				autosave: true,
+				processingAutosave: false,
+				processingTimeoutAt: null,
+				...overrides,
+			});
+
+		it('allows a bridged attempt with autosave on, without a deadline', () => {
+			expect(isAutosaveAllowed(createCallAttempt(), NOW)).toBe(true);
+		});
+
+		it('rejects when queue autosave is off', () => {
+			expect(
+				isAutosaveAllowed(
+					createCallAttempt({
+						autosave: false,
+					}),
+					NOW,
+				),
+			).toBe(false);
+		});
+
+		it('rejects an attempt that is not bridged yet or already ended', () => {
+			[
+				JobState.Distribute,
+				JobState.Offering,
+				JobState.Missed,
+				JobState.Closed,
+				JobState.Destroy,
+			].forEach((state) => {
+				expect(
+					isAutosaveAllowed(
+						createCallAttempt({
+							state,
+						}),
+						NOW,
+					),
+				).toBe(false);
+			});
+		});
+	});
 });
 
 describe('isNearDeadline', () => {
