@@ -28,6 +28,6 @@ jobs:
 
     with:
       languages: '[{"language":"javascript","build-mode":"none"},{"language":"actions","build-mode":"none"}]'
-      analysis-key: .github/workflows/node-checks.yml:analyze
+      analysis-key: .github/workflows/workflow.yml:analyze
       runs-on: arc-frontend-runner-set
       max-age-days: ${{ fromJSON(inputs.force && '0' || '7') }}
