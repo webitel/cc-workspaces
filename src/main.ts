@@ -19,29 +19,9 @@ import {
 import { initRouter, router } from './app/router';
 import store from './app/store';
 import './app/assets/icons/sprite';
+import { setTokenFromUrl } from './app/scripts/setTokenFromUrl';
 import App from './app/the-app.vue';
 import { useUserinfoStore } from './ui/modules/userinfo/userinfoStore';
-
-const setTokenFromUrl = () => {
-	try {
-		const queryMap: {
-			accessToken?: string;
-		} = window.location.search
-			.slice(1)
-			.split('&')
-			.reduce((obj, query) => {
-				const [key, value] = query.split('=');
-				obj[key] = value;
-				return obj;
-			}, {});
-
-		if (queryMap.accessToken) {
-			localStorage.setItem('access-token', queryMap.accessToken);
-		}
-	} catch (err) {
-		console.error('Error restoring token from url', err);
-	}
-};
 
 const fetchConfig = async () => {
 	const electronConfig = window._config || {}; // Electron sets config to window
