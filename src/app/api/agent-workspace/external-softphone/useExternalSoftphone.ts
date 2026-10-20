@@ -256,6 +256,13 @@ export function useExternalSoftphone() {
 				if (settled) return;
 				settled = true;
 				window.clearTimeout(timer);
+				// the browser already logs the refused socket as an error; this line
+				// states the outcome so the fallback is visible in the console
+				if (!ok) {
+					console.warn(
+						`[external-softphone] companion not reachable on 127.0.0.1:${port}, using web phone`,
+					);
+				}
 				resolve(ok);
 			};
 			const timer = window.setTimeout(() => {
