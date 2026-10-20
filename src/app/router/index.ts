@@ -1,5 +1,6 @@
 import { WtApplication } from '@webitel/ui-sdk/enums';
 import { createRouter, createWebHistory } from 'vue-router';
+import { createAuthGuard } from './authGuard';
 
 const AgentWorkspace = () =>
 	import('../../ui/components/the-agent-workspace.vue');
@@ -51,34 +52,16 @@ export const initRouter = async ({
 		'error-page',
 	];
 
-	router.beforeEach((to, _from, next) => {
+	const authGuard = createAuthGuard({
+		onUnauthorized,
+	});
+
+	router.beforeEach((to, from, next) => {
 		if (excludeRouteAuth.includes(to.name)) {
 			next();
 			return;
 		}
-
-		if (!localStorage.getItem('access-token') && !to.query.accessToken) {
-			// @author @Lear24
-			// remove flag about shown notifications from localStorage
-			onUnauthorized();
-			const desiredUrl = encodeURIComponent(window.location.href);
-			const authUrl = import.meta.env.VITE_AUTH_URL;
-			window.location.href = `${authUrl}?redirectTo=${desiredUrl}`;
-			return;
-		}
-		if (to.query.accessToken) {
-			// assume that access token was set from query before app initialization in main.js
-			const newQuery = {
-				...to.query,
-			};
-			delete newQuery.accessToken;
-			return next({
-				...to,
-				query: newQuery,
-			});
-		}
-
-		next();
+		authGuard(to, from, next);
 	});
 
 	beforeEach.forEach((guard) => {
