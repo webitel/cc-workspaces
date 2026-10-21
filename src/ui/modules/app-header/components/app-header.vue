@@ -3,7 +3,7 @@
     <a :href="startPageHref">
       <wt-logo :dark-mode="darkMode" />
     </a>
-    <wt-dark-mode-switcher namespace="ui/appearance" />
+    <wt-dark-mode-switcher @changed-mode="setTheme" />
 
     <wt-chip :color="isPhoneReg ? 'success' : 'primary'">SIP </wt-chip>
     <break-timer-popup v-if="isAgent"></break-timer-popup>
@@ -66,6 +66,7 @@ const isVideo = computed(() => store.state.features?.call?.isVideo);
 const isPhoneReg = computed(() => store.state.features?.globals?.isPhoneReg);
 const isAgent = computed(() => store.getters['features/status/IS_AGENT']);
 const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
+const setTheme = (theme) => store.dispatch('ui/appearance/SET_THEME', theme);
 
 const connectionQuality = computed(
 	() => store.getters['features/connectionQuality/LATENCY_LEVEL'],
