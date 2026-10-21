@@ -1,9 +1,13 @@
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import { ConfigurationsAPI } from '@webitel/api-services/api';
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { DefaultWorkspaceTabSettings } from '@webitel/ui-sdk/enums';
+import { createPinia } from 'pinia';
+import { nextTick, ref } from 'vue';
 import { createStore } from 'vuex';
 import { CallActions } from 'webitel-sdk';
 
+import { useSystemSettingsStore } from '../../../../../features/modules/system-settings/store/system-settings';
 import InfoSectionModule from '../../store/infoSec.js';
 import InfoSection from '../the-agent-info-section.vue';
 
@@ -30,6 +34,7 @@ const mountInfoSection = (overrides = {}) =>
 						...InfoSectionModule,
 					},
 				}),
+				createPinia(),
 			],
 		},
 		computed: {
@@ -52,6 +57,7 @@ describe('InfoSection', () => {
 			global: {
 				plugins: [
 					store,
+					createPinia(),
 				],
 			},
 			computed: {
@@ -102,6 +108,7 @@ describe('InfoSection', () => {
 			ConfigurationsAPI.getList.mockResolvedValue({
 				items: [
 					{
+						name: EngineSystemSettingName.DefaultWorkspaceTab,
 						value: DefaultWorkspaceTabSettings.TaskProcessing,
 					},
 				],
@@ -119,6 +126,7 @@ describe('InfoSection', () => {
 			ConfigurationsAPI.getList.mockResolvedValue({
 				items: [
 					{
+						name: EngineSystemSettingName.DefaultWorkspaceTab,
 						value: DefaultWorkspaceTabSettings.TaskProcessing,
 					},
 				],
@@ -129,6 +137,45 @@ describe('InfoSection', () => {
 			});
 			await flushPromises();
 
+			expect(wrapper.vm.currentTab?.value).toBe('client-info');
+		});
+
+		it('applies a default tab changed by system settings event from the next task, without switching the current one', async () => {
+			const task = ref(callOnWorkspace);
+			const pinia = createPinia();
+			const wrapper = shallowMount(InfoSection, {
+				global: {
+					plugins: [
+						createStore({
+							modules: {
+								...InfoSectionModule,
+							},
+						}),
+						pinia,
+					],
+				},
+				computed: {
+					...InfoSection.computed,
+					showFlows: () => false,
+					showProcessing: () => true,
+					taskOnWorkspace: () => task.value,
+				},
+			});
+			await flushPromises();
+			expect(wrapper.vm.currentTab?.value).toBe('processing');
+
+			await useSystemSettingsStore(pinia).applyChange({
+				name: EngineSystemSettingName.DefaultWorkspaceTab,
+				value: DefaultWorkspaceTabSettings.ClientInfo,
+			});
+			await nextTick();
+			expect(wrapper.vm.currentTab?.value).toBe('processing');
+
+			task.value = {
+				...callOnWorkspace,
+				id: 'call-2',
+			};
+			await nextTick();
 			expect(wrapper.vm.currentTab?.value).toBe('client-info');
 		});
 	});

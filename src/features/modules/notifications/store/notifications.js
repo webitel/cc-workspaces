@@ -1,6 +1,26 @@
 import { UserSettingsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import NotificationsStoreModule from '@webitel/ui-sdk/src/modules/Notifications/store/NotificationsStoreModule';
+import { debounce } from 'lodash-es';
+
+const NotificationSettingNames = [
+	EngineSystemSettingName.CallEndSoundNotification,
+	EngineSystemSettingName.CallEndPushNotification,
+	EngineSystemSettingName.ChatEndSoundNotification,
+	EngineSystemSettingName.ChatEndPushNotification,
+	EngineSystemSettingName.TaskEndSoundNotification,
+	EngineSystemSettingName.TaskEndPushNotification,
+	EngineSystemSettingName.PushNotificationTimeout,
+	EngineSystemSettingName.NewMessageSoundNotification,
+	EngineSystemSettingName.NewChatSoundNotification,
+	EngineSystemSettingName.SelfAssignedCallSoundNotification,
+];
+
+// [Claude] coalesces a burst of setting change events into a single reload
+const reloadNotificationSettings = debounce(
+	(context) => context.dispatch('LOAD_NOTIFICATION_SETTINGS'),
+	300,
+);
 
 const state = {
 	isHangupSoundAllowed: false, // for prevent STOP_SOUND before we play hangup sound after call end
@@ -31,6 +51,12 @@ const actions = {
 			path: 'settings',
 			value: settings,
 		});
+	},
+
+	// [Claude] re-read instead of using the event value, so user overrides of these settings are kept
+	HANDLE_SYSTEM_SETTING_CHANGE: (context, { name }) => {
+		if (!NotificationSettingNames.includes(name)) return;
+		reloadNotificationSettings(context);
 	},
 
 	HANDLE_HANGUP_SOUND_ALLOW: (context, payload) => {

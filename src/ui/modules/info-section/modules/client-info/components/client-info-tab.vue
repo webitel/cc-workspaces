@@ -14,11 +14,11 @@
 </template>
 
 <script setup>
-import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { WebitelLicense } from '@webitel/ui-sdk/modules/Userinfo';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
+import { useSystemSettingsStore } from '../../../../../../features/modules/system-settings/store/system-settings';
 import { useUserinfoStore } from '../../../../userinfo/userinfoStore';
 import Contact from '../modules/contact/components/the-contact.vue';
 import ClientInfoMember from './client-info-member/client-info-member.vue';
@@ -35,8 +35,11 @@ const props = defineProps({
 });
 
 const store = useStore();
+const systemSettingsStore = useSystemSettingsStore();
 
-const isHideContact = ref(false);
+const isHideContact = computed(
+	() => systemSettingsStore.settings[EngineSystemSettingName.WbtHideContact],
+);
 
 const isJob = computed(() => store.getters['workspace/IS_JOB_WORKSPACE']);
 const isChatClosed = computed(
@@ -49,15 +52,6 @@ const hasCallCenterLicense = computed(() =>
 	hasLicense(WebitelLicense.CallCenter),
 );
 
-const getValueWbtHideContactVariable = async () => {
-	const { items } = await ConfigurationsAPI.getList({
-		name: [
-			EngineSystemSettingName.WbtHideContact,
-		],
-	});
-	return items?.[0]?.value;
-};
-
 const isAllowedContacts = computed(() => {
 	if (isJob.value) return;
 	return (
@@ -66,10 +60,6 @@ const isAllowedContacts = computed(() => {
 		!isChatClosed.value &&
 		hasCallCenterLicense.value
 	);
-});
-
-onMounted(async () => {
-	isHideContact.value = await getValueWbtHideContactVariable();
 });
 </script>
 

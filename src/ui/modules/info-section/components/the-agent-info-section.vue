@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { ConfigurationsAPI } from '@webitel/api-services/api';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { DefaultWorkspaceTabSettings } from '@webitel/ui-sdk/enums';
 import getNamespacedState from '@webitel/ui-sdk/src/store/helpers/getNamespacedState';
@@ -50,6 +49,7 @@ import { CallActions, ConversationState, JobState } from 'webitel-sdk';
 import CollapseAction from '../../../../app/components/utils/collapse-action.vue';
 import PinAction from '../../../../app/components/utils/pin-action.vue';
 import sizeMixin from '../../../../app/mixins/sizeMixin';
+import { useSystemSettingsStore } from '../../../../features/modules/system-settings/store/system-settings';
 import ClientInfo from '../modules/client-info/components/client-info-tab.vue';
 import Flows from '../modules/flows/components/flows-tab.vue';
 import GeneralInfo from '../modules/general-info/components/general-info-tab.vue';
@@ -85,11 +85,16 @@ export default {
 		},
 	},
 
+	setup() {
+		return {
+			systemSettingsStore: useSystemSettingsStore(),
+		};
+	},
+
 	data: () => ({
 		currentTab: null,
 		pin: false,
 		flowsNamespace: 'ui/infoSec/flows',
-		defaultWorkspaceTab: null,
 	}),
 
 	watch: {
@@ -137,6 +142,14 @@ export default {
 		},
 		taskState() {
 			return this.taskOnWorkspace.state;
+		},
+
+		defaultWorkspaceTab() {
+			return (
+				this.systemSettingsStore.settings[
+					EngineSystemSettingName.DefaultWorkspaceTab
+				] ?? null
+			);
 		},
 
 		showClientInfo() {
@@ -248,17 +261,8 @@ export default {
 			return generalInfo;
 		},
 
-		async loadDefaultWorkspaceTab() {
-			const { items } = await ConfigurationsAPI.getList({
-				name: [
-					EngineSystemSettingName.DefaultWorkspaceTab,
-				],
-			});
-			this.defaultWorkspaceTab = items?.[0]?.value ?? null;
-		},
-
 		async initialize() {
-			await this.loadDefaultWorkspaceTab();
+			await this.systemSettingsStore.initialize();
 			this.currentTab = this.resolveDefaultTab();
 		},
 	},

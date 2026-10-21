@@ -30,11 +30,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ConfigurationsAPI } from '@webitel/api-services/api';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
 import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
+import { useSystemSettingsStore } from '../../../../../../../../../features/modules/system-settings/store/system-settings';
 import Communications from './contact-card-communications.vue';
 import Description from './contact-card-description.vue';
 import General from './contact-card-general.vue';
@@ -57,25 +57,16 @@ const emit = defineEmits<{
 	link: [];
 }>();
 
-const isContactTabsOpen = ref(false);
+const systemSettingsStore = useSystemSettingsStore();
+
+const isContactTabsOpen = computed(
+	() =>
+		!!systemSettingsStore.settings[EngineSystemSettingName.ExpandContactTabs],
+);
 
 const labels = computed(() => props.contact?.labels?.data);
 const variables = computed(() => props.contact?.variables?.data);
 const description = computed(() => props.contact?.about);
-
-const getValueExpandContactTabsVariable = async () => {
-	const { items } = await ConfigurationsAPI.getList({
-		name: [
-			EngineSystemSettingName.ExpandContactTabs,
-		],
-	});
-	return items?.[0]?.value;
-};
-
-onMounted(async () => {
-	isContactTabsOpen.value =
-		(await getValueExpandContactTabsVariable()) ?? false;
-});
 </script>
 
 <style lang="scss" scoped>

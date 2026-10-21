@@ -2,6 +2,7 @@ import { eventBus } from '@webitel/ui-sdk/scripts';
 import { watch } from 'vue';
 import i18n from '../../../../app/locale/i18n';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum.ts';
+import { useSystemSettingsStore } from '../../system-settings/store/system-settings';
 
 const state = {
 	isDisconnectPopup: false,
@@ -17,6 +18,7 @@ const actions = {
 		context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT');
 		context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED');
 		context.dispatch('SUBSCRIBE_TO_PHONE_UNREGISTERED_NOTIFICATION');
+		context.dispatch('SUBSCRIBE_TO_SYSTEM_SETTINGS');
 	},
 	RESET_GLOBAL_HANDLERS: (context) => {
 		context.dispatch('CLOSE_DISCONNECT_POPUP');
@@ -63,6 +65,16 @@ const actions = {
 			context.dispatch('SUBSCRIBE_TO_PHONE_REGISTRATION'),
 			context.dispatch('SUBSCRIBE_TO_CLIENT_DISCONNECT'),
 			context.dispatch('SUBSCRIBE_TO_CLIENT_CLOSED'),
+			context.dispatch('SUBSCRIBE_TO_SYSTEM_SETTINGS'),
+			// [Claude] changes made while the socket was down were never delivered
+			useSystemSettingsStore().reload(),
+			context.dispatch(
+				'features/notifications/LOAD_NOTIFICATION_SETTINGS',
+				null,
+				{
+					root: true,
+				},
+			),
 			context.dispatch('features/call/SUBSCRIBE_CALLS', null, {
 				root: true,
 			}),
@@ -96,6 +108,19 @@ const actions = {
 		client.on('close', () => {
 			context.dispatch('CLEAR_ALL_TASKS');
 		});
+	},
+	SUBSCRIBE_TO_SYSTEM_SETTINGS: async (context) => {
+		const client = await context.rootState.client.getCliInstance();
+		useSystemSettingsStore().subscribe(client);
+		client.on('system_settings_changed', (change) =>
+			context.dispatch(
+				'features/notifications/HANDLE_SYSTEM_SETTING_CHANGE',
+				change,
+				{
+					root: true,
+				},
+			),
+		);
 	},
 	SUBSCRIBE_TO_PHONE_REGISTRATION: async (context) => {
 		const client = await context.rootState.client.getCliInstance();

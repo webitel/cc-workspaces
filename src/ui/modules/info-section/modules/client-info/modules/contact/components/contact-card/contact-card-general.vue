@@ -58,12 +58,10 @@
 </template>
 
 <script setup lang="ts">
-import { ConfigurationsAPI } from '@webitel/api-services/api';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
-import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { ComponentSize } from '@webitel/ui-sdk/enums';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useContactStore } from '../../store/contact';
@@ -84,7 +82,6 @@ const { t } = useI18n();
 const store = useStore();
 const contactStore = useContactStore();
 const { contactLink } = storeToRefs(contactStore);
-const { initShowFullContactState } = contactStore;
 
 const emit = defineEmits<{
 	link: [];
@@ -99,18 +96,6 @@ const timezone = computed(
 const contactId = computed(() =>
 	contactStore.showFullContact ? props.contact?.id : props.contact?.etag,
 );
-
-// to get access variable for contact card page in read only mode
-async function initShowContactState() {
-	const { items } = await ConfigurationsAPI.getList({
-		name: [
-			EngineSystemSettingName.ShowFullContact,
-		],
-	});
-	initShowFullContactState(items?.[0]?.value);
-}
-
-onMounted(initShowContactState);
 </script>
 
 <style lang="scss" scoped>

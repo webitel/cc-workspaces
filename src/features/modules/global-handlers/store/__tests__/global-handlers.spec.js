@@ -1,5 +1,9 @@
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
+import { createPinia, setActivePinia } from 'pinia';
+
 import MockSocket from '../../../../../../tests/unit/mocks/MockSocket';
 import { useWebSocketClient } from '../../../../../app/api/agent-workspace/websocket/useWebSocketClient';
+import { useSystemSettingsStore } from '../../../system-settings/store/system-settings';
 import globalsModule from '../global-handlers';
 
 const mockSocket = new MockSocket();
@@ -56,6 +60,48 @@ describe('global handlers store: actions', () => {
 	it('CLOSE_DISCONNECT_POPUP commits SET_DISCONNECT_POPUP with "close" value', () => {
 		globalsModule.actions.CLOSE_DISCONNECT_POPUP(context);
 		expect(context.commit).toHaveBeenCalledWith('SET_DISCONNECT_POPUP', false);
+	});
+});
+
+describe('global handlers store: system settings', () => {
+	it('SUBSCRIBE_TO_SYSTEM_SETTINGS passes "system_settings_changed" event to system settings and notifications stores', async () => {
+		setActivePinia(createPinia());
+		const handlers = {};
+		const context = {
+			rootState: {
+				client: {
+					getCliInstance: async () => ({
+						on: (event, cb) => {
+							handlers[event] = [
+								...(handlers[event] ?? []),
+								cb,
+							];
+						},
+					}),
+				},
+			},
+			dispatch: vi.fn(),
+		};
+		const change = {
+			name: EngineSystemSettingName.WbtHideContact,
+			value: true,
+		};
+
+		await globalsModule.actions.SUBSCRIBE_TO_SYSTEM_SETTINGS(context);
+		handlers.system_settings_changed.forEach((cb) => {
+			cb(change);
+		});
+
+		expect(
+			useSystemSettingsStore().settings[EngineSystemSettingName.WbtHideContact],
+		).toBe(true);
+		expect(context.dispatch).toHaveBeenCalledWith(
+			'features/notifications/HANDLE_SYSTEM_SETTING_CHANGE',
+			change,
+			{
+				root: true,
+			},
+		);
 	});
 });
 
