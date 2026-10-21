@@ -6,6 +6,15 @@ import UserStatus from './statusUtils/UserStatus';
 
 const usersAPI = APIRepository.users;
 
+const AGENT_NOT_FOUND_ERROR_ID = 'store.sql_agent.get.app_error';
+const AGENT_LOGGED_OUT_ERROR_ID = 'app.agent.set_logout.agent_logged_out';
+
+const isLogoutError = (error, id) =>
+	error?.id === id ||
+	(error?.id === 'app.agent.logout.app_err' &&
+		typeof error.detail === 'string' &&
+		error.detail.includes(id));
+
 const state = {
 	agent: null,
 	user: {
@@ -57,9 +66,9 @@ const actions = {
 		try {
 			await agent.offline();
 		} catch (error) {
-			if (error?.id === 'app.agent.logout.app_err') {
+			if (isLogoutError(error, AGENT_NOT_FOUND_ERROR_ID)) {
 				context.commit('SET_AGENT_REMOVED', true);
-			} else {
+			} else if (!isLogoutError(error, AGENT_LOGGED_OUT_ERROR_ID)) {
 				throw error;
 			}
 		}

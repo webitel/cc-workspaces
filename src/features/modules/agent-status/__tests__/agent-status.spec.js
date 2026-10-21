@@ -71,9 +71,11 @@ describe('features/status store client handlers: actions', () => {
 		expect(agent.offline).toHaveBeenCalled();
 	});
 
-	it('AGENT_LOGOUT marks the agent removed on app.agent.logout.app_err', async () => {
+	it('AGENT_LOGOUT marks the agent removed when the wrapped error is agent not found', async () => {
 		const offline = vi.fn().mockRejectedValue({
 			id: 'app.agent.logout.app_err',
+			detail:
+				'rpc error: code = Internal desc = {"id":"store.sql_agent.get.app_error","code":404}',
 		});
 		context.dispatch = vi.fn().mockResolvedValue({
 			...agent,
@@ -83,9 +85,38 @@ describe('features/status store client handlers: actions', () => {
 		expect(context.commit).toHaveBeenCalledWith('SET_AGENT_REMOVED', true);
 	});
 
-	it('AGENT_LOGOUT rethrows other offline errors', async () => {
+	it('AGENT_LOGOUT marks the agent removed on unwrapped agent not found error', async () => {
+		const offline = vi.fn().mockRejectedValue({
+			id: 'store.sql_agent.get.app_error',
+		});
+		context.dispatch = vi.fn().mockResolvedValue({
+			...agent,
+			offline,
+		});
+		await statusModule.actions.AGENT_LOGOUT(context);
+		expect(context.commit).toHaveBeenCalledWith('SET_AGENT_REMOVED', true);
+	});
+
+	it('AGENT_LOGOUT ignores the error when the agent is already logged out', async () => {
+		const offline = vi.fn().mockRejectedValue({
+			id: 'app.agent.logout.app_err',
+			detail:
+				'rpc error: code = InvalidArgument desc = {"id":"app.agent.set_logout.agent_logged_out","code":400}',
+		});
+		context.dispatch = vi.fn().mockResolvedValue({
+			...agent,
+			offline,
+		});
+		await expect(
+			statusModule.actions.AGENT_LOGOUT(context),
+		).resolves.toBeUndefined();
+		expect(context.commit).not.toHaveBeenCalled();
+	});
+
+	it('AGENT_LOGOUT rethrows other wrapped logout errors', async () => {
 		const error = {
-			id: 'other.error',
+			id: 'app.agent.logout.app_err',
+			detail: 'rpc error: code = Unavailable desc = connection refused',
 		};
 		context.dispatch = vi.fn().mockResolvedValue({
 			...agent,
