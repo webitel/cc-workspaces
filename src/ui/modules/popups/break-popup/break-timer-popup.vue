@@ -57,7 +57,6 @@ const { t } = useI18n();
 const { activityTypes, defaultActivityTypeOption, loadActivityTypes } =
 	useActivityTypesOptions();
 
-const duration = ref('00:00:00');
 const isBreakPopupValue = ref(false);
 const isBreakTimerStep = ref(true);
 const selectedActivityType = ref<LookupOption | null>(null);
@@ -66,6 +65,14 @@ const now = computed(() => store.state.ui.now.now);
 const agent = computed<Agent>(() => store.state.features.status.agent);
 
 const agentStatus = computed(() => agent.value.status);
+
+const duration = computed(() => {
+	const msSinceStatusChange = Math.max(
+		0,
+		now.value - agent.value.lastStatusChange,
+	);
+	return convertDuration(Math.round(msSinceStatusChange / 1000));
+});
 
 const breakInfo = computed(() =>
 	agentStatus.value === AgentStatus.Pause
@@ -88,16 +95,6 @@ const isBreakPopup = computed(
 		isBreakPopupValue.value &&
 		(agentStatus.value === AgentStatus.Pause ||
 			agentStatus.value === AgentStatus.BreakOut),
-);
-
-watch(
-	now,
-	() => {
-		duration.value = convertDuration(agent.value?.stateDuration);
-	},
-	{
-		immediate: true,
-	},
 );
 
 watch(
