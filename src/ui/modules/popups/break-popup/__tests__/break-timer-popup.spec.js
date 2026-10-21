@@ -4,6 +4,8 @@ import { AgentStatus } from 'webitel-sdk';
 
 import TimerPopup from '../break-timer-popup.vue';
 
+const NOW = Date.now();
+
 function createTestStore(agent) {
 	return createStore({
 		modules: {
@@ -13,7 +15,7 @@ function createTestStore(agent) {
 					now: {
 						namespaced: true,
 						state: () => ({
-							now: Date.now(),
+							now: NOW,
 						}),
 					},
 				},
@@ -34,10 +36,10 @@ function createTestStore(agent) {
 }
 
 describe('Break timer popup', () => {
-	it('computes and renders break duration', () => {
+	it('resets duration on status change before the next now tick', async () => {
 		const store = createTestStore({
-			status: AgentStatus.Pause,
-			stateDuration: 12 * 60 * 60,
+			status: AgentStatus.Online,
+			lastStatusChange: NOW - 69_600,
 		});
 		const wrapper = shallowMount(TimerPopup, {
 			global: {
@@ -46,14 +48,20 @@ describe('Break timer popup', () => {
 				],
 			},
 		});
-		expect(wrapper.vm.duration).toEqual('12:00:00');
-		expect(wrapper.vm.duration.split(':')).toHaveLength(3);
+		expect(wrapper.vm.duration).toEqual('00:01:10');
+
+		const { agent } = store.state.features.status;
+		agent.status = AgentStatus.Pause;
+		agent.lastStatusChange = NOW + 900;
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.duration).toEqual('00:00:00');
 	});
 
 	it('hides popup on online status', () => {
 		const store = createTestStore({
 			status: AgentStatus.Online,
-			stateDuration: 0,
+			lastStatusChange: NOW,
 		});
 		const wrapper = shallowMount(TimerPopup, {
 			global: {
