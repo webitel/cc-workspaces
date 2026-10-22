@@ -8,16 +8,22 @@ import { JobState } from 'webitel-sdk';
 import i18n from '../../../../../app/locale/i18n.js';
 import { getRingtoneVolume } from '../../helpers/getRingtoneVolume.ts';
 
+// [Claude] task_end_* admin settings gate both new and ended task notifications
+const getJobNotificationSettings = (context) => {
+	const getSetting =
+		context.rootGetters['features/notifications/GET_NOTIFICATION_SETTING'];
+	return {
+		push: getSetting(EngineSystemSettingName.TaskEndPushNotification),
+		sound: getSetting(EngineSystemSettingName.TaskEndSoundNotification),
+	};
+};
+
 const actions = {
 	// @author @stanislav-kozak
 	// Action what call when job is ended
 	HANDLE_JOB_END: async (context, job) => {
-		const isJobEndPushNotification = context.rootGetters[
-			'features/notifications/GET_NOTIFICATION_SETTING'
-		](EngineSystemSettingName.TaskEndPushNotification);
-		const isJobEndSoundNotification = context.rootGetters[
-			'features/notifications/GET_NOTIFICATION_SETTING'
-		](EngineSystemSettingName.TaskEndSoundNotification);
+		const { push: isJobEndPushNotification, sound: isJobEndSoundNotification } =
+			getJobNotificationSettings(context);
 
 		context.commit('features/notifications/SET_CURRENTLY_PLAYING', null, {
 			root: true,
@@ -56,18 +62,26 @@ const actions = {
 		}
 	},
 	HANDLE_JOB_DISTRIBUTE: (context, { action, job }) => {
-		context.dispatch(
-			'features/notifications/PLAY_SOUND',
-			{
-				action,
-				volume: getRingtoneVolume(RingtoneType.Task),
-			},
-			{
-				root: true,
-			},
-		);
+		// [Claude] if a setting is not set, keep new task notifications on
+		const { push, sound } = getJobNotificationSettings(context);
+		const isJobPushNotification = push ?? true;
+		const isJobSoundNotification = sound ?? true;
+
+		if (isJobSoundNotification) {
+			context.dispatch(
+				'features/notifications/PLAY_SOUND',
+				{
+					action,
+					volume: getRingtoneVolume(RingtoneType.Task),
+				},
+				{
+					root: true,
+				},
+			);
+		}
 
 		if (
+			isJobPushNotification &&
 			!document.hasFocus() &&
 			context.rootGetters['features/notifications/IS_MAIN_TAB']
 		) {
