@@ -1,9 +1,11 @@
 import { ContactsAPI, EmailsAPI, PhonesAPI } from '@webitel/api-services/api';
 import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 import type { WebitelContactsContact } from '@webitel/api-services/gen/models';
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useSystemSettingsStore } from '../../../../../../../../features/modules/system-settings/store/system-settings';
 
 import { ContactPath } from '../enums/ContactPath';
 
@@ -26,6 +28,7 @@ const resolveTaskContactId = (task: any, callList: any[] = []) => {
 
 export const useContactStore = defineStore('ui/infoSec/client/contact', () => {
 	const vuexStore = useStore();
+	const systemSettingsStore = useSystemSettingsStore();
 
 	// this is the actual contact, linked to the task
 	const contact = ref<WebitelContactsContact | null>(null);
@@ -35,7 +38,10 @@ export const useContactStore = defineStore('ui/infoSec/client/contact', () => {
 	// contacts, loaded by user manual search
 	const contactsBySearch = ref<WebitelContactsContact[]>([]);
 	// access variable for contact card page in read only mode
-	const showFullContact = ref(false);
+	const showFullContact = computed(
+		() =>
+			!!systemSettingsStore.settings[EngineSystemSettingName.ShowFullContact],
+	);
 
 	const contactLink = computed(() => (id: string | number) => {
 		const contactPath = !showFullContact.value
@@ -48,10 +54,6 @@ export const useContactStore = defineStore('ui/infoSec/client/contact', () => {
 		() => (id: string | number) =>
 			`${import.meta.env.VITE_CRM_URL}/${ContactPath.ReadOnlyContact}/${id}`,
 	);
-
-	function initShowFullContactState(value: boolean) {
-		showFullContact.value = value;
-	}
 
 	async function loadContactsByDestination(task: any) {
 		const isCallWorkspace = vuexStore.getters['workspace/IS_CALL_WORKSPACE'];
@@ -262,7 +264,6 @@ export const useContactStore = defineStore('ui/infoSec/client/contact', () => {
 		contactLink,
 		readOnlyContactLink,
 
-		initShowFullContactState,
 		loadContactsByDestination,
 		searchContacts,
 		loadChatContact,

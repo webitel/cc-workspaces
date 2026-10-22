@@ -1,9 +1,11 @@
 import '../../../../../../tests/unit/mocks/broadcastChannelMock';
 
+import { EngineSystemSettingName } from '@webitel/api-services/gen/models';
 import { ChatActions } from 'webitel-sdk';
 
 import callNotificationsModule from '../../call/store/call.js';
 import chatNotificationsModule from '../../chat/store/chat.js';
+import notificationsModule from '../notifications';
 
 const state = {
 	thisTabId: null,
@@ -97,5 +99,44 @@ describe('features/notifications store: actions', () => {
 				root: true,
 			},
 		);
+	});
+});
+
+describe('features/notifications store: HANDLE_SYSTEM_SETTING_CHANGE', () => {
+	const context = {
+		dispatch: vi.fn(),
+	};
+
+	beforeEach(() => {
+		vi.useFakeTimers();
+		context.dispatch.mockClear();
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
+	it('reloads notification settings once for a burst of notification setting changes', () => {
+		notificationsModule.actions.HANDLE_SYSTEM_SETTING_CHANGE(context, {
+			name: EngineSystemSettingName.CallEndSoundNotification,
+			value: false,
+		});
+		notificationsModule.actions.HANDLE_SYSTEM_SETTING_CHANGE(context, {
+			name: EngineSystemSettingName.PushNotificationTimeout,
+		});
+		vi.runAllTimers();
+
+		expect(context.dispatch).toHaveBeenCalledTimes(1);
+		expect(context.dispatch).toHaveBeenCalledWith('LOAD_NOTIFICATION_SETTINGS');
+	});
+
+	it('ignores settings that are not notification ones', () => {
+		notificationsModule.actions.HANDLE_SYSTEM_SETTING_CHANGE(context, {
+			name: EngineSystemSettingName.ShowFullContact,
+			value: true,
+		});
+		vi.runAllTimers();
+
+		expect(context.dispatch).not.toHaveBeenCalled();
 	});
 });
