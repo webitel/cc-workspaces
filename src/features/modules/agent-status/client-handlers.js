@@ -1,12 +1,12 @@
+import { parseUserPresence } from '@webitel/ui-sdk/scripts';
 import { reactive } from 'vue';
 
 import APIRepository from '../../../app/api/APIRepository';
-import parseUserStatus from './statusUtils/parseUserStatus';
 
 const usersAPI = APIRepository.users;
 
 const userStatusHandler = (user) => ({
-	status: parseUserStatus(user),
+	status: parseUserPresence(user?.status),
 });
 
 const actions = {

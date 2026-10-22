@@ -51,7 +51,7 @@ describe('TransferLookupItem', () => {
 		]);
 	});
 
-	// status priority matrix is covered in statusUtils/__tests__/getUserStatusByPriority.spec.ts
+	// status priority matrix is covered by the getUserStatusByPriority spec in @webitel/ui-sdk
 	it('computes userStatus from item presence and agent status', () => {
 		const wrapper = shallowMount(TransferLookupItem, {
 			props: {

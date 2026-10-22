@@ -8,9 +8,8 @@
 </template>
 
 <script>
+import { UserPresenceStatus } from '@webitel/ui-sdk/enums';
 import { mapActions, mapState } from 'vuex';
-
-import UserStatus from '../../../../features/modules/agent-status/statusUtils/UserStatus';
 
 export default {
 	name: 'UserDndSwitcher',
@@ -19,7 +18,7 @@ export default {
 			user: (state) => state.user,
 		}),
 		isDnd() {
-			return !!this.user?.status?.[UserStatus.DND];
+			return !!this.user?.status?.[UserPresenceStatus.Dnd];
 		},
 	},
 	methods: {
