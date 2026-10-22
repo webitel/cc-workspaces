@@ -40,11 +40,15 @@ const getHistory = (params) => {
 		number: search,
 		direction,
 		missed: isMissed,
+		hide_number: true,
 	});
 };
 
+const redial = ({ callId }) => CallHistoryAPI.redial({ callId });
+
 const historyAPIRepository = {
 	getHistory,
+	redial,
 };
 
 export default historyAPIRepository;
