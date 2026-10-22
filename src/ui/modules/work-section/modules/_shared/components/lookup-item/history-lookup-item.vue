@@ -92,6 +92,7 @@ import convertDuration from '@webitel/ui-sdk/src/scripts/convertDuration';
 import { formatDate } from '@webitel/ui-sdk/utils';
 import { mapActions } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
+import APIRepository from '../../../../../../../app/api/APIRepository';
 import sizeMixin from '../../../../../../../app/mixins/sizeMixin';
 import { useLoader } from '../../../../../../composables/useLoader';
 import lookupItemMixin from './mixins/lookupItemMixin';
@@ -204,6 +205,16 @@ export default {
 				number = this.item.from.number;
 			} else {
 				number = this.item.to.number || this.item.destination;
+			}
+
+			const isNumberHidden = number?.includes('*');
+
+			if (isNumberHidden) {
+				return this.runWithLoader(this.item.id, () =>
+					APIRepository.history.redial({
+						callId: this.item.id,
+					}),
+				);
 			}
 
 			return this.runWithLoader(this.item.id, () =>
