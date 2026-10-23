@@ -62,6 +62,13 @@ const actions = {
 	HANDLE_HANGUP_SOUND_ALLOW: (context, payload) => {
 		context.commit('SET_HANGUP_SOUND_ALLOW', payload);
 	},
+
+	// [Claude] drops only the "call in progress" lock; a playing Audio (e.g. a ringtone) keeps its
+	// reference, otherwise STOP_SOUND can't pause it anymore https://webitel.atlassian.net/browse/WTEL-10753
+	RELEASE_SOUND_LOCK: (context) => {
+		if (context.state.currentlyPlaying instanceof Audio) return;
+		context.commit('SET_CURRENTLY_PLAYING', null);
+	},
 };
 
 const mutations = {
