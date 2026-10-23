@@ -1,6 +1,6 @@
 {
 	"name": "@webitel/workspace",
-	"version": "26.10.0",
+	"version": "26.12.0",
 	"private": true,
 	"scripts": {
 		"check:libs-train": "node scripts/check-webitel-train.mjs",
