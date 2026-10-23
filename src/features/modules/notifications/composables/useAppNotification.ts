@@ -20,6 +20,12 @@ export const useAppNotification = () => {
 	const playRinging = () =>
 		store.dispatch('features/callNotifications/HANDLE_ANY_CALL_RINGING');
 
+	// [Claude] only the ringtone is looped, so a looped sound means ringing is still playing
+	const isRingtonePlaying = () => {
+		const { currentlyPlaying } = store.state.features.notifications;
+		return currentlyPlaying instanceof Audio && currentlyPlaying.loop;
+	};
+
 	watch(isAnyRinging, (value) => {
 		if (value) {
 			playRinging();
@@ -27,6 +33,8 @@ export const useAppNotification = () => {
 			// need prevent stopPlaying() if we want play hangup sound after call end
 			if (isHangupSoundAllowed.value) {
 				changeHangupSoundAllowance(false); // must turn back isHangupSoundAllowed state in default value
+				// [Claude] the flag may be left over from an earlier chat/task/call end, so it must not keep a ringtone going https://webitel.atlassian.net/browse/WTEL-10753
+				if (isRingtonePlaying()) stopPlaying();
 			} else {
 				stopPlaying();
 			}
