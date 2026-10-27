@@ -140,3 +140,27 @@ describe('features/notifications store: HANDLE_SYSTEM_SETTING_CHANGE', () => {
 		expect(context.dispatch).not.toHaveBeenCalled();
 	});
 });
+
+describe('features/notifications store: RELEASE_SOUND_LOCK', () => {
+	const context = {
+		commit: vi.fn(),
+		state: {},
+	};
+
+	beforeEach(() => {
+		context.commit.mockClear();
+	});
+
+	it('resets the call-in-progress lock', () => {
+		context.state.currentlyPlaying = true;
+		notificationsModule.actions.RELEASE_SOUND_LOCK(context);
+		expect(context.commit).toHaveBeenCalledWith('SET_CURRENTLY_PLAYING', null);
+	});
+
+	// [Claude] https://webitel.atlassian.net/browse/WTEL-10753
+	it('keeps a playing sound, so it can still be stopped', () => {
+		context.state.currentlyPlaying = new Audio();
+		notificationsModule.actions.RELEASE_SOUND_LOCK(context);
+		expect(context.commit).not.toHaveBeenCalled();
+	});
+});
