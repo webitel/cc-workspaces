@@ -122,7 +122,7 @@ const actions = {
 			'features/notifications/GET_NOTIFICATION_SETTING'
 		](EngineSystemSettingName.ChatEndSoundNotification);
 
-		context.commit('features/notifications/SET_CURRENTLY_PLAYING', null, {
+		context.dispatch('features/notifications/RELEASE_SOUND_LOCK', null, {
 			root: true,
 		});
 
