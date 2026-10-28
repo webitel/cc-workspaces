@@ -9,6 +9,8 @@ import {
 } from 'vue';
 import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
+import packageJson from '../../../../../package.json' with { type: 'json' };
+import { UserAgentPlatform } from '../../../../ui/enums/UserAgentPlatform.enum';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
 import { getExternalSoftphoneConfig } from '../external-softphone/config';
@@ -88,6 +90,13 @@ function getCliConfig(): CliConfig {
 	} catch {
 		return {};
 	}
+}
+
+function getUserAgent(): string {
+	const platform = window.matchMedia('(display-mode: standalone)').matches
+		? UserAgentPlatform.Pwa
+		: UserAgentPlatform.Workspace;
+	return `webitel-${platform}.${packageJson.version}`;
 }
 
 function attachCoreHandlers(cli: Client, generation: number) {
@@ -227,6 +236,7 @@ async function createClient(): Promise<Client> {
 				(cliConfig.registerWebDevice ?? true) &&
 				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
+			userAgent: getUserAgent(),
 		}),
 	);
 
