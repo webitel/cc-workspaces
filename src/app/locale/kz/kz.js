@@ -245,6 +245,7 @@ export default {
 		transfer: 'Ауыстыру',
 		blindTransfer: 'Соқыр аудару',
 		consultTransfer: 'Кеңесу аударымы',
+		dialplan: 'Диалплан',
 	},
 	contacts: {
 		phones: 'Телефон | Телефондар',

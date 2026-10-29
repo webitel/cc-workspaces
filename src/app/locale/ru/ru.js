@@ -248,6 +248,7 @@ export default {
 		transfer: 'Перевести',
 		blindTransfer: 'Слепой перевод',
 		consultTransfer: 'Консультативный перевод',
+		dialplan: 'Диаплан',
 	},
 	contacts: {
 		phones: 'Номер телефона | Номера телефонов',

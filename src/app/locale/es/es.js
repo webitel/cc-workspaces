@@ -247,6 +247,7 @@ export default {
 		transfer: 'Transferir',
 		blindTransfer: 'Transferencia ciega',
 		consultTransfer: 'Transferencia consultiva',
+		dialplan: 'Plan de marcación',
 	},
 	contacts: {
 		phones: 'Teléfono | Teléfonos',
