@@ -1,4 +1,5 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import isElectron from 'is-electron';
 import {
 	markRaw,
 	reactive,
@@ -92,11 +93,15 @@ function getCliConfig(): CliConfig {
 	}
 }
 
+function getUserAgentPlatform(): UserAgentPlatform {
+	if (isElectron()) return UserAgentPlatform.Desktop;
+	if (window.matchMedia('(display-mode: standalone)').matches)
+		return UserAgentPlatform.Pwa;
+	return UserAgentPlatform.Workspace;
+}
+
 function getUserAgent(): string {
-	const platform = window.matchMedia('(display-mode: standalone)').matches
-		? UserAgentPlatform.Pwa
-		: UserAgentPlatform.Workspace;
-	return `webitel-${platform}.${packageJson.version}`;
+	return `webitel-${getUserAgentPlatform()}.${packageJson.version}`;
 }
 
 function attachCoreHandlers(cli: Client, generation: number) {
