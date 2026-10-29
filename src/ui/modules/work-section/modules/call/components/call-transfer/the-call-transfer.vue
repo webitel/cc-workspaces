@@ -61,7 +61,7 @@ const tabs = computed(() => [
 		component: QueuesCallTransfer,
 	},
 	{
-		text: t('WtApplication.admin.sections.dialplan', 2),
+		text: t('transfer.dialplan'),
 		value: 'dialplan',
 		component: DialplanCallTransfer,
 	},
