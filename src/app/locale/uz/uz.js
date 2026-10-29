@@ -242,6 +242,7 @@ export default {
 		transfer: 'Oʻtkazish',
 		blindTransfer: "Ko'r o'tkazma",
 		consultTransfer: "Maslahatli o'tkazma",
+		dialplan: "Qo'ng'iroq rejasi",
 	},
 	contacts: {
 		phones: 'Telefon | Telefonlar',
