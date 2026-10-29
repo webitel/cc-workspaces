@@ -50,6 +50,7 @@ const iconClass = computed(() => senderClass[props.icon] ?? null);
 
 .last-message-container--contacts {
   background-color: var(--p-primary-highlight-color);
+  color: var(--p-primary-on-highlight-color);
 }
 
 .last-message-container--agent {
