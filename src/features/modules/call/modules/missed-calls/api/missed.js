@@ -56,6 +56,7 @@ const getMissedCalls = async (params) => {
 			cause,
 			direction,
 			missed: isMissed,
+			hide_number: true,
 		},
 	});
 };

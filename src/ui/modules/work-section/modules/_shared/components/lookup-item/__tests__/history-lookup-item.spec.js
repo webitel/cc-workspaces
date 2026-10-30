@@ -2,6 +2,7 @@ import { mount, shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import { CallDirection } from 'webitel-sdk';
 
+import APIRepository from '../../../../../../../../app/api/APIRepository';
 import HistoryLookupItem from '../history-lookup-item.vue';
 
 describe('HistoryLookupItem', () => {
@@ -112,6 +113,83 @@ describe('HistoryLookupItem', () => {
 			.vm.$emit('click');
 		expect(callAction).toHaveBeenCalledWith(expect.anything(), {
 			number: 'true',
+		});
+	});
+
+	describe('masked number', () => {
+		const clickCall = (wrapper) =>
+			wrapper
+				.findComponent({
+					name: 'wt-button',
+				})
+				.vm.$emit('click');
+
+		beforeEach(() => {
+			vi.spyOn(APIRepository.history, 'redial').mockResolvedValue({});
+		});
+
+		afterEach(() => {
+			vi.restoreAllMocks();
+		});
+
+		it('redials inbound call by id instead of dialing the masked number', () => {
+			item.direction = CallDirection.Inbound;
+			item.from.number = '*****888';
+			const wrapper = mount(HistoryLookupItem, {
+				props: {
+					item,
+				},
+				global: {
+					plugins: [
+						store,
+					],
+				},
+			});
+			clickCall(wrapper);
+			expect(APIRepository.history.redial).toHaveBeenCalledWith({
+				callId: item.id,
+			});
+			expect(callAction).not.toHaveBeenCalled();
+		});
+
+		it('redials outbound call by id instead of dialing the masked number', () => {
+			item.direction = CallDirection.Outbound;
+			item.to.number = '*****888';
+			const wrapper = mount(HistoryLookupItem, {
+				props: {
+					item,
+				},
+				global: {
+					plugins: [
+						store,
+					],
+				},
+			});
+			clickCall(wrapper);
+			expect(APIRepository.history.redial).toHaveBeenCalledWith({
+				callId: item.id,
+			});
+			expect(callAction).not.toHaveBeenCalled();
+		});
+
+		it('does not redial when the number is not masked', () => {
+			item.direction = CallDirection.Outbound;
+			item.to.number = '380988888888';
+			const wrapper = mount(HistoryLookupItem, {
+				props: {
+					item,
+				},
+				global: {
+					plugins: [
+						store,
+					],
+				},
+			});
+			clickCall(wrapper);
+			expect(APIRepository.history.redial).not.toHaveBeenCalled();
+			expect(callAction).toHaveBeenCalledWith(expect.anything(), {
+				number: '380988888888',
+			});
 		});
 	});
 });

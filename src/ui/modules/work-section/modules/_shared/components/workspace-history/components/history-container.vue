@@ -82,6 +82,8 @@ const select = (item) => {
 	if (item.direction === CallDirection.Inbound)
 		destination = item.from.number || '';
 	if (item.direction === CallDirection.Outbound) destination = item.destination;
+	// a masked number can't be dialed, the row's call button redials it by id
+	if (destination?.includes('*')) return;
 	store.dispatch('features/call/SET_NEW_NUMBER', {
 		value: destination,
 	});
