@@ -124,6 +124,10 @@ export default {
 			},
 		},
 	},
+	notification: {
+		newVersion:
+			'Đã có phiên bản Workspace mới. Hãy tải lại trang (F5) khi thuận tiện',
+	},
 	infoSec: {
 		generalInfo: {
 			generalInfo: 'Thông tin chung',

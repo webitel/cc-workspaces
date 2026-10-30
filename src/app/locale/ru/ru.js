@@ -128,6 +128,8 @@ export default {
 		callEnded: 'Звонок с {name} окончен',
 		chatEnded: 'Чат с {name} закрыт',
 		jobEnded: 'Задача “{name}“ закончена',
+		newVersion:
+			'Доступна новая версия Workspace. Обновите страницу (F5), когда будет удобно',
 	},
 	infoSec: {
 		generalInfo: {

@@ -58,6 +58,9 @@ setChatsServicesConfig({
 // generated api-services clients call through this app's instance
 setDefaultAxiosInstance(instance);
 
+// [Claude] lets support see which release the agent actually runs
+console.info('[workspace] version:', __APP_VERSION__);
+
 const pinia = createPinia();
 
 const initApp = async () => {

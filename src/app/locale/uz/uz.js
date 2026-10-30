@@ -124,6 +124,10 @@ export default {
 			},
 		},
 	},
+	notification: {
+		newVersion:
+			'Workspace’ning yangi versiyasi mavjud. Qulay paytda sahifani yangilang (F5)',
+	},
 	infoSec: {
 		generalInfo: {
 			generalInfo: 'Umumiy maʼlumot',

@@ -44,7 +44,10 @@ const getHistory = (params) => {
 	});
 };
 
-const redial = ({ callId }) => CallHistoryAPI.redial({ callId });
+const redial = ({ callId }) =>
+	CallHistoryAPI.redial({
+		callId,
+	});
 
 const historyAPIRepository = {
 	getHistory,
