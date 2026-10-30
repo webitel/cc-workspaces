@@ -124,6 +124,10 @@ export default {
 			},
 		},
 	},
+	notification: {
+		newVersion:
+			'Hay una nueva versión de Workspace disponible. Recargue la página (F5) cuando le resulte conveniente',
+	},
 	infoSec: {
 		generalInfo: {
 			generalInfo: 'Información general',

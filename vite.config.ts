@@ -4,15 +4,22 @@ import { defineConfig, loadEnv } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 import vueDevtools from 'vite-plugin-vue-devtools';
+import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { vite as vidstack } from 'vidstack/plugins';
 
 export default ({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 	const isStagingEnv = env.VITE_STAGING_ENV === 'true';
+	const { version: appVersion } = JSON.parse(
+		readFileSync(resolve(__dirname, 'package.json'), 'utf-8'),
+	);
 
 	return defineConfig({
 		base: '/workspace',
+		define: {
+			__APP_VERSION__: JSON.stringify(appVersion),
+		},
 		build: {
 			sourcemap: isStagingEnv,
 			minify: !isStagingEnv, // Disable minification for readable debugging

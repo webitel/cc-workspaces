@@ -128,6 +128,8 @@ export default {
 		callEnded: 'The call with {name} has ended',
 		chatEnded: 'The chat with {name} has ended',
 		jobEnded: 'The task "{name}" has ended',
+		newVersion:
+			'A new version of Workspace is available. Reload the page (F5) when it is convenient',
 	},
 	infoSec: {
 		generalInfo: {

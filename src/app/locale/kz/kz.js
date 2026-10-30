@@ -124,6 +124,10 @@ export default {
 			},
 		},
 	},
+	notification: {
+		newVersion:
+			'Workspace-тің жаңа нұсқасы қолжетімді. Ыңғайлы кезде бетті жаңартыңыз (F5)',
+	},
 	infoSec: {
 		generalInfo: {
 			generalInfo: 'Жалпы ақпарат',

@@ -124,6 +124,10 @@ export default {
 			},
 		},
 	},
+	notification: {
+		newVersion:
+			'Este disponibilă o versiune nouă a Workspace. Reîncărcați pagina (F5) când vă este convenabil',
+	},
 	infoSec: {
 		generalInfo: {
 			generalInfo: 'Informații generale',
