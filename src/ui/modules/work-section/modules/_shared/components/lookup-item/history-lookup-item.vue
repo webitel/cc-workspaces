@@ -207,6 +207,7 @@ export default {
 				number = this.item.to.number || this.item.destination;
 			}
 
+			// history is requested with hide_number, so a masked number can't be dialed directly
 			const isNumberHidden = number?.includes('*');
 
 			if (isNumberHidden) {
