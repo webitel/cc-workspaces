@@ -1,4 +1,5 @@
 import { eventBus } from '@webitel/ui-sdk/scripts';
+import isElectron from 'is-electron';
 import {
 	markRaw,
 	reactive,
@@ -9,6 +10,8 @@ import {
 } from 'vue';
 import type { RtpMetrics } from 'webitel-sdk';
 import { Client } from 'webitel-sdk';
+import packageJson from '../../../../../package.json' with { type: 'json' };
+import { UserAgentPlatform } from '../../../../ui/enums/UserAgentPlatform.enum';
 import { WebSocketClientEvent } from '../../../../ui/enums/WebSocketClientEvent.enum';
 import { WebSocketConnectionState } from '../../../../ui/enums/WebSocketConnectionState.enum';
 import { getExternalSoftphoneConfig } from '../external-softphone/config';
@@ -88,6 +91,17 @@ function getCliConfig(): CliConfig {
 	} catch {
 		return {};
 	}
+}
+
+function getUserAgentPlatform(): UserAgentPlatform {
+	if (isElectron()) return UserAgentPlatform.Desktop;
+	if (window.matchMedia('(display-mode: standalone)').matches)
+		return UserAgentPlatform.Pwa;
+	return UserAgentPlatform.Workspace;
+}
+
+function getUserAgent(): string {
+	return `webitel-${getUserAgentPlatform()}.${packageJson.version}`;
 }
 
 function attachCoreHandlers(cli: Client, generation: number) {
@@ -227,6 +241,7 @@ async function createClient(): Promise<Client> {
 				(cliConfig.registerWebDevice ?? true) &&
 				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
+			userAgent: getUserAgent(),
 		}),
 	);
 
