@@ -7,6 +7,7 @@
 import { computed, provide } from 'vue';
 import { useStore } from 'vuex';
 import { useLeaveGuardStore } from '../features/modules/leave-guard/store/leave-guard';
+import { useAutoUpdate } from '../features/modules/sw-controller/composables/useAutoUpdate';
 import { useUserinfoStore } from '../ui/modules/userinfo/userinfoStore.ts';
 
 export default {
@@ -16,6 +17,7 @@ export default {
 		const store = useStore();
 		const { showUserNotifications } = useUserinfoStore();
 		const { handleLeaveAttempt } = useLeaveGuardStore();
+		useAutoUpdate();
 		// @author o.chorpita
 		// Provide darkMode for ui-sdk components
 		const darkMode = computed(() => store.getters['ui/appearance/DARK_MODE']);
