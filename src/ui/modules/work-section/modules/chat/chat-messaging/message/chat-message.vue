@@ -250,7 +250,7 @@ $chat-info-gap: var(--spacing-2xs);
     padding: var(--spacing-xs);
     border-radius: var(--border-radius);
     background: var(--p-primary-highlight-color);
-    color: var(--primary-on-color);
+    color: var(--p-primary-on-highlight-color);
     place-self: flex-start;
   }
 

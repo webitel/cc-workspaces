@@ -73,7 +73,7 @@
 		"date-fns": "^4.1.0",
 		"glob-to-regexp": "^0.4.1",
 		"globals": "^17.x",
-		"happy-dom": "^20.10.6",
+		"happy-dom": "^21.0.4",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.x",
 		"prismjs": "^1.29.0",
@@ -96,6 +96,7 @@
 		"@rollup/rollup-linux-x64-gnu": "^4"
 	},
 	"overrides": {
+		"query-string": "^9.5.1",
 		"vite": "8.0.0-beta.15"
 	}
 }
