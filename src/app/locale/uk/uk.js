@@ -249,7 +249,7 @@ export default {
 		transfer: 'Перевести',
 		blindTransfer: 'Сліпий перевід',
 		consultTransfer: 'Консультативний перевід',
-		dialplan: 'Діаплан',
+		dialplan: 'Діалплан',
 	},
 	contacts: {
 		phones: 'Номер телефону | Номери телефонів',
