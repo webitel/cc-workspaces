@@ -248,6 +248,7 @@ export default {
 		transfer: 'Transfer',
 		blindTransfer: 'Blind transfer',
 		consultTransfer: 'Consult transfer',
+		dialplan: 'Dialplan',
 	},
 	contacts: {
 		phones: 'Phone | Phones',

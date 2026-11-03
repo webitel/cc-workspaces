@@ -246,6 +246,7 @@ export default {
 		transfer: 'Przekaż',
 		blindTransfer: 'Transfer ślepy',
 		consultTransfer: 'Transfer konsultacyjny',
+		dialplan: 'Plan wybierania',
 	},
 	contacts: {
 		phones: 'Telefon | Telefony',

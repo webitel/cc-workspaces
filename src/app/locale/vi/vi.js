@@ -245,6 +245,7 @@ export default {
 		transfer: 'Chuyển',
 		blindTransfer: 'Chuyển cuộc gọi mù',
 		consultTransfer: 'Chuyển cuộc gọi tư vấn',
+		dialplan: 'Kế hoạch gọi',
 	},
 	contacts: {
 		phones: 'Điện thoại',

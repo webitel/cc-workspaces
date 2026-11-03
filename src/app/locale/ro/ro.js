@@ -247,6 +247,7 @@ export default {
 		transfer: 'Transfer',
 		blindTransfer: 'Transfer orb',
 		consultTransfer: 'Transfer consultativ',
+		dialplan: 'Plan de apelare',
 	},
 	contacts: {
 		phones: 'Telefon | Telefoane',
