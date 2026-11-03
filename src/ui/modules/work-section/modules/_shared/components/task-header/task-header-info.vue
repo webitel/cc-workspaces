@@ -65,7 +65,8 @@ const withAvatar = computed(() => props.size === ComponentSize.MD);
 		gap: var(--spacing-2xs);
 		padding: var(--spacing-xs);
 		border-radius: var(--border-radius--md);
-		background-color: var(--info-surface-color);
+		/* Figma token; chat-page top-bar resolves to the same value */
+		background-color: var(--wt-ws-call-page-colors-top-bar-background);
 	}
 
 	.task-header-info__user {
