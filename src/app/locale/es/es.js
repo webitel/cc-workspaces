@@ -126,7 +126,7 @@ export default {
 	},
 	notification: {
 		newVersion:
-			'Hay una nueva versión de Workspace disponible. Recargue la página (F5) cuando le resulte conveniente',
+			'Hay una nueva versión de Webitel disponible. Recargue la página para aplicar la actualización.',
 	},
 	infoSec: {
 		generalInfo: {

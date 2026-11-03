@@ -112,4 +112,18 @@ describe('useAutoUpdate', () => {
 		expect(emit).toHaveBeenCalledTimes(1);
 		expect(registration.update).not.toHaveBeenCalled();
 	});
+
+	it('reminds about the new version every hour until the page is reloaded', async () => {
+		vi.useFakeTimers();
+		await runAutoUpdate();
+		activateNewWorker();
+		emit.mockClear();
+
+		vi.advanceTimersByTime(SW_UPDATE_INTERVAL_MS);
+		expect(emit).toHaveBeenCalledTimes(1);
+
+		vi.advanceTimersByTime(SW_UPDATE_INTERVAL_MS);
+		expect(emit).toHaveBeenCalledTimes(2);
+		expect(registration.update).not.toHaveBeenCalled();
+	});
 });

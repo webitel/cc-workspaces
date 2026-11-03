@@ -48,6 +48,12 @@ export const useAutoUpdate = () => {
 
 	sw.ready.then((registration) => {
 		const checkForUpdate = () => {
+			// [Claude] new version is already waiting for a reload - remind the agent again
+			// (toast may have been missed), there is nothing newer to look for
+			if (isNewVersionActive) {
+				notifyNewVersion();
+				return;
+			}
 			// [Claude] failed check (e.g. offline) is not an error, next one will retry
 			registration.update().catch(() => {});
 		};
@@ -55,9 +61,7 @@ export const useAutoUpdate = () => {
 		setInterval(checkForUpdate, SW_UPDATE_INTERVAL_MS);
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState !== 'visible') return;
-			// [Claude] remind again, the toast may have been missed while the tab was hidden
-			if (isNewVersionActive) notifyNewVersion();
-			else checkForUpdate();
+			checkForUpdate();
 		});
 	});
 };
