@@ -122,10 +122,7 @@ const apps = computed(() => {
 		wfm,
 	];
 	if (config?.ON_SITE) allApps.push(grafana);
-	// [Claude] WTEL-10755: WFM is not part of the 26.10 release, hidden from the list
-	return allApps.filter(
-		({ name }) => name !== WtApplication.Wfm && hasApplicationVisibility(name),
-	);
+	return allApps.filter(({ name }) => hasApplicationVisibility(name));
 });
 
 function toggleCCenterMode(activityType) {
