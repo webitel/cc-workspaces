@@ -126,7 +126,7 @@ export default {
 	},
 	notification: {
 		newVersion:
-			'Workspace-тің жаңа нұсқасы қолжетімді. Ыңғайлы кезде бетті жаңартыңыз (F5)',
+			'Webitel-дің жаңа нұсқасы қолжетімді. Жаңартуды қолдану үшін бетті қайта жүктеңіз.',
 	},
 	infoSec: {
 		generalInfo: {
