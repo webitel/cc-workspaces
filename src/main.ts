@@ -3,7 +3,7 @@ import './app/css/main.scss';
 import { setConfig as setApiServicesConfig } from '@webitel/api-services';
 import { setDefaultAxiosInstance } from '@webitel/api-services/api/axios';
 import { setConfig as setChatsServicesConfig } from '@webitel/ui-chats';
-import { eventBus } from '@webitel/ui-sdk/scripts';
+import { eventBus, reloadOnStaleChunk } from '@webitel/ui-sdk/scripts';
 import deepmerge from 'deepmerge';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
@@ -47,6 +47,9 @@ const fetchConfig = async () => {
 	};
 	return deepmerge(fileConfig, await apiResponse(), electronConfig);
 };
+
+// [Claude] after a release an open tab can request an old lazy chunk that is gone - reload instead of a white page
+reloadOnStaleChunk();
 
 setApiServicesConfig({
 	eventBus,

@@ -126,7 +126,7 @@ export default {
 	},
 	notification: {
 		newVersion:
-			'Workspace’ning yangi versiyasi mavjud. Qulay paytda sahifani yangilang (F5)',
+			'Webitel’ning yangi versiyasi mavjud. Yangilanishni qo‘llash uchun sahifani qayta yuklang.',
 	},
 	infoSec: {
 		generalInfo: {
