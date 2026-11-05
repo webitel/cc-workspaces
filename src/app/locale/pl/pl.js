@@ -126,7 +126,7 @@ export default {
 	},
 	notification: {
 		newVersion:
-			'Dostępna jest nowa wersja Workspace. Odśwież stronę (F5), gdy będzie to wygodne',
+			'Dostępna jest nowa wersja Webitel. Odśwież stronę, aby zastosować aktualizację.',
 	},
 	infoSec: {
 		generalInfo: {

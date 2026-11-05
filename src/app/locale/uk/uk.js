@@ -129,7 +129,7 @@ export default {
 		chatEnded: 'Чат з {name} закрито',
 		jobEnded: 'Завдання “{name}“ завершене',
 		newVersion:
-			'Доступна нова версія Workspace. Оновіть сторінку (F5), коли буде зручно',
+			'Доступна нова версія Webitel. Перезавантажте сторінку, щоб застосувати оновлення.',
 	},
 	infoSec: {
 		generalInfo: {

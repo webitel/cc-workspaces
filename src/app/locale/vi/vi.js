@@ -126,7 +126,7 @@ export default {
 	},
 	notification: {
 		newVersion:
-			'Đã có phiên bản Workspace mới. Hãy tải lại trang (F5) khi thuận tiện',
+			'Đã có phiên bản Webitel mới. Hãy tải lại trang để áp dụng bản cập nhật.',
 	},
 	infoSec: {
 		generalInfo: {
