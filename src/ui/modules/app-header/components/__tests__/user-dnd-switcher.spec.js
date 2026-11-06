@@ -1,8 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
+import { UserPresenceStatus } from '@webitel/ui-sdk/enums';
 import { vi } from 'vitest';
 import { createStore } from 'vuex';
-
-import UserStatus from '../../../../../features/modules/agent-status/statusUtils/UserStatus';
 import UserDndSwitcher from '../user-dnd-switcher.vue';
 
 describe('User Dnd Switcher', () => {
@@ -17,7 +16,7 @@ describe('User Dnd Switcher', () => {
 							state: {
 								user: {
 									status: {
-										[UserStatus.DND]: true,
+										[UserPresenceStatus.Dnd]: true,
 									},
 								},
 							},
@@ -57,7 +56,7 @@ describe('User Dnd Switcher', () => {
 							state: {
 								user: {
 									status: {
-										[UserStatus.DND]: false,
+										[UserPresenceStatus.Dnd]: false,
 									},
 								},
 							},
