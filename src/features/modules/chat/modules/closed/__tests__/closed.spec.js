@@ -107,10 +107,8 @@ describe('features/chat/closed store', () => {
 		const chat = {
 			id: 'chat-b',
 			startedAt: '100',
-			contact: {
-				id: '413',
-			},
 		};
+		const contactId = '413';
 
 		it('commits the anchor and resolves true when the chat is on the loaded page', async () => {
 			const context = createContext({
@@ -124,7 +122,10 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
+			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
+				chat,
+				contactId,
+			});
 
 			expect(result).toBe(true);
 			expect(context.commit).toHaveBeenCalledWith(
@@ -145,7 +146,10 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
+			await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
+				chat,
+				contactId,
+			});
 
 			expect(context.commit).toHaveBeenCalledWith(
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
@@ -184,7 +188,10 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
+			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
+				chat,
+				contactId,
+			});
 
 			const loadNextCalls = context.dispatch.mock.calls.filter(
 				([type]) => type === 'features/chat/chatHistory/LOAD_NEXT',
@@ -216,7 +223,10 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, chat);
+			const result = await actions.FIND_TARGET_CHAT_IN_HISTORY(context, {
+				chat,
+				contactId,
+			});
 
 			const loadNextCalls = context.dispatch.mock.calls.filter(
 				([type]) => type === 'features/chat/chatHistory/LOAD_NEXT',
@@ -285,6 +295,34 @@ describe('features/chat/closed store', () => {
 			expect(result.messages).toHaveLength(1);
 			expect(result.messages[0].id).toBe('m1');
 		});
+
+		it('keeps the id when it comes from a prototype getter', async () => {
+			CatalogAPI.getChatMessagesList.mockResolvedValue({
+				items: [],
+				next: false,
+			});
+
+			// a live conversation exposes `id` through the prototype, like the sdk one
+			const liveChat = Object.create({
+				get id() {
+					return 'channel-1';
+				},
+			});
+			liveChat.conversationId = 'conv-1';
+			liveChat.closedAt = '300';
+
+			const context = createContext({
+				pages: [],
+				chatHistory: {
+					next: false,
+					chatHistoryMessages: [],
+				},
+			});
+
+			const result = await actions.LOAD_CLOSED_CHAT(context, liveChat);
+
+			expect(result.id).toBe('channel-1');
+		});
 	});
 
 	describe('LOAD_CLOSED_CHAT_HISTORY', () => {
@@ -292,10 +330,8 @@ describe('features/chat/closed store', () => {
 			id: 'chat-b',
 			startedAt: '100',
 			closedAt: '300',
-			contact: {
-				id: '413',
-			},
 		};
+		const contactId = '413';
 
 		it('falls back to the dialog and anchors on its first message when the archive has no such chat', async () => {
 			CatalogAPI.getChatMessagesList.mockResolvedValue({
@@ -318,7 +354,10 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			await actions.LOAD_CLOSED_CHAT_HISTORY(context, chat);
+			await actions.LOAD_CLOSED_CHAT_HISTORY(context, {
+				chat,
+				contactId,
+			});
 
 			expect(CatalogAPI.getChatMessagesList).toHaveBeenCalledWith({
 				chatId: 'chat-b',
@@ -346,12 +385,45 @@ describe('features/chat/closed store', () => {
 				},
 			});
 
-			await actions.LOAD_CLOSED_CHAT_HISTORY(context, chat);
+			await actions.LOAD_CLOSED_CHAT_HISTORY(context, {
+				chat,
+				contactId,
+			});
 
 			expect(CatalogAPI.getChatMessagesList).not.toHaveBeenCalled();
 			expect(context.commit).toHaveBeenCalledWith(
 				'SET_CLOSED_CHAT_FIRST_MESSAGE_ID',
 				'm10',
+			);
+		});
+
+		it('reads the dialog itself when there is no contact to search the history by', async () => {
+			CatalogAPI.getChatMessagesList.mockResolvedValue({
+				items: [],
+				next: false,
+			});
+
+			const context = createContext({
+				pages: [],
+				chatHistory: {
+					next: false,
+					chatHistoryMessages: [],
+				},
+			});
+
+			await actions.LOAD_CLOSED_CHAT_HISTORY(context, {
+				chat,
+				contactId: null,
+			});
+
+			expect(CatalogAPI.getChatMessagesList).toHaveBeenCalledWith({
+				chatId: 'chat-b',
+				offsetDate: '300',
+			});
+			expect(context.dispatch).not.toHaveBeenCalledWith(
+				'features/chat/chatHistory/LOAD_CHAT_HISTORY',
+				expect.anything(),
+				expect.anything(),
 			);
 		});
 	});
