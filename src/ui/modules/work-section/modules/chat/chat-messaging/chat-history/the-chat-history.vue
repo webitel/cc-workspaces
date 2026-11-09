@@ -189,10 +189,11 @@ const { startObserve: startObserveClosedChat } = useObserveHeightUntilStable(
 const loadHistory = async () =>
 	await store.dispatch(`${namespace}/LOAD_CHAT_HISTORY`, props.contact?.id);
 const loadClosedChatHistory = async () =>
-	await store.dispatch(
-		`features/chat/closed/LOAD_CLOSED_CHAT_HISTORY`,
-		chat.value,
-	);
+	await store.dispatch(`features/chat/closed/LOAD_CLOSED_CHAT_HISTORY`, {
+		chat: chat.value,
+		// a live chat has contact.id = null, props.contact is the resolved one [WTEL-10935]
+		contactId: props.contact?.id,
+	});
 const resetHistory = () => store.dispatch(`${namespace}/RESET_CHAT_HISTORY`);
 
 const attachPlayer = (player) =>
