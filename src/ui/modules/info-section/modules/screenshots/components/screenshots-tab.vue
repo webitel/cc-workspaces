@@ -15,7 +15,7 @@
       <template #screenshot="{ item }">
         <wt-image
           class="screenshots-tab__table--preview"
-          :src="getMediaUrl(item.id, false)"
+          :src="getMediaUrl(item.id, { auth: getMediaUrlAuth() })"
           overlay-icon="zoom-in"
           :size="ComponentSize.XXS"
           @click="openScreenshotInGalleria(item)"
@@ -52,6 +52,7 @@ import { formatDate } from '@webitel/ui-sdk/utils';
 import { computed, onActivated, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { getMediaUrlAuth } from '../../../../../../app/scripts/getMediaUrlAuth';
 
 const { t } = useI18n();
 const store = useStore();

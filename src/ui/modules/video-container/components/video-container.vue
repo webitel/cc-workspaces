@@ -51,6 +51,7 @@ import { eventBus } from '@webitel/ui-sdk/scripts';
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
+import { getMediaUrlAuth } from '../../../../app/scripts/getMediaUrlAuth';
 import { useContactStore } from '../../info-section/modules/client-info/modules/contact/store/contact';
 import { useScreenShot } from '../composable/useScreenshot';
 import {
@@ -197,8 +198,13 @@ const getScreenshots = async () => {
 
 const galleriaData = computed(() =>
 	screenshotData.value?.map((item) => ({
-		src: getMediaUrl(item.id, false),
-		thumbnailSrc: getMediaUrl(item.id, true),
+		src: getMediaUrl(item.id, {
+			auth: getMediaUrlAuth(),
+		}),
+		thumbnailSrc: getMediaUrl(item.id, {
+			auth: getMediaUrlAuth(),
+			isThumb: true,
+		}),
 		title: item.view_name,
 		alt: item.view_name,
 	})),
