@@ -1,9 +1,12 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const { isAlive } = require('./window_utils');
+const { isWebUrl, originOf } = require('./url_utils');
 
 class Workspace {
 	window = null;
+	/** Origin the SPA was loaded from; `null` denies every navigation. */
+	allowedOrigin = null;
 
 	createWindow(URL) {
 		if (isAlive(this.window)) return;
@@ -34,13 +37,38 @@ class Workspace {
 			evt.preventDefault();
 		});
 
-		this.window.webContents.setWindowOpenHandler((url) => {
-			console.log(url);
-			shell.openExternal(url.url);
+		this.window.webContents.setWindowOpenHandler(({ url }) => {
+			// every scheme used to be forwarded, so `smb://host/share` in a
+			// chat message or a flow variable reached the OS handler
+			if (isWebUrl(url)) {
+				shell.openExternal(url);
+			} else {
+				console.warn('[workspace] blocked external open of', url);
+			}
+
 			return {
 				action: 'deny',
 			};
 		});
+
+		// the window keeps Node integration across navigation, so another
+		// origin loaded into it would get `require`. Only navigation started
+		// by the page is limited: `loadURL` from the main process raises no
+		// navigation event.
+		const denyForeignNavigation = (event, url) => {
+			if (this._isSameOrigin(url)) return;
+
+			event.preventDefault();
+			console.warn('[workspace] blocked navigation to', url);
+		};
+
+		this.window.webContents.on('will-navigate', denyForeignNavigation);
+		this.window.webContents.on('will-redirect', denyForeignNavigation);
+		this.window.webContents.on('will-frame-navigate', (details) => {
+			denyForeignNavigation(details, details.url);
+		});
+
+		this.allowedOrigin = originOf(URL);
 
 		this.window.loadURL(URL).catch((err) => {
 			// window may be destroyed/replaced while the URL was loading
@@ -69,6 +97,12 @@ class Workspace {
 		});
 	}
 
+	_isSameOrigin(url) {
+		if (!this.allowedOrigin) return false;
+
+		return originOf(url) === this.allowedOrigin;
+	}
+
 	changeSIP(value) {
 		if (isAlive(this.window)) {
 			const str = `{'ON_SITE':true,'CLI':{'debug':false,'registerWebDevice':${value}}}`;
@@ -91,6 +125,7 @@ class Workspace {
 
 	updateWindow(ob) {
 		if (!isAlive(this.window)) return;
+		this.allowedOrigin = originOf(ob.URL);
 		this.window
 			.loadURL(ob.URL)
 			.then(() => {

@@ -28,3 +28,34 @@ describe('ChatMessageText component', () => {
 		expect(wrapper.vm.text).toBe(text);
 	});
 });
+
+describe('ChatMessageText link schemes', () => {
+	const render = (text) =>
+		shallowMount(ChatMessageText, {
+			props: {
+				text,
+			},
+		}).html();
+
+	it.each([
+		'smb://attacker.test/share',
+		'ms-settings://x',
+		'file:///etc/passwd',
+	])('leaves %s as plain text', (url) => {
+		const html = render(`look at ${url} please`);
+
+		expect(html).not.toContain('<a');
+		expect(html).toContain(url);
+	});
+
+	it.each([
+		'https://example.test/page',
+		'http://example.test/page',
+	])('still links %s', (url) => {
+		expect(render(`look at ${url} please`)).toContain('<a');
+	});
+
+	it('does not render markup from the message body', () => {
+		expect(render('<img src=x onerror=alert(1)>')).not.toContain('<img');
+	});
+});
