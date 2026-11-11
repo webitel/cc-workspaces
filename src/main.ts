@@ -17,7 +17,6 @@ import {
 	options as WebitelUiOptions,
 } from './app/plugins/webitel/ui-sdk';
 import { initRouter, router } from './app/router';
-import { installChatPostProcessingDebug } from './app/scripts/debugChatPostProcessing';
 import store from './app/store';
 import './app/assets/icons/sprite';
 import { setTokenFromUrl } from './app/scripts/setTokenFromUrl';
@@ -64,9 +63,6 @@ setDefaultAxiosInstance(instance);
 
 // [Claude] lets support see which release the agent actually runs
 console.info('[workspace] version:', __APP_VERSION__);
-
-// tmp debug [WTEL-10935]
-installChatPostProcessingDebug();
 
 const pinia = createPinia();
 
