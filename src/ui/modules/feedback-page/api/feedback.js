@@ -1,12 +1,13 @@
 import {
 	getDefaultGetListResponse,
 	getDefaultInstance,
-} from '@webitel/ui-sdk/src/api/defaults/index';
-import applyTransform, {
+} from '@webitel/api-services/api/defaults';
+import {
+	applyTransform,
 	generateUrl,
 	merge,
 	notify,
-} from '@webitel/ui-sdk/src/api/transformers/index';
+} from '@webitel/api-services/api/transformers';
 
 const instance = getDefaultInstance();
 

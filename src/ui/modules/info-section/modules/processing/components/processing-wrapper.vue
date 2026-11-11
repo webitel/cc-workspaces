@@ -22,9 +22,10 @@
 </template>
 
 <script setup>
-import applyTransform, {
+import {
+	applyTransform,
 	snakeToCamel,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
+} from '@webitel/api-services/api/transformers';
 import { computed } from 'vue';
 import ProcessingTimer from './timer/processing-timer.vue';
 

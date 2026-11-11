@@ -2,16 +2,17 @@ import {
 	getDefaultGetListResponse,
 	getDefaultGetParams,
 	getDefaultInstance,
-} from '@webitel/ui-sdk/src/api/defaults/index';
-import applyTransform, {
+} from '@webitel/api-services/api/defaults';
+import {
 	addQueryParamsToUrl,
+	applyTransform,
 	camelToSnake,
 	generateUrl,
 	merge,
 	notify,
 	sanitize,
 	starToSearch,
-} from '@webitel/ui-sdk/src/api/transformers/index';
+} from '@webitel/api-services/api/transformers';
 import get from 'lodash/get';
 
 const instance = getDefaultInstance();
