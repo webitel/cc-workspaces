@@ -1,7 +1,5 @@
 import { ContactChatMessagesAPI as contactChatMessagesHistory } from '@webitel/api-services/api';
-import applyTransform, {
-	notify,
-} from '@webitel/ui-sdk/src/api/transformers/index';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 
 import i18n from '../../../../app/locale/i18n';
 import { formatChatMessages } from '../scripts/formatChatMessages';

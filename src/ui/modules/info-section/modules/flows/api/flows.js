@@ -1,7 +1,5 @@
 import { AgentTriggersAPI } from '@webitel/api-services/api';
-import applyTransform, {
-	notify,
-} from '@webitel/ui-sdk/src/api/transformers/index.js';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 
 import i18n from '../../../../../../app/locale/i18n.js';
 

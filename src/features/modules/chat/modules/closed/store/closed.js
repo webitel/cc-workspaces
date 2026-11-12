@@ -1,6 +1,4 @@
-import applyTransform, {
-	notify,
-} from '@webitel/ui-sdk/src/api/transformers/index';
+import { applyTransform, notify } from '@webitel/api-services/api/transformers';
 
 import AgentChatsAPI from '../../../../../../app/api/agent-workspace/endpoints/agent-info/agent-chats';
 import CatalogAPI from '../../../../../../app/api/agent-workspace/endpoints/catalog/CatalogAPIRepository';
