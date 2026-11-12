@@ -84,6 +84,8 @@ const actions = {
 			// chat.messages is read-only, so clone with messages instead of mutating it
 			chatWithMessages = {
 				...chat,
+				// `id` is a prototype getter on a live conversation, the spread drops it [WTEL-10935]
+				id: chat.id,
 				messages: formatChatMessages(items),
 			};
 			context.commit('SET_NEXT', next);
@@ -152,11 +154,16 @@ const actions = {
 			});
 		}
 	},
-	LOAD_CLOSED_CHAT_HISTORY: async (context, chat) => {
-		const contactId = chat.contact.id;
-
+	LOAD_CLOSED_CHAT_HISTORY: async (context, { chat, contactId }) => {
 		try {
 			context.dispatch('RESET_CLOSED_CHAT');
+
+			// without a contact there is no history to search: read the dialog itself [WTEL-10935]
+			if (!contactId) {
+				await context.dispatch('LOAD_CLOSED_CHAT', chat);
+				return;
+			}
+
 			await context.dispatch(
 				'features/chat/chatHistory/LOAD_CHAT_HISTORY',
 				contactId,
@@ -167,7 +174,10 @@ const actions = {
 
 			const isFoundInHistory = await context.dispatch(
 				'FIND_TARGET_CHAT_IN_HISTORY',
-				chat,
+				{
+					chat,
+					contactId,
+				},
 			);
 
 			if (!isFoundInHistory) {
@@ -185,10 +195,10 @@ const actions = {
 		}
 	},
 
-	FIND_TARGET_CHAT_IN_HISTORY: async (context, chat) => {
+	FIND_TARGET_CHAT_IN_HISTORY: async (context, { chat, contactId }) => {
 		// recurses page by page; true once the target chat is found
-		const contactId = chat.contact.id;
-		const targetChatId = chat.id;
+		// history messages carry conversationId, a live chat's `.id` is channelId [WTEL-10935]
+		const targetChatId = chat.conversationId || chat.id;
 
 		const closedChatFirstMessage = await context.dispatch(
 			'FIND_TARGET_CHAT_FIRST_MESSAGE',
@@ -210,11 +220,13 @@ const actions = {
 
 		// pages run newest to oldest: past the chat's own start it can no longer appear
 		const [oldestLoadedMessage] = chatHistoryMessages;
+		// a live conversation has createdAt instead of startedAt [WTEL-10935]
+		const startedAt = chat.startedAt || chat.createdAt;
 
 		if (
-			chat.startedAt &&
+			startedAt &&
 			oldestLoadedMessage &&
-			Number(oldestLoadedMessage.createdAt) < Number(chat.startedAt)
+			Number(oldestLoadedMessage.createdAt) < Number(startedAt)
 		) {
 			return false;
 		}
@@ -223,7 +235,10 @@ const actions = {
 			root: true,
 		});
 
-		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', chat);
+		return context.dispatch('FIND_TARGET_CHAT_IN_HISTORY', {
+			chat,
+			contactId,
+		});
 	},
 	FIND_TARGET_CHAT_FIRST_MESSAGE: async (context, targetChatId) => {
 		// try to find first message of needed chat
