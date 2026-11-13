@@ -10,6 +10,8 @@ const editorStub = {
 		'labelProps',
 		'output',
 		'height',
+		'plugins',
+		'toolbar',
 	],
 	emits: [
 		'update:modelValue',
@@ -48,6 +50,72 @@ describe('RichTextEditor', () => {
 			output: 'text',
 			height: 200,
 		});
+	});
+
+	// [Claude] Pinned to the editor ui-sdk used to default to, so agents see no change
+	it('sets up the html editor for the processing form', () => {
+		const editor = mountEditor({
+			output: 'html',
+		}).findComponent(editorStub);
+
+		expect(editor.props('plugins')).toEqual([
+			'advlist',
+			'emoticons',
+			'fullscreen',
+			'image',
+			'link',
+			'lists',
+			'table',
+		]);
+		expect(editor.props('toolbar')).toEqual([
+			[
+				'undo',
+				'redo',
+			],
+			[
+				'bold',
+				'italic',
+				'underline',
+				'strikethrough',
+			],
+			[
+				'fullscreen',
+			],
+			[
+				'fontfamily',
+				'fontsize',
+			],
+			[
+				'alignleft',
+				'aligncenter',
+				'alignright',
+				'alignjustify',
+			],
+			[
+				'numlist',
+				'bullist',
+			],
+			[
+				'forecolor',
+				'backcolor',
+				'removeformat',
+			],
+			[
+				'emoticons',
+				'image',
+				'link',
+				'table',
+			],
+		]);
+	});
+
+	it("leaves plain text to ui-sdk's defaults", () => {
+		const editor = mountEditor({
+			output: 'text',
+		}).findComponent(editorStub);
+
+		expect(editor.props('plugins')).toBeUndefined();
+		expect(editor.props('toolbar')).toBeUndefined();
 	});
 
 	it('gives the editor a string, whatever the seed was', () => {
