@@ -19,6 +19,8 @@
 import Autolinker from 'autolinker';
 import { computed } from 'vue';
 
+import { isWebUrl } from '../../../../../../../../app/scripts/isWebUrl';
+
 interface IChatMessageTextProps {
 	text: string;
 	agent?: boolean;
@@ -38,6 +40,14 @@ const text = computed(() => {
 		newWindow: true,
 		sanitizeHtml: true, // DONT FORGET TO SANITIZE, OR USE DOM PURIFY
 		className: 'chat-message-text__link',
+		replaceFn: (match) => {
+			if (match.getType() !== 'url') return true;
+
+			// Autolinker rejects only `javascript:` and `vbscript:`, so inside
+			// Electron a `smb:` link still reaches the OS handler.
+			// `getAnchorHref` is declared on the base Match type, `getUrl` is not.
+			return isWebUrl(match.getAnchorHref());
+		},
 	});
 });
 </script>
