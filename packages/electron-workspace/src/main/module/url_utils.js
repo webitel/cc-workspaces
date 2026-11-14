@@ -1,11 +1,7 @@
 /**
- * Whether a URL is a plain web URL.
- *
- * `shell.openExternal` hands the URL to the OS, which launches whatever
- * handler the scheme is registered to (`smb:`, `file:`, `ms-settings:`, …).
- * Links here come from chat messages and flow-defined task variables, so the
- * scheme is not ours to trust. `http:` is allowed because on-prem is served
- * without TLS.
+ * Whether a URL is plain `http:` or `https:`. `shell.openExternal` launches
+ * the OS handler of any scheme (`smb:`, `file:`, …), and links come from chat
+ * messages and flow variables. `http:` stays: on-prem runs without TLS.
  */
 function isWebUrl(value) {
 	try {

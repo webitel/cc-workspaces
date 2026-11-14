@@ -1,11 +1,7 @@
 /**
- * Whether a URL is a plain web URL (`http:` or `https:`).
- *
- * The renderer runs inside Electron, where a click on a link with any other
- * scheme reaches `shell.openExternal` and from there the OS handler for that
- * scheme (`smb:`, `file:`, `ms-settings:`, …). Link text in a chat message is
- * written by the person on the other end, so the scheme is not ours to trust.
- * `http:` is allowed because on-prem is served without TLS.
+ * Whether a URL is plain `http:` or `https:`. Inside Electron a link with any
+ * other scheme (`smb:`, `file:`, …) reaches its OS handler, and chat link text
+ * is written by the other side. `http:` stays: on-prem runs without TLS.
  */
 export const isWebUrl = (value?: string | null): boolean => {
 	if (!value) return false;

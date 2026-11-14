@@ -38,8 +38,7 @@ class Workspace {
 		});
 
 		this.window.webContents.setWindowOpenHandler(({ url }) => {
-			// every scheme used to be forwarded, so `smb://host/share` in a
-			// chat message or a flow variable reached the OS handler
+			// any other scheme (`smb:`, `file:`, …) would reach its OS handler
 			if (isWebUrl(url)) {
 				shell.openExternal(url);
 			} else {
@@ -51,22 +50,20 @@ class Workspace {
 			};
 		});
 
-		// the window keeps Node integration across navigation, so another
-		// origin loaded into it would get `require`. Only navigation started
-		// by the page is limited: `loadURL` from the main process raises no
-		// navigation event.
-		const denyForeignNavigation = (event, url) => {
-			if (this._isSameOrigin(url)) return;
+		// the main frame keeps Node integration across navigation, so another
+		// origin loaded into it would get `require`. Iframes (knowledge base,
+		// processing forms) have no Node and stay free to navigate; guard them
+		// too if `nodeIntegrationInSubFrames` is ever turned on. `loadURL`
+		// from the main process raises no navigation event.
+		const denyForeignNavigation = (details) => {
+			if (!details.isMainFrame || this._isSameOrigin(details.url)) return;
 
-			event.preventDefault();
-			console.warn('[workspace] blocked navigation to', url);
+			details.preventDefault();
+			console.warn('[workspace] blocked navigation to', details.url);
 		};
 
 		this.window.webContents.on('will-navigate', denyForeignNavigation);
 		this.window.webContents.on('will-redirect', denyForeignNavigation);
-		this.window.webContents.on('will-frame-navigate', (details) => {
-			denyForeignNavigation(details, details.url);
-		});
 
 		this.allowedOrigin = originOf(URL);
 
