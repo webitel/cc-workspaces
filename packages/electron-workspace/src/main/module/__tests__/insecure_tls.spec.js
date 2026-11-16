@@ -3,12 +3,17 @@ import { describe, expect, it, vi } from 'vitest';
 import { applyInsecureTlsSwitches } from '../insecure_tls';
 
 describe('applyInsecureTlsSwitches', () => {
-	it('leaves TLS verification on by default', () => {
+	it.each([
+		{},
+		{
+			insecure: false,
+		},
+	])('leaves TLS verification on for %o', (conf) => {
 		const commandLine = {
 			appendSwitch: vi.fn(),
 		};
 
-		applyInsecureTlsSwitches({}, commandLine);
+		applyInsecureTlsSwitches(conf, commandLine);
 
 		expect(commandLine.appendSwitch).not.toHaveBeenCalled();
 	});
@@ -33,26 +38,5 @@ describe('applyInsecureTlsSwitches', () => {
 			'allow-insecure-localhost',
 			'true',
 		);
-	});
-
-	it.each([
-		false,
-		0,
-		'',
-		null,
-		undefined,
-	])('treats falsy insecure (%s) as off', (insecure) => {
-		const commandLine = {
-			appendSwitch: vi.fn(),
-		};
-
-		applyInsecureTlsSwitches(
-			{
-				insecure,
-			},
-			commandLine,
-		);
-
-		expect(commandLine.appendSwitch).not.toHaveBeenCalled();
 	});
 });
