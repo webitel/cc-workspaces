@@ -2,6 +2,7 @@ const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const { isAlive } = require('./window_utils');
 const { isWebUrl, originOf } = require('./url_utils');
+const { guardMainFrameNavigation } = require('./navigation_guard');
 
 class Workspace {
 	window = null;
@@ -50,20 +51,7 @@ class Workspace {
 			};
 		});
 
-		// the main frame keeps Node integration across navigation, so another
-		// origin loaded into it would get `require`. Iframes (knowledge base,
-		// processing forms) have no Node and stay free to navigate; guard them
-		// too if `nodeIntegrationInSubFrames` is ever turned on. `loadURL`
-		// from the main process raises no navigation event.
-		const denyForeignNavigation = (details) => {
-			if (!details.isMainFrame || this._isSameOrigin(details.url)) return;
-
-			details.preventDefault();
-			console.warn('[workspace] blocked navigation to', details.url);
-		};
-
-		this.window.webContents.on('will-navigate', denyForeignNavigation);
-		this.window.webContents.on('will-redirect', denyForeignNavigation);
+		guardMainFrameNavigation(this.window.webContents, () => this.allowedOrigin);
 
 		this.allowedOrigin = originOf(URL);
 
@@ -92,12 +80,6 @@ class Workspace {
 		this.window.on('closed', () => {
 			this.window = null;
 		});
-	}
-
-	_isSameOrigin(url) {
-		if (!this.allowedOrigin) return false;
-
-		return originOf(url) === this.allowedOrigin;
 	}
 
 	changeSIP(value) {
