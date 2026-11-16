@@ -1,8 +1,4 @@
-/**
- * Whether a URL is plain `http:` or `https:`. `shell.openExternal` launches
- * the OS handler of any scheme (`smb:`, `file:`, …), and links come from chat
- * messages and flow variables. `http:` stays: on-prem runs without TLS.
- */
+// shell.openExternal hands any other scheme (smb:, file:) to the OS; http: stays for on-prem
 function isWebUrl(value) {
 	try {
 		const { protocol } = new URL(value);
@@ -13,13 +9,7 @@ function isWebUrl(value) {
 	}
 }
 
-/**
- * The origin of a URL, or `null` when there is none to compare.
- *
- * A non-special scheme (`smb:`, `wtel:`, …) has an opaque origin, which the
- * URL API reports as the *string* `'null'` — returned verbatim it would make
- * any two such URLs compare equal.
- */
+// a non-special scheme reports its origin as the string 'null'; two such URLs would compare equal
 function originOf(value) {
 	try {
 		const { origin } = new URL(value);

@@ -6,7 +6,6 @@ const { guardMainFrameNavigation } = require('./navigation_guard');
 
 class Workspace {
 	window = null;
-	/** Origin the SPA was loaded from; `null` denies every navigation. */
 	allowedOrigin = null;
 
 	createWindow(URL) {
@@ -39,7 +38,6 @@ class Workspace {
 		});
 
 		this.window.webContents.setWindowOpenHandler(({ url }) => {
-			// any other scheme (`smb:`, `file:`, …) would reach its OS handler
 			if (isWebUrl(url)) {
 				shell.openExternal(url);
 			} else {

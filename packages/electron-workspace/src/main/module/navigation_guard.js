@@ -1,10 +1,6 @@
 const { originOf } = require('./url_utils');
 
-// the main frame keeps Node integration across navigation, so another
-// origin loaded into it would get `require`. Iframes (knowledge base,
-// processing forms) have no Node and stay free to navigate; guard them
-// too if `nodeIntegrationInSubFrames` is ever turned on. `loadURL`
-// from the main process raises no navigation event.
+// the main frame keeps Node integration, so another origin there would get require
 function guardMainFrameNavigation(webContents, getAllowedOrigin) {
 	const denyForeignNavigation = (details) => {
 		if (!details.isMainFrame) return;

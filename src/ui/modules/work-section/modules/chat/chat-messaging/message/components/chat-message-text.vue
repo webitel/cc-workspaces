@@ -43,9 +43,7 @@ const text = computed(() => {
 		replaceFn: (match) => {
 			if (match.getType() !== 'url') return true;
 
-			// Autolinker rejects only `javascript:` and `vbscript:`, so inside
-			// Electron a `smb:` link still reaches the OS handler.
-			// `getAnchorHref` is declared on the base Match type, `getUrl` is not.
+			// Autolinker blocks only javascript: and vbscript:
 			return isWebUrl(match.getAnchorHref());
 		},
 	});
