@@ -19,7 +19,7 @@ const editorStub = {
 	template: '<div class="editor" />',
 };
 
-const mountEditor = (props = {}) =>
+const mountEditor = (props: Record<string, unknown> = {}) =>
 	mount(RichTextEditor, {
 		props,
 		global: {
