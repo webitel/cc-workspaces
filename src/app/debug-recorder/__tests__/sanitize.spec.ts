@@ -135,6 +135,35 @@ describe('redactText', () => {
 		expect(out).toContain('retry with');
 	});
 
+	it('finds a secret pair inside the value of a non-secret one', () => {
+		for (const input of [
+			'x: token: v1',
+			`msg: 'password: v1'`,
+			'note="pwd=v1 retry"',
+		]) {
+			expect(redactText(input)).not.toContain('v1');
+		}
+	});
+
+	it('fails closed on an unterminated quoted secret, up to the end of the line', () => {
+		const out = redactText('password="abc def\nnext line');
+		expect(out).not.toContain('abc');
+		expect(out).not.toContain('def');
+		expect(out).toContain('next line');
+	});
+
+	it('stays fast on adversarial input', () => {
+		const inputs = [
+			'a: '.repeat(20_000),
+			`${'a'.repeat(60)}=`.repeat(2_000),
+			`password="${'x\\'.repeat(20_000)}`,
+			'"'.repeat(50_000),
+		];
+		const started = performance.now();
+		for (const input of inputs) redactText(input);
+		expect(performance.now() - started).toBeLessThan(500);
+	});
+
 	it('redacts quoted and unquoted values after any secret-looking name in text', () => {
 		const out = redactText(
 			`password="hunter 2" token: 'abc' {'apiKey': "k1"} credentials=c1 cookie: sid=c2; ha1=h1 sig=s1 user=ivan`,

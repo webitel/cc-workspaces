@@ -4,7 +4,7 @@ export const REDACTED = '[REDACTED]';
 
 /** keys whose values are secrets: dropped entirely */
 const SECRET_KEY_RE =
-	/pass(word|wd)?$|secret|token|authori[sz]ation|credential|api[-_]?key|cookie|^ha1$|^x-webitel-access$|^access$/i;
+	/pass(word|wd)?$|^pwd$|secret|token|authori[sz]ation|credential|api[-_]?key|cookie|^ha1$|^x-webitel-access$|^access$/i;
 
 /** keys whose values are personal data: masked, last chars kept for correlation */
 const PII_KEY_RE =
@@ -32,8 +32,11 @@ const PAIR_NAME_RE =
 const TEXT_TOKEN_RE = /[^\s"'<>]+/g;
 // any `name: value` / `name = value` / `'name': "value"` in free text; the name goes
 // through the same secret rule as object keys, the value may be quoted
-const PROSE_PAIR_RE =
-	/\b([A-Za-z][\w.-]*)(["']?\s*[:=]\s*)(?!\[REDACTED\])("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|[^\s,;"'&<>]+)/g;
+// only `name` + separator is matched (bounded, so linear); the value is measured
+// by a scan and consumed only for secret names, so `x: token: v` still finds `token`
+const PROSE_NAME_SOURCE = String.raw`\b([A-Za-z][\w.-]{0,63})(["']?[ \t]*[:=][ \t]*)`;
+const MAX_QUOTED_VALUE_CHARS = 4_096;
+const VALUE_STOP_RE = /[\s,;"'&<>]/;
 const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
 const MAX_DECODE_PASSES = 5;
 
@@ -97,6 +100,40 @@ function redactParams(text: string): string {
 	);
 }
 
+/** end index of the value starting at `start`; an unterminated or huge quote fails closed to end of line */
+function valueEnd(text: string, start: number): number {
+	const quote = text[start];
+	if (quote === '"' || quote === "'") {
+		const limit = Math.min(text.length, start + 1 + MAX_QUOTED_VALUE_CHARS);
+		for (let i = start + 1; i < limit; i += 1) {
+			if (text[i] === '\\') i += 1;
+			else if (text[i] === quote) return i + 1;
+		}
+		const lineEnd = text.indexOf('\n', start);
+		return lineEnd === -1 ? text.length : lineEnd;
+	}
+	let i = start;
+	while (i < text.length && !VALUE_STOP_RE.test(text[i])) i += 1;
+	return i;
+}
+
+/** `password: x`, `token="x"`, `'apiKey': 'x'` in free text, for any secret-looking name */
+function redactProse(text: string): string {
+	const nameRe = new RegExp(PROSE_NAME_SOURCE, 'g');
+	let out = '';
+	let last = 0;
+	for (let m = nameRe.exec(text); m; m = nameRe.exec(text)) {
+		const start = m.index + m[0].length;
+		if (!isSecretParam(m[1]) || text.startsWith(REDACTED, start)) continue;
+		const end = valueEnd(text, start);
+		if (end === start) continue;
+		out += `${text.slice(last, start)}${REDACTED}`;
+		last = end;
+		nameRe.lastIndex = end;
+	}
+	return out + text.slice(last);
+}
+
 /** backstop: a whitespace/quote-delimited token that still decodes to a secret pair goes whole */
 function redactTokens(text: string): string {
 	return text.replace(TEXT_TOKEN_RE, (token) =>
@@ -129,16 +166,17 @@ export interface RedactTextOptions {
 }
 
 export function redactText(text: string, opts: RedactTextOptions = {}): string {
-	let out = text
+	// cut first: every pass below then works on a bounded input
+	let out = truncate(text)
 		.replace(SIP_AUTH_HEADER_RE, `$1: ${REDACTED}`)
 		.replace(BEARER_RE, `$1${REDACTED}`)
 		.replace(JSON_STRING_PAIR_RE, (match, prefix: string, key: string) =>
 			isSecretKey(key) ? `${prefix}"${REDACTED}"` : match,
-		)
-		.replace(PROSE_PAIR_RE, (match, name: string, separator: string) =>
-			isSecretParam(name) ? `${name}${separator}${REDACTED}` : match,
 		);
-	out = redactTokens(redactParams(out)).replace(EMAIL_RE, '***@$1');
+	out = redactTokens(redactParams(redactProse(out))).replace(
+		EMAIL_RE,
+		'***@$1',
+	);
 	if (opts.phones) {
 		out = out.replace(PHONE_RE, (m) => maskPii(m));
 	}
