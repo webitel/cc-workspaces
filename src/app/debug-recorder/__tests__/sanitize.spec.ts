@@ -84,8 +84,27 @@ describe('redactText', () => {
 		expect(redactUrl('/login?next=/cb?access_token=x&page=2')).toBe(
 			`/login?next=/cb?access_token=${REDACTED}&page=2`,
 		);
-		expect(redactUrl('/login?next=%2Fcb%3Faccess_token%3Dabc%26page%3D2')).toBe(
-			`/login?next=%2Fcb%3Faccess_token%3D${REDACTED}%26page%3D2`,
+		const encoded = redactUrl(
+			'/login?next=%2Fcb%3Faccess_token%3Dabc%26page%3D2&lang=uk',
+		);
+		expect(encoded).not.toContain('abc');
+		expect(decodeURIComponent(encoded)).toBe(
+			`/login?next=/cb?access_token=${REDACTED}&page=2&lang=uk`,
+		);
+		// double-encoded and bare nested pairs
+		expect(redactUrl('/x?next=%252Fcb%253Ftoken%253Dzz')).not.toContain('zz');
+		expect(redactUrl('/x?state=access_token%3Dqq')).not.toContain('qq');
+	});
+
+	it('cuts a secret value whole, even with encoded delimiters inside', () => {
+		expect(redactUrl('/x?token=abc%26def%3Fghi&page=2')).toBe(
+			`/x?token=${REDACTED}&page=2`,
+		);
+	});
+
+	it('decodes the param name before checking it', () => {
+		expect(redactUrl('/x?access%5Ftoken=abc&pass%77ord=p')).toBe(
+			`/x?access%5Ftoken=${REDACTED}&pass%77ord=${REDACTED}`,
 		);
 	});
 

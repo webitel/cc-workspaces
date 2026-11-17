@@ -19,23 +19,55 @@ const CONTENT_KEY_RE = /^text$/i;
 const SECRET_PARAM_RE = /^(key|auth|sig|signature)$/i;
 
 // every query param and every quoted JSON key inside strings is checked against
-// SECRET_KEY_RE, so object keys and in-string keys follow one rule
-// a value stops at any delimiter, plain or percent-encoded, so a nested URL
-// (`?next=/cb?access_token=x`, `?next=%2Fcb%3Faccess_token%3Dx`) is scanned too
-const QUERY_PARAM_RE =
-	/((?:[?&#]|%3[Ff]|%26|%23)([^=?&#\s"'<>%]+)(?:=|%3[Dd]))((?:(?!%26|%3[Ff]|%23)[^?&#\s"'<>])*)/g;
+// SECRET_KEY_RE, so object keys and in-string keys follow one rule.
+// A value runs to the next *outer* delimiter: a secret is cut whole, even if it
+// contains `?` or `%26`; any other value is scanned again for nested params.
+const QUERY_PARAM_RE = /([?&#;])([^=?&#;\s"'<>]+)=([^&#;\s"'<>]*)/g;
 const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
+const MAX_QUERY_DEPTH = 4;
 
 const SIP_AUTH_HEADER_RE = /^((?:Proxy-)?Authorization)[ \t]*:.*$/gim;
 const BEARER_RE = /(Bearer\s+)[A-Za-z0-9\-._~+/]+=*/gi;
 
 const isSecretKey = (key: string) => SECRET_KEY_RE.test(key);
 
-function redactQuery(text: string): string {
-	return text.replace(QUERY_PARAM_RE, (match, prefix: string, name: string) =>
-		isSecretKey(name) || SECRET_PARAM_RE.test(name)
-			? `${prefix}${REDACTED}`
-			: match,
+function safeDecode(value: string): string {
+	try {
+		return decodeURIComponent(value.replace(/\+/g, ' '));
+	} catch {
+		return value;
+	}
+}
+
+function isSecretParam(rawName: string): boolean {
+	const name = safeDecode(rawName);
+	return isSecretKey(name) || SECRET_PARAM_RE.test(name);
+}
+
+/** scans a param value for a nested query, plain (`/cb?token=x`) or percent-encoded */
+function redactNested(value: string, depth: number): string {
+	if (depth > MAX_QUERY_DEPTH) return value;
+	// a leading `&` lets a bare `token=x` (no `?` before it) match as a param
+	const plain = value.includes('=')
+		? redactQuery(`&${value}`, depth + 1).slice(1)
+		: value;
+	if (plain !== value || !value.includes('%')) return plain;
+	// decode one level and look again: handles single and double encoding
+	const decoded = safeDecode(value);
+	if (decoded === value) return value;
+	const inner = redactNested(decoded, depth + 1);
+	return inner === decoded ? value : encodeURIComponent(inner);
+}
+
+function redactQuery(text: string, depth = 0): string {
+	if (depth > MAX_QUERY_DEPTH) return text;
+	return text.replace(
+		QUERY_PARAM_RE,
+		(match, delimiter: string, name: string, value: string) => {
+			if (isSecretParam(name)) return `${delimiter}${name}=${REDACTED}`;
+			const nested = redactNested(value, depth);
+			return nested === value ? match : `${delimiter}${name}=${nested}`;
+		},
 	);
 }
 // not preceded by a word char or `sip:`, so SIP URIs keep their user part
