@@ -80,20 +80,19 @@ describe('redactText', () => {
 		);
 	});
 
-	it('finds secrets in a URL nested inside another param, plain or encoded', () => {
+	it('fails closed on a URL nested inside another param, plain or encoded', () => {
 		expect(redactUrl('/login?next=/cb?access_token=x&page=2')).toBe(
-			`/login?next=/cb?access_token=${REDACTED}&page=2`,
+			`/login?next=${REDACTED}&page=2`,
 		);
-		const encoded = redactUrl(
-			'/login?next=%2Fcb%3Faccess_token%3Dabc%26page%3D2&lang=uk',
+		expect(
+			redactUrl('/login?next=%2Fcb%3Faccess_token%3Dabc%26page%3D2&lang=uk'),
+		).toBe(`/login?next=${REDACTED}&lang=uk`);
+		expect(redactUrl('/x?next=%252Fcb%253Ftoken%253Dzz')).toBe(
+			`/x?next=${REDACTED}`,
 		);
-		expect(encoded).not.toContain('abc');
-		expect(decodeURIComponent(encoded)).toBe(
-			`/login?next=/cb?access_token=${REDACTED}&page=2&lang=uk`,
+		expect(redactUrl('/x?state=access_token%3Dqq')).toBe(
+			`/x?state=${REDACTED}`,
 		);
-		// double-encoded and bare nested pairs
-		expect(redactUrl('/x?next=%252Fcb%253Ftoken%253Dzz')).not.toContain('zz');
-		expect(redactUrl('/x?state=access_token%3Dqq')).not.toContain('qq');
 	});
 
 	it('cuts a secret value whole, even with encoded delimiters inside', () => {
@@ -106,6 +105,41 @@ describe('redactText', () => {
 		expect(redactUrl('/x?access%5Ftoken=abc&pass%77ord=p')).toBe(
 			`/x?access%5Ftoken=${REDACTED}&pass%77ord=${REDACTED}`,
 		);
+	});
+
+	it('is not fooled by a malformed escape next to an encoded secret', () => {
+		expect(redactUrl('/x?next=%ZZ%2Fcb%3Ftoken%3Dabc')).not.toContain('abc');
+		expect(redactUrl('/x?next=%E0%A4%A%2Fcb%3Ftoken%3Dabc')).not.toContain(
+			'abc',
+		);
+	});
+
+	it('fails closed when the value keeps decoding past the pass limit', () => {
+		let nested = 'token=abc';
+		for (let i = 0; i < 8; i += 1) nested = encodeURIComponent(nested);
+		expect(redactUrl(`/x?next=${nested}`)).toBe(`/x?next=${REDACTED}`);
+	});
+
+	it('catches pairs with encoded delimiters at the top level and in free text', () => {
+		expect(redactUrl('/x%3Faccess_token%3Dabc')).not.toContain('abc');
+		const out = redactText(
+			'retry with access_token%3Dabc; auth failed token=def, password: ghi',
+		);
+		for (const leaked of [
+			'abc',
+			'def',
+			'ghi',
+		]) {
+			expect(out).not.toContain(leaked);
+		}
+		expect(out).toContain('retry with');
+	});
+
+	it('leaves ordinary URLs and SIP params alone', () => {
+		const url = '/api/agents?page=2&size=10&q=x%20y#tab';
+		expect(redactUrl(url)).toBe(url);
+		const via = 'Via: SIP/2.0/WSS a.invalid;branch=z9hG4bK1;transport=ws';
+		expect(redactText(via)).toBe(via);
 	});
 
 	it('masks e-mails but not SIP URIs', () => {

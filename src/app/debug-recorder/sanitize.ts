@@ -18,58 +18,90 @@ const CONTENT_KEY_RE = /^text$/i;
 /** query params that are secrets although the key rule does not match them */
 const SECRET_PARAM_RE = /^(key|auth|sig|signature)$/i;
 
-// every query param and every quoted JSON key inside strings is checked against
-// SECRET_KEY_RE, so object keys and in-string keys follow one rule.
-// A value runs to the next *outer* delimiter: a secret is cut whole, even if it
-// contains `?` or `%26`; any other value is scanned again for nested params.
-const QUERY_PARAM_RE = /([?&#;])([^=?&#;\s"'<>]+)=([^&#;\s"'<>]*)/g;
+/*
+ * Query-string redaction is fail-closed. Exact cut-outs are tried first, but
+ * the final word is containsSecretPair(): if any percent-decoded form of a
+ * value or token still holds `<secret-name>=`, the whole value/token goes.
+ * Nested URLs therefore lose their non-secret parts too; for logs that is fine.
+ */
+const PARAM_RE = /([?&#;])([^=?&#;\s"'<>]+)=([^&#;\s"'<>]*)/g;
+// a candidate pair anywhere: name after a delimiter (or at the start), value not yet redacted
+// lookbehind, so the delimiter is not consumed and `a=token=x` still yields `token`
+const PAIR_NAME_RE =
+	/(?<=^|[?&#;,\s{(=/:])([^=?&#;,\s"'<>{}()/:]+)=(?!\[REDACTED\])/g;
+const TEXT_TOKEN_RE = /[^\s"'<>]+/g;
+const PROSE_SECRET_RE =
+	/\b(password|passwd|pwd|secret|token|access_?token|api[_-]?key|authorization)(\s*[:=]\s*)(?!\[REDACTED\])([^\s,;"'&<>]+)/gi;
 const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
-const MAX_QUERY_DEPTH = 4;
+const MAX_DECODE_PASSES = 5;
 
 const SIP_AUTH_HEADER_RE = /^((?:Proxy-)?Authorization)[ \t]*:.*$/gim;
 const BEARER_RE = /(Bearer\s+)[A-Za-z0-9\-._~+/]+=*/gi;
 
 const isSecretKey = (key: string) => SECRET_KEY_RE.test(key);
+const isSecretName = (name: string) =>
+	isSecretKey(name) || SECRET_PARAM_RE.test(name);
 
-function safeDecode(value: string): string {
-	try {
-		return decodeURIComponent(value.replace(/\+/g, ' '));
-	} catch {
-		return value;
+/** decodes each %XX on its own: a malformed escape elsewhere cannot block decoding */
+function decodeOnce(value: string): string {
+	return value.replace(/%[0-9A-Fa-f]{2}/g, (escape) => {
+		try {
+			return decodeURIComponent(escape);
+		} catch {
+			return escape;
+		}
+	});
+}
+
+/** every decoded form of `value`, raw first; null if it still changes after the pass limit */
+function decodedForms(value: string): string[] | null {
+	const forms = [
+		value,
+	];
+	let current = value;
+	for (let pass = 0; pass < MAX_DECODE_PASSES; pass += 1) {
+		const next = decodeOnce(current);
+		if (next === current) return forms;
+		forms.push(next);
+		current = next;
 	}
+	return decodeOnce(current) === current ? forms : null;
+}
+
+/** true if `value`, or any percent-decoded form of it, contains `<secret-name>=` */
+export function containsSecretPair(value: string): boolean {
+	if (!value.includes('=') && !value.includes('%')) return false;
+	const forms = decodedForms(value);
+	if (!forms) return true;
+	return forms.some((form) =>
+		Array.from(form.matchAll(PAIR_NAME_RE)).some(([, name]) =>
+			isSecretName(name),
+		),
+	);
 }
 
 function isSecretParam(rawName: string): boolean {
-	const name = safeDecode(rawName);
-	return isSecretKey(name) || SECRET_PARAM_RE.test(name);
+	const forms = decodedForms(rawName);
+	return !forms || forms.some(isSecretName);
 }
 
-/** scans a param value for a nested query, plain (`/cb?token=x`) or percent-encoded */
-function redactNested(value: string, depth: number): string {
-	if (depth > MAX_QUERY_DEPTH) return value;
-	// a leading `&` lets a bare `token=x` (no `?` before it) match as a param
-	const plain = value.includes('=')
-		? redactQuery(`&${value}`, depth + 1).slice(1)
-		: value;
-	if (plain !== value || !value.includes('%')) return plain;
-	// decode one level and look again: handles single and double encoding
-	const decoded = safeDecode(value);
-	if (decoded === value) return value;
-	const inner = redactNested(decoded, depth + 1);
-	return inner === decoded ? value : encodeURIComponent(inner);
-}
-
-function redactQuery(text: string, depth = 0): string {
-	if (depth > MAX_QUERY_DEPTH) return text;
+function redactParams(text: string): string {
 	return text.replace(
-		QUERY_PARAM_RE,
-		(match, delimiter: string, name: string, value: string) => {
-			if (isSecretParam(name)) return `${delimiter}${name}=${REDACTED}`;
-			const nested = redactNested(value, depth);
-			return nested === value ? match : `${delimiter}${name}=${nested}`;
-		},
+		PARAM_RE,
+		(match, delimiter: string, name: string, value: string) =>
+			isSecretParam(name) || containsSecretPair(value)
+				? `${delimiter}${name}=${REDACTED}`
+				: match,
 	);
 }
+
+/** backstop: a whitespace/quote-delimited token that still decodes to a secret pair goes whole */
+function redactTokens(text: string): string {
+	return text.replace(TEXT_TOKEN_RE, (token) =>
+		containsSecretPair(token) ? REDACTED : token,
+	);
+}
+
 // not preceded by a word char or `sip:`, so SIP URIs keep their user part
 const EMAIL_RE =
 	/(?<![\w.%+-]|sips?:)[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,})/g;
@@ -95,14 +127,14 @@ export interface RedactTextOptions {
 }
 
 export function redactText(text: string, opts: RedactTextOptions = {}): string {
-	let out = redactQuery(
-		text
-			.replace(SIP_AUTH_HEADER_RE, `$1: ${REDACTED}`)
-			.replace(BEARER_RE, `$1${REDACTED}`)
-			.replace(JSON_STRING_PAIR_RE, (match, prefix: string, key: string) =>
-				isSecretKey(key) ? `${prefix}"${REDACTED}"` : match,
-			),
-	).replace(EMAIL_RE, '***@$1');
+	let out = text
+		.replace(SIP_AUTH_HEADER_RE, `$1: ${REDACTED}`)
+		.replace(BEARER_RE, `$1${REDACTED}`)
+		.replace(JSON_STRING_PAIR_RE, (match, prefix: string, key: string) =>
+			isSecretKey(key) ? `${prefix}"${REDACTED}"` : match,
+		)
+		.replace(PROSE_SECRET_RE, `$1$2${REDACTED}`);
+	out = redactTokens(redactParams(out)).replace(EMAIL_RE, '***@$1');
 	if (opts.phones) {
 		out = out.replace(PHONE_RE, (m) => maskPii(m));
 	}
@@ -110,7 +142,8 @@ export function redactText(text: string, opts: RedactTextOptions = {}): string {
 }
 
 export function redactUrl(url: string): string {
-	return redactQuery(url);
+	const out = redactParams(url);
+	return containsSecretPair(out) ? REDACTED : out;
 }
 
 export interface SanitizeOptions extends RedactTextOptions {
