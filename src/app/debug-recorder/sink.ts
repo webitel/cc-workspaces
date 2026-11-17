@@ -74,6 +74,8 @@ export class RecorderSink {
 	private queue: StoredRecord[] = [];
 	private flushTimer: ReturnType<typeof setTimeout> | null = null;
 	private reqId = 0;
+	private stopped = false;
+	private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 	private pending = new Map<
 		number,
 		{
@@ -120,6 +122,7 @@ export class RecorderSink {
 	}
 
 	record(ch: RecorderChannel, type: string, data?: unknown): void {
+		if (this.stopped) return;
 		const t = Date.now();
 		let json: string;
 		try {
@@ -176,8 +179,17 @@ export class RecorderSink {
 		});
 	}
 
+	/** drops everything queued and ignores further events; collectors stay installed but inert */
+	stop(): void {
+		this.stopped = true;
+		this.queue = [];
+		if (this.flushTimer) clearTimeout(this.flushTimer);
+		this.flushTimer = null;
+		if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
+	}
+
 	startHeartbeat(): void {
-		setInterval(
+		this.heartbeatTimer = setInterval(
 			() =>
 				this.transport.post({
 					kind: 'hb',

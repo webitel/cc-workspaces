@@ -15,13 +15,26 @@ const PII_CAMEL_KEY_RE = /[a-z](Number|Phone|Email|Destination)$/;
 /** chat message bodies: replaced by their length */
 const CONTENT_KEY_RE = /^text$/i;
 
-const SECRET_QUERY_RE =
-	/([?&#](?:access_?token|accesstoken|token|password|secret|api_?key|key|auth)=)[^&#\s"'<>]*/gi;
+/** query params that are secrets although the key rule does not match them */
+const SECRET_PARAM_RE = /^(key|auth|sig|signature)$/i;
+
+// every query param and every quoted JSON key inside strings is checked against
+// SECRET_KEY_RE, so object keys and in-string keys follow one rule
+const QUERY_PARAM_RE = /([?&#]([^=&#\s"'<>]+)=)([^&#\s"'<>]*)/g;
+const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
 
 const SIP_AUTH_HEADER_RE = /^((?:Proxy-)?Authorization)[ \t]*:.*$/gim;
 const BEARER_RE = /(Bearer\s+)[A-Za-z0-9\-._~+/]+=*/gi;
-const JSON_SECRET_RE =
-	/("(?:password|passwd|secret|token|access_?token|accessToken|refresh_?token|authorization|x-webitel-access|credential|api_?key)"\s*:\s*)"(?:[^"\\]|\\.)*"/gi;
+
+const isSecretKey = (key: string) => SECRET_KEY_RE.test(key);
+
+function redactQuery(text: string): string {
+	return text.replace(QUERY_PARAM_RE, (match, prefix: string, name: string) =>
+		isSecretKey(name) || SECRET_PARAM_RE.test(name)
+			? `${prefix}${REDACTED}`
+			: match,
+	);
+}
 // not preceded by a word char or `sip:`, so SIP URIs keep their user part
 const EMAIL_RE =
 	/(?<![\w.%+-]|sips?:)[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,})/g;
@@ -47,12 +60,14 @@ export interface RedactTextOptions {
 }
 
 export function redactText(text: string, opts: RedactTextOptions = {}): string {
-	let out = text
-		.replace(SIP_AUTH_HEADER_RE, `$1: ${REDACTED}`)
-		.replace(BEARER_RE, `$1${REDACTED}`)
-		.replace(JSON_SECRET_RE, `$1"${REDACTED}"`)
-		.replace(SECRET_QUERY_RE, `$1${REDACTED}`)
-		.replace(EMAIL_RE, '***@$1');
+	let out = redactQuery(
+		text
+			.replace(SIP_AUTH_HEADER_RE, `$1: ${REDACTED}`)
+			.replace(BEARER_RE, `$1${REDACTED}`)
+			.replace(JSON_STRING_PAIR_RE, (match, prefix: string, key: string) =>
+				isSecretKey(key) ? `${prefix}"${REDACTED}"` : match,
+			),
+	).replace(EMAIL_RE, '***@$1');
 	if (opts.phones) {
 		out = out.replace(PHONE_RE, (m) => maskPii(m));
 	}
@@ -60,7 +75,7 @@ export function redactText(text: string, opts: RedactTextOptions = {}): string {
 }
 
 export function redactUrl(url: string): string {
-	return url.replace(SECRET_QUERY_RE, `$1${REDACTED}`);
+	return redactQuery(url);
 }
 
 export interface SanitizeOptions extends RedactTextOptions {
@@ -180,7 +195,7 @@ export function sanitize(value: unknown, opts: SanitizeOptions = {}): unknown {
 
 		const out: Record<string, unknown> = {};
 		for (const [key, val] of entries.slice(0, maxKeys)) {
-			if (SECRET_KEY_RE.test(key)) {
+			if (isSecretKey(key)) {
 				out[key] =
 					val === undefined || val === null || val === '' ? val : REDACTED;
 			} else if (

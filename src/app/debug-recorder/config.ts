@@ -1,7 +1,13 @@
 export const RECORDER_VERSION = '0.1.0-spike';
 
-/** localStorage key that keeps the recorder on across reloads */
+/** localStorage key that keeps the recorder on across reloads; holds the expiry time */
 export const ENABLED_STORAGE_KEY = 'wt-debug-recorder';
+/** set while the store may hold records, so a disabled start knows to wipe it */
+export const HAS_DATA_STORAGE_KEY = 'wt-debug-recorder:has-data';
+/** recording switches itself off after this, so a forgotten flag does not record for days */
+export const ENABLED_TTL_MS = 24 * 60 * 60 * 1000;
+/** records older than this are dropped when the store opens */
+export const RETENTION_MS = 48 * 60 * 60 * 1000;
 /** sid of the last page-load that reached pagehide; written synchronously on exit */
 export const CLEAN_EXIT_STORAGE_KEY = 'wt-debug-recorder:clean-exit';
 /** `?debug=1` turns the recorder on, `?debug=0` turns it off */
@@ -35,22 +41,31 @@ function readUrlFlag(): string | null {
 	return hashQuery ? new URLSearchParams(hashQuery).get(URL_PARAM) : null;
 }
 
-/** reads the URL flag (persisting it) and falls back to the stored one */
-export function resolveEnabled(): boolean {
-	try {
-		const urlFlag = readUrlFlag();
-		if (urlFlag === '1' || urlFlag === 'true') {
-			localStorage.setItem(ENABLED_STORAGE_KEY, '1');
-		} else if (urlFlag === '0' || urlFlag === 'false') {
-			localStorage.removeItem(ENABLED_STORAGE_KEY);
-		}
-		return localStorage.getItem(ENABLED_STORAGE_KEY) === '1';
-	} catch {
-		return false;
+export function setEnabled(enabled: boolean, now = Date.now()): void {
+	if (enabled) {
+		localStorage.setItem(ENABLED_STORAGE_KEY, String(now + ENABLED_TTL_MS));
+	} else {
+		localStorage.removeItem(ENABLED_STORAGE_KEY);
 	}
 }
 
-export function setEnabled(enabled: boolean): void {
-	if (enabled) localStorage.setItem(ENABLED_STORAGE_KEY, '1');
-	else localStorage.removeItem(ENABLED_STORAGE_KEY);
+/**
+ * Reads the URL flag (persisting it) and falls back to the stored one.
+ * The URL flag is honoured without login on purpose: the recorder must work
+ * when login itself is what fails. The TTL, the REC indicator and wiping on
+ * logout/disable limit what a forgotten flag can collect.
+ */
+export function resolveEnabled(now = Date.now()): boolean {
+	try {
+		const urlFlag = readUrlFlag();
+		if (urlFlag === '1' || urlFlag === 'true') setEnabled(true, now);
+		else if (urlFlag === '0' || urlFlag === 'false') setEnabled(false);
+
+		const expiresAt = Number(localStorage.getItem(ENABLED_STORAGE_KEY));
+		if (expiresAt > now) return true;
+		setEnabled(false);
+		return false;
+	} catch {
+		return false;
+	}
 }

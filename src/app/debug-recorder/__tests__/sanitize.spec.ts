@@ -58,6 +58,28 @@ describe('redactText', () => {
 		expect(out).toContain('"name":"x"');
 	});
 
+	it('applies the same key rule inside strings as for object keys', () => {
+		const out = redactText(
+			'{"sipPassword":"a1","client_secret":"b2","ha1":"c3","Cookie":"d4","X-Webitel-Access":"e5","queue":"Support"}',
+		);
+		for (const leaked of [
+			'a1',
+			'b2',
+			'c3',
+			'd4',
+			'e5',
+		]) {
+			expect(out).not.toContain(`"${leaked}"`);
+		}
+		expect(out).toContain('"queue":"Support"');
+	});
+
+	it('removes any secret-looking query param, keeps the rest', () => {
+		expect(redactUrl('/x?refresh_token=r&sig=s&apiKey=k&page=2#auth=h')).toBe(
+			`/x?refresh_token=${REDACTED}&sig=${REDACTED}&apiKey=${REDACTED}&page=2#auth=${REDACTED}`,
+		);
+	});
+
 	it('masks e-mails but not SIP URIs', () => {
 		const out = redactText(
 			'mail john.doe@example.com, call sip:1001@pbx.local.com',

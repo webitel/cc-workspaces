@@ -1,4 +1,10 @@
-import { DB_NAME, DB_VERSION, EVICTION_BATCH, MAX_RECORDS } from './config';
+import {
+	DB_NAME,
+	DB_VERSION,
+	EVICTION_BATCH,
+	MAX_RECORDS,
+	RETENTION_MS,
+} from './config';
 import type { RecorderStats, StoredRecord } from './types';
 
 const EVENTS = 'events';
@@ -46,6 +52,19 @@ export async function openStorage(): Promise<RecorderStorage> {
 		}
 	};
 	const db = await promisify(open);
+
+	// retention: records are in time order, so walk from the oldest until a fresh one
+	const cutoff = Date.now() - RETENTION_MS;
+	const retentionTx = db.transaction(EVENTS, 'readwrite');
+	const retentionCursor = retentionTx.objectStore(EVENTS).openCursor();
+	retentionCursor.onsuccess = () => {
+		const cursor = retentionCursor.result;
+		if (cursor && (cursor.value as StoredRecord).t < cutoff) {
+			cursor.delete();
+			cursor.continue();
+		}
+	};
+	await done(retentionTx);
 
 	let count = await promisify(
 		db.transaction(EVENTS, 'readonly').objectStore(EVENTS).count(),
