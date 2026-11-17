@@ -20,7 +20,10 @@ const SECRET_PARAM_RE = /^(key|auth|sig|signature)$/i;
 
 // every query param and every quoted JSON key inside strings is checked against
 // SECRET_KEY_RE, so object keys and in-string keys follow one rule
-const QUERY_PARAM_RE = /([?&#]([^=&#\s"'<>]+)=)([^&#\s"'<>]*)/g;
+// a value stops at any delimiter, plain or percent-encoded, so a nested URL
+// (`?next=/cb?access_token=x`, `?next=%2Fcb%3Faccess_token%3Dx`) is scanned too
+const QUERY_PARAM_RE =
+	/((?:[?&#]|%3[Ff]|%26|%23)([^=?&#\s"'<>%]+)(?:=|%3[Dd]))((?:(?!%26|%3[Ff]|%23)[^?&#\s"'<>])*)/g;
 const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
 
 const SIP_AUTH_HEADER_RE = /^((?:Proxy-)?Authorization)[ \t]*:.*$/gim;

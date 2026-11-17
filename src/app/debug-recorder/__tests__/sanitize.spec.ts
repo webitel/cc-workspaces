@@ -80,6 +80,15 @@ describe('redactText', () => {
 		);
 	});
 
+	it('finds secrets in a URL nested inside another param, plain or encoded', () => {
+		expect(redactUrl('/login?next=/cb?access_token=x&page=2')).toBe(
+			`/login?next=/cb?access_token=${REDACTED}&page=2`,
+		);
+		expect(redactUrl('/login?next=%2Fcb%3Faccess_token%3Dabc%26page%3D2')).toBe(
+			`/login?next=%2Fcb%3Faccess_token%3D${REDACTED}%26page%3D2`,
+		);
+	});
+
 	it('masks e-mails but not SIP URIs', () => {
 		const out = redactText(
 			'mail john.doe@example.com, call sip:1001@pbx.local.com',
