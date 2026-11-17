@@ -30,8 +30,10 @@ const PARAM_RE = /([?&#;])([^=?&#;\s"'<>]+)=([^&#;\s"'<>]*)/g;
 const PAIR_NAME_RE =
 	/(?<=^|[?&#;,\s{(=/:])([^=?&#;,\s"'<>{}()/:]+)=(?!\[REDACTED\])/g;
 const TEXT_TOKEN_RE = /[^\s"'<>]+/g;
-const PROSE_SECRET_RE =
-	/\b(password|passwd|pwd|secret|token|access_?token|api[_-]?key|authorization)(\s*[:=]\s*)(?!\[REDACTED\])([^\s,;"'&<>]+)/gi;
+// any `name: value` / `name = value` / `'name': "value"` in free text; the name goes
+// through the same secret rule as object keys, the value may be quoted
+const PROSE_PAIR_RE =
+	/\b([A-Za-z][\w.-]*)(["']?\s*[:=]\s*)(?!\[REDACTED\])("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|[^\s,;"'&<>]+)/g;
 const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
 const MAX_DECODE_PASSES = 5;
 
@@ -133,7 +135,9 @@ export function redactText(text: string, opts: RedactTextOptions = {}): string {
 		.replace(JSON_STRING_PAIR_RE, (match, prefix: string, key: string) =>
 			isSecretKey(key) ? `${prefix}"${REDACTED}"` : match,
 		)
-		.replace(PROSE_SECRET_RE, `$1$2${REDACTED}`);
+		.replace(PROSE_PAIR_RE, (match, name: string, separator: string) =>
+			isSecretParam(name) ? `${name}${separator}${REDACTED}` : match,
+		);
 	out = redactTokens(redactParams(out)).replace(EMAIL_RE, '***@$1');
 	if (opts.phones) {
 		out = out.replace(PHONE_RE, (m) => maskPii(m));

@@ -135,6 +135,24 @@ describe('redactText', () => {
 		expect(out).toContain('retry with');
 	});
 
+	it('redacts quoted and unquoted values after any secret-looking name in text', () => {
+		const out = redactText(
+			`password="hunter 2" token: 'abc' {'apiKey': "k1"} credentials=c1 cookie: sid=c2; ha1=h1 sig=s1 user=ivan`,
+		);
+		for (const leaked of [
+			'hunter',
+			'abc',
+			'k1',
+			'c1',
+			'c2',
+			'h1',
+			's1',
+		]) {
+			expect(out).not.toContain(leaked);
+		}
+		expect(out).toContain('user=ivan');
+	});
+
 	it('leaves ordinary URLs and SIP params alone', () => {
 		const url = '/api/agents?page=2&size=10&q=x%20y#tab';
 		expect(redactUrl(url)).toBe(url);
