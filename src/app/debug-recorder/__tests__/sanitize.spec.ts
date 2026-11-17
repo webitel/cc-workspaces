@@ -145,11 +145,27 @@ describe('redactText', () => {
 		}
 	});
 
-	it('fails closed on an unterminated quoted secret, up to the end of the line', () => {
+	it('fails closed on an unterminated quoted secret, to the end of the text', () => {
 		const out = redactText('password="abc def\nnext line');
-		expect(out).not.toContain('abc');
-		expect(out).not.toContain('def');
-		expect(out).toContain('next line');
+		expect(out).toBe(`password=${REDACTED}`);
+	});
+
+	it('cuts a long quoted secret up to its real closing quote, across lines', () => {
+		const value = `${'a'.repeat(5_000)}\nsecret-tail`;
+		const out = redactText(`token="${value}" after`);
+		expect(out).toBe(`token=${REDACTED} after`);
+	});
+
+	it('finds a value that starts on the next line', () => {
+		const out = redactText('password:\n\n   hunter2\nnext');
+		expect(out).not.toContain('hunter2');
+		expect(out).toContain('next');
+	});
+
+	it('checks the end of a name longer than the scan window', () => {
+		const out = redactText(`${'x_'.repeat(50)}password: v1 ok`);
+		expect(out).not.toContain('v1');
+		expect(out).toContain('ok');
 	});
 
 	it('stays fast on adversarial input', () => {

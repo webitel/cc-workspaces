@@ -32,10 +32,12 @@ const PAIR_NAME_RE =
 const TEXT_TOKEN_RE = /[^\s"'<>]+/g;
 // any `name: value` / `name = value` / `'name': "value"` in free text; the name goes
 // through the same secret rule as object keys, the value may be quoted
-// only `name` + separator is matched (bounded, so linear); the value is measured
-// by a scan and consumed only for secret names, so `x: token: v` still finds `token`
-const PROSE_NAME_SOURCE = String.raw`\b([A-Za-z][\w.-]{0,63})(["']?[ \t]*[:=][ \t]*)`;
-const MAX_QUOTED_VALUE_CHARS = 4_096;
+// scanned from the separator: the name is read backwards from it (last 64 chars,
+// so a long `..._password` still counts) and the value is consumed only for
+// secret names, so `x: token: v` still finds `token`
+const PROSE_SEPARATOR_RE = /["']?[ \t]*[:=]/g;
+const NAME_CHAR_RE = /[\w.-]/;
+const MAX_NAME_CHARS = 64;
 const VALUE_STOP_RE = /[\s,;"'&<>]/;
 const JSON_STRING_PAIR_RE = /("((?:[^"\\]|\\.)*)"\s*:\s*)"(?:[^"\\]|\\.)*"/g;
 const MAX_DECODE_PASSES = 5;
@@ -100,36 +102,53 @@ function redactParams(text: string): string {
 	);
 }
 
-/** end index of the value starting at `start`; an unterminated or huge quote fails closed to end of line */
+/**
+ * End index of the value starting at `start`. A quoted value runs to its real
+ * closing quote; without one it fails closed to the end of the text (the input
+ * is already truncated, and the scanned part is never scanned again, so this stays linear).
+ */
 function valueEnd(text: string, start: number): number {
 	const quote = text[start];
 	if (quote === '"' || quote === "'") {
-		const limit = Math.min(text.length, start + 1 + MAX_QUOTED_VALUE_CHARS);
-		for (let i = start + 1; i < limit; i += 1) {
+		for (let i = start + 1; i < text.length; i += 1) {
 			if (text[i] === '\\') i += 1;
 			else if (text[i] === quote) return i + 1;
 		}
-		const lineEnd = text.indexOf('\n', start);
-		return lineEnd === -1 ? text.length : lineEnd;
+		return text.length;
 	}
 	let i = start;
 	while (i < text.length && !VALUE_STOP_RE.test(text[i])) i += 1;
 	return i;
 }
 
-/** `password: x`, `token="x"`, `'apiKey': 'x'` in free text, for any secret-looking name */
+function nameBefore(text: string, end: number): string {
+	let start = end;
+	while (
+		start > 0 &&
+		end - start < MAX_NAME_CHARS &&
+		NAME_CHAR_RE.test(text[start - 1])
+	) {
+		start -= 1;
+	}
+	return text.slice(start, end);
+}
+
+/** `password: x`, `token="x"`, `'apiKey':\n 'x'` in free text, for any secret-looking name */
 function redactProse(text: string): string {
-	const nameRe = new RegExp(PROSE_NAME_SOURCE, 'g');
+	const separatorRe = new RegExp(PROSE_SEPARATOR_RE.source, 'g');
 	let out = '';
 	let last = 0;
-	for (let m = nameRe.exec(text); m; m = nameRe.exec(text)) {
-		const start = m.index + m[0].length;
-		if (!isSecretParam(m[1]) || text.startsWith(REDACTED, start)) continue;
+	for (let m = separatorRe.exec(text); m; m = separatorRe.exec(text)) {
+		const name = nameBefore(text, m.index);
+		if (!name || !isSecretParam(name)) continue;
+		// the value may follow on the next line
+		let start = m.index + m[0].length;
+		while (start < text.length && /\s/.test(text[start])) start += 1;
+		if (start >= text.length || text.startsWith(REDACTED, start)) continue;
 		const end = valueEnd(text, start);
-		if (end === start) continue;
 		out += `${text.slice(last, start)}${REDACTED}`;
 		last = end;
-		nameRe.lastIndex = end;
+		separatorRe.lastIndex = end;
 	}
 	return out + text.slice(last);
 }
