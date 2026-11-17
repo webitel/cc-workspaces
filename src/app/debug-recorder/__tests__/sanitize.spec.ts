@@ -174,10 +174,26 @@ describe('redactText', () => {
 			`${'a'.repeat(60)}=`.repeat(2_000),
 			`password="${'x\\'.repeat(20_000)}`,
 			'"'.repeat(50_000),
+			' '.repeat(20_000),
+			'\t'.repeat(20_000),
+			`${' '.repeat(15_000)}x`,
+			`password:${' '.repeat(15_000)}`,
 		];
 		const started = performance.now();
 		for (const input of inputs) redactText(input);
 		expect(performance.now() - started).toBeLessThan(500);
+	});
+
+	it('fails closed when a secret value starts with a punctuation char', () => {
+		for (const input of [
+			'password=,hunter2 ok',
+			'token=<abc> ok',
+			'pwd:;s3cr3t ok',
+		]) {
+			const out = redactText(input);
+			expect(out).not.toMatch(/hunter2|abc|s3cr3t/);
+			expect(out).toContain('ok');
+		}
 	});
 
 	it('redacts quoted and unquoted values after any secret-looking name in text', () => {

@@ -35,7 +35,10 @@ const TEXT_TOKEN_RE = /[^\s"'<>]+/g;
 // scanned from the separator: the name is read backwards from it (last 64 chars,
 // so a long `..._password` still counts) and the value is consumed only for
 // secret names, so `x: token: v` still finds `token`
-const PROSE_SEPARATOR_RE = /["']?[ \t]*[:=]/g;
+// only the separator itself is searched; blanks and a quote before it are walked
+// back over by hand, so no regex attempt can start inside a long blank run
+const PROSE_SEPARATOR_RE = /[:=]/g;
+const MAX_GAP_CHARS = 64;
 const NAME_CHAR_RE = /[\w.-]/;
 const MAX_NAME_CHARS = 64;
 const VALUE_STOP_RE = /[\s,;"'&<>]/;
@@ -139,13 +142,23 @@ function redactProse(text: string): string {
 	let out = '';
 	let last = 0;
 	for (let m = separatorRe.exec(text); m; m = separatorRe.exec(text)) {
-		const name = nameBefore(text, m.index);
+		// `name "  :` — step back over blanks and one closing quote, bounded
+		let nameEnd = m.index;
+		const gapLimit = Math.max(0, m.index - MAX_GAP_CHARS);
+		while (nameEnd > gapLimit && /[ \t]/.test(text[nameEnd - 1])) nameEnd -= 1;
+		if (nameEnd > 0 && /["']/.test(text[nameEnd - 1])) nameEnd -= 1;
+		const name = nameBefore(text, nameEnd);
 		if (!name || !isSecretParam(name)) continue;
+
 		// the value may follow on the next line
-		let start = m.index + m[0].length;
+		let start = m.index + 1;
 		while (start < text.length && /\s/.test(text[start])) start += 1;
 		if (start >= text.length || text.startsWith(REDACTED, start)) continue;
-		const end = valueEnd(text, start);
+		let end = valueEnd(text, start);
+		// value starts with a stop char (`password=,abc`, `token=<x>`): fail closed to the next blank
+		if (end === start) {
+			while (end < text.length && !/\s/.test(text[end])) end += 1;
+		}
 		out += `${text.slice(last, start)}${REDACTED}`;
 		last = end;
 		separatorRe.lastIndex = end;
