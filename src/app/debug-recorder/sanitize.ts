@@ -49,11 +49,11 @@ const isSecretName = (name: string) =>
 
 /** decodes each %XX on its own: a malformed escape elsewhere cannot block decoding */
 function decodeOnce(value: string): string {
-	return value.replace(/%[0-9A-Fa-f]{2}/g, (escape) => {
+	return value.replace(/%[0-9A-Fa-f]{2}/g, (sequence) => {
 		try {
-			return decodeURIComponent(escape);
+			return decodeURIComponent(sequence);
 		} catch {
-			return escape;
+			return sequence;
 		}
 	});
 }
