@@ -8,9 +8,16 @@ const SECRET_KEY_RE =
 
 /** keys whose values are personal data: masked, last chars kept for correlation */
 const PII_KEY_RE =
-	/(^|_)(number|phone|destination|email|display|msisdn)$|^(phone|email)/i;
+	/(^|_)(number|phone|destination|email|display|msisdn|display_?name|full_?name|first_?name|last_?name|caller_?name)$|^(phone|email)/i;
 // camelCase variants (`fromNumber`), case-sensitive on purpose
-const PII_CAMEL_KEY_RE = /[a-z](Number|Phone|Email|Destination)$/;
+const PII_CAMEL_KEY_RE =
+	/[a-z](Number|Phone|Email|Destination|DisplayName|FullName|FirstName|LastName)$/;
+// `name` is PII only inside a party object (`from.name`), not for queues or agents
+const PARTY_KEY_RE =
+	/^(from|to|member|contact|customer|client|caller|callee|participant|peer)$/i;
+const PARTY_NAME_KEY_RE = /^name$/i;
+// arbitrary data attached to a call or form: keep the keys, drop the values
+const FREE_DATA_KEY_RE = /^(variables|vars|custom_?data|form_?data)$/i;
 
 /** chat message bodies: replaced by their length */
 const CONTENT_KEY_RE = /^text$/i;
@@ -18,25 +25,13 @@ const CONTENT_KEY_RE = /^text$/i;
 /** query params that are secrets although the key rule does not match them */
 const SECRET_PARAM_RE = /^(key|auth|sig|signature)$/i;
 
-/*
- * Query-string redaction is fail-closed. Exact cut-outs are tried first, but
- * the final word is containsSecretPair(): if any percent-decoded form of a
- * value or token still holds `<secret-name>=`, the whole value/token goes.
- * Nested URLs therefore lose their non-secret parts too; for logs that is fine.
- */
+// fail-closed: a value/token whose decoded form still holds `<secret>=` is replaced whole
 const PARAM_RE = /([?&#;])([^=?&#;\s"'<>]+)=([^&#;\s"'<>]*)/g;
-// a candidate pair anywhere: name after a delimiter (or at the start), value not yet redacted
-// lookbehind, so the delimiter is not consumed and `a=token=x` still yields `token`
+// lookbehind keeps the delimiter, so `a=token=x` still yields `token`
 const PAIR_NAME_RE =
 	/(?<=^|[?&#;,\s{(=/:])([^=?&#;,\s"'<>{}()/:]+)=(?!\[REDACTED\])/g;
 const TEXT_TOKEN_RE = /[^\s"'<>]+/g;
-// any `name: value` / `name = value` / `'name': "value"` in free text; the name goes
-// through the same secret rule as object keys, the value may be quoted
-// scanned from the separator: the name is read backwards from it (last 64 chars,
-// so a long `..._password` still counts) and the value is consumed only for
-// secret names, so `x: token: v` still finds `token`
-// only the separator itself is searched; blanks and a quote before it are walked
-// back over by hand, so no regex attempt can start inside a long blank run
+// prose `name: value`: only the separator is searched, the name is read backwards (linear)
 const PROSE_SEPARATOR_RE = /[:=]/g;
 const MAX_GAP_CHARS = 64;
 const NAME_CHAR_RE = /[\w.-]/;
@@ -105,11 +100,7 @@ function redactParams(text: string): string {
 	);
 }
 
-/**
- * End index of the value starting at `start`. A quoted value runs to its real
- * closing quote; without one it fails closed to the end of the text (the input
- * is already truncated, and the scanned part is never scanned again, so this stays linear).
- */
+// end of the value at `start`; an unterminated quote fails closed to the end of the (truncated) text
 function valueEnd(text: string, start: number): number {
 	const quote = text[start];
 	if (quote === '"' || quote === "'") {
@@ -238,17 +229,14 @@ function describeNode(node: Node): string {
 	return `[${node.nodeName}]`;
 }
 
-/**
- * Turns any value into a structured-cloneable, JSON-safe plain value with
- * secrets removed and PII masked. Handles cycles, DOM nodes, errors, Vue proxies.
- */
+// any value -> JSON-safe plain value with secrets removed and PII masked (cycles, DOM, errors, Vue proxies)
 export function sanitize(value: unknown, opts: SanitizeOptions = {}): unknown {
 	const maxDepth = opts.maxDepth ?? 6;
 	const maxKeys = opts.maxKeys ?? 100;
 	const maxText = opts.maxText ?? MAX_TEXT_CHARS;
 	const seen = new WeakSet<object>();
 
-	const walk = (v: unknown, depth: number): unknown => {
+	const walk = (v: unknown, depth: number, parentKey = ''): unknown => {
 		if (v === null || v === undefined) return v;
 		switch (typeof v) {
 			case 'string':
@@ -270,7 +258,24 @@ export function sanitize(value: unknown, opts: SanitizeOptions = {}): unknown {
 				}]`;
 		}
 
-		const obj = v as object;
+		let obj = v as object;
+		// Vue reactive proxy: read the raw target (untracked), so logging inside a
+		// render/computed does not subscribe it to every field of the logged object
+		for (
+			let raw = (
+				obj as {
+					__v_raw?: unknown;
+				}
+			).__v_raw;
+			raw && typeof raw === 'object' && raw !== obj;
+			raw = (
+				obj as {
+					__v_raw?: unknown;
+				}
+			).__v_raw
+		) {
+			obj = raw;
+		}
 		if (obj instanceof Error) {
 			return {
 				name: obj.name,
@@ -336,6 +341,7 @@ export function sanitize(value: unknown, opts: SanitizeOptions = {}): unknown {
 					});
 
 		const out: Record<string, unknown> = {};
+		const isParty = PARTY_KEY_RE.test(parentKey);
 		for (const [key, val] of entries.slice(0, maxKeys)) {
 			if (isSecretKey(key)) {
 				out[key] =
@@ -347,13 +353,28 @@ export function sanitize(value: unknown, opts: SanitizeOptions = {}): unknown {
 			) {
 				out[key] = `[text: ${val.length} chars]`;
 			} else if (
-				(PII_KEY_RE.test(key) || PII_CAMEL_KEY_RE.test(key)) &&
+				(PII_KEY_RE.test(key) ||
+					PII_CAMEL_KEY_RE.test(key) ||
+					(isParty && PARTY_NAME_KEY_RE.test(key))) &&
 				(typeof val === 'string' || typeof val === 'number') &&
 				String(val).length
 			) {
 				out[key] = maskPii(String(val));
+			} else if (
+				FREE_DATA_KEY_RE.test(key) &&
+				val !== null &&
+				typeof val === 'object'
+			) {
+				out[key] = Object.fromEntries(
+					Object.keys(val)
+						.slice(0, maxKeys)
+						.map((k) => [
+							k,
+							`[value: ${String((val as Record<string, unknown>)[k] ?? '').length} chars]`,
+						]),
+				);
 			} else {
-				out[key] = walk(val, depth + 1);
+				out[key] = walk(val, depth + 1, key);
 			}
 		}
 		if (entries.length > maxKeys) {

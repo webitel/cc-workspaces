@@ -5,7 +5,7 @@ import {
 	MAX_RECORDS,
 	RETENTION_MS,
 } from './config';
-import type { RecorderStats, StoredRecord } from './types';
+import { type RecorderStats, type StoredRecord, tallyChannel } from './types';
 
 const EVENTS = 'events';
 const META = 'meta';
@@ -32,12 +32,10 @@ export interface RecorderStorage {
 	stats(): Promise<RecorderStats>;
 	getMeta<T>(key: string): Promise<T | undefined>;
 	setMeta(key: string, value: unknown): Promise<void>;
+	close(): void;
 }
 
-/**
- * IndexedDB ring buffer. Used from the worker; the main thread uses it
- * directly only as a fallback when a worker cannot be started.
- */
+// IndexedDB ring buffer; opened in the worker, or on the main thread as a fallback
 export async function openStorage(): Promise<RecorderStorage> {
 	const open = indexedDB.open(DB_NAME, DB_VERSION);
 	open.onupgradeneeded = () => {
@@ -140,13 +138,7 @@ export async function openStorage(): Promise<RecorderStorage> {
 					stats.chars += n;
 					stats.firstT = stats.firstT === null ? t : Math.min(stats.firstT, t);
 					stats.lastT = stats.lastT === null ? t : Math.max(stats.lastT, t);
-					stats.byChannel[ch] ??= {
-						count: 0,
-						chars: 0,
-					};
-					const bucket = stats.byChannel[ch];
-					bucket.count += 1;
-					bucket.chars += n;
+					tallyChannel(stats.byChannel, ch, n);
 					cursor.continue();
 				};
 			});
@@ -157,6 +149,10 @@ export async function openStorage(): Promise<RecorderStorage> {
 			return promisify(
 				db.transaction(META, 'readonly').objectStore(META).get(key),
 			) as Promise<T | undefined>;
+		},
+
+		close() {
+			db.close();
 		},
 
 		async setMeta(key, value) {

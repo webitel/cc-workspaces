@@ -20,10 +20,7 @@ export const originalConsole: Pick<Console, Level> = {
 	error: console.error.bind(console),
 };
 
-/**
- * Must run before JsSIP is evaluated: its Logger binds `console.info`
- * once per logger instance, at module load.
- */
+// must run before JsSIP loads: its Logger binds console.info once, at module load
 export function installConsoleCollector(record: RecordFn): void {
 	let inside = false;
 	for (const level of LEVELS) {

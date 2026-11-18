@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { installHttpCollector } from '../collectors/http';
+import { installWebRtcCollector } from '../collectors/webrtc';
 import { installWebSocketCollector } from '../collectors/websocket';
 import { REDACTED } from '../sanitize';
 import type { RecordFn } from '../types';
@@ -174,5 +175,95 @@ describe('http collector', () => {
 
 		await expect(target.fetch('/api/x')).rejects.toThrow('Failed to fetch');
 		expect(record.mock.calls.at(-1)?.[1]).toBe('fetch:fail');
+	});
+});
+
+class FakeXhr extends EventTarget {
+	status = 0;
+	responseType = '';
+	responseText = '';
+	open(_method: string, _url: string) {}
+	send() {}
+	finish(status: number) {
+		this.status = status;
+		this.dispatchEvent(new Event('loadend'));
+	}
+}
+
+describe('xhr collector', () => {
+	it('records one end per request when an XHR is reused', () => {
+		const record = vi.fn<RecordFn>();
+		installHttpCollector(record, {
+			fetch: undefined as unknown as typeof fetch,
+			XMLHttpRequest: FakeXhr as unknown as typeof XMLHttpRequest,
+		});
+		const xhr = new FakeXhr();
+		xhr.open('GET', '/a');
+		xhr.send();
+		xhr.finish(200);
+		xhr.open('POST', '/b');
+		xhr.send();
+		xhr.finish(204);
+
+		const ends = record.mock.calls.filter(([, type]) => type === 'xhr:end');
+		expect(ends.map(([, , data]) => data)).toEqual([
+			expect.objectContaining({
+				id: 1,
+				method: 'GET',
+				url: '/a',
+				status: 200,
+			}),
+			expect.objectContaining({
+				id: 2,
+				method: 'POST',
+				url: '/b',
+				status: 204,
+			}),
+		]);
+	});
+});
+
+class FakePeerConnection extends EventTarget {
+	connectionState = 'new';
+	signalingState = 'stable';
+	iceConnectionState = 'new';
+	iceGatheringState = 'new';
+	getStats = vi.fn(async () => new Map());
+	setState(state: string) {
+		this.connectionState = state;
+		this.dispatchEvent(new Event('connectionstatechange'));
+	}
+}
+
+describe('webrtc collector', () => {
+	it('stops polling a failed connection after one last snapshot, resumes on reconnect', async () => {
+		vi.useFakeTimers();
+		try {
+			const record = vi.fn<RecordFn>();
+			const target = {
+				RTCPeerConnection:
+					FakePeerConnection as unknown as typeof RTCPeerConnection,
+			};
+			installWebRtcCollector(record, target);
+			const pc =
+				new target.RTCPeerConnection() as unknown as FakePeerConnection;
+			const statsCount = () =>
+				record.mock.calls.filter(([, type]) => type === 'pc:stats').length;
+
+			await vi.advanceTimersByTimeAsync(10_000);
+			expect(statsCount()).toBe(2);
+
+			pc.setState('failed');
+			await vi.advanceTimersByTimeAsync(0);
+			expect(statsCount()).toBe(3);
+			await vi.advanceTimersByTimeAsync(60_000);
+			expect(statsCount()).toBe(3);
+
+			pc.setState('connected');
+			await vi.advanceTimersByTimeAsync(5_000);
+			expect(statsCount()).toBe(4);
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 });

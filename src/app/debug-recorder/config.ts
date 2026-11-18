@@ -28,6 +28,9 @@ export const MAX_EVENT_CHARS = 65_536;
 export const FLUSH_INTERVAL_MS = 250;
 export const FLUSH_QUEUE_SIZE = 200;
 
+/** dump/clear/stats give up after this, so a dead worker cannot hang logout or download */
+export const REQUEST_TIMEOUT_MS = 30_000;
+
 export const HEARTBEAT_INTERVAL_MS = 1_000;
 export const STALL_THRESHOLD_MS = 3_000;
 

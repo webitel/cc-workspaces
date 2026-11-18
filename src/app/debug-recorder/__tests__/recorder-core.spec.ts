@@ -24,6 +24,7 @@ function memoryStorage(meta: Record<string, unknown> = {}) {
 		setMeta: async (key, value) => {
 			meta[key] = value;
 		},
+		close: () => {},
 	};
 	const events = () => records.map((r) => JSON.parse(r.json) as RecorderEvent);
 	return {

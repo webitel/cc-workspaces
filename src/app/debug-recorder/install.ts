@@ -1,13 +1,4 @@
-/**
- * Debug recorder ("black box") — spike.
- *
- * Imported first in main.ts so it is evaluated before webitel-sdk and JsSIP.
- * Does nothing unless enabled with `?debug=1`; the flag lives in localStorage
- * for ENABLED_TTL_MS, until `?debug=0`, `webitelDebug.disable()` or logout.
- * Disabling, logging out, or starting with the flag gone wipes what was recorded.
- *
- * Archive: the REC badge, Ctrl+Alt+Shift+D, or `webitelDebug.download()`.
- */
+// Debug recorder, opt-in via ?debug=1 (24h TTL); first import in main.ts so it wraps APIs before webitel-sdk/JsSIP load
 import { installConsoleCollector, originalConsole } from './collectors/console';
 import { installDeviceCollector } from './collectors/devices';
 import { collectEnvironment } from './collectors/environment';
@@ -95,23 +86,28 @@ function showIndicator(): void {
 		});
 }
 
-/**
- * Stops recording in this page and deletes everything recorded so far.
- * Called on logout: workstations in a contact center are often shared.
- */
+// stops recording and deletes the store; called on logout because workstations are shared
 export async function wipeDebugRecorder(): Promise<void> {
-	setEnabled(false);
+	let hadData = false;
 	safeLocalStorage((s) => {
+		hadData = s.getItem(HAS_DATA_STORAGE_KEY) !== null;
+		setEnabled(false);
 		s.removeItem(HAS_DATA_STORAGE_KEY);
 		s.removeItem(CLEAN_EXIT_STORAGE_KEY);
 	});
 	indicator?.remove();
 	indicator = null;
-	if (!sink) return;
 	const current = sink;
 	sink = null;
-	current.stop();
-	await current.clear();
+	// destroy() never rejects and is time-bounded, so logout cannot hang on it
+	if (current) await current.destroy();
+	if (current || hadData) {
+		try {
+			indexedDB.deleteDatabase(DB_NAME);
+		} catch {
+			// IndexedDB unavailable: nothing was stored either
+		}
+	}
 }
 
 function startRecording(): void {
@@ -154,7 +150,11 @@ function startRecording(): void {
 		],
 		[
 			'lifecycle',
-			() => installLifecycleCollector(record, () => s.markCleanExit()),
+			() =>
+				installLifecycleCollector(record, {
+					onExit: () => s.markCleanExit(),
+					onResume: () => s.markResumed(),
+				}),
 		],
 	];
 	const failed: string[] = [];

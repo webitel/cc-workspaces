@@ -10,10 +10,7 @@ interface SessionMeta {
 // per-session keys: a dying page's worker may still write after the next page started
 const sessionKey = (sid: string) => `session:${sid}`;
 
-/**
- * Storage-side logic, shared by the worker and the main-thread fallback:
- * persists batches, watches heartbeats, answers dump/clear/stats.
- */
+// storage-side logic shared by the worker and the inline fallback
 export function createRecorderCore(storage: RecorderStorage) {
 	let sid = '';
 	let lastHbAt = 0;
@@ -33,6 +30,8 @@ export function createRecorderCore(storage: RecorderStorage) {
 		return {
 			t,
 			ch: 'recorder',
+			sid,
+			type,
 			n: json.length,
 			json,
 		};
@@ -132,5 +131,6 @@ export function createRecorderCore(storage: RecorderStorage) {
 	return {
 		handle,
 		checkStall,
+		close: () => storage.close(),
 	};
 }

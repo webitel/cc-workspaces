@@ -1,5 +1,10 @@
 import { RECORDER_VERSION } from './config';
-import type { RecorderEvent, StoredRecord } from './types';
+import {
+	type ChannelTally,
+	type RecorderEvent,
+	type StoredRecord,
+	tallyChannel,
+} from './types';
 
 const README = `Webitel Workspace debug archive
 
@@ -25,42 +30,43 @@ interface SessionStats {
 	chars: number;
 }
 
+// records written before `sid`/`type` were stored need a parse; new ones never do
+function meta(record: StoredRecord): {
+	sid: string;
+	type: string;
+} {
+	if (record.sid && record.type) return record;
+	const { sid, type } = JSON.parse(record.json) as RecorderEvent;
+	return {
+		sid,
+		type,
+	};
+}
+
 export function buildStats(records: StoredRecord[]) {
-	const byChannel: Record<
-		string,
-		{
-			count: number;
-			chars: number;
-		}
-	> = {};
+	const byChannel: ChannelTally = {};
 	const byType: Record<string, number> = {};
 	const sessions = new Map<string, SessionStats>();
 	let chars = 0;
 
 	for (const record of records) {
 		chars += record.n;
-		byChannel[record.ch] ??= {
-			count: 0,
-			chars: 0,
-		};
-		const ch = byChannel[record.ch];
-		ch.count += 1;
-		ch.chars += record.n;
+		tallyChannel(byChannel, record.ch, record.n);
 
-		const event = JSON.parse(record.json) as RecorderEvent;
-		const typeKey = `${event.ch}/${event.type}`;
+		const { sid, type } = meta(record);
+		const typeKey = `${record.ch}/${type}`;
 		byType[typeKey] = (byType[typeKey] ?? 0) + 1;
 
-		const session = sessions.get(event.sid);
+		const session = sessions.get(sid);
 		if (session) {
-			session.last = Math.max(session.last, event.t);
+			session.last = Math.max(session.last, record.t);
 			session.records += 1;
 			session.chars += record.n;
 		} else {
-			sessions.set(event.sid, {
-				sid: event.sid,
-				first: event.t,
-				last: event.t,
+			sessions.set(sid, {
+				sid,
+				first: record.t,
+				last: record.t,
 				records: 1,
 				chars: record.n,
 			});
@@ -92,6 +98,7 @@ export function buildStats(records: StoredRecord[]) {
 	};
 }
 
+/** only SIP records are parsed, once each */
 export function buildSipText(records: StoredRecord[]): string {
 	const lines: string[] = [];
 	for (const record of records) {
@@ -101,8 +108,6 @@ export function buildSipText(records: StoredRecord[]): string {
 				id?: number;
 				text?: string;
 				keepAlive?: boolean;
-				code?: number;
-				url?: string;
 			};
 		};
 		const time = new Date(event.t).toISOString();

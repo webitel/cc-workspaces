@@ -19,10 +19,7 @@ function urlOf(input: RequestInfo | URL): string {
 	return input.url;
 }
 
-/**
- * Method, URL, status and duration of every request. Bodies are not recorded,
- * except the response body of a failed request (sanitized and cut).
- */
+// method, URL, status, duration; a body only for failed responses (sanitized and cut)
 export function installHttpCollector(
 	record: RecordFn,
 	target: {
@@ -93,13 +90,48 @@ export function installHttpCollector(
 
 	const XHR = target.XMLHttpRequest;
 	if (!XHR) return;
+	// per request: open() sets method/url, send() sets id/started; one loadend listener per XHR
 	const meta = new WeakMap<
 		XMLHttpRequest,
 		{
 			method: string;
 			url: string;
+			id: number;
+			started: number;
 		}
 	>();
+	const listening = new WeakSet<XMLHttpRequest>();
+
+	const onLoadEnd = function (this: XMLHttpRequest) {
+		const info = meta.get(this);
+		if (!info?.id) return;
+		const { method, url, id, started } = info;
+		info.id = 0;
+		let body: unknown;
+		if (this.status >= 400) {
+			try {
+				body =
+					this.responseType === '' || this.responseType === 'text'
+						? errorBody(this.responseText)
+						: this.responseType === 'json'
+							? sanitize(this.response, {
+									maxText: ERROR_BODY_CHARS,
+								})
+							: `[${this.responseType}]`;
+			} catch {
+				body = undefined;
+			}
+		}
+		record('http', 'xhr:end', {
+			id,
+			method,
+			url,
+			status: this.status,
+			durationMs: Math.round(performance.now() - started),
+			networkError: this.status === 0 ? true : undefined,
+			body,
+		});
+	};
 	const nativeOpen = XHR.prototype.open;
 	const nativeSend = XHR.prototype.send;
 
@@ -112,6 +144,8 @@ export function installHttpCollector(
 		meta.set(this, {
 			method: String(method).toUpperCase(),
 			url: redactUrl(String(url)),
+			id: 0,
+			started: 0,
 		});
 		return (nativeOpen as (...args: unknown[]) => void).call(
 			this,
@@ -127,38 +161,17 @@ export function installHttpCollector(
 	) {
 		const info = meta.get(this);
 		if (info) {
-			const id = ++nextId;
-			const started = performance.now();
+			info.id = ++nextId;
+			info.started = performance.now();
 			record('http', 'xhr:start', {
-				id,
-				...info,
+				id: info.id,
+				method: info.method,
+				url: info.url,
 			});
-			this.addEventListener('loadend', () => {
-				const failed = this.status === 0 || this.status >= 400;
-				let body: unknown;
-				if (failed && this.status !== 0) {
-					try {
-						body =
-							this.responseType === '' || this.responseType === 'text'
-								? errorBody(this.responseText)
-								: this.responseType === 'json'
-									? sanitize(this.response, {
-											maxText: ERROR_BODY_CHARS,
-										})
-									: `[${this.responseType}]`;
-					} catch {
-						body = undefined;
-					}
-				}
-				record('http', 'xhr:end', {
-					id,
-					...info,
-					status: this.status,
-					durationMs: Math.round(performance.now() - started),
-					networkError: this.status === 0 ? true : undefined,
-					body,
-				});
-			});
+			if (!listening.has(this)) {
+				listening.add(this);
+				this.addEventListener('loadend', onLoadEnd);
+			}
 		}
 		return nativeSend.call(this, body);
 	};

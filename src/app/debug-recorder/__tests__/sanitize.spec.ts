@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { effect, reactive } from 'vue';
 import {
 	REDACTED,
 	redactText,
@@ -232,6 +233,64 @@ describe('redactText', () => {
 });
 
 describe('sanitize', () => {
+	it('reads Vue reactive objects raw, without subscribing the running effect', () => {
+		const state = reactive({
+			agent: {
+				status: 'online',
+			},
+		});
+		const runs = vi.fn();
+		effect(() => {
+			runs();
+			sanitize(state);
+		});
+		state.agent.status = 'pause';
+		expect(runs).toHaveBeenCalledTimes(1);
+		expect(sanitize(state)).toEqual({
+			agent: {
+				status: 'pause',
+			},
+		});
+	});
+
+	it('masks party names and drops call variable values, keeps queue and agent names', () => {
+		expect(
+			sanitize({
+				from: {
+					name: 'Ivan Petrenko',
+					number: '380671234567',
+				},
+				queue: {
+					name: 'Support',
+				},
+				agent: {
+					name: 'Olena',
+				},
+				display_name: 'Ivan P',
+				variables: {
+					card: '4111111111111111',
+					lang: 'uk',
+				},
+			}),
+		).toEqual({
+			from: {
+				name: '***nko',
+				number: '***567',
+			},
+			queue: {
+				name: 'Support',
+			},
+			agent: {
+				name: 'Olena',
+			},
+			display_name: '***n P',
+			variables: {
+				card: '[value: 16 chars]',
+				lang: '[value: 2 chars]',
+			},
+		});
+	});
+
 	it('redacts secret keys at any depth and masks PII keys', () => {
 		const out = sanitize({
 			user: {

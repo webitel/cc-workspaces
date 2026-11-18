@@ -15,11 +15,7 @@ const RTP_TYPES = new Set([
 
 type Stat = RTCStats & Record<string, unknown>;
 
-/**
- * Keeps only what matters for call quality: RTP streams, the transport, the
- * selected candidate pair and its two candidates (real IP:port, type, relay),
- * and the codecs actually in use.
- */
+// call-quality subset: RTP, transport, the selected candidate pair with its candidates, codecs in use
 export function pickStats(report: RTCStatsReport): Stat[] {
 	const all = new Map<string, Stat>();
 	report.forEach((stat) => {
@@ -70,11 +66,63 @@ export function pickStats(report: RTCStatsReport): Stat[] {
 	}));
 }
 
-/**
- * Replaces the global RTCPeerConnection with a subclass that records state
- * changes, ICE errors and polls getStats() while the connection is alive.
- * JsSIP and webrtc2 both construct the global one, so neither is touched.
- */
+// polls getStats(); holds the connection weakly, so one dropped without close() can still be collected
+function createStatsPoller(
+	record: RecordFn,
+	ref: WeakRef<RTCPeerConnection>,
+	id: number,
+) {
+	let timer: ReturnType<typeof setInterval> | null = null;
+
+	const stop = () => {
+		if (timer) clearInterval(timer);
+		timer = null;
+	};
+
+	const snapshot = async () => {
+		const pc = ref.deref();
+		if (
+			!pc ||
+			pc.signalingState === 'closed' ||
+			pc.connectionState === 'closed'
+		) {
+			stop();
+			record('webrtc', 'pc:closed', {
+				id,
+				collected: !pc || undefined,
+			});
+			return;
+		}
+		const started = performance.now();
+		try {
+			const report = await pc.getStats();
+			record('webrtc', 'pc:stats', {
+				id,
+				costMs: Math.round((performance.now() - started) * 10) / 10,
+				stats: sanitize(pickStats(report), {
+					maxDepth: 3,
+				}),
+			});
+		} catch (err) {
+			record('webrtc', 'pc:stats-error', {
+				id,
+				error: sanitize(err),
+			});
+		}
+	};
+
+	return {
+		start() {
+			timer ??= setInterval(snapshot, WEBRTC_STATS_INTERVAL_MS);
+		},
+		async stopAfterSnapshot() {
+			stop();
+			await snapshot();
+		},
+	};
+}
+
+// global RTCPeerConnection subclass: state changes, ICE errors, getStats polling (JsSIP and webrtc2 use the global)
 export function installWebRtcCollector(
 	record: RecordFn,
 	target: {
@@ -137,34 +185,13 @@ export function installWebRtcCollector(
 				}),
 			);
 
-			const timer = setInterval(async () => {
-				if (
-					this.signalingState === 'closed' ||
-					this.connectionState === 'closed'
-				) {
-					clearInterval(timer);
-					record('webrtc', 'pc:closed', {
-						id,
-					});
-					return;
-				}
-				const started = performance.now();
-				try {
-					const report = await this.getStats();
-					record('webrtc', 'pc:stats', {
-						id,
-						costMs: Math.round((performance.now() - started) * 10) / 10,
-						stats: sanitize(pickStats(report), {
-							maxDepth: 3,
-						}),
-					});
-				} catch (err) {
-					record('webrtc', 'pc:stats-error', {
-						id,
-						error: sanitize(err),
-					});
-				}
-			}, WEBRTC_STATS_INTERVAL_MS);
+			const poller = createStatsPoller(record, new WeakRef(this), id);
+			poller.start();
+			// a failed connection that is never closed must not be polled all shift
+			this.addEventListener('connectionstatechange', () => {
+				if (this.connectionState === 'failed') void poller.stopAfterSnapshot();
+				else if (this.connectionState === 'connected') poller.start();
+			});
 		}
 	}
 

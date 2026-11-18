@@ -78,11 +78,7 @@ function describePayload(data: unknown, ch: Channel) {
 	}
 }
 
-/**
- * Replaces the global WebSocket with a subclass that records lifecycle and
- * every frame. Catches both the webitel-sdk socket and JsSIP's SIP socket
- * (protocol `sip`) without touching either library.
- */
+// global WebSocket subclass: records lifecycle and frames of both the webitel-sdk and the JsSIP (`sip`) sockets
 export function installWebSocketCollector(
 	record: RecordFn,
 	target: {

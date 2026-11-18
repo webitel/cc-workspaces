@@ -25,6 +25,8 @@ export interface RecorderEvent {
 export interface StoredRecord {
 	t: number;
 	ch: RecorderChannel;
+	sid: string;
+	type: string;
 	/** length of `json`, used for volume stats */
 	n: number;
 	json: string;
@@ -75,8 +77,27 @@ export type WorkerRequest =
 			reqId: number;
 	  };
 
+/** sent by the worker once its module has loaded; request ids start at 1 */
+export const WORKER_READY_ID = 0;
+
 export interface WorkerResponse {
 	reqId: number;
 	result?: unknown;
 	error?: string;
+}
+
+export type ChannelTally = RecorderStats['byChannel'];
+
+/** one place for the per-channel count/size, used by the store stats and the archive */
+export function tallyChannel(
+	tally: ChannelTally,
+	ch: string,
+	chars: number,
+): void {
+	tally[ch] ??= {
+		count: 0,
+		chars: 0,
+	};
+	tally[ch].count += 1;
+	tally[ch].chars += chars;
 }

@@ -12,7 +12,10 @@ interface LoafScript {
 /** online/offline, visibility, freeze/resume, unload, and long main-thread frames */
 export function installLifecycleCollector(
 	record: RecordFn,
-	onExit: () => void,
+	hooks: {
+		onExit: () => void;
+		onResume: () => void;
+	},
 ): void {
 	window.addEventListener('online', () => record('lifecycle', 'online'));
 	window.addEventListener('offline', () => record('lifecycle', 'offline'));
@@ -23,16 +26,17 @@ export function installLifecycleCollector(
 	);
 	document.addEventListener('freeze', () => record('lifecycle', 'freeze'));
 	document.addEventListener('resume', () => record('lifecycle', 'resume'));
-	window.addEventListener('pageshow', (event) =>
+	window.addEventListener('pageshow', (event) => {
 		record('lifecycle', 'pageshow', {
 			persisted: event.persisted,
-		}),
-	);
+		});
+		if (event.persisted) hooks.onResume();
+	});
 	window.addEventListener('pagehide', (event) => {
 		record('lifecycle', 'pagehide', {
 			persisted: event.persisted,
 		});
-		onExit();
+		hooks.onExit();
 	});
 
 	const supported =
