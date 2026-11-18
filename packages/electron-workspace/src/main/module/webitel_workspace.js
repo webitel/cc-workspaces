@@ -1,7 +1,7 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const { isAlive } = require('./window_utils');
-const { isWebUrl } = require('./url_utils');
+const { isExternalUrl } = require('./url_utils');
 
 class Workspace {
 	window = null;
@@ -36,7 +36,7 @@ class Workspace {
 		});
 
 		this.window.webContents.setWindowOpenHandler(({ url }) => {
-			if (isWebUrl(url)) {
+			if (isExternalUrl(url)) {
 				shell.openExternal(url);
 			} else {
 				console.warn('[workspace] blocked external open of', url);

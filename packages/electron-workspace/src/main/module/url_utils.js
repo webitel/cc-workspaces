@@ -1,14 +1,21 @@
+const EXTERNAL_PROTOCOLS = [
+	'http:',
+	'https:',
+	'mailto:',
+	'tel:',
+];
+
 // shell.openExternal hands any other scheme (smb:, file:) to the OS; http: stays for on-prem
-function isWebUrl(value) {
+function isExternalUrl(value) {
 	try {
 		const { protocol } = new URL(value);
 
-		return protocol === 'http:' || protocol === 'https:';
+		return EXTERNAL_PROTOCOLS.includes(protocol);
 	} catch {
 		return false;
 	}
 }
 
 module.exports = {
-	isWebUrl,
+	isExternalUrl,
 };
