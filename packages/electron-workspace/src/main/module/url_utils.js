@@ -9,18 +9,6 @@ function isWebUrl(value) {
 	}
 }
 
-// a non-special scheme reports its origin as the string 'null'; two such URLs would compare equal
-function originOf(value) {
-	try {
-		const { origin } = new URL(value);
-
-		return origin === 'null' ? null : origin;
-	} catch {
-		return null;
-	}
-}
-
 module.exports = {
 	isWebUrl,
-	originOf,
 };

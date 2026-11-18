@@ -1,12 +1,10 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const { isAlive } = require('./window_utils');
-const { isWebUrl, originOf } = require('./url_utils');
-const { guardMainFrameNavigation } = require('./navigation_guard');
+const { isWebUrl } = require('./url_utils');
 
 class Workspace {
 	window = null;
-	allowedOrigin = null;
 
 	createWindow(URL) {
 		if (isAlive(this.window)) return;
@@ -48,10 +46,6 @@ class Workspace {
 				action: 'deny',
 			};
 		});
-
-		guardMainFrameNavigation(this.window.webContents, () => this.allowedOrigin);
-
-		this.allowedOrigin = originOf(URL);
 
 		this.window.loadURL(URL).catch((err) => {
 			// window may be destroyed/replaced while the URL was loading
@@ -102,7 +96,6 @@ class Workspace {
 
 	updateWindow(ob) {
 		if (!isAlive(this.window)) return;
-		this.allowedOrigin = originOf(ob.URL);
 		this.window
 			.loadURL(ob.URL)
 			.then(() => {
