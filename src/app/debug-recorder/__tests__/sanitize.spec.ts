@@ -253,6 +253,44 @@ describe('sanitize', () => {
 		});
 	});
 
+	it('masks names of parties listed in arrays', () => {
+		expect(
+			sanitize({
+				members: [
+					{
+						name: 'Ivan Petrenko',
+					},
+				],
+				participants: [
+					{
+						name: 'Olha Koval',
+					},
+				],
+				queues: [
+					{
+						name: 'Support',
+					},
+				],
+			}),
+		).toEqual({
+			members: [
+				{
+					name: '***nko',
+				},
+			],
+			participants: [
+				{
+					name: '***val',
+				},
+			],
+			queues: [
+				{
+					name: 'Support',
+				},
+			],
+		});
+	});
+
 	it('masks party names and drops call variable values, keeps queue and agent names', () => {
 		expect(
 			sanitize({

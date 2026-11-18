@@ -14,7 +14,7 @@ const PII_CAMEL_KEY_RE =
 	/[a-z](Number|Phone|Email|Destination|DisplayName|FullName|FirstName|LastName)$/;
 // `name` is PII only inside a party object (`from.name`), not for queues or agents
 const PARTY_KEY_RE =
-	/^(from|to|member|contact|customer|client|caller|callee|participant|peer)$/i;
+	/^(from|to|members?|contacts?|customers?|clients?|callers?|callees?|participants?|peers?|parties|party)$/i;
 const PARTY_NAME_KEY_RE = /^name$/i;
 // arbitrary data attached to a call or form: keep the keys, drop the values
 const FREE_DATA_KEY_RE = /^(variables|vars|custom_?data|form_?data)$/i;
@@ -311,7 +311,10 @@ export function sanitize(value: unknown, opts: SanitizeOptions = {}): unknown {
 
 		if (Array.isArray(obj) || obj instanceof Set) {
 			const items = Array.from(obj as Iterable<unknown>);
-			const out = items.slice(0, maxKeys).map((item) => walk(item, depth + 1));
+			// elements inherit the array's key, so `members: [{name}]` is still a party
+			const out = items
+				.slice(0, maxKeys)
+				.map((item) => walk(item, depth + 1, parentKey));
 			if (items.length > maxKeys)
 				out.push(`…[+${items.length - maxKeys} items]`);
 			return out;
