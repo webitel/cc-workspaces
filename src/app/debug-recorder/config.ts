@@ -44,6 +44,26 @@ function readUrlFlag(): string | null {
 	return hashQuery ? new URLSearchParams(hashQuery).get(URL_PARAM) : null;
 }
 
+// after a stop, so F5 on a ?debug=1 URL does not start recording again
+export function stripUrlFlag(): void {
+	try {
+		const url = new URL(window.location.href);
+		url.searchParams.delete(URL_PARAM);
+		const [path, hashQuery] = url.hash.split('?');
+		if (hashQuery !== undefined) {
+			const params = new URLSearchParams(hashQuery);
+			params.delete(URL_PARAM);
+			const rest = params.toString();
+			url.hash = rest ? `${path}?${rest}` : path;
+		}
+		if (url.href !== window.location.href) {
+			history.replaceState(history.state, '', url.href);
+		}
+	} catch {
+		// URL left as is: worst case F5 records again, with the REC badge on
+	}
+}
+
 export function setEnabled(enabled: boolean, now = Date.now()): void {
 	if (enabled) {
 		localStorage.setItem(ENABLED_STORAGE_KEY, String(now + ENABLED_TTL_MS));

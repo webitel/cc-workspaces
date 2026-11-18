@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { ENABLED_STORAGE_KEY, ENABLED_TTL_MS, resolveEnabled } from '../config';
+import {
+	ENABLED_STORAGE_KEY,
+	ENABLED_TTL_MS,
+	resolveEnabled,
+	stripUrlFlag,
+} from '../config';
 
 const NOW = 1_800_000_000_000;
 
@@ -37,5 +42,29 @@ describe('resolveEnabled', () => {
 	it('ignores the pre-TTL "1" value', () => {
 		localStorage.setItem(ENABLED_STORAGE_KEY, '1');
 		expect(resolveEnabled(NOW)).toBe(false);
+	});
+});
+
+describe('stripUrlFlag', () => {
+	afterEach(() => {
+		openWith('');
+	});
+
+	it('removes debug from the query and the hash query, keeps the rest', () => {
+		window.history.replaceState(
+			null,
+			'',
+			'/workspace/?debug=1&lang=uk#/queue?debug=1&tab=2',
+		);
+		stripUrlFlag();
+		expect(
+			window.location.pathname + window.location.search + window.location.hash,
+		).toBe('/workspace/?lang=uk#/queue?tab=2');
+	});
+
+	it('leaves a URL without the flag alone', () => {
+		openWith('?x=1');
+		stripUrlFlag();
+		expect(window.location.search).toBe('?x=1');
 	});
 });

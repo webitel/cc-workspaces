@@ -13,15 +13,17 @@ import {
 	HAS_DATA_STORAGE_KEY,
 	resolveEnabled,
 	setEnabled,
+	stripUrlFlag,
 } from './config';
 import { downloadArchive } from './export';
+import { flash, showIndicator } from './indicator';
 import { RecorderSink } from './sink';
 import type { RecorderStats, RecordFn } from './types';
 
 const PREFIX = '[debug-recorder]';
 
 let sink: RecorderSink | null = null;
-let indicator: HTMLElement | null = null;
+let hideIndicator: (() => void) | null = null;
 
 export interface WebitelDebugApi {
 	readonly recording: boolean;
@@ -55,37 +57,6 @@ async function download(): Promise<void> {
 	originalConsole.info(PREFIX, `archive with ${records.length} records saved`);
 }
 
-function showIndicator(): void {
-	const el = document.createElement('button');
-	el.type = 'button';
-	el.textContent = '● REC';
-	el.title =
-		'Debug recording is on. Click (or Ctrl+Alt+Shift+D) to download the archive for support.';
-	el.setAttribute('aria-label', el.title);
-	Object.assign(el.style, {
-		position: 'fixed',
-		left: '8px',
-		bottom: '8px',
-		zIndex: '2147483647',
-		padding: '2px 8px',
-		font: '600 11px/16px system-ui, sans-serif',
-		color: '#fff',
-		background: '#d32f2f',
-		border: '0',
-		borderRadius: '10px',
-		opacity: '0.85',
-		cursor: 'pointer',
-	});
-	el.addEventListener('click', () => void download());
-	indicator = el;
-	const mount = () => document.body.appendChild(el);
-	if (document.body) mount();
-	else
-		document.addEventListener('DOMContentLoaded', mount, {
-			once: true,
-		});
-}
-
 // stops recording and deletes the store; called on logout because workstations are shared
 export async function wipeDebugRecorder(): Promise<void> {
 	let hadData = false;
@@ -95,8 +66,9 @@ export async function wipeDebugRecorder(): Promise<void> {
 		s.removeItem(HAS_DATA_STORAGE_KEY);
 		s.removeItem(CLEAN_EXIT_STORAGE_KEY);
 	});
-	indicator?.remove();
-	indicator = null;
+	stripUrlFlag();
+	hideIndicator?.();
+	hideIndicator = null;
 	const current = sink;
 	sink = null;
 	// destroy() never rejects and is time-bounded, so logout cannot hang on it
@@ -183,10 +155,17 @@ function startRecording(): void {
 			void download();
 		}
 	});
-	showIndicator();
+	hideIndicator = showIndicator({
+		download,
+		stats: async () => (sink ? sink.stats() : null),
+		stop: async () => {
+			await wipeDebugRecorder();
+			flash('Debug recording stopped, recorded data deleted.');
+		},
+	});
 	originalConsole.info(
 		PREFIX,
-		'recording. Archive: REC badge, Ctrl+Alt+Shift+D or webitelDebug.download(). Stop and wipe: webitelDebug.disable()',
+		'recording. Archive: REC badge menu, Ctrl+Alt+Shift+D or webitelDebug.download(). Stop and wipe: REC badge menu or webitelDebug.disable()',
 	);
 }
 
