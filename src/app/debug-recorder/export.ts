@@ -1,4 +1,6 @@
 import { RECORDER_VERSION } from './config';
+import { buildReport } from './report';
+import { buildTimeline, timelineEntries } from './timeline';
 import {
 	type ChannelTally,
 	type RecorderEvent,
@@ -8,10 +10,14 @@ import {
 
 const README = `Webitel Workspace debug archive
 
-manifest.json   when/where the archive was made
+report.html     start here: open in a browser; summary, likely problems, filterable
+                timeline, click a row for its full data (works offline)
+timeline.txt    the same timeline as plain text, likely problems listed on top
+sip.txt         SIP signalling as plain text, full messages
+events.ndjson   every recorded event with all its data, one JSON object per line,
+                oldest first; for tools (jq, grep) and for details behind a timeline line
 stats.json      volume per channel and per event type, per page-load session
-events.ndjson   every recorded event, one JSON object per line, oldest first
-sip.txt         SIP signalling as plain text, for a quick read
+manifest.json   when/where the archive was made
 
 Event fields: t (epoch ms), sid (page-load session; a new one after every F5),
 ch (console | error | http | ws | sip | webrtc | device | env | lifecycle | perf | recorder),
@@ -135,24 +141,21 @@ export async function downloadArchive(
 		...records,
 	].sort((a, b) => a.t - b.t);
 	const generatedAt = new Date();
+	const manifest = {
+		generatedAt: generatedAt.toISOString(),
+		recorder: RECORDER_VERSION,
+		app: __APP_VERSION__,
+		origin: location.origin,
+		userAgent: navigator.userAgent,
+		currentSession: currentSid,
+	};
+	const entries = timelineEntries(sorted);
 
 	const zip = new JSZip();
 	zip.file('README.txt', README);
-	zip.file(
-		'manifest.json',
-		JSON.stringify(
-			{
-				generatedAt: generatedAt.toISOString(),
-				recorder: RECORDER_VERSION,
-				app: __APP_VERSION__,
-				origin: location.origin,
-				userAgent: navigator.userAgent,
-				currentSession: currentSid,
-			},
-			null,
-			2,
-		),
-	);
+	zip.file('manifest.json', JSON.stringify(manifest, null, 2));
+	zip.file('report.html', buildReport(sorted, entries, manifest));
+	zip.file('timeline.txt', buildTimeline(entries));
 	zip.file('stats.json', JSON.stringify(buildStats(sorted), null, 2));
 	zip.file('events.ndjson', sorted.map((r) => r.json).join('\n'));
 	zip.file('sip.txt', buildSipText(sorted));
