@@ -311,9 +311,8 @@ function scheduleReconnect() {
 	reconnectTimerId = window.setTimeout(async () => {
 		reconnectTimerId = null;
 		try {
-			await getCliInstance({
-				forceReconnect: true,
-			});
+			// no force: reuse a client another caller connected meanwhile, a forced one would orphan it with its phone
+			await getCliInstance();
 			reconnectAttemptCount = 0;
 		} catch {
 			scheduleReconnect();
