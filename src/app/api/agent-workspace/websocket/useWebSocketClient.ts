@@ -46,7 +46,7 @@ const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 
 let clientInitPromise: Promise<Client> | null = null;
 // web phone carried over a reconnect, so the agent keeps one SIP registration
-let retainedPhone: Client['phone'];
+let keptPhone: Client['phone'];
 let reconnectAttemptCount = 0;
 let reconnectTimerId: number | null = null;
 let clientGenerationCount = 0;
@@ -244,7 +244,7 @@ async function createClient(): Promise<Client> {
 				(browserPermissions.micGranted ?? false),
 			debug: cliConfig.debug,
 			userAgent: getUserAgent(),
-			sipPhone: retainedPhone,
+			sipPhone: keptPhone,
 		}),
 	);
 
@@ -264,10 +264,10 @@ async function createClient(): Promise<Client> {
 		await cli.auth();
 	} catch (e) {
 		// the next attempt takes the phone over, without this client's listeners
-		retainedPhone = cli.detachPhone() ?? retainedPhone;
+		keptPhone = cli.detachPhone() ?? keptPhone;
 		throw e;
 	}
-	retainedPhone = undefined;
+	keptPhone = undefined;
 
 	emit(WebSocketClientEvent.AfterAuth, cli);
 	if (useExternalPhone) {
@@ -286,11 +286,11 @@ async function createClient(): Promise<Client> {
 	return cli;
 }
 
-function releaseRetainedPhone() {
-	retainedPhone?.unregister().catch((e) => {
+function releaseKeptPhone() {
+	keptPhone?.unregister().catch((e) => {
 		console.warn('[WS] phone unregister error', e);
 	});
-	retainedPhone = undefined;
+	keptPhone = undefined;
 }
 
 async function destroyClient({
@@ -298,7 +298,7 @@ async function destroyClient({
 }: {
 	keepPhone?: boolean;
 } = {}) {
-	if (!keepPhone) releaseRetainedPhone();
+	if (!keepPhone) releaseKeptPhone();
 	if (!client.value) return;
 
 	try {
@@ -306,7 +306,7 @@ async function destroyClient({
 		// drop the external-softphone reference so a later utility `state`
 		// message can't re-attach the phone onto this destroyed client
 		useExternalSoftphone().clearClient();
-		if (keepPhone) retainedPhone = client.value.detachPhone();
+		if (keepPhone) keptPhone = client.value.detachPhone();
 		await client.value.destroy?.();
 	} catch (e) {
 		console.warn('[WS] destroy error', e);
@@ -325,7 +325,7 @@ function scheduleReconnect() {
 	if (reconnectTimerId) return;
 	if (reconnectAttemptCount >= MAX_RECONNECT_ATTEMPTS) {
 		// no client will pick the phone up: calls must not ring in a tab without UI
-		releaseRetainedPhone();
+		releaseKeptPhone();
 		return;
 	}
 
