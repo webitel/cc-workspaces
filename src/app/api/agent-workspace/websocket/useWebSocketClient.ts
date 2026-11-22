@@ -45,7 +45,6 @@ const client = shallowRef<Client | null>(null);
 const state = ref<WebSocketConnectionState>(WebSocketConnectionState.Idle);
 
 let clientInitPromise: Promise<Client> | null = null;
-// web phone carried over a reconnect, so the agent keeps one SIP registration
 let keptPhone: Client['phone'];
 let reconnectAttemptCount = 0;
 let reconnectTimerId: number | null = null;
@@ -263,7 +262,6 @@ async function createClient(): Promise<Client> {
 		await cli.connect();
 		await cli.auth();
 	} catch (e) {
-		// the next attempt takes the phone over, without this client's listeners
 		keptPhone = cli.detachPhone() ?? keptPhone;
 		throw e;
 	}
@@ -324,7 +322,6 @@ async function destroyClient({
 function scheduleReconnect() {
 	if (reconnectTimerId) return;
 	if (reconnectAttemptCount >= MAX_RECONNECT_ATTEMPTS) {
-		// no client will pick the phone up: calls must not ring in a tab without UI
 		releaseKeptPhone();
 		return;
 	}
@@ -338,7 +335,6 @@ function scheduleReconnect() {
 	reconnectTimerId = window.setTimeout(async () => {
 		reconnectTimerId = null;
 		try {
-			// no force: reuse a client another caller connected meanwhile, a forced one would orphan it with its phone
 			await getCliInstance();
 			reconnectAttemptCount = 0;
 		} catch {
