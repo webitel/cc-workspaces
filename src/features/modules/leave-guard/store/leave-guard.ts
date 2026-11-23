@@ -3,7 +3,6 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { JobState, type Task } from 'webitel-sdk';
 
-import { wipeDebugRecorder } from '@webitel/ui-sdk/modules/DebugRecorder';
 import { useUserinfoStore } from '../../../../ui/modules/userinfo/userinfoStore';
 import { getAllClientConversations } from '../../chat/scripts/getClientConversations';
 
@@ -52,8 +51,6 @@ export const useLeaveGuardStore = defineStore('features/leaveGuard', () => {
 	const logout = async () => {
 		isLeaving.value = true;
 		try {
-			// shared workstations: the next user must not get this user's debug records
-			await wipeDebugRecorder();
 			await userinfoStore.logoutUser();
 		} catch (err) {
 			isLeaving.value = false;
