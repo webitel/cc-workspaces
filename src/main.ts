@@ -1,5 +1,5 @@
 // must stay the first import: wraps console/WebSocket/RTCPeerConnection before the SDK loads
-import './app/debug-recorder/install';
+import './app/debug-recorder';
 import './app/css/main.scss';
 
 import { setConfig as setApiServicesConfig } from '@webitel/api-services';

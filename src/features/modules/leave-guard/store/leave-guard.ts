@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { JobState, type Task } from 'webitel-sdk';
 
-import { wipeDebugRecorder } from '../../../../app/debug-recorder/install';
+import { wipeDebugRecorder } from '@webitel/ui-sdk/modules/DebugRecorder';
 import { useUserinfoStore } from '../../../../ui/modules/userinfo/userinfoStore';
 import { getAllClientConversations } from '../../chat/scripts/getClientConversations';
 
