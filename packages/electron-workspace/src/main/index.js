@@ -10,14 +10,14 @@ const conf = require('../shared/config').config();
 const WebitelWindows = require('./windows');
 const WebitelTray = require('./module/webitel_tray');
 const { isAlive } = require('./module/window_utils');
+const { applyInsecureTlsSwitches } = require('./module/insecure_tls');
 
 const win = new WebitelWindows();
 let tray = {};
 
 autoUpdater.autoDownload = false;
 
-app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
-app.commandLine.appendSwitch('allow-insecure-localhost', 'true');
+applyInsecureTlsSwitches(conf, app.commandLine);
 
 app.setAsDefaultProtocolClient('wtel');
 
