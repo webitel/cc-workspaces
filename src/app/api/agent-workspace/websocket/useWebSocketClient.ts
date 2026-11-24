@@ -311,9 +311,7 @@ function scheduleReconnect() {
 	reconnectTimerId = window.setTimeout(async () => {
 		reconnectTimerId = null;
 		try {
-			await getCliInstance({
-				forceReconnect: true,
-			});
+			await getCliInstance();
 			reconnectAttemptCount = 0;
 		} catch {
 			scheduleReconnect();
