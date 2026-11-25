@@ -4,6 +4,7 @@ import type {
 	AudioProcessingConfig,
 	CallSession,
 	Outbound,
+	OutboundCallResult,
 	SipClient,
 	SipClientEvents,
 	SipConfiguration,
@@ -93,7 +94,7 @@ export class RemotePhone
 		return;
 	}
 
-	async call(req: Outbound): Promise<undefined | Error> {
+	async call(req: Outbound): Promise<OutboundCallResult | undefined> {
 		if (!req.destination) return;
 		this.send('call', {
 			destination: req.destination,
